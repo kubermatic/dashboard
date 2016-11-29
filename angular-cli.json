@@ -18,7 +18,9 @@
       "prefix": "kubermatic",
       "mobile": false,
       "styles": [
-        "styles.scss"
+        "styles.scss",
+        "assets/inspinia/css/animate.css",
+        "assets/inspinia/css/style.css"
       ],
       "scripts": [],
       "environments": {

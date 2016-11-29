@@ -1,0 +1,47 @@
+<nav class="navbar-default navbar-static-side" role="navigation" ng-controller="NavbarLinksCtrl">
+  <div class="sidebar-collapse">
+    <ul side-navigation class="nav metismenu" id="side-menu">
+      <li class="nav-header">
+        <div class="logo-element">
+          Kubermatic
+        </div>
+        <div class="dropdown profile-element" dropdown ng-show="auth.isAuthenticated">
+                    <span>
+                        <a ng-href="/profile">
+                            <img class="navbar-avatar img-circle" />
+                        </a>
+                    </span>
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">Test</strong> <b class="caret"></b>
+                            </span>
+                            <span class="text-muted text-xs block">
+                                Email
+                            </span>
+                        </span>
+          </a>
+          <ul class="dropdown-menu animated fadeInRight m-t-xs">
+            <li><a ng-href="/profile">My Profile</a></li>
+            <li class="divider"></li>
+            <li><a href="#" ng-click="logout()">Logout</a></li>
+          </ul>
+        </div>
+      </li>
+
+      <li>
+        <a active-link="active" ng-href="/">
+          <i class="fa fa-home"></i>
+          <span class="nav-label">Kubermatic</span>
+        </a>
+      </li>
+      <li>
+        <a active-link="active" ng-show="auth.isAuthenticated" ng-href="/cluster">
+          <i class="fa fa-cubes"></i>
+          <span class="nav-label">My Clusters</span>
+        </a>
+      </li>
+    </ul>
+
+  </div>
+</nav>
