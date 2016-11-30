@@ -1,0 +1,233 @@
+.menu {
+  list-style: none;
+  border-bottom: 0.1em solid black;
+  margin-bottom: 2em;
+  padding: 0 0 0.5em;
+}
+.menu:before {
+  content: "[";
+}
+.menu:after {
+  content: "]";
+}
+.menu > li {
+  display: inline;
+}
+.menu > li:before {
+  content: "|";
+  padding-right: 0.3em;
+}
+.menu > li:nth-child(1):before {
+  content: "";
+  padding: 0;
+}
+
+.css-form input.ng-invalid.ng-touched {
+  background-color: #ffe0e0;
+}
+
+.css-form input.ng-valid.ng-touched {
+  background-color: #e0ffe0;
+}
+
+.icon-health{
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 5px;
+  padding: 0;
+}
+.icon-health-unready,
+.icon-health-false {
+  color: red;
+  text-shadow: 1px 1px 5px #ff0000;
+}
+.icon-health-ready,
+.icon-health-true {
+  color: green;
+  text-shadow: 1px 1px 3px #00ff00;
+}
+.icon-health-ready.warning {
+    color: #ff8000;
+    text-shadow: 1px 1px 3px #ff8100;
+}
+.icon-health-created,
+.icon-health-null {
+  color: grey;
+  text-shadow: 1px 1px 3px #a0a0a0;
+}
+
+
+.cloud-thumbnail {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+.cloud-thumbnail a:focus { text-decoration:none; }
+.cloud-thumbnail a:hover { text-decoration:none; }
+.cloud-thumbnail a:active { text-decoration:none; }
+.cloud-thumbnail .logo {
+    margin-top: 0px;
+    margin-bottom: 15px;
+    height: 50px;
+}
+.cloud-thumbnail .caption {
+     text-align: center;
+     padding: 0;
+}
+.cloud-thumbnail.selected .caption {
+    text-align: center;
+    padding: 0;
+    color: #ffffff;
+}
+.cloud-thumbnail.selected {
+    background-color: #059eff;
+}
+
+.growl-container.growl-fixed {
+    margin-top: 60px;
+    max-width: 250px;
+}
+
+.partial-clusters .cloud-logo {
+    max-height: 20px;
+    vertical-align: middle;
+}
+
+.partial-cluster .cloud-logo {
+    max-height: 20px;
+    vertical-align: middle;
+}
+.partial-cluster .page-header .cloud-logo {
+    max-height: 40px;
+}
+.partial-cluster .delete-cluster-button {
+    position: absolute;
+    right: 10px;
+    top: 1px;
+}
+.placeholder {
+    color: #b0b0b0;
+}
+
+table tbody .button-heading th {
+    vertical-align: middle;
+}
+.button-heading > h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: normal;
+    width: 75%;
+    padding-top: 4px;
+}
+.button-heading {
+    position: relative;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.cluster-delete-model-header {
+    background-color: #d30002;
+    color: #ffffff;
+}
+
+.navbar-auth .dropdown-toggle {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.navbar-avatar {
+    width: 50px;
+    border-radius: 50%;
+}
+
+.partial-profile .avatar {
+    width: 100px;
+    border-radius: 50%;
+}
+
+.address-token {
+    background-color: #e0e0e0;
+    font-family: monospace
+}
+
+.modal-full-height {
+    max-height: calc(100vh - 210px);
+    overflow-y: auto;
+}
+
+.wizard-step {
+    margin-left: 16px;
+    padding-left: 16px;
+    border-left: 2px solid #d0d0d0;
+    position: relative;
+}
+.wizard-step.done {
+    border-left-color: #049516;
+}
+.wizard-step:last-child {
+    border-left: none;
+}
+.wizard-step-body {
+    margin-left: 16px;
+    margin-top: 0;
+    min-height: 48px;
+    overflow-y:hidden;
+    padding-bottom: 16px;
+}
+.wizard-step.done .wizard-step-body {
+}
+.wizard-step.tbd .wizard-step-body {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    opacity: 0.3;
+}
+.wizard-step.disabled .wizard-step-body {
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    opacity: 0.3;
+}
+.wizard-step-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 36px;
+    position: absolute;
+    top: 0  ;
+    left: -18px;
+    text-align: center;
+    line-height: 30px;
+}
+.wizard-step.done .wizard-step-circle {
+    background-color: #049516;
+    color: white;
+    border: 2px solid #049516;
+}
+.wizard-step.active .wizard-step-circle {
+    background-color: #049516;
+    color: white;
+    border: 2px solid #049516;
+}
+.wizard-step.tbd .wizard-step-circle {
+    background-color: #d0d0d0;
+    color: #808080;
+    border-color: #d0d0d0;
+}
+.wizard-step.tbd .wizard-step-body {
+    filter: opacity(50%) grayscale();
+}
+
+.popover {
+    max-width: 400px;
+}
+.create-nodes-dropover {
+    width: 300px;
+    padding: 10px;
+}
+
+.panel-heading .btn {
+    margin-left: 5px;
+}
