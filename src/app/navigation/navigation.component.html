@@ -1,47 +1,23 @@
-<nav class="navbar-default navbar-static-side" role="navigation" ng-controller="NavbarLinksCtrl">
-  <div class="sidebar-collapse">
-    <ul side-navigation class="nav metismenu" id="side-menu">
-      <li class="nav-header">
-        <div class="logo-element">
-          Kubermatic
-        </div>
-        <div class="dropdown profile-element" dropdown ng-show="auth.isAuthenticated">
-                    <span>
-                        <a ng-href="/profile">
-                            <img class="navbar-avatar img-circle" />
-                        </a>
-                    </span>
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                        <span class="clear">
-                            <span class="block m-t-xs">
-                                <strong class="font-bold">Test</strong> <b class="caret"></b>
-                            </span>
-                            <span class="text-muted text-xs block">
-                                Email
-                            </span>
-                        </span>
-          </a>
-          <ul class="dropdown-menu animated fadeInRight m-t-xs">
-            <li><a ng-href="/profile">My Profile</a></li>
-            <li class="divider"></li>
-            <li><a href="#" ng-click="logout()">Logout</a></li>
-          </ul>
-        </div>
-      </li>
-
-      <li>
-        <a active-link="active" ng-href="/">
-          <i class="fa fa-home"></i>
-          <span class="nav-label">Kubermatic</span>
-        </a>
-      </li>
-      <li>
-        <a active-link="active" ng-show="auth.isAuthenticated" ng-href="/cluster">
-          <i class="fa fa-cubes"></i>
-          <span class="nav-label">My Clusters</span>
-        </a>
-      </li>
-    </ul>
-
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header page-scroll">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">KUBERMATIC</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li><a class="page-scroll" href="#page-top">Home</a></li>
+        <li><a class="page-scroll" href="#features">Features</a></li>
+        <li><a class="page-scroll" href="#team">Team</a></li>
+        <li><a class="page-scroll" href="#testimonials">Testimonials</a></li>
+        <li><a class="page-scroll" href="#pricing">Pricing</a></li>
+        <li><a class="page-scroll" href="#contact">Contact</a></li>
+      </ul>
+    </div>
   </div>
 </nav>

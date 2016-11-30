@@ -18,11 +18,13 @@
       "prefix": "kubermatic",
       "mobile": false,
       "styles": [
-        "styles.scss",
-        "assets/inspinia/css/animate.css",
-        "assets/inspinia/css/style.css"
+        "assets/css/app.css",
+        "assets/css/global.scss"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "assets/js/bootstrap.js"
+      ],
       "environments": {
         "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
