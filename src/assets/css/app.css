@@ -217,7 +217,7 @@ table tbody .button-heading th {
     border-color: #d0d0d0;
 }
 .wizard-step.tbd .wizard-step-body {
-    filter: opacity(50%) grayscale();
+    filter: opacity(50%) grayscale(50%);
 }
 
 .popover {

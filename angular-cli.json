@@ -18,12 +18,12 @@
       "prefix": "kubermatic",
       "mobile": false,
       "styles": [
-        "assets/css/app.css",
         "assets/css/global.scss"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
-        "assets/js/bootstrap.js"
+        "assets/js/bootstrap.js",
+        "assets/js/agency.js"
       ],
       "environments": {
         "source": "environments/environment.ts",

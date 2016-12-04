@@ -8,6 +8,7 @@ import { KubermaticComponent } from './kubermatic.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
 import { appRoutes } from "./app.routing";
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   imports: [
@@ -19,7 +20,8 @@ import { appRoutes } from "./app.routing";
   declarations: [
     KubermaticComponent,
     NavigationComponent,
-    FrontpageComponent
+    FrontpageComponent,
+    FooterComponent
   ],
   providers: [],
   bootstrap: [KubermaticComponent]
