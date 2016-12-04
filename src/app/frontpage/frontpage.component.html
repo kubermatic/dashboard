@@ -4,10 +4,10 @@
     <div class="intro-text">
       <div class="col-lg-12">
         <h1 class="intro-heading">Kubernetes Automatic</h1>
-        <h3 class="intro-lead-in">Create your Kubernetes cluster – in seconds – where you want.</h3>
+        <h3 class="intro-lead-in col-lg-8 col-lg-offset-2">Create your Kubernetes cluster – in seconds – where you want.</h3>
       </div>
       <div class="col-xs-12 col-sm-offset-2 col-sm-8 col-md-offset-3 col-md-6">
-        <button class="btn btn-lg btn-block space-50" type="submit">Create a Kubernetes Cluster</button>
+        <button class="btn btn-lg btn-block space-50" type="button" (click)="auth.login()">Create a Kubernetes Cluster</button>
       </div>
     </div>
   </div>
@@ -19,7 +19,7 @@
     <div class="row">
       <div class="col-lg-12 text-center">
         <h2 class="section-heading">Features</h2>
-        <h3 class="section-subheading text-muted">Kubermatic will host your Kubernetes master as a Service.
+        <h3 class="col-lg-8 col-lg-offset-2 section-subheading text-muted">Kubermatic will host your Kubernetes master as a Service.
           You can select the IaaS provider of your choice.
           Create nodes with ease, update them, scale up and down.
           Kubernetes made easy.</h3>
@@ -152,4 +152,32 @@
     </div>
   </div>
 </aside>
+
+<div class="footer container bg-light-gray col-lg-12">
+  <div class="row">
+    <div class="col-md-4">
+      <a href="https://loodse.com/en/" title="Startseite">
+        <img src="https://w3alpha.com/cms/templates/166/img/footer_logo.svg" width="160" alt="Logo loodse.com">
+      </a>
+    </div>
+    <div class="col-md-4">
+      <ul class="list-inline social-buttons">
+        <li><a href="https://www.twitter.com/loodse"><i class="fa fa-twitter"></i></a>
+        </li>
+        <li><a href="https://github.com/kubermatic/kubermatic"><i class="fa fa-github"></i></a>
+        </li>
+        <li><a href="http://slack.kubermatic.io/"><i class="fa fa-slack"></i></a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-4">
+      <ul class="list-inline quicklinks">
+        <li><a href="#">Privacy Policy</a>
+        </li>
+        <li><a href="#">Terms of Use</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
 

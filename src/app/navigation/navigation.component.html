@@ -1,4 +1,4 @@
-<nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top" role="navigation">
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header page-scroll">
@@ -11,7 +11,8 @@
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li><a class="page-scroll" href="#login"><i class="fa fa-sign-out"></i>Login</a></li>
+        <li><button type="button" class="btn btn-link navbar-btn" (click)="login()" *ngIf="!auth.authenticated()"><i class="fa fa-sign-in"></i>Log In</button></li>
+        <li><button type="button" class="btn btn-link navbar-btn" (click)="logout()" *ngIf="auth.authenticated()"><i class="fa fa-sign-out"></i>Log Out</button></li>
       </ul>
     </div>
   </div>

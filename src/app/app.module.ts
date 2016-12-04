@@ -7,8 +7,12 @@ import { RouterModule } from "@angular/router";
 import { KubermaticComponent } from './kubermatic.component';
 import { NavigationComponent } from './navigation/navigation.component';
 import { FrontpageComponent } from './frontpage/frontpage.component';
+
+import { Auth } from "./auth/auth.service";
 import { appRoutes } from "./app.routing";
-import { FooterComponent } from './footer/footer.component';
+import { AUTH_PROVIDERS } from 'angular2-jwt';
+import { AuthGuard } from "./auth/auth.guard";
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
   imports: [
@@ -21,9 +25,13 @@ import { FooterComponent } from './footer/footer.component';
     KubermaticComponent,
     NavigationComponent,
     FrontpageComponent,
-    FooterComponent
+    DashboardComponent
   ],
-  providers: [],
+  providers: [
+    AUTH_PROVIDERS,
+    Auth,
+    AuthGuard
+  ],
   bootstrap: [KubermaticComponent]
 })
 export class AppModule { }

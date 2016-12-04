@@ -113,7 +113,7 @@ h1, h2, h3, h4, h5, h6 {
         &:focus,
         &:active,
         &.active {
-            color: darken($white-base, 10%);
+            color: $white-darker;
         }
     }
     .navbar-collapse {
@@ -126,7 +126,7 @@ h1, h2, h3, h4, h5, h6 {
         color: white;
         font-size: 12px;
         &:hover{
-          background-color: $theme-primary-dark;
+          color: $white-darker;
         }
         &:focus {
             background-color: $theme-primary;
@@ -134,12 +134,15 @@ h1, h2, h3, h4, h5, h6 {
     }
     .nav {
         li {
-            a {
+            button {
                 @include heading-font;
                 font-weight: 400;
                 letter-spacing: 1px;
                 color: white;
-                &:hover,
+                &:hover{
+                  color: $white-darker;
+                  text-decoration: none;
+                }
                 &:focus {
                     color: $theme-primary;
                     outline: none;
@@ -162,7 +165,7 @@ h1, h2, h3, h4, h5, h6 {
 @media(min-width:768px) {
     .navbar-custom {
         background-color: $theme-primary;
-        padding: 15px 0;
+        padding: 10px 0;
         -webkit-transition: padding 0.3s;
         -moz-transition: padding 0.3s;
         transition: padding 0.3s;
