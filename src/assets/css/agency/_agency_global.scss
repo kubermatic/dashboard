@@ -221,8 +221,8 @@ header {
 @media(min-width:768px) {
     header {
         .intro-text {
-            padding-top: 175px;
-            padding-bottom: 175px;
+            padding-top: 150px;
+            padding-bottom: 150px;
             .intro-lead-in {
                 @include serif-font;
                 font-style: italic;
