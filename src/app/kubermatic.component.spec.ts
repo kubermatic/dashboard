@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async } from '@angular/core/testing';
-import { KubermaticComponent } from './app.component';
+import { KubermaticComponent } from './kubermatic.component';
 
 describe('KubermaticComponent', () => {
   beforeEach(() => {
