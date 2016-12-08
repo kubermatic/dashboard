@@ -165,7 +165,7 @@ h1, h2, h3, h4, h5, h6 {
 @media(min-width:768px) {
     .navbar-custom {
         background-color: $theme-primary;
-        padding: 10px 0;
+        padding: 7px 0;
         -webkit-transition: padding 0.3s;
         -moz-transition: padding 0.3s;
         transition: padding 0.3s;
@@ -187,7 +187,7 @@ h1, h2, h3, h4, h5, h6 {
 @media(min-width:768px) {
     .navbar-custom.affix {
         background-color: $theme-primary;
-        padding: 10px 0;
+        padding: 7px 0;
         .navbar-brand {
             font-size: 1.5em;
         }

@@ -7,7 +7,7 @@
   "license": "propietary",
   "angular-cli": {},
   "scripts": {
-    "start": "ng serve --port 8000",
+    "serve": "ng serve --port 8000",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",
     "pree2e": "webdriver-manager update",

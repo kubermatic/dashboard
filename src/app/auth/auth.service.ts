@@ -10,7 +10,12 @@ let Auth0Lock = require('auth0-lock').default;
 export class Auth {
 
   // Configure Auth0
-  lock = new Auth0Lock('zqaGAqBGiWD6tce7fcHL03QZYi1AC9wF', 'kubermatic.eu.auth0.com', {});
+  lock = new Auth0Lock('zqaGAqBGiWD6tce7fcHL03QZYi1AC9wF',
+    'kubermatic.eu.auth0.com', {
+      theme: {
+        logo: "https://w3alpha.com/cms/templates/166/img/logo.svg",
+        primaryColor: "#445f73"
+      }});
 
   constructor(private _router: Router) {
     // Add callback for lock `authenticated` event
