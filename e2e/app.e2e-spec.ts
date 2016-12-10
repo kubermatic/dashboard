@@ -1,14 +1,14 @@
-import { DashboardPage } from './app.po';
+import { KubermaticPage } from './app.po';
 
-describe('dashboard App', function() {
-  let page: DashboardPage;
+describe('kubermatic App', function() {
+  let page: KubermaticPage;
 
   beforeEach(() => {
-    page = new DashboardPage();
+    page = new KubermaticPage();
   });
 
   it('should display message saying app works', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('kubermatic works!');
+    expect(page.getParagraphText()).toEqual('app works!');
   });
 });
