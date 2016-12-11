@@ -176,6 +176,19 @@ a.collapse-menu-link {
 .login-section {
   @extend .actions-section;
   right: 40px;
+
+  button {
+    color: $default-text;
+    text-decoration: none;
+
+    &:hover {
+      color: $white-darker;
+    }
+
+    span {
+      margin: 0 5px;
+    }
+  }
 }
 
 @media screen and (max-width: 768px) {

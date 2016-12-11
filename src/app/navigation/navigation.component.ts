@@ -9,17 +9,21 @@ import {Auth} from "../auth/auth.service";
 export class NavigationComponent {
 
   public isScrolled:boolean = false;
+  public userProfile: Object;
 
   constructor(private auth: Auth) {
+    this.userProfile = JSON.parse(localStorage.getItem('profile'));
   }
 
   public login() {
+    console.log("Starting logging");
     localStorage.setItem('redirect_url', "dashboard");
     this.auth.login()
   }
 
   public logout() {
     localStorage.setItem('redirect_url', "welcome");
+    this.userProfile = undefined;
     this.auth.logout()
   }
 
