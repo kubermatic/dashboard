@@ -13,6 +13,7 @@ import { appRoutes } from "./app.routing";
 import { AUTH_PROVIDERS } from 'angular2-jwt';
 import { AuthGuard } from "./auth/auth.guard";
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     KubermaticComponent,
     NavigationComponent,
     FrontpageComponent,
-    DashboardComponent
+    DashboardComponent,
+    BreadcrumbsComponent
   ],
   providers: [
     AUTH_PROVIDERS,

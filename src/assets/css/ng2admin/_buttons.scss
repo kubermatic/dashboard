@@ -11,10 +11,6 @@ $hover: 24;
   font-size: 0.9rem;
 }
 
-.btn:hover {
-  transform: scale(1.2);
-}
-
 @mixin styleButton($color, $borderColor) {
   background: $color;
   border-color: $borderColor;

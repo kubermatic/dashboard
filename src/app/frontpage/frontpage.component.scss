@@ -1,0 +1,41 @@
+@import '../../assets/css/ng2admin/conf/conf';
+
+.intro-text {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
+  color: $primary;
+
+  .intro-lead-in {
+    font-style: italic;
+    font-size: 22px;
+    line-height: 22px;
+    margin-bottom: 25px;
+  }
+  .intro-heading {
+    @include titillium-font;
+    font-size: 40px;
+    line-height: 40px;
+    margin-bottom: 25px;
+  }
+}
+
+@media(min-width:768px) {
+  header {
+    .intro-text {
+      padding-top: 150px;
+      padding-bottom: 150px;
+      .intro-lead-in {
+        font-style: italic;
+        font-size: 40px;
+        line-height: 40px;
+        margin-bottom: 25px;
+      }
+      .intro-heading {
+        font-size: 50px;
+        line-height: 50px;
+        margin-bottom: 50px;
+      }
+    }
+  }
+}

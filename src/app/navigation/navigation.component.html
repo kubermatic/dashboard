@@ -1,19 +1,33 @@
-<nav class="navbar navbar-default navbar-custom navbar-fixed-top" role="navigation">
-  <div class="container">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header page-scroll">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-              aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
-      </button>
-      <a class="navbar-brand" href="/welcome#page-top">KUBERMATIC</a>
-    </div>
+<div class="page-top clearfix" baScrollPosition maxHeight="50" (scrollChange)="scrolledChanged($event)"
+     [ngClass]="{scrolled: isScrolled}">
 
-    <div id="navbar" class="navbar-collapse collapse">
-      <ul class="nav navbar-nav navbar-right">
-        <li><button type="button" class="btn btn-link navbar-btn" (click)="login()" *ngIf="!auth.authenticated()"><i class="fa fa-sign-in"></i>Log In</button></li>
-        <li><button type="button" class="btn btn-link navbar-btn" (click)="logout()" *ngIf="auth.authenticated()"><i class="fa fa-sign-out"></i>Log Out</button></li>
+  <a routerLink="/pages/dashboard" class="al-logo clearfix">KUBERMATIC</a>
+
+  <div class="info" *ngIf="auth.authenticated()">
+    <kubermatic-breadcrumbs></kubermatic-breadcrumbs>
+  </div>
+
+  <div class="user-profile clearfix" *ngIf="auth.authenticated()">
+    <div class="dropdown al-user-profile">
+      <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
+        <span class="fa fa-user-circle"></span>
+      </a>
+      <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
+        <li class="dropdown-item"><i class="dropdown-arr"></i></li>
+        <li class="dropdown-item"><a href><i class="fa fa-user"></i>Profile</a></li>
+        <li class="dropdown-item"><a href><i class="fa fa-cog"></i>Settings</a></li>
+        <li class="dropdown-item"><a href class="signout"><i class="fa fa-power-off"></i>Sign out</a></li>
       </ul>
     </div>
+    <div class="actions-section">
+      <a href>
+        <i class="fa fa-plus"></i><span>Add</span>
+      </a>
+    </div>
   </div>
-</nav>
+  <div class="login-section" *ngIf="!auth.authenticated()">
+    <a href (click)="login()">
+      <i class="fa fa-sign-in"></i><span>Log In</span>
+    </a>
+  </div>
+</div>

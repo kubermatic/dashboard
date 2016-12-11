@@ -8,6 +8,8 @@ import {Auth} from "../auth/auth.service";
 })
 export class NavigationComponent {
 
+  public isScrolled:boolean = false;
+
   constructor(private auth: Auth) {
   }
 
@@ -19,5 +21,9 @@ export class NavigationComponent {
   public logout() {
     localStorage.setItem('redirect_url', "welcome");
     this.auth.logout()
+  }
+
+  public scrolledChanged(isScrolled) {
+    this.isScrolled = isScrolled;
   }
 }

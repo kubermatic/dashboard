@@ -107,3 +107,7 @@
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='$color-1', endColorstr='$color-3',GradientType=1); /* IE6-9 fallback on horizontal gradient */
 
 }
+
+@mixin titillium-font {
+  font-family: "Titillium Web", "Kaushan Script", Helvetica, Arial, cursive;
+}

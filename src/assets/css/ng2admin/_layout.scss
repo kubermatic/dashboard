@@ -22,11 +22,6 @@ main {
   color: $default-text;
 
   @include body-bg();
-
-  .additional-bg {
-    display: none;
-    @include additional-bg();
-  }
 }
 
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
@@ -68,7 +63,7 @@ a {
 
 .al-footer {
   height: 34px;
-  padding: 0 18px 0 ($left-space + 20px);
+  padding: 8px 18px 0 ($left-space + 20px);
   width: 100%;
   position: absolute;
   display: block;
@@ -76,6 +71,7 @@ a {
   font-size: 13px;
   color: $default-text;
   transition: padding-left 0.5s ease;
+  background-color: $white-dark;
 }
 
 .al-footer-main {
@@ -159,13 +155,13 @@ a {
   display: block;
 }
 
-.icon-up {
-  @include bg-nr('arrow-green-up.svg');
-}
-
-.icon-down {
-  @include bg-nr('arrow-red-down.svg');
-}
+//.icon-up {
+//  @include bg-nr('arrow-green-up.svg');
+//}
+//
+//.icon-down {
+//  @include bg-nr('arrow-red-down.svg');
+//}
 
 .disable-text-selection {
   -webkit-touch-callout: none;

@@ -1,4 +1,8 @@
-$default: #ffffff; // default colors for layout
+$white-base:			#fff !default;
+$white-darker:		darken($white-base, 13.5%) !default; // #222
+$white-dark:			darken($white-base, 20%)   !default; // #333
+
+$default: $white-base; // default colors for layout
 $body-bg: #F0F3F4; // default bg color
 
 $default-text: $default; // default text color layout (usually is the same as $default)
@@ -13,9 +17,6 @@ $gray:				  lighten($gray-base, 33.5%) !default; // #555
 $gray-light:		lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:	lighten($gray-base, 93.5%) !default; // #eee
 
-$white-base:			#fff !default;
-$white-darker:		darken($white-base, 13.5%) !default; // #222
-$white-dark:			darken($white-base, 20%)   !default; // #333
 
 $disabled: rgba(255, 255, 255, 0.4); // color for disabled state
 $disabled-bg: tint($disabled, 15%); // background color for disable state
@@ -90,9 +91,4 @@ $hoverlink: darken($activelink, 20%);
     will-change: transform;
     z-index: 0;
   }
-}
-
-// additional background if you want another layer
-@mixin additional-bg() {
-  //display: block; // additional background layer, hidden by default
 }
