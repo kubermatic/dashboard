@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {Router} from "@angular/router";
 
 import { tokenNotExpired } from 'angular2-jwt';
+import {GlobalState} from "../global.state";
 
 // Avoid name not found warnings
 let Auth0Lock = require('auth0-lock').default;
@@ -17,7 +18,9 @@ export class Auth {
         primaryColor: "#445f73"
       }});
 
-  constructor(private _router: Router) {
+  constructor(private _router: Router, private _state: GlobalState) {
+    console.log("Auth constructor");
+
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult) => {
       localStorage.setItem('id_token', authResult.idToken);
@@ -34,10 +37,12 @@ export class Auth {
           _router.navigate([redirectUrl]);
           localStorage.removeItem('redirect_url');
         }
+
+        console.log("Auth calling notifyDataChanged with "+JSON.stringify(profile));
+        this._state.notifyDataChanged('auth.authenticated', profile);
       });
     });
   }
-
 
   public login() {
     // Call the show method to display the widget.
