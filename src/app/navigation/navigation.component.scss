@@ -42,7 +42,7 @@ a.al-logo:hover {
 
 .user-profile {
   float: right;
-  min-width: 230px;
+  min-width: 150px;
   margin-top: 10px;
 }
 
@@ -68,10 +68,10 @@ a.al-logo:hover {
   width: 305px;
   padding: 10px 10px 0;
 
-  > img {
+  img {
     width: 90px;
     height: 90px;
-    border-radius: 10%;
+    border-radius: 5%;
   }
 }
 
@@ -211,6 +211,10 @@ a.collapse-menu-link {
 
 @media screen and (max-width: $resS) {
   .info {
+    display: none;
+  }
+
+  .al-user-profile-details {
     display: none;
   }
 }

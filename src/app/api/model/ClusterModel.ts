@@ -1,3 +1,11 @@
-/**
- * Created by maaz1de on 14.12.2016.
- */
+
+export class ClusterModel {
+  dc: string;
+  cluster: string;
+
+  constructor(dc: string, cluster: string) {
+    this.dc = dc;
+    this.cluster = cluster;
+  }
+}
+
