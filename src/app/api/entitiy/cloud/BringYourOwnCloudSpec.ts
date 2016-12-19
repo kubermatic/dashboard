@@ -1,4 +1,4 @@
-import {KeyCert} from '../KeyCert';
+import {KeyCert} from "../KeyCert";
 
 export class BringYourOwnCloudSpec {
   privateInterface: string;

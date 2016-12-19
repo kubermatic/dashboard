@@ -1,4 +1,4 @@
-@import '../../assets/css/ng2admin/conf/conf';
+@import "../../assets/css/ng2admin/conf/conf";
 
 .page-top {
   background-color: $primary;
@@ -378,7 +378,7 @@ a.collapse-menu-link {
     border-bottom-color: rgba(0, 0, 0, .15);
     &:after {
       top: -9px;
-      left: 0px;
+      left: 0;
       margin-left: -10px;
       content: " ";
       position: absolute;

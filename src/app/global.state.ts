@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Subject }    from 'rxjs/Subject';
+import { Injectable } from "@angular/core";
+import { Subject }    from "rxjs/Subject";
 
 @Injectable()
 export class GlobalState {
@@ -34,10 +34,10 @@ export class GlobalState {
   }
 
   _onEvent(data: any) {
-    let subscribers = this._subscriptions.get(data['event']) || [];
+    let subscribers = this._subscriptions.get(data["event"]) || [];
 
     subscribers.forEach((callback) => {
-      callback.call(null, data['data']);
+      callback.call(null, data["data"]);
     });
   }
 }

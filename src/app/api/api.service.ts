@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
-import {Observable} from 'rxjs';
-import { environment } from '../../environments/environment';
+import { Injectable } from "@angular/core";
+import { Http } from "@angular/http";
+import "rxjs/add/operator/map";
+import {Observable} from "rxjs";
+import { environment } from "../../environments/environment";
 
-import {CreateNodeModel} from './model/CreateNodeModel';
-import {ClusterModel} from './model/ClusterModel';
-import {DataCenterEntity} from './entitiy/DatacenterEntity';
-import {ClusterEntity} from './entitiy/ClusterEntity';
+import {CreateNodeModel} from "./model/CreateNodeModel";
+import {ClusterModel} from "./model/ClusterModel";
+import {DataCenterEntity} from "./entitiy/DatacenterEntity";
+import {ClusterEntity} from "./entitiy/ClusterEntity";
 import {NodeEntity} from "./entitiy/NodeEntity";
 
 @Injectable()

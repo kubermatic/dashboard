@@ -1,4 +1,4 @@
-import {NodeSpec} from '../entitiy/NodeEntity';
+import {NodeSpec} from "../entitiy/NodeEntity";
 export class CreateNodeModel {
 
   instances: number;

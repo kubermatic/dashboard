@@ -1,7 +1,7 @@
-import {MetadataEntity} from './MetadataEntity';
-import {DigitialoceanDatacenterSpec} from './datacenters/DigitialoceanDatacenterSpec';
-import {BringYourOwnDatacenterSpec} from './datacenters/BringYourOwnDatacenterSpec';
-import {AWSDatacenterSpec} from './datacenters/AWSDatacenterSpec';
+import {MetadataEntity} from "./MetadataEntity";
+import {DigitialoceanDatacenterSpec} from "./datacenter/DigitialoceanDatacenterSpec";
+import {BringYourOwnDatacenterSpec} from "./datacenter/BringYourOwnDatacenterSpec";
+import {AWSDatacenterSpec} from "./datacenter/AWSDatacenterSpec";
 
 export class DataCenterEntity {
   metadata: MetadataEntity;

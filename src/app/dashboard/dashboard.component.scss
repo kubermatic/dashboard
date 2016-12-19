@@ -1,4 +1,4 @@
-@import '../../assets/css/ng2admin/conf/conf';
+@import "../../assets/css/ng2admin/conf/conf";
 
 $arrow-box-size: 250px;
 $arrow-box-placeholder-size: 100px;
@@ -41,7 +41,7 @@ $arrow-box-placeholder-left-margin: ($arrow-box-size - $arrow-box-placeholder-si
 }
 
 %arrow-template {
-  content: '';
+  content: "";
   position: relative;
   top: 40px;
   left: 174px;
@@ -69,7 +69,7 @@ $arrow-box-placeholder-left-margin: ($arrow-box-size - $arrow-box-placeholder-si
 @media screen and (max-width: 500px) {
 
   %arrow-template-xs {
-    content: '';
+    content: "";
     position: absolute;
     top: 115px;
     left: 195px;

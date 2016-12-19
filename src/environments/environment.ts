@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  restRoot : "https://k.loodse.com/api/v1/dc",
+  restRoot : "api/v1/dc",
 };

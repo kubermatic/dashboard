@@ -1,7 +1,7 @@
-import {MetadataEntity} from './MetadataEntity';
-import {DigitaloceanNodeSpec} from './node/DigitialoceanNodeSpec';
-import {BringYourOwnNodeSpec} from './node/BringYourOwnNodeSpec';
-import {AWSNodeSpec} from './node/AWSNodeSpec';
+import {MetadataEntity} from "./MetadataEntity";
+import {DigitaloceanNodeSpec} from "./node/DigitialoceanNodeSpec";
+import {BringYourOwnNodeSpec} from "./node/BringYourOwnNodeSpec";
+import {AWSNodeSpec} from "./node/AWSNodeSpec";
 
 export class NodeEntity {
   metadata: MetadataEntity;

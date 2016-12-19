@@ -8,6 +8,7 @@
   "angular-cli": {},
   "scripts": {
     "serve": "ng serve --port 8000 --hmr",
+    "serve:proxy": "ng serve --port 8000 --hmr --proxy-config proxy.conf.json",
     "prebuild": "ng test --single-run",
     "build": "ng build --prod",
     "lint": "tslint \"src/**/*.ts\"",

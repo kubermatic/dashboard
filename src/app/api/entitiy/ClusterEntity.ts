@@ -1,8 +1,8 @@
-import {MetadataEntity} from './MetadataEntity';
-import {DigitialoceanCloudSpec} from './cloud/DigitialoceanCloudSpec';
-import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
-import {AWSCloudSpec} from './cloud/AWSCloudSpec';
-import {KeyCert} from './KeyCert';
+import {MetadataEntity} from "./MetadataEntity";
+import {DigitialoceanCloudSpec} from "./cloud/DigitialoceanCloudSpec";
+import {BringYourOwnCloudSpec} from "./cloud/BringYourOwnCloudSpec";
+import {AWSCloudSpec} from "./cloud/AWSCloudSpec";
+import {KeyCert} from "./KeyCert";
 
 export class ClusterEntity {
   metadata: MetadataEntity;

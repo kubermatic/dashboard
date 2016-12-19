@@ -1,0 +1,6 @@
+{
+  "/api": {
+    "target": "https://k.loodse.com",
+    "secure": false
+  }
+}

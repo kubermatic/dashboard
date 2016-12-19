@@ -1,18 +1,18 @@
-import { Injectable } from '@angular/core';
-import {Router} from "@angular/router';
+import { Injectable } from "@angular/core";
+import {Router} from "@angular/router";
 
-import { tokenNotExpired } from 'angular2-jwt';
-import {GlobalState} from '../global.state';
+import { tokenNotExpired } from "angular2-jwt";
+import {GlobalState} from "../global.state";
 
 // Avoid name not found warnings
-let Auth0Lock = require('auth0-lock').default;
+let Auth0Lock = require("auth0-lock").default;
 
 @Injectable()
 export class Auth {
 
   // Configure Auth0
-  lock = new Auth0Lock('zqaGAqBGiWD6tce7fcHL03QZYi1AC9wF',
-    'kubermatic.eu.auth0.com', {
+  lock = new Auth0Lock("zqaGAqBGiWD6tce7fcHL03QZYi1AC9wF",
+    "kubermatic.eu.auth0.com", {
       theme: {
         logo: "https://w3alpha.com/cms/templates/166/img/logo.svg",
         primaryColor: "#445f73"

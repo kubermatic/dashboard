@@ -1,9 +1,9 @@
 /* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { By } from "@angular/platform-browser";
+import { DebugElement } from "@angular/core";
 
-import { FrontpageComponent } from './frontpage.component';
+import { FrontpageComponent } from "./frontpage.component";
 
 describe('FrontpageComponent', () => {
   let component: FrontpageComponent;
