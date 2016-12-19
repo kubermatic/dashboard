@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import {Auth} from "../auth/auth.service";
-import {GlobalState} from "../global.state";
+import {Auth} from '../auth/auth.service';
+import {GlobalState} from '../global.state';
 
 @Component({
   selector: 'kubermatic-navigation',

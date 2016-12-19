@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Router} from "@angular/router";
+import {Router} from "@angular/router';
 
 import { tokenNotExpired } from 'angular2-jwt';
-import {GlobalState} from "../global.state";
+import {GlobalState} from '../global.state';
 
 // Avoid name not found warnings
 let Auth0Lock = require('auth0-lock').default;
