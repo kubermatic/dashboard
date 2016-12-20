@@ -2,15 +2,30 @@
 
 import { TestBed, async, inject } from "@angular/core/testing";
 import { Auth } from "./auth.service";
+import {HttpModule} from "@angular/http";
+import {BrowserModule} from "@angular/platform-browser";
+import {RouterTestingModule} from "@angular/router/testing";
+import {GlobalState} from "../global.state";
 
-describe('Auth', () => {
+describe("Auth", () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [Auth]
-    });
+      imports: [
+        BrowserModule,
+        HttpModule,
+        RouterTestingModule
+      ],
+      declarations: [
+      ],
+      providers: [
+        Auth,
+        GlobalState
+      ],
+    }).compileComponents();
   });
 
-  it('should ...', inject([Auth], (service: Auth) => {
+
+  it("should ...", inject([Auth], (service: Auth) => {
     expect(service).toBeTruthy();
   }));
 });

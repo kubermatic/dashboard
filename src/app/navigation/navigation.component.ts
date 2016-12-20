@@ -13,7 +13,6 @@ export class NavigationComponent {
   public userProfile: Object;
 
   constructor(private auth: Auth, private _state: GlobalState) {
-    console.log("NavigationComponent constructor");
     this._state.subscribe("auth.authenticated", (profile) => {
       console.log("NavigationComponent Called by subscribe");
       this.userProfile = JSON.parse(profile);

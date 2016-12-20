@@ -19,8 +19,6 @@ export class Auth {
       }});
 
   constructor(private _router: Router, private _state: GlobalState) {
-    console.log("Auth constructor");
-
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult) => {
       localStorage.setItem('id_token', authResult.idToken);
