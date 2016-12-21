@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  restRoot : "https://beta.kubermatic.io/api/dc",
+  restRoot : "/api/v1/dc",
 };

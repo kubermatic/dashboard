@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="row flex-items-xs-center">
+    <h2 class="wizard-headline">Create a Kubernetes Cluster</h2>
+  </div>
+</div>
+
+
+<div class="container dashboard-content">
+  <div class="row flex-items-xs-center">
+
+    <div>
+      <div *ngFor="let stepTitle of stepsTitles; let idx = index;" class="wizard-step" [ngClass]="{'active': currentStep === idx, 'done': currentStep > idx, 'tbd': currentStep < idx}">
+        <span *ngIf="currentStep > idx" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="currentStep <= idx" class="wizard-step-circle">{{ idx + 1}}</span>
+        <div class="wizard-step-body">
+          <h4>{{ stepTitle }}</h4>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-group" role="group" aria-label="...">
+      <button type="button" class="btn btn-info" (click)="stepBack()" [disabled]="!canStepBack()">
+        <i class="fa fa-chevron-left" style="margin-right: 5px;" aria-hidden="true"></i>Back
+      </button>
+      <button type="button" (click)="stepForward()" class="btn btn-success"  [disabled]="!canStepForward()">
+        Next<i class="fa fa-chevron-right" style="margin-left: 5px;" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <div>
+      <span class="arrow-box-title">Select the Datacenter of the Kubernetes Master</span>
+
+      <div *ngFor="let dc of seedDataCenters; let i = index;" class="col-sm arrow-box arrow-box-completed"
+           [ngClass]="{'selected': selectedDC === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+           (click)="selectDC(dc.metadata.name)">
+
+        <div class="col-xs arrow-box-content flex-items-xs-center flex-xs-middle">
+          <img class="logo" height="20px" src="/assets/images/clouds/loodsecluster.png" alt="{{dc.spec.provider}}">
+          <div class="name">
+            {{dc.metadata.name}}
+          </div>
+          <div class="location">
+            {{dc.spec.location}}
+          </div>
+          <img class="location-flag" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
+        </div>
+      </div>
+
+      <span class="arrow-box-description">This is the datacenter the Kubernetes master is deployed in by Kubermatic. Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</span>
+    </div>
+  </div>
+</div>
