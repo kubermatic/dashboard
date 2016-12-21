@@ -1,27 +1,55 @@
-<h2>Create a Kubernetes Cluster</h2>
+<div class="container">
+  <div class="row flex-items-xs-center">
+    <h2 class="initial-flow-headline">Create a Kubernetes Cluster</h2>
+  </div>
+</div>
+
 
 <div class="container dashboard-content">
   <div class="row flex-items-xs-center">
+
     <div>
-      <div class="arrow_box arrow_box_completed arrow_box_color_primary">
-        <span class="arrow_box_title">Select the Datacenter of the Kubernetes Master</span>
-        <div class="col-xs arrow-box-template flex-items-xs-center flex-xs-middle"></div>
+      <div class="wizard-step active">
+        <span *ngIf="current > 1" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="current <= 1" class="wizard-step-circle">1</span>
+        <div class="wizard-step-body">
+          <h4>Data center</h4>
+        </div>
+      </div>
+
+      <div class="wizard-step tbd">
+        <span *ngIf="current > 2" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="current <= 2" class="wizard-step-circle">2</span>
+        <div class="wizard-step-body">
+          <h4>Cloud provider</h4>
+        </div>
+      </div>
+
+      <div class="wizard-step tbd">
+        <span *ngIf="current > 3" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="current <= 3" class="wizard-step-circle">3</span>
+        <div class="wizard-step-body">
+          <h4>Configuration</h4>
+        </div>
+      </div>
+
+      <div class="wizard-step tbd">
+        <span *ngIf="current > 4" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="current <= 4" class="wizard-step-circle">4</span>
+        <div class="wizard-step-body">
+          <h4>Go!</h4>
+        </div>
       </div>
     </div>
 
-    <div class="arrow_box arrow_box_completed arrow_box_color_secondary">
-      <span class="arrow_box_title">Select a cloud provider for your nodes</span>
-      <div class="col-xs arrow-box-template flex-items-xs-center flex-xs-middle"></div>
-    </div>
+    <div>
+      <span class="arrow_box_title">Select the Datacenter of the Kubernetes Master</span>
 
-    <div class="arrow_box arrow_box_completed arrow_box_color_primary">
-      <span class="arrow_box_title">Select number of nodes</span>
-      <div class="col-xs arrow-box-template flex-items-xs-center flex-xs-middle"></div>
-    </div>
+      <div class="arrow_box arrow_box_completed arrow_box_color_primary">
+        <div class="col-xs arrow-box-template flex-items-xs-center flex-xs-middle"></div>
+      </div>
 
-    <div class="arrow_box arrow_box_completed arrow_box_color_secondary">
-      <span class="arrow_box_title">Select cluster name</span>
-      <div class="col-xs arrow-box-template flex-items-xs-center flex-xs-middle"></div>
+      <span class="arrow_box_description">This is the datacenter the Kubernetes master is deployed in by Kubermatic. Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</span>
     </div>
   </div>
 </div>

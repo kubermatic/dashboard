@@ -1,6 +1,6 @@
 {
-  "/api": {
-    "target": "https://k.loodse.com",
+  "/api/**": {
+    "target": "https://k.loodse.com/api",
     "secure": false
   }
 }

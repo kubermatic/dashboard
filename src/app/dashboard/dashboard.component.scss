@@ -5,18 +5,109 @@ $arrow-box-placeholder-size: 100px;
 $arrow-box-placeholder-top-margin: ($arrow-box-size - $arrow-box-placeholder-size)* 3/5 ;
 $arrow-box-placeholder-left-margin: ($arrow-box-size - $arrow-box-placeholder-size) /2 ;
 
+.initial-flow-headline {
+  padding-top: 25px;
+  color: $primary;
+  font-weight: $font-bold;
+}
+
 .dashboard-content {
   padding-top: 50px;
   margin-right: auto;
   margin-left: auto;
 }
+
+.wizard-step {
+  margin-left: 16px;
+  padding-left: 16px;
+  padding-top: 8px;
+  border-left: 2px solid #d0d0d0;
+  position: relative;
+}
+.wizard-step.done {
+  border-left-color: #049516;
+}
+.wizard-step:last-child {
+  border-left: none;
+}
+
+.wizard-step-body {
+  margin-left: 16px;
+  margin-top: 0;
+  min-height: 48px;
+  overflow-y:hidden;
+  padding-bottom: 16px;
+  color: $primary;
+
+  .wizard-step {
+    .tbd{
+      filter: grayscale(100%);
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+      opacity: 0.3;
+    }
+
+    .disabled {
+      filter: grayscale(100%);
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+      opacity: 0.3;
+    }
+
+    .tbd {
+       filter: opacity(50%) grayscale(80%);
+    }
+  }
+}
+
+.wizard-step-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 36px;
+  position: absolute;
+  top: 0  ;
+  left: -18px;
+  text-align: center;
+  line-height: 34px;
+}
+.wizard-step.done .wizard-step-circle {
+  background-color: #049516;
+  color: white;
+  border: 2px solid #049516;
+}
+.wizard-step.active .wizard-step-circle {
+  background-color: #049516;
+  color: white;
+  border: 2px solid #049516;
+}
+.wizard-step.tbd .wizard-step-circle {
+  background-color: #d0d0d0;
+  color: #808080;
+  border-color: #d0d0d0;
+}
+.wizard-step.tbd .wizard-step-body {
+  filter: opacity(50%) grayscale(50%);
+}
+
 .arrow_box_title {
   text-align: center;
   align-items: center;
   max-width: 220px;
   color: $primary;
+  font-weight: $font-normal;
 }
 
+.arrow_box_description {
+  text-align: center;
+  align-items: center;
+  max-width: 220px;
+  color: $primary;
+  font-weight: $font-thin;
+}
 
 .arrow_box {
   width: $arrow-box-size;
