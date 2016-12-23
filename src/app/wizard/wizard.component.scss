@@ -3,8 +3,6 @@
 
 .dashboard-content {
   padding-top: 50px;
-  margin-right: auto;
-  margin-left: auto;
 }
 
 // wizard--------------
@@ -120,10 +118,12 @@
 
 // arrow box--------
 
-$arrow-box-size: 250px;
-$arrow-box-content-logo-size: 90px;
+$arrow-box-size: 200px;
+$arrow-box-content-dc-logo-size: 70px;
+$arrow-box-content-cloud-logo-size: 90px;
 $arrow-box-content-location-flag-size: 32px;
-$arrow-box-content-margin-top: ($arrow-box-size - ($arrow-box-content-logo-size+$arrow-box-content-location-flag-size*2))/2;
+$arrow-box-content-dc-margin-top: 10px;
+$arrow-box-content-cloud-margin-top: ($arrow-box-size - $arrow-box-content-cloud-logo-size)/2;
 
 .arrow-box-title {
   text-align: center;
@@ -143,16 +143,19 @@ $arrow-box-content-margin-top: ($arrow-box-size - ($arrow-box-content-logo-size+
 
 .arrow-box-content {
   text-align: center;
-  align-items: center;
   color: $primary;
   font-weight: $font-bold;
-  position: relative;
-  margin-top: $arrow-box-content-margin-top;
 
-  img.logo {
-    width: $arrow-box-content-logo-size;
-    height: $arrow-box-content-logo-size * 50/69;
+  img.dc-logo {
+    width: $arrow-box-content-dc-logo-size;
+    margin-top: $arrow-box-content-dc-margin-top;
     margin-bottom: 15px;
+  }
+
+  img.cloud-logo {
+    width: $arrow-box-content-cloud-logo-size;
+    margin-top: $arrow-box-content-cloud-margin-top;
+    margin-bottom: 15px; //2,66, 1,64 1,772
   }
 
   div.name {
@@ -175,10 +178,9 @@ $arrow-box-content-margin-top: ($arrow-box-size - ($arrow-box-content-logo-size+
 }
 
 .arrow-box {
-  width: $arrow-box-size;
-  height: $arrow-box-size;
-  margin-left: 30px;
-  margin-bottom: 30px;
+  max-width: $arrow-box-size;
+  max-height: $arrow-box-size;
+  margin: 15px;
   border-radius: 10px 10px 10px 10px;
   -moz-border-radius: 10px 10px 10px 10px;
   -webkit-border-radius: 10px 10px 10px 10px;
@@ -192,12 +194,12 @@ $arrow-box-content-margin-top: ($arrow-box-size - ($arrow-box-content-logo-size+
 }
 
 .arrow-box.selected {
-  background-color: #0597f2;
+  background-color: #dcebff;
   cursor: default;
 }
 
 .arrow-box.selected:hover {
-  background-color: #059eff;
+  background-color: #d5e3f5;
   cursor: default;
 }
 

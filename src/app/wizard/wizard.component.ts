@@ -10,12 +10,17 @@ import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
 })
 export class WizardComponent implements OnInit {
 
-  private seedDataCenters: DataCenterEntity[] = [];
-  private currentStep: number = 0;
-  private stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
+  public seedDataCenters: DataCenterEntity[] = []; // TODO question why does this list contain sometimes gke and D.O. sometimes not?
+  public nodeDataCenters: DataCenterEntity[] = [];
+  public supportedNodeProviders: string[] = ["aws", "digitalocean", "bringyourown"];
+  public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {}; // TODO aws IReland shows Iran flag
 
-  private selectedDC: string;
-  private selectedCloud: string;
+  public currentStep: number = 0;
+  public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
+
+  public selectedDC: string;
+  public selectedCloud: string;
+  public selectedCloudRegion: string;
   private selectedNodeCount: number = 3;
   private selectedName: string;
 
@@ -26,7 +31,14 @@ export class WizardComponent implements OnInit {
       this.seedDataCenters = result.filter(elem => elem.seed)
         .sort((a, b) => DataCenterEntity.sortByName(a, b));
 
-      console.log(JSON.stringify(this.seedDataCenters));
+      result.forEach(elem => {
+        if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
+          this.groupedDatacenters[elem.spec.provider]= [];
+        }
+
+        this.groupedDatacenters[elem.spec.provider].push(elem);
+      });
+      // console.log(JSON.stringify(this.seedDataCenters));
     });
   }
 
@@ -36,6 +48,10 @@ export class WizardComponent implements OnInit {
 
   public selectCloud(cloud: string) {
     this.selectedCloud = cloud;
+  }
+
+  public selectCloudRegion(cloud: string) {
+    this.selectedCloudRegion = cloud;
   }
 
   public selectName(name: string) {
@@ -65,8 +81,10 @@ export class WizardComponent implements OnInit {
       case 1:
         return !!this.selectedCloud;
       case 2:
-        return !!this.selectedName;
+        return !!this.selectedCloudRegion;
       case 3:
+        return !!this.selectedName;
+      case 4:
         return !!this.selectedNodeCount && this.selectedNodeCount >= 0;
       default:
         return false;

@@ -5,48 +5,121 @@
 </div>
 
 
-<div class="container dashboard-content">
-  <div class="row flex-items-xs-center">
+<div class="dashboard-content container">
+  <div class="row">
 
     <div>
-      <div *ngFor="let stepTitle of stepsTitles; let idx = index;" class="wizard-step" [ngClass]="{'active': currentStep === idx, 'done': currentStep > idx, 'tbd': currentStep < idx}">
-        <span *ngIf="currentStep > idx" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
-        <span *ngIf="currentStep <= idx" class="wizard-step-circle">{{ idx + 1}}</span>
+      <div class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
+        <span *ngIf="currentStep > 0" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="currentStep <= 0" class="wizard-step-circle">1</span>
         <div class="wizard-step-body">
-          <h4>{{ stepTitle }}</h4>
-        </div>
-      </div>
-    </div>
+          <h4>Select the Datacenter of the Kubernetes Master</h4>
+          <div [hidden]="currentStep !== 0">
+            <span class="arrow-box-title">This is the datacenter the Kubernetes master is deployed in by Kubermatic.</span>
+            <div class="row flex-items-xs-center">
+              <div *ngFor="let dc of seedDataCenters; let i = index;" class="col-sm arrow-box arrow-box-completed"
+                   [ngClass]="{'selected': selectedDC === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                   (click)="selectDC(dc.metadata.name)">
 
-    <div class="btn-group" role="group" aria-label="...">
-      <button type="button" class="btn btn-info" (click)="stepBack()" [disabled]="!canStepBack()">
-        <i class="fa fa-chevron-left" style="margin-right: 5px;" aria-hidden="true"></i>Back
-      </button>
-      <button type="button" (click)="stepForward()" class="btn btn-success"  [disabled]="!canStepForward()">
-        Next<i class="fa fa-chevron-right" style="margin-left: 5px;" aria-hidden="true"></i>
-      </button>
-    </div>
-
-    <div>
-      <span class="arrow-box-title">Select the Datacenter of the Kubernetes Master</span>
-
-      <div *ngFor="let dc of seedDataCenters; let i = index;" class="col-sm arrow-box arrow-box-completed"
-           [ngClass]="{'selected': selectedDC === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
-           (click)="selectDC(dc.metadata.name)">
-
-        <div class="col-xs arrow-box-content flex-items-xs-center flex-xs-middle">
-          <img class="logo" height="20px" src="/assets/images/clouds/loodsecluster.png" alt="{{dc.spec.provider}}">
-          <div class="name">
-            {{dc.metadata.name}}
+                <div class="col-xs arrow-box-content flex-items-xs-center">
+                  <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{dc.spec.provider}}">
+                  <div class="flex-xs-middle">
+                    <div class="name">
+                      {{dc.metadata.name}}
+                    </div>
+                    <div class="location">
+                      {{dc.spec.location}}
+                    </div>
+                  </div>
+                  <img class="location-flag flex-xs-bottom" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="location">
-            {{dc.spec.location}}
-          </div>
-          <img class="location-flag" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
         </div>
       </div>
 
-      <span class="arrow-box-description">This is the datacenter the Kubernetes master is deployed in by Kubermatic. Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</span>
+      <div class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
+        <span *ngIf="currentStep > 1" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="currentStep <= 1" class="wizard-step-circle">2</span>
+        <div class="wizard-step-body">
+          <h4>Select the cloud provider for your nodes</h4>
+          <div [hidden]="currentStep !== 1">
+            <span class="arrow-box-title">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic. Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</span>
+            <div class="row flex-items-xs-center">
+              <div *ngFor="let cloud of supportedNodeProviders; let i = index;" class="col-sm arrow-box arrow-box-completed"
+                   [ngClass]="{'selected': selectedCloud === cloud, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                   (click)="selectCloud(cloud)">
+
+                <div class="col-xs arrow-box-content flex-items-xs-center flex-xs-middle">
+                  <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
+        <span *ngIf="currentStep > 2" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="currentStep <= 2" class="wizard-step-circle">3</span>
+        <div class="wizard-step-body">
+          <h4>Select the datacenter of your cloud provider</h4>
+          <div [hidden]="currentStep !== 2">
+            <span class="arrow-box-title">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic. Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</span>
+            <div [hidden]="selectedCloud === 'bringyourown'">
+              <div class="row flex-items-xs-center">
+                <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-sm arrow-box arrow-box-completed"
+                     [ngClass]="{'selected': selectedCloudRegion === cloud, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                     (click)="selectCloudRegion(cloud)">
+
+                  <div class="col-xs arrow-box-content flex-items-xs-center">
+                    <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{dc.spec.provider}}">
+                    <div class="name">
+                      {{dc.metadata.name}}
+                    </div>
+                    <div class="location">
+                      {{dc.spec.location}}
+                    </div>
+                    <img class="location-flag" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div [hidden]="selectedCloud !== 'bringyourown'">
+              <p>
+                You <i>bring your own</i> nodes, how you like, whereever you like. You are on your own, but
+                you have full flexibility. Install the nodes on any cloud provider of your choice or in your
+                own datacenter or on bare-metal.
+              </p>
+              <p>
+                Only requirement for now: your provider has to support Ubuntu 16.04 and a private network.
+              </p>
+              <p>
+                Instructions will be provided in the cluster details.
+              </p>
+              <div class="btn-group">
+                <button class="btn btn-warning" ng-class="{active: acceptedBringYourOwn}" ng-click="acceptBringYourOwn()">
+                  Fantastic, this is exactly what I want.
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </div>
   </div>
+
+  <div class="btn-group row" role="group" aria-label="navigation">
+    <button type="button" class="col-xs-6 btn btn-info" (click)="stepBack()" [disabled]="!canStepBack()">
+      <i class="fa fa-chevron-left" style="margin-right: 5px;" aria-hidden="true"></i>Back
+    </button>
+    <button type="button" class="col-xs-6 btn btn-success" (click)="stepForward()" [disabled]="!canStepForward()">
+      Next<i class="fa fa-chevron-right" style="margin-left: 5px;" aria-hidden="true"></i>
+    </button>
+  </div>
+
 </div>
