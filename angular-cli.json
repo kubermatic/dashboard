@@ -22,6 +22,7 @@
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
+        "assets/js/tether.js",
         "assets/js/bootstrap.js"
       ],
       "environments": {
