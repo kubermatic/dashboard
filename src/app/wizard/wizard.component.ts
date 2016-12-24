@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
+import {ClusterNameGenerator} from "../util/name-generator.service";
 
 
 @Component({
@@ -21,10 +22,12 @@ export class WizardComponent implements OnInit {
   public selectedDC: string;
   public selectedCloud: string;
   public selectedCloudRegion: string;
-  private selectedNodeCount: number = 3;
-  private selectedName: string;
+  public selectedNodeCount: number = 3;
+  public selectedName: string;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator) {
+    this.refreshName();
+  }
 
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
@@ -44,22 +47,46 @@ export class WizardComponent implements OnInit {
 
   public selectDC(dc: string) {
     this.selectedDC = dc;
+    this.selectedCloud = null;
+    this.selectedCloudRegion = null;
   }
 
   public selectCloud(cloud: string) {
     this.selectedCloud = cloud;
+    this.selectedCloudRegion = null;
   }
 
   public selectCloudRegion(cloud: string) {
     this.selectedCloudRegion = cloud;
   }
 
+  public selectNodeCount(nodeCount: number) {
+    this.selectedNodeCount = nodeCount;
+  }
+
   public selectName(name: string) {
     this.selectedName = name;
   }
 
-  public selectNodeCount(nodeCount: number) {
-    this.selectedNodeCount = nodeCount;
+  public gotoStep(step: number) {
+    this.currentStep = step;
+  }
+
+  public canGotoStep(step: number) {
+    switch (step) {
+      case 0:
+        return !!this.selectedDC;
+      case 1:
+        return !!this.selectedCloud;
+      case 2:
+        return !!this.selectedCloudRegion;
+      case 3:
+        return !!this.selectedName;
+      case 4:
+        return !!this.selectedNodeCount && this.selectedNodeCount >= 0;
+      default:
+        return false;
+    }
   }
 
   public stepBack() {
@@ -75,19 +102,10 @@ export class WizardComponent implements OnInit {
   }
 
   public canStepForward(): boolean {
-    switch (this.currentStep) {
-      case 0:
-        return !!this.selectedDC;
-      case 1:
-        return !!this.selectedCloud;
-      case 2:
-        return !!this.selectedCloudRegion;
-      case 3:
-        return !!this.selectedName;
-      case 4:
-        return !!this.selectedNodeCount && this.selectedNodeCount >= 0;
-      default:
-        return false;
-    }
+    return this.canGotoStep(this.currentStep);
+  }
+
+  public refreshName() {
+    this.selectedName = this.nameGenerator.generateName();
   }
 }

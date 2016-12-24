@@ -10,7 +10,7 @@
 
     <div>
       <div class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
-        <span *ngIf="currentStep > 0" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="currentStep > 0" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'"  (click)="gotoStep(0)"></span>
         <span *ngIf="currentStep <= 0" class="wizard-step-circle">1</span>
         <div class="wizard-step-body">
           <h4>Select the Datacenter of the Kubernetes Master</h4>
@@ -40,7 +40,7 @@
       </div>
 
       <div class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
-        <span *ngIf="currentStep > 1" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="currentStep > 1" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(1)"></span>
         <span *ngIf="currentStep <= 1" class="wizard-step-circle">2</span>
         <div class="wizard-step-body">
           <h4>Select the cloud provider for your nodes</h4>
@@ -61,7 +61,7 @@
       </div>
 
       <div class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
-        <span *ngIf="currentStep > 2" class="wizard-step-circle fa fa-check-circle" aria-hidden="true"></span>
+        <span *ngIf="currentStep > 2" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(2)"></span>
         <span *ngIf="currentStep <= 2" class="wizard-step-circle">3</span>
         <div class="wizard-step-body">
           <h4>Select the datacenter of your cloud provider</h4>
@@ -70,8 +70,8 @@
             <div [hidden]="selectedCloud === 'bringyourown'">
               <div class="row flex-items-xs-center">
                 <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-sm arrow-box arrow-box-completed"
-                     [ngClass]="{'selected': selectedCloudRegion === cloud, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
-                     (click)="selectCloudRegion(cloud)">
+                     [ngClass]="{'selected': selectedCloudRegion === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                     (click)="selectCloudRegion(dc.metadata.name)">
 
                   <div class="col-xs arrow-box-content flex-items-xs-center">
                     <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{dc.spec.provider}}">
@@ -107,6 +107,39 @@
             </div>
           </div>
 
+        </div>
+      </div>
+
+      <div class="wizard-step" [ngClass]="{'active': currentStep === 3, 'done': currentStep > 3, 'tbd': currentStep < 3}">
+        <span *ngIf="currentStep > 3" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(3)"></span>
+        <span *ngIf="currentStep <= 3" class="wizard-step-circle">4</span>
+        <div class="wizard-step-body">
+          <h4>Cluster name</h4>
+          <div [hidden]="currentStep !== 3">
+            <p>Give your cluster a name:</p>
+            <div class="input-group">
+              <input type="text" class="form-control" [(ngModel)]="selectedName">
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-secondary" (click)="refreshName()">
+                 <i class="fa fa-refresh"></i>
+                </button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
+        <span *ngIf="currentStep > 4" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(4)"></span>
+        <span *ngIf="currentStep <= 4" class="wizard-step-circle">5</span>
+        <div class="wizard-step-body">
+          <h4>Summary</h4>
+          <div [hidden]="currentStep !== 4">
+            <p>You are creating your cluster in {{ selectedDC }} with name {{ selectedName }}</p>
+            <p>You choose the cloud provider: {{ selectedCloud }} in region {{ selectedCloudRegion }}</p>
+            <p>Count of nodes: {{ selectNodeCount() }}</p>
+            <button class="btn btn-success">Create cluster</button>
+          </div>
         </div>
       </div>
 

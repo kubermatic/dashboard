@@ -1,6 +1,7 @@
 $white-base:			#fff !default;
-$white-darker:		darken($white-base, 13.5%) !default; // #222
-$white-dark:			darken($white-base, 20%)   !default; // #333
+$white-dark-light:		darken($white-base, 6.75%) !default;
+$white-dark:		darken($white-base, 13.5%) !default; // #222
+$white-darker:			darken($white-base, 20%)   !default; // #333
 
 $default: $white-base; // default colors for layout
 $body-bg: #F0F3F4; // default bg color
