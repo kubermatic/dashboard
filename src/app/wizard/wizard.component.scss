@@ -7,10 +7,19 @@
 
 // wizard--------------
 
+.wizard-content {
+  padding: 5px;
+  max-height: calc(100vh - 210px);
+  overflow-y: auto;
+}
+
 .wizard-headline {
-  padding-top: 25px;
   color: $primary;
   font-weight: $font-bold;
+}
+
+.wizard-footer {
+  padding: 5px;
 }
 
 .wizard-step {
@@ -90,56 +99,29 @@
   filter: opacity(50%) grayscale(50%);
 }
 
-//cloud-thumbnail--------------
-
-.cloud-thumbnail {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-.cloud-thumbnail a:focus { text-decoration:none; }
-.cloud-thumbnail a:hover { text-decoration:none; }
-.cloud-thumbnail a:active { text-decoration:none; }
-.cloud-thumbnail .logo {
-  margin-top: 0;
-  margin-bottom: 15px;
-  height: 50px;
-}
-.cloud-thumbnail .caption {
-  text-align: center;
-  padding: 0;
-}
-.cloud-thumbnail.selected .caption {
-  text-align: center;
-  padding: 0;
-  color: #ffffff;
-}
-.cloud-thumbnail.selected {
-  background-color: #059eff;
-}
-
 // arrow box--------
 
 $arrow-box-size: 200px;
 $arrow-box-content-dc-logo-size: 70px;
-$arrow-box-content-cloud-logo-size: 90px;
+$arrow-box-content-cloud-logo-size: 120px;
 $arrow-box-content-location-flag-size: 32px;
 $arrow-box-content-dc-margin-top: 10px;
 $arrow-box-content-cloud-margin-top: ($arrow-box-size - $arrow-box-content-cloud-logo-size)/2;
 
-.arrow-box-title {
-  text-align: center;
-  align-items: center;
-  max-width: 220px;
+.arrow-box-text {
   color: $primary;
   font-weight: $font-normal;
+  font-size: $font-size-base;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
-.arrow-box-description {
-  text-align: center;
-  align-items: center;
-  max-width: 220px;
+.arrow-box-text-primary {
   color: $primary;
   font-weight: $font-thin;
+  font-size: $font-size-lg;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .arrow-box-content {
@@ -181,6 +163,8 @@ $arrow-box-content-cloud-margin-top: ($arrow-box-size - $arrow-box-content-cloud
 .arrow-box {
   max-width: $arrow-box-size;
   max-height: $arrow-box-size;
+  width: $arrow-box-size;
+  height: $arrow-box-size;
   margin: 15px;
   border-radius: 10px 10px 10px 10px;
   -moz-border-radius: 10px 10px 10px 10px;

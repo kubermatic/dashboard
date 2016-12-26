@@ -11,10 +11,9 @@ import {ClusterNameGenerator} from "../util/name-generator.service";
 })
 export class WizardComponent implements OnInit {
 
-  public seedDataCenters: DataCenterEntity[] = []; // TODO question why does this list contain sometimes gke and D.O. sometimes not?
-  public nodeDataCenters: DataCenterEntity[] = [];
+  public seedDataCenters: DataCenterEntity[] = [];
   public supportedNodeProviders: string[] = ["aws", "digitalocean", "bringyourown"];
-  public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {}; // TODO aws IReland shows Iran flag
+  public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {};
 
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
@@ -22,8 +21,10 @@ export class WizardComponent implements OnInit {
   public selectedDC: string;
   public selectedCloud: string;
   public selectedCloudRegion: string;
+  public selectedCloudConfiguration: any;
   public selectedNodeCount: number = 3;
   public selectedName: string;
+  public acceptBringYourOwn: boolean;
 
   constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator) {
     this.refreshName();
@@ -60,6 +61,10 @@ export class WizardComponent implements OnInit {
     this.selectedCloudRegion = cloud;
   }
 
+  public selectCloudConfiguration(config: any) {
+    this.selectedCloudConfiguration = config;
+  }
+
   public selectNodeCount(nodeCount: number) {
     this.selectedNodeCount = nodeCount;
   }
@@ -79,9 +84,13 @@ export class WizardComponent implements OnInit {
       case 1:
         return !!this.selectedCloud;
       case 2:
-        return !!this.selectedCloudRegion;
+        if (this.selectedCloud === "bringyourown") {
+          return this.acceptBringYourOwn;
+        } else {
+          return !!this.selectedCloudRegion;
+        }
       case 3:
-        return !!this.selectedName;
+        return !!this.selectedCloudConfiguration && !!this.selectedName;
       case 4:
         return !!this.selectedNodeCount && this.selectedNodeCount >= 0;
       default:
