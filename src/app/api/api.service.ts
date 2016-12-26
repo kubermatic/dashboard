@@ -10,6 +10,7 @@ import {DataCenterEntity} from "./entitiy/DatacenterEntity";
 import {ClusterEntity} from "./entitiy/ClusterEntity";
 import {NodeEntity} from "./entitiy/NodeEntity";
 import {Auth} from "../auth/auth.service";
+import {AwsSSHKey} from "./model/AwsSSHKeyModel";
 
 @Injectable()
 export class ApiService {
@@ -109,6 +110,13 @@ export class ApiService {
     let url = `${this.restRoot}${clusterModel.dc}/cluster/${clusterModel.cluster}/k8s/nodes/${node_name}`;
 
     return this._http.get(url, { headers: this.headers })
+      .map(res => res.json());
+  }
+
+  getAWSSSHKeys(dc: string, access_key_id: string, secret_access_key: string): Observable<AwsSSHKey[]> {
+    let url = `${this.restRoot}ext/${dc}/keys`;
+
+    return this._http.post(url, {username: access_key_id , password: secret_access_key}, { headers: this.headers })
       .map(res => res.json());
   }
 }

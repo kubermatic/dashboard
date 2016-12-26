@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
 import {ClusterNameGenerator} from "../util/name-generator.service";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 
 @Component({
@@ -23,11 +24,12 @@ export class WizardComponent implements OnInit {
   public selectedCloudRegion: string;
   public selectedCloudConfiguration: any;
   public selectedNodeCount: number = 3;
-  public selectedName: string;
   public acceptBringYourOwn: boolean;
 
-  constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator) {
-    this.refreshName();
+  public clusterNameForm: FormGroup;
+  public bringYourOwnForm: FormGroup;
+
+  constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator, private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
@@ -37,13 +39,24 @@ export class WizardComponent implements OnInit {
 
       result.forEach(elem => {
         if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
-          this.groupedDatacenters[elem.spec.provider]= [];
+          this.groupedDatacenters[elem.spec.provider] = [];
         }
 
         this.groupedDatacenters[elem.spec.provider].push(elem);
       });
       // console.log(JSON.stringify(this.seedDataCenters));
     });
+
+    this.bringYourOwnForm = this.formBuilder.group({
+      pif: ["", [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16),
+        Validators.pattern("[a-z0-9-]+(:[a-z0-9-]+)?")]],
+    });
+
+    this.clusterNameForm = this.formBuilder.group({
+      clustername: ["", [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16)]],
+    });
+    
+    this.refreshName();
   }
 
   public selectDC(dc: string) {
@@ -69,10 +82,6 @@ export class WizardComponent implements OnInit {
     this.selectedNodeCount = nodeCount;
   }
 
-  public selectName(name: string) {
-    this.selectedName = name;
-  }
-
   public gotoStep(step: number) {
     this.currentStep = step;
   }
@@ -90,7 +99,11 @@ export class WizardComponent implements OnInit {
           return !!this.selectedCloudRegion;
         }
       case 3:
-        return !!this.selectedCloudConfiguration && !!this.selectedName;
+        if (this.selectedCloud === "bringyourown") {
+          return this.bringYourOwnForm.valid && this.clusterNameForm.valid;
+        } else {
+          return this.clusterNameForm.valid; // TODO
+        }
       case 4:
         return !!this.selectedNodeCount && this.selectedNodeCount >= 0;
       default:
@@ -115,6 +128,6 @@ export class WizardComponent implements OnInit {
   }
 
   public refreshName() {
-    this.selectedName = this.nameGenerator.generateName();
+    this.clusterNameForm.patchValue({clustername: this.nameGenerator.generateName()});
   }
 }

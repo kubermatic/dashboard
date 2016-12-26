@@ -7,168 +7,170 @@
 
 <div class="container">
   <div class="wizard-content">
-      <div class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
-        <span *ngIf="currentStep > 0" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'"  (click)="gotoStep(0)"></span>
-        <span *ngIf="currentStep <= 0" class="wizard-step-circle">1</span>
-        <div class="wizard-step-body">
-          <h4>Select the Datacenter of the Kubernetes Master</h4>
-          <div [hidden]="currentStep !== 0">
-            <div class="arrow-box-text">This is the datacenter the Kubernetes master is deployed in by Kubermatic.</div>
-            <div class="row flex-items-xs-center">
-              <div *ngFor="let dc of seedDataCenters; let i = index;" class="col-sm arrow-box arrow-box-completed"
-                   [ngClass]="{'selected': selectedDC === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
-                   (click)="selectDC(dc.metadata.name)">
+    <div class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
+      <span *ngIf="currentStep > 0" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'"  (click)="gotoStep(0)"></span>
+      <span *ngIf="currentStep <= 0" class="wizard-step-circle">1</span>
+      <div class="wizard-step-body">
+        <h4>Select the Datacenter of the Kubernetes Master</h4>
+        <div [hidden]="currentStep !== 0">
+          <div class="arrow-box-text">This is the datacenter the Kubernetes master is deployed in by Kubermatic.</div>
+          <div class="row flex-items-xs-center">
+            <div *ngFor="let dc of seedDataCenters; let i = index;" class="col-sm arrow-box arrow-box-completed"
+                 [ngClass]="{'selected': selectedDC === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                 (click)="selectDC(dc.metadata.name)">
 
-                <div class="col-xs arrow-box-content flex-items-xs-center">
-                  <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{dc.spec.provider}}">
-                  <div class="flex-xs-middle">
-                    <div class="name">
-                      {{dc.metadata.name}}
-                    </div>
-                    <div class="location">
-                      {{dc.spec.location}}
-                    </div>
+              <div class="col-xs arrow-box-content flex-items-xs-center">
+                <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{dc.spec.provider}}">
+                <div class="flex-xs-middle">
+                  <div class="name">
+                    {{dc.metadata.name}}
                   </div>
-                  <img class="location-flag flex-xs-bottom" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
-        <span *ngIf="currentStep > 1" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(1)"></span>
-        <span *ngIf="currentStep <= 1" class="wizard-step-circle">2</span>
-        <div class="wizard-step-body">
-          <h4>Select the cloud provider for your nodes</h4>
-          <div [hidden]="currentStep !== 1">
-            <div class="arrow-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-              Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
-            <div class="row flex-items-xs-center">
-              <div *ngFor="let cloud of supportedNodeProviders; let i = index;" class="col-sm arrow-box arrow-box-completed"
-                   [ngClass]="{'selected': selectedCloud === cloud, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
-                   (click)="selectCloud(cloud)">
-
-                <div class="col-xs arrow-box-content flex-items-xs-center">
-                  <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
-        <span *ngIf="currentStep > 2" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(2)"></span>
-        <span *ngIf="currentStep <= 2" class="wizard-step-circle">3</span>
-        <div class="wizard-step-body">
-          <h4>Select the datacenter of your cloud provider</h4>
-          <div [hidden]="currentStep !== 2">
-            <div class="arrow-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-              Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
-
-            <div [hidden]="selectedCloud === 'bringyourown'">
-              <div class="row flex-items-xs-center">
-                <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-sm arrow-box arrow-box-completed"
-                     [ngClass]="{'selected': selectedCloudRegion === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
-                     (click)="selectCloudRegion(dc.metadata.name)">
-
-                  <div class="col-xs arrow-box-content flex-items-xs-center">
-                    <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{dc.spec.provider}}">
-                    <div class="name">
-                      {{dc.metadata.name}}
-                    </div>
-                    <div class="location">
-                      {{dc.spec.location}}
-                    </div>
-                    <img class="location-flag" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
+                  <div class="location">
+                    {{dc.spec.location}}
                   </div>
                 </div>
+                <img class="location-flag flex-xs-bottom" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <div [hidden]="selectedCloud !== 'bringyourown'" class="col-xs-8">
-              <div class="arrow-box-text">
-                You <i>bring your own</i> nodes, how you like, whereever you like. You are on your own, but
-                you have full flexibility. Install the nodes on any cloud provider of your choice or in your
-                own datacenter or on bare-metal.
+    <div class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
+      <span *ngIf="currentStep > 1" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(1)"></span>
+      <span *ngIf="currentStep <= 1" class="wizard-step-circle">2</span>
+      <div class="wizard-step-body">
+        <h4>Select the cloud provider for your nodes</h4>
+        <div [hidden]="currentStep !== 1">
+          <div class="arrow-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+            Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
+          <div class="row flex-items-xs-center">
+            <div *ngFor="let cloud of supportedNodeProviders; let i = index;" class="col-sm arrow-box arrow-box-completed"
+                 [ngClass]="{'selected': selectedCloud === cloud, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                 (click)="selectCloud(cloud)">
+
+              <div class="col-xs arrow-box-content flex-items-xs-center">
+                <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
               </div>
-              <div class="arrow-box-text">
-                Only requirement for now: your provider has to support Ubuntu 16.04 and a private network.
-              </div>
-              <div class="arrow-box-text">
-                Instructions will be provided in the cluster details.
-              </div>
-              <div class="arrow-box-text-primary">
-                <label style="cursor: pointer;"><input type="checkbox" value="" [(ngModel)]="acceptBringYourOwn">Fantastic, this is exactly what I want.</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
+      <span *ngIf="currentStep > 2" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(2)"></span>
+      <span *ngIf="currentStep <= 2" class="wizard-step-circle">3</span>
+      <div class="wizard-step-body">
+        <h4>Select the datacenter of your cloud provider</h4>
+        <div [hidden]="currentStep !== 2">
+          <div class="arrow-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+            Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
+
+          <div [hidden]="selectedCloud === 'bringyourown'">
+            <div class="row flex-items-xs-center">
+              <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-sm arrow-box arrow-box-completed"
+                   [ngClass]="{'selected': selectedCloudRegion === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                   (click)="selectCloudRegion(dc.metadata.name)">
+
+                <div class="col-xs arrow-box-content flex-items-xs-center">
+                  <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{dc.spec.provider}}">
+                  <div class="name">
+                    {{dc.metadata.name}}
+                  </div>
+                  <div class="location">
+                    {{dc.spec.location}}
+                  </div>
+                  <img class="location-flag" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
+                </div>
               </div>
             </div>
           </div>
 
+          <div [hidden]="selectedCloud !== 'bringyourown'" class="col-xs-8">
+            <div class="arrow-box-text">
+              You <i>bring your own</i> nodes, how you like, whereever you like. You are on your own, but
+              you have full flexibility. Install the nodes on any cloud provider of your choice or in your
+              own datacenter or on bare-metal.
+            </div>
+            <div class="arrow-box-text">
+              Only requirement for now: your provider has to support Ubuntu 16.04 and a private network.
+            </div>
+            <div class="arrow-box-text">
+              Instructions will be provided in the cluster details.
+            </div>
+            <div class="arrow-box-text-primary">
+              <label style="cursor: pointer;"><input type="checkbox" value="" [(ngModel)]="acceptBringYourOwn">Fantastic, this is exactly what I want.</label>
+            </div>
+          </div>
         </div>
+
       </div>
+    </div>
 
-      <div class="wizard-step" [ngClass]="{'active': currentStep === 3, 'done': currentStep > 3, 'tbd': currentStep < 3}">
-        <span *ngIf="currentStep > 3" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(3)"></span>
-        <span *ngIf="currentStep <= 3" class="wizard-step-circle">4</span>
-        <div class="wizard-step-body">
-          <h4>Provide credentials & Settings</h4>
-          <div [hidden]="currentStep !== 3">
+    <div class="wizard-step" [ngClass]="{'active': currentStep === 3, 'done': currentStep > 3, 'tbd': currentStep < 3}">
+      <span *ngIf="currentStep > 3" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(3)"></span>
+      <span *ngIf="currentStep <= 3" class="wizard-step-circle">4</span>
+      <div class="wizard-step-body">
+        <h4>Provide credentials & Settings</h4>
+        <div [hidden]="currentStep !== 3">
 
-            <div [hidden]="selectedCloud !== 'aws'">
-              <div class="row flex-items-xs-center">
-                <div class="arrow-box-text">
-                  We need a AWS Access Key and Secret Access Key <b>with write access</b>.
-                  You can create one
-                  <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
-                </div>
-                <div class="arrow-box-text">
-                  Moreover, select at least one Authorized SSH Key from your AWS account.
-                  You can add more <a target="_new" href="https://cloud.digitalocean.com/settings/security">here</a>.
-                </div>
-              </div>
-            </div>
-
-            <div [hidden]="selectedCloud !== 'bringyourown'" class="col-xs-8">
+          <div [hidden]="selectedCloud !== 'aws'">
+            <div class="row flex-items-xs-center">
               <div class="arrow-box-text">
-                You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?
+                We need a AWS Access Key and Secret Access Key <b>with write access</b>.
+                You can create one
+                <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
               </div>
               <div class="arrow-box-text">
-                For non-interactive installation of the kubermatic debian package, you have to tell us about the
-                private network interface of your nodes. It will be used for the
-                <a href="https://github.com/coreos/flannel">Flannel</a> network traffic.
-              </div>
-
-              <div class="col-xs-6 form-group">
-                <label for="pif" class="form-text text-muted">Private network interface:</label>
-                <input id="pif" type="text" class="form-control">
-                <small class="form-text text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
+                Moreover, select at least one Authorized SSH Key from your AWS account.
+                You can add more <a target="_new" href="https://cloud.digitalocean.com/settings/security">here</a>.
               </div>
             </div>
+          </div>
 
-            <div class="col-xs-6 form-group">
+          <div [hidden]="selectedCloud !== 'bringyourown'" class="col-xs-8">
+            <div class="arrow-box-text">
+              You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?<br>
+              For non-interactive installation of the kubermatic debian package, you have to tell us about the
+              private network interface of your nodes. It will be used for the
+              <a href="https://github.com/coreos/flannel">Flannel</a> network traffic.
+
+              <form [formGroup]="bringYourOwnForm" novalidate>
+                <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
+                  <label for="pif" class="form-text text-muted">Private network interface:</label>
+                  <input id="pif" formControlName="pif" type="text" class="form-control">
+                  <small class="form-text text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <form [formGroup]="clusterNameForm" novalidate>
+            <div class="col-xs-6 form-group" [ngClass]="{'has-danger': !clusterNameForm.controls.clustername.valid, 'has-warning': clusterNameForm.controls.clustername.valid}">
               <label for="clustername" class="form-text text-muted">Choose the name of for your cluster</label>
-              <input id="clustername" type="text" class="form-control" [(ngModel)]="selectedName">
+              <input id="clustername" formControlName="clustername" type="text" class="form-control">
               <small class="form-text text-primary" style="cursor: pointer;" (click)="refreshName()">Generate name</small>
             </div>
-          </div>
+          </form>
         </div>
       </div>
+    </div>
 
-      <div class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
-        <span *ngIf="currentStep > 4" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(4)"></span>
-        <span *ngIf="currentStep <= 4" class="wizard-step-circle">5</span>
-        <div class="wizard-step-body">
-          <h4>Summary</h4>
-          <div [hidden]="currentStep !== 5">
-            <p>You are creating your cluster in {{ selectedDC }} with name {{ selectedName }}</p>
-            <p>You choose the cloud provider: {{ selectedCloud }} in region {{ selectedCloudRegion }}</p>
-            <p>Count of nodes: {{ selectNodeCount() }}</p>
-            <button class="btn btn-success">Create cluster</button>
-          </div>
+    <div class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
+      <span *ngIf="currentStep > 4" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(4)"></span>
+      <span *ngIf="currentStep <= 4" class="wizard-step-circle">5</span>
+      <div class="wizard-step-body">
+        <h4>Summary</h4>
+        <div [hidden]="currentStep !== 4">
+          <div class="arrow-box-text">You are creating your cluster in {{ selectedDC }} with name {{ clusterNameForm.controls.clustername.value }}</div>
+          <div class="arrow-box-text">You choose the cloud provider: {{ selectedCloud }} in region {{ selectedCloudRegion }}</div>
+          <div class="arrow-box-text">Count of nodes: {{ selectNodeCount() }}</div>
+          <button class="btn btn-outline-warning">Create cluster</button>
         </div>
       </div>
+    </div>
   </div>
 
   <div class="wizard-footer btn-group row" role="group" aria-label="navigation">
