@@ -116,18 +116,58 @@
         <h4>Provide credentials & Settings</h4>
         <div [hidden]="currentStep !== 3">
 
-          <div [hidden]="selectedCloud !== 'aws'">
-            <div class="row flex-items-xs-center">
-              <div class="arrow-box-text">
-                We need a AWS Access Key and Secret Access Key <b>with write access</b>.
-                You can create one
-                <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
-              </div>
-              <div class="arrow-box-text">
-                Moreover, select at least one Authorized SSH Key from your AWS account.
-                You can add more <a target="_new" href="https://cloud.digitalocean.com/settings/security">here</a>.
-              </div>
+          <div [hidden]="selectedCloud !== 'aws'" class="col-xs-8">
+            <div class="arrow-box-text">
+              We need a AWS Access Key and Secret Access Key <b>with write access</b>.
+              You can create one
+              <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
+              <br>
+              Moreover, select at least one Authorized SSH Key from your AWS account.
+              You can add more <a target="_new" href="https://cloud.digitalocean.com/settings/security">here</a>.
             </div>
+
+            <form [formGroup]="awsForm" novalidate>
+              <div class="form-group" [ngClass]="{'has-danger': !awsForm.controls.access_key_id.valid && awsForm.controls.access_key_id.touched, 'has-success': awsForm.controls.access_key_id.valid}">
+                <label for="access_key_id" class="form-text text-muted">Access Key ID:</label>
+                <input id="access_key_id" formControlName="access_key_id" type="text" class="form-control">
+                <small class="form-text text-danger" [hidden]="awsForm.controls.access_key_id.valid || !awsForm.controls.access_key_id.touched">Access Key ID must be between 16 and 32 characters long.</small>
+              </div>
+              <div class="form-group" [ngClass]="{'has-danger': !awsForm.controls.secret_access_key.valid && awsForm.controls.secret_access_key.touched, 'has-success': awsForm.controls.secret_access_key.valid}">
+                <label for="secret_access_key" class="form-text text-muted">Secret Access Key:</label>
+                <input id="secret_access_key" formControlName="secret_access_key" type="text" class="form-control">
+                <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
+              </div>
+              <div class="form-group">
+                <label for="ssh_key" class="form-text text-muted">Authorized SSH Key:</label>
+                <select class="form-control" id="ssh_key" name="sshKeys" formControlName="ssh_key"></select>
+                <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+                  to provide kubectl logs, port-forward and exec functionality.</small>
+              </div>
+            </form>
+          </div>
+
+          <div [hidden]="selectedCloud !== 'digitalocean'" class="col-xs-8">
+            <div class="arrow-box-text">
+              We need a DigitalOcean Personal Access Token <b>with write access</b>.
+              You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
+              <br>
+              Moreover, select at least one Authorized SSH Key from your DigitalOcean account.
+              You can add more <a target="_new" href="https://cloud.digitalocean.com/settings/security">here</a>.
+            </div>
+
+            <form [formGroup]="digitaloceanForm" novalidate>
+              <div class="form-group" [ngClass]="{'has-danger': !digitaloceanForm.controls.access_token.valid && digitaloceanForm.controls.access_token.touched, 'has-success': digitaloceanForm.controls.access_token.valid}">
+                <label for="access_token" class="form-text text-muted">Personal Access Token:</label>
+                <input id="access_token" formControlName="access_token" type="text" class="form-control">
+                <small class="form-text text-danger" [hidden]="digitaloceanForm.controls.access_token.valid || !digitaloceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
+              </div>
+              <div class="form-group">
+                <label for="digitalocean_ssh_key" class="form-text text-muted">Authorized SSH Key:</label>
+                <select class="form-control" id="digitalocean_ssh_key" name="sshKeys" formControlName="ssh_key"></select>
+                <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+                  to provide kubectl logs, port-forward and exec functionality.</small>
+              </div>
+            </form>
           </div>
 
           <div [hidden]="selectedCloud !== 'bringyourown'" class="col-xs-8">
@@ -148,7 +188,7 @@
           </div>
 
           <form [formGroup]="clusterNameForm" novalidate>
-            <div class="col-xs-6 form-group" [ngClass]="{'has-danger': !clusterNameForm.controls.clustername.valid, 'has-warning': clusterNameForm.controls.clustername.valid}">
+            <div class="col-xs-8 form-group" [ngClass]="{'has-danger': !clusterNameForm.controls.clustername.valid, 'has-warning': clusterNameForm.controls.clustername.valid}">
               <label for="clustername" class="form-text text-muted">Choose the name of for your cluster</label>
               <input id="clustername" formControlName="clustername" type="text" class="form-control">
               <small class="form-text text-primary" style="cursor: pointer;" (click)="refreshName()">Generate name</small>
