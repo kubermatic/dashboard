@@ -106,7 +106,7 @@ $arrow-box-content-dc-logo-size: 70px;
 $arrow-box-content-cloud-logo-size: 120px;
 $arrow-box-content-location-flag-size: 32px;
 $arrow-box-content-dc-margin-top: 10px;
-$arrow-box-content-cloud-margin-top: ($arrow-box-size - $arrow-box-content-cloud-logo-size)/2;
+$arrow-box-content-cloud-margin-top: 25px;
 
 .arrow-box-text {
   color: $primary;
@@ -164,7 +164,6 @@ $arrow-box-content-cloud-margin-top: ($arrow-box-size - $arrow-box-content-cloud
   max-width: $arrow-box-size;
   max-height: $arrow-box-size;
   width: $arrow-box-size;
-  height: $arrow-box-size;
   margin: 15px;
   border-radius: 10px 10px 10px 10px;
   -moz-border-radius: 10px 10px 10px 10px;
@@ -218,4 +217,87 @@ $arrow-box-content-cloud-margin-top: ($arrow-box-size - $arrow-box-content-cloud
 
 .arrow-box.arrow-box-completed.arrow-box-color_secondary:before {
   border-left-color: #00969e;
+}
+
+
+
+.range {
+  display: table;
+  position: relative;
+  height: 25px;
+}
+
+.range input[type="range"] {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -ms-appearance: none !important;
+  -o-appearance: none !important;
+  appearance: none !important;
+
+  display: table-cell;
+  width: 100%;
+  background-color: transparent;
+  height: 25px;
+  cursor: pointer;
+}
+.range input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -ms-appearance: none !important;
+  -o-appearance: none !important;
+  appearance: none !important;
+
+  width: 11px;
+  height: 25px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0;
+  background-color: $primary;
+}
+
+.range input[type="range"]::-moz-range-track {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  -ms-appearance: none !important;
+  -o-appearance: none !important;
+  appearance: none !important;
+
+  width: 11px;
+  height: 25px;
+  color: rgb(255, 255, 255);
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0;
+  background-color: $primary;
+}
+
+.range output {
+  display: table-cell;
+  padding: 3px 5px 2px;
+  min-width: 40px;
+  color: rgb(255, 255, 255);
+  background-color: $primary;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 4px;
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  width: 1%;
+  white-space: nowrap;
+  vertical-align: middle;
+
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  -ms-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -o-user-select: none;
+  user-select: none;
 }

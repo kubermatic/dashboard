@@ -3,6 +3,7 @@ import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
 import {ClusterNameGenerator} from "../util/name-generator.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {CustomValidators} from "ng2-validation";
 
 
 @Component({
@@ -23,7 +24,7 @@ export class WizardComponent implements OnInit {
   public selectedCloud: string;
   public selectedCloudRegion: string;
   public selectedCloudConfiguration: any;
-  public selectedNodeCount: number = 3;
+  public selectedCloudProviderApiError: string;
   public acceptBringYourOwn: boolean;
 
   public clusterNameForm: FormGroup;
@@ -61,13 +62,15 @@ export class WizardComponent implements OnInit {
     this.awsForm = this.formBuilder.group({
       access_key_id: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
       secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
-      ssh_key: ["", [<any>Validators.required]]
+      ssh_key: ["", [<any>Validators.required]],
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
 
     this.digitaloceanForm = this.formBuilder.group({
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64)],
         Validators.pattern("[a-z0-9]+")],
-      ssh_key: ["", [<any>Validators.required]]
+      ssh_key: ["", [<any>Validators.required]],
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
 
     this.awsForm.valueChanges.subscribe(value => {
@@ -78,7 +81,11 @@ export class WizardComponent implements OnInit {
         this.api.getSSHKeys("aws", body)
           .subscribe(result => {
             // TODO consume api call
+            this.selectedCloudProviderApiError = null;
             console.log(JSON.stringify(result));
+          },
+          error => {
+            this.selectedCloudProviderApiError = error.status + " " + error.statusText;
           });
       }
     });
@@ -117,10 +124,6 @@ export class WizardComponent implements OnInit {
     this.selectedCloudConfiguration = config;
   }
 
-  public selectNodeCount(nodeCount: number) {
-    this.selectedNodeCount = nodeCount;
-  }
-
   public gotoStep(step: number) {
     this.currentStep = step;
   }
@@ -147,8 +150,6 @@ export class WizardComponent implements OnInit {
         } else {
           return false;
         }
-      case 4:
-        return !!this.selectedNodeCount && this.selectedNodeCount >= 0;
       default:
         return false;
     }
