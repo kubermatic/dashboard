@@ -2,7 +2,7 @@ import { Routes } from "@angular/router";
 import { FrontpageComponent } from "./frontpage/frontpage.component";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { AuthGuard } from "./auth/auth.guard";
-import {WizardComponent} from "./dashboard/wizard/wizard.component";
+import {WizardComponent} from "./wizard/wizard.component";
 
 export const appRoutes: Routes = [
   {

@@ -17,7 +17,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { BreadcrumbsComponent } from "./breadcrumbs/breadcrumbs.component";
 import { GlobalState } from "./global.state";
 import { ApiService } from "./api/api.service";
-import { WizardComponent } from "./dashboard/wizard/wizard.component";
+import { WizardComponent } from "./wizard/wizard.component";
 import { ClusterNameGenerator } from "./util/name-generator.service";
 
 @NgModule({
