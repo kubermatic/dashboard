@@ -2,9 +2,13 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { WizardComponent } from "./wizard.component";
-import {FormBuilder} from "@angular/forms";
+import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {ClusterNameGenerator} from "../util/name-generator.service";
 import {ApiService} from "../api/api.service";
+import {HttpModule} from "@angular/http";
+import {Auth} from "../auth/auth.service";
+import {RouterTestingModule} from "@angular/router/testing";
+import {GlobalState} from "../global.state";
 
 describe("WizardComponent", () => {
   let component: WizardComponent;
@@ -12,13 +16,21 @@ describe("WizardComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        HttpModule,
+        RouterTestingModule
+      ],
       declarations: [
         WizardComponent
       ],
       providers: [
+        Auth,
         ApiService,
         ClusterNameGenerator,
-        FormBuilder
+        FormBuilder,
+        GlobalState
       ],
     })
     .compileComponents();

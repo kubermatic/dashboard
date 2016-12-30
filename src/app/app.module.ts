@@ -10,7 +10,7 @@ import { FrontpageComponent } from "./frontpage/frontpage.component";
 
 import { Auth } from "./auth/auth.service";
 import { appRoutes } from "./app.routing";
-import { AUTH_PROVIDERS } from "angular2-jwt";
+import { AUTH_PROVIDERS } from "./auth/auth.provider";
 import { AuthGuard } from "./auth/auth.guard";
 import { CustomFormsModule } from "ng2-validation";
 import { DashboardComponent } from "./dashboard/dashboard.component";
