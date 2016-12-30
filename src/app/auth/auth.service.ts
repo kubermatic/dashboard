@@ -2,7 +2,9 @@ import { Injectable } from "@angular/core";
 import {Router} from "@angular/router";
 
 import { tokenNotExpired } from "angular2-jwt";
-import {GlobalState} from "../global.state";
+import { Store } from "@ngrx/store";
+import { State } from "../reducers";
+import { Actions } from "../reducers/actions";
 
 // Avoid name not found warnings
 let Auth0Lock = require("auth0-lock").default;
@@ -18,17 +20,16 @@ export class Auth {
         primaryColor: "#445f73"
       }});
 
-  constructor(private _router: Router, private _state: GlobalState) {
+  constructor(private _router: Router, private _store: Store<State>) {
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult) => {
       localStorage.setItem("id_token", authResult.idToken);
+      this._store.dispatch({ type: Actions.LOGGED_IN, payload: { token: authResult.idToken } });
 
       this.lock.getProfile(authResult.idToken, function(error: any, profile: any){
         if (error) {
-          throw new Error(error);
+          throw new Error(error); // TODO make global error state?!
         }
-
-        localStorage.setItem("profile", JSON.stringify(profile));
 
         // Redirect if there is a saved url to do so.
         let redirectUrl: string = localStorage.getItem("redirect_url");
@@ -37,8 +38,7 @@ export class Auth {
           localStorage.removeItem("redirect_url");
         }
 
-        console.log("Auth calling notifyDataChanged with " + JSON.stringify(profile));
-        this._state.notifyDataChanged("auth.authenticated", profile);
+        _store.dispatch({ type: Actions.FETCH_PROFILE, payload: { profile: profile } });
       });
     });
   }
@@ -61,7 +61,7 @@ export class Auth {
   public logout() {
     // Remove token from localStorage
     localStorage.removeItem("id_token");
-    localStorage.removeItem("profile");
+    this._store.dispatch({ type: Actions.LOGGED_OUT, payload: { } });
 
     // Redirect if there is a saved url to do so.
     let redirectUrl: string = localStorage.getItem("redirect_url");
