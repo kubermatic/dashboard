@@ -22,10 +22,10 @@
 }
 
 a.al-logo {
+  @include titillium-font;
   color: $default-text;
   display: block;
   font-size: 23px;
-  font-family: $font-family;
   white-space: nowrap;
   float: left;
   outline: none !important;

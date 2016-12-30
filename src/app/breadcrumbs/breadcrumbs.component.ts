@@ -7,6 +7,8 @@ import { Component, OnInit } from "@angular/core";
 })
 export class BreadcrumbsComponent implements OnInit {
 
+  public activePageTitle: string = "";
+
   constructor() { }
 
   ngOnInit() {

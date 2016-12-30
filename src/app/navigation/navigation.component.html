@@ -1,7 +1,7 @@
 <div class="page-top clearfix" baScrollPosition maxHeight="50" (scrollChange)="scrolledChanged($event)"
      [ngClass]="{scrolled: isScrolled}">
 
-  <a routerLink="/pages/dashboard" class="al-logo clearfix">KUBERMATIC</a>
+  <a routerLink="/dashboard" class="al-logo clearfix">Kubermatic</a>
 
   <div class="info" *ngIf="auth.authenticated()">
     <kubermatic-breadcrumbs></kubermatic-breadcrumbs>
