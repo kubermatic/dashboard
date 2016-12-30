@@ -8,8 +8,8 @@ import {CustomValidators} from "ng2-validation";
 
 @Component({
   selector: "kubermatic-wizard",
-  templateUrl: "./wizard.component.html",
-  styleUrls: ["./wizard.component.scss"]
+  templateUrl: "wizard.component.html",
+  styleUrls: ["wizard.component.scss"]
 })
 export class WizardComponent implements OnInit {
 
