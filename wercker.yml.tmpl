@@ -1,0 +1,146 @@
+build:
+  box: golang:1.6-wheezy
+  steps:
+    - script:
+        name: install node
+        code: |
+          curl -sL https://deb.nodesource.com/setup_7.x | bash -
+          apt-get install -y nodejs
+    - npm-install
+    - script:
+        name: build dist
+        code: |
+          npm run build
+    - setup-go-workspace:
+        package-dir: github.com/kubermatic/dashboard
+    - script:
+        name: build fileserver binary
+        code: |
+          export PATH=$PWD/node_packages/.bin:$PATH
+          CGO_ENABLED=0 make build
+    - script:
+        name: copy to deployment directory
+        code: cp -av dist "$WERCKER_OUTPUT_DIR"
+
+push-hash-image:
+    box: ubuntu:16.04
+    steps:
+    - script:
+        code: |
+          apt-get update
+          apt-get install -y ca-certificates
+    - internal/docker-scratch-push:
+        name: push to docker hub
+        author: Dr. Stefan Schimanski <stefan.schimanski@gmail.com>
+        username: $USERNAME
+        password: $PASSWORD
+        email: stefan.schimanski@gmail.com
+        tag: $WERCKER_GIT_COMMIT
+        repository: kubermatic/ui
+        registry: https://registry.hub.docker.com
+        cmd: /dashboard
+
+deployment-update:
+    box: ubuntu:16.04
+    steps:
+    - create-file:
+        name: Create ca.pem
+        filename: ca.pem
+        overwrite: true
+        content: $CERTIFICATE_AUTHORITY
+    - create-file:
+        name: Create admin.pem
+        filename: admin.pem
+        overwrite: true
+        content: $CLIENT_CERTIFICATE
+    - create-file:
+        name: Create admin-key.pem
+        filename: admin-key.pem
+        overwrite: true
+        content: $CLIENT_KEY
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        certificate-authority: ca.pem
+        client-certificate: admin.pem
+        client-key: admin-key.pem
+        command: set image deployment/kubermatic-api-v1 api=kubermatic/api:$WERCKER_GIT_COMMIT --namespace=api
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        certificate-authority: ca.pem
+        client-certificate: admin.pem
+        client-key: admin-key.pem
+        command: set image deployment/cluster-controller-v1 cluster-controller=kubermatic/api:$WERCKER_GIT_COMMIT --namespace=control
+
+push-latest-image:
+    box: ubuntu:16.04
+    steps:
+    - internal/docker-scratch-push:
+        name: push to docker hub
+        author: Dr. Stefan Schimanski <stefan.schimanski@gmail.com>
+        username: $USERNAME
+        password: $PASSWORD
+        email: stefan.schimanski@gmail.com
+        tag: latest
+        repository: kubermatic/ui
+        registry: https://registry.hub.docker.com
+        cmd: /dashboard
+
+rollback-api:
+    box: ubuntu:16.04
+    steps:
+    - script:
+        code: |
+          apt-get update
+          apt-get install -y ca-certificates
+    - create-file:
+        name: Create ca.pem
+        filename: ca.pem
+        content: $CERTIFICATE_AUTHORITY
+    - create-file:
+        name: Create admin.pem
+        filename: admin.pem
+        content: $CLIENT_CERTIFICATE
+    - create-file:
+        name: Create admin-key.pem
+        filename: admin-key.pem
+        content: $CLIENT_KEY
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        certificate-authority: ca.pem
+        client-certificate: admin.pem
+        client-key: admin-key.pem
+        command: rollout undo deployment/kubermatic-api-v1 --namespace=api
+
+rollback-cluster-controller:
+    box: ubuntu:16.04
+    steps:
+    - script:
+        code: |
+          apt-get update
+          apt-get install -y ca-certificates
+    - create-file:
+        name: Create ca.pem
+        filename: ca.pem
+        content: $CERTIFICATE_AUTHORITY
+    - create-file:
+        name: Create admin.pem
+        filename: admin.pem
+        content: $CLIENT_CERTIFICATE
+    - create-file:
+        name: Create admin-key.pem
+        filename: admin-key.pem
+        content: $CLIENT_KEY
+    - kubectl:
+        server: $KUBERNETES_MASTER
+        username: $KUBERNETES_USERNAME
+        password: $KUBERNETES_PASSWORD
+        certificate-authority: ca.pem
+        client-certificate: admin.pem
+        client-key: admin-key.pem
+        command: rollout undo deployment/kubermatic-api-v1 --namespace=control
