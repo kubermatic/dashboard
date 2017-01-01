@@ -4,18 +4,16 @@ import { TestBed, async } from "@angular/core/testing";
 import { KubermaticComponent } from "./kubermatic.component";
 import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
-import {DashboardComponent} from "./dashboard/dashboard.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule} from "@angular/http";
-import {RouterModule} from "@angular/router";
 import {RouterTestingModule} from "@angular/router/testing";
-import {BrowserDynamicTestingModule, platformBrowserDynamicTesting} from "@angular/platform-browser-dynamic/testing";
-import {AUTH_PROVIDERS} from "angular2-jwt";
+import { AUTH_PROVIDERS } from "./auth/auth.provider";
 import {Auth} from "./auth/auth.service";
 import {ApiService} from "./api/api.service";
 import {AuthGuard} from "./auth/auth.guard";
-import {GlobalState} from "./global.state";
+import {combinedReducer} from "./reducers/index";
+import {StoreModule} from "@ngrx/store";
 
 describe("KubermaticComponent", () => {
   beforeEach(() => {
@@ -23,7 +21,8 @@ describe("KubermaticComponent", () => {
       imports: [
         BrowserModule,
         HttpModule,
-        RouterTestingModule
+        RouterTestingModule,
+        StoreModule.provideStore(combinedReducer)
       ],
       declarations: [
         KubermaticComponent,
@@ -36,7 +35,6 @@ describe("KubermaticComponent", () => {
         Auth,
         ApiService,
         AuthGuard,
-        GlobalState
       ],
     }).compileComponents();
   });

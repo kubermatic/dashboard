@@ -1,12 +1,12 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import {By, BrowserModule} from "@angular/platform-browser";
-import { DebugElement } from "@angular/core";
+import {StoreModule} from "@ngrx/store";
+import {combinedReducer} from "../reducers/index";
 
 import { NavigationComponent } from "./navigation.component";
 import {Auth} from "../auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
-import {GlobalState} from "../global.state";
 import {BreadcrumbsComponent} from "../breadcrumbs/breadcrumbs.component";
 
 describe("NavigationComponent", () => {
@@ -17,15 +17,15 @@ describe("NavigationComponent", () => {
     TestBed.configureTestingModule({
       imports: [
         BrowserModule,
-        RouterTestingModule
+        RouterTestingModule,
+        StoreModule.provideStore(combinedReducer)
       ],
       declarations: [
         NavigationComponent,
         BreadcrumbsComponent
       ],
       providers: [
-        Auth,
-        GlobalState
+        Auth
       ],
     })
       .compileComponents();

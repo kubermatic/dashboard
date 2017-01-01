@@ -19,7 +19,7 @@ export class ApiService {
   private headers: Headers = new Headers();
 
   constructor(private _http: Http, private _auth: Auth) {
-    this.headers.append("Authorization", "Bearer " + this._auth.getBearerToken());
+    this.headers.append("Authorization", "Bearer " + Auth.getBearerToken());
   }
 
   getDataCenters(): Observable<DataCenterEntity[]> {

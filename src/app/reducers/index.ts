@@ -30,8 +30,8 @@ export function combinedReducer(state: any, action: any): ComposeSignature {
 }
 
 export const getAuthState = (state: State) => state.auth;
-export const getAuthProfile = createSelector(getAuthState, fromAuth.getAuthState);
-export const getSearchQuery = createSelector(getAuthState, fromAuth.getProfile);
+export const getAuthProfile = createSelector(getAuthState, fromAuth.getProfile);
+export const getAuthLoggedIn = createSelector(getAuthState, fromAuth.getAuthState);
 
 export * from "./auth";
 export * from "./actions";

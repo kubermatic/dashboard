@@ -20,16 +20,22 @@ export class Auth {
         primaryColor: "#445f73"
       }});
 
+  public static getBearerToken(): string {
+    return localStorage.getItem("id_token");
+  }
+
   constructor(private _router: Router, private _store: Store<State>) {
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult) => {
       localStorage.setItem("id_token", authResult.idToken);
-      this._store.dispatch({ type: Actions.LOGGED_IN, payload: { token: authResult.idToken } });
+      this._store.dispatch({ type: Actions.LOGGED_IN, payload: { token: authResult.idToken, profile: [] } });
 
       this.lock.getProfile(authResult.idToken, function(error: any, profile: any){
         if (error) {
           throw new Error(error); // TODO make global error state?!
         }
+
+        localStorage.setItem("profile", JSON.stringify(profile));
 
         // Redirect if there is a saved url to do so.
         let redirectUrl: string = localStorage.getItem("redirect_url");
@@ -41,6 +47,12 @@ export class Auth {
         _store.dispatch({ type: Actions.FETCH_PROFILE, payload: { profile: profile } });
       });
     });
+
+    if (this.authenticated()) {
+      let idToken = Auth.getBearerToken();
+      let profile = JSON.parse(localStorage.getItem("profile"));
+      this._store.dispatch({ type: Actions.LOGGED_IN, payload: { token: idToken, profile: profile } });
+    }
   }
 
   public login() {
@@ -54,14 +66,10 @@ export class Auth {
     return tokenNotExpired();
   };
 
-  public getBearerToken(): string {
-    return localStorage.getItem("id_token");
-  }
-
   public logout() {
     // Remove token from localStorage
     localStorage.removeItem("id_token");
-    this._store.dispatch({ type: Actions.LOGGED_OUT, payload: { } });
+    localStorage.removeItem("profile");
 
     // Redirect if there is a saved url to do so.
     let redirectUrl: string = localStorage.getItem("redirect_url");

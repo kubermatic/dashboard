@@ -8,7 +8,8 @@ import {ApiService} from "../api/api.service";
 import {HttpModule} from "@angular/http";
 import {Auth} from "../auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
-import {GlobalState} from "../global.state";
+import {StoreModule} from "@ngrx/store";
+import {combinedReducer} from "../reducers/index";
 
 describe("WizardComponent", () => {
   let component: WizardComponent;
@@ -20,7 +21,8 @@ describe("WizardComponent", () => {
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
-        RouterTestingModule
+        RouterTestingModule,
+        StoreModule.provideStore(combinedReducer)
       ],
       declarations: [
         WizardComponent
@@ -30,7 +32,6 @@ describe("WizardComponent", () => {
         ApiService,
         ClusterNameGenerator,
         FormBuilder,
-        GlobalState
       ],
     })
     .compileComponents();

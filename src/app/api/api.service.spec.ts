@@ -6,7 +6,8 @@ import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule} from "@angular/http";
 import {Auth} from "../auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
-import {GlobalState} from "../global.state";
+import {StoreModule} from "@ngrx/store";
+import {combinedReducer} from "../reducers/index";
 
 describe("ApiService", () => {
   beforeEach(() => {
@@ -14,14 +15,14 @@ describe("ApiService", () => {
       imports: [
         BrowserModule,
         HttpModule,
-        RouterTestingModule
+        RouterTestingModule,
+        StoreModule.provideStore(combinedReducer)
       ],
       declarations: [
       ],
       providers: [
         Auth,
         ApiService,
-        GlobalState
       ],
     }).compileComponents();
   });

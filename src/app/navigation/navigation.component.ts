@@ -1,6 +1,8 @@
 import { Component } from "@angular/core";
 import {Auth} from "../auth/auth.service";
-import {GlobalState} from "../global.state";
+
+import {Store} from "@ngrx/store";
+import * as fromRoot from "../reducers/index";
 
 @Component({
   selector: "kubermatic-navigation",
@@ -12,19 +14,13 @@ export class NavigationComponent {
   public isScrolled: boolean = false;
   public userProfile: Object;
 
-  constructor(private auth: Auth, private _state: GlobalState) {
-    this._state.subscribe("auth.authenticated", (profile) => {
-      console.log("NavigationComponent Called by subscribe");
-      this.userProfile = JSON.parse(profile);
+  constructor(private auth: Auth, private _store: Store<fromRoot.State>) {
+    this._store.select(fromRoot.getAuthProfile).subscribe(profile => {
+      this.userProfile = profile;
     });
-
-    if (auth.authenticated()) {
-        this.userProfile = JSON.parse(localStorage.getItem("profile"));
-    }
   }
 
   public login() {
-    console.log("Starting logging");
     localStorage.setItem("redirect_url", "dashboard");
     this.auth.login();
   }

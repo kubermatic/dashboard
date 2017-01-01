@@ -22,7 +22,7 @@ export function authReducer(state: Auth = initialState, action: Action): Auth {
   switch (action.type) {
     case Actions.LOGGED_IN:
       return Object.assign({}, state, {
-        profile: {},
+        profile: action.payload.profile,
         token: action.payload.token,
         state: AuthStatus.LoggedIn
       });
