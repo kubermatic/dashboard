@@ -20,9 +20,9 @@ export class WizardComponent implements OnInit {
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
 
-  public selectedDC: string;
+  public selectedDC: DataCenterEntity;
   public selectedCloud: string;
-  public selectedCloudRegion: string;
+  public selectedCloudRegion: DataCenterEntity;
   public selectedCloudConfiguration: any;
   public selectedCloudProviderApiError: string;
   public acceptBringYourOwn: boolean;
@@ -105,7 +105,7 @@ export class WizardComponent implements OnInit {
     this.refreshName();
   }
 
-  public selectDC(dc: string) {
+  public selectDC(dc: DataCenterEntity) {
     this.selectedDC = dc;
     this.selectedCloud = null;
     this.selectedCloudRegion = null;
@@ -116,7 +116,7 @@ export class WizardComponent implements OnInit {
     this.selectedCloudRegion = null;
   }
 
-  public selectCloudRegion(cloud: string) {
+  public selectCloudRegion(cloud: DataCenterEntity) {
     this.selectedCloudRegion = cloud;
   }
 

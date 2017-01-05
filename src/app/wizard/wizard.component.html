@@ -17,8 +17,7 @@
           <div class="row flex-items-xs-center">
             <div *ngFor="let dc of seedDataCenters; let i = index;" class="col-sm arrow-box arrow-box-completed"
                  [ngClass]="{'selected': selectedDC === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
-                 (click)="selectDC(dc.metadata.name)">
-
+                 (click)="selectDC(dc)">
               <div class="col-xs arrow-box-content flex-items-xs-center">
                 <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{dc.spec.provider}}">
                 <div class="flex-xs-middle">
@@ -49,7 +48,6 @@
             <div *ngFor="let cloud of supportedNodeProviders; let i = index;" class="col-sm arrow-box arrow-box-completed"
                  [ngClass]="{'selected': selectedCloud === cloud, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
                  (click)="selectCloud(cloud)">
-
               <div class="col-xs arrow-box-content flex-items-xs-center">
                 <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
               </div>
@@ -72,7 +70,7 @@
             <div class="row flex-items-xs-center">
               <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-xs-6 arrow-box arrow-box-completed"
                    [ngClass]="{'selected': selectedCloudRegion === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
-                   (click)="selectCloudRegion(dc.metadata.name)">
+                   (click)="selectCloudRegion(dc)">
 
                 <div class="col-xs arrow-box-content flex-items-xs-center">
                   <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{dc.spec.provider}}">
@@ -222,6 +220,46 @@
       <div class="wizard-step-body">
         <h4>Summary</h4>
         <div [hidden]="currentStep !== 4">
+
+          <div class="row flex-items-xs-center">
+            <div class="col-sm arrow-box arrow-box-completed arrow-box-color_primary">
+              <div class="col-xs arrow-box-content flex-items-xs-center">
+                <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{selectedDC.spec.provider}}">
+                <div class="flex-xs-middle">
+                  <div class="name">
+                    {{selectedDC.metadata.name}}
+                  </div>
+                  <div class="location">
+                    {{selectedDC.spec.location}}
+                  </div>
+                </div>
+                <img class="location-flag flex-xs-bottom" src="/assets/images/flags/32/{{selectedDC.spec.country}}.png" alt="{{selectedDC.spec.country}}" />
+              </div>
+            </div>
+
+            <div [hidden]="selectedCloud === 'bringyourown'">
+              <div class="col-xs-6 arrow-box arrow-box-completed arrow-box-color_secondary">
+                <div class="col-xs arrow-box-content flex-items-xs-center">
+                  <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
+                  <div class="name">
+                    {{selectedCloudRegion.metadata.name}}
+                  </div>
+                  <div class="location">
+                    {{selectedCloudRegion.spec.location}}
+                  </div>
+                  <img class="location-flag" src="/assets/images/flags/32/{{selectedCloudRegion.spec.country}}.png" alt="{{selectedCloudRegion.spec.country}}" />
+                </div>
+              </div>
+            </div>
+
+            <div [hidden]="selectedCloud !== 'bringyourown'">
+              <div class="col-sm arrow-box arrow-box-completed arrow-box-color_secondary">
+                <div class="col-xs arrow-box-content flex-items-xs-center">
+                  <img class="cloud-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloud}}">
+                </div>
+              </div>
+            </div>
+
           <div class="arrow-box-text">You are creating your cluster in {{ selectedDC }} with name {{ clusterNameForm.controls.clustername.value }}</div>
           <div class="arrow-box-text">You choose the cloud provider: {{ selectedCloud }} in region {{ selectedCloudRegion }}</div>
           <button class="btn btn-outline-warning">Create cluster</button>
