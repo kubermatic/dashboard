@@ -16,7 +16,7 @@
           <div class="arrow-box-text">This is the datacenter the Kubernetes master is deployed in by Kubermatic.</div>
           <div class="row flex-items-xs-center">
             <div *ngFor="let dc of seedDataCenters; let i = index;" class="col-sm arrow-box arrow-box-completed"
-                 [ngClass]="{'selected': selectedDC === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                 [ngClass]="{'selected': !!selectedDC && selectedDC.metadata.name === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
                  (click)="selectDC(dc)">
               <div class="col-xs arrow-box-content flex-items-xs-center">
                 <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{dc.spec.provider}}">
@@ -69,7 +69,7 @@
           <div [hidden]="selectedCloud === 'bringyourown'">
             <div class="row flex-items-xs-center">
               <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-xs-6 arrow-box arrow-box-completed"
-                   [ngClass]="{'selected': selectedCloudRegion === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+                   [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
                    (click)="selectCloudRegion(dc)">
 
                 <div class="col-xs arrow-box-content flex-items-xs-center">
@@ -192,15 +192,15 @@
               For non-interactive installation of the kubermatic debian package, you have to tell us about the
               private network interface of your nodes. It will be used for the
               <a href="https://github.com/coreos/flannel">Flannel</a> network traffic.
-
-              <form [formGroup]="bringYourOwnForm" novalidate>
-                <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
-                  <label for="pif" class="form-text text-muted">Private network interface:</label>
-                  <input id="pif" formControlName="pif" type="text" class="form-control">
-                  <small class="form-text text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
-                </div>
-              </form>
             </div>
+
+            <form [formGroup]="bringYourOwnForm" novalidate>
+              <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
+                <label for="pif" class="form-text text-muted">Private network interface:</label>
+                <input id="pif" formControlName="pif" type="text" class="form-control">
+                <small class="form-text text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
+              </div>
+            </form>
           </div>
 
           <form [formGroup]="clusterNameForm" novalidate>
@@ -219,9 +219,9 @@
       <span *ngIf="currentStep <= 4" class="wizard-step-circle">5</span>
       <div class="wizard-step-body">
         <h4>Summary</h4>
-        <div [hidden]="currentStep !== 4">
+        <div [hidden]="currentStep !== 4" *ngIf="selectedDC">
 
-          <div class="row flex-items-xs-center">
+          <div class="row flex-items-xs-center" *ngIf="selectedDC">
             <div class="col-sm arrow-box arrow-box-completed arrow-box-color_primary">
               <div class="col-xs arrow-box-content flex-items-xs-center">
                 <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{selectedDC.spec.provider}}">
@@ -237,7 +237,7 @@
               </div>
             </div>
 
-            <div [hidden]="selectedCloud === 'bringyourown'">
+            <div [hidden]="selectedCloud === 'bringyourown'" *ngIf="selectedCloudRegion">
               <div class="col-xs-6 arrow-box arrow-box-completed arrow-box-color_secondary">
                 <div class="col-xs arrow-box-content flex-items-xs-center">
                   <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
@@ -260,12 +260,14 @@
               </div>
             </div>
 
-          <div class="arrow-box-text">You are creating your cluster in {{ selectedDC }} with name {{ clusterNameForm.controls.clustername.value }}</div>
-          <div class="arrow-box-text">You choose the cloud provider: {{ selectedCloud }} in region {{ selectedCloudRegion }}</div>
-          <button class="btn btn-outline-warning">Create cluster</button>
+            <div class="arrow-box-text">You are creating your cluster in {{ selectedDC }} with name {{ clusterNameForm.controls.clustername.value }}</div>
+            <div class="arrow-box-text">You choose the cloud provider: {{ selectedCloud }} in region {{ selectedCloudRegion }}</div>
+            <button class="btn btn-outline-warning">Create cluster</button>
+          </div>
         </div>
       </div>
     </div>
+
   </div>
 
   <div class="wizard-footer btn-group row" role="group" aria-label="navigation">

@@ -23,6 +23,16 @@ Run `npm run test` to execute the unit tests via [Karma](https://karma-runner.gi
 Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 Before running the tests make sure you are serving the app via `npm run serve`.
 
+## Troubleshooting
+
+
+- **Node Sass could not find a binding for your current environment** 
+  (for example Windows 64-bit with Node.js 7.x)
+  - Rebuild on target system: 
+    - rm node_module 
+    - npm install
+    - npm rebuild node-sass  
+
 ## Further help
 
 To get more help on the `angular-cli` use `ng --help` or go check out the [Angular-CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
