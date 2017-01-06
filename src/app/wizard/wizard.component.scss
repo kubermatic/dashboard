@@ -116,6 +116,11 @@ $arrow-box-content-cloud-margin-top: 25px;
   padding-bottom: 10px;
 }
 
+.arrow-box-title {
+  @extend .arrow-box-text;
+  text-align: center;
+}
+
 .arrow-box-text-primary {
   color: $primary;
   font-weight: $font-thin;
@@ -138,13 +143,19 @@ $arrow-box-content-cloud-margin-top: 25px;
   img.cloud-logo {
     width: $arrow-box-content-cloud-logo-size;
     margin-top: $arrow-box-content-cloud-margin-top;
-    margin-bottom: 15px; //2,66, 1,64 1,772
+    margin-bottom: 15px;
   }
 
   div.name {
     font-weight: $font-thin;
     font-size: $font-size-lg;
     padding: 5px;
+  }
+
+  div.headline {
+    font-weight: 600;
+    font-size: 7em;
+    margin-top: 75px;
   }
 
   div.location {
@@ -163,6 +174,7 @@ $arrow-box-content-cloud-margin-top: 25px;
 .arrow-box {
   max-width: $arrow-box-size;
   max-height: $arrow-box-size;
+  min-height: $arrow-box-size;
   width: $arrow-box-size;
   margin: 15px;
   border-radius: 10px 10px 10px 10px;

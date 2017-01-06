@@ -220,24 +220,30 @@
       <div class="wizard-step-body">
         <h4>Summary</h4>
         <div [hidden]="currentStep !== 4" *ngIf="selectedDC">
+          <div class="arrow-box-text">You are about to create your cluster: <strong>{{ clusterNameForm.controls.clustername.value }}</strong></div>
 
-          <div class="row flex-items-xs-center" *ngIf="selectedDC">
-            <div class="col-sm arrow-box arrow-box-completed arrow-box-color_primary">
-              <div class="col-xs arrow-box-content flex-items-xs-center">
-                <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{selectedDC.spec.provider}}">
-                <div class="flex-xs-middle">
-                  <div class="name">
-                    {{selectedDC.metadata.name}}
+          <div class="row flex-items-xs-center">
+
+            <div class="flex-items-xs-center">
+              <div class="arrow-box-title">Datacenter of master</div>
+              <div class="col-sm arrow-box arrow-box-completed arrow-box-color_primary">
+                <div class="col-xs arrow-box-content flex-items-xs-center">
+                  <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{selectedDC.spec.provider}}">
+                  <div class="flex-xs-middle">
+                    <div class="name">
+                      {{selectedDC.metadata.name}}
+                    </div>
+                    <div class="location">
+                      {{selectedDC.spec.location}}
+                    </div>
                   </div>
-                  <div class="location">
-                    {{selectedDC.spec.location}}
-                  </div>
+                  <img class="location-flag flex-xs-bottom" src="/assets/images/flags/32/{{selectedDC.spec.country}}.png" alt="{{selectedDC.spec.country}}" />
                 </div>
-                <img class="location-flag flex-xs-bottom" src="/assets/images/flags/32/{{selectedDC.spec.country}}.png" alt="{{selectedDC.spec.country}}" />
               </div>
             </div>
 
-            <div [hidden]="selectedCloud === 'bringyourown'" *ngIf="selectedCloudRegion">
+            <div [hidden]="selectedCloud === 'bringyourown'" class="flex-items-xs-center" *ngIf="selectedCloudRegion">
+              <div class="arrow-box-title">Datacenter of nodes</div>
               <div class="col-xs-6 arrow-box arrow-box-completed arrow-box-color_secondary">
                 <div class="col-xs arrow-box-content flex-items-xs-center">
                   <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
@@ -252,17 +258,29 @@
               </div>
             </div>
 
-            <div [hidden]="selectedCloud !== 'bringyourown'">
+            <div [hidden]="selectedCloud === 'bringyourown'" class="flex-items-xs-center">
+              <div class="arrow-box-title">Node count</div>
+              <div class="col-xs-6 arrow-box arrow-box-completed arrow-box-color_secondary">
+                <div class="col-xs arrow-box-content flex-items-xs-center">
+                  <div class="headline">
+                    {{getNodeCount()}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div [hidden]="selectedCloud !== 'bringyourown'" class="flex-items-xs-center">
+              <div class="arrow-box-title">Datacenter of nodes</div>
               <div class="col-sm arrow-box arrow-box-completed arrow-box-color_secondary">
                 <div class="col-xs arrow-box-content flex-items-xs-center">
                   <img class="cloud-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloud}}">
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="arrow-box-text">You are creating your cluster in {{ selectedDC }} with name {{ clusterNameForm.controls.clustername.value }}</div>
-            <div class="arrow-box-text">You choose the cloud provider: {{ selectedCloud }} in region {{ selectedCloudRegion }}</div>
-            <button class="btn btn-outline-warning">Create cluster</button>
+          <div class="row flex-items-xs-center">
+            <button class="btn btn-outline-warning col-xs-8 flex-items-xs-center">Create cluster</button>
           </div>
         </div>
       </div>

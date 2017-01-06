@@ -23,7 +23,6 @@ export class WizardComponent implements OnInit {
   public selectedDC: DataCenterEntity;
   public selectedCloud: string;
   public selectedCloudRegion: DataCenterEntity;
-  public selectedCloudConfiguration: any;
   public selectedCloudProviderApiError: string;
   public acceptBringYourOwn: boolean;
 
@@ -51,7 +50,7 @@ export class WizardComponent implements OnInit {
     });
 
     this.clusterNameForm = this.formBuilder.group({
-      clustername: ["", [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16)]],
+      clustername: [this.nameGenerator.generateName(), [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16)]],
     });
 
     this.bringYourOwnForm = this.formBuilder.group({
@@ -80,13 +79,13 @@ export class WizardComponent implements OnInit {
 
         this.api.getSSHKeys("aws", body)
           .subscribe(result => {
-            // TODO consume api call
-            this.selectedCloudProviderApiError = null;
-            console.log(JSON.stringify(result));
-          },
-          error => {
-            this.selectedCloudProviderApiError = error.status + " " + error.statusText;
-          });
+              // TODO consume api call
+              this.selectedCloudProviderApiError = null;
+              console.log(JSON.stringify(result));
+            },
+            error => {
+              this.selectedCloudProviderApiError = error.status + " " + error.statusText;
+            });
       }
     });
 
@@ -96,13 +95,15 @@ export class WizardComponent implements OnInit {
 
         this.api.getSSHKeys("digitalocean", body)
           .subscribe(result => {
-            // TODO consume api call
-            console.log(JSON.stringify(result));
-          });
+              // TODO consume api call
+              this.selectedCloudProviderApiError = null;
+              console.log(JSON.stringify(result));
+            },
+            error => {
+              this.selectedCloudProviderApiError = error.status + " " + error.statusText;
+            });
       }
     });
-
-    this.refreshName();
   }
 
   public selectDC(dc: DataCenterEntity) {
@@ -120,8 +121,18 @@ export class WizardComponent implements OnInit {
     this.selectedCloudRegion = cloud;
   }
 
-  public selectCloudConfiguration(config: any) {
-    this.selectedCloudConfiguration = config;
+  public getNodeCount(): string {
+    if (this.selectedCloud === "aws") {
+      return this.awsForm.controls["node_count"].value;
+    } else if (this.selectedCloud === "digitalocean") {
+      return this.digitaloceanForm.controls["node_count"].value;
+    } else {
+      return "-1";
+    }
+  }
+
+  public refreshName() {
+    this.clusterNameForm.patchValue({clustername: this.nameGenerator.generateName()});
   }
 
   public gotoStep(step: number) {
@@ -144,9 +155,9 @@ export class WizardComponent implements OnInit {
         if (this.selectedCloud === "bringyourown") {
           return this.bringYourOwnForm.valid && this.clusterNameForm.valid;
         } else if (this.selectedCloud === "aws") {
-          return this.clusterNameForm.valid && this.awsForm.valid;
+          return this.clusterNameForm.valid; // && this.awsForm.valid;
         } else if (this.selectedCloud === "digitalocean") {
-          return this.clusterNameForm.valid && this.digitaloceanForm.valid;
+          return this.clusterNameForm.valid; // && this.digitaloceanForm.valid;
         } else {
           return false;
         }
@@ -169,9 +180,5 @@ export class WizardComponent implements OnInit {
 
   public canStepForward(): boolean {
     return this.canGotoStep(this.currentStep);
-  }
-
-  public refreshName() {
-    this.clusterNameForm.patchValue({clustername: this.nameGenerator.generateName()});
   }
 }
