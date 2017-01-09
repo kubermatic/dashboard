@@ -46,4 +46,9 @@ describe("WizardComponent", () => {
   it("should create", () => {
     expect(component).toBeTruthy();
   });
+
+  it("initialized in initial step", () => {
+    component = fixture.componentInstance;
+    expect(component.currentStep).toBe(0);
+  });
 });

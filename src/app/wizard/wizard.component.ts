@@ -155,9 +155,9 @@ export class WizardComponent implements OnInit {
         if (this.selectedCloud === "bringyourown") {
           return this.bringYourOwnForm.valid && this.clusterNameForm.valid;
         } else if (this.selectedCloud === "aws") {
-          return this.clusterNameForm.valid; // && this.awsForm.valid;
+          return this.clusterNameForm.valid && this.awsForm.valid;
         } else if (this.selectedCloud === "digitalocean") {
-          return this.clusterNameForm.valid; // && this.digitaloceanForm.valid;
+          return this.clusterNameForm.valid && this.digitaloceanForm.valid;
         } else {
           return false;
         }
