@@ -101,14 +101,14 @@
 
 // arrow box--------
 
-$arrow-box-size: 200px;
-$arrow-box-content-dc-logo-size: 70px;
-$arrow-box-content-cloud-logo-size: 120px;
-$arrow-box-content-location-flag-size: 32px;
-$arrow-box-content-dc-margin-top: 10px;
-$arrow-box-content-cloud-margin-top: 25px;
+$wizard-box-size: 200px;
+$wizard-box-content-dc-logo-size: 70px;
+$wizard-box-content-cloud-logo-size: 120px;
+$wizard-box-content-location-flag-size: 32px;
+$wizard-box-content-dc-margin-top: 10px;
+$wizard-box-content-cloud-margin-top: 25px;
 
-.arrow-box-text {
+.wizard-box-text {
   color: $primary;
   font-weight: $font-normal;
   font-size: $font-size-base;
@@ -116,12 +116,12 @@ $arrow-box-content-cloud-margin-top: 25px;
   padding-bottom: 10px;
 }
 
-.arrow-box-title {
-  @extend .arrow-box-text;
+.wizard-box-title {
+  @extend .wizard-box-text;
   text-align: center;
 }
 
-.arrow-box-text-primary {
+.wizard-box-text-primary {
   color: $primary;
   font-weight: $font-thin;
   font-size: $font-size-lg;
@@ -129,20 +129,20 @@ $arrow-box-content-cloud-margin-top: 25px;
   padding-bottom: 10px;
 }
 
-.arrow-box-content {
+.wizard-box-content {
   text-align: center;
   color: $primary;
   font-weight: $font-bold;
 
   img.dc-logo {
-    width: $arrow-box-content-dc-logo-size;
-    margin-top: $arrow-box-content-dc-margin-top;
+    width: $wizard-box-content-dc-logo-size;
+    margin-top: $wizard-box-content-dc-margin-top;
     margin-bottom: 15px;
   }
 
   img.cloud-logo {
-    width: $arrow-box-content-cloud-logo-size;
-    margin-top: $arrow-box-content-cloud-margin-top;
+    width: $wizard-box-content-cloud-logo-size;
+    margin-top: $wizard-box-content-cloud-margin-top;
     margin-bottom: 15px;
   }
 
@@ -152,7 +152,14 @@ $arrow-box-content-cloud-margin-top: 25px;
     padding: 5px;
   }
 
-  div.headline {
+  div.cluster-name {
+    font-weight: 600;
+    font-size: 2em;
+    line-height: 120%;
+    margin-top: 50px;
+  }
+
+  div.node-count {
     font-weight: 600;
     font-size: 7em;
     margin-top: 75px;
@@ -166,16 +173,16 @@ $arrow-box-content-cloud-margin-top: 25px;
 
   image.location-flag {
     margin-top: 10px;
-    width: $arrow-box-content-location-flag-size;
-    height: $arrow-box-content-location-flag-size;
+    width: $wizard-box-content-location-flag-size;
+    height: $wizard-box-content-location-flag-size;
   }
 }
 
-.arrow-box {
-  max-width: $arrow-box-size;
-  max-height: $arrow-box-size;
-  min-height: $arrow-box-size;
-  width: $arrow-box-size;
+.wizard-box {
+  max-width: $wizard-box-size;
+  max-height: $wizard-box-size;
+  min-height: $wizard-box-size;
+  width: $wizard-box-size;
   margin: 15px;
   border-radius: 10px 10px 10px 10px;
   -moz-border-radius: 10px 10px 10px 10px;
@@ -185,49 +192,49 @@ $arrow-box-content-cloud-margin-top: 25px;
   cursor: pointer;
 }
 
-.arrow-box[disabled] {
+.wizard-box[disabled] {
   cursor: not-allowed;
 }
 
-.arrow-box.selected {
+.wizard-box.selected {
   background-color: #dcebff;
   cursor: default;
 }
 
-.arrow-box.selected:hover {
+.wizard-box.selected:hover {
   background-color: #d5e3f5;
   cursor: default;
 }
 
-.arrow-box:not([disabled]):not(.selected):hover {
+.wizard-box:not([disabled]):not(.selected):hover {
   background: #f7f8f9;
 }
 
-.arrow-box-completed.arrow-box-color_primary:not([disabled]) {
+.wizard-box-completed.wizard-box-color_primary:not([disabled]) {
   border: 1px solid #00BDCC;
 }
 
-.arrow-box-completed.arrow-box-color_secondary:not([disabled]) {
+.wizard-box-completed.wizard-box-color_secondary:not([disabled]) {
   border: 1px solid #00969e;
 }
 
-.arrow-box.arrow-box-color_primary:hover {
+.wizard-box.wizard-box-color_primary:hover {
   border: 1px solid #00BDCC;
 }
 
-.arrow-box.arrow-box-color_secondary:hover {
+.wizard-box.wizard-box-color_secondary:hover {
   border: 1px solid #00969e;
 }
 
-.arrow-box[disabled] > i {
+.wizard-box[disabled] > i {
   color: #717171
 }
 
-.arrow-box.arrow-box-completed.arrow-box-color_primary:before {
+.wizard-box.wizard-box-completed.wizard-box-color_primary:before {
   border-left-color: #00BDCC;
 }
 
-.arrow-box.arrow-box-completed.arrow-box-color_secondary:before {
+.wizard-box.wizard-box-completed.wizard-box-color_secondary:before {
   border-left-color: #00969e;
 }
 
