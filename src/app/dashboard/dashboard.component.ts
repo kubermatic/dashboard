@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import {Auth} from "../auth/auth.service";
 
 @Component({
   selector: "kubermatic-dashboard",
@@ -7,7 +8,9 @@ import { Component, OnInit } from "@angular/core";
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  constructor(private auth: Auth) {
+
+  }
 
   ngOnInit() {
   }

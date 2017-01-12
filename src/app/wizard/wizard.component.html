@@ -11,27 +11,15 @@
       <span *ngIf="currentStep > 0" class="wizard-step-circle fa fa-check" aria-hidden="true" [style.cursor]="'pointer'"  (click)="gotoStep(0)"></span>
       <span *ngIf="currentStep <= 0" class="wizard-step-circle">1</span>
       <div class="wizard-step-body">
-        <h4>Select the Datacenter of the Kubernetes Master</h4>
+        <h4>Name your Kubernetes cluster</h4>
         <div [hidden]="currentStep !== 0">
-          <div class="arrow-box-text">This is the datacenter the Kubernetes master is deployed in by Kubermatic.</div>
-          <div class="row flex-items-xs-center">
-            <div *ngFor="let dc of seedDataCenters; let i = index;" class="col-sm arrow-box arrow-box-completed"
-                 [ngClass]="{'selected': !!selectedDC && selectedDC.metadata.name === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
-                 (click)="selectDC(dc)">
-              <div class="col-xs arrow-box-content flex-items-xs-center">
-                <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{dc.spec.provider}}">
-                <div class="flex-xs-middle">
-                  <div class="name">
-                    {{dc.metadata.name}}
-                  </div>
-                  <div class="location">
-                    {{dc.spec.location}}
-                  </div>
-                </div>
-                <img class="location-flag flex-xs-bottom" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
-              </div>
+          <div class="wizard-box-text">This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</div>
+          <form [formGroup]="clusterNameForm" novalidate>
+            <div class="col-xs-8 form-group" [ngClass]="{'has-danger': !clusterNameForm.controls.clustername.valid, 'has-warning': clusterNameForm.controls.clustername.valid}">
+              <input id="clustername" formControlName="clustername" type="text" class="form-control" title="clusterName">
+              <small class="form-text text-primary" style="cursor: pointer;" (click)="refreshName()">Generate name</small>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
@@ -42,13 +30,13 @@
       <div class="wizard-step-body">
         <h4>Select the cloud provider for your nodes</h4>
         <div [hidden]="currentStep !== 1">
-          <div class="arrow-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+          <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
             Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
           <div class="row flex-items-xs-center">
-            <div *ngFor="let cloud of supportedNodeProviders; let i = index;" class="col-sm arrow-box arrow-box-completed"
-                 [ngClass]="{'selected': selectedCloud === cloud, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+            <div *ngFor="let cloud of supportedNodeProviders; let i = index;" class="col-sm wizard-box wizard-box-completed"
+                 [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
                  (click)="selectCloud(cloud)">
-              <div class="col-xs arrow-box-content flex-items-xs-center">
+              <div class="col-xs wizard-box-content flex-items-xs-center">
                 <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
               </div>
             </div>
@@ -63,16 +51,16 @@
       <div class="wizard-step-body">
         <h4>Select the datacenter of your cloud provider</h4>
         <div [hidden]="currentStep !== 2">
-          <div class="arrow-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+          <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
             Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
 
           <div [hidden]="selectedCloud === 'bringyourown'">
             <div class="row flex-items-xs-center">
-              <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-xs-6 arrow-box arrow-box-completed"
-                   [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'arrow-box-color_primary': i % 2 === 0, 'arrow-box-color_secondary': i % 2 !== 0}"
+              <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-xs-6 wizard-box wizard-box-completed"
+                   [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
                    (click)="selectCloudRegion(dc)">
 
-                <div class="col-xs arrow-box-content flex-items-xs-center">
+                <div class="col-xs wizard-box-content flex-items-xs-center">
                   <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{dc.spec.provider}}">
                   <div class="name">
                     {{dc.metadata.name}}
@@ -87,18 +75,18 @@
           </div>
 
           <div [hidden]="selectedCloud !== 'bringyourown'" class="col-xs-8">
-            <div class="arrow-box-text">
+            <div class="wizard-box-text">
               You <i>bring your own</i> nodes, how you like, whereever you like. You are on your own, but
               you have full flexibility. Install the nodes on any cloud provider of your choice or in your
               own datacenter or on bare-metal.
             </div>
-            <div class="arrow-box-text">
+            <div class="wizard-box-text">
               Only requirement for now: your provider has to support Ubuntu 16.04 and a private network.
             </div>
-            <div class="arrow-box-text">
+            <div class="wizard-box-text">
               Instructions will be provided in the cluster details.
             </div>
-            <div class="arrow-box-text-primary">
+            <div class="wizard-box-text-primary">
               <label style="cursor: pointer;"><input type="checkbox" value="" [(ngModel)]="acceptBringYourOwn">Fantastic, this is exactly what I want.</label>
             </div>
           </div>
@@ -115,7 +103,7 @@
         <div [hidden]="currentStep !== 3">
 
           <div [hidden]="selectedCloud !== 'aws'" class="col-xs-8">
-            <div class="arrow-box-text">
+            <div class="wizard-box-text">
               We need a AWS Access Key and Secret Access Key <b>with write access</b>.
               You can create one
               <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
@@ -154,7 +142,7 @@
           </div>
 
           <div [hidden]="selectedCloud !== 'digitalocean'" class="col-xs-8">
-            <div class="arrow-box-text">
+            <div class="wizard-box-text">
               We need a DigitalOcean Personal Access Token <b>with write access</b>.
               You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
               <br>
@@ -187,7 +175,7 @@
           </div>
 
           <div [hidden]="selectedCloud !== 'bringyourown'" class="col-xs-8">
-            <div class="arrow-box-text">
+            <div class="wizard-box-text">
               You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?<br>
               For non-interactive installation of the kubermatic debian package, you have to tell us about the
               private network interface of your nodes. It will be used for the
@@ -202,14 +190,6 @@
               </div>
             </form>
           </div>
-
-          <form [formGroup]="clusterNameForm" novalidate>
-            <div class="col-xs-8 form-group" [ngClass]="{'has-danger': !clusterNameForm.controls.clustername.valid, 'has-warning': clusterNameForm.controls.clustername.valid}">
-              <label for="clustername" class="form-text text-muted">Choose the name of for your cluster</label>
-              <input id="clustername" formControlName="clustername" type="text" class="form-control">
-              <small class="form-text text-primary" style="cursor: pointer;" (click)="refreshName()">Generate name</small>
-            </div>
-          </form>
         </div>
       </div>
     </div>
@@ -219,33 +199,24 @@
       <span *ngIf="currentStep <= 4" class="wizard-step-circle">5</span>
       <div class="wizard-step-body">
         <h4>Summary</h4>
-        <div [hidden]="currentStep !== 4" *ngIf="selectedDC">
-          <div class="arrow-box-text">You are about to create your cluster: <strong>{{ clusterNameForm.controls.clustername.value }}</strong></div>
-
+        <div [hidden]="currentStep !== 4">
           <div class="row flex-items-xs-center">
 
             <div class="flex-items-xs-center">
-              <div class="arrow-box-title">Datacenter of master</div>
-              <div class="col-sm arrow-box arrow-box-completed arrow-box-color_primary">
-                <div class="col-xs arrow-box-content flex-items-xs-center">
-                  <img class="dc-logo flex-xs-top" src="/assets/images/clouds/loodsecluster.png" alt="{{selectedDC.spec.provider}}">
-                  <div class="flex-xs-middle">
-                    <div class="name">
-                      {{selectedDC.metadata.name}}
-                    </div>
-                    <div class="location">
-                      {{selectedDC.spec.location}}
-                    </div>
+              <div class="wizard-box-title">Cluster name</div>
+              <div class="col-xs-6 wizard-box wizard-box-completed wizard-box-color_secondary">
+                <div class="col-xs wizard-box-content flex-items-xs-center">
+                  <div class="cluster-name">
+                    {{ clusterNameForm.controls.clustername.value }}
                   </div>
-                  <img class="location-flag flex-xs-bottom" src="/assets/images/flags/32/{{selectedDC.spec.country}}.png" alt="{{selectedDC.spec.country}}" />
                 </div>
               </div>
             </div>
 
             <div [hidden]="selectedCloud === 'bringyourown'" class="flex-items-xs-center" *ngIf="selectedCloudRegion">
-              <div class="arrow-box-title">Datacenter of nodes</div>
-              <div class="col-xs-6 arrow-box arrow-box-completed arrow-box-color_secondary">
-                <div class="col-xs arrow-box-content flex-items-xs-center">
+              <div class="wizard-box-title">Datacenter of nodes</div>
+              <div class="col-xs-6 wizard-box wizard-box-completed wizard-box-color_secondary">
+                <div class="col-xs wizard-box-content flex-items-xs-center">
                   <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
                   <div class="name">
                     {{selectedCloudRegion.metadata.name}}
@@ -259,10 +230,10 @@
             </div>
 
             <div [hidden]="selectedCloud === 'bringyourown'" class="flex-items-xs-center">
-              <div class="arrow-box-title">Node count</div>
-              <div class="col-xs-6 arrow-box arrow-box-completed arrow-box-color_secondary">
-                <div class="col-xs arrow-box-content flex-items-xs-center">
-                  <div class="headline">
+              <div class="wizard-box-title">Node count</div>
+              <div class="col-xs-6 wizard-box wizard-box-completed wizard-box-color_secondary">
+                <div class="col-xs wizard-box-content flex-items-xs-center">
+                  <div class="node-count">
                     {{getNodeCount()}}
                   </div>
                 </div>
@@ -270,9 +241,9 @@
             </div>
 
             <div [hidden]="selectedCloud !== 'bringyourown'" class="flex-items-xs-center">
-              <div class="arrow-box-title">Datacenter of nodes</div>
-              <div class="col-sm arrow-box arrow-box-completed arrow-box-color_secondary">
-                <div class="col-xs arrow-box-content flex-items-xs-center">
+              <div class="wizard-box-title">Datacenter of nodes</div>
+              <div class="col-sm wizard-box wizard-box-completed wizard-box-color_secondary">
+                <div class="col-xs wizard-box-content flex-items-xs-center">
                   <img class="cloud-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloud}}">
                 </div>
               </div>
