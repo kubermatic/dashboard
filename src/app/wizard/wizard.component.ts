@@ -31,6 +31,8 @@ export class WizardComponent implements OnInit {
   public digitaloceanForm: FormGroup;
   public bringYourOwnForm: FormGroup;
 
+  public sshKeys: {[key: string]: DataCenterEntity[]} = {};
+
   constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator, private formBuilder: FormBuilder) {
   }
 
@@ -77,15 +79,27 @@ export class WizardComponent implements OnInit {
         let body = {username: this.awsForm.controls["access_key_id"].value ,
           password: this.awsForm.controls["secret_access_key"].value};
 
-        this.api.getSSHKeys("aws", body)
+
+        this.api.getSSHKeys(this.selectedCloudRegion.metadata.name, body)
           .subscribe(result => {
               // TODO consume api call
               this.selectedCloudProviderApiError = null;
-              console.log(JSON.stringify(result));
-            },
+
+                this.sshKeys = result.reduce(function(obj, x) {
+                  obj[x.KeyName + ' - ' + x.KeyFingerprint] = x.KeyName;
+
+
+                  return obj;
+                }, {});
+
+
+
+              },
             error => {
               this.selectedCloudProviderApiError = error.status + " " + error.statusText;
             });
+
+
       }
     });
 
