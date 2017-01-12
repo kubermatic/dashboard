@@ -11,6 +11,7 @@ import {ApiService} from "../api/api.service";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";
 import {ClusterNameGenerator} from "../util/name-generator.service";
+import {FrontpageComponent} from "../frontpage/frontpage.component";
 
 describe("DashboardComponent", () => {
   let component: DashboardComponent;
@@ -27,7 +28,8 @@ describe("DashboardComponent", () => {
       ],
       declarations: [
         DashboardComponent,
-        WizardComponent
+        WizardComponent,
+        FrontpageComponent
       ],
       providers: [
         Auth,

@@ -13,14 +13,12 @@ import {CustomValidators} from "ng2-validation";
 })
 export class WizardComponent implements OnInit {
 
-  public seedDataCenters: DataCenterEntity[] = [];
   public supportedNodeProviders: string[] = ["aws", "digitalocean", "bringyourown"];
   public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {};
 
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
 
-  public selectedDC: DataCenterEntity;
   public selectedCloud: string;
   public selectedCloudRegion: DataCenterEntity;
   public selectedCloudProviderApiError: string;
@@ -36,9 +34,6 @@ export class WizardComponent implements OnInit {
 
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
-      this.seedDataCenters = result.filter(elem => elem.seed)
-        .sort((a, b) => DataCenterEntity.sortByName(a, b));
-
       result.forEach(elem => {
         if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
           this.groupedDatacenters[elem.spec.provider] = [];
@@ -50,7 +45,8 @@ export class WizardComponent implements OnInit {
     });
 
     this.clusterNameForm = this.formBuilder.group({
-      clustername: [this.nameGenerator.generateName(), [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16)]],
+      clustername: [this.nameGenerator.generateName(),
+        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16)]],
     });
 
     this.bringYourOwnForm = this.formBuilder.group({
@@ -66,8 +62,8 @@ export class WizardComponent implements OnInit {
     });
 
     this.digitaloceanForm = this.formBuilder.group({
-      access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64)],
-        Validators.pattern("[a-z0-9]+")],
+      access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
+        Validators.pattern("[a-z0-9]+")]],
       ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
@@ -106,12 +102,6 @@ export class WizardComponent implements OnInit {
     });
   }
 
-  public selectDC(dc: DataCenterEntity) {
-    this.selectedDC = dc;
-    this.selectedCloud = null;
-    this.selectedCloudRegion = null;
-  }
-
   public selectCloud(cloud: string) {
     this.selectedCloud = cloud;
     this.selectedCloudRegion = null;
@@ -142,7 +132,7 @@ export class WizardComponent implements OnInit {
   public canGotoStep(step: number) {
     switch (step) {
       case 0:
-        return !!this.selectedDC;
+        return this.clusterNameForm.valid;
       case 1:
         return !!this.selectedCloud;
       case 2:
@@ -153,11 +143,11 @@ export class WizardComponent implements OnInit {
         }
       case 3:
         if (this.selectedCloud === "bringyourown") {
-          return this.bringYourOwnForm.valid && this.clusterNameForm.valid;
+          return this.bringYourOwnForm.valid;
         } else if (this.selectedCloud === "aws") {
-          return this.clusterNameForm.valid && this.awsForm.valid;
+          return this.awsForm.valid;
         } else if (this.selectedCloud === "digitalocean") {
-          return this.clusterNameForm.valid && this.digitaloceanForm.valid;
+          return this.digitaloceanForm.valid;
         } else {
           return false;
         }
