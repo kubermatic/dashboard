@@ -125,7 +125,10 @@
               </div>
               <div class="form-group">
                 <label for="ssh_key" class="form-text text-muted">Authorized SSH Key:</label>
-                <select class="form-control" id="ssh_key" name="sshKeys" formControlName="ssh_key"></select>
+                <select class="form-control" id="ssh_key" name="sshKeys" formControlName="ssh_key">
+                  <option value="" disabled="true" [selected]="!node_size">Please enter credentials and select a SSH Key!</option>
+                  <option *ngFor="let key of sshKeys" [value]="key.KeyName">{{key.KeyName + ' - ' + key.KeyFingerprint}}</option>
+                </select>
                 <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
                   to provide kubectl logs, port-forward and exec functionality.</small>
                 <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
@@ -138,6 +141,17 @@
                 </div>
                 <small class="form-text text-danger"  [hidden]="awsForm.controls.node_count.valid || !awsForm.controls.node_count.touched">Node count is required.</small>
               </div>
+              <div class="form-group">
+                <label for="node_size" class="form-text text-muted">Node Size:</label>
+                <select class="form-control" id="node_size" name="nodeSize" formControlName="node_size">
+                  <option value="" disabled="true" [selected]="!node_size">Please select a node size!</option>
+                  <option *ngFor="let size of nodeSize; let i = index;" [value]="size"> {{size}}</option>
+                </select>
+                <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+                  to provide kubectl logs, port-forward and exec functionality.</small>
+                <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
+              </div>
+
             </form>
           </div>
 
@@ -150,11 +164,11 @@
               You can add more <a target="_new" href="https://cloud.digitalocean.com/settings/security">here</a>.
             </div>
 
-            <form [formGroup]="digitaloceanForm" novalidate>
-              <div class="form-group" [ngClass]="{'has-danger': !digitaloceanForm.controls.access_token.valid && digitaloceanForm.controls.access_token.touched, 'has-success': digitaloceanForm.controls.access_token.valid}">
+            <form [formGroup]="digitalOceanForm" novalidate>
+              <div class="form-group" [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
                 <label for="access_token" class="form-text text-muted">Personal Access Token:</label>
                 <input id="access_token" formControlName="access_token" type="text" class="form-control">
-                <small class="form-text text-danger" [hidden]="digitaloceanForm.controls.access_token.valid || !digitaloceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
+                <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
               </div>
               <div class="form-group">
                 <label for="digitalocean_ssh_key" class="form-text text-muted">Authorized SSH Key:</label>
@@ -163,13 +177,13 @@
                   to provide kubectl logs, port-forward and exec functionality.</small>
                 <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
               </div>
-              <div class="form-group" [ngClass]="{'has-danger': !digitaloceanForm.controls.node_count.valid && digitaloceanForm.controls.node_count.touched, 'has-success': digitaloceanForm.controls.node_count.valid}">
+              <div class="form-group" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid}">
                 <label for="digitalocean_node_count" class="form-text text-muted">Node count:</label>
                 <div class="range">
                   <input id="digitalocean_node_count" name="range" formControlName="node_count" type="range" min="1" max="20" class="form-control">
-                  <output>{{ digitaloceanForm.controls.node_count.value }}</output>
+                  <output>{{ digitalOceanForm.controls.node_count.value }}</output>
                 </div>
-                <small class="form-text text-danger"  [hidden]="digitaloceanForm.controls.node_count.valid || !digitaloceanForm.controls.node_count.touched">Node count is required.</small>
+                <small class="form-text text-danger"  [hidden]="digitalOceanForm.controls.node_count.valid || !digitalOceanForm.controls.node_count.touched">Node count is required.</small>
               </div>
             </form>
           </div>
@@ -235,6 +249,7 @@
                 <div class="col-xs wizard-box-content flex-items-xs-center">
                   <div class="node-count">
                     {{getNodeCount()}}
+                    {{getNodeSize()}}
                   </div>
                 </div>
               </div>
@@ -251,7 +266,7 @@
           </div>
 
           <div class="row flex-items-xs-center">
-            <button class="btn btn-outline-warning col-xs-8 flex-items-xs-center">Create cluster</button>
+            <button class="btn btn-outline-warning col-xs-8 flex-items-xs-center" (click)="createClusterAndNode()" >Create cluster</button>
           </div>
         </div>
       </div>
