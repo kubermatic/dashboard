@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import {ApiService} from "../api/api.service";
 
 @Component({
   selector: "kubermatic-profile",
@@ -7,9 +8,12 @@ import { Component, OnInit } from "@angular/core";
 })
 export class ProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(private api: ApiService) { }
 
   ngOnInit() {
+    this.api.getSSHKeys().subscribe(result => {
+      console.log(JSON.stringify(result));
+    });
   }
 
 }

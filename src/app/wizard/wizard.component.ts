@@ -73,15 +73,15 @@ export class WizardComponent implements OnInit {
         let body = {username: this.awsForm.controls["access_key_id"].value ,
           password: this.awsForm.controls["secret_access_key"].value};
 
-        this.api.getSSHKeys("aws", body)
-          .subscribe(result => {
-              // TODO consume api call
-              this.selectedCloudProviderApiError = null;
-              console.log(JSON.stringify(result));
-            },
-            error => {
-              this.selectedCloudProviderApiError = error.status + " " + error.statusText;
-            });
+        // this.api.getSSHKeys("aws", body)
+        //   .subscribe(result => {
+        //       // TODO consume api call
+        //       this.selectedCloudProviderApiError = null;
+        //       console.log(JSON.stringify(result));
+        //     },
+        //     error => {
+        //       this.selectedCloudProviderApiError = error.status + " " + error.statusText;
+        //     });
       }
     });
 
@@ -89,15 +89,15 @@ export class WizardComponent implements OnInit {
       if (this.digitaloceanForm.controls["access_token"].valid) {
         let body = {token: this.digitaloceanForm.controls["access_token"].value};
 
-        this.api.getSSHKeys("digitalocean", body)
-          .subscribe(result => {
-              // TODO consume api call
-              this.selectedCloudProviderApiError = null;
-              console.log(JSON.stringify(result));
-            },
-            error => {
-              this.selectedCloudProviderApiError = error.status + " " + error.statusText;
-            });
+        // this.api.getSSHKeys("digitalocean", body)
+        //   .subscribe(result => {
+        //       // TODO consume api call
+        //       this.selectedCloudProviderApiError = null;
+        //       console.log(JSON.stringify(result));
+        //     },
+        //     error => {
+        //       this.selectedCloudProviderApiError = error.status + " " + error.statusText;
+        //     });
       }
     });
   }

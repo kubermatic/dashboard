@@ -1,6 +1,6 @@
 {
-  "/api/**": {
-    "target": "https://beta.kubermatic.io",
+  "/api/v1/**": {
+    "target": "http://localhost:8001",
     "secure": false,
     "changeOrigin": true
   }

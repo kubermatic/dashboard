@@ -10,7 +10,7 @@ import {DataCenterEntity} from "./entitiy/DatacenterEntity";
 import {ClusterEntity} from "./entitiy/ClusterEntity";
 import {NodeEntity} from "./entitiy/NodeEntity";
 import {Auth} from "../auth/auth.service";
-import {SSHKey} from "./model/SSHKeyModel";
+import {SSHKeyEntity} from "./entitiy/SSHKeyEntity";
 
 @Injectable()
 export class ApiService {
@@ -113,14 +113,10 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  getSSHKeys(dc: string, body: any): Observable<SSHKey[]> {
-    let url = `${this.restRoot}/ext/${dc}/keys`;
+  getSSHKeys(): Observable<SSHKeyEntity[]> {
+    let url = `${this.restRoot}/sshkeys`;
 
-    return this._http.post(url, body, { headers: this.headers })
-      .map((res: Response) => {
-      let x = res.json();
-
-        return x.KeyPairs;
-      });
+    return this._http.get(url, { headers: this.headers })
+      .map(res => res.json());
   }
 }

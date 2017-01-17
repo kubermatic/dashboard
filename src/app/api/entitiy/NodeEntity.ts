@@ -7,6 +7,12 @@ export class NodeEntity {
   metadata: MetadataEntity;
   spec: NodeSpec;
   status: NodeStatus;
+
+  constructor(metadata: MetadataEntity, spec: NodeSpec, status: NodeStatus) {
+    this.metadata = metadata;
+    this.spec = spec;
+    this.status = status;
+  }
 }
 
 export class NodeSpec {

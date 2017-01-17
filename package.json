@@ -57,6 +57,7 @@
     "ngrx-store-freeze": "^0.1.6",
     "ngrx-store-logger": "^0.1.7",
     "protractor": "~4.0.13",
+    "request": "^2.79.0",
     "ts-node": "1.2.1",
     "tslint": "^4.0.2",
     "typescript": "~2.0.3",
