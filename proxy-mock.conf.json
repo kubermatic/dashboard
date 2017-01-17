@@ -1,0 +1,7 @@
+{
+  "/api/**": {
+    "target": "https://beta.kubermatic.io",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

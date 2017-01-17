@@ -9,6 +9,7 @@
   "scripts": {
     "serve": "ng serve --port 8000 --hmr",
     "serve:proxy": "ng serve --port 8000 --hmr --proxy-config proxy.conf.json",
+    "serve:mock": "concurrently --kill-others --prefix \"[{name}]\" --names \"mock-server,ng-serve\" \"node mock-server.js\" \"ng serve --port 8000 --hmr --proxy-config proxy-mock.conf.json\"",
     "prebuild": "ng test --single-run",
     "build": "ng build --prod",
     "lint": "tslint \"src/**/*.ts\"",
@@ -45,6 +46,7 @@
     "@types/node": "^6.0.42",
     "angular-cli": "1.0.0-beta.24",
     "codelyzer": "~2.0.0-beta.1",
+    "concurrently": "^3.1.0",
     "jasmine-core": "2.5.2",
     "jasmine-spec-reporter": "2.5.0",
     "karma": "1.2.0",
