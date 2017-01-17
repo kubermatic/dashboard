@@ -14,9 +14,9 @@ export class FrontpageComponent {
 
   public gotoDashboard() {
     if (this.auth.authenticated()) {
-      this.router.navigate(["dashboard/wizard"]);
+      this.router.navigate(["wizard"]);
     } else {
-      localStorage.setItem("redirect_url", "dashboard/wizard");
+      localStorage.setItem("redirect_url", "wizard");
       this.auth.login();
     }
   }

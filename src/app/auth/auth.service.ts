@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 
 import { tokenNotExpired } from "angular2-jwt";
 import { Store } from "@ngrx/store";
-import { State } from "../reducers";
+import * as fromRoot from "../reducers/index";
 import { Actions } from "../reducers/actions";
 
 // Avoid name not found warnings
@@ -24,7 +24,7 @@ export class Auth {
     return localStorage.getItem("id_token");
   }
 
-  constructor(private _router: Router, private _store: Store<State>) {
+  constructor(private _router: Router, private _store: Store<fromRoot.State>) {
     // Add callback for lock `authenticated` event
     this.lock.on("authenticated", (authResult) => {
       localStorage.setItem("id_token", authResult.idToken);

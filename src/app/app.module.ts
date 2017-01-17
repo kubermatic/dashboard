@@ -20,6 +20,7 @@ import { WizardComponent } from "./wizard/wizard.component";
 import { ClusterNameGenerator } from "./util/name-generator.service";
 import { StoreModule } from "@ngrx/store";
 import { combinedReducer } from "./reducers/index";
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   imports: [
@@ -37,7 +38,8 @@ import { combinedReducer } from "./reducers/index";
     FrontpageComponent,
     DashboardComponent,
     BreadcrumbsComponent,
-    WizardComponent
+    WizardComponent,
+    ProfileComponent
   ],
   providers: [
     AUTH_PROVIDERS,
