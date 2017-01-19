@@ -29,6 +29,10 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.router.navigate(["wizard"]);
+    if (this.auth.authenticated()) {
+      this.router.navigate(["wizard"]);
+    } else {
+      this.router.navigate(["welcome"]);
+    }
   }
 }
