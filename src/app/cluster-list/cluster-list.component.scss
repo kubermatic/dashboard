@@ -1,0 +1,17 @@
+.cluster {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+
+  .list-headline {
+    background-color: #f5f5f5;
+    height: 40px;
+
+    div, a {
+      line-height: 40px;
+      color: #333;
+      font-weight: bold;
+    }
+  }
+}
+
+

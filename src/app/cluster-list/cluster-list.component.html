@@ -1,0 +1,23 @@
+<div class="container">
+  <div class="row flex-items-xs-center">
+    <h2 class="cluster-headline">Cluster Overview</h2>
+  </div>
+</div>
+
+<div class="container cluster">
+  <div class="row list-headline">
+    <div class="col-xs-3">Cluster Name</div>
+    <div class="col-xs-3">DC of Nodes</div>
+    <div class="col-xs-2">Status</div>
+    <div class="col-xs-2">Health</div>
+    <div class="col-xs-2">
+      <button type="button" class="btn btn-primary">
+        <i class="fa fa-chevron-left" style="margin-right: 5px;" aria-hidden="true"></i>Add Node
+      </button>
+    </div>
+  </div>
+  <kubermatic-cluster-item *ngFor="let c of clusters" [cluster]="c"></kubermatic-cluster-item>
+  <div class="row text-center" *ngIf="!clusters.length">
+    No Cluster available. Please add a Cluster.
+  </div>
+</div>

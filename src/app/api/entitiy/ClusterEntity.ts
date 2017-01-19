@@ -3,29 +3,23 @@ import {DigitialoceanCloudSpec} from "./cloud/DigitialoceanCloudSpec";
 import {BringYourOwnCloudSpec} from "./cloud/BringYourOwnCloudSpec";
 import {AWSCloudSpec} from "./cloud/AWSCloudSpec";
 import {KeyCert} from "./KeyCert";
+import {DataCenterEntity} from "./DatacenterEntity";
 
 export class ClusterEntity {
-  metadata: MetadataEntity;
-  spec: ClusterSpec;
-  address: ClusterAddress;
-  status: ClusterStatus;
-
-  constructor(metadata: MetadataEntity, spec: ClusterSpec, address: ClusterAddress, status: ClusterStatus) {
-    this.metadata = metadata;
-    this.spec = spec;
-    this.address = address;
-    this.status = status;
-  }
+  constructor(
+    public metadata: MetadataEntity,
+    public spec: ClusterSpec,
+    public address: ClusterAddress,
+    public status: ClusterStatus,
+    public dc: DataCenterEntity
+  ) {}
 }
 
 export class ClusterSpec {
-  cloud: CloudSpec;
-  humanReadableName: string;
-
-  constructor(cloud: CloudSpec, humanReadableName: string) {
-    this.cloud = cloud;
-    this.humanReadableName = humanReadableName;
-  }
+  constructor(
+    public cloud: CloudSpec,
+    public humanReadableName: string
+  ) {}
 }
 
 export class CloudSpec {

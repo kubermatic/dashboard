@@ -1,0 +1,9 @@
+
+<div class="row list-content">
+  <div class="col-xs-3"><a routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}">{{cluster.metadata.name}}</a></div>
+  <div class="col-xs-3"><span *ngIf="cluster.spec.cloud">{{cluster.spec.cloud.dc}}</span></div>
+  <div class="col-xs-2">status</div>
+  <div class="col-xs-2">health</div>
+  <div class="col-xs-2">x</div>
+</div>
+
