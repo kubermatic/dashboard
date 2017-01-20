@@ -1,3 +1,26 @@
-<p>
-  profile works!
-</p>
+<div class="container">
+  <div class="row flex-items-xs-center">
+    <h2 class="wizard-headline">Your SSH keys</h2>
+  </div>
+</div>
+
+
+<div class="container flex-items-xs-center">
+  <div *ngFor="let key of sshKeys; let i = index;" class="card">
+    <div class="card-header ssh-key-header">
+      <div class="row">
+        <i class="fa fa-key" aria-hidden="true"></i>
+        <span class="ssh-key-name">{{ key.name }}</span>
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+      </div>
+    </div>
+    <div class="card-block">
+      <blockquote class="card-blockquote ssh-key-publickey">
+        {{ key.publicKey }}
+      </blockquote>
+    </div>
+    <div class="card-footer text-muted">
+      <small>Fingerprint: {{ key.fingerprint }}</small>
+    </div>
+  </div>
+</div>

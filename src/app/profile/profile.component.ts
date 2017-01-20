@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import {ApiService} from "../api/api.service";
+import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 
 @Component({
   selector: "kubermatic-profile",
@@ -8,11 +9,13 @@ import {ApiService} from "../api/api.service";
 })
 export class ProfileComponent implements OnInit {
 
+  private sshKeys: SSHKeyEntity[];
+
   constructor(private api: ApiService) { }
 
   ngOnInit() {
     this.api.getSSHKeys().subscribe(result => {
-      console.log(JSON.stringify(result));
+      this.sshKeys = result;
     });
   }
 

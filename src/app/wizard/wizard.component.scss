@@ -1,12 +1,6 @@
 @import "../../assets/css/ng2admin/conf/conf";
 @import "../../assets/css/bootstrap/variables";
 
-.dashboard-content {
-  padding-top: 50px;
-}
-
-// wizard--------------
-
 .wizard-content {
   padding: 5px;
   max-height: calc(100vh - 210px);
@@ -14,7 +8,6 @@
 }
 
 .wizard-headline {
-  color: $primary;
   font-weight: $font-bold;
 }
 
