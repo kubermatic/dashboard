@@ -7,10 +7,6 @@
   overflow-y: auto;
 }
 
-.wizard-headline {
-  font-weight: $font-bold;
-}
-
 .wizard-footer {
   padding: 5px;
 }
@@ -125,7 +121,7 @@ $wizard-box-content-cloud-margin-top: 25px;
 .wizard-box-content {
   text-align: center;
   color: $primary;
-  font-weight: $font-bold;
+  font-weight: $font-weight-bold;
 
   img.dc-logo {
     width: $wizard-box-content-dc-logo-size;
