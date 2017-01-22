@@ -5,6 +5,12 @@ input.form-control {
   color: $primary !important;
 }
 
+textarea.form-control {
+  background-color: $white-base !important;
+  border-color: $primary !important;
+  color: $primary !important;
+}
+
 select.form-control {
   background-color: $white-base !important;
   border-color: $primary !important;
