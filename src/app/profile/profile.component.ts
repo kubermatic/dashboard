@@ -53,7 +53,7 @@ export class ProfileComponent implements OnInit {
   public addSSHKey(): void {
     const name = this.addSSHKeyForm.controls["name"].value;
     const key = this.addSSHKeyForm.controls["key"].value;
-    console.log("Adding ssh key: " + JSON.stringify(this.addSSHKeyForm));
+    console.log(`Adding ssh key ${name}`);
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
       .subscribe(result => {
