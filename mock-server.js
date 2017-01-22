@@ -7,7 +7,7 @@ const path = require('path');
 const app = express();
 
 const mockServerPort = 8001;
-const mockedResources = ["sshkeys"];
+const mockedResources = ["sshkeys", "dc"];
 const proxyUrl = "https://beta.kubermatic.io";
 
 let requireUncached = function(mockFile){
