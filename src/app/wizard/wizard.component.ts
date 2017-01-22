@@ -41,7 +41,6 @@ export class WizardComponent implements OnInit {
 
         this.groupedDatacenters[elem.spec.provider].push(elem);
       });
-      // console.log(JSON.stringify(this.seedDataCenters));
     });
 
     this.clusterNameForm = this.formBuilder.group({
@@ -70,7 +69,7 @@ export class WizardComponent implements OnInit {
 
     this.awsForm.valueChanges.subscribe(value => {
       if (this.awsForm.controls["access_key_id"].valid && this.awsForm.controls["secret_access_key"].valid) {
-        let body = {username: this.awsForm.controls["access_key_id"].value ,
+        const body = {username: this.awsForm.controls["access_key_id"].value ,
           password: this.awsForm.controls["secret_access_key"].value};
 
         // this.api.getSSHKeys("aws", body)
@@ -87,7 +86,7 @@ export class WizardComponent implements OnInit {
 
     this.digitaloceanForm.valueChanges.subscribe(value => {
       if (this.digitaloceanForm.controls["access_token"].valid) {
-        let body = {token: this.digitaloceanForm.controls["access_token"].value};
+        const body = {token: this.digitaloceanForm.controls["access_token"].value};
 
         // this.api.getSSHKeys("digitalocean", body)
         //   .subscribe(result => {

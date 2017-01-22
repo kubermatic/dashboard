@@ -1,12 +1,22 @@
 <div class="container">
-  <div class="row flex-items-xs-center">
+  <div class="row">
     <h2 class="component-heading">Your SSH keys</h2>
   </div>
 </div>
 
 
-<div class="container flex-items-xs-center">
+<div class="container">
+  <ng-container *ngIf="deleteSSHKeyResult">
+    <div class="alert alert-dismissible fade show" role="alert" [ngClass]="{'alert-danger': deleteSSHKeyResult.error, 'alert-success': !deleteSSHKeyResult.error}">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <strong>{{ deleteSSHKeyResult.title }}</strong> {{ deleteSSHKeyResult.message }}
+    </div>
+  </ng-container>
+</div>
 
+<div class="container">
   <ng-container [ngSwitch]="!!sshKeys && sshKeys.length > 0">
     <div *ngSwitchCase="false">
       You have not added any SSH keys yet.
@@ -25,7 +35,7 @@
 
               <div class="dropdown-menu">
                 <h6 class="dropdown-header">Delete key?</h6>
-                <span class="dropdown-item ssh-key-action" (click)="deleteSSHKey(key.fingerprint)">Delete</span>
+                <span class="dropdown-item ssh-key-action" (click)="deleteSSHKey(key.name)">Delete</span>
                 <span class="dropdown-item ssh-key-action">Cancel</span>
               </div>
             </div>
@@ -46,12 +56,12 @@
 
 
 <div class="container">
-  <div class="row flex-items-xs-center">
+  <div class="row justify-content-center">
     <h3 class="component-sub-heading text-muted">Add SSH key</h3>
   </div>
 </div>
 
-<div class="container flex-items-xs-center">
+<div class="container justify-content-center">
   <ng-container *ngIf="addSSHKeyResult">
     <div class="alert alert-dismissible fade show" role="alert" [ngClass]="{'alert-danger': addSSHKeyResult.error, 'alert-success': !addSSHKeyResult.error}">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -63,16 +73,16 @@
 
   <form [formGroup]="addSSHKeyForm" novalidate>
 
+    <div class="form-group" [ngClass]="{'has-danger': !addSSHKeyForm.controls.key.valid && addSSHKeyForm.controls.key.touched, 'has-success': addSSHKeyForm.controls.key.valid}">
+      <label for="key" class="form-text text-muted">Key</label>
+      <textarea id="key" formControlName="key" rows="8" type="text" class="form-control" (change)="onNewKeyTextChanged()"></textarea>
+      <small class="form-text text-muted">Remember to past only the public part of your SSH key and store the private part safely.</small>
+    </div>
+
     <div class="form-group" [ngClass]="{'has-danger': !addSSHKeyForm.controls.name.valid && addSSHKeyForm.controls.name.touched, 'has-success': addSSHKeyForm.controls.name.valid}">
       <label for="name" class="form-text text-muted">Name</label>
       <input id="name" formControlName="name" type="text" class="form-control">
       <small class="form-text text-muted">The unique name of your SSH key</small>
-    </div>
-
-    <div class="form-group" [ngClass]="{'has-danger': !addSSHKeyForm.controls.key.valid && addSSHKeyForm.controls.key.touched, 'has-success': addSSHKeyForm.controls.key.valid}">
-      <label for="key" class="form-text text-muted">Key</label>
-      <textarea id="key" formControlName="key" type="text" class="form-control"></textarea>
-      <small class="form-text text-muted">Remember to past only the public part of your SSH key and store the private part safely.</small>
     </div>
 
     <div class="form-group">

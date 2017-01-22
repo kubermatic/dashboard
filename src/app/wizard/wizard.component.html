@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row flex-items-xs-center">
+  <div class="row">
     <h2 class="component-heading">Create a Kubernetes Cluster</h2>
   </div>
 </div>
@@ -32,11 +32,11 @@
         <div [hidden]="currentStep !== 1">
           <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
             Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
-          <div class="row flex-items-xs-center">
+          <div class="row justify-content-center">
             <div *ngFor="let cloud of supportedNodeProviders; let i = index;" class="col-sm wizard-box wizard-box-completed"
                  [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
                  (click)="selectCloud(cloud)">
-              <div class="col-xs wizard-box-content flex-items-xs-center">
+              <div class="col-xs wizard-box-content justify-content-center">
                 <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
               </div>
             </div>
@@ -55,12 +55,12 @@
             Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
 
           <div [hidden]="selectedCloud === 'bringyourown'">
-            <div class="row flex-items-xs-center">
+            <div class="row justify-content-center">
               <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-xs-6 wizard-box wizard-box-completed"
                    [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
                    (click)="selectCloudRegion(dc)">
 
-                <div class="col-xs wizard-box-content flex-items-xs-center">
+                <div class="col-xs wizard-box-content justify-content-center">
                   <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{dc.spec.provider}}">
                   <div class="name">
                     {{dc.metadata.name}}
@@ -200,12 +200,12 @@
       <div class="wizard-step-body">
         <h4>Summary</h4>
         <div [hidden]="currentStep !== 4">
-          <div class="row flex-items-xs-center">
+          <div class="row justify-content-center">
 
-            <div class="flex-items-xs-center">
+            <div class="justify-content-center">
               <div class="wizard-box-title">Cluster name</div>
               <div class="col-xs-6 wizard-box wizard-box-completed wizard-box-color_secondary">
-                <div class="col-xs wizard-box-content flex-items-xs-center">
+                <div class="col-xs wizard-box-content justify-content-center">
                   <div class="cluster-name">
                     {{ clusterNameForm.controls.clustername.value }}
                   </div>
@@ -213,10 +213,10 @@
               </div>
             </div>
 
-            <div [hidden]="selectedCloud === 'bringyourown'" class="flex-items-xs-center" *ngIf="selectedCloudRegion">
+            <div [hidden]="selectedCloud === 'bringyourown'" class="justify-content-center" *ngIf="selectedCloudRegion">
               <div class="wizard-box-title">Datacenter of nodes</div>
               <div class="col-xs-6 wizard-box wizard-box-completed wizard-box-color_secondary">
-                <div class="col-xs wizard-box-content flex-items-xs-center">
+                <div class="col-xs wizard-box-content justify-content-center">
                   <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
                   <div class="name">
                     {{selectedCloudRegion.metadata.name}}
@@ -229,10 +229,10 @@
               </div>
             </div>
 
-            <div [hidden]="selectedCloud === 'bringyourown'" class="flex-items-xs-center">
+            <div [hidden]="selectedCloud === 'bringyourown'" class="justify-content-center">
               <div class="wizard-box-title">Node count</div>
               <div class="col-xs-6 wizard-box wizard-box-completed wizard-box-color_secondary">
-                <div class="col-xs wizard-box-content flex-items-xs-center">
+                <div class="col-xs wizard-box-content justify-content-center">
                   <div class="node-count">
                     {{getNodeCount()}}
                   </div>
@@ -240,18 +240,18 @@
               </div>
             </div>
 
-            <div [hidden]="selectedCloud !== 'bringyourown'" class="flex-items-xs-center">
+            <div [hidden]="selectedCloud !== 'bringyourown'" class="justify-content-center">
               <div class="wizard-box-title">Datacenter of nodes</div>
               <div class="col-sm wizard-box wizard-box-completed wizard-box-color_secondary">
-                <div class="col-xs wizard-box-content flex-items-xs-center">
+                <div class="col-xs wizard-box-content justify-content-center">
                   <img class="cloud-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloud}}">
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="row flex-items-xs-center">
-            <button class="btn btn-outline-warning col-xs-8 flex-items-xs-center">Create cluster</button>
+          <div class="row justify-content-center">
+            <button class="btn btn-outline-warning col-xs-8 justify-content-center">Create cluster</button>
           </div>
         </div>
       </div>

@@ -120,14 +120,14 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  deleteSSHKey(keyName: string): Observable<SSHKeyEntity[]> {
+  deleteSSHKey(keyName: string) {
     const url = `${this.restRoot}/sshkeys/${keyName}`;
 
     return this._http.delete(url, { headers: this.headers })
       .map(res => res.json());
   }
 
-  addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity[]> {
+  addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
     const url = `${this.restRoot}/sshkeys`;
 
     return this._http.post(url, sshKey, { headers: this.headers })

@@ -1,6 +1,6 @@
 {
   "statusCode":200,
-  "content":[
+  "responseBody":[
     {
       "name": "MySSHKey1",
       "fingerprint": "d0:82:24:8e:d7:f1:bb:9b:33:53:96:93:49:da:9b:e3",

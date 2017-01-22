@@ -25,7 +25,7 @@ let handleRequest = function(basePatch, requestPath, httpVerb, res) {
     console.warn(`Mocking request: "${httpVerb} ${filePath}" - ${fileData.statusCode}`);
 
     res.status(fileData.statusCode);
-    res.send(fileData.content);
+    res.send(fileData.responseBody);
   } catch (err){
     console.warn(`Mocking request: "${httpVerb} ${filePath}" - 404`);
 
@@ -44,24 +44,27 @@ let isMockedResource = function(path) {
   return (mockedResources.indexOf(path.split("/")[0]) != -1);
 };
 
-app.get('/api/v1/*', function(req, res){
+let dispatchRequest = function (req, res, httpVerb) {
   let path = req.params["0"];
 
   if (isMockedResource(path)) {
-    handleRequest("api_mocks", path, "GET", res);
+    handleRequest("api_mocks", path, httpVerb, res);
   } else {
     proxyRequest(path, req, res);
   }
+};
+
+
+app.get('/api/v1/*', function(req, res){
+  dispatchRequest(req, res, "GET");
 });
 
 app.post('/api/v1/*', function(req, res){
-  let path = req.params["0"];
+  dispatchRequest(req, res, "POST");
+});
 
-  if (isMockedResource(path)) {
-    handleRequest("api_mocks", path, "POST", res);
-  } else {
-    proxyRequest(path, req, res);
-  }
+app.delete('/api/v1/*', function(req, res){
+  dispatchRequest(req, res, "DELETE");
 });
 
 app.listen(mockServerPort, function(){

@@ -10,20 +10,25 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 })
 export class ProfileComponent implements OnInit {
 
-  public sshKeys: SSHKeyEntity[];
+  public sshKeys: Array<SSHKeyEntity> = [];
   public addSSHKeyForm: FormGroup;
   public addSSHKeyResult: any;
+  public deleteSSHKeyResult: any;
 
   constructor(private api: ApiService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
-    this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-    });
+    this.refreshSSHKeys();
 
     this.addSSHKeyForm = this.formBuilder.group({
       name: ["", [<any>Validators.required]],
       key: ["", [<any>Validators.required]],
+    });
+  }
+
+  private refreshSSHKeys() {
+    this.api.getSSHKeys().subscribe(result => {
+      this.sshKeys = result;
     });
   }
 
@@ -39,21 +44,32 @@ export class ProfileComponent implements OnInit {
     if (index > -1) {
       this.api.deleteSSHKey(name)
         .subscribe(result => {
-          console.log(`SSH key with fingerprint ${name} deleted`);
-          this.sshKeys.splice(index, 1);
-        },
-        error => {
-          console.log(`SSH key with fingerprint ${name} could not be deleted. Error: ` + error);
-        });
+            this.sshKeys.splice(index, 1);
+            this.deleteSSHKeyResult = {
+              title: "Success",
+              error: false,
+              message: `SSH key ${name} deleted.`
+            };
+          },
+          error => {
+            this.deleteSSHKeyResult = {
+              title: "Error",
+              error: true,
+              message: `SSH key ${name} could not be deleted. Error: ` + error
+            };
+          });
     } else {
-      console.log(`No SSH key found with fingerprint ${name} !`);
+      this.deleteSSHKeyResult = {
+        title: "Error",
+        error: true,
+        message: `Error deleting SSH key ${name}. Please try again.`
+      };
     }
   }
 
   public addSSHKey(): void {
     const name = this.addSSHKeyForm.controls["name"].value;
     const key = this.addSSHKeyForm.controls["key"].value;
-    console.log(`Adding ssh key ${name}`);
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
       .subscribe(result => {
@@ -64,6 +80,7 @@ export class ProfileComponent implements OnInit {
           };
 
           this.addSSHKeyForm.reset();
+          this.sshKeys.push(result);
         },
         error => {
           this.addSSHKeyResult = {
@@ -72,5 +89,15 @@ export class ProfileComponent implements OnInit {
             message: error.status + " " + error.statusText
           };
         });
+  }
+
+  public onNewKeyTextChanged() {
+    const name = this.addSSHKeyForm.controls["name"].value;
+    const key = this.addSSHKeyForm.controls["key"].value;
+    const keyName = key.match(/^\S+ \S+ (.+)\n?$/);
+
+    if (keyName && keyName.length > 1 && "" === name) {
+      this.addSSHKeyForm.patchValue({name: keyName[1]});
+    }
   }
 }
