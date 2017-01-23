@@ -1,3 +1,19 @@
 <div *ngIf="cluster">
   <p>{{cluster.metadata.name}}</p>
 </div>
+----
+<div *ngIf="nodes">
+
+  <div>add node</div>
+
+
+  <div *ngFor="let n of nodes">
+    <div>{{n}}</div>
+  </div>
+
+
+  <div *ngIf="!nodes.length">
+    no node
+  </div>
+</div>
+

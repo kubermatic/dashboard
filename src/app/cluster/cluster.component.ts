@@ -16,13 +16,14 @@ export class ClusterComponent implements OnInit {
   public routingParams;
   //public cluster: ClusterEntity[] = [];
   public cluster;
+  public nodes;
 
   ngOnInit() {
-
 
     this.route.params.subscribe(params => {
       this.routingParams = new ClusterModel(params['seedDcName'], params['clusterName']);
       this.getCluster(this.routingParams);
+      this.getNodes(this.routingParams);
     })
   }
 
@@ -30,6 +31,14 @@ export class ClusterComponent implements OnInit {
     this.api.getCluster(clusterModel).subscribe(result => {
       this.cluster = result;
     });
+  }
+
+  getNodes(clusterModel){
+    this.api.getClusterNodes(clusterModel).subscribe(result => {
+
+      console.log(result);
+        this.nodes =result;
+    })
   }
 }
 
