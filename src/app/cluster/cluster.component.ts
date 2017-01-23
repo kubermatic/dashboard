@@ -21,16 +21,13 @@ export class ClusterComponent implements OnInit {
 
 
     this.route.params.subscribe(params => {
-      this.routingParams = new ClusterModel(params['seedDcName'],params['clusterName']);
+      this.routingParams = new ClusterModel(params['seedDcName'], params['clusterName']);
       this.getCluster(this.routingParams);
     })
-
-
-
   }
 
-  getCluster(params){
-    this.api.getCluster(params).subscribe(result => {
+  getCluster(clusterModel){
+    this.api.getCluster(clusterModel).subscribe(result => {
       this.cluster = result;
     });
   }
