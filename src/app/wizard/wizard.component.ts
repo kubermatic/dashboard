@@ -45,7 +45,7 @@ export class WizardComponent implements OnInit {
 
     this.clusterNameForm = this.formBuilder.group({
       clustername: [this.nameGenerator.generateName(),
-        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16)]],
+        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(50)]],
     });
 
     this.bringYourOwnForm = this.formBuilder.group({
