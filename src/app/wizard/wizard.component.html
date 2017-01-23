@@ -15,7 +15,7 @@
         <div [hidden]="currentStep !== 0">
           <div class="wizard-box-text">This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</div>
           <form [formGroup]="clusterNameForm" novalidate>
-            <div class="col-xs-8 form-group" [ngClass]="{'has-danger': !clusterNameForm.controls.clustername.valid, 'has-warning': clusterNameForm.controls.clustername.valid}">
+            <div class="col-xs-8 form-group" [ngClass]="{'has-danger': !clusterNameForm.controls.clustername.valid, 'has-success': clusterNameForm.controls.clustername.valid}">
               <input id="clustername" formControlName="clustername" type="text" class="form-control" title="clusterName">
               <small class="form-text text-primary" style="cursor: pointer;" (click)="refreshName()">Generate name</small>
             </div>

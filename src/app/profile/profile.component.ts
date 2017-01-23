@@ -21,7 +21,7 @@ export class ProfileComponent implements OnInit {
     this.refreshSSHKeys();
 
     this.addSSHKeyForm = this.formBuilder.group({
-      name: ["", [<any>Validators.required]],
+      name: ["", [<any>Validators.required, Validators.pattern("[\w\d-]+")]],
       key: ["", [<any>Validators.required]],
     });
   }
