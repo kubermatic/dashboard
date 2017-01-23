@@ -5,8 +5,7 @@ import {ClusterNameGenerator} from "../util/name-generator.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
-import {NodeProvider} from "../api/model/NodeProvider";
-import {NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
+import {NodeProvider, NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
 
 
 @Component({
@@ -55,7 +54,7 @@ export class WizardComponent implements OnInit {
 
     this.clusterNameForm = this.formBuilder.group({
       clustername: [this.nameGenerator.generateName(),
-        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16)]],
+        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(50)]],
     });
 
     this.bringYourOwnForm = this.formBuilder.group({
@@ -134,15 +133,16 @@ export class WizardComponent implements OnInit {
           return !!this.selectedCloudRegion;
         }
       case 3:
-        if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
-          return this.bringYourOwnForm.valid;
-        } else if (this.selectedCloud === NodeProvider.AWS) {
-          return this.awsForm.valid;
-        } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
-          return this.digitalOceanForm.valid;
-        } else {
-          return false;
-        }
+        return true;
+        // if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
+        //   return this.bringYourOwnForm.valid;
+        // } else if (this.selectedCloud === NodeProvider.AWS) {
+        //   return this.awsForm.valid;
+        // } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
+        //   return this.digitalOceanForm.valid;
+        // } else {
+        //   return false;
+        // }
       default:
         return false;
     }
