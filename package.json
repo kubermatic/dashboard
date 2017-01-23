@@ -36,6 +36,7 @@
     "auth0-lock": "^10.7.2",
     "core-js": "^2.4.1",
     "jquery": "^3.1.1",
+    "karma-spec-reporter": "^0.0.26",
     "ng2-validation": "^3.1.2",
     "reselect": "^2.5.4",
     "rxjs": "^5.0.1",
@@ -62,7 +63,7 @@
     "request": "^2.79.0",
     "ts-node": "1.2.1",
     "tslint": "^4.0.2",
-    "typescript": "~2.0.3",
+    "typescript": "2.1.5",
     "webdriver-manager": "10.2.5"
   }
 }

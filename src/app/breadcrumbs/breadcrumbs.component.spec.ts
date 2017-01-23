@@ -2,6 +2,8 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 
 import { BreadcrumbsComponent } from "./breadcrumbs.component";
+import {StoreModule} from "@ngrx/store";
+import {combinedReducer} from "../reducers/index";
 
 describe("BreadcrumbsComponent", () => {
   let component: BreadcrumbsComponent;
@@ -9,9 +11,12 @@ describe("BreadcrumbsComponent", () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports : [
+        StoreModule.provideStore(combinedReducer)
+      ],
       declarations: [ BreadcrumbsComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
