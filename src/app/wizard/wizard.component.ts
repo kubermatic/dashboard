@@ -26,8 +26,11 @@ export class WizardComponent implements OnInit {
 
   public clusterNameForm: FormGroup;
   public awsForm: FormGroup;
-  public digitaloceanForm: FormGroup;
+  public digitalOceanForm: FormGroup;
   public bringYourOwnForm: FormGroup;
+
+  public sshKeys: SSHKey[] = [];
+  public nodeSize: string[] = [];
 
   constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator, private formBuilder: FormBuilder) {
   }
@@ -41,11 +44,12 @@ export class WizardComponent implements OnInit {
 
         this.groupedDatacenters[elem.spec.provider].push(elem);
       });
+      // console.log(JSON.stringify(this.seedDataCenters));
     });
 
     this.clusterNameForm = this.formBuilder.group({
       clustername: [this.nameGenerator.generateName(),
-        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(50)]],
+        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16)]],
     });
 
     this.bringYourOwnForm = this.formBuilder.group({
@@ -57,46 +61,48 @@ export class WizardComponent implements OnInit {
       access_key_id: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
       secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
       ssh_key: ["", [<any>Validators.required]],
-      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: ["", [<any>Validators.required]]
     });
 
-    this.digitaloceanForm = this.formBuilder.group({
+    this.digitalOceanForm = this.formBuilder.group({
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
       ssh_key: ["", [<any>Validators.required]],
-      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: ["", [<any>Validators.required]]
     });
 
     this.awsForm.valueChanges.subscribe(value => {
       if (this.awsForm.controls["access_key_id"].valid && this.awsForm.controls["secret_access_key"].valid) {
-        const body = {username: this.awsForm.controls["access_key_id"].value ,
+        let body = {username: this.awsForm.controls["access_key_id"].value ,
           password: this.awsForm.controls["secret_access_key"].value};
 
-        // this.api.getSSHKeys("aws", body)
-        //   .subscribe(result => {
-        //       // TODO consume api call
-        //       this.selectedCloudProviderApiError = null;
-        //       console.log(JSON.stringify(result));
-        //     },
-        //     error => {
-        //       this.selectedCloudProviderApiError = error.status + " " + error.statusText;
-        //     });
+        this.api.getSSHKeys(this.selectedCloudRegion.metadata.name, body)
+          .subscribe(result => {
+              // TODO consume api call
+              this.selectedCloudProviderApiError = null;
+              this.sshKeys = result;
+            },
+            error => {
+              this.selectedCloudProviderApiError = error.status + " " + error.statusText;
+            });
       }
     });
 
-    this.digitaloceanForm.valueChanges.subscribe(value => {
-      if (this.digitaloceanForm.controls["access_token"].valid) {
-        const body = {token: this.digitaloceanForm.controls["access_token"].value};
+    this.digitalOceanForm.valueChanges.subscribe(value => {
+      if (this.digitalOceanForm.controls["access_token"].valid) {
+        let body = {token: this.digitalOceanForm.controls["access_token"].value};
 
-        // this.api.getSSHKeys("digitalocean", body)
-        //   .subscribe(result => {
-        //       // TODO consume api call
-        //       this.selectedCloudProviderApiError = null;
-        //       console.log(JSON.stringify(result));
-        //     },
-        //     error => {
-        //       this.selectedCloudProviderApiError = error.status + " " + error.statusText;
-        //     });
+        this.api.getSSHKeys("digitalocean", body)
+          .subscribe(result => {
+              // TODO consume api call
+              this.selectedCloudProviderApiError = null;
+              console.log(JSON.stringify(result));
+            },
+            error => {
+              this.selectedCloudProviderApiError = error.status + " " + error.statusText;
+            });
       }
     });
   }
@@ -104,6 +110,14 @@ export class WizardComponent implements OnInit {
   public selectCloud(cloud: string) {
     this.selectedCloud = cloud;
     this.selectedCloudRegion = null;
+
+    if (cloud == "aws") {
+      this.nodeSize = ['t2.nano', 't2.micro', 't2.small', 't2.medium', 't2.large', 'm4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge', 'm4.10xlarge', 'm4.16xlarge', 'm3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'];
+    } else if (cloud == "digitalocean") {
+      this.nodeSize = [];
+    } else {
+      this.nodeSize = [];
+    }
   }
 
   public selectCloudRegion(cloud: DataCenterEntity) {
@@ -114,7 +128,17 @@ export class WizardComponent implements OnInit {
     if (this.selectedCloud === "aws") {
       return this.awsForm.controls["node_count"].value;
     } else if (this.selectedCloud === "digitalocean") {
-      return this.digitaloceanForm.controls["node_count"].value;
+      return this.digitalOceanForm.controls["node_count"].value;
+    } else {
+      return "-1";
+    }
+  }
+
+  public getNodeSize(): string {
+    if (this.selectedCloud === "aws") {
+      return this.awsForm.controls["node_size"].value;
+    } else if (this.selectedCloud === "digitalocean") {
+      return this.digitalOceanForm.controls["node_size"].value;
     } else {
       return "-1";
     }
@@ -146,7 +170,7 @@ export class WizardComponent implements OnInit {
         } else if (this.selectedCloud === "aws") {
           return this.awsForm.valid;
         } else if (this.selectedCloud === "digitalocean") {
-          return this.digitaloceanForm.valid;
+          return this.digitalOceanForm.valid;
         } else {
           return false;
         }
@@ -169,5 +193,13 @@ export class WizardComponent implements OnInit {
 
   public canStepForward(): boolean {
     return this.canGotoStep(this.currentStep);
+  }
+
+
+  public createClusterAndNode(this) {
+
+    console.log(this);
+
+    debugger;
   }
 }
