@@ -11,6 +11,10 @@ textarea.form-control {
   color: $primary !important;
 }
 
+select.form-control option {
+  color: $primary !important;
+}
+
 select.form-control {
   background-color: $white-base !important;
   border-color: $primary;

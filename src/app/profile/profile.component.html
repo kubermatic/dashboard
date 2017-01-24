@@ -7,7 +7,8 @@
 
 <div class="container">
   <ng-container *ngIf="deleteSSHKeyResult">
-    <div class="alert alert-dismissible fade show" role="alert" [ngClass]="{'alert-danger': deleteSSHKeyResult.error, 'alert-success': !deleteSSHKeyResult.error}">
+    <div class="alert alert-dismissible fade show" role="alert"
+         [ngClass]="{'alert-danger': deleteSSHKeyResult.error, 'alert-success': !deleteSSHKeyResult.error}">
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>

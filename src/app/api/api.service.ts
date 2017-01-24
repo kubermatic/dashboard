@@ -11,6 +11,7 @@ import {ClusterEntity} from "./entitiy/ClusterEntity";
 import {NodeEntity} from "./entitiy/NodeEntity";
 import {Auth} from "../auth/auth.service";
 import {SSHKeyEntity} from "./entitiy/SSHKeyEntity";
+import {CreateClusterModel} from "./model/CreateClusterModel";
 
 @Injectable()
 export class ApiService {
@@ -50,10 +51,10 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  createCluster(dc: string): Observable<ClusterEntity> {
-    const url = `${this.restRoot}/dc/${dc}/cluster`;
+  createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/cluster`;
 
-    return this._http.post(url, "", { headers: this.headers })
+    return this._http.post(url, createClusterModel, { headers: this.headers })
       .map(res => res.json());
   }
 
