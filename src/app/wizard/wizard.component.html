@@ -113,11 +113,6 @@
             </div>
 
             <form [formGroup]="awsForm" novalidate class="col-6">
-              <div class="form-group" [ngClass]="{'has-danger': !awsForm.controls.username.valid && awsForm.controls.username.touched, 'has-success': awsForm.controls.username.valid}">
-                <label for="username" class="form-text text-muted">User name:</label>
-                <input id="username" formControlName="username" type="text" class="form-control">
-                <small class="form-text text-danger" [hidden]="awsForm.controls.username.valid || !awsForm.controls.username.touched">Your AWS user identifier.</small>
-              </div>
               <div class="form-group" [ngClass]="{'has-danger': !awsForm.controls.access_key_id.valid && awsForm.controls.access_key_id.touched, 'has-success': awsForm.controls.access_key_id.valid}">
                 <label for="access_key_id" class="form-text text-muted">Access Key ID:</label>
                 <input id="access_key_id" formControlName="access_key_id" type="text" class="form-control">

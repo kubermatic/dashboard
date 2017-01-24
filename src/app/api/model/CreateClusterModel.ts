@@ -12,14 +12,12 @@ export class CreateClusterModel {
 
 export class CloudModel {
   user: string;
-  key: string;
   secret: string;
   name: string;
   region: string;
 
-  constructor(user: string, key: string, secret: string, name: string, region: string) {
+  constructor(user: string, secret: string, name: string, region: string) {
     this.user = user;
-    this.key = key;
     this.secret = secret;
     this.name = name;
     this.region = region;

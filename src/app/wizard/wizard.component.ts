@@ -64,7 +64,6 @@ export class WizardComponent implements OnInit {
     });
 
     this.awsForm = this.formBuilder.group({
-      username: ["", [<any>Validators.required]],
       access_key_id: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
       secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
       ssh_key: ["", [<any>Validators.required]],
@@ -164,14 +163,12 @@ export class WizardComponent implements OnInit {
 
 
   public createClusterAndNode() {
-    let user = null;
     let key = null;
     let secret =  null;
     let ssh_keys =  null;
     let region = null;
 
     if (this.selectedCloud === NodeProvider.AWS) {
-      user = this.awsForm.controls["username"].value;
       key = this.awsForm.controls["access_key_id"].value;
       secret = this.awsForm.controls["secret_access_key"].value;
       ssh_keys = this.awsForm.controls["ssh_key"].value;
@@ -183,7 +180,7 @@ export class WizardComponent implements OnInit {
     }
 
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value);
-    const cloud = new CloudModel(user, key, secret, this.selectedCloud, region);
+    const cloud = new CloudModel(key, secret, this.selectedCloud, region);
     const model = new CreateClusterModel(cloud, spec, ssh_keys);
 
 
