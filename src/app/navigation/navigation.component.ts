@@ -21,7 +21,7 @@ export class NavigationComponent {
   }
 
   public login() {
-    localStorage.setItem("redirect_url", "");
+    localStorage.setItem("redirect_url", "welcome");
     this.auth.login();
   }
 

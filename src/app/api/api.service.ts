@@ -115,21 +115,21 @@ export class ApiService {
   }
 
   getSSHKeys(): Observable<SSHKeyEntity[]> {
-    const url = `${this.restRoot}/sshkeys`;
+    const url = `${this.restRoot}/ssh-keys`;
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   deleteSSHKey(keyName: string) {
-    const url = `${this.restRoot}/sshkeys/${keyName}`;
+    const url = `${this.restRoot}/ssh-keys/${keyName}`;
 
     return this._http.delete(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
-    const url = `${this.restRoot}/sshkeys`;
+    const url = `${this.restRoot}/ssh-keys`;
 
     return this._http.post(url, sshKey, { headers: this.headers })
       .map(res => res.json());
