@@ -11,6 +11,15 @@
       color: #333;
       font-weight: bold;
     }
+
+    a {float: right;}
+  }
+
+  .list-empty {
+    background-color: #fff;
+    height: 40px;
+    color: #333;
+    line-height: 40px;
   }
 }
 

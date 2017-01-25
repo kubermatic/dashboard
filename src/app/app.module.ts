@@ -13,7 +13,7 @@ import { RegionComponent } from './wizard/region/region.component';
 import { ClusterComponent } from './cluster/cluster.component';
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
 import { ClusterItemComponent } from './cluster-list/cluster-item/cluster-item.component';
-import { NodeComponent } from './node/node.component';
+import { NodeComponent } from './cluster/node/node.component';
 
 import { Auth } from "./auth/auth.service";
 import { appRoutes } from "./app.routing";

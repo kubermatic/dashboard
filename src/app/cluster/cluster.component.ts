@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from "../api/api.service";
 import { ClusterModel } from "../api/model/ClusterModel";
-import { ClusterEntity } from "../api/entitiy/ClusterEntity";
+//import { ClusterEntity } from "../api/entitiy/ClusterEntity";
+import { NodeEntity } from "../api/entitiy/NodeEntity";
 
 @Component({
   selector: 'kubermatic-cluster',
@@ -14,9 +15,8 @@ export class ClusterComponent implements OnInit {
   constructor(private route: ActivatedRoute, private api: ApiService) {}
 
   public routingParams;
-  //public cluster: ClusterEntity[] = [];
-  public cluster;
   public nodes;
+  public cluster;
 
   ngOnInit() {
 
@@ -35,10 +35,43 @@ export class ClusterComponent implements OnInit {
 
   getNodes(clusterModel){
     this.api.getClusterNodes(clusterModel).subscribe(result => {
-
-      console.log(result);
         this.nodes =result;
     })
   }
+
+  public addNodes(clusterModel): void {
+    //this.api.createClusterNode(clusterModel, /*  node  */);
+
+  }
+
+
+
+  /*
+
+   public addSSHKey(): void {
+   const name = this.addSSHKeyForm.controls["name"].value;
+   const key = this.addSSHKeyForm.controls["key"].value;
+
+
+   this.api.addSSHKey(new SSHKeyEntity(name, null, key))
+   .subscribe(result => {
+   this.addSSHKeyResult = {
+   title: "Success",
+   error: false,
+   message: `SSH key ${name} added successfully`
+   };
+
+   this.addSSHKeyForm.reset();
+   this.sshKeys.push(result);
+   },
+   error => {
+   this.addSSHKeyResult = {
+   title: "Error",
+   error: true,
+   message: error.status + " " + error.statusText
+   };
+   });
+   }
+   */
 }
 

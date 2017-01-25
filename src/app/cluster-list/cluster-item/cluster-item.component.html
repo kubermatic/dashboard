@@ -1,9 +1,21 @@
 
 <div class="row list-content">
-  <div class="col-xs-3"><a routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}">{{cluster.metadata.name}}</a></div>
-  <div class="col-xs-3"><span *ngIf="cluster.spec.cloud">{{cluster.spec.cloud.dc}}</span></div>
-  <div class="col-xs-2">status</div>
-  <div class="col-xs-2">health</div>
-  <div class="col-xs-2">x</div>
+  <div class="col-xs-4">
+    <a routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}">
+      <img src="../../../assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
+      {{cluster.spec.humanReadableName}}
+    </a>
+  </div>
+  <div class="col-xs-3">
+    <span *ngIf="cluster.spec.cloud">{{cluster.spec.cloud.dc}}</span>
+    <span *ngIf="!cluster.spec.cloud">No cloud provider selected</span>
+  </div>
+  <div class="col-xs-2">{{cluster.status.phase}}</div>
+  <div class="col-xs-3">
+    {{cluster.status.health.apiserver}}
+    {{cluster.status.health.controller}}
+    {{cluster.status.health.etcd}}
+    {{cluster.status.health.scheduler}}
+  </div>
 </div>
 

@@ -6,11 +6,7 @@
 
   <div>add node</div>
 
-
-  <div *ngFor="let n of nodes">
-    <div>{{n}}</div>
-  </div>
-
+  <kubermatic-node *ngFor="let n of nodes" [node]="n"></kubermatic-node>
 
   <div *ngIf="!nodes.length">
     no node
