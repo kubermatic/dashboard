@@ -3,6 +3,5 @@
 // Includes all the imports from the standard Bootstrap project, but enables
 // the flexbox variable.
 
-$enable-flex: true;
-
 @import "bootstrap/bootstrap";
+@import "bootstrap_overwrites";

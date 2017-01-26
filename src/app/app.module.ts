@@ -7,16 +7,18 @@ import { RouterModule } from "@angular/router";
 import { KubermaticComponent } from "./kubermatic.component";
 import { NavigationComponent } from "./navigation/navigation.component";
 import { FrontpageComponent } from "./frontpage/frontpage.component";
+import { DashboardComponent } from "./dashboard/dashboard.component";
+import { BreadcrumbsComponent } from "./breadcrumbs/breadcrumbs.component";
+import { WizardComponent } from "./wizard/wizard.component";
+import { ProfileComponent } from "./profile/profile.component";
 
 import { Auth } from "./auth/auth.service";
 import { appRoutes } from "./app.routing";
 import { AUTH_PROVIDERS } from "./auth/auth.provider";
 import { AuthGuard } from "./auth/auth.guard";
 import { CustomFormsModule } from "ng2-validation";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { BreadcrumbsComponent } from "./breadcrumbs/breadcrumbs.component";
+
 import { ApiService } from "./api/api.service";
-import { WizardComponent } from "./wizard/wizard.component";
 import { ClusterNameGenerator } from "./util/name-generator.service";
 import { StoreModule } from "@ngrx/store";
 import { combinedReducer } from "./reducers/index";
@@ -37,7 +39,8 @@ import { combinedReducer } from "./reducers/index";
     FrontpageComponent,
     DashboardComponent,
     BreadcrumbsComponent,
-    WizardComponent
+    WizardComponent,
+    ProfileComponent
   ],
   providers: [
     AUTH_PROVIDERS,

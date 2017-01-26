@@ -8,14 +8,17 @@ import { combineReducers } from "@ngrx/store";
 import { environment } from "../../environments/environment";
 
 import * as fromAuth from "./auth";
+import * as fromBreadcrumbs from "./breadcrumb";
 
 export interface State {
   auth: fromAuth.Auth;
+  breadcrumb: fromBreadcrumbs.Breadcrumb;
 }
 
 // All reducers
 const reducers = {
   auth: fromAuth.authReducer,
+  breadcrumb: fromBreadcrumbs.breadcrumbReducer
 };
 
 const developmentReducer = compose(storeFreeze, storeLogger(), combineReducers)(reducers);
@@ -33,5 +36,9 @@ export const getAuthState = (state: State) => state.auth;
 export const getAuthProfile = createSelector(getAuthState, fromAuth.getProfile);
 export const getAuthLoggedIn = createSelector(getAuthState, fromAuth.getAuthState);
 
+export const getBreadcrumbState = (state: State) => state.breadcrumb;
+export const getBreadcrumb = createSelector(getBreadcrumbState, fromBreadcrumbs.getCrumb);
+
 export * from "./auth";
+export * from "./breadcrumb";
 export * from "./actions";
