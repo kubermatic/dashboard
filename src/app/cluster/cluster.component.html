@@ -1,15 +1,65 @@
-<div *ngIf="cluster">
-  <p>{{cluster.metadata.name}}</p>
+<div class="container" *ngIf="cluster">
+  <div class="row">
+    <h2 class="component-heading">{{cluster.spec.humanReadableName}}</h2>
+  </div>
 </div>
-----
-<div *ngIf="nodes">
 
-  <div>add node</div>
+<div class="container card" *ngIf="cluster">
+  <div class="row card-header">Kubernetes Master</div>
+
+  <div class="row card-block">
+    <div class="col-xs-2">Status</div>
+    <div class="col-xs-8">
+      <strong>{{cluster.status.phase}}</strong>
+      - Health:
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
+    </div>
+  </div>
+  <div class="row card-block">
+    <div class="col-xs-2">API Server</div>
+    <div class="col-xs-8">
+     {{cluster.address.url}}
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="container card" *ngIf="nodes">
+  <div class="row card-header">
+    <div class="col-xs-2">Name</div>
+    <div class="col-xs-3">Capacity</div>
+    <div class="col-xs-3">Version</div>
+    <div class="col-xs-1">Public IP</div>
+    <div class="col-xs-2">Status</div>
+    <div class="col-xs-1">
+      Actions
+      <a routerLink="wizard">
+        <button type="button" class="btn btn-primary">
+          <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>Add Node
+        </button>
+      </a>
+    </div>
+  </div>
+
+
 
   <kubermatic-node *ngFor="let n of nodes" [node]="n"></kubermatic-node>
 
-  <div *ngIf="!nodes.length">
-    no node
+  <div class="row card-block" *ngIf="!nodes.length">
+    <div class="col-xs-12 text-center text-muted">
+      No Node available. Please add a Node.
+    </div>
   </div>
 </div>
+
+
+
+
+
+
 

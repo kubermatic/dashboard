@@ -1,12 +1,11 @@
 <div class="container">
-  <div class="row flex-items-xs-center">
-    <h2 class="cluster-headline">My Cluster</h2>
-
+  <div class="row">
+    <h2 class="component-heading">My Cluster</h2>
   </div>
 </div>
 
-<div class="container cluster">
-  <div class="row list-headline">
+<div class="container card">
+  <div class="row card-header">
     <div class="col-xs-4">Cluster Name</div>
     <div class="col-xs-3">DC of Nodes</div>
     <div class="col-xs-2">Status</div>
@@ -19,8 +18,8 @@
     </div>
   </div>
   <kubermatic-cluster-item *ngFor="let c of clusters" [cluster]="c"></kubermatic-cluster-item>
-  <div class="row list-empty" *ngIf="!clusters.length">
-    <div class="col-xs-12 text-center">
+  <div class="row card-block" *ngIf="!clusters.length">
+    <div class="col-xs-12 text-center text-muted">
       No Cluster available. Please add a Cluster.
     </div>
   </div>

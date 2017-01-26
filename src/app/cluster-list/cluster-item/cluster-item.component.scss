@@ -1,10 +1,13 @@
+.card-block {
+  border-top:1px solid #f7f7f9;
+}
 
-.list-content {
-  background-color: #fff;
-  height: 40px;
+.health-state {
+  i {
+    color: red;
+  }
 
-  div, a {
-    line-height: 40px;
-    color: #333;
+  i.green {
+    color: green;
   }
 }

@@ -1,5 +1,4 @@
-
-<div class="row list-content">
+<div class="row card-block">
   <div class="col-xs-4">
     <a routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}">
       <img src="../../../assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
@@ -8,14 +7,13 @@
   </div>
   <div class="col-xs-3">
     <span *ngIf="cluster.spec.cloud">{{cluster.spec.cloud.dc}}</span>
-    <span *ngIf="!cluster.spec.cloud">No cloud provider selected</span>
+    <span *ngIf="!cluster.spec.cloud" class="text-muted">No cloud provider selected</span>
   </div>
   <div class="col-xs-2">{{cluster.status.phase}}</div>
-  <div class="col-xs-3">
-    {{cluster.status.health.apiserver}}
-    {{cluster.status.health.controller}}
-    {{cluster.status.health.etcd}}
-    {{cluster.status.health.scheduler}}
+  <div class="col-xs-3 health-state">
+    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
+    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
+    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
+    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
   </div>
 </div>
-
