@@ -14,16 +14,17 @@ import { ClusterComponent } from './cluster/cluster.component';
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
 import { ClusterItemComponent } from './cluster-list/cluster-item/cluster-item.component';
 import { NodeComponent } from './cluster/node/node.component';
+import { DashboardComponent } from "./dashboard/dashboard.component";
+import { BreadcrumbsComponent } from "./breadcrumbs/breadcrumbs.component";
+import { ProfileComponent } from "./profile/profile.component";
 
 import { Auth } from "./auth/auth.service";
 import { appRoutes } from "./app.routing";
 import { AUTH_PROVIDERS } from "./auth/auth.provider";
 import { AuthGuard } from "./auth/auth.guard";
 import { CustomFormsModule } from "ng2-validation";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { BreadcrumbsComponent } from "./breadcrumbs/breadcrumbs.component";
-import { ApiService } from "./api/api.service";
 
+import { ApiService } from "./api/api.service";
 import { ClusterNameGenerator } from "./util/name-generator.service";
 import { StoreModule } from "@ngrx/store";
 import { combinedReducer } from "./reducers/index";
@@ -51,7 +52,9 @@ import { combinedReducer } from "./reducers/index";
     ClusterListComponent,
     NodeComponent,
     ClusterItemComponent,
-    RegionComponent
+    RegionComponent,
+    ProfileComponent
+
   ],
   providers: [
     AUTH_PROVIDERS,

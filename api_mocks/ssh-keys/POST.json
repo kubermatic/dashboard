@@ -1,0 +1,8 @@
+{
+  "statusCode": 201,
+  "responseBody": {
+    "name": "mazad-at-loodse",
+    "fingerprint": "3a:e8:3e:0d:ab:77:9a:d0:e4:8a:91:f1:3f:86:ca:10",
+    "publicKey": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDB7EXdMnyolgAB5smTm/1bmQKbSWNtxX2XFNk6dhc7YPNElJsMBtbhX3/KD6AKnNKbAfqGk6X0P8THGgDwOz6Njsr6PDvS2k+kGCvQBswZDU5lY9ehIQqeVCoPL4VcrLZIrdCisXJO/1SpLDlnrR4QLLgYVUCwHxb/+kyLA/cEOE3xgwlMjX81eKFNJuIItKxk0u4cVtQoRZwYqaAnx457Ul4ClZy1OamESUdA7T/d9SGEHuUKqCWswezTJMWa+FoqbY52f1mdxuETP8Z3IuACBfIidASfsk6TlExrcX4iR55Pzk70hDw/oar9fQjXXHB0vJHhM1utfS7PXnXlC/FDaUSNbMgzee9INXSJjo1psNWO2oM4LoAPJ6O6HlmBuSPGHWfmJ+Jrg1qxsruwtNHniDH+RYay2abXUhn0GUuJL7fQ80jWGV8y0QAQPpcQeJrpCag0cbo0QXoxk2lmwe3Yc14v5gFz0uusNT4Zmq13rCqMbz8ZzoqAsfBs4IP6ge1jwI1mnRFZkdlt2qwXZI5idNwrVKLyQ2ayXdl15gCUCq5tPwzXV+vsyJPAGpVwopDgU0+irNu0WrkJ/OezlBUsHZzCXzY5WnzugwHH1trMiK9wiWau9o71R9gX5YVR3Dbe72T2gnTeA9FGIb4eMFAVGrjYxtNEKut1G2Q0nliqDQ== mazad@loodse.com"
+  }
+}

@@ -1,7 +1,7 @@
 <div class="page-top clearfix" baScrollPosition maxHeight="50" (scrollChange)="scrolledChanged($event)"
      [ngClass]="{scrolled: isScrolled}">
 
-  <a routerLink="/dashboard" class="al-logo clearfix">Kubermatic</a>
+  <a routerLink="welcome" class="al-logo clearfix">Kubermatic</a>
 
   <div class="info" *ngIf="auth.authenticated()">
     <kubermatic-breadcrumbs></kubermatic-breadcrumbs>
@@ -28,7 +28,7 @@
                   <p class="text-left"><strong>{{ userProfile.name }}</strong></p>
                   <p class="text-left small">{{ userProfile.email }}</p>
                   <p class="text-left">
-                    <button type="button" class="btn btn-primary btn-block btn-sm">Profile</button>
+                    <button type="button" routerLink="profile" class="btn btn-primary btn-block btn-sm">Profile</button>
                   </p>
                 </div>
               </div>

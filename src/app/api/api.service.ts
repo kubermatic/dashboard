@@ -10,7 +10,8 @@ import {DataCenterEntity} from "./entitiy/DatacenterEntity";
 import {ClusterEntity} from "./entitiy/ClusterEntity";
 import {NodeEntity} from "./entitiy/NodeEntity";
 import {Auth} from "../auth/auth.service";
-import {SSHKey} from "./model/SSHKeyModel";
+import {SSHKeyEntity} from "./entitiy/SSHKeyEntity";
+import {CreateClusterModel} from "./model/CreateClusterModel";
 
 @Injectable()
 export class ApiService {
@@ -23,14 +24,19 @@ export class ApiService {
   }
 
   getDataCenters(): Observable<DataCenterEntity[]> {
-    let url = `${this.restRoot}/dc`;
+    const url = `${this.restRoot}/dc`;
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
+<<<<<<< HEAD
   /*getDataCenter(dc: string): Observable<DataCenterEntity> {
     let url = `${this.restRoot}/dc${dc}`;
+=======
+  getDataCenter(dc: string): Observable<DataCenterEntity> {
+    const url = `${this.restRoot}/dc/${dc}`;
+>>>>>>> master
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
@@ -54,91 +60,114 @@ export class ApiService {
       .map(clusters => [].concat(...clusters));
   }
 
+<<<<<<< HEAD
   private getClustersByDC(seedRegion: string): Observable<ClusterEntity[]> {
     let url = `${this.restRoot}/dc/${seedRegion}/cluster`;
+=======
+  getClusters(dc: string): Observable<ClusterEntity[]> {
+    const url = `${this.restRoot}/dc/${dc}/cluster`;
+>>>>>>> master
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   getCluster(clusterModel: ClusterModel): Observable<ClusterEntity> {
+<<<<<<< HEAD
     let url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
+=======
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
+>>>>>>> master
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
-  createCluster(dc: string): Observable<ClusterEntity> {
-    let url = `${this.restRoot}/dc${dc}/cluster`;
+  createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/cluster`;
 
-    return this._http.post(url, "", { headers: this.headers })
+    return this._http.post(url, createClusterModel, { headers: this.headers })
       .map(res => res.json());
   }
 
   setCloudProvider(clusterModel: ClusterModel, node_dc: string): Observable<ClusterEntity> {
-    let url = `${this.restRoot}/dc${clusterModel.dc}/cluster/${clusterModel.cluster}/cloud`;
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/cloud`;
 
     return this._http.put(url, {dc: node_dc}, { headers: this.headers })
       .map(res => res.json());
   }
 
   getKubeconfig(clusterModel: ClusterModel, authorization_token: string): Observable<string> {
-    let url = `${this.restRoot}/dc${clusterModel.dc}/cluster/${clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   deleteCluster(clusterModel: ClusterModel) {
-    let url = `${this.restRoot}/dc${clusterModel.dc}/cluster/${clusterModel.cluster}`;
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
 
     return this._http.delete(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   getClusterNodes(clusterModel: ClusterModel): Observable<NodeEntity[]> {
+<<<<<<< HEAD
     let url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
+=======
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
+>>>>>>> master
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   getClusterNode(clusterModel: ClusterModel, node_name: string): Observable<NodeEntity> {
-    let url = `${this.restRoot}/dc${clusterModel.dc}/cluster/${clusterModel.cluster}/node/${node_name}`;
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node/${node_name}`;
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   createClusterNode(clusterModel: ClusterModel, nodeModel: CreateNodeModel): Observable<NodeEntity> {
-    let url = `${this.restRoot}/dc${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
 
     return this._http.post(url, nodeModel, { headers: this.headers })
       .map(res => res.json());
   }
 
   deleteClusterNode(clusterModel: ClusterModel, node_name: string) {
-    let url = `${this.restRoot}/dc${clusterModel.dc}/cluster/${clusterModel.cluster}/node/${node_name}`;
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node/${node_name}`;
 
     return this._http.delete(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   getKubernetesNode(clusterModel: ClusterModel, node_name: string) {
-    let url = `${this.restRoot}/dc${clusterModel.dc}/cluster/${clusterModel.cluster}/k8s/nodes/${node_name}`;
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/k8s/nodes/${node_name}`;
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
-  getSSHKeys(dc: string, body: any): Observable<SSHKey[]> {
-    let url = `${this.restRoot}/ext/${dc}/keys`;
+  getSSHKeys(): Observable<SSHKeyEntity[]> {
+    const url = `${this.restRoot}/ssh-keys`;
 
-    return this._http.post(url, body, { headers: this.headers })
-      .map((res: Response) => {
-      let x = res.json();
+    return this._http.get(url, { headers: this.headers })
+      .map(res => res.json());
+  }
 
-        return x.KeyPairs;
-      });
+  deleteSSHKey(keyName: string) {
+    const url = `${this.restRoot}/ssh-keys/${keyName}`;
+
+    return this._http.delete(url, { headers: this.headers })
+      .map(res => res.json());
+  }
+
+  addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
+    const url = `${this.restRoot}/ssh-keys`;
+
+    return this._http.post(url, sshKey, { headers: this.headers })
+      .map(res => res.json());
   }
 }

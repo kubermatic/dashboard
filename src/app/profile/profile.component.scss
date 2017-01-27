@@ -1,0 +1,20 @@
+@import "../../assets/css/ng2admin/conf/conf";
+
+.ssh-key-header {
+  background: #f7f7f9;
+  color: $primary;
+}
+
+.ssh-key-name {
+  padding-left: 5px;
+}
+
+.ssh-key-action {
+  cursor: pointer;
+}
+
+.ssh-key-publickey {
+  padding: 5px;
+  word-wrap: break-word;
+  color: $primary;
+}
