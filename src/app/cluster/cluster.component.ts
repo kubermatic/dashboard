@@ -35,7 +35,7 @@ export class ClusterComponent implements OnInit {
 
   getNodes(clusterModel){
     this.api.getClusterNodes(clusterModel).subscribe(result => {
-        this.nodes =result;
+        this.nodes = result;
     })
   }
 
