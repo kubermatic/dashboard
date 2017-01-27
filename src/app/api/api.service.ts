@@ -30,13 +30,10 @@ export class ApiService {
       .map(res => res.json());
   }
 
-<<<<<<< HEAD
-  /*getDataCenter(dc: string): Observable<DataCenterEntity> {
-    let url = `${this.restRoot}/dc${dc}`;
-=======
+/*
   getDataCenter(dc: string): Observable<DataCenterEntity> {
     const url = `${this.restRoot}/dc/${dc}`;
->>>>>>> master
+
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
@@ -60,24 +57,16 @@ export class ApiService {
       .map(clusters => [].concat(...clusters));
   }
 
-<<<<<<< HEAD
+
   private getClustersByDC(seedRegion: string): Observable<ClusterEntity[]> {
     let url = `${this.restRoot}/dc/${seedRegion}/cluster`;
-=======
-  getClusters(dc: string): Observable<ClusterEntity[]> {
-    const url = `${this.restRoot}/dc/${dc}/cluster`;
->>>>>>> master
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   getCluster(clusterModel: ClusterModel): Observable<ClusterEntity> {
-<<<<<<< HEAD
     let url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
-=======
-    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
->>>>>>> master
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
@@ -112,11 +101,7 @@ export class ApiService {
   }
 
   getClusterNodes(clusterModel: ClusterModel): Observable<NodeEntity[]> {
-<<<<<<< HEAD
     let url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
-=======
-    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
->>>>>>> master
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
