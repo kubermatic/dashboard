@@ -11,6 +11,7 @@ import { DashboardComponent } from "./dashboard/dashboard.component";
 import { BreadcrumbsComponent } from "./breadcrumbs/breadcrumbs.component";
 import { WizardComponent } from "./wizard/wizard.component";
 import { ProfileComponent } from "./profile/profile.component";
+import { NotificationComponent } from "./notification/notification.component";
 
 import { Auth } from "./auth/auth.service";
 import { appRoutes } from "./app.routing";
@@ -22,6 +23,8 @@ import { ApiService } from "./api/api.service";
 import { ClusterNameGenerator } from "./util/name-generator.service";
 import { StoreModule } from "@ngrx/store";
 import { combinedReducer } from "./reducers/index";
+import { SimpleNotificationsModule } from "angular2-notifications";
+
 
 @NgModule({
   imports: [
@@ -31,7 +34,8 @@ import { combinedReducer } from "./reducers/index";
     HttpModule,
     RouterModule.forRoot(appRoutes),
     CustomFormsModule,
-    StoreModule.provideStore(combinedReducer)
+    StoreModule.provideStore(combinedReducer),
+    SimpleNotificationsModule
   ],
   declarations: [
     KubermaticComponent,
@@ -40,7 +44,8 @@ import { combinedReducer } from "./reducers/index";
     DashboardComponent,
     BreadcrumbsComponent,
     WizardComponent,
-    ProfileComponent
+    ProfileComponent,
+    NotificationComponent
   ],
   providers: [
     AUTH_PROVIDERS,
