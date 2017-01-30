@@ -6,18 +6,6 @@
 
 
 <div class="container">
-  <ng-container *ngIf="deleteSSHKeyResult">
-    <div class="alert alert-dismissible fade show" role="alert"
-         [ngClass]="{'alert-danger': deleteSSHKeyResult.error, 'alert-success': !deleteSSHKeyResult.error}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <strong>{{ deleteSSHKeyResult.title }}</strong> {{ deleteSSHKeyResult.message }}
-    </div>
-  </ng-container>
-</div>
-
-<div class="container">
   <ng-container [ngSwitch]="!!sshKeys && sshKeys.length > 0">
     <div *ngSwitchCase="false">
       You have not added any SSH keys yet.
@@ -63,15 +51,6 @@
 </div>
 
 <div class="container justify-content-center">
-  <ng-container *ngIf="addSSHKeyResult">
-    <div class="alert alert-dismissible fade show" role="alert" [ngClass]="{'alert-danger': addSSHKeyResult.error, 'alert-success': !addSSHKeyResult.error}">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-      <strong>{{ addSSHKeyResult.title }}</strong> {{ addSSHKeyResult.message }}
-    </div>
-  </ng-container>
-
   <form [formGroup]="addSSHKeyForm" novalidate>
 
     <div class="form-group" [ngClass]="{'has-danger': !addSSHKeyForm.controls.key.valid && addSSHKeyForm.controls.key.touched, 'has-success': addSSHKeyForm.controls.key.valid}">

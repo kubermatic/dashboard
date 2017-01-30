@@ -1,4 +1,6 @@
 @import "bootstrap/variables";
+@import "ng2admin/conf/variables";
+@import "ng2admin/conf/ng2";
 
 .component-heading {
   font-weight: $font-weight-bold;
@@ -9,3 +11,17 @@
   font-weight: $font-weight-normal;
   padding: 15px 0;
 }
+
+.custom-simple-notification {
+  margin-top: $top-height;
+}
+
+.simple-notification.error { background: $danger-dark !important; }
+.simple-notification.success { background: $success !important; }
+.simple-notification.alert { background: $warning !important; }
+.simple-notification.info { background: $primary !important; }
+
+.simple-notification.error .sn-progress-loader span { background: $danger !important; }
+.simple-notification.success .sn-progress-loader span { background: $success-light !important; }
+.simple-notification.alert .sn-progress-loader span { background: $warning-dark !important; }
+.simple-notification.info .sn-progress-loader span { background: $primary-light !important; }

@@ -1,7 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {Store} from "@ngrx/store";
+import * as fromRoot from "../reducers/index";
+import {NotificationComponent} from "../notification/notification.component";
 
 @Component({
   selector: "kubermatic-profile",
@@ -12,10 +15,8 @@ export class ProfileComponent implements OnInit {
 
   public sshKeys: Array<SSHKeyEntity> = [];
   public addSSHKeyForm: FormGroup;
-  public addSSHKeyResult: any;
-  public deleteSSHKeyResult: any;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder) { }
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
     this.refreshSSHKeys();
@@ -45,25 +46,13 @@ export class ProfileComponent implements OnInit {
       this.api.deleteSSHKey(name)
         .subscribe(result => {
             this.sshKeys.splice(index, 1);
-            this.deleteSSHKeyResult = {
-              title: "Success",
-              error: false,
-              message: `SSH key ${name} deleted.`
-            };
+            NotificationComponent.success(this.store, "Success", `SSH key ${name} deleted.`);
           },
           error => {
-            this.deleteSSHKeyResult = {
-              title: "Error",
-              error: true,
-              message: `SSH key ${name} could not be deleted. Error: ` + error
-            };
+            NotificationComponent.error(this.store, "Error",  `SSH key ${name} could not be deleted. Error: ${error}`);
           });
     } else {
-      this.deleteSSHKeyResult = {
-        title: "Error",
-        error: true,
-        message: `Error deleting SSH key ${name}. Please try again.`
-      };
+      NotificationComponent.error(this.store, "Error", `Error deleting SSH key ${name}. Please try again.`);
     }
   }
 
@@ -73,21 +62,13 @@ export class ProfileComponent implements OnInit {
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
       .subscribe(result => {
-          this.addSSHKeyResult = {
-            title: "Success",
-            error: false,
-            message: `SSH key ${name} added successfully`
-          };
+          NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
 
           this.addSSHKeyForm.reset();
           this.sshKeys.push(result);
         },
         error => {
-          this.addSSHKeyResult = {
-            title: "Error",
-            error: true,
-            message: error.status + " " + error.statusText
-          };
+          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
         });
   }
 
