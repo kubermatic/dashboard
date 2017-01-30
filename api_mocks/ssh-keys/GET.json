@@ -1,4 +1,7 @@
 {
+  "spec": {
+    "responseTimeMs": 1000
+  },
   "statusCode":200,
   "responseBody":[
     {

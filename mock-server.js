@@ -16,6 +16,11 @@ let requireUncached = function(mockFile){
   return require(mockFile);
 };
 
+let handleRequestInternal = function (res, statusCode, responseBody) {
+  res.status(statusCode);
+  res.send(responseBody);
+};
+
 let handleRequest = function(basePatch, requestPath, httpVerb, res) {
   let filePath = path.join(__dirname, basePatch, requestPath, `${httpVerb}.json`);
   let fileData;
@@ -23,9 +28,15 @@ let handleRequest = function(basePatch, requestPath, httpVerb, res) {
   try {
     fileData = requireUncached(filePath);
     console.warn(`Mocking request: "${httpVerb} ${filePath}" - ${fileData.statusCode}`);
+    let responseTimeMs = fileData.spec ? fileData.spec.responseTimeMs : -1;
 
-    res.status(fileData.statusCode);
-    res.send(fileData.responseBody);
+    if (responseTimeMs <= 0) {
+      responseTimeMs = 200;
+    }
+
+    setTimeout(function() {
+      handleRequestInternal(res, fileData.statusCode, fileData.responseBody);
+    }, responseTimeMs);
   } catch (err){
     console.warn(`Mocking request: "${httpVerb} ${filePath}" - 404`);
 

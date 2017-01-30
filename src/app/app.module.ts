@@ -1,7 +1,7 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
-import { HttpModule } from "@angular/http";
+import {HttpModule, BrowserXhr} from "@angular/http";
 import { RouterModule } from "@angular/router";
 
 import { KubermaticComponent } from "./kubermatic.component";
@@ -24,6 +24,8 @@ import { ClusterNameGenerator } from "./util/name-generator.service";
 import { StoreModule } from "@ngrx/store";
 import { combinedReducer } from "./reducers/index";
 import { SimpleNotificationsModule } from "angular2-notifications";
+import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
+import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import { SimpleNotificationsModule } from "angular2-notifications";
     RouterModule.forRoot(appRoutes),
     CustomFormsModule,
     StoreModule.provideStore(combinedReducer),
-    SimpleNotificationsModule
+    SimpleNotificationsModule,
+    SlimLoadingBarModule.forRoot()
   ],
   declarations: [
     KubermaticComponent,
@@ -52,7 +55,11 @@ import { SimpleNotificationsModule } from "angular2-notifications";
     Auth,
     ApiService,
     AuthGuard,
-    ClusterNameGenerator
+    ClusterNameGenerator,
+    {
+      provide: BrowserXhr,
+      useClass: ProgressBrowserXhr
+    }
   ],
   bootstrap: [KubermaticComponent]
 })

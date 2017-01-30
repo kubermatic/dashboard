@@ -16,6 +16,7 @@ import {combinedReducer} from "./reducers/index";
 import {StoreModule} from "@ngrx/store";
 import {NotificationComponent} from "./notification/notification.component";
 import {SimpleNotificationsModule} from "angular2-notifications";
+import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 
 describe("KubermaticComponent", () => {
   beforeEach(() => {
@@ -25,7 +26,8 @@ describe("KubermaticComponent", () => {
         HttpModule,
         RouterTestingModule,
         StoreModule.provideStore(combinedReducer),
-        SimpleNotificationsModule
+        SimpleNotificationsModule,
+        SlimLoadingBarModule.forRoot()
       ],
       declarations: [
         KubermaticComponent,
