@@ -21,10 +21,8 @@
   <div class="row card-block">
     <div class="col-2">API Server</div>
     <div class="col-8">
-     {{cluster.address.url}} -<!--<a ng-show="!!cluster.address.url" target="_blank" ng-href="/api/v1/dc/{{dcName}}/cluster/{{clusterName}}/kubeconfig?token={{token}}">download kubeconfig</a>
--->
-
-      <a href="">download kubeconfig</a>
+     {{cluster.address.url}}
+      <a [attr.href]="downloadKubeconfigUrl()" target="_blank">download kubeconfig</a>
     </div>
   </div>
 </div>

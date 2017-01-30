@@ -1,4 +1,6 @@
 {
-  "statusCode": 200,
+  "spec": {
+    "statusCode": 200
+  },
   "responseBody": {}
 }

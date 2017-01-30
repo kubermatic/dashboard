@@ -16,9 +16,18 @@ let requireUncached = function(mockFile){
   return require(mockFile);
 };
 
-let handleRequestInternal = function (res, statusCode, responseBody) {
-  res.status(statusCode);
-  res.send(responseBody);
+let handleRequestInternal = function (res, fileData) {
+  let contentType = "text/json";
+  let body = fileData.responseBody;
+
+  if (fileData.spec.contentType === "text/plain") {
+    contentType = "text/plain";
+    body = fileData.responseBody.plain;
+  }
+
+  res.status(fileData.spec.statusCode);
+  res.set('Content-Type', contentType);
+  res.send(body);
 };
 
 let handleRequest = function(basePatch, requestPath, httpVerb, res) {
@@ -27,20 +36,21 @@ let handleRequest = function(basePatch, requestPath, httpVerb, res) {
 
   try {
     fileData = requireUncached(filePath);
-    console.warn(`Mocking request: "${httpVerb} ${filePath}" - ${fileData.statusCode}`);
-    let responseTimeMs = fileData.spec ? fileData.spec.responseTimeMs : -1;
+    console.warn(`Mocking request: "${httpVerb} ${filePath}" - ${fileData.spec.statusCode}`);
+    let responseTimeMs = 200;
 
-    if (responseTimeMs <= 0) {
-      responseTimeMs = 200;
+    if (fileData.spec.responseTimeMs) {
+      responseTimeMs = fileData.spec.responseTimeMs;
     }
 
     setTimeout(function() {
-      handleRequestInternal(res, fileData.statusCode, fileData.responseBody);
+      handleRequestInternal(res, fileData);
     }, responseTimeMs);
   } catch (err){
     console.warn(`Mocking request: "${httpVerb} ${filePath}" - 404`);
 
     res.status(404);
+    res.set('Content-Type', 'text/plain');
     res.send("");
   }
 };

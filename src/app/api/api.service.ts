@@ -72,13 +72,6 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  getKubeconfig(clusterModel: ClusterModel, authorization_token: string): Observable<string> {
-    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
-
-    return this._http.get(url, { headers: this.headers })
-      .map(res => res.json());
-  }
-
   deleteCluster(clusterModel: ClusterModel) {
     const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
 

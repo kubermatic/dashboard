@@ -16,8 +16,6 @@ export class ClusterListComponent implements OnInit {
   ngOnInit() {
     this.api.getClusters().subscribe(result => {
       this.clusters = result;
-
-      console.log("cluster", this.clusters);
     });
   }
 }

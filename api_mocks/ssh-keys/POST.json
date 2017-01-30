@@ -1,5 +1,7 @@
 {
-  "statusCode": 201,
+  "spec": {
+    "statusCode": 201
+  },
   "responseBody": {
     "name": "mazad-at-loodse",
     "fingerprint": "3a:e8:3e:0d:ab:77:9a:d0:e4:8a:91:f1:3f:86:ca:10",

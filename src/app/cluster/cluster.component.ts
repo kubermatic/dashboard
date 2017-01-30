@@ -1,47 +1,52 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ApiService } from "../api/api.service";
-import { ClusterModel } from "../api/model/ClusterModel";
-//import { ClusterEntity } from "../api/entitiy/ClusterEntity";
-import { NodeEntity } from "../api/entitiy/NodeEntity";
+import {Component, OnInit} from "@angular/core";
+import {ActivatedRoute} from "@angular/router";
+import {ApiService} from "../api/api.service";
+import {ClusterModel} from "../api/model/ClusterModel";
+import {Store} from "@ngrx/store";
+import * as fromRoot from "../reducers/index";
+import {environment} from "../../environments/environment";
 
 @Component({
-  selector: 'kubermatic-cluster',
-  templateUrl: './cluster.component.html',
-  styleUrls: ['./cluster.component.scss']
+  selector: "kubermatic-cluster",
+  templateUrl: "./cluster.component.html",
+  styleUrls: ["./cluster.component.scss"]
 })
 export class ClusterComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private api: ApiService) {}
-
-  public routingParams: any;
+  private restRoot: string = environment.restRoot;
+  public clusterModel: ClusterModel;
   public nodes: any;
   public cluster: any;
 
-  ngOnInit() {
+  constructor(private route: ActivatedRoute, private api: ApiService, private store: Store<fromRoot.State>) {}
 
+  ngOnInit() {
     this.route.params.subscribe(params => {
-      this.routingParams = new ClusterModel(params['seedDcName'], params['clusterName']);
-      this.getCluster(this.routingParams);
-      this.getNodes(this.routingParams);
-    })
+      this.clusterModel = new ClusterModel(params["seedDcName"], params["clusterName"]);
+      this.updateCluster();
+      this.updateNodes();
+    });
   }
 
-  getCluster(clusterModel){
-    this.api.getCluster(clusterModel).subscribe(result => {
+  updateCluster(): void {
+    this.api.getCluster(this.clusterModel).subscribe(result => {
       this.cluster = result;
     });
   }
 
-  getNodes(clusterModel){
-    this.api.getClusterNodes(clusterModel).subscribe(result => {
-        this.nodes = result;
-    })
+  updateNodes(): void {
+    this.api.getClusterNodes(this.clusterModel).subscribe(result => {
+      this.nodes = result;
+    });
   }
 
-  public addNodes(clusterModel): void {
-    //this.api.createClusterNode(clusterModel, /*  node  */);
+  public downloadKubeconfigUrl(): string {
+    const authorization_token = localStorage.getItem("id_token");
+    return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
+  }
 
+  public addNodes(): void {
+    // this.api.createClusterNode(clusterModel, /*  node  */);
   }
 }
 
