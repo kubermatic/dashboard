@@ -1,14 +1,16 @@
 <div class="navigation-bar clearfix" (scrollChange)="scrolledChanged($event)" [ngClass]="{scrolled: isScrolled}">
   <ng2-slim-loading-bar [color]="'white'" [height]="'2px'"></ng2-slim-loading-bar>
 
-  <div class="navigation-bar-content">
-    <a routerLink="welcome" class="al-logo clearfix">Kubermatic</a>
+  <div class="row navigation-bar-content">
+    <div class="col-1">
+      <a routerLink="welcome" class="al-logo clearfix">Kubermatic</a>
+    </div>
 
-    <div class="info" *ngIf="auth.authenticated()">
+    <div class="col-2 col-md-auto info" *ngIf="auth.authenticated()">
       <kubermatic-breadcrumbs></kubermatic-breadcrumbs>
     </div>
 
-    <div class="row pull-right" *ngIf="auth.authenticated()">
+    <div class="col" *ngIf="auth.authenticated()">
       <div class="user-profile clearfix">
         <div class="dropdown al-user-profile" *ngIf="userProfile">
           <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
@@ -49,4 +51,5 @@
       </div>
     </div>
   </div>
+
 </div>
