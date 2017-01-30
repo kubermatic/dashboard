@@ -14,6 +14,8 @@ import {ApiService} from "./api/api.service";
 import {AuthGuard} from "./auth/auth.guard";
 import {combinedReducer} from "./reducers/index";
 import {StoreModule} from "@ngrx/store";
+import {NotificationComponent} from "./notification/notification.component";
+import {SimpleNotificationsModule} from "angular2-notifications";
 
 describe("KubermaticComponent", () => {
   beforeEach(() => {
@@ -22,11 +24,13 @@ describe("KubermaticComponent", () => {
         BrowserModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer)
+        StoreModule.provideStore(combinedReducer),
+        SimpleNotificationsModule
       ],
       declarations: [
         KubermaticComponent,
         NavigationComponent,
+        NotificationComponent,
         FrontpageComponent,
         BreadcrumbsComponent
       ],

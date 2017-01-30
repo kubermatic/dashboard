@@ -4,8 +4,6 @@ import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
-import {Actions} from "../reducers/actions";
-import {NotificationToastType, NotificationToast} from "../reducers/notification";
 import {NotificationComponent} from "../notification/notification.component";
 
 @Component({
