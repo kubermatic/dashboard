@@ -6,10 +6,10 @@
 
 <div class="container card">
   <div class="row card-header">
-    <div class="col-xs-4">Cluster Name</div>
-    <div class="col-xs-3">DC of Nodes</div>
-    <div class="col-xs-2">Status</div>
-    <div class="col-xs-3">Health
+    <div class="col-4">Cluster Name</div>
+    <div class="col-3">DC of Nodes</div>
+    <div class="col-2">Status</div>
+    <div class="col-3">Health
       <a routerLink="wizard">
         <button type="button" class="btn btn-primary">
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>Add Cluster
@@ -17,10 +17,15 @@
       </a>
     </div>
   </div>
-  <kubermatic-cluster-item *ngFor="let c of clusters" [cluster]="c"></kubermatic-cluster-item>
-  <div class="row card-block" *ngIf="!clusters.length">
-    <div class="col-xs-12 text-center text-muted">
-      No Cluster available. Please add a Cluster.
+
+  <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
+    <div *ngSwitchCase="true">
+      <kubermatic-cluster-item *ngFor="let c of clusters" [cluster]="c"></kubermatic-cluster-item>
     </div>
-  </div>
+    <div *ngSwitchCase="false" class="row card-block">
+      <div class="col-12 text-center text-muted">
+        No Cluster available. Please add a Cluster.
+      </div>
+    </div>
+  </ng-container>
 </div>

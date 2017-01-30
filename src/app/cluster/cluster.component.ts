@@ -14,9 +14,9 @@ export class ClusterComponent implements OnInit {
 
   constructor(private route: ActivatedRoute, private api: ApiService) {}
 
-  public routingParams;
-  public nodes;
-  public cluster;
+  public routingParams: any;
+  public nodes: any;
+  public cluster: any;
 
   ngOnInit() {
 
@@ -43,35 +43,5 @@ export class ClusterComponent implements OnInit {
     //this.api.createClusterNode(clusterModel, /*  node  */);
 
   }
-
-
-
-  /*
-
-   public addSSHKey(): void {
-   const name = this.addSSHKeyForm.controls["name"].value;
-   const key = this.addSSHKeyForm.controls["key"].value;
-
-
-   this.api.addSSHKey(new SSHKeyEntity(name, null, key))
-   .subscribe(result => {
-   this.addSSHKeyResult = {
-   title: "Success",
-   error: false,
-   message: `SSH key ${name} added successfully`
-   };
-
-   this.addSSHKeyForm.reset();
-   this.sshKeys.push(result);
-   },
-   error => {
-   this.addSSHKeyResult = {
-   title: "Error",
-   error: true,
-   message: error.status + " " + error.statusText
-   };
-   });
-   }
-   */
 }
 

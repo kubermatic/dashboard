@@ -8,8 +8,8 @@
   <div class="row card-header">Kubernetes Master</div>
 
   <div class="row card-block">
-    <div class="col-xs-2">Status</div>
-    <div class="col-xs-8 health-state">
+    <div class="col-2">Status</div>
+    <div class="col-8 health-state">
       <strong>{{cluster.status.phase}}</strong>
       - Health:
       <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
@@ -19,24 +19,24 @@
     </div>
   </div>
   <div class="row card-block">
-    <div class="col-xs-2">API Server</div>
-    <div class="col-xs-8">
-     {{cluster.address.url}}
+    <div class="col-2">API Server</div>
+    <div class="col-8">
+     {{cluster.address.url}} -<!--<a ng-show="!!cluster.address.url" target="_blank" ng-href="/api/v1/dc/{{dcName}}/cluster/{{clusterName}}/kubeconfig?token={{token}}">download kubeconfig</a>
+-->
+
+      <a href="">download kubeconfig</a>
     </div>
   </div>
 </div>
 
-
-
-
 <div class="container card" *ngIf="nodes">
   <div class="row card-header">
-    <div class="col-xs-4">Name</div>
-    <div class="col-xs-2">Capacity</div>
-    <div class="col-xs-1">Version</div>
-    <div class="col-xs-2">Public IP</div>
-    <div class="col-xs-2">Status</div>
-    <div class="col-xs-1">
+    <div class="col-4">Name</div>
+    <div class="col-2">Capacity</div>
+    <div class="col-1">Version</div>
+    <div class="col-2">Public IP</div>
+    <div class="col-2">Status</div>
+    <div class="col-1">
       <a routerLink="wizard">
         <button type="button" class="btn btn-primary">
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>Add Node
@@ -44,14 +44,17 @@
       </a>
     </div>
   </div>
-
-  <kubermatic-node *ngFor="let n of nodes" [node]="n"></kubermatic-node>
-
-  <div class="row card-block" *ngIf="!nodes.length">
-    <div class="col-xs-12 text-center text-muted">
-      No Node available. Please add a Node.
+  <ng-container [ngSwitch]="!!nodes && nodes.length > 0">
+    <div *ngSwitchCase="true">
+      <kubermatic-node *ngFor="let n of nodes" [node]="n"></kubermatic-node>
     </div>
-  </div>
+
+    <div *ngSwitchCase="false" class="row card-block">
+      <div class="col-12 text-center text-muted">
+        No Node available. Please add a Node.
+      </div>
+    </div>
+  </ng-container>
 </div>
 
 
