@@ -1,10 +1,9 @@
-import { Injectable } from "@angular/core";
+import {Injectable} from "@angular/core";
 import {Router, NavigationStart} from "@angular/router";
-
-import { tokenNotExpired } from "angular2-jwt";
-import { Store } from "@ngrx/store";
+import {tokenNotExpired} from "angular2-jwt";
+import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
-import { Actions } from "../reducers/actions";
+import {Actions} from "../reducers/actions";
 
 // Avoid name not found warnings
 const Auth0Lock = require("auth0-lock").default;
@@ -12,16 +11,19 @@ const Auth0Lock = require("auth0-lock").default;
 @Injectable()
 export class Auth {
 
+  public static readonly AUTH0_LOCK_CONTAINER_ID = "embedded-lock";
+
   // Configure Auth0
   private lock = new Auth0Lock("zqaGAqBGiWD6tce7fcHL03QZYi1AC9wF", "kubermatic.eu.auth0.com", {
       theme: {
         logo: "https://w3alpha.com/cms/templates/166/img/logo.svg",
-        primaryColor: "#445f73"
+        primaryColor: "#2f4050"
       },
       auth: {
         autoParseHash: false,
         params: {scope: "openid app_metadata"}
-      }
+      },
+      container: Auth.AUTH0_LOCK_CONTAINER_ID
     }
   );
 

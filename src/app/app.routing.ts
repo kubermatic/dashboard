@@ -9,6 +9,11 @@ import {ProfileComponent} from "./profile/profile.component";
 
 export const appRoutes: Routes = [
   {
+    path: "welcome",
+    component: FrontpageComponent,
+    data: { title: "Welcome" }
+  },
+  {
     path: "",
     component: DashboardComponent,
     children: [
@@ -23,11 +28,6 @@ export const appRoutes: Routes = [
         component: ProfileComponent,
         canActivate: [AuthGuard],
         data: { title: "Profile" }
-      },
-      {
-        path: "welcome",
-        component: FrontpageComponent,
-        data: { title: "Welcome" }
       },
       {
         path: "dc/:seedDcName/cluster/:clusterName",
@@ -45,6 +45,6 @@ export const appRoutes: Routes = [
   },
   {
     path: "**",
-    redirectTo: ""
+    redirectTo: "welcome"
   },
 ];
