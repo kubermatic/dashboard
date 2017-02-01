@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
 import {ClusterNameGenerator} from "../util/name-generator.service";
@@ -7,6 +7,10 @@ import {CustomValidators} from "ng2-validation";
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {NodeProvider, NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
 import {CreateClusterModel, CloudModel, ClusterSpec} from "../api/model/CreateClusterModel";
+import {Router} from "@angular/router";
+import {NotificationComponent} from "../notification/notification.component";
+import {Store} from "@ngrx/store";
+import * as fromRoot from "../reducers/index";
 
 
 @Component({
@@ -35,7 +39,9 @@ export class WizardComponent implements OnInit {
   public sshKeys: SSHKeyEntity[] = [];
   public nodeSize: string[] = NodeInstanceFlavors.VOID;
 
-  constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator, private formBuilder: FormBuilder) {
+  constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator,
+              private formBuilder: FormBuilder, private router: Router,
+              private store: Store<fromRoot.State>) {
   }
 
   ngOnInit() {
@@ -186,10 +192,10 @@ export class WizardComponent implements OnInit {
 
     console.log("Create cluster mode: \n" + JSON.stringify(model));
     this.api.createCluster(model).subscribe(result => {
-        console.log("createCluster successful");
+        this.router.navigate(["clusters"]);
       },
       error => {
-        console.error("createCluster failed");
+        NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
       });
   }
 }

@@ -15,7 +15,7 @@ import {ApiService} from "../api/api.service";
 export class DashboardComponent implements OnInit {
 
   constructor(private auth: Auth, private router: Router, private activatedRoute: ActivatedRoute,
-              private _store: Store<fromRoot.State>, private api: ApiService) {
+              private store: Store<fromRoot.State>, private api: ApiService) {
     this.router.events
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
       .filter(route => route.outlet === "primary")
       .mergeMap(route => route.data)
       .subscribe((event) => {
-        this._store.dispatch({ type: Actions.PUT_BREADCRUMB, payload: { crumb: event["title"] } });
+        this.store.dispatch({ type: Actions.PUT_BREADCRUMB, payload: { crumb: event["title"] } });
       });
   }
 

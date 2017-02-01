@@ -16,6 +16,10 @@
   margin-top: $top-height;
 }
 
+.card-margin {
+  margin-bottom: 24px;
+}
+
 .simple-notification.error { background: $danger-dark !important; }
 .simple-notification.success { background: $success !important; }
 .simple-notification.alert { background: $warning !important; }
