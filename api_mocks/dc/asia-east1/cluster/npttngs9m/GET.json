@@ -16,8 +16,8 @@
       }
     },
     "address": {
-      "url": "https://npttngs9m.asia-east1.beta.kubermatic.io",
-      "etcdURL": "https://etcd.npttngs9m.asia-east1.beta.kubermatic.io",
+      "url": "https://npttngs9m.asia-east1.dev.kubermatic.io",
+      "etcdURL": "https://etcd.npttngs9m.asia-east1.dev.kubermatic.io",
       "token": "Be2ExvY5RHZAhJ4YpXWcH_vy4Y5qmyJqP3csje2w7k4",
       "nodePort": 30947
     },

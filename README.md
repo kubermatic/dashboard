@@ -3,7 +3,7 @@
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.24.
 
 ## Development server
-Run `npm run serve:proxy` for a dev server. Navigate to `http://localhost:8000/`. This will proxy api calls to the target specified in proxy.conf.json, which is https://beta.kubermatic.io. 
+Run `npm run serve:proxy` for a dev server. Navigate to `http://localhost:8000/`. This will proxy api calls to the target specified in proxy.conf.json, which is https://dev.kubermatic.io.
 The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
