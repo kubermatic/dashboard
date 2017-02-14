@@ -34,6 +34,12 @@ export class ClusterComponent implements OnInit {
     });
   }
 
+  deleteCluster(){
+    this.api.deleteCluster(this.clusterModel).subscribe(result => {
+      this.cluster = result;
+    })
+  }
+
   updateNodes(): void {
     this.api.getClusterNodes(this.clusterModel).subscribe(result => {
       this.nodes = result;
@@ -47,6 +53,10 @@ export class ClusterComponent implements OnInit {
 
   public addNodes(): void {
     // this.api.createClusterNode(clusterModel, /*  node  */);
+  }
+
+  public deleteNodes(): void {
+    console.log('delete node');
   }
 }
 
