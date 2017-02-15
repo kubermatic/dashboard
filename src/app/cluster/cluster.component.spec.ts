@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
 import { ClusterComponent } from './cluster.component';
+import {NodeComponent} from "./node/node.component";
 
 describe('ClusterComponent', () => {
   let component: ClusterComponent;
@@ -11,7 +12,10 @@ describe('ClusterComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ClusterComponent ]
+      declarations: [
+        ClusterComponent,
+        NodeComponent
+      ]
     })
     .compileComponents();
   }));

@@ -11,8 +11,8 @@ export class BreadcrumbsComponent implements OnInit {
 
   public activePageTitle: string = "";
 
-  constructor(private _store: Store<fromRoot.State>) {
-    this._store.select(fromRoot.getBreadcrumb).subscribe(crumb => {
+  constructor(private store: Store<fromRoot.State>) {
+    this.store.select(fromRoot.getBreadcrumb).subscribe(crumb => {
       this.activePageTitle = crumb;
     });
   }

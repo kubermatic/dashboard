@@ -192,7 +192,7 @@ export class WizardComponent implements OnInit {
 
     console.log("Create cluster mode: \n" + JSON.stringify(model));
     this.api.createCluster(model).subscribe(result => {
-        this.router.navigate(["clusters"]);
+        this.router.navigate(["dashboard/clusters"]);
       },
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);

@@ -31,10 +31,10 @@ export class Auth {
     return localStorage.getItem("id_token");
   }
 
-  constructor(private _router: Router, private _store: Store<fromRoot.State>) {
+  constructor(private router: Router, private store: Store<fromRoot.State>) {
     this.lock.on("authenticated", (authResult) => {
       localStorage.setItem("id_token", authResult.idToken);
-      this._store.dispatch({ type: Actions.LOGGED_IN, payload: { token: authResult.idToken, profile: [] } });
+      this.store.dispatch({ type: Actions.LOGGED_IN, payload: { token: authResult.idToken, profile: [] } });
 
       this.lock.getProfile(authResult.idToken, function(error: any, profile: any){
         if (error) {
@@ -46,25 +46,25 @@ export class Auth {
         // Redirect if there is a saved url to do so.
         const redirectUrl: string = localStorage.getItem("redirect_url");
         if (redirectUrl !== undefined) {
-          _router.navigate([redirectUrl]);
+          router.navigate([redirectUrl]);
           localStorage.removeItem("redirect_url");
         }
 
-        _store.dispatch({ type: Actions.FETCH_PROFILE, payload: { profile: profile } });
+        store.dispatch({ type: Actions.FETCH_PROFILE, payload: { profile: profile } });
       });
     });
 
     if (this.authenticated()) {
       const idToken = Auth.getBearerToken();
       const profile = JSON.parse(localStorage.getItem("profile"));
-      this._store.dispatch({ type: Actions.LOGGED_IN, payload: { token: idToken, profile: profile } });
+      this.store.dispatch({ type: Actions.LOGGED_IN, payload: { token: idToken, profile: profile } });
     }
 
     this.handleAuthenticationWithHash();
   }
 
   private handleAuthenticationWithHash(): void {
-    this._router.events
+    this.router.events
       .filter(event => event instanceof NavigationStart)
       .filter(event => (/access_token|id_token|error/).test(event.url))
       .subscribe(event => {
@@ -90,7 +90,7 @@ export class Auth {
     // Redirect if there is a saved url to do so.
     const redirectUrl: string = localStorage.getItem("redirect_url");
     if (redirectUrl !== undefined) {
-      this._router.navigate([redirectUrl]);
+      this.router.navigate([redirectUrl]);
       localStorage.removeItem("redirect_url");
     }
   };
