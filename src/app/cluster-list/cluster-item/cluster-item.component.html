@@ -1,6 +1,6 @@
 <div class="row card-block">
   <div class="col-4">
-    <a routerLink="/dc/{{cluster.spec.cloud.dc}}/cluster/{{cluster.metadata.name}}">
+    <a *ngIf="cluster.spec.cloud" routerLink="/dc/{{cluster.spec.cloud.dc}}/cluster/{{cluster.metadata.name}}">
       <img src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
       {{cluster.spec.humanReadableName}}
     </a>
@@ -10,6 +10,7 @@
       <div *ngSwitchCase="true">
         <img *ngIf="cluster.spec.cloud.provider" src="/assets/images/clouds/{{cluster.spec.cloud.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
         {{cluster.spec.cloud.dc}}
+        <p *ngIf="cluster.spec.cloud.dc">{{cluster.spec.cloud.dc}}</p>
       </div>
       <div *ngSwitchCase="false" class="text-muted">
         No cloud provider selected
