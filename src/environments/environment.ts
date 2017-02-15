@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  restRoot : "/api/v1",
+  restRoot : "/api/v2",
 };
