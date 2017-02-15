@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  restRoot : "/api/v2",
+  restRoot : "/api/v1",
 };
