@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {ActivatedRoute} from "@angular/router";
+import {Router, ActivatedRoute} from "@angular/router";
 import {ApiService} from "../api/api.service";
 import {ClusterModel} from "../api/model/ClusterModel";
 import {Store} from "@ngrx/store";
@@ -18,7 +18,7 @@ export class ClusterComponent implements OnInit {
   public nodes: any;
   public cluster: any;
 
-  constructor(private route: ActivatedRoute, private api: ApiService, private store: Store<fromRoot.State>) {}
+  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -37,6 +37,7 @@ export class ClusterComponent implements OnInit {
   deleteCluster(){
     this.api.deleteCluster(this.clusterModel).subscribe(result => {
       this.cluster = result;
+      this.router.navigate(['/clusters']);
     })
   }
 
