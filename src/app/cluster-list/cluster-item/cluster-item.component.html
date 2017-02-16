@@ -1,6 +1,6 @@
 <div class="row card-block">
   <div class="col-4">
-    <a routerLink="/dashboard/dc/{{cluster.spec.cloud.dc}}/cluster/{{cluster.metadata.name}}">
+    <a *ngIf="cluster.dc.metadata.name" routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}">
       <img src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
       {{cluster.spec.humanReadableName}}
     </a>

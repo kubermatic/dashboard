@@ -5,7 +5,10 @@
 </div>
 
 <div class="container card card-margin" *ngIf="cluster">
-  <div class="row card-header">Kubernetes Master</div>
+  <div class="row card-header">
+    Kubernetes Master
+    <button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>
+  </div>
 
   <div class="row card-block">
     <div class="col-2">Status</div>
