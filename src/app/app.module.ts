@@ -8,7 +8,6 @@ import {KubermaticComponent} from "./kubermatic.component";
 import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {WizardComponent} from "./wizard/wizard.component";
-import {RegionComponent} from "./wizard/region/region.component";
 import {ClusterComponent} from "./cluster/cluster.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.component";
@@ -55,7 +54,6 @@ import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
     ClusterListComponent,
     NodeComponent,
     ClusterItemComponent,
-    RegionComponent,
     ProfileComponent,
     NotificationComponent
   ],
