@@ -7,23 +7,12 @@ import {ClusterComponent} from "./cluster/cluster.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ProfileComponent} from "./profile/profile.component";
 
-export const appRootRoutes: Routes = [
+export const appRoutes: Routes = [
   {
     path: "welcome",
     component: FrontpageComponent,
     data: { title: "Welcome" }
   },
-  {
-    path: "dashboard",
-    loadChildren: "./dashboard/dashboard.module#DashboardModule",
-    canActivate: [AuthGuard],
-  },
-  {
-    path: "**",
-    redirectTo: "welcome"
-  },
-];
-export const appChildRoutes: Routes = [
   {
     path: "",
     component: DashboardComponent,
@@ -53,5 +42,9 @@ export const appChildRoutes: Routes = [
         data: { title: "Clusters" }
       },
     ]
-  }
+  },
+  {
+    path: "**",
+    redirectTo: "welcome"
+  },
 ];

@@ -37,15 +37,15 @@ export class DashboardComponent implements OnInit {
     if (this.auth.authenticated()) {
       this.api.getClusters().subscribe(result => {
         if (result) {
-          this.router.navigate(["dashboard/clusters"]);
+          this.router.navigate(["clusters"]);
         } else {
-          this.router.navigate(["dashboard/wizard"]);
+          this.router.navigate(["wizard"]);
         }
       }, error => {
-        this.router.navigate(["dashboard/wizard"]);
+        this.router.navigate(["wizard"]);
       });
     } else {
-      this.router.navigate(["dashboard/welcome"]);
+      this.router.navigate(["welcome"]);
     }
   }
 }

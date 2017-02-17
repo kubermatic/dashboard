@@ -14,9 +14,9 @@ export class FrontpageComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.auth.authenticated()) {
-      this.router.navigate(["dashboard/clusters"]);
+      this.router.navigate(["clusters"]);
     } else {
-      localStorage.setItem("redirect_url", "dashboard/clusters");
+      localStorage.setItem("redirect_url", "clusters");
       this.auth.login();
     }
   }
