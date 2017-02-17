@@ -1,9 +1,8 @@
-import { Injectable } from "@angular/core";
-import {Http, Headers, Response} from "@angular/http";
+import {Injectable} from "@angular/core";
+import {Http, Headers} from "@angular/http";
 import "rxjs/add/operator/map";
 import {Observable} from "rxjs";
-import { environment } from "../../environments/environment";
-
+import {environment} from "../../environments/environment";
 import {CreateNodeModel} from "./model/CreateNodeModel";
 import {ClusterModel} from "./model/ClusterModel";
 import {DataCenterEntity} from "./entitiy/DatacenterEntity";
@@ -37,8 +36,27 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  getClusters(dc: string): Observable<ClusterEntity[]> {
-    const url = `${this.restRoot}/dc/${dc}/cluster`;
+  getClusters(): Observable<ClusterEntity[]> {
+    let dcCache : DataCenterEntity[];
+
+    return this.getDataCenters()
+      .map(dcs => dcs.filter(result => result.seed))
+      .flatMap(dcs => {
+        dcCache = dcs;
+
+        return Observable.forkJoin(dcs.map(dc => this.getClustersByDC(dc.metadata.name)));
+      })
+      .map(clusterLists => clusterLists.map(
+        (clusterList, index) => clusterList.map(
+          cl => Object.assign({}, cl, {dc: dcCache[index]}))
+        )
+      )
+      .map(clusters => [].concat(...clusters));
+  }
+
+
+  private getClustersByDC(seedRegion: string): Observable<ClusterEntity[]> {
+    const url = `${this.restRoot}/dc/${seedRegion}/cluster`;
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
@@ -65,13 +83,6 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  getKubeconfig(clusterModel: ClusterModel, authorization_token: string): Observable<string> {
-    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
-
-    return this._http.get(url, { headers: this.headers })
-      .map(res => res.json());
-  }
-
   deleteCluster(clusterModel: ClusterModel) {
     const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
 
@@ -80,14 +91,16 @@ export class ApiService {
   }
 
   getClusterNodes(clusterModel: ClusterModel): Observable<NodeEntity[]> {
-    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
+
+
+    const url = `/api/v2/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
   }
 
   getClusterNode(clusterModel: ClusterModel, node_name: string): Observable<NodeEntity> {
-    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node/${node_name}`;
+    const url = `/api/v2/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node/${node_name}`;
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());

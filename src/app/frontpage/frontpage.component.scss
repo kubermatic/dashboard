@@ -1,28 +1,34 @@
 @import "../../assets/css/ng2admin/conf/conf";
+@import "../../assets/css/bootstrap/variables";
 
-.intro-text {
-  padding-top: 50px;
-  padding-bottom: 50px;
+.frontpage-container {
+  padding: $top-height 0 0 0;
+}
+
+.frontpage-text {
   text-align: center;
-  color: $primary;
 
+  .intro-heading {
+    @include titillium-font;
+    font-size: 3rem;
+    font-weight: $font-weight-bold;
+    line-height: 40px;
+    margin-bottom: 25px;
+  }
   .intro-lead-in {
-    font-style: italic;
-    font-size: 22px;
+    font-size: $font-size-lg;
     line-height: 22px;
     margin-bottom: 25px;
   }
-  .intro-heading {
-    @include titillium-font;
-    font-size: 40px;
-    line-height: 40px;
-    margin-bottom: 25px;
+  .intro-lead-full {
+    font-size: $font-size-base;
+    line-height: 25px;
   }
 }
 
 @media(min-width:768px) {
   header {
-    .intro-text {
+    .frontpage-text {
       padding-top: 150px;
       padding-bottom: 150px;
       .intro-lead-in {

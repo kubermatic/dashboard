@@ -9,8 +9,8 @@ export class DataCenterEntity {
   seed: boolean;
 
   public static sortByName(a: DataCenterEntity, b: DataCenterEntity): number {
-    let nameA = a.metadata.name.toLowerCase;
-    let nameB = b.metadata.name.toLowerCase;
+    const nameA = a.metadata.name.toLowerCase;
+    const nameB = b.metadata.name.toLowerCase;
 
     if (nameA < nameB) {
       return -1;

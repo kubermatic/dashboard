@@ -1,14 +1,13 @@
 /* tslint:disable:no-unused-variable */
-
-import { TestBed, async } from "@angular/core/testing";
-import { KubermaticComponent } from "./kubermatic.component";
+import {TestBed, async} from "@angular/core/testing";
+import {KubermaticComponent} from "./kubermatic.component";
 import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
-import { AUTH_PROVIDERS } from "./auth/auth.provider";
+import {AUTH_PROVIDERS} from "./auth/auth.provider";
 import {Auth} from "./auth/auth.service";
 import {ApiService} from "./api/api.service";
 import {AuthGuard} from "./auth/auth.guard";

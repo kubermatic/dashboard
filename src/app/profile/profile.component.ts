@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
@@ -13,16 +13,22 @@ import {NotificationComponent} from "../notification/notification.component";
 })
 export class ProfileComponent implements OnInit {
 
+  public currentTab: number = 0;
+  public userProfile: any;
   public sshKeys: Array<SSHKeyEntity> = [];
   public addSSHKeyForm: FormGroup;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) { }
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {
+    this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
+      this.userProfile = profile;
+    });
+  }
 
   ngOnInit() {
     this.refreshSSHKeys();
 
     this.addSSHKeyForm = this.formBuilder.group({
-      name: ["", [<any>Validators.required, Validators.pattern("[\w\d-]+")]],
+      name: ["", [<any>Validators.required, Validators.pattern("[\\w\\d-]+")]],
       key: ["", [<any>Validators.required]],
     });
   }
@@ -31,6 +37,14 @@ export class ProfileComponent implements OnInit {
     this.api.getSSHKeys().subscribe(result => {
       this.sshKeys = result;
     });
+  }
+
+  public selectTabProfileDetail(): void {
+    this.currentTab = 0;
+  }
+
+  public selectTabSSHKeys(): void {
+    this.currentTab = 1;
   }
 
   public deleteSSHKey(name): void {
@@ -80,5 +94,7 @@ export class ProfileComponent implements OnInit {
     if (keyName && keyName.length > 1 && "" === name) {
       this.addSSHKeyForm.patchValue({name: keyName[1]});
     }
+
+    console.log(this.addSSHKeyForm);
   }
 }

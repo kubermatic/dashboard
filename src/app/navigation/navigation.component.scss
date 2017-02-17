@@ -15,7 +15,7 @@
 }
 
 .navigation-bar-content {
-  padding: 0 32px 0 40px;
+  padding: 0 0 0 40px;
 }
 
 .blur {
@@ -136,8 +136,6 @@ a.collapse-menu-link {
   transition: all 0.5s ease;
   white-space: nowrap;
   overflow: hidden;
-  width: 162px;
-  float: left;
 
   label {
     cursor: pointer;
@@ -224,7 +222,7 @@ a.collapse-menu-link {
 
 @media screen and (max-width: $resXS) {
   .navigation-bar-content {
-    padding: 0 20px;
+    padding: 0 0 0 20px;
   }
 }
 

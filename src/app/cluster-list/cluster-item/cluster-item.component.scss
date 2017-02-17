@@ -1,0 +1,16 @@
+.card-block {
+  border-top:1px solid #f7f7f9;
+  div {
+    line-height: 30px;
+  }
+}
+
+.health-state {
+  i {
+    color: red;
+  }
+
+  i.green {
+    color: green;
+  }
+}

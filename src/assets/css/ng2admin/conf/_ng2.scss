@@ -37,14 +37,6 @@ $auth-panel-background: #ffffff;
 $progress-background: rgba(0, 0, 0, 0.15);
 $progress-default: rgba($default-text, 0.95);
 
-// bootstrap card panel styles
-$bootstrap-panel-radius: 7px;
-$bootstrap-panel-text: #ffffff;
-$bootstrap-panel-bg: $white-base; //rgba(47, 64, 80, 0.5);
-$bootstrap-panel-header-bg: transparent;
-$bootstrap-panel-header-border: 1px solid $border-light;
-$bootstrap-panel-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
-
 // color scheme
 $primary: #2f4050 !default;
 $info: #40daf1 !default;

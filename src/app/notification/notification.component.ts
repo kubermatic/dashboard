@@ -1,5 +1,5 @@
-import { Component } from "@angular/core";
-import { NotificationsService } from "angular2-notifications";
+import {Component} from "@angular/core";
+import {NotificationsService} from "angular2-notifications";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {NotificationToast, NotificationToastType} from "../reducers/notification";

@@ -1,0 +1,26 @@
+<div class="row card-block">
+  <div class="col-4">
+    <a *ngIf="cluster.dc.metadata.name" routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}">
+      <img src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
+      {{cluster.spec.humanReadableName}}
+    </a>
+  </div>
+  <div class="col-3">
+    <ng-container [ngSwitch]="!!cluster.spec.cloud">
+      <div *ngSwitchCase="true">
+        <img *ngIf="cluster.spec.cloud.provider" src="/assets/images/clouds/{{cluster.spec.cloud.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+        {{cluster.spec.cloud.dc}}
+      </div>
+      <div *ngSwitchCase="false" class="text-muted">
+        No cloud provider selected
+      </div>
+    </ng-container>
+  </div>
+  <div class="col-2">{{cluster.status.phase}}</div>
+  <div class="col-3 health-state" *ngIf="cluster.status.phase !== 'Pending'">
+    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
+    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
+    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
+    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
+  </div>
+</div>

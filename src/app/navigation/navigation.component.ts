@@ -1,6 +1,5 @@
-import { Component } from "@angular/core";
+import {Component} from "@angular/core";
 import {Auth} from "../auth/auth.service";
-
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 
@@ -12,10 +11,10 @@ import * as fromRoot from "../reducers/index";
 export class NavigationComponent {
 
   public isScrolled: boolean = false;
-  public userProfile: Object;
+  public userProfile: any;
 
-  constructor(private auth: Auth, private _store: Store<fromRoot.State>) {
-    this._store.select(fromRoot.getAuthProfile).subscribe(profile => {
+  constructor(private auth: Auth, private store: Store<fromRoot.State>) {
+    this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
       this.userProfile = profile;
     });
   }

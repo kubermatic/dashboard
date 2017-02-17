@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import {Component, OnInit} from "@angular/core";
 import {Auth} from "../auth/auth.service";
 import {Router} from "@angular/router";
 
@@ -7,16 +7,16 @@ import {Router} from "@angular/router";
   templateUrl: "./frontpage.component.html",
   styleUrls: ["./frontpage.component.scss"]
 })
-export class FrontpageComponent {
+export class FrontpageComponent implements OnInit {
 
   constructor(private auth: Auth, private router: Router) {
   }
 
-  public gotoDashboard() {
+  ngOnInit(): void {
     if (this.auth.authenticated()) {
-      this.router.navigate(["wizard"]);
+      this.router.navigate(["clusters"]);
     } else {
-      localStorage.setItem("redirect_url", "wizard");
+      localStorage.setItem("redirect_url", "clusters");
       this.auth.login();
     }
   }

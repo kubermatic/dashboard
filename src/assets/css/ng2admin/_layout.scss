@@ -1,7 +1,5 @@
 @import 'conf/conf';
 
-$left-space: $sidebar-width;
-
 @include scrollbars(.5em, #d9d9d9, rgba(0, 0, 0, 0));
 
 html {
@@ -55,7 +53,6 @@ a {
 }
 
 .al-main {
-  margin: 0, $left-space;
   padding: 66px 0 34px 0;
   min-height: 500px;
   position: relative;
@@ -155,14 +152,6 @@ a {
   height: 13px;
   display: block;
 }
-
-//.icon-up {
-//  @include bg-nr('arrow-green-up.svg');
-//}
-//
-//.icon-down {
-//  @include bg-nr('arrow-red-down.svg');
-//}
 
 .disable-text-selection {
   -webkit-touch-callout: none;

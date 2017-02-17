@@ -1,51 +1,48 @@
 <div class="navigation-bar clearfix" (scrollChange)="scrolledChanged($event)" [ngClass]="{scrolled: isScrolled}">
   <ng2-slim-loading-bar [color]="'white'" [height]="'2px'"></ng2-slim-loading-bar>
 
-  <div class="navigation-bar-content">
-    <a routerLink="welcome" class="al-logo clearfix">Kubermatic</a>
-
-    <div class="info" *ngIf="auth.authenticated()">
-      <kubermatic-breadcrumbs></kubermatic-breadcrumbs>
+  <div class="row navigation-bar-content">
+    <div class="col-2 col-lg-2 col-xl-1">
+      <a routerLink="/clusters" class="al-logo clearfix">Kubermatic</a>
     </div>
 
-    <div class="row pull-right" *ngIf="auth.authenticated()">
-      <div class="user-profile clearfix">
-        <div class="dropdown al-user-profile" *ngIf="userProfile">
-          <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
-            <img [src]="userProfile.picture" alt="" class="profile-img">
-            <span class="al-user-profile-details">
-            <strong class="font-bold">{{ userProfile.nickname }}</strong>
-            <i class="fa fa-caret-down" aria-hidden="true"></i>
-          </span>
-          </a>
-          <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
-            <li>
-              <div class="al-user-profile-dropdown">
-                <div class="row">
-                  <div class="col-lg-4">
-                    <img [src]="userProfile.picture" alt="" class="profile-img">
-                  </div>
-                  <div class="col-lg-8">
-                    <p class="text-left"><strong>{{ userProfile.name }}</strong></p>
-                    <p class="text-left small">{{ userProfile.email }}</p>
-                    <p class="text-left">
-                      <button type="button" routerLink="profile" class="btn btn-primary btn-block btn-sm">Profile</button>
-                    </p>
+    <div class="col-10 col-xl-11 row justify-content-between" *ngIf="auth.authenticated()">
+      <div class="col info">
+        <kubermatic-breadcrumbs></kubermatic-breadcrumbs>
+      </div>
+
+      <div class="col">
+        <div class="user-profile clearfix">
+          <div class="dropdown al-user-profile" *ngIf="userProfile">
+            <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
+              <img [src]="userProfile.picture" alt="">
+              <span class="al-user-profile-details">
+                <strong class="font-bold">{{ userProfile.nickname }}</strong>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+              </span>
+            </a>
+            <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
+              <li>
+                <div class="al-user-profile-dropdown">
+                  <div class="row">
+                    <div class="col-lg-4">
+                      <img [src]="userProfile.picture" alt="" class="profile-img">
+                    </div>
+                    <div class="col-lg-8">
+                      <p class="text-left"><strong>{{ userProfile.name }}</strong></p>
+                      <p class="text-left small">{{ userProfile.email }}</p>
+                      <p class="text-left">
+                        <button type="button" routerLink="profile" class="btn btn-primary btn-block btn-sm">Profile</button>
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </li>
-            <li class="divider"></li>
-            <li><a href (click)="logout()">Sign Out <span class="fa fa-sign-out pull-right"></span></a></li>
-          </ul>
+              </li>
+              <li class="divider"></li>
+              <li><a href (click)="logout()">Sign Out <span class="fa fa-sign-out pull-right"></span></a></li>
+            </ul>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="row pull-right" *ngIf="!auth.authenticated()">
-      <div class="login-section">
-        <button type="button" class="btn btn-link" (click)="login()">
-          <i class="fa fa-sign-in"></i><span>Log In</span>
-        </button>
       </div>
     </div>
   </div>

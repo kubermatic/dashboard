@@ -1,8 +1,8 @@
 {
   "spec": {
+    "statusCode":200,
     "responseTimeMs": 1000
   },
-  "statusCode":200,
   "responseBody":[
     {
       "name": "MySSHKey1",

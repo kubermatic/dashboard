@@ -5,80 +5,56 @@ import {AWSCloudSpec} from "./cloud/AWSCloudSpec";
 import {KeyCert} from "./KeyCert";
 
 export class ClusterEntity {
-  metadata: MetadataEntity;
-  spec: ClusterSpec;
-  address: ClusterAddress;
-  status: ClusterStatus;
-
-  constructor(metadata: MetadataEntity, spec: ClusterSpec, address: ClusterAddress, status: ClusterStatus) {
-    this.metadata = metadata;
-    this.spec = spec;
-    this.address = address;
-    this.status = status;
-  }
+  constructor(
+    public metadata: MetadataEntity,
+    public spec: ClusterSpec,
+    public address: ClusterAddress,
+    public status: ClusterStatus,
+  ) {}
 }
 
 export class ClusterSpec {
-  cloud: CloudSpec;
-  humanReadableName: string;
-
-  constructor(cloud: CloudSpec, humanReadableName: string) {
-    this.cloud = cloud;
-    this.humanReadableName = humanReadableName;
-  }
+  constructor(
+    public cloud: CloudSpec,
+    public humanReadableName: string
+  ) {}
 }
 
 export class CloudSpec {
-  dc: string;
-  digitalocean: DigitialoceanCloudSpec;
-  bringyourown: BringYourOwnCloudSpec;
-  aws: AWSCloudSpec;
-
-  constructor(dc: string, digitalocean: DigitialoceanCloudSpec, bringyourown: BringYourOwnCloudSpec, aws: AWSCloudSpec) {
-    this.dc = dc;
-    this.digitalocean = digitalocean;
-    this.bringyourown = bringyourown;
-    this.aws = aws;
-  }
+  constructor(
+    public dc: string,
+    public digitalocean: DigitialoceanCloudSpec,
+    public bringyourown: BringYourOwnCloudSpec,
+    public aws: AWSCloudSpec) {}
 }
 
 export class ClusterAddress {
-  url: string;
-  etcdURL: string;
-  token: string;
-  nodePort: number;
-
-  constructor(url: string, etcdURL: string, token: string, nodePort: number) {
-    this.url = url;
-    this.etcdURL = etcdURL;
-    this.token = token;
-    this.nodePort = nodePort;
-  }
+  constructor(
+    public url: string,
+    public etcdURL: string,
+    public token: string,
+    public nodePort: number
+  ) {}
 }
 
 export class ClusterStatus {
-  lastTransitionTime: string;
-  apiserverSSH: string;
-  health: ClusterHealth;
-
-  rootCA: KeyCert;
-  phase: ClusterPhase;
-
-  constructor(lastTransitionTime: string, apiserverSSH: string, health: ClusterHealth, rootCA: KeyCert, phase: ClusterPhase) {
-    this.lastTransitionTime = lastTransitionTime;
-    this.apiserverSSH = apiserverSSH;
-    this.health = health;
-    this.rootCA = rootCA;
-    this.phase = phase;
-  }
+  constructor(
+    public lastTransitionTime: string,
+    public apiserverSSH: string,
+    public health: ClusterHealth,
+    public rootCA: KeyCert,
+    public phase: ClusterPhase
+  ) {}
 }
 
 export class ClusterHealth {
-  lastTransitionTime: string;
-  apiserver: boolean;
-  scheduler: boolean;
-  controller: boolean;
-  etcd: boolean[];
+  constructor(
+    public lastTransitionTime: string,
+    public apiserver: boolean,
+    public scheduler: boolean,
+    public controller: boolean,
+    public etcd: boolean[]
+  ) {}
 }
 
 enum ClusterPhase {

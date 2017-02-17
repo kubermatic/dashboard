@@ -1,0 +1,66 @@
+<div class="container" *ngIf="cluster">
+  <div class="row">
+    <h2 class="component-heading">{{cluster.spec.humanReadableName}}</h2>
+  </div>
+</div>
+
+<div class="container card" *ngIf="cluster">
+  <div class="row card-header">
+    Kubernetes Master
+    <button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>
+  </div>
+
+  <div class="row card-block">
+    <div class="col-2">Status</div>
+    <div class="col-8 health-state">
+      <strong>{{cluster.status.phase}}</strong>
+      - Health:
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
+    </div>
+  </div>
+  <div class="row card-block">
+    <div class="col-2">API Server</div>
+    <div class="col-8">
+     {{cluster.address.url}}
+      <a [attr.href]="downloadKubeconfigUrl()" target="_blank">download kubeconfig</a>
+    </div>
+  </div>
+</div>
+
+<div class="container card">
+  <div class="row card-header">
+    <div class="col-4">Name</div>
+    <div class="col-2">Capacity</div>
+    <div class="col-1">Version</div>
+    <div class="col-2">Public IP</div>
+    <div class="col-2">Status</div>
+    <div class="col-1">
+      <a routerLink="/wizard">
+        <button type="button" class="btn btn-primary">
+          <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>Add Node
+        </button>
+      </a>
+    </div>
+  </div>
+  <ng-container [ngSwitch]="!!nodes && nodes.length > 0">
+    <div *ngSwitchCase="true">
+      <kubermatic-node *ngFor="let n of nodes" [node]="n"></kubermatic-node>
+    </div>
+
+    <div *ngSwitchCase="false" class="row card-block">
+      <div class="col-12 text-center text-muted">
+        No Node available. Please add a Node.
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+
+
+
+
+
+

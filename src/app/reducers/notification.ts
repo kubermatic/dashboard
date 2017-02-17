@@ -1,5 +1,5 @@
-import { Action } from "@ngrx/store";
-import { Actions } from "./actions";
+import {Action} from "@ngrx/store";
+import {Actions} from "./actions";
 
 export enum NotificationToastType {
   success,
