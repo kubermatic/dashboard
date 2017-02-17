@@ -28,6 +28,9 @@ import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
+import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
+import {ModalComponent} from "./modal/modal.component";
+
 
 
 @NgModule({
@@ -55,7 +58,9 @@ import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
     NodeComponent,
     ClusterItemComponent,
     ProfileComponent,
-    NotificationComponent
+    NotificationComponent,
+    ClusterDeleteConfirmationComponent,
+    ModalComponent
   ],
   providers: [
     AUTH_PROVIDERS,

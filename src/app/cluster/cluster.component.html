@@ -7,7 +7,8 @@
 <div class="container card" *ngIf="cluster">
   <div class="row card-header">
     Kubernetes Master
-    <button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>
+    <!--<button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>-->
+    <kubermatic-cluster-delete-confirmation></kubermatic-cluster-delete-confirmation>
   </div>
 
   <div class="row card-block">
@@ -57,6 +58,9 @@
     </div>
   </ng-container>
 </div>
+
+
+
 
 
 
