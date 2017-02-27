@@ -1,12 +1,27 @@
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalComponent">
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#clusterDelete">
 Delete Cluster
 </button>
 
 <!-- Modal -->
+<div class="modal fade" id="clusterDelete" tabindex="-1" role="dialog" aria-labelledby="clusterDelete">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Are you REALLY REALLY sure?</h4>
+      </div>
+      <div class="modal-body">
 
-
-<kubermatic-modal [headline]="'Cluster Löschen'" [submitLabel]="'Löschen'"></kubermatic-modal>
-
-
+        <p>You are on the way to delete the cluster "{{humanReadableName}}". Deletion of clusters cannot be UNDONE!</p>
+        <p>If you know what you are doing, please type the name of the cluster:</p>
+        <input id="name" type="text" title="name" (blur)="onChange($event)" (keyup)="onChange($event)">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteCluster()" [disabled]="!disableDeleteCluster">Löschen</button>
+      </div>
+    </div>
+  </div>
+</div>

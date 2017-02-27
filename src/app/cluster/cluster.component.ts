@@ -34,13 +34,6 @@ export class ClusterComponent implements OnInit {
     });
   }
 
-  deleteCluster(){
-    this.api.deleteCluster(this.clusterModel).subscribe(result => {
-      this.cluster = result;
-      this.router.navigate(['/clusters']);
-    })
-  }
-
   updateNodes(): void {
     this.api.getClusterNodes(this.clusterModel).subscribe(result => {
       this.nodes = result;
