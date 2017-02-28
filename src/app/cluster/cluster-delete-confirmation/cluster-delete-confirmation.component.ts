@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {Router, ActivatedRoute} from "@angular/router";
-import {ApiService} from "../../api/api.service";
-import {ClusterModel} from "../../api/model/ClusterModel";
+import { Router } from "@angular/router";
+import { ApiService } from "../../api/api.service";
+import { ClusterModel } from "../../api/model/ClusterModel";
 
 @Component({
   selector: 'kubermatic-cluster-delete-confirmation',
@@ -9,18 +9,19 @@ import {ClusterModel} from "../../api/model/ClusterModel";
   styleUrls: ['./cluster-delete-confirmation.component.scss']
 })
 export class ClusterDeleteConfirmationComponent implements OnInit {
+
   @Input() humanReadableName: string;
   @Input() clusterName: string;
   @Input() seedDcName: string;
 
-  public disableDeleteCluster: any;
-  public clusterModel: any;
+  public disableDeleteCluster: boolean = false;
+  public clusterModel: ClusterModel;
   public cluster: any;
 
   constructor(private router: Router, private api: ApiService) {}
 
   ngOnInit() {
-    this.disableDeleteCluster = false;
+
   }
 
   onChange(event: any) {
