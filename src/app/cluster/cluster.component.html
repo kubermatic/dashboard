@@ -47,7 +47,7 @@
   </div>
   <ng-container [ngSwitch]="!!nodes && nodes.length > 0">
     <div *ngSwitchCase="true">
-      <kubermatic-node *ngFor="let n of nodes" [node]="n"></kubermatic-node>
+      <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-node>
     </div>
 
     <div *ngSwitchCase="false" class="row card-block">

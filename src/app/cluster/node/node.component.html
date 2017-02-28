@@ -8,5 +8,8 @@
     {{node.status.addresses.public}}
   </div>
   <div class="col-2"></div>
-  <div class="col-1"></div>
+  <div class="col-1">
+    <kubermatic-node-delete-confirmation [nodeName]="node.metadata.name" [nodeUID]="node.metadata.uid" [clusterName]="clusterName" [seedDcName]="seedDcName"></kubermatic-node-delete-confirmation>
+
+  </div>
 </div>

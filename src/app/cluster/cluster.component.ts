@@ -55,9 +55,5 @@ export class ClusterComponent implements OnInit {
   public addNodes(): void {
     // this.api.createClusterNode(clusterModel, /*  node  */);
   }
-
-  public deleteNodes(): void {
-    console.log('delete node');
-  }
 }
 

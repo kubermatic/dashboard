@@ -12,6 +12,7 @@ import {ClusterComponent} from "./cluster/cluster.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.component";
 import {NodeComponent} from "./cluster/node/node.component";
+import {NodeDeleteConfirmationComponent} from "./cluster/node-delete-confirmation/node-delete-confirmation.component"
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {ProfileComponent} from "./profile/profile.component";
@@ -55,7 +56,8 @@ import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
     NodeComponent,
     ClusterItemComponent,
     ProfileComponent,
-    NotificationComponent
+    NotificationComponent,
+    NodeDeleteConfirmationComponent
   ],
   providers: [
     AUTH_PROVIDERS,

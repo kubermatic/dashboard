@@ -8,9 +8,13 @@ import { NodeEntity } from "../../api/entitiy/NodeEntity";
 })
 export class NodeComponent implements OnInit {
   @Input() node: NodeEntity;
+  @Input() clusterName: string;
+  @Input() seedDcName: string;
+
   constructor() { }
 
   ngOnInit() {
+
   }
 
 }

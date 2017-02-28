@@ -1,0 +1,23 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nodeDelete">
+  Delete Node
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="nodeDelete" tabindex="-1" role="dialog" aria-labelledby="nodeDelete">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">Are you REALLY REALLY sure?</h4>
+        </div>
+        <div class="modal-body">
+          <p>You are on the way to delete the node "{{nodeName}}". Deletion of nodes cannot be UNDONE!</p>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteNode()">Löschen</button>
+      </div>
+    </div>
+  </div>
+</div>
