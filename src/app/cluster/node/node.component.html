@@ -2,12 +2,18 @@
   <div class="col-4">
     {{node.metadata.name}}
   </div>
-  <div class="col-2"></div>
-  <div class="col-1"></div>
+  <div class="col-1">
+    {{node.status.cpu}} CPU, {{node.spec['digitalocean'].size | uppercase }}
+  </div>
+  <div class="col-2">
+    <span *ngIf="node.status.versions">{{node.status.versions.os}}</span>
+  </div>
   <div class="col-2">
     {{node.status.addresses.public}}
   </div>
-  <div class="col-2"></div>
+  <div class="col-2 health-state">
+      <i class="fa fa-dot-circle-o" [class.green]="node.status.condition.healthy"></i>
+  </div>
   <div class="col-1">
     <kubermatic-node-delete-confirmation [nodeName]="node.metadata.name" [nodeUID]="node.metadata.uid" [clusterName]="clusterName" [seedDcName]="seedDcName"></kubermatic-node-delete-confirmation>
 

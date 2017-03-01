@@ -30,11 +30,32 @@
   </div>
 </div>
 
+<div class="container card" *ngIf="cluster">
+
+  <div class="row card-header">
+    <div class="col-4">Provider</div>
+    <div class="col-4">Node Region</div>
+    <div class="col-4">shhKeys</div>
+  </div>
+  <div class="row card-block">
+    <div class="col-4">
+      <!--<img src="/assets/images/clouds/{{cluster.spec.cloud.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />-->
+    </div>
+    <div class="col-4">
+
+    </div>
+    <div class="col-4">
+      {{cluster.spec.cloud['digitalocean'].sshKeys.length}} sshKey(s)
+    </div>
+  </div>
+
+</div>
+
 <div class="container card">
   <div class="row card-header">
     <div class="col-4">Name</div>
-    <div class="col-2">Capacity</div>
-    <div class="col-1">Version</div>
+    <div class="col-1">Capacity</div>
+    <div class="col-2">Version</div>
     <div class="col-2">Public IP</div>
     <div class="col-2">Status</div>
     <div class="col-1">
