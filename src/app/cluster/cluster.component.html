@@ -42,7 +42,7 @@
       <!--<img src="/assets/images/clouds/{{cluster.spec.cloud.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />-->
     </div>
     <div class="col-4">
-
+      {{cluster.spec.cloud.dc}}
     </div>
     <div class="col-4">
       {{cluster.spec.cloud['digitalocean'].sshKeys.length}} sshKey(s)
