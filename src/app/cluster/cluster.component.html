@@ -51,6 +51,8 @@
 
 </div>
 
+
+<p *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
 <div class="container card">
   <div class="row card-header">
     <div class="col-4">Name</div>
@@ -68,6 +70,7 @@
   </div>
   <ng-container [ngSwitch]="!!nodes && nodes.length > 0">
     <div *ngSwitchCase="true">
+
       <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-node>
     </div>
 
