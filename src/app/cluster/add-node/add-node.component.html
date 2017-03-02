@@ -1,0 +1,20 @@
+<div class="container card">
+  <div class="row card-header">
+    <div class="col-12">
+      Add Node
+    </div>
+  </div>
+
+  <div class="row card-block">
+    <form [formGroup]="addNodeForm" >
+      <input id="node_count" formControlName="node_count" type="number" min="1" max="20" class="form-control">
+
+      <select id="node_size" formControlName="node_size" class="form-control">
+              <option value="" disabled="true" [selected]="!node_size">Please select a node size!</option>
+        <option *ngFor="let size of nodeSizes; let i = index;" [value]="size"> {{size}}</option>
+      </select>
+
+      <button type="submit" value="submit" (click)="addNode()">Add Node(s)</button>
+    </form>
+  </div>
+</div>
