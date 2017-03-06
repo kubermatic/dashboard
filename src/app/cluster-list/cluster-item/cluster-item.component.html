@@ -8,7 +8,7 @@
   <div class="col-3">
     <ng-container [ngSwitch]="!!cluster.spec.cloud">
       <div *ngSwitchCase="true">
-        <!--<img *ngIf="nodeProvider" src="/assets/images/clouds/{{nodeProvider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />-->
+        <img *ngIf="cluster.dc.spec.provider" src="/assets/images/clouds/{{cluster.dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
         {{cluster.spec.cloud.dc}}
       </div>
       <div *ngSwitchCase="false" class="text-muted">

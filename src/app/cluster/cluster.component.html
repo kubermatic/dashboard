@@ -30,8 +30,7 @@
   </div>
 </div>
 
-<div class="container card" *ngIf="cluster">
-
+<div class="container card" *ngIf="cluster && cluster.dc">
   <div class="row card-header">
     <div class="col-4">Provider</div>
     <div class="col-4">Node Region</div>
@@ -39,21 +38,29 @@
   </div>
   <div class="row card-block">
     <div class="col-4">
-      <!--<img src="/assets/images/clouds/{{cluster.spec.cloud.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />-->
+      <img src="/assets/images/clouds/{{cluster.dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
     </div>
     <div class="col-4">
       {{cluster.spec.cloud.dc}}
     </div>
     <div class="col-4">
-      {{cluster.spec.cloud['digitalocean'].sshKeys.length}} sshKey(s)
+      <ng-container [ngSwitch]="cluster.dc.spec.provider">
+        <div *ngSwitchCase="'aws'">
+          {{cluster.spec.cloud['aws'].ssh_key_name}}
+        </div>
+        <div *ngSwitchCase="'digitalocean'">
+          {{cluster.spec.cloud['digitalocean'].sshKeys.length}} sshKey(s)
+        </div>
+
+      </ng-container>
     </div>
   </div>
 </div>
 
-<kubermatic-add-node *ngIf="cluster" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeDcName]="cluster.spec.cloud.dc"></kubermatic-add-node>
+<kubermatic-add-node *ngIf="cluster && cluster.dc" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeDcName]="cluster.spec.cloud.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-add-node>
 
 <p *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
-<div class="container card">
+<div class="container card" *ngIf="cluster && cluster.dc">
   <div class="row card-header">
     <div class="col-4">Name</div>
     <div class="col-1">Capacity</div>
@@ -63,10 +70,10 @@
     <div class="col-1">
     </div>
   </div>
-  <ng-container [ngSwitch]="!!nodes && nodes.length > 0">
+  <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
     <div *ngSwitchCase="true">
 
-      <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-node>
+      <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
     </div>
 
     <div *ngSwitchCase="false" class="row card-block">

@@ -17,12 +17,12 @@ export class AddNodeComponent implements OnInit {
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() nodeDcName: string;
+  @Input() nodeProvider: string;
 
   public addNodeForm: FormGroup;
 
   public clusterModel: ClusterModel;
   public createNodeModel: CreateNodeModel;
-  public nodeProvider: string = 'digitalocean';
   public node: any;
   public nodeSpec: any = {spec: {}}
   public nodeInstances: number = 1;

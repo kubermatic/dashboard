@@ -28,9 +28,13 @@ export class ClusterComponent implements OnInit {
     });
   }
 
+
   updateCluster(): void {
     this.api.getCluster(this.clusterModel).subscribe(result => {
       this.cluster = result;
+      this.api.getDataCenter(result.spec.cloud.dc).subscribe(dcResult => {
+        this.cluster.dc  = dcResult;
+      })
     });
   }
 
@@ -50,10 +54,6 @@ export class ClusterComponent implements OnInit {
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem("id_token");
     return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
-  }
-
-  public addNodes(): void {
-    // this.api.createClusterNode(clusterModel, /*  node  */);
   }
 }
 
