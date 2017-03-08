@@ -57,7 +57,7 @@
   </div>
 </div>
 
-<kubermatic-add-node *ngIf="cluster && cluster.dc" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeDcName]="cluster.spec.cloud.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-add-node>
+<kubermatic-add-node *ngIf="cluster && cluster.dc" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [cluster]="cluster"></kubermatic-add-node>
 
 <p *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
 <div class="container card" *ngIf="cluster && cluster.dc">

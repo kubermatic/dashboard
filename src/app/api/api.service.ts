@@ -17,6 +17,7 @@ export class ApiService {
 
   private restRoot: string = environment.restRoot;
   private headers: Headers = new Headers();
+  private digitaloceanHeader: Headers = new Headers();
 
   constructor(private _http: Http, private _auth: Auth) {
     this.headers.append("Authorization", "Bearer " + Auth.getBearerToken());
@@ -145,6 +146,23 @@ export class ApiService {
     const url = `${this.restRoot}/ssh-keys`;
 
     return this._http.post(url, sshKey, { headers: this.headers })
+      .map(res => res.json());
+  }
+
+
+  getDigitaloceanSizes(token: string)  {
+    const url = 'https://api.digitalocean.com/v2/sizes';
+    this.digitaloceanHeader.append("Authorization", "Bearer " + token);
+
+    return this._http.get(url, { headers: this.digitaloceanHeader })
+      .map(res => res.json());
+  }
+
+  getDigitaloceanSshKeys(token: string){
+    const url = 'https://api.digitalocean.com/v2/account/keys';
+    this.digitaloceanHeader.append("Authorization", "Bearer " + token);
+
+    return this._http.get(url, { headers: this.digitaloceanHeader })
       .map(res => res.json());
   }
 }

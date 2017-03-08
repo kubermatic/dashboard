@@ -13,32 +13,36 @@ import { NodeInstanceFlavors } from "../../api/model/NodeProviderConstants"
 })
 
 export class AddNodeComponent implements OnInit {
-
+  @Input() cluster: any;
   @Input() clusterName: string;
   @Input() seedDcName: string;
-  @Input() nodeDcName: string;
   @Input() nodeProvider: string;
 
   public addNodeForm: FormGroup;
-
   public clusterModel: ClusterModel;
   public createNodeModel: CreateNodeModel;
+  public nodeDcName: string;
   public node: any;
   public nodeSpec: any = {spec: {}}
   public nodeInstances: number = 1;
-  public nodeSizes: string[];
+  public nodeSizes: any;
+  public sshKeys: any;
+
 
   constructor(private api: ApiService, private formBuilder: FormBuilder) { }
 
   ngOnInit() {
+
+    this.nodeDcName = this.cluster.spec.cloud.dc;
+    this.nodeProvider = this.cluster.dc.spec.provider;
+    this.nodeSpec.spec.dc = this.cluster.spec.cloud.dc;
+
     this.getProviderNodeSpecification(this.nodeProvider);
 
     this.addNodeForm = this.formBuilder.group({
       node_count: [1, [<any>Validators.required, CustomValidators.min(1), CustomValidators.max(20)]],
       node_size: ['', [<any>Validators.required]]
     })
-
-    this.nodeSpec.spec.dc = this.nodeDcName;
   }
 
   public getProviderNodeSpecification(provider) {
@@ -49,8 +53,15 @@ export class AddNodeComponent implements OnInit {
       }
 
       case 'digitalocean' : {
-        //this.nodeSizes = NodeInstanceFlavors.digitalocean;
-        return this.nodeSizes;
+
+        this.api.getDigitaloceanSizes(this.cluster.spec.cloud.digitalocean.token).subscribe(result => {
+            this.nodeSizes = result.sizes;
+            console.log(result.sizes);
+            return this.nodeSizes;
+          }
+        )
+
+
       }
 
       default : {
@@ -71,7 +82,8 @@ export class AddNodeComponent implements OnInit {
 
       case 'digitalocean' : {
         this.nodeSpec.spec.digitalocean = {
-          type: this.addNodeForm.controls["node_size"].value
+          sshKeys: this.cluster.spec.cloud.digitalocean.sshKeys,
+          size: this.addNodeForm.controls["node_size"].value
         };
         return;
       }
@@ -86,6 +98,8 @@ export class AddNodeComponent implements OnInit {
     this.setProviderNodeSpecification(this.nodeProvider);
     this.clusterModel = new ClusterModel(this.seedDcName, this.clusterName);
     this.createNodeModel = new CreateNodeModel(this.nodeInstances,this.nodeSpec.spec);
+    console.log(this.clusterModel, this.createNodeModel);
+    debugger;
 
     this.api.createClusterNode(this.clusterModel, this.createNodeModel).subscribe(result => {
       this.node = result;
