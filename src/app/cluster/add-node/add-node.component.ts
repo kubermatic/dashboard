@@ -56,7 +56,6 @@ export class AddNodeComponent implements OnInit {
 
         this.api.getDigitaloceanSizes(this.cluster.spec.cloud.digitalocean.token).subscribe(result => {
             this.nodeSizes = result.sizes;
-            console.log(result.sizes);
             return this.nodeSizes;
           }
         )
@@ -98,8 +97,6 @@ export class AddNodeComponent implements OnInit {
     this.setProviderNodeSpecification(this.nodeProvider);
     this.clusterModel = new ClusterModel(this.seedDcName, this.clusterName);
     this.createNodeModel = new CreateNodeModel(this.nodeInstances,this.nodeSpec.spec);
-    console.log(this.clusterModel, this.createNodeModel);
-    debugger;
 
     this.api.createClusterNode(this.clusterModel, this.createNodeModel).subscribe(result => {
       this.node = result;

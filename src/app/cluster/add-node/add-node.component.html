@@ -7,26 +7,24 @@
 
   <div class="row card-block">
     <form [formGroup]="addNodeForm" >
-      <input id="node_count" formControlName="node_count" type="number" min="1" max="20" class="form-control">
-
-      <select id="node_size" formControlName="node_size" class="form-control">
-        <option value="" disabled="true" [selected]="!addNodeForm.controls['node_size'].value">Please select a node size!</option>
-
-        <ng-container [ngSwitch]="cluster.dc.spec.provider">
-
-          <ng-container *ngSwitchCase="'aws'">
-            <option  *ngFor="let size of nodeSizes; let i = index;" [value]="size"> {{size}}</option>
+      <div class="form-group">
+        <input id="node_count" formControlName="node_count" type="number" min="1" max="20" class="form-control">
+      </div>
+      <div class="form-group" >
+        <select id="node_size" formControlName="node_size" class="form-control">
+          <option value="" disabled="true" [selected]="!addNodeForm.controls['node_size'].value">Please select a node size!</option>
+          <ng-container [ngSwitch]="cluster.dc.spec.provider">
+            <ng-container *ngSwitchCase="'aws'">
+              <option  *ngFor="let size of nodeSizes; let i = index;" [value]="size"> {{size}}</option>
+            </ng-container>
+            <ng-container *ngSwitchCase="'digitalocean'">
+              <option *ngFor="let size of nodeSizes; let i = index;" [value]="size.slug">
+                {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+              </option>
+            </ng-container>
           </ng-container>
-
-          <ng-container *ngSwitchCase="'digitalocean'">
-            <option *ngFor="let size of nodeSizes; let i = index;" [value]="size.slug">
-              {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
-            </option>
-          </ng-container>
-
-        </ng-container>
-      </select>
-
+        </select>
+      </div>
       <button type="submit" value="submit" (click)="addNode()" class="btn btn-primary" [disabled]="!addNodeForm.controls['node_size'].value">Add Node(s)</button>
     </form>
   </div>
