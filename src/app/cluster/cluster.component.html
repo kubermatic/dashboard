@@ -6,8 +6,12 @@
 
 <div class="container card" *ngIf="cluster">
   <div class="row card-header">
-    Kubernetes Master
-    <kubermatic-cluster-delete-confirmation [humanReadableName]="cluster.spec.humanReadableName" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-cluster-delete-confirmation>
+    <div class="col-8">
+      Kubernetes Master
+    </div>
+    <div class="col-4">
+      <kubermatic-cluster-delete-confirmation [humanReadableName]="cluster.spec.humanReadableName" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-cluster-delete-confirmation>
+    </div>
   </div>
 
   <div class="row card-block">
