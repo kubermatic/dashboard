@@ -5,33 +5,18 @@
   },
   "responseBody": [{
     "metadata": {
-      "name": "asia-east1",
+      "name": "aws-ap-northeast-1a",
       "revision": "1"
     },
     "spec": {
-      "country": "TW",
-      "location": "Asia-East (Taiwan)",
-      "provider": "bringyourown",
-      "bringyourown": {
-
+      "country": "JP",
+      "location": "Asia Pacific (Tokyo)",
+      "provider": "aws",
+      "aws": {
+        "region": "ap-northeast-1"
       }
-    },
-    "seed": true
+    }
   },
-    {
-      "metadata": {
-        "name": "aws-ap-northeast-1a",
-        "revision": "1"
-      },
-      "spec": {
-        "country": "JP",
-        "location": "Asia Pacific (Tokyo)",
-        "provider": "aws",
-        "aws": {
-          "region": "ap-northeast-1"
-        }
-      }
-    },
     {
       "metadata": {
         "name": "aws-ap-northeast-2a",
@@ -325,21 +310,6 @@
           "region": "tor1"
         }
       }
-    },
-    {
-      "metadata": {
-        "name": "europe-west1",
-        "revision": "1"
-      },
-      "spec": {
-        "country": "BE",
-        "location": "Europe-West (Belgium)",
-        "provider": "bringyourown",
-        "bringyourown": {
-
-        }
-      },
-      "seed": true
     },
     {
       "metadata": {

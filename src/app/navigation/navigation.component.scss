@@ -121,14 +121,6 @@ a.collapse-menu-link {
   }
 }
 
-.icon-palette {
-  display: inline-block;
-  width: 14px;
-  height: 13px;
-  @include bg('theme/palette.png');
-  background-size: cover;
-}
-
 .info {
   text-shadow: none;
   font-size: 13px;
