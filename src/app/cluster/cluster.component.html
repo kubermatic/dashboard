@@ -1,91 +1,102 @@
-<div class="container" *ngIf="cluster">
-  <div class="row">
-    <h2 class="component-heading">{{cluster.spec.humanReadableName}}</h2>
-  </div>
-</div>
 
-<div class="container card" *ngIf="cluster">
-  <div class="row card-header">
-    <div class="col">Kubernetes Master</div>
-    <button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>
-  </div>
-
-  <div class="row card-block">
-    <div class="col-2">Status</div>
-    <div class="col-8 health-state">
-      <strong>{{cluster.status.phase}}</strong>
-      - Health:
-      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
-      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
-      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
-      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
+<ng-container *ngIf="cluster">
+  <div class="container">
+    <div class="row">
+      <h2 class="component-heading">{{cluster.spec.humanReadableName}}</h2>
     </div>
   </div>
-  <div class="row card-block">
-    <div class="col-2">API Server</div>
-    <div class="col-8">
-     {{cluster.address.url}}
-      <a [attr.href]="downloadKubeconfigUrl()" target="_blank">download kubeconfig</a>
-    </div>
-  </div>
-</div>
 
-<div class="container card" *ngIf="cluster && cluster.dc">
-  <div class="row card-header">
-    <div class="col-4">Provider</div>
-    <div class="col-4">Node Region</div>
-    <div class="col-4">SSH Keys</div>
-  </div>
-  <div class="row card-block">
-    <div class="col-4">
-      <img src="/assets/images/clouds/{{cluster.dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
-    </div>
-    <div class="col-4">
-      {{cluster.spec.cloud.dc}}
-    </div>
-    <div class="col-4">
-      <ng-container [ngSwitch]="cluster.dc.spec.provider">
-        <div *ngSwitchCase="'aws'">
-          {{cluster.spec.cloud['aws'].ssh_key_name}}
-        </div>
-        <div *ngSwitchCase="'digitalocean'">
-          {{cluster.spec.cloud['digitalocean'].sshKeys.length}} sshKey(s)
-        </div>
-      </ng-container>
-    </div>
-  </div>
-</div>
-
-<kubermatic-add-node *ngIf="cluster && cluster.dc" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [cluster]="cluster"></kubermatic-add-node>
-
-<p *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
-<div class="container card" *ngIf="cluster && cluster.dc">
-  <div class="row card-header">
-    <div class="col-3">Name</div>
-    <div class="col-1">Capacity</div>
-    <div class="col-3">Version</div>
-    <div class="col-2">Public IP</div>
-    <div class="col-1">Status</div>
-    <div class="col-2">
-    </div>
-  </div>
-  <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
-    <div *ngSwitchCase="true">
-
-      <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
+  <div class="container card">
+    <div class="row card-header">
+      Kubernetes Master
+      <button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>
     </div>
 
-    <div *ngSwitchCase="false" class="row card-block">
-      <div class="col-12 text-center text-muted">
-        No Node available. Please add a Node.
+    <div class="row card-block">
+      <div class="col-2">Status</div>
+      <div class="col-8 health-state">
+        <strong>{{cluster.status.phase}}</strong>
+        - Health:
+        <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
+        <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
+        <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
+        <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
       </div>
     </div>
-  </ng-container>
-</div>
+    <div class="row card-block">
+      <div class="col-2">API Server</div>
+      <div class="col-8">
+       {{cluster.address.url}}
+        <a [attr.href]="downloadKubeconfigUrl()" target="_blank">download kubeconfig</a>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="cluster && cluster.dc" >
+  <div class="container card">
+    <div class="row card-header">
+      <div class="col-4">Provider</div>
+      <div class="col-4">Node Region</div>
+      <div class="col-4">shhKeys</div>
+    </div>
+    <div class="row card-block">
+      <div class="col-4">
+        <img src="/assets/images/clouds/{{cluster.dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+      </div>
+      <div class="col-4">
+        {{cluster.spec.cloud.dc}}
+      </div>
+      <div class="col-4">
+        <ng-container [ngSwitch]="cluster.dc.spec.provider">
+          <div *ngSwitchCase="'aws'">
+            {{cluster.spec.cloud[cluster.dc.spec.provider].ssh_key_name}}
+          </div>
+          <div *ngSwitchCase="'digitalocean'">
+            {{cluster.spec.cloud[cluster.dc.spec.provider].sshKeys.length}} sshKey(s)
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <kubermatic-add-node [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [cluster]="cluster"></kubermatic-add-node>
+
+  <p *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
+
+  <div class="container card">
+    <div class="row card-header">
+      <div class="col-3">Name</div>
+      <div class="col-1">Capacity</div>
+      <div class="col-3">Version</div>
+      <div class="col-2">Public IP</div>
+      <div class="col-1">Status</div>
+      <div class="col-2">
+      </div>
+    </div>
+    <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
+      <div *ngSwitchCase="true">
+
+        <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
+      </div>
+
+      <div *ngSwitchCase="false" class="row card-block">
+        <div class="col-12 text-center text-muted">
+          No Node available. Please add a Node.
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>
 
 
+<ng-container *ngIf="cluster && !cluster.dc">
+  <div class="container card">
+    <div class="row card-block">
+      <div class="col-12 text-center text-muted">
+        No Provider available. Please add a Provider.
+      </div>
+    </div>
+  </div>
 
-
-
-
-
+</ng-container>
