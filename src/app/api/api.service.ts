@@ -55,7 +55,6 @@ export class ApiService {
       .map(clusters => [].concat(...clusters));
   }
 
-
   private getClustersByDC(seedRegion: string): Observable<ClusterEntity[]> {
     const url = `${this.restRoot}/dc/${seedRegion}/cluster`;
 
@@ -68,6 +67,25 @@ export class ApiService {
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
+  }
+
+  getClusterWithDatacenter(clusterModel: ClusterModel): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
+    let clCache;
+
+    return this._http.get(url, {headers: this.headers})
+      .map(res => clCache = res.json())
+      .flatMap((clCache) => {
+
+        if(!!clCache.spec.cloud) {
+          return this._http.get(`${this.restRoot}/dc/${clCache.spec.cloud.dc}`, {headers: this.headers})
+            .map((dcRes) => {
+              return Object.assign({}, clCache, {dc: dcRes.json()})
+            });
+        }
+
+        return Observable.of(clCache);
+      });
   }
 
   createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
@@ -92,8 +110,6 @@ export class ApiService {
   }
 
   getClusterNodes(clusterModel: ClusterModel): Observable<NodeEntity[]> {
-
-
     const url = `/api/v2/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
 
     return this._http.get(url, { headers: this.headers })
@@ -149,8 +165,7 @@ export class ApiService {
       .map(res => res.json());
   }
 
-
-  getDigitaloceanSizes(token: string)  {
+  getDigitaloceanSizes(token: string) {
     const url = 'https://api.digitalocean.com/v2/sizes';
     this.digitaloceanHeader.append("Authorization", "Bearer " + token);
 
@@ -158,7 +173,7 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  getDigitaloceanSshKeys(token: string){
+  getDigitaloceanSshKeys(token: string) {
     const url = 'https://api.digitalocean.com/v2/account/keys';
     this.digitaloceanHeader.append("Authorization", "Bearer " + token);
 
