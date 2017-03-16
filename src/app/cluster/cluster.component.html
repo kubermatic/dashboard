@@ -6,7 +6,7 @@
 
 <div class="container card" *ngIf="cluster">
   <div class="row card-header">
-    Kubernetes Master
+    <div class="col">Kubernetes Master</div>
     <button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>
   </div>
 
@@ -34,7 +34,7 @@
   <div class="row card-header">
     <div class="col-4">Provider</div>
     <div class="col-4">Node Region</div>
-    <div class="col-4">shhKeys</div>
+    <div class="col-4">SSH Keys</div>
   </div>
   <div class="row card-block">
     <div class="col-4">
@@ -51,7 +51,6 @@
         <div *ngSwitchCase="'digitalocean'">
           {{cluster.spec.cloud['digitalocean'].sshKeys.length}} sshKey(s)
         </div>
-
       </ng-container>
     </div>
   </div>

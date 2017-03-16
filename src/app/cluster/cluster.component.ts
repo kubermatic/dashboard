@@ -5,6 +5,7 @@ import {ClusterModel} from "../api/model/ClusterModel";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
+import {ClusterEntity} from "../api/entitiy/ClusterEntity";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -16,7 +17,7 @@ export class ClusterComponent implements OnInit {
   private restRoot: string = environment.restRoot;
   public clusterModel: ClusterModel;
   public nodes: any;
-  public cluster: any;
+  public cluster: ClusterEntity;
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>) {}
 
@@ -41,8 +42,8 @@ export class ClusterComponent implements OnInit {
   deleteCluster() {
     this.api.deleteCluster(this.clusterModel).subscribe(result => {
       this.cluster = result;
-      this.router.navigate(['/clusters']);
-    })
+      this.router.navigate(["/clusters"]);
+    });
   }
 
   updateNodes(): void {

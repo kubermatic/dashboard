@@ -37,7 +37,7 @@ export class ApiService {
   }
 
   getClusters(): Observable<ClusterEntity[]> {
-    let dcCache : DataCenterEntity[];
+    let dcCache: DataCenterEntity[];
 
     return this.getDataCenters()
       .map(dcs => dcs.filter(result => result.seed))
