@@ -49,16 +49,18 @@ export class ProfileComponent implements OnInit {
 
   public deleteSSHKey(name): void {
     let index = -1;
+    let fingerprint = "";
 
     this.sshKeys.forEach((key, i) => {
       if (key.name === name) {
         index = i;
+        fingerprint = key.fingerprint.replace(":", "");
       }
     });
 
     if (index > -1) {
-      this.api.deleteSSHKey(name)
-        .subscribe(result => {
+      this.api.deleteSSHKey(fingerprint)
+        .subscribe( () => {
             this.sshKeys.splice(index, 1);
             NotificationComponent.success(this.store, "Success", `SSH key ${name} deleted.`);
           },
