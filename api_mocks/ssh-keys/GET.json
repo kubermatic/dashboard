@@ -1,6 +1,6 @@
 {
   "spec": {
-    "statusCode":200,
+    "statusCode":201,
     "responseTimeMs": 1000
   },
   "responseBody":[
