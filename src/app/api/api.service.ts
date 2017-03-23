@@ -19,6 +19,7 @@ export class ApiService {
   private headers: Headers = new Headers();
 
   constructor(private _http: Http, private _auth: Auth) {
+    // TODO: Not until id_token is ready!
     this.headers.append("Authorization", "Bearer " + Auth.getBearerToken());
   }
 
@@ -150,8 +151,8 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  deleteSSHKey(keyName: string) {
-    const url = `${this.restRoot}/ssh-keys/${keyName}`;
+  deleteSSHKey(fingerprint: string) {
+    const url = `${this.restRoot}/ssh-keys/${fingerprint}`;
 
     return this._http.delete(url, { headers: this.headers })
       .map(res => res.json());
