@@ -86,16 +86,6 @@
     magic-string "^0.16.0"
     source-map "^0.5.6"
 
-"@types/auth0-js@*", "@types/auth0-js@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@types/auth0-js/-/auth0-js-0.0.7.tgz#bc5d251913d0f951318d337d30f0ad5cadea4cf1"
-
-"@types/auth0-lock@^10.9.0":
-  version "10.9.0"
-  resolved "https://registry.yarnpkg.com/@types/auth0-lock/-/auth0-lock-10.9.0.tgz#2b0c5ff65836d8a4abd03ebd66e7c16d29b7980f"
-  dependencies:
-    "@types/auth0-js" "*"
-
 "@types/jasmine@2.5.38", "@types/jasmine@^2.5.36":
   version "2.5.38"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-2.5.38.tgz#a4379124c4921d4e21de54ec74669c9e9b356717"
@@ -269,6 +259,10 @@ angular-cli@1.0.0-beta.26:
 angular2-jwt@0.1.28:
   version "0.1.28"
   resolved "https://registry.yarnpkg.com/angular2-jwt/-/angular2-jwt-0.1.28.tgz#4896dbb88ec561382cf485ff9eaa6f96a683f4d1"
+
+angular2-notifications@0.4.49:
+  version "0.4.49"
+  resolved "https://registry.yarnpkg.com/angular2-notifications/-/angular2-notifications-0.4.49.tgz#10d9914738d95730b379698277feec49df48358d"
 
 animate.css@^3.5.2:
   version "3.5.2"
@@ -3487,9 +3481,17 @@ negotiator@0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/negotiator/-/negotiator-0.6.1.tgz#2b327184e8992101177b28563fb5e7102acd0ca9"
 
-ng2-validation@^3.1.2:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/ng2-validation/-/ng2-validation-3.1.3.tgz#bac6f8e4bda331bb3ee950e14b758fd271adc9b6"
+ng-select@^1.0.0-beta.4:
+  version "1.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/ng-select/-/ng-select-1.0.0-beta.4.tgz#01c2c9afea1169c37d348e17b2fe5bf29c80f1e7"
+
+ng2-slim-loading-bar@^2.3.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/ng2-slim-loading-bar/-/ng2-slim-loading-bar-2.4.0.tgz#c3a301a9180e74058cb3e9fb27a8e7a7b61062d4"
+
+ng2-validation@3.1.2:
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/ng2-validation/-/ng2-validation-3.1.2.tgz#b4b97826d351e61d4b0d85a16c1a224f5871aa24"
 
 ngrx-store-freeze@^0.1.6:
   version "0.1.6"
@@ -5903,6 +5905,10 @@ yeast@0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/yeast/-/yeast-0.1.2.tgz#008e06d8094320c372dbc2f8ed76a0ca6c8ac419"
 
-zone.js@0.7.6, zone.js@^0.7.2:
+zone.js@0.7.4:
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.7.4.tgz#0e624fe5b724450ee433495deff15c02b3908ee0"
+
+zone.js@^0.7.2:
   version "0.7.6"
   resolved "https://registry.yarnpkg.com/zone.js/-/zone.js-0.7.6.tgz#fbbc39d3e0261d0986f1ba06306eb3aeb0d22009"

@@ -32,18 +32,18 @@
     "@ngrx/store": "^2.2.1",
     "@ngrx/store-devtools": "^3.2.2",
     "angular2-jwt": "0.1.28",
+    "angular2-notifications": "0.4.49",
     "animate.css": "^3.5.2",
     "auth0-lock": "10.10.2",
     "core-js": "^2.4.1",
     "jquery": "^3.1.1",
     "karma-spec-reporter": "^0.0.26",
+    "ng-select": "^1.0.0-beta.4",
     "ng2-validation": "3.1.2",
-    "angular2-notifications": "0.4.49",
     "reselect": "^2.5.4",
     "rxjs": "^5.0.1",
     "ts-helpers": "^1.1.1",
     "zone.js": "0.7.4"
-
   },
   "devDependencies": {
     "@angular/compiler-cli": "2.4.3",
