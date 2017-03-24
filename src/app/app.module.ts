@@ -31,6 +31,7 @@ import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
+import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.component';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
     ProfileComponent,
     NotificationComponent,
     NodeDeleteConfirmationComponent,
-    AddSshKeyComponent
+    AddSshKeyComponent,
+    ListSshKeyComponent
   ],
   providers: [
     AUTH_PROVIDERS,

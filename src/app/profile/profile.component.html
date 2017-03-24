@@ -55,41 +55,7 @@
       </div>
 
       <div class="container">
-        <ng-container [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-          <div *ngSwitchCase="false">
-            You have not added any SSH keys yet.
-          </div>
-          <ng-container *ngSwitchCase="true">
-            <div class="card card-margin" *ngFor="let key of sshKeys; let i = index;">
-              <div class="card-header ssh-key-header">
-                <div class="row">
-                  <div class="col">
-                    <i class="fa fa-key" aria-hidden="true"></i><span class="ssh-key-name">{{ key.name }}</span>
-                  </div>
-                  <div class="col-1 dropdown">
-                    <div class="ssh-key-action" data-toggle="dropdown">
-                      <div class="row justify-content-center"> <i class="fa fa-trash-o" aria-hidden="true"></i></div>
-                    </div>
-
-                    <div class="dropdown-menu">
-                      <h6 class="dropdown-header">Delete key?</h6>
-                      <span class="dropdown-item ssh-key-action" (click)="deleteSSHKey(key.name)">Delete</span>
-                      <span class="dropdown-item ssh-key-action">Cancel</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="card-block">
-                <blockquote class="card-blockquote ssh-key-publickey">
-                  {{ key.public_key }}
-                </blockquote>
-              </div>
-              <div class="card-footer text-muted">
-                <small>Fingerprint: {{ key.fingerprint }}</small>
-              </div>
-            </div>
-          </ng-container>
-        </ng-container>
+        <kubermatic-list-ssh-key></kubermatic-list-ssh-key>
       </div>
 
 
