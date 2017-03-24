@@ -9,6 +9,7 @@ import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
+import {AddSshKeyComponent} from "./profile/add-ssh-key/add-ssh-key.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.component";
 import {NodeComponent} from "./cluster/node/node.component";
@@ -59,7 +60,8 @@ import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
     AddNodeComponent,
     ProfileComponent,
     NotificationComponent,
-    NodeDeleteConfirmationComponent
+    NodeDeleteConfirmationComponent,
+    AddSshKeyComponent
   ],
   providers: [
     AUTH_PROVIDERS,

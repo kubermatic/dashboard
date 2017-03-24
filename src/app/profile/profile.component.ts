@@ -25,12 +25,6 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.refreshSSHKeys();
-
-    this.addSSHKeyForm = this.formBuilder.group({
-      name: ["", [<any>Validators.required, Validators.pattern("[\\w\\d-]+")]],
-      key: ["", [<any>Validators.required]],
-    });
   }
 
   private refreshSSHKeys() {
@@ -70,33 +64,5 @@ export class ProfileComponent implements OnInit {
     } else {
       NotificationComponent.error(this.store, "Error", `Error deleting SSH key ${name}. Please try again.`);
     }
-  }
-
-  public addSSHKey(): void {
-    const name = this.addSSHKeyForm.controls["name"].value;
-    const key = this.addSSHKeyForm.controls["key"].value;
-
-    this.api.addSSHKey(new SSHKeyEntity(name, null, key))
-      .subscribe(result => {
-          NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
-
-          this.addSSHKeyForm.reset();
-          this.sshKeys.push(result);
-        },
-        error => {
-          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-        });
-  }
-
-  public onNewKeyTextChanged() {
-    const name = this.addSSHKeyForm.controls["name"].value;
-    const key = this.addSSHKeyForm.controls["key"].value;
-    const keyName = key.match(/^\S+ \S+ (.+)\n?$/);
-
-    if (keyName && keyName.length > 1 && "" === name) {
-      this.addSSHKeyForm.patchValue({name: keyName[1]});
-    }
-
-    console.log(this.addSSHKeyForm);
   }
 }
