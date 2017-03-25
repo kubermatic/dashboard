@@ -11,7 +11,7 @@ import {Router} from "@angular/router";
 import {NotificationComponent} from "../notification/notification.component";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
-
+import {SelectModule} from 'ng-select';
 
 @Component({
   selector: "kubermatic-wizard",
