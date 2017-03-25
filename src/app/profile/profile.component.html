@@ -55,9 +55,8 @@
       </div>
 
       <div class="container">
-        <kubermatic-list-ssh-key></kubermatic-list-ssh-key>
+        <kubermatic-list-ssh-key [sshKeys]="sshKeys"></kubermatic-list-ssh-key>
       </div>
-
 
       <div class="container">
         <div class="row justify-content-center">
@@ -66,8 +65,8 @@
       </div>
 
       <div class="container justify-content-center">
+        <kubermatic-add-ssh-key (syncSshKey)="handleKeyUpdated($event)" ></kubermatic-add-ssh-key>
       </div>
-        <kubermatic-add-ssh-key></kubermatic-add-ssh-key>
     </div>
   </div>
 </div>

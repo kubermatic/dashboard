@@ -1,10 +1,10 @@
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
-import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {FormBuilder} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
-import {NotificationComponent} from "../notification/notification.component";
+import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
+
 
 @Component({
   selector: "kubermatic-profile",
@@ -15,6 +15,7 @@ export class ProfileComponent implements OnInit {
 
   public currentTab: number = 0;
   public userProfile: any;
+  public sshKeys: Array<SSHKeyEntity> = [];
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {
     this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
@@ -23,8 +24,18 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.refreshSSHKeys();
   }
 
+  private refreshSSHKeys() {
+    this.api.getSSHKeys().subscribe(result => {
+      this.sshKeys = result;
+    });
+  }
+
+  public handleKeyUpdated(result) {
+    this.sshKeys = result;
+  }
 
   public selectTabProfileDetail(): void {
     this.currentTab = 0;

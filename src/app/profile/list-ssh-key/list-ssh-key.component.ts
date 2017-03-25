@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, Input} from "@angular/core";
 import {ApiService} from "../../api/api.service";
 import {SSHKeyEntity} from "../../api/entitiy/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
@@ -12,8 +12,8 @@ import {NotificationComponent} from "../../notification/notification.component";
   styleUrls: ['./list-ssh-key.component.scss']
 })
 export class ListSshKeyComponent implements OnInit {
+  @Input() sshKeys: Array<SSHKeyEntity>;
   public userProfile: any;
-  public sshKeys: Array<SSHKeyEntity> = [];
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {
     this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
@@ -21,15 +21,7 @@ export class ListSshKeyComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.refreshSSHKeys();
-  }
-
-  private refreshSSHKeys() {
-    this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-    });
-  }
+  ngOnInit() {}
 
   public deleteSSHKey(name): void {
       let index = -1;
