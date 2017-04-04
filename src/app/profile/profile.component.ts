@@ -30,11 +30,12 @@ export class ProfileComponent implements OnInit {
   private refreshSSHKeys() {
     this.api.getSSHKeys().subscribe(result => {
       this.sshKeys = result;
+
     });
   }
 
-  public handleKeyUpdated(result) {
-    this.sshKeys = result;
+  public handleKeyUpdated() {
+    this.refreshSSHKeys();
   }
 
   public selectTabProfileDetail(): void {
