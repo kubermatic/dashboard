@@ -7,11 +7,15 @@ import {CustomValidators} from "ng2-validation";
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {NodeProvider, NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
 import {CreateClusterModel, CloudModel, ClusterSpec} from "../api/model/CreateClusterModel";
+
+import {CreateNodeModel} from "../api/model/CreateNodeModel";
+import {ClusterModel} from "../api/model/ClusterModel";
+
 import {Router} from "@angular/router";
 import {NotificationComponent} from "../notification/notification.component";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
-
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: "kubermatic-wizard",
@@ -37,7 +41,13 @@ export class WizardComponent implements OnInit {
   public bringYourOwnForm: FormGroup;
 
   public sshKeys: SSHKeyEntity[] = [];
+
+  // Nodes Sizes
   public nodeSize: string[] = NodeInstanceFlavors.VOID;
+
+  // Create Nodes
+  public cluster: any;
+  public nodeSpec: any = {spec: {}}
 
   constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder, private router: Router,
@@ -172,27 +182,69 @@ export class WizardComponent implements OnInit {
     let key = null;
     let secret =  null;
     let ssh_keys =  null;
-    let region = null;
+    let region = this.selectedCloudRegion.metadata.name;
+    let cluster_name = this.clusterNameForm.controls["name"].value;
+    let sub: Subscription;
+    const timer = Observable.timer(0,10000);
+    let node_instances: number = 3;
 
     if (this.selectedCloud === NodeProvider.AWS) {
       key = this.awsForm.controls["access_key_id"].value;
       secret = this.awsForm.controls["secret_access_key"].value;
       ssh_keys = this.awsForm.controls["ssh_key"].value;
-      region = this.selectedCloudRegion.metadata.name;
+      node_instances = this.digitalOceanForm.controls["node_count"].value;
+
+      this.nodeSpec.spec.aws = {
+        type: this.awsForm.controls["node_size"].value
+      };
+
     } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
       secret = this.digitalOceanForm.controls["access_token"].value;
       ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
-      region = this.selectedCloudRegion.metadata.name;
+      node_instances = this.digitalOceanForm.controls["node_count"].value;
+
+      this.nodeSpec.spec.digitalocean = {
+        //sshKeys: this.cluster.spec.cloud.digitalocean.sshKeys,
+        size: this.digitalOceanForm.controls["node_size"].value
+      };
     }
 
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value);
     const cloud = new CloudModel(key, secret, this.selectedCloud, region);
     const model = new CreateClusterModel(cloud, spec, ssh_keys);
 
-
-    console.log("Create cluster mode: \n" + JSON.stringify(model));
+    //console.log("Create cluster mode: \n" + JSON.stringify(model));
     this.api.createCluster(model).subscribe(result => {
-        this.router.navigate(["clusters"]);
+        //this.router.navigate(["clusters"]);
+        NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
+        this.cluster = result;
+        const clusterModel = new ClusterModel('us-central1', this.cluster.metadata.name);
+        const createNodeModel = new CreateNodeModel(node_instances, this.nodeSpec.spec);
+        sub = timer.subscribe(() => {
+          this.api.getCluster(clusterModel).subscribe(result => {
+            NotificationComponent.success(this.store, "Success", `Waiting till Cluster is running`);
+            this.cluster = result;
+            //console.log(this.cluster.status.phase);
+
+            if(this.cluster.status.phase == "Running") {
+              this.api.createClusterNode(clusterModel, createNodeModel).subscribe(result => {
+                NotificationComponent.success(this.store, "Success", `Creating Nodes`);
+                debugger;
+
+                sub.unsubscribe();
+                this.router.navigate(["clusters"]);
+              },
+              error => {
+                sub.unsubscribe();
+                NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+              });
+            }
+          },
+          error => {
+            sub.unsubscribe();
+            NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+          });
+        })
       },
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);

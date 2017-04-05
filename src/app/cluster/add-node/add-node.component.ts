@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from "@angular/core";
+import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
 import {ApiService} from "../../api/api.service";
@@ -17,6 +17,8 @@ export class AddNodeComponent implements OnInit {
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
+
+  @Output() syncNodes = new EventEmitter();
 
   public addNodeForm: FormGroup;
   public clusterModel: ClusterModel;
@@ -93,6 +95,8 @@ export class AddNodeComponent implements OnInit {
 
     this.api.createClusterNode(this.clusterModel, this.createNodeModel).subscribe(result => {
       this.node = result;
+      this.node.push(result);
+      this.syncNodes.emit(this.node);
     })
   }
 }

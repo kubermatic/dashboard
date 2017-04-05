@@ -9,6 +9,7 @@ import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
+import {AddSshKeyComponent} from "./profile/add-ssh-key/add-ssh-key.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.component";
 import {NodeComponent} from "./cluster/node/node.component";
@@ -31,6 +32,8 @@ import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
 import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
+import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component';
+
 
 
 @NgModule({
@@ -61,7 +64,10 @@ import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confi
     ProfileComponent,
     NotificationComponent,
     ClusterDeleteConfirmationComponent,
-    NodeDeleteConfirmationComponent
+    NodeDeleteConfirmationComponent,
+    AddSshKeyComponent,
+    ListSshKeyComponent
+
   ],
   providers: [
     AUTH_PROVIDERS,
