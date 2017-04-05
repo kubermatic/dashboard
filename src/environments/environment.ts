@@ -6,4 +6,5 @@
 export const environment = {
   production: false,
   restRoot : "/api/v1",
+  digitalOceanRestRoot : "https://api.digitalocean.com/v2",
 };

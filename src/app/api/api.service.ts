@@ -19,6 +19,7 @@ export class ApiService {
   private headers: Headers = new Headers();
 
   constructor(private _http: Http, private _auth: Auth) {
+    // TODO: Not until id_token is ready!
     this.headers.append("Authorization", "Bearer " + Auth.getBearerToken());
   }
 
@@ -37,7 +38,7 @@ export class ApiService {
   }
 
   getClusters(): Observable<ClusterEntity[]> {
-    let dcCache : DataCenterEntity[];
+    let dcCache: DataCenterEntity[];
 
     return this.getDataCenters()
       .map(dcs => dcs.filter(result => result.seed))
@@ -54,7 +55,6 @@ export class ApiService {
       .map(clusters => [].concat(...clusters));
   }
 
-
   private getClustersByDC(seedRegion: string): Observable<ClusterEntity[]> {
     const url = `${this.restRoot}/dc/${seedRegion}/cluster`;
 
@@ -67,6 +67,25 @@ export class ApiService {
 
     return this._http.get(url, { headers: this.headers })
       .map(res => res.json());
+  }
+
+  getClusterWithDatacenter(clusterModel: ClusterModel): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
+    let clCache;
+
+    return this._http.get(url, {headers: this.headers})
+      .map(res => clCache = res.json())
+      .flatMap((clCache) => {
+
+        if(!!clCache.spec.cloud) {
+          return this._http.get(`${this.restRoot}/dc/${clCache.spec.cloud.dc}`, {headers: this.headers})
+            .map((dcRes) => {
+              return Object.assign({}, clCache, {dc: dcRes.json()})
+            });
+        }
+
+        return Observable.of(clCache);
+      });
   }
 
   createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
@@ -91,8 +110,6 @@ export class ApiService {
   }
 
   getClusterNodes(clusterModel: ClusterModel): Observable<NodeEntity[]> {
-
-
     const url = `/api/v2/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
 
     return this._http.get(url, { headers: this.headers })
@@ -134,8 +151,8 @@ export class ApiService {
       .map(res => res.json());
   }
 
-  deleteSSHKey(keyName: string) {
-    const url = `${this.restRoot}/ssh-keys/${keyName}`;
+  deleteSSHKey(fingerprint: string) {
+    const url = `${this.restRoot}/ssh-keys/${fingerprint}`;
 
     return this._http.delete(url, { headers: this.headers })
       .map(res => res.json());
@@ -145,6 +162,21 @@ export class ApiService {
     const url = `${this.restRoot}/ssh-keys`;
 
     return this._http.post(url, sshKey, { headers: this.headers })
+      .map(res => res.json());
+  }
+
+
+  getDigitaloceanSizes(token: string)  {
+    const url = `${environment.digitalOceanRestRoot}/sizes`;
+
+    return this._http.get(url, { headers: new Headers({"Authorization": "Bearer " + token}) })
+      .map(res => res.json());
+  }
+
+  getDigitaloceanSshKeys(token: string){
+    const url = `${environment.digitalOceanRestRoot}/account/keys`;
+
+    return this._http.get(url, { headers: new Headers({"Authorization": "Bearer " + token}) })
       .map(res => res.json());
   }
 }

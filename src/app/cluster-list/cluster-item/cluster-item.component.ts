@@ -13,5 +13,4 @@ export class ClusterItemComponent implements OnInit {
 
   ngOnInit() {
   }
-
 }

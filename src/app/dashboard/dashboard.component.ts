@@ -36,9 +36,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     if (this.auth.authenticated()) {
       this.api.getClusters().subscribe(result => {
-        if (result) {
-          this.router.navigate(["clusters"]);
-        } else {
+        if (!result) {
           this.router.navigate(["wizard"]);
         }
       }, error => {

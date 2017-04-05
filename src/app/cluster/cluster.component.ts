@@ -5,6 +5,7 @@ import {ClusterModel} from "../api/model/ClusterModel";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
+import {Observable, Subscription} from "rxjs";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -16,20 +17,31 @@ export class ClusterComponent implements OnInit {
   private restRoot: string = environment.restRoot;
   public clusterModel: ClusterModel;
   public nodes: any;
-  public cluster: any;
+  public cluster;
+  public timer: any = Observable.timer(0,10000);
+  public sub: Subscription;
+
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>) {}
 
   ngOnInit() {
+
+
     this.route.params.subscribe(params => {
       this.clusterModel = new ClusterModel(params["seedDcName"], params["clusterName"]);
-      this.updateCluster();
-      this.updateNodes();
+      this.sub = this.timer.subscribe(() => {
+        this.updateCluster();
+        this.updateNodes();
+      });
     });
   }
 
+  ngOnDestroy(){
+    this.sub.unsubscribe();
+  }
+
   updateCluster(): void {
-    this.api.getCluster(this.clusterModel).subscribe(result => {
+    this.api.getClusterWithDatacenter(this.clusterModel).subscribe(result => {
       this.cluster = result;
     });
   }
@@ -43,14 +55,6 @@ export class ClusterComponent implements OnInit {
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem("id_token");
     return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
-  }
-
-  public addNodes(): void {
-    // this.api.createClusterNode(clusterModel, /*  node  */);
-  }
-
-  public deleteNodes(): void {
-    console.log('delete node');
   }
 }
 
