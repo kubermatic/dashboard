@@ -25,9 +25,9 @@ export class CloudModel {
 }
 
 export class ClusterSpec {
-  human_readable_name: string;
+  humanReadableName: string;
 
-  constructor(human_readable_name: string) {
-    this.human_readable_name = human_readable_name;
+  constructor(humanReadableName: string) {
+    this.humanReadableName = humanReadableName;
   }
 }
