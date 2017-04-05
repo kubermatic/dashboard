@@ -1,10 +1,10 @@
 import {NgModule} from "@angular/core";
 import {CommonModule} from "@angular/common";
-//import {RouterModule} from "@angular/router";
+import {RouterModule} from "@angular/router";
 
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
-//import {appChildRoutes} from "../app.routing";
+import {appRoutes} from "../app.routing";
 import {CustomFormsModule} from "ng2-validation";
 
 import {WizardComponent} from "../wizard/wizard.component";
@@ -24,7 +24,7 @@ import {DashboardComponent} from "./dashboard.component";
 @NgModule({
   imports: [
     CommonModule,
-    //RouterModule.forChild(appChildRoutes),
+    RouterModule.forRoot(appRoutes),
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
