@@ -20,7 +20,7 @@ import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {ProfileComponent} from "./profile/profile.component";
 import {NotificationComponent} from "./notification/notification.component";
 import {Auth} from "./auth/auth.service";
-import {appRoutes} from './app.routing';
+import {appRoutes} from "./app.routing";
 import {AUTH_PROVIDERS} from "./auth/auth.provider";
 import {AuthGuard} from "./auth/auth.guard";
 import {CustomFormsModule} from "ng2-validation";
