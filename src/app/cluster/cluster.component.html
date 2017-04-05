@@ -1,16 +1,18 @@
 <ng-container *ngIf="cluster">
   <div class="container">
     <div class="row">
-      <div class="col-8">
         <h2 class="component-heading">{{cluster.spec.humanReadableName}}</h2>
-      </div>
-      <div class="col-4">
-        <kubermatic-cluster-delete-confirmation [humanReadableName]="cluster.spec.humanReadableName" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-cluster-delete-confirmation>
-      </div>
     </div>
   </div>
 
   <div class="container card">
+    <div class="row card-header">
+      <div class="col-8" style="line-height: 30px;">Kubernetes Master</div>
+      <div class="col-4">
+        <kubermatic-cluster-delete-confirmation [humanReadableName]="cluster.spec.humanReadableName" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-cluster-delete-confirmation>
+      </div>
+    </div>
+
     <div class="row card-block">
       <div class="col-2">Status</div>
       <div class="col-8 health-state">
