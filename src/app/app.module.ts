@@ -4,6 +4,8 @@ import {NgModule} from "@angular/core";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
 import {RouterModule} from "@angular/router";
+import {MaterialModule} from '@angular/material';
+import 'hammerjs';
 import {KubermaticComponent} from "./kubermatic.component";
 import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
@@ -31,7 +33,7 @@ import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
-import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.component';
+import {ListSshKeyComponent} from "./profile/list-ssh-key/list-ssh-key.component";
 
 
 @NgModule({
@@ -45,7 +47,8 @@ import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.compone
     CustomFormsModule,
     StoreModule.provideStore(combinedReducer),
     SimpleNotificationsModule,
-    SlimLoadingBarModule.forRoot()
+    SlimLoadingBarModule.forRoot(),
+    MaterialModule
   ],
   declarations: [
     KubermaticComponent,
