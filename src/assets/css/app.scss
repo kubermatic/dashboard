@@ -1,6 +1,27 @@
-@import "bootstrap/variables";
-@import "ng2admin/conf/variables";
-@import "ng2admin/conf/ng2";
+//@import "bootstrap/variables";
+//@import "ng2admin/conf/variables";
+//@import "ng2admin/conf/ng2";
+
+// Import all the tools needed to customize the theme and extract parts of it
+@import '~@angular/material/core/theming/all-theme';
+
+
+@import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
+
+
+// Define a mixin that accepts a theme and outputs the color styles for the component.
+@mixin candy-carousel-theme($theme) {
+  // Extract whichever individual palettes you need from the theme.
+  $primary: map-get($theme, primary);
+  $accent: map-get($theme, accent);
+
+  // Use md-color to extract individual colors from a palette as necessary.
+  .candy-carousel {
+    background-color: mat-color($primary);
+    border-color: mat-color($accent, A400);
+  }
+}
+
 
 .component-heading {
   font-weight: $font-weight-bold;

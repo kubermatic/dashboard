@@ -1,11 +1,77 @@
 <main>
-  <kubermatic-navigation></kubermatic-navigation>
-  <kubermatic-notification></kubermatic-notification>
-  <div class="container al-main">
-    <div class="row al-content">
+
+  <!--- header -->
+
+  <header class="mat-elevation-z6">
+    <nav class="docs-navbar">
+      <a aria-label="Loodse Kubermatic" md-button="" routerlink="/" href="/" aria-disabled="false" tabindex="0" class="mat-button">
+        <span class="mat-button-wrapper">
+          <span>Kubermatic</span>
+        </span>
+
+
+      </a>
+      <a md-button routerlink="clusters" href="/clusters" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Clusters</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
+      <a md-button routerlink="clusters" href="/Clusters" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Manage sshKeys</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
+    </nav>
+  </header>
+
+
+  <!--- content -->
+  <md-sidenav-container>
+    <md-sidenav #sidenav >
+
+
+
+
+      Side navigation
+
+
+
+    </md-sidenav>
+
+    <div class="example-sidenav-content">
+      <!--<button md-button (click)="sidenav.open()">
+        Open sidenav
+      </button>-->
+
+      <button class="sidenav-toggle mat-button" (click)="sidenav.open()" md-button>
+          <span class="mat-button-wrapper">
+            <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
+          </span>
+        <div class="mat-button-ripple mat-ripple" md-ripple></div>
+        <div class="mat-button-focus-overlay"></div>
+      </button>
+
+      <kubermatic-notification></kubermatic-notification>
+
       <router-outlet></router-outlet>
+
+
     </div>
-  </div>
+
+  </md-sidenav-container>
+
+
+  <!--<header>
+    <kubermatic-navigation></kubermatic-navigation>
+  </header>
+
+
+
+  <md-sidenav-container class="sidenav-container">
+    <md-sidenav mode="side" opened="true" class="sidenav-content" >Drawer content</md-sidenav>
+    <div class="my-content">
+
+      <kubermatic-notification></kubermatic-notification>
+      <div class="container al-main">
+        <div class="row al-content">
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </div>
+  </md-sidenav-container>
+
   <footer class="al-footer clearfix">
     <div class="clearfix">
       <div class="al-copy">&copy; <a href="https://loodse.com">Loodse</a> 2017</div>
@@ -20,5 +86,6 @@
         </ul>
       </div>
     </div>
-  </footer>
+  </footer>-->
+
 </main>
