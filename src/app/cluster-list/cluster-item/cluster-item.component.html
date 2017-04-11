@@ -1,11 +1,11 @@
-<div class="row card-block">
-  <div class="col-4">
+<div fxLayout="column"  fxLayout fxLayoutGap="10px">
+  <div fxFlex="40%">
     <a *ngIf="cluster.dc.metadata.name" routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}">
       <img src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
       {{cluster.spec.humanReadableName}}
     </a>
   </div>
-  <div class="col-3">
+  <div fxFlex="25%">
     <ng-container [ngSwitch]="!!cluster.spec.cloud">
       <div *ngSwitchCase="true">
         <img *ngIf="cluster.spec.cloud.aws" src="/assets/images/clouds/aws.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
@@ -17,8 +17,8 @@
       </div>
     </ng-container>
   </div>
-  <div class="col-2">{{cluster.status.phase}}</div>
-  <div class="col-3 health-state" *ngIf="cluster.status.phase !== 'Pending'">
+  <div fxFlex="15%">{{cluster.status.phase}}</div>
+  <div fxFlex="30%" class="health-state" *ngIf="cluster.status.phase !== 'Pending'">
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>

@@ -1,4 +1,6 @@
 
+@import '~@angular/material/core/theming/all-theme';
+
 
 
 @import "variables";
@@ -6,12 +8,15 @@
 
 //@import "tether";
 
-@import "bootstrap";
+//@import "bootstrap";
 
 @import "font-awesome/font-awesome";
-@import "ng2admin";
+//@import "ng2admin";
 
 @import "footer";
 @import "loading";
+//@import "variables";
 
 @import "app";
+
+

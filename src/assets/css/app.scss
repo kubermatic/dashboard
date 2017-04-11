@@ -3,8 +3,6 @@
 //@import "ng2admin/conf/ng2";
 
 // Import all the tools needed to customize the theme and extract parts of it
-@import '~@angular/material/core/theming/all-theme';
-
 
 @import '~@angular/material/core/theming/prebuilt/deeppurple-amber.css';
 
@@ -23,7 +21,7 @@
 }
 
 
-.component-heading {
+/* .component-heading {
   font-weight: $font-weight-bold;
   padding: 15px 0;
 }
@@ -39,8 +37,10 @@
 
 .card-margin {
   margin-bottom: 24px;
-}
+}*/
 
+
+/*
 .simple-notification.error { background: $danger-dark !important; }
 .simple-notification.success { background: $success !important; }
 .simple-notification.alert { background: $warning !important; }
@@ -50,3 +50,13 @@
 .simple-notification.success .sn-progress-loader span { background: $success-light !important; }
 .simple-notification.alert .sn-progress-loader span { background: $warning-dark !important; }
 .simple-notification.info .sn-progress-loader span { background: $primary-light !important; }
+*/
+
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}

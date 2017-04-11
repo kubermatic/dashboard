@@ -1,49 +1,56 @@
-<div class="navigation-bar clearfix" (scrollChange)="scrolledChanged($event)" [ngClass]="{scrolled: isScrolled}">
+<header (scrollChange)="scrolledChanged($event)" [ngClass]="{scrolled: isScrolled}">
+
   <ng2-slim-loading-bar [color]="'white'" [height]="'2px'"></ng2-slim-loading-bar>
-
-  <div class="row navigation-bar-content">
-    <div class="col-2 col-lg-2 col-xl-1">
-      <a routerLink="/clusters" class="al-logo clearfix">Kubermatic</a>
-    </div>
-
-    <div class="col-10 col-xl-11 row justify-content-between" *ngIf="auth.authenticated()">
-      <div class="col info">
-        <kubermatic-breadcrumbs></kubermatic-breadcrumbs>
-      </div>
-
-      <div class="col">
-        <div class="user-profile clearfix">
-          <div class="dropdown al-user-profile" *ngIf="userProfile">
-            <a class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
-              <img [src]="userProfile.picture" alt="">
-              <span class="al-user-profile-details">
-                <strong class="font-bold">{{ userProfile.nickname }}</strong>
-                <i class="fa fa-caret-down" aria-hidden="true"></i>
+  <nav class="main-nav"
+       fxLayout
+       fxLayoutGap="10px"
+       >
+    <div fxFlex>
+      <button class="sidenav-toggle mat-button" (click)="sidenav.open()" md-button>
+              <span class="mat-button-wrapper">
+                <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
+                <span>Kubermatic</span>
               </span>
-            </a>
-            <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
-              <li>
-                <div class="al-user-profile-dropdown">
-                  <div class="row">
-                    <div class="col-lg-4">
-                      <img [src]="userProfile.picture" alt="" class="profile-img">
-                    </div>
-                    <div class="col-lg-8">
-                      <p class="text-left"><strong>{{ userProfile.name }}</strong></p>
-                      <p class="text-left small">{{ userProfile.email }}</p>
-                      <p class="text-left">
-                        <button type="button" routerLink="profile" class="btn btn-primary btn-block btn-sm">Profile</button>
-                      </p>
-                    </div>
-                  </div>
+        <div class="mat-button-ripple mat-ripple" md-ripple></div>
+        <div class="mat-button-focus-overlay"></div>
+      </button>
+      <a md-button routerlink="clusters" href="/wizard" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Create Cluster</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
+      <a md-button routerlink="clusters" href="/clusters" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Clusters</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
+      <a md-button routerlink="clusters" href="/profile" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Manage sshKeys</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
+    </div>
+    <div fxFlex="20" fxFlexOffset="50px"  fxFlexOffset.xs="0"><!--class="mat-button user-profile clearfix"-->
+      <div class="dropdown" *ngIf="userProfile">
+        <a md-button class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
+          <span class="al-user-profile-details">
+                  <strong class="font-bold">{{ userProfile.nickname }}</strong>
+                  <i class="fa fa-caret-down" aria-hidden="true"></i>
+                </span>
+        </a>
+       <!--<ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
+          <li>
+            <div class="al-user-profile-dropdown">
+              <div class="row">
+                <div class="col-lg-4">
+                  <img [src]="userProfile.picture" alt="" class="profile-img">
                 </div>
-              </li>
-              <li class="divider"></li>
-              <li><a href (click)="logout()">Sign Out <span class="fa fa-sign-out pull-right"></span></a></li>
-            </ul>
-          </div>
-        </div>
+                <div class="col-lg-8">
+                  <p class="text-left"><strong>{{ userProfile.name }}</strong></p>
+                  <p class="text-left small">{{ userProfile.email }}</p>
+                  <p class="text-left">
+                    <button type="button" routerLink="profile" class="btn btn-primary btn-block btn-sm">Profile</button>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="divider"></li>
+          <li><a href (click)="logout()">Sign Out <span class="fa fa-sign-out pull-right"></span></a></li>
+        </ul>-->
       </div>
     </div>
-  </div>
-</div>
+  </nav>
+
+  <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
+</header>
+
+

@@ -1,5 +1,5 @@
 //@import "../../assets/css/ng2admin/conf/conf";
-@import "../../assets/css/bootstrap/variables";
+//@import "../../assets/css/bootstrap/variables";
 
 .wizard-content {
   padding: 5px;
@@ -19,7 +19,7 @@
   position: relative;
 }
 .wizard-step.done {
-  border-left-color: $success;
+  border-left-color: green;
 }
 .wizard-step:last-child {
   border-left: none;
@@ -32,7 +32,7 @@
   overflow-y:hidden;
   overflow-x:hidden;
   padding-bottom: 16px;
-  color: $primary;
+  color: #000;
 
   .wizard-step {
     .tbd{
@@ -70,14 +70,14 @@
   line-height: 34px;
 }
 .wizard-step.done .wizard-step-circle {
-  background-color: $success;
+  background-color: green;
   color: white;
-  border: 2px solid $success;
+  border: 2px solid green;
 }
 .wizard-step.active .wizard-step-circle {
-  background-color: $success;
+  background-color: green;
   color: white;
-  border: 2px solid $success;
+  border: 2px solid green;
 }
 .wizard-step.tbd .wizard-step-circle {
   background-color: #d0d0d0;
@@ -98,9 +98,9 @@ $wizard-box-content-dc-margin-top: 10px;
 $wizard-box-content-cloud-margin-top: 25px;
 
 .wizard-box-text {
-  color: $primary;
-  font-weight: $font-normal;
-  font-size: $font-size-base;
+  color: #000;
+  font-weight: 400;
+  font-size: 14px;
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -111,17 +111,17 @@ $wizard-box-content-cloud-margin-top: 25px;
 }
 
 .wizard-box-text-primary {
-  color: $primary;
-  font-weight: $font-thin;
-  font-size: $font-size-lg;
+  color: #000;
+  font-weight: 300;
+  font-size: 16px;
   padding-top: 10px;
   padding-bottom: 10px;
 }
 
 .wizard-box-content {
   text-align: center;
-  color: $primary;
-  font-weight: $font-weight-bold;
+  color: #000;
+  font-weight: 600;
 
   img.dc-logo {
     width: $wizard-box-content-dc-logo-size;
@@ -136,8 +136,8 @@ $wizard-box-content-cloud-margin-top: 25px;
   }
 
   div.name {
-    font-weight: $font-thin;
-    font-size: $font-size-lg;
+    font-weight: 300;
+    font-size: 16px;
     padding: 5px;
   }
 
@@ -156,8 +156,8 @@ $wizard-box-content-cloud-margin-top: 25px;
   }
 
   div.location {
-    font-weight: $font-thin;
-    font-size: $font-size-base;
+    font-weight: 300;
+    font-size: 16px;
     padding: 5px;
   }
 
@@ -178,7 +178,7 @@ $wizard-box-content-cloud-margin-top: 25px;
   -moz-border-radius: 10px 10px 10px 10px;
   -webkit-border-radius: 10px 10px 10px 10px;
   background: #fbfbfc;
-  border: 1px solid $primary;
+  border: 1px solid #000;
   cursor: pointer;
 }
 

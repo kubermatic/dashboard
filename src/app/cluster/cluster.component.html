@@ -1,53 +1,53 @@
 
 <ng-container *ngIf="cluster">
-  <div class="container">
-    <div class="row">
-      <h2 class="component-heading">{{cluster.spec.humanReadableName}}</h2>
-    </div>
+  <div fxLayout fxLayoutGap="10px">
+    <h2 fxFlex class="component-heading">{{cluster.spec.humanReadableName}}</h2>
   </div>
 
-  <div class="container card">
-    <div class="row card-header">
+  <div fxLayout fxLayoutGap="10px">
+    <div fxFlex>
       Kubernetes Master
       <button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>
     </div>
+  </div>
 
-    <div class="row card-block">
-      <div class="col-2">Status</div>
-      <div class="col-8 health-state">
-        <strong>{{cluster.status.phase}}</strong>
-        - Health:
-        <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
-        <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
-        <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
-        <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
-      </div>
+  <div fxLayout="row" fxLayoutGap="10px">
+    <div fxFlex="20%">Status</div>
+    <div fxFlex="80%" class="health-state">
+      <strong>{{cluster.status.phase}}</strong>
+      - Health:
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
+      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
     </div>
-    <div class="row card-block">
-      <div class="col-2">API Server</div>
-      <div class="col-8">
-       {{cluster.address.url}}
-        <a [attr.href]="downloadKubeconfigUrl()" target="_blank">download kubeconfig</a>
-      </div>
+  </div>
+
+  <div fxLayout fxLayoutGap="10px">
+    <div fxFlex="20%">API Server</div>
+    <div fxFlex="80%">
+     {{cluster.address.url}}
+      <a [attr.href]="downloadKubeconfigUrl()" target="_blank">download kubeconfig</a>
     </div>
   </div>
 </ng-container>
 
-<ng-container *ngIf="cluster && cluster.dc" >
-  <div class="container card">
-    <div class="row card-header">
-      <div class="col-4">Provider</div>
-      <div class="col-4">Node Region</div>
-      <div class="col-4">shhKeys</div>
+<ng-container *ngIf="cluster && cluster.dc">
+
+
+    <div fxLayout fxLayoutGap="10px">
+      <div fxFlex="40%">Provider</div>
+      <div fxFlex="30%">Node Region</div>
+      <div fxFlex="30%">shhKeys</div>
     </div>
-    <div class="row card-block">
-      <div class="col-4">
+    <div fxLayout fxLayoutGap="10px">
+      <div fxFlex="40%">
         <img src="/assets/images/clouds/{{cluster.dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
       </div>
-      <div class="col-4">
+      <div fxFlex="30%">
         {{cluster.spec.cloud.dc}}
       </div>
-      <div class="col-4">
+      <div fxFlex="30%">
         <ng-container [ngSwitch]="cluster.dc.spec.provider">
           <div *ngSwitchCase="'aws'">
             {{cluster.spec.cloud[cluster.dc.spec.provider].ssh_key_name}}
@@ -58,45 +58,47 @@
         </ng-container>
       </div>
     </div>
-  </div>
+
 
   <kubermatic-add-node [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [cluster]="cluster"></kubermatic-add-node>
 
-  <p *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
+  <div fxLayout fxLayoutGap="10px">
+    <p fxFlex *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
+  </div>
 
-  <div class="container card">
-    <div class="row card-header">
-      <div class="col-3">Name</div>
-      <div class="col-1">Capacity</div>
-      <div class="col-3">Version</div>
-      <div class="col-2">Public IP</div>
-      <div class="col-1">Status</div>
-      <div class="col-2">
-      </div>
+
+
+    <div fxLayout fxLayoutGap="10px">
+      <div fxFlex="25%">Name</div>
+      <div fxFlex="10%">Capacity</div>
+      <div fxFlex="25%">Version</div>
+      <div fxFlex="15%">Public IP</div>
+      <div fxFlex="10%">Status</div>
+      <div fxFlex="15%"></div>
     </div>
+
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <div *ngSwitchCase="true">
 
         <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
       </div>
 
-      <div *ngSwitchCase="false" class="row card-block">
-        <div class="col-12 text-center text-muted">
+
+      <div *ngSwitchCase="false" fxLayout fxLayoutGap="10px">
+        <div fxFlex>
           No Node available. Please add a Node.
         </div>
       </div>
     </ng-container>
-  </div>
+
+
 </ng-container>
 
 
 <ng-container *ngIf="cluster && !cluster.dc">
-  <div class="container card">
-    <div class="row card-block">
-      <div class="col-12 text-center text-muted">
+  <div fxLayout="column" fxLayoutGap="10px">
+      <p fxFlex>
         No Provider available. Please add a Provider.
-      </div>
-    </div>
+      </p>
   </div>
-
 </ng-container>
