@@ -1,0 +1,43 @@
+.km-sshkey-card.mat-card {
+  border: 1px solid #E3E8EC;
+  padding-top: 10px;
+  margin-bottom: 30px;
+
+  .mat-card-title {
+    border-bottom: 1px solid #E3E8EC;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    .km-ssh-key-name {
+      padding-top: 5px;
+      i {
+        font-size: 18px;
+      }
+      span {
+        margin-left: 15px;
+        font-size: 20px;
+      }
+    }
+
+    .km-delete-ssh-key {
+      float: right;
+      color: #20a8d8;
+      border:1px solid #20a8d8;
+      border-radius: 0;
+    }
+  }
+}
+
+.km-ssh-key-publickey {
+  word-wrap:break-word;
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+.km-fingerprint {
+  border-top: 1px solid #E3E8EC;
+  padding-top: 10px;
+  margin-top: 20px;
+  color: #E3E8EC;
+}
