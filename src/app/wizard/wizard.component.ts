@@ -177,13 +177,19 @@ export class WizardComponent implements OnInit {
     return this.canGotoStep(this.currentStep);
   }
 
+  public changeDoKey() {
+    let key = this.digitalOceanForm.controls["access_token"].value;
+    this.api.getDigitaloceanSizes(key).subscribe(result => {
+        this.nodeSize = result.sizes;
+      }
+    );
+  }
 
   public createClusterAndNode() {
     let key = null;
     let secret =  null;
     let ssh_keys =  null;
     let region = this.selectedCloudRegion.metadata.name;
-    let cluster_name = this.clusterNameForm.controls["name"].value;
     let sub: Subscription;
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
