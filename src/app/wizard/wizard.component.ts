@@ -91,7 +91,8 @@ export class WizardComponent implements OnInit {
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
       ssh_key: ["", [<any>Validators.required]],
-      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: ["", [<any>Validators.required]]
     });
   }
 
