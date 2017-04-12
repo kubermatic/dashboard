@@ -185,7 +185,7 @@
             </div>
 
             <form [formGroup]="digitalOceanForm" novalidate class="col-6">
-              <div class="form-group" [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
+              <div class="form-group" [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}" (change)="changeDoKey()">
                 <label for="access_token" class="form-text text-muted">Personal Access Token:</label>
                 <input id="access_token" formControlName="access_token" type="text" class="form-control">
                 <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
