@@ -25,7 +25,7 @@ import {Observable, Subscription} from "rxjs";
 export class WizardComponent implements OnInit {
 
   public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN];
-  public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {};
+  public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
 
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
@@ -213,7 +213,6 @@ export class WizardComponent implements OnInit {
       node_instances = this.digitalOceanForm.controls["node_count"].value;
 
       this.nodeSpec.spec.digitalocean = {
-        //sshKeys: this.cluster.spec.cloud.digitalocean.sshKeys,
         size: this.digitalOceanForm.controls["node_size"].value
       };
     }
