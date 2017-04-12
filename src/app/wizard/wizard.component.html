@@ -166,8 +166,8 @@
                 <small class="form-text text-danger"  [hidden]="awsForm.controls.node_count.valid || !awsForm.controls.node_count.touched">Node count is invalid.</small>
               </div>
               <div class="form-group">
-                <label for="node_size" class="form-text text-muted">Node Size:</label>
-                <select class="form-control" id="node_size" name="nodeSize" formControlName="node_size">
+                <label for="node_size_aws" class="form-text text-muted">Node Size:</label>
+                <select class="form-control" id="node_size_aws" name="nodeSize" formControlName="node_size">
                   <option value="" disabled="true" [selected]="!node_size">Please select a node size!</option>
                   <option *ngFor="let size of nodeSize; let i = index;" [value]="size"> {{size}}</option>
                 </select>
