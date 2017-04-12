@@ -204,6 +204,15 @@
                   to provide kubectl logs, port-forward and exec functionality</small>.
                 <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
               </div>
+              <div class="form-group">
+                <label for="node_size_do" class="form-text text-muted">Node Size:</label>
+                <select class="form-control" id="node_size_do" name="nodeSize" formControlName="node_size">
+                  <option value="" disabled="true" [selected]="!node_size">Please select a node size!</option>
+                  <option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
+                    {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus != 1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+                  </option>
+                </select>
+              </div>
               <div class="form-group" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid}">
                 <label for="digitalocean_node_count" class="form-text text-muted">Node count:</label>
                 <input id="digitalocean_node_count" formControlName="node_count" type="number" min="1" max="20" class="form-control">
@@ -211,7 +220,6 @@
               </div>
             </form>
           </div>
-
           <div [hidden]="selectedCloud !== 'bringyourown'">
             <div class="col-8 wizard-box-text">
               You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?<br>
