@@ -122,9 +122,11 @@ export class WizardComponent implements OnInit {
   public getNodeSize(): string {
     if (this.selectedCloud === NodeProvider.AWS) {
       return this.awsForm.controls["node_size"].value;
-    } else {
-      return null;
     }
+    if (this.selectedCloud === NodeProvider.DIGITALOCEAN ) {
+      return this.digitalOceanForm.controls["node_size"].value;
+    }
+    return "";
   }
 
   public refreshName() {
