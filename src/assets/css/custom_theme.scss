@@ -1,0 +1,17 @@
+@import "~@angular/material/core/theming/all-theme";
+//@import '~@angular/material/core/theming/theming';
+
+@include mat-core();
+
+
+
+// Customizations go here, for instance:
+$primary: mat-palette($mat-light-blue, 700, 500, 800);
+$accent:  mat-palette($mat-green, A200, A100, A400);
+
+
+// Create the theme object (a Sass map containing all of the palettes).
+$app-theme: mat-light-theme($primary, $accent);
+
+@include angular-material-theme($app-theme);
+

@@ -18,7 +18,8 @@
       "prefix": "kubermatic",
       "mobile": false,
       "styles": [
-        "assets/css/global.scss"
+        "assets/css/global.scss",
+        "assets/css/custom_theme.scss"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",

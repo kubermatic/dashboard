@@ -1,0 +1,16 @@
+.km-add-ssh-key {
+  margin-bottom: 50px;
+
+  .km-ssh-key-textarea {
+    width: 100%;
+    height: 170px;
+    textarea {
+      height: 170px;
+    }
+  }
+  .km-ssh-key-input {
+    margin-top: 10px;
+    width: 100%;
+
+  }
+}
