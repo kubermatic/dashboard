@@ -43,7 +43,7 @@ export class WizardComponent implements OnInit {
   public sshKeys: SSHKeyEntity[] = [];
 
   // Nodes Sizes
-  public nodeSize: string[] = NodeInstanceFlavors.VOID;
+  public nodeSize: any[] = NodeInstanceFlavors.VOID;
 
   // Create Nodes
   public cluster: any;
