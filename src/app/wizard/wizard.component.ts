@@ -25,7 +25,7 @@ import {Observable, Subscription} from "rxjs";
 export class WizardComponent implements OnInit {
 
   public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN];
-  public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {};
+  public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
 
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
@@ -43,7 +43,7 @@ export class WizardComponent implements OnInit {
   public sshKeys: SSHKeyEntity[] = [];
 
   // Nodes Sizes
-  public nodeSize: string[] = NodeInstanceFlavors.VOID;
+  public nodeSize: any[] = NodeInstanceFlavors.VOID;
 
   // Create Nodes
   public cluster: any;
@@ -91,7 +91,8 @@ export class WizardComponent implements OnInit {
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
       ssh_key: ["", [<any>Validators.required]],
-      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: ["", [<any>Validators.required]]
     });
   }
 
@@ -121,9 +122,11 @@ export class WizardComponent implements OnInit {
   public getNodeSize(): string {
     if (this.selectedCloud === NodeProvider.AWS) {
       return this.awsForm.controls["node_size"].value;
-    } else {
-      return null;
     }
+    if (this.selectedCloud === NodeProvider.DIGITALOCEAN ) {
+      return this.digitalOceanForm.controls["node_size"].value;
+    }
+    return "";
   }
 
   public refreshName() {
@@ -177,13 +180,19 @@ export class WizardComponent implements OnInit {
     return this.canGotoStep(this.currentStep);
   }
 
+  public changeDoKey() {
+    let key = this.digitalOceanForm.controls["access_token"].value;
+    this.api.getDigitaloceanSizes(key).subscribe(result => {
+        this.nodeSize = result.sizes;
+      }
+    );
+  }
 
   public createClusterAndNode() {
     let key = null;
     let secret =  null;
     let ssh_keys =  null;
     let region = this.selectedCloudRegion.metadata.name;
-    let cluster_name = this.clusterNameForm.controls["name"].value;
     let sub: Subscription;
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
@@ -204,7 +213,6 @@ export class WizardComponent implements OnInit {
       node_instances = this.digitalOceanForm.controls["node_count"].value;
 
       this.nodeSpec.spec.digitalocean = {
-        //sshKeys: this.cluster.spec.cloud.digitalocean.sshKeys,
         size: this.digitalOceanForm.controls["node_size"].value
       };
     }
