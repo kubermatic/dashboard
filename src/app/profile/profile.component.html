@@ -1,72 +1,41 @@
-<div class="card card-margin">
-  <div class="card-header">
-    <ul class="nav nav-tabs card-header-tabs">
-      <li class="nav-item">
-        <button class="btn-link nav-link" [ngClass]="{'active': currentTab === 0}" (click)="selectTabProfileDetail()">Profile</button>
-      </li>
-      <li class="nav-item">
-        <button class="btn-link nav-link" [ngClass]="{'active': currentTab === 1}" (click)="selectTabSSHKeys()">SSH keys</button>
-      </li>
-    </ul>
-  </div>
-  <div class="card-block">
+<md-tab-group>
+  <md-tab label="Profile">
 
-    <div *ngIf="currentTab == 0">
-      <div class="container">
-        <div class="row">
-          <h2 class="component-heading">Your Profile</h2>
-        </div>
-      </div>
-
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-6">
-            <img [src]="userProfile.picture" alt="Profile image" class="profile-img">
+    <div class="km-profile" style="padding: 20px 2px;">
+      <md-card>
+        <md-card-header fxLayout>
+          <img md-card-avatar height="40px" width="40px" [src]="userProfile.picture" alt="Profile image">
+          <md-card-title>Your Profile</md-card-title>
+          <md-card-subtitle>{{ userProfile.name }}</md-card-subtitle>
+        </md-card-header>
+        <md-card-content>
+            <div fxLayout>
+              <div fxFlex="120px">E-Mail: </div>
+              <div fxFlex>{{ userProfile.email }}</div>
+            </div>
+            <div fxLayout>
+              <div fxFlex="120px">Hashtag: </div>
+              <div fxFlex>@{{ userProfile.nickname }}</div>
+            </div>
+            <div fxLayout>
+              <div fxFlex="120px">Member since: </div>
+              <div fxFlex>{{ userProfile.created_at | date:'medium' }}</div>
           </div>
-          <div class="w-100"></div>
-          <div class="col-6">
-            <p class="profile-name"><strong>{{ userProfile.name }}</strong></p>
-            <table class="table">
-              <tbody>
-                <tr>
-                  <th scope="row">Email</th>
-                  <td><span class="profile-details">{{ userProfile.email }}</span></td>
-                </tr>
-                <tr>
-                  <th scope="row">Hashtag</th>
-                  <td><span class="profile-hashtag">@{{ userProfile.nickname }}</span></td>
-                </tr>
-                <tr>
-                  <th scope="row">Member since</th>
-                  <td><span class="profile-details">{{ userProfile.created_at | date:'medium' }}</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+        </md-card-content>
+      </md-card>
     </div>
 
-    <div *ngIf="currentTab == 1">
-      <div class="container">
-        <div class="row">
-          <h2 class="component-heading">Your SSH keys</h2>
-        </div>
-      </div>
+  </md-tab>
+  <md-tab label="Your SSH keys">
+    <div class="km-ssh-keys" style="padding: 20px 2px;">
 
-      <div class="container">
-        <kubermatic-list-ssh-key [sshKeys]="sshKeys"></kubermatic-list-ssh-key>
-      </div>
 
-      <div class="container">
-        <div class="row justify-content-center">
-          <h3 class="component-sub-heading text-muted">Add SSH key</h3>
-        </div>
-      </div>
+      <kubermatic-list-ssh-key [sshKeys]="sshKeys"></kubermatic-list-ssh-key>
 
-      <div class="container justify-content-center">
-        <kubermatic-add-ssh-key (syncSshKey)="handleKeyUpdated($event)" ></kubermatic-add-ssh-key>
-      </div>
-    </div>
+      <kubermatic-add-ssh-key (syncSshKey)="handleKeyUpdated($event)" ></kubermatic-add-ssh-key>
+
   </div>
-</div>
+
+  </md-tab>
+</md-tab-group>
+

@@ -4,4 +4,25 @@ html, body {
   width: 100%;
   height: 100%;
   position: absolute;
+  @include titillium-font;
+
+  background-color: #EFF3F8;
+  color: #444D58;
+}
+
+
+.mat-card-header {
+  border-bottom: 1px solid #E3E8EC;
+  padding-bottom: 10px;
+
+}
+
+.mat-card-header-text {
+  width: 100%;
+}
+
+.mat-card-title {
+  padding-top: 0px;
+  font-size: 18px;
+
 }

@@ -1,7 +1,7 @@
 //@import "../../assets/css/ng2admin/conf/conf";
 
 header {
-  background-color: #000;
+  background-color: #fff;
 
   .dropdown-toggle::after {
     display: none;
@@ -394,8 +394,22 @@ a.collapse-menu-link {
 }
 
 .km-main-nav {
-   button, a {
-     color: #fff;
+  border-bottom: 1px solid #BCC5D0;
+
+   button {
+     color: #0288d1;
+     font-weight: 400;
    }
+
+    a {
+      color: #BCC5D0;
+      font-weight: 400;
+
+      &:hover {
+        color: #444D58;
+      }
+    }
+
+
 }
 

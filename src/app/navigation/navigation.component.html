@@ -15,14 +15,14 @@
         <div class="mat-button-focus-overlay"></div>
       </button>
       <a md-button routerlink="clusters" href="/wizard" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Create Cluster</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
-      <a md-button routerlink="clusters" href="/clusters" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Clusters</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
+      <a md-button routerlink="clusters" href="/clusters" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Manage Clusters</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
       <a md-button routerlink="clusters" href="/profile" aria-disabled="false" tabindex="0" class="mat-button"><span class="mat-button-wrapper">Manage sshKeys</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
     </div>
     <div fxFlex="20" fxFlexOffset="50px"  fxFlexOffset.xs="0"><!--class="mat-button user-profile clearfix"-->
       <div class="dropdown" *ngIf="userProfile">
         <a md-button class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
           <span class="al-user-profile-details">
-                  <strong class="font-bold">{{ userProfile.nickname }}</strong>
+                  <span>{{ userProfile.nickname }}</span>
                   <i class="fa fa-caret-down" aria-hidden="true"></i>
                 </span>
         </a>

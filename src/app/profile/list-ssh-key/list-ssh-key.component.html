@@ -1,25 +1,32 @@
 <ng-container [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-    <div *ngSwitchCase="false">
+    <md-card *ngSwitchCase="false" style="margin-bottom: 20px;">
+      <md-card-content>
         You have not added any SSH keys yet.
-    </div>
+      </md-card-content>
+    </md-card>
+
+
+
     <ng-container *ngSwitchCase="true">
         <md-card class="km-sshkey-card"  *ngFor="let key of sshKeys; let i = index;">
-            <md-card-title fxLayout>
-                <div fxFlex="90%" class="km-ssh-key-name">
-                    <i class="fa fa-key" aria-hidden="true"></i><span>{{ key.name }}</span>
-                </div>
-                <div fxFlex="10%">
+            <md-card-header>
+              <md-card-title fxLayout>
+                  <div fxFlex="90%" class="km-ssh-key-name">
+                      <i class="fa fa-key" aria-hidden="true"></i><span>{{ key.name }}</span>
+                  </div>
+                  <div fxFlex="10%">
 
-                  <md-menu #appMenu="mdMenu">
-                    <button md-menu-item (click)="deleteSSHKey(key.name)">Delete</button>
-                    <button md-menu-item >Cancel</button>
-                  </md-menu>
+                    <md-menu #appMenu="mdMenu">
+                      <button md-menu-item (click)="deleteSSHKey(key.name)">Delete</button>
+                      <button md-menu-item >Cancel</button>
+                    </md-menu>
 
-                  <button md-icon-button [mdMenuTriggerFor]="appMenu" class="km-delete-ssh-key">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                  </button>
-                </div>
-            </md-card-title>
+                    <button md-icon-button [mdMenuTriggerFor]="appMenu" class="km-delete-ssh-key">
+                      <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </button>
+                  </div>
+              </md-card-title>
+            </md-card-header>
             <md-card-content fxLayout="column">
                 <div fxflex class="km-ssh-key-publickey" style="margin: 0;" fxFlex>
                     {{ key.public_key }}

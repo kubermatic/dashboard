@@ -7,3 +7,8 @@ $success: #000;
 $primary: #000;
 $default-text: #000;
 $top-height: 20px;
+
+
+@mixin titillium-font {
+  font-family: "Titillium Web", "Roboto", "Kaushan Script", Helvetica, Arial, cursive;
+}

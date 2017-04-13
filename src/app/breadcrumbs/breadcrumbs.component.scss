@@ -6,8 +6,8 @@
   background-color: #fff;
   height: 40px;
   line-height: 40px;
-  border-bottom: 1px solid #000;
-  color: #000;
+  border-bottom: 1px solid #BCC5D0;
+  color: #BCC5D0;
 
   ul.breadcrumb {
     margin: 0;
@@ -23,11 +23,12 @@
       }
 
       a {
-        color: #000;
+        color: #BCC5D0;
+        text-decoration: none;
       }
 
-      &.breadcrumb-item.active {
-        color: #000;
+      &.breadcrumb-item.active, &:hover {
+        color: #0288d1;
       }
 
       &:last-child {
