@@ -31,7 +31,9 @@ import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
-import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.component';
+import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
+import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component';
+
 
 
 @NgModule({
@@ -61,9 +63,11 @@ import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.compone
     AddNodeComponent,
     ProfileComponent,
     NotificationComponent,
+    ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
     AddSshKeyComponent,
     ListSshKeyComponent
+
   ],
   providers: [
     AUTH_PROVIDERS,
