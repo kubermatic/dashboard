@@ -1,35 +1,37 @@
 
 <ng-container *ngIf="cluster">
-  <div fxLayout fxLayoutGap="10px">
-    <h2 fxFlex class="component-heading">{{cluster.spec.humanReadableName}}</h2>
-  </div>
-
-  <div fxLayout fxLayoutGap="10px">
-    <div fxFlex>
-      Kubernetes Master
-      <button type="button" class="btn btn-primary" (click)="deleteCluster()">Delete Cluster</button>
+  <div fxLayout>
+    <h2 fxFlex="80%">{{cluster.spec.humanReadableName}}</h2>
+    <div fxFlex="20%" align="right" style="margin-top: 25px;">
+      <button type="button" md-raised-button color="primary" (click)="deleteCluster()">Delete Cluster</button>
     </div>
   </div>
 
-  <div fxLayout="row" fxLayoutGap="10px">
-    <div fxFlex="20%">Status</div>
-    <div fxFlex="80%" class="health-state">
-      <strong>{{cluster.status.phase}}</strong>
-      - Health:
-      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
-      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
-      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
-      <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
-    </div>
-  </div>
-
-  <div fxLayout fxLayoutGap="10px">
-    <div fxFlex="20%">API Server</div>
-    <div fxFlex="80%">
-     {{cluster.address.url}}
-      <a [attr.href]="downloadKubeconfigUrl()" target="_blank">download kubeconfig</a>
-    </div>
-  </div>
+  <md-card class="km-card-list">
+    <md-card-header class="km-card-list-header">
+      <md-card-title>Kubernetes Master</md-card-title>
+    </md-card-header>
+    <md-card-content class="km-card-list-content" fxLayout >
+      <div fxFlex="20%">Status</div>
+      <div fxFlex="80%" class="health-state">
+        <strong>{{cluster.status.phase}}</strong>
+        <div *ngIf="cluster.status.phase !== 'Pending'">
+          - Health:
+          <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
+          <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
+          <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
+          <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
+        </div>
+      </div>
+    </md-card-content>
+    <md-card-content class="km-card-list-content" fxLayout>
+      <div fxFlex="20%">API Server</div>
+      <div fxFlex="80%">
+        {{cluster.address.url}}
+        <a [attr.href]="downloadKubeconfigUrl()" md-button color="primary" class="km-download-config" target="_blank"><i class="fa fa-save"></i> download kubeconfig</a>
+      </div>
+    </md-card-content>
+  </md-card>
 </ng-container>
 
 <ng-container *ngIf="cluster && cluster.dc">
@@ -66,8 +68,6 @@
     <p fxFlex *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
   </div>
 
-
-
     <div fxLayout fxLayoutGap="10px">
       <div fxFlex="25%">Name</div>
       <div fxFlex="10%">Capacity</div>
@@ -84,10 +84,12 @@
       </div>
 
 
-      <div *ngSwitchCase="false" fxLayout fxLayoutGap="10px">
-        <div fxFlex>
-          No Node available. Please add a Node.
-        </div>
+      <div *ngSwitchCase="false" >
+        <md-card fxLayout>
+          <md-card-content align="center">
+            No Node available. Please add a Node.
+          </md-card-content>
+        </md-card>
       </div>
     </ng-container>
 
@@ -96,9 +98,9 @@
 
 
 <ng-container *ngIf="cluster && !cluster.dc">
-  <div fxLayout="column" fxLayoutGap="10px">
-      <p fxFlex>
+  <md-card fxLayout style="margin-top: 15px;">
+      <md-card-content fxFlex class="km-no-provider">
         No Provider available. Please add a Provider.
-      </p>
-  </div>
+      </md-card-content>
+  </md-card>
 </ng-container>
