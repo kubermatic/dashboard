@@ -1,27 +1,28 @@
-<div fxLayout="column"  fxLayout fxLayoutGap="10px">
-  <div fxFlex="40%">
-    <a *ngIf="cluster.dc.metadata.name" routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}">
+<a *ngIf="cluster.dc.metadata.name" routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}" fxLayouts class="km-card-list-content">
+  <div fxFlex="5%">{{index}}</div>
+  <div fxFlex="35%">
+    <span>
       <img src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
-      {{cluster.spec.humanReadableName}}
-    </a>
+      <p>{{cluster.spec.humanReadableName}}</p>
+    </span>
   </div>
   <div fxFlex="25%">
     <ng-container [ngSwitch]="!!cluster.spec.cloud">
-      <div *ngSwitchCase="true">
+      <span *ngSwitchCase="true">
         <img *ngIf="cluster.spec.cloud.aws" src="/assets/images/clouds/aws.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
         <img *ngIf="cluster.spec.cloud.digitalocean" src="/assets/images/clouds/digitalocean.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
-        {{cluster.spec.cloud.dc}}
-      </div>
-      <div *ngSwitchCase="false" class="text-muted">
+        <p>{{cluster.spec.cloud.dc}}</p>
+      </span>
+      <p *ngSwitchCase="false" class="text-muted">
         No cloud provider selected
-      </div>
+      </p>
     </ng-container>
   </div>
   <div fxFlex="15%">{{cluster.status.phase}}</div>
-  <div fxFlex="30%" class="health-state" *ngIf="cluster.status.phase !== 'Pending'">
+  <div fxFlex="15%" class="health-state" *ngIf="cluster.status.phase !== 'Pending'">
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
   </div>
-</div>
+</a>

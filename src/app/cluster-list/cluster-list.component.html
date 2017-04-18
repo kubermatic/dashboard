@@ -1,31 +1,28 @@
- <div fxLayout="column" fxLayoutGap="10px">
-      <h2 fxFlex class="component-heading">My Clusters</h2>
-  </div>
-
-  <div fxLayout fxLayoutGap="10px" fxLayoutAlign="right" *ngIf="clusters">
-    <p fxFlex="30%" >quantity of clusters: {{clusters.length}}</p>
-  </div>
-
-  <div fxLayout fxLayoutGap="10px">
-      <div fxFlex="40%">Cluster Name</div>
-      <div fxFlex="25%">DC of Nodes</div>
-      <div fxFlex="15%">Status</div>
-      <div fxFlex="30%">Health
+  <div fxLayout>
+      <h2 fxFlex="70%" class="component-heading">My Clusters</h2>
+      <div fxFlex="30%" align="right" style="margin-bottom: 15px;margin-top: 25px;">
         <a routerLink="/wizard">
-          <button type="button" class="btn btn-primary">
+          <button md-raised-button color="primary" type="button">
             <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>Add Cluster
           </button>
         </a>
       </div>
   </div>
-
+  <md-card class="km-card-list">
+    <md-card-header fxLayout class="km-card-list-header">
+        <md-card-title fxFlex="5%">#</md-card-title>
+        <md-card-title fxFlex="35%">Cluster Name</md-card-title>
+        <md-card-title fxFlex="25%">DC of Nodes</md-card-title>
+        <md-card-title fxFlex="15%">Status</md-card-title>
+        <md-card-title fxFlex="15%">Health</md-card-title>
+    </md-card-header>
   <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
     <div *ngSwitchCase="true">
-      <kubermatic-cluster-item *ngFor="let c of clusters" [cluster]="c"></kubermatic-cluster-item>
+      <kubermatic-cluster-item *ngFor="let c of clusters; let i = index" [cluster]="c" [index]="i + 1"></kubermatic-cluster-item>
     </div>
     <div *ngSwitchCase="false" fxLayout fxLayoutGap="10px">
-      <p fxFlex >No Cluster available. Please add a Cluster.</p>
+      <p fxFlex class="km-no-cluster" >No Cluster available. <a routerLink="/wizard">Please add a Cluster.</a></p>
     </div>
   </ng-container>
-
+ </md-card>
 

@@ -12,4 +12,29 @@
   }
 }
 
+.km-card-list {
+  padding-top: 10px;
+  padding-bottom: 10px;
 
+  .km-card-list-header {
+    height: 30px;
+    padding-bottom: 0;
+    line-height: 30px;
+
+    .mat-card-title {
+      font-weight: 500;
+      margin-bottom: 0;
+    }
+  }
+
+}
+
+
+.km-no-cluster {
+  text-align: center;
+  font-size: 14px;
+  color: #BCC5D0;
+  a {
+    color: #0288d1;
+  }
+}
