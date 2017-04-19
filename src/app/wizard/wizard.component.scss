@@ -15,14 +15,14 @@
   margin-left: 16px;
   padding-left: 16px;
   padding-top: 8px;
-  border-left: 2px solid #d0d0d0;
+  border-bottom: 2px solid #d0d0d0;
   position: relative;
 }
 .wizard-step.done {
-  border-left-color: green;
+  border-bottom-color: green;
 }
 .wizard-step:last-child {
-  border-left: none;
+  //border-bottom: none;
 }
 
 .wizard-step-body {
