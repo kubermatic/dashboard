@@ -1,17 +1,20 @@
 import {Injectable} from "@angular/core";
-import {Router, NavigationStart} from "@angular/router";
+import {Router, NavigationStart, NavigationEnd} from "@angular/router";
 import {tokenNotExpired} from "angular2-jwt";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Actions} from "../reducers/actions";
+import {Subscription} from "rxjs";
 
 // Avoid name not found warnings
 const Auth0Lock = require("auth0-lock").default;
+
 
 @Injectable()
 export class Auth {
 
   public static readonly AUTH0_LOCK_CONTAINER_ID = "embedded-lock";
+  public sub: Subscription;
 
   // Configure Auth0
   private lock = new Auth0Lock("zqaGAqBGiWD6tce7fcHL03QZYi1AC9wF", "kubermatic.eu.auth0.com", {
@@ -71,6 +74,23 @@ export class Auth {
         this.lock.resumeAuth(window.location.hash, (error, authResult) => {});
       });
   }
+
+
+  /*
+
+   private handleAuthenticationWithHash(): void {
+
+   this
+   .router
+   .events
+   .filter(event => event instanceof NavigationStart)
+   .filter((event: NavigationStart) => (/access_token|id_token|error/).test(event.url))
+   .subscribe(event => {
+   this.lock.resumeAuth(window.location.hash, (error, authResult) => {});
+   });
+   }
+
+   */
   public login() {
     // Call the show method to display the widget.
     this.lock.show();

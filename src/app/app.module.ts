@@ -86,4 +86,9 @@ import {ListSshKeyComponent} from "./profile/list-ssh-key/list-ssh-key.component
   ],
   bootstrap: [KubermaticComponent]
 })
+
+
+  //['ngMaterial']
+
+
 export class AppModule { }
