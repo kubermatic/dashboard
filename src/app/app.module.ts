@@ -47,7 +47,7 @@ import {ListSshKeyComponent} from "./profile/list-ssh-key/list-ssh-key.component
     RouterModule.forRoot(appRoutes),
     CustomFormsModule,
     StoreModule.provideStore(combinedReducer),
-    SimpleNotificationsModule,
+    SimpleNotificationsModule.forRoot(),
     SlimLoadingBarModule.forRoot(),
     MaterialModule,
     FlexLayoutModule
