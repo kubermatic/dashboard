@@ -4,7 +4,6 @@ import {tokenNotExpired} from "angular2-jwt";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Actions} from "../reducers/actions";
-import {Subscription} from "rxjs";
 
 // Avoid name not found warnings
 const Auth0Lock = require("auth0-lock").default;
@@ -14,7 +13,6 @@ const Auth0Lock = require("auth0-lock").default;
 export class Auth {
 
   public static readonly AUTH0_LOCK_CONTAINER_ID = "embedded-lock";
-  public sub: Subscription;
 
   // Configure Auth0
   private lock = new Auth0Lock("zqaGAqBGiWD6tce7fcHL03QZYi1AC9wF", "kubermatic.eu.auth0.com", {
@@ -39,7 +37,7 @@ export class Auth {
       localStorage.setItem("id_token", authResult.idToken);
       this.store.dispatch({ type: Actions.LOGGED_IN, payload: { token: authResult.idToken, profile: [] } });
 
-      this.lock.getProfile(authResult.idToken, function(error: any, profile: any){
+      this.lock.getUserInfo(authResult.idToken, function(error: any, profile: any){
         if (error) {
           throw new Error(error); // TODO make global error state?!
         }
@@ -65,6 +63,9 @@ export class Auth {
 
     this.handleAuthenticationWithHash();
   }
+/*
+
+  old
 
   private handleAuthenticationWithHash(): void {
     this.router.events
@@ -75,22 +76,33 @@ export class Auth {
       });
   }
 
+  */
 
-  /*
+
+
 
    private handleAuthenticationWithHash(): void {
+     this
+      .router
+      .events
+      .filter(event => event instanceof NavigationStart)
+      .filter((event: NavigationStart) => {
+        return (/access_token|id_token|error/).test(event.url)
+      })
+      .subscribe(event => {
+        this.lock.resumeAuth(window.location.hash, (error, authResult) => {
 
-   this
-   .router
-   .events
-   .filter(event => event instanceof NavigationStart)
-   .filter((event: NavigationStart) => (/access_token|id_token|error/).test(event.url))
-   .subscribe(event => {
-   this.lock.resumeAuth(window.location.hash, (error, authResult) => {});
-   });
+          if (authResult && authResult.idToken) {
+            console.log('true')
+          }
+
+          if (authResult && authResult.error) {
+            console.log('false')
+          }
+        });
+      });
    }
 
-   */
   public login() {
     // Call the show method to display the widget.
     this.lock.show();
