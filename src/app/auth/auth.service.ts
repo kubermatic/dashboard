@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {Router, NavigationStart, NavigationEnd} from "@angular/router";
+import {Router, NavigationStart} from "@angular/router";
 import {tokenNotExpired} from "angular2-jwt";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
@@ -7,7 +7,6 @@ import {Actions} from "../reducers/actions";
 
 // Avoid name not found warnings
 const Auth0Lock = require("auth0-lock").default;
-
 
 @Injectable()
 export class Auth {
@@ -37,7 +36,7 @@ export class Auth {
       localStorage.setItem("id_token", authResult.idToken);
       this.store.dispatch({ type: Actions.LOGGED_IN, payload: { token: authResult.idToken, profile: [] } });
 
-      this.lock.getUserInfo(authResult.idToken, function(error: any, profile: any){
+      this.lock.getUserInfo(authResult.accessToken, function(error: any, profile: any){
         if (error) {
           throw new Error(error); // TODO make global error state?!
         }
@@ -63,46 +62,15 @@ export class Auth {
 
     this.handleAuthenticationWithHash();
   }
-/*
-
-  old
 
   private handleAuthenticationWithHash(): void {
     this.router.events
       .filter(event => event instanceof NavigationStart)
-      .filter(event => (/access_token|id_token|error/).test(event.url))
+      .filter((event: NavigationStart) => (/access_token|id_token|error/).test(event.url))
       .subscribe(event => {
         this.lock.resumeAuth(window.location.hash, (error, authResult) => {});
       });
   }
-
-  */
-
-
-
-
-   private handleAuthenticationWithHash(): void {
-     this
-      .router
-      .events
-      .filter(event => event instanceof NavigationStart)
-      .filter((event: NavigationStart) => {
-        return (/access_token|id_token|error/).test(event.url)
-      })
-      .subscribe(event => {
-        this.lock.resumeAuth(window.location.hash, (error, authResult) => {
-
-          if (authResult && authResult.idToken) {
-            console.log('true')
-          }
-
-          if (authResult && authResult.error) {
-            console.log('false')
-          }
-        });
-      });
-   }
-
   public login() {
     // Call the show method to display the widget.
     this.lock.show();
@@ -111,7 +79,7 @@ export class Auth {
   public authenticated() {
     // Check if there's an unexpired JWT
     // This searches for an item in localStorage with key == 'id_token'
-    return tokenNotExpired();
+    return tokenNotExpired('id_token');
   };
 
   public logout() {
