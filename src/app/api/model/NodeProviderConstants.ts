@@ -5,6 +5,7 @@ export class NodeProvider {
   public static readonly AWS: string = "aws";
   public static readonly DIGITALOCEAN: string = "digitalocean";
   public static readonly BRINGYOUROWN: string = "bringyourown";
+  public static readonly BAREMETAL: string = "baremetal";
 }
 
 export class NodeInstanceFlavors {

@@ -15,7 +15,6 @@
                       <i class="fa fa-key" aria-hidden="true"></i><span>{{ key.name }}</span>
                   </div>
                   <div fxFlex="10%">
-
                     <md-menu #appMenu="mdMenu">
                       <button md-menu-item (click)="deleteSSHKey(key.name)">Delete</button>
                       <button md-menu-item >Cancel</button>
@@ -35,8 +34,6 @@
                   <small>Fingerprint: {{ key.fingerprint }}</small>
                 </div>
             </md-card-content>
-
-
         </md-card>
     </ng-container>
 </ng-container>

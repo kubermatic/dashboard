@@ -24,18 +24,12 @@
         </md-card-content>
       </md-card>
     </div>
-
   </md-tab>
   <md-tab label="Your SSH keys">
     <div class="km-ssh-keys" style="padding: 20px 2px;">
-
-
       <kubermatic-list-ssh-key [sshKeys]="sshKeys"></kubermatic-list-ssh-key>
-
       <kubermatic-add-ssh-key (syncSshKey)="handleKeyUpdated($event)" ></kubermatic-add-ssh-key>
-
   </div>
-
   </md-tab>
 </md-tab-group>
 

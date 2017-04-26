@@ -2,9 +2,9 @@
 //@import "../../assets/css/bootstrap/variables";
 
 .wizard-content {
-  padding: 5px;
+  /*padding: 5px;
   max-height: calc(100vh - 210px);
-  overflow-y: auto;
+  overflow-y: auto;*/
 }
 
 .wizard-footer {
@@ -12,21 +12,18 @@
 }
 
 .wizard-step {
-  margin-left: 16px;
-  padding-left: 16px;
+  //margin-left: 16px;
+  //padding-left: 16px;
   padding-top: 8px;
-  border-bottom: 2px solid #d0d0d0;
+  border-bottom: 1px solid #d0d0d0;
   position: relative;
 }
 .wizard-step.done {
   border-bottom-color: green;
 }
-.wizard-step:last-child {
-  //border-bottom: none;
-}
 
 .wizard-step-body {
-  margin-left: 16px;
+  //margin-left: 16px;
   margin-top: 0;
   min-height: 48px;
   overflow-y:hidden;
@@ -72,12 +69,12 @@
 .wizard-step.done .wizard-step-circle {
   background-color: green;
   color: white;
-  border: 2px solid green;
+  border: 1px solid green;
 }
 .wizard-step.active .wizard-step-circle {
   background-color: green;
   color: white;
-  border: 2px solid green;
+  border: 1px solid green;
 }
 .wizard-step.tbd .wizard-step-circle {
   background-color: #d0d0d0;
@@ -95,7 +92,7 @@ $wizard-box-content-dc-logo-size: 70px;
 $wizard-box-content-cloud-logo-size: 120px;
 $wizard-box-content-location-flag-size: 32px;
 $wizard-box-content-dc-margin-top: 10px;
-$wizard-box-content-cloud-margin-top: 25px;
+$wizard-box-content-cloud-margin-top: 50px;
 
 .wizard-box-text {
   color: #000;
@@ -174,12 +171,14 @@ $wizard-box-content-cloud-margin-top: 25px;
   min-height: $wizard-box-size;
   width: $wizard-box-size;
   margin: 15px;
-  border-radius: 10px 10px 10px 10px;
+  /*border-radius: 10px 10px 10px 10px;
   -moz-border-radius: 10px 10px 10px 10px;
-  -webkit-border-radius: 10px 10px 10px 10px;
-  background: #fbfbfc;
-  border: 1px solid #000;
+  -webkit-border-radius: 10px 10px 10px 10px;*/
+  background: #fff;
+  border: 1px solid #E3E8EC;
   cursor: pointer;
+
+  min-height: 198px;
 }
 
 .wizard-box[disabled] {
@@ -187,43 +186,42 @@ $wizard-box-content-cloud-margin-top: 25px;
 }
 
 .wizard-box.selected {
-  background-color: #dcebff;
   cursor: default;
+  border: 1px solid #03a9f4;
 }
 
 .wizard-box.selected:hover {
   background-color: #d5e3f5;
   cursor: default;
+  border: 1px solid #03a9f4;
+}
+
+.wizard-box:hover {
+  border: 1px solid #03a9f4;
+  background-color: #d5e3f5;
 }
 
 .wizard-box:not([disabled]):not(.selected):hover {
   background: #f7f8f9;
 }
 
-.wizard-box-color_primary:not([disabled]) {
-  border: 1px solid #00BDCC;
-}
 
-.wizard-box-color_secondary:not([disabled]) {
-  border: 1px solid #00969e;
-}
-
-.wizard-box.wizard-box-color_primary:hover {
-  border: 1px solid #00BDCC;
-}
-
-.wizard-box.wizard-box-color_secondary:hover {
-  border: 1px solid #00969e;
-}
 
 .wizard-box[disabled] > i {
   color: #717171
 }
 
-.wizard-box.wizard-box-color_primary:before {
-  border-left-color: #00BDCC;
-}
+.km-card-progress-bar {
+  .mat-card-title {
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 0;
+    margin-top: 0px;
+    padding-bottom: 10px;
+    padding-right: 15px;
 
-.wizard-box.wizard-box-color_secondary:before {
-  border-left-color: #00969e;
+    i {
+      color: green;
+    }
+  }
 }

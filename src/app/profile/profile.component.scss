@@ -27,7 +27,6 @@
 }
 
 .profile-name {
-  //@include titillium-font;
   font-size: 2rem;
   line-height: 40px;
   margin: 15px 0;
@@ -49,6 +48,9 @@
 .km-profile {
   .mat-card-header {
     height: 55px;
-
+    margin-bottom: 10px;
+  }
+  .mat-card-content {
+    line-height: 20px;
   }
 }

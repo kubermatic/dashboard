@@ -4,95 +4,126 @@
   </div>
 </div>
 
-<md-card style="margin-bottom: 20px;">
-  <md-card-content fxLayout>
+<md-card style="margin-bottom: 20px;" class="km-card-progress-bar" fxLayout>
     <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
-      <span *ngIf="currentStep > 0" class="fa fa-check" aria-hidden="true" [style.cursor]="'pointer'"  (click)="gotoStep(0)"></span>
-      <span *ngIf="currentStep <= 0" class=""><span md-fab color="primary">1</span> <p>Name your Kubernetes cluster</p></span>
+      <span *ngIf="currentStep > 0" (click)="gotoStep(0)" [style.cursor]="'pointer'">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        <small>Name your Kubernetes cluster</small>
+      </span>
+      <span *ngIf="currentStep <= 0" class="">1. <small>Name your Kubernetes cluster</small></span>
     </md-card-title>
-    <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
-      <span *ngIf="currentStep > 1" class="fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(1)"></span>
-      <span *ngIf="currentStep <= 1" class="">2 <small>Select the cloud provider for your nodes</small></span>
+    <md-card-title fxFlex="25%" class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
+      <span *ngIf="currentStep > 1" [style.cursor]="'pointer'" (click)="gotoStep(1)">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        <small>Select the cloud provider for your nodes</small>
+      </span>
+      <span *ngIf="currentStep <= 1" class="">2. <small>Select the cloud provider for your nodes</small></span>
     </md-card-title>
-    <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
-      <span *ngIf="currentStep > 2" class="fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(2)"></span>
-      <span *ngIf="currentStep <= 2" class="">3 <small>Select the datacenter of your cloud provider</small></span>
+    <md-card-title fxFlex="25%" class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
+      <span *ngIf="currentStep > 2" [style.cursor]="'pointer'" (click)="gotoStep(2)">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        <small>Select the datacenter of your cloud provider</small>
+      </span>
+      <span *ngIf="currentStep <= 2" class="">3. <small>Select the datacenter of your cloud provider</small></span>
     </md-card-title>
     <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 3, 'done': currentStep > 3, 'tbd': currentStep < 3}">
-      <span *ngIf="currentStep > 3" class="fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(3)"></span>
-      <span *ngIf="currentStep <= 3" class="">4 <small>Provide credentials & Settings</small></span>
+      <span *ngIf="currentStep > 3" [style.cursor]="'pointer'" (click)="gotoStep(3)">
+        <i class="fa fa-check" aria-hidden="true" ></i>
+        <small>Provide credentials & Settings</small>
+      </span>
+      <span *ngIf="currentStep <= 3" class="">4. <small>Provide credentials & Settings</small></span>
     </md-card-title>
-    <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
-      <span *ngIf="currentStep > 4" class="fa fa-check" aria-hidden="true" [style.cursor]="'pointer'" (click)="gotoStep(4)"></span>
-      <span *ngIf="currentStep <= 4" class="">5 <small>Summary</small></span>
+    <md-card-title fxFlex="10%" class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
+      <span *ngIf="currentStep > 4"  [style.cursor]="'pointer'" (click)="gotoStep(4)">
+        <i class="fa fa-check" aria-hidden="true"></i>
+        <small>Summary</small>
+      </span>
+      <span *ngIf="currentStep <= 4" class="">5. <small>Summary</small></span>
     </md-card-title >
-  </md-card-content>
 </md-card>
 
 
-<md-card style="margin-bottom: 50px;">
+
+
+<md-card class="km-card-list" style="margin-bottom: 50px;">
+
+  <!-- TODO: Card header headline -->
+
+  <md-card-header class="km-card-list-header">
+    <md-card-title style="font-size: 18px; margin-bottom: 0;">
+      <h4 [hidden]="currentStep !== 0" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Name your Kubernetes cluster</h4>
+      <h4 [hidden]="currentStep !== 1" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Select the cloud provider for your nodes</h4>
+      <h4 [hidden]="currentStep !== 2" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Select the datacenter of your cloud provider</h4>
+      <h4 [hidden]="currentStep !== 3" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Provide credentials & Settings</h4>
+      <h4 [hidden]="currentStep !== 4" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Summary</h4>
+    </md-card-title>
+  </md-card-header>
+
+  <!-- TODO:  Create Cluster -->
   <md-card-content class="wizard-content">
     <div class="km-wizard-step" >
       <div class="wizard-step-body" [hidden]="currentStep !== 0">
-        <h4>Name your Kubernetes cluster</h4>
-        <div >
-          <div class="col-8 wizard-box-text">This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</div>
-          <form [formGroup]="clusterNameForm" novalidate>
-            <div class="col-6 form-group" [ngClass]="{'has-danger': !clusterNameForm.controls.name.valid, 'has-success': clusterNameForm.controls.name.valid}">
-              <input id="name" formControlName="name" type="text" class="form-control" title="name">
-              <button type="button" class="btn btn-link btn-sm text-primary" style="cursor: pointer;" (click)="refreshName()">Generate name</button>
-            </div>
-          </form>
-        </div>
+        <form [formGroup]="clusterNameForm" novalidate>
+          <div class="wizard-box-text form-text">This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</div>
+          <md-input-container class="km-ssh-key-input" style="width: 350px;" [ngClass]="{'has-danger': !clusterNameForm.controls.name.valid, 'has-success': clusterNameForm.controls.name.valid}">
+            <input id="name" mdInput formControlName="name" type="text" placeholder="Name" title="name">
+          </md-input-container>
+          <button type="button" md-raised-button style="background-color: rgba(0, 0, 0, 0.05); color: rgba(0, 0, 0, 0.50);" (click)="refreshName()">Generate name</button>
+        </form>
       </div>
     </div>
+    <!-- TODO:  Select Provider -->
+    <md-card-content class="wizard-content">
+      <div class="km-wizard-step">
+        <div class="wizard-step-body" [hidden]="currentStep !== 1">
 
-    <div class="km-wizard-step">
-
-      <div class="wizard-step-body" [hidden]="currentStep !== 1">
-        <h4>Select the cloud provider for your nodes</h4>
-        <div >
-          <div class="col-8 wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-            Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
-          <div class="row justify-content-center">
-            <div *ngFor="let cloud of supportedNodeProviders; let i = index;" class="col-sm wizard-box"
-                 [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-                 (click)="selectCloud(cloud)">
-              <div class="col-xs wizard-box-content justify-content-center">
-                <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
+          <div>
+            <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+              Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
+            <div fxLayoutAlign="center" fxLayout>
+              <div [fxFlex]="calc4Cols" *ngFor="let cloud of supportedNodeProviders; let i = index;" class="wizard-box"
+                   [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
+                   (click)="selectCloud(cloud)">
+                <div class="wizard-box-content">
+                  <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </md-card-content>
 
+
+    <!-- TODO:  Select Provider Datacenter -->
     <div class="km-wizard-step" >
-
       <div class="wizard-step-body" [hidden]="currentStep !== 2">
-        <h4>Select the datacenter of your cloud provider</h4>
+
         <div>
-          <div class="col-8 wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+          <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
             Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
 
-          <div [hidden]="selectedCloud === 'bringyourown'">
-            <div class="row justify-content-center">
-              <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;" class="col-xs-6 wizard-box"
-                   [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-                   (click)="selectCloudRegion(dc)">
+          <div [hidden]="selectedCloud === 'bringyourown'"  >
 
-                <div class="col-xs wizard-box-content justify-content-center">
-                  <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{dc.spec.provider}}">
-                  <div class="name">
-                    {{dc.metadata.name}}
+            <div *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;">
+              <div fxLayout="row">
+                <div fxFlex="25%"  class="wizard-box"
+                     [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
+                     (click)="selectCloudRegion(dc)">
+
+                  <div class="wizard-box-content justify-content-center">
+                    <img class="location-flag" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
+                    <div class="location">
+                      {{dc.spec.location}}
+                    </div>
                   </div>
-                  <div class="location">
-                    {{dc.spec.location}}
-                  </div>
-                  <img class="location-flag" src="/assets/images/flags/32/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
                 </div>
+
               </div>
             </div>
+
+
+
           </div>
 
           <div [hidden]="selectedCloud !== 'bringyourown'" class="col-6">
@@ -116,10 +147,12 @@
       </div>
     </div>
 
+
+    <!-- TODO: Add credentials -->
     <div class="km-wizard-step">
 
       <div class="wizard-step-body" [hidden]="currentStep !== 3">
-        <h4>Provide credentials & Settings</h4>
+
         <div>
           <div [hidden]="selectedCloud !== 'aws'">
             <div class="col-8 wizard-box-text">
@@ -132,16 +165,20 @@
             </div>
 
             <form [formGroup]="awsForm" novalidate class="col-6">
-              <div class="form-group" [ngClass]="{'has-danger': !awsForm.controls.access_key_id.valid && awsForm.controls.access_key_id.touched, 'has-success': awsForm.controls.access_key_id.valid}">
-                <label for="access_key_id" class="form-text text-muted">Access Key ID:</label>
-                <input id="access_key_id" formControlName="access_key_id" type="text" class="form-control">
+
+
+              <md-input-container  style="width: 350px;" [ngClass]="{'has-danger': !awsForm.controls.access_key_id.valid && awsForm.controls.access_key_id.touched, 'has-success': awsForm.controls.access_key_id.valid}">
+                <input id="access_key_id" mdInput formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
                 <small class="form-text text-danger" [hidden]="awsForm.controls.access_key_id.valid || !awsForm.controls.access_key_id.touched">Access Key ID must be between 16 and 32 characters long.</small>
-              </div>
-              <div class="form-group" [ngClass]="{'has-danger': !awsForm.controls.secret_access_key.valid && awsForm.controls.secret_access_key.touched, 'has-success': awsForm.controls.secret_access_key.valid}">
-                <label for="secret_access_key" class="form-text text-muted">Secret Access Key:</label>
-                <input id="secret_access_key" formControlName="secret_access_key" type="text" class="form-control">
+              </md-input-container>
+
+
+              <md-input-container  style="width: 350px;" [ngClass]="{'has-danger': !awsForm.controls.secret_access_key.valid && awsForm.controls.secret_access_key.touched, 'has-success': awsForm.controls.secret_access_key.valid}">
+                <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
                 <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
-              </div>
+              </md-input-container>
+
+
               <div class="form-group">
                 <label for="ssh_key" class="form-text text-muted">Authorized SSH Key:</label>
                 <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
@@ -252,9 +289,10 @@
       </div>
     </div>
 
+
+    <!-- TODO: Summery --->
     <div class="km-wizard-step" >
       <div class="wizard-step-body" [hidden]="currentStep !== 4">
-        <h4>Summary</h4>
         <div>
           <div class="row justify-content-center">
 
@@ -318,7 +356,7 @@
     </div>
   </md-card-content>
 
-  <md-card-footer class="wizard-footer btn-group row" role="group" aria-label="navigation">
+  <md-card-footer>
     <button type="button"md-raised-button color="primary" (click)="stepBack()" [disabled]="!canStepBack()">
       <i class="fa fa-chevron-left" style="margin-right: 5px;" aria-hidden="true"></i>Back
     </button>

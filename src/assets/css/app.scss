@@ -10,19 +10,36 @@ html, body {
   color: #444D58;
 }
 
+// Card Styling
 
-.mat-card-header {
+md-card-header {
   border-bottom: 1px solid #E3E8EC;
   padding-bottom: 10px;
 
+  &.km-card-list-header.mat-card-header {
+    margin-bottom: 10px;
+  }
+
+  .mat-card-title {
+    padding-top: 0px;
+    font-size: 18px;
+  }
+
+  .mat-card-header-text {
+    width: 100%;
+  }
 }
 
-.mat-card-header-text {
-  width: 100%;
+// Input Fields
+
+
+.mat-input-wrapper {
+  margin: 1.5em 0 1em;
+  padding-bottom: 6px;
 }
 
-.mat-card-title {
-  padding-top: 0px;
-  font-size: 18px;
 
+.km-card-list .mat-card-footer {
+  position: relative;
 }
+

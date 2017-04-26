@@ -3,6 +3,14 @@
   padding-top: 10px;
   margin-bottom: 30px;
 
+  .mat-card-header {
+    padding-bottom: 0;
+    margin-bottom: 10px;
+
+    .mat-card-title {
+      margin-bottom: 10px;
+    }
+
     .km-ssh-key-name {
       padding-top: 10px;
       i {
@@ -20,6 +28,7 @@
       border:1px solid #0288d1;
       border-radius: 0;
     }
+  }
 }
 
 .km-ssh-key-publickey {

@@ -24,7 +24,7 @@ import {Observable, Subscription} from "rxjs";
 })
 export class WizardComponent implements OnInit {
 
-  public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN];
+  public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN, NodeProvider.BAREMETAL];
   public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {};
 
   public currentStep: number = 0;
