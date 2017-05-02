@@ -9,8 +9,39 @@ html, body {
   background-color: #EFF3F8;
   color: #444D58;
 }
+h2 {
+  font-weight: 300;
+}
 
 // Card Styling
+
+.km-card-list {
+  padding-top: 10px;
+  margin-bottom: 10px;
+
+  .km-card-list-header {
+    height: 30px;
+    padding-bottom: 0;
+    line-height: 30px;
+
+    .mat-card-title {
+      font-weight: 500;
+      margin-bottom: 0;
+      margin-left: 0;
+    }
+  }
+
+}
+
+.km-card-list-content {
+  margin: 0 8px 10px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 30px;
+}
+
 
 md-card-header {
   border-bottom: 1px solid #E3E8EC;
@@ -32,14 +63,31 @@ md-card-header {
 
 // Input Fields
 
-
 .mat-input-wrapper {
   margin: 1.5em 0 1em;
   padding-bottom: 6px;
 }
 
-
 .km-card-list .mat-card-footer {
   position: relative;
 }
+
+.mat-select-placeholder {
+  font-size: 14px;
+}
+
+.mat-select-value-text {
+  font-size: 14px;
+}
+
+.mat-slider-horizontal {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.dfjsdfijs {
+  border: 1px solid red;
+  float: left;
+}
+
 

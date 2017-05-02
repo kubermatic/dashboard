@@ -46,8 +46,10 @@ export class WizardComponent implements OnInit {
   public nodeSize: string[] = NodeInstanceFlavors.VOID;
 
   // Create Nodes
+  public selectedNodeCountValue: number = 3;
   public cluster: any;
-  public nodeSpec: any = {spec: {}}
+  public nodeSpec: any = {spec: {}};
+  public clusterSpec: any = {};
 
   constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder, private router: Router,
@@ -84,8 +86,13 @@ export class WizardComponent implements OnInit {
       secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
       ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: ["", [<any>Validators.required]]
+      node_size: ["", [<any>Validators.required]],
+      vpc_id: [""],
+      subnet_id: [""],
+      auto_update: [true, [<any>Validators.required]]
     });
+
+
 
     this.digitalOceanForm = this.formBuilder.group({
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
@@ -181,7 +188,7 @@ export class WizardComponent implements OnInit {
   public createClusterAndNode() {
     let key = null;
     let secret =  null;
-    let ssh_keys =  null;
+    let ssh_keys = [];
     let region = this.selectedCloudRegion.metadata.name;
     let cluster_name = this.clusterNameForm.controls["name"].value;
     let sub: Subscription;
@@ -194,6 +201,14 @@ export class WizardComponent implements OnInit {
       ssh_keys = this.awsForm.controls["ssh_key"].value;
       node_instances = this.digitalOceanForm.controls["node_count"].value;
 
+      this.clusterSpec.aws = {
+        vpc_id: this.awsForm.controls["vpc_id"].value,
+        subnet_id: this.awsForm.controls["subnet_id"].value,
+        container_linux : {
+          auto_update : this.awsForm.controls["auto_update"].value
+        }
+      }
+
       this.nodeSpec.spec.aws = {
         type: this.awsForm.controls["node_size"].value
       };
@@ -202,14 +217,16 @@ export class WizardComponent implements OnInit {
       secret = this.digitalOceanForm.controls["access_token"].value;
       ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
       node_instances = this.digitalOceanForm.controls["node_count"].value;
+      this.clusterSpec.digitalocean = {}
 
       this.nodeSpec.spec.digitalocean = {
-        //sshKeys: this.cluster.spec.cloud.digitalocean.sshKeys,
         size: this.digitalOceanForm.controls["node_size"].value
       };
     }
 
-    const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value);
+    const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);
+
+
     const cloud = new CloudModel(key, secret, this.selectedCloud, region);
     const model = new CreateClusterModel(cloud, spec, ssh_keys);
 

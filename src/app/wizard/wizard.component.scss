@@ -88,10 +88,10 @@
 // arrow box--------
 
 $wizard-box-size: 200px;
-$wizard-box-content-dc-logo-size: 70px;
+$wizard-box-content-dc-logo-size: 125px;
 $wizard-box-content-cloud-logo-size: 120px;
-$wizard-box-content-location-flag-size: 32px;
-$wizard-box-content-dc-margin-top: 10px;
+$wizard-box-content-location-flag-size: 48px;
+$wizard-box-content-dc-margin-top: 20px;
 $wizard-box-content-cloud-margin-top: 50px;
 
 .wizard-box-text {
@@ -100,11 +100,15 @@ $wizard-box-content-cloud-margin-top: 50px;
   font-size: 14px;
   padding-top: 10px;
   padding-bottom: 10px;
+  a {
+    color: #0288d1;
+  }
 }
 
 .wizard-box-title {
   @extend .wizard-box-text;
   text-align: center;
+  padding-bottom: 0;
 }
 
 .wizard-box-text-primary {
@@ -123,7 +127,7 @@ $wizard-box-content-cloud-margin-top: 50px;
   img.dc-logo {
     width: $wizard-box-content-dc-logo-size;
     margin-top: $wizard-box-content-dc-margin-top;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
   }
 
   img.cloud-logo {
@@ -149,12 +153,12 @@ $wizard-box-content-cloud-margin-top: 50px;
   div.node-count {
     font-weight: 600;
     font-size: 7em;
-    margin-top: 50px;
+    margin-top: 15px;
   }
 
   div.location {
     font-weight: 300;
-    font-size: 16px;
+    font-size: 14px;
     padding: 5px;
   }
 
@@ -177,8 +181,14 @@ $wizard-box-content-cloud-margin-top: 50px;
   background: #fff;
   border: 1px solid #E3E8EC;
   cursor: pointer;
-
+  float: left;
   min-height: 198px;
+  &.small {
+    max-width: $wizard-box-size / 2;
+    max-height: $wizard-box-size / 2;
+    min-height: $wizard-box-size / 2;
+    width: $wizard-box-size / 2;
+  }
 }
 
 .wizard-box[disabled] {

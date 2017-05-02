@@ -35,13 +35,13 @@
 
 <ng-container *ngIf="cluster && cluster.dc">
 
-
-    <div fxLayout fxLayoutGap="10px">
-      <div fxFlex="40%">Provider</div>
-      <div fxFlex="30%">Node Region</div>
-      <div fxFlex="30%">shhKeys</div>
-    </div>
-    <div fxLayout fxLayoutGap="10px">
+  <md-card class="km-card-list">
+    <md-card-header class="km-card-list-header" fxLayout>
+      <md-card-title fxFlex="40%">Provider</md-card-title>
+      <md-card-title fxFlex="30%">Node Region</md-card-title>
+      <md-card-title fxFlex="30%">shhKeys</md-card-title>
+    </md-card-header>
+    <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="40%">
         <img src="/assets/images/clouds/{{cluster.dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
       </div>
@@ -58,40 +58,35 @@
           </div>
         </ng-container>
       </div>
-    </div>
-
+    </md-card-content>
+  </md-card>
 
   <kubermatic-add-node [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [cluster]="cluster"></kubermatic-add-node>
 
-  <div fxLayout fxLayoutGap="10px">
-    <p fxFlex *ngIf="nodes" class="text-right">quantity of nodes: {{nodes.length}}</p>
+  <div fxLayout >
+    <p fxFlex *ngIf="nodes" >quantity of nodes: {{nodes.length}}</p>
   </div>
 
-    <div fxLayout fxLayoutGap="10px">
-      <div fxFlex="25%">Name</div>
-      <div fxFlex="10%">Capacity</div>
-      <div fxFlex="25%">Version</div>
-      <div fxFlex="15%">Public IP</div>
-      <div fxFlex="10%">Status</div>
-      <div fxFlex="15%"></div>
-    </div>
+  <md-card class="km-card-list" style="margin-bottom: 70px;">
+    <md-card-header class="km-card-list-header" fxLayout>
+      <md-card-title fxFlex="25%">Name</md-card-title>
+      <md-card-title fxFlex="10%">Capacity</md-card-title>
+      <md-card-title fxFlex="25%">Version</md-card-title>
+      <md-card-title fxFlex="15%">Public IP</md-card-title>
+      <md-card-title fxFlex="10%">Status</md-card-title>
+      <md-card-title fxFlex="15%"></md-card-title>
+    </md-card-header>
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
-      <div *ngSwitchCase="true">
-
+      <md-card-content *ngSwitchCase="true">
         <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
-      </div>
+      </md-card-content>
 
-
-      <div *ngSwitchCase="false" >
-        <md-card fxLayout>
-          <md-card-content align="center">
-            No Node available. Please add a Node.
-          </md-card-content>
-        </md-card>
-      </div>
+      <md-card-content  *ngSwitchCase="false" align="center">
+        No Node available. Please add a Node.
+      </md-card-content>
     </ng-container>
-
+  </md-card>
 
 </ng-container>
 
