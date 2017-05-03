@@ -91,3 +91,53 @@ md-card-header {
 }
 
 
+// dialog
+
+.mat-dialog-container {
+  .mat-toolbar {
+    background-color: #fff;
+    border-bottom: 1px solid #E3E8EC;
+    min-height: 30px;
+    padding: 0 8px;
+    .mat-toolbar-row {
+      height: 30px;
+    }
+    h4 {
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0;
+    }
+    button {
+      position: absolute;
+      right: 15px;
+      top: 5px;
+      font-size: 20px;
+      i {
+        color: #0288d1;
+      }
+    }
+  }
+  .md-dialog-content {
+
+    p {
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .mat-input-wrapper {
+      margin: 8px 0;
+    }
+    .mat-input-infix {
+      font-size: 14px;
+    }
+  }
+  .mat-dialog-actions {
+
+    &:last-child {
+      margin-bottom: -12px;
+    }
+    button {
+      margin-right: 10px;
+    }
+  }
+}

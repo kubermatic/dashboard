@@ -2,7 +2,11 @@
   <div fxLayout>
     <h2 fxFlex="80%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="20%" align="right" style="margin-top: 25px;">
-      <kubermatic-cluster-delete-confirmation [humanReadableName]="cluster.spec.humanReadableName" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-cluster-delete-confirmation>
+      <!--<kubermatic-cluster-delete-confirmation [humanReadableName]="cluster.spec.humanReadableName" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc"></kubermatic-cluster-delete-confirmation>
+-->
+
+
+      <button md-button (click)="deleteClusterDialog()" md-raised-button >Delete Node</button>
     </div>
   </div>
 

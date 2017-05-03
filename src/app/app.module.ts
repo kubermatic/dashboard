@@ -73,6 +73,7 @@ import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component
     ListSshKeyComponent
   ],
   entryComponents: [
+    ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent
   ],
   providers: [

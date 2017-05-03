@@ -1,27 +1,37 @@
-
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary btn-right" data-toggle="modal" data-target="#clusterDelete">
-Delete Cluster
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="clusterDelete" tabindex="-1" role="dialog" aria-labelledby="clusterDelete">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Delete confirmation</h4>
-      </div>
-      <div class="modal-body">
-
-        <p>You are on the way to delete the cluster "{{humanReadableName}}". Deletion of clusters cannot be UNDONE!</p>
-        <p>If you know what you are doing, please type the name of the cluster:</p>
-        <input id="name" type="text" title="name" (blur)="onChange($event)" (keyup)="onChange($event)">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteCluster()" [disabled]="!disableDeleteCluster">Delete</button>
-      </div>
+<div>
+ <md-toolbar>
+    <div class="md-toolbar">
+        <h4 class="modal-title" id="myModalLabel">Delete Cluster confirmation</h4>
     </div>
-  </div>
+    <button md-icon-button md-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </md-toolbar>
+  <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+
+
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <p>You are on the way to delete the cluster "{{humanReadableName}}". Deletion of clusters cannot be UNDONE!</p>
+      <p>If you know what you are doing, <strong>please type the name of the cluster</strong>:</p>
+
+      <md-input-container style="width: 100%" >
+        <input id="name" mdInput type="text" placeholder="Name of the Cluster:" title="secret_access_key" (blur)="onChange($event)" (keyup)="onChange($event)">
+      </md-input-container>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <button md-dialog-close md-raised-button>
+      close
+    </button>
+    <button (click)="deleteCluster()" md-dialog-close md-raised-button color="primary" class="md-primary" [disabled]="!disableDeleteCluster">
+      delete
+    </button>
+  </md-dialog-actions>
 </div>
+
+
+
+
+
+
