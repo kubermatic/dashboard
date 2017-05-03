@@ -66,23 +66,20 @@
 
   <kubermatic-add-node [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [cluster]="cluster"></kubermatic-add-node>
 
-  <div fxLayout >
-    <p fxFlex *ngIf="nodes" >quantity of nodes: {{nodes.length}}</p>
-  </div>
-
   <md-card class="km-card-list" style="margin-bottom: 70px;">
     <md-card-header class="km-card-list-header" fxLayout>
+      <md-card-title fxFlex="5%">#</md-card-title>
       <md-card-title fxFlex="25%">Name</md-card-title>
       <md-card-title fxFlex="10%">Capacity</md-card-title>
       <md-card-title fxFlex="25%">Version</md-card-title>
       <md-card-title fxFlex="15%">Public IP</md-card-title>
       <md-card-title fxFlex="10%">Status</md-card-title>
-      <md-card-title fxFlex="15%"></md-card-title>
+      <md-card-title fxFlex="10%"></md-card-title>
     </md-card-header>
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <md-card-content *ngSwitchCase="true">
-        <kubermatic-node *ngFor="let n of nodes" [node]="n" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
+        <kubermatic-node *ngFor="let n of nodes, let i = index" [node]="n"  [index]="i + 1" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
       </md-card-content>
 
       <md-card-content  *ngSwitchCase="false" align="center">

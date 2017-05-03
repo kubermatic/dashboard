@@ -183,7 +183,7 @@
                 <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
                   <div class="form-group" [ngClass]="{'has-danger': !awsForm.controls.ssh_key.valid && awsForm.controls.ssh_key.touched, 'has-success': awsForm.controls.ssh_key.valid}">
                     <select multiple class="form-control" id="ssh_key" name="sshKeys" formControlName="ssh_key" *ngSwitchCase="true">
-                      <option *ngFor="let key of sshKeys" [value]="key.name">{{key.name + ' - ' + key.fingerprint}}</option>
+                      <option *ngFor="let key of sshKeys" [value]="key.metadata.name">{{key.name + ' - ' + key.fingerprint}}</option>
                       <!--<option *ngFor="let key of sshKeys" [value]="key.metadata.name">{{key.name + ' - ' + key.fingerprint}}</option>-->
                     </select>
                   </div>

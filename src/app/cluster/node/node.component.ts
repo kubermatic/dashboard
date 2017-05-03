@@ -13,6 +13,7 @@ export class NodeComponent implements OnInit {
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
+  @Input() index: number;
   public dialogRef: any;
   public config: any = {};
 
