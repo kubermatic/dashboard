@@ -43,7 +43,9 @@ export class AddNodeComponent implements OnInit {
 
     this.addNodeForm = this.formBuilder.group({
       node_count: [1, [<any>Validators.required, CustomValidators.min(1), CustomValidators.max(20)]],
-      node_size: ['', [<any>Validators.required]]
+      node_size: ['', [<any>Validators.required]],
+      disk_size: [8, [<any>Validators.required, CustomValidators.min(8), CustomValidators.max(200)]],
+      container_linux_version: ['']
     });
   }
 
@@ -69,7 +71,11 @@ export class AddNodeComponent implements OnInit {
     switch (this.nodeProvider) {
       case 'aws' : {
         this.nodeSpec.spec.aws = {
-          type: this.addNodeForm.controls["node_size"].value
+          type: this.addNodeForm.controls["node_size"].value,
+          disk_size: this.addNodeForm.controls["disk_size"].value,
+          container_linux: {
+            version: this.addNodeForm.controls["container_linux_version"].value
+          }
         };
         return;
       }

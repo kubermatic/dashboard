@@ -89,7 +89,9 @@ export class WizardComponent implements OnInit {
       node_size: ["", [<any>Validators.required]],
       vpc_id: [""],
       subnet_id: [""],
-      auto_update: [true, [<any>Validators.required]]
+      auto_update: [true, [<any>Validators.required]],
+      disk_size: [8, [<any>Validators.required, CustomValidators.min(8), CustomValidators.max(200)]],
+      container_linux_version: ['']
     });
 
 
@@ -210,7 +212,11 @@ export class WizardComponent implements OnInit {
       }
 
       this.nodeSpec.spec.aws = {
-        type: this.awsForm.controls["node_size"].value
+        type: this.awsForm.controls["node_size"].value,
+        disk_size: this.awsForm.controls["disk_size"].value,
+        container_linux: {
+          version: this.awsForm.controls["container_linux_version"].value
+        }
       };
 
     } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {

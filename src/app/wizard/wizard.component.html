@@ -243,6 +243,15 @@
                   </md-select>
                 </div>
 
+                <md-input-container style="width: 100%; margin-top: 10px" >
+                  <input id="disk_size" mdInput formControlName="disk_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="disk_size">
+                </md-input-container>
+
+                <md-input-container style="width: 100%; margin-top: 0px">
+                  <input id="container_linux_version" mdInput formControlName="container_linux_version" type="text" placeholder="Set CoreOS Version manually (optional):" title="container_linux_version">
+                  <small>Show stable <a href="https://aws.amazon.com/marketplace/pp/B01H62FDJM?qid=1490197183896&sr=0-1&ref_=srh_res_product_title#" target="_blank">CoreOS Versions</a> </small>
+                </md-input-container>
+
               </div>
             </form>
           </div>
