@@ -266,11 +266,12 @@
             </div>
 
             <form [formGroup]="digitalOceanForm" novalidate class="col-6">
-              <div class="form-group" [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
-                <label for="access_token" class="form-text text-muted">Personal Access Token:</label>
-                <input id="access_token" formControlName="access_token" type="text" class="form-control">
+              <md-input-container style="width: 100%" [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
+                <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="Access Key ID:" title="access_token" (change)="changeDoKey()">
                 <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
-              </div>
+              </md-input-container>
+
+
               <div class="form-group">
                 <label for="digitalocean_ssh_key" class="form-text text-muted">Authorized SSH Key:</label>
                 <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
@@ -285,11 +286,20 @@
                   to provide kubectl logs, port-forward and exec functionality</small>.
                 <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
               </div>
-              <div class="form-group" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid}">
-                <label for="digitalocean_node_count" class="form-text text-muted">Node count:</label>
-                <input id="digitalocean_node_count" formControlName="node_count" type="number" min="1" max="20" class="form-control">
+
+              <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched,
+              'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
+                <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="do_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
                 <small class="form-text text-danger"  [hidden]="digitalOceanForm.controls.node_count.valid || !digitalOceanForm.controls.node_count.touched">Node count is invalid.</small>
+                <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
               </div>
+
+              <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
+                <md-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</md-option>
+                <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
+                  {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+                </md-option>
+              </md-select>
             </form>
           </div>
 

@@ -43,7 +43,7 @@ export class WizardComponent implements OnInit {
   public sshKeys: SSHKeyEntity[] = [];
 
   // Nodes Sizes
-  public nodeSize: string[] = NodeInstanceFlavors.VOID;
+  public nodeSize: any[] = NodeInstanceFlavors.VOID;
 
   // Create Nodes
   public selectedNodeCountValue: number = 3;
@@ -100,7 +100,8 @@ export class WizardComponent implements OnInit {
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
       ssh_key: ["", [<any>Validators.required]],
-      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: ["", [<any>Validators.required]]
     });
   }
 
@@ -130,10 +131,25 @@ export class WizardComponent implements OnInit {
   public getNodeSize(): string {
     if (this.selectedCloud === NodeProvider.AWS) {
       return this.awsForm.controls["node_size"].value;
-    } else {
-      return null;
     }
+
+    if (this.selectedCloud === NodeProvider.DIGITALOCEAN ) {
+      return this.digitalOceanForm.controls["node_size"].value;
+    }
+    return "";
+
   }
+
+  public changeDoKey() {
+    let key = this.digitalOceanForm.controls["access_token"].value;
+
+    this.api.getDigitaloceanSizes(key).subscribe(result => {
+        this.nodeSize = result.sizes;
+        console.log(this.nodeSize.length);
+      }
+    );
+  }
+
 
   public refreshName() {
     this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
@@ -186,7 +202,6 @@ export class WizardComponent implements OnInit {
     return this.canGotoStep(this.currentStep);
   }
 
-
   public createClusterAndNode() {
     let key = null;
     let secret =  null;
@@ -232,11 +247,10 @@ export class WizardComponent implements OnInit {
 
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);
 
-
     const cloud = new CloudModel(key, secret, this.selectedCloud, region);
     const model = new CreateClusterModel(cloud, spec, ssh_keys);
 
-    //console.log("Create cluster mode: \n" + JSON.stringify(model));
+    console.log("Create cluster mode: \n" + JSON.stringify(model));
     this.api.createCluster(model).subscribe(result => {
         //this.router.navigate(["clusters"]);
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
