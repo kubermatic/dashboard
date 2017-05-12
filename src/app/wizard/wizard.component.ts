@@ -206,13 +206,16 @@ export class WizardComponent implements OnInit {
     let key = null;
     let secret =  null;
     let ssh_keys = [];
-    let region = this.selectedCloudRegion.metadata.name;
+    let region = null;
+
     let cluster_name = this.clusterNameForm.controls["name"].value;
     let sub: Subscription;
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
 
     if (this.selectedCloud === NodeProvider.AWS) {
+      region = this.selectedCloudRegion.metadata.name;
+
       key = this.awsForm.controls["access_key_id"].value;
       secret = this.awsForm.controls["secret_access_key"].value;
       ssh_keys = this.awsForm.controls["ssh_key"].value;
@@ -234,7 +237,11 @@ export class WizardComponent implements OnInit {
         }
       };
 
-    } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
+    }
+
+    if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
+      region = this.selectedCloudRegion.metadata.name;
+
       secret = this.digitalOceanForm.controls["access_token"].value;
       ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
       node_instances = this.digitalOceanForm.controls["node_count"].value;
@@ -245,43 +252,59 @@ export class WizardComponent implements OnInit {
       };
     }
 
+    if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
+      this.clusterSpec.bringyourown = {
+        privateInterface: this.bringYourOwnForm.controls["pif"].value
+      }
+    }
+
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);
 
     const cloud = new CloudModel(key, secret, this.selectedCloud, region);
+
     const model = new CreateClusterModel(cloud, spec, ssh_keys);
+
+
 
     console.log("Create cluster mode: \n" + JSON.stringify(model));
     this.api.createCluster(model).subscribe(result => {
         //this.router.navigate(["clusters"]);
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.cluster = result;
+
+      if (this.selectedCloud !== NodeProvider.BRINGYOUROWN) {
+        this.router.navigate(["clusters"]);
+        return;
+      }
         const clusterModel = new ClusterModel('us-central1', this.cluster.metadata.name);
         const createNodeModel = new CreateNodeModel(node_instances, this.nodeSpec.spec);
         sub = timer.subscribe(() => {
           this.api.getCluster(clusterModel).subscribe(result => {
-            NotificationComponent.success(this.store, "Success", `Waiting till Cluster is running`);
-            this.cluster = result;
-            //console.log(this.cluster.status.phase);
+              NotificationComponent.success(this.store, "Success", `Waiting till Cluster is running`);
+              this.cluster = result;
 
-            if(this.cluster.status.phase == "Running") {
-              this.api.createClusterNode(clusterModel, createNodeModel).subscribe(result => {
-                NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                debugger;
+              if (this.cluster.status.phase == "Running") {
+                this.api.createClusterNode(clusterModel, createNodeModel).subscribe(result => {
+                    NotificationComponent.success(this.store, "Success", `Creating Nodes`);
+                    debugger;
 
-                sub.unsubscribe();
-                this.router.navigate(["clusters"]);
-              },
-              error => {
-                sub.unsubscribe();
-                NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-              });
-            }
-          },
-          error => {
-            sub.unsubscribe();
-            NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-          });
+                    sub.unsubscribe();
+                    this.router.navigate(["clusters"]);
+                  },
+                  error => {
+                    sub.unsubscribe();
+                    NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+                  });
+              }
+            },
+            error => {
+              sub.unsubscribe();
+              NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+            });
         })
+
+
+
       },
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
