@@ -36,6 +36,8 @@ import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
 import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
+import { SidenavService } from './sidenav/sidenav.service';
 
 
 @NgModule({
@@ -70,7 +72,8 @@ import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component
     ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
     AddSshKeyComponent,
-    ListSshKeyComponent
+    ListSshKeyComponent,
+    SidenavComponent
   ],
   entryComponents: [
     ClusterDeleteConfirmationComponent,
@@ -82,6 +85,7 @@ import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component
     ApiService,
     AuthGuard,
     ClusterNameGenerator,
+    SidenavService,
     {
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr

@@ -1,51 +1,19 @@
 <main>
   <div>
-    <kubermatic-navigation></kubermatic-navigation>
     <md-sidenav-container>
-      <md-sidenav #sidenav >
-        Side navigation
+      <md-sidenav #sidenav opened mode="side" >
+        <kubermatic-sidenav></kubermatic-sidenav>
       </md-sidenav>
 
-      <div class="km-content">
-        <!--<button md-button (click)="sidenav.open()">
-          Open sidenav
-        </button>-->
-
-
-
-        <kubermatic-notification></kubermatic-notification>
-
-        <router-outlet></router-outlet>
-
-
-      </div>
-
-    </md-sidenav-container>
-    <div></div>
-
-
-  <!--<header>
-    <kubermatic-navigation></kubermatic-navigation>
-  </header>
-
-
-
-  <md-sidenav-container class="sidenav-container">
-    <md-sidenav mode="side" opened="true" class="sidenav-content" >Drawer content</md-sidenav>
-    <div class="my-content">
-
-      <kubermatic-notification></kubermatic-notification>
-      <div class="container al-main">
-        <div class="row al-content">
+      <div class="km-main">
+        <kubermatic-navigation></kubermatic-navigation>
+        <div class="km-content">
+          <kubermatic-notification></kubermatic-notification>
           <router-outlet></router-outlet>
         </div>
       </div>
-    </div>
-  </md-sidenav-container>
--->
-
-
-  <footer fxlayout>
+    </md-sidenav-container>
+    <footer fxlayout>
       <div fxFlex="20%" class="km-copy">powered by <a href="https://loodse.com">Loodse <small>&copy;</small></a></div>
       <div fxFlex="80%" class="km-footer-nav">
         <ul>
@@ -57,7 +25,6 @@
           </li>
         </ul>
       </div>
-
-  </footer>
+    </footer>
   </div>
 </main>

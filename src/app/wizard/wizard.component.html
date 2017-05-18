@@ -116,7 +116,7 @@
             </div>
           </div>
 
-          <div [hidden]="selectedCloud !== 'bringyourown'" class="col-6">
+          <div [hidden]="selectedCloud !== 'bringyourown'">
             <div class="wizard-box-text">
               You <i>bring your own</i> nodes, how you like, whereever you like. You are on your own, but
               you have full flexibility. Install the nodes on any cloud provider of your choice or in your
@@ -317,6 +317,20 @@
                 <label for="pif" class="form-text text-muted">Private network interface:</label>
                 <input id="pif" formControlName="pif" type="text" class="form-control">
                 <small class="form-text text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
+              </div>
+            </form>
+          </div>
+
+
+          <div [hidden]="selectedCloud !== 'baremetal'">
+            <form [formGroup]="bareMetalForm" novalidate >
+              <div>
+                <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched,
+              'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
+                  <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="baremetal_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
+                  <small class="form-text text-danger"  [hidden]="bareMetalForm.controls.node_count.valid || !awsForm.controls.node_count.touched">Node count is invalid.</small>
+                  <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
+                </div>
               </div>
             </form>
           </div>

@@ -6,6 +6,10 @@ import {ClusterModel} from "../../api/model/ClusterModel";
 import {CreateNodeModel} from "../../api/model/CreateNodeModel";
 import {NodeInstanceFlavors} from "../../api/model/NodeProviderConstants";
 
+import {NotificationComponent} from "../../notification/notification.component";
+import {Store} from "@ngrx/store";
+import * as fromRoot from "../../reducers/index";
+
 @Component({
   selector: 'kubermatic-add-node',
   templateUrl: './add-node.component.html',
@@ -31,7 +35,7 @@ export class AddNodeComponent implements OnInit {
   public sshKeys: any;
 
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder) { }
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
 
@@ -100,9 +104,13 @@ export class AddNodeComponent implements OnInit {
     this.createNodeModel = new CreateNodeModel(this.nodeInstances,this.nodeSpec.spec);
 
     this.api.createClusterNode(this.clusterModel, this.createNodeModel).subscribe(result => {
+      NotificationComponent.success(this.store, "Success", `Node(s) successfully created`);
       this.node = result;
       this.node.push(result);
       this.syncNodes.emit(this.node);
-    })
+    },
+      error => {
+        NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+      });
   }
 }

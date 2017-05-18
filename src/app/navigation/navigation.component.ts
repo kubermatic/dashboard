@@ -1,7 +1,10 @@
 import {Component} from "@angular/core";
 import {Auth} from "../auth/auth.service";
+
+import {SidenavService} from "../sidenav/sidenav.service";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
+
 
 @Component({
   selector: "kubermatic-navigation",
@@ -13,7 +16,7 @@ export class NavigationComponent {
   public isScrolled: boolean = false;
   public userProfile: any;
 
-  constructor(private auth: Auth, private store: Store<fromRoot.State>) {
+  constructor(private auth: Auth, private sidenavService: SidenavService, private store: Store<fromRoot.State>) {
     this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
       this.userProfile = profile;
     });
@@ -32,5 +35,11 @@ export class NavigationComponent {
 
   public scrolledChanged(isScrolled) {
     this.isScrolled = isScrolled;
+  }
+
+  public toggleSidenav() {
+    this.sidenavService
+      .toggle()
+      .then(() => { });
   }
 }

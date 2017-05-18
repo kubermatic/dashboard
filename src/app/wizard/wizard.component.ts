@@ -34,11 +34,13 @@ export class WizardComponent implements OnInit {
   public selectedCloudRegion: DataCenterEntity;
   public selectedCloudProviderApiError: string;
   public acceptBringYourOwn: boolean;
+  public acceptBareMetal: true;
 
   public clusterNameForm: FormGroup;
   public awsForm: FormGroup;
   public digitalOceanForm: FormGroup;
   public bringYourOwnForm: FormGroup;
+  public bareMetalForm: FormGroup;
 
   public sshKeys: SSHKeyEntity[] = [];
 
@@ -94,14 +96,17 @@ export class WizardComponent implements OnInit {
       container_linux_version: ['']
     });
 
-
-
     this.digitalOceanForm = this.formBuilder.group({
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
       ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]]
+    });
+
+
+    this.bareMetalForm = this.formBuilder.group({
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
   }
 
@@ -123,6 +128,8 @@ export class WizardComponent implements OnInit {
       return this.awsForm.controls["node_count"].value;
     } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
       return this.digitalOceanForm.controls["node_count"].value;
+    } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
+      return this.bareMetalForm.controls["node_count"].value;
     } else {
       return "-1";
     }
@@ -178,6 +185,8 @@ export class WizardComponent implements OnInit {
           return this.awsForm.valid;
         } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
           return this.digitalOceanForm.valid;
+        } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
+          return this.bareMetalForm.valid;
         } else {
           return false;
         }
@@ -208,13 +217,18 @@ export class WizardComponent implements OnInit {
     let ssh_keys = [];
     let region = null;
 
+    if (this.selectedCloud !== NodeProvider.BRINGYOUROWN) {
+      debugger;
+
+      region = this.selectedCloudRegion.metadata.name;
+    }
+
     let cluster_name = this.clusterNameForm.controls["name"].value;
     let sub: Subscription;
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
 
     if (this.selectedCloud === NodeProvider.AWS) {
-      region = this.selectedCloudRegion.metadata.name;
 
       key = this.awsForm.controls["access_key_id"].value;
       secret = this.awsForm.controls["secret_access_key"].value;
@@ -240,7 +254,6 @@ export class WizardComponent implements OnInit {
     }
 
     if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
-      region = this.selectedCloudRegion.metadata.name;
 
       secret = this.digitalOceanForm.controls["access_token"].value;
       ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
@@ -257,6 +270,15 @@ export class WizardComponent implements OnInit {
         privateInterface: this.bringYourOwnForm.controls["pif"].value
       }
     }
+
+    if (this.selectedCloud === NodeProvider.BAREMETAL) {
+      node_instances = this.bareMetalForm.controls["node_count"].value;
+
+      this.clusterSpec.baremetal = {}
+
+      this.nodeSpec.spec.baremetal = {}
+    }
+
 
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);
 
@@ -276,7 +298,8 @@ export class WizardComponent implements OnInit {
         this.router.navigate(["clusters"]);
         return;
       }
-        const clusterModel = new ClusterModel('us-central1', this.cluster.metadata.name);
+
+        const clusterModel = new ClusterModel(this.cluster.seed, this.cluster.metadata.name);
         const createNodeModel = new CreateNodeModel(node_instances, this.nodeSpec.spec);
         sub = timer.subscribe(() => {
           this.api.getCluster(clusterModel).subscribe(result => {
@@ -286,8 +309,6 @@ export class WizardComponent implements OnInit {
               if (this.cluster.status.phase == "Running") {
                 this.api.createClusterNode(clusterModel, createNodeModel).subscribe(result => {
                     NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                    debugger;
-
                     sub.unsubscribe();
                     this.router.navigate(["clusters"]);
                   },
@@ -302,9 +323,6 @@ export class WizardComponent implements OnInit {
               NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
             });
         })
-
-
-
       },
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
