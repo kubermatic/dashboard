@@ -61,11 +61,14 @@ export class WizardComponent implements OnInit {
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
       result.forEach(elem => {
-        if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
-          this.groupedDatacenters[elem.spec.provider] = [];
-        }
 
-        this.groupedDatacenters[elem.spec.provider].push(elem);
+        if (!elem.seed) {
+          if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
+            this.groupedDatacenters[elem.spec.provider] = [];
+          }
+
+          this.groupedDatacenters[elem.spec.provider].push(elem);
+        }
       });
     });
 
@@ -218,8 +221,6 @@ export class WizardComponent implements OnInit {
     let region = null;
 
     if (this.selectedCloud !== NodeProvider.BRINGYOUROWN) {
-      debugger;
-
       region = this.selectedCloudRegion.metadata.name;
     }
 
@@ -244,6 +245,7 @@ export class WizardComponent implements OnInit {
       }
 
       this.nodeSpec.spec.aws = {
+        dc: region,
         type: this.awsForm.controls["node_size"].value,
         disk_size: this.awsForm.controls["disk_size"].value,
         container_linux: {
@@ -260,9 +262,13 @@ export class WizardComponent implements OnInit {
       node_instances = this.digitalOceanForm.controls["node_count"].value;
       this.clusterSpec.digitalocean = {}
 
-      this.nodeSpec.spec.digitalocean = {
-        size: this.digitalOceanForm.controls["node_size"].value
-      };
+      this.nodeSpec.spec = {
+        dc:  region,
+        digitalocean: {
+          size: this.digitalOceanForm.controls["node_size"].value,
+          sshKeys: this.digitalOceanForm.controls["ssh_key"].value
+        }
+      }
     }
 
     if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
@@ -287,14 +293,13 @@ export class WizardComponent implements OnInit {
     const model = new CreateClusterModel(cloud, spec, ssh_keys);
 
 
-
     console.log("Create cluster mode: \n" + JSON.stringify(model));
     this.api.createCluster(model).subscribe(result => {
         //this.router.navigate(["clusters"]);
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.cluster = result;
 
-      if (this.selectedCloud !== NodeProvider.BRINGYOUROWN) {
+      if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
         this.router.navigate(["clusters"]);
         return;
       }
