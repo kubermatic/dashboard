@@ -80,11 +80,6 @@
           <div>
             <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
               Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
-
-              <div *ngIf="groupedDatacenters['aws']">aws</div>
-              <div *ngIf="groupedDatacenters.digitalocean">digitalocean</div>
-              <div *ngIf="groupedDatacenters.bringyourown">bringyourown</div>
-              <div *ngIf="groupedDatacenters.baremetal">baremetal</div>
             </div>
             <div fxLayoutAlign="center" fxLayout>
 
