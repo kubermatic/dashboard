@@ -155,7 +155,6 @@ export class WizardComponent implements OnInit {
 
     this.api.getDigitaloceanSizes(key).subscribe(result => {
         this.nodeSize = result.sizes;
-        console.log(this.nodeSize.length);
       }
     );
   }
