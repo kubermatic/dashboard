@@ -9,7 +9,7 @@ import {ProfileComponent} from "./profile/profile.component";
 
 export const appRoutes: Routes = [
   {
-    path: "welcome",
+    path: "login",
     component: FrontpageComponent,
     data: { title: "Welcome" }
   },
@@ -21,19 +21,19 @@ export const appRoutes: Routes = [
         path: "wizard",
         component: WizardComponent,
         canActivate: [AuthGuard],
-        data: { title: "Wizard" }
+        data: { title: "Create Cluster with Nodes" }
       },
       {
         path: "profile",
         component: ProfileComponent,
         canActivate: [AuthGuard],
-        data: { title: "Profile" }
+        data: { title: "sshKeys" }
       },
       {
         path: "dc/:seedDcName/cluster/:clusterName",
         component: ClusterComponent,
         canActivate: [AuthGuard],
-        data: { title: "Cluster detail" }
+        data: { title: "Cluster details" }
       },
       {
         path: "clusters",
@@ -45,6 +45,6 @@ export const appRoutes: Routes = [
   },
   {
     path: "**",
-    redirectTo: "welcome"
+    redirectTo: "login"
   },
 ];
