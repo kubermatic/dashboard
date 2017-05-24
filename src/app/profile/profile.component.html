@@ -1,4 +1,4 @@
-<md-tab-group>
+<!--md-tab-group>
   <md-tab label="Profile">
 
     <div class="km-profile" style="padding: 20px 2px;">
@@ -27,9 +27,11 @@
   </md-tab>
   <md-tab label="Your SSH keys">
     <div class="km-ssh-keys" style="padding: 20px 2px;">
-      <kubermatic-list-ssh-key [sshKeys]="sshKeys"></kubermatic-list-ssh-key>
-      <kubermatic-add-ssh-key (syncSshKey)="handleKeyUpdated($event)" ></kubermatic-add-ssh-key>
   </div>
   </md-tab>
-</md-tab-group>
-
+</md-tab-group-->
+<div fxLayout>
+  <h2 fxFlex="70%" class="component-heading">My SSH keys</h2>
+</div>
+<kubermatic-list-ssh-key [sshKeys]="sshKeys"></kubermatic-list-ssh-key>
+<kubermatic-add-ssh-key (syncSshKey)="handleKeyUpdated($event)" ></kubermatic-add-ssh-key>
