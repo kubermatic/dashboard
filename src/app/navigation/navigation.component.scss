@@ -401,7 +401,7 @@ a.collapse-menu-link {
      font-weight: 400;
    }
 
-    a {
+    a, .km-logout, .km-login {
       color: #444D58;
       font-weight: 400;
 
@@ -411,5 +411,9 @@ a.collapse-menu-link {
     }
 
 
+}
+
+.km-logout, .km-login {
+  float: right;
 }
 

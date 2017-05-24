@@ -69,7 +69,7 @@ export class ClusterComponent implements OnInit {
   }
 
   public downloadKubeconfigUrl(): string {
-    const authorization_token = localStorage.getItem("id_token");
+    const authorization_token = localStorage.getItem("token");
     return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
   }
 }

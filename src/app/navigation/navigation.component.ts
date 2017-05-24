@@ -14,22 +14,22 @@ import * as fromRoot from "../reducers/index";
 export class NavigationComponent {
 
   public isScrolled: boolean = false;
-  public userProfile: any;
+  //public userProfile: any;
 
   constructor(private auth: Auth, private sidenavService: SidenavService, private store: Store<fromRoot.State>) {
-    this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
+    /*this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
       this.userProfile = profile;
-    });
+    });*/
   }
 
   public login() {
-    localStorage.setItem("redirect_url", "welcome");
+    //localStorage.setItem("redirect_url", "welcome");
     this.auth.login();
   }
 
   public logout() {
-    localStorage.setItem("redirect_url", "welcome");
-    this.userProfile = undefined;
+    //localStorage.setItem("redirect_url", "welcome");
+    //this.userProfile = undefined;
     this.auth.logout();
   }
 
