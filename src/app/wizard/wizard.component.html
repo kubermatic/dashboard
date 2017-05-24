@@ -283,7 +283,7 @@
                 <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
                   <div class="form-group" [ngClass]="{'has-danger': !digitalOceanForm.controls.ssh_key.valid && digitalOceanForm.controls.ssh_key.touched, 'has-success': digitalOceanForm.controls.ssh_key.valid}">
                     <select multiple class="form-control" id="digitalocean_ssh_key" name="sshKeys" formControlName="ssh_key" *ngSwitchCase="true">
-                      <option *ngFor="let key of sshKeys" [value]="key.name">{{key.name + ' - ' + key.fingerprint}}</option>
+                      <option *ngFor="let key of sshKeys" [value]="key.metadata.name">{{key.name + ' - ' + key.fingerprint}}</option>
                     </select>
                   </div>
                   <button type="button" class="btn btn-link btn-sm text-primary" style="cursor: pointer;" routerLink="/profile" *ngSwitchCase="false">You have not added any SSH keys. Please add one first.</button>

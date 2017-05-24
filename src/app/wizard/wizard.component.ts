@@ -297,7 +297,7 @@ export class WizardComponent implements OnInit {
 
     console.log("Create cluster mode: \n" + JSON.stringify(model));
     this.api.createCluster(model).subscribe(result => {
-        //this.router.navigate(["clusters"]);
+
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.cluster = result;
 
@@ -314,13 +314,12 @@ export class WizardComponent implements OnInit {
               this.cluster = result;
 
               if (this.cluster.status.phase == "Running") {
+                sub.unsubscribe();
                 this.api.createClusterNode(clusterModel, createNodeModel).subscribe(result => {
                     NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                    sub.unsubscribe();
                     this.router.navigate(["clusters"]);
                   },
                   error => {
-                    sub.unsubscribe();
                     NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
                   });
               }
