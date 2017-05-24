@@ -113,11 +113,6 @@ export class Auth {
     localStorage.removeItem("token");
     localStorage.removeItem("profile");
 
-    // Redirect if there is a saved url to do so.
-    const redirectUrl: string = localStorage.getItem("redirect_url");
-    if (redirectUrl !== undefined) {
-      this.router.navigate([redirectUrl]);
-      localStorage.removeItem("redirect_url");
-    }
+    this.router.navigate(['/login']);
   };
 }
