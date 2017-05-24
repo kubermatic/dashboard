@@ -244,14 +244,16 @@ export class WizardComponent implements OnInit {
         }
       }
 
-      this.nodeSpec.spec.aws = {
+      this.nodeSpec.spec = {
         dc: region,
-        type: this.awsForm.controls["node_size"].value,
-        disk_size: this.awsForm.controls["disk_size"].value,
-        container_linux: {
-          version: this.awsForm.controls["container_linux_version"].value
+        aws:  {
+          type: this.awsForm.controls["node_size"].value,
+          disk_size: this.awsForm.controls["disk_size"].value,
+          container_linux: {
+            version: this.awsForm.controls["container_linux_version"].value
+          }
         }
-      };
+      }
 
     }
 
