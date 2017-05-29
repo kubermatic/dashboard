@@ -31,13 +31,13 @@
         </md-option>
       </md-select>-->
 
-      <!---<div class="form-group" >
+      <div class="form-group" *ngIf="cluster.dc.spec.provider == 'digitalocean'">
         <select id="node_size" formControlName="node_size" class="form-control">
           <option value="" disabled="true" [selected]="!addNodeForm.controls['node_size'].value">Please select a node size!</option>
           <ng-container [ngSwitch]="cluster.dc.spec.provider">
-            <ng-container *ngSwitchCase="'aws'">
+            <!--ng-container *ngSwitchCase="'aws'">
               <option  *ngFor="let size of nodeSizes; let i = index;" [value]="size"> {{size}}</option>
-            </ng-container>
+            </ng-container -->
             <ng-container *ngSwitchCase="'digitalocean'">
               <option *ngFor="let size of nodeSizes; let i = index;" [value]="size.slug">
                 {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
@@ -45,7 +45,7 @@
             </ng-container>
           </ng-container>
         </select>
-      </div>-->
+      </div>
 
       <ng-container *ngIf="cluster.dc.spec.provider == 'aws'">
         <md-select style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
