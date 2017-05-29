@@ -232,7 +232,8 @@ export class WizardComponent implements OnInit {
 
       key = this.awsForm.controls["access_key_id"].value;
       secret = this.awsForm.controls["secret_access_key"].value;
-      ssh_keys = this.awsForm.controls["ssh_key"].value;
+      ssh_keys.push(this.awsForm.controls["ssh_key"].value);
+
       node_instances = this.digitalOceanForm.controls["node_count"].value;
 
       this.clusterSpec.aws = {
@@ -302,11 +303,11 @@ export class WizardComponent implements OnInit {
 
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.cluster = result;
-
-      if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
         this.router.navigate(["clusters"]);
-        return;
-      }
+
+        if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
+          return;
+        }
 
         const clusterModel = new ClusterModel(this.cluster.seed, this.cluster.metadata.name);
         const createNodeModel = new CreateNodeModel(node_instances, this.nodeSpec.spec);
@@ -319,7 +320,7 @@ export class WizardComponent implements OnInit {
                 sub.unsubscribe();
                 this.api.createClusterNode(clusterModel, createNodeModel).subscribe(result => {
                     NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                    this.router.navigate(["clusters"]);
+
                   },
                   error => {
                     NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
