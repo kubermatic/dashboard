@@ -170,39 +170,24 @@
                 </md-input-container>
                  <div style="width: 100%; margin-top: 10px;">
                     <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                      <div [ngClass]="{'has-danger': !awsForm.controls.ssh_key.valid && awsForm.controls.ssh_key.touched, 'has-success': awsForm.controls.ssh_key.valid}">
+                      <div *ngSwitchCase="true" [ngClass]="{'has-danger': !awsForm.controls.ssh_key.valid && awsForm.controls.ssh_key.touched, 'has-success': awsForm.controls.ssh_key.valid}">
                         <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
                           <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
                             {{key.name + ' - ' + key.fingerprint}}
                           </md-option>
                         </md-select>
                       </div>
-                      <button type="button" class="btn btn-link btn-sm text-primary" style="cursor: pointer;" *ngSwitchCase="false">You have not added any SSH keys. Please add one first.</button>
-                    </div>
+                      <div *ngSwitchCase="false">
+                        <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
+                        <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+                      </div>
+                     </div>
 
                     <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
                       to provide kubectl logs, port-forward and exec functionality.
                     </small>
                 <br>
 
-                  <!---
-                  TODO: Modal for creating sshKey during creating a Cluster With Nodes
-                  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSSHKey">
-                      Add SSH key
-                  </button>
-                  <div class="modal fade" id="addSSHKey" tabindex="-1" role="dialog" aria-labelledby="addSSHKeyButton">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                          <h4 class="modal-title" id="myModalLabel">Add new SSH Key</h4>
-                        </div>
-                        <div class="modal-body">
-                          <kubermatic-add-ssh-key></kubermatic-add-ssh-key>
-                        </div>
-                      </div>
-                    </div>
-                  </div>-->
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
 
@@ -262,18 +247,20 @@
                 <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
               </md-input-container>
 
-
-
               <div style="width: 100%; margin-top: 10px;">
                 <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                  <div [ngClass]="{'has-danger': !digitalOceanForm.controls.ssh_key.valid && digitalOceanForm.controls.ssh_key.touched, 'has-success': digitalOceanForm.controls.ssh_key.valid}">
+                  <div *ngSwitchCase="true" [ngClass]="{'has-danger': !digitalOceanForm.controls.ssh_key.valid && digitalOceanForm.controls.ssh_key.touched, 'has-success': digitalOceanForm.controls.ssh_key.valid}">
                     <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
                       <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
                         {{key.name + ' - ' + key.fingerprint}}
                       </md-option>
                     </md-select>
                   </div>
-                  <button type="button" class="btn btn-link btn-sm text-primary" style="cursor: pointer;" *ngSwitchCase="false">You have not added any SSH keys. Please add one first.</button>
+
+                  <div *ngSwitchCase="false">
+                    <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
+                    <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+                  </div>
                 </div>
                   <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
                     to provide kubectl logs, port-forward and exec functionality</small>.

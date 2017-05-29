@@ -38,6 +38,7 @@ import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confi
 import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { SidenavService } from './sidenav/sidenav.service';
+import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 
 
 @NgModule({
@@ -73,11 +74,13 @@ import { SidenavService } from './sidenav/sidenav.service';
     NodeDeleteConfirmationComponent,
     AddSshKeyComponent,
     ListSshKeyComponent,
-    SidenavComponent
+    SidenavComponent,
+    AddSshKeyModalComponent
   ],
   entryComponents: [
     ClusterDeleteConfirmationComponent,
-    NodeDeleteConfirmationComponent
+    NodeDeleteConfirmationComponent,
+    AddSshKeyModalComponent
   ],
   providers: [
     AUTH_PROVIDERS,

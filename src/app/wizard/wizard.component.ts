@@ -17,6 +17,10 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 
+import {MdDialog} from '@angular/material';
+import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
+
+
 @Component({
   selector: "kubermatic-wizard",
   templateUrl: "./wizard.component.html",
@@ -53,9 +57,15 @@ export class WizardComponent implements OnInit {
   public nodeSpec: any = {spec: {}};
   public clusterSpec: any = {};
 
+
+  // Model add sshKey
+  public dialogRef: any;
+  public config: any = {};
+
   constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder, private router: Router,
-              private store: Store<fromRoot.State>) {
+              private store: Store<fromRoot.State>,
+              public dialog: MdDialog) {
   }
 
   ngOnInit() {
@@ -124,6 +134,21 @@ export class WizardComponent implements OnInit {
 
   public selectCloudRegion(cloud: DataCenterEntity) {
     this.selectedCloudRegion = cloud;
+  }
+
+  private refreshSSHKeys() {
+    this.api.getSSHKeys().subscribe(result => {
+      this.sshKeys = result;
+    });
+  }
+
+// TODO: show model
+  public addSshKeyDialog(): void {
+    this.dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      this.refreshSSHKeys();
+    });
   }
 
   public getNodeCount(): string {
