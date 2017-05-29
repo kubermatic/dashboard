@@ -91,7 +91,7 @@ $wizard-box-size: 200px;
 $wizard-box-content-dc-logo-size: 125px;
 $wizard-box-content-cloud-logo-size: 120px;
 $wizard-box-content-location-flag-size: 48px;
-$wizard-box-content-dc-margin-top: 20px;
+$wizard-box-content-dc-margin-top: 0px;
 $wizard-box-content-cloud-margin-top: 50px;
 
 .wizard-box-text {
@@ -123,6 +123,7 @@ $wizard-box-content-cloud-margin-top: 50px;
   text-align: center;
   color: #000;
   font-weight: 600;
+  padding: 11px 0;
 
   img.dc-logo {
     width: $wizard-box-content-dc-logo-size;
@@ -174,14 +175,14 @@ $wizard-box-content-cloud-margin-top: 50px;
   max-height: $wizard-box-size;
   min-height: $wizard-box-size;
   width: $wizard-box-size;
-  margin: 15px;
+  margin: 15px auto;
   /*border-radius: 10px 10px 10px 10px;
   -moz-border-radius: 10px 10px 10px 10px;
   -webkit-border-radius: 10px 10px 10px 10px;*/
   background: #fff;
   border: 1px solid #E3E8EC;
   cursor: pointer;
-  float: left;
+  //float: left;
   min-height: 198px;
   &.small {
     max-width: $wizard-box-size / 2;

@@ -283,7 +283,10 @@ export class WizardComponent implements OnInit {
 
       this.clusterSpec.baremetal = {}
 
-      this.nodeSpec.spec.baremetal = {}
+      this.nodeSpec.spec = {
+        dc: region,
+        baremetal: {}
+      }
     }
 
 
