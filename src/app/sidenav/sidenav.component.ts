@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-
 import {Auth} from "../auth/auth.service";
+import { environment } from "../../environments/environment";
 
 @Component({
   selector: 'kubermatic-sidenav',
@@ -8,6 +8,8 @@ import {Auth} from "../auth/auth.service";
   styleUrls: ['./sidenav.component.scss']
 })
 export class SidenavComponent implements OnInit {
+
+  public environment : any = environment;
 
   constructor(private auth: Auth) { }
 

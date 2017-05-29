@@ -26,7 +26,7 @@
     <!-- Menus for logged in users -->
     <div>
       <md-list-item>
-        <a md-line routerLink="/">Dashboard</a>
+        <a md-line routerLink="/welcome">Dashboard</a>
       </md-list-item>
       <md-list-item>
         <a md-line routerLink="/wizard"><i class="fa fa-magic blue"></i> Create Cluster</a>
@@ -39,7 +39,7 @@
       </md-list-item>
       <md-list-item>
         <a md-line *ngIf="auth.authenticated()" (click)="logout()"> <i class="fa fa-lock red"></i> Logout</a>
-        <a md-line *ngIf="!auth.authenticated()" href="https://auth.int.kubermatic.io/auth?response_type=id_token&client_id=kubermatic&redirect_uri=http://localhost:8000/login&scope=openid&nonce=random"> <i class="fa fa-unlock-alt red"></i> Login</a>
+        <a md-line *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}"> <i class="fa fa-unlock-alt red"></i> Login</a>
       </md-list-item>
     </div>
   </md-nav-list>

@@ -23,7 +23,7 @@
     <div fxFlex="20" fxFlexOffset="50px"  fxFlexOffset.xs="0">
 
       <span md-button class="mat-button km-logout" *ngIf="auth.authenticated()" (click)="logout()"><i class="fa fa-lock"></i> Logout</span>
-      <a md-button class="mat-button km-login"  *ngIf="!auth.authenticated()" href="https://auth.int.kubermatic.io/auth?response_type=id_token&client_id=kubermatic&redirect_uri=http://localhost:8000/login&scope=openid&nonce=random"> <i class="fa fa-unlock-alt"></i> Login</a>
+      <a md-button class="mat-button km-login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}"> <i class="fa fa-unlock-alt"></i> Login</a>
 
 
       <!--class="mat-button user-profile clearfix"-->

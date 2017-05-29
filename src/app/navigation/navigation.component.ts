@@ -5,6 +5,8 @@ import {SidenavService} from "../sidenav/sidenav.service";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 
+import {environment} from "../../environments/environment";
+
 
 @Component({
   selector: "kubermatic-navigation",
@@ -14,6 +16,8 @@ import * as fromRoot from "../reducers/index";
 export class NavigationComponent {
 
   public isScrolled: boolean = false;
+  public environment : any = environment;
+
   //public userProfile: any;
 
   constructor(private auth: Auth, private sidenavService: SidenavService, private store: Store<fromRoot.State>) {
@@ -23,13 +27,10 @@ export class NavigationComponent {
   }
 
   public login() {
-    //localStorage.setItem("redirect_url", "welcome");
     this.auth.login();
   }
 
   public logout() {
-    //localStorage.setItem("redirect_url", "welcome");
-    //this.userProfile = undefined;
     this.auth.logout();
   }
 
