@@ -117,7 +117,6 @@ export class WizardComponent implements OnInit {
       node_size: ["", [<any>Validators.required]]
     });
 
-
     this.bareMetalForm = this.formBuilder.group({
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
@@ -172,7 +171,6 @@ export class WizardComponent implements OnInit {
       return this.digitalOceanForm.controls["node_size"].value;
     }
     return "";
-
   }
 
   public changeDoKey() {
