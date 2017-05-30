@@ -25,6 +25,7 @@ describe("KubermaticComponent", () => {
         HttpModule,
         RouterTestingModule,
         StoreModule.provideStore(combinedReducer),
+        //SimpleNotificationsModule.forRoot(),
         SimpleNotificationsModule,
         SlimLoadingBarModule.forRoot()
       ],

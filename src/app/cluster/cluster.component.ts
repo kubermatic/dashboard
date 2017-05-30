@@ -6,6 +6,8 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
 import {Observable, Subscription} from "rxjs";
+import {MdDialog} from '@angular/material';
+import {ClusterDeleteConfirmationComponent} from "../cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -21,8 +23,11 @@ export class ClusterComponent implements OnInit {
   public timer: any = Observable.timer(0,10000);
   public sub: Subscription;
 
+  public dialogRef: any;
+  public config: any = {};
 
-  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>) {}
+
+  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
   ngOnInit() {
 
@@ -46,21 +51,25 @@ export class ClusterComponent implements OnInit {
     });
   }
 
-  deleteCluster() {
-    this.api.deleteCluster(this.clusterModel).subscribe(result => {
-      this.cluster = result;
-      this.router.navigate(['/clusters']);
-    })
-  }
-
   updateNodes(): void {
     this.api.getClusterNodes(this.clusterModel).subscribe(result => {
       this.nodes = result;
     });
   }
 
+
+  public deleteClusterDialog(): void {
+    this.dialogRef = this.dialog.open(ClusterDeleteConfirmationComponent, this.config);
+
+    this.dialogRef.componentInstance.humanReadableName = this.cluster.spec.humanReadableName;
+    this.dialogRef.componentInstance.clusterName = this.clusterModel.cluster;
+    this.dialogRef.componentInstance.seedDcName = this.clusterModel.dc;
+
+    this.dialogRef.afterClosed().subscribe(result => {});
+  }
+
   public downloadKubeconfigUrl(): string {
-    const authorization_token = localStorage.getItem("id_token");
+    const authorization_token = localStorage.getItem("token");
     return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
   }
 }

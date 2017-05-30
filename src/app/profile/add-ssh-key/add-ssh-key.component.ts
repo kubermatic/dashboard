@@ -56,7 +56,5 @@ export class AddSshKeyComponent implements OnInit {
     if (keyName && keyName.length > 1 && "" === name) {
       this.addSSHKeyForm.patchValue({name: keyName[1]});
     }
-
-    console.log(this.addSSHKeyForm);
   }
 }

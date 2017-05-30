@@ -8,8 +8,9 @@ import {ClusterEntity} from "../../api/entitiy/ClusterEntity";
 })
 export class ClusterItemComponent implements OnInit {
   @Input() cluster: ClusterEntity;
+  @Input() index: number;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
   }

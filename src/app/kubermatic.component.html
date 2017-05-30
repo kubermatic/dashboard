@@ -1,16 +1,22 @@
 <main>
-  <kubermatic-navigation></kubermatic-navigation>
-  <kubermatic-notification></kubermatic-notification>
-  <div class="container al-main">
-    <div class="row al-content">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-  <footer class="al-footer clearfix">
-    <div class="clearfix">
-      <div class="al-copy">&copy; <a href="https://loodse.com">Loodse</a> 2017</div>
-      <div class="pull-right">
-        <ul class="al-share clearfix">
+  <div>
+    <md-sidenav-container>
+      <md-sidenav #sidenav opened mode="side" >
+        <kubermatic-sidenav></kubermatic-sidenav>
+      </md-sidenav>
+
+      <div class="km-main">
+        <kubermatic-navigation></kubermatic-navigation>
+        <div class="km-content">
+          <kubermatic-notification></kubermatic-notification>
+          <router-outlet></router-outlet>
+        </div>
+      </div>
+    </md-sidenav-container>
+    <footer fxlayout>
+      <div fxFlex="20%" class="km-copy">powered by <a href="https://loodse.com">Loodse <small>&copy;</small></a></div>
+      <div fxFlex="80%" class="km-footer-nav">
+        <ul>
           <li><a href="https://www.twitter.com/loodse"><i class="fa fa-twitter"></i></a>
           </li>
           <li><a href="https://github.com/kubermatic/kubermatic"><i class="fa fa-github"></i></a>
@@ -19,6 +25,6 @@
           </li>
         </ul>
       </div>
-    </div>
-  </footer>
+    </footer>
+  </div>
 </main>

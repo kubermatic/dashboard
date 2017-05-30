@@ -1,3 +1,20 @@
+.km-node-row {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #E3E8EC;
+  padding-bottom: 10px;
+  div:first-child {
+    padding-left: 8px;
+  }
+
+  div:last-child {
+    padding-right: 8px;
+  }
+}
+
+button {
+  float: right;
+}
+
 .health-state {
   i {
     color: red;

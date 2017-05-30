@@ -1,0 +1,35 @@
+<div>
+ <md-toolbar>
+    <div class="md-toolbar">
+        <h4 class="modal-title" id="myModalLabel">Delete Cluster confirmation</h4>
+    </div>
+    <button md-icon-button md-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <p>You are on the way to delete the cluster "{{humanReadableName}}". Deletion of clusters cannot be UNDONE!</p>
+      <p>If you know what you are doing, <strong>please type the name of the cluster</strong>:</p>
+
+      <md-input-container style="width: 100%" >
+        <input id="name" mdInput type="text" placeholder="Name of the Cluster:" title="secret_access_key" (blur)="onChange($event)" (keyup)="onChange($event)">
+      </md-input-container>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <button md-dialog-close md-raised-button>
+      close
+    </button>
+    <button (click)="deleteCluster()" md-dialog-close md-raised-button color="primary" class="md-primary" [disabled]="!disableDeleteCluster">
+      delete
+    </button>
+  </md-dialog-actions>
+</div>
+
+
+
+
+
+

@@ -1,9 +1,11 @@
-.card-block {
+/*.card-block {
   border-top:1px solid #f7f7f9;
   div {
     line-height: 30px;
   }
 }
+*/
+
 
 .health-state {
   i {
@@ -13,4 +15,28 @@
   i.green {
     color: green;
   }
+}
+
+
+
+.km-card-list-content {
+  margin: 0 8px 10px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 30px;
+
+  img {
+    float: left;
+  }
+
+  p {
+    margin: 0 0 0 5px;
+    line-height: 30px;
+    display: inline-block;
+    float: left;
+  }
+
+
 }

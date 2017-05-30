@@ -18,15 +18,16 @@
       "prefix": "kubermatic",
       "mobile": false,
       "styles": [
-        "assets/css/global.scss"
+        "assets/css/global.scss",
+        "assets/css/custom_theme.scss"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js",
         "assets/js/tether.js",
         "assets/js/bootstrap.js"
       ],
+      "environmentSource": "environments/environment.ts",
       "environments": {
-        "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       }

@@ -1,20 +1,21 @@
-<div class="row card-block">
-  <div class="col-3">
+<div fxLayout class="km-node-row">
+  <div fxFlex="5%">{{index}}</div>
+  <div fxFlex="25%">
     {{node.metadata.name}}
   </div>
-  <div class="col-1">
+  <div fxFlex="10%">
     {{node.status.cpu}} CPU, {{node.status.memory | uppercase }}
   </div>
-  <div class="col-3">
+  <div fxFlex="25%">
     <span *ngIf="node.status.versions">{{node.status.versions.os}}</span>
   </div>
-  <div class="col-2">
+  <div fxFlex="15%">
     {{node.status.addresses.public}}
   </div>
-  <div class="col-1 health-state">
+  <div fxFlex="10%" class="health-state">
       <i class="fa fa-dot-circle-o" [class.green]="node.status.condition.healthy"></i>
   </div>
-  <div class="col-2">
-    <kubermatic-node-delete-confirmation [nodeName]="node.metadata.name" [nodeUID]="node.metadata.uid" [clusterName]="clusterName" [seedDcName]="seedDcName"></kubermatic-node-delete-confirmation>
+  <div fxFlex="10%">
+    <button md-button (click)="deleteNodeDialog()" md-raised-button >Delete Node</button>
   </div>
 </div>

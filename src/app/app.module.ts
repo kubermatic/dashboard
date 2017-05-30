@@ -4,6 +4,9 @@ import {NgModule} from "@angular/core";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
 import {RouterModule} from "@angular/router";
+import {MaterialModule} from '@angular/material';
+import 'hammerjs';
+import {FlexLayoutModule} from "@angular/flex-layout";
 import {KubermaticComponent} from "./kubermatic.component";
 import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
@@ -14,7 +17,7 @@ import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.component";
 import {NodeComponent} from "./cluster/node/node.component";
 import {AddNodeComponent} from "./cluster/add-node/add-node.component";
-import {NodeDeleteConfirmationComponent} from "./cluster/node-delete-confirmation/node-delete-confirmation.component"
+import {NodeDeleteConfirmationComponent} from "./cluster/node-delete-confirmation/node-delete-confirmation.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {ProfileComponent} from "./profile/profile.component";
@@ -31,7 +34,11 @@ import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
-import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.component';
+import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
+import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component';
+import { SidenavComponent } from './sidenav/sidenav.component';
+import { SidenavService } from './sidenav/sidenav.service';
+import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 
 
 @NgModule({
@@ -44,8 +51,10 @@ import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.compone
     RouterModule.forRoot(appRoutes),
     CustomFormsModule,
     StoreModule.provideStore(combinedReducer),
-    SimpleNotificationsModule,
-    SlimLoadingBarModule.forRoot()
+    SimpleNotificationsModule.forRoot(),
+    SlimLoadingBarModule.forRoot(),
+    MaterialModule,
+    FlexLayoutModule
   ],
   declarations: [
     KubermaticComponent,
@@ -61,9 +70,17 @@ import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.compone
     AddNodeComponent,
     ProfileComponent,
     NotificationComponent,
+    ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
     AddSshKeyComponent,
-    ListSshKeyComponent
+    ListSshKeyComponent,
+    SidenavComponent,
+    AddSshKeyModalComponent
+  ],
+  entryComponents: [
+    ClusterDeleteConfirmationComponent,
+    NodeDeleteConfirmationComponent,
+    AddSshKeyModalComponent
   ],
   providers: [
     AUTH_PROVIDERS,
@@ -71,6 +88,7 @@ import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.compone
     ApiService,
     AuthGuard,
     ClusterNameGenerator,
+    SidenavService,
     {
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr
@@ -78,4 +96,9 @@ import { ListSshKeyComponent } from './profile/list-ssh-key/list-ssh-key.compone
   ],
   bootstrap: [KubermaticComponent]
 })
+
+
+  //['ngMaterial']
+
+
 export class AppModule { }

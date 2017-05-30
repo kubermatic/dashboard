@@ -17,6 +17,10 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 
+import {MdDialog} from '@angular/material';
+import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
+
+
 @Component({
   selector: "kubermatic-wizard",
   templateUrl: "./wizard.component.html",
@@ -24,8 +28,8 @@ import {Observable, Subscription} from "rxjs";
 })
 export class WizardComponent implements OnInit {
 
-  public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN];
-  public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
+  public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN, NodeProvider.BAREMETAL];
+  public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {};
 
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
@@ -34,11 +38,13 @@ export class WizardComponent implements OnInit {
   public selectedCloudRegion: DataCenterEntity;
   public selectedCloudProviderApiError: string;
   public acceptBringYourOwn: boolean;
+  public acceptBareMetal: true;
 
   public clusterNameForm: FormGroup;
   public awsForm: FormGroup;
   public digitalOceanForm: FormGroup;
   public bringYourOwnForm: FormGroup;
+  public bareMetalForm: FormGroup;
 
   public sshKeys: SSHKeyEntity[] = [];
 
@@ -46,22 +52,33 @@ export class WizardComponent implements OnInit {
   public nodeSize: any[] = NodeInstanceFlavors.VOID;
 
   // Create Nodes
+  public selectedNodeCountValue: number = 3;
   public cluster: any;
-  public nodeSpec: any = {spec: {}}
+  public nodeSpec: any = {spec: {}};
+  public clusterSpec: any = {};
+
+
+  // Model add sshKey
+  public dialogRef: any;
+  public config: any = {};
 
   constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder, private router: Router,
-              private store: Store<fromRoot.State>) {
+              private store: Store<fromRoot.State>,
+              public dialog: MdDialog) {
   }
 
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
       result.forEach(elem => {
-        if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
-          this.groupedDatacenters[elem.spec.provider] = [];
-        }
 
-        this.groupedDatacenters[elem.spec.provider].push(elem);
+        if (!elem.seed) {
+          if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
+            this.groupedDatacenters[elem.spec.provider] = [];
+          }
+
+          this.groupedDatacenters[elem.spec.provider].push(elem);
+        }
       });
     });
 
@@ -84,7 +101,12 @@ export class WizardComponent implements OnInit {
       secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
       ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: ["", [<any>Validators.required]]
+      node_size: ["", [<any>Validators.required]],
+      vpc_id: [""],
+      subnet_id: [""],
+      auto_update: [true, [<any>Validators.required]],
+      disk_size: [8, [<any>Validators.required, CustomValidators.min(8), CustomValidators.max(200)]],
+      container_linux_version: ['']
     });
 
     this.digitalOceanForm = this.formBuilder.group({
@@ -93,6 +115,10 @@ export class WizardComponent implements OnInit {
       ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]]
+    });
+
+    this.bareMetalForm = this.formBuilder.group({
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
   }
 
@@ -109,11 +135,28 @@ export class WizardComponent implements OnInit {
     this.selectedCloudRegion = cloud;
   }
 
+  private refreshSSHKeys() {
+    this.api.getSSHKeys().subscribe(result => {
+      this.sshKeys = result;
+    });
+  }
+
+// TODO: show model
+  public addSshKeyDialog(): void {
+    this.dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      this.refreshSSHKeys();
+    });
+  }
+
   public getNodeCount(): string {
     if (this.selectedCloud === NodeProvider.AWS) {
       return this.awsForm.controls["node_count"].value;
     } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
       return this.digitalOceanForm.controls["node_count"].value;
+    } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
+      return this.bareMetalForm.controls["node_count"].value;
     } else {
       return "-1";
     }
@@ -123,11 +166,22 @@ export class WizardComponent implements OnInit {
     if (this.selectedCloud === NodeProvider.AWS) {
       return this.awsForm.controls["node_size"].value;
     }
+
     if (this.selectedCloud === NodeProvider.DIGITALOCEAN ) {
       return this.digitalOceanForm.controls["node_size"].value;
     }
     return "";
   }
+
+  public changeDoKey() {
+    let key = this.digitalOceanForm.controls["access_token"].value;
+
+    this.api.getDigitaloceanSizes(key).subscribe(result => {
+        this.nodeSize = result.sizes;
+      }
+    );
+  }
+
 
   public refreshName() {
     this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
@@ -156,6 +210,8 @@ export class WizardComponent implements OnInit {
           return this.awsForm.valid;
         } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
           return this.digitalOceanForm.valid;
+        } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
+          return this.bareMetalForm.valid;
         } else {
           return false;
         }
@@ -180,78 +236,124 @@ export class WizardComponent implements OnInit {
     return this.canGotoStep(this.currentStep);
   }
 
-  public changeDoKey() {
-    let key = this.digitalOceanForm.controls["access_token"].value;
-    this.api.getDigitaloceanSizes(key).subscribe(result => {
-        this.nodeSize = result.sizes;
-      }
-    );
-  }
-
   public createClusterAndNode() {
     let key = null;
     let secret =  null;
-    let ssh_keys =  null;
-    let region = this.selectedCloudRegion.metadata.name;
+    let ssh_keys = [];
+    let region = null;
+
+    if (this.selectedCloud !== NodeProvider.BRINGYOUROWN) {
+      region = this.selectedCloudRegion.metadata.name;
+    }
+
+    let cluster_name = this.clusterNameForm.controls["name"].value;
     let sub: Subscription;
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
 
     if (this.selectedCloud === NodeProvider.AWS) {
+
       key = this.awsForm.controls["access_key_id"].value;
       secret = this.awsForm.controls["secret_access_key"].value;
-      ssh_keys = this.awsForm.controls["ssh_key"].value;
+      ssh_keys.push(this.awsForm.controls["ssh_key"].value);
+
       node_instances = this.digitalOceanForm.controls["node_count"].value;
 
-      this.nodeSpec.spec.aws = {
-        type: this.awsForm.controls["node_size"].value
-      };
+      this.clusterSpec.aws = {
+        vpc_id: this.awsForm.controls["vpc_id"].value,
+        subnet_id: this.awsForm.controls["subnet_id"].value,
+        container_linux : {
+          auto_update : this.awsForm.controls["auto_update"].value
+        }
+      }
 
-    } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
+      this.nodeSpec.spec = {
+        dc: region,
+        aws:  {
+          type: this.awsForm.controls["node_size"].value,
+          disk_size: this.awsForm.controls["disk_size"].value,
+          container_linux: {
+            version: this.awsForm.controls["container_linux_version"].value
+          }
+        }
+      }
+
+    }
+
+    if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
+
       secret = this.digitalOceanForm.controls["access_token"].value;
       ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
       node_instances = this.digitalOceanForm.controls["node_count"].value;
+      this.clusterSpec.digitalocean = {}
 
-      this.nodeSpec.spec.digitalocean = {
-        size: this.digitalOceanForm.controls["node_size"].value
-      };
+      this.nodeSpec.spec = {
+        dc:  region,
+        digitalocean: {
+          size: this.digitalOceanForm.controls["node_size"].value,
+          sshKeys: this.digitalOceanForm.controls["ssh_key"].value
+        }
+      }
     }
 
-    const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value);
+    if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
+      this.clusterSpec.bringyourown = {
+        privateInterface: this.bringYourOwnForm.controls["pif"].value
+      }
+    }
+
+    if (this.selectedCloud === NodeProvider.BAREMETAL) {
+      node_instances = this.bareMetalForm.controls["node_count"].value;
+
+      this.clusterSpec.baremetal = {}
+
+      this.nodeSpec.spec = {
+        dc: region,
+        baremetal: {}
+      }
+    }
+
+
+    const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);
+
     const cloud = new CloudModel(key, secret, this.selectedCloud, region);
+
     const model = new CreateClusterModel(cloud, spec, ssh_keys);
 
-    //console.log("Create cluster mode: \n" + JSON.stringify(model));
+
+    console.log("Create cluster mode: \n" + JSON.stringify(model));
     this.api.createCluster(model).subscribe(result => {
-        //this.router.navigate(["clusters"]);
+
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.cluster = result;
-        const clusterModel = new ClusterModel('us-central1', this.cluster.metadata.name);
+        this.router.navigate(["clusters"]);
+
+        if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
+          return;
+        }
+
+        const clusterModel = new ClusterModel(this.cluster.seed, this.cluster.metadata.name);
         const createNodeModel = new CreateNodeModel(node_instances, this.nodeSpec.spec);
         sub = timer.subscribe(() => {
           this.api.getCluster(clusterModel).subscribe(result => {
-            NotificationComponent.success(this.store, "Success", `Waiting till Cluster is running`);
-            this.cluster = result;
-            //console.log(this.cluster.status.phase);
+              NotificationComponent.success(this.store, "Success", `Waiting till Cluster is running`);
+              this.cluster = result;
 
-            if(this.cluster.status.phase == "Running") {
-              this.api.createClusterNode(clusterModel, createNodeModel).subscribe(result => {
-                NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                debugger;
+              if (this.cluster.status.phase == "Running") {
+                sub.unsubscribe();
+                this.api.createClusterNode(clusterModel, createNodeModel).subscribe(result => {
+                    NotificationComponent.success(this.store, "Success", `Creating Nodes`);
 
-                sub.unsubscribe();
-                this.router.navigate(["clusters"]);
-              },
-              error => {
-                sub.unsubscribe();
-                NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-              });
-            }
-          },
-          error => {
-            sub.unsubscribe();
-            NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-          });
+                  },
+                  error => {
+                    NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+                  });
+              }
+            },
+            error => {
+              sub.unsubscribe();
+              NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+            });
         })
       },
       error => {

@@ -1,31 +1,151 @@
-@import "bootstrap/variables";
-@import "ng2admin/conf/variables";
-@import "ng2admin/conf/ng2";
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  @include titillium-font;
 
-.component-heading {
-  font-weight: $font-weight-bold;
-  padding: 15px 0;
+  background-color: #EFF3F8;
+  color: #444D58;
+}
+h2 {
+  font-weight: 300;
 }
 
-.component-sub-heading {
-  font-weight: $font-weight-normal;
-  padding: 15px 0;
+// Card Styling
+
+.km-card-list {
+  padding-top: 10px;
+  margin-bottom: 10px;
+
+  .km-card-list-header {
+    height: 30px;
+    padding-bottom: 0;
+    line-height: 30px;
+
+    .mat-card-title {
+      font-weight: 500;
+      margin-bottom: 0;
+      margin-left: 0;
+    }
+  }
+
 }
 
-.custom-simple-notification {
-  margin-top: $top-height;
+.km-card-list-content {
+  margin: 0 8px 10px;
+  text-decoration: none;
+  color: #333;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 30px;
 }
 
-.card-margin {
-  margin-bottom: 24px;
+
+md-card-header {
+  border-bottom: 1px solid #E3E8EC;
+  padding-bottom: 10px;
+
+  &.km-card-list-header.mat-card-header {
+    margin-bottom: 10px;
+  }
+
+  .mat-card-title {
+    padding-top: 0px;
+    font-size: 18px;
+  }
+
+  .mat-card-header-text {
+    width: 100%;
+  }
 }
 
-.simple-notification.error { background: $danger-dark !important; }
-.simple-notification.success { background: $success !important; }
-.simple-notification.alert { background: $warning !important; }
-.simple-notification.info { background: $primary !important; }
+// Input Fields
 
-.simple-notification.error .sn-progress-loader span { background: $danger !important; }
-.simple-notification.success .sn-progress-loader span { background: $success-light !important; }
-.simple-notification.alert .sn-progress-loader span { background: $warning-dark !important; }
-.simple-notification.info .sn-progress-loader span { background: $primary-light !important; }
+.mat-input-wrapper {
+  margin: 1.5em 0 1em;
+  padding-bottom: 6px;
+}
+
+.km-card-list .mat-card-footer {
+  position: relative;
+}
+
+.mat-select-placeholder {
+  font-size: 14px;
+}
+
+.mat-select-value-text {
+  font-size: 14px;
+}
+
+.mat-slider-horizontal {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.dfjsdfijs {
+  border: 1px solid red;
+  float: left;
+}
+
+
+// dialog
+
+.mat-dialog-container {
+  .mat-toolbar {
+    background-color: #fff;
+    border-bottom: 1px solid #E3E8EC;
+    min-height: 30px;
+    padding: 0 8px;
+    .mat-toolbar-row {
+      height: 30px;
+    }
+    h4 {
+      font-weight: 500;
+      font-size: 14px;
+      margin: 0;
+    }
+    button {
+      position: absolute;
+      right: 15px;
+      top: 5px;
+      font-size: 20px;
+      i {
+        color: #0288d1;
+      }
+    }
+  }
+  .md-dialog-content {
+
+    p {
+      font-size: 14px;
+      font-weight: 400;
+    }
+
+    .mat-input-wrapper {
+      margin: 8px 0;
+    }
+    .mat-input-infix {
+      font-size: 14px;
+    }
+  }
+  .mat-dialog-actions {
+
+    &:last-child {
+      margin-bottom: -12px;
+    }
+    button {
+      margin-right: 10px;
+    }
+  }
+}
+
+.mat-button-focus-overlay {
+  background-color: transparent !important;
+}
+
+.mat-sidenav {
+  background-color: #444D58 !important;
+}

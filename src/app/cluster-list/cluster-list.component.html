@@ -1,32 +1,28 @@
-<div class="container">
-  <div class="row">
-    <h2 class="component-heading">My Clusters</h2>
+  <div fxLayout>
+      <h2 fxFlex="70%" class="component-heading">My Clusters</h2>
+      <div fxFlex="30%" align="right" style="margin-bottom: 15px;margin-top: 25px;">
+        <a routerLink="/wizard">
+          <button md-raised-button color="primary" type="button">
+            <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>Add Cluster
+          </button>
+        </a>
+      </div>
   </div>
-</div>
-
-<p *ngIf="clusters" class="text-right">quantity of clusters: {{clusters.length}}</p>
-<div class="container card">
-  <div class="row card-header">
-    <div class="col-4">Cluster Name</div>
-    <div class="col-3">DC of Nodes</div>
-    <div class="col-2">Status</div>
-    <div class="col-3">Health
-      <a routerLink="/wizard">
-        <button type="button" class="btn btn-primary">
-          <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>Add Cluster
-        </button>
-      </a>
-    </div>
-  </div>
-
+  <md-card class="km-card-list">
+    <md-card-header fxLayout class="km-card-list-header">
+        <md-card-title fxFlex="5%">#</md-card-title>
+        <md-card-title fxFlex="35%">Cluster Name</md-card-title>
+        <md-card-title fxFlex="25%">Provider of Nodes</md-card-title>
+        <md-card-title fxFlex="15%">Status</md-card-title>
+        <md-card-title fxFlex="15%">Health</md-card-title>
+    </md-card-header>
   <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
     <div *ngSwitchCase="true">
-      <kubermatic-cluster-item *ngFor="let c of clusters" [cluster]="c"></kubermatic-cluster-item>
+      <kubermatic-cluster-item *ngFor="let c of clusters; let i = index" [cluster]="c" [index]="i + 1"></kubermatic-cluster-item>
     </div>
-    <div *ngSwitchCase="false" class="row card-block">
-      <div class="col-12 text-center text-muted">
-        No Cluster available. Please add a Cluster.
-      </div>
+    <div *ngSwitchCase="false" fxLayout fxLayoutGap="10px">
+      <p fxFlex class="km-no-cluster" >No Cluster available. <a routerLink="/wizard">Please add a Cluster.</a></p>
     </div>
   </ng-container>
-</div>
+ </md-card>
+

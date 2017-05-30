@@ -1,3 +1,5 @@
+import {AWSCloudSpec} from "./cloud/AWSCloudSpec";
+
 export class CreateClusterModel {
   cloud: CloudModel;
   spec: ClusterSpec;
@@ -24,10 +26,17 @@ export class CloudModel {
   }
 }
 
+export class CloudSpec {
+  constructor(
+    public aws: AWSCloudSpec) {}
+}
+
 export class ClusterSpec {
   humanReadableName: string;
+  cloud: CloudSpec;
 
-  constructor(humanReadableName: string) {
+  constructor(humanReadableName: string, cloud: CloudSpec) {
     this.humanReadableName = humanReadableName;
+    this.cloud = cloud;
   }
 }

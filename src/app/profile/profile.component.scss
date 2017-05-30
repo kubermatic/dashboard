@@ -1,9 +1,9 @@
-@import "../../assets/css/ng2admin/conf/conf";
-@import "../../assets/css/bootstrap/variables";
+//@import "../../assets/css/ng2admin/conf/conf";
+//@import "../../assets/css/bootstrap/variables";
 
 .ssh-key-header {
   background: #f7f7f9;
-  color: $primary;
+  color: #000;
 }
 
 .ssh-key-name {
@@ -17,7 +17,7 @@
 .ssh-key-publickey {
   padding: 5px;
   word-wrap: break-word;
-  color: $primary;
+  color: #000;
 }
 
 
@@ -27,20 +27,30 @@
 }
 
 .profile-name {
-  @include titillium-font;
   font-size: 2rem;
   line-height: 40px;
   margin: 15px 0;
 }
 
 .profile-hashtag {
-  font-size: $font-size-base;
+  font-size: 16px;
   line-height: 22px;
   margin-bottom: 10px;
 }
 
 .profile-details {
-  font-size: $font-size-base;
+  font-size: 16px;
   line-height: 22px;
   margin-bottom: 10px;
+}
+
+
+.km-profile {
+  .mat-card-header {
+    height: 55px;
+    margin-bottom: 10px;
+  }
+  .mat-card-content {
+    line-height: 20px;
+  }
 }

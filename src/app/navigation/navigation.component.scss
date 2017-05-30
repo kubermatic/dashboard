@@ -1,13 +1,7 @@
-@import "../../assets/css/ng2admin/conf/conf";
+//@import "../../assets/css/ng2admin/conf/conf";
 
-.navigation-bar {
-  background-color: $primary;
-  position: fixed;
-  z-index: 904;
-  box-shadow: 2px 0 3px rgba(0, 0, 0, 0.5);
-  height: 66px;
-  width: 100%;
-  min-width: $resMin;
+header {
+  background-color: #fff;
 
   .dropdown-toggle::after {
     display: none;
@@ -20,13 +14,13 @@
 
 .blur {
   .navigation-bar.scrolled {
-    background-color: rgba(black, 0.85)
+    //background-color: rgba(black, 0.85)
   }
 }
 
 a.al-logo {
-  @include titillium-font;
-  color: $default-text;
+  //@include titillium-font;
+  color: #fff;
   display: block;
   font-size: 23px;
   white-space: nowrap;
@@ -35,20 +29,24 @@ a.al-logo {
   line-height: 60px;
 
   span {
-    color: $primary;
+    color: #fff;
   }
 }
 
-a.al-logo:hover {
+/*a.al-logo:hover {
   color: $white-dark;
-}
+}*/
 
 .user-profile {
   float: right;
-  min-width: 150px;
-  margin-top: 10px;
 }
 
+
+.profile-toggle-link {
+  float: right;
+}
+
+/*
 .al-user-profile {
   float: right;
   margin-right: 12px;
@@ -77,18 +75,19 @@ a.al-logo:hover {
     border-radius: 5%;
   }
 }
+*/
 
 a.refresh-data {
-  color: $sidebar-text;
+  color: #000;
   font-size: 13px;
   text-decoration: none;
-  font-weight: $font-normal;
+  font-weight: 400;
   float: right;
   margin-top: 13px;
   margin-right: 26px;
 
   &:hover {
-    color: $warning !important;
+    color: red !important;
   }
 }
 
@@ -98,14 +97,14 @@ a.collapse-menu-link {
   display: block;
   text-decoration: none;
   line-height: 42px;
-  color: $sidebar-text;
+  color: #000;
   padding: 0;
   float: left;
   margin: 11px 0 0 25px;
 
   &:hover {
     text-decoration: none;
-    color: $warning;
+    color: grey;
   }
 }
 
@@ -141,7 +140,7 @@ a.collapse-menu-link {
     margin-right: 13px;
   }
   input {
-    color: $sidebar-text;
+    color: #000;
     background: none;
     border: none;
     outline: none;
@@ -154,17 +153,17 @@ a.collapse-menu-link {
 
 .actions-section {
   top: 0;
-  height: $top-height;
-  line-height: $top-height;
-  color: $default-text;
+  height: 80px;
+  line-height: 80px;
+  color: #000;
   font-size: 16px;
-  font-weight: $font-normal;
+  font-weight: 400;
 
   a {
-    color: $default-text;
+    color: #000;
 
     &:hover {
-      color: $white-darker;
+      color: grey;
     }
 
     span {
@@ -178,11 +177,11 @@ a.collapse-menu-link {
   right: 40px;
 
   button {
-    color: $default-text;
+    color: #000;
     text-decoration: none;
 
     &:hover {
-      color: $white-darker;
+      color: grey;
     }
 
     span {
@@ -201,7 +200,7 @@ a.collapse-menu-link {
     right: 20px;
   }
 }
-
+/*
 @media screen and (max-width: $resS) {
   .info {
     display: none;
@@ -232,7 +231,8 @@ a.collapse-menu-link {
   .al-skin-dropdown {
     display: none;
   }
-}
+}*/
+
 
 .profile-toggle-link{
   cursor: pointer;
@@ -243,21 +243,21 @@ a.collapse-menu-link {
   left: auto;
   right: -47px;
   top: 26px;
-  @include scrollbars(.4em, rgba(0,0,0,0.5), #fff);
+  //@include scrollbars(.4em, rgba(0,0,0,0.5), #fff);
   .header {
     padding: 10px 12px;
-    border-bottom: 1px solid $default;
+    border-bottom: 1px solid #000;
     font-size: 12px;
     strong {
       float: left;
-      color: $dropdown-text;
+      color: #000;
     }
     & > a {
       float: right;
       margin-left: 12px;
       text-decoration: none;
       &:hover {
-        color: $dropdown-text;
+        color: grey;
       }
     }
   }
@@ -266,11 +266,11 @@ a.collapse-menu-link {
     overflow: scroll;
     overflow-x: hidden;
     & > a {
-      border-top: 1px solid $default;
+      border-top: 1px solid #000;
       padding: 10px 12px;
       display: block;
       text-decoration: none;
-      color: $dropdown-text;
+      color: #000;
       font-size: 12px;
       &:first-child {
         border-top: none;
@@ -292,10 +292,10 @@ a.collapse-menu-link {
           font-size: 24px;
           text-align: center;
           &.comments {
-            color: $warning;
+            color: red;
           }
           &.orders {
-            color: $warning;
+            color: blue;
           }
           i {
             width: 36px;
@@ -324,14 +324,14 @@ a.collapse-menu-link {
     }
   }
   & > a {
-    border-top: 1px solid $default;
+    border-top: 1px solid #000;
     display: block;
     text-align: center;
     padding: 10px;
     font-size: 12px;
     text-decoration: none;
     &:hover {
-      color: $dropdown-text;
+      color: #000;
     }
   }
 
@@ -343,16 +343,16 @@ a.collapse-menu-link {
       text-align: left;
       border: none;
       text-decoration: none;
-      color: $dropdown-text;
+      color: #000;
       padding: 4px 16px 4px 20px;
       &.signout {
-        border-top: 1px solid $default;
+        border-top: 1px solid #000;
       }
       i {
         margin-right: 10px;
       }
       &:hover {
-        background: #f4fcff;
+        background: #fff;
       }
     }
     i.dropdown-arr {
@@ -379,7 +379,7 @@ a.collapse-menu-link {
       width: 0;
       height: 0;
       border: 10px solid transparent;
-      border-bottom-color: $default;
+      border-bottom-color: #000;
     }
   }
 }
@@ -392,3 +392,28 @@ a.collapse-menu-link {
     }
   }
 }
+
+.km-main-nav {
+  border-bottom: 1px solid #BCC5D0;
+
+   button {
+     color: #444D58;
+     font-weight: 400;
+   }
+
+    a, .km-logout, .km-login {
+      color: #444D58;
+      font-weight: 400;
+
+      &:hover {
+        color: #444D58;
+      }
+    }
+
+
+}
+
+.km-logout, .km-login {
+  float: right;
+}
+
