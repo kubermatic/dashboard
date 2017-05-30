@@ -52,8 +52,13 @@
           <div *ngSwitchCase="'aws'">
             {{cluster.spec.cloud[cluster.dc.spec.provider].ssh_key_name}}
           </div>
+
           <div *ngSwitchCase="'digitalocean'">
             {{cluster.spec.cloud[cluster.dc.spec.provider].sshKeys.length}} sshKey(s)
+          </div>
+
+          <div *ngSwitchCase="'baremetal'">
+            no key
           </div>
         </ng-container>
       </div>

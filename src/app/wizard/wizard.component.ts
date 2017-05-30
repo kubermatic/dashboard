@@ -118,6 +118,7 @@ export class WizardComponent implements OnInit {
     });
 
     this.bareMetalForm = this.formBuilder.group({
+      ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
   }
@@ -181,7 +182,6 @@ export class WizardComponent implements OnInit {
       }
     );
   }
-
 
   public refreshName() {
     this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
@@ -281,7 +281,6 @@ export class WizardComponent implements OnInit {
     }
 
     if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
-
       secret = this.digitalOceanForm.controls["access_token"].value;
       ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
       node_instances = this.digitalOceanForm.controls["node_count"].value;
@@ -304,6 +303,7 @@ export class WizardComponent implements OnInit {
 
     if (this.selectedCloud === NodeProvider.BAREMETAL) {
       node_instances = this.bareMetalForm.controls["node_count"].value;
+      ssh_keys.push(this.bareMetalForm.controls["ssh_key"].value);
 
       this.clusterSpec.baremetal = {}
 
@@ -312,7 +312,6 @@ export class WizardComponent implements OnInit {
         baremetal: {}
       }
     }
-
 
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);
 

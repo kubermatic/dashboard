@@ -305,6 +305,28 @@
             <div [hidden]="selectedCloud !== 'baremetal'">
               <form [formGroup]="bareMetalForm" novalidate >
                 <div>
+                  <div style="width: 100%; margin-top: 10px;">
+                    <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+                      <div *ngSwitchCase="true" [ngClass]="{'has-danger': !bareMetalForm.controls.ssh_key.valid && bareMetalForm.controls.ssh_key.touched, 'has-success': bareMetalForm.controls.ssh_key.valid}">
+                        <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+                          <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
+                            {{key.name + ' - ' + key.fingerprint}}
+                          </md-option>
+                        </md-select>
+                      </div>
+                      <div *ngSwitchCase="false">
+                        <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
+                        <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+                      </div>
+                    </div>
+
+                    <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+                      to provide kubectl logs, port-forward and exec functionality.
+                    </small>
+                    <br>
+
+                    <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
+                  </div>
                   <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched,
                 'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
                     <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="baremetal_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>

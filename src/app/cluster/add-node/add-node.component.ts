@@ -31,7 +31,7 @@ export class AddNodeComponent implements OnInit {
   public node: any;
   public nodeSpec: any = {spec: {}}
   public nodeInstances: number = 1;
-  public nodeSizes: any;
+  public nodeSizes: any = [];
   public sshKeys: any;
 
 
@@ -53,6 +53,13 @@ export class AddNodeComponent implements OnInit {
     });
   }
 
+  public addValidForm () {
+    if (this.nodeProvider == 'baremetal') {
+      return true;
+    }
+    return this.addNodeForm.valid;
+  }
+
   public getProviderNodeSpecification() {
     switch (this.nodeProvider) {
       case 'aws' : {
@@ -69,6 +76,7 @@ export class AddNodeComponent implements OnInit {
       }
     }
   }
+
 
   public setProviderNodeSpecification(): void {
     this.nodeInstances = this.addNodeForm.controls["node_count"].value;
@@ -90,6 +98,12 @@ export class AddNodeComponent implements OnInit {
           size: this.addNodeForm.controls["node_size"].value
         };
         return;
+      }
+
+      case 'baremetal' : {
+        this.nodeSpec.spec.baremetal = {};
+        return;
+
       }
 
       default : {

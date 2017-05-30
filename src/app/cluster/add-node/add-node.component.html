@@ -14,12 +14,6 @@
       </md-input-container>
 
 
-
-      <!--<div style="width: 100%; margin-top: 30px;">
-        <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="1" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
-        <small class="form-text text-danger"  [hidden]="addNodeForm.controls.node_count.valid || !addNodeForm.controls.node_count.touched">Node count is invalid.</small>
-        <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
-      </div>-->
    <!--
 
        <md-select style="width: 100%; margin-top: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
@@ -35,9 +29,6 @@
         <select id="node_size" formControlName="node_size" class="form-control">
           <option value="" disabled="true" [selected]="!addNodeForm.controls['node_size'].value">Please select a node size!</option>
           <ng-container [ngSwitch]="cluster.dc.spec.provider">
-            <!--ng-container *ngSwitchCase="'aws'">
-              <option  *ngFor="let size of nodeSizes; let i = index;" [value]="size"> {{size}}</option>
-            </ng-container -->
             <ng-container *ngSwitchCase="'digitalocean'">
               <option *ngFor="let size of nodeSizes; let i = index;" [value]="size.slug">
                 {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
@@ -63,8 +54,7 @@
           <small>Show stable <a href="https://aws.amazon.com/marketplace/pp/B01H62FDJM?qid=1490197183896&sr=0-1&ref_=srh_res_product_title#" target="_blank">CoreOS Versions</a> </small>
         </md-input-container>
       </ng-container>
-
-      <button type="submit" md-raised-button color="primary" value="submit" (click)="addNode()" class="btn btn-primary" [disabled]="!addNodeForm.controls['node_size'].value">Add Node(s)</button>
+      <button type="submit" md-raised-button color="primary" value="submit" (click)="addNode()" class="btn btn-primary" [disabled]="!addValidForm()">Add Node(s)</button>
     </form>
   </md-card-content>
 </md-card>
