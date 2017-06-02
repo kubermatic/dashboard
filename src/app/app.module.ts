@@ -1,9 +1,9 @@
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import {BrowserModule} from "@angular/platform-browser";
 import {CommonModule} from "@angular/common";
-import {NgModule} from "@angular/core";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
-import {RouterModule} from "@angular/router";
 import {MaterialModule} from '@angular/material';
 import 'hammerjs';
 import {FlexLayoutModule} from "@angular/flex-layout";
@@ -76,6 +76,9 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
     ListSshKeyComponent,
     SidenavComponent,
     AddSshKeyModalComponent
+  ],
+  exports: [
+    RouterModule,
   ],
   entryComponents: [
     ClusterDeleteConfirmationComponent,

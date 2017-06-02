@@ -1,4 +1,4 @@
-<a *ngIf="cluster.dc.metadata.name" routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}" fxLayouts class="km-card-list-content">
+<a *ngIf="cluster.dc.metadata.name" [routerLink]="clusterUri" fxLayouts class="km-card-list-content">
   <div fxFlex="5%">{{index}}</div>
   <div fxFlex="35%">
     <span>
