@@ -82,9 +82,6 @@
               Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
             </div>
             <div fxLayoutAlign="center" fxLayout>
-
-
-
               <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
                 <div *ngIf="groupedDatacenters[cloud]"  [fxFlex]="calc4Cols"  class="wizard-box"
                      [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
@@ -283,62 +280,131 @@
               </form>
             </div>
 
-            <div [hidden]="selectedCloud !== 'bringyourown'">
-              <div class="col-8 wizard-box-text">
-                You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?<br>
-                <br>
-                For non-interactive installation of the kubermatic debian package, you have to tell us about the
-                private network interface of your nodes. It will be used for the
-                <a href="https://github.com/coreos/flannel">Flannel</a> network traffic.
-              </div>
-
-              <form [formGroup]="bringYourOwnForm" novalidate class="col-6">
-                <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
-                  <label for="pif" class="form-text text-muted">Private network interface:</label>
-                  <input id="pif" formControlName="pif" type="text" class="form-control">
-                  <small class="form-text text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
-                </div>
-              </form>
+          <div [hidden]="selectedCloud !== 'bringyourown'">
+            <div class="col-8 wizard-box-text">
+              You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?<br>
+              <br>
+              For non-interactive installation of the kubermatic debian package, you have to tell us about the
+              private network interface of your nodes. It will be used for the
+              <a href="https://github.com/coreos/flannel">Flannel</a> network traffic.
             </div>
 
+            <form [formGroup]="bringYourOwnForm" novalidate class="col-6">
+              <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
+                <label for="pif" class="form-text text-muted">Private network interface:</label>
+                <input id="pif" formControlName="pif" type="text" class="form-control">
+                <small class="form-text text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
+              </div>
+            </form>
+          </div>
 
-            <div [hidden]="selectedCloud !== 'baremetal'">
-              <form [formGroup]="bareMetalForm" novalidate >
-                <div>
-                  <div style="width: 100%; margin-top: 10px;">
-                    <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                      <div *ngSwitchCase="true" [ngClass]="{'has-danger': !bareMetalForm.controls.ssh_key.valid && bareMetalForm.controls.ssh_key.touched, 'has-success': bareMetalForm.controls.ssh_key.valid}">
-                        <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                          <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                            {{key.name + ' - ' + key.fingerprint}}
-                          </md-option>
-                        </md-select>
-                      </div>
-                      <div *ngSwitchCase="false">
-                        <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                        <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                      </div>
+
+          <div [hidden]="selectedCloud !== 'baremetal'">
+            <form [formGroup]="bareMetalForm" novalidate >
+              <div>
+                <div style="width: 100%; margin-top: 10px;">
+                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !bareMetalForm.controls.ssh_key.valid && bareMetalForm.controls.ssh_key.touched, 'has-success': bareMetalForm.controls.ssh_key.valid}">
+                      <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+                        <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
+                          {{key.name + ' - ' + key.fingerprint}}
+                        </md-option>
+                      </md-select>
+                    </div>
+                    <div *ngSwitchCase="false">
+                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
+                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+                    </div>
+                  </div>
+
+                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+                    to provide kubectl logs, port-forward and exec functionality.
+                  </small>
+                  <br>
+
+                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
+                </div>
+                <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched,
+              'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
+                  <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="baremetal_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
+                  <small class="form-text text-danger"  [hidden]="bareMetalForm.controls.node_count.valid || !awsForm.controls.node_count.touched">Node count is invalid.</small>
+                  <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
+                </div>
+              </div>
+            </form>
+          </div>
+
+
+
+          <div [hidden]="selectedCloud !== 'openstack'">
+
+
+            <form [formGroup]="openStackForm" novalidate >
+              <div>
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_project_name.valid && openStackForm.controls.os_project_name.touched, 'has-success': openStackForm.controls.os_project_name.valid}">
+                  <input id="os_project_name" mdInput formControlName="os_project_name" type="text" placeholder="os_project_name:" title="os_project_name" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_project_name.valid || !openStackForm.controls.os_project_name.touched">os_project_name is required.</small>
+                </md-input-container>
+
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_username.valid && openStackForm.controls.os_username.touched, 'has-success': openStackForm.controls.os_username.valid}">
+                  <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="os_username:" title="os_username" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_username.valid || !openStackForm.controls.os_username.touched">os_username is required.</small>
+                </md-input-container>
+
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_password.valid && openStackForm.controls.os_password.touched, 'has-success': openStackForm.controls.os_password.valid}">
+                  <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="os_password:" title="os_password" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">os_password is required.</small>
+                </md-input-container>
+
+                <!-- TODO: SSHKey -->
+
+                <div style="width: 100%; margin-top: 10px;">
+                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !openStackForm.controls.ssh_key.valid && openStackForm.controls.ssh_key.touched, 'has-success': openStackForm.controls.ssh_key.valid}">
+                      <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+                        <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
+                          {{key.name + ' - ' + key.fingerprint}}
+                        </md-option>
+                      </md-select>
                     </div>
 
-                    <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                      to provide kubectl logs, port-forward and exec functionality.
-                    </small>
-                    <br>
-
-                    <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
+                    <div *ngSwitchCase="false">
+                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
+                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+                    </div>
                   </div>
-                  <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched,
-                'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
-                    <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="baremetal_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
-                    <small class="form-text text-danger"  [hidden]="bareMetalForm.controls.node_count.valid || !awsForm.controls.node_count.touched">Node count is invalid.</small>
-                    <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
-                  </div>
+                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+                    to provide kubectl logs, port-forward and exec functionality</small>.
+                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
-              </form>
-            </div>
+
+
+                <!-- TODO: Node Count -->
+                <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched,
+              'has-success': awsForm.controls.node_count.valid && awsForm.controls.node_count.touched}">
+                  <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="os_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
+                  <small class="form-text text-danger"  [hidden]="openStackForm.controls.node_count.valid || !openStackForm.controls.node_count.touched">Node count is invalid.</small>
+                  <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
+                </div>
+
+                <!--
+
+                // TODO: get Images
+
+                -->
+
+                <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
+                  <md-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</md-option>
+                  <md-option *ngFor="let images of nodeSize; let i = index;" [value]="images.name">
+                    {{images.name}}
+                  </md-option>
+                </md-select>
+              </div>
+            </form>
           </div>
         </div>
       </div>
+    </div>
 
 
       <!-- TODO: Summery --->

@@ -60,6 +60,10 @@
           <div *ngSwitchCase="'baremetal'">
             no key
           </div>
+
+          <div *ngSwitchCase="'openstack'">
+            {{cluster.spec.cloud[cluster.dc.spec.provider].ssh_key_name}}
+          </div>
         </ng-container>
       </div>
     </md-card-content>
