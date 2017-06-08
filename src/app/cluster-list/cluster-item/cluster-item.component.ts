@@ -10,8 +10,6 @@ export class ClusterItemComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() index: number
 
-  public clusterUri : string = '/dc/' + this.cluster.dc.metadata.name + '/cluster/' + this.cluster.metadata.name;
-
   constructor() {}
 
   ngOnInit() {

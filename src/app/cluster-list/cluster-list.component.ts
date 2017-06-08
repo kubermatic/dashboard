@@ -2,7 +2,11 @@ import {Component, OnInit, OnDestroy} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {ClusterEntity} from "../api/entitiy/ClusterEntity";
 
+
+
 import {Observable, Subscription} from "rxjs";
+
+import { RouterModule, Routes } from '@angular/router';
 
 @Component({
   selector: "kubermatic-cluster-list",
@@ -26,6 +30,9 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   getClusters(){
     this.api.getClusters().subscribe(result => {
       this.clusters = result;
+
+      console.log(this.clusters);
+      debugger;
     });
   }
 

@@ -1,6 +1,3 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-
 import { Component, ViewChild } from "@angular/core";
 import { MdSidenav } from '@angular/material';
 import { SidenavService } from './sidenav/sidenav.service';
@@ -12,6 +9,7 @@ import { SidenavService } from './sidenav/sidenav.service';
 })
 export class KubermaticComponent {
   @ViewChild('sidenav') public sidenav: MdSidenav;
+
 
   public constructor(
     private sidenavService: SidenavService

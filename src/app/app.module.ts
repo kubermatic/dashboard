@@ -4,7 +4,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
-import {MaterialModule} from '@angular/material';
+import { MaterialModule } from './material.module';
 import 'hammerjs';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {KubermaticComponent} from "./kubermatic.component";
@@ -79,6 +79,7 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
   ],
   exports: [
     RouterModule,
+    MaterialModule
   ],
   entryComponents: [
     ClusterDeleteConfirmationComponent,
@@ -99,9 +100,6 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
   ],
   bootstrap: [KubermaticComponent]
 })
-
-
-  //['ngMaterial']
 
 
 export class AppModule { }
