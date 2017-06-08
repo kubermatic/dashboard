@@ -4,7 +4,25 @@ import {BrowserModule} from "@angular/platform-browser";
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
-import { MaterialModule } from './material.module';
+//import { MaterialModule } from './material.module';
+
+import {
+  MdButtonModule,
+  MdIconModule,
+  MdInputModule,
+  MdListModule,
+  MdProgressSpinnerModule,
+  MdSidenavModule,
+  MdSnackBarModule,
+  MdToolbarModule,
+  MdTooltipModule,
+  MdSelectModule,
+  MdCheckboxModule,
+  MdMenuModule,
+  MdCardModule
+
+} from '@angular/material';
+
 import 'hammerjs';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {KubermaticComponent} from "./kubermatic.component";
@@ -53,8 +71,26 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
     StoreModule.provideStore(combinedReducer),
     SimpleNotificationsModule.forRoot(),
     SlimLoadingBarModule.forRoot(),
-    MaterialModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+
+
+
+
+  MdButtonModule,
+  MdIconModule,
+  MdInputModule,
+  MdListModule,
+  MdProgressSpinnerModule,
+  MdSidenavModule,
+  MdSnackBarModule,
+  MdToolbarModule,
+  MdTooltipModule,
+  MdSelectModule,
+  MdCheckboxModule,
+  MdMenuModule,
+  MdCardModule
+
+
   ],
   declarations: [
     KubermaticComponent,
@@ -79,7 +115,21 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
   ],
   exports: [
     RouterModule,
-    MaterialModule
+
+
+    MdButtonModule,
+    MdIconModule,
+    MdInputModule,
+    MdListModule,
+    MdProgressSpinnerModule,
+    MdSidenavModule,
+    MdSnackBarModule,
+    MdToolbarModule,
+    MdTooltipModule,
+    MdSelectModule,
+    MdCheckboxModule,
+    MdMenuModule,
+    MdCardModule
   ],
   entryComponents: [
     ClusterDeleteConfirmationComponent,

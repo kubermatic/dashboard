@@ -8,14 +8,14 @@
         </a>
       </div>
   </div>
-  <md-card class="km-card-list">
-    <md-card-header fxLayout class="km-card-list-header">
-        <md-card-title fxFlex="5%">#</md-card-title>
-        <md-card-title fxFlex="35%">Cluster Name</md-card-title>
-        <md-card-title fxFlex="25%">Provider of Nodes</md-card-title>
-        <md-card-title fxFlex="15%">Status</md-card-title>
-        <md-card-title fxFlex="15%">Health</md-card-title>
-    </md-card-header>
+  <div md-card class="km-card-list">
+    <div md-card-header fxLayout class="km-card-list-header">
+        <div md-card-title fxFlex="5%">#</div>
+        <div md-card-title fxFlex="35%">Cluster Name</div>
+        <div md-card-title fxFlex="25%">Provider of Nodes</div>
+        <div md-card-title fxFlex="15%">Status</div>
+        <div md-card-title fxFlex="15%">Health</div>
+    </div>
   <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
     <div *ngSwitchCase="true">
       <kubermatic-cluster-item *ngFor="let c of clusters; let i = index" [cluster]="c" [index]="i + 1"></kubermatic-cluster-item>
@@ -24,5 +24,5 @@
       <p fxFlex class="km-no-cluster" >No Cluster available. <a routerLink="/wizard">Please add a Cluster.</a></p>
     </div>
   </ng-container>
- </md-card>
+ </div>
 
