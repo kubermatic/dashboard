@@ -1,5 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MaterialModule } from '@angular/material';
 import { ClusterListComponent } from './cluster-list.component';
 import { ClusterItemComponent } from "./cluster-item/cluster-item.component";
 
@@ -12,9 +13,13 @@ describe('ClusterListComponent', () => {
       declarations: [
         ClusterListComponent,
         ClusterItemComponent
+      ],
+      imports: [
+        MaterialModule,
       ]
     })
-    .compileComponents();
+    .compileComponents()
+    .then(() => { });
   }));
 
   beforeEach(() => {

@@ -1,6 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
+import {Http} from "@angular/http";
 import {ApiService} from "../../api/api.service";
 import {ClusterModel} from "../../api/model/ClusterModel";
 import {CreateNodeModel} from "../../api/model/CreateNodeModel";
@@ -13,7 +14,8 @@ import * as fromRoot from "../../reducers/index";
 @Component({
   selector: 'kubermatic-add-node',
   templateUrl: './add-node.component.html',
-  styleUrls: ['./add-node.component.scss']
+  styleUrls: ['./add-node.component.scss'],
+  providers: [ApiService, Http]
 })
 
 export class AddNodeComponent implements OnInit {

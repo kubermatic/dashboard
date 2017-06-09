@@ -3,6 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
+import { MaterialModule } from '@angular/material';
+
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 
 describe('NodeDeleteConfirmationComponent', () => {
@@ -11,7 +13,10 @@ describe('NodeDeleteConfirmationComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NodeDeleteConfirmationComponent ]
+      declarations: [ NodeDeleteConfirmationComponent ],
+      imports: [
+        MaterialModule
+      ]
     })
     .compileComponents();
   }));

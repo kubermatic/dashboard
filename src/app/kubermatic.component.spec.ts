@@ -51,10 +51,4 @@ describe("KubermaticComponent", () => {
     expect(app).toBeTruthy();
   }));
 
-  it(`should have a footer with Loodse branding`, async(() => {
-    let fixture = TestBed.createComponent(KubermaticComponent);
-    fixture.detectChanges();
-    let compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector(".al-copy a").textContent).toContain("Loodse");
-  }));
 });

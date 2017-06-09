@@ -27,7 +27,7 @@
 
       <div class="form-group" *ngIf="cluster.dc.spec.provider == 'digitalocean'">
         <select id="node_size" formControlName="node_size" class="form-control">
-          <option value="" disabled="true" [selected]="!addNodeForm.controls['node_size'].value">Please select a node size!</option>
+          <option value="" [disabled]="true" [selected]="!addNodeForm.controls['node_size'].value">Please select a node size!</option>
           <ng-container [ngSwitch]="cluster.dc.spec.provider">
             <ng-container *ngSwitchCase="'digitalocean'">
               <option *ngFor="let size of nodeSizes; let i = index;" [value]="size.slug">

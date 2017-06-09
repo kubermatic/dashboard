@@ -1,7 +1,8 @@
+
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
-import { Router } from "@angular/router";
+import { RouterModule, Router } from "@angular/router";
 import { ApiService } from "../../api/api.service";
 import { ClusterModel } from "../../api/model/ClusterModel";
 import { NotificationComponent } from "../../notification/notification.component";
@@ -41,7 +42,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit {
       this.cluster = result;
       NotificationComponent.success(this.store, "Success", `Cluster removed successfully`);
 
-      this.router.navigate(['/clusters']);
+      //this.router.navigate(['/clusters']);
     }, error => {
       NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
     })

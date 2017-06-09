@@ -7,6 +7,7 @@ import {Auth} from "../auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";
+import { MaterialModule } from '@angular/material';
 
 import { ProfileComponent } from "./profile.component";
 
@@ -21,7 +22,8 @@ describe("ProfileComponent", () => {
         ReactiveFormsModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer)
+        StoreModule.provideStore(combinedReducer),
+        MaterialModule
       ],
       declarations: [
         ProfileComponent
