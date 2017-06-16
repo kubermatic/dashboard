@@ -62,8 +62,10 @@ export class WizardComponent implements OnInit {
   public dialogRef: any;
   public config: any = {};
 
-  constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator,
-              private formBuilder: FormBuilder, private router: Router,
+  constructor(private api: ApiService,
+              private nameGenerator: ClusterNameGenerator,
+              private formBuilder: FormBuilder,
+              private router: Router,
               private store: Store<fromRoot.State>,
               public dialog: MdDialog) {
   }

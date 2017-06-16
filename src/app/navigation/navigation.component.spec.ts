@@ -8,6 +8,8 @@ import {Auth} from "../auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
 import {BreadcrumbsComponent} from "../breadcrumbs/breadcrumbs.component";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
+import { MaterialModule } from '@angular/material';
+import {ConnectionBackend, HttpModule} from "@angular/http";
 
 describe("NavigationComponent", () => {
   let component: NavigationComponent;
@@ -19,14 +21,17 @@ describe("NavigationComponent", () => {
         BrowserModule,
         RouterTestingModule,
         StoreModule.provideStore(combinedReducer),
-        SlimLoadingBarModule.forRoot()
+        SlimLoadingBarModule.forRoot(),
+        MaterialModule,
+        HttpModule
       ],
       declarations: [
         NavigationComponent,
         BreadcrumbsComponent
       ],
       providers: [
-        Auth
+        Auth,
+        ConnectionBackend
       ],
     })
       .compileComponents();

@@ -1,7 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from "@angular/core";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
-import {Http} from "@angular/http";
 import {ApiService} from "../../api/api.service";
 import {ClusterModel} from "../../api/model/ClusterModel";
 import {CreateNodeModel} from "../../api/model/CreateNodeModel";
@@ -14,8 +13,7 @@ import * as fromRoot from "../../reducers/index";
 @Component({
   selector: 'kubermatic-add-node',
   templateUrl: './add-node.component.html',
-  styleUrls: ['./add-node.component.scss'],
-  providers: [ApiService, Http]
+  styleUrls: ['./add-node.component.scss']
 })
 
 export class AddNodeComponent implements OnInit {
@@ -29,9 +27,9 @@ export class AddNodeComponent implements OnInit {
   public addNodeForm: FormGroup;
   public clusterModel: ClusterModel;
   public createNodeModel: CreateNodeModel;
-  public nodeDcName: string;
+  public nodeDcName: any;
   public node: any;
-  public nodeSpec: any = {spec: {}}
+  public nodeSpec: any = {spec: { dc: {}}};
   public nodeInstances: number = 1;
   public nodeSizes: any = [];
   public sshKeys: any;
@@ -41,9 +39,13 @@ export class AddNodeComponent implements OnInit {
 
   ngOnInit() {
 
-    this.nodeDcName = this.cluster.spec.cloud.dc;
-    this.nodeProvider = this.cluster.dc.spec.provider;
-    this.nodeSpec.spec.dc = this.cluster.spec.cloud.dc;
+    if (this.cluster && this.cluster.spec.cloud) {
+      if (this.cluster.spec.cloud.dc) {
+        this.nodeDcName = this.cluster.spec.cloud.dc;
+        this.nodeProvider = this.cluster.dc.spec.provider;
+        this.nodeSpec.spec.dc = this.cluster.spec.cloud.dc;
+      }
+    }
 
     this.getProviderNodeSpecification();
 

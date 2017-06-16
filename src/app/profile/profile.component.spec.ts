@@ -10,6 +10,11 @@ import {combinedReducer} from "../reducers/index";
 import { MaterialModule } from '@angular/material';
 
 import { ProfileComponent } from "./profile.component";
+import { ListSshKeyComponent } from './list-ssh-key/list-ssh-key.component';
+import { AddSshKeyComponent } from './add-ssh-key/add-ssh-key.component';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 describe("ProfileComponent", () => {
   let component: ProfileComponent;
@@ -18,6 +23,7 @@ describe("ProfileComponent", () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
@@ -26,7 +32,9 @@ describe("ProfileComponent", () => {
         MaterialModule
       ],
       declarations: [
-        ProfileComponent
+        ProfileComponent,
+        ListSshKeyComponent,
+        AddSshKeyComponent
       ],
       providers: [
         Auth,

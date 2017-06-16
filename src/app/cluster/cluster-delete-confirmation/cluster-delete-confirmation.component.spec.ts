@@ -14,6 +14,8 @@ import {ApiService} from "../../api/api.service";
 import {HttpModule} from "@angular/http";
 import {combinedReducer} from "../../reducers/index";
 
+
+
 describe('ClusterDeleteConfirmationComponent', () => {
   let component: ClusterDeleteConfirmationComponent;
   let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;
@@ -33,7 +35,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
       providers: [
         Router,
         ApiService,
-        FormBuilder,
+        FormBuilder
       ]
     })
     .compileComponents();

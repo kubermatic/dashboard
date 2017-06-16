@@ -1,16 +1,18 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Inject, ViewChild, TemplateRef} from '@angular/core';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {ApiService} from "../../api/api.service";
 import {ClusterModel} from "../../api/model/ClusterModel";
 import {NodeEntity} from "../../api/entitiy/NodeEntity";
 import {NotificationComponent} from "../../notification/notification.component";
+import {MdDialogRef} from "@angular/material";
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
   templateUrl: './node-delete-confirmation.component.html',
   styleUrls: ['./node-delete-confirmation.component.scss']
 })
+
 export class NodeDeleteConfirmationComponent implements OnInit {
 
   @Input() nodeUID: string;
@@ -21,7 +23,15 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public clusterModel: ClusterModel;
   public node: NodeEntity;
 
-  constructor(private api: ApiService, private store: Store<fromRoot.State>) {}
+  public title: string;
+  public message: string;
+  public titleAlign?: string;
+  public messageAlign?: string;
+  public btnOkText?: string;
+  public btnCancelText?: string;
+
+
+  constructor(private api: ApiService, private store: Store<fromRoot.State>, public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>) {}
 
   ngOnInit() {
 

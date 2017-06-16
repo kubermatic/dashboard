@@ -3,7 +3,6 @@ import {ApiService} from "../api/api.service";
 import {ClusterEntity} from "../api/entitiy/ClusterEntity";
 import {Observable, Subscription} from "rxjs";
 import {Http} from "@angular/http";
-import {MdCard, MdCardTitle} from '@angular/material';
 
 
 @Component({
@@ -18,7 +17,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public timer: any = Observable.timer(0,10000);
   public sub: Subscription;
 
-  constructor(public api: ApiService) { }
+  constructor(public api: ApiService, private http: Http) { }
 
   ngOnInit() {
     this.sub = this.timer.subscribe(() => {

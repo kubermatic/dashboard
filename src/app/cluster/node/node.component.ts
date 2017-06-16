@@ -1,6 +1,6 @@
 import { Component, OnInit, Input} from "@angular/core";
 import { NodeEntity } from "../../api/entitiy/NodeEntity";
-import {MdDialog} from '@angular/material';
+import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
 import {NodeDeleteConfirmationComponent} from "../node-delete-confirmation/node-delete-confirmation.component";
 
 @Component({
@@ -14,22 +14,41 @@ export class NodeComponent implements OnInit {
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
   @Input() index: number;
-  public dialogRef: any;
-  public config: any = {};
+  public config: MdDialogConfig = {
+    disableClose: false,
+    //panelClass: 'custom-overlay-pane-class',
+    hasBackdrop: true,
+    backdropClass: '',
+    width: '',
+    height: '',
+    position: {
+      top: '',
+      bottom: '',
+      left: '',
+      right: ''
+    },
+    data: {
+      nodeName: '',
+      nodeUID: '',
+      clusterName: '',
+      seedDcName: ''
+    }
+  };
 
-  constructor(public dialog: MdDialog) {}
+  constructor(public dialog: MdDialog, public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>) {}
 
   ngOnInit() {
 
   }
 
   public deleteNodeDialog(): void {
-    this.dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
+    this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     this.dialogRef.componentInstance.nodeName = this.node.metadata.name;
     this.dialogRef.componentInstance.nodeUID = this.node.metadata.uid;
     this.dialogRef.componentInstance.clusterName = this.clusterName;
     this.dialogRef.componentInstance.seedDcName = this.seedDcName;
 
+    //this.data = this.dialogRef.componentInstance;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }

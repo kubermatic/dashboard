@@ -16,6 +16,10 @@ import {StoreModule} from "@ngrx/store";
 import {NotificationComponent} from "./notification/notification.component";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
+import { MaterialModule } from '@angular/material';
+import { SidenavComponent } from './sidenav/sidenav.component';
+import { SidenavService} from './sidenav/sidenav.service';
+import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
 
 describe("KubermaticComponent", () => {
   beforeEach(() => {
@@ -27,20 +31,25 @@ describe("KubermaticComponent", () => {
         StoreModule.provideStore(combinedReducer),
         //SimpleNotificationsModule.forRoot(),
         SimpleNotificationsModule,
-        SlimLoadingBarModule.forRoot()
+        SlimLoadingBarModule.forRoot(),
+        MaterialModule
       ],
       declarations: [
         KubermaticComponent,
         NavigationComponent,
         NotificationComponent,
         FrontpageComponent,
-        BreadcrumbsComponent
+        BreadcrumbsComponent,
+        SidenavComponent,
+
       ],
       providers: [
         AUTH_PROVIDERS,
         Auth,
         ApiService,
         AuthGuard,
+        SidenavService,
+        NodeDeleteConfirmationService
       ],
     }).compileComponents();
   });

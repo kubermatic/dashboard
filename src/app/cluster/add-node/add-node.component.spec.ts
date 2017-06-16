@@ -9,6 +9,9 @@ import { DebugElement } from '@angular/core';
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../../reducers/index";
 import { AddNodeComponent } from './add-node.component';
+import {HttpModule, ConnectionBackend} from "@angular/http";
+import {Auth} from "../../auth/auth.service";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('AddNodeComponent', () => {
   let component: AddNodeComponent;
@@ -21,10 +24,14 @@ describe('AddNodeComponent', () => {
         MaterialModule,
         FormsModule,
         ReactiveFormsModule,
-        StoreModule.provideStore(combinedReducer)
+        StoreModule.provideStore(combinedReducer),
+        HttpModule,
+        RouterTestingModule
       ],
       providers: [
-        ApiService
+        ApiService,
+        ConnectionBackend,
+        Auth
       ]
     })
     .compileComponents();

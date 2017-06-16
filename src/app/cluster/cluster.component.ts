@@ -12,7 +12,8 @@ import {ClusterDeleteConfirmationComponent} from "../cluster/cluster-delete-conf
 @Component({
   selector: "kubermatic-cluster",
   templateUrl: "./cluster.component.html",
-  styleUrls: ["./cluster.component.scss"]
+  styleUrls: ["./cluster.component.scss"],
+  providers: [ApiService]
 })
 export class ClusterComponent implements OnInit {
 
@@ -26,12 +27,13 @@ export class ClusterComponent implements OnInit {
   public dialogRef: any;
   public config: any = {};
 
+  public clusterName: string;
+  public seedDcName: string;
+
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
   ngOnInit() {
-
-
     this.route.params.subscribe(params => {
       this.clusterModel = new ClusterModel(params["seedDcName"], params["clusterName"]);
       this.sub = this.timer.subscribe(() => {
