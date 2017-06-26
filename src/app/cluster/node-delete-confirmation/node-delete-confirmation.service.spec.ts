@@ -23,8 +23,7 @@ describe('NodeDeleteConfirmationService', () => {
         NodeDeleteConfirmationService,
         MdDialog,
         Overlay,
-        OverlayContainer,
-        OverlayPositionBuilder
+        OverlayContainer
       ]
     });
   });
