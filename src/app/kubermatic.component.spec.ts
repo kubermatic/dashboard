@@ -5,7 +5,7 @@ import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {BrowserModule} from "@angular/platform-browser";
-import {HttpModule} from "@angular/http";
+import {Http, HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AUTH_PROVIDERS} from "./auth/auth.provider";
 import {Auth} from "./auth/auth.service";
@@ -49,7 +49,8 @@ describe("KubermaticComponent", () => {
         ApiService,
         AuthGuard,
         SidenavService,
-        NodeDeleteConfirmationService
+        NodeDeleteConfirmationService,
+        Http
       ],
     }).compileComponents();
   });

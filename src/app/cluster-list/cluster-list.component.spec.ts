@@ -7,7 +7,7 @@ import {Auth} from "../auth/auth.service";
 import {ApiService} from "../api/api.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {HttpModule, ConnectionBackend} from "@angular/http";
+import {Http, HttpModule, ConnectionBackend} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";
@@ -35,6 +35,7 @@ describe('ClusterListComponent', () => {
       providers: [
         ApiService,
         Auth,
+        Http,
         ConnectionBackend
       ]
     })

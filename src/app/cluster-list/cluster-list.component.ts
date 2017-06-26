@@ -2,14 +2,12 @@ import {Component, OnInit, OnDestroy} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {ClusterEntity} from "../api/entitiy/ClusterEntity";
 import {Observable, Subscription} from "rxjs";
-import {Http} from "@angular/http";
 
 
 @Component({
   selector: "kubermatic-cluster-list",
   templateUrl: "./cluster-list.component.html",
-  styleUrls: ["./cluster-list.component.scss"],
-  providers: [ApiService, Http]
+  styleUrls: ["./cluster-list.component.scss"]
 })
 export class ClusterListComponent implements OnInit, OnDestroy {
 
@@ -17,7 +15,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public timer: any = Observable.timer(0,10000);
   public sub: Subscription;
 
-  constructor(public api: ApiService, private http: Http) { }
+  constructor(public api: ApiService) { }
 
   ngOnInit() {
     this.sub = this.timer.subscribe(() => {

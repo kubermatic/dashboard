@@ -5,8 +5,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {HttpModule, Http, BrowserXhr, ConnectionBackend} from "@angular/http";
-
+import {HttpModule, Http, BrowserXhr, ConnectionBackend, RequestOptions, XHRBackend} from "@angular/http";
 
 
 import {MaterialModule,
@@ -81,22 +80,20 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-
-
-MaterialModule,
-  MdButtonModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdProgressSpinnerModule,
-  MdSidenavModule,
-  MdSnackBarModule,
-  MdToolbarModule,
-  MdTooltipModule,
-  MdSelectModule,
-  MdCheckboxModule,
-  MdMenuModule,
-  MdCardModule,
+    MaterialModule,
+    MdButtonModule,
+    MdIconModule,
+    MdInputModule,
+    MdListModule,
+    MdProgressSpinnerModule,
+    MdSidenavModule,
+    MdSnackBarModule,
+    MdToolbarModule,
+    MdTooltipModule,
+    MdSelectModule,
+    MdCheckboxModule,
+    MdMenuModule,
+    MdCardModule,
     MdDialogModule,
     MdSliderModule,
     OverlayModule
@@ -122,7 +119,7 @@ MaterialModule,
     AddSshKeyComponent,
     ListSshKeyComponent,
     SidenavComponent,
-    AddSshKeyModalComponent,
+    AddSshKeyModalComponent
   ],
   exports: [
     RouterModule,
@@ -152,7 +149,6 @@ MaterialModule,
     AddSshKeyModalComponent
   ],
   providers: [
-    Http,
     AUTH_PROVIDERS,
     Auth,
     ApiService,
@@ -160,15 +156,13 @@ MaterialModule,
     ClusterNameGenerator,
     SidenavService,
     NodeDeleteConfirmationService,
-    /*{
+    {
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr
-    }*/
+    }
   ],
   bootstrap: [KubermaticComponent]
 
 })
 
-
 export class AppModule { }
-
