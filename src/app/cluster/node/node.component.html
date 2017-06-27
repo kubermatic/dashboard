@@ -5,10 +5,10 @@
   </div>
 
   <div fxFlex="10%">
-    <span *ngIf="!isUndefined(node.status)"> {{node.status.cpu}} CPU, {{node.status.memory | uppercase }}</span>
+    <span *ngIf="!node.status"> {{node.status.cpu}} CPU, {{node.status.memory | uppercase }}</span>
   </div>
   <div fxFlex="25%">
-    <span *ngIf="!isUndefined(node.status)">{{node.status.versions.os}}</span>
+    <span *ngIf="!node.status">{{node.status.versions.os}}</span>
   </div>
   <div fxFlex="15%">
     {{node.status.addresses.public}}

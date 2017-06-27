@@ -2,7 +2,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import {MaterialModule, MdDialogRef} from '@angular/material';
+import {MaterialModule} from '@angular/material';
 import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
 import { ClusterComponent } from './cluster.component';
 import { NodeComponent } from "./node/node.component";

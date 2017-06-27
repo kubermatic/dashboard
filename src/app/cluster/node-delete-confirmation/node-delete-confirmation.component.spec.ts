@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import {MaterialModule, MdDialog, MdDialogModule, MdDialogRef} from '@angular/material';
+import {MaterialModule, MdDialog, MdDialogModule } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 import {ConnectionBackend, RequestOptions, HttpModule} from "@angular/http";
 import {StoreModule} from "@ngrx/store";
@@ -25,10 +25,10 @@ describe('NodeDeleteConfirmationComponent', () => {
       imports: [
         StoreModule.provideStore(combinedReducer),
         MaterialModule,
-        MdDialogModule,
         HttpModule,
         RouterTestingModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        MdDialogModule
       ],
       providers: [
         ConnectionBackend,

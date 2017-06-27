@@ -11,7 +11,7 @@ export class SidenavComponent implements OnInit {
 
   public environment : any = environment;
 
-  constructor(private auth: Auth) { }
+  constructor(public auth: Auth) { }
 
   ngOnInit() {
   }

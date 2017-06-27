@@ -1,6 +1,6 @@
-<a *ngIf="cluster" fxLayouts class="km-card-list-content">
+<div *ngIf="cluster" fxLayouts class="km-card-list-content">
   <!-- *ngIf="cluster.dc.metadata.name" -->
-  <!-- [routerLink]="['/dc', cluster.dc.metadata.name,'cluster', cluster.metadata.name]" -->
+  <div [routerLink]="['/dc', cluster.dc.metadata.name,'cluster', cluster.metadata.name]">
   <div fxFlex="5%">{{index}}</div>
   <div fxFlex="35%">
     <span>
@@ -28,4 +28,5 @@
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
   </div>
-</a>
+  </div>
+</div>
