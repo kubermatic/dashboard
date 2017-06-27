@@ -1,5 +1,5 @@
 build:
-  box: golang:1.6-wheezy
+  box: golang:1.6-trusty
   steps:
     - script:
         name: install node
