@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Rx';
 
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
-import { MdDialogRef, MdDialog, MdDialogConfig } from '@angular/material';
+import { MdDialog, MdDialogConfig } from '@angular/material';
 import { Injectable, ViewContainerRef } from '@angular/core';
 
 @Injectable()
@@ -11,11 +11,28 @@ export class NodeDeleteConfirmationService {
 
   public confirm(title: string, message: string, viewContainerRef: ViewContainerRef, btnOkText: string ='Ok', btnCancelText: string ='Cancel'): Observable<boolean> {
 
-    let dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
-    let config = new MdDialogConfig();
+   // let config = new MdDialogConfig();
+
+    let config: MdDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      backdropClass: '',
+      width: '',
+      height: '',
+      position: {
+        top: '',
+        bottom: '',
+        left: '',
+        right: ''
+      },
+      data: {
+        message: 'Jazzy jazz jazz'
+      }
+    };
+
     config.viewContainerRef = viewContainerRef;
 
-    dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
+    let dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
 
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.message = message;
@@ -27,11 +44,10 @@ export class NodeDeleteConfirmationService {
 
   public confirmWithoutContainer(title: string, message: string, titleAlign: string='center', messageAlign: string='center', btnOkText: string ='Ok', btnCancelText: string ='Cancel' ): Observable<boolean> {
 
-    let dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
     let config = new MdDialogConfig();
     // config.viewContainerRef = viewContainerRef;
 
-    dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
+    let dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
 
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.message = message;

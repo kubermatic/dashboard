@@ -17,7 +17,7 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 
-import {MdDialog} from '@angular/material';
+import {MdDialog, MdDialogRef} from '@angular/material';
 import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
 
 
@@ -59,7 +59,7 @@ export class WizardComponent implements OnInit {
 
 
   // Model add sshKey
-  public dialogRef: any;
+
   public config: any = {};
 
   constructor(private api: ApiService,
@@ -146,9 +146,9 @@ export class WizardComponent implements OnInit {
 
 // TODO: show model
   public addSshKeyDialog(): void {
-    this.dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
+    var dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
 
-    this.dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       this.refreshSSHKeys();
     });
   }

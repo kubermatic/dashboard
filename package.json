@@ -12,7 +12,7 @@
     "serve": "ng serve --port 8000 --hmr",
     "serve:proxy": "ng serve --port 8000 --hmr --proxy-config proxy.conf.json",
     "serve:mock": "concurrently --kill-others --prefix \"[{name}]\" --names \"mock-server,ng-serve\" \"node mock-server.js\" \"ng serve --port 8000 --hmr --proxy-config proxy-mock.conf.json\"",
-    "prebuild": "ng test --single-run",
+
     "build": "ng build --prod",
     "lint": "tslint \"src/**/*.ts\"",
     "test": "ng test",

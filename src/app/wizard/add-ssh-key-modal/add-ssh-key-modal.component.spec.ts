@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
 
-import { MaterialModule, MdDialogRef } from '@angular/material';
+import {MaterialModule} from '@angular/material';
 
 import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BaseRequestOptions, Http, XHRBackend, Response, ResponseOptions} from "@angular/http";
@@ -33,8 +33,7 @@ describe('AddSshKeyModalComponent', () => {
       providers: [
         FormBuilder,
         ApiService,
-        Auth,
-        MdDialogRef
+        Auth
       ]
     })
     .compileComponents();

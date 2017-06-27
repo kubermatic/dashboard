@@ -5,7 +5,6 @@ import {ApiService} from "../../api/api.service";
 import {ClusterModel} from "../../api/model/ClusterModel";
 import {NodeEntity} from "../../api/entitiy/NodeEntity";
 import {NotificationComponent} from "../../notification/notification.component";
-import {MdDialogRef} from "@angular/material";
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
@@ -31,7 +30,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public btnCancelText?: string;
 
 
-  constructor(private api: ApiService, private store: Store<fromRoot.State>, public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>) {}
+  constructor(private api: ApiService, private store: Store<fromRoot.State>) {}
 
   ngOnInit() {
 
