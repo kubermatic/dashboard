@@ -1,15 +1,19 @@
 build:
-  box: golang:1.6-trusty
+  box: google/golang
   steps:
     - script:
         name: install node
         code: |
-          curl -sL https://deb.nodesource.com/setup_7.x | bash -
+          curl -sL https://deb.nodesource.com/setup_8.x | bash -
           apt-get install -y nodejs
+    - script:
+        name: install bzip2
+        code: |
+          apt-get install -y bzip2
     - script:
         name: install yarn
         code: |
-          url -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
           echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && sudo apt-get update && sudo apt-get install yarn
     - script:
         name: build install

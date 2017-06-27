@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-CC=yarn
+CC=npm
 
 all: install run
 
