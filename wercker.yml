@@ -24,7 +24,7 @@ build:
         code: |
           make build
     - setup-go-workspace:
-        package-dir: github.com/kubermatic/dashboard
+        package-dir: github.com/kubermatic/dashboard-v2
     - script:
         name: build fileserver binary
         code: |
@@ -48,7 +48,7 @@ push-hash-image:
         password: $PASSWORD
         email: stefan.schimanski@gmail.com
         tag: $WERCKER_GIT_COMMIT
-        repository: kubermatic/ui
+        repository: kubermatic/ui-v2
         registry: https://registry.hub.docker.com
         cmd: /dashboard
 
@@ -77,7 +77,7 @@ deployment-update:
         certificate-authority: ca.pem
         client-certificate: admin.pem
         client-key: admin-key.pem
-        command: set image deployment/kubermatic-api-v1 api=kubermatic/api:$WERCKER_GIT_COMMIT --namespace=api
+        command: set image deployment/kubermatic-api-v2 api=kubermatic/api:$WERCKER_GIT_COMMIT --namespace=api
     - kubectl:
         server: $KUBERNETES_MASTER
         username: $KUBERNETES_USERNAME
@@ -97,7 +97,7 @@ push-latest-image:
         password: $PASSWORD
         email: stefan.schimanski@gmail.com
         tag: latest
-        repository: kubermatic/ui
+        repository: kubermatic/ui-v2
         registry: https://registry.hub.docker.com
         cmd: /dashboard
 

@@ -1,4 +1,5 @@
 SHELL=/bin/bash
+REPO=kubermatic/ui-v2
 CC=npm
 
 all: install run
@@ -9,9 +10,6 @@ install:
 run:
 	@$(CC) run serve:proxy
 
-build:
-	@$(CC) run build -prod
-
 test-full: test e2e
 
 test:
@@ -19,3 +17,17 @@ test:
 
 e2e:
 	@$(CC) run e2e
+
+build:
+	@$(CC) run build -prod
+	go get github.com/jteeuwen/go-bindata/...
+	go get github.com/elazarl/go-bindata-assetfs/...
+	go-bindata-assetfs $$(find app -type d)
+	go get .
+	go build github.com/kubermatic/dashboard-v2
+
+docker:
+	docker build -t $(REPO) .
+
+push: docker
+	docker push $(REPO)
