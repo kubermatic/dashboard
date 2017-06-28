@@ -11,18 +11,13 @@ build:
         code: |
           apt-get install -y bzip2
     - script:
-        name: install yarn
-        code: |
-          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-          echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && sudo apt-get update && sudo apt-get install yarn
-    - script:
         name: build install
         code: |
           make install
     - script:
         name: build dist
         code: |
-          make build
+          make dist
     - setup-go-workspace:
         package-dir: github.com/kubermatic/dashboard-v2
     - script:
