@@ -23,7 +23,9 @@ build:
     - script:
         name: build fileserver binary
         code: |
-          export PATH=$PWD/node_packages/.bin:$PATH
+          export GOPATH=/go/src/app/_gopath
+          export GOBIN=$GOPATH/bin
+          export PATH=$PWD/node_packages/.bin:$GOBIN:$PATH
           CGO_ENABLED=0 make build
     - script:
         name: copy to deployment directory
@@ -45,7 +47,7 @@ push-hash-image:
         tag: $WERCKER_GIT_COMMIT
         repository: kubermatic/ui-v2
         registry: https://registry.hub.docker.com
-        cmd: /dashboard
+        cmd: /dashboard-v2
 
 deployment-update:
     box: ubuntu:16.04
