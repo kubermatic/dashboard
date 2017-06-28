@@ -7,6 +7,10 @@ build:
           curl -sL https://deb.nodesource.com/setup_8.x | bash -
           apt-get install -y nodejs
     - script:
+        name: install bzip2
+        code: |
+          apt-get install -y bzip2
+    - script:
         name: install yarn
         code: |
           curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
