@@ -3,11 +3,12 @@
   <div fxFlex="25%">
     {{node.metadata.name}}
   </div>
+
   <div fxFlex="10%">
-    {{node.status.cpu}} CPU, {{node.status.memory | uppercase }}
+    <span *ngIf="!node.status"> {{node.status.cpu}} CPU, {{node.status.memory | uppercase }}</span>
   </div>
   <div fxFlex="25%">
-    <span *ngIf="node.status.versions">{{node.status.versions.os}}</span>
+    <span *ngIf="!node.status">{{node.status.versions.os}}</span>
   </div>
   <div fxFlex="15%">
     {{node.status.addresses.public}}

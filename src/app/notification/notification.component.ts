@@ -8,7 +8,8 @@ import {Actions} from "../reducers/actions";
 @Component({
   selector: "kubermatic-notification",
   templateUrl: "./notification.component.html",
-  styleUrls: ["./notification.component.scss"]
+  styleUrls: ["./notification.component.scss"],
+  providers: [NotificationsService]
 })
 export class NotificationComponent {
 

@@ -27,9 +27,9 @@ export class AddNodeComponent implements OnInit {
   public addNodeForm: FormGroup;
   public clusterModel: ClusterModel;
   public createNodeModel: CreateNodeModel;
-  public nodeDcName: string;
+  public nodeDcName: any;
   public node: any;
-  public nodeSpec: any = {spec: {}}
+  public nodeSpec: any = {spec: { dc: {}}};
   public nodeInstances: number = 1;
   public nodeSizes: any = [];
   public sshKeys: any;
@@ -39,9 +39,13 @@ export class AddNodeComponent implements OnInit {
 
   ngOnInit() {
 
-    this.nodeDcName = this.cluster.spec.cloud.dc;
-    this.nodeProvider = this.cluster.dc.spec.provider;
-    this.nodeSpec.spec.dc = this.cluster.spec.cloud.dc;
+    if (this.cluster && this.cluster.spec.cloud) {
+      if (this.cluster.spec.cloud.dc) {
+        this.nodeDcName = this.cluster.spec.cloud.dc;
+        this.nodeProvider = this.cluster.dc.spec.provider;
+        this.nodeSpec.spec.dc = this.cluster.spec.cloud.dc;
+      }
+    }
 
     this.getProviderNodeSpecification();
 

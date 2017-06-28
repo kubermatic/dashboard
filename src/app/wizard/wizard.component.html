@@ -83,7 +83,7 @@
             </div>
             <div fxLayoutAlign="center" fxLayout>
               <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
-                <div *ngIf="groupedDatacenters[cloud]"  [fxFlex]="calc4Cols"  class="wizard-box"
+                <div *ngIf="groupedDatacenters[cloud]"  class="wizard-box"
                      [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
                      (click)="selectCloud(cloud)">
                   <div class="wizard-box-content">

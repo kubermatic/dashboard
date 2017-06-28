@@ -1,4 +1,6 @@
-<a *ngIf="cluster.dc.metadata.name" routerLink="/dc/{{cluster.dc.metadata.name}}/cluster/{{cluster.metadata.name}}" fxLayouts class="km-card-list-content">
+<div *ngIf="cluster" fxLayouts class="km-card-list-content">
+  <!-- *ngIf="cluster.dc.metadata.name" -->
+  <div [routerLink]="['/dc', cluster.dc.metadata.name,'cluster', cluster.metadata.name]">
   <div fxFlex="5%">{{index}}</div>
   <div fxFlex="35%">
     <span>
@@ -23,10 +25,10 @@
   </div>
   <div fxFlex="15%">{{cluster.status.phase}}</div>
   <div fxFlex="15%" class="health-state"  *ngIf="cluster.status.health" >
-<!--*ngIf="cluster.status.phase !== 'Pending'"-->
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
     <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
   </div>
-</a>
+  </div>
+</div>

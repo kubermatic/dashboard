@@ -8,7 +8,7 @@ const app = express();
 
 const mockServerPort = 8001;
 const mockedResources = ["ssh-keys","dc","clusters"];
-const proxyUrl = "https://dev.kubermatic.io";
+const proxyUrl = 'https://int.kubermatic.io';
 
 let requireUncached = function(mockFile){
   // delete cached data, force the server to reload the json data from fs every time

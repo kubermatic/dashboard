@@ -22,9 +22,7 @@
         "assets/css/custom_theme.scss"
       ],
       "scripts": [
-        "../node_modules/jquery/dist/jquery.js",
-        "assets/js/tether.js",
-        "assets/js/bootstrap.js"
+        "../node_modules/jquery/dist/jquery.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
@@ -47,18 +45,13 @@
   },
   "defaults": {
     "styleExt": "scss",
-    "prefixInterfaces": false,
-    "inline": {
-      "style": false,
-      "template": false
-    },
-    "spec": {
-      "class": false,
-      "component": true,
-      "directive": true,
-      "module": false,
-      "pipe": true,
-      "service": true
-    }
+    "component": {},
+    "directive": {},
+    "guard": {},
+    "interface": {},
+    "module": {},
+    "pipe": {},
+    "service": {},
+    "serve": {}
   }
 }
