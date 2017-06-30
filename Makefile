@@ -24,9 +24,9 @@ dist:
 build: dist
 	go get github.com/jteeuwen/go-bindata/...
 	go get github.com/elazarl/go-bindata-assetfs/...
-	go-bindata-assetfs $$(find app -type d)
+	go-bindata-assetfs $$(find dist -type d)
 	go get .
-	go build github.com/kubermatic/dashboard-v2
+	go build -o dashboard-v2 .
 
 docker:
 	docker build -t $(REPO) .
