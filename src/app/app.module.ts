@@ -63,6 +63,7 @@ import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
+import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 
 @NgModule({
   imports: [
@@ -119,7 +120,8 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
     AddSshKeyComponent,
     ListSshKeyComponent,
     SidenavComponent,
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
+    ClusterHealthStatusComponent
   ],
   exports: [
     RouterModule,

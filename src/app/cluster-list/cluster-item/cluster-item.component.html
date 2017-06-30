@@ -24,11 +24,8 @@
     </ng-container>
   </div>
   <div fxFlex="15%">{{cluster.status.phase}}</div>
-  <div fxFlex="15%" class="health-state"  *ngIf="cluster.status.health" >
-    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
-    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
-    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
-    <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
+  <div fxFlex="15%" >
+    <kubermatic-cluster-health-status *ngIf="cluster.status.health" [health]="cluster.status.health"></kubermatic-cluster-health-status>
   </div>
   </div>
 </div>

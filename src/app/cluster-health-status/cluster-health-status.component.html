@@ -1,0 +1,8 @@
+
+<div class="health-state">
+  <div md-button class="fa fa-dot-circle-o" [class.green]="health.apiserver"><span md-tooltip md-direction="bottom">apiserver</span></div>
+  <div md-button class="fa fa-dot-circle-o" [class.green]="health.controller"><span md-tooltip md-direction="bottom">controller</span></div>
+  <div md-button class="fa fa-dot-circle-o" [class.green]="health.etcd"><span md-tooltip md-direction="bottom">etcd</span></div>
+  <div md-button class="fa fa-dot-circle-o" [class.green]="health.scheduler"><span md-tooltip md-direction="bottom">scheduler</span></div>
+</div>
+
