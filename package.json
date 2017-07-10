@@ -55,7 +55,6 @@
   "devDependencies": {
     "@angular/cli": "1.0.3",
     "@angular/compiler-cli": "4.2.5",
-    "@angular/material": "^2.0.0-beta.6",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.42",
     "codelyzer": "~2.0.0-beta.1",
@@ -70,6 +69,7 @@
     "karma-jasmine-html-reporter": "0.2.2",
     "karma-mocha-reporter": "2.2.3",
     "karma-phantomjs-launcher": "1.0.4",
+    "phantomjs-prebuilt":"2.1.7",
     "karma-remap-istanbul": "^0.2.1",
     "ng2-slim-loading-bar": "^4.0.0",
     "ngrx-store-freeze": "^0.1.6",
