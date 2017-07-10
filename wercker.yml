@@ -1,5 +1,5 @@
 build:
-  box: google/golang
+  box: golang:1.8
   steps:
     - script:
         name: install node
