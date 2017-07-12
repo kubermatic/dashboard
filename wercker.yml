@@ -29,7 +29,7 @@ build:
           CGO_ENABLED=0 make build
     - script:
         name: copy to deployment directory
-        code: cp -av dist "$WERCKER_OUTPUT_DIR"
+        code: cp -av dashboard-v2 "$WERCKER_OUTPUT_DIR"
 
 push-hash-image:
     box: ubuntu:16.04
@@ -44,6 +44,20 @@ push-hash-image:
         username: $USERNAME
         password: $PASSWORD
         tag: $WERCKER_GIT_COMMIT
+        repository: kubermatic/ui-v2
+        registry: https://registry.hub.docker.com
+        cmd: /dashboard-v2
+
+push-latest-image:
+    box: ubuntu:16.04
+    steps:
+    - internal/docker-scratch-push:
+        name: push to docker hub
+        author: Dr. Stefan Schimanski <stefan.schimanski@gmail.com>
+        username: $USERNAME
+        password: $PASSWORD
+        email: stefan.schimanski@gmail.com
+        tag: latest
         repository: kubermatic/ui-v2
         registry: https://registry.hub.docker.com
         cmd: /dashboard-v2
@@ -74,17 +88,3 @@ deployment-update:
         client-certificate: admin.pem
         client-key: admin-key.pem
         command: set image deployment/kubermatic-api-v2 api=kubermatic/api:$WERCKER_GIT_COMMIT --namespace=api
-
-push-latest-image:
-    box: ubuntu:16.04
-    steps:
-    - internal/docker-scratch-push:
-        name: push to docker hub
-        author: Dr. Stefan Schimanski <stefan.schimanski@gmail.com>
-        username: $USERNAME
-        password: $PASSWORD
-        email: stefan.schimanski@gmail.com
-        tag: latest
-        repository: kubermatic/ui-v2
-        registry: https://registry.hub.docker.com
-        cmd: /dashboard
