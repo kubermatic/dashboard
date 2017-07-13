@@ -12,15 +12,10 @@
     </md-card-header>
     <md-card-content class="km-card-list-content" fxLayout >
       <div fxFlex="20%">Status</div>
-      <div fxFlex="80%" class="health-state">
+      <div fxFlex="80%">
         <strong>{{cluster.status.phase}}</strong>
-        <div *ngIf="cluster.status.phase !== 'Pending'">
-          - Health:
-          <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.apiserver"></i>
-          <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.controller"></i>
-          <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.etcd"></i>
-          <i class="fa fa-dot-circle-o" [class.green]="cluster.status.health.scheduler"></i>
-        </div>
+        <span>- Health:</span>
+        <kubermatic-cluster-health-status *ngIf="cluster.status.health" [health]="cluster.status.health"></kubermatic-cluster-health-status>
       </div>
     </md-card-content>
     <md-card-content class="km-card-list-content" fxLayout>
@@ -33,7 +28,6 @@
 </ng-container>
 
 <ng-container *ngIf="cluster && cluster.dc">
-
   <md-card class="km-card-list">
     <md-card-header class="km-card-list-header" fxLayout>
       <md-card-title fxFlex="40%">Provider</md-card-title>
@@ -69,10 +63,7 @@
     </md-card-content>
   </md-card>
 
-
   <kubermatic-add-node [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [cluster]="cluster"></kubermatic-add-node>
-
-
 
   <md-card class="km-card-list" style="margin-bottom: 70px;">
     <md-card-header class="km-card-list-header" fxLayout>
@@ -95,7 +86,6 @@
       </md-card-content>
     </ng-container>
   </md-card>
-
 </ng-container>
 
 
@@ -105,6 +95,5 @@
         No Provider available. Please add a Provider.
       </md-card-content>
   </md-card>
-
 </ng-container>
 
