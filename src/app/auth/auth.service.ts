@@ -98,7 +98,6 @@ export class Auth {
 
     if (token) {
       localStorage.setItem('token', token);
-
     }
   };
 
