@@ -64,6 +64,7 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
+import { SettingsComponent } from './cluster/settings/settings.component';
 
 @NgModule({
   imports: [
@@ -121,7 +122,8 @@ import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-he
     ListSshKeyComponent,
     SidenavComponent,
     AddSshKeyModalComponent,
-    ClusterHealthStatusComponent
+    ClusterHealthStatusComponent,
+    SettingsComponent
   ],
   exports: [
     RouterModule,
@@ -148,7 +150,8 @@ import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-he
   entryComponents: [
     ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
+    SettingsComponent
   ],
   providers: [
     AUTH_PROVIDERS,

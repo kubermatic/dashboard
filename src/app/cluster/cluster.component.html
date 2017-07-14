@@ -61,6 +61,10 @@
         </ng-container>
       </div>
     </md-card-content>
+
+    <div fxLayout="row-reverse">
+      <button md-button (click)="openSettings()" md-raised-button >Settings</button>
+    </div>
   </md-card>
 
   <kubermatic-add-node [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [cluster]="cluster"></kubermatic-add-node>

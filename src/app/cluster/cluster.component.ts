@@ -8,6 +8,7 @@ import {environment} from "../../environments/environment";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from '@angular/material';
 import {ClusterDeleteConfirmationComponent} from "../cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
+import {SettingsComponent} from "./settings/settings.component";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -73,6 +74,10 @@ export class ClusterComponent implements OnInit {
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem("token");
     return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
+  }
+
+  public openSettings(): void {
+    this.dialogRef = this.dialog.open(SettingsComponent);
   }
 }
 

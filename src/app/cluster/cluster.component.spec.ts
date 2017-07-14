@@ -7,6 +7,7 @@ import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
 import { ClusterComponent } from './cluster.component';
 import { NodeComponent } from "./node/node.component";
 import {AddNodeComponent} from "./add-node/add-node.component";
+import {SettingsComponent} from "./settings/settings.component";
 import {NodeDeleteConfirmationComponent} from "./node-delete-confirmation/node-delete-confirmation.component";
 import {HttpModule} from "@angular/http";
 import {Auth} from "../auth/auth.service";
@@ -32,6 +33,7 @@ describe('ClusterComponent', () => {
         ClusterComponent,
         NodeComponent,
         AddNodeComponent,
+        SettingsComponent,
         //NodeDeleteConfirmationComponent,
       ],
       providers: [
