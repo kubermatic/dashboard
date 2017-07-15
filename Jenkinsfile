@@ -63,7 +63,7 @@ def buildPipeline(dockerTags, deployTag, stageSystem) {
            sh("cd /go/src/github.com/kubermatic/dashboard-v2 && make dist")
         }
     }
-    stage('Test'){
+/*    stage('Test'){
         container('node') {
            sh("cd /go/src/github.com/kubermatic/dashboard-v2 && make test")
         }
@@ -72,7 +72,7 @@ def buildPipeline(dockerTags, deployTag, stageSystem) {
         container('node') {
            sh("cd /go/src/github.com/kubermatic/dashboard-v2 && make e2e")
         }
-    }
+    }*/
     stage('Build go'){
         container('golang') {
             sh("cd /go/src/github.com/kubermatic/dashboard-v2 && CGO_ENABLED=0 make build")
