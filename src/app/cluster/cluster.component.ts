@@ -38,7 +38,10 @@ export class ClusterComponent implements OnInit {
       this.clusterModel = new ClusterModel(params["seedDcName"], params["clusterName"]);
       this.sub = this.timer.subscribe(() => {
         this.updateCluster();
-        this.updateNodes();
+
+        if (!!this.cluster && this.cluster.status.phase == "Running") {
+          this.updateNodes();
+        }
       });
     });
   }
