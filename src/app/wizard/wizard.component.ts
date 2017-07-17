@@ -383,7 +383,8 @@ export class WizardComponent implements OnInit {
 
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.cluster = result;
-        this.router.navigate(["clusters"]);
+        let redirectUrl = "/dc/" + this.cluster.seed + "/cluster/" + this.cluster.metadata.name ;
+        this.router.navigate([redirectUrl]);
 
         if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
           return;
