@@ -17,7 +17,7 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 
-import {MdDialog} from '@angular/material';
+import {MdDialog, MdDialogRef} from '@angular/material';
 import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
 
 
@@ -28,23 +28,23 @@ import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.com
 })
 export class WizardComponent implements OnInit {
 
-  public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN, NodeProvider.BAREMETAL];
+  public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN, NodeProvider.BAREMETAL, NodeProvider.OPENSTACK];
   public groupedDatacenters: {[key: string]: DataCenterEntity[]} = {};
 
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
 
-  public selectedCloud: string;
+  public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
   public selectedCloudProviderApiError: string;
   public acceptBringYourOwn: boolean;
-  public acceptBareMetal: true;
 
   public clusterNameForm: FormGroup;
   public awsForm: FormGroup;
   public digitalOceanForm: FormGroup;
   public bringYourOwnForm: FormGroup;
   public bareMetalForm: FormGroup;
+  public openStackForm: FormGroup;
 
   public sshKeys: SSHKeyEntity[] = [];
 
@@ -59,11 +59,13 @@ export class WizardComponent implements OnInit {
 
 
   // Model add sshKey
-  public dialogRef: any;
+
   public config: any = {};
 
-  constructor(private api: ApiService, private nameGenerator: ClusterNameGenerator,
-              private formBuilder: FormBuilder, private router: Router,
+  constructor(private api: ApiService,
+              private nameGenerator: ClusterNameGenerator,
+              private formBuilder: FormBuilder,
+              private router: Router,
               private store: Store<fromRoot.State>,
               public dialog: MdDialog) {
   }
@@ -121,6 +123,15 @@ export class WizardComponent implements OnInit {
       ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
+
+    this.openStackForm = this.formBuilder.group({
+      os_project_name: ["", [<any>Validators.required]],
+      os_username: ["", [<any>Validators.required]],
+      os_password: ["", [<any>Validators.required]],
+      ssh_key: ["", [<any>Validators.required]],
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: ["", [<any>Validators.required]]
+    });
   }
 
   public selectCloud(cloud: string) {
@@ -144,9 +155,9 @@ export class WizardComponent implements OnInit {
 
 // TODO: show model
   public addSshKeyDialog(): void {
-    this.dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
+    var dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
 
-    this.dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       this.refreshSSHKeys();
     });
   }
@@ -158,6 +169,8 @@ export class WizardComponent implements OnInit {
       return this.digitalOceanForm.controls["node_count"].value;
     } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
       return this.bareMetalForm.controls["node_count"].value;
+    } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
+      return this.openStackForm.controls["node_count"].value;
     } else {
       return "-1";
     }
@@ -171,7 +184,28 @@ export class WizardComponent implements OnInit {
     if (this.selectedCloud === NodeProvider.DIGITALOCEAN ) {
       return this.digitalOceanForm.controls["node_size"].value;
     }
+
+    if (this.selectedCloud === NodeProvider.OPENSTACK ) {
+      return this.openStackForm.controls["node_size"].value;
+    }
+
+
     return "";
+  }
+
+  public changeOpKey() {
+
+    let region = this.selectedCloudRegion.spec.location;
+    let project = this.openStackForm.controls["os_project_name"];
+    let username = this.openStackForm.controls["os_username"];
+    let password = this.openStackForm.controls["os_password"];
+    let url = 'http://192.168.99.99/';
+
+    if (project.valid && username.valid && password.valid) {
+      let openStackImages = this.api.getOpenStackImages(region, project.value, username.value, password.value, url);
+      console.log(openStackImages);
+      //this.nodeSize = openStackImages;
+    }
   }
 
   public changeDoKey() {
@@ -212,6 +246,8 @@ export class WizardComponent implements OnInit {
           return this.digitalOceanForm.valid;
         } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
           return this.bareMetalForm.valid;
+        } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
+          return this.openStackForm.valid;
         } else {
           return false;
         }
@@ -242,11 +278,15 @@ export class WizardComponent implements OnInit {
     let ssh_keys = [];
     let region = null;
 
+    // Open Stack
+    let os_project = null;
+    let os_username = null;
+    let os_password = null;
+
     if (this.selectedCloud !== NodeProvider.BRINGYOUROWN) {
       region = this.selectedCloudRegion.metadata.name;
     }
 
-    let cluster_name = this.clusterNameForm.controls["name"].value;
     let sub: Subscription;
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
@@ -313,6 +353,24 @@ export class WizardComponent implements OnInit {
       }
     }
 
+    if (this.selectedCloud === NodeProvider.OPENSTACK) {
+      os_project = this.openStackForm.controls["os_project"].value;
+      os_username = this.awsForm.controls["os_username"].value;
+      os_password = this.awsForm.controls["os_password"].value;
+
+      node_instances = this.openStackForm.controls["node_count"].value;
+      ssh_keys.push(this.openStackForm.controls["ssh_key"].value);
+
+      this.clusterSpec.openstack = {}
+
+      this.nodeSpec.spec = {
+        dc: region,
+        openstack: {
+          size: this.openStackForm.controls["node_size"].value,
+        }
+      }
+    }
+
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);
 
     const cloud = new CloudModel(key, secret, this.selectedCloud, region);
@@ -325,7 +383,8 @@ export class WizardComponent implements OnInit {
 
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.cluster = result;
-        this.router.navigate(["clusters"]);
+        let redirectUrl = "/dc/" + this.cluster.seed + "/cluster/" + this.cluster.metadata.name ;
+        this.router.navigate([redirectUrl]);
 
         if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
           return;

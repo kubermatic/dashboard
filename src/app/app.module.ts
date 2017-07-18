@@ -1,10 +1,32 @@
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import {BrowserModule} from "@angular/platform-browser";
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
-import {NgModule} from "@angular/core";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {HttpModule, BrowserXhr} from "@angular/http";
-import {RouterModule} from "@angular/router";
-import {MaterialModule} from '@angular/material';
+import {HttpModule, Http, BrowserXhr, ConnectionBackend, RequestOptions, XHRBackend} from "@angular/http";
+
+
+import {MaterialModule,
+  MdButtonModule,
+  MdIconModule,
+  MdInputModule,
+  MdListModule,
+  MdProgressSpinnerModule,
+  MdSidenavModule,
+  MdSnackBarModule,
+  MdToolbarModule,
+  MdTooltipModule,
+  MdSelectModule,
+  MdCheckboxModule,
+  MdMenuModule,
+  MdCardModule,
+  MdDialogModule,
+  MdSliderModule,
+  OverlayModule
+} from '@angular/material';
+
 import 'hammerjs';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {KubermaticComponent} from "./kubermatic.component";
@@ -18,6 +40,8 @@ import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.com
 import {NodeComponent} from "./cluster/node/node.component";
 import {AddNodeComponent} from "./cluster/add-node/add-node.component";
 import {NodeDeleteConfirmationComponent} from "./cluster/node-delete-confirmation/node-delete-confirmation.component";
+
+import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {ProfileComponent} from "./profile/profile.component";
@@ -39,12 +63,13 @@ import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
-
+import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 
 @NgModule({
   imports: [
     CommonModule,
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
@@ -53,8 +78,28 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
     StoreModule.provideStore(combinedReducer),
     SimpleNotificationsModule.forRoot(),
     SlimLoadingBarModule.forRoot(),
+    FlexLayoutModule,
+    FormsModule,
+    ReactiveFormsModule,
     MaterialModule,
-    FlexLayoutModule
+    MdButtonModule,
+    MdIconModule,
+    MdInputModule,
+    MdListModule,
+    MdProgressSpinnerModule,
+    MdSidenavModule,
+    MdSnackBarModule,
+    MdToolbarModule,
+    MdTooltipModule,
+    MdSelectModule,
+    MdCheckboxModule,
+    MdMenuModule,
+    MdCardModule,
+    MdDialogModule,
+    MdSliderModule,
+    OverlayModule
+
+
   ],
   declarations: [
     KubermaticComponent,
@@ -75,12 +120,36 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
     AddSshKeyComponent,
     ListSshKeyComponent,
     SidenavComponent,
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
+    ClusterHealthStatusComponent
+  ],
+  exports: [
+    RouterModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+
+    MdButtonModule,
+    MdIconModule,
+    MdInputModule,
+    MdListModule,
+    MdProgressSpinnerModule,
+    MdSidenavModule,
+    MdSnackBarModule,
+    MdToolbarModule,
+    MdTooltipModule,
+    MdSelectModule,
+    MdCheckboxModule,
+    MdMenuModule,
+    MdCardModule,
+    MdSliderModule,
+    OverlayModule
   ],
   entryComponents: [
     ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
+    AddNodeComponent
   ],
   providers: [
     AUTH_PROVIDERS,
@@ -89,16 +158,14 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
     AuthGuard,
     ClusterNameGenerator,
     SidenavService,
+    NodeDeleteConfirmationService,
     {
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr
     }
   ],
   bootstrap: [KubermaticComponent]
+
 })
-
-
-  //['ngMaterial']
-
 
 export class AppModule { }

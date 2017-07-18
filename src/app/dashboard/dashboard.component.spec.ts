@@ -12,6 +12,7 @@ import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";
 import {ClusterNameGenerator} from "../util/name-generator.service";
 import {FrontpageComponent} from "../frontpage/frontpage.component";
+import { MaterialModule } from '@angular/material';
 
 describe("DashboardComponent", () => {
   let component: DashboardComponent;
@@ -24,7 +25,8 @@ describe("DashboardComponent", () => {
         ReactiveFormsModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer)
+        StoreModule.provideStore(combinedReducer),
+        MaterialModule
       ],
       declarations: [
         DashboardComponent,

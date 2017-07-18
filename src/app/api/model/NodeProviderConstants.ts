@@ -6,6 +6,7 @@ export class NodeProvider {
   public static readonly DIGITALOCEAN: string = "digitalocean";
   public static readonly BRINGYOUROWN: string = "bringyourown";
   public static readonly BAREMETAL: string = "baremetal";
+  public static readonly OPENSTACK: string = "openstack";
 }
 
 export class NodeInstanceFlavors {

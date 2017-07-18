@@ -1,6 +1,6 @@
 {
   "/api/**": {
-    "target": "https://dev.kubermatic.io",
+    "target": "https://int.kubermatic.io",
     "secure": false,
     "changeOrigin": true
   }

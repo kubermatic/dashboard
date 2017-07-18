@@ -13,26 +13,16 @@
   }
 }
 
-.health-state {
-  i {
-    color: red;
-  }
-
-  i.green {
-    color: green;
-  }
-}
-
-
-
-
 .km-no-provider {
   text-align: center;
   font-size: 14px;
   color: #BCC5D0;
 }
 
-
 .km-download-config {
   background-color: rgba(2, 136, 209, 0.12);
+}
+
+kubermatic-cluster-health-status {
+  display: inline-block;
 }

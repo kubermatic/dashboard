@@ -1,7 +1,8 @@
+
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
-import { Router } from "@angular/router";
+import { RouterModule, Router } from "@angular/router";
 import { ApiService } from "../../api/api.service";
 import { ClusterModel } from "../../api/model/ClusterModel";
 import { NotificationComponent } from "../../notification/notification.component";

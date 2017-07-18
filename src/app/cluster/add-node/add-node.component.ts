@@ -4,7 +4,6 @@ import {CustomValidators} from "ng2-validation";
 import {ApiService} from "../../api/api.service";
 import {ClusterModel} from "../../api/model/ClusterModel";
 import {CreateNodeModel} from "../../api/model/CreateNodeModel";
-import {NodeInstanceFlavors} from "../../api/model/NodeProviderConstants";
 
 import {NotificationComponent} from "../../notification/notification.component";
 import {Store} from "@ngrx/store";
@@ -21,29 +20,30 @@ export class AddNodeComponent implements OnInit {
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
+  @Input() nodeSizes: any;
 
   @Output() syncNodes = new EventEmitter();
 
   public addNodeForm: FormGroup;
   public clusterModel: ClusterModel;
   public createNodeModel: CreateNodeModel;
-  public nodeDcName: string;
+  public nodeDcName: any;
   public node: any;
-  public nodeSpec: any = {spec: {}}
+  public nodeSpec: any = {spec: { dc: {}}};
   public nodeInstances: number = 1;
-  public nodeSizes: any = [];
   public sshKeys: any;
-
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
 
-    this.nodeDcName = this.cluster.spec.cloud.dc;
-    this.nodeProvider = this.cluster.dc.spec.provider;
-    this.nodeSpec.spec.dc = this.cluster.spec.cloud.dc;
-
-    this.getProviderNodeSpecification();
+    if (this.cluster && this.cluster.spec.cloud) {
+      if (this.cluster.spec.cloud.dc) {
+        this.nodeDcName = this.cluster.spec.cloud.dc;
+        this.nodeProvider = this.cluster.dc.spec.provider;
+        this.nodeSpec.spec.dc = this.cluster.spec.cloud.dc;
+      }
+    }
 
     this.addNodeForm = this.formBuilder.group({
       node_count: [1, [<any>Validators.required, CustomValidators.min(1), CustomValidators.max(20)]],
@@ -59,24 +59,6 @@ export class AddNodeComponent implements OnInit {
     }
     return this.addNodeForm.valid;
   }
-
-  public getProviderNodeSpecification() {
-    switch (this.nodeProvider) {
-      case 'aws' : {
-        this.nodeSizes = NodeInstanceFlavors.AWS;
-        return this.nodeSizes;
-      }
-
-      case 'digitalocean' : {
-        this.api.getDigitaloceanSizes(this.cluster.spec.cloud.digitalocean.token).subscribe(result => {
-            this.nodeSizes = result.sizes;
-            return this.nodeSizes;
-          }
-        );
-      }
-    }
-  }
-
 
   public setProviderNodeSpecification(): void {
     this.nodeInstances = this.addNodeForm.controls["node_count"].value;
@@ -104,6 +86,13 @@ export class AddNodeComponent implements OnInit {
         this.nodeSpec.spec.baremetal = {};
         return;
 
+      }
+
+      case 'openstack' : {
+        this.nodeSpec.spec.openstack = {
+          size: this.addNodeForm.controls["node_size"].value
+        };
+        return;
       }
 
       default : {
