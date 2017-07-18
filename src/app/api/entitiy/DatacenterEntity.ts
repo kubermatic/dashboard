@@ -2,6 +2,7 @@ import {MetadataEntity} from "./MetadataEntity";
 import {DigitialoceanDatacenterSpec} from "./datacenter/DigitialoceanDatacenterSpec";
 import {BringYourOwnDatacenterSpec} from "./datacenter/BringYourOwnDatacenterSpec";
 import {AWSDatacenterSpec} from "./datacenter/AWSDatacenterSpec";
+import {OpenStackDatacenterSpec} from "./datacenter/OpenStackDatacenterSpec";
 
 export class DataCenterEntity {
   metadata: MetadataEntity;
@@ -38,15 +39,21 @@ export class DatacenterSpec {
   digitalocean: DigitialoceanDatacenterSpec;
   bringyourown: BringYourOwnDatacenterSpec;
   aws: AWSDatacenterSpec;
+  openstack: OpenStackDatacenterSpec;
 
-  constructor(country: string, location: string, provider: string,
-              digitalocean: DigitialoceanDatacenterSpec, bringyourown: BringYourOwnDatacenterSpec,
-              aws: AWSDatacenterSpec) {
+  constructor(country: string,
+              location: string,
+              provider: string,
+              digitalocean: DigitialoceanDatacenterSpec,
+              bringyourown: BringYourOwnDatacenterSpec,
+              aws: AWSDatacenterSpec,
+              openstack: OpenStackDatacenterSpec) {
     this.country = country;
     this.location = location;
     this.provider = provider;
     this.digitalocean = digitalocean;
     this.bringyourown = bringyourown;
     this.aws = aws;
+    this.openstack = openstack;
   }
 }

@@ -11,6 +11,8 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";
 import {MockBackend} from "@angular/http/testing";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from '@angular/material';
 
 describe("WizardComponent", () => {
   let component: WizardComponent;
@@ -23,7 +25,9 @@ describe("WizardComponent", () => {
         ReactiveFormsModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer)
+        StoreModule.provideStore(combinedReducer),
+        MaterialModule,
+        BrowserAnimationsModule
       ],
       declarations: [
         WizardComponent

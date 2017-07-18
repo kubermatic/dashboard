@@ -98,13 +98,12 @@ export class Auth {
 
     if (token) {
       localStorage.setItem('token', token);
-
     }
   };
 
   public authenticated() {
     // Check if there's an unexpired JWT
-    // This searches for an item in localStorage with key == 'id_token'
+    // This searches for an item in localStorage with key == 'token'
     return tokenNotExpired('token');
   };
 

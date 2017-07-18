@@ -20,7 +20,7 @@ export class NavigationComponent {
 
   //public userProfile: any;
 
-  constructor(private auth: Auth, private sidenavService: SidenavService, private store: Store<fromRoot.State>) {
+  constructor(public auth: Auth, private sidenavService: SidenavService, private store: Store<fromRoot.State>) {
     /*this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
       this.userProfile = profile;
     });*/

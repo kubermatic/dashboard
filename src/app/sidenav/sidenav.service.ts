@@ -17,7 +17,6 @@ export class SidenavService {
   }
 
   public close(): Promise<MdSidenavToggleResult> {
-    debugger;
     return this.sidenav.close();
   }
 

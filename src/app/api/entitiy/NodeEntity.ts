@@ -32,9 +32,17 @@ export class NodeSpec {
 export class NodeStatus {
   hostname: string;
   addresses: {[key: string]: string};
+  condition: any;
+  versions: any;
+  cpu: any;
+  memory: any;
 
-  constructor(hostname: string, addresses: {[p: string]: string}) {
+  constructor(hostname: string, addresses: {[p: string]: string}, condition: any, versions: any, cpu: any, memory: any) {
     this.hostname = hostname;
     this.addresses = addresses;
+    this.condition = condition;
+    this.versions = versions;
+    this.cpu = cpu;
+    this.memory = memory;
   }
 }

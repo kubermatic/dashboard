@@ -1,6 +1,6 @@
 import { Component, OnInit, Input} from "@angular/core";
 import { NodeEntity } from "../../api/entitiy/NodeEntity";
-import {MdDialog} from '@angular/material';
+import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
 import {NodeDeleteConfirmationComponent} from "../node-delete-confirmation/node-delete-confirmation.component";
 
 @Component({
@@ -8,14 +8,32 @@ import {NodeDeleteConfirmationComponent} from "../node-delete-confirmation/node-
   templateUrl: "node.component.html",
   styleUrls: ["node.component.scss"]
 })
+
 export class NodeComponent implements OnInit {
   @Input() node: NodeEntity;
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
   @Input() index: number;
-  public dialogRef: any;
-  public config: any = {};
+
+  // public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
+
+  public config: MdDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      backdropClass: '',
+      width: '',
+      height: '',
+      position: {
+        top: '',
+        bottom: '',
+        left: '',
+        right: ''
+      },
+      data: {
+        message: 'Jazzy jazz jazz'
+      }
+  };
 
   constructor(public dialog: MdDialog) {}
 
@@ -24,14 +42,19 @@ export class NodeComponent implements OnInit {
   }
 
   public deleteNodeDialog(): void {
-    this.dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
-    this.dialogRef.componentInstance.nodeName = this.node.metadata.name;
-    this.dialogRef.componentInstance.nodeUID = this.node.metadata.uid;
-    this.dialogRef.componentInstance.clusterName = this.clusterName;
-    this.dialogRef.componentInstance.seedDcName = this.seedDcName;
 
 
-    this.dialogRef.afterClosed().subscribe(result => {});
+    let dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
+    dialogRef.componentInstance.nodeName = this.node.metadata.name;
+    dialogRef.componentInstance.nodeUID = this.node.metadata.uid;
+    dialogRef.componentInstance.clusterName = this.clusterName;
+    dialogRef.componentInstance.seedDcName = this.seedDcName;
+
+    //this.data = this.dialogRef.componentInstance;
+
+    dialogRef.afterClosed().subscribe(result => {
+      // this.dialogRef = null;
+    });
   }
 
 }
