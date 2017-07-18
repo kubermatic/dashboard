@@ -148,7 +148,8 @@ import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-he
   entryComponents: [
     ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
+    AddNodeComponent
   ],
   providers: [
     AUTH_PROVIDERS,

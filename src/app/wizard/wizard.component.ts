@@ -366,7 +366,7 @@ export class WizardComponent implements OnInit {
       this.nodeSpec.spec = {
         dc: region,
         openstack: {
-          size: this.digitalOceanForm.controls["node_size"].value,
+          size: this.openStackForm.controls["node_size"].value,
         }
       }
     }

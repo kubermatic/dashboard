@@ -195,7 +195,12 @@ export class ApiService {
     });
 
     // List all flavors
-    openStack.networkList()
-      .map(res => res.json());
+    openStack.networkList().then((networks) => {
+      console.log(networks);
+      return networks;
+    });
+
+
+
   }
 }
