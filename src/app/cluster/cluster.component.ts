@@ -10,6 +10,7 @@ import {MdDialog} from '@angular/material';
 import {ClusterDeleteConfirmationComponent} from "../cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import {AddNodeComponent} from "../cluster/add-node/add-node.component"
 import {NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
+import {SettingsComponent} from "./settings/settings.component";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -33,7 +34,6 @@ export class ClusterComponent implements OnInit {
   public seedDcName: string;
 
   public nodeSizes: any = [];
-
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
@@ -113,6 +113,10 @@ export class ClusterComponent implements OnInit {
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem("token");
     return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
+  }
+
+  public openSettings(): void {
+    this.dialogRef = this.dialog.open(SettingsComponent);
   }
 }
 
