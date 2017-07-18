@@ -94,7 +94,7 @@ export class ClusterComponent implements OnInit {
     this.dialogRef.componentInstance.clusterName = this.clusterModel.cluster;
     this.dialogRef.componentInstance.seedDcName = this.clusterModel.dc;
     this.dialogRef.componentInstance.cluster = this.cluster;
-    this.dialogRef.componentInstance.nodeSize = this.nodeSizes;
+    this.dialogRef.componentInstance.nodeSizes = this.nodeSizes;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }

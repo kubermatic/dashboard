@@ -18,15 +18,15 @@
 
 
         <div class="form-group" *ngIf="cluster.dc.spec.provider == 'digitalocean'">
-          <md-select style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
-            <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
+          <md-select style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size_do" formControlName="node_size">
+            <md-option *ngFor="let size of nodeSizes; let i = index;" [value]="size.slug">
               {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
             </md-option>
           </md-select>
         </div>
 
         <ng-container *ngIf="cluster.dc.spec.provider == 'aws'">
-          <md-select style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
+          <md-select style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size_aws" formControlName="node_size">
             <md-option *ngFor="let size of nodeSizes; let i = index;" [value]="size">
               {{size}}
             </md-option>
@@ -43,8 +43,8 @@
         </ng-container>
 
         <ng-container *ngIf="cluster.dc.spec.provider == 'openstack'">
-          <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
-            <md-option *ngFor="let images of nodeSize; let i = index;" [value]="images.name">
+          <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size_os" formControlName="node_size">
+            <md-option *ngFor="let images of nodeSizes; let i = index;" [value]="images.name">
               {{images.name}}
             </md-option>
           </md-select>
