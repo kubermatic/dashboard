@@ -65,6 +65,9 @@ import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 import { SettingsComponent } from './cluster/settings/settings.component';
+import { SettingFormAwsComponent } from './cluster/settings/setting-form-aws/setting-form-aws.component';
+import { SettingFormDoComponent } from './cluster/settings/setting-form-do/setting-form-do.component';
+import { SettingFormOsComponent } from './cluster/settings/setting-form-os/setting-form-os.component';
 
 
 @NgModule({
@@ -124,7 +127,10 @@ import { SettingsComponent } from './cluster/settings/settings.component';
     SidenavComponent,
     AddSshKeyModalComponent,
     ClusterHealthStatusComponent,
-    SettingsComponent
+    SettingsComponent,
+    SettingFormAwsComponent,
+    SettingFormDoComponent,
+    SettingFormOsComponent
   ],
   exports: [
     RouterModule,

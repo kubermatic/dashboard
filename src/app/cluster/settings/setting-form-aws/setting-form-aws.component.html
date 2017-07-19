@@ -1,0 +1,29 @@
+<form [formGroup]="settingsAWSForm">
+  <md-input-container style="width: 100%">
+    <input id="access_key_id" mdInput formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
+  </md-input-container>
+
+  <md-input-container style="width: 100%">
+    <input id="secret_access_key" mdInput type="text" formControlName="secret_access_key" placeholder="Secret Access Key:" title="secret_access_key">
+  </md-input-container>
+
+  <md-select style="width: 100%; margin-top: 23px; margin-bottom: 10px;" id="sshKey" formControlName="ssh_key" placeholder="Authorized SSH Keys:" name="sshKey" title="sshKey">
+    <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name" ng-selected="cluster['aws'].ssh_key == key.metadata.name">
+      {{key.name + ' - ' + key.fingerprint}}
+    </md-option>
+  </md-select>
+
+  <small>In addition, one more SSH key is authorized automatically for the Kubernetes apiserver to provide kubectl logs, port-forward and exec functionality.</small>
+
+  <md-checkbox style="display: flex; margin-top: 28px; margin-bottom: 15px;" id="coreOsAutoUpdate" title="coreOsAutoUpdate">
+    Update CoreOS automatically
+  </md-checkbox>
+
+  <md-input-container style="width: 100%">
+    <input id="virtual_private_cloud_id" mdInput type="text" placeholder="Virtual ID (optional):" title="virtual_private_cloud_id">
+  </md-input-container>
+
+  <md-input-container style="width: 100%">
+    <input id="subnet_id" mdInput type="text" placeholder="Subnet ID (optional):" title="subnet_id">
+  </md-input-container>
+</form>

@@ -1,0 +1,10 @@
+<form [formGroup]="settingsDOForm">
+  <md-input-container>
+    <input id="token" mdInput formControlName="id_token" type="text" placeholder="Access Key ID:" title="id_token">
+  </md-input-container>
+  <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+    <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
+      {{key.name + ' - ' + key.fingerprint}}
+    </md-option>
+  </md-select>
+</form>

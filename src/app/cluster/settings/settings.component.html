@@ -1,7 +1,7 @@
-<div style="max-width: 40vw">
+<div style="min-width: 400px;">
   <md-toolbar>
     <div class="md-toolbar">
-      <h4 class="modal-title" id="myModalLabel">Settings</h4>
+      <h4 class="modal-title" id="myModalLabel">Provider Settings</h4>
     </div>
     <button md-icon-button md-dialog-close>
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -10,37 +10,9 @@
 
   <md-dialog-content>
     <div class="md-dialog-content">
-      <form [formGroup]="settingsForm">
-
-        <md-input-container style="width: 100%">
-          <input id="access_key_id" mdInput formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
-        </md-input-container>
-
-        <md-input-container style="width: 100%">
-          <input id="secret_access_key" mdInput type="text" formControlName="secret_access_key" placeholder="Secret Access Key:" title="secret_access_key">
-        </md-input-container>
-
-        <md-select style="width: 100%; margin-top: 23px; margin-bottom: 10px;" id="sshKeys" formControlName="sshKeys" placeholder="Authorized SSH Keys:" name="sshKeys" title="sshKeys">
-          <md-option *ngFor="let sshKey of sshKeys; let i = index;" [value]="sshKey">
-            {{sshKey}}
-          </md-option>
-        </md-select>
-
-        <p>In addition, one more SSH key is authorized automatically for the Kubernetes apiserver to provide kubectl logs, port-forward and exec functionality.</p>
-
-        <md-checkbox style="display: flex; margin-top: 28px; margin-bottom: 15px;" id="coreOsAutoUpdate" title="coreOsAutoUpdate">
-          Update CoreOS automatically
-        </md-checkbox>
-
-        <md-input-container style="width: 100%">
-          <input id="virtual_private_cloud_id" mdInput type="text" placeholder="Virtual ID (optional):" title="virtual_private_cloud_id">
-        </md-input-container>
-
-        <md-input-container style="width: 100%">
-          <input id="subnet_id" mdInput type="text" placeholder="Subnet ID (optional):" title="subnet_id">
-        </md-input-container>
-
-      </form>
+      <kubermatic-setting-form-aws [cluster]="cluster" *ngIf="dc == 'aws'"></kubermatic-setting-form-aws>
+      <kubermatic-setting-form-do [cluster]="cluster" *ngIf="dc == 'digitalocean'"></kubermatic-setting-form-do>
+      <kubermatic-setting-form-os [cluster]="cluster" *ngIf="dc == 'openstack'"></kubermatic-setting-form-os>
     </div>
   </md-dialog-content>
 

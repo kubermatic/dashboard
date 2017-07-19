@@ -117,6 +117,10 @@ export class ClusterComponent implements OnInit {
 
   public openSettings(): void {
     this.dialogRef = this.dialog.open(SettingsComponent);
+    this.dialogRef.componentInstance.cluster = this.cluster.spec.cloud;
+    this.dialogRef.componentInstance.dc = this.cluster.dc.spec.provider;
+
+    this.dialogRef.afterClosed().subscribe(result => {});
   }
 }
 
