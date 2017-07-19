@@ -1,11 +1,13 @@
 export class AWSNodeSpec {
-  type: string;
-  size: string;
-  sshKeys: string[];
+  root_size: number;
+  instance_type: string;
+  volume_type:   string;
+  ami: string;
 
-  constructor(type: string, size: string, sshKeys: string[]) {
-    this.type = type;
-    this.size = size;
-    this.sshKeys = sshKeys;
+  constructor(instance_type: string, root_size: number, volume_type: string, ami: string) {
+    this.instance_type = instance_type;
+    this.root_size = root_size;
+    this.volume_type = volume_type;
+    this.ami = ami;
   }
 }

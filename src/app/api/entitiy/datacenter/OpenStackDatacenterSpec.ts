@@ -1,7 +1,9 @@
 export class OpenStackDatacenterSpec {
-  region: string;
+  availability_zone: string;
+  auth_url: string;
 
-  constructor(region: string) {
-    this.region = region;
+  constructor(availability_zone: string, auth_url: string) {
+    this.availability_zone =availability_zone;
+    this.auth_url = auth_url;
   }
 }

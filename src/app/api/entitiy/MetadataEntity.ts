@@ -1,11 +1,7 @@
 export class MetadataEntity {
-  name: any;
-  revision: string;
+  name: string;
   uid: string;
-
-  constructor(name: any, revision: string, uid: string) {
-    this.name = name;
-    this.revision = revision;
-    this.uid = uid;
-  }
+  annotations: Map<string, string>;
+  creationTimestamp: Date;
+  labels: Map<string, string>;
 }

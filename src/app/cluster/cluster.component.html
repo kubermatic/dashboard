@@ -28,7 +28,7 @@
   </md-card>
 </ng-container>
 
-<ng-container *ngIf="cluster && cluster.dc">
+<ng-container *ngIf="cluster && dc">
   <md-card class="km-card-list">
     <md-card-header class="km-card-list-header" fxLayout>
       <md-card-title fxFlex="40%">Provider</md-card-title>
@@ -37,19 +37,19 @@
     </md-card-header>
     <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="40%">
-        <img src="/assets/images/clouds/{{cluster.dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+        <img src="/assets/images/clouds/{{dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
       </div>
       <div fxFlex="30%">
-        {{cluster.spec.cloud.dc}}
+        {{dc.spec.country}} / {{dc.spec.location}}
       </div>
       <div fxFlex="30%">
-        <ng-container [ngSwitch]="cluster.dc.spec.provider">
+        <ng-container [ngSwitch]="dc.spec.provider">
           <div *ngSwitchCase="'aws'">
-            {{cluster.spec.cloud[cluster.dc.spec.provider].ssh_key_name}}
+            {{cluster.spec.cloud[dc.spec.provider].ssh_key_name}}
           </div>
 
           <div *ngSwitchCase="'digitalocean'">
-            {{cluster.spec.cloud[cluster.dc.spec.provider].sshKeys.length}} sshKey(s)
+            {{cluster.spec.cloud[dc.spec.provider].sshKeys.length}} sshKey(s)
           </div>
 
           <div *ngSwitchCase="'baremetal'">
@@ -57,13 +57,12 @@
           </div>
 
           <div *ngSwitchCase="'openstack'">
-            {{cluster.spec.cloud[cluster.dc.spec.provider].ssh_key_name}}
+            {{cluster.spec.cloud[dc.spec.provider].ssh_key_name}}
           </div>
         </ng-container>
       </div>
     </md-card-content>
   </md-card>
-
 
   <md-card class="km-card-list" style="margin-bottom: 70px;">
     <md-card-header class="km-card-list-header" fxLayout>
@@ -78,7 +77,7 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <md-card-content *ngSwitchCase="true">
-        <kubermatic-node *ngFor="let n of nodes, let i = index" [node]="n"  [index]="i + 1" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
+        <kubermatic-node *ngFor="let n of nodes, let i = index" [node]="n"  [index]="i + 1" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="dc.spec.provider"></kubermatic-node>
       </md-card-content>
 
       <md-card-content  *ngSwitchCase="false" align="center">
@@ -87,13 +86,3 @@
     </ng-container>
   </md-card>
 </ng-container>
-
-
-<ng-container *ngIf="cluster && !cluster.dc">
-  <md-card fxLayout style="margin-top: 15px;">
-      <md-card-content fxFlex class="km-no-provider">
-        No Provider available. Please add a Provider.
-      </md-card-content>
-  </md-card>
-</ng-container>
-
