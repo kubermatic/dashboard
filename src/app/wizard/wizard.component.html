@@ -165,33 +165,9 @@
                   <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
                   <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
                 </md-input-container>
-                 <div style="width: 100%; margin-top: 10px;">
-                    <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                      <div *ngSwitchCase="true" [ngClass]="{'has-danger': !awsForm.controls.ssh_key.valid && awsForm.controls.ssh_key.touched, 'has-success': awsForm.controls.ssh_key.valid}">
-                        <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                          <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                            {{key.name + ' - ' + key.fingerprint}}
-                          </md-option>
-                        </md-select>
-                      </div>
-                      <div *ngSwitchCase="false">
-                        <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                        <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                      </div>
-                     </div>
 
-                    <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                      to provide kubectl logs, port-forward and exec functionality.
-                    </small>
-                <br>
+                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField"></kubermatic-ssh-key-form-field>
 
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
-
-                <div style="margin: 15px 0;">
-                  <md-checkbox name="coreOsAutoUpdate" id="coreOsAutoUpdate" [checked]="awsForm.controls.auto_update" formControlName="auto_update">Update CoreOS automatically</md-checkbox>
-
-                </div>
                 <md-input-container style="width: 100%;">
                   <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
                          ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
@@ -200,6 +176,10 @@
                   <input type="text" mdInput id="subnet_id" name="subnet_id" formControlName="subnet_id"
                          ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
                 </md-input-container>
+
+                <div style="margin: 15px 0;">
+                  <md-checkbox name="coreOsAutoUpdate" id="coreOsAutoUpdate" [checked]="awsForm.controls.auto_update" formControlName="auto_update">Update CoreOS automatically</md-checkbox>
+                </div>
 
                 <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !awsForm.controls.node_count.valid && awsForm.controls.node_count.touched,
               'has-success': awsForm.controls.node_count.valid && awsForm.controls.node_count.touched}">
@@ -244,27 +224,9 @@
                 <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
               </md-input-container>
 
-              <div style="width: 100%; margin-top: 10px;">
-                <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                  <div *ngSwitchCase="true" [ngClass]="{'has-danger': !digitalOceanForm.controls.ssh_key.valid && digitalOceanForm.controls.ssh_key.touched, 'has-success': digitalOceanForm.controls.ssh_key.valid}">
-                    <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                      <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
-                        {{key.name + ' - ' + key.fingerprint}}
-                      </md-option>
-                    </md-select>
-                  </div>
+              <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField"></kubermatic-ssh-key-form-field>
 
-                  <div *ngSwitchCase="false">
-                    <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                    <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                  </div>
-                </div>
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality</small>.
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
-
-                <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched,
+              <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched,
                 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
                   <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="do_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
                   <small class="form-text text-danger"  [hidden]="digitalOceanForm.controls.node_count.valid || !digitalOceanForm.controls.node_count.touched">Node count is invalid.</small>
@@ -302,28 +264,8 @@
           <div [hidden]="selectedCloud !== 'baremetal'">
             <form [formGroup]="bareMetalForm" novalidate >
               <div>
-                <div style="width: 100%; margin-top: 10px;">
-                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !bareMetalForm.controls.ssh_key.valid && bareMetalForm.controls.ssh_key.touched, 'has-success': bareMetalForm.controls.ssh_key.valid}">
-                      <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                        <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                          {{key.name + ' - ' + key.fingerprint}}
-                        </md-option>
-                      </md-select>
-                    </div>
-                    <div *ngSwitchCase="false">
-                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                    </div>
-                  </div>
+                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField"></kubermatic-ssh-key-form-field>
 
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality.
-                  </small>
-                  <br>
-
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
                 <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched,
               'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
                   <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="baremetal_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>

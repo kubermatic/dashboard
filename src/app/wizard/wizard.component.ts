@@ -4,7 +4,6 @@ import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
 import {ClusterNameGenerator} from "../util/name-generator.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
-import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {NodeProvider, NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
 import {CreateClusterModel, CloudModel, ClusterSpec} from "../api/model/CreateClusterModel";
 
@@ -17,7 +16,7 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 
-import {MdDialog, MdDialogRef} from '@angular/material';
+import {MdDialog} from '@angular/material';
 import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
 
 
@@ -46,7 +45,9 @@ export class WizardComponent implements OnInit {
   public bareMetalForm: FormGroup;
   public openStackForm: FormGroup;
 
-  public sshKeys: SSHKeyEntity[] = [];
+  public sshKeysFormField: any = [];
+
+
 
   // Nodes Sizes
   public nodeSize: any[] = NodeInstanceFlavors.VOID;
@@ -56,7 +57,6 @@ export class WizardComponent implements OnInit {
   public cluster: any;
   public nodeSpec: any = {spec: {}};
   public clusterSpec: any = {};
-
 
   // Model add sshKey
 
@@ -84,9 +84,6 @@ export class WizardComponent implements OnInit {
       });
     });
 
-    this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-    });
 
     this.clusterNameForm = this.formBuilder.group({
       name: [this.nameGenerator.generateName(),
@@ -101,7 +98,7 @@ export class WizardComponent implements OnInit {
     this.awsForm = this.formBuilder.group({
       access_key_id: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
       secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
-      ssh_key: ["", [<any>Validators.required]],
+      //ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]],
       vpc_id: [""],
@@ -114,13 +111,13 @@ export class WizardComponent implements OnInit {
     this.digitalOceanForm = this.formBuilder.group({
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
-      ssh_key: ["", [<any>Validators.required]],
+      //ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]]
     });
 
     this.bareMetalForm = this.formBuilder.group({
-      ssh_key: ["", [<any>Validators.required]],
+      //ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
 
@@ -128,7 +125,7 @@ export class WizardComponent implements OnInit {
       os_project_name: ["", [<any>Validators.required]],
       os_username: ["", [<any>Validators.required]],
       os_password: ["", [<any>Validators.required]],
-      ssh_key: ["", [<any>Validators.required]],
+      //ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]]
     });
@@ -148,9 +145,9 @@ export class WizardComponent implements OnInit {
   }
 
   private refreshSSHKeys() {
-    this.api.getSSHKeys().subscribe(result => {
+    /*this.api.getSSHKeys().subscribe(result => {
       this.sshKeys = result;
-    });
+    });*/
   }
 
 // TODO: show model
@@ -275,7 +272,7 @@ export class WizardComponent implements OnInit {
   public createClusterAndNode() {
     let key = null;
     let secret =  null;
-    let ssh_keys = [];
+    let ssh_keys;
     let region = null;
 
     // Open Stack
@@ -291,13 +288,15 @@ export class WizardComponent implements OnInit {
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
 
+    ssh_keys = this.sshKeysFormField;
+
+
     if (this.selectedCloud === NodeProvider.AWS) {
 
       key = this.awsForm.controls["access_key_id"].value;
       secret = this.awsForm.controls["secret_access_key"].value;
-      ssh_keys.push(this.awsForm.controls["ssh_key"].value);
 
-      node_instances = this.digitalOceanForm.controls["node_count"].value;
+      node_instances = this.awsForm.controls["node_count"].value;
 
       this.clusterSpec.aws = {
         vpc_id: this.awsForm.controls["vpc_id"].value,
@@ -322,7 +321,6 @@ export class WizardComponent implements OnInit {
 
     if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
       secret = this.digitalOceanForm.controls["access_token"].value;
-      ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
       node_instances = this.digitalOceanForm.controls["node_count"].value;
       this.clusterSpec.digitalocean = {}
 
@@ -330,7 +328,7 @@ export class WizardComponent implements OnInit {
         dc:  region,
         digitalocean: {
           size: this.digitalOceanForm.controls["node_size"].value,
-          sshKeys: this.digitalOceanForm.controls["ssh_key"].value
+          sshKeys: ssh_keys
         }
       }
     }
@@ -343,7 +341,6 @@ export class WizardComponent implements OnInit {
 
     if (this.selectedCloud === NodeProvider.BAREMETAL) {
       node_instances = this.bareMetalForm.controls["node_count"].value;
-      ssh_keys.push(this.bareMetalForm.controls["ssh_key"].value);
 
       this.clusterSpec.baremetal = {}
 
@@ -359,7 +356,6 @@ export class WizardComponent implements OnInit {
       os_password = this.awsForm.controls["os_password"].value;
 
       node_instances = this.openStackForm.controls["node_count"].value;
-      ssh_keys.push(this.openStackForm.controls["ssh_key"].value);
 
       this.clusterSpec.openstack = {}
 
