@@ -30,7 +30,6 @@ build: dist
 	go get .
 	go build -o dashboard-v2 .
 
-s
 docker-build:
 	docker build $(BUILD_FLAG) .
 
