@@ -2,6 +2,8 @@ import {Component, OnInit, Output, Input, EventEmitter} from '@angular/core';
 import {ApiService} from "../../api/api.service";
 import {SSHKeyEntity} from "../../api/entitiy/SSHKeyEntity";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {AddSshKeyModalComponent} from "../add-ssh-key-modal/add-ssh-key-modal.component";
+import {MdDialog} from '@angular/material';
 
 @Component({
   selector: 'kubermatic-ssh-key-form-field',
@@ -11,12 +13,13 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class SshKeyFormFieldComponent implements OnInit {
 
   public sshKeys: SSHKeyEntity[] = [];
+  public config: any = {};
 
   public sshKeyForm: FormGroup;
   @Output() syncSshKeys = new EventEmitter();
   @Input() sshKeysFormField;
 
-  constructor(private api: ApiService,private formBuilder: FormBuilder) { }
+  constructor(private api: ApiService,private formBuilder: FormBuilder, public dialog: MdDialog) { }
 
   ngOnInit() {
     this.api.getSSHKeys().subscribe(result => {
@@ -37,5 +40,20 @@ export class SshKeyFormFieldComponent implements OnInit {
     console.log(this.sshKeysFormField);
     this.syncSshKeys.emit();
   }
+
+  private refreshSSHKeys() {
+    this.api.getSSHKeys().subscribe(result => {
+     this.sshKeys = result;
+     });
+  }
+
+  // TODO: show model
+    public addSshKeyDialog(): void {
+      var dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
+
+      dialogRef.afterClosed().subscribe(result => {
+        this.refreshSSHKeys();
+      });
+    }
 
 }
