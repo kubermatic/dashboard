@@ -7,22 +7,22 @@ npmBuildNode(pipeline){
     pipeline.setupENV()
     stage('Install deps'){
         container('node') {
-           sh("cd ${goImportPath} && make install")
+           sh("make install")
         }
     }
     stage('Build dist'){
         container('node') {
-           sh("cd ${goImportPath} && make dist")
+           sh("make dist")
         }
     }
 /*    stage('Test'){
         container('node') {
-           sh("cd ${goImportPath} && make test")
+           sh("make test")
         }
     }
     stage('Test de2e'){
         container('node') {
-           sh("cd ${goImportPath} && make e2e")
+           sh("make e2e")
         }
     }*/
     stage('Build go'){
