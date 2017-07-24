@@ -17,8 +17,6 @@ import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 
 import {MdDialog} from '@angular/material';
-import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
-
 
 @Component({
   selector: "kubermatic-wizard",
@@ -46,8 +44,6 @@ export class WizardComponent implements OnInit {
   public openStackForm: FormGroup;
 
   public sshKeysFormField: any = [];
-
-
 
   // Nodes Sizes
   public nodeSize: any[] = NodeInstanceFlavors.VOID;
@@ -142,22 +138,10 @@ export class WizardComponent implements OnInit {
 
   public selectCloudRegion(cloud: DataCenterEntity) {
     this.selectedCloudRegion = cloud;
+    this.sshKeysFormField = [];
   }
 
-  private refreshSSHKeys() {
-    /*this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-    });*/
-  }
 
-// TODO: show model
-  public addSshKeyDialog(): void {
-    var dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.refreshSSHKeys();
-    });
-  }
 
   public getNodeCount(): string {
     if (this.selectedCloud === NodeProvider.AWS) {
