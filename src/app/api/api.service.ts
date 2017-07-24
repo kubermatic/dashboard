@@ -11,7 +11,6 @@ import {NodeEntity} from "./entitiy/NodeEntity";
 import {Auth} from "../auth/auth.service";
 import {SSHKeyEntity} from "./entitiy/SSHKeyEntity";
 import {CreateClusterModel} from "./model/CreateClusterModel";
-import {OpenStack} from 'openstack-lib';
 
 @Injectable()
 export class ApiService {
@@ -179,28 +178,5 @@ export class ApiService {
 
     return this._http.get(url, { headers: new Headers({"Authorization": "Bearer " + token}) })
       .map(res => res.json());
-  }
-
-
-  getOpenStackImages(location: string, project: string, name: string, password: string, authUrl: string) {
-
-    const openStack = new OpenStack({
-      region_name: location,
-      auth: {
-        username: name,
-        password: password,
-        project_name: project,
-        auth_url: authUrl
-      }
-    });
-
-    // List all flavors
-    openStack.networkList().then((networks) => {
-      console.log(networks);
-      return networks;
-    });
-
-
-
   }
 }
