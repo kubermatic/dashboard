@@ -166,7 +166,7 @@
                   <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
                 </md-input-container>
 
-                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField"></kubermatic-ssh-key-form-field>
+                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
 
                 <md-input-container style="width: 100%;">
                   <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
@@ -224,7 +224,7 @@
                 <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
               </md-input-container>
 
-              <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField"></kubermatic-ssh-key-form-field>
+              <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
 
               <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched,
                 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
@@ -264,7 +264,7 @@
           <div [hidden]="selectedCloud !== 'baremetal'">
             <form [formGroup]="bareMetalForm" novalidate >
               <div>
-                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField"></kubermatic-ssh-key-form-field>
+                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
 
                 <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched,
               'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">

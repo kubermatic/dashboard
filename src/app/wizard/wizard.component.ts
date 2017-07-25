@@ -43,7 +43,12 @@ export class WizardComponent implements OnInit {
   public bareMetalForm: FormGroup;
   public openStackForm: FormGroup;
 
-  public sshKeysFormField: any = [];
+  public sshKeysFormField: any = [{
+    aws :[],
+    digitalocean : [],
+    baremetal : [],
+    openstack : []
+  }];
 
   // Nodes Sizes
   public nodeSize: any[] = NodeInstanceFlavors.VOID;
@@ -138,7 +143,6 @@ export class WizardComponent implements OnInit {
 
   public selectCloudRegion(cloud: DataCenterEntity) {
     this.selectedCloudRegion = cloud;
-    this.sshKeysFormField = [];
   }
 
 
@@ -219,19 +223,22 @@ export class WizardComponent implements OnInit {
           return !!this.selectedCloudRegion;
         }
       case 3:
-        if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
-          return this.bringYourOwnForm.valid;
-        } else if (this.selectedCloud === NodeProvider.AWS) {
-          return this.awsForm.valid;
-        } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
-          return this.digitalOceanForm.valid;
-        } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
-          return this.bareMetalForm.valid;
-        } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
-          return this.openStackForm.valid;
-        } else {
-          return false;
-        }
+
+          if(!this.sshKeysFormField[0][this.selectedCloud].length) {
+            return false;
+          } else if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
+            return this.bringYourOwnForm.valid;
+          } else if (this.selectedCloud === NodeProvider.AWS) {
+            return this.awsForm.valid;
+          } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
+            return this.digitalOceanForm.valid;
+          } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
+            return this.bareMetalForm.valid;
+          } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
+            return this.openStackForm.valid;
+          } else {
+            return false;
+          }
       default:
         return false;
     }
@@ -272,7 +279,7 @@ export class WizardComponent implements OnInit {
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
 
-    ssh_keys = this.sshKeysFormField;
+    ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
 
 
     if (this.selectedCloud === NodeProvider.AWS) {

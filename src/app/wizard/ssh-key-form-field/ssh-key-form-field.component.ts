@@ -18,6 +18,7 @@ export class SshKeyFormFieldComponent implements OnInit {
   public sshKeyForm: FormGroup;
   @Output() syncSshKeys = new EventEmitter();
   @Input() sshKeysFormField;
+  @Input() provider;
 
   constructor(private api: ApiService,private formBuilder: FormBuilder, public dialog: MdDialog) { }
 
@@ -32,12 +33,11 @@ export class SshKeyFormFieldComponent implements OnInit {
   }
 
   public addSshKeyFrom(key) {
-    if(this.sshKeysFormField.some(item => item == key)){
-      this.sshKeysFormField = this.sshKeysFormField.filter(item => item !== key);
+    if(this.sshKeysFormField[0][this.provider].some(item => item == key)){
+      this.sshKeysFormField[0][this.provider] = this.sshKeysFormField[0][this.provider].filter(item => item !== key);
     } else {
-      this.sshKeysFormField.push(key);
+      this.sshKeysFormField[0][this.provider].push(key);
     }
-    console.log(this.sshKeysFormField);
     this.syncSshKeys.emit();
   }
 

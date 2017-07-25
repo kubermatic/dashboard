@@ -2,7 +2,7 @@
   <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
     <div *ngSwitchCase="true" [ngClass]="{'has-danger': !sshKeyForm.controls.ssh_key.valid && sshKeyForm.controls.ssh_key.touched, 'has-success': sshKeyForm.controls.ssh_key.valid}">
       <div *ngFor="let key of sshKeys">
-        <md-checkbox name="ssh_key[{{key.metadata.name}}]" id="key_{{key.metadata.name}}" formControlName="ssh_key" (click)="addSshKeyFrom(key.metadata.name)">{{key.name + ' - ' + key.fingerprint}}</md-checkbox>
+        <md-checkbox name="ssh_key[{{key.metadata.name}}]" formControlName="ssh_key" (click)="addSshKeyFrom(key.metadata.name)">{{key.name + ' - ' + key.fingerprint}}</md-checkbox>
       </div>
     </div>
     <div *ngSwitchCase="false">
