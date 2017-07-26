@@ -259,7 +259,7 @@ export class WizardComponent implements OnInit {
   public createClusterAndNode() {
     let key = null;
     let secret =  null;
-    let ssh_keys;
+    let ssh_keys : string[];
     let region = null;
 
     // Open Stack
