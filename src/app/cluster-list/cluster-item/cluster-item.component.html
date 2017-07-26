@@ -25,7 +25,7 @@
   </div>
   <div fxFlex="15%">{{cluster.status.phase}}</div>
   <div fxFlex="15%" >
-    <kubermatic-cluster-health-status *ngIf="cluster.status.health" [health]="cluster.status.health"></kubermatic-cluster-health-status>
+    <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
   </div>
   </div>
 </div>
