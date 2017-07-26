@@ -18,7 +18,7 @@ export class SshKeyFormFieldComponent implements OnInit {
   public sshKeyForm: FormGroup;
   @Output() syncSshKeys = new EventEmitter();
   @Input() sshKeysFormField;
-  @Input() provider;
+  @Input() provider: string;
 
 
 

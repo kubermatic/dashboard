@@ -43,7 +43,7 @@ export class WizardComponent implements OnInit {
   public bareMetalForm: FormGroup;
   public openStackForm: FormGroup;
 
-  public sshKeysFormField: any = [{
+  public sshKeysFormField: object[] = [{
     aws :[],
     digitalocean : [],
     baremetal : [],
@@ -99,7 +99,6 @@ export class WizardComponent implements OnInit {
     this.awsForm = this.formBuilder.group({
       access_key_id: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
       secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
-      //ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]],
       vpc_id: [""],
@@ -112,13 +111,11 @@ export class WizardComponent implements OnInit {
     this.digitalOceanForm = this.formBuilder.group({
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
-      //ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]]
     });
 
     this.bareMetalForm = this.formBuilder.group({
-      //ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
 
@@ -126,7 +123,6 @@ export class WizardComponent implements OnInit {
       os_project_name: ["", [<any>Validators.required]],
       os_username: ["", [<any>Validators.required]],
       os_password: ["", [<any>Validators.required]],
-      //ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]]
     });
