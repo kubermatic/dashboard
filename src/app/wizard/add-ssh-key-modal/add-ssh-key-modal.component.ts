@@ -19,7 +19,7 @@ export class AddSshKeyModalComponent implements OnInit {
 
   ngOnInit() {
     this.addSSHKeyForm = this.formBuilder.group({
-      name: ["", [<any>Validators.required, Validators.pattern("[\\w\\d-]+")]],
+      name: ["", [<any>Validators.required]],
       key: ["", [<any>Validators.required]],
     });
   }
