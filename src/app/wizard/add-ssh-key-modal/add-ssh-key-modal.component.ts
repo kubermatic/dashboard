@@ -13,15 +13,10 @@ import {NotificationComponent} from "../../notification/notification.component";
 })
 export class AddSshKeyModalComponent implements OnInit {
   @Input() sshKeys: Array<SSHKeyEntity> = [];
-  public userProfile: any;
-
   public addSSHKeyForm: FormGroup;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {
-    this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
-      this.userProfile = profile;
-    });
-  }
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {}
+
   ngOnInit() {
     this.addSSHKeyForm = this.formBuilder.group({
       name: ["", [<any>Validators.required, Validators.pattern("[\\w\\d-]+")]],
@@ -36,7 +31,6 @@ export class AddSshKeyModalComponent implements OnInit {
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
       .subscribe(result => {
           NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
-          this.addSSHKeyForm.reset();
         },
         error => {
           NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);

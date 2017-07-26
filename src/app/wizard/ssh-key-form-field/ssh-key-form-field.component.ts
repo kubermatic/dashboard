@@ -1,7 +1,7 @@
 import {Component, OnInit, Output, Input, EventEmitter} from '@angular/core';
 import {ApiService} from "../../api/api.service";
 import {SSHKeyEntity} from "../../api/entitiy/SSHKeyEntity";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {AddSshKeyModalComponent} from "../add-ssh-key-modal/add-ssh-key-modal.component";
 import {MdDialog} from '@angular/material';
 
@@ -20,16 +20,13 @@ export class SshKeyFormFieldComponent implements OnInit {
   @Input() sshKeysFormField;
   @Input() provider;
 
+
+
   constructor(private api: ApiService,private formBuilder: FormBuilder, public dialog: MdDialog) { }
 
   ngOnInit() {
-    this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-    });
-
-    this.sshKeyForm = this.formBuilder.group({
-      ssh_key: ["", [<any>Validators.required]]
-    });
+    this.sshKeyForm = this.formBuilder.group({});
+    this.refreshSSHKeys();
   }
 
   public addSshKeyFrom(key) {
@@ -44,6 +41,11 @@ export class SshKeyFormFieldComponent implements OnInit {
   private refreshSSHKeys() {
     this.api.getSSHKeys().subscribe(result => {
      this.sshKeys = result;
+
+      for (const key of this.sshKeys) {
+        const control: FormControl = new FormControl(false, Validators.required);
+        this.sshKeyForm.addControl(key.metadata.name, control);
+      }
      });
   }
 
