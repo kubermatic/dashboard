@@ -52,7 +52,6 @@ export class WizardComponent implements OnInit {
   public nodeSize: any[] = NodeInstanceFlavors.VOID;
 
   // Create Nodes
-  public selectedNodeCountValue: number = 3;
   public cluster: any;
   public nodeSpec: any = {spec: {}};
   public clusterSpec: any = {};
