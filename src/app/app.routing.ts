@@ -8,6 +8,7 @@ import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ProfileComponent} from "./profile/profile.component";
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 
 
 
@@ -48,8 +49,12 @@ export const appRoutes: Routes = [
     ]
   },
   {
+      path: "404",
+      component: PageNotFoundComponent
+  },
+  {
     path: "**",
-    redirectTo: "login"
+    redirectTo: "404"
   },
 ];
 
