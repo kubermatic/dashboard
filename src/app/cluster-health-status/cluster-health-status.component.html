@@ -1,7 +1,9 @@
 <div class="health-state">
-  <div md-button class="fa fa-dot-circle-o" [class.green]="health.apiserver" mdTooltip="apiserver"></div>
-  <div md-button class="fa fa-dot-circle-o" [class.green]="health.controller" mdTooltip="controller"></div>
-  <div md-button class="fa fa-dot-circle-o" [class.green]="health.etcd" mdTooltip="etcd"></div>
-  <div md-button class="fa fa-dot-circle-o" [class.green]="health.scheduler" mdTooltip="scheduler"></div>
+  <div md-button class="fa fa-dot-circle-o"  mdTooltip="apiserver" [ngClass]="getHealthStatusColor('apiserver')"></div>
+  <div md-button class="fa fa-dot-circle-o"  mdTooltip="controller" [ngClass]="getHealthStatusColor('controller')"></div>
+  <div md-button class="fa fa-dot-circle-o"  mdTooltip="etcd" [ngClass]="getHealthStatusColor('etcd')"></div>
+  <div md-button class="fa fa-dot-circle-o"  mdTooltip="scheduler" [ngClass]="getHealthStatusColor('scheduler')"></div>
+
+
 </div>
 

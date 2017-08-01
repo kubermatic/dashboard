@@ -1,9 +1,11 @@
 .health-state {
-  div {
-    color: red;
+  div.orange {
+   color: orange;
   }
-
   div.green {
     color: green;
+  }
+  div.red {
+    color: red;
   }
 }
