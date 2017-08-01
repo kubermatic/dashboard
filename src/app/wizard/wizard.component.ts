@@ -62,6 +62,7 @@ export class WizardComponent implements OnInit {
   // Model add sshKey
 
   public config: any = {};
+  public ssh_keys: string[] = [];
 
   constructor(private api: ApiService,
               private nameGenerator: ClusterNameGenerator,
@@ -259,7 +260,6 @@ export class WizardComponent implements OnInit {
   public createClusterAndNode() {
     let key = null;
     let secret =  null;
-    let ssh_keys : string[];
     let region = null;
 
     // Open Stack
@@ -275,8 +275,7 @@ export class WizardComponent implements OnInit {
     const timer = Observable.timer(0,10000);
     let node_instances: number = 3;
 
-    ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
-
+    this.ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
 
     if (this.selectedCloud === NodeProvider.AWS) {
 
@@ -315,7 +314,7 @@ export class WizardComponent implements OnInit {
         dc:  region,
         digitalocean: {
           size: this.digitalOceanForm.controls["node_size"].value,
-          sshKeys: ssh_keys
+          sshKeys: this.ssh_keys
         }
       }
     }
@@ -358,7 +357,7 @@ export class WizardComponent implements OnInit {
 
     const cloud = new CloudModel(key, secret, this.selectedCloud, region);
 
-    const model = new CreateClusterModel(cloud, spec, ssh_keys);
+    const model = new CreateClusterModel(cloud, spec, this.ssh_keys);
 
 
     console.log("Create cluster mode: \n" + JSON.stringify(model));

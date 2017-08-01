@@ -278,7 +278,7 @@
 
 
 
-          <div [hidden]="selectedCloud !== 'openstack'">
+           <div [hidden]="selectedCloud !== 'openstack'"> 
 
 
             <form [formGroup]="openStackForm" novalidate >
@@ -300,14 +300,14 @@
 
                 <!-- TODO: SSHKey -->
 
-                <div style="width: 100%; margin-top: 10px;">
-                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+                 <div style="width: 100%; margin-top: 10px;">
+                  <div [ngSwitch]="!!ssh_keys && ssh_keys.length > 0">
                     <div *ngSwitchCase="true" [ngClass]="{'has-danger': !openStackForm.controls.ssh_key.valid && openStackForm.controls.ssh_key.touched, 'has-success': openStackForm.controls.ssh_key.valid}">
-                      <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+                       <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
                         <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
                           {{key.name + ' - ' + key.fingerprint}}
                         </md-option>
-                      </md-select>
+                      </md-select> 
                     </div>
 
                     <div *ngSwitchCase="false">
@@ -318,7 +318,7 @@
                   <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
                     to provide kubectl logs, port-forward and exec functionality</small>.
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
+                </div> 
 
 
                 <!-- TODO: Node Count -->
