@@ -1,5 +1,7 @@
 SHELL=/bin/bash
 REPO=kubermatic/ui-v2
+TAGS=dev
+BUILD_FLAG += $(foreach tag, $(TAGS), -t $(REPO):$(tag))
 CC=npm
 
 all: install run
@@ -28,8 +30,10 @@ build: dist
 	go get .
 	go build -o dashboard-v2 .
 
-docker:
-	docker build -t $(REPO) .
+docker-build:
+	docker build $(BUILD_FLAG) .
 
-push: docker
-	docker push $(REPO)
+docker-push:
+	for TAG in $(TAGS) ; do \
+		docker push $(REPO):$$TAG ; \
+	done

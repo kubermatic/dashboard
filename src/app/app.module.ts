@@ -1,14 +1,14 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {BrowserModule} from "@angular/platform-browser";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {HttpModule, Http, BrowserXhr, ConnectionBackend, RequestOptions, XHRBackend} from "@angular/http";
+import {HttpModule, BrowserXhr} from "@angular/http";
 
 
-import {MaterialModule,
+import {
   MdButtonModule,
   MdIconModule,
   MdInputModule,
@@ -81,7 +81,6 @@ import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-he
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    MaterialModule,
     MdButtonModule,
     MdIconModule,
     MdInputModule,

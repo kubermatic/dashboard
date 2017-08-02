@@ -16,7 +16,7 @@
       <div fxFlex="80%">
         <strong>{{cluster.status.phase}}</strong>
         <span>- Health:</span>
-        <kubermatic-cluster-health-status *ngIf="cluster.status.health" [health]="cluster.status.health"></kubermatic-cluster-health-status>
+        <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
       </div>
     </md-card-content>
     <md-card-content class="km-card-list-content" fxLayout>

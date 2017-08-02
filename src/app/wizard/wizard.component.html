@@ -201,26 +201,25 @@
                          ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
                 </md-input-container>
 
-                <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !awsForm.controls.node_count.valid && awsForm.controls.node_count.touched,
-              'has-success': awsForm.controls.node_count.valid && awsForm.controls.node_count.touched}">
-                  <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="aws_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
-                  <small class="form-text text-danger"  [hidden]="awsForm.controls.node_count.valid || !awsForm.controls.node_count.touched">Node count is invalid.</small>
-                  <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
-                </div>
+                <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !awsForm.controls.node_count.valid && awsForm.controls.node_count.touched, 'has-success': awsForm.controls.node_count.valid && awsForm.controls.node_count.touched}">
+                    <input id="node_count" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+                </md-input-container>
 
-                <div>
-                  <md-select style="width: 100%; margin-top: 10px;" placeholder="Node Size:" name="nodeSize" formControlName="node_size">
+                <div style="margin: 21px 0 14px" [ngClass]="{'has-danger': !awsForm.controls.node_size.valid && awsForm.controls.node_size.touched,
+                 'has-success': awsForm.controls.node_size.valid && awsForm.controls.node_size.touched}">
+
+                  <md-select style="width: 100%;" placeholder="Node Size:" name="nodeSize" formControlName="node_size">
                     <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
                       {{size}}
                     </md-option>
                   </md-select>
                 </div>
 
-                <md-input-container style="width: 100%; margin-top: 10px" >
+                <md-input-container style="width: 100%;" >
                   <input id="disk_size" mdInput formControlName="disk_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="disk_size">
                 </md-input-container>
 
-                <md-input-container style="width: 100%; margin-top: 0px">
+                <md-input-container style="width: 100%; ">
                   <input id="container_linux_version" mdInput formControlName="container_linux_version" type="text" placeholder="Set CoreOS Version manually (optional):" title="container_linux_version">
                   <small>Show stable <a href="https://aws.amazon.com/marketplace/pp/B01H62FDJM?qid=1490197183896&sr=0-1&ref_=srh_res_product_title#" target="_blank">CoreOS Versions</a> </small>
                 </md-input-container>
@@ -240,7 +239,7 @@
 
             <form [formGroup]="digitalOceanForm" novalidate class="col-6">
               <md-input-container style="width: 100%" [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
-                <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="Access Key ID:" title="access_token" (change)="changeDoKey()">
+                <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="API Token:" title="access_token" (change)="changeDoKey()">
                 <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
               </md-input-container>
 
@@ -264,14 +263,11 @@
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
 
-                <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched,
-                'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
-                  <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="do_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
-                  <small class="form-text text-danger"  [hidden]="digitalOceanForm.controls.node_count.valid || !digitalOceanForm.controls.node_count.touched">Node count is invalid.</small>
-                  <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
-                </div>
+                <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
+                  <input id="node_count_do" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+                </md-input-container>
 
-                <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
+                <md-select  style="width: 100%; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
                   <md-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</md-option>
                   <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
                     {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
@@ -324,12 +320,10 @@
 
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
-                <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched,
-              'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
-                  <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="baremetal_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
-                  <small class="form-text text-danger"  [hidden]="bareMetalForm.controls.node_count.valid || !awsForm.controls.node_count.touched">Node count is invalid.</small>
-                  <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
-                </div>
+
+                <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched, 'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
+                  <input id="node_count_bareMetalForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+                </md-input-container>
               </div>
             </form>
           </div>
@@ -378,6 +372,10 @@
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
 
+                <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched, 'has-success': openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched}">
+                  <input id="node_count_openStackForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+                </md-input-container>
+
 
                 <!-- TODO: Node Count -->
                 <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched,
@@ -386,6 +384,7 @@
                   <small class="form-text text-danger"  [hidden]="openStackForm.controls.node_count.valid || !openStackForm.controls.node_count.touched">Node count is invalid.</small>
                   <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
                 </div>
+
 
                 <!--
                 // TODO: get Images
