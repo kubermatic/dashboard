@@ -132,7 +132,7 @@ export class WizardComponent implements OnInit {
       subnet_id: [""],
       auto_update: [true, [<any>Validators.required]],
       disk_size: [8, [<any>Validators.required, CustomValidators.min(8), CustomValidators.max(200)]],
-      container_linux_version: ['']
+      container_linux_version: [""]
     });
 
     this.digitalOceanForm = this.formBuilder.group({
@@ -406,16 +406,16 @@ export class WizardComponent implements OnInit {
       this.nodeSpec.spec = {
         dc: region,
         baremetal: {}
-      }
+      };
     }
 
     if (this.selectedCloud === NodeProvider.OPENSTACK) {
-      os_project = this.openStackForm.controls["os_project_name"].value;
-      os_username = this.openStackForm.controls["os_username"].value;
-      os_password = this.openStackForm.controls["os_password"].value;
+      //project = this.openStackForm.controls["os_project_name"].value;
+      key = this.openStackForm.controls["os_username"].value;
+      secret = this.openStackForm.controls["os_password"].value;
 
       node_instances = this.openStackForm.controls["node_count"].value;
-      ssh_keys =this.openStackForm.controls["ssh_key"].value;
+      ssh_keys = this.openStackForm.controls["ssh_key"].value;
 
       this.clusterSpec.openstack = {}
 
@@ -424,7 +424,7 @@ export class WizardComponent implements OnInit {
         openstack: {
           size: this.openStackForm.controls["node_size"].value,
         }
-      }
+      };
     }
 
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);
