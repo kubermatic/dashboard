@@ -14,6 +14,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public clusters: ClusterEntity[] = [];
   public timer: any = Observable.timer(0,10000);
   public sub: Subscription;
+  public loading: boolean = false;
 
   constructor(public api: ApiService) { }
 
@@ -24,8 +25,10 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   getClusters(){
+    this.loading = true;
     this.api.getClusters().subscribe(result => {
       this.clusters = result;
+      this.loading = false;
     });
   }
 

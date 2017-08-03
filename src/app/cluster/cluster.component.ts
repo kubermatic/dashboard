@@ -33,7 +33,7 @@ export class ClusterComponent implements OnInit {
   public seedDcName: string;
 
   public nodeSizes: any = [];
-
+  public loading: boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
@@ -77,9 +77,11 @@ export class ClusterComponent implements OnInit {
   }
 
   updateCluster(): void {
+    this.loading = true;
     this.api.getClusterWithDatacenter(this.clusterModel).subscribe(result => {
       this.cluster = result;
       this.getProviderNodeSpecification();
+      this.loading = false;   
     });
   }
 
