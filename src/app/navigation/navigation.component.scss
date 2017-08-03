@@ -399,6 +399,8 @@ a.collapse-menu-link {
    button {
      color: #444D58;
      font-weight: 400;
+     min-width: 60px;
+     padding: 0;
    }
 
     a, .km-logout, .km-login {
@@ -409,11 +411,13 @@ a.collapse-menu-link {
         color: #444D58;
       }
     }
-
-
 }
 
 .km-logout, .km-login {
   float: right;
 }
 
+kubermatic-breadcrumbs {
+  display: inline-block;
+  float: left;
+}
