@@ -4,6 +4,7 @@ import {SSHKeyEntity} from "../../api/entitiy/SSHKeyEntity";
 import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {AddSshKeyModalComponent} from "../add-ssh-key-modal/add-ssh-key-modal.component";
 import {MdDialog, MdDialogConfig} from '@angular/material';
+import {SshKeys} from "../../api/model/SshKeysModel";
 
 @Component({
   selector: 'kubermatic-ssh-key-form-field',
@@ -17,7 +18,7 @@ export class SshKeyFormFieldComponent implements OnInit {
   public selectedCloudProviderApiError: string;
   public sshKeyForm: FormGroup;
   @Output() syncSshKeys = new EventEmitter();
-  @Input() sshKeysFormField: object[];
+  @Input() sshKeysFormField: SshKeys[];
   @Input() provider: string;
 
 

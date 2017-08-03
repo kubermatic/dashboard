@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
 import {NodeProvider, NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
 import {CreateClusterModel, CloudModel, ClusterSpec} from "../api/model/CreateClusterModel";
+import {SshKeys} from "../api/model/SshKeysModel";
 
 import {CreateNodeModel} from "../api/model/CreateNodeModel";
 import {ClusterModel} from "../api/model/ClusterModel";
@@ -43,7 +44,7 @@ export class WizardComponent implements OnInit {
   public bareMetalForm: FormGroup;
   public openStackForm: FormGroup;
 
-  public sshKeysFormField: object[] = [{
+  public sshKeysFormField: SshKeys[] = [{
     aws :[],
     digitalocean : [],
     baremetal : [],
