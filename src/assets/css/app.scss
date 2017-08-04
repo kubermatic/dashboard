@@ -94,6 +94,9 @@ md-card-header {
 // dialog
 
 .mat-dialog-container {
+  .mat-toolbar-row {
+    position: relative;
+  }
   .mat-toolbar {
     background-color: #fff;
     border-bottom: 1px solid #E3E8EC;
@@ -109,8 +112,8 @@ md-card-header {
     }
     button {
       position: absolute;
-      right: 15px;
-      top: 5px;
+      right: -20px;
+      top: -20px;
       font-size: 20px;
       i {
         color: #0288d1;
