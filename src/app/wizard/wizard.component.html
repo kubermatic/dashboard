@@ -4,41 +4,56 @@
   </div>
 </div>
 
-<md-card style="margin-bottom: 20px;" class="km-card-progress-bar" fxLayout>
-    <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
+<md-card style="margin-bottom: 20px;" class="km-card-progress-bar" fxLayout fxLayoutGap="25px" style="background-color: #0288d1;"   >
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
       <span *ngIf="currentStep > 0" (click)="gotoStep(0)" [style.cursor]="'pointer'">
         <i class="fa fa-check" aria-hidden="true"></i>
-        <small>Name your Kubernetes cluster</small>
+        <small>Cluster Name</small>
       </span>
-      <span *ngIf="currentStep <= 0" class="">1. <small>Name your Kubernetes cluster</small></span>
+      <span *ngIf="currentStep <= 0" >
+        <i *ngIf="currentStep == 0" class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+
+        <small>Cluster Name</small></span>
     </md-card-title>
-    <md-card-title fxFlex="25%" class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
       <span *ngIf="currentStep > 1" [style.cursor]="'pointer'" (click)="gotoStep(1)">
         <i class="fa fa-check" aria-hidden="true"></i>
-        <small>Select the cloud provider for your nodes</small>
+        <small>Provider</small>
       </span>
-      <span *ngIf="currentStep <= 1" class="">2. <small>Select the cloud provider for your nodes</small></span>
+      <span *ngIf="currentStep <= 1" class="">
+        <i *ngIf="currentStep < 1" class="fa fa-times " aria-hidden="true"></i>
+        <i *ngIf="currentStep == 1" class="fa fa-circle-o-notch fa-spin " aria-hidden="true"></i>
+        <small>Provider</small></span>
     </md-card-title>
-    <md-card-title fxFlex="25%" class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
       <span *ngIf="currentStep > 2" [style.cursor]="'pointer'" (click)="gotoStep(2)">
         <i class="fa fa-check" aria-hidden="true"></i>
-        <small>Select the datacenter of your cloud provider</small>
+        <small>Datacenter</small>
       </span>
-      <span *ngIf="currentStep <= 2" class="">3. <small>Select the datacenter of your cloud provider</small></span>
+      <span *ngIf="currentStep <= 2" class="">
+        <i *ngIf="currentStep < 2" class="fa fa-times " aria-hidden="true"></i>
+        <i *ngIf="currentStep == 2" class="fa fa-circle-o-notch fa-spin " aria-hidden="true"></i>
+        <small>Datacenter</small></span>
     </md-card-title>
-    <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 3, 'done': currentStep > 3, 'tbd': currentStep < 3}">
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 3, 'done': currentStep > 3, 'tbd': currentStep < 3}">
       <span *ngIf="currentStep > 3" [style.cursor]="'pointer'" (click)="gotoStep(3)">
         <i class="fa fa-check" aria-hidden="true" ></i>
-        <small>Provide credentials & Settings</small>
+        <small>Settings</small>
       </span>
-      <span *ngIf="currentStep <= 3" class="">4. <small>Provide credentials & Settings</small></span>
+      <span *ngIf="currentStep <= 3" class="">
+        <i *ngIf="currentStep < 3" class="fa fa-times " aria-hidden="true"></i>
+        <i *ngIf="currentStep == 3" class="fa fa-circle-o-notch fa-spin " aria-hidden="true"></i>
+        <small>Settings</small></span>
     </md-card-title>
-    <md-card-title fxFlex="10%" class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
       <span *ngIf="currentStep > 4"  [style.cursor]="'pointer'" (click)="gotoStep(4)">
         <i class="fa fa-check" aria-hidden="true"></i>
         <small>Summary</small>
       </span>
-      <span *ngIf="currentStep <= 4" class="">5. <small>Summary</small></span>
+      <span *ngIf="currentStep <= 4" class="">
+        <i *ngIf="currentStep < 4" class="fa fa-times " aria-hidden="true"></i>
+        <i *ngIf="currentStep == 4" class="fa fa-circle-o-notch fa-spin " aria-hidden="true"></i>
+        <small>Summary</small></span>
     </md-card-title >
 </md-card>
 
@@ -55,7 +70,7 @@
       <h4 [hidden]="currentStep !== 1" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Select the cloud provider for your nodes</h4>
       <h4 [hidden]="currentStep !== 2" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Select the datacenter of your cloud provider</h4>
       <h4 [hidden]="currentStep !== 3" fxFlex="50%" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Provide credentials & settings</h4>
-      <h4 [hidden]="currentStep !== 3" fxFlex="50%" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Node settings</h4>
+      <h4 [hidden]="currentStep !== 3" fxFlex="50%" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;" fxShow="false" fxShow.gt-sm="true" >Node settings</h4>
 
       <h4 [hidden]="currentStep !== 4" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Summary</h4>
     </md-card-title>
@@ -165,6 +180,7 @@
             <form [formGroup]="awsForm" novalidate >
 
               <div   fxLayout
+                     fxLayout.sm="column"
                      fxLayout.xs="column"
                      fxLayoutAlign="center"
                      fxLayoutGap="20px" >
@@ -249,6 +265,7 @@
 
             <form [formGroup]="digitalOceanForm" novalidate
                   fxLayout
+                  fxLayout.sm="column"
                   fxLayout.xs="column"
                   fxLayoutAlign="center"
                   fxLayoutGap="20px"
@@ -321,6 +338,7 @@
           <div [hidden]="selectedCloud !== 'baremetal'">
             <form [formGroup]="bareMetalForm" novalidate >
               <div   fxLayout
+                     fxLayout.sm="column"
                      fxLayout.xs="column"
                      fxLayoutAlign="center"
                      fxLayoutGap="20px">
@@ -359,6 +377,7 @@
 
             <form [formGroup]="openStackForm" novalidate >
               <div fxLayout
+                   fxLayout.sm="column"
                    fxLayout.xs="column"
                    fxLayoutAlign="center"
                    fxLayoutGap="20px">
@@ -423,10 +442,10 @@
     <div class="km-wizard-step" >
       <div class="wizard-step-body" [hidden]="currentStep !== 4">
         <div>
-          <div class="row justify-content-center">
-            <div class="justify-content-center" fxFlex="33%">
+          <div fxLayoutAlign="center" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+            <div fxFlex="33%">
               <div class="wizard-box-title">Cluster name</div>
-              <div class=" wizard-box wizard-box-color_secondary">
+              <div class=" wizard-box-summary wizard-box-color_secondary">
                 <div class="wizard-box-content justify-content-center">
                   <div class="cluster-name">
                     {{ clusterNameForm.controls.name.value }}
@@ -435,9 +454,9 @@
               </div>
             </div>
 
-            <div [hidden]="selectedCloud === 'bringyourown'" class="justify-content-center" fxFlex="33%" *ngIf="selectedCloudRegion">
+            <div [hidden]="selectedCloud === 'bringyourown'" fxFlex="33%" *ngIf="selectedCloudRegion">
               <div class="wizard-box-title">Datacenter of nodes</div>
-              <div class=" wizard-box wizard-box-color_secondary">
+              <div class=" wizard-box-summary wizard-box-color_secondary">
                 <div class="col-xs wizard-box-content justify-content-center">
                   <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
 
@@ -449,9 +468,9 @@
               </div>
             </div>
 
-            <div [hidden]="selectedCloud === 'bringyourown'" class="justify-content-center" fxFlex="33%">
+            <div [hidden]="selectedCloud === 'bringyourown'" fxFlex="33%">
               <div class="wizard-box-title" >Node count</div>
-              <div class="row justify-content-center wizard-box wizard-box-color_secondary">
+              <div class="row justify-content-center wizard-box-summary wizard-box-color_secondary">
                 <div class="row wizard-box-content">
                   <div class="col align-self-center node-count">
                     {{ getNodeCount() }}
@@ -464,9 +483,9 @@
               </div>
             </div>
 
-            <div [hidden]="selectedCloud !== 'bringyourown'" class="justify-content-center" fxFlex="33%">
+            <div [hidden]="selectedCloud !== 'bringyourown'" fxFlex="33%">
               <div class="wizard-box-title">Datacenter of nodes</div>
-              <div class="col-sm wizard-box wizard-box-color_secondary">
+              <div class="col-sm wizard-box-summary wizard-box-color_secondary">
                 <div class="col-xs wizard-box-content justify-content-center">
                   <img class="cloud-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloud}}">
                 </div>
