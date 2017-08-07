@@ -170,11 +170,14 @@ $wizard-box-content-cloud-margin-top: 50px;
   }
 }
 
+.wizard-box-provider {
+  background: #fff;
+  border: 1px solid #E3E8EC;
+  cursor: pointer;
+  min-height: 198px;
+}
+
 .wizard-box {
-  max-width: $wizard-box-size;
-  max-height: $wizard-box-size;
-  min-height: $wizard-box-size;
-  width: $wizard-box-size;
   margin: 15px auto;
   /*border-radius: 10px 10px 10px 10px;
   -moz-border-radius: 10px 10px 10px 10px;
@@ -183,43 +186,42 @@ $wizard-box-content-cloud-margin-top: 50px;
   border: 1px solid #E3E8EC;
   cursor: pointer;
   //float: left;
-  min-height: 198px;
-  &.small {
-    max-width: $wizard-box-size / 2;
-    max-height: $wizard-box-size / 2;
-    min-height: $wizard-box-size / 2;
-    width: $wizard-box-size / 2;
-  }
 }
 
-.wizard-box[disabled] {
+.wizard-box[disabled],
+.wizard-box-provider [disabled] {
   cursor: not-allowed;
 }
 
-.wizard-box.selected {
+.wizard-box.selected,
+.wizard-box-provider.selected {
   background-color: #d5e3f5;
   cursor: default;
   border: 1px solid #03a9f4;
 }
 
-.wizard-box.selected:hover {
+.wizard-box.selected:hover,
+.wizard-box-provider.selected:hover {
   background-color: #d5e3f5;
   cursor: default;
   border: 1px solid #03a9f4;
 }
 
-.wizard-box:hover {
+.wizard-box:hover,
+.wizard-box-provider:hover {
   border: 1px solid #03a9f4;
   background-color: #d5e3f5;
 }
 
-.wizard-box:not([disabled]):not(.selected):hover {
+.wizard-box:not([disabled]):not(.selected):hover,
+.wizard-box-provider:not([disabled]):not(.selected):hover {
   background: #f7f8f9;
 }
 
 
 
-.wizard-box[disabled] > i {
+.wizard-box[disabled] > i,
+.wizard-box-provider[disabled] > i {
   color: #717171
 }
 

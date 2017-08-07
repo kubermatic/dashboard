@@ -83,11 +83,15 @@
             <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
               Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
             </div>
-            <div fxLayoutAlign="center" fxLayout>
+            <div fxLayoutAlign="center" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
               <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
-                <div *ngIf="groupedDatacenters[cloud]"  class="wizard-box"
+                <div *ngIf="groupedDatacenters[cloud]"
+                     fxFlex
+                      class="wizard-box-provider"
                      [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
                      (click)="selectCloud(cloud)">
+
+
                   <div class="wizard-box-content">
                     <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
                   </div>
@@ -104,14 +108,15 @@
     <div class="km-wizard-step" >
       <div class="wizard-step-body" [hidden]="currentStep !== 2">
 
-        <div>
+        <div >
           <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
             Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
           <div [hidden]="selectedCloud === 'bringyourown'"  >
-            <div class="wizard-box small"  *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;"
+            <div class="wizard-box"  *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;"
                  [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-                 (click)="selectCloudRegion(dc)">
-
+                 (click)="selectCloudRegion(dc)"
+                 fxFlex="100px"
+            >
               <div class="wizard-box-content justify-content-center">
                 <img class="location-flag" src="/assets/images/flags/48/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
                 <div class="location">
