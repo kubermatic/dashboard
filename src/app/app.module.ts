@@ -24,7 +24,8 @@ import {
   MdCardModule,
   MdDialogModule,
   MdSliderModule,
-  OverlayModule
+  OverlayModule,
+  MdSlideToggleModule
 } from '@angular/material';
 
 import 'hammerjs';
@@ -96,8 +97,8 @@ import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-he
     MdCardModule,
     MdDialogModule,
     MdSliderModule,
-    OverlayModule
-
+    OverlayModule,
+    MdSlideToggleModule
 
   ],
   declarations: [

@@ -1,15 +1,4 @@
-//@import "../../assets/css/ng2admin/conf/conf";
-//@import "../../assets/css/bootstrap/variables";
 
-.wizard-content {
-  /*padding: 5px;
-  max-height: calc(100vh - 210px);
-  overflow-y: auto;*/
-}
-
-.wizard-footer {
-  padding: 5px;
-}
 
 .wizard-step {
 
@@ -93,34 +82,14 @@
 
 $wizard-box-size: 200px;
 $wizard-box-content-dc-logo-size: 125px;
-$wizard-box-content-cloud-logo-size: 120px;
+$wizard-box-content-cloud-logo-size: 80px;
 $wizard-box-content-location-flag-size: 48px;
 $wizard-box-content-dc-margin-top: 0px;
 $wizard-box-content-cloud-margin-top: 50px;
 
-.wizard-box-text {
-  color: #000;
-  font-weight: 400;
-  font-size: 14px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  a {
-    color: #0288d1;
-  }
-}
 
-.wizard-box-title {
-  @extend .wizard-box-text;
-  text-align: center;
-}
 
-.wizard-box-text-primary {
-  color: #000;
-  font-weight: 300;
-  font-size: 16px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
+
 
 .wizard-box-content {
   text-align: center;
@@ -134,11 +103,7 @@ $wizard-box-content-cloud-margin-top: 50px;
     margin-bottom: 10px;
   }
 
-  img.cloud-logo {
-    width: $wizard-box-content-cloud-logo-size;
-    margin-top: $wizard-box-content-cloud-margin-top;
-    margin-bottom: 15px;
-  }
+
 
   div.name {
     font-weight: 300;
@@ -174,7 +139,66 @@ $wizard-box-content-cloud-margin-top: 50px;
   }
 }
 
-.wizard-box-provider, .wizard-box-summary {
+
+
+
+
+// New Styling Create Cluster
+
+
+.mat-card {
+
+  .mat-card-header {
+    padding: 0;
+    margin-bottom: 10px;
+  }
+
+  .mat-card-header-text {
+    margin: 0;
+  }
+  .mat-card-title {
+    margin: 0;
+    h4 {
+      font-weight: 400;
+      margin: 10px 0;
+      font-size: 18px;
+      color: #444D58;
+    }
+  }
+
+  .mat-card-content {
+    form {
+      padding-top: 10px;
+    }
+    p {
+      color: #444D58;
+      margin: 0 8px 5px;
+    }
+
+
+  }
+}
+
+
+
+
+
+.wizard-box-provider {
+  margin-top: 10px;
+}
+
+.wizard-box-provider {
+  background: #fff;
+  border: 1px solid #E3E8EC;
+  cursor: pointer;
+  min-height: 140px;
+}
+.wizard-box-title {
+  text-align: center;
+  padding-bottom: 5px;
+}
+
+ .wizard-box-summary {
   background: #fff;
   border: 1px solid #E3E8EC;
   cursor: pointer;
@@ -241,7 +265,26 @@ $wizard-box-content-cloud-margin-top: 50px;
 
 
     i {
-      color: #ff;
+      color: #fff;
     }
   }
 }
+
+// img provider
+img.cloud-logo {
+  width: $wizard-box-content-cloud-logo-size ;
+  margin-bottom: 15px;
+}
+
+
+// create cluster form fields
+
+
+/deep/ .mat-input-wrapper {
+    margin: 5px 0 0 0;
+}
+
+.mat-select-container {
+  padding-top: 15px;
+}
+
