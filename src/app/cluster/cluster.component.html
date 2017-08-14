@@ -1,9 +1,15 @@
 <ng-container *ngIf="cluster">
   <div fxLayout>
-    <h2 fxFlex="70%">{{cluster.spec.humanReadableName}}</h2>
-    <div fxFlex="30%" align="right" style="margin-top: 25px;">
-      <button md-button (click)="addNode()" md-raised-button [disabled]="cluster.status.phase != 'Running'">Add Node</button>
-      <button md-button (click)="deleteClusterDialog()" md-raised-button >Delete Cluster</button>
+    <h2 fxFlex="50%">{{cluster.spec.humanReadableName}}</h2>
+    <div fxFlex="50%" align="right" style="margin-top: 25px;">
+      <button md-raised-button color="primary" (click)="addNode()" md-raised-button [disabled]="cluster.status.phase != 'Running'">
+        <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
+        Add Node
+      </button>
+      <button md-button (click)="deleteClusterDialog()" md-raised-button >
+        <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px;margin-top: -4px; color: #0288d1;" color="primary"></i>
+        Delete Cluster
+      </button>
     </div>
   </div>
 
@@ -33,7 +39,7 @@
     <md-card-header class="km-card-list-header" fxLayout>
       <md-card-title fxFlex="40%">Provider</md-card-title>
       <md-card-title fxFlex="30%">Node Region</md-card-title>
-      <md-card-title fxFlex="30%">shhKeys</md-card-title>
+      <md-card-title fxFlex="30%">sshKeys</md-card-title>
     </md-card-header>
     <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="40%">

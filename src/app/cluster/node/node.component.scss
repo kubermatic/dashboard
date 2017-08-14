@@ -16,11 +16,17 @@ button {
 }
 
 .health-state {
-  i {
-    color: red;
+  i.red {
+    color: #ff5454;
   }
-
   i.green {
-    color: green;
+    color: #79c447;
   }
+}
+
+.km-delete-node {
+  float: right;
+  color: #0288d1;
+  border:1px solid #0288d1;
+  border-radius: 0;
 }

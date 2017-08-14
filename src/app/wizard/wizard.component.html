@@ -1,469 +1,587 @@
-<div fxLayout>
-  <div fxFlex>
-    <h2>Create a Kubernetes Cluster</h2>
-  </div>
-</div>
 
-<md-card style="margin-bottom: 20px;" class="km-card-progress-bar" fxLayout>
-    <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
+
+<md-card style="margin-bottom: 20px;" class="km-card-progress-bar" fxLayout fxLayoutGap="25px" style="background-color: #0288d1;"   >
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 0, 'done': currentStep > 0, 'tbd': currentStep < 0}">
       <span *ngIf="currentStep > 0" (click)="gotoStep(0)" [style.cursor]="'pointer'">
         <i class="fa fa-check" aria-hidden="true"></i>
-        <small>Name your Kubernetes cluster</small>
+        <small>Cluster Name</small>
       </span>
-      <span *ngIf="currentStep <= 0" class="">1. <small>Name your Kubernetes cluster</small></span>
+      <span *ngIf="currentStep <= 0" >
+        <i *ngIf="currentStep == 0" class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>
+
+        <small>Cluster Name</small></span>
     </md-card-title>
-    <md-card-title fxFlex="25%" class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 1, 'done': currentStep > 1, 'tbd': currentStep < 1}">
       <span *ngIf="currentStep > 1" [style.cursor]="'pointer'" (click)="gotoStep(1)">
         <i class="fa fa-check" aria-hidden="true"></i>
-        <small>Select the cloud provider for your nodes</small>
+        <small>Provider</small>
       </span>
-      <span *ngIf="currentStep <= 1" class="">2. <small>Select the cloud provider for your nodes</small></span>
+      <span *ngIf="currentStep <= 1" class="">
+        <i *ngIf="currentStep < 1" class="fa fa-times " aria-hidden="true"></i>
+        <i *ngIf="currentStep == 1" class="fa fa-circle-o-notch fa-spin " aria-hidden="true"></i>
+        <small>Provider</small></span>
     </md-card-title>
-    <md-card-title fxFlex="25%" class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 2, 'done': currentStep > 2, 'tbd': currentStep < 2}">
       <span *ngIf="currentStep > 2" [style.cursor]="'pointer'" (click)="gotoStep(2)">
         <i class="fa fa-check" aria-hidden="true"></i>
-        <small>Select the datacenter of your cloud provider</small>
+        <small>Datacenter</small>
       </span>
-      <span *ngIf="currentStep <= 2" class="">3. <small>Select the datacenter of your cloud provider</small></span>
+      <span *ngIf="currentStep <= 2" class="">
+        <i *ngIf="currentStep < 2" class="fa fa-times " aria-hidden="true"></i>
+        <i *ngIf="currentStep == 2" class="fa fa-circle-o-notch fa-spin " aria-hidden="true"></i>
+        <small>Datacenter</small></span>
     </md-card-title>
-    <md-card-title fxFlex="20%" class="wizard-step" [ngClass]="{'active': currentStep === 3, 'done': currentStep > 3, 'tbd': currentStep < 3}">
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 3, 'done': currentStep > 3, 'tbd': currentStep < 3}">
       <span *ngIf="currentStep > 3" [style.cursor]="'pointer'" (click)="gotoStep(3)">
         <i class="fa fa-check" aria-hidden="true" ></i>
-        <small>Provide credentials & Settings</small>
+        <small>Settings</small>
       </span>
-      <span *ngIf="currentStep <= 3" class="">4. <small>Provide credentials & Settings</small></span>
+      <span *ngIf="currentStep <= 3" class="">
+        <i *ngIf="currentStep < 3" class="fa fa-times " aria-hidden="true"></i>
+        <i *ngIf="currentStep == 3" class="fa fa-circle-o-notch fa-spin " aria-hidden="true"></i>
+        <small>Settings</small></span>
     </md-card-title>
-    <md-card-title fxFlex="10%" class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
+    <md-card-title fxFlex class="wizard-step" [ngClass]="{'active': currentStep === 4, 'done': currentStep > 4, 'tbd': currentStep < 4}">
       <span *ngIf="currentStep > 4"  [style.cursor]="'pointer'" (click)="gotoStep(4)">
         <i class="fa fa-check" aria-hidden="true"></i>
         <small>Summary</small>
       </span>
-      <span *ngIf="currentStep <= 4" class="">5. <small>Summary</small></span>
+      <span *ngIf="currentStep <= 4" class="">
+        <i *ngIf="currentStep < 4" class="fa fa-times " aria-hidden="true"></i>
+        <i *ngIf="currentStep == 4" class="fa fa-circle-o-notch fa-spin " aria-hidden="true"></i>
+        <small>Summary</small></span>
     </md-card-title >
 </md-card>
 
 
+<!-- Start Cluster Name: Step 1 -->
+<ng-container *ngIf="currentStep == 0">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <h4>Name your Kubernetes cluster</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</p>
+      <form [formGroup]="clusterNameForm" novalidate fxLayout="column">
+        <md-input-container fxFlex [ngClass]="{'has-danger': !clusterNameForm.controls.name.valid, 'has-success': clusterNameForm.controls.name.valid}">
+          <input id="name" mdInput formControlName="name" type="text" placeholder="Name" title="name">
+        </md-input-container>
+        <div fxFlex>
+        <button type="button" md-raised-button (click)="refreshName()">Generate name</button>
+        </div>
+      </form>
+    </md-card-content>
+  </md-card>
+</ng-container>
+<!-- Ende Cluster Name: Step 1 -->
+
+<!-- Start Select Provider: Step 2 -->
+<ng-container *ngIf="currentStep == 1">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <h4>Select the cloud provider for your nodes</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+        <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+          Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
+        </p>
+
+        <div fxLayoutAlign="center" fxLayout="row"  fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+          <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
+            <div *ngIf="groupedDatacenters[cloud]"
+                 fxFlex="150px"
+                 fxLayoutAlign="center center"
+                 class="wizard-box-provider"
+                 [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
+                 (click)="selectCloud(cloud)">
+              <div class="wizard-box-content">
+                <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+    </md-card-content>
+  </md-card>
+</ng-container>
+<!-- Ende Select Provider: Step 2 -->
 
 
-<md-card class="km-card-list" style="margin-bottom: 50px;">
+<!-- Start Select Datacenter: Step 3 Default -->
+<ng-container *ngIf="currentStep == 2 && selectedCloud !== 'bringyourown'">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <h4>Select the datacenter of your cloud provider</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+        <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+          Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</p>
+        <div>
+          <div class="wizard-box"  *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;"
+               [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
+               (click)="selectCloudRegion(dc)"
+               fxFlex="100px"
+          >
+            <div class="wizard-box-content justify-content-center">
+              <img class="location-flag" src="/assets/images/flags/48/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
+              <div class="location">
+                {{dc.spec.location}}
+              </div>
+            </div>
+          </div>
+        </div>
+    </md-card-content>
+  </md-card>
+</ng-container>
+<!-- End Select Datacenter: Step 3 Default -->
 
-  <!-- TODO: Card header headline -->
+<!-- Start Select Datacenter: Step 3 Bring Your Own -->
+<ng-container *ngIf="currentStep == 2 && selectedCloud == 'bringyourown'">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <h4>Select the datacenter of your cloud provider</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+        <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
+          Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</p>
+        <div>
+          <p>
+            You <i>bring your own</i> nodes, how you like, whereever you like. You are on your own, but
+            you have full flexibility. Install the nodes on any cloud provider of your choice or in your
+            own datacenter or on bare-metal.
+          </p>
+          <p>
+            Only requirement for now: your provider has to support Ubuntu 16.04 and a private network.
+          </p>
+          <p>
+            Instructions will be provided in the cluster details.
+          </p>
+          <div class="wizard-box-text-primary">
+            <label style="cursor: pointer;"><input type="checkbox" value="" [(ngModel)]="acceptBringYourOwn">Fantastic, this is exactly what I want.</label>
+          </div>
+       </div>
+    </md-card-content>
+  </md-card>
+</ng-container>
+<!-- End Select Datacenter: Step 3 Bring Your Own -->
 
-  <md-card-header class="km-card-list-header">
-    <md-card-title style="font-size: 18px; margin-bottom: 0;">
-      <h4 [hidden]="currentStep !== 0" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Name your Kubernetes cluster</h4>
-      <h4 [hidden]="currentStep !== 1" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Select the cloud provider for your nodes</h4>
-      <h4 [hidden]="currentStep !== 2" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Select the datacenter of your cloud provider</h4>
-      <h4 [hidden]="currentStep !== 3" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Provide credentials & Settings</h4>
-      <h4 [hidden]="currentStep !== 4" style="margin: 0; font-size: 18px; font-weight: 300;letter-spacing: 0.04em;">Summary</h4>
-    </md-card-title>
-  </md-card-header>
 
-  <!-- TODO:  Create Cluster -->
-  <md-card-content class="wizard-content">
-    <div class="km-wizard-step" >
-      <div class="wizard-step-body" [hidden]="currentStep !== 0">
-        <form [formGroup]="clusterNameForm" novalidate>
-          <div class="wizard-box-text form-text">This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</div>
-          <md-input-container class="km-ssh-key-input" style="width: 350px;" [ngClass]="{'has-danger': !clusterNameForm.controls.name.valid, 'has-success': clusterNameForm.controls.name.valid}">
-            <input id="name" mdInput formControlName="name" type="text" placeholder="Name" title="name">
+<!-- Start Provider Settings: Step 4 Amazon Weg Service -->
+<ng-container *ngIf="currentStep == 3 && selectedCloud == 'aws'">
+  <form [formGroup]="awsForm" novalidate >
+
+    <div   fxLayout="row"
+           fxLayout.md="column"
+           fxLayout.sm="column"
+           fxLayout.xs="column"
+           fxLayoutGap="20px" >
+
+  <md-card fxFlex>
+    <md-card-header>
+      <md-card-title>
+        <h4>
+          Provide credentials
+          <md-slide-toggle style="float: right;" formControlName="aws_cas">Extend Provider settings</md-slide-toggle>
+        </h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content fxLayout="column">
+      <p>
+        We need a AWS Access Key and Secret Access Key <b>with write access</b>.
+        You can create one
+        <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+      </p>
+      <md-input-container fxFlex [ngClass]="{'has-danger': !awsForm.controls.access_key_id.valid && awsForm.controls.access_key_id.touched, 'has-success': awsForm.controls.access_key_id.valid}">
+        <input id="access_key_id" mdInput formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
+        <small class="form-text text-danger" [hidden]="awsForm.controls.access_key_id.valid || !awsForm.controls.access_key_id.touched">Access Key ID must be between 16 and 32 characters long.</small>
+      </md-input-container>
+      <md-input-container fxFlex  [ngClass]="{'has-danger': !awsForm.controls.secret_access_key.valid && awsForm.controls.secret_access_key.touched, 'has-success': awsForm.controls.secret_access_key.valid}">
+        <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
+        <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
+      </md-input-container>
+      <div fxFlex class="mat-select-container">
+        <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+          <div *ngSwitchCase="true" [ngClass]="{'has-danger': !awsForm.controls.ssh_key.valid && awsForm.controls.ssh_key.touched, 'has-success': awsForm.controls.ssh_key.valid}">
+            <md-select fxFlex placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+              <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
+                {{key.name + ' - ' + key.fingerprint}}
+              </md-option>
+            </md-select>
+          </div>
+          <div *ngSwitchCase="false">
+            <p>You have not added any SSH keys. Please add one first.</p>
+            <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+          </div>
+        </div>
+          <small>In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+          to provide kubectl logs, port-forward and exec functionality.
+        </small>
+        <br>
+        <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
+      </div>
+      <div fxFlex fxHide class="mat-select-container">
+        <md-checkbox name="coreOsAutoUpdate" id="coreOsAutoUpdate" [checked]="awsForm.controls.auto_update" formControlName="auto_update">Update CoreOS automatically</md-checkbox>
+      </div>
+      <md-input-container fxFlex *ngIf="awsForm.controls['aws_cas'].value">
+        <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
+               ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
+      </md-input-container>
+      <md-input-container fxFlex *ngIf="awsForm.controls['aws_cas'].value">
+        <input type="text" mdInput id="subnet_id" name="subnet_id" formControlName="subnet_id"
+               ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
+      </md-input-container>
+      <div style="clear: both"></div>
+    </md-card-content>
+  </md-card>
+  <md-card  fxFlex>
+    <md-card-header>
+      <md-card-title>
+        <h4>
+          Node settings
+          <md-slide-toggle style="float: right;" formControlName="aws_nas">Extend Node settings</md-slide-toggle>
+        </h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content fxLayout="column">
+        <md-input-container fxFlex [ngClass]="{'has-danger': !awsForm.controls.node_count.valid && awsForm.controls.node_count.touched, 'has-success': awsForm.controls.node_count.valid && awsForm.controls.node_count.touched}">
+          <input id="node_count" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+        </md-input-container>
+        <md-input-container fxFlex>
+          <input id="disk_size" mdInput formControlName="disk_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="disk_size">
+        </md-input-container>
+        <div fxFlex class="mat-select-container" >
+          <md-select fxFlex placeholder="Node Size:" name="nodeSize" formControlName="node_size">
+            <md-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</md-option>
+            <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
+              {{size}}
+            </md-option>
+          </md-select>
+        </div>
+      <br>
+        <md-input-container fxFlex *ngIf="awsForm.controls['aws_nas'].value" >
+          <input id="container_linux_version" mdInput formControlName="container_linux_version" type="text" placeholder="Set CoreOS Version manually (optional):" title="container_linux_version">
+          <small>Show stable <a href="https://aws.amazon.com/marketplace/pp/B01H62FDJM?qid=1490197183896&sr=0-1&ref_=srh_res_product_title#" target="_blank">CoreOS Versions</a> </small>
+        </md-input-container>
+
+    </md-card-content>
+  </md-card>
+    </div>
+  </form>
+</ng-container>
+<!-- End Provider Settings: Step 4 Amazon Weg Service -->
+
+<!-- Start Provider Settings: Step 4 Digital Ocean -->
+<ng-container *ngIf="currentStep == 3 && selectedCloud == 'digitalocean'">
+  <form [formGroup]="digitalOceanForm" novalidate >
+    <div   fxLayout="row"
+           fxLayout.md="column"
+           fxLayout.sm="column"
+           fxLayout.xs="column"
+           fxLayoutGap="20px" >
+      <md-card fxFlex>
+        <md-card-header>
+          <md-card-title>
+            <h4>Provide credentials & settings</h4>
+          </md-card-title>
+        </md-card-header>
+        <md-card-content fxLayout="column">
+          <p fxFlex>
+            We need a DigitalOcean Personal Access Token <b>with write access</b>.
+            You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
+          </p>
+          <md-input-container fxFlex [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
+            <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="API Token:" title="access_token" (change)="changeDoKey()">
+            <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
           </md-input-container>
-          <button type="button" md-raised-button style="background-color: rgba(0, 0, 0, 0.05); color: rgba(0, 0, 0, 0.50);" (click)="refreshName()">Generate name</button>
+          <div fxFlex class="mat-select-content">
+            <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+              <div *ngSwitchCase="true" [ngClass]="{'has-danger': !digitalOceanForm.controls.ssh_key.valid && digitalOceanForm.controls.ssh_key.touched, 'has-success': digitalOceanForm.controls.ssh_key.valid}">
+                <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+                  <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
+                    {{key.name + ' - ' + key.fingerprint}}
+                  </md-option>
+                </md-select>
+              </div>
+              <div *ngSwitchCase="false">
+                <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
+                <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+              </div>
+            </div>
+            <small>In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+              to provide kubectl logs, port-forward and exec functionality</small>.
+            <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
+          </div>
+        </md-card-content>
+      </md-card>
+      <md-card fxFlex>
+        <md-card-header>
+          <md-card-title>
+            <h4>Node settings</h4>
+          </md-card-title>
+        </md-card-header>
+        <md-card-content fxLayout="column">
+          <md-input-container fxFlex [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
+            <input id="node_count_do" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+          </md-input-container>
+          <div fxFlex class="mat-select-content">
+            <md-select fxFlex placeholder="Node Size:" name="node_size" formControlName="node_size">
+              <md-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</md-option>
+              <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
+                {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+              </md-option>
+            </md-select>
+          </div>
+        </md-card-content>
+      </md-card>
+    </div>
+  </form>
+</ng-container>
+<!-- End Provider Settings: Step 4 Digital Ocean -->
+
+<!-- Start Provider Settings: Step 4 Bring Your Own -->
+<ng-container *ngIf="currentStep == 3 && selectedCloud == 'bringyourown'">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <h4>Provide credentials & settings</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <div [hidden]="selectedCloud !== 'bringyourown'">
+        <p>
+          You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?<br>
+          <br>
+          For non-interactive installation of the kubermatic debian package, you have to tell us about the
+          private network interface of your nodes. It will be used for the
+          <a href="https://github.com/coreos/flannel">Flannel</a> network traffic.
+        </p>
+
+        <form [formGroup]="bringYourOwnForm" novalidate>
+          <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
+            <label for="pif" class="form-text text-muted">Private network interface:</label>
+            <input id="pif" formControlName="pif" type="text" class="form-control">
+            <small class="text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
+          </div>
         </form>
       </div>
-    </div>
-    <!-- TODO:  Select Provider -->
-    <md-card-content class="wizard-content">
-      <div class="km-wizard-step">
-        <div class="wizard-step-body" [hidden]="currentStep !== 1">
 
-          <div>
-            <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-              Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
-            </div>
-            <div fxLayoutAlign="center" fxLayout>
-              <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
-                <div *ngIf="groupedDatacenters[cloud]"  class="wizard-box"
-                     [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-                     (click)="selectCloud(cloud)">
-                  <div class="wizard-box-content">
-                    <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
-                  </div>
-                </div>
-              </ng-container>
-            </div>
-          </div>
-        </div>
-      </div>
     </md-card-content>
+  </md-card>
+</ng-container>
+<!-- End Provider Settings: Step 4 Bring Your Own -->
+
+<!-- Start Provider Settings: Step 4 Bare Metal -->
+<ng-container *ngIf="currentStep == 3 && selectedCloud == 'baremetal'">
+
+  <form [formGroup]="bareMetalForm" novalidate >
+    <div   fxLayout
+           fxLayout.sm="column"
+           fxLayout.xs="column"
+           fxLayoutAlign="center"
+           fxLayoutGap="20px">
+      <md-card fxFlex="50%">
+        <md-card-header>
+          <md-card-title>
+            <h4>Provide credentials & settings</h4>
+          </md-card-title>
+        </md-card-header>
+        <md-card-content fxLayout="column">
+          <div fxFlex class="mat-select-container" [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+            <div *ngSwitchCase="true" [ngClass]="{'has-danger': !bareMetalForm.controls.ssh_key.valid && bareMetalForm.controls.ssh_key.touched, 'has-success': bareMetalForm.controls.ssh_key.valid}">
+              <md-select fxFlex placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+                <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
+                  {{key.name + ' - ' + key.fingerprint}}
+                </md-option>
+              </md-select>
+            </div>
+            <div *ngSwitchCase="false">
+              <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
+              <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+            </div>
+          </div>
+          <small fxFlex>In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+            to provide kubectl logs, port-forward and exec functionality.
+          </small>
+        </md-card-content>
+      </md-card>
+      <md-card fxFlex="50%">
+        <md-card-header>
+          <md-card-title>
+            <h4>Node settings</h4>
+          </md-card-title>
+        </md-card-header>
+        <md-card-content>
+          <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched, 'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
+            <input id="node_count_bareMetalForm" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+          </md-input-container>
+        </md-card-content>
+      </md-card>
+    </div>
+  </form>
+</ng-container>
+<!-- End Provider Settings: Step 4 Bare Metal -->
+
+<!-- Start Provider Settings: Step 4 Open Stack -->
+<ng-container *ngIf="currentStep == 3 && selectedCloud == 'openstack'">
+  <form [formGroup]="openStackForm" novalidate >
+    <div fxLayout
+         fxLayout.sm="column"
+         fxLayout.xs="column"
+         fxLayoutAlign="center"
+         fxLayoutGap="20px">
+      <md-card fxFlex="50%">
+        <md-card-header>
+          <md-card-title>
+            <h4>Provide credentials & settings</h4>
+          </md-card-title>
+        </md-card-header>
+        <md-card-content fxLayout="column">
+          <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_project_name.valid && openStackForm.controls.os_project_name.touched, 'has-success': openStackForm.controls.os_project_name.valid}">
+            <input id="os_project_name" mdInput formControlName="os_project_name" type="text" placeholder="os_project_name:" title="os_project_name" (change)="changeOpKey()">
+            <small class="form-text text-danger" [hidden]="openStackForm.controls.os_project_name.valid || !openStackForm.controls.os_project_name.touched">os_project_name is required.</small>
+          </md-input-container>
+
+          <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_username.valid && openStackForm.controls.os_username.touched, 'has-success': openStackForm.controls.os_username.valid}">
+            <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="os_username:" title="os_username" (change)="changeOpKey()">
+            <small class="form-text text-danger" [hidden]="openStackForm.controls.os_username.valid || !openStackForm.controls.os_username.touched">os_username is required.</small>
+          </md-input-container>
+
+          <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_password.valid && openStackForm.controls.os_password.touched, 'has-success': openStackForm.controls.os_password.valid}">
+            <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="os_password:" title="os_password" (change)="changeOpKey()">
+            <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">os_password is required.</small>
+          </md-input-container>
+
+          <!-- TODO: SSHKey -->
+
+          <div fxFlex class="mat-select-container">
+            <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+              <div *ngSwitchCase="true" [ngClass]="{'has-danger': !openStackForm.controls.ssh_key.valid && openStackForm.controls.ssh_key.touched, 'has-success': openStackForm.controls.ssh_key.valid}">
+                <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
+                  <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
+                    {{key.name + ' - ' + key.fingerprint}}
+                  </md-option>
+                </md-select>
+              </div>
+              <div *ngSwitchCase="false">
+                <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
+                <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+              </div>
+            </div>
+            <small class="text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
+              to provide kubectl logs, port-forward and exec functionality</small>.
+           </div>
+
+        </md-card-content>
+      </md-card>
+      <md-card fxFlex="50%">
+        <md-card-header>
+          <md-card-title>
+            <h4>Node settings</h4>
+          </md-card-title>
+        </md-card-header>
+        <md-card-content fxLayout="column">
+          <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched, 'has-success': openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched}">
+            <input id="node_count_openStackForm" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+          </md-input-container>
+          <div fxFlex class="mat-select-container">
+            <md-select fxFlex placeholder="Node Size:" name="node_size" formControlName="node_size">
+              <md-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</md-option>
+              <md-option *ngFor="let images of nodeSize; let i = index;" [value]="images.name">
+                {{images.name}}
+              </md-option>
+            </md-select>
+          </div>
+        </md-card-content>
+      </md-card>
+    </div>
+  </form>
+</ng-container>
+<!-- End Provider Settings: Step 4 Open Stack -->
 
 
-    <!-- TODO:  Select Provider Datacenter -->
-    <div class="km-wizard-step" >
-      <div class="wizard-step-body" [hidden]="currentStep !== 2">
+<!-- Start Summary: All cluster  -->
+<ng-container *ngIf="currentStep == 4 ">
+  <md-card>
+    <md-card-header>
+      <md-card-title>
+        <h4>Summary</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
 
-        <div>
-          <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-            Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
-          <div [hidden]="selectedCloud === 'bringyourown'"  >
-            <div class="wizard-box small"  *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;"
-                 [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-                 (click)="selectCloudRegion(dc)">
-
+      <div>
+        <div fxLayoutAlign="center" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+          <div fxFlex="33%">
+            <div class="wizard-box-title">Cluster name</div>
+            <div class=" wizard-box-summary wizard-box-color_secondary">
               <div class="wizard-box-content justify-content-center">
-                <img class="location-flag" src="/assets/images/flags/48/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
+                <div class="cluster-name">
+                  {{ clusterNameForm.controls.name.value }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div [hidden]="selectedCloud === 'bringyourown'" fxFlex="33%" *ngIf="selectedCloudRegion">
+            <div class="wizard-box-title">Datacenter of nodes</div>
+            <div class=" wizard-box-summary wizard-box-color_secondary">
+              <div class="col-xs wizard-box-content justify-content-center">
+                <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
                 <div class="location">
-                  {{dc.spec.location}}
+                  {{ selectedCloudRegion.spec.location }}
+                </div>
+                <img class="location-flag" src="/assets/images/flags/48/{{selectedCloudRegion.spec.country}}.png" alt="{{selectedCloudRegion.spec.country}}" />
+              </div>
+            </div>
+          </div>
+
+          <div [hidden]="selectedCloud === 'bringyourown'" fxFlex="33%">
+            <div class="wizard-box-title" >Node count</div>
+            <div class="row justify-content-center wizard-box-summary wizard-box-color_secondary">
+              <div class="row wizard-box-content">
+                <div class="col align-self-center node-count">
+                  {{ getNodeCount() }}
+                </div>
+                <div class="w-100"></div>
+                <div class="col align-self-center name">
+                  {{ getNodeSize() }}
                 </div>
               </div>
             </div>
           </div>
 
-          <div [hidden]="selectedCloud !== 'bringyourown'">
-            <div class="wizard-box-text">
-              You <i>bring your own</i> nodes, how you like, whereever you like. You are on your own, but
-              you have full flexibility. Install the nodes on any cloud provider of your choice or in your
-              own datacenter or on bare-metal.
-            </div>
-            <div class="wizard-box-text">
-              Only requirement for now: your provider has to support Ubuntu 16.04 and a private network.
-            </div>
-            <div class="wizard-box-text">
-              Instructions will be provided in the cluster details.
-            </div>
-            <div class="wizard-box-text-primary">
-              <label style="cursor: pointer;"><input type="checkbox" value="" [(ngModel)]="acceptBringYourOwn">Fantastic, this is exactly what I want.</label>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- TODO: Add credentials -->
-    <div class="km-wizard-step">
-      <div class="wizard-step-body" [hidden]="currentStep !== 3">
-        <div>
-          <div [hidden]="selectedCloud !== 'aws'">
-            <div class="wizard-box-text">
-              We need a AWS Access Key and Secret Access Key <b>with write access</b>.
-              You can create one
-              <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
-              <br>
-              Moreover, select at least one Authorized SSH Key from your AWS account.
-              You can add more <a target="_new" href="https://console.aws.amazon.com/ec2/v2/home?region={{selectedCloudRegion}}#KeyPairs:sort=keyName">here</a>.
-            </div>
-
-            <form [formGroup]="awsForm" novalidate >
-              <div>
-                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !awsForm.controls.access_key_id.valid && awsForm.controls.access_key_id.touched, 'has-success': awsForm.controls.access_key_id.valid}">
-                  <input id="access_key_id" mdInput formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
-                  <small class="form-text text-danger" [hidden]="awsForm.controls.access_key_id.valid || !awsForm.controls.access_key_id.touched">Access Key ID must be between 16 and 32 characters long.</small>
-                </md-input-container>
-
-                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !awsForm.controls.secret_access_key.valid && awsForm.controls.secret_access_key.touched, 'has-success': awsForm.controls.secret_access_key.valid}">
-                  <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
-                  <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
-                </md-input-container>
-                 <div style="width: 100%; margin-top: 10px;">
-                    <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                      <div *ngSwitchCase="true" [ngClass]="{'has-danger': !awsForm.controls.ssh_key.valid && awsForm.controls.ssh_key.touched, 'has-success': awsForm.controls.ssh_key.valid}">
-                        <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                          <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                            {{key.name + ' - ' + key.fingerprint}}
-                          </md-option>
-                        </md-select>
-                      </div>
-                      <div *ngSwitchCase="false">
-                        <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                        <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                      </div>
-                     </div>
-
-                    <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                      to provide kubectl logs, port-forward and exec functionality.
-                    </small>
-                <br>
-
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
-
-                <div style="margin: 15px 0;">
-                  <md-checkbox name="coreOsAutoUpdate" id="coreOsAutoUpdate" [checked]="awsForm.controls.auto_update" formControlName="auto_update">Update CoreOS automatically</md-checkbox>
-
-                </div>
-                <md-input-container style="width: 100%;">
-                  <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
-                         ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
-                </md-input-container>
-                <md-input-container style="width: 100%;">
-                  <input type="text" mdInput id="subnet_id" name="subnet_id" formControlName="subnet_id"
-                         ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
-                </md-input-container>
-
-                <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !awsForm.controls.node_count.valid && awsForm.controls.node_count.touched, 'has-success': awsForm.controls.node_count.valid && awsForm.controls.node_count.touched}">
-                    <input id="node_count" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
-                </md-input-container>
-
-                <div style="margin: 21px 0 14px" [ngClass]="{'has-danger': !awsForm.controls.node_size.valid && awsForm.controls.node_size.touched,
-                 'has-success': awsForm.controls.node_size.valid && awsForm.controls.node_size.touched}">
-
-                  <md-select style="width: 100%;" placeholder="Node Size:" name="nodeSize" formControlName="node_size">
-                    <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
-                      {{size}}
-                    </md-option>
-                  </md-select>
-                </div>
-
-                <md-input-container style="width: 100%;" >
-                  <input id="disk_size" mdInput formControlName="disk_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="disk_size">
-                </md-input-container>
-
-                <md-input-container style="width: 100%; ">
-                  <input id="container_linux_version" mdInput formControlName="container_linux_version" type="text" placeholder="Set CoreOS Version manually (optional):" title="container_linux_version">
-                  <small>Show stable <a href="https://aws.amazon.com/marketplace/pp/B01H62FDJM?qid=1490197183896&sr=0-1&ref_=srh_res_product_title#" target="_blank">CoreOS Versions</a> </small>
-                </md-input-container>
-
-              </div>
-            </form>
-          </div>
-
-          <div [hidden]="selectedCloud !== 'digitalocean'">
-            <div class="col-8 wizard-box-text">
-              We need a DigitalOcean Personal Access Token <b>with write access</b>.
-              You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
-              <br>
-              Moreover, select at least one Authorized SSH Key from your DigitalOcean account.
-              You can add more <a target="_new" href="https://cloud.digitalocean.com/settings/security">here</a>.
-            </div>
-
-            <form [formGroup]="digitalOceanForm" novalidate class="col-6">
-              <md-input-container style="width: 100%" [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
-                <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="API Token:" title="access_token" (change)="changeDoKey()">
-                <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
-              </md-input-container>
-
-              <div style="width: 100%; margin-top: 10px;">
-                <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                  <div *ngSwitchCase="true" [ngClass]="{'has-danger': !digitalOceanForm.controls.ssh_key.valid && digitalOceanForm.controls.ssh_key.touched, 'has-success': digitalOceanForm.controls.ssh_key.valid}">
-                    <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                      <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
-                        {{key.name + ' - ' + key.fingerprint}}
-                      </md-option>
-                    </md-select>
-                  </div>
-
-                  <div *ngSwitchCase="false">
-                    <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                    <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                  </div>
-                </div>
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality</small>.
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
-
-                <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
-                  <input id="node_count_do" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
-                </md-input-container>
-
-                <md-select  style="width: 100%; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
-                  <md-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</md-option>
-                  <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
-                    {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
-                  </md-option>
-                </md-select>
-              </form>
-            </div>
-
-          <div [hidden]="selectedCloud !== 'bringyourown'">
-            <div class="col-8 wizard-box-text">
-              You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?<br>
-              <br>
-              For non-interactive installation of the kubermatic debian package, you have to tell us about the
-              private network interface of your nodes. It will be used for the
-              <a href="https://github.com/coreos/flannel">Flannel</a> network traffic.
-            </div>
-
-            <form [formGroup]="bringYourOwnForm" novalidate class="col-6">
-              <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
-                <label for="pif" class="form-text text-muted">Private network interface:</label>
-                <input id="pif" formControlName="pif" type="text" class="form-control">
-                <small class="form-text text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
-              </div>
-            </form>
-          </div>
-
-
-          <div [hidden]="selectedCloud !== 'baremetal'">
-            <form [formGroup]="bareMetalForm" novalidate >
-              <div>
-                <div style="width: 100%; margin-top: 10px;">
-                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !bareMetalForm.controls.ssh_key.valid && bareMetalForm.controls.ssh_key.touched, 'has-success': bareMetalForm.controls.ssh_key.valid}">
-                      <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                        <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                          {{key.name + ' - ' + key.fingerprint}}
-                        </md-option>
-                      </md-select>
-                    </div>
-                    <div *ngSwitchCase="false">
-                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                    </div>
-                  </div>
-
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality.
-                  </small>
-                  <br>
-
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
-
-                <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched, 'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
-                  <input id="node_count_bareMetalForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
-                </md-input-container>
-              </div>
-            </form>
-          </div>
-
-
-
-          <div [hidden]="selectedCloud !== 'openstack'">
-
-
-            <form [formGroup]="openStackForm" novalidate >
-              <div>
-                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_project_name.valid && openStackForm.controls.os_project_name.touched, 'has-success': openStackForm.controls.os_project_name.valid}">
-                  <input id="os_project_name" mdInput formControlName="os_project_name" type="text" placeholder="os_project_name:" title="os_project_name" (change)="changeOpKey()">
-                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_project_name.valid || !openStackForm.controls.os_project_name.touched">os_project_name is required.</small>
-                </md-input-container>
-
-                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_username.valid && openStackForm.controls.os_username.touched, 'has-success': openStackForm.controls.os_username.valid}">
-                  <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="os_username:" title="os_username" (change)="changeOpKey()">
-                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_username.valid || !openStackForm.controls.os_username.touched">os_username is required.</small>
-                </md-input-container>
-
-                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_password.valid && openStackForm.controls.os_password.touched, 'has-success': openStackForm.controls.os_password.valid}">
-                  <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="os_password:" title="os_password" (change)="changeOpKey()">
-                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">os_password is required.</small>
-                </md-input-container>
-
-                <!-- TODO: SSHKey -->
-
-                <div style="width: 100%; margin-top: 10px;">
-                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !openStackForm.controls.ssh_key.valid && openStackForm.controls.ssh_key.touched, 'has-success': openStackForm.controls.ssh_key.valid}">
-                      <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                        <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
-                          {{key.name + ' - ' + key.fingerprint}}
-                        </md-option>
-                      </md-select>
-                    </div>
-
-                    <div *ngSwitchCase="false">
-                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                    </div>
-                  </div>
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality</small>.
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
-
-                <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched, 'has-success': openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched}">
-                  <input id="node_count_openStackForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
-                </md-input-container>
-
-
-                <!--
-
-                // TODO: get Images
-
-                -->
-
-                <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
-                  <md-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</md-option>
-                  <md-option *ngFor="let images of nodeSize; let i = index;" [value]="images.name">
-                    {{images.name}}
-                  </md-option>
-                </md-select>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-      <!-- TODO: Summery --->
-    <div class="km-wizard-step" >
-      <div class="wizard-step-body" [hidden]="currentStep !== 4">
-        <div>
-          <div class="row justify-content-center">
-            <div class="justify-content-center" fxFlex="33%">
-              <div class="wizard-box-title">Cluster name</div>
-              <div class=" wizard-box wizard-box-color_secondary">
-                <div class="wizard-box-content justify-content-center">
-                  <div class="cluster-name">
-                    {{ clusterNameForm.controls.name.value }}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div [hidden]="selectedCloud === 'bringyourown'" class="justify-content-center" fxFlex="33%" *ngIf="selectedCloudRegion">
-              <div class="wizard-box-title">Datacenter of nodes</div>
-              <div class=" wizard-box wizard-box-color_secondary">
-                <div class="col-xs wizard-box-content justify-content-center">
-                  <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
-
-                  <div class="location">
-                    {{ selectedCloudRegion.spec.location }}
-                  </div>
-                  <img class="location-flag" src="/assets/images/flags/48/{{selectedCloudRegion.spec.country}}.png" alt="{{selectedCloudRegion.spec.country}}" />
-                </div>
-              </div>
-            </div>
-
-            <div [hidden]="selectedCloud === 'bringyourown'" class="justify-content-center" fxFlex="33%">
-              <div class="wizard-box-title" >Node count</div>
-              <div class="row justify-content-center wizard-box wizard-box-color_secondary">
-                <div class="row wizard-box-content">
-                  <div class="col align-self-center node-count">
-                    {{ getNodeCount() }}
-                  </div>
-                  <div class="w-100"></div>
-                  <div class="col align-self-center name">
-                    {{ getNodeSize() }}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div [hidden]="selectedCloud !== 'bringyourown'" class="justify-content-center" fxFlex="33%">
-              <div class="wizard-box-title">Datacenter of nodes</div>
-              <div class="col-sm wizard-box wizard-box-color_secondary">
-                <div class="col-xs wizard-box-content justify-content-center">
-                  <img class="cloud-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloud}}">
-                </div>
+          <div [hidden]="selectedCloud !== 'bringyourown'" fxFlex="33%">
+            <div class="wizard-box-title">Datacenter of nodes</div>
+            <div class="col-sm wizard-box-summary wizard-box-color_secondary">
+              <div class="col-xs wizard-box-content justify-content-center">
+                <img class="cloud-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloud}}">
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </md-card-content>
 
-  <md-card-footer>
-    <button type="button"md-raised-button color="primary" (click)="stepBack()" [disabled]="!canStepBack()">
+    </md-card-content>
+  </md-card>
+</ng-container>
+<!-- End Summary: All cluster -->
+
+
+<div style="margin-top: 10px;">
+  <div>
+    <button type="button" md-raised-button color="primary" (click)="stepBack()" [disabled]="!canStepBack()">
       <i class="fa fa-chevron-left" style="margin-right: 5px;" aria-hidden="true"></i>Back
     </button>
     <button type="button" md-raised-button color="primary" (click)="stepForward()" *ngIf="currentStep !== 4" [disabled]="!canStepForward()">
       Next<i class="fa fa-chevron-right" style="margin-left: 5px;" aria-hidden="true"></i>
     </button>
     <button type="button" md-raised-button color="primary" *ngIf="currentStep == 4" (click)="createClusterAndNode()">Create cluster</button>
-  </md-card-footer>
-
-</md-card>
+  </div>
+</div>

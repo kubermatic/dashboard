@@ -17,7 +17,7 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 
-import {MdDialog, MdDialogRef} from '@angular/material';
+import {MdDialog} from '@angular/material';
 import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
 
 
@@ -107,7 +107,9 @@ export class WizardComponent implements OnInit {
       subnet_id: [""],
       auto_update: [true, [<any>Validators.required]],
       disk_size: [8, [<any>Validators.required, CustomValidators.min(8), CustomValidators.max(200)]],
-      container_linux_version: ['']
+      container_linux_version: [''],
+      aws_cas: [false],
+      aws_nas: [false]
     });
 
     this.digitalOceanForm = this.formBuilder.group({

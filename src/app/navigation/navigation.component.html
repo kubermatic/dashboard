@@ -6,17 +6,16 @@
        fxLayoutGap="10px"
        >
     <div fxFlex>
+      <div style="float: left;display: inline-block;">
       <button class="sidenav-toggle mat-button" (click)="toggleSidenav()" md-button>
               <span class="mat-button-wrapper">
                 <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
-                <span>Kubermatic</span>
               </span>
         <div class="mat-button-ripple mat-ripple" md-ripple></div>
         <div class="mat-button-focus-overlay"></div>
       </button>
-      <a md-button routerLink="/wizard" routerLinkActive="active" class="mat-button"><span class="mat-button-wrapper">Create Cluster</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
-      <a md-button routerLink="/clusters" routerLinkActive="active" class="mat-button"><span class="mat-button-wrapper">Manage Clusters</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
-      <a md-button routerLink="/profile" routerLinkActive="active" class="mat-button"><span class="mat-button-wrapper">Manage sshKeys</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
+      </div>
+      <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
     </div>
 
 
@@ -57,8 +56,6 @@
       </div>-->
     </div>
   </nav>
-
-  <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
 </header>
 
 
