@@ -15,8 +15,7 @@ npmBuildNode(pipeline){
            sh("make dist")
         }
     }
-/*
-    stage('Test'){
+/* stage('Test'){
         container('node') {
            sh("make test")
         }
@@ -25,8 +24,7 @@ npmBuildNode(pipeline){
         container('node') {
            sh("make e2e")
         }
-    }
-*/
+    } */
     stage('Build go'){
         container('golang') {
             sh("cd ${goImportPath} && CGO_ENABLED=0 make build")
