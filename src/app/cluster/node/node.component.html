@@ -5,16 +5,18 @@
   </div>
 
   <div fxFlex="10%">
-    <span *ngIf="!node.status"> {{node.status.cpu}} CPU, {{node.status.memory | uppercase }}</span>
+    <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{node.status.allocatable.memory | uppercase }}</span>
   </div>
   <div fxFlex="25%">
-    <span *ngIf="!node.status">{{node.status.versions.os}}</span>
+    <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
   </div>
   <div fxFlex="15%">
-    {{node.status.addresses.public}}
+    {{node.metadata.annotations["node.k8s.io/public-ip"]}}
   </div>
   <div fxFlex="10%" class="health-state">
-      <i class="fa fa-dot-circle-o" [class.green]="node.status.condition.healthy"></i>
+    <!--TODO: FIX-->
+    <!--{{node.status.isHealthy()}}-->
+      <i class="fa fa-dot-circle-o"></i>
   </div>
   <div fxFlex="10%">
     <button md-button (click)="deleteNodeDialog()" md-raised-button >Delete Node</button>
