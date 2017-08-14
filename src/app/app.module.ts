@@ -132,7 +132,6 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     MdButtonModule,
     MdIconModule,
     MdInputModule,

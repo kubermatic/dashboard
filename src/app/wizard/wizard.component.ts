@@ -113,7 +113,7 @@ export class WizardComponent implements OnInit {
       node_count: [3, [<any>Validators.required, Validators.min(1)]],
       node_size: ["", [<any>Validators.required]],
       root_size: [20, [<any>Validators.required, CustomValidators.min(8), CustomValidators.max(200)]],
-      ami: ["", [<any>Validators.required]],
+      ami: [""],
     });
 
     this.digitalOceanForm = this.formBuilder.group({
