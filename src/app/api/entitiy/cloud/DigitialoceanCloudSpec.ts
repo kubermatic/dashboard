@@ -1,9 +1,7 @@
-export class DigitialoceanCloudSpec {
+export class DigitaloceanCloudSpec {
   token: string;
-  sshKeys: string[];
 
-  constructor(token: string, sshKeys: string[]) {
+  constructor(token: string) {
     this.token = token;
-    this.sshKeys = sshKeys;
   }
 }

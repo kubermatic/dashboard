@@ -6,13 +6,12 @@ import {MaterialModule} from '@angular/material';
 import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
 import { ClusterComponent } from './cluster.component';
 import { NodeComponent } from "./node/node.component";
-import {AddNodeComponent} from "./add-node/add-node.component";
-import {NodeDeleteConfirmationComponent} from "./node-delete-confirmation/node-delete-confirmation.component";
 import {HttpModule} from "@angular/http";
 import {Auth} from "../auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";
+import {AddNodeComponent} from "../forms/add-node/add-node.component";
 
 describe('ClusterComponent', () => {
   let component: ClusterComponent;
@@ -32,7 +31,6 @@ describe('ClusterComponent', () => {
         ClusterComponent,
         NodeComponent,
         AddNodeComponent,
-        //NodeDeleteConfirmationComponent,
       ],
       providers: [
         FormBuilder,

@@ -1,48 +1,94 @@
 import {MetadataEntity} from "./MetadataEntity";
 import {DigitaloceanNodeSpec} from "./node/DigitialoceanNodeSpec";
-import {BringYourOwnNodeSpec} from "./node/BringYourOwnNodeSpec";
 import {AWSNodeSpec} from "./node/AWSNodeSpec";
+import {OpenstackNodeSpec} from "./node/OpenstackNodeSpec";
+import {BareMetalNodeSpec} from "./node/BareMetalNodeSpec";
+
+
+export class NodeCreateSpec {
+  digitalocean: DigitaloceanNodeSpec;
+  aws: AWSNodeSpec;
+  openstack: OpenstackNodeSpec;
+  baremetal: BareMetalNodeSpec;
+
+  constructor(digitalocean: DigitaloceanNodeSpec, aws: AWSNodeSpec, openstack: OpenstackNodeSpec, baremetal: BareMetalNodeSpec) {
+    this.digitalocean = digitalocean;
+    this.aws = aws;
+    this.openstack = openstack;
+    this.baremetal = baremetal;
+  }
+}
+
+export class Spec {
+  podCIDR: string;
+  externalID: string;
+}
+
+export class Capacity {
+  cpu: string;
+  memory: string;
+  pods: string;
+}
+
+export class Allocatable {
+  cpu: string;
+  memory: string;
+  pods: string;
+}
+
+export class Condition {
+  type: string;
+  status: string;
+  lastHeartbeatTime: Date;
+  lastTransitionTime: Date;
+  reason: string;
+  message: string;
+}
+
+export class Address {
+  type: string;
+  address: string;
+}
+
+export class KubeletEndpoint {
+  Port: number;
+}
+
+export class DaemonEndpoints {
+  kubeletEndpoint: KubeletEndpoint;
+}
+
+export class NodeInfo {
+  machineID: string;
+  systemUUID: string;
+  bootID: string;
+  kernelVersion: string;
+  osImage: string;
+  containerRuntimeVersion: string;
+  kubeletVersion: string;
+  kubeProxyVersion: string;
+  operatingSystem: string;
+  architecture: string;
+}
+
+export class Image {
+  names: string[];
+  sizeBytes: number;
+}
+
+export class Status {
+  capacity: Capacity;
+  allocatable: Allocatable;
+  conditions: Condition[];
+  addresses: Address[];
+  daemonEndpoints: DaemonEndpoints;
+  nodeInfo: NodeInfo;
+  images: Image[];
+}
 
 export class NodeEntity {
   metadata: MetadataEntity;
-  spec: NodeSpec;
-  status: NodeStatus;
-
-  constructor(metadata: MetadataEntity, spec: NodeSpec, status: NodeStatus) {
-    this.metadata = metadata;
-    this.spec = spec;
-    this.status = status;
-  }
+  spec: Spec;
+  status: Status;
 }
 
-export class NodeSpec {
-  dc: string;
-  digitalocean: DigitaloceanNodeSpec;
-  bringyourown: BringYourOwnNodeSpec;
-  aws: AWSNodeSpec;
-
-  constructor(dc: string, digitalocean: DigitaloceanNodeSpec, bringyourown: BringYourOwnNodeSpec, aws: AWSNodeSpec) {
-    this.dc = dc;
-    this.digitalocean = digitalocean;
-    this.bringyourown = bringyourown;
-    this.aws = aws;
-  }
-}
-
-export class NodeStatus {
-  hostname: string;
-  addresses: {[key: string]: string};
-  condition: any;
-  versions: any;
-  cpu: any;
-  memory: any;
-
-  constructor(hostname: string, addresses: {[p: string]: string}, condition: any, versions: any, cpu: any, memory: any) {
-    this.hostname = hostname;
-    this.addresses = addresses;
-    this.condition = condition;
-    this.versions = versions;
-    this.cpu = cpu;
-    this.memory = memory;
-  }
-}
