@@ -20,6 +20,8 @@ import {Observable, Subscription} from "rxjs";
 import {MdDialog, MdDialogRef} from '@angular/material';
 import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
 
+import {OpenStack} from 'openstack-lib';
+
 
 @Component({
   selector: "kubermatic-wizard",
@@ -55,6 +57,7 @@ export class WizardComponent implements OnInit {
   public cluster: any;
   public nodeSpec: any = {spec: {}};
   public clusterSpec: any = {};
+  public osdc: any = {};
 
 
   // Model add sshKey
@@ -80,6 +83,27 @@ export class WizardComponent implements OnInit {
 
           this.groupedDatacenters[elem.spec.provider].push(elem);
         }
+
+        this.osdc =  {
+          "metadata":
+            {
+              "name": "otc-eu-central-1a",
+              "revision": "1"
+            },
+          "spec":
+            {
+              "country": "DE",
+              "location": "DE",
+              "provider": "openstack",
+              "openstack": {
+                "availability_zone": "eu-de-01",
+                "auth_url": "https://iam.eu-de.otc.t-systems.com/v3/"
+              }
+            }
+        };
+
+        this.groupedDatacenters["openstack"] = [];
+        this.groupedDatacenters["openstack"].push(this.osdc);
       });
     });
 
@@ -107,7 +131,7 @@ export class WizardComponent implements OnInit {
       subnet_id: [""],
       auto_update: [true, [<any>Validators.required]],
       disk_size: [8, [<any>Validators.required, CustomValidators.min(8), CustomValidators.max(200)]],
-      container_linux_version: ['']
+      container_linux_version: [""]
     });
 
     this.digitalOceanForm = this.formBuilder.group({
@@ -124,9 +148,9 @@ export class WizardComponent implements OnInit {
     });
 
     this.openStackForm = this.formBuilder.group({
-      os_project_name: ["", [<any>Validators.required]],
-      os_username: ["", [<any>Validators.required]],
-      os_password: ["", [<any>Validators.required]],
+      os_project_name: ["eu-de", [<any>Validators.required]],
+      os_username: ["4864532 OTC-EU-DE-00000000001000020658", [<any>Validators.required]],
+      os_password: ["7446wrxb64lyxD0I", [<any>Validators.required]],
       ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]]
@@ -139,6 +163,10 @@ export class WizardComponent implements OnInit {
 
     if (cloud === NodeProvider.AWS) {
       this.nodeSize = NodeInstanceFlavors.AWS;
+    }
+
+    if(cloud === NodeProvider.OPENSTACK) {
+      this.nodeSize = NodeInstanceFlavors.OPENSTACK;
     }
   }
 
@@ -192,21 +220,50 @@ export class WizardComponent implements OnInit {
     return "";
   }
 
-  public changeOpKey() {
+  public getOpenStackImages(location: string, project: string, name: string, password: string, authUrl: string) {
 
-    let region = this.selectedCloudRegion.spec.location;
+    /*const openStack = new OpenStack({
+      region_name: location,
+      auth: {
+        username: name,
+        password: password,
+        project_name: project,
+        auth_url: authUrl
+      }
+    })
+    let list:any = "";
+
+     openStack.networkList().then((networks) => {
+
+       console.log(networks);
+      list = networks;
+    });
+
+    let test = openStack.getConfig()
+
+    */
+
+  }
+
+  public changeOpKey() {
+/*
+    //let region = this.selectedCloudRegion.spec["openstack"].availability_zone;
+    let region = this.selectedCloudRegion.spec.openstack.availability_zone;
     let project = this.openStackForm.controls["os_project_name"];
     let username = this.openStackForm.controls["os_username"];
     let password = this.openStackForm.controls["os_password"];
-    let url = 'http://192.168.99.99/';
+    let url = this.selectedCloudRegion.spec.openstack.auth_url;
+    //let url = this.selectedCloudRegion.spec["openstack"].auth_url;
+
 
     if (project.valid && username.valid && password.valid) {
-      let openStackImages = this.api.getOpenStackImages(region, project.value, username.value, password.value, url);
-      console.log(openStackImages);
+      let openStackImages = this.getOpenStackImages(region, project.value, username.value, password.value, url);
+
       //this.nodeSize = openStackImages;
-    }
+    }*/
   }
 
+  //Digital Ocean Node Sizes
   public changeDoKey() {
     let key = this.digitalOceanForm.controls["access_token"].value;
 
@@ -316,7 +373,6 @@ export class WizardComponent implements OnInit {
           }
         }
       }
-
     }
 
     if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
@@ -349,16 +405,16 @@ export class WizardComponent implements OnInit {
       this.nodeSpec.spec = {
         dc: region,
         baremetal: {}
-      }
+      };
     }
 
     if (this.selectedCloud === NodeProvider.OPENSTACK) {
-      os_project = this.openStackForm.controls["os_project"].value;
-      os_username = this.awsForm.controls["os_username"].value;
-      os_password = this.awsForm.controls["os_password"].value;
+      //project = this.openStackForm.controls["os_project_name"].value;
+      key = this.openStackForm.controls["os_username"].value;
+      secret = this.openStackForm.controls["os_password"].value;
 
       node_instances = this.openStackForm.controls["node_count"].value;
-      ssh_keys.push(this.openStackForm.controls["ssh_key"].value);
+      ssh_keys = this.openStackForm.controls["ssh_key"].value;
 
       this.clusterSpec.openstack = {}
 
@@ -367,7 +423,7 @@ export class WizardComponent implements OnInit {
         openstack: {
           size: this.openStackForm.controls["node_size"].value,
         }
-      }
+      };
     }
 
     const spec = new ClusterSpec(this.clusterNameForm.controls["name"].value, this.clusterSpec);

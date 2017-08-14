@@ -336,17 +336,17 @@
             <form [formGroup]="openStackForm" novalidate >
               <div>
                 <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_project_name.valid && openStackForm.controls.os_project_name.touched, 'has-success': openStackForm.controls.os_project_name.valid}">
-                  <input id="os_project_name" mdInput formControlName="os_project_name" type="text" placeholder="os_project_name:" title="os_project_name" (change)="changeOpKey()">
+                  <input id="os_project_name" mdInput formControlName="os_project_name" type="text" placeholder="Project Name:" title="os_project_name" (change)="changeOpKey()">
                   <small class="form-text text-danger" [hidden]="openStackForm.controls.os_project_name.valid || !openStackForm.controls.os_project_name.touched">os_project_name is required.</small>
                 </md-input-container>
 
                 <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_username.valid && openStackForm.controls.os_username.touched, 'has-success': openStackForm.controls.os_username.valid}">
-                  <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="os_username:" title="os_username" (change)="changeOpKey()">
+                  <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="Username:" title="os_username" (change)="changeOpKey()">
                   <small class="form-text text-danger" [hidden]="openStackForm.controls.os_username.valid || !openStackForm.controls.os_username.touched">os_username is required.</small>
                 </md-input-container>
 
                 <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_password.valid && openStackForm.controls.os_password.touched, 'has-success': openStackForm.controls.os_password.valid}">
-                  <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="os_password:" title="os_password" (change)="changeOpKey()">
+                  <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="Password:" title="os_password" (change)="changeOpKey()">
                   <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">os_password is required.</small>
                 </md-input-container>
 
@@ -377,15 +377,20 @@
                 </md-input-container>
 
 
+                <!-- TODO: Node Count -->
+                <div style="width: 100%; margin-top: 30px;" [ngClass]="{'has-danger': !openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched,
+              'has-success': openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched}">
+                  <md-slider class="cdk-focused cdk-mouse-focused" style="width: 100%" min="2" max="20" step="1" value="3" thumbLabel formControlName="node_count" id="os_node_count" placeholder="Node count:" [(ngModel)]="selectedNodeCountValue"></md-slider>
+                  <small class="form-text text-danger"  [hidden]="openStackForm.controls.node_count.valid || !openStackForm.controls.node_count.touched">Node count is invalid.</small>
+                  <p style="margin: -15px 0 20px 0; color: #0288d1;">Create {{selectedNodeCountValue}} Nodes.</p>
+                </div>
+
+
                 <!--
-
                 // TODO: get Images
-
                 -->
-
                 <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
-                  <md-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</md-option>
-                  <md-option *ngFor="let images of nodeSize; let i = index;" [value]="images.name">
+                  <md-option *ngFor="let images of nodeSize; let i = index;" [value]="images.key">
                     {{images.name}}
                   </md-option>
                 </md-select>
@@ -417,7 +422,7 @@
               <div class="wizard-box-title">Datacenter of nodes</div>
               <div class=" wizard-box wizard-box-color_secondary">
                 <div class="col-xs wizard-box-content justify-content-center">
-                  <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
+                  <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" style="max-height: 80px;" alt="{{selectedCloudRegion.spec.provider}}">
 
                   <div class="location">
                     {{ selectedCloudRegion.spec.location }}
