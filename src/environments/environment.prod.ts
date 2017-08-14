@@ -1,6 +1,5 @@
-let port = ((window.location.port != "80" && window.location.port != "443") ? ':'+window.location.port : "");
 let redirect_uri = window.location.protocol + '//' + window.location.host +'/login';
-let coreOS_auth_host = "auth.int.kubermatic.io";
+let coreOS_auth_host = "auth." + window.location.host;
 
 export const environment = {
   production: true,
