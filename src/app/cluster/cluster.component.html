@@ -30,10 +30,12 @@
 
 <ng-container *ngIf="cluster && dc">
   <md-card class="km-card-list">
-    <md-card-header class="km-card-list-header" fxLayout>
-      <md-card-title fxFlex="40%">Provider</md-card-title>
-      <md-card-title fxFlex="30%">Node Region</md-card-title>
-      <md-card-title fxFlex="30%">shhKeys</md-card-title>
+    <md-card-header class="km-card-list-header" >
+      <md-card-title fxLayout>
+        <div fxFlex="40%">Provider</div>
+        <div fxFlex="30%">Node Region</div>
+        <div fxFlex="30%">shhKeys</div>
+      </md-card-title>
     </md-card-header>
     <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="40%">
@@ -65,14 +67,16 @@
   </md-card>
 
   <md-card class="km-card-list" style="margin-bottom: 70px;">
-    <md-card-header class="km-card-list-header" fxLayout>
-      <md-card-title fxFlex="5%">#</md-card-title>
-      <md-card-title fxFlex="25%">Name</md-card-title>
-      <md-card-title fxFlex="10%">Capacity</md-card-title>
-      <md-card-title fxFlex="25%">Version</md-card-title>
-      <md-card-title fxFlex="15%">Public IP</md-card-title>
-      <md-card-title fxFlex="10%">Status</md-card-title>
-      <md-card-title fxFlex="10%"></md-card-title>
+    <md-card-header class="km-card-list-header" >
+      <md-card-title fxLayout>
+        <div fxFlex="5%">#</div>
+        <div fxFlex="25%">Name</div>
+        <div fxFlex="10%">Capacity</div>
+        <div fxFlex="25%">Version</div>
+        <div fxFlex="15%">Public IP</div>
+        <div fxFlex="10%">Status</div>
+        <div fxFlex="10%"></div>
+      </md-card-title>
     </md-card-header>
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
