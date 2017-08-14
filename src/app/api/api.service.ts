@@ -199,8 +199,5 @@ export class ApiService {
       console.log(networks);
       return networks;
     });
-
-
-
   }
 }

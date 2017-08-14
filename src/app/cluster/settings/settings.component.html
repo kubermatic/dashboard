@@ -1,0 +1,27 @@
+<div style="min-width: 400px;">
+  <md-toolbar>
+    <div class="md-toolbar">
+      <h4 class="modal-title" id="myModalLabel">Provider Settings</h4>
+    </div>
+    <button md-icon-button md-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </md-toolbar>
+
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <kubermatic-setting-form-aws [cluster]="cluster" *ngIf="dc == 'aws'"></kubermatic-setting-form-aws>
+      <kubermatic-setting-form-do [cluster]="cluster" *ngIf="dc == 'digitalocean'"></kubermatic-setting-form-do>
+      <kubermatic-setting-form-os [cluster]="cluster" *ngIf="dc == 'openstack'"></kubermatic-setting-form-os>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <button md-dialog-close md-raised-button>
+      close
+    </button>
+    <button type="submit" md-raised-button color="primary" value="submit" (click)="saveSettings()" class="btn btn-primary" [disabled]="!saveValidForm()">
+      save
+    </button>
+  </md-dialog-actions>
+</div>

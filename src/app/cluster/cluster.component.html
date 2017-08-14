@@ -2,7 +2,8 @@
   <div fxLayout>
     <h2 fxFlex="70%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="30%" align="right" style="margin-top: 25px;">
-      <button md-button (click)="addNode()" md-raised-button [disabled]="cluster.status.phase != 'Running'">Add Node</button>
+      <button md-button color="primary" (click)="addNode()" md-raised-button [disabled]="cluster.status.phase != 'Running'">Add Node</button>
+      <button md-button (click)="openSettings()" md-raised-button >Settings</button>
       <button md-button (click)="deleteClusterDialog()" md-raised-button >Delete Cluster</button>
     </div>
   </div>

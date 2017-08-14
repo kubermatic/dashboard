@@ -10,6 +10,7 @@ import {MdDialog} from '@angular/material';
 import {ClusterDeleteConfirmationComponent} from "../cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import {AddNodeComponent} from "../cluster/add-node/add-node.component"
 import {NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
+import {SettingsComponent} from "./settings/settings.component";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -33,7 +34,6 @@ export class ClusterComponent implements OnInit {
   public seedDcName: string;
 
   public nodeSizes: any = [];
-
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
@@ -94,7 +94,7 @@ export class ClusterComponent implements OnInit {
     this.dialogRef.componentInstance.clusterName = this.clusterModel.cluster;
     this.dialogRef.componentInstance.seedDcName = this.clusterModel.dc;
     this.dialogRef.componentInstance.cluster = this.cluster;
-    this.dialogRef.componentInstance.nodeSize = this.nodeSizes;
+    this.dialogRef.componentInstance.nodeSizes = this.nodeSizes;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
@@ -113,6 +113,14 @@ export class ClusterComponent implements OnInit {
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem("token");
     return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
+  }
+
+  public openSettings(): void {
+    this.dialogRef = this.dialog.open(SettingsComponent);
+    this.dialogRef.componentInstance.cluster = this.cluster.spec.cloud;
+    this.dialogRef.componentInstance.dc = this.cluster.dc.spec.provider;
+
+    this.dialogRef.afterClosed().subscribe(result => {});
   }
 }
 
