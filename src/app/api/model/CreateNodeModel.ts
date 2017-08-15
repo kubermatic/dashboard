@@ -1,10 +1,9 @@
-import {NodeSpec} from "../entitiy/NodeEntity";
+import {NodeCreateSpec} from "../entitiy/NodeEntity";
 export class CreateNodeModel {
-
   instances: number;
-  spec: NodeSpec;
+  spec: NodeCreateSpec;
 
-  constructor(instances: number, spec: NodeSpec) {
+  constructor(instances: number, spec: NodeCreateSpec) {
     this.instances = instances;
     this.spec = spec;
   }

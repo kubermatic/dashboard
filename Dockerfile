@@ -1,8 +1,8 @@
-FROM nginx
-MAINTAINER Dr. Stefan Schimanski <stefan.schimanski@gmail.com>
+FROM alpine:3.5
 
-ADD dist /usr/share/nginx/html/
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+LABEL maintainer "sebastian@loodse.com"
 
-RUN sed -i 's,access_log.*,access_log /dev/stdout main;,' /etc/nginx/nginx.conf
-RUN sed -i 's,error_log.*,error_log /dev/stderr warn;,' /etc/nginx/nginx.conf
+RUN apk add -U ca-certificates && rm -rf /var/cache/apk/*
+
+COPY ./dashboard-v2 /
+CMD ["/dashboard-v2"]

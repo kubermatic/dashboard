@@ -1,70 +1,117 @@
-import {MetadataEntity} from "./MetadataEntity";
-import {DigitialoceanCloudSpec} from "./cloud/DigitialoceanCloudSpec";
+import {DigitaloceanCloudSpec} from "./cloud/DigitialoceanCloudSpec";
 import {BringYourOwnCloudSpec} from "./cloud/BringYourOwnCloudSpec";
 import {AWSCloudSpec} from "./cloud/AWSCloudSpec";
-import {KeyCert} from "./KeyCert";
-import {DataCenterEntity} from "./DatacenterEntity";
+import {MetadataEntity} from "./MetadataEntity";
+import {OpenstackCloudSpec} from "./cloud/OpenstackCloudSpec";
+import {BareMetalCloudSpec} from "./cloud/BareMetalCloudSpec";
+import {NodeProvider} from "../model/NodeProviderConstants";
 
 export class ClusterEntity {
-  constructor(
-    public metadata: MetadataEntity,
-    public spec: ClusterSpec,
-    public address: ClusterAddress,
-    public status: ClusterStatus,
-    public dc: DataCenterEntity
-  ) {}
-}
+  metadata: MetadataEntity;
+  spec: ClusterSpec;
+  address: Address;
+  status: Status;
+  seed: string;
 
-export class ClusterSpec {
-  constructor(
-    public cloud: CloudSpec,
-    public humanReadableName: string
-  ) {}
+  constructor(metadata: MetadataEntity,
+              spec: ClusterSpec,
+              address: Address,
+              status: Status,
+              seed: string) {
+    this.metadata = metadata;
+    this.spec = spec;
+    this.address = address;
+    this.status = status;
+    this.seed = seed;
+  }
+
+  isRunning(): boolean {
+    return this.status.phase == "Running";
+  }
+
+  get provider(): string {
+    switch (true) {
+      case !!this.spec.cloud.digitalocean: {
+        return NodeProvider.DIGITALOCEAN;
+      }
+      case !!this.spec.cloud.aws: {
+        return NodeProvider.AWS;
+      }
+      case !!this.spec.cloud.bringyourown: {
+        return NodeProvider.BRINGYOUROWN;
+      }
+      case !!this.spec.cloud.openstack: {
+        return NodeProvider.OPENSTACK;
+      }
+      case !!this.spec.cloud.baremetal: {
+        return NodeProvider.BAREMETAL;
+      }
+    }
+    return ""
+  }
 }
 
 export class CloudSpec {
-  constructor(
-    public dc: string,
-    public digitalocean: DigitialoceanCloudSpec,
-    public bringyourown: BringYourOwnCloudSpec,
-    public aws: AWSCloudSpec) {}
+  dc: string;
+  digitalocean: DigitaloceanCloudSpec;
+  aws: AWSCloudSpec;
+  bringyourown: BringYourOwnCloudSpec;
+  openstack: OpenstackCloudSpec;
+  baremetal: BareMetalCloudSpec;
+
+  constructor(dc: string,
+              digitalocean: DigitaloceanCloudSpec,
+              aws: AWSCloudSpec,
+              bringyourown: BringYourOwnCloudSpec,
+              openstack: OpenstackCloudSpec,
+              baremetal: BareMetalCloudSpec,
+  ) {
+    this.dc = dc;
+    this.digitalocean = digitalocean;
+    this.bringyourown = bringyourown;
+    this.aws = aws;
+    this.openstack = openstack;
+    this.baremetal = baremetal;
+  }
+
 }
 
-export class ClusterAddress {
-  constructor(
-    public url: string,
-    public etcdURL: string,
-    public token: string,
-    public nodePort: number
-  ) {}
+export class ClusterSpec {
+  cloud: CloudSpec;
+  humanReadableName: string;
+  masterVersion: string;
+
+  constructor(cloud: CloudSpec,
+              humanReadableName: string,
+              masterVersion: string,) {
+    this.cloud = cloud;
+    this.humanReadableName = humanReadableName;
+    this.masterVersion = masterVersion;
+  }
 }
 
-export class ClusterStatus {
-  constructor(
-    public lastTransitionTime: string,
-    public apiserverSSH: string,
-    public health: ClusterHealth,
-    public rootCA: KeyCert,
-    public phase: ClusterPhase
-  ) {}
+export class Address {
+  url: string;
+  external_name: string;
+  external_port: number;
+  kubelet_token: string;
+  admin_token: string;
 }
 
-export class ClusterHealth {
-  constructor(
-    public lastTransitionTime: string,
-    public apiserver: boolean,
-    public scheduler: boolean,
-    public controller: boolean,
-    public etcd: boolean[]
-  ) {}
+export class RootCA {
+  cert: string;
 }
 
-enum ClusterPhase {
-  Unknown,
-  Pending,
-  Launching,
-  Failed,
-  Running,
-  Paused,
-  Deleting,
+export class ApiserverSshKey {
+  public_key: string;
 }
+
+export class Status {
+  lastTransitionTime: Date;
+  phase: string;
+  lastDeployedMasterVersion: string;
+  masterUpdatePhase: string;
+  rootCA: RootCA;
+  apiserver_ssh_key: ApiserverSshKey;
+}
+

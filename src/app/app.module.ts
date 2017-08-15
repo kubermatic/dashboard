@@ -38,7 +38,6 @@ import {AddSshKeyComponent} from "./profile/add-ssh-key/add-ssh-key.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.component";
 import {NodeComponent} from "./cluster/node/node.component";
-import {AddNodeComponent} from "./cluster/add-node/add-node.component";
 import {NodeDeleteConfirmationComponent} from "./cluster/node-delete-confirmation/node-delete-confirmation.component";
 
 import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
@@ -65,6 +64,12 @@ import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-form-field.component';
+import {HttpClientModule} from "@angular/common/http";
+import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.component";
+import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digitalocean-add-node.component";
+import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
+import {AddNodeComponent} from "./forms/add-node/add-node.component";
+
 
 @NgModule({
   imports: [
@@ -74,6 +79,7 @@ import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-fo
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    HttpClientModule,
     RouterModule.forRoot(appRoutes),
     CustomFormsModule,
     StoreModule.provideStore(combinedReducer),
@@ -98,8 +104,6 @@ import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-fo
     MdDialogModule,
     MdSliderModule,
     OverlayModule
-
-
   ],
   declarations: [
     KubermaticComponent,
@@ -112,7 +116,6 @@ import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-fo
     ClusterListComponent,
     ClusterItemComponent,
     NodeComponent,
-    AddNodeComponent,
     ProfileComponent,
     NotificationComponent,
     ClusterDeleteConfirmationComponent,
@@ -122,14 +125,17 @@ import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-fo
     SidenavComponent,
     AddSshKeyModalComponent,
     ClusterHealthStatusComponent,
-    SshKeyFormFieldComponent
+    SshKeyFormFieldComponent,
+    AWSAddNodeFormComponent,
+    DigitaloceanAddNodeComponent,
+    OpenstackAddNodeComponent
+
   ],
   exports: [
     RouterModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-
     MdButtonModule,
     MdIconModule,
     MdInputModule,
@@ -150,7 +156,9 @@ import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-fo
     ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
     AddSshKeyModalComponent,
-    AddNodeComponent
+    AWSAddNodeFormComponent,
+    DigitaloceanAddNodeComponent,
+    OpenstackAddNodeComponent
   ],
   providers: [
     AUTH_PROVIDERS,

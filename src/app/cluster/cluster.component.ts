@@ -7,9 +7,16 @@ import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from '@angular/material';
-import {ClusterDeleteConfirmationComponent} from "../cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
-import {AddNodeComponent} from "../cluster/add-node/add-node.component"
-import {NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
+import {ClusterDeleteConfirmationComponent} from "./cluster-delete-confirmation/cluster-delete-confirmation.component";
+import {NodeEntity} from "../api/entitiy/NodeEntity";
+import {ClusterEntity} from "../api/entitiy/ClusterEntity";
+import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
+import {AWSAddNodeFormComponent} from "../forms/add-node/aws/aws-add-node.component";
+import {DigitaloceanAddNodeComponent} from "../forms/add-node/digitalocean/digitalocean-add-node.component";
+import {OpenstackAddNodeComponent} from "../forms/add-node/openstack/openstack-add-node.component";
+import {NotificationComponent} from "../notification/notification.component";
+import {NodeProvider} from "../api/model/NodeProviderConstants";
+import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -20,99 +27,88 @@ import {NodeInstanceFlavors} from "../api/model/NodeProviderConstants";
 export class ClusterComponent implements OnInit {
 
   private restRoot: string = environment.restRoot;
-  public clusterModel: ClusterModel;
-  public nodes: any;
-  public cluster;
+
+  public nodes: NodeEntity[];
+  public cluster: ClusterEntity;
+  public dc: DataCenterEntity;
   public timer: any = Observable.timer(0,10000);
   public sub: Subscription;
-
   public dialogRef: any;
   public config: any = {};
-
   public clusterName: string;
   public seedDcName: string;
-
   public nodeSizes: any = [];
-
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
-      this.clusterModel = new ClusterModel(params["seedDcName"], params["clusterName"]);
-      this.sub = this.timer.subscribe(() => {
-        this.updateCluster();
+      this.clusterName = params["clusterName"];
+      this.seedDcName = params["seedDcName"];
 
-        if (!!this.cluster && this.cluster.status.phase == "Running") {
-          this.updateNodes();
-        }
+      this.sub = this.timer.subscribe(() => {
+        this.update();
       });
     });
-  }
-
-  public getProviderNodeSpecification() {
-    switch (this.cluster.dc.spec.provider) {
-      case 'aws' : {
-        this.nodeSizes = NodeInstanceFlavors.AWS;
-        return this.nodeSizes;
-      }
-
-      case 'digitalocean' : {
-        this.api.getDigitaloceanSizes(this.cluster.spec.cloud.digitalocean.token).subscribe(result => {
-            this.nodeSizes = result.sizes;
-            return this.nodeSizes;
-          }
-        );
-      }
-      case 'openstack' : {
-        //let openStackImages = this.api.getOpenStackImages('region', 'project', 'username', 'password', 'url');
-        //console.log(openStackImages);
-        //this.nodeSize = openStackImages;
-      }
-    }
   }
 
   ngOnDestroy(){
     this.sub.unsubscribe();
   }
 
-  updateCluster(): void {
-    this.api.getClusterWithDatacenter(this.clusterModel).subscribe(result => {
-      this.cluster = result;
-      this.getProviderNodeSpecification();
+  update(): void {
+    this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName)).subscribe(res => {
+      this.cluster = new ClusterEntity(
+        res.metadata,
+        res.spec,
+        res.address,
+        res.status,
+        res.seed,
+      );
+      this.api.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
+        this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
+      });
+      if (this.cluster.isRunning()) {
+        this.updateNodes();
+      }
     });
   }
 
   updateNodes(): void {
-    this.api.getClusterNodes(this.clusterModel).subscribe(result => {
-      this.nodes = result;
+    this.api.getClusterNodes(new ClusterModel(this.seedDcName, this.clusterName)).subscribe(nodes => {
+      this.nodes = nodes;
     });
   }
 
   public addNode(): void {
-    this.dialogRef = this.dialog.open(AddNodeComponent);
-    this.dialogRef.componentInstance.clusterName = this.clusterModel.cluster;
-    this.dialogRef.componentInstance.seedDcName = this.clusterModel.dc;
-    this.dialogRef.componentInstance.cluster = this.cluster;
-    this.dialogRef.componentInstance.nodeSize = this.nodeSizes;
+    let data = new AddNodeModalData(this.cluster, this.dc);
+    if (this.cluster.provider == NodeProvider.AWS) {
+      this.dialogRef = this.dialog.open(AWSAddNodeFormComponent, {data: data});
+    } else if (this.cluster.provider == NodeProvider.DIGITALOCEAN) {
+      this.dialogRef = this.dialog.open(DigitaloceanAddNodeComponent, {data: data});
+    } else if (this.cluster.provider == NodeProvider.OPENSTACK) {
+      this.dialogRef = this.dialog.open(OpenstackAddNodeComponent, {data: data});
+    } else {
+      NotificationComponent.error(this.store, "Error", `Add node form is missing.`);
+      return;
+    }
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
-
 
   public deleteClusterDialog(): void {
     this.dialogRef = this.dialog.open(ClusterDeleteConfirmationComponent, this.config);
 
     this.dialogRef.componentInstance.humanReadableName = this.cluster.spec.humanReadableName;
-    this.dialogRef.componentInstance.clusterName = this.clusterModel.cluster;
-    this.dialogRef.componentInstance.seedDcName = this.clusterModel.dc;
+    this.dialogRef.componentInstance.clusterName = this.clusterName;
+    this.dialogRef.componentInstance.seedDcName = this.seedDcName;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
 
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem("token");
-    return `${this.restRoot}/dc/${this.clusterModel.dc}/cluster/${this.clusterModel.cluster}/kubeconfig?token=${authorization_token}`;
+    return `${this.restRoot}/dc/${this.seedDcName}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
 }
 
