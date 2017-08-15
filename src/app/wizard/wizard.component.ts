@@ -323,7 +323,6 @@ export class WizardComponent implements OnInit {
       );
 
       node_instances = this.awsForm.controls["node_count"].value;
-      ssh_keys = this.awsForm.controls["ssh_key"].value;
     } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
       clusterSpec = new ClusterSpec(
         new CloudSpec(
@@ -345,7 +344,6 @@ export class WizardComponent implements OnInit {
         null,
       );
       node_instances = this.digitalOceanForm.controls["node_count"].value;
-      ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
     } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
       clusterSpec = new ClusterSpec(
         new CloudSpec(
@@ -367,7 +365,6 @@ export class WizardComponent implements OnInit {
         null,
       );
       node_instances = this.bareMetalForm.controls["node_count"].value;
-      ssh_keys = this.bareMetalForm.controls["ssh_key"].value;
     } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
       clusterSpec = new ClusterSpec(
         new CloudSpec(
@@ -400,12 +397,11 @@ export class WizardComponent implements OnInit {
         null,
       );
       node_instances = this.openStackForm.controls["node_count"].value;
-      ssh_keys = this.openStackForm.controls["ssh_key"].value;
     }
 
     let cluster = new CreateClusterModel(
       clusterSpec,
-      ssh_keys,
+      this.ssh_keys,
     );
 
     console.log("Create cluster mode: \n" + JSON.stringify(cluster));
