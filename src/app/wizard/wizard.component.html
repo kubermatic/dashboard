@@ -165,28 +165,9 @@
                   <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
                   <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
                 </md-input-container>
-                 <div style="width: 100%; margin-top: 10px;">
-                    <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                      <div *ngSwitchCase="true" [ngClass]="{'has-danger': !awsForm.controls.ssh_key.valid && awsForm.controls.ssh_key.touched, 'has-success': awsForm.controls.ssh_key.valid}">
-                        <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                          <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                            {{key.name + ' - ' + key.fingerprint}}
-                          </md-option>
-                        </md-select>
-                      </div>
-                      <div *ngSwitchCase="false">
-                        <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                        <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                      </div>
-                     </div>
 
-                    <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                      to provide kubectl logs, port-forward and exec functionality.
-                    </small>
-                <br>
 
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
+                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
 
                 <md-input-container style="width: 100%;">
                   <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
@@ -237,25 +218,10 @@
                 <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
               </md-input-container>
 
-              <div style="width: 100%; margin-top: 10px;">
-                <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                  <div *ngSwitchCase="true" [ngClass]="{'has-danger': !digitalOceanForm.controls.ssh_key.valid && digitalOceanForm.controls.ssh_key.touched, 'has-success': digitalOceanForm.controls.ssh_key.valid}">
-                    <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                      <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
-                        {{key.name + ' - ' + key.fingerprint}}
-                      </md-option>
-                    </md-select>
-                  </div>
-
-                  <div *ngSwitchCase="false">
-                    <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                    <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                  </div>
-                </div>
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality</small>.
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
+              <div>
+                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
+                <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
+              </div>
 
                 <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
                   <input id="node_count_do" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
@@ -291,37 +257,16 @@
           <div [hidden]="selectedCloud !== 'baremetal'">
             <form [formGroup]="bareMetalForm" novalidate >
               <div>
-                <div style="width: 100%; margin-top: 10px;">
-                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !bareMetalForm.controls.ssh_key.valid && bareMetalForm.controls.ssh_key.touched, 'has-success': bareMetalForm.controls.ssh_key.valid}">
-                      <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                        <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                          {{key.name + ' - ' + key.fingerprint}}
-                        </md-option>
-                      </md-select>
-                    </div>
-                    <div *ngSwitchCase="false">
-                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                    </div>
-                  </div>
-
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality.
-                  </small>
-                  <br>
-
+                <div>
+                  <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
-
                 <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched, 'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
                   <input id="node_count_bareMetalForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
                 </md-input-container>
               </div>
             </form>
           </div>
-
-
 
           <div [hidden]="selectedCloud !== 'openstack'">
             <form [formGroup]="openStackForm" novalidate >
@@ -363,23 +308,8 @@
 
                 <!-- TODO: SSHKey -->
 
-                <div style="width: 100%; margin-top: 10px;">
-                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !openStackForm.controls.ssh_key.valid && openStackForm.controls.ssh_key.touched, 'has-success': openStackForm.controls.ssh_key.valid}">
-                      <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                        <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
-                          {{key.name + ' - ' + key.fingerprint}}
-                        </md-option>
-                      </md-select>
-                    </div>
-
-                    <div *ngSwitchCase="false">
-                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                    </div>
-                  </div>
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality</small>.
+                <div>
+                  <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
 

@@ -63,11 +63,13 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
+import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-form-field.component';
 import {HttpClientModule} from "@angular/common/http";
 import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.component";
 import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
 import {AddNodeComponent} from "./forms/add-node/add-node.component";
+
 
 @NgModule({
   imports: [
@@ -123,9 +125,11 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
     SidenavComponent,
     AddSshKeyModalComponent,
     ClusterHealthStatusComponent,
+    SshKeyFormFieldComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent
+
   ],
   exports: [
     RouterModule,
