@@ -6,18 +6,16 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {NodeInstanceFlavors, NodeProvider} from "../api/model/NodeProviderConstants";
-
 import {CreateNodeModel} from "../api/model/CreateNodeModel";
-
 import {Router} from "@angular/router";
 import {NotificationComponent} from "../notification/notification.component";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
-
 import {MdDialog, MdDialogRef} from "@angular/material";
 import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
 import {ClusterModel} from "../api/model/ClusterModel";
+import {SshKeys} from "../api/model/SshKeysModel";
 import {AWSCloudSpec} from "../api/entitiy/cloud/AWSCloudSpec";
 import {AWSNodeSpec} from "../api/entitiy/node/AWSNodeSpec";
 import {CloudSpec, ClusterEntity, ClusterSpec} from "../api/entitiy/ClusterEntity";
@@ -28,6 +26,7 @@ import {OpenstackCloudSpec} from "../api/entitiy/cloud/OpenstackCloudSpec";
 import {OpenstackNodeSpec} from "../api/entitiy/node/OpenstackNodeSpec";
 import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
+
 
 @Component({
   selector: "kubermatic-wizard",
@@ -54,7 +53,12 @@ export class WizardComponent implements OnInit {
   public bareMetalForm: FormGroup;
   public openStackForm: FormGroup;
 
-  public sshKeys: SSHKeyEntity[] = [];
+  public sshKeysFormField: SshKeys[] = [{
+    aws :[],
+    digitalocean : [],
+    baremetal : [],
+    openstack : []
+  }];
 
   // Nodes Sizes
   public nodeSize: any[] = NodeInstanceFlavors.VOID;
@@ -64,6 +68,7 @@ export class WizardComponent implements OnInit {
 
   // Model add sshKey
   public config: any = {};
+  public ssh_keys: string[] = [];
 
   constructor(private api: ApiService,
               private nameGenerator: ClusterNameGenerator,
@@ -87,9 +92,6 @@ export class WizardComponent implements OnInit {
       });
     });
 
-    this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-    });
 
     this.clusterNameForm = this.formBuilder.group({
       name: [this.nameGenerator.generateName(),
@@ -112,19 +114,18 @@ export class WizardComponent implements OnInit {
       //Node spec
       node_count: [3, [<any>Validators.required, Validators.min(1)]],
       node_size: ["", [<any>Validators.required]],
+      root_size: [20, [Validators.required, Validators.min(10), Validators.max(16000)]],
       ami: [""],
     });
 
     this.digitalOceanForm = this.formBuilder.group({
       access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
-      ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]]
     });
 
     this.bareMetalForm = this.formBuilder.group({
-      ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]]
     });
 
@@ -158,20 +159,7 @@ export class WizardComponent implements OnInit {
     this.selectedCloudRegion = cloud;
   }
 
-  private refreshSSHKeys() {
-    this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-    });
-  }
 
-// TODO: show model
-  public addSshKeyDialog(): void {
-    var dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
-
-    dialogRef.afterClosed().subscribe(result => {
-      this.refreshSSHKeys();
-    });
-  }
 
   public getNodeCount(): string {
     if (this.selectedCloud === NodeProvider.AWS) {
@@ -249,19 +237,22 @@ export class WizardComponent implements OnInit {
           return !!this.selectedCloudRegion;
         }
       case 3:
-        if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
-          return this.bringYourOwnForm.valid;
-        } else if (this.selectedCloud === NodeProvider.AWS) {
-          return this.awsForm.valid;
-        } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
-          return this.digitalOceanForm.valid;
-        } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
-          return this.bareMetalForm.valid;
-        } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
-          return this.openStackForm.valid;
-        } else {
-          return false;
-        }
+
+          if(!this.sshKeysFormField[0][this.selectedCloud].length) {
+            return false;
+          } else if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
+            return this.bringYourOwnForm.valid;
+          } else if (this.selectedCloud === NodeProvider.AWS) {
+            return this.awsForm.valid;
+          } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
+            return this.digitalOceanForm.valid;
+          } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
+            return this.bareMetalForm.valid;
+          } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
+            return this.openStackForm.valid;
+          } else {
+            return false;
+          }
       default:
         return false;
     }
@@ -284,6 +275,7 @@ export class WizardComponent implements OnInit {
   }
 
   public createClusterAndNode() {
+
     let ssh_keys = [];
     let clusterSpec: ClusterSpec;
     let nodeSpec: NodeCreateSpec;
@@ -292,7 +284,10 @@ export class WizardComponent implements OnInit {
     const timer = Observable.timer(0, 10000);
     let node_instances: number = 3;
 
+    this.ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
+
     if (this.selectedCloud === NodeProvider.AWS) {
+
       clusterSpec = new ClusterSpec(
         new CloudSpec(
           this.selectedCloudRegion.metadata.name,
@@ -328,7 +323,6 @@ export class WizardComponent implements OnInit {
       );
 
       node_instances = this.awsForm.controls["node_count"].value;
-      ssh_keys = this.awsForm.controls["ssh_key"].value;
     } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
       clusterSpec = new ClusterSpec(
         new CloudSpec(
@@ -350,7 +344,6 @@ export class WizardComponent implements OnInit {
         null,
       );
       node_instances = this.digitalOceanForm.controls["node_count"].value;
-      ssh_keys = this.digitalOceanForm.controls["ssh_key"].value;
     } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
       clusterSpec = new ClusterSpec(
         new CloudSpec(
@@ -372,7 +365,6 @@ export class WizardComponent implements OnInit {
         null,
       );
       node_instances = this.bareMetalForm.controls["node_count"].value;
-      ssh_keys = this.bareMetalForm.controls["ssh_key"].value;
     } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
       clusterSpec = new ClusterSpec(
         new CloudSpec(
@@ -405,12 +397,11 @@ export class WizardComponent implements OnInit {
         null,
       );
       node_instances = this.openStackForm.controls["node_count"].value;
-      ssh_keys = this.openStackForm.controls["ssh_key"].value;
     }
 
     let cluster = new CreateClusterModel(
       clusterSpec,
-      ssh_keys,
+      this.ssh_keys,
     );
 
     console.log("Create cluster mode: \n" + JSON.stringify(cluster));
