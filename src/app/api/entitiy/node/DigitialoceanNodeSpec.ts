@@ -1,11 +1,7 @@
 export class DigitaloceanNodeSpec {
-  type: string;
   size: string;
-  sshKeys: string[];
 
-  constructor(type: string, size: string, sshKeys: string[]) {
-    this.type = type;
+  constructor(size: string) {
     this.size = size;
-    this.sshKeys = sshKeys;
   }
 }

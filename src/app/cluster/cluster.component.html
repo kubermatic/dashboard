@@ -1,103 +1,79 @@
-<div *ngIf="!loading">
-  <ng-container *ngIf="cluster">
-    <div fxLayout>
-      <h2 fxFlex="70%">{{cluster.spec.humanReadableName}}</h2>
-      <div fxFlex="30%" align="right" style="margin-top: 25px;">
-        <button md-button (click)="addNode()" md-raised-button [disabled]="cluster.status.phase != 'Running'">Add Node</button>
-        <button md-button (click)="deleteClusterDialog()" md-raised-button >Delete Cluster</button>
-      </div>
+<ng-container *ngIf="!loading">
+  <div fxLayout>
+    <h2 fxFlex="70%">{{cluster.spec.humanReadableName}}</h2>
+    <div fxFlex="30%" align="right" style="margin-top: 25px;">
+      <button md-button (click)="addNode()" md-raised-button [disabled]="cluster.status.phase != 'Running'">Add Node</button>
+      <button md-button (click)="deleteClusterDialog()" md-raised-button >Delete Cluster</button>
     </div>
+  </div>
 
-    <md-card class="km-card-list">
-      <md-card-header class="km-card-list-header">
-        <md-card-title>Kubernetes Master</md-card-title>
-      </md-card-header>
-      <md-card-content class="km-card-list-content" fxLayout >
-        <div fxFlex="20%">Status</div>
-        <div fxFlex="80%">
-          <strong>{{cluster.status.phase}}</strong>
-          <span>- Health:</span>
-          <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
-        </div>
+  <md-card class="km-card-list">
+    <md-card-header class="km-card-list-header">
+      <md-card-title>Kubernetes Master</md-card-title>
+    </md-card-header>
+    <md-card-content class="km-card-list-content" fxLayout >
+      <div fxFlex="20%">Status</div>
+      <div fxFlex="80%">
+        <strong>{{cluster.status.phase}}</strong>
+        <span>- Health:</span>
+        <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
+      </div>
+    </md-card-content>
+    <md-card-content class="km-card-list-content" fxLayout>
+      <div fxFlex="20%">API Server</div>
+      <div fxFlex="80%">
+        <a [attr.href]="downloadKubeconfigUrl()" md-button color="primary" class="km-download-config" target="_blank"><i class="fa fa-save"></i> download kubeconfig</a>
+      </div>
+    </md-card-content>
+  </md-card>
+
+  <md-card class="km-card-list">
+    <md-card-header class="km-card-list-header" >
+      <md-card-title fxLayout>
+        <div fxFlex="40%">Provider</div>
+        <div fxFlex="30%">Node Region</div>
+        <div fxFlex="30%">shhKeys</div>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content class="km-card-list-content" fxLayout>
+      <div fxFlex="40%">
+        <img src="/assets/images/clouds/{{dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+      </div>
+      <div fxFlex="30%">
+        {{dc.spec.country}} / {{dc.spec.location}}
+      </div>
+      <div fxFlex="30%">
+        {{cluster.spec.cloud[dc.spec.provider].sshKeys.length}} sshKey(s)
+      </div>
+    </md-card-content>
+  </md-card>
+
+  <md-card class="km-card-list" style="margin-bottom: 70px;">
+    <md-card-header class="km-card-list-header" >
+      <md-card-title fxLayout>
+        <div fxFlex="5%">#</div>
+        <div fxFlex="25%">Name</div>
+        <div fxFlex="10%">Capacity</div>
+        <div fxFlex="25%">Version</div>
+        <div fxFlex="15%">Public IP</div>
+        <div fxFlex="10%">Status</div>
+        <div fxFlex="10%"></div>
+      </md-card-title>
+    </md-card-header>
+
+    <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
+      <md-card-content *ngSwitchCase="true">
+        <kubermatic-node *ngFor="let n of nodes, let i = index" [node]="n"  [index]="i + 1" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="dc.spec.provider"></kubermatic-node>
       </md-card-content>
-      <md-card-content class="km-card-list-content" fxLayout>
-        <div fxFlex="20%">API Server</div>
-        <div fxFlex="80%">
-          <a [attr.href]="downloadKubeconfigUrl()" md-button color="primary" class="km-download-config" target="_blank"><i class="fa fa-save"></i> download kubeconfig</a>
-        </div>
+
+      <md-card-content  *ngSwitchCase="false" align="center">
+        No Node available. Please add a Node.
       </md-card-content>
-    </md-card>
-  </ng-container>
-
-  <ng-container *ngIf="cluster && cluster.dc">
-    <md-card class="km-card-list">
-      <md-card-header class="km-card-list-header" fxLayout>
-        <md-card-title fxFlex="40%">Provider</md-card-title>
-        <md-card-title fxFlex="30%">Node Region</md-card-title>
-        <md-card-title fxFlex="30%">shhKeys</md-card-title>
-      </md-card-header>
-      <md-card-content class="km-card-list-content" fxLayout>
-        <div fxFlex="40%">
-          <img src="/assets/images/clouds/{{cluster.dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
-        </div>
-        <div fxFlex="30%">
-          {{cluster.spec.cloud.dc}}
-        </div>
-        <div fxFlex="30%">
-          <ng-container [ngSwitch]="cluster.dc.spec.provider">
-            <div *ngSwitchCase="'aws'">
-              {{cluster.spec.cloud[cluster.dc.spec.provider].ssh_key_name}}
-            </div>
-
-            <div *ngSwitchCase="'digitalocean'">
-              {{cluster.spec.cloud[cluster.dc.spec.provider].sshKeys.length}} sshKey(s)
-            </div>
-
-            <div *ngSwitchCase="'baremetal'">
-              no key
-            </div>
-
-            <div *ngSwitchCase="'openstack'">
-              {{cluster.spec.cloud[cluster.dc.spec.provider].ssh_key_name}}
-            </div>
-          </ng-container>
-        </div>
-      </md-card-content>
-    </md-card>
+    </ng-container>
+  </md-card>
+</ng-container>
 
 
-    <md-card class="km-card-list" style="margin-bottom: 70px;">
-      <md-card-header class="km-card-list-header" fxLayout>
-        <md-card-title fxFlex="5%">#</md-card-title>
-        <md-card-title fxFlex="25%">Name</md-card-title>
-        <md-card-title fxFlex="10%">Capacity</md-card-title>
-        <md-card-title fxFlex="25%">Version</md-card-title>
-        <md-card-title fxFlex="15%">Public IP</md-card-title>
-        <md-card-title fxFlex="10%">Status</md-card-title>
-        <md-card-title fxFlex="10%"></md-card-title>
-      </md-card-header>
-
-      <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
-        <md-card-content *ngSwitchCase="true">
-          <kubermatic-node *ngFor="let n of nodes, let i = index" [node]="n"  [index]="i + 1" [clusterName]="clusterModel.cluster" [seedDcName]="clusterModel.dc" [nodeProvider]="cluster.dc.spec.provider"></kubermatic-node>
-        </md-card-content>
-
-        <md-card-content  *ngSwitchCase="false" align="center">
-          No Node available. Please add a Node.
-        </md-card-content>
-      </ng-container>
-    </md-card>
-  </ng-container>
-
-
-  <ng-container *ngIf="cluster && !cluster.dc">
-    <md-card fxLayout style="margin-top: 15px;">
-        <md-card-content fxFlex class="km-no-provider">
-          No Provider available. Please add a Provider.
-        </md-card-content>
-    </md-card>
-  </ng-container>
-</div>
 <div *ngIf="loading" >
-  <md-spinner color="accent" class="km-spinner"></md-spinner> 
+  <md-spinner color="accent" class="km-spinner"></md-spinner>
 </div>

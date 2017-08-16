@@ -106,7 +106,7 @@
           <div class="wizard-box-text">This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
             Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</div>
           <div [hidden]="selectedCloud === 'bringyourown'"  >
-            <div class="wizard-box small"  *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;"
+            <div class="wizard-box small "  *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;"
                  [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
                  (click)="selectCloudRegion(dc)">
 
@@ -165,33 +165,10 @@
                   <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
                   <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
                 </md-input-container>
-                 <div style="width: 100%; margin-top: 10px;">
-                    <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                      <div *ngSwitchCase="true" [ngClass]="{'has-danger': !awsForm.controls.ssh_key.valid && awsForm.controls.ssh_key.touched, 'has-success': awsForm.controls.ssh_key.valid}">
-                        <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                          <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                            {{key.name + ' - ' + key.fingerprint}}
-                          </md-option>
-                        </md-select>
-                      </div>
-                      <div *ngSwitchCase="false">
-                        <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                        <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                      </div>
-                     </div>
 
-                    <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                      to provide kubectl logs, port-forward and exec functionality.
-                    </small>
-                <br>
 
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
+                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
 
-                <div style="margin: 15px 0;">
-                  <md-checkbox name="coreOsAutoUpdate" id="coreOsAutoUpdate" [checked]="awsForm.controls.auto_update" formControlName="auto_update">Update CoreOS automatically</md-checkbox>
-
-                </div>
                 <md-input-container style="width: 100%;">
                   <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
                          ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
@@ -215,15 +192,13 @@
                   </md-select>
                 </div>
 
+                <md-input-container style="width: 100%;">
+                  <input type="text" mdInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off" />
+                </md-input-container>
+
                 <md-input-container style="width: 100%;" >
-                  <input id="disk_size" mdInput formControlName="disk_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="disk_size">
+                  <input id="root_size" mdInput formControlName="root_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="Disk size">
                 </md-input-container>
-
-                <md-input-container style="width: 100%; ">
-                  <input id="container_linux_version" mdInput formControlName="container_linux_version" type="text" placeholder="Set CoreOS Version manually (optional):" title="container_linux_version">
-                  <small>Show stable <a href="https://aws.amazon.com/marketplace/pp/B01H62FDJM?qid=1490197183896&sr=0-1&ref_=srh_res_product_title#" target="_blank">CoreOS Versions</a> </small>
-                </md-input-container>
-
               </div>
             </form>
           </div>
@@ -243,25 +218,10 @@
                 <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
               </md-input-container>
 
-              <div style="width: 100%; margin-top: 10px;">
-                <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                  <div *ngSwitchCase="true" [ngClass]="{'has-danger': !digitalOceanForm.controls.ssh_key.valid && digitalOceanForm.controls.ssh_key.touched, 'has-success': digitalOceanForm.controls.ssh_key.valid}">
-                    <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                      <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
-                        {{key.name + ' - ' + key.fingerprint}}
-                      </md-option>
-                    </md-select>
-                  </div>
-
-                  <div *ngSwitchCase="false">
-                    <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                    <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                  </div>
-                </div>
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality</small>.
-                  <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-                </div>
+              <div>
+                <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
+                <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
+              </div>
 
                 <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
                   <input id="node_count_do" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
@@ -294,33 +254,13 @@
             </form>
           </div>
 
-
           <div [hidden]="selectedCloud !== 'baremetal'">
             <form [formGroup]="bareMetalForm" novalidate >
               <div>
-                <div style="width: 100%; margin-top: 10px;">
-                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !bareMetalForm.controls.ssh_key.valid && bareMetalForm.controls.ssh_key.touched, 'has-success': bareMetalForm.controls.ssh_key.valid}">
-                      <md-select style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                        <md-option *ngFor="let key of sshKeys" [value]="key.metadata.name">
-                          {{key.name + ' - ' + key.fingerprint}}
-                        </md-option>
-                      </md-select>
-                    </div>
-                    <div *ngSwitchCase="false">
-                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                    </div>
-                  </div>
-
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality.
-                  </small>
-                  <br>
-
+                <div>
+                  <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
-
                 <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched, 'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
                   <input id="node_count_bareMetalForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
                 </md-input-container>
@@ -328,47 +268,48 @@
             </form>
           </div>
 
-
-
           <div [hidden]="selectedCloud !== 'openstack'">
-
-
             <form [formGroup]="openStackForm" novalidate >
               <div>
-                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_project_name.valid && openStackForm.controls.os_project_name.touched, 'has-success': openStackForm.controls.os_project_name.valid}">
-                  <input id="os_project_name" mdInput formControlName="os_project_name" type="text" placeholder="os_project_name:" title="os_project_name" (change)="changeOpKey()">
-                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_project_name.valid || !openStackForm.controls.os_project_name.touched">os_project_name is required.</small>
+
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_domain.valid && openStackForm.controls.os_domain.touched, 'has-success': openStackForm.controls.os_domain.valid}">
+                  <input id="os_domain" mdInput formControlName="os_domain" type="text" placeholder="Domain:" title="Domain" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_domain.valid || !openStackForm.controls.os_domain.touched">Domain is required.</small>
+                </md-input-container>
+
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_tenant.valid && openStackForm.controls.os_tenant.touched, 'has-success': openStackForm.controls.os_tenant.valid}">
+                  <input id="os_tenant" mdInput formControlName="os_tenant" type="text" placeholder="Tenant/Project:" title="Tenant/Project" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_tenant.valid || !openStackForm.controls.os_tenant.touched">Tenant/Project is required.</small>
                 </md-input-container>
 
                 <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_username.valid && openStackForm.controls.os_username.touched, 'has-success': openStackForm.controls.os_username.valid}">
-                  <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="os_username:" title="os_username" (change)="changeOpKey()">
-                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_username.valid || !openStackForm.controls.os_username.touched">os_username is required.</small>
+                  <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="Username:" title="Username" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_username.valid || !openStackForm.controls.os_username.touched">Username is required.</small>
                 </md-input-container>
 
                 <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_password.valid && openStackForm.controls.os_password.touched, 'has-success': openStackForm.controls.os_password.valid}">
-                  <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="os_password:" title="os_password" (change)="changeOpKey()">
-                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">os_password is required.</small>
+                  <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="Password:" title="Password" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">Password is required.</small>
+                </md-input-container>
+
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_network.valid && openStackForm.controls.os_network.touched, 'has-success': openStackForm.controls.os_network.valid}">
+                  <input id="os_network" mdInput formControlName="os_network" type="text" placeholder="Network name:" title="Network" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_network.valid || !openStackForm.controls.os_network.touched">Network is required.</small>
+                </md-input-container>
+
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_security_groups.valid && openStackForm.controls.os_security_groups.touched, 'has-success': openStackForm.controls.os_security_groups.valid}">
+                  <input id="os_security_groups" mdInput formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated):" title="Security groups" (change)="changeOpKey()">
+                  <small class="form-text text-danger" [hidden]="openStackForm.controls.os_security_groups.valid || !openStackForm.controls.os_security_groups.touched">At least one security groups is required.</small>
+                </md-input-container>
+
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_floating_ip_pool.valid && openStackForm.controls.os_floating_ip_pool.touched, 'has-success': openStackForm.controls.os_floating_ip_pool.valid}">
+                  <input id="os_floating_ip_pool" mdInput formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" (change)="changeOpKey()">
                 </md-input-container>
 
                 <!-- TODO: SSHKey -->
 
-                <div style="width: 100%; margin-top: 10px;">
-                  <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-                    <div *ngSwitchCase="true" [ngClass]="{'has-danger': !openStackForm.controls.ssh_key.valid && openStackForm.controls.ssh_key.touched, 'has-success': openStackForm.controls.ssh_key.valid}">
-                      <md-select multiple="{{true}}" style="width: 100%" placeholder="Authorized SSH Key:" name="ssh_key" formControlName="ssh_key">
-                        <md-option *ngFor="let key of sshKeys" [value]="key.fingerprint">
-                          {{key.name + ' - ' + key.fingerprint}}
-                        </md-option>
-                      </md-select>
-                    </div>
-
-                    <div *ngSwitchCase="false">
-                      <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
-                      <button md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
-                    </div>
-                  </div>
-                  <small class="form-text text-muted">In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-                    to provide kubectl logs, port-forward and exec functionality</small>.
+                <div>
+                  <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
                 </div>
 
@@ -376,19 +317,17 @@
                   <input id="node_count_openStackForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
                 </md-input-container>
 
-
-                <!--
-
-                // TODO: get Images
-
-                -->
-
                 <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
                   <md-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</md-option>
-                  <md-option *ngFor="let images of nodeSize; let i = index;" [value]="images.name">
-                    {{images.name}}
-                  </md-option>
+                    <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
+                      {{size}}
+                    </md-option>
                 </md-select>
+
+                <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_node_image.valid && openStackForm.controls.os_node_image.touched, 'has-success': openStackForm.controls.os_node_image.valid}">
+                  <input id="os_node_image" mdInput formControlName="os_node_image" placeholder="Image (Ubuntu only)" title="Image">
+                </md-input-container>
+
               </div>
             </form>
           </div>
@@ -396,12 +335,11 @@
       </div>
     </div>
 
-
       <!-- TODO: Summery --->
     <div class="km-wizard-step" >
       <div class="wizard-step-body" [hidden]="currentStep !== 4">
         <div>
-          <div class="row justify-content-center">
+          <div class="row justify-content-center" fxLayout>
             <div class="justify-content-center" fxFlex="33%">
               <div class="wizard-box-title">Cluster name</div>
               <div class=" wizard-box wizard-box-color_secondary">

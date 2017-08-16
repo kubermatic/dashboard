@@ -159,8 +159,8 @@ $wizard-box-content-cloud-margin-top: 50px;
 
   div.location {
     font-weight: 300;
-    font-size: 14px;
-    padding: 5px;
+    font-size: 12px;
+    padding: 0 5px;
   }
 
   image.location-flag {
@@ -182,13 +182,15 @@ $wizard-box-content-cloud-margin-top: 50px;
   background: #fff;
   border: 1px solid #E3E8EC;
   cursor: pointer;
-  //float: left;
+  float: left;
   min-height: 198px;
+  margin: 10px;
   &.small {
     max-width: $wizard-box-size / 2;
     max-height: $wizard-box-size / 2;
     min-height: $wizard-box-size / 2;
     width: $wizard-box-size / 2;
+    margin: 5px;
   }
 }
 

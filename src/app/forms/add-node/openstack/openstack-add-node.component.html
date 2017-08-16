@@ -1,0 +1,42 @@
+<div style="max-width: 400px; min-width: 400px;">
+  <md-toolbar>
+    <div class="md-toolbar">
+      <h4 class="modal-title" id="myModalLabel"> Add Node</h4>
+    </div>
+    <button md-icon-button md-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <div [formGroup]="form">
+
+        <md-input-container style="width: 100%;">
+          <input id="node_count" mdInput formControlName="node_count" type="number" min=1
+                 placeholder="Quantity of Nodes:"
+                 title="node_count">
+        </md-input-container>
+
+        <md-select style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Flavor:" name="flavor" formControlName="flavor">
+          <md-option *ngFor="let flavor of flavors; let i = index;" [value]="flavor">
+            {{flavor}}
+          </md-option>
+        </md-select>
+
+        <md-input-container style="width: 100%;">
+          <input mdInput formControlName="image" ng-trim="true" placeholder="Image:"/>
+        </md-input-container>
+
+      </div>
+    </div>
+  </md-dialog-content>
+
+  <md-dialog-actions>
+    <button md-dialog-close md-raised-button>
+      close
+    </button>
+    <button md-raised-button md-dialog-close color="primary" value="submit" (click)="addNode()" class="btn btn-primary">
+      Add Node(s)
+    </button>
+  </md-dialog-actions>
+</div>

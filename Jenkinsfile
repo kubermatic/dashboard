@@ -15,7 +15,7 @@ npmBuildNode(pipeline){
            sh("make dist")
         }
     }
-/*    stage('Test'){
+/* stage('Test'){
         container('node') {
            sh("make test")
         }
@@ -24,21 +24,21 @@ npmBuildNode(pipeline){
         container('node') {
            sh("make e2e")
         }
-    }*/
+    } */
     stage('Build go'){
         container('golang') {
             sh("cd ${goImportPath} && CGO_ENABLED=0 make build")
         }
     }
 
-    if (env.BRANCH_NAME == "develop" && env.GIT_TAG !=  "") {
-        pipeline.dockerBuild("docker", "${env.DOCKER_TAG} latest" )
+    if (env.BRANCH_NAME == "master" && env.GIT_TAG !=  "") {
+        pipeline.dockerBuild("docker", "${env.DOCKER_TAG} latest", "./")
         pipeline.deploy("docker", "prod", "kubermatic", "deployment/kubermatic-ui-v1", "webserver=kubermatic/ui-v2:${env.DOCKER_TAG}")
-    } else if (env.BRANCH_NAME == "develop") {
-        pipeline.dockerBuild("docker", "${env.DOCKER_TAG} develop" )
+    } else if (env.BRANCH_NAME == "master") {
+        pipeline.dockerBuild("docker", "${env.DOCKER_TAG} develop", "./")
         pipeline.deploy("docker", "staging", "kubermatic", "deployment/kubermatic-ui-v1", "webserver=kubermatic/ui-v2:${env.DOCKER_TAG}")
     } else {
-        pipeline.dockerBuild("docker", "${env.DOCKER_TAG} dev" )
+        pipeline.dockerBuild("docker", "${env.DOCKER_TAG}", "./")
         pipeline.deploy("docker", "dev", "kubermatic", "deployment/kubermatic-ui-v1", "webserver=kubermatic/ui-v2:${env.DOCKER_TAG}")
     }
 }

@@ -42,8 +42,6 @@ export class NodeComponent implements OnInit {
   }
 
   public deleteNodeDialog(): void {
-
-
     let dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.nodeName = this.node.metadata.name;
     dialogRef.componentInstance.nodeUID = this.node.metadata.uid;
