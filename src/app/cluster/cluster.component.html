@@ -1,4 +1,4 @@
-<ng-container *ngIf="cluster">
+<ng-container *ngIf="!loading">
   <div fxLayout>
     <h2 fxFlex="70%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="30%" align="right" style="margin-top: 25px;">
@@ -26,9 +26,7 @@
       </div>
     </md-card-content>
   </md-card>
-</ng-container>
 
-<ng-container *ngIf="cluster && dc">
   <md-card class="km-card-list">
     <md-card-header class="km-card-list-header" >
       <md-card-title fxLayout>
@@ -45,23 +43,7 @@
         {{dc.spec.country}} / {{dc.spec.location}}
       </div>
       <div fxFlex="30%">
-        <ng-container [ngSwitch]="dc.spec.provider">
-          <div *ngSwitchCase="'aws'">
-            {{cluster.spec.cloud[dc.spec.provider].ssh_key_name}}
-          </div>
-
-          <div *ngSwitchCase="'digitalocean'">
-            {{cluster.spec.cloud[dc.spec.provider].sshKeys.length}} sshKey(s)
-          </div>
-
-          <div *ngSwitchCase="'baremetal'">
-            no key
-          </div>
-
-          <div *ngSwitchCase="'openstack'">
-            {{cluster.spec.cloud[dc.spec.provider].ssh_key_name}}
-          </div>
-        </ng-container>
+        {{cluster.spec.cloud[dc.spec.provider].sshKeys.length}} sshKey(s)
       </div>
     </md-card-content>
   </md-card>
@@ -90,3 +72,8 @@
     </ng-container>
   </md-card>
 </ng-container>
+
+
+<div *ngIf="loading" >
+  <md-spinner color="accent" class="km-spinner"></md-spinner>
+</div>

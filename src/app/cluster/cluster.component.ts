@@ -38,6 +38,8 @@ export class ClusterComponent implements OnInit {
   public clusterName: string;
   public seedDcName: string;
   public nodeSizes: any = [];
+  public loading: boolean = true;
+
 
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
@@ -67,10 +69,12 @@ export class ClusterComponent implements OnInit {
       );
       this.api.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
         this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
+        this.loading = false;
       });
       if (this.cluster.isRunning()) {
         this.updateNodes();
       }
+
     });
   }
 
