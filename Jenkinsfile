@@ -36,6 +36,7 @@ npmBuildNode(pipeline){
         pipeline.deploy("docker", "prod", "kubermatic", "deployment/kubermatic-ui-v1", "webserver=kubermatic/ui-v2:${env.DOCKER_TAG}")
     } else if (env.BRANCH_NAME == "master") {
         pipeline.dockerBuild("docker", "${env.DOCKER_TAG} develop", "./")
+        pipeline.deploy("docker", "dev", "kubermatic", "deployment/kubermatic-ui-v1", "webserver=kubermatic/ui-v2:${env.DOCKER_TAG}")
         pipeline.deploy("docker", "staging", "kubermatic", "deployment/kubermatic-ui-v1", "webserver=kubermatic/ui-v2:${env.DOCKER_TAG}")
     } else {
         pipeline.dockerBuild("docker", "${env.DOCKER_TAG}", "./")
