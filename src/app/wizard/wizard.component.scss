@@ -135,6 +135,10 @@ $wizard-box-content-cloud-margin-top: 50px;
     width: $wizard-box-content-cloud-logo-size;
     margin-top: $wizard-box-content-cloud-margin-top;
     margin-bottom: 15px;
+    position: relative;
+    top: 90px;
+    bottom: 0;
+    margin-top: -25%;
   }
 
   div.name {

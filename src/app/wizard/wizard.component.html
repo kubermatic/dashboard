@@ -306,8 +306,6 @@
                   <input id="os_floating_ip_pool" mdInput formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" (change)="changeOpKey()">
                 </md-input-container>
 
-                <!-- TODO: SSHKey -->
-
                 <div>
                   <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
                   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>

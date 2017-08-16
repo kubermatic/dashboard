@@ -68,7 +68,6 @@ export class WizardComponent implements OnInit {
 
   // Model add sshKey
   public config: any = {};
-  public ssh_keys: string[] = [];
 
   constructor(private api: ApiService,
               private nameGenerator: ClusterNameGenerator,
@@ -107,7 +106,6 @@ export class WizardComponent implements OnInit {
       //Cluster spec
       access_key_id: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
       secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
-      ssh_key: ["", [<any>Validators.required]],
       vpc_id: [""],
       subnet_id: [""],
       route_table_id: [""],
@@ -138,9 +136,8 @@ export class WizardComponent implements OnInit {
       os_security_groups: ["", [<any>Validators.required]],
       os_floating_ip_pool: ["", []],
       os_node_image: ["", [<any>Validators.required]],
-      ssh_key: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: ["", []]
+      node_size: ["", [<any>Validators.required]]
     });
   }
 
@@ -284,7 +281,7 @@ export class WizardComponent implements OnInit {
     const timer = Observable.timer(0, 10000);
     let node_instances: number = 3;
 
-    this.ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
+    ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
 
     if (this.selectedCloud === NodeProvider.AWS) {
 
@@ -401,7 +398,7 @@ export class WizardComponent implements OnInit {
 
     let cluster = new CreateClusterModel(
       clusterSpec,
-      this.ssh_keys,
+      ssh_keys,
     );
 
     console.log("Create cluster mode: \n" + JSON.stringify(cluster));

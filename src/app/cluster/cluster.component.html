@@ -43,7 +43,9 @@
         {{dc.spec.country}} / {{dc.spec.location}}
       </div>
       <div fxFlex="30%">
-        {{cluster.spec.cloud[dc.spec.provider].sshKeys.length}} sshKey(s)
+        <ng-container *ngIf="cluster.spec.cloud[dc.spec.provider].sshKeys">
+          {{cluster.spec.cloud[dc.spec.provider].sshKeys.length}} sshKey(s)
+        </ng-container>
       </div>
     </md-card-content>
   </md-card>
