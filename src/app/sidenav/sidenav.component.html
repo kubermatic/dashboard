@@ -1,42 +1,23 @@
-
-
 <div class="container"
      fxLayout="column"
 >
-
-
-  <div style="height: 79px; border-bottom: 1px solid #BCC5D0; background-color: rgb(188, 197, 208)">
+  <div style="height: 42px; border-bottom: 1px solid #BCC5D0; background-color: #fff">
     <div class="km-header-logo" ></div>
   </div>
-
-
   <md-nav-list>
-    <!-- Common menus for all -->
-    <!--<md-list-item>
-      <a md-line [routerLink]="['/about']">About</a>
-    </md-list-item>-->
-
-    <!-- Menus for not logged in users -->
-    <!--<div *ngIf="!user">
-      <md-list-item>
-        <a md-line [routerLink]="['/auth/login']">Login</a>
-      </md-list-item>
-    </div>-->
-
     <!-- Menus for logged in users -->
-    <div>
+    <div class="km-sidenav-top">
       <md-list-item>
-        <a md-line routerLink="/welcome">Dashboard</a>
+        <a md-line routerLink="/wizard"><i class="fa fa-magic"></i> Create Cluster</a>
       </md-list-item>
       <md-list-item>
-        <a md-line routerLink="/wizard"><i class="fa fa-magic blue"></i> Create Cluster</a>
+        <a md-line routerLink="/clusters"><i class="fa fa-cubes"></i> Manage Cluster</a>
       </md-list-item>
       <md-list-item>
-        <a md-line routerLink="/clusters"><i class="fa fa-cubes green"></i> Manage Cluster</a>
+        <a md-line routerLink="/profile"><i class="fa fa-key"></i> Manage sshKeys</a>
       </md-list-item>
-      <md-list-item>
-        <a md-line routerLink="/profile"><i class="fa fa-key white"></i> Manage sshKeys</a>
-      </md-list-item>
+    </div>
+    <div class="km-sidenav-bottom">
       <md-list-item>
         <a md-line *ngIf="auth.authenticated()" (click)="logout()"> <i class="fa fa-lock red"></i> Logout</a>
         <a md-line *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}"> <i class="fa fa-unlock-alt red"></i> Login</a>
