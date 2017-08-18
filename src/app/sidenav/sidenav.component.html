@@ -8,13 +8,13 @@
     <!-- Menus for logged in users -->
     <div class="km-sidenav-top">
       <md-list-item>
-        <a md-line routerLink="/wizard"><i class="fa fa-magic"></i> Create Cluster</a>
+        <a md-line routerLink="/wizard" [routerLinkActive]="['active']"><i class="fa fa-magic"></i> Create Cluster</a>
       </md-list-item>
       <md-list-item>
-        <a md-line routerLink="/clusters"><i class="fa fa-cubes"></i> Manage Cluster</a>
+        <a md-line routerLink="/clusters" [routerLinkActive]="['active']"><i class="fa fa-cubes"></i> Manage Cluster</a>
       </md-list-item>
       <md-list-item>
-        <a md-line routerLink="/profile"><i class="fa fa-key"></i> Manage sshKeys</a>
+        <a md-line routerLink="/profile" [routerLinkActive]="['active']"><i class="fa fa-key"></i> Manage sshKeys</a>
       </md-list-item>
     </div>
     <div class="km-sidenav-bottom">
