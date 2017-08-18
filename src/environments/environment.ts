@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 let redirect_uri = window.location.protocol + '//' + window.location.host +'/login';
-let coreOS_auth_host = "auth.dev.kubermatic.io";
+let coreOS_auth_host = "auth.int.kubermatic.io";
 
 export const environment = {
   production: false,
