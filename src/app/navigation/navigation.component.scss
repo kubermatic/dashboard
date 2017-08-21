@@ -1,5 +1,3 @@
-//@import "../../assets/css/ng2admin/conf/conf";
-
 header {
   background-color: #fff;
 
@@ -14,12 +12,10 @@ header {
 
 .blur {
   .navigation-bar.scrolled {
-    //background-color: rgba(black, 0.85)
   }
 }
 
 a.al-logo {
-  //@include titillium-font;
   color: #fff;
   display: block;
   font-size: 23px;
@@ -33,10 +29,6 @@ a.al-logo {
   }
 }
 
-/*a.al-logo:hover {
-  color: $white-dark;
-}*/
-
 .user-profile {
   float: right;
 }
@@ -45,37 +37,6 @@ a.al-logo {
 .profile-toggle-link {
   float: right;
 }
-
-/*
-.al-user-profile {
-  float: right;
-  margin-right: 12px;
-  transition: all .15s ease-in-out;
-  padding: 0;
-  height: 36px;
-  border: 0;
-  opacity: 1;
-  position: relative;
-  a {
-    display: block;
-  }
-  img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-  }
-}
-.al-user-profile-dropdown {
-  width: 305px;
-  padding: 10px 10px 0;
-
-  img {
-    width: 90px;
-    height: 90px;
-    border-radius: 5%;
-  }
-}
-*/
 
 a.refresh-data {
   color: #000;
@@ -200,39 +161,6 @@ a.collapse-menu-link {
     right: 20px;
   }
 }
-/*
-@media screen and (max-width: $resS) {
-  .info {
-    display: none;
-  }
-
-  .al-user-profile-details {
-    display: none;
-  }
-}
-
-@media screen and (max-width: $resXS) {
-  .navigation-bar-content {
-    padding: 0 0 0 20px;
-  }
-}
-
-@media (max-width: $resXXS) {
-  .user-profile{
-    min-width: 130px;
-  }
-  a.refresh-data {
-    margin-right: 10px;
-  }
-  a.collapse-menu-link {
-    margin-left: 10px;
-  }
-
-  .al-skin-dropdown {
-    display: none;
-  }
-}*/
-
 
 .profile-toggle-link{
   cursor: pointer;
@@ -243,7 +171,6 @@ a.collapse-menu-link {
   left: auto;
   right: -47px;
   top: 26px;
-  //@include scrollbars(.4em, rgba(0,0,0,0.5), #fff);
   .header {
     padding: 10px 12px;
     border-bottom: 1px solid #000;
@@ -399,6 +326,8 @@ a.collapse-menu-link {
    button {
      color: #444D58;
      font-weight: 400;
+     min-width: 60px;
+     padding: 0 10px 0 20px;
    }
 
     a, .km-logout, .km-login {
@@ -409,11 +338,14 @@ a.collapse-menu-link {
         color: #444D58;
       }
     }
-
-
 }
 
 .km-logout, .km-login {
   float: right;
 }
 
+
+kubermatic-breadcrumbs {
+  display: inline-block;
+  float: left;
+}

@@ -1,6 +1,7 @@
 footer {
-  background-color: #005b9f;
-  color: #fff;
+  background-color: #fff;
+  color: #BCC5D0;
+  border-top: 1px solid #BCC5D0;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -11,11 +12,11 @@ footer {
 
   .km-copy {
     text-align: left;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
     line-height: 35px;
     a {
-      color: #fff;
+      color: #BCC5D0;
       font-size: 14px;
       font-weight: 400;
       text-decoration: none;
@@ -37,7 +38,7 @@ footer {
           text-align: center;
 
           i {
-            color: #fff;
+            color: #BCC5D0;
           }
         }
       }

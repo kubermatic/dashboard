@@ -4,7 +4,6 @@
     <div fxFlex="25%">
       {{node.metadata.name}}
     </div>
-
     <div fxFlex="10%">
       <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{node.status.allocatable.memory | uppercase }}</span>
     </div>
@@ -17,8 +16,10 @@
     <div fxFlex="10%" class="health-state">
         <i [ngClass]="getNodeHealth()"></i>
     </div>
-    <div >
-      <button md-button (click)="deleteNodeDialog()" md-raised-button >Delete Node</button>
+    <div fxFlex="10%">
+      <button md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+      </button>
     </div>
   </div>
   <div fxLayout *ngIf="conditionsMessage" class="km-conditionsMessage">

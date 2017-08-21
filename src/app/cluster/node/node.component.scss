@@ -30,15 +30,25 @@ button {
 
 .health-state {
   text-align: center;
+
   i.red {
     color: #ff5454;
   }
 
   i.green {
     color: #79c447;
+
   }
 
   i.orange {
     color: orange;
   }
+}
+
+
+.km-delete-node {
+  float: right;
+  color: #0288d1;
+  border:1px solid #0288d1;
+  border-radius: 0;
 }
