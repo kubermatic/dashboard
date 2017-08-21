@@ -11,17 +11,37 @@
   }
 }
 
+.km-single-node {
+  line-height: 38px;
+}
+
+.km-conditionsMessage {
+  border-top: 1px solid rgba(227,232,236, 0.3);
+  margin-top: 10px;
+  p {
+    margin: 10px auto 0;
+    color: #ff5454;
+  }
+}
+
 button {
   float: right;
 }
 
 .health-state {
+  text-align: center;
+
   i.red {
     color: #ff5454;
   }
 
   i.green {
     color: #79c447;
+
+  }
+
+  i.orange {
+    color: orange;
   }
 }
 

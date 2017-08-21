@@ -1,27 +1,29 @@
-<div fxLayout class="km-node-row">
-  <div fxFlex="5%">{{index}}</div>
-  <div fxFlex="25%">
-    {{node.metadata.name}}
+<div  class="km-node-row">
+  <div fxLayout class="km-single-node">
+    <div fxFlex="5%">{{index}}</div>
+    <div fxFlex="25%">
+      {{node.metadata.name}}
+    </div>
+    <div fxFlex="10%">
+      <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{node.status.allocatable.memory | uppercase }}</span>
+    </div>
+    <div fxFlex="25%">
+      <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
+    </div>
+    <div fxFlex="15%">
+      {{node.metadata.annotations["node.k8s.io/public-ip"]}}
+    </div>
+    <div fxFlex="10%" class="health-state">
+        <i [ngClass]="getNodeHealth()"></i>
+    </div>
+    <div fxFlex="10%">
+      <button md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+      </button>
+    </div>
   </div>
-
-  <div fxFlex="10%">
-    <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{node.status.allocatable.memory | uppercase }}</span>
-  </div>
-  <div fxFlex="25%">
-    <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
-  </div>
-  <div fxFlex="15%">
-    {{node.metadata.annotations["node.k8s.io/public-ip"]}}
-  </div>
-  <div fxFlex="10%" class="health-state">
-    <!--TODO: FIX-->
-    <!--{{node.status.isHealthy()}}-->
-    <!--i *ngIf="!node.status.condition.healthy" mdTooltip="{{node.status.condition.description}}" class="fa fa-circle-o red"></i>
-    <i *ngIf="node.status.condition.healthy" mdTooltip="Healthy" class="fa fa-circle green"></i-->
-  </div>
-  <div fxFlex="10%">
-    <button md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
-      <i class="fa fa-trash-o" aria-hidden="true"></i>
-    </button>
+  <div fxLayout *ngIf="conditionsMessage" class="km-conditionsMessage">
+    <p color="accent">{{conditionsMessage}}</p>
   </div>
 </div>
+

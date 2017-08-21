@@ -15,6 +15,7 @@ export class NodeComponent implements OnInit {
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
   @Input() index: number;
+  public conditionsMessage: string = "";
 
   // public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
 
@@ -55,6 +56,42 @@ export class NodeComponent implements OnInit {
     });
   }
 
+
+
+
+  public getNodeHealth() {
+    let green = "fa fa-circle green";
+    let red = "fa fa-circle-o red";
+    let orange = "fa fa-spin fa-circle-o-notch orange";
+    let orangeSpinner = "fa fa-spin fa-circle-o-notch orange";
+
+    if(this.node.status.conditions) {
+      this.conditionsMessage = "";
+      for (let entry of this.node.status.conditions) {
+        if (entry.status == "True" && entry.type != "Ready"){
+            this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
+        }
+      }
+    }
+
+
+    if (this.node.metadata.annotations['node.k8s.io/state'] && !this.conditionsMessage.length) {
+      switch (this.node.metadata.annotations['node.k8s.io/state']) {
+        case "pending":
+          return orange;
+        case "provisioning":
+          return orangeSpinner;
+        case "launching":
+          return orangeSpinner;
+        case "running":
+          return green;
+        default:
+          return red;
+      }
+    } else {
+      return red;
+    }
+  }
 }
 
 
