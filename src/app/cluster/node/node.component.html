@@ -16,9 +16,12 @@
   <div fxFlex="10%" class="health-state">
     <!--TODO: FIX-->
     <!--{{node.status.isHealthy()}}-->
-      <i class="fa fa-dot-circle-o"></i>
+    <!--i *ngIf="!node.status.condition.healthy" mdTooltip="{{node.status.condition.description}}" class="fa fa-circle-o red"></i>
+    <i *ngIf="node.status.condition.healthy" mdTooltip="Healthy" class="fa fa-circle green"></i-->
   </div>
   <div fxFlex="10%">
-    <button md-button (click)="deleteNodeDialog()" md-raised-button >Delete Node</button>
+    <button md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+    </button>
   </div>
 </div>
