@@ -24,7 +24,8 @@ import {
   MdCardModule,
   MdDialogModule,
   MdSliderModule,
-  OverlayModule
+  OverlayModule,
+  MdSlideToggleModule
 } from '@angular/material';
 
 import 'hammerjs';
@@ -103,7 +104,8 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
     MdCardModule,
     MdDialogModule,
     MdSliderModule,
-    OverlayModule
+    OverlayModule,
+    MdSlideToggleModule
   ],
   declarations: [
     KubermaticComponent,

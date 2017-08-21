@@ -12,7 +12,7 @@ import {NotificationComponent} from "../notification/notification.component";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
-import {MdDialog, MdDialogRef} from "@angular/material";
+import {MdDialog} from "@angular/material";
 import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
 import {ClusterModel} from "../api/model/ClusterModel";
 import {SshKeys} from "../api/model/SshKeysModel";
@@ -114,6 +114,9 @@ export class WizardComponent implements OnInit {
       node_size: ["", [<any>Validators.required]],
       root_size: [20, [Validators.required, Validators.min(10), Validators.max(16000)]],
       ami: [""],
+      // Extend options
+      aws_cas: [false],
+      aws_nas: [false]
     });
 
     this.digitalOceanForm = this.formBuilder.group({
@@ -137,7 +140,9 @@ export class WizardComponent implements OnInit {
       os_floating_ip_pool: ["", []],
       os_node_image: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: ["", [<any>Validators.required]]
+      node_size: ["", [<any>Validators.required]],
+      // Extend options
+      os_cas: [false]
     });
   }
 
