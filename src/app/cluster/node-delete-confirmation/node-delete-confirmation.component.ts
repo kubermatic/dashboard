@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Inject, ViewChild, TemplateRef} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {ApiService} from "../../api/api.service";
@@ -30,17 +30,17 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public btnCancelText?: string;
 
 
-  constructor(private api: ApiService, private store: Store<fromRoot.State>) {}
-
-  ngOnInit() {
-
+  constructor(private api: ApiService, private store: Store<fromRoot.State>) {
   }
 
-  public deleteNode(): void {
+  ngOnInit() {
+  }
+
+  public deleteNode(nodeUID: string): void {
     this.clusterModel = new ClusterModel(this.seedDcName, this.clusterName);
-    this.api.deleteClusterNode(this.clusterModel, this.nodeUID).subscribe(result => {
+    this.api.deleteClusterNode(this.clusterModel, nodeUID).subscribe(result => {
       NotificationComponent.success(this.store, "Success", `Node removed successfully`);
-    },error => {
+    }, error => {
       NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
     })
   }

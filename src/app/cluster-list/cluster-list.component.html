@@ -1,3 +1,4 @@
+<div *ngIf="!loading">
   <div fxLayout>
       <h2 fxFlex="70%" class="component-heading">My Clusters</h2>
       <div fxFlex="30%" align="right" style="margin-bottom: 15px;margin-top: 25px;">
@@ -8,15 +9,17 @@
         </a>
       </div>
   </div>
-  <md-card  class="km-card-list">
-    <md-card-header fxLayout class="km-card-list-header">
-        <md-card-title  fxFlex="5%">#</md-card-title>
-        <md-card-title fxFlex="35%">Cluster Name</md-card-title>
-        <md-card-title fxFlex="25%">Provider of Nodes</md-card-title>
-        <md-card-title fxFlex="15%">Status</md-card-title>
-        <md-card-title fxFlex="15%">Health</md-card-title>
+  <md-card class="km-card-list">
+    <md-card-header class="km-card-list-header">
+      <md-card-title fxLayout>
+        <div fxFlex="5%">#</div>
+        <div fxFlex="35%">Cluster Name</div>
+        <div fxFlex="25%">Provider of Nodes</div>
+        <div fxFlex="15%">Status</div>
+        <div fxFlex="15%">Health</div>
+      </md-card-title>
     </md-card-header>
-  <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
+    <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
     <div *ngSwitchCase="true">
       <kubermatic-cluster-item *ngFor="let c of clusters; let i = index" [cluster]="c" [index]="i + 1"></kubermatic-cluster-item>
     </div>
@@ -24,5 +27,8 @@
       <p fxFlex class="km-no-cluster" >No Cluster available. <a routerLink="/wizard">Please add a Cluster.</a></p>
     </div>
   </ng-container>
- </md-card>
-
+  </md-card>
+</div>
+<div *ngIf="loading" >
+  <md-spinner color="accent" class="km-spinner"></md-spinner>
+</div>

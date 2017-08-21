@@ -6,59 +6,23 @@
        fxLayoutGap="10px"
        >
     <div fxFlex>
-      <button class="sidenav-toggle mat-button" (click)="toggleSidenav()" md-button>
-              <span class="mat-button-wrapper">
-                <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
-                <span>Kubermatic</span>
-              </span>
-        <div class="mat-button-ripple mat-ripple" md-ripple></div>
-        <div class="mat-button-focus-overlay"></div>
-      </button>
-      <a md-button routerLink="/wizard" routerLinkActive="active" class="mat-button"><span class="mat-button-wrapper">Create Cluster</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
-      <a md-button routerLink="/clusters" routerLinkActive="active" class="mat-button"><span class="mat-button-wrapper">Manage Clusters</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
-      <a md-button routerLink="/profile" routerLinkActive="active" class="mat-button"><span class="mat-button-wrapper">Manage sshKeys</span><!--template bindings={}--><div class="mat-button-ripple mat-ripple" md-ripple=""></div><div class="mat-button-focus-overlay"></div></a>
+      <div style="float: left;display: inline-block;">
+        <button class="sidenav-toggle mat-button" (click)="toggleSidenav()" md-button>
+                <span class="mat-button-wrapper">
+                  <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
+                  <span>Kubermatic</span>
+                </span>
+          <div class="mat-button-ripple mat-ripple" md-ripple></div>
+          <div class="mat-button-focus-overlay"></div>
+        </button>
+      </div>
+      <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
     </div>
-
-
     <div fxFlex="20" fxFlexOffset="50px"  fxFlexOffset.xs="0">
-
       <span md-button class="mat-button km-logout" *ngIf="auth.authenticated()" (click)="logout()"><i class="fa fa-lock"></i> Logout</span>
       <a md-button class="mat-button km-login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}"> <i class="fa fa-unlock-alt"></i> Login</a>
-
-
-      <!--class="mat-button user-profile clearfix"-->
-      <!--<div class="dropdown" *ngIf="userProfile">
-        <a md-button class="profile-toggle-link dropdown-toggle" id="user-profile-dd" data-toggle="dropdown" aria-expanded="false">
-          <span class="al-user-profile-details">
-                  <span>{{ userProfile.nickname }}</span>
-                  <i class="fa fa-caret-down" aria-hidden="true"></i>
-                </span>
-        </a>
-       <ul class="dropdown-menu top-dropdown-menu profile-dropdown" aria-labelledby="user-profile-dd">
-          <li>
-            <div class="al-user-profile-dropdown">
-              <div class="row">
-                <div class="col-lg-4">
-                  <img [src]="userProfile.picture" alt="" class="profile-img">
-                </div>
-                <div class="col-lg-8">
-                  <p class="text-left"><strong>{{ userProfile.name }}</strong></p>
-                  <p class="text-left small">{{ userProfile.email }}</p>
-                  <p class="text-left">
-                    <button type="button" routerLink="profile" class="btn btn-primary btn-block btn-sm">Profile</button>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li class="divider"></li>
-          <li><a href (click)="logout()">Sign Out <span class="fa fa-sign-out pull-right"></span></a></li>
-        </ul>
-      </div>-->
     </div>
   </nav>
-
-  <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
 </header>
 
 

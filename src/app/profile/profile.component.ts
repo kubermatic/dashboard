@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit {
   public currentTab: number = 0;
   public userProfile: any;
   public sshKeys: Array<SSHKeyEntity> = [];
+  public loading: boolean = true;
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {
     this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
@@ -30,7 +31,7 @@ export class ProfileComponent implements OnInit {
   private refreshSSHKeys() {
     this.api.getSSHKeys().subscribe(result => {
       this.sshKeys = result;
-
+      this.loading = false;
     });
   }
 

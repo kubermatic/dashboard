@@ -1,22 +1,29 @@
-<div fxLayout class="km-node-row">
-  <div fxFlex="5%">{{index}}</div>
-  <div fxFlex="25%">
-    {{node.metadata.name}}
+<div  class="km-node-row">
+  <div fxLayout class="km-single-node">
+    <div fxFlex="5%">{{index}}</div>
+    <div fxFlex="25%">
+      {{node.metadata.name}}
+    </div>
+    <div fxFlex="10%">
+      <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{node.status.allocatable.memory | uppercase }}</span>
+    </div>
+    <div fxFlex="25%">
+      <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
+    </div>
+    <div fxFlex="15%">
+      {{node.metadata.annotations["node.k8s.io/public-ip"]}}
+    </div>
+    <div fxFlex="10%" class="health-state">
+        <i [ngClass]="getNodeHealth()"></i>
+    </div>
+    <div fxFlex="10%">
+      <button md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+      </button>
+    </div>
   </div>
-
-  <div fxFlex="10%">
-    <span *ngIf="!node.status"> {{node.status.cpu}} CPU, {{node.status.memory | uppercase }}</span>
-  </div>
-  <div fxFlex="25%">
-    <span *ngIf="!node.status">{{node.status.versions.os}}</span>
-  </div>
-  <div fxFlex="15%">
-    {{node.status.addresses.public}}
-  </div>
-  <div fxFlex="10%" class="health-state">
-      <i class="fa fa-dot-circle-o" [class.green]="node.status.condition.healthy"></i>
-  </div>
-  <div fxFlex="10%">
-    <button md-button (click)="deleteNodeDialog()" md-raised-button >Delete Node</button>
+  <div fxLayout *ngIf="conditionsMessage" class="km-conditionsMessage">
+    <p color="accent">{{conditionsMessage}}</p>
   </div>
 </div>
+

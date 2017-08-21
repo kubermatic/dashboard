@@ -27,7 +27,6 @@
       margin-bottom: 0;
     }
   }
-
 }
 
 
@@ -38,4 +37,19 @@
   a {
     color: #0288d1;
   }
+}
+
+.km-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.mat-card-header-text {
+  height: auto;
+  margin: 0;
+  width: auto;
 }
