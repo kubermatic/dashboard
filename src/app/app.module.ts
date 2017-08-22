@@ -68,9 +68,7 @@ import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.compone
 import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
 import {AddNodeComponent} from "./forms/add-node/add-node.component";
-
 import { ClipboardModule } from 'ngx-clipboard';
-
 
 @NgModule({
   imports: [
