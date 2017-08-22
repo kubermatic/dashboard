@@ -10,18 +10,9 @@
     <div fxFlex="15%">
       <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
     </div>
-    <div fxFlex="15%" ngxClipboard>
+    <div fxFlex="15%" class="km-copy" ngxClipboard [cbContent]="node.metadata.annotations['node.k8s.io/public-ip']">
       {{node.metadata.annotations["node.k8s.io/public-ip"]}}
-
-
-      <div class="row">
-
-            <input type="text" class="form-control" [(ngModel)]="copy">
-
-            <button class="btn btn-default" type="button" ngxClipboard [cbContent]="copy">copy</button>
-
-      </div>
-
+      <small>Copy</small>
     </div>
     <div fxFlex="10%" class="health-state">
         <i [ngClass]="getNodeHealth()"></i>

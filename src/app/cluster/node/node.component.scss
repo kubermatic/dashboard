@@ -52,3 +52,19 @@ button {
   border:1px solid #0288d1;
   border-radius: 0;
 }
+
+
+.km-copy {
+  cursor: pointer;
+
+  small {
+    display: none;
+    color: #0288d1;
+  }
+
+  &:hover {
+    small {
+      display: inline-block;
+    }
+  }
+}
