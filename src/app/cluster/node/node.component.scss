@@ -37,7 +37,6 @@ button {
 
   i.green {
     color: #79c447;
-
   }
 
   i.orange {
@@ -45,10 +44,24 @@ button {
   }
 }
 
-
 .km-delete-node {
   float: right;
   color: #0288d1;
   border:1px solid #0288d1;
   border-radius: 0;
+}
+
+.km-copy {
+  cursor: pointer;
+
+  small {
+    display: none;
+    color: #0288d1;
+  }
+
+  &:hover {
+    small {
+      display: inline-block;
+    }
+  }
 }

@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {BrowserModule} from "@angular/platform-browser";
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
-
 
 import {
   MdButtonModule,
@@ -71,10 +69,9 @@ import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.compone
 import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
 import {AddNodeComponent} from "./forms/add-node/add-node.component";
-
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service';
-
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   imports: [
@@ -110,7 +107,8 @@ import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service
     MdSliderModule,
     OverlayModule,
     MdSlideToggleModule,
-    MdProgressBarModule
+    MdProgressBarModule,
+    ClipboardModule
   ],
   declarations: [
     KubermaticComponent,
@@ -183,7 +181,7 @@ import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service
       useClass: LoaderInterceptor,
       multi: true
     }
-    
+
   ],
   bootstrap: [KubermaticComponent]
 
