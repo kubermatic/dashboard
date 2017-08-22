@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {BrowserModule} from "@angular/platform-browser";
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
@@ -29,6 +28,9 @@ import {
 } from '@angular/material';
 
 import 'hammerjs';
+
+
+
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {KubermaticComponent} from "./kubermatic.component";
 import {NavigationComponent} from "./navigation/navigation.component";
@@ -71,6 +73,8 @@ import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digita
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
 import {AddNodeComponent} from "./forms/add-node/add-node.component";
 
+import { ClipboardModule } from 'ngx-clipboard';
+
 
 @NgModule({
   imports: [
@@ -105,7 +109,8 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
     MdDialogModule,
     MdSliderModule,
     OverlayModule,
-    MdSlideToggleModule
+    MdSlideToggleModule,
+    ClipboardModule
   ],
   declarations: [
     KubermaticComponent,
