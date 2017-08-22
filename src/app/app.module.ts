@@ -6,7 +6,6 @@ import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
 
-
 import {
   MdButtonModule,
   MdIconModule,
@@ -28,9 +27,6 @@ import {
 } from '@angular/material';
 
 import 'hammerjs';
-
-
-
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {KubermaticComponent} from "./kubermatic.component";
 import {NavigationComponent} from "./navigation/navigation.component";
