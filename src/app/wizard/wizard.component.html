@@ -395,7 +395,6 @@
             <md-card-title>
               <h4>
                 Provide credentials & settings
-                <md-slide-toggle style="float: right;" formControlName="os_cas">Extend Provider settings</md-slide-toggle>
               </h4>
             </md-card-title>
           </md-card-header>
@@ -430,11 +429,13 @@
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_security_groups.valid || !openStackForm.controls.os_security_groups.touched">At least one security groups is required.</small>
             </md-input-container>
 
-            <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
-
-            <md-input-container *ngIf="openStackForm.controls['os_cas'].value" fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_floating_ip_pool.valid && openStackForm.controls.os_floating_ip_pool.touched, 'has-success': openStackForm.controls.os_floating_ip_pool.valid}">
+            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_floating_ip_pool.valid && openStackForm.controls.os_floating_ip_pool.touched, 'has-success': openStackForm.controls.os_floating_ip_pool.valid}">
               <input id="os_floating_ip_pool" mdInput formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" (change)="changeOpKey()">
             </md-input-container>
+
+            <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
+
+
           </md-card-content>
         </md-card>
         <md-card fxFlex="50%">
