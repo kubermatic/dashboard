@@ -45,6 +45,11 @@ export const appRoutes: Routes = [
         canActivate: [AuthGuard],
         data: { title: "Clusters" }
       },
+      {
+        path: "",
+        redirectTo: 'clusters',
+        pathMatch: 'full',
+      }
     ]
   },
   {
