@@ -6,7 +6,6 @@
   background-position: center -16px;
 }
 
-
 .mat-nav-list {
 
   .mat-list-item, a {
@@ -17,11 +16,6 @@
     i {
       color: #fff;
     }
-
-    .red {
-      color: #c2185b;
-    }
-
   }
   a {
     padding: 20px 16px;
@@ -35,13 +29,6 @@
     }
   }
 }
-
-.km-sidenav-bottom {
-  position: absolute;
-  bottom: 44px;
-  width: 100%;
-}
-
 
 /deep/ .mat-list-item-content {
   padding: 0 !important;
