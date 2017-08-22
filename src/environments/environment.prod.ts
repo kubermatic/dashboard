@@ -1,5 +1,5 @@
 let redirect_uri = window.location.protocol + '//' + window.location.host +'/login';
-let oauth = window.location.protocol + '//' + window.location.host +'/auth';
+let oauth = window.location.protocol + '//' + window.location.host +'/dex/auth';
 
 export const environment = {
   production: true,

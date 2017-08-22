@@ -4,7 +4,7 @@
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
 let redirect_uri = window.location.protocol + '//' + window.location.host +'/login';
-let oauth = window.location.protocol + '//' + window.location.host +'/auth';
+let oauth = window.location.protocol + '//' + window.location.host +'/dex/auth';
 
 export const environment = {
   production: false,
