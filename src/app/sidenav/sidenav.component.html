@@ -17,11 +17,5 @@
         <a md-line routerLink="/profile" [routerLinkActive]="['active']"><i class="fa fa-key"></i> Manage sshKeys</a>
       </md-list-item>
     </div>
-    <div class="km-sidenav-bottom">
-      <md-list-item>
-        <a md-line *ngIf="auth.authenticated()" (click)="logout()"> <i class="fa fa-lock red"></i> Logout</a>
-        <a md-line *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}"> <i class="fa fa-unlock-alt red"></i> Login</a>
-      </md-list-item>
-    </div>
   </md-nav-list>
 </div>
