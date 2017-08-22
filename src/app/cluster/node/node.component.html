@@ -4,14 +4,15 @@
     <div fxFlex="25%">
       {{node.metadata.name}}
     </div>
-    <div fxFlex="10%">
+    <div fxFlex="20%">
       <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{node.status.allocatable.memory | uppercase }}</span>
     </div>
-    <div fxFlex="25%">
+    <div fxFlex="15%">
       <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
     </div>
-    <div fxFlex="15%">
+    <div fxFlex="15%" class="km-copy" ngxClipboard [cbContent]="node.metadata.annotations['node.k8s.io/public-ip']">
       {{node.metadata.annotations["node.k8s.io/public-ip"]}}
+      <small>Copy</small>
     </div>
     <div fxFlex="10%" class="health-state">
         <i [ngClass]="getNodeHealth()"></i>
