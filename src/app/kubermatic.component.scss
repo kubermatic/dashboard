@@ -6,12 +6,9 @@
   position: absolute;
 }
 
-
 .km-main .km-content{
   margin: 20px;
 }
-
-
 
  // ToDo: new file
 
@@ -34,4 +31,8 @@
 
 #km-top-progress-bar {
   visibility: hidden;
+}
+
+.km-progress-bar-container {
+  background-color: #E3E8EC;
 }
