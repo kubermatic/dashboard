@@ -26,6 +26,7 @@ import {OpenstackCloudSpec} from "../api/entitiy/cloud/OpenstackCloudSpec";
 import {OpenstackNodeSpec} from "../api/entitiy/node/OpenstackNodeSpec";
 import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
+import * as testing from "selenium-webdriver/testing";
 
 
 @Component({

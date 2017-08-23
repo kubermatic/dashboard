@@ -1,78 +1,3 @@
-.wizard-step {
-  padding-top: 8px;
-  position: relative;
-  color: #fff;
-  font-weight: bold;
-}
-.wizard-step.done {
-  border-bottom-color: green;
-}
-
-.wizard-step-body {
-  //margin-left: 16px;
-  margin-top: 0;
-  min-height: 48px;
-  overflow-y:hidden;
-  overflow-x:hidden;
-  padding-bottom: 16px;
-  color: #000;
-
-  .wizard-step {
-    .tbd{
-      filter: grayscale(100%);
-      -webkit-filter: grayscale(100%);
-      -moz-filter: grayscale(100%);
-      -o-filter: grayscale(100%);
-      -ms-filter: grayscale(100%);
-      opacity: 0.3;
-    }
-
-    .disabled {
-      filter: grayscale(100%);
-      -webkit-filter: grayscale(100%);
-      -moz-filter: grayscale(100%);
-      -o-filter: grayscale(100%);
-      -ms-filter: grayscale(100%);
-      opacity: 0.3;
-    }
-
-    .tbd {
-      filter: opacity(50%) grayscale(80%);
-    }
-  }
-}
-
-.wizard-step-circle {
-  width: 36px;
-  height: 36px;
-  border-radius: 36px;
-  position: absolute;
-  top: 0  ;
-  left: -18px;
-  text-align: center;
-  line-height: 34px;
-}
-.wizard-step.done .wizard-step-circle {
-  background-color: green;
-  color: white;
-  border: 1px solid green;
-}
-.wizard-step.active .wizard-step-circle {
-  background-color: green;
-  color: white;
-  border: 1px solid green;
-}
-.wizard-step.tbd .wizard-step-circle {
-  background-color: #d0d0d0;
-  color: #808080;
-  border-color: #d0d0d0;
-}
-.wizard-step.tbd .wizard-step-body {
-  filter: opacity(50%) grayscale(50%);
-}
-
-// arrow box--------
-
 $wizard-box-size: 200px;
 $wizard-box-content-dc-logo-size: 125px;
 $wizard-box-content-location-flag-size: 48px;
@@ -181,22 +106,6 @@ $wizard-box-content-cloud-logo-size: 100px;
   color: #717171
 }
 
-.km-card-progress-bar {
-  margin-bottom: 10px;
-  padding-top: 14px;
-  .mat-card-title {
-
-    font-size: 16px;
-    font-weight: 400;
-    margin-bottom: 0;
-    margin-top: 0px;
-    padding-right: 15px;
-
-    i {
-      color: #fff;
-    }
-  }
-}
 
 
 // New Styling Create Cluster
