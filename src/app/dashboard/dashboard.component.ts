@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(["wizard"]);
       });
     } else {
-      this.router.navigate(["welcome"]);
+        this.router.navigate(["login"]);
     }
   }
 }
