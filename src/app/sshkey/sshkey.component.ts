@@ -20,10 +20,13 @@ export class SshkeyComponent implements OnInit {
   }
 
   private refreshSSHKeys() {
-    this.api.getSSHKeys().subscribe(result => {
+    this.api.getSSHKeys().retry(3).subscribe(result => {
       this.sshKeys = result;
       this.loading = false;
-    });
+    }, error => {
+        this.loading = false;
+    }
+    );
   }
 
   public handleKeyUpdated() {
