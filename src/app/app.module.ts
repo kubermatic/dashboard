@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {BrowserModule} from "@angular/platform-browser";
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
+
 
 import {
   MdButtonModule,
@@ -62,6 +64,7 @@ import { SidenavComponent } from './sidenav/sidenav.component';
 import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-form-field.component';
 import {HttpClientModule} from "@angular/common/http";
 import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.component";
@@ -71,6 +74,7 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ProgressComponent } from './wizard/progress/progress.component';
 
 @NgModule({
   imports: [
@@ -129,10 +133,12 @@ import { ClipboardModule } from 'ngx-clipboard';
     SidenavComponent,
     AddSshKeyModalComponent,
     ClusterHealthStatusComponent,
+    PageNotFoundComponent,
     SshKeyFormFieldComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
-    OpenstackAddNodeComponent
+    OpenstackAddNodeComponent,
+    ProgressComponent
   ],
   exports: [
     RouterModule,
