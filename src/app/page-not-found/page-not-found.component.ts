@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Location } from '@angular/common';
+import { Auth } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'kubermatic-page-not-found',
@@ -8,10 +9,15 @@ import { Location } from '@angular/common';
 })
 export class PageNotFoundComponent {
   constructor(
-    private location: Location
+    private auth: Auth,
+    private router: Router
   ) { }
 
-  back(): void {
-    this.location.back();
+  backToApp(): void {
+    if (this.auth.authenticated()) {
+      this.router.navigate(['clusters']);
+    } else {
+      this.router.navigate(['login']);
+    }
   }
 }

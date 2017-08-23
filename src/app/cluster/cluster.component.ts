@@ -75,7 +75,9 @@ export class ClusterComponent implements OnInit {
         this.updateNodes();
       }
 
-    });
+    },
+      error => this.router.navigate(['404'])
+    );
   }
 
   updateNodes(): void {
