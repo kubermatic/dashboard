@@ -1,0 +1,32 @@
+import {Component, OnInit} from "@angular/core";
+import {ApiService} from "../api/api.service";
+import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
+
+@Component({
+  selector: "kubermatic-sshkey",
+  templateUrl: "sshkey.component.html",
+  styleUrls: ["sshkey.component.scss"]
+})
+
+export class SshkeyComponent implements OnInit {
+
+  public sshKeys: Array<SSHKeyEntity> = [];
+  public loading: boolean = true;
+
+  constructor(private api: ApiService) {}
+
+  ngOnInit() {
+    this.refreshSSHKeys();
+  }
+
+  private refreshSSHKeys() {
+    this.api.getSSHKeys().subscribe(result => {
+      this.sshKeys = result;
+      this.loading = false;
+    });
+  }
+
+  public handleKeyUpdated() {
+    this.refreshSSHKeys();
+  }
+}

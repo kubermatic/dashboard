@@ -7,7 +7,7 @@ import {AuthGuard} from "./auth/auth.guard";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
-import {ProfileComponent} from "./profile/profile.component";
+import {SshkeyComponent} from "./sshkey/sshkey.component";
 
 
 
@@ -28,10 +28,10 @@ export const appRoutes: Routes = [
         data: { title: "Create Cluster with Nodes" }
       },
       {
-        path: "profile",
-        component: ProfileComponent,
+        path: "sshkeys",
+        component: SshkeyComponent,
         canActivate: [AuthGuard],
-        data: { title: "sshKeys" }
+        data: { title: "SSH Keys" }
       },
       {
         path: "dc/:seedDcName/cluster/:clusterName",
