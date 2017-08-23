@@ -25,7 +25,8 @@ import {
   MdDialogModule,
   MdSliderModule,
   OverlayModule,
-  MdSlideToggleModule
+  MdSlideToggleModule,
+  MdProgressBarModule
 } from '@angular/material';
 
 import 'hammerjs';
@@ -71,6 +72,9 @@ import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.compone
 import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
 import {AddNodeComponent} from "./forms/add-node/add-node.component";
+import {HTTP_INTERCEPTORS} from '@angular/common/http';
+import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service';
+import { ClipboardModule } from 'ngx-clipboard';
 
 @NgModule({
   imports: [
@@ -105,7 +109,9 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
     MdDialogModule,
     MdSliderModule,
     OverlayModule,
-    MdSlideToggleModule
+    MdSlideToggleModule,
+    MdProgressBarModule,
+    ClipboardModule
   ],
   declarations: [
     KubermaticComponent,
@@ -132,7 +138,6 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent
-
   ],
   exports: [
     RouterModule,
@@ -174,7 +179,13 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
     {
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoaderInterceptor,
+      multi: true
     }
+
   ],
   bootstrap: [KubermaticComponent]
 
