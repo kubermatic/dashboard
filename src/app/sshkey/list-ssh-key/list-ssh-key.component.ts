@@ -12,7 +12,6 @@ import {NotificationComponent} from "../../notification/notification.component";
 })
 export class ListSshKeyComponent implements OnInit {
   @Input() sshKeys: Array<SSHKeyEntity>;
-  public userProfile: any;
 
   constructor(private api: ApiService, private store: Store<fromRoot.State>) {}
 
