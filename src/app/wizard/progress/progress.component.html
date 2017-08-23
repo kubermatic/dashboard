@@ -1,0 +1,32 @@
+<md-card class="km-card-progress-bar" fxLayout fxLayoutGap="25px">
+  <md-card-title fxFlex class="wizard-step" >
+    <span [style.cursor]="getCurser(0)" (click)="gotoStep(0)">
+      <i [ngClass]="getIconClass(0)"></i>
+      <small>Cluster Name</small>
+    </span>
+  </md-card-title>
+  <md-card-title fxFlex class="wizard-step">
+    <span [style.cursor]="getCurser(1)" (click)="gotoStep(1)">
+      <i [ngClass]="getIconClass(1)"></i>
+      <small>Provider</small>
+    </span>
+  </md-card-title>
+  <md-card-title fxFlex class="wizard-step">
+    <span [style.cursor]="getCurser(2)" (click)="gotoStep(2)">
+      <i [ngClass]="getIconClass(2)"></i>
+      <small>Datacenter</small>
+    </span>
+  </md-card-title>
+  <md-card-title fxFlex class="wizard-step">
+    <span [style.cursor]="getCurser(3)" (click)="gotoStep(3)">
+      <i [ngClass]="getIconClass(3)"></i>
+      <small>Settings</small>
+    </span>
+  </md-card-title>
+  <md-card-title fxFlex class="wizard-step">
+    <span [style.cursor]="getCurser(4)" (click)="gotoStep(4)">
+      <i [ngClass]="getIconClass(4)"></i>
+      <small>Summary</small>
+    </span>
+  </md-card-title>
+</md-card>

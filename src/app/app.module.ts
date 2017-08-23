@@ -72,6 +72,7 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service';
 import { ClipboardModule } from 'ngx-clipboard';
+import { ProgressComponent } from './wizard/progress/progress.component';
 
 @NgModule({
   imports: [
@@ -133,7 +134,8 @@ import { ClipboardModule } from 'ngx-clipboard';
     SshKeyFormFieldComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
-    OpenstackAddNodeComponent
+    OpenstackAddNodeComponent,
+    ProgressComponent
   ],
   exports: [
     RouterModule,
