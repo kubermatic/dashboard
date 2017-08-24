@@ -1,10 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
-import {ClusterNameGenerator} from "../util/name-generator.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
-import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {NodeInstanceFlavors, NodeProvider} from "../api/model/NodeProviderConstants";
 import {CreateNodeModel} from "../api/model/CreateNodeModel";
 import {Router} from "@angular/router";
@@ -42,12 +40,16 @@ export class WizardComponent implements OnInit {
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
 
+
+  public clusterNameValid: boolean;
+  public clusterNameValue: string;
+
   public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
   public selectedCloudProviderApiError: string;
   public acceptBringYourOwn: boolean;
 
-  public clusterNameForm: FormGroup;
+
   public awsForm: FormGroup;
   public digitalOceanForm: FormGroup;
   public bringYourOwnForm: FormGroup;
@@ -71,7 +73,6 @@ export class WizardComponent implements OnInit {
   public config: any = {};
 
   constructor(private api: ApiService,
-              private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder,
               private router: Router,
               private store: Store<fromRoot.State>,
@@ -93,10 +94,7 @@ export class WizardComponent implements OnInit {
     });
 
 
-    this.clusterNameForm = this.formBuilder.group({
-      name: [this.nameGenerator.generateName(),
-        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(50)]],
-    });
+
 
     this.bringYourOwnForm = this.formBuilder.group({
       pif: ["", [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16),
@@ -143,6 +141,18 @@ export class WizardComponent implements OnInit {
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]],
     });
+  }
+
+  public getClusterName(name) {
+    this.clusterNameValue = "";
+    if (name.length) {
+      this.clusterNameValue = name;
+    }
+
+  }
+
+  public getClusterNameValid(valid) {
+    this.clusterNameValid = valid;
   }
 
   public selectCloud(cloud: string) {
@@ -217,9 +227,6 @@ export class WizardComponent implements OnInit {
     );
   }
 
-  public refreshName() {
-    this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
-  }
 
   public gotoStep(step: number) {
     this.currentStep = step;
@@ -228,7 +235,7 @@ export class WizardComponent implements OnInit {
   public canGotoStep(step: number) {
     switch (step) {
       case 0:
-        return this.clusterNameForm.valid;
+        return this.clusterNameValid;
       case 1:
         return !!this.selectedCloud;
       case 2:
@@ -305,7 +312,7 @@ export class WizardComponent implements OnInit {
           null,
           null,
         ),
-        this.clusterNameForm.controls["name"].value,
+        this.clusterNameValue,
         "",
       );
 
@@ -334,7 +341,7 @@ export class WizardComponent implements OnInit {
           null,
           null,
         ),
-        this.clusterNameForm.controls["name"].value,
+        this.clusterNameValue,
         "",
       );
 
@@ -355,7 +362,7 @@ export class WizardComponent implements OnInit {
           null,
           new BareMetalCloudSpec(""),
         ),
-        this.clusterNameForm.controls["name"].value,
+        this.clusterNameValue,
         "",
       );
 
@@ -384,7 +391,7 @@ export class WizardComponent implements OnInit {
           ),
           null,
         ),
-        this.clusterNameForm.controls["name"].value,
+        this.clusterNameValue,
         "",
       );
 
