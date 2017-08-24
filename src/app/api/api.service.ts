@@ -27,6 +27,11 @@ export class ApiService {
 
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
+
+    if(this.headers.get('Authorization').includes('null')) {
+      this.headers = this.headers.set("Authorization", "Bearer " + Auth.getBearerToken());
+    } 
+    
     return this.http.get<DataCenterEntity[]>(url, { headers: this.headers });
   }
 

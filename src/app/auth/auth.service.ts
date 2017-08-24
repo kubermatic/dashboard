@@ -95,9 +95,10 @@ export class Auth {
     expiresIn = params('expires_in');
     token = params('id_token');
     tokenType = params('token_type');
-
+    
     if (token) {
       localStorage.setItem('token', token);
+      this.router.navigate(['clusters']);
     }
   };
 
@@ -112,6 +113,6 @@ export class Auth {
     localStorage.removeItem("token");
     localStorage.removeItem("profile");
 
-    this.router.navigate(['/login']);
+    this.router.navigate(['']);
   };
 }
