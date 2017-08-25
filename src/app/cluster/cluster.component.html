@@ -50,7 +50,12 @@
       </div>
       <div fxFlex="30%">
         <ng-container *ngIf="cluster.spec.cloud[dc.spec.provider].sshKeys">
-          {{cluster.spec.cloud[dc.spec.provider].sshKeys.length}} sshKey(s)
+            <ul class="km-ssh-keys-list">
+                <li *ngFor="let sshKeyName of sshKeysNames">
+                  <i class="fa fa-key"></i>
+                  {{sshKeyName}}
+                </li>
+              </ul>
         </ng-container>
       </div>
     </md-card-content>
