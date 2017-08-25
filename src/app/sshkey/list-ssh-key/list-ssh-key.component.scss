@@ -1,7 +1,10 @@
 .km-sshkey-card.mat-card {
   border: 1px solid #E3E8EC;
   padding-top: 10px;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+  &:last-child {
+    margin-bottom: 60px;
+  }
 
   .mat-card-header {
     padding-bottom: 0;
