@@ -35,3 +35,16 @@ kubermatic-cluster-health-status {
   bottom: 0;
   margin: auto;
 }
+
+.km-ssh-keys-list {
+  list-style-type: none;
+  margin: 0; 
+  padding: 0;
+  li {
+    margin-bottom: 3px;
+    i {
+      color: #0288d1;
+      margin-right: 5px;
+    }
+  }
+}
