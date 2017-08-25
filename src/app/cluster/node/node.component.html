@@ -15,7 +15,7 @@
       <small>Copy</small>
     </div>
     <div fxFlex="10%" class="health-state">
-        <i [ngClass]="getNodeHealth()"></i>
+        <i [mdTooltip]="this.node.metadata.annotations['node.k8s.io/state']" [ngClass]="getNodeHealth()"></i>
     </div>
     <div fxFlex="10%">
       <button md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
