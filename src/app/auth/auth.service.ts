@@ -58,6 +58,8 @@ export class Auth {
       const idToken = Auth.getBearerToken();
       const profile = JSON.parse(localStorage.getItem("profile"));
       this.store.dispatch({ type: Actions.LOGGED_IN, payload: { token: idToken, profile: profile } });
+    } else {
+      this.login();
     }
 
     this.handleAuthenticationWithHash();
