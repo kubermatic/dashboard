@@ -14,30 +14,38 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {DropletSizeResponseEntity} from "./entitiy/digitalocean/DropletSizeEntity";
 import {CreateClusterModel} from "./model/CreateClusterModel";
 
+const REFRESH_TOKEN_DELAY = 40000;
+
 @Injectable()
 export class ApiService {
 
   private restRoot: string = environment.restRoot;
-  private headers: HttpHeaders = new HttpHeaders();
+  private headers: HttpHeaders = null;
+  private timeoutId: number = null;
 
-  constructor(private http: HttpClient) {
-    let token = Auth.getBearerToken();
-    this.headers = this.headers.set("Authorization", "Bearer " + token);
+  constructor(private http: HttpClient) {}
+
+  private getHeaders(): HttpHeaders {
+    if (this.headers && !this.timeoutId) {
+      this.timeoutId = window.setTimeout(() => { 
+        this.headers = null;
+        this.timeoutId = null;
+      }, REFRESH_TOKEN_DELAY);
+    }
+
+    return this.headers || (this.headers = new HttpHeaders({
+      "Authorization": "Bearer " + Auth.getBearerToken()
+    }));
   }
 
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
-
-    if(this.headers.get('Authorization').includes('null')) {
-      this.headers = this.headers.set("Authorization", "Bearer " + Auth.getBearerToken());
-    } 
-    
-    return this.http.get<DataCenterEntity[]>(url, { headers: this.headers });
+    return this.http.get<DataCenterEntity[]>(url, { headers: this.getHeaders() });
   }
 
   getDataCenter(dc: string): Observable<DataCenterEntity> {
     const url = `${this.restRoot}/dc/${dc}`;
-    return this.http.get<DataCenterEntity>(url, { headers: this.headers });
+    return this.http.get<DataCenterEntity>(url, { headers: this.getHeaders() });
   }
 
   getClusters(): Observable<ClusterEntity[]> {
@@ -60,52 +68,52 @@ export class ApiService {
 
   private getClustersByDC(seedRegion: string): Observable<ClusterEntity[]> {
     const url = `${this.restRoot}/dc/${seedRegion}/cluster`;
-    return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
+    return this.http.get<ClusterEntity[]>(url, { headers: this.getHeaders() });
   }
 
   getCluster(clusterModel: ClusterModel): Observable<ClusterEntity> {
     const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
-    return this.http.get<ClusterEntity>(url, { headers: this.headers })
+    return this.http.get<ClusterEntity>(url, { headers: this.getHeaders() })
   }
 
   createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
     const url = `${this.restRoot}/cluster`;
-    return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
+    return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.getHeaders() });
   }
 
   deleteCluster(clusterModel: ClusterModel) {
     const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, { headers: this.getHeaders() });
   }
 
   getClusterNodes(clusterModel: ClusterModel): Observable<NodeEntity[]> {
     const url = `/api/v1/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node`;
-    return this.http.get<NodeEntity[]>(url, { headers: this.headers });
+    return this.http.get<NodeEntity[]>(url, { headers: this.getHeaders() });
   }
 
   createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<NodeEntity> {
     const url = `${this.restRoot}/dc/${cluster.seed}/cluster/${cluster.metadata.name}/node`;
-    return this.http.post<NodeEntity>(url, nodeModel, { headers: this.headers });
+    return this.http.post<NodeEntity>(url, nodeModel, { headers: this.getHeaders() });
   }
 
   deleteClusterNode(clusterModel: ClusterModel, node_name: string) {
     const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/node/${node_name}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, { headers: this.getHeaders() });
   }
 
   getSSHKeys(): Observable<SSHKeyEntity[]> {
     const url = `${this.restRoot}/ssh-keys?format=json`;
-    return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
+    return this.http.get<SSHKeyEntity[]>(url, { headers: this.getHeaders() });
   }
 
   deleteSSHKey(fingerprint: string) {
     const url = `${this.restRoot}/ssh-keys/${fingerprint}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, { headers: this.getHeaders() });
   }
 
   addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
     const url = `${this.restRoot}/ssh-keys`;
-    return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.headers });
+    return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.getHeaders() });
   }
 
   getDigitaloceanSizes(token: string)  {
