@@ -49,13 +49,14 @@
         {{dc.spec.country}} / {{dc.spec.location}}
       </div>
       <div fxFlex="30%">
-        <ng-container *ngIf="cluster.spec.cloud[dc.spec.provider].sshKeys">
-            <ul class="km-ssh-keys-list">
-                <li *ngFor="let sshKeyName of sshKeysNames">
-                  <i class="fa fa-key"></i>
-                  {{sshKeyName}}
-                </li>
-              </ul>
+        <ng-container [ngSwitch]="sshKeysNames.length > 0">
+          <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
+            <li *ngFor="let sshKeyName of sshKeysNames">
+              <i class="fa fa-key"></i>
+              {{sshKeyName}}
+            </li>
+          </ul>
+          <ng-container *ngSwitchCase="false">no SSH Key selected</ng-container>
         </ng-container>
       </div>
     </md-card-content>
