@@ -8,7 +8,7 @@
     <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</p>
     <form [formGroup]="clusterNameForm" novalidate fxLayout="column">
       <md-input-container fxFlex [ngClass]="{'has-danger': !clusterNameForm.controls.name.valid, 'has-success': clusterNameForm.controls.name.valid}">
-        <input id="name" mdInput formControlName="name" type="text" placeholder="Name" title="name">
+        <input id="name" mdInput formControlName="name" type="text" placeholder="Name" title="name" (change)="syncClusterName()">
       </md-input-container>
       <div fxFlex>
         <button type="button" md-raised-button (click)="refreshName()">Generate name</button>

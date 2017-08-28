@@ -10,7 +10,7 @@ import * as fromRoot from "../../reducers/index";
   styleUrls: ['./cluster-name.component.scss']
 })
 export class ClusterNameComponent implements OnInit {
-  @Output() clusterName = new EventEmitter();
+  @Output() syncName = new EventEmitter();
   public clusterNameForm: FormGroup;
   //public clusterName: string;
 
@@ -25,10 +25,15 @@ export class ClusterNameComponent implements OnInit {
       name: [this.nameGenerator.generateName(),
         [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(50)]],
     });
+
+    this.syncClusterName();
   }
 
   public refreshName() {
     this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
   }
 
+  public syncClusterName() {
+    this.syncName.emit(this.clusterNameForm.controls['name'].value);
+  }
 }
