@@ -75,6 +75,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
+import { ProviderComponent } from './wizard/provider/provider.component';
 
 @NgModule({
   imports: [
@@ -138,7 +139,8 @@ import { ProgressComponent } from './wizard/progress/progress.component';
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
-    ProgressComponent
+    ProgressComponent,
+    ProviderComponent
   ],
   exports: [
     RouterModule,

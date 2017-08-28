@@ -141,17 +141,6 @@ $wizard-box-content-cloud-logo-size: 100px;
   }
 }
 
-.wizard-box-provider {
-  margin-top: 10px;
-}
-
-.wizard-box-provider {
-  background: #fff;
-  border: 1px solid #E3E8EC;
-  cursor: pointer;
-  min-height: 140px;
-}
-
 .wizard-box-title {
   text-align: center;
   padding-bottom: 5px;
@@ -164,11 +153,7 @@ $wizard-box-content-cloud-logo-size: 100px;
   min-height: 205px;
 }
 
-// img provider
-img.cloud-logo {
-  width: $wizard-box-content-cloud-logo-size ;
-  margin-bottom: 15px;
-}
+
 
 // create cluster form fields
 
