@@ -20,18 +20,13 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient) {
-    let token = Auth.getBearerToken();
+  constructor(private http: HttpClient, private auth: Auth) {
+    let token = auth.getBearerToken();
     this.headers = this.headers.set("Authorization", "Bearer " + token);
   }
 
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
-
-    if(this.headers.get('Authorization').includes('null')) {
-      this.headers = this.headers.set("Authorization", "Bearer " + Auth.getBearerToken());
-    } 
-    
     return this.http.get<DataCenterEntity[]>(url, { headers: this.headers });
   }
 
