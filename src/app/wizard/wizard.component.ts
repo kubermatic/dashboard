@@ -143,7 +143,7 @@ export class WizardComponent implements OnInit {
     });
   }
 
-  public getClusterName(name) {
+  public setClusterName(name) {
     this.clusterNameValue = name;
     this.clusterNameValid = false;
 
@@ -152,9 +152,7 @@ export class WizardComponent implements OnInit {
     }
   }
 
-  public getClusterNameValid(valid) {
-    this.clusterNameValid = valid;
-  }
+
 
   public selectCloud(cloud: string) {
     this.selectedCloud = cloud;
