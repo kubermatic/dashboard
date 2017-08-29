@@ -13,6 +13,10 @@ import {OpenStack} from 'openstack-lib';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {DropletSizeResponseEntity} from "./entitiy/digitalocean/DropletSizeEntity";
 import {CreateClusterModel} from "./model/CreateClusterModel";
+import 'rxjs/add/operator/catch';
+import {Store} from "@ngrx/store";
+import * as fromRoot from "../reducers/index";
+import {NotificationComponent} from '../notification/notification.component';
 
 @Injectable()
 export class ApiService {
@@ -20,7 +24,7 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private store: Store<fromRoot.State>) {
     let token = Auth.getBearerToken();
     this.headers = this.headers.set("Authorization", "Bearer " + token);
   }
@@ -123,6 +127,25 @@ export class ApiService {
     openStack.networkList().then((networks) => {
       console.log(networks);
       return networks;
+    });
+  }
+
+  getClusterUpgrades(clusterModel: ClusterModel): Observable<string[]> {
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/upgrades`;
+    return this.http.get<string[]>(url, {headers: this.headers})
+      .catch(error => {
+        NotificationComponent.error(this.store, 'Error', `${error.status} ${error.statusText}`);
+        return Observable.of<string[]>([]);
+      })
+  }
+
+  updateClusterUpgrade(clusterModel: ClusterModel, upgradeVersion: string): void {
+    let body = { to: upgradeVersion };
+    const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/upgrade`;
+    this.http.post(url, body, {headers: this.headers})
+      .catch(error => {
+        NotificationComponent.error(this.store, 'Error', `${error.status} ${error.statusText}`);
+        return null;
     });
   }
 }

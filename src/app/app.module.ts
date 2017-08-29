@@ -75,6 +75,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
+import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 
 @NgModule({
   imports: [
@@ -138,7 +139,8 @@ import { ProgressComponent } from './wizard/progress/progress.component';
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
-    ProgressComponent
+    ProgressComponent,
+    UpgradeClusterComponent
   ],
   exports: [
     RouterModule,
@@ -167,7 +169,8 @@ import { ProgressComponent } from './wizard/progress/progress.component';
     AddSshKeyModalComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
-    OpenstackAddNodeComponent
+    OpenstackAddNodeComponent,
+    UpgradeClusterComponent
   ],
   providers: [
     AUTH_PROVIDERS,

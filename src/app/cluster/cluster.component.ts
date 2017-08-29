@@ -17,6 +17,7 @@ import {OpenstackAddNodeComponent} from "../forms/add-node/openstack/openstack-a
 import {NotificationComponent} from "../notification/notification.component";
 import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
+import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
 
 @Component({
   selector: "kubermatic-cluster",
@@ -40,6 +41,7 @@ export class ClusterComponent implements OnInit {
   public nodeSizes: any = [];
   public loading: boolean = true;
   public sshKeysNames: string[] = [];
+  private upgradesList: string[] = [];
   
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
@@ -60,6 +62,9 @@ export class ClusterComponent implements OnInit {
         }
       }).map(key => key.name);
     });
+
+    this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
+      .subscribe(upgrades => this.upgradesList = upgrades);
   }
 
   ngOnDestroy(){
@@ -118,6 +123,17 @@ export class ClusterComponent implements OnInit {
     this.dialogRef.componentInstance.seedDcName = this.seedDcName;
 
     this.dialogRef.afterClosed().subscribe(result => {});
+  }
+
+  public upgradeClusterDialog(): void {
+    let dialogWidth = '500px';
+    this.dialogRef = this.dialog.open(UpgradeClusterComponent, {
+      data: {
+        upgradesList: this.upgradesList,
+        clusterModel: new ClusterModel(this.seedDcName, this.clusterName)
+      },
+      width: dialogWidth
+    });
   }
 
   public downloadKubeconfigUrl(): string {
