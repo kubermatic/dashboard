@@ -1,8 +1,6 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ClusterNameGenerator} from "../../util/name-generator.service";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../reducers/index";
 
 @Component({
   selector: 'kubermatic-cluster-name',
@@ -12,28 +10,27 @@ import * as fromRoot from "../../reducers/index";
 export class ClusterNameComponent implements OnInit {
   @Output() syncName = new EventEmitter();
   public clusterNameForm: FormGroup;
-  //public clusterName: string;
 
   constructor(private nameGenerator: ClusterNameGenerator,
-              private formBuilder: FormBuilder,
-              private store: Store<fromRoot.State>) {
+              private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
-
     this.clusterNameForm = this.formBuilder.group({
-      name: [this.nameGenerator.generateName(),
-        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(50)]],
+      name: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
     });
-
-    this.syncClusterName();
   }
 
-  public refreshName() {
+  public generateName() {
     this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
+    this.syncName.emit(this.clusterNameForm.controls['name'].value);
   }
 
   public syncClusterName() {
-    this.syncName.emit(this.clusterNameForm.controls['name'].value);
+    if(this.clusterNameForm.controls['name'].valid) {
+      this.syncName.emit(this.clusterNameForm.controls['name'].value);
+    } else {
+      this.syncName.emit("");
+    }
   }
 }
