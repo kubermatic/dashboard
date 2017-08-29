@@ -61,7 +61,7 @@ export class WizardComponent implements OnInit {
   }];
 
   // Nodes Sizes
-  public nodeSize: any[] = NodeInstanceFlavors.VOID;
+  public nodeSize: any[] = NodeInstanceFlavors.AWS;
 
   // Create Nodes
   public cluster: any;
@@ -148,9 +148,9 @@ export class WizardComponent implements OnInit {
     this.selectedCloud = cloud;
     this.selectedCloudRegion = null;
 
-    if (cloud === NodeProvider.AWS) {
+    if (cloud === 'aws') {
       this.nodeSize = NodeInstanceFlavors.AWS;
-    } else if (cloud == NodeProvider.OPENSTACK) {
+    } else if (cloud === 'openstack') {
       this.nodeSize = NodeInstanceFlavors.Openstack;
     }
   }

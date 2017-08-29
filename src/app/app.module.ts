@@ -76,6 +76,7 @@ import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { ProviderComponent } from './wizard/provider/provider.component';
+import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
 
 @NgModule({
   imports: [
@@ -140,7 +141,8 @@ import { ProviderComponent } from './wizard/provider/provider.component';
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
     ProgressComponent,
-    ProviderComponent
+    ProviderComponent,
+    DatacenterComponent
   ],
   exports: [
     RouterModule,

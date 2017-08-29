@@ -61,50 +61,6 @@ $wizard-box-content-cloud-logo-size: 100px;
   }
 }
 
-.wizard-box {
-  margin: 5px;
-  background: #fff;
-  border: 1px solid #E3E8EC;
-  cursor: pointer;
-  float: left;
-}
-
-.wizard-box[disabled],
-.wizard-box-provider [disabled] {
-  cursor: not-allowed;
-}
-
-.wizard-box.selected,
-.wizard-box-provider.selected {
-  background-color: #d5e3f5;
-  cursor: default;
-  border: 1px solid #03a9f4;
-}
-
-.wizard-box.selected:hover,
-.wizard-box-provider.selected:hover {
-  background-color: #d5e3f5;
-  cursor: default;
-  border: 1px solid #03a9f4;
-}
-
-.wizard-box:hover,
-.wizard-box-provider:hover {
-  border: 1px solid #03a9f4;
-  background-color: #d5e3f5;
-}
-
-.wizard-box:not([disabled]):not(.selected):hover,
-.wizard-box-provider:not([disabled]):not(.selected):hover {
-  background: #f7f8f9;
-}
-
-
-
-.wizard-box[disabled] > i,
-.wizard-box-provider[disabled] > i {
-  color: #717171
-}
 
 
 
