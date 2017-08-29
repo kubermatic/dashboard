@@ -39,8 +39,8 @@ export class ClusterComponent implements OnInit {
   public seedDcName: string;
   public nodeSizes: any = [];
   public loading: boolean = true;
-
-
+  public sshKeysNames: string[] = [];
+  
   constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
 
   ngOnInit() {
@@ -51,6 +51,14 @@ export class ClusterComponent implements OnInit {
       this.sub = this.timer.subscribe(() => {
         this.update();
       });
+    });
+
+    this.api.getSSHKeys().subscribe(keys => {
+      this.sshKeysNames = keys.filter(key => {
+        if(key['clusters']) {
+          return key['clusters'].includes(this.clusterName);
+        }
+      }).map(key => key.name);
     });
   }
 

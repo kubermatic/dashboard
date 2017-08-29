@@ -5,10 +5,8 @@
       </md-card-content>
     </md-card>
 
-
-
     <ng-container *ngSwitchCase="true">
-        <md-card class="km-sshkey-card"  *ngFor="let key of sshKeys; let i = index;">
+        <md-card class="km-sshkey-card" *ngFor="let key of sshKeys; let i = index;">
             <md-card-header>
               <md-card-title fxLayout>
                   <div fxFlex="90%" class="km-ssh-key-name">

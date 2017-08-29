@@ -1,16 +1,12 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-
+import {Routes} from '@angular/router';
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {AuthGuard} from "./auth/auth.guard";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
-import {ProfileComponent} from "./profile/profile.component";
+import {SshkeyComponent} from "./sshkey/sshkey.component";
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
-
-
 
 export const appRoutes: Routes = [
   {
@@ -24,10 +20,10 @@ export const appRoutes: Routes = [
         data: { title: "Create Cluster with Nodes" }
       },
       {
-        path: "profile",
-        component: ProfileComponent,
+        path: "sshkeys",
+        component: SshkeyComponent,
         canActivate: [AuthGuard],
-        data: { title: "sshKeys" }
+        data: { title: "SSH Keys" }
       },
       {
         path: "dc/:seedDcName/cluster/:clusterName",
@@ -49,8 +45,8 @@ export const appRoutes: Routes = [
     ]
   },
   {
-      path: "404",
-      component: PageNotFoundComponent
+    path: "404",
+    component: PageNotFoundComponent
   },
   {
     path: "**",
