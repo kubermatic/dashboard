@@ -143,9 +143,6 @@ export class ApiService {
     let body = { to: upgradeVersion };
     const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/upgrade`;
     this.http.post(url, body, {headers: this.headers})
-      .catch(error => {
-        NotificationComponent.error(this.store, 'Error', `${error.status} ${error.statusText}`);
-        return null;
-    });
+     .subscribe({error: error => NotificationComponent.error(this.store, 'Error', `${error.status} ${error.statusText}`)});
   }
 }
