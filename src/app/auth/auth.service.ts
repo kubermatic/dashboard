@@ -7,54 +7,22 @@ import {Actions} from "../reducers/actions";
 
 @Injectable()
 export class Auth {
+  
   constructor(private router: Router, private store: Store<fromRoot.State>) {
-    if (this.authenticated()) {
-      const idToken = this.getBearerToken();
-      const profile = JSON.parse(localStorage.getItem("profile"));
-      this.store.dispatch({ type: Actions.LOGGED_IN, payload: { token: idToken, profile: profile } });
-    } else {
-      this.login();
+    let token = this.getTokenFromQuery();
+    if (token) {
+      localStorage.setItem('token', token);      
     }
-    
-    this.handleAuthenticationWithHash();
+  }
+
+  private getTokenFromQuery(): string {
+    let results = new RegExp('[\?&]id_token=([^&#]*)').exec(window.location.href);
+    return results == null ? null : results[1] || '';
   }
 
   public getBearerToken(): string {
     return localStorage.getItem("token");
   }
-
-  private handleAuthenticationWithHash(): void {
-    this.router.events
-      .filter(event => event instanceof NavigationStart)
-      .filter((event: NavigationStart) => (/access_token|token|error/).test(event.url));
-  }
-
-
-  public login() {
-    let accessToken : any;
-    let expiresIn : any;
-    let token : string;
-    let tokenType : any;
-
-    let params = function(name){
-      var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-      if (results==null){
-        return null;
-      } else {
-        return results[1] || '';
-      }
-    }
-
-    accessToken = params('access_token');
-    expiresIn = params('expires_in');
-    token = params('id_token');
-    tokenType = params('token_type');
-    
-    if (token) {
-      localStorage.setItem('token', token);
-      this.router.navigate(['clusters']);
-    }
-  };
 
   public authenticated() {
     // Check if there's an unexpired JWT
@@ -64,7 +32,5 @@ export class Auth {
 
   public logout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("profile");
-    this.router.navigate(['']);
   };
 }
