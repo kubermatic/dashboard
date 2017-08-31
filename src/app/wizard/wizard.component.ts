@@ -40,7 +40,8 @@ export class WizardComponent implements OnInit {
   public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
 
   public currentStep: number = 0;
-  public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
+  public stepFormard: boolean = false;
+  public stepBack: boolean = false;
 
   public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
@@ -259,20 +260,12 @@ export class WizardComponent implements OnInit {
     }
   }
 
-  public stepBack() {
-    this.currentStep = (this.currentStep - 1) < 0 ? 0 : (this.currentStep - 1);
+  public canStepBack() {
+    this.stepBack =  this.currentStep > 0;
   }
 
-  public stepForward() {
-    this.currentStep = (this.currentStep + 1) > this.stepsTitles.length ? 0 : (this.currentStep + 1);
-  }
-
-  public canStepBack(): boolean {
-    return this.currentStep > 0;
-  }
-
-  public canStepForward(): boolean {
-    return this.canGotoStep(this.currentStep);
+  public canStepForward() {
+    this.stepFormard =  this.canGotoStep(this.currentStep);
   }
 
   public createClusterAndNode() {

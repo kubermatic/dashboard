@@ -475,16 +475,4 @@
 </ng-container>
 <!-- End Summary: All cluster -->
 
-<!-- Start Create Cluster Navigation Buttons -->
-<div style="margin-top: 10px;margin-bottom: 70px;">
-  <div>
-    <button type="button" md-raised-button color="primary" (click)="stepBack()" [disabled]="!canStepBack()">
-      <i class="fa fa-chevron-left" style="margin-right: 5px;" aria-hidden="true"></i>Back
-    </button>
-    <button type="button" md-raised-button color="primary" (click)="stepForward()" *ngIf="currentStep !== 4" [disabled]="!canStepForward()">
-      Next<i class="fa fa-chevron-right" style="margin-left: 5px;" aria-hidden="true"></i>
-    </button>
-    <button type="button" md-raised-button color="primary" *ngIf="currentStep == 4" (click)="createClusterAndNode()">Create cluster</button>
-  </div>
-</div>
-<!-- End Create Cluster Navigation Buttons -->
+<kubermatic-navigation-buttons [step]="currentStep" (syncStep)="gotoStep($event)"></kubermatic-navigation-buttons>
