@@ -14,15 +14,10 @@ import {NotificationComponent} from "../../notification/notification.component";
 export class AddSshKeyComponent implements OnInit {
   @Output() syncSshKey = new EventEmitter();
   @Input() sshKeys: Array<SSHKeyEntity> = [];
-  public userProfile: any;
 
   public addSSHKeyForm: FormGroup;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {
-    this.store.select(fromRoot.getAuthProfile).subscribe(profile => {
-      this.userProfile = profile;
-    });
-  }
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {}
 
   ngOnInit() {
     this.addSSHKeyForm = this.formBuilder.group({

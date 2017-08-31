@@ -36,16 +36,15 @@ import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
-import {AddSshKeyComponent} from "./profile/add-ssh-key/add-ssh-key.component";
+import {AddSshKeyComponent} from "./sshkey/add-ssh-key/add-ssh-key.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.component";
 import {NodeComponent} from "./cluster/node/node.component";
 import {NodeDeleteConfirmationComponent} from "./cluster/node-delete-confirmation/node-delete-confirmation.component";
-
 import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
-import {ProfileComponent} from "./profile/profile.component";
+import {SshkeyComponent} from "./sshkey/sshkey.component";
 import {NotificationComponent} from "./notification/notification.component";
 import {Auth} from "./auth/auth.service";
 import {appRoutes} from "./app.routing";
@@ -60,7 +59,7 @@ import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
 import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
-import {ListSshKeyComponent} from './profile/list-ssh-key/list-ssh-key.component';
+import {ListSshKeyComponent} from './sshkey/list-ssh-key/list-ssh-key.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
@@ -77,6 +76,7 @@ import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
+import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 
 @NgModule({
   imports: [
@@ -126,7 +126,7 @@ import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.compone
     ClusterListComponent,
     ClusterItemComponent,
     NodeComponent,
-    ProfileComponent,
+    SshkeyComponent,
     NotificationComponent,
     ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
@@ -142,6 +142,7 @@ import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.compone
     OpenstackAddNodeComponent,
     ProgressComponent,
     ClusterNameComponent
+    UpgradeClusterComponent
   ],
   exports: [
     RouterModule,
@@ -170,7 +171,8 @@ import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.compone
     AddSshKeyModalComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
-    OpenstackAddNodeComponent
+    OpenstackAddNodeComponent,
+    UpgradeClusterComponent
   ],
   providers: [
     AUTH_PROVIDERS,

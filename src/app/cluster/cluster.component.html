@@ -6,6 +6,11 @@
         <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
         Add Node
       </button>
+      <button md-raised-button color="primary" (click)="upgradeClusterDialog()" 
+      [disabled]="cluster.status.phase != 'Running' || upgradesList.length === 0">
+        <i class="fa fa-arrow-up" style="margin-right: 5px;" aria-hidden="true"></i>
+        Upgrade Cluster
+      </button>
       <button md-button (click)="deleteClusterDialog()" md-raised-button >
         <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px;margin-top: -4px; color: #0288d1;" color="primary"></i>
         Delete Cluster
@@ -49,13 +54,19 @@
         {{dc.spec.country}} / {{dc.spec.location}}
       </div>
       <div fxFlex="30%">
-        <ng-container *ngIf="cluster.spec.cloud[dc.spec.provider].sshKeys">
-          {{cluster.spec.cloud[dc.spec.provider].sshKeys.length}} sshKey(s)
+        <ng-container [ngSwitch]="sshKeysNames.length > 0">
+          <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
+            <li *ngFor="let sshKeyName of sshKeysNames">
+              <i class="fa fa-key"></i>
+              {{sshKeyName}}
+            </li>
+          </ul>
+          <ng-container *ngSwitchCase="false">no SSH Key selected</ng-container>
         </ng-container>
       </div>
     </md-card-content>
   </md-card>
-
+  
   <md-card class="km-card-list" style="margin-bottom: 70px;">
     <md-card-header class="km-card-list-header" >
       <md-card-title fxLayout>

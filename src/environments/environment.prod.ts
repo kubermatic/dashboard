@@ -1,4 +1,4 @@
-let redirect_uri = window.location.protocol + '//' + window.location.host +'/login';
+let redirect_uri = window.location.protocol + '//' + window.location.host;
 let oauth = window.location.protocol + '//' + window.location.host +'/dex/auth';
 
 export const environment = {

@@ -1,0 +1,30 @@
+<div class="km-upgrade-cluster">
+  <md-toolbar>
+    <div class="md-toolbar">
+        <h4 class="modal-title" id="myModalLabel">Upgrade Cluster</h4>
+    </div>
+    <button md-icon-button md-dialog-close>
+        <i class="fa fa-times" aria-hidden="true"></i>
+      </button>
+  </md-toolbar>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <md-select class="top-bottom-distance" [(ngModel)]="selectedVersion" style="width: 100%" placeholder="Upgradable version:">
+        <md-option *ngFor="let upgradeVersion of data.upgradesList" [value]="upgradeVersion">
+          {{upgradeVersion}}
+        </md-option>
+      </md-select>
+      <div class="top-bottom-distance">
+        Selected version: {{selectedVersion}}
+      </div>
+    </div>        
+  </md-dialog-content>
+  <md-dialog-actions>
+  <button md-dialog-close md-raised-button>
+    close
+  </button>
+  <button md-raised-button color="primary" (click)="upgrade()" [disabled]="!selectedVersion">
+    upgrade
+  </button>
+  </md-dialog-actions>
+</div>
