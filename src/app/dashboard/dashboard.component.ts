@@ -42,8 +42,6 @@ export class DashboardComponent implements OnInit {
       }, error => {
         this.router.navigate(["wizard"]);
       });
-    } else {
-        this.router.navigate(["login"]);
     }
   }
 }
