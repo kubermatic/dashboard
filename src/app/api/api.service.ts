@@ -24,7 +24,7 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient, private auth: Auth) {
+  constructor(private http: HttpClient, private auth: Auth, private store: Store<fromRoot.State>) {
     let token = auth.getBearerToken();
     this.headers = this.headers.set("Authorization", "Bearer " + token);
   }
