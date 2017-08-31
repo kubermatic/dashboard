@@ -141,7 +141,7 @@ import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-clust
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
     ProgressComponent,
-    ClusterNameComponent
+    ClusterNameComponent,
     UpgradeClusterComponent
   ],
   exports: [
