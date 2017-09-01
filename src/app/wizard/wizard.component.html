@@ -27,10 +27,6 @@
 
 <kubermatic-datacenter [datacenter]="groupedDatacenters[selectedCloud]" (syncDatacenter)="selectCloudRegion($event)" *ngIf="currentStep == 2 && selectedCloud !== 'bringyourown'"></kubermatic-datacenter>
 
-<!-- Start Select Datacenter: Step 3 Default -->
-<ng-container *ngIf="currentStep == 2 && selectedCloud !== 'bringyourown'">
-</ng-container>
-<!-- End Select Datacenter: Step 3 Default -->
 
 <!-- Start Select Datacenter: Step 3 Bring Your Own -->
 <ng-container *ngIf="currentStep == 2 && selectedCloud == 'bringyourown'">

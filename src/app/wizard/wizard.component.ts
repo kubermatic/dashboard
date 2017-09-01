@@ -148,9 +148,9 @@ export class WizardComponent implements OnInit {
     this.selectedCloud = cloud;
     this.selectedCloudRegion = null;
 
-    if (cloud === 'aws') {
+    if (cloud === NodeProvider.AWS) {
       this.nodeSize = NodeInstanceFlavors.AWS;
-    } else if (cloud === 'openstack') {
+    } else if (cloud === NodeProvider.OPENSTACK) {
       this.nodeSize = NodeInstanceFlavors.Openstack;
     }
   }
