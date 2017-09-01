@@ -5,7 +5,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
   templateUrl: 'progress.component.html',
   styleUrls: ['progress.component.scss']
 })
-export class ProgressComponent implements OnInit{
+export class ProgressComponent implements OnInit {
 
   @Input() step: number;
   @Output() syncStep = new EventEmitter();
