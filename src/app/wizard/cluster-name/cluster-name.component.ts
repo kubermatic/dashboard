@@ -10,6 +10,10 @@ import {ClusterNameGenerator} from "../../util/name-generator.service";
 export class ClusterNameComponent implements OnInit {
   @Output() syncName = new EventEmitter();
   public clusterNameForm: FormGroup;
+  public clusterName: {valid: boolean, value:string } = {
+    valid : false,
+    value : ""
+  };
 
   constructor(private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder) {
@@ -23,14 +27,12 @@ export class ClusterNameComponent implements OnInit {
 
   public generateName() {
     this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
-    this.syncName.emit(this.clusterNameForm.controls['name'].value);
+    this.syncClusterName();
   }
 
   public syncClusterName() {
-    if(this.clusterNameForm.controls['name'].valid) {
-      this.syncName.emit(this.clusterNameForm.controls['name'].value);
-    } else {
-      this.syncName.emit("");
-    }
+    this.clusterName.valid = this.clusterNameForm.controls['name'].valid;
+    this.clusterName.value = this.clusterNameForm.controls['name'].value;
+    this.syncName.emit(this.clusterName);
   }
 }

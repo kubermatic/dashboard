@@ -144,14 +144,9 @@ export class WizardComponent implements OnInit {
   }
 
   public setClusterName(name) {
-    this.clusterNameValue = name;
+    this.clusterNameValue = name.value;
+    this.clusterNameValid = name.valid;
 
-
-    if (name.length) {
-      this.clusterNameValid = true;
-    } else {
-      this.clusterNameValid = false;
-    }
   }
 
 
