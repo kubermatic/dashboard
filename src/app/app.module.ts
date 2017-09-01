@@ -77,6 +77,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { ProviderComponent } from './wizard/provider/provider.component';
 import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
+import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 
 @NgModule({
   imports: [
@@ -142,7 +143,8 @@ import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
     OpenstackAddNodeComponent,
     ProgressComponent,
     ProviderComponent,
-    DatacenterComponent
+    DatacenterComponent,
+    UpgradeClusterComponent
   ],
   exports: [
     RouterModule,
@@ -171,7 +173,8 @@ import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
     AddSshKeyModalComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
-    OpenstackAddNodeComponent
+    OpenstackAddNodeComponent,
+    UpgradeClusterComponent
   ],
   providers: [
     AUTH_PROVIDERS,

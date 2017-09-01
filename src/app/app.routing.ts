@@ -10,11 +10,6 @@ import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 
 export const appRoutes: Routes = [
   {
-    path: "login",
-    component: FrontpageComponent,
-    data: { title: "Welcome" }
-  },
-  {
     path: "",
     component: DashboardComponent,
     children: [
@@ -44,7 +39,7 @@ export const appRoutes: Routes = [
       },
       {
         path: "",
-        redirectTo: 'clusters',
+        component: FrontpageComponent,
         pathMatch: 'full',
       }
     ]

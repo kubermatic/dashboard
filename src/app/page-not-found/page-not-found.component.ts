@@ -17,7 +17,7 @@ export class PageNotFoundComponent {
     if (this.auth.authenticated()) {
       this.router.navigate(['clusters']);
     } else {
-      this.router.navigate(['login']);
+      this.router.navigate(['']);
     }
   }
 }
