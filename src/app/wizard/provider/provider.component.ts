@@ -11,7 +11,7 @@ import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
 export class ProviderComponent implements OnInit {
   @Input() provider: { [key: string]: DataCenterEntity[] } = {};
   @Output() syncProvider =  new EventEmitter();
-  public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN, NodeProvider.BAREMETAL, NodeProvider.OPENSTACK];
+  public supportedNodeProviders: string[] = NodeProvider.Supported;
   public selectedCloud: string = NodeProvider.AWS;
 
   constructor() { }
