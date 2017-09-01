@@ -40,9 +40,7 @@ export class WizardComponent implements OnInit {
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
 
-
-  public clusterNameValid: boolean;
-  public clusterNameValue: string;
+  public clusterName: {valid: boolean; value: string} = {valid: false, value: ""};
 
   public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
@@ -82,7 +80,6 @@ export class WizardComponent implements OnInit {
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
       result.forEach(elem => {
-
         if (!elem.seed) {
           if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
             this.groupedDatacenters[elem.spec.provider] = [];
@@ -92,9 +89,6 @@ export class WizardComponent implements OnInit {
         }
       });
     });
-
-
-
 
     this.bringYourOwnForm = this.formBuilder.group({
       pif: ["", [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(16),
@@ -143,12 +137,9 @@ export class WizardComponent implements OnInit {
     });
   }
 
-  public setClusterName(name) {
-    this.clusterNameValue = name.value;
-    this.clusterNameValid = name.valid;
-
+  public setClusterName(clusterNameChangeEvent) {
+    this.clusterName = clusterNameChangeEvent;
   }
-
 
 
   public selectCloud(cloud: string) {
@@ -231,7 +222,7 @@ export class WizardComponent implements OnInit {
   public canGotoStep(step: number) {
     switch (step) {
       case 0:
-        return this.clusterNameValid;
+        return this.clusterName.valid;
       case 1:
         return !!this.selectedCloud;
       case 2:
@@ -308,7 +299,7 @@ export class WizardComponent implements OnInit {
           null,
           null,
         ),
-        this.clusterNameValue,
+        this.clusterName.value,
         "",
       );
 
@@ -337,7 +328,7 @@ export class WizardComponent implements OnInit {
           null,
           null,
         ),
-        this.clusterNameValue,
+        this.clusterName.value,
         "",
       );
 
@@ -358,7 +349,7 @@ export class WizardComponent implements OnInit {
           null,
           new BareMetalCloudSpec(""),
         ),
-        this.clusterNameValue,
+        this.clusterName.value,
         "",
       );
 
@@ -387,7 +378,7 @@ export class WizardComponent implements OnInit {
           ),
           null,
         ),
-        this.clusterNameValue,
+        this.clusterName.value,
         "",
       );
 
