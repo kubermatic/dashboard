@@ -1,6 +1,6 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { LoaderInterceptor} from './loader-interceptor.service';
+import { LoaderInterceptor} from './loader.service';
 
 describe('LoaderInterceptorService', () => {
   beforeEach(() => {

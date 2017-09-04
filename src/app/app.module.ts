@@ -72,10 +72,10 @@ import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digita
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
 import {AddNodeComponent} from "./forms/add-node/add-node.component";
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
+import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 
 @NgModule({
   imports: [
@@ -186,10 +186,14 @@ import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-clust
     },
     {
       provide: HTTP_INTERCEPTORS,
+      useClass: CheckTokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
       useClass: LoaderInterceptor,
       multi: true
     }
-
   ],
   bootstrap: [KubermaticComponent]
 
