@@ -6,20 +6,25 @@ import 'rxjs/add/operator/do';
 @Injectable()
 export class LoaderInterceptor implements HttpInterceptor{
   private progressBarElement: HTMLElement;
-  
+
   constructor() {
     this.progressBarElement = document.getElementById('km-top-progress-bar');
   }
 
+  private setProgressBarVisibility(visibility: string): void {
+    this.progressBarElement.style.visibility = visibility;
+  }
+
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {    
-    this.progressBarElement.style.visibility = 'visible';
+    this.setProgressBarVisibility('visible');
 
     return next
       .handle(req)
       .do((event) => {
         if (event instanceof HttpResponse) {
-          this.progressBarElement.style.visibility ='hidden';
+          this.setProgressBarVisibility('hidden');
         }
-      });
+      },
+      error => this.setProgressBarVisibility('hidden'));
   }
 }
