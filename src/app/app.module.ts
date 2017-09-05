@@ -75,6 +75,7 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
+import {CustomEventService} from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 
 @NgModule({
@@ -193,7 +194,8 @@ import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
       provide: HTTP_INTERCEPTORS,
       useClass: LoaderInterceptor,
       multi: true
-    }
+    },
+    CustomEventService
   ],
   bootstrap: [KubermaticComponent]
 
