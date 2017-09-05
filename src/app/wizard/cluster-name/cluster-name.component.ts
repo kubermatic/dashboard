@@ -1,6 +1,7 @@
 import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ClusterNameGenerator} from "../../util/name-generator.service";
+import {ClusterNameEntity} from "../../api/entitiy/wizard/ClusterNameEntity";
 
 @Component({
   selector: 'kubermatic-cluster-name',
@@ -10,11 +11,6 @@ import {ClusterNameGenerator} from "../../util/name-generator.service";
 export class ClusterNameComponent implements OnInit {
   @Output() syncName = new EventEmitter();
   public clusterNameForm: FormGroup;
-  public clusterName: {valid: boolean, value:string } = {
-    valid : false,
-    value : ""
-  };
-
   constructor(private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder) {
   }
@@ -31,8 +27,9 @@ export class ClusterNameComponent implements OnInit {
   }
 
   public syncClusterName() {
-    this.clusterName.valid = this.clusterNameForm.controls['name'].valid;
-    this.clusterName.value = this.clusterNameForm.controls['name'].value;
-    this.syncName.emit(this.clusterName);
+    this.syncName.emit(new ClusterNameEntity(
+      this.clusterNameForm.controls['name'].valid,
+      this.clusterNameForm.controls['name'].value
+    ));
   }
 }

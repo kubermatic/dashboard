@@ -25,6 +25,7 @@ import {OpenstackNodeSpec} from "../api/entitiy/node/OpenstackNodeSpec";
 import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
 import * as testing from "selenium-webdriver/testing";
+import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
 
 
 @Component({
@@ -40,7 +41,7 @@ export class WizardComponent implements OnInit {
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
 
-  public clusterName: {valid: boolean; value: string} = {valid: false, value: ""};
+  public clusterName: ClusterNameEntity = {valid: false, value : ""};
 
   public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
@@ -137,7 +138,7 @@ export class WizardComponent implements OnInit {
     });
   }
 
-  public setClusterName(clusterNameChangeEvent) {
+  public setClusterName(clusterNameChangeEvent: ClusterNameEntity) {
     this.clusterName = clusterNameChangeEvent;
   }
 
