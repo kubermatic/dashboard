@@ -196,7 +196,6 @@ import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
       multi: true
     },
     CustomEventService
-    }
   ],
   bootstrap: [KubermaticComponent]
 
