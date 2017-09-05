@@ -1,5 +1,5 @@
-import { PubSubService } from './pub-sub/pub-sub.service';
+import { CustomEventService } from './custom-event/custom-event.service';
 
 export { 
-    PubSubService
+    CustomEventService
 }

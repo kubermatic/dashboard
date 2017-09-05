@@ -76,7 +76,7 @@ import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import {PubSubService} from './services';
+import {CustomEventService} from './services';
 
 @NgModule({
   imports: [
@@ -190,7 +190,7 @@ import {PubSubService} from './services';
       useClass: LoaderInterceptor,
       multi: true
     },
-    PubSubService
+    CustomEventService
   ],
   bootstrap: [KubermaticComponent]
 

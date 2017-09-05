@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class PubSubService {
+export class CustomEventService {
   private storage: object = {};
 
   constructor() { }

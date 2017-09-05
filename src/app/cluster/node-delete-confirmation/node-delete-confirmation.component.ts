@@ -5,7 +5,7 @@ import {ApiService} from "../../api/api.service";
 import {ClusterModel} from "../../api/model/ClusterModel";
 import {NodeEntity} from "../../api/entitiy/NodeEntity";
 import {NotificationComponent} from "../../notification/notification.component";
-import {PubSubService} from '../../services';
+import {CustomEventService} from '../../services';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
@@ -34,14 +34,14 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   constructor(
     private api: ApiService, 
     private store: Store<fromRoot.State>, 
-    private pubsubService: PubSubService
+    private customEventService: CustomEventService
   ) {}
 
   ngOnInit() {
   }
 
   public deleteNode(nodeName: string): void {
-    this.pubsubService.publish('onNodeDelete', nodeName);
+    this.customEventService.publish('onNodeDelete', nodeName);
     this.clusterModel = new ClusterModel(this.seedDcName, this.clusterName);
     this.api.deleteClusterNode(this.clusterModel, nodeName).subscribe(result => {
       NotificationComponent.success(this.store, "Success", `Node removed successfully`);
