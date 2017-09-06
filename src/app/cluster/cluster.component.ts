@@ -45,13 +45,13 @@ export class ClusterComponent implements OnInit {
   public dcLocation: string = "";
   public dcFlagCode: string = "";
   private upgradesList: string[] = [];
-  
+
   constructor(
-    private customEventService: CustomEventService, 
-    private route: ActivatedRoute, 
-    private router: Router, 
-    private api: ApiService, 
-    private store: Store<fromRoot.State>, 
+    private customEventService: CustomEventService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private api: ApiService,
+    private store: Store<fromRoot.State>,
     public dialog: MdDialog
   ) {}
 
@@ -59,7 +59,7 @@ export class ClusterComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
       this.seedDcName = params["seedDcName"];
-      
+
       this.sub = this.timer.subscribe(() => {
         this.update();
       });
@@ -75,12 +75,12 @@ export class ClusterComponent implements OnInit {
 
     this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
       .subscribe(upgrades => this.upgradesList = upgrades);
-    
+
     this.api.getDataCenter(this.seedDcName).subscribe(dc => {
-      this.dcLocation = dc.spec.location;
-      this.dcFlagCode = dc.spec.country.toLowerCase();     
+      this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
+      this.dcFlagCode = dc.spec.country.toLowerCase();
     })
-    this.customEventService.subscribe('onNodeDelete', (nodeName: string) => 
+    this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
       this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
   }
 
@@ -90,7 +90,6 @@ export class ClusterComponent implements OnInit {
 
   update(): void {
     this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName)).subscribe(res => {
-      // console.log(res);
       this.cluster = new ClusterEntity(
         res.metadata,
         res.spec,
