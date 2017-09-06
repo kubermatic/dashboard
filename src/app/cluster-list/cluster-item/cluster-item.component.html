@@ -1,13 +1,13 @@
 <div *ngIf="cluster" class="km-card-list-content">
   <div fxLayout [routerLink]="['/dc', cluster.seed,'cluster', cluster.metadata.name]">
-    <div fxFlex="5%">{{index}}</div>
+    <div fxFlex="5%" fxFlex.sm="3%">{{index}}</div>
     <div fxFlex="35%">
       <span>
         <img src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
         <p>{{cluster.spec.humanReadableName}}</p>
       </span>
     </div>
-    <div fxFlex="15%">
+    <div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="31%">
       <ng-container [ngSwitch]="!!cluster.spec.cloud">
         <span *ngSwitchCase="true">
           <img *ngIf="cluster.spec.cloud.aws" src="/assets/images/clouds/aws.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
@@ -20,9 +20,10 @@
         </p>
       </ng-container>
     </div>
-    <div fxFlex="15%">{{cluster.spec.cloud.dc}}</div>
-    <div fxFlex="15%">{{cluster.status.phase}}</div>
-    <div fxFlex="15%" >
+    <div fxFlex="13%" fxHide.sm fxHide.xs>{{cluster.seed}}</div>
+    <div fxFlex="13%" fxHide.sm fxHide.xs>{{cluster.spec.cloud.dc}}</div>
+    <div fxFlex="13%" fxFlex.sm="20.66%" fxHide.xs>{{cluster.status.phase}}</div>
+    <div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="31%">
       <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
     </div>
   </div>

@@ -43,19 +43,23 @@
   <md-card class="km-card-list">
     <md-card-header class="km-card-list-header" >
       <md-card-title fxLayout>
-        <div fxFlex="40%">Provider</div>
-        <div fxFlex="30%">Node Region</div>
-        <div fxFlex="30%">SSH keys</div>
+        <div fxFlex="25%">Provider</div>
+        <div fxFlex="25%">Seed Region</div>
+        <div fxFlex="25%">Node Region</div>
+        <div fxFlex="25%">SSH keys</div>
       </md-card-title>
     </md-card-header>
     <md-card-content class="km-card-list-content" fxLayout>
-      <div fxFlex="40%">
+      <div fxFlex="25%">
         <img src="/assets/images/clouds/{{dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
       </div>
-      <div fxFlex="30%">
+      <div fxFlex="25%">
+        {{seedDcName}}
+      </div>
+      <div fxFlex="25%">
         {{dc.spec.country}} / {{dc.spec.location}}
       </div>
-      <div fxFlex="30%">
+      <div fxFlex="25%">
         <ng-container [ngSwitch]="sshKeysNames.length > 0">
           <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
             <li *ngFor="let sshKeyName of sshKeysNames">
