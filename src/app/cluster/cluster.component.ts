@@ -42,14 +42,16 @@ export class ClusterComponent implements OnInit {
   public nodeSizes: any = [];
   public loading: boolean = true;
   public sshKeysNames: string[] = [];
+  public dcLocation: string = "";
+  public dcFlagCode: string = "";
   private upgradesList: string[] = [];
-  
+
   constructor(
-    private customEventService: CustomEventService, 
-    private route: ActivatedRoute, 
-    private router: Router, 
-    private api: ApiService, 
-    private store: Store<fromRoot.State>, 
+    private customEventService: CustomEventService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private api: ApiService,
+    private store: Store<fromRoot.State>,
     public dialog: MdDialog
   ) {}
 
@@ -74,7 +76,11 @@ export class ClusterComponent implements OnInit {
     this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
       .subscribe(upgrades => this.upgradesList = upgrades);
 
-    this.customEventService.subscribe('onNodeDelete', (nodeName: string) => 
+    this.api.getDataCenter(this.seedDcName).subscribe(dc => {
+      this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
+      this.dcFlagCode = dc.spec.country.toLowerCase();
+    })
+    this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
       this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
   }
 
