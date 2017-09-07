@@ -257,6 +257,8 @@ export class WizardComponent implements OnInit {
           } else {
             return false;
           }
+      case 4:
+        return true;
       default:
         return false;
     }
