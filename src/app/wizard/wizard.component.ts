@@ -262,8 +262,8 @@ export class WizardComponent implements OnInit {
     }
   }
 
-  public canStepForward() {
-    this.stepFormard =  this.canGotoStep(this.currentStep);
+  public canStepForward(): boolean {
+    return this.canGotoStep(this.currentStep);
   }
 
   public createClusterAndNode() {
