@@ -17,7 +17,7 @@ export class ClusterNameComponent implements OnInit {
 
   ngOnInit() {
     this.clusterNameForm = this.formBuilder.group({
-      name: ["", [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      name: [this.nameGenerator.generateName(), [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
     });
   }
 
