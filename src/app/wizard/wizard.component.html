@@ -475,4 +475,4 @@
 </ng-container>
 <!-- End Summary: All cluster -->
 
-<kubermatic-navigation-buttons [step]="currentStep" (syncStep)="gotoStep($event)"></kubermatic-navigation-buttons>
+<kubermatic-navigation-buttons [step]="currentStep" [nextStep]="canGotoStep(currentStep)" (syncStep)="gotoStep($event)"></kubermatic-navigation-buttons>

@@ -41,7 +41,6 @@ export class WizardComponent implements OnInit {
 
   public currentStep: number = 0;
   public stepFormard: boolean = false;
-  public stepBack: boolean = false;
 
   public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
@@ -161,8 +160,6 @@ export class WizardComponent implements OnInit {
     this.selectedCloudRegion = cloud;
   }
 
-
-
   public getNodeCount(): string {
     if (this.selectedCloud === NodeProvider.AWS) {
       return this.awsForm.controls["node_count"].value;
@@ -189,7 +186,6 @@ export class WizardComponent implements OnInit {
     if (this.selectedCloud === NodeProvider.OPENSTACK) {
       return this.openStackForm.controls["node_size"].value;
     }
-
 
     return "";
   }
@@ -246,7 +242,6 @@ export class WizardComponent implements OnInit {
           return !!this.selectedCloudRegion;
         }
       case 3:
-
           if(!this.sshKeysFormField[0][this.selectedCloud].length) {
             return false;
           } else if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
@@ -265,10 +260,6 @@ export class WizardComponent implements OnInit {
       default:
         return false;
     }
-  }
-
-  public canStepBack() {
-    this.stepBack =  this.currentStep > 0;
   }
 
   public canStepForward() {

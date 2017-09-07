@@ -8,12 +8,12 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 export class NavigationButtonsComponent implements OnInit {
 
   @Input() step: number;
+  @Input() nextStep: boolean;
   @Output() syncStep = new EventEmitter();
 
   constructor() { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   public stepBack() {
     this.syncStep.emit(this.step - 1);
