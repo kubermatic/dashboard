@@ -9,7 +9,6 @@ export class NavigationButtonsComponent implements OnInit {
 
   @Input() step: number;
   @Output() syncStep = new EventEmitter();
-  public currentStep: number;
 
   constructor() { }
 
@@ -17,12 +16,10 @@ export class NavigationButtonsComponent implements OnInit {
   }
 
   public stepBack() {
-    this.currentStep = (this.step - 1) < 0 ? 0 : (this.step - 1);
-    this.syncStep.emit(this.currentStep);
+    this.syncStep.emit(this.step - 1);
   }
 
   public stepForward() {
-    this.currentStep = (this.step + 1) > 0 ? 0 : (this.step + 1);
-    this.syncStep.emit(this.currentStep);
+    this.syncStep.emit(this.step + 1);
   }
 }

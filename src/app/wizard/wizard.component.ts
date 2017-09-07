@@ -223,7 +223,14 @@ export class WizardComponent implements OnInit {
   }
 
   public gotoStep(step: number) {
-    this.currentStep = step;
+    switch (step) {
+      case 5:
+        this.createClusterAndNode();
+        break;
+
+      default:
+        this.currentStep = step;
+    }
   }
 
   public canGotoStep(step: number) {
