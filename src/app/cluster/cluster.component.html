@@ -35,6 +35,13 @@
       <div fxFlex="80%"><span class="{{'flag-icon flag-icon-' + dcFlagCode}}"></span> <span class="location">{{dcLocation}}</span></div>
     </md-card-content>
     <md-card-content class="km-card-list-content" fxLayout>
+      <div fxFlex="20%">Master Version:</div>
+      <div fxFlex="80%">
+        {{cluster.spec.masterVersion}}
+        <small (click)="upgradeClusterDialog()" [hidden]="cluster.status.phase != 'Running' || upgradesList.length === 0">upgrade available</small>
+      </div>
+    </md-card-content>
+    <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="20%">API Server:</div>
       <div fxFlex="80%">
         <a [attr.href]="downloadKubeconfigUrl()" md-button color="primary" class="km-download-config" target="_blank"><i class="fa fa-save"></i> download kubeconfig</a>
