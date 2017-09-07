@@ -41,7 +41,7 @@ export class WizardComponent implements OnInit {
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
 
-  public clusterName: ClusterNameEntity = {valid: false, value : ""};
+  public clusterName: ClusterNameEntity = {valid: true, value : ""};
 
   public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
