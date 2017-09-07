@@ -78,6 +78,7 @@ import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-clust
 import {CustomEventService} from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 import { ProviderComponent } from './wizard/provider/provider.component';
+import { SummaryComponent } from './wizard/summary/summary.component';
 
 @NgModule({
   imports: [
@@ -144,7 +145,8 @@ import { ProviderComponent } from './wizard/provider/provider.component';
     ProgressComponent,
     ClusterNameComponent,
     UpgradeClusterComponent,
-    ProviderComponent
+    ProviderComponent,
+    SummaryComponent
   ],
   exports: [
     RouterModule,
