@@ -106,9 +106,19 @@ export class ApiserverSshKey {
   public_key: string;
 }
 
+export class Health {
+  apiserver: boolean;
+  scheduler: boolean;
+  controller: boolean;
+  node_controller: boolean;
+  etcd: boolean;
+  lastTransitionTime: string;
+}
+
 export class Status {
   lastTransitionTime: Date;
   phase: string;
+  health: Health;
   lastDeployedMasterVersion: string;
   masterUpdatePhase: string;
   rootCA: RootCA;
