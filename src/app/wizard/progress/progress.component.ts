@@ -15,6 +15,7 @@ export class ProgressComponent implements OnInit {
 
   ngOnInit() { }
 
+
   public gotoStep(clickStep: number) {
     if(this.step >= clickStep) {
       this.currentStep = clickStep;

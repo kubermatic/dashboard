@@ -1,10 +1,8 @@
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
-import {ClusterNameGenerator} from "../util/name-generator.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
-import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {NodeInstanceFlavors, NodeProvider} from "../api/model/NodeProviderConstants";
 import {CreateNodeModel} from "../api/model/CreateNodeModel";
 import {Router} from "@angular/router";
@@ -27,6 +25,7 @@ import {OpenstackNodeSpec} from "../api/entitiy/node/OpenstackNodeSpec";
 import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
 import * as testing from "selenium-webdriver/testing";
+import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
 
 
 @Component({
@@ -42,12 +41,14 @@ export class WizardComponent implements OnInit {
   public currentStep: number = 0;
   public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
 
+  public clusterName: ClusterNameEntity = {valid: false, value : ""};
+
   public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
   public selectedCloudProviderApiError: string;
   public acceptBringYourOwn: boolean;
 
-  public clusterNameForm: FormGroup;
+
   public awsForm: FormGroup;
   public digitalOceanForm: FormGroup;
   public bringYourOwnForm: FormGroup;
@@ -71,7 +72,6 @@ export class WizardComponent implements OnInit {
   public config: any = {};
 
   constructor(private api: ApiService,
-              private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder,
               private router: Router,
               private store: Store<fromRoot.State>,
@@ -81,7 +81,6 @@ export class WizardComponent implements OnInit {
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
       result.forEach(elem => {
-
         if (!elem.seed) {
           if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
             this.groupedDatacenters[elem.spec.provider] = [];
@@ -90,12 +89,6 @@ export class WizardComponent implements OnInit {
           this.groupedDatacenters[elem.spec.provider].push(elem);
         }
       });
-    });
-
-
-    this.clusterNameForm = this.formBuilder.group({
-      name: [this.nameGenerator.generateName(),
-        [<any>Validators.required, <any>Validators.minLength(2), <any>Validators.maxLength(50)]],
     });
 
     this.bringYourOwnForm = this.formBuilder.group({
@@ -144,6 +137,11 @@ export class WizardComponent implements OnInit {
       node_size: ["", [<any>Validators.required]],
     });
   }
+
+  public setClusterName(clusterNameChangeEvent: ClusterNameEntity) {
+    this.clusterName = clusterNameChangeEvent;
+  }
+
 
   public selectCloud(cloud: string) {
     this.selectedCloud = cloud;
@@ -217,9 +215,6 @@ export class WizardComponent implements OnInit {
     );
   }
 
-  public refreshName() {
-    this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
-  }
 
   public gotoStep(step: number) {
     this.currentStep = step;
@@ -228,7 +223,7 @@ export class WizardComponent implements OnInit {
   public canGotoStep(step: number) {
     switch (step) {
       case 0:
-        return this.clusterNameForm.valid;
+        return this.clusterName.valid;
       case 1:
         return !!this.selectedCloud;
       case 2:
@@ -305,7 +300,7 @@ export class WizardComponent implements OnInit {
           null,
           null,
         ),
-        this.clusterNameForm.controls["name"].value,
+        this.clusterName.value,
         "",
       );
 
@@ -334,7 +329,7 @@ export class WizardComponent implements OnInit {
           null,
           null,
         ),
-        this.clusterNameForm.controls["name"].value,
+        this.clusterName.value,
         "",
       );
 
@@ -355,7 +350,7 @@ export class WizardComponent implements OnInit {
           null,
           new BareMetalCloudSpec(""),
         ),
-        this.clusterNameForm.controls["name"].value,
+        this.clusterName.value,
         "",
       );
 
@@ -384,7 +379,7 @@ export class WizardComponent implements OnInit {
           ),
           null,
         ),
-        this.clusterNameForm.controls["name"].value,
+        this.clusterName.value,
         "",
       );
 

@@ -1,0 +1,30 @@
+.mat-card {
+  .mat-card-header {
+    padding: 0;
+    margin-bottom: 10px;
+  }
+
+  .mat-card-header-text {
+    margin: 0;
+  }
+
+  .mat-card-title {
+    margin: 0;
+    h4 {
+      font-weight: 400;
+      margin: 10px 0;
+      font-size: 18px;
+      color: #444D58;
+    }
+  }
+
+  .mat-card-content {
+    form {
+      padding-top: 10px;
+    }
+    p {
+      color: #444D58;
+      margin: 0 0 5px;
+    }
+  }
+}
