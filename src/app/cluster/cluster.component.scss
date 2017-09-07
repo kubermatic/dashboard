@@ -30,6 +30,11 @@ $flag-icon-css-path: '~flag-icon-css/flags' !default;
       position: absolute;
     }
   }
+
+  small {
+    color: #0288d1;
+    cursor: pointer;
+  }
 }
 
 .km-provider-region {
