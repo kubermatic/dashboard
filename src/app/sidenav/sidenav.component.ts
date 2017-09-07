@@ -16,10 +16,6 @@ export class SidenavComponent implements OnInit {
   ngOnInit() {
   }
 
-  public login() {
-    this.auth.login();
-  }
-
   public logout() {
     this.auth.logout();
   }

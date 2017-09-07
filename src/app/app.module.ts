@@ -72,10 +72,13 @@ import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digita
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
 import {AddNodeComponent} from "./forms/add-node/add-node.component";
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
-import {LoaderInterceptor} from './loader-interceptor/loader-interceptor.service';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
+import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
+import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
+import {CustomEventService} from './services';
+import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 
 @NgModule({
   imports: [
@@ -141,6 +144,8 @@ import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigati
     OpenstackAddNodeComponent,
     ProgressComponent,
     NavigationButtonsComponent
+    ClusterNameComponent,
+    UpgradeClusterComponent
   ],
   exports: [
     RouterModule,
@@ -169,7 +174,8 @@ import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigati
     AddSshKeyModalComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
-    OpenstackAddNodeComponent
+    OpenstackAddNodeComponent,
+    UpgradeClusterComponent
   ],
   providers: [
     AUTH_PROVIDERS,
@@ -185,10 +191,15 @@ import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigati
     },
     {
       provide: HTTP_INTERCEPTORS,
+      useClass: CheckTokenInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
       useClass: LoaderInterceptor,
       multi: true
-    }
-
+    },
+    CustomEventService
   ],
   bootstrap: [KubermaticComponent]
 

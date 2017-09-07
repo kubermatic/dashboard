@@ -1,3 +1,6 @@
+$flag-icon-css-path: '~flag-icon-css/flags' !default;
+@import "~flag-icon-css/sass/flag-icon";
+
 .card {
   color: #333;
   margin-bottom: 20px;
@@ -12,6 +15,37 @@
     }
   }
 }
+
+.km-card-list-content {
+  height: 26px;
+  line-height: 26px;
+  &.seed  {
+    .flag-icon {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+    .location {
+      line-height: 24px;
+      position: absolute;
+    }
+  }
+}
+
+.km-provider-region {
+  .flag-icon {
+    font-size: 24px;
+    margin-right: 10px;
+  }
+
+  .location {
+    line-height: 26px;
+    position: absolute;
+  }
+}
+
+
+
 
 .km-no-provider {
   text-align: center;
@@ -38,7 +72,7 @@ kubermatic-cluster-health-status {
 
 .km-ssh-keys-list {
   list-style-type: none;
-  margin: 0; 
+  margin: 0;
   padding: 0;
   li {
     margin-bottom: 3px;
