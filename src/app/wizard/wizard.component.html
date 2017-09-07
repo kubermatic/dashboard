@@ -390,71 +390,7 @@
   </ng-container>
 <!-- End Provider Settings: Step 4 Open Stack -->
 
-
-
-
-
-
-
-<!-- Start Summary: All cluster  -->
-<ng-container *ngIf="currentStep == 4 ">
-    <md-card>
-      <md-card-header>
-        <md-card-title>
-          <h4>Summary</h4>
-        </md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <div fxLayoutAlign="center" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
-          <div fxFlex="33%">
-            <div class="wizard-box-title">Cluster name</div>
-            <div class=" wizard-box-summary wizard-box-color_secondary">
-              <div class="wizard-box-content justify-content-center">
-                <div class="cluster-name">
-                  {{ clusterName.value }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div [hidden]="selectedCloud === 'bringyourown'" fxFlex="33%" *ngIf="selectedCloudRegion">
-              <div class="wizard-box-title">Datacenter of nodes</div>
-              <div class=" wizard-box-summary wizard-box-color_secondary">
-                <div class="col-xs wizard-box-content justify-content-center">
-                  <img class="dc-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloudRegion.spec.provider}}">
-                  <div class="location">
-                    {{ selectedCloudRegion.spec.location }}
-                  </div>
-                  <img class="location-flag" src="/assets/images/flags/48/{{selectedCloudRegion.spec.country}}.png" alt="{{selectedCloudRegion.spec.country}}" />
-                </div>
-              </div>
-            </div>
-            <div [hidden]="selectedCloud === 'bringyourown'" fxFlex="33%">
-              <div class="wizard-box-title" >Node count</div>
-              <div class="row justify-content-center wizard-box-summary wizard-box-color_secondary">
-                <div class="row wizard-box-content">
-                  <div class="col align-self-center node-count">
-                    {{ getNodeCount() }}
-                  </div>
-                  <div class="w-100"></div>
-                  <div class="col align-self-center name">
-                    {{ getNodeSize() }}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div [hidden]="selectedCloud !== 'bringyourown'" fxFlex="33%">
-              <div class="wizard-box-title">Datacenter of nodes</div>
-              <div class="col-sm wizard-box-summary wizard-box-color_secondary">
-                <div class="col-xs wizard-box-content justify-content-center">
-                  <img class="cloud-logo" src="/assets/images/clouds/{{selectedCloud}}.png" alt="{{selectedCloud}}">
-                </div>
-              </div>
-            </div>
-          </div>
-      </md-card-content>
-  </md-card>
-</ng-container>
-<!-- End Summary: All cluster -->
+<kubermatic-summary *ngIf="currentStep == 4" [clusterName]="clusterName.value" [cloud]="selectedCloud" [region]="selectedCloudRegion" [nodeCount]="getNodeCount()" [nodeSize]="getNodeSize()"></kubermatic-summary>
 
 <!-- Start Create Cluster Navigation Buttons -->
 <div style="margin-top: 10px;margin-bottom: 70px;">

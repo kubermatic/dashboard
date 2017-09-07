@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 
 @Component({
   selector: 'kubermatic-summary',
@@ -6,6 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./summary.component.scss']
 })
 export class SummaryComponent implements OnInit {
+
+  @Input() clusterName: string;
+  @Input() cloud: string;
+  @Input() region;
+  @Input() nodeCount: number;
+  @Input() nodeSize: string;
 
   constructor() { }
 
