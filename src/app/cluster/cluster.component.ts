@@ -18,6 +18,7 @@ import {NotificationComponent} from "../notification/notification.component";
 import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
+import {CustomEventService} from '../services';
 
 @Component({
   selector: "kubermatic-cluster",
@@ -41,9 +42,18 @@ export class ClusterComponent implements OnInit {
   public nodeSizes: any = [];
   public loading: boolean = true;
   public sshKeysNames: string[] = [];
+  public dcLocation: string = "";
+  public dcFlagCode: string = "";
   private upgradesList: string[] = [];
-  
-  constructor(private route: ActivatedRoute, private router: Router, private api: ApiService, private store: Store<fromRoot.State>, public dialog: MdDialog) {}
+
+  constructor(
+    private customEventService: CustomEventService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private api: ApiService,
+    private store: Store<fromRoot.State>,
+    public dialog: MdDialog
+  ) {}
 
   ngOnInit() {
     this.route.params.subscribe(params => {
@@ -65,6 +75,13 @@ export class ClusterComponent implements OnInit {
 
     this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
       .subscribe(upgrades => this.upgradesList = upgrades);
+
+    this.api.getDataCenter(this.seedDcName).subscribe(dc => {
+      this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
+      this.dcFlagCode = dc.spec.country.toLowerCase();
+    })
+    this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
+      this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
   }
 
   ngOnDestroy(){
