@@ -7,7 +7,6 @@ import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
 
-
 import {
   MdButtonModule,
   MdIconModule,
@@ -78,6 +77,7 @@ import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.compone
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 import {CustomEventService} from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
+import { ProviderComponent } from './wizard/provider/provider.component';
 
 @NgModule({
   imports: [
@@ -143,7 +143,8 @@ import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
     OpenstackAddNodeComponent,
     ProgressComponent,
     ClusterNameComponent,
-    UpgradeClusterComponent
+    UpgradeClusterComponent,
+    ProviderComponent
   ],
   exports: [
     RouterModule,
