@@ -74,6 +74,7 @@ import {AddNodeComponent} from "./forms/add-node/add-node.component";
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
+import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
 import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 import {CustomEventService} from './services';
@@ -142,6 +143,7 @@ import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
     ProgressComponent,
+    NavigationButtonsComponent
     ClusterNameComponent,
     UpgradeClusterComponent
   ],

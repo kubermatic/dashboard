@@ -39,7 +39,7 @@ export class WizardComponent implements OnInit {
   public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
 
   public currentStep: number = 0;
-  public stepsTitles: string[] = ["Data center", "Cloud provider", "Configuration", "Go!"];
+  public stepFormard: boolean = false;
 
   public clusterName: ClusterNameEntity = {valid: true, value : ""};
 
@@ -158,8 +158,6 @@ export class WizardComponent implements OnInit {
     this.selectedCloudRegion = cloud;
   }
 
-
-
   public getNodeCount(): string {
     if (this.selectedCloud === NodeProvider.AWS) {
       return this.awsForm.controls["node_count"].value;
@@ -186,7 +184,6 @@ export class WizardComponent implements OnInit {
     if (this.selectedCloud === NodeProvider.OPENSTACK) {
       return this.openStackForm.controls["node_size"].value;
     }
-
 
     return "";
   }
@@ -217,7 +214,14 @@ export class WizardComponent implements OnInit {
 
 
   public gotoStep(step: number) {
-    this.currentStep = step;
+    switch (step) {
+      case 5:
+        this.createClusterAndNode();
+        break;
+
+      default:
+        this.currentStep = step;
+    }
   }
 
   public canGotoStep(step: number) {
@@ -233,7 +237,6 @@ export class WizardComponent implements OnInit {
           return !!this.selectedCloudRegion;
         }
       case 3:
-
           if(!this.sshKeysFormField[0][this.selectedCloud].length) {
             return false;
           } else if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
@@ -249,21 +252,11 @@ export class WizardComponent implements OnInit {
           } else {
             return false;
           }
+      case 4:
+        return true;
       default:
         return false;
     }
-  }
-
-  public stepBack() {
-    this.currentStep = (this.currentStep - 1) < 0 ? 0 : (this.currentStep - 1);
-  }
-
-  public stepForward() {
-    this.currentStep = (this.currentStep + 1) > this.stepsTitles.length ? 0 : (this.currentStep + 1);
-  }
-
-  public canStepBack(): boolean {
-    return this.currentStep > 0;
   }
 
   public canStepForward(): boolean {
