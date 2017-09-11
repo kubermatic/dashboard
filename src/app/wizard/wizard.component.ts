@@ -63,7 +63,7 @@ export class WizardComponent implements OnInit {
   }];
 
   // Nodes Sizes
-  public nodeSize: any[] = NodeInstanceFlavors.VOID;
+  public nodeSize: any[] = NodeInstanceFlavors.AWS;
 
   // Create Nodes
   public cluster: any;
