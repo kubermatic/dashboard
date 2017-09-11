@@ -1,0 +1,22 @@
+<div class="km-buttom-navigation">
+  <button type="button" md-raised-button color="primary" (click)="stepBack()" [disabled]="!step > 0">
+    <i class="fa fa-chevron-left" style="margin-right: 5px;" aria-hidden="true"></i>Back
+  </button>
+  <button type="button" md-raised-button color="primary" (click)="stepForward()"  [disabled]="!nextStep">
+    <ng-container *ngIf="step == 0">
+      continue to select provider<i class="fa fa-chevron-right" aria-hidden="true"></i>
+    </ng-container>
+    <ng-container *ngIf="step == 1">
+      continue to select datacenter<i class="fa fa-chevron-right"  aria-hidden="true"></i>
+    </ng-container>
+    <ng-container *ngIf="step == 2">
+      continue to add credentials and settings<i class="fa fa-chevron-right" aria-hidden="true"></i>
+    </ng-container>
+    <ng-container *ngIf="step == 3">
+      continue to review settings <i class="fa fa-chevron-right" aria-hidden="true"></i>
+    </ng-container>
+    <ng-container *ngIf="step == 4">
+      create cluster
+    </ng-container>
+  </button>
+</div>
