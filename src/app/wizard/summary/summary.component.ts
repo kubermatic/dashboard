@@ -7,17 +7,20 @@ import { Component, OnInit, Input} from '@angular/core';
 })
 export class SummaryComponent implements OnInit {
 
-  @Input() clusterName: string;
   @Input() cloud: string;
   @Input() region;
   @Input() nodeCount: number;
-  @Input() nodeSize: string;
+  @Input() sshKeys;
   @Input() clusterSpec;
   @Input() nodeSpec;
 
   constructor() { }
 
   ngOnInit() {
+    console.log(this.clusterSpec);
+    console.log(this.nodeSpec);
+    console.log(this.sshKeys);
+    console.log(this.nodeSpec[this.cloud].size );
   }
 
 }

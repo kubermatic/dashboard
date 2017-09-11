@@ -144,7 +144,7 @@ import { SummaryComponent } from './wizard/summary/summary.component';
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
     ProgressComponent,
-    NavigationButtonsComponent
+    NavigationButtonsComponent,
     ClusterNameComponent,
     UpgradeClusterComponent,
     ProviderComponent,

@@ -390,6 +390,6 @@
   </ng-container>
 <!-- End Provider Settings: Step 4 Open Stack -->
 
-<kubermatic-summary *ngIf="currentStep == 4" [clusterName]="clusterName.value" [cloud]="selectedCloud" [region]="selectedCloudRegion" [nodeCount]="getNodeCount()" [nodeSize]="getNodeSize()" [clusterSpec]="clusterSpec" [nodeSpec]="nodeSpec"></kubermatic-summary>
+<kubermatic-summary *ngIf="currentStep == 4" [cloud]="selectedCloud" [region]="selectedCloudRegion" [nodeCount]="getNodeCount()" [sshKeys]="ssh_keys" [clusterSpec]="clusterSpec" [nodeSpec]="nodeSpec"></kubermatic-summary>
 
 <kubermatic-navigation-buttons [step]="currentStep" [nextStep]="canGotoStep(currentStep)" (syncStep)="gotoStep($event)"></kubermatic-navigation-buttons>

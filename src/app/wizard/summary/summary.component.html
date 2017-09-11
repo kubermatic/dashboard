@@ -1,111 +1,9 @@
 
 
-<div fxLayout
+<div fxLayout="column"
      fxLayout.sm="column"
      fxLayout.xs="column"
-     fxLayoutAlign="center"
      fxLayoutGap="20px">
-
-  <md-card fxFlex="50%">
-    <md-card-header>
-      <md-card-title>
-        <h4>Cluster Settings</h4>
-      </md-card-title>
-    </md-card-header>
-    <md-card-content>
-
-      <div fxLayout>
-        <div fxFlex="30%">Cluster name</div>
-        <div fxFlex="70%">{{ clusterName }}</div>
-      </div>
-
-      <div fxLayout>
-        <div fxFlex="30%">Provider</div>
-        <div fxFlex="70%"><img class="dc-logo" src="/assets/images/clouds/{{cloud}}.png" width="100px" alt="{{region.spec.provider}}"></div>
-      </div>
-
-      <div fxLayout *ngIf="region">
-        <div fxFlex="30%">Region</div>
-        <div fxFlex="70%">
-          <img class="location-flag" src="/assets/images/flags/48/{{region.spec.country}}.png" width="100px" alt="{{region.spec.country}}" />
-          {{region.spec.country}} / {{ region.spec.location }}
-        </div>
-      </div>
-
-      <!-- Provider Credentials -->
-
-
-
-      <!-- Provider Settings -->
-
-
-      <!--  Spinn up Nodes -->
-
-
-
-
-
-      <!-- Node Settings -->
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <!--<div [hidden]="cloud === 'bringyourown'" fxFlex="33%" *ngIf="region">
-        <div class="wizard-box-title">Datacenter of nodes</div>
-        <div class=" wizard-box-summary wizard-box-color_secondary">
-          <div class=" wizard-box-content justify-content-center">
-            <img class="dc-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{region.spec.provider}}">
-            <div class="location">
-              {{region.spec.country}} / {{ region.spec.location }}
-            </div>
-            <img class="location-flag" src="/assets/images/flags/48/{{region.spec.country}}.png" alt="{{region.spec.country}}" />
-          </div>
-        </div>
-      </div>
-      <div [hidden]="cloud === 'bringyourown'" fxFlex="33%">
-        <div class="wizard-box-title" >Node count</div>
-        <div class=" justify-content-center wizard-box-summary wizard-box-color_secondary">
-          <div class=" wizard-box-content">
-            <div class=" align-self-center node-count">
-              {{ nodeCount }}
-            </div>
-            <div class="w-100"></div>
-            <div class=" align-self-center name">
-              {{ nodeSize }}
-            </div>
-          </div>
-        </div>
-      </div>
-      <div [hidden]="cloud !== 'bringyourown'" fxFlex="33%">
-        <div class="wizard-box-title">Datacenter of nodes</div>
-        <div class=" wizard-box-summary wizard-box-color_secondary">
-          <div class=" wizard-box-content justify-content-center">
-            <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
-          </div>
-        </div>
-      </div>
-    </div>--->
-
-    </md-card-content>
-  </md-card>
-
 
   <md-card fxFlex="50%">
     <md-card-header>
@@ -114,17 +12,63 @@
       </md-card-title>
     </md-card-header>
     <md-card-content>
-      <div>
+
+      <div fxLayout class="km-card-list-content">
+        <div fxFlex="30%">Cluster name</div>
+        <div fxFlex="70%">{{ clusterSpec.humanReadableName }}</div>
+      </div>
+
+      <div fxLayout class="km-card-list-content provider">
+        <div fxFlex="30%">Provider</div>
+        <div fxFlex="70%">
+
+          <img class="icon-provider" src="/assets/images/clouds/{{cloud}}.png" height="40px" alt="{{cloud}}">
+          <div class="region">
+
+            <img class="flag-icon " src="/assets/images/flags/48/{{region.spec.country}}.png" height="40px" alt="{{region.spec.country}}" />
+            <span>{{region.spec.country}} / {{ region.spec.location }}</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].token">
         <div fxFlex="30%">DO Token</div>
-        <div fxFlex="70%"></div>
+        <div fxFlex="70%">{{clusterSpec.cloud[cloud].token}}</div>
       </div>
-      <div>
+
+      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].access_key_id">
+        <div fxFlex="30%">Access Key</div>
+        <div fxFlex="70%">{{clusterSpec.cloud[cloud].access_key_id}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].secret_access_key">
+        <div fxFlex="30%">Secret Key</div>
+        <div fxFlex="70%">{{clusterSpec.cloud[cloud].secret_access_key}}</div>
+      </div>
+
+      <div class="km-card-list-content ssh-key">
         <div fxFlex="30%">SSH Keys</div>
-        <div fxFlex="70%"></div>
+        <div fxFlex="70%">
+          <ul *ngFor="let key of sshKeys" class="km-ssh-keys-list">
+            <li><i class="fa fa-key"></i> {{key}}</li>
+          </ul>
+        </div>
       </div>
+      // optional
+      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud] == 'aws'">
+        <div fxFlex="30%">vpc_id</div>
+        <div fxFlex="70%">{{clusterSpec.cloud[cloud].vpc_id}}</div>
+      </div>
+
+
+      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud] == 'aws'">
+        <div fxFlex="30%">subnet_id</div>
+        <div fxFlex="70%">{{clusterSpec.cloud[cloud].subnet_id}}</div>
+      </div>
+
+
     </md-card-content>
   </md-card>
-
 
   <md-card fxFlex="50%">
     <md-card-header>
@@ -133,7 +77,7 @@
       </md-card-title>
     </md-card-header>
     <md-card-content>
-      <div fxLayout *ngIf="nodeCount">
+      <div fxLayout *ngIf="nodeCount" class="km-card-list-content">
         <div fxFlex="30%">
           Node Count
         </div>
@@ -142,18 +86,16 @@
         </div>
       </div>
 
-      <div fxLayout *ngIf="nodeSize">
+      <div fxLayout *ngIf="nodeSpec[cloud].size" class="km-card-list-content">
         <div fxFlex="30%">
           Node Size
         </div>
         <div fxFlex="70%">
-          {{ nodeSize }}
+          {{ nodeSpec[cloud].size }}
         </div>
       </div>
     </md-card-content>
   </md-card>
-
-
 
 </div>
 

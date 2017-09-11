@@ -71,7 +71,7 @@ export class WizardComponent implements OnInit {
   }];
 
   // Nodes Sizes
-  public nodeSize: any[] = NodeInstanceFlavors.VOID;
+  public nodeSize: any[] =  NodeInstanceFlavors.AWS;
 
   // Create Nodes
   public cluster: any;
@@ -152,6 +152,7 @@ export class WizardComponent implements OnInit {
 
 
   public selectCloud(cloud: string) {
+    debugger;
     this.selectedCloud = cloud;
     this.selectedCloudRegion = null;
 
@@ -160,6 +161,8 @@ export class WizardComponent implements OnInit {
     } else if (cloud == NodeProvider.OPENSTACK) {
       this.nodeSize = NodeInstanceFlavors.Openstack;
     }
+
+    console.log(this.nodeSize)
   }
 
   public selectCloudRegion(cloud: DataCenterEntity) {
@@ -261,6 +264,7 @@ export class WizardComponent implements OnInit {
             return false;
           }
       case 4:
+        this.createSpec();
         return true;
       default:
         return false;
@@ -276,7 +280,6 @@ export class WizardComponent implements OnInit {
     this.ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
 
     if (this.selectedCloud === NodeProvider.AWS) {
-
       this.clusterSpec = new ClusterSpec(
         new CloudSpec(
           this.selectedCloudRegion.metadata.name,
