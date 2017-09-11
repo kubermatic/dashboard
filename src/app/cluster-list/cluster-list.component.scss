@@ -1,3 +1,5 @@
+$MOBILE_RESOLUTION_BREAKPOINT: 504px;
+
 .card {
   color: #333;
 
@@ -53,3 +55,9 @@
   margin: 0;
   width: auto;
 }
+
+@media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
+  .btn-text-default {
+    display: none;
+  }
+}  
