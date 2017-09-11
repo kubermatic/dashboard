@@ -390,7 +390,7 @@
   </ng-container>
 <!-- End Provider Settings: Step 4 Open Stack -->
 
-<kubermatic-summary *ngIf="currentStep == 4" [clusterName]="clusterName.value" [cloud]="selectedCloud" [region]="selectedCloudRegion" [nodeCount]="getNodeCount()" [nodeSize]="getNodeSize()"></kubermatic-summary>
+<kubermatic-summary *ngIf="currentStep == 4" [clusterName]="clusterName.value" [cloud]="selectedCloud" [region]="selectedCloudRegion" [nodeCount]="getNodeCount()" [nodeSize]="getNodeSize()" [clusterSpec]="clusterSpec" [nodeSpec]="nodeSpec"></kubermatic-summary>
 
 <!-- Start Create Cluster Navigation Buttons -->
 <div style="margin-top: 10px;margin-bottom: 70px;">

@@ -12,6 +12,8 @@ export class SummaryComponent implements OnInit {
   @Input() region;
   @Input() nodeCount: number;
   @Input() nodeSize: string;
+  @Input() clusterSpec;
+  @Input() nodeSpec;
 
   constructor() { }
 

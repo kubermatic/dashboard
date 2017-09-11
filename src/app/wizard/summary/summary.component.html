@@ -1,98 +1,159 @@
 
-  <md-card>
+
+<div fxLayout
+     fxLayout.sm="column"
+     fxLayout.xs="column"
+     fxLayoutAlign="center"
+     fxLayoutGap="20px">
+
+  <md-card fxFlex="50%">
     <md-card-header>
       <md-card-title>
-        <h4>Summary</h4>
+        <h4>Cluster Settings</h4>
       </md-card-title>
     </md-card-header>
     <md-card-content>
 
-        <div fxLayout>
-          <div>Cluster name</div>
-          <div>{{ clusterName }}</div>
+      <div fxLayout>
+        <div fxFlex="30%">Cluster name</div>
+        <div fxFlex="70%">{{ clusterName }}</div>
+      </div>
+
+      <div fxLayout>
+        <div fxFlex="30%">Provider</div>
+        <div fxFlex="70%"><img class="dc-logo" src="/assets/images/clouds/{{cloud}}.png" width="100px" alt="{{region.spec.provider}}"></div>
+      </div>
+
+      <div fxLayout *ngIf="region">
+        <div fxFlex="30%">Region</div>
+        <div fxFlex="70%">
+          <img class="location-flag" src="/assets/images/flags/48/{{region.spec.country}}.png" width="100px" alt="{{region.spec.country}}" />
+          {{region.spec.country}} / {{ region.spec.location }}
         </div>
+      </div>
+
+      <!-- Provider Credentials -->
 
 
-        <div fxLayout>
-          <div>Provider</div>
-          <div><img class="dc-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{region.spec.provider}}"></div>
-        </div>
 
-      
-        <div fxLayout>
-          <div>Region</div>
-          <div>
+      <!-- Provider Settings -->
+
+
+      <!--  Spinn up Nodes -->
+
+
+
+
+
+      <!-- Node Settings -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <!--<div [hidden]="cloud === 'bringyourown'" fxFlex="33%" *ngIf="region">
+        <div class="wizard-box-title">Datacenter of nodes</div>
+        <div class=" wizard-box-summary wizard-box-color_secondary">
+          <div class=" wizard-box-content justify-content-center">
             <img class="dc-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{region.spec.provider}}">
-            {{region.spec.country}} / {{ region.spec.location }}
+            <div class="location">
+              {{region.spec.country}} / {{ region.spec.location }}
+            </div>
+            <img class="location-flag" src="/assets/images/flags/48/{{region.spec.country}}.png" alt="{{region.spec.country}}" />
           </div>
         </div>
-
-        // Provider Credentials
-
-
-
-        // Provider Settings
-
-
-        // Spinn up Nodes
-
-        // Node Settings
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <!--<div [hidden]="cloud === 'bringyourown'" fxFlex="33%" *ngIf="region">
-          <div class="wizard-box-title">Datacenter of nodes</div>
-          <div class=" wizard-box-summary wizard-box-color_secondary">
-            <div class=" wizard-box-content justify-content-center">
-              <img class="dc-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{region.spec.provider}}">
-              <div class="location">
-                {{region.spec.country}} / {{ region.spec.location }}
-              </div>
-              <img class="location-flag" src="/assets/images/flags/48/{{region.spec.country}}.png" alt="{{region.spec.country}}" />
+      </div>
+      <div [hidden]="cloud === 'bringyourown'" fxFlex="33%">
+        <div class="wizard-box-title" >Node count</div>
+        <div class=" justify-content-center wizard-box-summary wizard-box-color_secondary">
+          <div class=" wizard-box-content">
+            <div class=" align-self-center node-count">
+              {{ nodeCount }}
+            </div>
+            <div class="w-100"></div>
+            <div class=" align-self-center name">
+              {{ nodeSize }}
             </div>
           </div>
         </div>
-        <div [hidden]="cloud === 'bringyourown'" fxFlex="33%">
-          <div class="wizard-box-title" >Node count</div>
-          <div class=" justify-content-center wizard-box-summary wizard-box-color_secondary">
-            <div class=" wizard-box-content">
-              <div class=" align-self-center node-count">
-                {{ nodeCount }}
-              </div>
-              <div class="w-100"></div>
-              <div class=" align-self-center name">
-                {{ nodeSize }}
-              </div>
-            </div>
+      </div>
+      <div [hidden]="cloud !== 'bringyourown'" fxFlex="33%">
+        <div class="wizard-box-title">Datacenter of nodes</div>
+        <div class=" wizard-box-summary wizard-box-color_secondary">
+          <div class=" wizard-box-content justify-content-center">
+            <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
           </div>
         </div>
-        <div [hidden]="cloud !== 'bringyourown'" fxFlex="33%">
-          <div class="wizard-box-title">Datacenter of nodes</div>
-          <div class=" wizard-box-summary wizard-box-color_secondary">
-            <div class=" wizard-box-content justify-content-center">
-              <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
-            </div>
-          </div>
-        </div>
-      </div>--->
+      </div>
+    </div>--->
 
     </md-card-content>
   </md-card>
+
+
+  <md-card fxFlex="50%">
+    <md-card-header>
+      <md-card-title>
+        <h4>Cluster Credentials and Settings</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <div>
+        <div fxFlex="30%">DO Token</div>
+        <div fxFlex="70%"></div>
+      </div>
+      <div>
+        <div fxFlex="30%">SSH Keys</div>
+        <div fxFlex="70%"></div>
+      </div>
+    </md-card-content>
+  </md-card>
+
+
+  <md-card fxFlex="50%">
+    <md-card-header>
+      <md-card-title>
+        <h4>Node Settings</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <div fxLayout *ngIf="nodeCount">
+        <div fxFlex="30%">
+          Node Count
+        </div>
+        <div fxFlex="70%">
+          {{ nodeCount }}
+        </div>
+      </div>
+
+      <div fxLayout *ngIf="nodeSize">
+        <div fxFlex="30%">
+          Node Size
+        </div>
+        <div fxFlex="70%">
+          {{ nodeSize }}
+        </div>
+      </div>
+    </md-card-content>
+  </md-card>
+
+
+
+</div>
+

@@ -55,6 +55,14 @@ export class WizardComponent implements OnInit {
   public bareMetalForm: FormGroup;
   public openStackForm: FormGroup;
 
+
+  public clusterSpec: ClusterSpec;
+  public nodeSpec: NodeCreateSpec;
+  public node_instances: number = 3;
+
+  public ssh_keys = [];
+
+
   public sshKeysFormField: SshKeys[] = [{
     aws :[],
     digitalocean : [],
@@ -233,7 +241,6 @@ export class WizardComponent implements OnInit {
           return !!this.selectedCloudRegion;
         }
       case 3:
-
           if(!this.sshKeysFormField[0][this.selectedCloud].length) {
             return false;
           } else if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
@@ -270,21 +277,13 @@ export class WizardComponent implements OnInit {
     return this.canGotoStep(this.currentStep);
   }
 
-  public createClusterAndNode() {
 
-    let ssh_keys = [];
-    let clusterSpec: ClusterSpec;
-    let nodeSpec: NodeCreateSpec;
-
-    let sub: Subscription;
-    const timer = Observable.timer(0, 10000);
-    let node_instances: number = 3;
-
-    ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
+  public createSpec() {
+    this.ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
 
     if (this.selectedCloud === NodeProvider.AWS) {
 
-      clusterSpec = new ClusterSpec(
+      this.clusterSpec = new ClusterSpec(
         new CloudSpec(
           this.selectedCloudRegion.metadata.name,
           null,
@@ -304,7 +303,7 @@ export class WizardComponent implements OnInit {
         "",
       );
 
-      nodeSpec = new NodeCreateSpec(
+      this.nodeSpec = new NodeCreateSpec(
         null,
         new AWSNodeSpec(
           this.awsForm.controls["node_size"].value,
@@ -318,9 +317,9 @@ export class WizardComponent implements OnInit {
         null,
       );
 
-      node_instances = this.awsForm.controls["node_count"].value;
+      this.node_instances = this.awsForm.controls["node_count"].value;
     } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
-      clusterSpec = new ClusterSpec(
+      this.clusterSpec = new ClusterSpec(
         new CloudSpec(
           this.selectedCloudRegion.metadata.name,
           new DigitaloceanCloudSpec(this.digitalOceanForm.controls["access_token"].value),
@@ -333,15 +332,15 @@ export class WizardComponent implements OnInit {
         "",
       );
 
-      nodeSpec = new NodeCreateSpec(
+      this.nodeSpec = new NodeCreateSpec(
         new DigitaloceanNodeSpec(this.digitalOceanForm.controls["node_size"].value),
         null,
         null,
         null,
       );
-      node_instances = this.digitalOceanForm.controls["node_count"].value;
+      this.node_instances = this.digitalOceanForm.controls["node_count"].value;
     } else if (this.selectedCloud === NodeProvider.BAREMETAL) {
-      clusterSpec = new ClusterSpec(
+      this.clusterSpec = new ClusterSpec(
         new CloudSpec(
           this.selectedCloudRegion.metadata.name,
           null,
@@ -354,15 +353,15 @@ export class WizardComponent implements OnInit {
         "",
       );
 
-      nodeSpec = new NodeCreateSpec(
+      this.nodeSpec = new NodeCreateSpec(
         null,
         null,
         null,
         null,
       );
-      node_instances = this.bareMetalForm.controls["node_count"].value;
+      this.node_instances = this.bareMetalForm.controls["node_count"].value;
     } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
-      clusterSpec = new ClusterSpec(
+      this.clusterSpec = new ClusterSpec(
         new CloudSpec(
           this.selectedCloudRegion.metadata.name,
           null,
@@ -383,7 +382,7 @@ export class WizardComponent implements OnInit {
         "",
       );
 
-      nodeSpec = new NodeCreateSpec(
+      this.nodeSpec = new NodeCreateSpec(
         null,
         null,
         new OpenstackNodeSpec(
@@ -392,12 +391,20 @@ export class WizardComponent implements OnInit {
         ),
         null,
       );
-      node_instances = this.openStackForm.controls["node_count"].value;
+      this.node_instances = this.openStackForm.controls["node_count"].value;
     }
 
+  }
+
+  public createClusterAndNode() {
+
+    let sub: Subscription;
+    const timer = Observable.timer(0, 10000);
+
+
     let cluster = new CreateClusterModel(
-      clusterSpec,
-      ssh_keys,
+      this.clusterSpec,
+      this.ssh_keys,
     );
 
     console.log("Create cluster mode: \n" + JSON.stringify(cluster));
@@ -409,7 +416,7 @@ export class WizardComponent implements OnInit {
           return;
         }
 
-        const createNodeModel = new CreateNodeModel(node_instances, nodeSpec);
+        const createNodeModel = new CreateNodeModel(this.node_instances, this.nodeSpec);
         sub = timer.subscribe(() => {
           this.api.getCluster(new ClusterModel(cluster.seed, cluster.metadata.name)).subscribe(cluster => {
               if (cluster.status.phase == "Running") {
