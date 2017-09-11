@@ -106,7 +106,11 @@ export class ClusterComponent implements OnInit {
       }
 
     },
-      error => this.router.navigate(['404'])
+      error => {
+        if(error.status === 404) {
+          this.router.navigate(['404']);
+        }
+      }
     );
   }
 
