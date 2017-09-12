@@ -78,6 +78,7 @@ import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.compone
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 import {CustomEventService} from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
+import { MobileNavigationComponent } from './overlays';
 
 @NgModule({
   imports: [
@@ -143,7 +144,8 @@ import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
     OpenstackAddNodeComponent,
     ProgressComponent,
     ClusterNameComponent,
-    UpgradeClusterComponent
+    UpgradeClusterComponent,
+    MobileNavigationComponent
   ],
   exports: [
     RouterModule,
@@ -173,7 +175,8 @@ import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
-    UpgradeClusterComponent
+    UpgradeClusterComponent,
+    MobileNavigationComponent
   ],
   providers: [
     AUTH_PROVIDERS,

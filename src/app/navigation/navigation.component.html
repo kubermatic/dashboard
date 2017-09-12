@@ -1,4 +1,4 @@
-<header (scrollChange)="scrolledChanged($event)" [ngClass]="{scrolled: isScrolled}">
+<header (scrollChange)="scrolledChanged($event)" [ngClass]="{scrolled: isScrolled}" (window:resize)="onResize($event)">
 
   <ng2-slim-loading-bar [color]="'white'" [height]="'2px'"></ng2-slim-loading-bar>
   <nav class="km-main-nav"
@@ -7,11 +7,19 @@
        >
     <div fxFlex>
       <div style="float: left;display: inline-block;">
-        <button class="sidenav-toggle mat-button" (click)="toggleSidenav()" md-button>
+        <button class="sidenav-toggle mat-button nav-default" (click)="toggleSidenav()" md-button>
                 <span class="mat-button-wrapper">
                   <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
                   <span>Kubermatic</span>
                 </span>
+          <div class="mat-button-ripple mat-ripple" md-ripple></div>
+          <div class="mat-button-focus-overlay"></div>
+        </button>
+        <button class="sidenav-toggle mat-button nav-mobile" (click)="showMobileNav()" md-button>
+          <span class="mat-button-wrapper">
+            <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
+            <span>Kubermatic</span>
+          </span>
           <div class="mat-button-ripple mat-ripple" md-ripple></div>
           <div class="mat-button-focus-overlay"></div>
         </button>
