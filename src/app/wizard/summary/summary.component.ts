@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'kubermatic-summary',
@@ -14,6 +14,8 @@ export class SummaryComponent implements OnInit {
   @Input() clusterSpec;
   @Input() nodeSpec;
 
+  @Output() syncStep = new EventEmitter();
+
   constructor() { }
 
   ngOnInit() {
@@ -21,6 +23,11 @@ export class SummaryComponent implements OnInit {
     console.log(this.nodeSpec);
     console.log(this.sshKeys);
     console.log(this.nodeSpec[this.cloud].size );
+  }
+
+
+  public gotoStep(step: number) {
+      this.syncStep.emit(step);
   }
 
 }
