@@ -152,7 +152,6 @@ export class WizardComponent implements OnInit {
 
 
   public selectCloud(cloud: string) {
-    debugger;
     this.selectedCloud = cloud;
     this.selectedCloudRegion = null;
 
@@ -161,8 +160,6 @@ export class WizardComponent implements OnInit {
     } else if (cloud == NodeProvider.OPENSTACK) {
       this.nodeSize = NodeInstanceFlavors.Openstack;
     }
-
-    console.log(this.nodeSize)
   }
 
   public selectCloudRegion(cloud: DataCenterEntity) {
