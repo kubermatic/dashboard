@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {ApiService} from "../../api/api.service";
@@ -19,6 +19,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   @Input() nodeName: string;
   @Input() clusterName: string;
   @Input() seedDcName: string;
+  @Input() onNodeRemoval;
 
   public clusterModel: ClusterModel;
   public node: NodeEntity;
@@ -41,10 +42,12 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   }
 
   public deleteNode(nodeName: string): void {
-    this.customEventService.publish('onNodeDelete', nodeName);
+    this.onNodeRemoval(true);
     this.clusterModel = new ClusterModel(this.seedDcName, this.clusterName);
     this.api.deleteClusterNode(this.clusterModel, nodeName).subscribe(result => {
       NotificationComponent.success(this.store, "Success", `Node removed successfully`);
+      this.customEventService.publish('onNodeDelete', nodeName);
+      this.onNodeRemoval(false);
     }, error => {
       NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
     })
