@@ -81,6 +81,21 @@ import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 import { ProviderComponent } from './wizard/provider/provider.component';
 import { SummaryComponent } from './wizard/summary/summary.component';
 
+import { ProviderClusterComponent } from './provider/cluster/cluster.component'
+import { ProviderNodeComponent } from './provider/node/node.component'
+
+
+import { DigitaloceanClusterComponent } from './provider/cluster/digitalocean/digitalocean.component';
+import { BringYourOwnClusterComponent } from './provider/cluster/bring-your-own/bring-your-own.component';
+import { AWSClusterComponent } from './provider/cluster/aws/aws.component';
+import { OpenstackClusterComponent } from './provider/cluster/openstack/openstack.component';
+import { BareMetalClusterComponent } from './provider/cluster/bare-metal/bare-metal.component';
+
+import { BareMetalNodeComponent } from './provider/node/bare-metal/bare-metal.component';
+import { AwsNodeComponent } from './provider/node/aws/aws.component';
+import { DigitaloceanNodeComponent } from './provider/node/digitalocean/digitalocean.component';
+import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -148,7 +163,18 @@ import { SummaryComponent } from './wizard/summary/summary.component';
     ClusterNameComponent,
     UpgradeClusterComponent,
     ProviderComponent,
-    SummaryComponent
+    SummaryComponent,
+    ProviderClusterComponent,
+    ProviderNodeComponent,
+    DigitaloceanClusterComponent,
+    BringYourOwnClusterComponent,
+    AWSClusterComponent,
+    OpenstackClusterComponent,
+    BareMetalClusterComponent,
+    BareMetalNodeComponent,
+    AwsNodeComponent,
+    DigitaloceanNodeComponent,
+    OpenstackNodeComponent
   ],
   exports: [
     RouterModule,

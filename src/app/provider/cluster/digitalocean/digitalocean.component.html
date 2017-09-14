@@ -1,0 +1,14 @@
+<form [formGroup]="digitalOceanClusterForm" novalidate fxLayout="column">
+
+  <p fxFlex>
+    We need a DigitalOcean Personal Access Token <b>with write access</b>.
+    You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
+  </p>
+  <md-input-container fxFlex [ngClass]="{'has-danger': !digitalOceanClusterForm.controls.access_token.valid && digitalOceanClusterForm.controls.access_token.touched, 'has-success': digitalOceanClusterForm.controls.access_token.valid}">
+    <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="API Token:" title="access_token" (change)="changeDoKey()">
+    <small class="form-text text-danger" [hidden]="digitalOceanClusterForm.controls.access_token.valid || !digitalOceanClusterForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
+  </md-input-container>
+
+  {{ digitalOceanClusterForm.status | json }}
+
+</form>

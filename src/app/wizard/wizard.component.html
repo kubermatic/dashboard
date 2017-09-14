@@ -100,6 +100,10 @@
 
 
 
+
+
+
+
 <!-- Start Provider Settings: Step 4 Amazon Weg Service -->
 <ng-container *ngIf="currentStep == 3 && selectedCloud == 'aws'">
   <form [formGroup]="awsForm" novalidate >
@@ -119,32 +123,14 @@
             </h4>
           </md-card-title>
         </md-card-header>
-        <md-card-content fxLayout="column">
-          <p>
-            We need a AWS Access Key and Secret Access Key <b>with write access</b>.
-            You can create one
-            <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
-          </p>
-          <md-input-container fxFlex [ngClass]="{'has-danger': !awsForm.controls.access_key_id.valid && awsForm.controls.access_key_id.touched, 'has-success': awsForm.controls.access_key_id.valid}">
-            <input id="access_key_id" mdInput formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
-            <small class="form-text text-danger" [hidden]="awsForm.controls.access_key_id.valid || !awsForm.controls.access_key_id.touched">Access Key ID must be between 16 and 32 characters long.</small>
-          </md-input-container>
-          <md-input-container fxFlex  [ngClass]="{'has-danger': !awsForm.controls.secret_access_key.valid && awsForm.controls.secret_access_key.touched, 'has-success': awsForm.controls.secret_access_key.valid}">
-            <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
-            <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
-          </md-input-container>
+        <md-card-content>
+          <kubermatic-provider-cluster *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)" ></kubermatic-provider-cluster>
+
+
+
+
           <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
 
-          <md-input-container fxFlex *ngIf="awsForm.controls['aws_cas'].value">
-            <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
-                                   ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
-          </md-input-container>
-          <md-input-container fxFlex *ngIf="awsForm.controls['aws_cas'].value">
-            <input type="text" mdInput id="subnet_id" name="subnet_id" formControlName="subnet_id"
-                                   ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
-          </md-input-container>
-
-          <div style="clear: both"></div>
         </md-card-content>
       </md-card>
       <md-card  fxFlex>
@@ -157,7 +143,12 @@
           </md-card-title>
         </md-card-header>
         <md-card-content fxLayout="column">
-            <md-input-container fxFlex >
+
+
+          <kubermatic-provider-node *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)"> </kubermatic-provider-node>
+
+          ////////
+          <md-input-container fxFlex >
               <input id="node_count" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
             </md-input-container>
 
@@ -199,16 +190,12 @@
               <h4>Provide credentials & settings</h4>
             </md-card-title>
           </md-card-header>
-          <md-card-content fxLayout="column">
-            <p fxFlex>
-              We need a DigitalOcean Personal Access Token <b>with write access</b>.
-              You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
-            </p>
-            <md-input-container fxFlex [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
-              <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="API Token:" title="access_token" (change)="changeDoKey()">
-              <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
-            </md-input-container>
-            <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
+          <md-card-content>
+            <kubermatic-provider-cluster *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)" ></kubermatic-provider-cluster>
+
+
+
+          <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
           </md-card-content>
         </md-card>
         <md-card fxFlex>
@@ -323,39 +310,8 @@
             </md-card-title>
           </md-card-header>
           <md-card-content fxLayout="column">
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_domain.valid && openStackForm.controls.os_domain.touched, 'has-success': openStackForm.controls.os_domain.valid}">
-              <input id="os_domain" mdInput formControlName="os_domain" type="text" placeholder="Domain:" title="Domain" (change)="changeOpKey()">
-              <small class="form-text text-danger" [hidden]="openStackForm.controls.os_domain.valid || !openStackForm.controls.os_domain.touched">Domain is required.</small>
-            </md-input-container>
 
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_tenant.valid && openStackForm.controls.os_tenant.touched, 'has-success': openStackForm.controls.os_tenant.valid}">
-              <input id="os_tenant" mdInput formControlName="os_tenant" type="text" placeholder="Tenant/Project:" title="Tenant/Project" (change)="changeOpKey()">
-              <small class="form-text text-danger" [hidden]="openStackForm.controls.os_tenant.valid || !openStackForm.controls.os_tenant.touched">Tenant/Project is required.</small>
-            </md-input-container>
-
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_username.valid && openStackForm.controls.os_username.touched, 'has-success': openStackForm.controls.os_username.valid}">
-              <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="Username:" title="Username" (change)="changeOpKey()">
-              <small class="form-text text-danger" [hidden]="openStackForm.controls.os_username.valid || !openStackForm.controls.os_username.touched">Username is required.</small>
-            </md-input-container>
-
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_password.valid && openStackForm.controls.os_password.touched, 'has-success': openStackForm.controls.os_password.valid}">
-              <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="Password:" title="Password" (change)="changeOpKey()">
-              <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">Password is required.</small>
-            </md-input-container>
-
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_network.valid && openStackForm.controls.os_network.touched, 'has-success': openStackForm.controls.os_network.valid}">
-              <input id="os_network" mdInput formControlName="os_network" type="text" placeholder="Network name:" title="Network" (change)="changeOpKey()">
-              <small class="form-text text-danger" [hidden]="openStackForm.controls.os_network.valid || !openStackForm.controls.os_network.touched">Network is required.</small>
-            </md-input-container>
-
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_security_groups.valid && openStackForm.controls.os_security_groups.touched, 'has-success': openStackForm.controls.os_security_groups.valid}">
-              <input id="os_security_groups" mdInput formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated):" title="Security groups" (change)="changeOpKey()">
-              <small class="form-text text-danger" [hidden]="openStackForm.controls.os_security_groups.valid || !openStackForm.controls.os_security_groups.touched">At least one security groups is required.</small>
-            </md-input-container>
-
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_floating_ip_pool.valid && openStackForm.controls.os_floating_ip_pool.touched, 'has-success': openStackForm.controls.os_floating_ip_pool.valid}">
-              <input id="os_floating_ip_pool" mdInput formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" (change)="changeOpKey()">
-            </md-input-container>
+            <kubermatic-provider-cluster *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)" ></kubermatic-provider-cluster>
 
             <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
 
