@@ -41,7 +41,7 @@ export class WizardComponent implements OnInit {
   public currentStep: number = 0;
   public stepFormard: boolean = false;
 
-  public clusterName: ClusterNameEntity = {valid: false, value : ""};
+  public clusterName: ClusterNameEntity = {valid: true, value : ""};
 
   public selectedCloud: string = NodeProvider.AWS;
   public selectedCloudRegion: DataCenterEntity;
@@ -71,7 +71,8 @@ export class WizardComponent implements OnInit {
   }];
 
   // Nodes Sizes
-  public nodeSize: any[] =  NodeInstanceFlavors.AWS;
+
+  public nodeSize: any[] = NodeInstanceFlavors.AWS;
 
   // Create Nodes
   public cluster: any;
