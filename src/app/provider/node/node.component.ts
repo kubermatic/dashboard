@@ -8,6 +8,7 @@ import {Component, OnInit, Input} from '@angular/core';
 export class ProviderNodeComponent implements OnInit {
 
   @Input() provider: string;
+  @Input() token: string;
 
   constructor() { }
 

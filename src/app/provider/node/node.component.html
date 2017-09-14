@@ -1,4 +1,4 @@
 <kubermatic-node-aws *ngIf="provider == 'aws'"></kubermatic-node-aws>
 <kubermatic-node-bare-metal *ngIf="provider == 'bare-metal'"></kubermatic-node-bare-metal>
-<kubermatic-node-digitalocean *ngIf="provider == 'digitalocean'"></kubermatic-node-digitalocean>
+<kubermatic-node-digitalocean *ngIf="provider == 'digitalocean'" [doToken]="token" ></kubermatic-node-digitalocean>
 <kubermatic-node-openstack *ngIf="provider == 'openstack'"></kubermatic-node-openstack>

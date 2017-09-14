@@ -147,27 +147,7 @@
 
           <kubermatic-provider-node *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)"> </kubermatic-provider-node>
 
-          ////////
-          <md-input-container fxFlex >
-              <input id="node_count" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
-            </md-input-container>
 
-            <div fxFlex class="mat-select-container" >
-              <md-select placeholder="Node Size:" name="nodeSize" formControlName="node_size">
-                <md-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</md-option>
-                <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
-                  {{size}}
-                </md-option>
-              </md-select>
-            </div>
-
-            <md-input-container fxFlex>
-              <input id="root_size" mdInput formControlName="root_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="Disk size">
-            </md-input-container>
-
-            <md-input-container fxFlex *ngIf="awsForm.controls['aws_nas'].value" >
-              <input type="text" mdInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off" />
-            </md-input-container>
         </md-card-content>
       </md-card>
     </div>
@@ -193,9 +173,7 @@
           <md-card-content>
             <kubermatic-provider-cluster *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)" ></kubermatic-provider-cluster>
 
-
-
-          <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
+            <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
           </md-card-content>
         </md-card>
         <md-card fxFlex>
@@ -205,17 +183,9 @@
             </md-card-title>
           </md-card-header>
           <md-card-content fxLayout="column">
-            <md-input-container fxFlex [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
-              <input id="node_count_do" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
-            </md-input-container>
-            <div fxFlex class="mat-select-content">
-              <md-select fxFlex placeholder="Node Size:" name="node_size" formControlName="node_size">
-                <md-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</md-option>
-                <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
-                  {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
-                </md-option>
-              </md-select>
-            </div>
+
+            <kubermatic-provider-node [provider]="selectedCloud" [token]="'114a1c82fde0fbadba446f9c852211034e0094e3c7d0b0d96c62a07aaf023448'"></kubermatic-provider-node>
+
           </md-card-content>
         </md-card>
       </div>
@@ -324,21 +294,8 @@
               <h4>Node settings</h4>
             </md-card-title>
           </md-card-header>
-          <md-card-content fxLayout="column">
-            <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched, 'has-success': openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched}">
-              <input id="node_count_openStackForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
-            </md-input-container>
-
-            <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
-              <md-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</md-option>
-              <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
-                {{size}}
-              </md-option>
-            </md-select>
-
-            <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_node_image.valid && openStackForm.controls.os_node_image.touched, 'has-success': openStackForm.controls.os_node_image.valid}">
-              <input id="os_node_image" mdInput formControlName="os_node_image" placeholder="Image (Ubuntu only)" title="Image">
-            </md-input-container>
+          <md-card-content>
+            <kubermatic-provider-node [provider]="selectedCloud" ></kubermatic-provider-node>
           </md-card-content>
         </md-card>
       </div>
