@@ -138,16 +138,11 @@
           <md-card-title>
             <h4>
               Node settings
-              <md-slide-toggle style="float: right;" formControlName="aws_nas">Extend Node settings</md-slide-toggle>
             </h4>
           </md-card-title>
         </md-card-header>
         <md-card-content fxLayout="column">
-
-
           <kubermatic-provider-node *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)"> </kubermatic-provider-node>
-
-
         </md-card-content>
       </md-card>
     </div>
