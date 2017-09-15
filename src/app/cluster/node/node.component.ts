@@ -16,7 +16,7 @@ export class NodeComponent implements OnInit {
   @Input() nodeProvider: string;
   @Input() index: number;
   public conditionsMessage: string = "";
-
+  public nodeRemoval: boolean = false;
   // public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
 
   public config: MdDialogConfig = {
@@ -37,9 +37,13 @@ export class NodeComponent implements OnInit {
   };
 
   constructor(public dialog: MdDialog) {}
-
+  
   ngOnInit() {
-
+    
+  }
+  
+  onNodeRemoval(nodeRemoval: boolean) {
+    this.nodeRemoval = nodeRemoval;
   }
 
   public deleteNodeDialog(): void {
@@ -48,8 +52,7 @@ export class NodeComponent implements OnInit {
     dialogRef.componentInstance.nodeUID = this.node.metadata.uid;
     dialogRef.componentInstance.clusterName = this.clusterName;
     dialogRef.componentInstance.seedDcName = this.seedDcName;
-
-    //this.data = this.dialogRef.componentInstance;
+    dialogRef.componentInstance.onNodeRemoval = this.onNodeRemoval.bind(this);
 
     dialogRef.afterClosed().subscribe(result => {
       // this.dialogRef = null;

@@ -17,10 +17,11 @@
     <div fxFlex="10%" class="health-state">
         <i [mdTooltip]="this.node.metadata.annotations['node.k8s.io/state']" [ngClass]="getNodeHealth()"></i>
     </div>
-    <div fxFlex="10%">
-      <button md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
+    <div fxFlex="10%" class="km-btn-remove-node-wrapper">
+      <button *ngIf="!nodeRemoval" md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
         <i class="fa fa-trash-o" aria-hidden="true"></i>
       </button>
+      <md-spinner class="km-spinner" color="accent" *ngIf="nodeRemoval"></md-spinner>
     </div>
   </div>
   <div fxLayout *ngIf="conditionsMessage" class="km-conditionsMessage">
