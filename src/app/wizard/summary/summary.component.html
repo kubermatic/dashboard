@@ -33,19 +33,19 @@
       </div>
 
       <!-- DO -->
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].token">
+      <div class="km-card-list-content" *ngIf="cloudSpec.token">
         <div fxFlex="30%">DO Token</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].token}}</div>
+        <div fxFlex="70%">{{cloudSpec.token}}</div>
       </div>
 
       <!-- AWS -->
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].access_key_id">
+      <div class="km-card-list-content" *ngIf="cloudSpec.access_key_id">
         <div fxFlex="30%">Access Key ID</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].access_key_id}}</div>
+        <div fxFlex="70%">{{cloudSpec.access_key_id}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].secret_access_key">
+      <div class="km-card-list-content" *ngIf="cloudSpec.secret_access_key">
         <div fxFlex="30%">Secret Access Key</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].secret_access_key}}</div>
+        <div fxFlex="70%">{{cloudSpec.secret_access_key}}</div>
       </div>
 
       <div class="km-card-list-content ssh-key">
@@ -56,44 +56,44 @@
           </ul>
         </div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].vpc_id">
+      <div class="km-card-list-content" *ngIf="cloudSpec.vpc_id">
         <div fxFlex="30%">VPC ID (optional)</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].vpc_id}}</div>
+        <div fxFlex="70%">{{cloudSpec.vpc_id}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].subnet_id">
+      <div class="km-card-list-content" *ngIf="cloudSpec.subnet_id">
         <div fxFlex="30%">Subnet ID (optional)</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].subnet_id}}</div>
+        <div fxFlex="70%">{{cloudSpec.subnet_id}}</div>
       </div>
 
       <!-- Open Stack -->
 
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].domain">
+      <div class="km-card-list-content" *ngIf="cloudSpec.domain">
         <div fxFlex="30%">Domain</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].domain}}</div>
+        <div fxFlex="70%">{{cloudSpec.domain}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].tenant">
+      <div class="km-card-list-content" *ngIf="cloudSpec.tenant">
         <div fxFlex="30%">Tenant/Project</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].tenant}}</div>
+        <div fxFlex="70%">{{cloudSpec.tenant}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].username">
+      <div class="km-card-list-content" *ngIf="cloudSpec.username">
         <div fxFlex="30%">Username</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].username}}</div>
+        <div fxFlex="70%">{{cloudSpec.username}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].password">
+      <div class="km-card-list-content" *ngIf="cloudSpec.password">
         <div fxFlex="30%">Password</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].password}}</div>
+        <div fxFlex="70%">{{cloudSpec.password}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].network">
+      <div class="km-card-list-content" *ngIf="cloudSpec.network">
         <div fxFlex="30%">Network name</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].network}}</div>
+        <div fxFlex="70%">{{cloudSpec.network}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].security_groups">
+      <div class="km-card-list-content" *ngIf="cloudSpec.security_groups">
         <div fxFlex="30%">Security groups</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].security_groups}}</div>
+        <div fxFlex="70%">{{cloudSpec.security_groups}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cloud[cloud].floating_ip_pool">
+      <div class="km-card-list-content" *ngIf="cloudSpec.floating_ip_pool">
         <div fxFlex="30%">Floating IP pool</div>
-        <div fxFlex="70%">{{clusterSpec.cloud[cloud].floating_ip_pool}}</div>
+        <div fxFlex="70%">{{cloudSpec.floating_ip_pool}}</div>
       </div>
     </md-card-content>
   </md-card>
@@ -106,68 +106,69 @@
     </md-card-header>
     <md-card-content>
       <!-- General -->
-      <div fxLayout *ngIf="nodeCount" class="km-card-list-content">
+      <div fxLayout *ngIf="nodeSpec.instances" class="km-card-list-content">
         <div fxFlex="30%">
           Quantity of Nodes
         </div>
         <div fxFlex="70%">
-          {{ nodeCount }}
+          {{ nodeSpec.instances }}
         </div>
       </div>
 
       <!-- DO -->
-      <div fxLayout *ngIf="nodeSpec[cloud].size" class="km-card-list-content">
+     <div fxLayout *ngIf="nodeSpec.spec[cloud].size" class="km-card-list-content">
         <div fxFlex="30%">
           Node Size
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec[cloud].size }}
+          {{ nodeSpec.spec[cloud].size }}
         </div>
       </div>
 
       <!-- AWS -->
-      <div fxLayout *ngIf="nodeSpec[cloud].instance_type" class="km-card-list-content">
+      <div fxLayout *ngIf="nodeSpec.spec[cloud].instance_type" class="km-card-list-content">
         <div fxFlex="30%">
           Node Size
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec[cloud].instance_type }}
+          {{ nodeSpec.spec[cloud].instance_type }}
         </div>
       </div>
 
-      <div fxLayout *ngIf="nodeSpec[cloud].root_size" class="km-card-list-content">
+      <div fxLayout *ngIf=" nodeSpec.spec[cloud].root_size" class="km-card-list-content">
         <div fxFlex="30%">
           Disk Size in GB (gb2)
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec[cloud].root_size }}
+          {{ nodeSpec.spec[cloud].root_size }}
         </div>
       </div>
-      <div fxLayout *ngIf="nodeSpec[cloud].ami" class="km-card-list-content">
+      <div fxLayout *ngIf=" nodeSpec.spec[cloud].ami" class="km-card-list-content">
         <div fxFlex="30%">
           AMI ID (optional)
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec[cloud].ami }}
+          {{ nodeSpec.spec[cloud].ami }}
         </div>
       </div>
+
       <!-- Open Stack --->
 
-      <div fxLayout *ngIf="nodeSpec[cloud].flavor" class="km-card-list-content">
+      <div fxLayout *ngIf=" nodeSpec.spec[cloud].flavor" class="km-card-list-content">
         <div fxFlex="30%">
           Node Size
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec[cloud].flavor }}
+          {{ nodeSpec.spec[cloud].flavor }}
         </div>
       </div>
 
-      <div fxLayout *ngIf="nodeSpec[cloud].image" class="km-card-list-content">
+      <div fxLayout *ngIf=" nodeSpec.spec[cloud].image" class="km-card-list-content">
         <div fxFlex="30%">
           Image (Ubuntu only)
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec[cloud].image }}
+          {{ nodeSpec.spec[cloud].image }}
         </div>
       </div>
 

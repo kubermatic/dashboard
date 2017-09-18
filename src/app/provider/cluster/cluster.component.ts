@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'kubermatic-provider-cluster',
@@ -7,11 +7,14 @@ import {Component, OnInit, Input} from '@angular/core';
 })
 export class ProviderClusterComponent implements OnInit {
 
-  @Input() provider: string;
-
   constructor() { }
 
-  ngOnInit() {
-  }
+  @Input() provider: string;
+  @Output() syncCloudSpec = new EventEmitter();
 
+  ngOnInit() { }
+
+  public setCloud(spec) {
+    this.syncCloudSpec.emit(spec);
+  }
 }

@@ -3,8 +3,6 @@
 <!-- Cluster Name: Step 1 -->
 <kubermatic-cluster-name *ngIf="currentStep == 0" (syncName)="setClusterName($event)"></kubermatic-cluster-name>
 
-
-
 <!-- Start Select Provider: Step 2 -->
 <ng-container *ngIf="currentStep == 1">
   <md-card>
@@ -37,7 +35,6 @@
 </ng-container>
 <!-- Ende Select Provider: Step 2 -->
 
-
 <!-- Start Select Datacenter: Step 3 Default -->
 <ng-container *ngIf="currentStep == 2 && selectedCloud !== 'bringyourown'">
   <md-card>
@@ -66,71 +63,25 @@
 </ng-container>
 <!-- End Select Datacenter: Step 3 Default -->
 
-<!-- Start Select Datacenter: Step 3 Bring Your Own -->
-<ng-container *ngIf="currentStep == 2 && selectedCloud == 'bringyourown'">
-    <md-card>
-      <md-card-header>
-        <md-card-title>
-          <h4>Select the datacenter of your cloud provider</h4>
-        </md-card-title>
-      </md-card-header>
-      <md-card-content>
-          <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-            Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</p>
-          <div>
-            <p>
-              You <i>bring your own</i> nodes, how you like, whereever you like. You are on your own, but
-              you have full flexibility. Install the nodes on any cloud provider of your choice or in your
-              own datacenter or on bare-metal.
-            </p>
-            <p>
-              Only requirement for now: your provider has to support Ubuntu 16.04 and a private network.
-            </p>
-            <p>
-              Instructions will be provided in the cluster details.
-            </p>
-            <div class="wizard-box-text-primary">
-              <label style="cursor: pointer;"><input type="checkbox" value="" [(ngModel)]="acceptBringYourOwn">Fantastic, this is exactly what I want.</label>
-            </div>
-           </div>
-      </md-card-content>
-    </md-card>
-  </ng-container>
-<!-- End Select Datacenter: Step 3 Bring Your Own -->
-
-
-
-
-
-
-
 <!-- Start Provider Settings: Step 4 Amazon Weg Service -->
-<ng-container *ngIf="currentStep == 3 && selectedCloud == 'aws'">
-  <form [formGroup]="awsForm" novalidate >
-
+<ng-container *ngIf="currentStep == 3">
+  <ng-container *ngIf="selectedCloud == 'aws' || selectedCloud == 'openstack' || selectedCloud == 'digitalocean'">
     <div   fxLayout="row"
            fxLayout.md="column"
            fxLayout.sm="column"
            fxLayout.xs="column"
            fxLayoutGap="20px" >
-
       <md-card fxFlex>
         <md-card-header>
           <md-card-title>
             <h4>
               Provide credentials
-              <md-slide-toggle style="float: right;" formControlName="aws_cas">Extend Provider settings</md-slide-toggle>
             </h4>
           </md-card-title>
         </md-card-header>
         <md-card-content>
-          <kubermatic-provider-cluster *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)" ></kubermatic-provider-cluster>
-
-
-
-
+          <kubermatic-provider-cluster [provider]="selectedCloud" (syncCloudSpec)="setCloud($event)" ></kubermatic-provider-cluster>
           <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
-
         </md-card-content>
       </md-card>
       <md-card  fxFlex>
@@ -142,162 +93,17 @@
           </md-card-title>
         </md-card-header>
         <md-card-content fxLayout="column">
-          <kubermatic-provider-node *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)"> </kubermatic-provider-node>
+          <kubermatic-provider-node [provider]="selectedCloud" [token]="'114a1c82fde0fbadba446f9c852211034e0094e3c7d0b0d96c62a07aaf023448'" (syncNodeModel)="setNode($event)"> </kubermatic-provider-node>
         </md-card-content>
       </md-card>
     </div>
-  </form>
+  </ng-container>
 </ng-container>
 <!-- End Provider Settings: Step 4 Amazon Weg Service -->
 
 
-<!-- Start Provider Settings: Step 4 Digital Ocean -->
-<ng-container *ngIf="currentStep == 3 && selectedCloud == 'digitalocean'">
-    <form [formGroup]="digitalOceanForm" novalidate >
-      <div   fxLayout="row"
-             fxLayout.md="column"
-             fxLayout.sm="column"
-             fxLayout.xs="column"
-             fxLayoutGap="20px" >
-        <md-card fxFlex>
-          <md-card-header>
-            <md-card-title>
-              <h4>Provide credentials & settings</h4>
-            </md-card-title>
-          </md-card-header>
-          <md-card-content>
-            <kubermatic-provider-cluster *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)" ></kubermatic-provider-cluster>
+<!-- Provider Summary: Step 5 -->
+<kubermatic-summary *ngIf="currentStep == 4" [cloud]="selectedCloud" [region]="selectedCloudRegion" [sshKeys]="ssh_keys" [clusterSpec]="clusterSpec" [cloudSpec]="getCloudSpec" [nodeSpec]="createNodeModel" (syncStep)="gotoStep($event)"></kubermatic-summary>
 
-            <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
-          </md-card-content>
-        </md-card>
-        <md-card fxFlex>
-          <md-card-header>
-            <md-card-title>
-              <h4>Node settings</h4>
-            </md-card-title>
-          </md-card-header>
-          <md-card-content fxLayout="column">
-
-            <kubermatic-provider-node [provider]="selectedCloud" [token]="'114a1c82fde0fbadba446f9c852211034e0094e3c7d0b0d96c62a07aaf023448'"></kubermatic-provider-node>
-
-          </md-card-content>
-        </md-card>
-      </div>
-    </form>
-  </ng-container>
-<!-- End Provider Settings: Step 4 Digital Ocean -->
-
-
-<!-- Start Provider Settings: Step 4 Bring Your Own -->
-<ng-container *ngIf="currentStep == 3 && selectedCloud == 'bringyourown'">
-    <md-card>
-      <md-card-header>
-        <md-card-title>
-          <h4>Provide credentials & settings</h4>
-        </md-card-title>
-      </md-card-header>
-      <md-card-content>
-        <div [hidden]="selectedCloud !== 'bringyourown'">
-          <p>
-            You provide your own nodes. We don't need your credentials, but we also cannot help you. Deal?<br>
-            <br>
-            For non-interactive installation of the kubermatic debian package, you have to tell us about the
-            private network interface of your nodes. It will be used for the
-            <a href="https://github.com/coreos/flannel">Flannel</a> network traffic.
-          </p>
-
-          <form [formGroup]="bringYourOwnForm" novalidate>
-            <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
-              <label for="pif" class="form-text text-muted">Private network interface:</label>
-              <input id="pif" formControlName="pif" type="text" class="form-control">
-              <small class="text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
-            </div>
-          </form>
-        </div>
-
-      </md-card-content>
-    </md-card>
-  </ng-container>
-<!-- End Provider Settings: Step 4 Bring Your Own -->
-
-<!-- Start Provider Settings: Step 4 Bare Metal -->
-<ng-container *ngIf="currentStep == 3 && selectedCloud == 'baremetal'">
-
-    <form [formGroup]="bareMetalForm" novalidate >
-      <div   fxLayout
-             fxLayout.sm="column"
-             fxLayout.xs="column"
-             fxLayoutAlign="center"
-             fxLayoutGap="20px">
-        <md-card fxFlex="50%">
-          <md-card-header>
-            <md-card-title>
-              <h4>Provide credentials & settings</h4>
-            </md-card-title>
-          </md-card-header>
-          <md-card-content fxLayout="column">
-            <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
-          </md-card-content>
-        </md-card>
-        <md-card fxFlex="50%">
-          <md-card-header>
-            <md-card-title>
-              <h4>Node settings</h4>
-            </md-card-title>
-          </md-card-header>
-          <md-card-content>
-            <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched, 'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
-              <input id="node_count_bareMetalForm" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
-            </md-input-container>
-          </md-card-content>
-        </md-card>
-      </div>
-    </form>
-  </ng-container>
-<!-- End Provider Settings: Step 4 Bare Metal -->
-
-
-<!-- Start Provider Settings: Step 4 Open Stack -->
-<ng-container *ngIf="currentStep == 3 && selectedCloud == 'openstack'">
-    <form [formGroup]="openStackForm" novalidate >
-      <div fxLayout
-           fxLayout.sm="column"
-           fxLayout.xs="column"
-           fxLayoutAlign="center"
-           fxLayoutGap="20px">
-        <md-card fxFlex="50%">
-          <md-card-header>
-            <md-card-title>
-              <h4>
-                Provide credentials & settings
-              </h4>
-            </md-card-title>
-          </md-card-header>
-          <md-card-content fxLayout="column">
-
-            <kubermatic-provider-cluster *ngIf="currentStep == 3" [provider]="selectedCloud" (syncCloudSpec)="console.log($event)" ></kubermatic-provider-cluster>
-
-            <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
-
-
-          </md-card-content>
-        </md-card>
-        <md-card fxFlex="50%">
-          <md-card-header>
-            <md-card-title>
-              <h4>Node settings</h4>
-            </md-card-title>
-          </md-card-header>
-          <md-card-content>
-            <kubermatic-provider-node [provider]="selectedCloud" ></kubermatic-provider-node>
-          </md-card-content>
-        </md-card>
-      </div>
-    </form>
-  </ng-container>
-<!-- End Provider Settings: Step 4 Open Stack -->
-
-<kubermatic-summary *ngIf="currentStep == 4" [cloud]="selectedCloud" [region]="selectedCloudRegion" [nodeCount]="getNodeCount()" [sshKeys]="ssh_keys" [clusterSpec]="clusterSpec" [nodeSpec]="nodeSpec" (syncStep)="gotoStep($event)"></kubermatic-summary>
-
+<!-- Navigation Buttons -->
 <kubermatic-navigation-buttons [step]="currentStep" [nextStep]="canGotoStep(currentStep)" (syncStep)="gotoStep($event)"></kubermatic-navigation-buttons>

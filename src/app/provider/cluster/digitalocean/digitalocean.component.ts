@@ -8,13 +8,12 @@ import {DigitaloceanCloudSpec} from "../../../api/entitiy/cloud/DigitialoceanClo
   styleUrls: ['./digitalocean.component.scss']
 })
 export class DigitaloceanClusterComponent implements OnInit {
+  public digitalOceanClusterForm: FormGroup;
+  public cloudSpec: DigitaloceanCloudSpec;
 
   constructor(private formBuilder: FormBuilder) { }
 
   @Output() syncCloudSpec = new EventEmitter();
-
-  public digitalOceanClusterForm: FormGroup;
-  public cloudSpec;
 
   ngOnInit() {
     this.digitalOceanClusterForm = this.formBuilder.group({
@@ -26,7 +25,19 @@ export class DigitaloceanClusterComponent implements OnInit {
   public onChange(){
     this.cloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls["access_token"].value);
 
-    this.syncCloudSpec = this.cloudSpec;
+    if (this.digitalOceanClusterForm.valid){
+      this.syncCloudSpec.emit(this.cloudSpec);
+    }
+  }
+
+  // ToDo: Pass token to the node component
+  public changeDoKey() {
+    let key = this.digitalOceanClusterForm.controls["access_token"].value;
+
+    //this.api.getDigitaloceanSizes(key).subscribe(result => {
+        //this.nodeSize = result.sizes;
+     // }
+    //);
   }
 
 }

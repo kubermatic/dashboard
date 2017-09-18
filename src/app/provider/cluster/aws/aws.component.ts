@@ -8,13 +8,12 @@ import {AWSCloudSpec} from "../../../api/entitiy/cloud/AWSCloudSpec";
   styleUrls: ['./aws.component.scss']
 })
 export class AWSClusterComponent implements OnInit {
+  public awsClusterForm: FormGroup;
+  public cloudSpec: AWSCloudSpec;
 
   constructor(private formBuilder: FormBuilder) { }
 
   @Output() syncCloudSpec = new EventEmitter();
-
-  public awsClusterForm: FormGroup;
-  public cloudSpec;
 
   ngOnInit() {
     this.awsClusterForm = this.formBuilder.group({
@@ -24,14 +23,9 @@ export class AWSClusterComponent implements OnInit {
       subnet_id: [""],
       route_table_id: [""],
     });
-
-    console.log(this.awsClusterForm.status);
   }
 
   public onChange(){
-
-    console.log(this.awsClusterForm.status);
-    debugger;
     this.cloudSpec = new AWSCloudSpec(
       this.awsClusterForm.controls["access_key_id"].value,
       this.awsClusterForm.controls["secret_access_key"].value,
@@ -41,6 +35,8 @@ export class AWSClusterComponent implements OnInit {
       "",
     )
 
-    this.syncCloudSpec = this.cloudSpec;
+    if (this.awsClusterForm.valid){
+      this.syncCloudSpec.emit(this.cloudSpec);
+    }
   }
 }

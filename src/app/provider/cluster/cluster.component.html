@@ -1,5 +1,5 @@
-<kubermatic-cluster-aws *ngIf="provider == 'aws'"></kubermatic-cluster-aws>
-<kubermatic-cluster-bare-metal *ngIf="provider == 'bare-metal'"></kubermatic-cluster-bare-metal>
-<kubermatic-cluster-bring-your-own *ngIf="provider == 'bring-your-own'"></kubermatic-cluster-bring-your-own>
-<kubermatic-cluster-digitalocean *ngIf="provider == 'digitalocean'"></kubermatic-cluster-digitalocean>
-<kubermatic-cluster-openstack *ngIf="provider == 'openstack'"></kubermatic-cluster-openstack>
+<kubermatic-cluster-aws *ngIf="provider == 'aws'" (syncCloudSpec)="setCloud($event)"></kubermatic-cluster-aws>
+<kubermatic-cluster-bare-metal *ngIf="provider == 'bare-metal'" (syncCloudSpec)="setCloud($event)"></kubermatic-cluster-bare-metal>
+<kubermatic-cluster-bring-your-own *ngIf="provider == 'bring-your-own'" (syncCloudSpec)="setCloud($event)"></kubermatic-cluster-bring-your-own>
+<kubermatic-cluster-digitalocean *ngIf="provider == 'digitalocean'" (syncCloudSpec)="setCloud($event)"></kubermatic-cluster-digitalocean>
+<kubermatic-cluster-openstack *ngIf="provider == 'openstack'" (syncCloudSpec)="setCloud($event)"></kubermatic-cluster-openstack>

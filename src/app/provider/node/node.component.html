@@ -1,4 +1,4 @@
-<kubermatic-node-aws *ngIf="provider == 'aws'"></kubermatic-node-aws>
-<kubermatic-node-bare-metal *ngIf="provider == 'bare-metal'"></kubermatic-node-bare-metal>
-<kubermatic-node-digitalocean *ngIf="provider == 'digitalocean'" [doToken]="token" ></kubermatic-node-digitalocean>
-<kubermatic-node-openstack *ngIf="provider == 'openstack'"></kubermatic-node-openstack>
+<kubermatic-node-aws *ngIf="provider == 'aws'" (syncNodeModel)="getNodeModel($event)"></kubermatic-node-aws>
+<kubermatic-node-bare-metal *ngIf="provider == 'bare-metal'" (syncNodeModel)="getNodeModel($event)"></kubermatic-node-bare-metal>
+<kubermatic-node-digitalocean *ngIf="provider == 'digitalocean'" [doToken]="token" (syncNodeModel)="getNodeModel($event)" ></kubermatic-node-digitalocean>
+<kubermatic-node-openstack *ngIf="provider == 'openstack'" (syncNodeModel)="getNodeModel($event)" ></kubermatic-node-openstack>

@@ -1,5 +1,4 @@
-<form [formGroup]="digitalOceanClusterForm" novalidate fxLayout="column">
-
+<form [formGroup]="digitalOceanClusterForm" novalidate fxLayout="column" (change)="onChange()">
   <p fxFlex>
     We need a DigitalOcean Personal Access Token <b>with write access</b>.
     You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
@@ -8,7 +7,4 @@
     <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="API Token:" title="access_token">
     <small class="form-text text-danger" [hidden]="digitalOceanClusterForm.controls.access_token.valid || !digitalOceanClusterForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
   </md-input-container>
-
-  {{ digitalOceanClusterForm.status | json }}
-
 </form>

@@ -1,11 +1,10 @@
-<form [formGroup]="awsNodeForm" novalidate  fxLayout="column">
-
+<form [formGroup]="awsNodeForm" novalidate  fxLayout="column" (change)="onChange()">
   <md-input-container fxFlex >
     <input id="node_count" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
   </md-input-container>
 
   <div fxFlex class="mat-select-container" >
-    <md-select placeholder="Node Size:" name="nodeSize" formControlName="node_size">
+    <md-select placeholder="Node Size:" name="nodeSize" formControlName="node_size" (change)="onChange()">
       <md-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</md-option>
       <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
         {{size}}
@@ -20,6 +19,4 @@
   <md-input-container fxFlex >
     <input type="text" mdInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off" />
   </md-input-container>
-
-  {{awsNodeForm.status}}
 </form>

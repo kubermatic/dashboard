@@ -8,13 +8,12 @@ import {OpenstackCloudSpec} from "../../../api/entitiy/cloud/OpenstackCloudSpec"
   styleUrls: ['./openstack.component.scss']
 })
 export class OpenstackClusterComponent implements OnInit {
+  public osClusterForm: FormGroup;
+  public cloudSpec: OpenstackCloudSpec;
 
   constructor(private formBuilder: FormBuilder) { }
 
   @Output() syncCloudSpec = new EventEmitter();
-
-  public osClusterForm: FormGroup;
-  public cloudSpec;
 
   ngOnInit() {
     this.osClusterForm = this.formBuilder.group({
@@ -39,7 +38,8 @@ export class OpenstackClusterComponent implements OnInit {
       this.osClusterForm.controls["os_floating_ip_pool"].value,
     )
 
-    this.syncCloudSpec = this.cloudSpec;
+    if (this.osClusterForm.valid){
+      this.syncCloudSpec.emit(this.cloudSpec);
+    }
   }
-
 }
