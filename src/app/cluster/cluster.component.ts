@@ -19,6 +19,7 @@ import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
 import {CustomEventService} from '../services';
+import 'rxjs/add/operator/retry';
 
 @Component({
   selector: "kubermatic-cluster",
@@ -89,7 +90,9 @@ export class ClusterComponent implements OnInit {
   }
 
   update(): void {
-    this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName)).subscribe(res => {
+    this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
+    .retry(3)
+    .subscribe(res => {
       this.cluster = new ClusterEntity(
         res.metadata,
         res.spec,
@@ -106,7 +109,14 @@ export class ClusterComponent implements OnInit {
       }
 
     },
-      error => this.router.navigate(['404'])
+      error => {
+        if(error.status === 404) {
+          this.router.navigate(['404']);
+        }
+        else {
+          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+        }
+      }
     );
   }
 
