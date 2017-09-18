@@ -92,7 +92,7 @@ export class ClusterComponent implements OnInit {
   update(): void {
     this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
     .retry(3)
-    .subscribe(res => {
+      .subscribe(res => {
       this.cluster = new ClusterEntity(
         res.metadata,
         res.spec,
@@ -107,17 +107,7 @@ export class ClusterComponent implements OnInit {
       if (this.cluster.isRunning()) {
         this.updateNodes();
       }
-
-    },
-      error => {
-        if(error.status === 404) {
-          this.router.navigate(['404']);
-        }
-        else {
-          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-        }
-      }
-    );
+    });
   }
 
   updateNodes(): void {

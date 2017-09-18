@@ -31,9 +31,6 @@ export class AddSshKeyModalComponent implements OnInit {
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
       .subscribe(result => {
           NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
-        },
-        error => {
-          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
         });
   }
 

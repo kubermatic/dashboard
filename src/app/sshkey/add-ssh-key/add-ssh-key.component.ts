@@ -37,9 +37,6 @@ export class AddSshKeyComponent implements OnInit {
               NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
               this.addSSHKeyForm.reset();
               this.syncSshKey.emit();
-            },
-            error => {
-              NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
             });
   }
 

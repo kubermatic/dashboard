@@ -76,7 +76,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import {CustomEventService} from './services';
+import {CustomEventService, CustomHttpService} from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 import { MobileNavigationComponent } from './overlays';
 
@@ -200,7 +200,8 @@ import { MobileNavigationComponent } from './overlays';
       useClass: LoaderInterceptor,
       multi: true
     },
-    CustomEventService
+    CustomEventService,
+    CustomHttpService
   ],
   bootstrap: [KubermaticComponent]
 

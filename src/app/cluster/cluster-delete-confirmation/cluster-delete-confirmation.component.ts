@@ -53,8 +53,6 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
           NotificationComponent.success(this.store, "Success", `Cluster removed successfully`);
     
           this.router.navigate(['/clusters']);
-        }, error => {
-          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
         });
     }
   }

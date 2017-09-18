@@ -49,7 +49,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
       this.customEventService.publish('onNodeDelete', nodeName);
       this.onNodeRemoval(false);
     }, error => {
-      NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+      // NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
     })
   }
 }
