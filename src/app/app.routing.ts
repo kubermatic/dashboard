@@ -23,7 +23,7 @@ export const appRoutes: Routes = [
         path: "sshkeys",
         component: SshkeyComponent,
         canActivate: [AuthGuard],
-        data: { title: "SSH Keys" }
+        data: { title: "Manage SSH Keys" }
       },
       {
         path: "dc/:seedDcName/cluster/:clusterName",
@@ -35,7 +35,7 @@ export const appRoutes: Routes = [
         path: "clusters",
         component: ClusterListComponent,
         canActivate: [AuthGuard],
-        data: { title: "Clusters" }
+        data: { title: "Manage Clusters" }
       },
       {
         path: "",

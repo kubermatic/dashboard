@@ -1,3 +1,5 @@
+$MOBILE_RESOLUTION_BREAKPOINT: 504px;
+
 header {
   background-color: #fff;
 
@@ -348,4 +350,17 @@ a.collapse-menu-link {
 kubermatic-breadcrumbs {
   display: inline-block;
   float: left;
+}
+
+.nav-mobile {
+  display: none;
+}
+
+@media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
+  .nav-default {
+    display: none;
+  }
+  .nav-mobile {
+    display: block;
+  }
 }
