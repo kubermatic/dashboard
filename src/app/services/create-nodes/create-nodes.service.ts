@@ -17,7 +17,14 @@ export class CreateNodesService {
         private api: ApiService, 
         private localStorageService: LocalStorageService,
         private store: Store<fromRoot.State>
-    ) {}
+    )
+    {
+        let nodesData = this.localStorageService.getNodesData();
+
+        if(nodesData) {
+            this.createNodes(nodesData.cluster, nodesData.createNodeModel);    
+        }      
+    }
  
     public createNodes(cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
         let sub: Subscription;

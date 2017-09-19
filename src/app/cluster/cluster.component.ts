@@ -18,7 +18,7 @@ import {NotificationComponent} from "../notification/notification.component";
 import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
-import {CustomEventService, CreateNodesService, LocalStorageService} from '../services';
+import {CustomEventService, CreateNodesService} from '../services';
 
 @Component({
   selector: "kubermatic-cluster",
@@ -53,8 +53,7 @@ export class ClusterComponent implements OnInit {
     private api: ApiService,
     private store: Store<fromRoot.State>,
     public dialog: MdDialog,
-    private createNodesService: CreateNodesService,
-    private localStorageService: LocalStorageService
+    private createNodesService: CreateNodesService
   ) {}
 
   ngOnInit() {
@@ -62,12 +61,6 @@ export class ClusterComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
       this.seedDcName = params["seedDcName"];
-      
-      let nodesData = this.localStorageService.getNodesData(this.clusterName);
-
-      if (nodesData) {
-        this.createNodesService.createNodes(nodesData.cluster, nodesData.createNodeModel);    
-      }
 
       this.sub = this.timer.subscribe(() => {
         this.update();
