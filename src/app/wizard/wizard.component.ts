@@ -32,9 +32,8 @@ export class WizardComponent implements OnInit {
 
   public clusterName: ClusterNameEntity = {valid: true, value : ""};
 
-  public selectedCloud: string = NodeProvider.AWS;
+  public selectedCloud: string;
   public selectedCloudRegion: DataCenterEntity;
-  public acceptBringYourOwn: boolean;
 
   public clusterSpec: ClusterSpec;
   public ssh_keys = [];
@@ -48,9 +47,6 @@ export class WizardComponent implements OnInit {
     baremetal : [],
     openstack : []
   }];
-
-  // Nodes Sizes
-  public nodeSize: any[];
 
   // Create Nodes
   public cluster: any;
@@ -114,11 +110,7 @@ export class WizardComponent implements OnInit {
       case 1:
         return !!this.selectedCloud;
       case 2:
-        if (this.selectedCloud === NodeProvider.BRINGYOUROWN) {
-          return this.acceptBringYourOwn;
-        } else {
-          return !!this.selectedCloudRegion;
-        }
+        return !!this.selectedCloudRegion;
       case 3:
           if(!this.sshKeysFormField[0][this.selectedCloud].length) {
             return false;
