@@ -4,7 +4,9 @@
     <div fxFlex="35%" fxFlex.xs="40%">
       <span>
         <img fxHide.xs src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
-        <p>{{getShortClusterName()}}</p>
+        <p fxHide.gt-sm >{{getShortClusterName()}}</p>
+        <p fxHide.lt-md >{{this.cluster.spec.humanReadableName}}</p>
+
       </span>
     </div>
     <div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="25%">

@@ -30,7 +30,7 @@ export class WizardComponent implements OnInit {
 
   public currentStep: number = 0;
 
-  public clusterName: ClusterNameEntity = {valid: true, value : ""};
+  public clusterName: ClusterNameEntity = {valid: false, value : ""};
 
   public selectedCloud: string;
   public selectedCloudRegion: DataCenterEntity;
