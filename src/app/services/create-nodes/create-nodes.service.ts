@@ -22,12 +22,19 @@ export class CreateNodesService {
         let nodesData = this.localStorageService.getNodesData();
 
         if(nodesData) {
-            this.createNodes(nodesData.cluster, nodesData.createNodeModel);    
+            this.createInitialClusterNodes(nodesData.cluster, nodesData.createNodeModel);    
         }      
     }
  
-    public createNodes(cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
+    public createInitialClusterNodes(cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
         let sub: Subscription;
+
+        if(!this.localStorageService.getNodesData()) {
+            this.localStorageService.setNodesCreationData({
+                cluster: cluster,
+                createNodeModel: createNodeModel
+            });
+        }
 
         sub = this.timer.subscribe(() => {
             this.api.getCluster(new ClusterModel(cluster.seed, cluster.metadata.name))

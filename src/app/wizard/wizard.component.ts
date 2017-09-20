@@ -26,7 +26,7 @@ import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
 import * as testing from "selenium-webdriver/testing";
 import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
-import {CustomEventService, CreateNodesService, LocalStorageService } from '../services';
+import {CustomEventService, CreateNodesService} from '../services';
 
 @Component({
   selector: "kubermatic-wizard",
@@ -78,8 +78,7 @@ export class WizardComponent implements OnInit {
     private store: Store<fromRoot.State>,
     public dialog: MdDialog,
     private customEventService: CustomEventService,
-    private createNodesService: CreateNodesService,
-    private localStorageService: LocalStorageService
+    private createNodesService: CreateNodesService
   ) {}
 
   ngOnInit() {
@@ -415,11 +414,7 @@ export class WizardComponent implements OnInit {
           return;
         }
 
-        this.localStorageService.setNodesCreationData({
-          cluster: cluster,
-          createNodeModel: createNodeModel
-        });
-        this.createNodesService.createNodes(cluster, createNodeModel);
+        this.createNodesService.createInitialClusterNodes(cluster, createNodeModel);
       },
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
