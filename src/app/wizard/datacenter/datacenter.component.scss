@@ -1,6 +1,7 @@
-$wizard-box-content-cloud-logo-size: 100px;
-$wizard-box-content-cloud-margin-top: 50px;
+$wizard-box-content-dc-logo-size: 125px;
+$wizard-box-content-dc-margin-top: 0px;
 
+$wizard-box-content-location-flag-size: 48px;
 .mat-card {
   .mat-card-header {
     padding: 0;
@@ -38,52 +39,56 @@ $wizard-box-content-cloud-margin-top: 50px;
   font-weight: 600;
   padding: 11px 0;
 
-
-  img.cloud-logo {
-    width: $wizard-box-content-cloud-logo-size;
-    margin-top: $wizard-box-content-cloud-margin-top;
-    margin-bottom: 15px;
-    position: relative;
-    top: 20px;
-    bottom: 0;
-    margin-top: -25%;
+  img.dc-logo {
+    width: $wizard-box-content-dc-logo-size;
+    margin-top: $wizard-box-content-dc-margin-top;
+    margin-bottom: 10px;
   }
 }
 
-.wizard-box-provider {
-  margin-top: 10px;
+
+
+.wizard-box {
+  margin: 5px;
   background: #fff;
   border: 1px solid #E3E8EC;
   cursor: pointer;
-  min-height: 140px;
 }
 
-.wizard-box-provider [disabled] {
+.wizard-box[disabled] {
   cursor: not-allowed;
 }
 
-.wizard-box-provider.selected {
+.wizard-box.selected {
   background-color: #d5e3f5;
   cursor: default;
   border: 1px solid #03a9f4;
 }
 
-.wizard-box-provider.selected:hover {
+.wizard-box.selected:hover {
   background-color: #d5e3f5;
   cursor: default;
   border: 1px solid #03a9f4;
 }
 
-.wizard-box-provider:hover {
+.wizard-box:hover {
   border: 1px solid #03a9f4;
   background-color: #d5e3f5;
 }
 
-.wizard-box-provider:not([disabled]):not(.selected):hover {
+.wizard-box:not([disabled]):not(.selected):hover {
   background: #f7f8f9;
 }
 
-img.cloud-logo {
-  width: $wizard-box-content-cloud-logo-size ;
-  margin-bottom: 15px;
+
+div.location {
+  font-weight: 300;
+  font-size: 12px;
+  padding: 0 5px;
+}
+
+image.location-flag {
+  margin-top: 10px;
+  width: $wizard-box-content-location-flag-size;
+  height: $wizard-box-content-location-flag-size;
 }

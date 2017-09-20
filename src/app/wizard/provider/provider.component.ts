@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {NodeProvider} from "../../api/model/NodeProviderConstants";
+import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
 
 @Component({
   selector: 'kubermatic-provider',
@@ -7,9 +9,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProviderComponent implements OnInit {
 
+  @Input() provider: { [key: string]: DataCenterEntity[] } = {};
+  @Output() syncProvider =  new EventEmitter();
+  public supportedNodeProviders: string[] = NodeProvider.Supported;
+  public selectedCloud: string = NodeProvider.AWS;
+
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  public selectCloud(cloud: string) {
+    this.selectedCloud = cloud;
+    this.syncProvider.emit(this.selectedCloud);
   }
 
 }

@@ -1,7 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
-import {FormBuilder} from "@angular/forms";
 import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {Router} from "@angular/router";
 import {NotificationComponent} from "../notification/notification.component";
@@ -25,7 +24,6 @@ import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
 
 export class WizardComponent implements OnInit {
 
-  public supportedNodeProviders: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.BRINGYOUROWN, NodeProvider.BAREMETAL, NodeProvider.OPENSTACK];
   public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
 
   public currentStep: number = 0;
