@@ -12,7 +12,7 @@ export class ProviderComponent implements OnInit {
   @Input() provider: { [key: string]: DataCenterEntity[] } = {};
   @Output() syncProvider =  new EventEmitter();
   public supportedNodeProviders: string[] = NodeProvider.Supported;
-  public selectedCloud: string = NodeProvider.AWS;
+  public selectedCloud: string;
 
   constructor() { }
 
