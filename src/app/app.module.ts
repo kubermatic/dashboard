@@ -89,6 +89,7 @@ import { AwsNodeComponent } from './provider/node/aws/aws.component';
 import { DigitaloceanNodeComponent } from './provider/node/digitalocean/digitalocean.component';
 import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
 import { MobileNavigationComponent } from './overlays';
+import { SetSettingsComponent } from './wizard/set-settings/set-settings.component';
 
 @NgModule({
   imports: [
@@ -168,7 +169,8 @@ import { MobileNavigationComponent } from './overlays';
     AwsNodeComponent,
     DigitaloceanNodeComponent,
     OpenstackNodeComponent,
-    MobileNavigationComponent
+    MobileNavigationComponent,
+    SetSettingsComponent
   ],
   exports: [
     RouterModule,
