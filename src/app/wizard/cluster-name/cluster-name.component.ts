@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ClusterNameGenerator} from "../../util/name-generator.service";
 import {ClusterNameEntity} from "../../api/entitiy/wizard/ClusterNameEntity";
@@ -9,6 +9,7 @@ import {ClusterNameEntity} from "../../api/entitiy/wizard/ClusterNameEntity";
   styleUrls: ['./cluster-name.component.scss']
 })
 export class ClusterNameComponent implements OnInit {
+  @Input() clusterName: ClusterNameEntity;
   @Output() syncName = new EventEmitter();
   public clusterNameForm: FormGroup;
   constructor(private nameGenerator: ClusterNameGenerator,
@@ -17,7 +18,7 @@ export class ClusterNameComponent implements OnInit {
 
   ngOnInit() {
     this.clusterNameForm = this.formBuilder.group({
-      name: [this.nameGenerator.generateName(), [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
+      name: [this.clusterName.value, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
     });
   }
 
