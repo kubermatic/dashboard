@@ -3,6 +3,7 @@ import {NodeProvider} from "../../api/model/NodeProviderConstants";
 import {ClusterSpec, CloudSpec} from "../../api/entitiy/ClusterEntity";
 import {CreateClusterModel} from "../../api/model/CreateClusterModel";
 import {SshKeys} from "../../api/model/SshKeysModel";
+import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
 
 
 @Component({
@@ -14,18 +15,17 @@ export class SetSettingsComponent implements OnInit {
 
   @Input() clusterName: string;
   @Input() provider: string;
-  @Input() region;
+  @Input() region: string;
 
   @Output() syncCluster = new EventEmitter();
-  @Output() syncCloud = new EventEmitter();
   @Output() syncNode = new EventEmitter();
   @Output() syncSshKeys = new EventEmitter();
 
-
-  public createNodeModel;
-  public getCloudSpec;
-  public clusterSpec;
-  public getSshKeys = [];
+  public clusterModal: CreateClusterModel;
+  // varies between AWSCloudSpec, DigitalOceanCloudSpec, OpenstackCloudSpec
+  public getCloudSpec: any;
+  public clusterSpec: ClusterSpec;
+  public getSshKeys: string[] = [];
 
   public sshKeysFormField: SshKeys[] = [{
     aws :[],
@@ -34,17 +34,12 @@ export class SetSettingsComponent implements OnInit {
     openstack : []
   }];
 
-  public clusterModal: CreateClusterModel;
-
   constructor() { }
 
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   public setCloud(spec) {
     this.getCloudSpec = spec;
-    this.syncCloud.emit(spec);
     this.createSpec();
   }
 

@@ -14,6 +14,7 @@ import {CloudSpec, ClusterSpec} from "../api/entitiy/ClusterEntity";
 import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import * as testing from "selenium-webdriver/testing";
 import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
+import {CreateNodeModel} from "../api/model/CreateNodeModel";
 
 
 @Component({
@@ -36,17 +37,14 @@ export class WizardComponent implements OnInit {
   // Step 3: Selected Provider Region
   public selectedProviderRegion: DataCenterEntity;
 
-  // Step 5: get Cloud Spec for Summary
-  public getCloudSpec;
-
   // step 5: get sshKeys for Summary
   public selectedSshKeys: string[] = [];
 
   // Step 5: get Cluster Modal
-  public createClusterModal: any;
+  public createClusterModal: CreateClusterModel;
 
   // step 5: get Node Modal for Summary
-  public createNodeModel;
+  public createNodeModel: CreateNodeModel;
 
   public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
 
@@ -87,10 +85,6 @@ export class WizardComponent implements OnInit {
 
   public setCluster(cluster) {
     this.createClusterModal = cluster;
-  }
-
-  public setCloud(cloud) {
-    this.getCloudSpec = cloud;
   }
 
   public setNode(node) {
