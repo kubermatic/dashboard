@@ -1,0 +1,65 @@
+workspace:
+  base: /go
+  path: src/github.com/kubermatic/dashboard-v2
+
+pipeline:
+  dependencies:
+    image: node:8
+    commands:
+      - make install
+
+  node-dist:
+    image: node:8
+    commands:
+      - make dist
+
+  build:
+    image: golang:1.8.3
+    commands:
+      - CGO_ENABLED=0 make build
+
+  docker-always:
+    group: push
+    image: plugins/docker
+    repo: kubermatic/ui-v2
+    password: ${DOCKER_PASSWORD}
+    username: ${DOCKER_USERNAME}
+    tags:
+      - ${DRONE_COMMIT}
+    secrets: [ docker_username, docker_password ]
+
+  docker-master:
+    group: push
+    image: plugins/docker
+    repo: kubermatic/ui-v2
+    password: ${DOCKER_PASSWORD}
+    username: ${DOCKER_USERNAME}
+    tags:
+      - master
+    secrets: [ docker_username, docker_password ]
+    when:
+      branch: develop
+
+  docker-release:
+    group: push
+    image: plugins/docker
+    repo: kubermatic/ui-v2
+    password: ${DOCKER_PASSWORD}
+    username: ${DOCKER_USERNAME}
+    tags:
+      - ${DRONE_TAG}
+      - latest
+    secrets: [ docker_username, docker_password ]
+    when:
+      event: [tag]
+      branch: release/*
+
+  deploy-dev:
+    group: deploy
+    image: gcr.io/google_containers/hyperkube-amd64:v1.6.10
+    commands:
+      - echo $KUBECONFIG | base64 -d > kubeconfig
+      - /hyperkube kubectl --kubeconfig kubeconfig -n kubermatic set image deployment/kubermatic-ui-v2 webserver=kubermatic/ui-v2:$DRONE_COMMIT
+    secrets: [ kubeconfig ]
+    when:
+      branch: develop
