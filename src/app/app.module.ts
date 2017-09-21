@@ -73,11 +73,11 @@ import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
-import { ProviderComponent } from './wizard/provider/provider.component';
+import { SetProviderComponent } from './wizard/set-provider/set-provider.component';
 import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import {CustomEventService} from './services';
+import { CustomEventService } from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 import { SummaryComponent } from './wizard/summary/summary.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component'
@@ -155,11 +155,10 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     OpenstackAddNodeComponent,
     ProgressComponent,
     NavigationButtonsComponent,
-    ProviderComponent,
+    SetProviderComponent,
     DatacenterComponent,
     SetClusterNameComponent,
     UpgradeClusterComponent,
-    ProviderComponent,
     SummaryComponent,
     ProviderClusterComponent,
     ProviderNodeComponent,

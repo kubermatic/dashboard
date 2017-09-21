@@ -8,12 +8,12 @@
 ></kubermatic-set-cluster-name>
 
 <!-- Cluster Provider: Step 2 --->
-<kubermatic-provider
+<kubermatic-set-provider
   *ngIf="currentStep == 1"
   [provider]="groupedDatacenters"
   [selectedProvider]="selectedProvider"
   (syncProvider)="setProvider($event)"
-></kubermatic-provider>
+></kubermatic-set-provider>
 
 <!-- Cluster Datacenter: Step 3 -->
 <kubermatic-datacenter

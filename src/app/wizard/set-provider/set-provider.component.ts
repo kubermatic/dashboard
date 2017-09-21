@@ -3,11 +3,11 @@ import {NodeProvider} from "../../api/model/NodeProviderConstants";
 import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
 
 @Component({
-  selector: 'kubermatic-provider',
-  templateUrl: './provider.component.html',
-  styleUrls: ['./provider.component.scss']
+  selector: 'kubermatic-set-provider',
+  templateUrl: 'set-provider.component.html',
+  styleUrls: ['set-provider.component.scss']
 })
-export class ProviderComponent implements OnInit {
+export class SetProviderComponent implements OnInit {
 
   @Input() provider: { [key: string]: DataCenterEntity[] } = {};
   @Input() selectedProvider: string;
