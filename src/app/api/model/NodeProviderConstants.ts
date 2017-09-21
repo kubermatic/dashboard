@@ -8,7 +8,7 @@ export class NodeProvider {
   public static readonly BAREMETAL: string = "baremetal";
   public static readonly OPENSTACK: string = "openstack";
 
-  public static readonly Supported: string[] = [NodeProvider.AWS,NodeProvider.DIGITALOCEAN,NodeProvider.BRINGYOUROWN,NodeProvider.BAREMETAL,NodeProvider.OPENSTACK];
+  public static readonly Supported: string[] = [NodeProvider.AWS,NodeProvider.DIGITALOCEAN,NodeProvider.OPENSTACK];
 }
 
 export class NodeInstanceFlavors {

@@ -1,5 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
+import {ApiService} from "../../api/api.service";
 
 @Component({
   selector: 'kubermatic-datacenter',
@@ -10,16 +11,22 @@ export class DatacenterComponent implements OnInit {
   @Input() datacenter: DataCenterEntity[];
   @Output() syncDatacenter =  new EventEmitter();
 
-  public selectedCloudRegion: DataCenterEntity;
+  public selectedProviderRegion: DataCenterEntity;
 
-  constructor() { }
+
+
+  constructor(private api: ApiService) {
+
+
+
+  }
 
   ngOnInit() {
 
   }
 
   public selectDatacenter(datacenter: DataCenterEntity) {
-    this.selectedCloudRegion = datacenter;
-    this.syncDatacenter.emit(this.selectedCloudRegion);
+    this.selectedProviderRegion = datacenter;
+    this.syncDatacenter.emit(this.selectedProviderRegion);
   }
 }

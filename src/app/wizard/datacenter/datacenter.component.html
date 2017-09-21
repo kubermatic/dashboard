@@ -9,7 +9,7 @@
       Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</p>
     <div fxLayoutAlign="center" fxLayout="row wrap">
       <div class="wizard-box" fxFlex="100px" *ngFor="let dc of datacenter; let i = index;"
-           [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
+           [ngClass]="{'selected': !!selectedProviderRegion && selectedProviderRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
            (click)="selectDatacenter(dc)">
         <div class="wizard-box-content">
           <img class="location-flag" src="/assets/images/flags/48/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />

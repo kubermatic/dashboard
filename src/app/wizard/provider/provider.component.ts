@@ -10,17 +10,16 @@ import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
 export class ProviderComponent implements OnInit {
 
   @Input() provider: { [key: string]: DataCenterEntity[] } = {};
+  @Input() selectedProvider: string;
   @Output() syncProvider =  new EventEmitter();
   public supportedNodeProviders: string[] = NodeProvider.Supported;
-  public selectedCloud: string;
 
   constructor() { }
 
   ngOnInit() { }
 
-  public selectCloud(cloud: string) {
-    this.selectedCloud = cloud;
-    this.syncProvider.emit(this.selectedCloud);
+  public selectProvider(provider: string) {
+    this.selectedProvider = provider;
+    this.syncProvider.emit(this.selectedProvider);
   }
-
 }

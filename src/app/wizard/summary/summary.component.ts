@@ -7,11 +7,9 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 })
 export class SummaryComponent implements OnInit {
 
-  @Input() cloud: string;
+  @Input() provider: string;
   @Input() region;
-  @Input() sshKeys;
   @Input() clusterSpec;
-  @Input() cloudSpec;
   @Input() nodeSpec;
 
   @Output() syncStep = new EventEmitter();

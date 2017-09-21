@@ -24,30 +24,31 @@ import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
 
 export class WizardComponent implements OnInit {
 
-  public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
-
+  // Current Create Cluster Step
   public currentStep: number = 0;
 
+  // Step 1: Cluster Name
   public clusterName: ClusterNameEntity = {valid: false, value : ""};
 
-  public selectedCloud: string;
-  public selectedCloudRegion: DataCenterEntity;
+  // Step 2: Selected Provider
+  public selectedProvider: string;
 
-  public clusterSpec: ClusterSpec;
-  public ssh_keys = [];
+  // Step 3: Selected Provider Region
+  public selectedProviderRegion: DataCenterEntity;
 
+  // Step 5: get Cloud Spec for Summary
   public getCloudSpec;
+
+  // step 5: get sshKeys for Summary
+  public selectedSshKeys: string[] = [];
+
+  // Step 5: get Cluster Modal
+  public createClusterModal: any;
+
+  // step 5: get Node Modal for Summary
   public createNodeModel;
 
-  public sshKeysFormField: SshKeys[] = [{
-    aws :[],
-    digitalocean : [],
-    baremetal : [],
-    openstack : []
-  }];
-
-  // Create Nodes
-  public cluster: any;
+  public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
 
   constructor(private api: ApiService,
               private router: Router,
@@ -67,28 +68,38 @@ export class WizardComponent implements OnInit {
         }
       });
     });
+
   }
 
   public setClusterName(clusterNameChangeEvent: ClusterNameEntity) {
     this.clusterName = clusterNameChangeEvent;
   }
 
-  public setCloud(spec) {
-    this.getCloudSpec = spec;
+  public setProvider(cloud: string) {
+    this.selectedProvider = cloud;
+    this.selectedProviderRegion = null;
   }
 
-  public setNode(model) {
-    this.createNodeModel = model;
+  public setProviderRegion(cloud: DataCenterEntity) {
+    this.selectedProviderRegion = cloud;
   }
 
-  public selectCloud(cloud: string) {
-    this.selectedCloud = cloud;
-    this.selectedCloudRegion = null;
+  public setCluster(cluster) {
+    this.createClusterModal = cluster;
   }
 
-  public selectCloudRegion(cloud: DataCenterEntity) {
-    this.selectedCloudRegion = cloud;
+  public setCloud(cloud) {
+    this.getCloudSpec = cloud;
   }
+
+  public setNode(node) {
+    this.createNodeModel = node;
+  }
+
+  public setSshKeys(keys) {
+    this.selectedSshKeys = keys;
+  }
+
 
   public gotoStep(step: number) {
     switch (step) {
@@ -106,20 +117,18 @@ export class WizardComponent implements OnInit {
       case 0:
         return this.clusterName.valid;
       case 1:
-        return !!this.selectedCloud;
+        return !!this.selectedProvider;
       case 2:
-        return !!this.selectedCloudRegion;
+        return !!this.selectedProviderRegion;
       case 3:
-          if(!this.sshKeysFormField[0][this.selectedCloud].length) {
+          if(!this.selectedSshKeys.length) {
             return false;
-          } else if (this.getCloudSpec && this.createNodeModel){
-
+          } else if (this.createClusterModal && this.createNodeModel){
             return true;
           } else {
             return false;
           }
       case 4:
-        this.createSpec();
         return true;
       default:
         return false;
@@ -130,65 +139,12 @@ export class WizardComponent implements OnInit {
     return this.canGotoStep(this.currentStep);
   }
 
-
-  public createSpec() {
-    this.ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
-
-    if (this.selectedCloud === NodeProvider.AWS) {
-      this.clusterSpec = new ClusterSpec(
-        new CloudSpec(
-          this.selectedCloudRegion.metadata.name,
-          null,
-          this.getCloudSpec,
-          null,
-          null,
-          null,
-        ),
-        this.clusterName.value,
-        "",
-      );
-
-    } else if (this.selectedCloud === NodeProvider.DIGITALOCEAN) {
-      this.clusterSpec = new ClusterSpec(
-        new CloudSpec(
-          this.selectedCloudRegion.metadata.name,
-          this.getCloudSpec,
-          null,
-          null,
-          null,
-          null,
-        ),
-        this.clusterName.value,
-        "",
-      );
-    } else if (this.selectedCloud === NodeProvider.OPENSTACK) {
-      this.clusterSpec = new ClusterSpec(
-        new CloudSpec(
-          this.selectedCloudRegion.metadata.name,
-          null,
-          null,
-          null,
-          this.getCloudSpec,
-          null,
-        ),
-        this.clusterName.value,
-        "",
-      );
-    }
-  }
-
   public createClusterAndNode() {
-
     let sub: Subscription;
     const timer = Observable.timer(0, 10000);
 
-    let cluster = new CreateClusterModel(
-      this.clusterSpec,
-      this.ssh_keys,
-    );
-
-    console.log("Create cluster mode: \n" + JSON.stringify(cluster));
-    this.api.createCluster(cluster).subscribe(cluster => {
+    console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
+    this.api.createCluster(this.createClusterModal).subscribe(cluster => {
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.router.navigate(["/dc/" + cluster.seed + "/cluster/" + cluster.metadata.name]);
 

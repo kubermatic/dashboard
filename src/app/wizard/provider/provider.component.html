@@ -11,12 +11,11 @@
 
     <div fxLayoutAlign="center" fxLayout="row"  fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
       <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
-        <div *ngIf="provider[cloud]"
-             fxFlex="150px"
+        <div fxFlex="150px"
              fxLayoutAlign="center center"
              class="wizard-box-provider"
-             [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-             (click)="selectCloud(cloud)">
+             [ngClass]="{'selected': selectedProvider === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
+             (click)="selectProvider(cloud)">
           <div class="wizard-box-content">
             <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
           </div>

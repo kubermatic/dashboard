@@ -1,57 +1,52 @@
 <kubermatic-progress [step]="currentStep" (syncStep)="gotoStep($event)"></kubermatic-progress>
 
 <!-- Cluster Name: Step 1 -->
-<kubermatic-cluster-name *ngIf="currentStep == 0" (syncName)="setClusterName($event)" [clusterName]="clusterName"></kubermatic-cluster-name>
+<kubermatic-cluster-name
+  *ngIf="currentStep == 0"
+  [clusterName]="clusterName"
+  (syncName)="setClusterName($event)"
+></kubermatic-cluster-name>
 
 <!-- Cluster Provider: Step 2 --->
-<kubermatic-provider [provider]="groupedDatacenters" (syncProvider)="selectCloud($event)"  *ngIf="currentStep == 1" ></kubermatic-provider>
+<kubermatic-provider
+  *ngIf="currentStep == 1"
+  [provider]="groupedDatacenters"
+  [selectedProvider]="selectedProvider"
+  (syncProvider)="setProvider($event)"
+></kubermatic-provider>
 
+<!-- Cluster Datacenter: Step 3 -->
+<kubermatic-datacenter
+  *ngIf="currentStep == 2"
+  [datacenter]="groupedDatacenters[selectedProvider]"
+  (syncDatacenter)="setProviderRegion($event)"
+></kubermatic-datacenter>
 
-<!--- Cluster Datacenter: Step 3 --->
-<kubermatic-datacenter [datacenter]="groupedDatacenters[selectedCloud]" (syncDatacenter)="selectCloudRegion($event)" *ngIf="currentStep == 2 && selectedCloud !== 'bringyourown'"></kubermatic-datacenter>
-
-
-<!-- Start Provider Settings: Step 4 Amazon Weg Service -->
-<ng-container *ngIf="currentStep == 3">
-  <ng-container *ngIf="selectedCloud == 'aws' || selectedCloud == 'openstack' || selectedCloud == 'digitalocean'">
-    <div   fxLayout="row"
-           fxLayout.md="column"
-           fxLayout.sm="column"
-           fxLayout.xs="column"
-           fxLayoutGap="20px" >
-      <md-card fxFlex>
-        <md-card-header>
-          <md-card-title>
-            <h4>
-              Provide credentials
-            </h4>
-          </md-card-title>
-        </md-card-header>
-        <md-card-content>
-          <kubermatic-provider-cluster [provider]="selectedCloud" (syncCloudSpec)="setCloud($event)" ></kubermatic-provider-cluster>
-          <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
-        </md-card-content>
-      </md-card>
-      <md-card  fxFlex>
-        <md-card-header>
-          <md-card-title>
-            <h4>
-              Node settings
-            </h4>
-          </md-card-title>
-        </md-card-header>
-        <md-card-content fxLayout="column">
-          <kubermatic-provider-node [provider]="selectedCloud" [token]="'114a1c82fde0fbadba446f9c852211034e0094e3c7d0b0d96c62a07aaf023448'" (syncNodeModel)="setNode($event)"> </kubermatic-provider-node>
-        </md-card-content>
-      </md-card>
-    </div>
-  </ng-container>
-</ng-container>
-<!-- End Provider Settings: Step 4 Amazon Weg Service -->
-
+<!-- Provider Settings: Step 4 -->
+<kubermatic-set-settings
+  *ngIf="currentStep == 3"
+  [clusterName]="clusterName.value"
+  [provider]="selectedProvider"
+  [region]="selectedProviderRegion.metadata.name"
+  (syncCluster)="setCluster($event)"
+  (syncCloud)="setCloud($event)"
+  (syncNode)="setNode($event)"
+  (syncSshKeys)="setSshKeys($event)"
+></kubermatic-set-settings>
 
 <!-- Provider Summary: Step 5 -->
-<kubermatic-summary *ngIf="currentStep == 4" [cloud]="selectedCloud" [region]="selectedCloudRegion" [sshKeys]="ssh_keys" [clusterSpec]="clusterSpec" [cloudSpec]="getCloudSpec" [nodeSpec]="createNodeModel" (syncStep)="gotoStep($event)"></kubermatic-summary>
+<kubermatic-summary
+  *ngIf="currentStep == 4"
+  [provider]="selectedProvider"
+  [region]="selectedProviderRegion"
+  [clusterSpec]="createClusterModal"
+  [nodeSpec]="createNodeModel"
+  (syncStep)="gotoStep($event)"
+></kubermatic-summary>
 
 <!-- Navigation Buttons -->
-<kubermatic-navigation-buttons [step]="currentStep" [nextStep]="canGotoStep(currentStep)" (syncStep)="gotoStep($event)"></kubermatic-navigation-buttons>
+<kubermatic-navigation-buttons
+  [step]="currentStep"
+  [nextStep]="canGotoStep(currentStep)"
+  (syncStep)="gotoStep($event)"
+></kubermatic-navigation-buttons>

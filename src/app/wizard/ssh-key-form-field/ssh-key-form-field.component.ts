@@ -21,8 +21,6 @@ export class SshKeyFormFieldComponent implements OnInit {
   @Input() sshKeysFormField: SshKeys[];
   @Input() provider: string;
 
-
-
   constructor(private api: ApiService,private formBuilder: FormBuilder, public dialog: MdDialog) { }
 
   ngOnInit() {
