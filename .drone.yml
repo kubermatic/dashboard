@@ -38,7 +38,7 @@ pipeline:
       - master
     secrets: [ docker_username, docker_password ]
     when:
-      branch: develop
+      branch: master
 
   docker-release:
     group: push
@@ -62,4 +62,4 @@ pipeline:
       - /hyperkube kubectl --kubeconfig kubeconfig -n kubermatic set image deployment/kubermatic-ui-v2 webserver=kubermatic/ui-v2:$DRONE_COMMIT
     secrets: [ kubeconfig ]
     when:
-      branch: develop
+      branch: master
