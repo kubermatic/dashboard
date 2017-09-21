@@ -4,11 +4,11 @@ import {ClusterNameGenerator} from "../../util/name-generator.service";
 import {ClusterNameEntity} from "../../api/entitiy/wizard/ClusterNameEntity";
 
 @Component({
-  selector: 'kubermatic-cluster-name',
-  templateUrl: './cluster-name.component.html',
-  styleUrls: ['./cluster-name.component.scss']
+  selector: 'kubermatic-set-cluster-name',
+  templateUrl: 'set-cluster-name.component.html',
+  styleUrls: ['set-cluster-name.component.scss']
 })
-export class ClusterNameComponent implements OnInit {
+export class SetClusterNameComponent implements OnInit {
   @Input() clusterName: ClusterNameEntity;
   @Output() syncName = new EventEmitter();
   public clusterNameForm: FormGroup;

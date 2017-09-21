@@ -1,11 +1,11 @@
 <kubermatic-progress [step]="currentStep" (syncStep)="gotoStep($event)"></kubermatic-progress>
 
 <!-- Cluster Name: Step 1 -->
-<kubermatic-cluster-name
+<kubermatic-set-cluster-name
   *ngIf="currentStep == 0"
   [clusterName]="clusterName"
   (syncName)="setClusterName($event)"
-></kubermatic-cluster-name>
+></kubermatic-set-cluster-name>
 
 <!-- Cluster Provider: Step 2 --->
 <kubermatic-provider

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClusterNameComponent } from './cluster-name.component';
+import { SetClusterNameComponent } from './set-cluster-name.component';
 
 describe('ClusterNameComponent', () => {
-  let component: ClusterNameComponent;
-  let fixture: ComponentFixture<ClusterNameComponent>;
+  let component: SetClusterNameComponent;
+  let fixture: ComponentFixture<SetClusterNameComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ClusterNameComponent ]
+      declarations: [ SetClusterNameComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClusterNameComponent);
+    fixture = TestBed.createComponent(SetClusterNameComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

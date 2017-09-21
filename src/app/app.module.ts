@@ -75,7 +75,7 @@ import { ProgressComponent } from './wizard/progress/progress.component';
 import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
 import { ProviderComponent } from './wizard/provider/provider.component';
 import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
-import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
+import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 import {CustomEventService} from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
@@ -157,7 +157,7 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     NavigationButtonsComponent,
     ProviderComponent,
     DatacenterComponent,
-    ClusterNameComponent,
+    SetClusterNameComponent,
     UpgradeClusterComponent,
     ProviderComponent,
     SummaryComponent,
