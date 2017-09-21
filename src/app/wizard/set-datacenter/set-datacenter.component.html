@@ -12,6 +12,7 @@
            [ngClass]="{'selected': !!selectedProviderRegion && selectedProviderRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
            (click)="selectDatacenter(dc)">
         <!-- TODO: OnClick go to next step -->
+        <!-- TODO: Refresh Button is no region shown -->
         <div class="wizard-box-content">
           <img class="location-flag" src="/assets/images/flags/48/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
           <div class="location">

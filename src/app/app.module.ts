@@ -74,7 +74,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
 import { SetProviderComponent } from './wizard/set-provider/set-provider.component';
-import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
+import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 import { CustomEventService } from './services';
@@ -156,7 +156,7 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     ProgressComponent,
     NavigationButtonsComponent,
     SetProviderComponent,
-    DatacenterComponent,
+    SetDatacenterComponent,
     SetClusterNameComponent,
     UpgradeClusterComponent,
     SummaryComponent,

@@ -16,11 +16,11 @@
 ></kubermatic-set-provider>
 
 <!-- Cluster Datacenter: Step 3 -->
-<kubermatic-datacenter
+<kubermatic-set-datacenter
   *ngIf="currentStep == 2"
   [datacenter]="groupedDatacenters[selectedProvider]"
   (syncDatacenter)="setProviderRegion($event)"
-></kubermatic-datacenter>
+></kubermatic-set-datacenter>
 
 <!-- Provider Settings: Step 4 -->
 <kubermatic-set-settings

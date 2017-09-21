@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DatacenterComponent } from './datacenter.component';
+import { SetDatacenterComponent } from './set-datacenter.component';
 
-describe('DatacenterComponent', () => {
-  let component: DatacenterComponent;
-  let fixture: ComponentFixture<DatacenterComponent>;
+describe('SetDatacenterComponent', () => {
+  let component: SetDatacenterComponent;
+  let fixture: ComponentFixture<SetDatacenterComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DatacenterComponent ]
+      declarations: [ SetDatacenterComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DatacenterComponent);
+    fixture = TestBed.createComponent(SetDatacenterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

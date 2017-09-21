@@ -3,11 +3,11 @@ import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
 import {ApiService} from "../../api/api.service";
 
 @Component({
-  selector: 'kubermatic-datacenter',
-  templateUrl: './datacenter.component.html',
-  styleUrls: ['./datacenter.component.scss']
+  selector: 'kubermatic-set-datacenter',
+  templateUrl: 'set-datacenter.component.html',
+  styleUrls: ['set-datacenter.component.scss']
 })
-export class DatacenterComponent implements OnInit {
+export class SetDatacenterComponent implements OnInit {
   @Input() datacenter: DataCenterEntity[];
   @Output() syncDatacenter =  new EventEmitter();
 
