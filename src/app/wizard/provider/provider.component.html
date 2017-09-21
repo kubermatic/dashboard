@@ -16,6 +16,7 @@
              class="wizard-box-provider"
              [ngClass]="{'selected': selectedProvider === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
              (click)="selectProvider(cloud)">
+          <!-- TODO: OnClick go to next step -->
           <div class="wizard-box-content">
             <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
           </div>

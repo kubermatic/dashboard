@@ -13,20 +13,12 @@ export class DatacenterComponent implements OnInit {
 
   public selectedProviderRegion: DataCenterEntity;
 
+  constructor() { }
 
-
-  constructor(private api: ApiService) {
-
-
-
-  }
-
-  ngOnInit() {
-
-  }
+  ngOnInit() { }
 
   public selectDatacenter(datacenter: DataCenterEntity) {
     this.selectedProviderRegion = datacenter;
-    this.syncDatacenter.emit(this.selectedProviderRegion);
+    this.syncDatacenter.emit(datacenter);
   }
 }

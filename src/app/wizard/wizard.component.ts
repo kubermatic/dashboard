@@ -57,6 +57,7 @@ export class WizardComponent implements OnInit {
   }
 
   ngOnInit() {
+    // TODO: move api call to the datacenter component
     this.api.getDataCenters().subscribe(result => {
       result.forEach(elem => {
         if (!elem.seed) {
