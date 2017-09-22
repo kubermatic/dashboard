@@ -26,7 +26,7 @@ import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
 import * as testing from "selenium-webdriver/testing";
 import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
-
+import {CustomEventService, CreateNodesService} from '../services';
 
 @Component({
   selector: "kubermatic-wizard",
@@ -70,12 +70,15 @@ export class WizardComponent implements OnInit {
   // Model add sshKey
   public config: any = {};
 
-  constructor(private api: ApiService,
-              private formBuilder: FormBuilder,
-              private router: Router,
-              private store: Store<fromRoot.State>,
-              public dialog: MdDialog) {
-  }
+  constructor(
+    private api: ApiService,
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private store: Store<fromRoot.State>,
+    public dialog: MdDialog,
+    private customEventService: CustomEventService,
+    private createNodesService: CreateNodesService
+  ) {}
 
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
@@ -400,32 +403,17 @@ export class WizardComponent implements OnInit {
     );
 
     console.log("Create cluster mode: \n" + JSON.stringify(cluster));
+    
     this.api.createCluster(cluster).subscribe(cluster => {
+        const createNodeModel = new CreateNodeModel(node_instances, nodeSpec);
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.router.navigate(["/dc/" + cluster.seed + "/cluster/" + cluster.metadata.name]);
-
+          
         if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
           return;
         }
 
-        const createNodeModel = new CreateNodeModel(node_instances, nodeSpec);
-        sub = timer.subscribe(() => {
-          this.api.getCluster(new ClusterModel(cluster.seed, cluster.metadata.name)).subscribe(cluster => {
-              if (cluster.status.phase == "Running") {
-                sub.unsubscribe();
-                this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
-                    NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                  },
-                  error => {
-                    NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-                  });
-              }
-            },
-            error => {
-              sub.unsubscribe();
-              NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-            });
-        })
+        this.createNodesService.createInitialClusterNodes(cluster, createNodeModel);
       },
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
