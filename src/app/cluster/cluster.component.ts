@@ -74,9 +74,6 @@ export class ClusterComponent implements OnInit {
       }).map(key => key.name);
     });
 
-    this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
-      .subscribe(upgrades => this.upgradesList = upgrades);
-
     this.api.getDataCenter(this.seedDcName).subscribe(dc => {
       this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
       this.dcFlagCode = dc.spec.country.toLowerCase();
@@ -92,22 +89,26 @@ export class ClusterComponent implements OnInit {
   update(): void {
     this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
     .retry(3)
-      .subscribe(res => {
-        this.cluster = new ClusterEntity(
-          res.metadata,
-          res.spec,
-          res.address,
-          res.status,
-          res.seed,
-        );
-        this.api.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
-          this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
-          this.loading = false;
-        });
-        if (this.cluster.isRunning()) {
-          this.updateNodes();
-        }
-      }, 
+    .subscribe(res => {
+      this.cluster = new ClusterEntity(
+        res.metadata,
+        res.spec,
+        res.address,
+        res.status,
+        res.seed,
+      );
+      this.api.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
+        this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
+        this.loading = false;
+      });
+      
+      if (this.cluster.isRunning()) {
+        this.updateNodes();
+
+        this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
+          .subscribe(upgrades => this.upgradesList = upgrades);
+      }
+    },
       error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`));
   }
 

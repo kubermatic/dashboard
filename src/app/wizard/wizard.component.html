@@ -1,70 +1,13 @@
 <kubermatic-progress [step]="currentStep" (syncStep)="gotoStep($event)"></kubermatic-progress>
 
 <!-- Cluster Name: Step 1 -->
-<kubermatic-cluster-name *ngIf="currentStep == 0" (syncName)="setClusterName($event)"></kubermatic-cluster-name>
+<kubermatic-cluster-name *ngIf="currentStep == 0" (syncName)="setClusterName($event)" [clusterName]="clusterName"></kubermatic-cluster-name>
 
 
+<kubermatic-provider [provider]="groupedDatacenters" (syncProvider)="selectCloud($event)"  *ngIf="currentStep == 1" ></kubermatic-provider>
 
-<!-- Start Select Provider: Step 2 -->
-<ng-container *ngIf="currentStep == 1">
-  <md-card>
-    <md-card-header>
-      <md-card-title>
-      <h4>Select the cloud provider for your nodes</h4>
-      </md-card-title>
-    </md-card-header>
-    <md-card-content>
-      <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-      Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
-      </p>
+<kubermatic-datacenter [datacenter]="groupedDatacenters[selectedCloud]" (syncDatacenter)="selectCloudRegion($event)" *ngIf="currentStep == 2 && selectedCloud !== 'bringyourown'"></kubermatic-datacenter>
 
-      <div fxLayoutAlign="center" fxLayout="row"  fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
-        <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
-        <div *ngIf="groupedDatacenters[cloud]"
-           fxFlex="150px"
-           fxLayoutAlign="center center"
-           class="wizard-box-provider"
-           [ngClass]="{'selected': selectedCloud === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-           (click)="selectCloud(cloud)">
-              <div class="wizard-box-content">
-                <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
-              </div>
-        </div>
-        </ng-container>
-      </div>
-    </md-card-content>
-  </md-card>
-</ng-container>
-<!-- Ende Select Provider: Step 2 -->
-
-
-<!-- Start Select Datacenter: Step 3 Default -->
-<ng-container *ngIf="currentStep == 2 && selectedCloud !== 'bringyourown'">
-  <md-card>
-    <md-card-header>
-      <md-card-title>
-        <h4>Select the datacenter of your cloud provider</h4>
-      </md-card-title>
-    </md-card-header>
-    <md-card-content>
-      <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-      Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</p>
-      <div fxLayout="row wrap">
-        <div class="wizard-box" fxFlex="100px" *ngFor="let dc of groupedDatacenters[selectedCloud]; let i = index;"
-            [ngClass]="{'selected': !!selectedCloudRegion && selectedCloudRegion.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-            (click)="selectCloudRegion(dc)">
-        <div class="wizard-box-content">
-          <img class="location-flag" src="/assets/images/flags/48/{{dc.spec.country}}.png" alt="{{dc.spec.country}}" />
-          <div class="location">
-            {{dc.spec.location}}
-          </div>
-        </div>
-      </div>
-      </div>
-    </md-card-content>
-  </md-card>
-</ng-container>
-<!-- End Select Datacenter: Step 3 Default -->
 
 <!-- Start Select Datacenter: Step 3 Bring Your Own -->
 <ng-container *ngIf="currentStep == 2 && selectedCloud == 'bringyourown'">
