@@ -93,21 +93,22 @@ export class ClusterComponent implements OnInit {
     this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
     .retry(3)
       .subscribe(res => {
-      this.cluster = new ClusterEntity(
-        res.metadata,
-        res.spec,
-        res.address,
-        res.status,
-        res.seed,
-      );
-      this.api.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
-        this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
-        this.loading = false;
-      });
-      if (this.cluster.isRunning()) {
-        this.updateNodes();
-      }
-    });
+        this.cluster = new ClusterEntity(
+          res.metadata,
+          res.spec,
+          res.address,
+          res.status,
+          res.seed,
+        );
+        this.api.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
+          this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
+          this.loading = false;
+        });
+        if (this.cluster.isRunning()) {
+          this.updateNodes();
+        }
+      }, 
+      error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`));
   }
 
   updateNodes(): void {

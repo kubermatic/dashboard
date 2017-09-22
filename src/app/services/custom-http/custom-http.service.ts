@@ -38,9 +38,6 @@ export class CustomHttpService extends HttpClient{
 
   handleError(error: HttpErrorResponse): ErrorObservable {
 
-    NotificationComponent.error(this.store, 
-      "Error", `${error.status} ${error.statusText}`);
-
     switch(error.status) {
       case 401: {
         this.authService.logout();

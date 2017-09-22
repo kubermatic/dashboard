@@ -414,15 +414,18 @@ export class WizardComponent implements OnInit {
           this.api.getCluster(new ClusterModel(cluster.seed, cluster.metadata.name)).subscribe(cluster => {
               if (cluster.status.phase == "Running") {
                 sub.unsubscribe();
-                this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
-                    NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                  });
+                this.api.createClusterNode(cluster, createNodeModel)
+                  .subscribe(
+                    result => NotificationComponent.success(this.store, "Success", `Creating Nodes`),
+                    error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`)
+                  );
               }
             },
             error => {
               sub.unsubscribe();
+              NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
             });
-        })
-      });
+        });
+      }, error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`));
   }
 }
