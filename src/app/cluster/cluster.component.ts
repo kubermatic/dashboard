@@ -74,9 +74,6 @@ export class ClusterComponent implements OnInit {
       }).map(key => key.name);
     });
 
-    this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
-      .subscribe(upgrades => this.upgradesList = upgrades);
-
     this.api.getDataCenter(this.seedDcName).subscribe(dc => {
       this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
       this.dcFlagCode = dc.spec.country.toLowerCase();
@@ -106,6 +103,9 @@ export class ClusterComponent implements OnInit {
       });
       if (this.cluster.isRunning()) {
         this.updateNodes();
+
+        this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
+          .subscribe(upgrades => this.upgradesList = upgrades);
       }
 
     },
