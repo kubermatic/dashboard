@@ -27,6 +27,8 @@ export class SetSettingsComponent implements OnInit {
   public clusterSpec: ClusterSpec;
   public getSshKeys: string[] = [];
 
+  public token: string = "";
+
   public sshKeysFormField: SshKeys[] = [{
     aws :[],
     digitalocean : [],
@@ -81,6 +83,8 @@ export class SetSettingsComponent implements OnInit {
         this.clusterName,
         "",
       );
+
+      this.token = this.getCloudSpec.token;
     } else if (this.provider === NodeProvider.OPENSTACK) {
       this.clusterSpec = new ClusterSpec(
         new CloudSpec(
