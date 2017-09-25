@@ -99,4 +99,4 @@ pipeline:
         We just deployed a new version of the Dashboard-V2 to dev! :heart:
     when:
       status: [ success ]
-      branch: develop
+      branch: master
