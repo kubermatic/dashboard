@@ -63,3 +63,40 @@ pipeline:
     secrets: [ kubeconfig ]
     when:
       branch: master
+
+  slack-failure:
+    group: notify
+    image: kubermaticbot/drone-slack
+    webhook: https://hooks.slack.com/services/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
+    username: drone
+    icon_url: https://docs.tea-ci.org/logos/downstream.svg
+    recipient: ${DRONE_COMMIT_AUTHOR}
+    image_url: https://media.giphy.com/media/m6tmCnGCNvTby/giphy-downsized.gif
+    template: >
+        Your build failed! Shame. Shame. Shame.
+    author_recipient_mapping:
+      - mrIncompetent=henrik
+      - metalmatze=matthias
+      - andriisoldatenko=a_soldatenko
+      - guusvw=guus
+      - realfake=luk
+      - scheeles=sebastian
+      - chaosaffe=jason
+      - zsemenyuk=zsemenyuk
+      - j3ank=eugenia
+    when:
+      status: [ failure ]
+
+  slack-deploy:
+    group: notify
+    image: kubermaticbot/drone-slack
+    webhook: https://hooks.slack.com/services/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
+    username: drone
+    icon_url: https://docs.tea-ci.org/logos/downstream.svg
+    channel: dev
+    image_url: http://thecatapi.com/api/images/get?format=src&type=gif&asdasdasd=${DRONE_COMMIT}
+    template: >
+        We just deployed a new version of the Dashboard-V2 to dev! :heart:
+    when:
+      status: [ success ]
+      branch: develop
