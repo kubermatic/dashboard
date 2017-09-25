@@ -141,7 +141,7 @@ export class WizardComponent implements OnInit {
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.router.navigate(["/dc/" + cluster.seed + "/cluster/" + cluster.metadata.name]);
-      
+
         sub = timer.subscribe(() => {
           this.api.getCluster(new ClusterModel(cluster.seed, cluster.metadata.name)).subscribe(cluster => {
               if (cluster.status.phase == "Running") {
