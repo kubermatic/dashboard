@@ -29,15 +29,4 @@ export class DigitaloceanClusterComponent implements OnInit {
       this.syncCloudSpec.emit(this.cloudSpec);
     }
   }
-
-  // ToDo: Pass token to the node component
-  public changeDoKey() {
-    let key = this.digitalOceanClusterForm.controls["access_token"].value;
-
-    //this.api.getDigitaloceanSizes(key).subscribe(result => {
-        //this.nodeSize = result.sizes;
-     // }
-    //);
-  }
-
 }
