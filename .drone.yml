@@ -69,7 +69,7 @@ pipeline:
     image: kubermaticbot/drone-slack
     webhook: https://hooks.slack.com/services/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
     username: drone
-    icon_url: https://docs.tea-ci.org/logos/downstream.svg
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?v=4&s=200
     recipient: ${DRONE_COMMIT_AUTHOR}
     image_url: https://media.giphy.com/media/m6tmCnGCNvTby/giphy-downsized.gif
     template: >
@@ -92,7 +92,7 @@ pipeline:
     image: kubermaticbot/drone-slack
     webhook: https://hooks.slack.com/services/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
     username: drone
-    icon_url: https://docs.tea-ci.org/logos/downstream.svg
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?v=4&s=200
     channel: dev
     image_url: http://thecatapi.com/api/images/get?format=src&type=gif&asdasdasd=${DRONE_COMMIT}
     template: >
