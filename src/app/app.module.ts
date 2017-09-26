@@ -78,7 +78,7 @@ import { ProviderComponent } from './wizard/provider/provider.component';
 import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
 import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import {CustomEventService} from './services';
+import { CustomEventService, CreateNodesService, LocalStorageService } from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 import { MobileNavigationComponent } from './overlays';
 
@@ -204,7 +204,9 @@ import { MobileNavigationComponent } from './overlays';
       useClass: LoaderInterceptor,
       multi: true
     },
-    CustomEventService
+    CustomEventService,
+    CreateNodesService,
+    LocalStorageService
   ],
   bootstrap: [KubermaticComponent]
 
