@@ -18,7 +18,7 @@ import {NotificationComponent} from "../notification/notification.component";
 import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
-import {CustomEventService} from '../services';
+import {CustomEventService, CreateNodesService} from '../services';
 import 'rxjs/add/operator/retry';
 
 @Component({
@@ -53,10 +53,12 @@ export class ClusterComponent implements OnInit {
     private router: Router,
     private api: ApiService,
     private store: Store<fromRoot.State>,
-    public dialog: MdDialog
+    public dialog: MdDialog,
+    private createNodesService: CreateNodesService
   ) {}
 
   ngOnInit() {
+    
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
       this.seedDcName = params["seedDcName"];
