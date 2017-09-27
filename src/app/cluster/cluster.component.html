@@ -68,11 +68,11 @@
         <span class="location">{{dc.spec.country}} / {{dc.spec.location}}</span>
       </div>
       <div fxFlex="40%">
-        <ng-container [ngSwitch]="sshKeysNames.length > 0">
+        <ng-container [ngSwitch]="sshKeys.length > 0">
           <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
-            <li *ngFor="let sshKeyName of sshKeysNames">
+            <li *ngFor="let key of sshKeys">
               <i class="fa fa-key"></i>
-              {{sshKeyName}}
+              {{key.spec.name}}
             </li>
           </ul>
           <ng-container *ngSwitchCase="false">no SSH Key selected</ng-container>
