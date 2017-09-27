@@ -39,7 +39,7 @@ export class NodeComponent implements OnInit {
   constructor(public dialog: MdDialog) {}
   
   ngOnInit() {
-    
+   
   }
   
   onNodeRemoval(nodeRemoval: boolean) {
@@ -94,6 +94,28 @@ export class NodeComponent implements OnInit {
     } else {
       return red;
     }
+  }
+
+  public getNodeCapacity(): string {      
+    let memRE = /([0-9]+)([a-zA-Z])i/;
+    let nodeAllocatable = this.node.status.allocatable.memory;
+    let resRE = nodeAllocatable.match(memRE);
+    let nodeCapacity;
+    let prefixes = ['Ki', 'Mi','Gi','Ti'];
+    let i = 0;
+
+    if(resRE) {
+      let ki = parseInt(resRE[1]);
+
+      do {
+        ki /= 1024;
+        i++;
+      }
+      while(ki > 1);
+      nodeCapacity = (ki * 1024).toFixed(2);
+    }
+
+    return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 }
 
