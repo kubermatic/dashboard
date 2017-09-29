@@ -10,11 +10,11 @@
             <md-card-header>
               <md-card-title fxLayout>
                   <div fxFlex="90%" class="km-ssh-key-name">
-                      <i class="fa fa-key" aria-hidden="true"></i><span>{{ key.name }}</span>
+                      <i class="fa fa-key" aria-hidden="true"></i><span>{{ key.spec.name }}</span>
                   </div>
                   <div fxFlex="10%">
                     <md-menu #appMenu="mdMenu">
-                      <button md-menu-item (click)="deleteSSHKey(key.name)">Delete</button>
+                      <button md-menu-item (click)="deleteSSHKey(key.spec.name)">Delete</button>
                       <button md-menu-item >Cancel</button>
                     </md-menu>
 
@@ -26,10 +26,10 @@
             </md-card-header>
             <md-card-content fxLayout="column">
                 <div fxflex class="km-ssh-key-publickey" style="margin: 0;" fxFlex>
-                    {{ key.public_key }}
+                    {{ key.spec.public_key }}
                 </div>
                 <div fxFlex class="km-fingerprint">
-                  <small>Fingerprint: {{ key.fingerprint }}</small>
+                  <small>Fingerprint: {{ key.spec.fingerprint }}</small>
                 </div>
             </md-card-content>
         </md-card>

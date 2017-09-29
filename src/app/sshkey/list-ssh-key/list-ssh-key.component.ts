@@ -23,7 +23,7 @@ export class ListSshKeyComponent implements OnInit {
     let keyName = "";
 
     this.sshKeys.forEach((key, i) => {
-      if (key.name === name) {
+      if (key.spec.name === name) {
         index = i;
         keyName = key.metadata.name;
       }
