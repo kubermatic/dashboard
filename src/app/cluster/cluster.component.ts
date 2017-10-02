@@ -20,6 +20,7 @@ import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
 import {CustomEventService, CreateNodesService} from '../services';
 import 'rxjs/add/operator/retry';
+import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -42,7 +43,7 @@ export class ClusterComponent implements OnInit {
   public seedDcName: string;
   public nodeSizes: any = [];
   public loading: boolean = true;
-  public sshKeysNames: string[] = [];
+  public sshKeys: SSHKeyEntity[] = [];
   public dcLocation: string = "";
   public dcFlagCode: string = "";
   private upgradesList: string[] = [];
@@ -58,7 +59,7 @@ export class ClusterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    
+
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
       this.seedDcName = params["seedDcName"];
@@ -69,17 +70,18 @@ export class ClusterComponent implements OnInit {
     });
 
     this.api.getSSHKeys().subscribe(keys => {
-      this.sshKeysNames = keys.filter(key => {
-        if(key['clusters']) {
-          return key['clusters'].includes(this.clusterName);
+      this.sshKeys = keys.filter(key => {
+        if (key.spec.clusters == null) {
+          return false
         }
-      }).map(key => key.name);
+        return key.spec.clusters.indexOf(this.clusterName) > -1
+      });
     });
 
     this.api.getDataCenter(this.seedDcName).subscribe(dc => {
       this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
       this.dcFlagCode = dc.spec.country.toLowerCase();
-    })
+    });
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
       this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
   }

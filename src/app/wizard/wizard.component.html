@@ -282,7 +282,7 @@
             </md-input-container>
 
             <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_password.valid && openStackForm.controls.os_password.touched, 'has-success': openStackForm.controls.os_password.valid}">
-              <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="Password:" title="Password" (change)="changeOpKey()">
+              <input id="os_password" mdInput formControlName="os_password" type="password" placeholder="Password:" title="Password" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">Password is required.</small>
             </md-input-container>
 
