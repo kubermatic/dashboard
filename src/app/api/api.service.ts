@@ -93,7 +93,7 @@ export class ApiService {
   }
 
   getSSHKeys(): Observable<SSHKeyEntity[]> {
-    const url = `${this.restRoot}/ssh-keys?format=json`;
+    const url = `${this.restRoot}/ssh-keys`;
     return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 
