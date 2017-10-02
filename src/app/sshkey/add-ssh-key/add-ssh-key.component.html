@@ -5,13 +5,13 @@
   <md-card-content>
     <form [formGroup]="addSSHKeyForm" novalidate>
 
-      <md-input-container class="km-ssh-key-textarea" [ngClass]="{'has-danger': !addSSHKeyForm.controls.key.valid && addSSHKeyForm.controls.key.touched, 'has-success': addSSHKeyForm.controls.key.valid}">
-        <textarea id="key" mdInput formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
+      <md-input-container class="km-ssh-key-textarea" >
+        <textarea id="key" mdInput [errorStateMatcher]="errorStateHandler" formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
         <small class="form-text text-muted">Remember to past only the public part of your SSH key and store the private part safely.</small>
       </md-input-container>
 
-      <md-input-container class="km-ssh-key-input" [ngClass]="{'has-danger': !addSSHKeyForm.controls.name.valid && addSSHKeyForm.controls.name.touched, 'has-success': addSSHKeyForm.controls.name.valid}">
-        <input id="name" mdInput formControlName="name" type="text" placeholder="Name">
+      <md-input-container class="km-ssh-key-input">
+        <input id="name" mdInput [errorStateMatcher]="errorStateHandler" formControlName="name" type="text" placeholder="Name">
         <small class="form-text text-muted">The unique name of your SSH key</small>
       </md-input-container>
 

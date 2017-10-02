@@ -1,7 +1,7 @@
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {ApiService} from "../../api/api.service";
 import {SSHKeyEntity} from "../../api/entitiy/SSHKeyEntity";
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
+import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {NotificationComponent} from "../../notification/notification.component";
@@ -51,5 +51,9 @@ export class AddSshKeyComponent implements OnInit {
     if (keyName && keyName.length > 1 && "" === name) {
       this.addSSHKeyForm.patchValue({name: keyName[1]});
     }
+  }
+
+  public errorStateHandler(formControl: FormControl): boolean {
+    return !formControl.valid && formControl.touched;
   }
 }
