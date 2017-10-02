@@ -23,8 +23,7 @@
 
           <img class="icon-provider" src="/assets/images/clouds/{{provider}}.png" height="40px" alt="{{provider}}">
           <div class="region">
-
-            <img class="flag-icon " src="/assets/images/flags/48/{{region.spec.country}}.png" height="40px" alt="{{region.spec.country}}" />
+            <span class="{{'flag-icon flag-icon-' + region.spec.country.toLowerCase()}}"></span>
             <span>{{region.spec.country}} / {{ region.spec.location }}</span>
           </div>
         </div>
