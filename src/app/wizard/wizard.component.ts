@@ -15,6 +15,7 @@ import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import * as testing from "selenium-webdriver/testing";
 import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
 import {CreateNodeModel} from "../api/model/CreateNodeModel";
+import {CustomEventService, CreateNodesService} from '../services';
 
 
 @Component({
@@ -48,11 +49,16 @@ export class WizardComponent implements OnInit {
 
   public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
 
-  constructor(private api: ApiService,
-              private router: Router,
-              private store: Store<fromRoot.State>,
-              public dialog: MdDialog) {
-  }
+
+  constructor(
+    private api: ApiService,
+    private router: Router,
+    private store: Store<fromRoot.State>,
+    public dialog: MdDialog,
+    private customEventService: CustomEventService,
+    private createNodesService: CreateNodesService
+  ) {}
+
 
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
@@ -142,24 +148,11 @@ export class WizardComponent implements OnInit {
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.router.navigate(["/dc/" + cluster.seed + "/cluster/" + cluster.metadata.name]);
 
-        sub = timer.subscribe(() => {
-          this.api.getCluster(new ClusterModel(cluster.seed, cluster.metadata.name)).subscribe(cluster => {
-              if (cluster.status.phase == "Running") {
-                sub.unsubscribe();
 
-                this.api.createClusterNode(cluster, this.createNodeModel).subscribe(result => {
-                    NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                  },
-                  error => {
-                    NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-                  });
-              }
-            },
-            error => {
-              sub.unsubscribe();
-              NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-            });
-        })
+      this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
+
+
+
       },
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);

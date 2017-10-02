@@ -44,7 +44,8 @@
     <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="20%">API Server:</div>
       <div fxFlex="80%">
-        <a [attr.href]="downloadKubeconfigUrl()" md-button color="primary" class="km-download-config" target="_blank"><i class="fa fa-save"></i> download kubeconfig</a>
+        <a [attr.href]="downloadKubeconfigUrl()" *ngIf="cluster.isRunning()" md-button color="primary" class="km-download-config" target="_blank"><i class="fa fa-save"></i> download kubeconfig</a>
+        <md-spinner *ngIf="!cluster.isRunning()" class="km-spinner-sm"></md-spinner>
       </div>
     </md-card-content>
 
