@@ -7,21 +7,24 @@ button.close {
   float: right;
 }
 
+.md-dialog-content {
+  margin-top: 0;
+}
 
-  .mat-card-title {
-    font-size: 20px;
-  }
+.mat-card-title {
+  font-size: 20px;
+}
 
-  .km-ssh-key-textarea {
-    width: 100%;
+.km-ssh-key-textarea {
+  width: 100%;
+  height: 170px;
+  textarea {
     height: 170px;
-    textarea {
-      height: 170px;
-    }
   }
-  .km-ssh-key-input {
-    margin-top: 10px;
-    width: 100%;
+}
+.km-ssh-key-input {
+  margin-top: 25px;
+  width: 100%;
 
-  }
+}
 
