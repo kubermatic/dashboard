@@ -24,7 +24,7 @@
       <md-spinner class="km-spinner" color="accent" *ngIf="nodeRemoval"></md-spinner>
     </div>
   </div>
-  <div fxLayout *ngIf="conditionsMessage" class="km-conditionsMessage">
+  <div fxLayout *ngIf="conditionsMessage && getNodeState()" class="km-conditionsMessage">
     <p color="accent">{{conditionsMessage}}</p>
   </div>
 </div>

@@ -117,6 +117,10 @@ export class NodeComponent implements OnInit {
 
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
+
+  public getNodeState(): boolean {
+    return this.node.metadata.annotations['node.k8s.io/state'] === 'running' ? true : false;
+  }
 }
 
 
