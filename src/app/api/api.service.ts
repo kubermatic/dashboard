@@ -17,7 +17,7 @@ import 'rxjs/add/operator/catch';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {NotificationComponent} from '../notification/notification.component';
-import {CustomHttpService} from '../services';
+import {CustomHttpService} from '../services/custom-http/custom-http.service';
 
 @Injectable()
 export class ApiService {
