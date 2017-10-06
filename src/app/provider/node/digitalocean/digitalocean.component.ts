@@ -36,9 +36,9 @@ export class DigitaloceanNodeComponent implements OnInit {
     this.getNodeSize(changes.doToken.currentValue);
   }
 
-  public getNodeSize(token) {
-    if (this.doToken.length) {
-      this.api.getDigitaloceanSizes(this.doToken).subscribe(result => {
+  public getNodeSize(token: string) {
+    if (token.length) {
+      this.api.getDigitaloceanSizes(token).subscribe(result => {
           this.nodeSize = result.sizes;
         }
       );
