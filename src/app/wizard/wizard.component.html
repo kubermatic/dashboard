@@ -19,6 +19,7 @@
 <kubermatic-set-datacenter
   *ngIf="currentStep == 2"
   [datacenter]="groupedDatacenters[selectedProvider]"
+  [selectedDatacenter]="selectedProviderRegion"
   (syncDatacenter)="setProviderRegion($event)"
 ></kubermatic-set-datacenter>
 

@@ -9,16 +9,15 @@ import {ApiService} from "../../api/api.service";
 })
 export class SetDatacenterComponent implements OnInit {
   @Input() datacenter: DataCenterEntity[];
+  @Input() selectedDatacenter: DataCenterEntity;
   @Output() syncDatacenter =  new EventEmitter();
-
-  public selectedProviderRegion: DataCenterEntity;
 
   constructor() { }
 
   ngOnInit() { }
 
   public selectDatacenter(datacenter: DataCenterEntity) {
-    this.selectedProviderRegion = datacenter;
+    this.selectedDatacenter = datacenter;
     this.syncDatacenter.emit(datacenter);
   }
 }
