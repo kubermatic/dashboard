@@ -1,0 +1,7 @@
+<div fxLayout="row" [formGroup]="form">
+  <md-input-container fxFlex>
+    <input [id]="inputId" mdInput kmTypeNumber [min]="min" [max]="max" (onInputChange)="onInputChange($event)" formControlName="node_count" type="text" placeholder="Quantity of Nodes:" title="node_count">
+  </md-input-container>
+  <button md-icon-button color="primary" (click)="increaseValue(false)"><i class="fa fa-minus" aria-hidden="true"></i></button>            
+  <button md-icon-button color="primary" (click)="increaseValue(true)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+</div>

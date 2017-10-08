@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators, FormControl} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
 import {NodeInstanceFlavors, NodeProvider} from "../api/model/NodeProviderConstants";
 import {CreateNodeModel} from "../api/model/CreateNodeModel";
@@ -418,5 +418,9 @@ export class WizardComponent implements OnInit {
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
       });
+  }
+  
+  public errorStateMatcher(control: FormControl): boolean {
+    return !control.valid && control.touched;
   }
 }
