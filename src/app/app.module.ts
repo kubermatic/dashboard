@@ -81,6 +81,8 @@ import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-clust
 import { CustomEventService, CreateNodesService, LocalStorageService } from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 import { MobileNavigationComponent } from './overlays';
+import { KmTypeNumberDirective } from './directives';
+import { KmInputNodesNumberComponent } from './km-input-nodes-number/km-input-nodes-number.component';
 
 @NgModule({
   imports: [
@@ -149,7 +151,9 @@ import { MobileNavigationComponent } from './overlays';
     DatacenterComponent,
     ClusterNameComponent,
     UpgradeClusterComponent,
-    MobileNavigationComponent
+    MobileNavigationComponent,
+    KmTypeNumberDirective,
+    KmInputNodesNumberComponent
   ],
   exports: [
     RouterModule,
