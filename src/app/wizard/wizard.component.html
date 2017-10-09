@@ -120,10 +120,14 @@
             <md-input-container fxFlex *ngIf="awsForm.controls['aws_nas'].value" >
               <input type="text" mdInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off" />
             </md-input-container>
-        </md-card-content>
-      </md-card>
-    </div>
-  </form>
+          </md-card-content>
+          <p class="km-warning-msg">
+            You need to accept the Software Terms of CoreOS. For this please click on the link, select "manual launch" & click on "Accept Software Terms".
+            <a target="_blank" href="https://aws.amazon.com/marketplace/pp?sku=ryg425ue2hwnsok9ccfastg4">CoreOS Software Terms</a>
+          </p>        
+        </md-card>
+      </div>
+    </form>
 </ng-container>
 <!-- End Provider Settings: Step 4 Amazon Weg Service -->
 
