@@ -124,3 +124,14 @@ $wizard-box-content-cloud-logo-size: 100px;
      width: 100%;
    }
 }
+
+.km-warning-msg {
+  background-color: rgba(255,213,92,0.1);
+  padding: 10px;
+  text-align: justify;
+
+  a {
+    color: #0288d1;
+    text-decoration: none;
+  }
+}
