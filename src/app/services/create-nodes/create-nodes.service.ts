@@ -12,6 +12,8 @@ import * as fromRoot from "../../reducers/index";
 @Injectable()
 export class CreateNodesService {
     private timer = Observable.timer(0, 10000);
+    private sub: Subscription;
+    public hasData: boolean;
 
     constructor(
         private api: ApiService, 
@@ -22,27 +24,27 @@ export class CreateNodesService {
         let nodesData = this.localStorageService.getNodesData();
 
         if(nodesData) {
-            this.createInitialClusterNodes(nodesData.cluster, nodesData.createNodeModel);    
+            this.createInitialClusterNodes(nodesData.cluster, nodesData.createNodeModel);
+            this.hasData = true;
         }      
     }
  
     public createInitialClusterNodes(cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
-        let sub: Subscription;
 
         if(!this.localStorageService.getNodesData()) {
             this.localStorageService.setNodesCreationData({
                 cluster: cluster,
                 createNodeModel: createNodeModel
             });
+            this.hasData = true;
         }
 
-        sub = this.timer.subscribe(() => {
+        this.sub = this.timer.subscribe(() => {
             this.api.getCluster(new ClusterModel(cluster.seed, cluster.metadata.name))
                 .subscribe(cluster => {
                     if (cluster.status.phase == "Running") {                       
                         this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
-                            sub.unsubscribe();
-                            this.localStorageService.removeNodesCreationData();                 
+                            this.preventCreatingInitialClusterNodes();               
                             NotificationComponent.success(this.store, "Success", `Creating Nodes`);
                         },
                             error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`)
@@ -52,5 +54,14 @@ export class CreateNodesService {
                 error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`)             
             );
         })
+    }
+
+    public preventCreatingInitialClusterNodes(): void {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.localStorageService.removeNodesCreationData();
+            this.sub = null;
+            this.hasData = false;
+        }
     }
 }
