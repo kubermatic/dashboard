@@ -29,6 +29,10 @@ export class ClusterEntity {
     return this.status.phase == "Running";
   }
 
+  isFailed(): boolean {
+    return this.status.phase == 'Failed';
+  }
+
   get provider(): string {
     switch (true) {
       case !!this.spec.cloud.digitalocean: {

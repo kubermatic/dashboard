@@ -7,6 +7,7 @@ import { ApiService } from "../../api/api.service";
 import { ClusterModel } from "../../api/model/ClusterModel";
 import { NotificationComponent } from "../../notification/notification.component";
 import { MdDialogRef } from '@angular/material';
+import { CreateNodesService } from '../../services';
 
 @Component({
   selector: 'kubermatic-cluster-delete-confirmation',
@@ -27,7 +28,8 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
     private router: Router,
     private api: ApiService, 
     private store: Store<fromRoot.State>,
-    private dialogRef:MdDialogRef<ClusterDeleteConfirmationComponent>
+    private dialogRef:MdDialogRef<ClusterDeleteConfirmationComponent>,
+    private createNodesService: CreateNodesService
   ) {}
   
   ngOnInit() {}
@@ -50,6 +52,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
         this.clusterModel = new ClusterModel(this.seedDcName, this.clusterName);
         this.api.deleteCluster(this.clusterModel).subscribe(result => {
           this.cluster = result;
+          this.createNodesService.preventCreatingInitialClusterNodes();
           NotificationComponent.success(this.store, "Success", `Cluster removed successfully`);
     
           this.router.navigate(['/clusters']);
