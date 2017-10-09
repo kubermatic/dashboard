@@ -412,7 +412,7 @@ export class WizardComponent implements OnInit {
         if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
           return;
         }
-
+      
         this.createNodesService.createInitialClusterNodes(cluster, createNodeModel);
       },
       error => {

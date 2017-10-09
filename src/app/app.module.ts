@@ -78,7 +78,7 @@ import { ProviderComponent } from './wizard/provider/provider.component';
 import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
 import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import { CustomEventService, CreateNodesService, LocalStorageService } from './services';
+import { CustomEventService, CreateNodesService, LocalStorageService, CustomHttpService } from './services';
 import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
 import { MobileNavigationComponent } from './overlays';
 
@@ -205,6 +205,7 @@ import { MobileNavigationComponent } from './overlays';
       multi: true
     },
     CustomEventService,
+    CustomHttpService,
     CreateNodesService,
     LocalStorageService
   ],

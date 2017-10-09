@@ -50,6 +50,6 @@ export class NodeDeleteConfirmationComponent implements OnInit {
       this.onNodeRemoval(false);
     }, error => {
       NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-    })
+    });
   }
 }

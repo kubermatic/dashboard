@@ -105,23 +105,15 @@ export class ClusterComponent implements OnInit {
         this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
         this.loading = false;
       });
+      
       if (this.cluster.isRunning()) {
         this.updateNodes();
 
         this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
           .subscribe(upgrades => this.upgradesList = upgrades);
       }
-
     },
-      error => {
-        if(error.status === 404) {
-          this.router.navigate(['404']);
-        }
-        else {
-          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-        }
-      }
-    );
+      error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`));
   }
 
   updateNodes(): void {

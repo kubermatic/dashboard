@@ -29,12 +29,10 @@ export class AddSshKeyModalComponent implements OnInit {
     const key = this.addSSHKeyForm.controls["key"].value;
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
-      .subscribe(result => {
-          NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
-        },
-        error => {
-          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-        });
+      .subscribe(
+        result => NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`),
+        error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`)
+      );
   }
 
   public onNewKeyTextChanged() {
