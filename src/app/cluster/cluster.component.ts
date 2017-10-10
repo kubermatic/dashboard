@@ -105,6 +105,11 @@ export class ClusterComponent implements OnInit {
         this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
         this.loading = false;
       });
+
+      if(this.cluster.isFailed() && this.createNodesService.hasData) {
+        this.createNodesService.preventCreatingInitialClusterNodes();
+      }
+      
       if (this.cluster.isRunning()) {
         this.updateNodes();
 
