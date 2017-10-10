@@ -103,8 +103,8 @@
       </md-card-content>
 
       <md-card-content *ngSwitchCase="false" align="center">
-        <span *ngIf="!!nodes">No Node available. Please add a Node.</span>    
-        <md-spinner *ngIf="!nodes" color="accent" class="node-list-spinner"></md-spinner>
+        <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>    
+        <md-spinner *ngIf="!cluster.isRunning() && !nodes" color="accent" class="node-list-spinner"></md-spinner>
       </md-card-content>
     </ng-container>
   </md-card>
