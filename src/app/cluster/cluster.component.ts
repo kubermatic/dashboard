@@ -47,6 +47,7 @@ export class ClusterComponent implements OnInit {
   public dcLocation: string = "";
   public dcFlagCode: string = "";
   private upgradesList: string[] = [];
+  private gotUpgradesList: boolean;
 
   constructor(
     private customEventService: CustomEventService,
@@ -112,9 +113,14 @@ export class ClusterComponent implements OnInit {
       
       if (this.cluster.isRunning()) {
         this.updateNodes();
+        
+        if(this.gotUpgradesList) return;
 
         this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
-          .subscribe(upgrades => this.upgradesList = upgrades);
+          .subscribe(upgrades => {
+            this.upgradesList = upgrades;
+            this.gotUpgradesList = true;
+          });
       }
 
     },
