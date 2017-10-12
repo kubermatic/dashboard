@@ -69,7 +69,7 @@ export class ClusterComponent implements OnInit {
         this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
         this.dcFlagCode = dc.spec.country.toLowerCase();
       });
-
+      
       this.sub = this.timer.subscribe(() => this.refreshData());
     });
     
@@ -93,7 +93,7 @@ export class ClusterComponent implements OnInit {
   loadDataCenter(dc, func):void {
     this.api.getDataCenter(dc).subscribe(res => func(res));
   }
-
+  
   loadCluster(): Observable<ClusterEntity> {
     return this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
       .retry(3);
@@ -127,7 +127,7 @@ export class ClusterComponent implements OnInit {
             res.status,
             res.seed,
           );
-          
+
           if(!this.dc) {
             this.loadDataCenter(this.cluster.spec.cloud.dc, (res) => {
               this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed); 
