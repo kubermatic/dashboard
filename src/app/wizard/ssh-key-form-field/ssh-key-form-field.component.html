@@ -8,8 +8,7 @@
     <div *ngSwitchCase="false">
       <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
     </div>
-    <small class="form-text text-muted" >In addition, one more SSH key is authorized automatically for the Kubernetes apiserver
-      to provide kubectl logs, port-forward and exec functionality.
+    <small class="form-text text-muted" >In addition, one SSH key is authorized automatically for the Kubernetes apiserver to provide kubectl logs, port-forward and exec functionality.
     </small>
     <br>
     <button style="margin-top: 10px;" md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
