@@ -64,7 +64,12 @@ export class ClusterComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
       this.seedDcName = params["seedDcName"];
-      this.loadDataCenter();
+
+      this.loadDataCenter(this.seedDcName, dc => {
+        this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
+        this.dcFlagCode = dc.spec.country.toLowerCase();
+      });
+
       this.sub = this.timer.subscribe(() => this.refreshData());
     });
     
@@ -85,14 +90,10 @@ export class ClusterComponent implements OnInit {
       });
   }
 
-  loadDataCenter(): void {
-    this.api.getDataCenter(this.seedDcName).subscribe(dc => {
-      this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
-      this.dcFlagCode = dc.spec.country.toLowerCase();
-      this.dc = new DataCenterEntity(dc.metadata, dc.spec, dc.seed);   
-    });
+  loadDataCenter(dc, func):void {
+    this.api.getDataCenter(dc).subscribe(res => func(res));
   }
-  
+
   loadCluster(): Observable<ClusterEntity> {
     return this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
       .retry(3);
@@ -127,7 +128,16 @@ export class ClusterComponent implements OnInit {
             res.seed,
           );
           
-          this.loading = false;
+          if(!this.dc) {
+            this.loadDataCenter(this.cluster.spec.cloud.dc, (res) => {
+              this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed); 
+              this.loading = false; 
+            });
+          }
+
+          if(this.cluster.isFailed() && this.createNodesService.hasData) {
+            this.createNodesService.preventCreatingInitialClusterNodes();
+          }
 
           if(this.cluster.isRunning()) {
             this.loadNodes();
