@@ -34,7 +34,8 @@ export class ClusterComponent implements OnInit {
 
   public nodes: NodeEntity[];
   public cluster: ClusterEntity;
-  public dc: DataCenterEntity;
+  public seedDc: DataCenterEntity;
+  public nodeDc: DataCenterEntity;
   public timer: any = Observable.timer(0,10000);
   public sub: Subscription;
   public dialogRef: any;
@@ -44,8 +45,6 @@ export class ClusterComponent implements OnInit {
   public nodeSizes: any = [];
   public loading: boolean = true;
   public sshKeys: SSHKeyEntity[] = [];
-  public dcLocation: string = "";
-  public dcFlagCode: string = "";
   private upgradesList: string[] = [];
   private gotUpgradesList: boolean;
 
@@ -65,11 +64,8 @@ export class ClusterComponent implements OnInit {
       this.clusterName = params["clusterName"];
       this.seedDcName = params["seedDcName"];
 
-      this.loadDataCenter(this.seedDcName, dc => {
-        this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
-        this.dcFlagCode = dc.spec.country.toLowerCase();
-      });
-      
+      this.loadDataCenter(this.seedDcName, dc => 
+        this.seedDc = new DataCenterEntity(dc.metadata, dc.spec, dc.seed));
       this.sub = this.timer.subscribe(() => this.refreshData());
     });
     
@@ -127,10 +123,10 @@ export class ClusterComponent implements OnInit {
             res.status,
             res.seed,
           );
-
-          if(!this.dc) {
+          
+          if(!this.nodeDc) {
             this.loadDataCenter(this.cluster.spec.cloud.dc, (res) => {
-              this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed); 
+              this.nodeDc = new DataCenterEntity(res.metadata, res.spec, res.seed); 
               this.loading = false; 
             });
           }
@@ -159,7 +155,7 @@ export class ClusterComponent implements OnInit {
   }
 
   public addNode(): void {
-    let data = new AddNodeModalData(this.cluster, this.dc);
+    let data = new AddNodeModalData(this.cluster, this.nodeDc);
     if (this.cluster.provider == NodeProvider.AWS) {
       this.dialogRef = this.dialog.open(AWSAddNodeFormComponent, {data: data});
     } else if (this.cluster.provider == NodeProvider.DIGITALOCEAN) {
