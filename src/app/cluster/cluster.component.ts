@@ -47,6 +47,7 @@ export class ClusterComponent implements OnInit {
   public dcLocation: string = "";
   public dcFlagCode: string = "";
   private upgradesList: string[] = [];
+  private gotUpgradesList: boolean;
 
   constructor(
     private customEventService: CustomEventService,
@@ -63,25 +64,11 @@ export class ClusterComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
       this.seedDcName = params["seedDcName"];
-
-      this.sub = this.timer.subscribe(() => {
-        this.update();
-      });
+      this.loadDataCenter();
+      this.sub = this.timer.subscribe(() => this.refreshData());
     });
-
-    this.api.getSSHKeys().subscribe(keys => {
-      this.sshKeys = keys.filter(key => {
-        if (key.spec.clusters == null) {
-          return false
-        }
-        return key.spec.clusters.indexOf(this.clusterName) > -1
-      });
-    });
-
-    this.api.getDataCenter(this.seedDcName).subscribe(dc => {
-      this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
-      this.dcFlagCode = dc.spec.country.toLowerCase();
-    });
+    
+    this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
       this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
   }
@@ -90,49 +77,75 @@ export class ClusterComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
-  update(): void {
-    this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
-    .retry(3)
-    .subscribe(res => {
-      this.cluster = new ClusterEntity(
-        res.metadata,
-        res.spec,
-        res.address,
-        res.status,
-        res.seed,
-      );
-      this.api.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
-        this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
-        this.loading = false;
+  loadUpgrades(): void {
+    this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
+      .subscribe(upgrades => {
+        this.upgradesList = upgrades;
+        this.gotUpgradesList = true;
       });
-
-      if(this.cluster.isFailed() && this.createNodesService.hasData) {
-        this.createNodesService.preventCreatingInitialClusterNodes();
-      }
-      
-      if (this.cluster.isRunning()) {
-        this.updateNodes();
-
-        this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
-          .subscribe(upgrades => this.upgradesList = upgrades);
-      }
-
-    },
-      error => {
-        if(error.status === 404) {
-          this.router.navigate(['404']);
-        }
-        else {
-          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-        }
-      }
-    );
   }
 
-  updateNodes(): void {
+  loadDataCenter(): void {
+    this.api.getDataCenter(this.seedDcName).subscribe(dc => {
+      this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
+      this.dcFlagCode = dc.spec.country.toLowerCase();
+      this.dc = new DataCenterEntity(dc.metadata, dc.spec, dc.seed);   
+    });
+  }
+  
+  loadCluster(): Observable<ClusterEntity> {
+    return this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
+      .retry(3);
+  }
+
+  loadSshKeys(): void {
+    this.api.getSSHKeys().subscribe(keys => {
+      this.sshKeys = keys.filter(key => {
+        if (key.spec.clusters == null) {
+          return false
+        }
+        return key.spec.clusters.indexOf(this.clusterName) > -1
+      });
+    });
+  }
+
+  loadNodes(): void {
     this.api.getClusterNodes(new ClusterModel(this.seedDcName, this.clusterName)).subscribe(nodes => {
       this.nodes = nodes;
     });
+  }
+
+  refreshData(): void {
+    this.loadCluster()
+      .subscribe(
+        res => {
+          this.cluster = new ClusterEntity(
+            res.metadata,
+            res.spec,
+            res.address,
+            res.status,
+            res.seed,
+          );
+          
+          this.loading = false;
+
+          if(this.cluster.isRunning()) {
+            this.loadNodes();
+      
+            if(this.gotUpgradesList) return;
+      
+            this.loadUpgrades();
+          }
+        },
+        error => {
+          if(error.status === 404) {
+            this.router.navigate(['404']);
+          }
+          else {
+            NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+          }
+        }
+      );
   }
 
   public addNode(): void {
