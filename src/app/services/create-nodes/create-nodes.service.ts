@@ -46,14 +46,10 @@ export class CreateNodesService {
                         this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
                             this.preventCreatingInitialClusterNodes();               
                             NotificationComponent.success(this.store, "Success", `Creating Nodes`);
-                        },
-                            error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`)
-                        );
+                        });
                     }
-                },
-                error => NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`)             
-            );
-        })
+                });
+        });
     }
 
     public preventCreatingInitialClusterNodes(): void {
