@@ -63,9 +63,7 @@ export class ClusterComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
       this.seedDcName = params["seedDcName"];
-
-      this.loadDataCenter(this.seedDcName, dc => 
-        this.seedDc = new DataCenterEntity(dc.metadata, dc.spec, dc.seed));
+      this.loadDataCenter(this.seedDcName, 'seedDc');
       this.sub = this.timer.subscribe(() => this.refreshData());
     });
     
@@ -86,8 +84,9 @@ export class ClusterComponent implements OnInit {
       });
   }
 
-  loadDataCenter(dc, func):void {
-    this.api.getDataCenter(dc).subscribe(res => func(res));
+  loadDataCenter(dcName, dcObjectName):void {
+    this.api.getDataCenter(dcName).subscribe(res => 
+      this[dcObjectName] = new DataCenterEntity(res.metadata, res.spec, res.seed));
   }
   
   loadCluster(): Observable<ClusterEntity> {
@@ -125,10 +124,7 @@ export class ClusterComponent implements OnInit {
           );
           
           if(!this.nodeDc) {
-            this.loadDataCenter(this.cluster.spec.cloud.dc, (res) => {
-              this.nodeDc = new DataCenterEntity(res.metadata, res.spec, res.seed); 
-              this.loading = false; 
-            });
+            this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
           }
 
           if(this.cluster.isFailed() && this.createNodesService.hasData) {
@@ -192,5 +188,8 @@ export class ClusterComponent implements OnInit {
     const authorization_token = localStorage.getItem("token");
     return `${this.restRoot}/dc/${this.seedDcName}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
-}
 
+  public isLoaded() {
+    return this.seedDc && this.nodeDc;
+  }
+}
