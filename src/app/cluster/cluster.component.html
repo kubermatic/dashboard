@@ -1,4 +1,4 @@
-<ng-container *ngIf="!loading">
+<ng-container *ngIf="isLoaded()">
   <div fxLayout>
     <h2 fxFlex="50%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="50%" align="right" style="margin-top: 25px;">
@@ -111,6 +111,6 @@
 </ng-container>
 
 
-<div *ngIf="loading" >
+<div *ngIf="!isLoaded()">
   <md-spinner color="accent" class="km-spinner"></md-spinner>
 </div>
