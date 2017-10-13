@@ -79,7 +79,7 @@ import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
 import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 import { CustomEventService, CreateNodesService, LocalStorageService } from './services';
-import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
+import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
 import { MobileNavigationComponent } from './overlays';
 
 @NgModule({
@@ -193,6 +193,11 @@ import { MobileNavigationComponent } from './overlays';
     {
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorNotificationsInterceptor,
+      multi: true
     },
     {
       provide: HTTP_INTERCEPTORS,

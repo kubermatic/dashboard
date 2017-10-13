@@ -134,15 +134,14 @@ export class ApiService {
     const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/upgrades`;
     return this.http.get<string[]>(url, {headers: this.headers})
       .catch(error => {
-        NotificationComponent.error(this.store, 'Error', `${error.status} ${error.statusText}`);
         return Observable.of<string[]>([]);
-      })
+      });
   }
 
   updateClusterUpgrade(clusterModel: ClusterModel, upgradeVersion: string): void {
     let body = { to: upgradeVersion };
     const url = `${this.restRoot}/dc/${clusterModel.dc}/cluster/${clusterModel.cluster}/upgrade`;
     this.http.put(url, body, {headers: this.headers})
-     .subscribe({error: error => NotificationComponent.error(this.store, 'Error', `${error.status} ${error.statusText}`)});
+     .subscribe(result => NotificationComponent.success(this.store, 'Success', `Cluster ${clusterModel.cluster} was upgraded`)); 
   }
 }

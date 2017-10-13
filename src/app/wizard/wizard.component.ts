@@ -414,9 +414,6 @@ export class WizardComponent implements OnInit {
         }
 
         this.createNodesService.createInitialClusterNodes(cluster, createNodeModel);
-      },
-      error => {
-        NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
       });
   }
 }
