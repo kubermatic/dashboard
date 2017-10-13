@@ -23,14 +23,14 @@ export class SshkeyComponent implements OnInit {
   }
 
   private refreshSSHKeys() {
-    this.api.getSSHKeys().retry(3).subscribe(result => {
-      this.sshKeys = result;
-      this.loading = false;
-    }, error => {
-      this.loading = false;
-      NotificationComponent.error(this.store, "Error",  `SSH keys could not be loaded. Error: ${error}`);
-    }
-    );
+    this.api.getSSHKeys().retry(3)
+      .subscribe(
+        result => {
+          this.sshKeys = result;
+          this.loading = false;
+        }, 
+        error => this.loading = false
+      );
   }
 
   public handleKeyUpdated() {

@@ -31,14 +31,12 @@ export class ListSshKeyComponent implements OnInit {
 
     if (index > -1) {
       this.api.deleteSSHKey(keyName)
-          .subscribe( () => {
-                this.sshKeys.splice(index, 1);
-
-                NotificationComponent.success(this.store, "Success", `SSH key ${name} deleted.`);
-              },
-              error => {
-                NotificationComponent.error(this.store, "Error",  `SSH key ${name} could not be deleted. Error: ${error}`);
-              });
+          .subscribe( 
+            () => {
+              this.sshKeys.splice(index, 1);
+              NotificationComponent.success(this.store, "Success", `SSH key ${name} deleted.`);
+            }
+          );
     } else {
       NotificationComponent.error(this.store, "Error", `Error deleting SSH key ${name}. Please try again.`);
     }

@@ -147,9 +147,6 @@ export class ClusterComponent implements OnInit {
           if(error.status === 404) {
             this.router.navigate(['404']);
           }
-          else {
-            NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-          }
         }
       );
   }
