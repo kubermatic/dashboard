@@ -5,6 +5,7 @@ import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {NotificationComponent} from "../../notification/notification.component";
+import {MdDialogRef} from '@angular/material';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',
@@ -15,7 +16,12 @@ export class AddSshKeyModalComponent implements OnInit {
   @Input() sshKeys: Array<SSHKeyEntity> = [];
   public addSSHKeyForm: FormGroup;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {}
+  constructor(
+    private api: ApiService, 
+    private formBuilder: FormBuilder, 
+    private store: Store<fromRoot.State>,
+    private dialogRef: MdDialogRef<AddSshKeyModalComponent>
+  ) {}
 
   ngOnInit() {
     this.addSSHKeyForm = this.formBuilder.group({
@@ -29,7 +35,11 @@ export class AddSshKeyModalComponent implements OnInit {
     const key = this.addSSHKeyForm.controls["key"].value;
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
-      .subscribe(result => NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`));
+      .subscribe(
+        result => {
+          NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
+          this.dialogRef.close();
+        });
   }
 
   public onNewKeyTextChanged() {
