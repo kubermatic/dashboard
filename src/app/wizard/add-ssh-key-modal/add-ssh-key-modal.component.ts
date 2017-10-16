@@ -6,6 +6,7 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {NotificationComponent} from "../../notification/notification.component";
 import {MdDialogRef} from '@angular/material';
+import { InputValidationService } from '../../services';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',
@@ -20,7 +21,8 @@ export class AddSshKeyModalComponent implements OnInit {
     private api: ApiService, 
     private formBuilder: FormBuilder, 
     private store: Store<fromRoot.State>,
-    private dialogRef: MdDialogRef<AddSshKeyModalComponent>
+    private dialogRef: MdDialogRef<AddSshKeyModalComponent>,
+    public inputValidationService: InputValidationService
   ) {}
 
   ngOnInit() {

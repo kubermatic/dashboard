@@ -26,7 +26,7 @@ import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
 import * as testing from "selenium-webdriver/testing";
 import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
-import {CustomEventService, CreateNodesService} from '../services';
+import {CustomEventService, CreateNodesService, InputValidationService} from '../services';
 
 @Component({
   selector: "kubermatic-wizard",
@@ -77,7 +77,8 @@ export class WizardComponent implements OnInit {
     private store: Store<fromRoot.State>,
     public dialog: MdDialog,
     private customEventService: CustomEventService,
-    private createNodesService: CreateNodesService
+    private createNodesService: CreateNodesService,
+    public inputValidationService: InputValidationService
   ) {}
 
   ngOnInit() {
