@@ -5,6 +5,7 @@ import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {NotificationComponent} from "../../notification/notification.component";
+import { InputValidationService } from '../../services';
 
 @Component({
   selector: 'kubermatic-add-ssh-key',
@@ -17,7 +18,12 @@ export class AddSshKeyComponent implements OnInit {
 
   public addSSHKeyForm: FormGroup;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private store: Store<fromRoot.State>) {}
+  constructor(
+    private api: ApiService, 
+    private formBuilder: FormBuilder, 
+    private store: Store<fromRoot.State>,
+    public inputValidationService: InputValidationService
+  ) {}
 
   ngOnInit() {
     this.addSSHKeyForm = this.formBuilder.group({
@@ -48,9 +54,5 @@ export class AddSshKeyComponent implements OnInit {
     if (keyName && keyName.length > 1 && "" === name) {
       this.addSSHKeyForm.patchValue({name: keyName[1]});
     }
-  }
-
-  public errorStateHandler(formControl: FormControl): boolean {
-    return !formControl.valid && formControl.touched;
   }
 }

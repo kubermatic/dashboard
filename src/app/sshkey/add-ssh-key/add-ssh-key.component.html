@@ -6,12 +6,12 @@
     <form [formGroup]="addSSHKeyForm" novalidate>
 
       <md-input-container class="km-ssh-key-textarea" >
-        <textarea id="key" mdInput [errorStateMatcher]="errorStateHandler" formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
+        <textarea id="key" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
         <small class="form-text text-muted">Remember to past only the public part of your SSH key and store the private part safely.</small>
       </md-input-container>
 
       <md-input-container class="km-ssh-key-input">
-        <input id="name" mdInput [errorStateMatcher]="errorStateHandler" formControlName="name" type="text" placeholder="Name">
+        <input id="name" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="name" type="text" placeholder="Name">
         <small class="form-text text-muted">The unique name of your SSH key</small>
       </md-input-container>
 

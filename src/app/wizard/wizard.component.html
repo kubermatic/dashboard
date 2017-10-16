@@ -68,12 +68,12 @@
             You can create one
             <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
           </p>
-          <md-input-container fxFlex [ngClass]="{'has-danger': !awsForm.controls.access_key_id.valid && awsForm.controls.access_key_id.touched, 'has-success': awsForm.controls.access_key_id.valid}">
-            <input id="access_key_id" mdInput formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
+          <md-input-container fxFlex>
+            <input id="access_key_id" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
             <small class="form-text text-danger" [hidden]="awsForm.controls.access_key_id.valid || !awsForm.controls.access_key_id.touched">Access Key ID must be between 16 and 32 characters long.</small>
           </md-input-container>
-          <md-input-container fxFlex  [ngClass]="{'has-danger': !awsForm.controls.secret_access_key.valid && awsForm.controls.secret_access_key.touched, 'has-success': awsForm.controls.secret_access_key.valid}">
-            <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
+          <md-input-container fxFlex>
+            <input id="secret_access_key" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
             <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
           </md-input-container>
           <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
@@ -151,8 +151,8 @@
               We need a DigitalOcean Personal Access Token <b>with write access</b>.
               You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
             </p>
-            <md-input-container fxFlex [ngClass]="{'has-danger': !digitalOceanForm.controls.access_token.valid && digitalOceanForm.controls.access_token.touched, 'has-success': digitalOceanForm.controls.access_token.valid}">
-              <input id="access_token" mdInput formControlName="access_token" type="text" placeholder="API Token:" title="access_token" (change)="changeDoKey()">
+            <md-input-container fxFlex>
+              <input id="access_token" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="access_token" type="text" placeholder="API Token:" title="access_token" (change)="changeDoKey()">
               <small class="form-text text-danger" [hidden]="digitalOceanForm.controls.access_token.valid || !digitalOceanForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
             </md-input-container>
             <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
@@ -165,8 +165,8 @@
             </md-card-title>
           </md-card-header>
           <md-card-content fxLayout="column">
-            <md-input-container fxFlex [ngClass]="{'has-danger': !digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched, 'has-success': digitalOceanForm.controls.node_count.valid && digitalOceanForm.controls.node_count.touched}">
-              <input id="node_count_do" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+            <md-input-container fxFlex>
+              <input id="node_count_do" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
             </md-input-container>
             <div fxFlex class="mat-select-content">
               <md-select fxFlex placeholder="Node Size:" name="node_size" formControlName="node_size">
@@ -203,7 +203,7 @@
           </p>
 
           <form [formGroup]="bringYourOwnForm" novalidate>
-            <div class="form-group" [ngClass]="{'has-danger': !bringYourOwnForm.controls.pif.valid, 'has-success': bringYourOwnForm.controls.pif.valid}">
+            <div class="form-group">
               <label for="pif" class="form-text text-muted">Private network interface:</label>
               <input id="pif" formControlName="pif" type="text" class="form-control">
               <small class="text-muted">Must be a Linux network device name, e.g. eth1 or eth0:1.</small>
@@ -242,8 +242,8 @@
             </md-card-title>
           </md-card-header>
           <md-card-content>
-            <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched, 'has-success': bareMetalForm.controls.node_count.valid && bareMetalForm.controls.node_count.touched}">
-              <input id="node_count_bareMetalForm" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+            <md-input-container style="width: 100%;">
+              <input id="node_count_bareMetalForm" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
             </md-input-container>
           </md-card-content>
         </md-card>
@@ -270,38 +270,38 @@
             </md-card-title>
           </md-card-header>
           <md-card-content fxLayout="column">
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_domain.valid && openStackForm.controls.os_domain.touched, 'has-success': openStackForm.controls.os_domain.valid}">
-              <input id="os_domain" mdInput formControlName="os_domain" type="text" placeholder="Domain:" title="Domain" (change)="changeOpKey()">
+            <md-input-container fxFlex>
+              <input id="os_domain" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_domain" type="text" placeholder="Domain:" title="Domain" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_domain.valid || !openStackForm.controls.os_domain.touched">Domain is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_tenant.valid && openStackForm.controls.os_tenant.touched, 'has-success': openStackForm.controls.os_tenant.valid}">
-              <input id="os_tenant" mdInput formControlName="os_tenant" type="text" placeholder="Tenant/Project:" title="Tenant/Project" (change)="changeOpKey()">
+            <md-input-container fxFlex>
+              <input id="os_tenant" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_tenant" type="text" placeholder="Tenant/Project:" title="Tenant/Project" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_tenant.valid || !openStackForm.controls.os_tenant.touched">Tenant/Project is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_username.valid && openStackForm.controls.os_username.touched, 'has-success': openStackForm.controls.os_username.valid}">
-              <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="Username:" title="Username" (change)="changeOpKey()">
+            <md-input-container fxFlex>
+              <input id="os_username" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_username" type="text" placeholder="Username:" title="Username" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_username.valid || !openStackForm.controls.os_username.touched">Username is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_password.valid && openStackForm.controls.os_password.touched, 'has-success': openStackForm.controls.os_password.valid}">
-              <input id="os_password" mdInput formControlName="os_password" type="password" placeholder="Password:" title="Password" (change)="changeOpKey()">
+            <md-input-container fxFlex>
+              <input id="os_password" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_password" type="password" placeholder="Password:" title="Password" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">Password is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_network.valid && openStackForm.controls.os_network.touched, 'has-success': openStackForm.controls.os_network.valid}">
-              <input id="os_network" mdInput formControlName="os_network" type="text" placeholder="Network name:" title="Network" (change)="changeOpKey()">
+            <md-input-container fxFlex>
+              <input id="os_network" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_network" type="text" placeholder="Network name:" title="Network" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_network.valid || !openStackForm.controls.os_network.touched">Network is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_security_groups.valid && openStackForm.controls.os_security_groups.touched, 'has-success': openStackForm.controls.os_security_groups.valid}">
-              <input id="os_security_groups" mdInput formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated):" title="Security groups" (change)="changeOpKey()">
+            <md-input-container fxFlex>
+              <input id="os_security_groups" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated):" title="Security groups" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_security_groups.valid || !openStackForm.controls.os_security_groups.touched">At least one security groups is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex [ngClass]="{'has-danger': !openStackForm.controls.os_floating_ip_pool.valid && openStackForm.controls.os_floating_ip_pool.touched, 'has-success': openStackForm.controls.os_floating_ip_pool.valid}">
-              <input id="os_floating_ip_pool" mdInput formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" (change)="changeOpKey()">
+            <md-input-container fxFlex>
+              <input id="os_floating_ip_pool" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" (change)="changeOpKey()">
             </md-input-container>
 
             <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
@@ -316,8 +316,8 @@
             </md-card-title>
           </md-card-header>
           <md-card-content fxLayout="column">
-            <md-input-container style="width: 100%;" [ngClass]="{'has-danger': !openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched, 'has-success': openStackForm.controls.node_count.valid && openStackForm.controls.node_count.touched}">
-              <input id="node_count_openStackForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+            <md-input-container style="width: 100%;">
+              <input id="node_count_openStackForm" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
             </md-input-container>
 
             <md-select  style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="node_size" formControlName="node_size">
@@ -327,8 +327,8 @@
               </md-option>
             </md-select>
 
-            <md-input-container style="width: 100%" [ngClass]="{'has-danger': !openStackForm.controls.os_node_image.valid && openStackForm.controls.os_node_image.touched, 'has-success': openStackForm.controls.os_node_image.valid}">
-              <input id="os_node_image" mdInput formControlName="os_node_image" placeholder="Image (Ubuntu only)" title="Image">
+            <md-input-container style="width: 100%">
+              <input id="os_node_image" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_node_image" placeholder="Image (Ubuntu only)" title="Image">
             </md-input-container>
           </md-card-content>
         </md-card>
