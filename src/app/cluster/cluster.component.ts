@@ -1,7 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router, ActivatedRoute} from "@angular/router";
 import {ApiService} from "../api/api.service";
-import {ClusterModel} from "../api/model/ClusterModel";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
@@ -17,7 +16,7 @@ import {OpenstackAddNodeComponent} from "../forms/add-node/openstack/openstack-a
 import {NotificationComponent} from "../notification/notification.component";
 import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
-import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
+import {UpgradeClusterComponent, UpgradeClusterComponentData} from './upgrade-cluster/upgrade-cluster.component';
 import {CustomEventService, CreateNodesService} from '../services';
 import 'rxjs/add/operator/retry';
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
@@ -41,8 +40,6 @@ export class ClusterComponent implements OnInit {
   public dialogRef: any;
   public config: any = {};
   public clusterName: string;
-  public seedDcName: string;
-  public nodeSizes: any = [];
   public loading: boolean = true;
   public sshKeys: SSHKeyEntity[] = [];
   private upgradesList: string[] = [];
@@ -62,11 +59,9 @@ export class ClusterComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
-      this.seedDcName = params["seedDcName"];
-      this.loadDataCenter(this.seedDcName, 'seedDc');
       this.sub = this.timer.subscribe(() => this.refreshData());
     });
-    
+
     this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
       this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
@@ -77,7 +72,7 @@ export class ClusterComponent implements OnInit {
   }
 
   loadUpgrades(): void {
-    this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
+    this.api.getClusterUpgrades(this.clusterName)
       .subscribe(upgrades => {
         this.upgradesList = upgrades;
         this.gotUpgradesList = true;
@@ -85,12 +80,12 @@ export class ClusterComponent implements OnInit {
   }
 
   loadDataCenter(dcName, dcObjectName):void {
-    this.api.getDataCenter(dcName).subscribe(res => 
+    this.api.getDataCenter(dcName).subscribe(res =>
       this[dcObjectName] = new DataCenterEntity(res.metadata, res.spec, res.seed));
   }
-  
+
   loadCluster(): Observable<ClusterEntity> {
-    return this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
+    return this.api.getCluster(this.clusterName)
       .retry(3);
   }
 
@@ -106,7 +101,7 @@ export class ClusterComponent implements OnInit {
   }
 
   loadNodes(): void {
-    this.api.getClusterNodes(new ClusterModel(this.seedDcName, this.clusterName)).subscribe(nodes => {
+    this.api.getClusterNodes(this.clusterName).subscribe(nodes => {
       this.nodes = nodes;
     });
   }
@@ -120,9 +115,12 @@ export class ClusterComponent implements OnInit {
             res.spec,
             res.address,
             res.status,
-            res.seed,
           );
-          
+
+          if(!this.seedDc) {
+            this.loadDataCenter(this.cluster.status.seed, 'seedDc');
+          }
+
           if(!this.nodeDc) {
             this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
           }
@@ -133,9 +131,9 @@ export class ClusterComponent implements OnInit {
 
           if(this.cluster.isRunning()) {
             this.loadNodes();
-      
+
             if(this.gotUpgradesList) return;
-      
+
             this.loadUpgrades();
           }
         },
@@ -168,25 +166,22 @@ export class ClusterComponent implements OnInit {
 
     this.dialogRef.componentInstance.humanReadableName = this.cluster.spec.humanReadableName;
     this.dialogRef.componentInstance.clusterName = this.clusterName;
-    this.dialogRef.componentInstance.seedDcName = this.seedDcName;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
 
   public upgradeClusterDialog(): void {
     let dialogWidth = '500px';
+
     this.dialogRef = this.dialog.open(UpgradeClusterComponent, {
-      data: {
-        upgradesList: this.upgradesList,
-        clusterModel: new ClusterModel(this.seedDcName, this.clusterName)
-      },
+      data: new UpgradeClusterComponentData(this.clusterName, this.upgradesList),
       width: dialogWidth
     });
   }
 
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem("token");
-    return `${this.restRoot}/dc/${this.seedDcName}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
+    return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
 
   public isLoaded() {

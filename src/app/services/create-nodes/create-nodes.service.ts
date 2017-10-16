@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ClusterModel } from '../../api/model/ClusterModel';
 import { ApiService } from '../../api/api.service';
 import { ClusterEntity } from '../../api/entitiy/ClusterEntity';
 import { CreateNodeModel } from "../../api/model/CreateNodeModel";
@@ -16,7 +15,7 @@ export class CreateNodesService {
     public hasData: boolean;
 
     constructor(
-        private api: ApiService, 
+        private api: ApiService,
         private localStorageService: LocalStorageService,
         private store: Store<fromRoot.State>
     )
@@ -26,9 +25,9 @@ export class CreateNodesService {
         if(nodesData) {
             this.createInitialClusterNodes(nodesData.cluster, nodesData.createNodeModel);
             this.hasData = true;
-        }      
+        }
     }
- 
+
     public createInitialClusterNodes(cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
 
         if(!this.localStorageService.getNodesData()) {
@@ -40,11 +39,11 @@ export class CreateNodesService {
         }
 
         this.sub = this.timer.subscribe(() => {
-            this.api.getCluster(new ClusterModel(cluster.seed, cluster.metadata.name))
+            this.api.getCluster(cluster.metadata.name)
                 .subscribe(cluster => {
-                    if (cluster.status.phase == "Running") {                       
+                    if (cluster.status.phase == "Running") {
                         this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
-                            this.preventCreatingInitialClusterNodes();               
+                            this.preventCreatingInitialClusterNodes();
                             NotificationComponent.success(this.store, "Success", `Creating Nodes`);
                         });
                     }

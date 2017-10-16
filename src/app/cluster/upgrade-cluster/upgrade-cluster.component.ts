@@ -10,16 +10,27 @@ import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 })
 export class UpgradeClusterComponent{
   selectedVersion: string = null;
-  
+
   constructor(
-    @Inject(MD_DIALOG_DATA) public data: any, 
+    @Inject(MD_DIALOG_DATA) public data: UpgradeClusterComponentData,
     private api: ApiService,
     private dialogRef: MdDialogRef<UpgradeClusterComponent>
   ) { }
 
   upgrade(): void {
-      this.api.updateClusterUpgrade(this.data.clusterModel, this.selectedVersion);
+      this.api.updateClusterUpgrade(this.data.clusterName, this.selectedVersion);
       this.selectedVersion = null;
       this.dialogRef.close();
   }
+}
+
+export class UpgradeClusterComponentData {
+  clusterName: string;
+  upgradesList: string[];
+
+  constructor(clusterName: string, upgradesList: string[]) {
+    this.clusterName = clusterName;
+    this.upgradesList = upgradesList;
+  }
+
 }
