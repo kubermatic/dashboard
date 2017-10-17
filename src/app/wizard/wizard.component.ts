@@ -11,8 +11,6 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from "@angular/material";
-import {AddSshKeyModalComponent} from "./add-ssh-key-modal/add-ssh-key-modal.component";
-import {ClusterModel} from "../api/model/ClusterModel";
 import {SshKeys} from "../api/model/SshKeysModel";
 import {AWSCloudSpec} from "../api/entitiy/cloud/AWSCloudSpec";
 import {AWSNodeSpec} from "../api/entitiy/node/AWSNodeSpec";
@@ -24,7 +22,6 @@ import {OpenstackCloudSpec} from "../api/entitiy/cloud/OpenstackCloudSpec";
 import {OpenstackNodeSpec} from "../api/entitiy/node/OpenstackNodeSpec";
 import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
-import * as testing from "selenium-webdriver/testing";
 import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
 import {CustomEventService, CreateNodesService, InputValidationService} from '../services';
 
@@ -101,11 +98,11 @@ export class WizardComponent implements OnInit {
 
     this.awsForm = this.formBuilder.group({
       //Cluster spec
-      access_key_id: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
-      secret_access_key: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
-      vpc_id: [""],
-      subnet_id: [""],
-      route_table_id: [""],
+      accessKeyId: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
+      secretAccessKey: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
+      vpcId: [""],
+      subnetId: [""],
+      routeTableId: [""],
       //Node spec
       node_count: [3, [<any>Validators.required, Validators.min(1)]],
       node_size: ["", [<any>Validators.required]],
@@ -275,7 +272,6 @@ export class WizardComponent implements OnInit {
 
   public createClusterAndNode() {
 
-    let ssh_keys = [];
     let clusterSpec: ClusterSpec;
     let nodeSpec: NodeCreateSpec;
 
@@ -283,7 +279,7 @@ export class WizardComponent implements OnInit {
     const timer = Observable.timer(0, 10000);
     let node_instances: number = 3;
 
-    ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
+    let ssh_keys = this.sshKeysFormField[0][this.selectedCloud];
 
     if (this.selectedCloud === NodeProvider.AWS) {
 
@@ -292,11 +288,11 @@ export class WizardComponent implements OnInit {
           this.selectedCloudRegion.metadata.name,
           null,
           new AWSCloudSpec(
-            this.awsForm.controls["access_key_id"].value,
-            this.awsForm.controls["secret_access_key"].value,
-            this.awsForm.controls["vpc_id"].value,
-            this.awsForm.controls["subnet_id"].value,
-            this.awsForm.controls["route_table_id"].value,
+            this.awsForm.controls["accessKeyId"].value,
+            this.awsForm.controls["secretAccessKey"].value,
+            this.awsForm.controls["vpcId"].value,
+            this.awsForm.controls["subnetId"].value,
+            this.awsForm.controls["routeTableId"].value,
             "",
           ),
           null,
@@ -404,12 +400,12 @@ export class WizardComponent implements OnInit {
     );
 
     console.log("Create cluster mode: \n" + JSON.stringify(cluster));
-    
+
     this.api.createCluster(cluster).subscribe(cluster => {
         const createNodeModel = new CreateNodeModel(node_instances, nodeSpec);
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
-        this.router.navigate(["/dc/" + cluster.seed + "/cluster/" + cluster.metadata.name]);
-          
+        this.router.navigate(["/cluster/" + cluster.metadata.name]);
+
         if (this.selectedCloud == NodeProvider.BRINGYOUROWN) {
           return;
         }

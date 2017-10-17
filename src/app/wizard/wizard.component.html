@@ -69,21 +69,21 @@
             <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
           </p>
           <md-input-container fxFlex>
-            <input id="access_key_id" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
-            <small class="form-text text-danger" [hidden]="awsForm.controls.access_key_id.valid || !awsForm.controls.access_key_id.touched">Access Key ID must be between 16 and 32 characters long.</small>
+            <input id="access_key_id" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="accessKeyId" type="text" placeholder="Access Key ID:" title="Access Key ID">
+            <small class="form-text text-danger" [hidden]="awsForm.controls.accessKeyId.valid || !awsForm.controls.accessKeyId.touched">Access Key ID must be between 16 and 32 characters long.</small>
           </md-input-container>
           <md-input-container fxFlex>
-            <input id="secret_access_key" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
-            <small class="form-text text-danger" [hidden]="awsForm.controls.secret_access_key.valid || !awsForm.controls.secret_access_key.touched">Secret access key is required.</small>
+            <input id="secret_access_key" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="secretAccessKey" type="text" placeholder="Secret Access Key:" title="Secret Access Key:">
+            <small class="form-text text-danger" [hidden]="awsForm.controls.secretAccessKey.valid || !awsForm.controls.secretAccessKey.touched">Secret access key is required.</small>
           </md-input-container>
           <kubermatic-ssh-key-form-field [sshKeysFormField]="sshKeysFormField" [provider]="selectedCloud"></kubermatic-ssh-key-form-field>
 
           <md-input-container fxFlex *ngIf="awsForm.controls['aws_cas'].value">
-            <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
+            <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpcId"
                                    ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
           </md-input-container>
           <md-input-container fxFlex *ngIf="awsForm.controls['aws_cas'].value">
-            <input type="text" mdInput id="subnet_id" name="subnet_id" formControlName="subnet_id"
+            <input type="text" mdInput id="subnet_id" name="subnetId" formControlName="subnetId"
                                    ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
           </md-input-container>
 
@@ -124,7 +124,7 @@
           <p class="km-warning-msg">
             You need to accept the Software Terms of CoreOS. For this please click on the link, select "manual launch" & click on "Accept Software Terms".
             <a target="_blank" href="https://aws.amazon.com/marketplace/pp?sku=ryg425ue2hwnsok9ccfastg4">CoreOS Software Terms</a>
-          </p>        
+          </p>
         </md-card>
       </div>
     </form>

@@ -1,6 +1,7 @@
 import { Component, Inject} from '@angular/core';
 import { ApiService } from '../../api/api.service';
 import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import {UpgradeClusterComponentData} from "../../api/model/UpgradeClusterDialogData";
 
 
 @Component({
@@ -10,15 +11,15 @@ import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 })
 export class UpgradeClusterComponent{
   selectedVersion: string = null;
-  
+
   constructor(
-    @Inject(MD_DIALOG_DATA) public data: any, 
+    @Inject(MD_DIALOG_DATA) public data: UpgradeClusterComponentData,
     private api: ApiService,
     private dialogRef: MdDialogRef<UpgradeClusterComponent>
   ) { }
 
   upgrade(): void {
-      this.api.updateClusterUpgrade(this.data.clusterModel, this.selectedVersion);
+      this.api.updateClusterUpgrade(this.data.clusterName, this.selectedVersion);
       this.selectedVersion = null;
       this.dialogRef.close();
   }

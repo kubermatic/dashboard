@@ -2,7 +2,6 @@ import {Component, Input, OnInit, Output} from '@angular/core';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {ApiService} from "../../api/api.service";
-import {ClusterModel} from "../../api/model/ClusterModel";
 import {NodeEntity} from "../../api/entitiy/NodeEntity";
 import {NotificationComponent} from "../../notification/notification.component";
 import {CustomEventService} from '../../services';
@@ -21,7 +20,6 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   @Input() seedDcName: string;
   @Input() onNodeRemoval;
 
-  public clusterModel: ClusterModel;
   public node: NodeEntity;
 
   public title: string;
@@ -33,8 +31,8 @@ export class NodeDeleteConfirmationComponent implements OnInit {
 
 
   constructor(
-    private api: ApiService, 
-    private store: Store<fromRoot.State>, 
+    private api: ApiService,
+    private store: Store<fromRoot.State>,
     private customEventService: CustomEventService
   ) {}
 
@@ -43,8 +41,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
 
   public deleteNode(nodeName: string): void {
     this.onNodeRemoval(true);
-    this.clusterModel = new ClusterModel(this.seedDcName, this.clusterName);
-    this.api.deleteClusterNode(this.clusterModel, nodeName).subscribe(result => {
+    this.api.deleteClusterNode(this.clusterName, nodeName).subscribe(result => {
       NotificationComponent.success(this.store, "Success", `Node removed successfully`);
       this.customEventService.publish('onNodeDelete', nodeName);
       this.onNodeRemoval(false);

@@ -18,28 +18,11 @@ export class ListSshKeyComponent implements OnInit {
   ngOnInit() {
   }
 
-  public deleteSSHKey(name): void {
-    let index = -1;
-    let keyName = "";
-
-    this.sshKeys.forEach((key, i) => {
-      if (key.spec.name === name) {
-        index = i;
-        keyName = key.metadata.name;
-      }
+  public deleteSSHKey(key: SSHKeyEntity): void {
+    this.api.deleteSSHKey(key.metadata.name).subscribe(() => {
+      this.sshKeys.splice(this.sshKeys.indexOf(key), 1);
+      NotificationComponent.success(this.store, "Success", `SSH key ${name} deleted.`);
     });
-
-    if (index > -1) {
-      this.api.deleteSSHKey(keyName)
-          .subscribe( 
-            () => {
-              this.sshKeys.splice(index, 1);
-              NotificationComponent.success(this.store, "Success", `SSH key ${name} deleted.`);
-            }
-          );
-    } else {
-      NotificationComponent.error(this.store, "Error", `Error deleting SSH key ${name}. Please try again.`);
-    }
   }
 
 }
