@@ -16,10 +16,11 @@ import {OpenstackAddNodeComponent} from "../forms/add-node/openstack/openstack-a
 import {NotificationComponent} from "../notification/notification.component";
 import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
-import {UpgradeClusterComponent, UpgradeClusterComponentData} from './upgrade-cluster/upgrade-cluster.component';
+import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
 import {CustomEventService, CreateNodesService} from '../services';
 import 'rxjs/add/operator/retry';
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
+import {UpgradeClusterComponentData} from "../api/model/UpgradeClusterDialogData";
 
 @Component({
   selector: "kubermatic-cluster",
