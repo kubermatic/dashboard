@@ -135,6 +135,8 @@ export class WizardComponent implements OnInit {
       os_node_image: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]],
+      // Extend options
+      os_cas: [false],
     });
   }
 
