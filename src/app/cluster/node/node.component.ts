@@ -37,11 +37,11 @@ export class NodeComponent implements OnInit {
   };
 
   constructor(public dialog: MdDialog) {}
-  
+
   ngOnInit() {
-   
+
   }
-  
+
   onNodeRemoval(nodeRemoval: boolean) {
     this.nodeRemoval = nodeRemoval;
   }
@@ -63,40 +63,42 @@ export class NodeComponent implements OnInit {
 
 
   public getNodeHealth() {
-    let green = "fa fa-circle green";
-    let red = "fa fa-circle-o red";
-    let orange = "fa fa-spin fa-circle-o-notch orange";
-    let orangeSpinner = "fa fa-spin fa-circle-o-notch orange";
+    const green = "fa fa-circle green";
+    const red = "fa fa-circle-o red";
+    const orange = "fa fa-spin fa-circle-o-notch orange";
+    const orangeSpinner = "fa fa-spin fa-circle-o-notch orange";
+
+    let kubeMachineState = this.node.metadata.annotations['node.k8s.io/state'];
 
     if(this.node.status.conditions) {
       this.conditionsMessage = "";
       for (let entry of this.node.status.conditions) {
         if (entry.status == "True" && entry.type != "Ready"){
-            this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
+          this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
         }
       }
     }
 
-
-    if (this.node.metadata.annotations['node.k8s.io/state'] && !this.conditionsMessage.length) {
-      switch (this.node.metadata.annotations['node.k8s.io/state']) {
-        case "pending":
-          return orange;
-        case "provisioning":
-          return orangeSpinner;
-        case "launching":
-          return orangeSpinner;
-        case "running":
-          return green;
-        default:
-          return red;
-      }
-    } else {
+    if (this.conditionsMessage != "" && kubeMachineState == "running") {
       return red;
     }
+
+    switch (kubeMachineState) {
+      case "pending":
+        return orange;
+      case "provisioning":
+        return orangeSpinner;
+      case "launching":
+        return orangeSpinner;
+      case "running":
+        return green;
+      default:
+        return red;
+    }
+
   }
 
-  public getNodeCapacity(): string {      
+  public getNodeCapacity(): string {
     let memRE = /([0-9]+)([a-zA-Z])i/;
     let nodeAllocatable = this.node.status.allocatable.memory;
     let resRE = nodeAllocatable.match(memRE);

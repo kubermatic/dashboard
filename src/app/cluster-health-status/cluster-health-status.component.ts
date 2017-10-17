@@ -30,7 +30,7 @@ export class ClusterHealthStatusComponent implements OnInit {
         case "scheduler":
           return this.health.scheduler ? this.green : this.red;
         case "node-controller":
-          return this.health.node_controller ? this.green : this.red;
+          return this.health.nodeController ? this.green : this.red;
         default:
           return this.orange;
       }

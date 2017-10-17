@@ -36,8 +36,6 @@ export class AddSshKeyComponent implements OnInit {
     const name = this.addSSHKeyForm.controls["name"].value;
     const key = this.addSSHKeyForm.controls["key"].value;
 
-
-
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
         .subscribe(result => {
           NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);

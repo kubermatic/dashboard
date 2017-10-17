@@ -2,11 +2,11 @@ import {ClusterSpec} from "../entitiy/ClusterEntity";
 
 export class CreateClusterModel {
   cluster: ClusterSpec;
-  ssh_keys: string[];
+  sshKeys: string[];
 
-  constructor(cluster: ClusterSpec, ssh_keys: string[]) {
+  constructor(cluster: ClusterSpec, sshKeys: string[]) {
     this.cluster = cluster;
-    this.ssh_keys = ssh_keys;
+    this.sshKeys = sshKeys;
   }
 }
 
