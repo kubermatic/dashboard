@@ -266,6 +266,7 @@
             <md-card-title>
               <h4>
                 Provide credentials & settings
+                <md-slide-toggle style="float: right;" formControlName="os_cas">Extend Provider settings</md-slide-toggle>          
               </h4>
             </md-card-title>
           </md-card-header>
@@ -295,7 +296,7 @@
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_network.valid || !openStackForm.controls.os_network.touched">Network is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex>
+            <md-input-container fxFlex *ngIf="openStackForm.controls['os_cas'].value">
               <input id="os_security_groups" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated):" title="Security groups" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_security_groups.valid || !openStackForm.controls.os_security_groups.touched">At least one security groups is required.</small>
             </md-input-container>
