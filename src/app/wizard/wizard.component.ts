@@ -81,11 +81,12 @@ export class WizardComponent implements OnInit {
   ngOnInit() {
     this.api.getDataCenters().subscribe(result => {
       result.forEach(elem => {
+        if(elem.spec.provider == 'bringyourown') return;
         if (!elem.seed) {
           if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
             this.groupedDatacenters[elem.spec.provider] = [];
           }
-
+          
           this.groupedDatacenters[elem.spec.provider].push(elem);
         }
       });
