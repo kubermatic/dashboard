@@ -11,22 +11,23 @@ export class ClusterEntity {
   spec: ClusterSpec;
   address: Address;
   status: Status;
-  seed: string;
 
   constructor(metadata: MetadataEntity,
               spec: ClusterSpec,
               address: Address,
-              status: Status,
-              seed: string) {
+              status: Status) {
     this.metadata = metadata;
     this.spec = spec;
     this.address = address;
     this.status = status;
-    this.seed = seed;
   }
 
   isRunning(): boolean {
     return this.status.phase == "Running";
+  }
+
+  isFailed(): boolean {
+    return this.status.phase == 'Failed';
   }
 
   get provider(): string {
@@ -73,7 +74,6 @@ export class CloudSpec {
     this.openstack = openstack;
     this.baremetal = baremetal;
   }
-
 }
 
 export class ClusterSpec {
@@ -92,25 +92,22 @@ export class ClusterSpec {
 
 export class Address {
   url: string;
-  external_name: string;
-  external_port: number;
-  kubelet_token: string;
-  admin_token: string;
+  externalName: string;
+  externalPort: number;
+  kubeletToken: string;
+  adminToken: string;
 }
 
-export class RootCA {
+export class Certificate {
+  key: string;
   cert: string;
-}
-
-export class ApiserverSshKey {
-  public_key: string;
 }
 
 export class Health {
   apiserver: boolean;
   scheduler: boolean;
   controller: boolean;
-  node_controller: boolean;
+  nodeController: boolean;
   etcd: boolean;
   lastTransitionTime: string;
 }
@@ -118,10 +115,19 @@ export class Health {
 export class Status {
   lastTransitionTime: Date;
   phase: string;
-  health: Health;
   lastDeployedMasterVersion: string;
   masterUpdatePhase: string;
-  rootCA: RootCA;
-  apiserver_ssh_key: ApiserverSshKey;
+  rootCA: Certificate;
+  apiserverCert: Certificate;
+  kubeletCert: Certificate;
+  apiserverSshKey: SSHKeyPair;
+  serviceAccountKey: string;
+  seed: string;
+  namespaceName: string;
+}
+
+export class SSHKeyPair {
+  privateKey: string;
+  publicKey: string;
 }
 

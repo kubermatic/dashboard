@@ -1,7 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router, ActivatedRoute} from "@angular/router";
 import {ApiService} from "../api/api.service";
-import {ClusterModel} from "../api/model/ClusterModel";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
@@ -21,6 +20,7 @@ import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.compone
 import {CustomEventService, CreateNodesService} from '../services';
 import 'rxjs/add/operator/retry';
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
+import {UpgradeClusterComponentData} from "../api/model/UpgradeClusterDialogData";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -34,19 +34,17 @@ export class ClusterComponent implements OnInit {
 
   public nodes: NodeEntity[];
   public cluster: ClusterEntity;
-  public dc: DataCenterEntity;
+  public seedDc: DataCenterEntity;
+  public nodeDc: DataCenterEntity;
   public timer: any = Observable.timer(0,10000);
   public sub: Subscription;
   public dialogRef: any;
   public config: any = {};
   public clusterName: string;
-  public seedDcName: string;
-  public nodeSizes: any = [];
   public loading: boolean = true;
   public sshKeys: SSHKeyEntity[] = [];
-  public dcLocation: string = "";
-  public dcFlagCode: string = "";
   private upgradesList: string[] = [];
+  private gotUpgradesList: boolean;
 
   constructor(
     private customEventService: CustomEventService,
@@ -62,26 +60,10 @@ export class ClusterComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
-      this.seedDcName = params["seedDcName"];
-
-      this.sub = this.timer.subscribe(() => {
-        this.update();
-      });
+      this.sub = this.timer.subscribe(() => this.refreshData());
     });
 
-    this.api.getSSHKeys().subscribe(keys => {
-      this.sshKeys = keys.filter(key => {
-        if (key.spec.clusters == null) {
-          return false
-        }
-        return key.spec.clusters.indexOf(this.clusterName) > -1
-      });
-    });
-
-    this.api.getDataCenter(this.seedDcName).subscribe(dc => {
-      this.dcLocation = dc.spec.country + ' / ' + dc.spec.location;
-      this.dcFlagCode = dc.spec.country.toLowerCase();
-    });
+    this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
       this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
   }
@@ -90,48 +72,82 @@ export class ClusterComponent implements OnInit {
     this.sub.unsubscribe();
   }
 
-  update(): void {
-    this.api.getCluster(new ClusterModel(this.seedDcName, this.clusterName))
-    .retry(3)
-    .subscribe(res => {
-      this.cluster = new ClusterEntity(
-        res.metadata,
-        res.spec,
-        res.address,
-        res.status,
-        res.seed,
-      );
-      this.api.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
-        this.dc = new DataCenterEntity(res.metadata, res.spec, res.seed);
-        this.loading = false;
+  loadUpgrades(): void {
+    this.api.getClusterUpgrades(this.clusterName)
+      .subscribe(upgrades => {
+        this.upgradesList = upgrades;
+        this.gotUpgradesList = true;
       });
-      if (this.cluster.isRunning()) {
-        this.updateNodes();
-
-        this.api.getClusterUpgrades(new ClusterModel(this.seedDcName, this.clusterName))
-          .subscribe(upgrades => this.upgradesList = upgrades);
-      }
-
-    },
-      error => {
-        if(error.status === 404) {
-          this.router.navigate(['404']);
-        }
-        else {
-          NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-        }
-      }
-    );
   }
 
-  updateNodes(): void {
-    this.api.getClusterNodes(new ClusterModel(this.seedDcName, this.clusterName)).subscribe(nodes => {
+  loadDataCenter(dcName, dcObjectName):void {
+    this.api.getDataCenter(dcName).subscribe(res =>
+      this[dcObjectName] = new DataCenterEntity(res.metadata, res.spec, res.seed));
+  }
+
+  loadCluster(): Observable<ClusterEntity> {
+    return this.api.getCluster(this.clusterName)
+      .retry(3);
+  }
+
+  loadSshKeys(): void {
+    this.api.getSSHKeys().subscribe(keys => {
+      this.sshKeys = keys.filter(key => {
+        if (key.spec.clusters == null) {
+          return false
+        }
+        return key.spec.clusters.indexOf(this.clusterName) > -1
+      });
+    });
+  }
+
+  loadNodes(): void {
+    this.api.getClusterNodes(this.clusterName).subscribe(nodes => {
       this.nodes = nodes;
     });
   }
 
+  refreshData(): void {
+    this.loadCluster()
+      .subscribe(
+        res => {
+          this.cluster = new ClusterEntity(
+            res.metadata,
+            res.spec,
+            res.address,
+            res.status,
+          );
+
+          if(!this.seedDc) {
+            this.loadDataCenter(this.cluster.status.seed, 'seedDc');
+          }
+
+          if(!this.nodeDc) {
+            this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
+          }
+
+          if(this.cluster.isFailed() && this.createNodesService.hasData) {
+            this.createNodesService.preventCreatingInitialClusterNodes();
+          }
+
+          if(this.cluster.isRunning()) {
+            this.loadNodes();
+
+            if(this.gotUpgradesList) return;
+
+            this.loadUpgrades();
+          }
+        },
+        error => {
+          if(error.status === 404) {
+            this.router.navigate(['404']);
+          }
+        }
+      );
+  }
+
   public addNode(): void {
-    let data = new AddNodeModalData(this.cluster, this.dc);
+    let data = new AddNodeModalData(this.cluster, this.nodeDc);
     if (this.cluster.provider == NodeProvider.AWS) {
       this.dialogRef = this.dialog.open(AWSAddNodeFormComponent, {data: data});
     } else if (this.cluster.provider == NodeProvider.DIGITALOCEAN) {
@@ -151,25 +167,25 @@ export class ClusterComponent implements OnInit {
 
     this.dialogRef.componentInstance.humanReadableName = this.cluster.spec.humanReadableName;
     this.dialogRef.componentInstance.clusterName = this.clusterName;
-    this.dialogRef.componentInstance.seedDcName = this.seedDcName;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
 
   public upgradeClusterDialog(): void {
     let dialogWidth = '500px';
+
     this.dialogRef = this.dialog.open(UpgradeClusterComponent, {
-      data: {
-        upgradesList: this.upgradesList,
-        clusterModel: new ClusterModel(this.seedDcName, this.clusterName)
-      },
+      data: new UpgradeClusterComponentData(this.clusterName, this.upgradesList),
       width: dialogWidth
     });
   }
 
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem("token");
-    return `${this.restRoot}/dc/${this.seedDcName}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
+    return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
+  }
+
+  public isLoaded() {
+    return this.seedDc && this.nodeDc;
   }
 }
-

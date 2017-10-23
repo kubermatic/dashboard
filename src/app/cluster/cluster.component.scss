@@ -89,3 +89,19 @@ kubermatic-cluster-health-status {
     }
   }
 }
+
+.add-node-btn {
+  width: 120px;
+  height: 36px;
+}
+
+.btn-spinner {
+  width: 100%;
+  height: 25px;
+  display: inline-block;
+}
+
+.node-list-spinner {
+  margin: 0 auto;
+  height: 70px;
+}

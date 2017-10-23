@@ -77,8 +77,8 @@ import { SetProviderComponent } from './wizard/set-provider/set-provider.compone
 import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import { CustomEventService, CreateNodesService, LocalStorageService } from './services';
-import { CheckTokenInterceptor, LoaderInterceptor } from './interceptors';
+import { CustomEventService, CreateNodesService, LocalStorageService, InputValidationService } from './services';
+import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
 import { SummaryComponent } from './wizard/summary/summary.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component'
 import { ProviderNodeComponent } from './provider/node/node.component'
@@ -216,6 +216,11 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     },
     {
       provide: HTTP_INTERCEPTORS,
+      useClass: ErrorNotificationsInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
       useClass: CheckTokenInterceptor,
       multi: true
     },
@@ -226,7 +231,8 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     },
     CustomEventService,
     CreateNodesService,
-    LocalStorageService
+    LocalStorageService,
+    InputValidationService
   ],
   bootstrap: [KubermaticComponent]
 

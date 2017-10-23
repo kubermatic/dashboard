@@ -2,6 +2,8 @@ import {Component, OnInit, Output, EventEmitter} from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from "@angular/forms";
 import {DigitaloceanCloudSpec} from "../../../api/entitiy/cloud/DigitialoceanCloudSpec";
 
+import {InputValidationService} from '../../../services';
+
 @Component({
   selector: 'kubermatic-cluster-digitalocean',
   templateUrl: './digitalocean.component.html',
@@ -11,7 +13,7 @@ export class DigitaloceanClusterComponent implements OnInit {
   public digitalOceanClusterForm: FormGroup;
   public cloudSpec: DigitaloceanCloudSpec;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
   @Output() syncCloudSpec = new EventEmitter();
 

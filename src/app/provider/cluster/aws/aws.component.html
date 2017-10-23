@@ -4,20 +4,20 @@
     You can create one
     <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
   </p>
-  <md-input-container fxFlex [ngClass]="{'has-danger': !awsClusterForm.controls.access_key_id.valid && awsClusterForm.controls.access_key_id.touched, 'has-success': awsClusterForm.controls.access_key_id.valid}">
-    <input id="access_key_id" mdInput formControlName="access_key_id" type="text" placeholder="Access Key ID:" title="access_key_id">
-    <small class="form-text text-danger" [hidden]="awsClusterForm.controls.access_key_id.valid || !awsClusterForm.controls.access_key_id.touched">Access Key ID must be between 16 and 32 characters long.</small>
-  </md-input-container>
-  <md-input-container fxFlex  [ngClass]="{'has-danger': !awsClusterForm.controls.secret_access_key.valid && awsClusterForm.controls.secret_access_key.touched, 'has-success': awsClusterForm.controls.secret_access_key.valid}">
-    <input id="secret_access_key" mdInput formControlName="secret_access_key" type="text" placeholder="Secret Access Key:" title="secret_access_key">
-    <small class="form-text text-danger" [hidden]="awsClusterForm.controls.secret_access_key.valid || !awsClusterForm.controls.secret_access_key.touched">Secret access key is required.</small>
+  <md-input-container fxFlex>
+    <input id="accessKeyId" mdInput [errorStateMatcher]="inputValidationService.isValid"  formControlName="accessKeyId" type="text" placeholder="Access Key ID:" title="accessKeyId">
+    <small class="form-text text-danger" [hidden]="awsClusterForm.controls.accessKeyId.valid || !awsClusterForm.controls.accessKeyId.touched">Access Key ID must be between 16 and 32 characters long.</small>
   </md-input-container>
   <md-input-container fxFlex>
-    <input type="text" mdInput id="virtual_private_cloud_id" name="virtual_private_cloud_id" formControlName="vpc_id"
+    <input id="secretAccessKey" mdInput [errorStateMatcher]="inputValidationService.isValid"  formControlName="secretAccessKey" type="text" placeholder="Secret Access Key:" title="secretAccessKey">
+    <small class="form-text text-danger" [hidden]="awsClusterForm.controls.secretAccessKey.valid || !awsClusterForm.controls.secretAccessKey.touched">Secret access key is required.</small>
+  </md-input-container>
+  <md-input-container fxFlex>
+    <input type="text" mdInput id="vpcId" name="vpcId" formControlName="vpcId"
            ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
   </md-input-container>
   <md-input-container fxFlex>
-    <input type="text" mdInput id="subnet_id" name="subnet_id" formControlName="subnet_id"
+    <input type="text" mdInput id="subnetId" name="subnetId" formControlName="subnetId"
            ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
   </md-input-container>
 </form>

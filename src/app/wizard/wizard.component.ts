@@ -8,14 +8,17 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from "@angular/material";
-import {ClusterModel} from "../api/model/ClusterModel";
+//import {ClusterModel} from "../api/model/ClusterModel";
 import {SshKeys} from "../api/model/SshKeysModel";
 import {CloudSpec, ClusterSpec} from "../api/entitiy/ClusterEntity";
 import {CreateClusterModel} from "../api/model/CreateClusterModel";
 import * as testing from "selenium-webdriver/testing";
+import {CreateNodeModel} from "../api/model/CreateNodeModel"
+
+import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
 import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
-import {CreateNodeModel} from "../api/model/CreateNodeModel";
-import {CustomEventService, CreateNodesService} from '../services';
+import {CustomEventService, CreateNodesService, InputValidationService} from '../services';
+
 
 
 @Component({
@@ -56,7 +59,8 @@ export class WizardComponent implements OnInit {
     private store: Store<fromRoot.State>,
     public dialog: MdDialog,
     private customEventService: CustomEventService,
-    private createNodesService: CreateNodesService
+    private createNodesService: CreateNodesService,
+    public inputValidationService: InputValidationService
   ) {}
 
 
@@ -72,7 +76,6 @@ export class WizardComponent implements OnInit {
         }
       });
     });
-
   }
 
   public setClusterName(clusterNameChangeEvent: ClusterNameEntity) {
@@ -140,22 +143,26 @@ export class WizardComponent implements OnInit {
   }
 
   public createClusterAndNode() {
-    let sub: Subscription;
+
+  //let ssh_keys = this.sshKeysFormField[0][this.selectedCloud]; // TODO: WAS hier los
+
+  let sub: Subscription;
     const timer = Observable.timer(0, 10000);
 
     console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
-        this.router.navigate(["/dc/" + cluster.seed + "/cluster/" + cluster.metadata.name]);
+        this.router.navigate(["/cluster/" + cluster.metadata.name]);
 
 
-      this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
+        this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
 
 
 
       },
       error => {
         NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
+
       });
   }
 }

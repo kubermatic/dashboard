@@ -1,36 +1,36 @@
 <form [formGroup]="osClusterForm" novalidate fxLayout="column" (change)="onChange()">
 
-  <md-input-container fxFlex [ngClass]="{'has-danger': !osClusterForm.controls.os_domain.valid && osClusterForm.controls.os_domain.touched, 'has-success': osClusterForm.controls.os_domain.valid}">
-    <input id="os_domain" mdInput formControlName="os_domain" type="text" placeholder="Domain:" title="Domain" >
+  <md-input-container fxFlex>
+    <input id="os_domain" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_domain" type="text" placeholder="Domain:" title="Domain" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_domain.valid || !osClusterForm.controls.os_domain.touched">Domain is required.</small>
   </md-input-container>
 
-  <md-input-container fxFlex [ngClass]="{'has-danger': !osClusterForm.controls.os_tenant.valid && osClusterForm.controls.os_tenant.touched, 'has-success': osClusterForm.controls.os_tenant.valid}">
-    <input id="os_tenant" mdInput formControlName="os_tenant" type="text" placeholder="Tenant/Project:" title="Tenant/Project" >
+  <md-input-container fxFlex>
+    <input id="os_tenant" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_tenant" type="text" placeholder="Tenant/Project:" title="Tenant/Project" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_tenant.valid || !osClusterForm.controls.os_tenant.touched">Tenant/Project is required.</small>
   </md-input-container>
 
-  <md-input-container fxFlex [ngClass]="{'has-danger': !osClusterForm.controls.os_username.valid && osClusterForm.controls.os_username.touched, 'has-success': osClusterForm.controls.os_username.valid}">
-    <input id="os_username" mdInput formControlName="os_username" type="text" placeholder="Username:" title="Username" >
+  <md-input-container fxFlex>
+    <input id="os_username" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_username" type="text" placeholder="Username:" title="Username" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_username.valid || !osClusterForm.controls.os_username.touched">Username is required.</small>
   </md-input-container>
 
-  <md-input-container fxFlex [ngClass]="{'has-danger': !osClusterForm.controls.os_password.valid && osClusterForm.controls.os_password.touched, 'has-success': osClusterForm.controls.os_password.valid}">
-    <input id="os_password" mdInput formControlName="os_password" type="text" placeholder="Password:" title="Password" >
+  <md-input-container fxFlex>
+    <input id="os_password" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_password" type="text" placeholder="Password:" title="Password" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_password.valid || !osClusterForm.controls.os_password.touched">Password is required.</small>
   </md-input-container>
 
-  <md-input-container fxFlex [ngClass]="{'has-danger': !osClusterForm.controls.os_network.valid && osClusterForm.controls.os_network.touched, 'has-success': osClusterForm.controls.os_network.valid}">
-    <input id="os_network" mdInput formControlName="os_network" type="text" placeholder="Network name:" title="Network" >
+  <md-input-container fxFlex>
+    <input id="os_network" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_network" type="text" placeholder="Network name:" title="Network" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_network.valid || !osClusterForm.controls.os_network.touched">Network is required.</small>
   </md-input-container>
 
-  <md-input-container fxFlex [ngClass]="{'has-danger': !osClusterForm.controls.os_security_groups.valid && osClusterForm.controls.os_security_groups.touched, 'has-success': osClusterForm.controls.os_security_groups.valid}">
-    <input id="os_security_groups" mdInput formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated):" title="Security groups" >
+  <md-input-container fxFlex>
+    <input id="os_security_groups" [errorStateMatcher]="inputValidationService.isValid" mdInput formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated):" title="Security groups" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_security_groups.valid || !osClusterForm.controls.os_security_groups.touched">At least one security groups is required.</small>
   </md-input-container>
 
-  <md-input-container fxFlex [ngClass]="{'has-danger': !osClusterForm.controls.os_floating_ip_pool.valid && osClusterForm.controls.os_floating_ip_pool.touched, 'has-success': osClusterForm.controls.os_floating_ip_pool.valid}">
-    <input id="os_floating_ip_pool" mdInput formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" >
+  <md-input-container fxFlex>
+    <input id="os_floating_ip_pool" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" >
   </md-input-container>
 </form>

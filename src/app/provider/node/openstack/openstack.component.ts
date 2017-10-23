@@ -6,6 +6,8 @@ import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
 import {OpenstackNodeSpec} from "../../../api/entitiy/node/OpenstackNodeSpec";
 import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
 
+import {InputValidationService} from '../../../services';
+
 @Component({
   selector: 'kubermatic-node-openstack',
   templateUrl: './openstack.component.html',
@@ -17,7 +19,7 @@ export class OpenstackNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
   @Output() syncNodeModel = new EventEmitter();
 

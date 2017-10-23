@@ -4,6 +4,7 @@ import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
 import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
 import {AWSNodeSpec} from "../../../api/entitiy/node/AWSNodeSpec";
 import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
+import {InputValidationService} from '../../../services';
 
 @Component({
   selector: 'kubermatic-node-aws',
@@ -16,7 +17,7 @@ export class AwsNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
   @Output() syncNodeModel = new EventEmitter();
 

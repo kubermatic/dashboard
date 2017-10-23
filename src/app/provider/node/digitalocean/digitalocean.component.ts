@@ -6,6 +6,7 @@ import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
 import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
 import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
 import {DigitaloceanNodeSpec} from "../../../api/entitiy/node/DigitialoceanNodeSpec";
+import {InputValidationService} from '../../../services';
 
 @Component({
   selector: 'kubermatic-node-digitalocean',
@@ -18,7 +19,7 @@ export class DigitaloceanNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
-  constructor(private formBuilder: FormBuilder,private api: ApiService) { }
+  constructor(private formBuilder: FormBuilder,private api: ApiService, public inputValidationService: InputValidationService) { }
 
   @Input() doToken: string;
   @Output() syncNodeModel = new EventEmitter();

@@ -2,6 +2,8 @@ import {Component, OnInit, EventEmitter, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OpenstackCloudSpec} from "../../../api/entitiy/cloud/OpenstackCloudSpec";
 
+import {InputValidationService} from '../../../services';
+
 @Component({
   selector: 'kubermatic-cluster-openstack',
   templateUrl: './openstack.component.html',
@@ -11,7 +13,7 @@ export class OpenstackClusterComponent implements OnInit {
   public osClusterForm: FormGroup;
   public cloudSpec: OpenstackCloudSpec;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
   @Output() syncCloudSpec = new EventEmitter();
 
@@ -22,7 +24,7 @@ export class OpenstackClusterComponent implements OnInit {
       os_username: ["", [<any>Validators.required]],
       os_password: ["", [<any>Validators.required]],
       os_network: ["", [<any>Validators.required]],
-      os_security_groups: ["", [<any>Validators.required]],
+      os_security_groups: [""],
       os_floating_ip_pool: ["", [<any>Validators.required]],
     });
   }

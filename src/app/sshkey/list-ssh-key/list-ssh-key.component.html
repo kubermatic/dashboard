@@ -14,7 +14,7 @@
                   </div>
                   <div fxFlex="10%">
                     <md-menu #appMenu="mdMenu">
-                      <button md-menu-item (click)="deleteSSHKey(key.spec.name)">Delete</button>
+                      <button md-menu-item (click)="deleteSSHKey(key)">Delete</button>
                       <button md-menu-item >Cancel</button>
                     </md-menu>
 
@@ -26,7 +26,7 @@
             </md-card-header>
             <md-card-content fxLayout="column">
                 <div fxflex class="km-ssh-key-publickey" style="margin: 0;" fxFlex>
-                    {{ key.spec.public_key }}
+                    {{ key.spec.publicKey }}
                 </div>
                 <div fxFlex class="km-fingerprint">
                   <small>Fingerprint: {{ key.spec.fingerprint }}</small>

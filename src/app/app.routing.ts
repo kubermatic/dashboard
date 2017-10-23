@@ -26,7 +26,7 @@ export const appRoutes: Routes = [
         data: { title: "Manage SSH Keys" }
       },
       {
-        path: "dc/:seedDcName/cluster/:clusterName",
+        path: "cluster/:clusterName",
         component: ClusterComponent,
         canActivate: [AuthGuard],
         data: { title: "Cluster details" }

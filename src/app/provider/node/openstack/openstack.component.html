@@ -1,6 +1,6 @@
 <form [formGroup]="osNodeForm" novalidate  fxLayout="column" (change)="onChange()">
-  <md-input-container fxFlex [ngClass]="{'has-danger': !osNodeForm.controls.node_count.valid && osNodeForm.controls.node_count.touched, 'has-success': osNodeForm.controls.node_count.valid && osNodeForm.controls.node_count.touched}">
-    <input id="node_count_osNodeForm" mdInput formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+  <md-input-container fxFlex>
+    <input id="node_count_osNodeForm" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
   </md-input-container>
 
   <md-select fxFlex  class="mat-select-content" placeholder="Node Size:" name="node_size" formControlName="node_size" (change)="onChange()">
@@ -10,7 +10,7 @@
     </md-option>
   </md-select>
 
-  <md-input-container fxFlex  [ngClass]="{'has-danger': !osNodeForm.controls.os_node_image.valid && osNodeForm.controls.os_node_image.touched, 'has-success': osNodeForm.controls.os_node_image.valid}">
-    <input id="os_node_image" mdInput formControlName="os_node_image" placeholder="Image (Ubuntu only)" title="Image">
+  <md-input-container fxFlex>
+    <input id="os_node_image" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_node_image" placeholder="Image (Ubuntu only)" title="Image">
   </md-input-container>
 </form>

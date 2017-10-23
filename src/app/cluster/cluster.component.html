@@ -1,10 +1,13 @@
-<ng-container *ngIf="!loading">
+<ng-container *ngIf="isLoaded()">
   <div fxLayout>
     <h2 fxFlex="50%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="50%" align="right" style="margin-top: 25px;">
-      <button md-raised-button color="primary" (click)="addNode()" md-raised-button [disabled]="cluster.status.phase != 'Running'">
-        <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
-        Add Node
+      <button class="add-node-btn" md-raised-button color="primary" (click)="addNode()" [disabled]="cluster.status.phase != 'Running'">
+        <div *ngIf="cluster.isRunning()">
+          <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
+          Add Node
+        </div>
+        <md-spinner *ngIf="!cluster.isRunning()" class="btn-spinner"></md-spinner>
       </button>
       <button md-raised-button color="primary" (click)="upgradeClusterDialog()"
       [disabled]="cluster.status.phase != 'Running' || upgradesList.length === 0">
@@ -32,7 +35,7 @@
     </md-card-content>
     <md-card-content class="km-card-list-content seed" fxLayout>
       <div fxFlex="20%">Master Region:</div>
-      <div fxFlex="80%"><span class="{{'flag-icon flag-icon-' + dcFlagCode}}"></span> <span class="location">{{dcLocation}}</span></div>
+      <div fxFlex="80%"><span class="{{'flag-icon flag-icon-' + seedDc.spec.country.toLowerCase()}}"></span> <span class="location">{{seedDc.spec.country}} / {{seedDc.spec.location}}</span></div>
     </md-card-content>
     <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="20%">Master Version:</div>
@@ -61,11 +64,11 @@
     </md-card-header>
     <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="25%">
-        <img src="/assets/images/clouds/{{dc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+        <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
       </div>
       <div fxFlex="35%" class="km-provider-region">
-        <span class="{{'flag-icon flag-icon-' + dc.spec.country.toLowerCase()}}"></span>
-        <span class="location">{{dc.spec.country}} / {{dc.spec.location}}</span>
+        <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
+        <span class="location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
       </div>
       <div fxFlex="40%">
         <ng-container [ngSwitch]="sshKeys.length > 0">
@@ -87,7 +90,7 @@
         <div fxFlex="5%">#</div>
         <div fxFlex="25%">Name</div>
         <div fxFlex="20%">Capacity</div>
-        <div fxFlex="15%">Version</div>
+        <div fxFlex="15%">Kubelet Version</div>
         <div fxFlex="15%">Public IP</div>
         <div fxFlex="10%" align="center">Status</div>
         <div fxFlex="10%"></div>
@@ -96,17 +99,18 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <md-card-content *ngSwitchCase="true">
-        <kubermatic-node *ngFor="let n of nodes, let i = index" [node]="n"  [index]="i + 1" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="dc.spec.provider"></kubermatic-node>
+        <kubermatic-node *ngFor="let n of nodes, let i = index" [node]="n"  [index]="i + 1" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node>
       </md-card-content>
 
-      <md-card-content  *ngSwitchCase="false" align="center">
-        No Node available. Please add a Node.
+      <md-card-content *ngSwitchCase="false" align="center">
+        <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>    
+        <md-spinner *ngIf="!cluster.isRunning() && !nodes" color="accent" class="node-list-spinner"></md-spinner>
       </md-card-content>
     </ng-container>
   </md-card>
 </ng-container>
 
 
-<div *ngIf="loading" >
+<div *ngIf="!isLoaded()">
   <md-spinner color="accent" class="km-spinner"></md-spinner>
 </div>

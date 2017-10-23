@@ -1,5 +1,5 @@
 <div *ngIf="cluster" class="km-card-list-content">
-  <div fxLayout [routerLink]="['/dc', cluster.seed,'cluster', cluster.metadata.name]">
+  <div fxLayout [routerLink]="['/cluster', cluster.metadata.name]">
     <div fxFlex="5%" fxFlex.sm="3%" fxHide.xs>{{index}}</div>
     <div fxFlex="35%" fxFlex.xs="40%">
       <span>
@@ -22,7 +22,7 @@
         </p>
       </ng-container>
     </div>
-    <div fxFlex="13%" fxHide.sm fxHide.xs>{{cluster.seed}}</div>
+    <div fxFlex="13%" fxHide.sm fxHide.xs>{{cluster.status.seed}}</div>
     <div fxFlex="13%" fxHide.sm fxHide.xs>{{cluster.spec.cloud.dc}}</div>
     <div fxFlex="13%" fxFlex.sm="20.66%" fxHide.xs>{{cluster.status.phase}}</div>
     <div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="35%">
