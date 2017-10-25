@@ -21,17 +21,19 @@
         <div fxFlex="30%">Provider</div>
         <div fxFlex="70%">
 
-          <img class="icon-provider" src="/assets/images/clouds/{{provider}}.png" height="40px" alt="{{provider}}">
+          <div class="cloud">
+            <img class="icon-provider" src="/assets/images/clouds/{{provider}}.png" height="40px" alt="{{provider}}">
+          </div>
           <div class="region">
             <span class="{{'flag-icon flag-icon-' + region.spec.country.toLowerCase()}}"></span>
-            <span>{{region.spec.country}} / {{ region.spec.location }}</span>
+            <span class="region-name">{{region.spec.country}} / {{ region.spec.location }}</span>
           </div>
         </div>
       </div>
 
       <!-- DO -->
       <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].token">
-        <div fxFlex="30%">DO Token</div>
+        <div fxFlex="30%">Digitalocean API token</div>
         <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].token}}</div>
       </div>
 
