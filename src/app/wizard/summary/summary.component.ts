@@ -2,6 +2,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {CreateNodeModel} from "../../api/model/CreateNodeModel";
 import {CreateClusterModel} from "../../api/model/CreateClusterModel";
 import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
+import {ApiService} from "../../api/api.service";
 
 @Component({
   selector: 'kubermatic-summary',
@@ -17,9 +18,23 @@ export class SummaryComponent implements OnInit {
 
   @Output() syncStep = new EventEmitter();
 
-  constructor() { }
+  public shhKeysList: string[]  = [];
 
-  ngOnInit() { }
+  constructor(private api: ApiService) { }
+
+  ngOnInit() {
+    this.api.getSSHKeys()
+      .subscribe(
+        result => {
+          for (var item of result) {
+            for (var key of this.clusterSpec.sshKeys)
+            if (item.metadata.name == key) {
+              this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
+            }
+          }
+        }
+      );
+  }
 
   public gotoStep(step: number) {
       this.syncStep.emit(step);
