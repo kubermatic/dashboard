@@ -126,12 +126,12 @@ export class WizardComponent implements OnInit {
 
     this.openStackForm = this.formBuilder.group({
       os_tenant: ["", [<any>Validators.required]],
-      os_domain: ["", [<any>Validators.required]],
+      os_domain: ["Default", [<any>Validators.required]],
       os_username: ["", [<any>Validators.required]],
       os_password: ["", [<any>Validators.required]],
-      os_network: ["", [<any>Validators.required]],
+      os_network: ["", []],
       os_security_groups: ["", []],
-      os_floating_ip_pool: ["", [<any>Validators.required]],
+      os_floating_ip_pool: ["", []],
       os_node_image: ["", [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ["", [<any>Validators.required]],
