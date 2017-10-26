@@ -266,7 +266,7 @@
             <md-card-title>
               <h4>
                 Provide credentials & settings
-                <md-slide-toggle style="float: right;" formControlName="os_cas">Extend Provider settings</md-slide-toggle>          
+                <md-slide-toggle style="float: right;" formControlName="os_cas">Extend Provider settings</md-slide-toggle>
               </h4>
             </md-card-title>
           </md-card-header>
@@ -291,17 +291,17 @@
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_password.valid || !openStackForm.controls.os_password.touched">Password is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex>
+            <md-input-container fxFlex *ngIf="openStackForm.controls['os_cas'].value">
               <input id="os_network" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_network" type="text" placeholder="Network name:" title="Network" (change)="changeOpKey()">
-              <small class="form-text text-danger" [hidden]="openStackForm.controls.os_network.valid || !openStackForm.controls.os_network.touched">Network is required.</small>
+              <small class="form-text text-danger" [hidden]="openStackForm.controls.os_network.valid || !openStackForm.controls.os_network.touched">Network.</small>
             </md-input-container>
 
             <md-input-container fxFlex *ngIf="openStackForm.controls['os_cas'].value">
-              <input id="os_security_groups" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated):" title="Security groups" (change)="changeOpKey()">
+              <input id="os_security_groups" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated - without spaces):" title="Security groups" (change)="changeOpKey()">
               <small class="form-text text-danger" [hidden]="openStackForm.controls.os_security_groups.valid || !openStackForm.controls.os_security_groups.touched">At least one security groups is required.</small>
             </md-input-container>
 
-            <md-input-container fxFlex>
+            <md-input-container fxFlex *ngIf="openStackForm.controls['os_cas'].value">
               <input id="os_floating_ip_pool" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" (change)="changeOpKey()">
             </md-input-container>
 
