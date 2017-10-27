@@ -2,12 +2,15 @@ SHELL=/bin/bash
 REPO=kubermatic/ui-v2
 TAGS=dev
 BUILD_FLAG += $(foreach tag, $(TAGS), -t $(REPO):$(tag))
-CC=npm
+CC=yarn
 
 all: install run
 
 install:
 	@$(CC) install
+
+lint:
+	./node_modules/tslint/bin/tslint -c tslint.json 'src/**/*.ts'
 
 run:
 	@$(CC) run serve:proxy
