@@ -1,10 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
-import {NodeProvider} from "../../api/model/NodeProviderConstants";
 import {ClusterSpec, CloudSpec} from "../../api/entitiy/ClusterEntity";
 import {CreateClusterModel} from "../../api/model/CreateClusterModel";
 import {CreateNodeModel} from "../../api/model/CreateNodeModel"
-import {SshKeys} from "../../api/model/SshKeysModel";
-
 
 @Component({
   selector: 'kubermatic-set-settings',
