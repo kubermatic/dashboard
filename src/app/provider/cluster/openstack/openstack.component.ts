@@ -24,9 +24,9 @@ export class OpenstackClusterComponent implements OnInit {
       os_domain: [this.cloud.domain, [<any>Validators.required]],
       os_username: [this.cloud.username, [<any>Validators.required]],
       os_password: [this.cloud.password, [<any>Validators.required]],
-      os_network: [this.cloud.network, [<any>Validators.required]],
+      os_network: [this.cloud.network],
       os_security_groups: [this.cloud.securityGroups],
-      os_floating_ip_pool: [this.cloud.floatingIpPool, [<any>Validators.required]],
+      os_floating_ip_pool: [this.cloud.floatingIpPool],
     });
   }
 
