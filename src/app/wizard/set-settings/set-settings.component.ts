@@ -1,9 +1,9 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
 import {NodeProvider} from "../../api/model/NodeProviderConstants";
 import {ClusterSpec, CloudSpec} from "../../api/entitiy/ClusterEntity";
 import {CreateClusterModel} from "../../api/model/CreateClusterModel";
+import {CreateNodeModel} from "../../api/model/CreateNodeModel"
 import {SshKeys} from "../../api/model/SshKeysModel";
-import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
 
 
 @Component({
@@ -16,32 +16,42 @@ export class SetSettingsComponent implements OnInit {
   @Input() clusterName: string;
   @Input() provider: string;
   @Input() region: string;
+  @Input() cloud: CloudSpec;
+  @Input() node: CreateNodeModel;
+  @Input() selectedSshKeys: string[];
 
   @Output() syncCluster = new EventEmitter();
+  @Output() syncCloud = new EventEmitter();
   @Output() syncNode = new EventEmitter();
   @Output() syncSshKeys = new EventEmitter();
 
-  public clusterModal: CreateClusterModel;
-  // varies between AWSCloudSpec, DigitalOceanCloudSpec, OpenstackCloudSpec
-  public getCloudSpec: any;
+  @Output() cloudValid = new EventEmitter();
+  @Output() nodeValid = new EventEmitter();
+
+  public createClusterModal: CreateClusterModel;
+
+  public cloudSpec: CloudSpec;
   public clusterSpec: ClusterSpec;
-  public getSshKeys: string[] = [];
+  public sshKeys: string[] = [];
 
   public token: string = "";
 
-  public sshKeysFormField: SshKeys[] = [{
-    aws :[],
-    digitalocean : [],
-    baremetal : [],
-    openstack : []
-  }];
-
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() {}
+
+  ngOnChanges(changes: SimpleChanges) {
+    /* TODO: Find a better solution */
+    if(!!this.cloud.digitalocean && this.cloud.digitalocean.token) {
+      this.token = this.cloud.digitalocean.token;
+    } else {
+      this.token = "";
+    }
+  }
 
   public setCloud(spec) {
-    this.getCloudSpec = spec;
+    this.cloudSpec = spec;
+    this.sshKeys = this.selectedSshKeys;
     this.createSpec();
   }
 
@@ -49,62 +59,37 @@ export class SetSettingsComponent implements OnInit {
     this.syncNode.emit(model);
   }
 
-  public setSshKeys() {
-    this.getSshKeys = this.sshKeysFormField[0][this.provider];
-    this.syncSshKeys.emit(this.sshKeysFormField[0][this.provider]);
+  public setSshKeys(keys) {
+    this.sshKeys = keys;
+    this.syncSshKeys.emit(keys);
     this.createSpec();
   }
 
+  public cloudSpecValid(value) {
+    this.cloudValid.emit(value);
+  }
+
+  public nodeSpecValid(value) {
+    this.nodeValid.emit(value);
+  }
+
   public createSpec() {
-    if (this.provider === NodeProvider.AWS) {
-      this.clusterSpec = new ClusterSpec(
-        new CloudSpec(
-          this.region,
-          null,
-          this.getCloudSpec,
-          null,
-          null,
-          null,
-        ),
-        this.clusterName,
-        "",
-      );
-
-    } else if (this.provider === NodeProvider.DIGITALOCEAN) {
-      this.clusterSpec = new ClusterSpec(
-        new CloudSpec(
-          this.region,
-          this.getCloudSpec,
-          null,
-          null,
-          null,
-          null,
-        ),
-        this.clusterName,
-        "",
-      );
-
-      this.token = this.getCloudSpec.token;
-    } else if (this.provider === NodeProvider.OPENSTACK) {
-      this.clusterSpec = new ClusterSpec(
-        new CloudSpec(
-          this.region,
-          null,
-          null,
-          null,
-          this.getCloudSpec,
-          null,
-        ),
-        this.clusterName,
-        "",
-      );
+    if (!this.cloudSpec) {
+      this.cloudSpec = this.cloud;
     }
 
-    this.clusterModal = new CreateClusterModel(
-      this.clusterSpec,
-      this.getSshKeys,
+    this.clusterSpec = new ClusterSpec(
+      this.cloudSpec,
+      this.clusterName,
+      "",
     );
 
-    this.syncCluster.emit(this.clusterModal);
+    this.createClusterModal = new CreateClusterModel(
+      this.clusterSpec,
+      this.sshKeys,
+    );
+
+    this.syncCluster.emit(this.createClusterModal);
+    this.syncCloud.emit(this.cloudSpec);
   }
 }

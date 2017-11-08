@@ -21,20 +21,22 @@ export class DigitaloceanNodeComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder,private api: ApiService, public inputValidationService: InputValidationService) { }
 
+  @Input() node: CreateNodeModel;
   @Input() doToken: string;
   @Output() syncNodeModel = new EventEmitter();
+  @Output() syncNodeSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.doNodeForm = this.formBuilder.group({
-      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: ["", [<any>Validators.required]]
+      node_count: [this.node.instances, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: [this.node.spec.digitalocean.size, [<any>Validators.required]]
     });
 
     this.getNodeSize(this.doToken);
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.getNodeSize(changes.doToken.currentValue);
+    this.getNodeSize(this.doToken);
   }
 
   public getNodeSize(token: string) {
@@ -55,10 +57,8 @@ export class DigitaloceanNodeComponent implements OnInit {
     );
     this.nodeInstances = this.doNodeForm.controls["node_count"].value;
 
-    if (this.doNodeForm.valid){
-      const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
-      this.syncNodeModel.emit(createNodeModel);
-    }
+    const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
+    this.syncNodeModel.emit(createNodeModel);
+    this.syncNodeSpecValid.emit(this.doNodeForm.valid);
   }
-
 }

@@ -1,8 +1,9 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit,Input, Output, EventEmitter} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AWSCloudSpec} from "../../../api/entitiy/cloud/AWSCloudSpec";
 
 import {InputValidationService} from '../../../services';
+import {CloudSpec} from "../../../api/entitiy/ClusterEntity";
 
 
 @Component({
@@ -13,18 +14,20 @@ import {InputValidationService} from '../../../services';
 export class AWSClusterComponent implements OnInit {
   public awsClusterForm: FormGroup;
   public cloudSpec: AWSCloudSpec;
+  @Input() cloud: AWSCloudSpec;
 
   constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
-  @Output() syncCloudSpec = new EventEmitter();
+  @Output() syncProviderCloudSpec = new EventEmitter();
+  @Output() syncProviderCloudSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.awsClusterForm = this.formBuilder.group({
-      accessKeyId: ["", [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
-      secretAccessKey: ["", [<any>Validators.required, <any>Validators.minLength(2)]],
-      vpcId: [""],
-      subnetId: [""],
-      routeTableId: [""],
+      accessKeyId: [this.cloud.accessKeyId, [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
+      secretAccessKey: [this.cloud.secretAccessKey, [<any>Validators.required, <any>Validators.minLength(2)]],
+      vpcId: [this.cloud.vpcId],
+      subnetId: [this.cloud.subnetId],
+      routeTableId: [this.cloud.routeTableId],
     });
   }
 
@@ -38,8 +41,7 @@ export class AWSClusterComponent implements OnInit {
       "",
     )
 
-    if (this.awsClusterForm.valid){
-      this.syncCloudSpec.emit(this.cloudSpec);
-    }
+    this.syncProviderCloudSpec.emit(this.cloudSpec);
+    this.syncProviderCloudSpecValid.emit(this.awsClusterForm.valid);
   }
 }

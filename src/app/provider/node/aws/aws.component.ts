@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from "@angular/forms";
 import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
 import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
@@ -19,14 +19,16 @@ export class AwsNodeComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
+  @Input() node: CreateNodeModel;
   @Output() syncNodeModel = new EventEmitter();
+  @Output() syncNodeSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.awsNodeForm = this.formBuilder.group({
-      node_count: [3, [<any>Validators.required, Validators.min(1)]],
-      node_size: ["", [<any>Validators.required]],
-      root_size: [20, [Validators.required, Validators.min(10), Validators.max(16000)]],
-      ami: [""],
+      node_count: [this.node.instances, [<any>Validators.required, Validators.min(1)]],
+      node_size: [this.node.spec.aws.instance_type, [<any>Validators.required]],
+      root_size: [this.node.spec.aws.root_size, [Validators.required, Validators.min(10), Validators.max(16000)]],
+      ami: [this.node.spec.aws.ami],
     });
   }
 
@@ -46,10 +48,9 @@ export class AwsNodeComponent implements OnInit {
     );
     this.nodeInstances = this.awsNodeForm.controls["node_count"].value;
 
-    if (this.awsNodeForm.valid){
-      const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
-      this.syncNodeModel.emit(createNodeModel);
-    }
+    const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
+    this.syncNodeModel.emit(createNodeModel);
+    this.syncNodeSpecValid.emit(this.awsNodeForm.valid);
   }
 }
 

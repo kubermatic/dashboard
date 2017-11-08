@@ -1,4 +1,4 @@
-import {Component, OnInit, EventEmitter, Output} from '@angular/core';
+import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OpenstackCloudSpec} from "../../../api/entitiy/cloud/OpenstackCloudSpec";
 
@@ -14,18 +14,19 @@ export class OpenstackClusterComponent implements OnInit {
   public cloudSpec: OpenstackCloudSpec;
 
   constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
-
-  @Output() syncCloudSpec = new EventEmitter();
+  @Input() cloud: OpenstackCloudSpec;
+  @Output() syncProviderCloudSpec = new EventEmitter();
+  @Output() syncProviderCloudSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.osClusterForm = this.formBuilder.group({
-      os_tenant: ["", [<any>Validators.required]],
-      os_domain: ["", [<any>Validators.required]],
-      os_username: ["", [<any>Validators.required]],
-      os_password: ["", [<any>Validators.required]],
-      os_network: ["", [<any>Validators.required]],
-      os_security_groups: [""],
-      os_floating_ip_pool: ["", [<any>Validators.required]],
+      os_tenant: [this.cloud.tenant, [<any>Validators.required]],
+      os_domain: [this.cloud.domain, [<any>Validators.required]],
+      os_username: [this.cloud.username, [<any>Validators.required]],
+      os_password: [this.cloud.password, [<any>Validators.required]],
+      os_network: [this.cloud.network, [<any>Validators.required]],
+      os_security_groups: [this.cloud.securityGroups],
+      os_floating_ip_pool: [this.cloud.floatingIpPool, [<any>Validators.required]],
     });
   }
 
@@ -40,8 +41,7 @@ export class OpenstackClusterComponent implements OnInit {
       this.osClusterForm.controls["os_floating_ip_pool"].value,
     )
 
-    if (this.osClusterForm.valid){
-      this.syncCloudSpec.emit(this.cloudSpec);
-    }
+    this.syncProviderCloudSpec.emit(this.cloudSpec);
+    this.syncProviderCloudSpecValid.emit(this.osClusterForm.valid);
   }
 }

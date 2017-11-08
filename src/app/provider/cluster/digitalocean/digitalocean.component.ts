@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from "@angular/forms";
 import {DigitaloceanCloudSpec} from "../../../api/entitiy/cloud/DigitialoceanCloudSpec";
 
@@ -15,11 +15,13 @@ export class DigitaloceanClusterComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
-  @Output() syncCloudSpec = new EventEmitter();
+  @Input() cloud: DigitaloceanCloudSpec;
+  @Output() syncProviderCloudSpec = new EventEmitter();
+  @Output() syncProviderCloudSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.digitalOceanClusterForm = this.formBuilder.group({
-      access_token: ["", [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
+      access_token: [this.cloud.token, [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
     });
   }
@@ -27,8 +29,8 @@ export class DigitaloceanClusterComponent implements OnInit {
   public onChange(){
     this.cloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls["access_token"].value);
 
-    if (this.digitalOceanClusterForm.valid){
-      this.syncCloudSpec.emit(this.cloudSpec);
-    }
+
+      this.syncProviderCloudSpec.emit(this.cloudSpec);
+      this.syncProviderCloudSpecValid.emit(this.digitalOceanClusterForm.valid);
   }
 }

@@ -29,10 +29,15 @@
   [clusterName]="clusterName.value"
   [provider]="selectedProvider"
   [region]="selectedProviderRegion.metadata.name"
+  [cloud]="cacheCloud"
+  [node]="cacheNode"
+  [selectedSshKeys]="selectedSshKeys"
   (syncCluster)="setCluster($event)"
   (syncCloud)="setCloud($event)"
   (syncNode)="setNode($event)"
   (syncSshKeys)="setSshKeys($event)"
+  (cloudValid)="checkCloudValid($event)"
+  (nodeValid)="checkNodeValid($event)"
 ></kubermatic-set-settings>
 
 <!-- Provider Summary: Step 5 -->
