@@ -100,14 +100,17 @@ export class WizardComponent implements OnInit {
   public setProvider(cloud: string) {
     if(this.selectedProvider != cloud){
       this.resetCachedCredentials();
+      this.selectedProviderRegion = null;
     }
 
     this.selectedProvider = cloud;
-    this.selectedProviderRegion = null;
+    this.gotoStep(2);
+
   }
 
   public setProviderRegion(cloud: DataCenterEntity) {
     this.selectedProviderRegion = cloud;
+    this.gotoStep(3);
   }
 
   public setCluster(cluster) {
