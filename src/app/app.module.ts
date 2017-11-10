@@ -7,7 +7,6 @@ import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BrowserXhr} from "@angular/http";
 
-
 import {
   MdButtonModule,
   MdIconModule,
@@ -70,17 +69,27 @@ import {HttpClientModule} from "@angular/common/http";
 import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.component";
 import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
-import {AddNodeComponent} from "./forms/add-node/add-node.component";
 import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
-import { ProviderComponent } from './wizard/provider/provider.component';
-import { DatacenterComponent } from './wizard/datacenter/datacenter.component';
-import { ClusterNameComponent } from './wizard/cluster-name/cluster-name.component';
+import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
+import { SetProviderComponent } from './wizard/set-provider/set-provider.component';
+import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
+import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 import { CustomEventService, CreateNodesService, LocalStorageService, InputValidationService } from './services';
 import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
+import { SummaryComponent } from './wizard/summary/summary.component';
+import { ProviderClusterComponent } from './provider/cluster/cluster.component'
+import { ProviderNodeComponent } from './provider/node/node.component'
+import { DigitaloceanClusterComponent } from './provider/cluster/digitalocean/digitalocean.component';
+import { AWSClusterComponent } from './provider/cluster/aws/aws.component';
+import { OpenstackClusterComponent } from './provider/cluster/openstack/openstack.component';
+import { AwsNodeComponent } from './provider/node/aws/aws.component';
+import { DigitaloceanNodeComponent } from './provider/node/digitalocean/digitalocean.component';
+import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
 import { MobileNavigationComponent } from './overlays';
+import { SetSettingsComponent } from './wizard/set-settings/set-settings.component';
 
 @NgModule({
   imports: [
@@ -145,11 +154,22 @@ import { MobileNavigationComponent } from './overlays';
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
     ProgressComponent,
-    ProviderComponent,
-    DatacenterComponent,
-    ClusterNameComponent,
+    NavigationButtonsComponent,
+    SetProviderComponent,
+    SetDatacenterComponent,
+    SetClusterNameComponent,
     UpgradeClusterComponent,
-    MobileNavigationComponent
+    SummaryComponent,
+    ProviderClusterComponent,
+    ProviderNodeComponent,
+    DigitaloceanClusterComponent,
+    AWSClusterComponent,
+    OpenstackClusterComponent,
+    AwsNodeComponent,
+    DigitaloceanNodeComponent,
+    OpenstackNodeComponent,
+    MobileNavigationComponent,
+    SetSettingsComponent
   ],
   exports: [
     RouterModule,

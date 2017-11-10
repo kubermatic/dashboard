@@ -1,0 +1,178 @@
+<div fxLayout="column"
+     fxLayout.sm="column"
+     fxLayout.xs="column"
+     fxLayoutGap="20px">
+
+  <md-card fxFlex="50%">
+    <md-card-header>
+      <md-card-title>
+        <h4>Cluster Credentials and Settings</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+
+      <!-- General -->
+      <div fxLayout class="km-card-list-content">
+        <div fxFlex="30%">Cluster name</div>
+        <div fxFlex="70%">{{ clusterSpec.cluster.humanReadableName }} <i class="fa fa-pencil" aria-hidden="true" (click)="gotoStep(0)"></i></div>
+      </div>
+
+      <div fxLayout class="km-card-list-content provider">
+        <div fxFlex="30%">Provider</div>
+        <div fxFlex="70%">
+
+          <div class="cloud">
+            <img class="icon-provider" src="/assets/images/clouds/{{provider}}.png" height="40px" alt="{{provider}}">
+          </div>
+          <div class="region">
+            <span class="{{'flag-icon flag-icon-' + region.spec.country.toLowerCase()}}"></span>
+            <span class="region-name">{{region.spec.country}} / {{ region.spec.location }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DO -->
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].token">
+        <div fxFlex="30%">Digitalocean API token</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].token}}</div>
+      </div>
+
+      <!-- AWS -->
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].access_key_id">
+        <div fxFlex="30%">Access Key ID</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].access_key_id}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].secret_access_key">
+        <div fxFlex="30%">Secret Access Key</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].secret_access_key}}</div>
+      </div>
+
+      <div class="km-card-list-content ssh-key">
+        <div fxFlex="30%">SSH Keys</div>
+        <div fxFlex="70%">
+          <ul *ngFor="let key of shhKeysList" class="km-ssh-keys-list">
+            <li><i class="fa fa-key"></i> {{key}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].vpc_id">
+        <div fxFlex="30%">VPC ID (optional)</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].vpc_id}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].subnet_id">
+        <div fxFlex="30%">Subnet ID (optional)</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].subnet_id}}</div>
+      </div>
+
+      <!-- Open Stack -->
+
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].domain">
+        <div fxFlex="30%">Domain</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].domain}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].tenant">
+        <div fxFlex="30%">Tenant/Project</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].tenant}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].username">
+        <div fxFlex="30%">Username</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].username}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].password">
+        <div fxFlex="30%">Password</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].password}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].network">
+        <div fxFlex="30%">Network name</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].network}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].security_groups">
+        <div fxFlex="30%">Security groups</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].security_groups}}</div>
+      </div>
+      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].floating_ip_pool">
+        <div fxFlex="30%">Floating IP pool</div>
+        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].floating_ip_pool}}</div>
+      </div>
+    </md-card-content>
+  </md-card>
+
+  <md-card fxFlex="50%">
+    <md-card-header>
+      <md-card-title>
+        <h4>Node Settings</h4>
+      </md-card-title>
+    </md-card-header>
+    <md-card-content>
+      <!-- General -->
+      <div fxLayout *ngIf="nodeSpec.instances" class="km-card-list-content">
+        <div fxFlex="30%">
+          Quantity of Nodes
+        </div>
+        <div fxFlex="70%">
+          {{ nodeSpec.instances }}
+        </div>
+      </div>
+
+      <!-- DO -->
+     <div fxLayout *ngIf="nodeSpec.spec[provider].size" class="km-card-list-content">
+        <div fxFlex="30%">
+          Node Size
+        </div>
+        <div fxFlex="70%">
+          {{ nodeSpec.spec[provider].size }}
+        </div>
+      </div>
+
+      <!-- AWS -->
+      <div fxLayout *ngIf="nodeSpec.spec[provider].instance_type" class="km-card-list-content">
+        <div fxFlex="30%">
+          Node Size
+        </div>
+        <div fxFlex="70%">
+          {{ nodeSpec.spec[provider].instance_type }}
+        </div>
+      </div>
+
+      <div fxLayout *ngIf=" nodeSpec.spec[provider].root_size" class="km-card-list-content">
+        <div fxFlex="30%">
+          Disk Size in GB (gb2)
+        </div>
+        <div fxFlex="70%">
+          {{ nodeSpec.spec[provider].root_size }}
+        </div>
+      </div>
+      <div fxLayout *ngIf=" nodeSpec.spec[provider].ami" class="km-card-list-content">
+        <div fxFlex="30%">
+          AMI ID (optional)
+        </div>
+        <div fxFlex="70%">
+          {{ nodeSpec.spec[provider].ami }}
+        </div>
+      </div>
+
+      <!-- Open Stack --->
+
+      <div fxLayout *ngIf=" nodeSpec.spec[provider].flavor" class="km-card-list-content">
+        <div fxFlex="30%">
+          Node Size
+        </div>
+        <div fxFlex="70%">
+          {{ nodeSpec.spec[provider].flavor }}
+        </div>
+      </div>
+
+      <div fxLayout *ngIf=" nodeSpec.spec[provider].image" class="km-card-list-content">
+        <div fxFlex="30%">
+          Image (Ubuntu only)
+        </div>
+        <div fxFlex="70%">
+          {{ nodeSpec.spec[provider].image }}
+        </div>
+      </div>
+
+    </md-card-content>
+  </md-card>
+
+</div>
+

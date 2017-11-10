@@ -1,0 +1,33 @@
+<ng-container>
+  <div   fxLayout="row"
+         fxLayout.md="column"
+         fxLayout.sm="column"
+         fxLayout.xs="column"
+         fxLayoutGap="20px" >
+    <md-card fxFlex>
+      <md-card-header>
+        <md-card-title>
+          <h4>
+            Provide credentials
+          </h4>
+        </md-card-title>
+      </md-card-header>
+      <md-card-content>
+        <kubermatic-provider-cluster [provider]="provider" [region]="region" [cloud]="cloud" (syncCloudSpec)="setCloud($event)" (syncCloudSpecValid)="cloudSpecValid($event)"></kubermatic-provider-cluster>
+        <kubermatic-ssh-key-form-field [selectedSshKeys]="selectedSshKeys" [provider]="provider" (syncSshKeys)="setSshKeys($event)"></kubermatic-ssh-key-form-field>
+      </md-card-content>
+    </md-card>
+    <md-card  fxFlex>
+      <md-card-header>
+        <md-card-title>
+          <h4>
+            Node settings
+          </h4>
+        </md-card-title>
+      </md-card-header>
+      <md-card-content fxLayout="column">
+        <kubermatic-provider-node [provider]="provider" [token]="token" [node]="node" (syncNodeModel)="setNode($event)" (syncNodeSpecValid)="nodeSpecValid($event)"></kubermatic-provider-node>
+      </md-card-content>
+    </md-card>
+  </div>
+</ng-container>
