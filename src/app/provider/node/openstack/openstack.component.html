@@ -1,0 +1,16 @@
+<form [formGroup]="osNodeForm" novalidate  fxLayout="column" (change)="onChange()">
+  <md-input-container fxFlex>
+    <input id="node_count_osNodeForm" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count" min="3" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+  </md-input-container>
+
+  <md-select fxFlex  class="mat-select-content" placeholder="Node Size:" name="node_size" formControlName="node_size" (change)="onChange()">
+    <md-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</md-option>
+    <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
+      {{size}}
+    </md-option>
+  </md-select>
+
+  <md-input-container fxFlex>
+    <input id="os_node_image" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_node_image" placeholder="Image (Ubuntu only)" title="Image">
+  </md-input-container>
+</form>

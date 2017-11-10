@@ -1,9 +1,11 @@
-<div style="width: 100%; margin-top: 10px; padding-left: 10px; padding-bottom: 5px;" [formGroup]="sshKeyForm">
+<form [formGroup]="sshKeyForm" novalidate  fxLayout="column"  >
   <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
      <div *ngSwitchCase="true">
-      <div *ngFor="let key of sshKeys">
-        <md-checkbox name="ssh_key[{{key.metadata.name}}]" formControlName="{{key.metadata.name}}" (click)="addSshKeyFrom(key.metadata.name)">{{key.spec.name + ' - ' + key.spec.fingerprint}}</md-checkbox>
-      </div>
+       <md-select fxFlex multiple  class="mat-select-content" placeholder="SSH Keys:" name="ssh_keys" formControlName="ssh_keys" (change)="change($event)">
+         <md-option *ngFor="let key of sshKeys; let i = index;" [value]="key.metadata.name">
+           {{key.spec.name + ' - ' + key.spec.fingerprint}}
+         </md-option>
+       </md-select>
     </div>
     <div *ngSwitchCase="false">
       <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
@@ -14,4 +16,4 @@
     <button style="margin-top: 10px;" md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
   </div>
   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
-</div>
+</form>

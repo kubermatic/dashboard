@@ -1,0 +1,100 @@
+$flag-icon-css-path: '~flag-icon-css/flags' !default;
+@import "~flag-icon-css/sass/flag-icon";
+
+.mat-card {
+  .mat-card-header {
+    padding: 0;
+    margin-bottom: 10px;
+  }
+
+  .mat-card-header-text {
+    margin: 0;
+  }
+
+  .mat-card-title {
+    margin: 0;
+    h4 {
+      font-weight: 400;
+      margin: 10px 0;
+      font-size: 18px;
+      color: #444D58;
+    }
+  }
+
+  .mat-card-content {
+    form {
+      padding-top: 10px;
+    }
+    p {
+      color: #444D58;
+      margin: 0 8px 5px;
+    }
+
+    i {
+      color: #0288d1;
+      cursor: pointer;
+    }
+  }
+}
+
+.km-card-list-content {
+  height: 26px;
+  line-height: 26px;
+
+  &.ssh-key {
+    height: auto;
+  }
+  &.provider  {
+    height: 50px;
+    line-height: 50px;
+
+    .icon-provider {
+      float: left;
+      padding-right: 10px;
+    }
+
+    .cloud {
+
+    }
+    .region {
+      float: left;
+
+    }
+
+    .region-name {
+      line-height: 40px;
+      display: block;
+      float: right;
+    }
+
+    .flag-icon {
+      font-size: 40px;
+      margin-right: 10px;
+    }
+
+    .location {
+      line-height: 24px;
+      position: absolute;
+    }
+  }
+
+  small {
+    color: #0288d1;
+    cursor: pointer;
+  }
+}
+
+
+.km-ssh-keys-list {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  li {
+    margin-bottom: 3px;
+    i {
+      color: #0288d1;
+      margin-right: 5px;
+      cursor: default;
+    }
+  }
+}

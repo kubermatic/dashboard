@@ -1,0 +1,22 @@
+/deep/ .mat-input-wrapper {
+  margin: 5px 0 0 0;
+}
+
+.mat-select-container {
+  padding-top: 15px;
+  padding-bottom: 20px;
+  .mat-select {
+    width: 100%;
+  }
+}
+
+.km-warning-msg {
+  background-color: rgba(255,213,92,0.1);
+  padding: 10px;
+  text-align: justify;
+
+  a {
+    color: #0288d1;
+    text-decoration: none;
+  }
+}

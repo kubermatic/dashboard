@@ -1,0 +1,13 @@
+<form [formGroup]="doNodeForm" novalidate  fxLayout="column" (change)="onChange()">
+  <md-input-container fxFlex>
+    <input id="node_count_do" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+  </md-input-container>
+  <div fxFlex class="mat-select-content">
+    <md-select fxFlex placeholder="Node Size:" name="node_size" formControlName="node_size" (change)="onChange()">
+      <md-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</md-option>
+      <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
+        {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+      </md-option>
+    </md-select>
+  </div>
+</form>
