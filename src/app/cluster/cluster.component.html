@@ -3,11 +3,8 @@
     <h2 fxFlex="50%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="50%" align="right" style="margin-top: 25px;">
       <button class="add-node-btn" md-raised-button color="primary" (click)="addNode()" [disabled]="cluster.status.phase != 'Running'">
-        <div *ngIf="cluster.isRunning()">
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
           Add Node
-        </div>
-        <md-spinner *ngIf="!cluster.isRunning()" class="btn-spinner"></md-spinner>
       </button>
       <button md-raised-button color="primary" (click)="upgradeClusterDialog()"
       [disabled]="cluster.status.phase != 'Running' || upgradesList.length === 0">
@@ -103,7 +100,7 @@
       </md-card-content>
 
       <md-card-content *ngSwitchCase="false" align="center">
-        <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>    
+        <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>
         <md-spinner *ngIf="!cluster.isRunning() && !nodes" color="accent" class="node-list-spinner"></md-spinner>
       </md-card-content>
     </ng-container>
