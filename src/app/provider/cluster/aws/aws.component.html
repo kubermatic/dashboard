@@ -12,12 +12,15 @@
     <input id="secretAccessKey" mdInput [errorStateMatcher]="inputValidationService.isValid"  formControlName="secretAccessKey" type="text" placeholder="Secret Access Key:" title="secretAccessKey">
     <small class="form-text text-danger" [hidden]="awsClusterForm.controls.secretAccessKey.valid || !awsClusterForm.controls.secretAccessKey.touched">Secret access key is required.</small>
   </md-input-container>
-  <md-input-container fxFlex>
+  <md-input-container fxFlex *ngIf="awsClusterForm.controls['aws_cas'].value">
     <input type="text" mdInput id="vpcId" name="vpcId" formControlName="vpcId"
            ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
   </md-input-container>
-  <md-input-container fxFlex>
+  <md-input-container fxFlex *ngIf="awsClusterForm.controls['aws_cas'].value">
     <input type="text" mdInput id="subnetId" name="subnetId" formControlName="subnetId"
            ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
   </md-input-container>
+  <div class="slider-box">
+    <md-slide-toggle formControlName="aws_cas">Extend Provider settings</md-slide-toggle>
+  </div>
 </form>

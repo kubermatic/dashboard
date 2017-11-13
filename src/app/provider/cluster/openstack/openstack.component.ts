@@ -27,6 +27,7 @@ export class OpenstackClusterComponent implements OnInit {
       os_network: [this.cloud.network],
       os_security_groups: [this.cloud.securityGroups],
       os_floating_ip_pool: [this.cloud.floatingIpPool],
+      os_cas: [false]
     });
   }
 
