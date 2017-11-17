@@ -1,3 +1,4 @@
+import { DatacenterService } from './../services/datacenter/datacenter.service';
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
@@ -69,13 +70,14 @@ export class WizardComponent implements OnInit {
     public dialog: MdDialog,
     private customEventService: CustomEventService,
     private createNodesService: CreateNodesService,
-    public inputValidationService: InputValidationService
+    public inputValidationService: InputValidationService,
+    public dcService: DatacenterService
   ) {}
 
 
   ngOnInit() {
     this.resetCachedCredentials();
-    this.api.getDataCenters().subscribe(result => {
+    this.dcService.getDataCenters().subscribe(result => {
       result.forEach(elem => {
         if (!elem.seed) {
           if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {

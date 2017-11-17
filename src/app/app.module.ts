@@ -51,6 +51,7 @@ import {AUTH_PROVIDERS} from "./auth/auth.provider";
 import {AuthGuard} from "./auth/auth.guard";
 import {CustomFormsModule} from "ng2-validation";
 import {ApiService} from "./api/api.service";
+import { DatacenterService } from './services/datacenter/datacenter.service';
 import {ClusterNameGenerator} from "./util/name-generator.service";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "./reducers/index";
@@ -206,6 +207,7 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     AUTH_PROVIDERS,
     Auth,
     ApiService,
+    DatacenterService,
     AuthGuard,
     ClusterNameGenerator,
     SidenavService,
