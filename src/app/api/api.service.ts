@@ -28,16 +28,6 @@ export class ApiService {
     this.headers = this.headers.set("Authorization", "Bearer " + token);
   }
 
-  getDataCenters(): Observable<DataCenterEntity[]> {
-    const url = `${this.restRoot}/dc`;
-    return this.http.get<DataCenterEntity[]>(url, { headers: this.headers });
-  }
-
-  getDataCenter(dc: string): Observable<DataCenterEntity> {
-    const url = `${this.restRoot}/dc/${dc}`;
-    return this.http.get<DataCenterEntity>(url, { headers: this.headers });
-  }
-
   getClusters(): Observable<ClusterEntity[]> {
     const url = `${this.restRoot}/cluster`;
     return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
