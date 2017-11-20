@@ -1,4 +1,4 @@
-import {Component, OnInit, EventEmitter, Output, Input, SimpleChanges} from '@angular/core';
+import {Component, OnInit, OnChanges, EventEmitter, Output, Input, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
 import {ApiService} from "../../../api/api.service";
@@ -13,7 +13,7 @@ import {InputValidationService} from '../../../services';
   templateUrl: './digitalocean.component.html',
   styleUrls: ['./digitalocean.component.scss']
 })
-export class DigitaloceanNodeComponent implements OnInit {
+export class DigitaloceanNodeComponent implements OnInit, OnChanges {
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
   public nodeSpec: NodeCreateSpec;
@@ -39,10 +39,14 @@ export class DigitaloceanNodeComponent implements OnInit {
     this.getNodeSize(this.doToken);
   }
 
-  public getNodeSize(token: string) {
+  public getNodeSize(token: string): void {
     if (token.length) {
       this.api.getDigitaloceanSizes(token).subscribe(result => {
           this.nodeSize = result.sizes;
+          if (this.nodeSize.length > 0 && this.doNodeForm.controls["node_size"].value === '') {
+            this.doNodeForm.patchValue({node_size: '4gb'});
+            this.onChange();
+          }
         }
       );
     }
@@ -56,7 +60,6 @@ export class DigitaloceanNodeComponent implements OnInit {
       null,
     );
     this.nodeInstances = this.doNodeForm.controls["node_count"].value;
-
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
     this.syncNodeModel.emit(createNodeModel);
     this.syncNodeSpecValid.emit(this.doNodeForm.valid);
