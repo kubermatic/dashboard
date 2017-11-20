@@ -11,6 +11,8 @@ export class DatacenterService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
+  private dataCenterCache: Observable<DataCenterEntity[]>;
+
   constructor(private http: HttpClient,
               private auth: Auth) { 
     const token = auth.getBearerToken();
@@ -19,7 +21,12 @@ export class DatacenterService {
 
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
-    return this.http.get<DataCenterEntity[]>(url, { headers: this.headers });
+    if  (!this.dataCenterCache) {
+      this.dataCenterCache =  this.http.get<DataCenterEntity[]>(url, { headers: this.headers })
+        .publishReplay(1)
+        .refCount();
+    }
+    return this.dataCenterCache;
   }
 
   getDataCenter(dc: string): Observable<DataCenterEntity> {
