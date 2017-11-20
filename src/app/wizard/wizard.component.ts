@@ -181,9 +181,6 @@ export class WizardComponent implements OnInit {
 
   public createClusterAndNode() {
 
-  let sub: Subscription;
-    const timer = Observable.timer(0, 10000);
-
     console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
