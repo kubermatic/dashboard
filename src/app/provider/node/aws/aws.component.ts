@@ -29,6 +29,7 @@ export class AwsNodeComponent implements OnInit {
       node_size: [this.node.spec.aws.instance_type, [<any>Validators.required]],
       root_size: [this.node.spec.aws.root_size, [Validators.required, Validators.min(10), Validators.max(16000)]],
       ami: [this.node.spec.aws.ami],
+      aws_nas: [false]
     });
   }
 

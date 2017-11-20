@@ -20,17 +20,21 @@
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_password.valid || !osClusterForm.controls.os_password.touched">Password is required.</small>
   </md-input-container>
 
-  <md-input-container fxFlex>
+  <md-input-container fxFlex *ngIf="osClusterForm.controls['os_cas'].value">
     <input id="os_network" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_network" type="text" placeholder="Network name:" title="Network" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_network.valid || !osClusterForm.controls.os_network.touched">Network.</small>
   </md-input-container>
 
-  <md-input-container fxFlex>
+  <md-input-container fxFlex *ngIf="osClusterForm.controls['os_cas'].value">
     <input id="os_security_groups" [errorStateMatcher]="inputValidationService.isValid" mdInput formControlName="os_security_groups" type="text" placeholder="Security groups (comma separated - without spaces):" title="Security groups" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_security_groups.valid || !osClusterForm.controls.os_security_groups.touched">At least one security groups is required.</small>
   </md-input-container>
 
-  <md-input-container fxFlex>
+  <md-input-container fxFlex *ngIf="osClusterForm.controls['os_cas'].value">
     <input id="os_floating_ip_pool" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_floating_ip_pool" type="text" placeholder="Floating IP pool (external network name)" title="Floating IP pool" >
   </md-input-container>
+
+  <div class="slider-box">
+    <md-slide-toggle formControlName="os_cas">Extend Provider settings</md-slide-toggle>
+  </div>
 </form>

@@ -28,6 +28,7 @@ export class AWSClusterComponent implements OnInit {
       vpcId: [this.cloud.vpcId],
       subnetId: [this.cloud.subnetId],
       routeTableId: [this.cloud.routeTableId],
+      aws_cas: [false]
     });
   }
 
