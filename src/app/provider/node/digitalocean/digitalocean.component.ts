@@ -27,6 +27,7 @@ export class DigitaloceanNodeComponent implements OnInit, OnChanges {
   @Output() syncNodeSpecValid = new EventEmitter();
 
   ngOnInit() {
+    console.log(this.node);
     this.doNodeForm = this.formBuilder.group({
       node_count: [this.node.instances, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: [this.node.spec.digitalocean.size, [<any>Validators.required]]

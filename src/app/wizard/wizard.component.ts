@@ -92,8 +92,22 @@ export class WizardComponent implements OnInit {
 
 
   public resetCachedCredentials() {
-    this.cacheCloud =  new CloudSpec('', new DigitaloceanCloudSpec(''), new AWSCloudSpec('','','','','',''), null, new OpenstackCloudSpec('','','','Default','','',''), null);
-    this.cacheNode = new CreateNodeModel(3, new NodeCreateSpec(new DigitaloceanNodeSpec(''), new AWSNodeSpec('',20,'',''), new OpenstackNodeSpec('',''), null,));
+    this.cacheCloud =  new CloudSpec(
+      '', 
+      new DigitaloceanCloudSpec(''), 
+      new AWSCloudSpec('','','','','',''), 
+      null, 
+      new OpenstackCloudSpec('','','','Default','','',''), 
+      null
+    );
+
+    this.cacheNode = new CreateNodeModel(
+      3, 
+      new NodeCreateSpec(
+        new DigitaloceanNodeSpec(''),
+        new AWSNodeSpec('t2.medium', 20, '', ''),
+        new OpenstackNodeSpec('m1.medium', ''), null)
+    );
   }
 
   public setClusterName(clusterNameChangeEvent: ClusterNameEntity) {

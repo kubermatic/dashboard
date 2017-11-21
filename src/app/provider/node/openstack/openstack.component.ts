@@ -31,7 +31,6 @@ export class OpenstackNodeComponent implements OnInit {
       node_count: [this.node.instances, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: [this.node.spec.openstack.flavor, [<any>Validators.required]],
     });
-    this.osNodeForm.patchValue({node_size: 'm1.medium'});
   }
 
   public onChange() {

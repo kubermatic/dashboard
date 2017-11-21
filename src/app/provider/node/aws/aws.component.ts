@@ -31,7 +31,6 @@ export class AwsNodeComponent implements OnInit {
       ami: [this.node.spec.aws.ami],
       aws_nas: [false]
     });
-    this.awsNodeForm.patchValue({node_size: 't2.medium'});
   }
 
   public onChange() {
