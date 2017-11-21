@@ -1,7 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router, ActivatedRoute} from "@angular/router";
 import {ApiService} from "../api/api.service";
-import { DatacenterService } from './../services/datacenter/datacenter.service';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
@@ -18,7 +17,7 @@ import {NotificationComponent} from "../notification/notification.component";
 import {NodeProvider} from "../api/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
-import {CustomEventService, CreateNodesService} from '../services';
+import { CustomEventService, CreateNodesService, DatacenterService } from '../core/services';
 import 'rxjs/add/operator/retry';
 import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
 import {UpgradeClusterComponentData} from "../api/model/UpgradeClusterDialogData";

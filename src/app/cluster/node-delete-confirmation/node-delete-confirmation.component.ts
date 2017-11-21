@@ -4,7 +4,7 @@ import * as fromRoot from "../../reducers/index";
 import {ApiService} from "../../api/api.service";
 import {NodeEntity} from "../../api/entitiy/NodeEntity";
 import {NotificationComponent} from "../../notification/notification.component";
-import {CustomEventService} from '../../services';
+import {CustomEventService} from '../../core/services';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',

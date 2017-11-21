@@ -2,7 +2,7 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from "@angular/forms";
 import {DigitaloceanCloudSpec} from "../../../api/entitiy/cloud/DigitialoceanCloudSpec";
 
-import {InputValidationService} from '../../../services';
+import {InputValidationService} from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-digitalocean',

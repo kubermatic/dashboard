@@ -77,7 +77,6 @@ import { SetProviderComponent } from './wizard/set-provider/set-provider.compone
 import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import { CustomEventService, CreateNodesService, LocalStorageService, InputValidationService, DatacenterService } from './services';
 import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
 import { SummaryComponent } from './wizard/summary/summary.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component'
@@ -90,10 +89,12 @@ import { DigitaloceanNodeComponent } from './provider/node/digitalocean/digitalo
 import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
 import { MobileNavigationComponent } from './overlays';
 import { SetSettingsComponent } from './wizard/set-settings/set-settings.component';
+import { CoreModule } from 'app/core/core.module';
 
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
@@ -206,7 +207,6 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     AUTH_PROVIDERS,
     Auth,
     ApiService,
-    DatacenterService,
     AuthGuard,
     ClusterNameGenerator,
     SidenavService,
@@ -229,11 +229,7 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
       provide: HTTP_INTERCEPTORS,
       useClass: LoaderInterceptor,
       multi: true
-    },
-    CustomEventService,
-    CreateNodesService,
-    LocalStorageService,
-    InputValidationService
+    }
   ],
   bootstrap: [KubermaticComponent]
 

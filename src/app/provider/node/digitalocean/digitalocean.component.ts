@@ -6,7 +6,7 @@ import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
 import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
 import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
 import {DigitaloceanNodeSpec} from "../../../api/entitiy/node/DigitialoceanNodeSpec";
-import {InputValidationService} from '../../../services';
+import {InputValidationService} from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-node-digitalocean',

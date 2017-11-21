@@ -6,7 +6,7 @@ import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
 import {OpenstackNodeSpec} from "../../../api/entitiy/node/OpenstackNodeSpec";
 import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
 
-import {InputValidationService} from '../../../services';
+import {InputValidationService} from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-node-openstack',

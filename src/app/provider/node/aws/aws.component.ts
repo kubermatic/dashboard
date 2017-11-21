@@ -4,7 +4,7 @@ import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
 import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
 import {AWSNodeSpec} from "../../../api/entitiy/node/AWSNodeSpec";
 import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
-import {InputValidationService} from '../../../services';
+import {InputValidationService} from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-node-aws',

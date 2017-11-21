@@ -2,7 +2,7 @@ import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OpenstackCloudSpec} from "../../../api/entitiy/cloud/OpenstackCloudSpec";
 
-import {InputValidationService} from '../../../services';
+import {InputValidationService} from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-openstack',

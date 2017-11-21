@@ -5,7 +5,7 @@ import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {NotificationComponent} from "../../notification/notification.component";
-import { InputValidationService } from '../../services';
+import { InputValidationService } from '../../core/services';
 
 @Component({
   selector: 'kubermatic-add-ssh-key',
