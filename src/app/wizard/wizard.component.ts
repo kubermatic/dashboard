@@ -1,3 +1,4 @@
+import { DatacenterService } from './../services/datacenter/datacenter.service';
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
 import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
@@ -71,13 +72,14 @@ export class WizardComponent implements OnInit {
     public dialog: MdDialog,
     private customEventService: CustomEventService,
     private createNodesService: CreateNodesService,
-    public inputValidationService: InputValidationService
+    public inputValidationService: InputValidationService,
+    public dcService: DatacenterService
   ) {}
 
 
   ngOnInit() {
     this.resetCachedCredentials();
-    this.api.getDataCenters().subscribe(result => {
+    this.dcService.getDataCenters().subscribe(result => {
       result.forEach(elem => {
           if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
             this.groupedDatacenters[elem.spec.provider] = [];
@@ -89,8 +91,23 @@ export class WizardComponent implements OnInit {
 
 
   public resetCachedCredentials() {
-    this.cacheCloud =  new CloudSpec('', new DigitaloceanCloudSpec(''), new AWSCloudSpec('','','','','',''), new BringYourOwnCloudSpec(), new OpenstackCloudSpec('','','','Default','','',''), null);
-    this.cacheNode = new CreateNodeModel(3, new NodeCreateSpec(new DigitaloceanNodeSpec(''), new AWSNodeSpec('',20,'',''), new OpenstackNodeSpec('',''), null,));
+
+    this.cacheCloud =  new CloudSpec(
+      '', 
+      new DigitaloceanCloudSpec(''), 
+      new AWSCloudSpec('','','','','',''),
+      new BringYourOwnCloudSpec(),
+      new OpenstackCloudSpec('','','','Default','','',''), 
+      null
+    );
+
+    this.cacheNode = new CreateNodeModel(
+      3, 
+      new NodeCreateSpec(
+        new DigitaloceanNodeSpec(''),
+        new AWSNodeSpec('t2.medium', 20, '', ''),
+        new OpenstackNodeSpec('m1.medium', ''), null)
+    );
   }
 
   public setClusterName(clusterNameChangeEvent: ClusterNameEntity) {
@@ -186,9 +203,6 @@ export class WizardComponent implements OnInit {
   }
 
   public createClusterAndNode() {
-
-  let sub: Subscription;
-    const timer = Observable.timer(0, 10000);
 
     console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {

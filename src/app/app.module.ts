@@ -77,7 +77,7 @@ import { SetProviderComponent } from './wizard/set-provider/set-provider.compone
 import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import { CustomEventService, CreateNodesService, LocalStorageService, InputValidationService } from './services';
+import { CustomEventService, CreateNodesService, LocalStorageService, InputValidationService, DatacenterService } from './services';
 import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
 import { SummaryComponent } from './wizard/summary/summary.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component'
@@ -208,6 +208,7 @@ import { BringyourownClusterComponent } from './provider/cluster/bringyourown/br
     AUTH_PROVIDERS,
     Auth,
     ApiService,
+    DatacenterService,
     AuthGuard,
     ClusterNameGenerator,
     SidenavService,

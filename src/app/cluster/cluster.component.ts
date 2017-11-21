@@ -1,6 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Router, ActivatedRoute} from "@angular/router";
 import {ApiService} from "../api/api.service";
+import { DatacenterService } from './../services/datacenter/datacenter.service';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
@@ -53,7 +54,8 @@ export class ClusterComponent implements OnInit {
     private api: ApiService,
     private store: Store<fromRoot.State>,
     public dialog: MdDialog,
-    private createNodesService: CreateNodesService
+    private createNodesService: CreateNodesService,
+    private dcService: DatacenterService
   ) {}
 
   ngOnInit() {
@@ -80,8 +82,8 @@ export class ClusterComponent implements OnInit {
   }
 
   loadDataCenter(dcName, dcObjectName):void {
-    this.api.getDataCenter(dcName).subscribe(res =>
 
+    this.dcService.getDataCenter(dcName).subscribe(res =>
       this[dcObjectName] = new DataCenterEntity(res.metadata, res.spec, res.seed));
   }
 
