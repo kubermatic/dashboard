@@ -1,8 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {BringYourOwnCloudSpec} from "../../../api/entitiy/cloud/BringYourOwnCloudSpec";
 
-
-
 @Component({
   selector: 'kubermatic-cluster-bringyourown',
   templateUrl: './bringyourown.component.html',
@@ -18,6 +16,5 @@ export class BringyourownClusterComponent implements OnInit {
     this.syncProviderCloudSpec.emit(this.cloud);
     this.syncProviderCloudSpecValid.emit(true);
   }
-
 
 }
