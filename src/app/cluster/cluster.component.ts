@@ -57,7 +57,6 @@ export class ClusterComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-
     this.route.params.subscribe(params => {
       this.clusterName = params["clusterName"];
       this.sub = this.timer.subscribe(() => this.refreshData());
@@ -82,6 +81,7 @@ export class ClusterComponent implements OnInit {
 
   loadDataCenter(dcName, dcObjectName):void {
     this.api.getDataCenter(dcName).subscribe(res =>
+
       this[dcObjectName] = new DataCenterEntity(res.metadata, res.spec, res.seed));
   }
 
@@ -118,11 +118,15 @@ export class ClusterComponent implements OnInit {
             res.status,
           );
 
-          if(!this.seedDc) {
+          if(!this.seedDc && this.cluster.provider !== NodeProvider.BRINGYOUROWN) {
             this.loadDataCenter(this.cluster.status.seed, 'seedDc');
           }
 
-          if(!this.nodeDc) {
+          if(!this.seedDc && this.cluster.provider == NodeProvider.BRINGYOUROWN) {
+            this.loadDataCenter(this.cluster.spec.seedDatacenterName, 'seedDc');
+          }
+
+          if(!this.nodeDc && this.cluster.provider !== NodeProvider.BRINGYOUROWN) {
             this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
           }
 
@@ -186,6 +190,10 @@ export class ClusterComponent implements OnInit {
   }
 
   public isLoaded() {
-    return this.seedDc && this.nodeDc;
+    if (this.cluster && this.cluster.provider == NodeProvider.BRINGYOUROWN) {
+      return this.seedDc;
+    } else if (this.cluster) {
+      return this.seedDc && this.nodeDc;
+    }
   }
 }

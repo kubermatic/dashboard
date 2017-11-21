@@ -1,8 +1,8 @@
 <ng-container *ngIf="isLoaded()">
-  <div fxLayout>
+  <div fxLayout >
     <h2 fxFlex="50%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="50%" align="right" style="margin-top: 25px;">
-      <button class="add-node-btn" md-raised-button color="primary" (click)="addNode()" [disabled]="cluster.status.phase != 'Running'">
+      <button class="add-node-btn" md-raised-button color="primary" (click)="addNode()" [disabled]="cluster.status.phase != 'Running'" [fxHide]="cluster.provider == 'bringyourown'">
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
           Add Node
       </button>
@@ -61,11 +61,20 @@
     </md-card-header>
     <md-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="25%">
-        <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+
+        <ng-container *ngIf="cluster.provider == 'bringyourown'">
+          <img src="/assets/images/clouds/{{cluster.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+        </ng-container>
+
+        <ng-container *ngIf="cluster.provider !== 'bringyourown'">
+          <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+        </ng-container>
       </div>
-      <div fxFlex="35%" class="km-provider-region">
-        <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
-        <span class="location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
+      <div fxFlex="35%" class="km-provider-region" >
+        <ng-container *ngIf="cluster.provider !== 'bringyourown'">
+          <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
+          <span class="location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
+        </ng-container>
       </div>
       <div fxFlex="40%">
         <ng-container [ngSwitch]="sshKeys.length > 0">
@@ -81,7 +90,7 @@
     </md-card-content>
   </md-card>
 
-  <md-card class="km-card-list" style="margin-bottom: 70px;">
+  <md-card class="km-card-list">
     <md-card-header class="km-card-list-header" >
       <md-card-title fxLayout>
         <div fxFlex="5%">#</div>
@@ -105,6 +114,17 @@
       </md-card-content>
     </ng-container>
   </md-card>
+
+  <md-card [fxShow]="cluster.provider == 'bringyourown'">
+    <md-card-content>
+      <div class="code-block">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p><p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+      </div>
+    </md-card-content>
+  </md-card>
+  <div  style="margin-bottom: 70px;"></div>
 </ng-container>
 
 

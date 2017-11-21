@@ -54,6 +54,7 @@
 <kubermatic-navigation-buttons
   [step]="currentStep"
   [nextStep]="canGotoStep(currentStep)"
+  [provider]="selectedProvider"
   (syncStep)="gotoStep($event)"
 ></kubermatic-navigation-buttons>
 

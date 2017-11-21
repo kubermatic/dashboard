@@ -1,9 +1,11 @@
-<ng-container>
+<ng-container >
   <div   fxLayout="row"
          fxLayout.md="column"
          fxLayout.sm="column"
          fxLayout.xs="column"
-         fxLayoutGap="20px" >
+         fxLayoutGap="20px"
+         [fxShow]="provider != 'bringyourown'">
+
     <md-card fxFlex>
       <md-card-header>
         <md-card-title>
@@ -30,4 +32,19 @@
       </md-card-content>
     </md-card>
   </div>
+  <div fxLayout="row" [fxShow]="provider == 'bringyourown'">
+    <md-card fxFlex>
+      <md-card-header>
+        <md-card-title>
+          <h4>
+            Provide credentials
+          </h4>
+        </md-card-title>
+      </md-card-header>
+      <md-card-content class="byo-content">
+        <md-spinner class="km-spinner" color="accent" ></md-spinner>
+      </md-card-content>
+    </md-card>
+  </div>
+
 </ng-container>

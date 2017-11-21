@@ -20,6 +20,8 @@ import {AWSNodeSpec} from "../api/entitiy/node/AWSNodeSpec";
 import {DigitaloceanNodeSpec} from "../api/entitiy/node/DigitialoceanNodeSpec";
 import {AWSCloudSpec} from "../api/entitiy/cloud/AWSCloudSpec";
 import {OpenstackCloudSpec} from "../api/entitiy/cloud/OpenstackCloudSpec";
+import {BringYourOwnCloudSpec} from "../api/entitiy/cloud/BringYourOwnCloudSpec";
+import {setInterval} from "timers";
 
 @Component({
   selector: "kubermatic-wizard",
@@ -77,20 +79,17 @@ export class WizardComponent implements OnInit {
     this.resetCachedCredentials();
     this.api.getDataCenters().subscribe(result => {
       result.forEach(elem => {
-        if (!elem.seed) {
           if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
             this.groupedDatacenters[elem.spec.provider] = [];
           }
-
           this.groupedDatacenters[elem.spec.provider].push(elem);
-        }
       });
     });
   }
 
 
   public resetCachedCredentials() {
-    this.cacheCloud =  new CloudSpec('', new DigitaloceanCloudSpec(''), new AWSCloudSpec('','','','','',''), null, new OpenstackCloudSpec('','','','Default','','',''), null);
+    this.cacheCloud =  new CloudSpec('', new DigitaloceanCloudSpec(''), new AWSCloudSpec('','','','','',''), new BringYourOwnCloudSpec(), new OpenstackCloudSpec('','','','Default','','',''), null);
     this.cacheNode = new CreateNodeModel(3, new NodeCreateSpec(new DigitaloceanNodeSpec(''), new AWSNodeSpec('',20,'',''), new OpenstackNodeSpec('',''), null,));
   }
 
@@ -120,6 +119,10 @@ export class WizardComponent implements OnInit {
 
   public setCloud(cloud) {
     this.cacheCloud = cloud;
+    if(this.selectedProvider == 'bringyourown') {
+      this.gotoStep(4);
+    }
+
   }
 
   public setNode(node) {
@@ -144,7 +147,12 @@ export class WizardComponent implements OnInit {
       case 5:
         this.createClusterAndNode();
         break;
-
+      case 2: {
+        this.currentStep = step;
+      }
+      case 3: {
+          this.currentStep = step;
+      }
       default:
         this.currentStep = step;
     }
@@ -159,7 +167,7 @@ export class WizardComponent implements OnInit {
       case 2:
         return !!this.selectedProviderRegion;
       case 3:
-          if(!this.selectedSshKeys) {
+          if(!this.selectedSshKeys.length) {
             return false;
           } else if (this.clusterModalValid && this.nodeModalValid){
             return true;
@@ -187,7 +195,9 @@ export class WizardComponent implements OnInit {
         NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
         this.router.navigate(["/cluster/" + cluster.metadata.name]);
 
-        this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
+          if (this.selectedProvider !== "bringyourown") {
+            this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
+          }
 
       },
       error => {
