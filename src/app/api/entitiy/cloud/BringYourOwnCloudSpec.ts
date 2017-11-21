@@ -1,1 +1,1 @@
-export class BringYourOwnCloudSpec { }
+export class BringYourOwnCloudSpec {}
