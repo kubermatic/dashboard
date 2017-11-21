@@ -17,12 +17,10 @@ export class CreateNodesService {
     constructor(
         private api: ApiService,
         private localStorageService: LocalStorageService,
-        private store: Store<fromRoot.State>
-    )
-    {
+        private store: Store<fromRoot.State>) {
         let nodesData = this.localStorageService.getNodesData();
 
-        if(nodesData) {
+        if (nodesData) {
             this.createInitialClusterNodes(nodesData.cluster, nodesData.createNodeModel);
             this.hasData = true;
         }
@@ -30,7 +28,7 @@ export class CreateNodesService {
 
     public createInitialClusterNodes(cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
 
-        if(!this.localStorageService.getNodesData()) {
+        if (!this.localStorageService.getNodesData()) {
             this.localStorageService.setNodesCreationData({
                 cluster: cluster,
                 createNodeModel: createNodeModel
@@ -41,7 +39,7 @@ export class CreateNodesService {
         this.sub = this.timer.subscribe(() => {
             this.api.getCluster(cluster.metadata.name)
                 .subscribe(cluster => {
-                    if (cluster.status.phase == "Running") {
+                    if (cluster.status.phase === "Running") {
                         this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
                             this.preventCreatingInitialClusterNodes();
                             NotificationComponent.success(this.store, "Success", `Creating Nodes`);
