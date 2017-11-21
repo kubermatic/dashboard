@@ -6,7 +6,6 @@ export class AWSCloudSpec {
   routeTableId: string;
   securityGroup: string;
 
-
   constructor(
     accessKeyId: string,
     secretAccessKey: string,

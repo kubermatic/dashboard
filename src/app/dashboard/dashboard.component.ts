@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {Auth} from "../auth/auth.service";
+import {Auth} from "../core/services";
 import {Router, NavigationEnd, ActivatedRoute} from "@angular/router";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";

@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {Auth} from "../auth/auth.service";
+import {Auth} from "../core/services";
 
 import {SidenavService} from "../sidenav/sidenav.service";
 import {Store} from "@ngrx/store";

@@ -1,3 +1,5 @@
+import { ApiService } from 'app/api/api.service';
+import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {BrowserModule} from "@angular/platform-browser";
@@ -45,14 +47,9 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {SshkeyComponent} from "./sshkey/sshkey.component";
 import {NotificationComponent} from "./notification/notification.component";
-import {Auth} from "./auth/auth.service";
 import {appRoutes} from "./app.routing";
-import {AUTH_PROVIDERS} from "./auth/auth.provider";
-import {AuthGuard} from "./auth/auth.guard";
 import {CustomFormsModule} from "ng2-validation";
-import {ApiService} from "./api/api.service";
 import {ClusterNameGenerator} from "./util/name-generator.service";
-import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
@@ -204,10 +201,7 @@ import { CoreModule } from 'app/core/core.module';
     MobileNavigationComponent
   ],
   providers: [
-    AUTH_PROVIDERS,
-    Auth,
     ApiService,
-    AuthGuard,
     ClusterNameGenerator,
     SidenavService,
     NodeDeleteConfirmationService,

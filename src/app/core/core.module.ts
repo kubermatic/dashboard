@@ -1,15 +1,24 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { StoreModule } from "@ngrx/store";
+import {HttpModule, BrowserXhr} from "@angular/http";
+import {HttpClientModule} from "@angular/common/http";
 
 import {
   CreateNodesService,
   CustomEventService,
   DatacenterService,
   InputValidationService,
-  LocalStorageService
+  LocalStorageService,
+  AUTH_PROVIDERS,
+  Auth,
+  AuthGuard
 } from './services';
 
 const services: any[] = [
+  AUTH_PROVIDERS,
+  Auth,
+  AuthGuard,
   CreateNodesService,
   CustomEventService,
   DatacenterService,

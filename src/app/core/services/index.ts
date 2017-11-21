@@ -1,3 +1,6 @@
+import { AUTH_PROVIDERS } from './auth/auth.provider';
+import { AuthGuard } from './auth/auth.guard';
+import { Auth } from './auth/auth.service';
 import { DatacenterService } from './datacenter/datacenter.service';
 import { CustomEventService } from './custom-event/custom-event.service';
 import { CreateNodesService } from './create-nodes/create-nodes.service';
@@ -9,5 +12,8 @@ export {
     CreateNodesService,
     LocalStorageService,
     InputValidationService,
-    DatacenterService
+    DatacenterService,
+    Auth,
+    AuthGuard,
+    AUTH_PROVIDERS
 }

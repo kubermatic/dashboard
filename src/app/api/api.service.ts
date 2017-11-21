@@ -6,7 +6,7 @@ import {CreateNodeModel} from "./model/CreateNodeModel";
 import {DataCenterEntity} from "./entitiy/DatacenterEntity";
 import {ClusterEntity} from "./entitiy/ClusterEntity";
 import {NodeEntity} from "./entitiy/NodeEntity";
-import {Auth} from "../auth/auth.service";
+import {Auth} from "../core/services/auth/auth.service";
 import {SSHKeyEntity} from "./entitiy/SSHKeyEntity";
 import {OpenStack} from 'openstack-lib';
 import {HttpClient, HttpHeaders} from "@angular/common/http";

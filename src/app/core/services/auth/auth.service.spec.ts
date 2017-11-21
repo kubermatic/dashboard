@@ -6,7 +6,7 @@ import {HttpModule} from "@angular/http";
 import {BrowserModule} from "@angular/platform-browser";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../reducers/index";
+import {combinedReducer} from "../../../reducers/index";
 
 describe("Auth", () => {
   beforeEach(() => {

@@ -11,10 +11,10 @@ export class NodeProvider {
   public static readonly Supported: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.OPENSTACK];
 }
 
-export class NodeInstanceFlavors {
-  public static readonly AWS: string[] = ["t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "m4.large",
+export namespace NodeInstanceFlavors {
+  export const AWS: string[] = ["t2.nano", "t2.micro", "t2.small", "t2.medium", "t2.large", "m4.large",
     "m4.xlarge", "m4.2xlarge", "m4.4xlarge", "m4.10xlarge", "m4.16xlarge",
     "m3.medium", "m3.large", "m3.xlarge", "m3.2xlarge"];
-  public static readonly Openstack: string[] = ["m1.micro", "m1.tiny", "m1.small", "m1.medium", "m1.large"];
-  public static readonly VOID: string[] = [];
+  export const Openstack: string[] = ["m1.micro", "m1.tiny", "m1.small", "m1.medium", "m1.large"];
+  export const VOID: string[] = [];
 }
