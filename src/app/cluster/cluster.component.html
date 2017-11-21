@@ -1,5 +1,5 @@
 <ng-container *ngIf="isLoaded()">
-  <div fxLayout >
+  <div fxLayout>
     <h2 fxFlex="50%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="50%" align="right" style="margin-top: 25px;">
       <button class="add-node-btn" md-raised-button color="primary" (click)="addNode()" [disabled]="cluster.status.phase != 'Running'" [fxHide]="cluster.provider == 'bringyourown'">

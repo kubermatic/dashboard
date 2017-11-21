@@ -191,11 +191,11 @@ export class ClusterComponent implements OnInit {
     return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
 
-  public isLoaded() {
+  public isLoaded(): boolean {
     if (this.cluster && this.cluster.provider == NodeProvider.BRINGYOUROWN) {
-      return this.seedDc;
+      return !!this.seedDc;
     } else if (this.cluster) {
-      return this.seedDc && this.nodeDc;
+      return !!this.seedDc && !!this.nodeDc;
     }
   }
 }
