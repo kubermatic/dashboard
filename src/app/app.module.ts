@@ -51,7 +51,6 @@ import {AUTH_PROVIDERS} from "./auth/auth.provider";
 import {AuthGuard} from "./auth/auth.guard";
 import {CustomFormsModule} from "ng2-validation";
 import {ApiService} from "./api/api.service";
-import { DatacenterService } from './services/datacenter/datacenter.service';
 import {ClusterNameGenerator} from "./util/name-generator.service";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "./reducers/index";
@@ -78,7 +77,7 @@ import { SetProviderComponent } from './wizard/set-provider/set-provider.compone
 import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import { CustomEventService, CreateNodesService, LocalStorageService, InputValidationService } from './services';
+import { CustomEventService, CreateNodesService, LocalStorageService, InputValidationService, DatacenterService } from './services';
 import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
 import { SummaryComponent } from './wizard/summary/summary.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component'

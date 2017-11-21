@@ -35,7 +35,7 @@ export class ApiService {
 
   getCluster(cluster: string): Observable<ClusterEntity> {
     const url = `${this.restRoot}/cluster/${cluster}`;
-    return this.http.get<ClusterEntity>(url, { headers: this.headers })
+    return this.http.get<ClusterEntity>(url, { headers: this.headers });
   }
 
   createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
