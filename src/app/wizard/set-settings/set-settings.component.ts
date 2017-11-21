@@ -24,6 +24,7 @@ export class SetSettingsComponent implements OnInit {
 
   @Output() cloudValid = new EventEmitter();
   @Output() nodeValid = new EventEmitter();
+  @Output() goToNextStep = new EventEmitter();
 
   public createClusterModal: CreateClusterModel;
 
@@ -79,6 +80,7 @@ export class SetSettingsComponent implements OnInit {
       this.cloudSpec,
       this.clusterName,
       "",
+      this.region,
     );
 
     this.createClusterModal = new CreateClusterModel(

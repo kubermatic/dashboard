@@ -47,7 +47,7 @@
         <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].secret_access_key}}</div>
       </div>
 
-      <div class="km-card-list-content ssh-key">
+      <div class="km-card-list-content ssh-key" *ngIf="shhKeysList.length">
         <div fxFlex="30%">SSH Keys</div>
         <div fxFlex="70%">
           <ul *ngFor="let key of shhKeysList" class="km-ssh-keys-list">
@@ -97,7 +97,7 @@
     </md-card-content>
   </md-card>
 
-  <md-card fxFlex="50%">
+  <md-card fxFlex="50%" *ngIf="provider !== 'bringyourown'">
     <md-card-header>
       <md-card-title>
         <h4>Node Settings</h4>

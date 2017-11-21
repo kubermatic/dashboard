@@ -10,3 +10,8 @@
                               [cloud]="cloud.openstack"
                               (syncProviderCloudSpec)="setCloud($event)"
                               (syncProviderCloudSpecValid)="valid($event)"></kubermatic-cluster-openstack>
+<kubermatic-cluster-bringyourown *ngIf="provider == 'bringyourown'"
+                              [cloud]="cloud.bringyourown"
+                              (syncProviderCloudSpec)="setCloud($event)"
+                              (syncProviderCloudSpecValid)="valid($event)"></kubermatic-cluster-bringyourown>
+

@@ -53,6 +53,15 @@ export class ProviderClusterComponent implements OnInit {
         providerCloudSpec,
         null,
       )
+    } else if(this.provider == NodeProvider.BRINGYOUROWN) {
+      this.cloudSpec = new CloudSpec(
+        null,
+        null,
+        null,
+        providerCloudSpec,
+        null,
+        null,
+      )
     }
 
     this.syncCloudSpec.emit(this.cloudSpec);

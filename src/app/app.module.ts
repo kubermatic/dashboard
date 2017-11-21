@@ -90,6 +90,7 @@ import { DigitaloceanNodeComponent } from './provider/node/digitalocean/digitalo
 import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
 import { MobileNavigationComponent } from './overlays';
 import { SetSettingsComponent } from './wizard/set-settings/set-settings.component';
+import { BringyourownClusterComponent } from './provider/cluster/bringyourown/bringyourown.component';
 
 @NgModule({
   imports: [
@@ -169,7 +170,8 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     DigitaloceanNodeComponent,
     OpenstackNodeComponent,
     MobileNavigationComponent,
-    SetSettingsComponent
+    SetSettingsComponent,
+    BringyourownClusterComponent
   ],
   exports: [
     RouterModule,
