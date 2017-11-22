@@ -1,4 +1,6 @@
-import {Routes} from '@angular/router';
+import { NgModule } from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {AuthGuard} from "./core/services";
@@ -8,7 +10,7 @@ import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {SshkeyComponent} from "./sshkey/sshkey.component";
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 
-export const appRoutes: Routes = [
+const appRoutes: Routes = [
   {
     path: "",
     component: DashboardComponent,
@@ -53,5 +55,11 @@ export const appRoutes: Routes = [
     redirectTo: "404"
   },
 ];
+
+@NgModule({
+  imports: [ RouterModule.forRoot(appRoutes) ],
+  exports: [ RouterModule ]
+})
+export class AppRoutingModule {}
 
 

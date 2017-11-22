@@ -3,7 +3,7 @@ import { Component, ViewChild} from "@angular/core";
 
 
 import { MdSidenav } from '@angular/material';
-import { SidenavService } from './sidenav/sidenav.service';
+import { SidenavService } from './core/components/sidenav/sidenav.service';
 
 @Component({
   selector: "kubermatic-root",

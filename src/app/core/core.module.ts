@@ -2,9 +2,13 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { HttpModule, BrowserXhr } from "@angular/http";
+import { RouterModule } from '@angular/router';
 
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { SidenavService } from './components/sidenav/sidenav.service';
 import { ClusterNameGenerator } from './util/name-generator.service';
 import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
+import { SharedModule } from 'app/shared/shared.module';
 import { 
   CreateNodesService,
   CustomEventService,
@@ -19,6 +23,18 @@ import {
   CheckTokenInterceptor, 
   ErrorNotificationsInterceptor } from './interceptors';
 
+const modules: any[] = [
+  CommonModule,
+  HttpModule,
+  HttpClientModule,
+  RouterModule,
+  SharedModule
+];
+
+const components: any[] = [
+  SidenavComponent
+];
+
 const services: any[] = [
   AUTH_PROVIDERS,
   Auth,
@@ -28,7 +44,8 @@ const services: any[] = [
   DatacenterService,
   InputValidationService,
   LocalStorageService,
-  ClusterNameGenerator
+  ClusterNameGenerator,
+  SidenavService
 ];
 
 const interceptors: any[] = [
@@ -51,11 +68,11 @@ const interceptors: any[] = [
 
 @NgModule({
   imports: [
-    CommonModule,
-    HttpModule,
-    HttpClientModule,
+    ...modules
   ],
-  declarations: [],
+  declarations: [
+    ...components
+  ],
   providers: [
     ...services,
     ...interceptors,
@@ -63,6 +80,9 @@ const interceptors: any[] = [
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr
     }
+  ],
+  exports: [
+    ...components
   ]
 })
 export class CoreModule {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Auth} from "../core/services";
-import { environment } from "../../environments/environment";
+import {Auth} from "../../services";
+import { environment } from "../../../../environments/environment";
 
 @Component({
   selector: 'kubermatic-sidenav',

@@ -1,34 +1,9 @@
 import { ApiService } from 'app/api/api.service';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import {BrowserModule} from "@angular/platform-browser";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {CommonModule} from "@angular/common";
-import {ReactiveFormsModule, FormsModule} from "@angular/forms";
-// import {HttpModule, BrowserXhr} from "@angular/http";
-
-import {
-  MdButtonModule,
-  MdIconModule,
-  MdInputModule,
-  MdListModule,
-  MdProgressSpinnerModule,
-  MdSidenavModule,
-  MdSnackBarModule,
-  MdToolbarModule,
-  MdTooltipModule,
-  MdSelectModule,
-  MdCheckboxModule,
-  MdMenuModule,
-  MdCardModule,
-  MdDialogModule,
-  MdSliderModule,
-  OverlayModule,
-  MdSlideToggleModule,
-  MdProgressBarModule
-} from '@angular/material';
 
 import 'hammerjs';
 import {FlexLayoutModule} from "@angular/flex-layout";
@@ -47,15 +22,13 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {SshkeyComponent} from "./sshkey/sshkey.component";
 import {NotificationComponent} from "./notification/notification.component";
-import {appRoutes} from "./app.routing";
+import {AppRoutingModule} from "./app.routing";
 import {CustomFormsModule} from "ng2-validation";
 import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import {ListSshKeyComponent} from './sshkey/list-ssh-key/list-ssh-key.component';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { SidenavService } from './sidenav/sidenav.service';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
@@ -81,42 +54,21 @@ import { DigitaloceanNodeComponent } from './provider/node/digitalocean/digitalo
 import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
 import { MobileNavigationComponent } from './overlays';
 import { SetSettingsComponent } from './wizard/set-settings/set-settings.component';
+import { SharedModule } from './shared/shared.module';
 import { CoreModule } from 'app/core/core.module';
 
 @NgModule({
   imports: [
-    CommonModule,
     CoreModule,
     BrowserModule,
     BrowserAnimationsModule,
-    FormsModule,
-    ReactiveFormsModule,
-    RouterModule.forRoot(appRoutes),
+    SharedModule,
+    AppRoutingModule,
     CustomFormsModule,
     StoreModule.provideStore(combinedReducer),
     SimpleNotificationsModule.forRoot(),
     SlimLoadingBarModule.forRoot(),
     FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MdButtonModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdProgressSpinnerModule,
-    MdSidenavModule,
-    MdSnackBarModule,
-    MdToolbarModule,
-    MdTooltipModule,
-    MdSelectModule,
-    MdCheckboxModule,
-    MdMenuModule,
-    MdCardModule,
-    MdDialogModule,
-    MdSliderModule,
-    OverlayModule,
-    MdSlideToggleModule,
-    MdProgressBarModule,
     ClipboardModule
   ],
   declarations: [
@@ -136,7 +88,6 @@ import { CoreModule } from 'app/core/core.module';
     NodeDeleteConfirmationComponent,
     AddSshKeyComponent,
     ListSshKeyComponent,
-    SidenavComponent,
     AddSshKeyModalComponent,
     ClusterHealthStatusComponent,
     PageNotFoundComponent,
@@ -162,27 +113,6 @@ import { CoreModule } from 'app/core/core.module';
     MobileNavigationComponent,
     SetSettingsComponent
   ],
-  exports: [
-    RouterModule,
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MdButtonModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdProgressSpinnerModule,
-    MdSidenavModule,
-    MdSnackBarModule,
-    MdToolbarModule,
-    MdTooltipModule,
-    MdSelectModule,
-    MdCheckboxModule,
-    MdMenuModule,
-    MdCardModule,
-    MdSliderModule,
-    OverlayModule
-  ],
   entryComponents: [
     ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
@@ -195,7 +125,6 @@ import { CoreModule } from 'app/core/core.module';
   ],
   providers: [
     ApiService,
-    SidenavService,
     NodeDeleteConfirmationService
   ],
   bootstrap: [KubermaticComponent]

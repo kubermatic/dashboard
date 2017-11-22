@@ -15,8 +15,8 @@ import {NotificationComponent} from "./notification/notification.component";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import { MaterialModule } from '@angular/material';
-import { SidenavComponent } from './sidenav/sidenav.component';
-import { SidenavService} from './sidenav/sidenav.service';
+import { SidenavComponent } from './core/components/sidenav/sidenav.component';
+import { SidenavService} from './core/components/sidenav/sidenav.service';
 import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
 
 describe("KubermaticComponent", () => {

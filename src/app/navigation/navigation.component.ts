@@ -1,7 +1,7 @@
 import {Component, OnInit} from "@angular/core";
 import {Auth} from "../core/services";
 
-import {SidenavService} from "../sidenav/sidenav.service";
+import {SidenavService} from "../core/components/sidenav/sidenav.service";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Router} from '@angular/router';
