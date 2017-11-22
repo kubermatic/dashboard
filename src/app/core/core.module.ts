@@ -1,7 +1,10 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HTTP_INTERCEPTORS } from "@angular/common/http";
+import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
+import { HttpModule, BrowserXhr } from "@angular/http";
 
+import { ClusterNameGenerator } from './util/name-generator.service';
+import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
 import { 
   CreateNodesService,
   CustomEventService,
@@ -24,7 +27,8 @@ const services: any[] = [
   CustomEventService,
   DatacenterService,
   InputValidationService,
-  LocalStorageService
+  LocalStorageService,
+  ClusterNameGenerator
 ];
 
 const interceptors: any[] = [
@@ -47,12 +51,18 @@ const interceptors: any[] = [
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    HttpModule,
+    HttpClientModule,
   ],
   declarations: [],
   providers: [
     ...services,
-    ...interceptors
+    ...interceptors,
+    {
+      provide: BrowserXhr,
+      useClass: ProgressBrowserXhr
+    }
   ]
 })
 export class CoreModule {

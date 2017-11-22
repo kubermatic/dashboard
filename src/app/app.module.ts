@@ -7,7 +7,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {CommonModule} from "@angular/common";
 import {ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {HttpModule, BrowserXhr} from "@angular/http";
+// import {HttpModule, BrowserXhr} from "@angular/http";
 
 import {
   MdButtonModule,
@@ -49,11 +49,9 @@ import {SshkeyComponent} from "./sshkey/sshkey.component";
 import {NotificationComponent} from "./notification/notification.component";
 import {appRoutes} from "./app.routing";
 import {CustomFormsModule} from "ng2-validation";
-import {ClusterNameGenerator} from "./util/name-generator.service";
 import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
-import {ProgressBrowserXhr} from "./util/ProgressBrowserXhr";
 import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import {ListSshKeyComponent} from './sshkey/list-ssh-key/list-ssh-key.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
@@ -62,11 +60,9 @@ import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-form-field.component';
-import {HttpClientModule} from "@angular/common/http";
 import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.component";
 import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
-// import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
@@ -74,7 +70,6 @@ import { SetProviderComponent } from './wizard/set-provider/set-provider.compone
 import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-// import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
 import { SummaryComponent } from './wizard/summary/summary.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component'
 import { ProviderNodeComponent } from './provider/node/node.component'
@@ -96,8 +91,6 @@ import { CoreModule } from 'app/core/core.module';
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule,
-    HttpClientModule,
     RouterModule.forRoot(appRoutes),
     CustomFormsModule,
     StoreModule.provideStore(combinedReducer),
@@ -202,31 +195,10 @@ import { CoreModule } from 'app/core/core.module';
   ],
   providers: [
     ApiService,
-    ClusterNameGenerator,
     SidenavService,
-    NodeDeleteConfirmationService,
-    {
-      provide: BrowserXhr,
-      useClass: ProgressBrowserXhr
-    },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: ErrorNotificationsInterceptor,
-    //   multi: true
-    // },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: CheckTokenInterceptor,
-    //   multi: true
-    // },
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: LoaderInterceptor,
-    //   multi: true
-    // }
+    NodeDeleteConfirmationService
   ],
   bootstrap: [KubermaticComponent]
-
 })
 
 export class AppModule { }

@@ -1,6 +1,6 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {ClusterNameGenerator} from "../../util/name-generator.service";
+import {ClusterNameGenerator} from "../../core/util/name-generator.service";
 import {ClusterNameEntity} from "../../api/entitiy/wizard/ClusterNameEntity";
 
 @Component({

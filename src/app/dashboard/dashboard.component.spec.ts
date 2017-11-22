@@ -10,7 +10,7 @@ import {Auth} from "../core/services";
 import {ApiService} from "../api/api.service";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";
-import {ClusterNameGenerator} from "../util/name-generator.service";
+import {ClusterNameGenerator} from "../core/util/name-generator.service";
 import {FrontpageComponent} from "../frontpage/frontpage.component";
 import { MaterialModule } from '@angular/material';
 

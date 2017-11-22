@@ -3,7 +3,7 @@ import {async, ComponentFixture, TestBed, inject} from "@angular/core/testing";
 
 import { WizardComponent } from "./wizard.component";
 import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {ClusterNameGenerator} from "../util/name-generator.service";
+import {ClusterNameGenerator} from "../core/util/name-generator.service";
 import {ApiService} from "../api/api.service";
 import {HttpModule, BaseRequestOptions, Http, XHRBackend, Response, ResponseOptions} from "@angular/http";
 import {Auth} from "../core/services";
