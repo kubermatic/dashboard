@@ -1,14 +1,14 @@
 import {Component, OnInit} from "@angular/core";
-import {Auth} from "../core/services";
-
-import {SidenavService} from "../core/components/sidenav/sidenav.service";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../reducers/index";
-import {Router} from '@angular/router';
-import {environment} from "../../environments/environment";
-import {AppConstants} from '../constants/constants';
 import { MdDialog } from '@angular/material';
-import { MobileNavigationComponent } from '../overlays';
+
+import {Auth} from "../../services";
+import {SidenavService} from "../sidenav/sidenav.service";
+import {Store} from "@ngrx/store";
+import * as fromRoot from "../../../reducers/index";
+import {Router} from '@angular/router';
+import {environment} from "../../../../environments/environment";
+import {AppConstants} from '../../../constants/constants';
+import { MobileNavigationComponent } from '../../../overlays';
 
 @Component({
   selector: "kubermatic-navigation",

@@ -8,7 +8,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import 'hammerjs';
 import {FlexLayoutModule} from "@angular/flex-layout";
 import {KubermaticComponent} from "./kubermatic.component";
-import {NavigationComponent} from "./navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
@@ -19,14 +18,12 @@ import {NodeComponent} from "./cluster/node/node.component";
 import {NodeDeleteConfirmationComponent} from "./cluster/node-delete-confirmation/node-delete-confirmation.component";
 import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
 import {DashboardComponent} from "./dashboard/dashboard.component";
-import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {SshkeyComponent} from "./sshkey/sshkey.component";
 import {NotificationComponent} from "./notification/notification.component";
 import {AppRoutingModule} from "./app.routing";
 import {CustomFormsModule} from "ng2-validation";
 import {combinedReducer} from "./reducers/index";
 import {SimpleNotificationsModule} from "angular2-notifications";
-import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import {ClusterDeleteConfirmationComponent} from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import {ListSshKeyComponent} from './sshkey/list-ssh-key/list-ssh-key.component';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
@@ -67,16 +64,13 @@ import { CoreModule } from 'app/core/core.module';
     CustomFormsModule,
     StoreModule.provideStore(combinedReducer),
     SimpleNotificationsModule.forRoot(),
-    SlimLoadingBarModule.forRoot(),
     FlexLayoutModule,
     ClipboardModule
   ],
   declarations: [
     KubermaticComponent,
-    NavigationComponent,
     FrontpageComponent,
     DashboardComponent,
-    BreadcrumbsComponent,
     WizardComponent,
     ClusterComponent,
     ClusterListComponent,

@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {TestBed, async} from "@angular/core/testing";
 import {KubermaticComponent} from "./kubermatic.component";
-import {NavigationComponent} from "./navigation/navigation.component";
+import {NavigationComponent} from "./core/components/navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
 import {BrowserModule} from "@angular/platform-browser";

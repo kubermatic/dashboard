@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 
 import {
     MdButtonModule,
@@ -27,6 +28,7 @@ const modules: Array<any> = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    SlimLoadingBarModule,
     MdButtonModule,
     MdIconModule,
     MdInputModule,

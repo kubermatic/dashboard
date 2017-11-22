@@ -2,11 +2,11 @@
 import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 import {BrowserModule} from "@angular/platform-browser";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../reducers/index";
+import {combinedReducer} from "../../../reducers/index";
 import {NavigationComponent} from "./navigation.component";
-import {Auth} from "../core/services/auth/auth.service";
+import {Auth} from "../../services/auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
-import {BreadcrumbsComponent} from "../breadcrumbs/breadcrumbs.component";
+import {BreadcrumbsComponent} from "../../../breadcrumbs/breadcrumbs.component";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import { MaterialModule } from '@angular/material';
 import {ConnectionBackend, HttpModule} from "@angular/http";

@@ -4,7 +4,10 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { HttpModule, BrowserXhr } from "@angular/http";
 import { RouterModule } from '@angular/router';
 
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
+
 import { SidenavService } from './components/sidenav/sidenav.service';
 import { ClusterNameGenerator } from './util/name-generator.service';
 import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
@@ -32,7 +35,9 @@ const modules: any[] = [
 ];
 
 const components: any[] = [
-  SidenavComponent
+  SidenavComponent,
+  NavigationComponent,
+  BreadcrumbsComponent
 ];
 
 const services: any[] = [
