@@ -66,7 +66,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {AWSAddNodeFormComponent} from "./forms/add-node/aws/aws-add-node.component";
 import {DigitaloceanAddNodeComponent} from "./forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "./forms/add-node/openstack/openstack-add-node.component";
-import {HTTP_INTERCEPTORS} from '@angular/common/http';
+// import {HTTP_INTERCEPTORS} from '@angular/common/http';
 import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
@@ -74,7 +74,7 @@ import { SetProviderComponent } from './wizard/set-provider/set-provider.compone
 import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
-import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
+// import { CheckTokenInterceptor, LoaderInterceptor, ErrorNotificationsInterceptor } from './interceptors';
 import { SummaryComponent } from './wizard/summary/summary.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component'
 import { ProviderNodeComponent } from './provider/node/node.component'
@@ -209,21 +209,21 @@ import { CoreModule } from 'app/core/core.module';
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr
     },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ErrorNotificationsInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: CheckTokenInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: LoaderInterceptor,
-      multi: true
-    }
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: ErrorNotificationsInterceptor,
+    //   multi: true
+    // },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: CheckTokenInterceptor,
+    //   multi: true
+    // },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: LoaderInterceptor,
+    //   multi: true
+    // }
   ],
   bootstrap: [KubermaticComponent]
 

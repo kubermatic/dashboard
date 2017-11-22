@@ -1,10 +1,8 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoreModule } from "@ngrx/store";
-import {HttpModule, BrowserXhr} from "@angular/http";
-import {HttpClientModule} from "@angular/common/http";
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 
-import {
+import { 
   CreateNodesService,
   CustomEventService,
   DatacenterService,
@@ -12,8 +10,11 @@ import {
   LocalStorageService,
   AUTH_PROVIDERS,
   Auth,
-  AuthGuard
-} from './services';
+  AuthGuard } from './services';
+import { 
+  LoaderInterceptor, 
+  CheckTokenInterceptor, 
+  ErrorNotificationsInterceptor } from './interceptors';
 
 const services: any[] = [
   AUTH_PROVIDERS,
@@ -26,13 +27,32 @@ const services: any[] = [
   LocalStorageService
 ];
 
+const interceptors: any[] = [
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: ErrorNotificationsInterceptor,
+    multi: true
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: CheckTokenInterceptor,
+    multi: true
+  },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: LoaderInterceptor,
+    multi: true
+  }
+];
+
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [],
   providers: [
-    ...services
+    ...services,
+    ...interceptors
   ]
 })
 export class CoreModule {

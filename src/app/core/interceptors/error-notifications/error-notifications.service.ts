@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { NotificationComponent } from "../../notification/notification.component";
+import { NotificationComponent } from "../../../notification/notification.component";
 import { Store } from "@ngrx/store";
-import * as fromRoot from "../../reducers/index";
+import * as fromRoot from "../../../reducers/index";
 
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor{

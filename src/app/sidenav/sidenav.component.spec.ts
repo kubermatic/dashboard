@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidenavComponent } from './sidenav.component';
 import { MaterialModule } from '@angular/material';
-import {Auth} from "../auth/auth.service";
+import {Auth} from "../core/services/auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";

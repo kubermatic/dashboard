@@ -6,7 +6,7 @@ import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {ClusterNameGenerator} from "../util/name-generator.service";
 import {ApiService} from "../api/api.service";
 import {HttpModule, BaseRequestOptions, Http, XHRBackend, Response, ResponseOptions} from "@angular/http";
-import {Auth} from "../auth/auth.service";
+import {Auth} from "../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../reducers/index";
