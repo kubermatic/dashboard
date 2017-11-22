@@ -7,7 +7,7 @@ import {Store} from "@ngrx/store";
 import * as fromRoot from "../../../reducers/index";
 import {Router} from '@angular/router';
 import {environment} from "../../../../environments/environment";
-import {AppConstants} from '../../../constants/constants';
+import {AppConstants} from '../../../shared/constants/constants';
 import { MobileNavigationComponent } from '../../../overlays';
 
 @Component({
@@ -18,9 +18,9 @@ import { MobileNavigationComponent } from '../../../overlays';
 export class NavigationComponent implements OnInit {
 
   public isScrolled: boolean = false;
-  public environment : any = environment;
+  public environment: any = environment;
 
-  //public userProfile: any;
+  // public userProfile: any;
 
   constructor(
     public auth: Auth, 
@@ -31,7 +31,7 @@ export class NavigationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(window.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
+    if (window.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
       this.sidenavService.close();
     }
   }

@@ -3,7 +3,7 @@ import {TestBed, async} from "@angular/core/testing";
 import {KubermaticComponent} from "./kubermatic.component";
 import {NavigationComponent} from "./core/components/navigation/navigation.component";
 import {FrontpageComponent} from "./frontpage/frontpage.component";
-import {BreadcrumbsComponent} from "./breadcrumbs/breadcrumbs.component";
+import {BreadcrumbsComponent} from "./core/components/breadcrumbs/breadcrumbs.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {Http, HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";

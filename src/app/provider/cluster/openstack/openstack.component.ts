@@ -1,6 +1,6 @@
 import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {OpenstackCloudSpec} from "../../../api/entitiy/cloud/OpenstackCloudSpec";
+import {OpenstackCloudSpec} from "../../../shared/entity/cloud/OpenstackCloudSpec";
 
 import {InputValidationService} from '../../../core/services';
 

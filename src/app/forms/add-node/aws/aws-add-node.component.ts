@@ -1,12 +1,12 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AWSNodeSpec} from "../../../api/entitiy/node/AWSNodeSpec";
-import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
-import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
+import {AWSNodeSpec} from "../../../shared/entity/node/AWSNodeSpec";
+import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
+import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
 import {ApiService} from "../../../api/api.service";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../../reducers/index";
-import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
+import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
 import {AddNodeComponent} from "../add-node.component";
 import {MD_DIALOG_DATA} from "@angular/material";
 import {AddNodeModalData} from "../add-node-modal-data";

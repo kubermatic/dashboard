@@ -1,6 +1,6 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {ApiService} from "../../api/api.service";
-import {SSHKeyEntity} from "../../api/entitiy/SSHKeyEntity";
+import {SSHKeyEntity} from "../../shared/entity/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";

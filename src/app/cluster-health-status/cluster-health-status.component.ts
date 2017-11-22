@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Health} from "../api/entitiy/ClusterEntity";
+import {Health} from "../shared/entity/ClusterEntity";
 
 @Component({
   selector: 'kubermatic-cluster-health-status',

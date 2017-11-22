@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from './../../../../environments/environment';
 import { Auth } from '../auth/auth.service';
-import { DataCenterEntity } from 'app/api/entitiy/DatacenterEntity';
+import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 
 @Injectable()
 export class DatacenterService {

@@ -1,7 +1,7 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {ClusterNameGenerator} from "../../core/util/name-generator.service";
-import {ClusterNameEntity} from "../../api/entitiy/wizard/ClusterNameEntity";
+import {ClusterNameEntity} from "../../shared/entity/wizard/ClusterNameEntity";
 
 @Component({
   selector: 'kubermatic-set-cluster-name',

@@ -1,10 +1,10 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
+import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
 import {CustomValidators} from "ng2-validation";
-import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
-import {OpenstackNodeSpec} from "../../../api/entitiy/node/OpenstackNodeSpec";
-import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
+import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
+import {OpenstackNodeSpec} from "../../../shared/entity/node/OpenstackNodeSpec";
+import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 
 import {InputValidationService} from '../../../core/services';
 

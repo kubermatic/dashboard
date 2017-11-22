@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from "@angular/forms";
-import {DigitaloceanCloudSpec} from "../../../api/entitiy/cloud/DigitialoceanCloudSpec";
+import {DigitaloceanCloudSpec} from "../../../shared/entity/cloud/DigitialoceanCloudSpec";
 
 import {InputValidationService} from '../../../core/services';
 

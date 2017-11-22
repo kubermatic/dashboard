@@ -6,7 +6,7 @@ import {combinedReducer} from "../../../reducers/index";
 import {NavigationComponent} from "./navigation.component";
 import {Auth} from "../../services/auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
-import {BreadcrumbsComponent} from "../../../breadcrumbs/breadcrumbs.component";
+import {BreadcrumbsComponent} from "../breadcrumbs/breadcrumbs.component";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import { MaterialModule } from '@angular/material';
 import {ConnectionBackend, HttpModule} from "@angular/http";

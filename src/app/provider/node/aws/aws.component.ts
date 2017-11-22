@@ -1,9 +1,9 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from "@angular/forms";
-import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
-import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
-import {AWSNodeSpec} from "../../../api/entitiy/node/AWSNodeSpec";
-import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
+import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
+import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
+import {AWSNodeSpec} from "../../../shared/entity/node/AWSNodeSpec";
+import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 import {InputValidationService} from '../../../core/services';
 
 @Component({

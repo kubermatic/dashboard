@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {CreateNodeModel} from "../../api/model/CreateNodeModel";
-import {CreateClusterModel} from "../../api/model/CreateClusterModel";
-import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
+import {CreateNodeModel} from "../../shared/model/CreateNodeModel";
+import {CreateClusterModel} from "../../shared/model/CreateClusterModel";
+import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
 import {ApiService} from "../../api/api.service";
 
 @Component({

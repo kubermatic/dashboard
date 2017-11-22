@@ -1,6 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
-import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
+import {SSHKeyEntity} from "../shared/entity/SSHKeyEntity";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {NotificationComponent} from "../notification/notification.component";

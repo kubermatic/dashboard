@@ -2,7 +2,7 @@ import {Component, Input, OnInit, Output} from '@angular/core';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";
 import {ApiService} from "../../api/api.service";
-import {NodeEntity} from "../../api/entitiy/NodeEntity";
+import {NodeEntity} from "../../shared/entity/NodeEntity";
 import {NotificationComponent} from "../../notification/notification.component";
 import {CustomEventService} from '../../core/services';
 

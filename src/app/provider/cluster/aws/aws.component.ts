@@ -1,9 +1,9 @@
 import {Component, OnInit,Input, Output, EventEmitter} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AWSCloudSpec} from "../../../api/entitiy/cloud/AWSCloudSpec";
+import {AWSCloudSpec} from "../../../shared/entity/cloud/AWSCloudSpec";
 
 import {InputValidationService} from '../../../core/services';
-import {CloudSpec} from "../../../api/entitiy/ClusterEntity";
+import {CloudSpec} from "../../../shared/entity/ClusterEntity";
 
 
 @Component({

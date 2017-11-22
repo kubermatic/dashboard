@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
+import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
 import {ApiService} from "../../api/api.service";
 
 @Component({
