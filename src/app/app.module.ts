@@ -1,3 +1,4 @@
+import { PagesModule } from './pages/pages.module';
 import { ApiService } from 'app/api/api.service';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
@@ -6,7 +7,6 @@ import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KubermaticComponent } from "./kubermatic.component";
-import { FrontpageComponent } from "./frontpage/frontpage.component";
 import { WizardComponent } from "./wizard/wizard.component";
 import { ClusterComponent } from "./cluster/cluster.component";
 import { AddSshKeyComponent } from "./sshkey/add-ssh-key/add-ssh-key.component";
@@ -17,13 +17,12 @@ import { NodeDeleteConfirmationComponent } from "./cluster/node-delete-confirmat
 import { NodeDeleteConfirmationService } from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { SshkeyComponent } from "./sshkey/sshkey.component";
-import { AppRoutingModule } from "./app.routing";
+import { AppRoutingModule } from "./app-routing.module";
 import { combinedReducer } from "./redux/reducers/index";
 import { ClusterDeleteConfirmationComponent } from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import { ListSshKeyComponent } from './sshkey/list-ssh-key/list-ssh-key.component';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
-import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-form-field.component';
 import { AWSAddNodeFormComponent } from "./forms/add-node/aws/aws-add-node.component";
 import { DigitaloceanAddNodeComponent } from "./forms/add-node/digitalocean/digitalocean-add-node.component";
@@ -56,12 +55,12 @@ import { CoreModule } from 'app/core/core.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
+    PagesModule,
     StoreModule.provideStore(combinedReducer),
     ClipboardModule
   ],
   declarations: [
     KubermaticComponent,
-    FrontpageComponent,
     DashboardComponent,
     WizardComponent,
     ClusterComponent,
@@ -75,7 +74,6 @@ import { CoreModule } from 'app/core/core.module';
     ListSshKeyComponent,
     AddSshKeyModalComponent,
     ClusterHealthStatusComponent,
-    PageNotFoundComponent,
     SshKeyFormFieldComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
