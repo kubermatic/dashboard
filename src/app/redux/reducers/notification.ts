@@ -1,5 +1,5 @@
+import { NotificationActions } from './../actions/notification.actions';
 import {Action} from "@ngrx/store";
-import {Actions} from "./actions";
 
 export enum NotificationToastType {
   success,
@@ -26,7 +26,7 @@ const initialState: Notification = {
 
 export function notificationReducer(state: Notification = initialState, action: Action): Notification {
   switch (action.type) {
-    case Actions.PUSH_NOTIFICATION:
+    case NotificationActions.PUSH_NOTIFICATION:
       return Object.assign({}, state, {
         toast: action.payload.toast,
       });

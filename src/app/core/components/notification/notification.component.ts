@@ -3,7 +3,6 @@ import { NotificationsService } from "angular2-notifications";
 import { Store } from "@ngrx/store";
 import * as fromRoot from "../../../redux/reducers/index";
 import { NotificationToast, NotificationToastType } from "../../../redux/reducers/notification";
-import { Actions } from "../../../redux/reducers/actions";
 
 @Component({
   selector: "kubermatic-notification",
