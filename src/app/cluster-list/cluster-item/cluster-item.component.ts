@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from "@angular/core";
-import {ClusterEntity} from "../../api/entitiy/ClusterEntity";
+import {ClusterEntity} from "../../shared/entity/ClusterEntity";
 
 @Component({
   selector: "kubermatic-cluster-item",

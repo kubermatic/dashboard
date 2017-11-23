@@ -6,7 +6,7 @@ import {combinedReducer} from "../reducers/index";
 
 import { FrontpageComponent } from "./frontpage.component";
 import {RouterTestingModule} from "@angular/router/testing";
-import {Auth} from "../auth/auth.service";
+import {Auth} from "../core/services";
 
 describe("FrontpageComponent", () => {
   let component: FrontpageComponent;

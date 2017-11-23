@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
-import {ClusterSpec, CloudSpec} from "../../api/entitiy/ClusterEntity";
-import {CreateClusterModel} from "../../api/model/CreateClusterModel";
-import {CreateNodeModel} from "../../api/model/CreateNodeModel"
+import {ClusterSpec, CloudSpec} from "../../shared/entity/ClusterEntity";
+import {CreateClusterModel} from "../../shared/model/CreateClusterModel";
+import {CreateNodeModel} from "../../shared/model/CreateNodeModel"
 
 @Component({
   selector: 'kubermatic-set-settings',

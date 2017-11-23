@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {CloudSpec, ClusterSpec} from "../../api/entitiy/ClusterEntity";
-import {NodeProvider} from "../../api/model/NodeProviderConstants";
+import {CloudSpec, ClusterSpec} from "../../shared/entity/ClusterEntity";
+import {NodeProvider} from "../../shared/model/NodeProviderConstants";
 
 @Component({
   selector: 'kubermatic-provider-cluster',

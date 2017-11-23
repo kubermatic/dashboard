@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {NodeProvider} from "../../api/model/NodeProviderConstants";
-import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
+import {NodeProvider} from "../../shared/model/NodeProviderConstants";
+import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
 
 @Component({
   selector: 'kubermatic-set-provider',

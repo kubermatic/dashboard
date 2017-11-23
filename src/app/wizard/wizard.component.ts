@@ -1,26 +1,25 @@
-import { DatacenterService } from './../services/datacenter/datacenter.service';
 import {Component, OnInit} from "@angular/core";
 import {ApiService} from "../api/api.service";
-import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
+import {DataCenterEntity} from "../shared/entity/DatacenterEntity";
 import {Router} from "@angular/router";
 import {NotificationComponent} from "../notification/notification.component";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from "@angular/material";
-import {CloudSpec} from "../api/entitiy/ClusterEntity";
-import {CreateClusterModel} from "../api/model/CreateClusterModel";
+import {CloudSpec} from "../shared/entity/ClusterEntity";
+import {CreateClusterModel} from "../shared/model/CreateClusterModel";
 import * as testing from "selenium-webdriver/testing";
-import {CreateNodeModel} from "../api/model/CreateNodeModel"
-import {DigitaloceanCloudSpec} from "../api/entitiy/cloud/DigitialoceanCloudSpec";
-import {ClusterNameEntity} from "../api/entitiy/wizard/ClusterNameEntity";
-import {CustomEventService, CreateNodesService, InputValidationService} from '../services';
-import {NodeCreateSpec} from "../api/entitiy/NodeEntity";
-import {OpenstackNodeSpec} from "../api/entitiy/node/OpenstackNodeSpec";
-import {AWSNodeSpec} from "../api/entitiy/node/AWSNodeSpec";
-import {DigitaloceanNodeSpec} from "../api/entitiy/node/DigitialoceanNodeSpec";
-import {AWSCloudSpec} from "../api/entitiy/cloud/AWSCloudSpec";
-import {OpenstackCloudSpec} from "../api/entitiy/cloud/OpenstackCloudSpec";
+import {CreateNodeModel} from "../shared/model/CreateNodeModel";
+import {DigitaloceanCloudSpec} from "../shared/entity/cloud/DigitialoceanCloudSpec";
+import {ClusterNameEntity} from "../shared/entity/wizard/ClusterNameEntity";
+import {CustomEventService, CreateNodesService, InputValidationService, DatacenterService } from '../core/services';
+import {NodeCreateSpec} from "../shared/entity/NodeEntity";
+import {OpenstackNodeSpec} from "../shared/entity/node/OpenstackNodeSpec";
+import {AWSNodeSpec} from "../shared/entity/node/AWSNodeSpec";
+import {DigitaloceanNodeSpec} from "../shared/entity/node/DigitialoceanNodeSpec";
+import {AWSCloudSpec} from "../shared/entity/cloud/AWSCloudSpec";
+import {OpenstackCloudSpec} from "../shared/entity/cloud/OpenstackCloudSpec";
 
 @Component({
   selector: "kubermatic-wizard",
