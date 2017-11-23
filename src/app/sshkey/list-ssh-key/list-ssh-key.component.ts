@@ -1,4 +1,4 @@
-import { NotificationActions } from 'app/actions/notification.actions';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, OnInit, Input} from "@angular/core";
 import {ApiService} from "../../api/api.service";
 import {SSHKeyEntity} from "../../shared/entity/SSHKeyEntity";

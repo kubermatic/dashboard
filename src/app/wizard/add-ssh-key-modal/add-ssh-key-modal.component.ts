@@ -4,7 +4,7 @@ import {SSHKeyEntity} from "../../shared/entity/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
 import {MdDialogRef} from '@angular/material';
 import { InputValidationService } from '../../core/services';
-import { NotificationActions } from 'app/actions/notification.actions';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',

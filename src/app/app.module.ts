@@ -18,7 +18,7 @@ import { NodeDeleteConfirmationService } from "./cluster/node-delete-confirmatio
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { SshkeyComponent } from "./sshkey/sshkey.component";
 import { AppRoutingModule } from "./app.routing";
-import { combinedReducer } from "./reducers/index";
+import { combinedReducer } from "./redux/reducers/index";
 import { ClusterDeleteConfirmationComponent } from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import { ListSshKeyComponent } from './sshkey/list-ssh-key/list-ssh-key.component';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';

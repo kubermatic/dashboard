@@ -1,7 +1,7 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../../reducers/index";
+import {combinedReducer} from "../../../redux/reducers/index";
 import {NotificationComponent} from "./notification.component";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {RouterTestingModule} from "@angular/router/testing";

@@ -9,7 +9,7 @@ import {Http, HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AUTH_PROVIDERS, Auth, AuthGuard} from "./core/services";
 import {ApiService} from "./api/api.service";
-import {combinedReducer} from "./reducers/index";
+import {combinedReducer} from "./redux/reducers/index";
 import {StoreModule} from "@ngrx/store";
 import {NotificationComponent} from "./shared/components/notification/notification.component";
 import {SimpleNotificationsModule} from "angular2-notifications";

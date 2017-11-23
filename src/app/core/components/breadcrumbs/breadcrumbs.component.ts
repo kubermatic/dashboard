@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import {Router} from '@angular/router';
 import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../reducers/index";
+import * as fromRoot from "../../../redux/reducers/index";
 import {ApiService} from '../../../api/api.service';
 @Component({
   selector: "kubermatic-breadcrumbs",

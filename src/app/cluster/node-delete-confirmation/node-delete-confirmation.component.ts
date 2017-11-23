@@ -2,7 +2,7 @@ import {Component, Input, OnInit, Output} from '@angular/core';
 import {ApiService} from "../../api/api.service";
 import {NodeEntity} from "../../shared/entity/NodeEntity";
 import {CustomEventService} from '../../core/services';
-import { NotificationActions } from 'app/actions/notification.actions';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',

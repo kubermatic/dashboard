@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 
 /* Modules */
 import { SharedModule } from 'app/shared/shared.module';
-import { ActionsModule } from 'app/actions/actions.module';
+import { ActionsModule } from 'app/redux/actions/actions.module';
 import { SimpleNotificationsModule } from "angular2-notifications";
 
 /* Components */

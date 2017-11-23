@@ -2,8 +2,8 @@ import {Component, OnInit} from "@angular/core";
 import {Auth} from "../core/services";
 import {Router, NavigationEnd, ActivatedRoute} from "@angular/router";
 import {Store} from "@ngrx/store";
-import * as fromRoot from "../reducers/index";
-import {Actions} from "../reducers/actions";
+import * as fromRoot from "../redux/reducers/index";
+import {Actions} from "../redux/reducers/actions";
 import "rxjs/add/operator/filter";
 import {ApiService} from "../api/api.service";
 

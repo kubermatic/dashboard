@@ -2,7 +2,7 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import {By, BrowserModule} from "@angular/platform-browser";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../reducers/index";
+import {combinedReducer} from "../redux/reducers/index";
 
 import { FrontpageComponent } from "./frontpage.component";
 import {RouterTestingModule} from "@angular/router/testing";

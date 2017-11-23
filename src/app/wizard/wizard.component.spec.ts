@@ -9,7 +9,7 @@ import {HttpModule, BaseRequestOptions, Http, XHRBackend, Response, ResponseOpti
 import {Auth} from "../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../reducers/index";
+import {combinedReducer} from "../redux/reducers/index";
 import {MockBackend} from "@angular/http/testing";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from '@angular/material';

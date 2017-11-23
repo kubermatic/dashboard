@@ -1,4 +1,4 @@
-import { NotificationActions } from 'app/actions/notification.actions';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Injectable} from "@angular/core";
 import "rxjs/add/operator/map";
 import {Observable} from "rxjs";

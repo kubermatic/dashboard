@@ -17,7 +17,7 @@ import {AWSNodeSpec} from "../shared/entity/node/AWSNodeSpec";
 import {DigitaloceanNodeSpec} from "../shared/entity/node/DigitialoceanNodeSpec";
 import {AWSCloudSpec} from "../shared/entity/cloud/AWSCloudSpec";
 import {OpenstackCloudSpec} from "../shared/entity/cloud/OpenstackCloudSpec";
-import { NotificationActions } from "app/actions/notification.actions";
+import { NotificationActions } from "app/redux/actions/notification.actions";
 
 @Component({
   selector: "kubermatic-wizard",

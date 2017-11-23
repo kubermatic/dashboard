@@ -9,7 +9,7 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {Auth} from "../core/services";
 import {ApiService} from "../api/api.service";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../reducers/index";
+import {combinedReducer} from "../redux/reducers/index";
 import {ClusterNameGenerator} from "../core/util/name-generator.service";
 import {FrontpageComponent} from "../frontpage/frontpage.component";
 import { MaterialModule } from '@angular/material';

@@ -8,7 +8,7 @@ import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule, BaseRequestOptions, Http, XHRBackend, Response, ResponseOptions} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../reducers/index";
+import {combinedReducer} from "../../redux/reducers/index";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {Auth} from "../../core/services";

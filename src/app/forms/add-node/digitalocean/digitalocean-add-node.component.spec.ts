@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ApiService } from "../../../api/api.service";
 
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../../reducers/index";
+import {combinedReducer} from "../../../redux/reducers/index";
 import {HttpModule, ConnectionBackend} from "@angular/http";
 import {Auth} from "../../../core/services";
 import {RouterTestingModule} from "@angular/router/testing";

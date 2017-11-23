@@ -1,4 +1,4 @@
-import { NotificationActions } from 'app/actions/notification.actions';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, Inject} from "@angular/core";
 import {FormBuilder} from "@angular/forms";
 import {ApiService} from "../../api/api.service";

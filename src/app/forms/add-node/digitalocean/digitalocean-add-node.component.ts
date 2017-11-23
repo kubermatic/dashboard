@@ -8,7 +8,7 @@ import {Size} from "../../../shared/entity/digitalocean/DropletSizeEntity";
 import {DigitaloceanNodeSpec} from "../../../shared/entity/node/DigitialoceanNodeSpec";
 import {MD_DIALOG_DATA} from "@angular/material";
 import {AddNodeModalData} from "../add-node-modal-data";
-import { NotificationActions } from 'app/actions/notification.actions';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
   styleUrls: ['./../add-node.component.scss'],

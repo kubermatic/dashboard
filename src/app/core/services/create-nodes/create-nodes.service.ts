@@ -1,4 +1,4 @@
-import { NotificationActions } from 'app/actions/notification.actions';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Injectable } from '@angular/core';
 import { Observable, Subscription } from "rxjs";
 import { ApiService } from "../../../api/api.service";

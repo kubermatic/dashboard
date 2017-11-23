@@ -5,7 +5,7 @@ import { ApiService } from "../../api/api.service";
 import { MdDialogRef } from '@angular/material';
 import { CreateNodesService } from '../../core/services';
 import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
-import { NotificationActions } from 'app/actions/notification.actions';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-cluster-delete-confirmation',

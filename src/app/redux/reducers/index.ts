@@ -3,7 +3,7 @@ import {storeFreeze} from "ngrx-store-freeze";
 import {storeLogger} from "ngrx-store-logger";
 import {compose, ComposeSignature} from "@ngrx/core/compose";
 import {combineReducers} from "@ngrx/store";
-import {environment} from "../../environments/environment";
+import {environment} from "../../../environments/environment";
 import * as fromAuth from "./auth";
 import * as fromBreadcrumbs from "./breadcrumb";
 import * as fromNotification from "./notification";
