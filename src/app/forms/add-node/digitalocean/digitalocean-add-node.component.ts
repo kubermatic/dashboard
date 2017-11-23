@@ -1,13 +1,13 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
-import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
+import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
+import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
 import {ApiService} from "../../../api/api.service";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../../reducers/index";
 import {AddNodeComponent} from "../add-node.component";
-import {Size} from "../../../api/entitiy/digitalocean/DropletSizeEntity";
-import {DigitaloceanNodeSpec} from "../../../api/entitiy/node/DigitialoceanNodeSpec";
+import {Size} from "../../../shared/entity/digitalocean/DropletSizeEntity";
+import {DigitaloceanNodeSpec} from "../../../shared/entity/node/DigitialoceanNodeSpec";
 import {MD_DIALOG_DATA} from "@angular/material";
 import {AddNodeModalData} from "../add-node-modal-data";
 

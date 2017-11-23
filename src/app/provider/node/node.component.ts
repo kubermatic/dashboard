@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {CreateNodeModel} from "../../api/model/CreateNodeModel";
+import {CreateNodeModel} from "../../shared/model/CreateNodeModel";
 
 @Component({
   selector: 'kubermatic-provider-node',

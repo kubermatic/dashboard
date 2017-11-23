@@ -1,7 +1,7 @@
 import {Component, Inject} from "@angular/core";
 import {FormBuilder} from "@angular/forms";
 import {ApiService} from "../../api/api.service";
-import {CreateNodeModel} from "../../api/model/CreateNodeModel";
+import {CreateNodeModel} from "../../shared/model/CreateNodeModel";
 import {NotificationComponent} from "../../notification/notification.component";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../reducers/index";

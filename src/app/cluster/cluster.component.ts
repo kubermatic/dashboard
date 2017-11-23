@@ -1,27 +1,26 @@
 import {Component, OnInit} from "@angular/core";
 import {Router, ActivatedRoute} from "@angular/router";
 import {ApiService} from "../api/api.service";
-import { DatacenterService } from './../services/datacenter/datacenter.service';
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../reducers/index";
 import {environment} from "../../environments/environment";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from '@angular/material';
 import {ClusterDeleteConfirmationComponent} from "./cluster-delete-confirmation/cluster-delete-confirmation.component";
-import {NodeEntity} from "../api/entitiy/NodeEntity";
-import {ClusterEntity} from "../api/entitiy/ClusterEntity";
-import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
+import {NodeEntity} from "../shared/entity/NodeEntity";
+import {ClusterEntity} from "../shared/entity/ClusterEntity";
+import {DataCenterEntity} from "../shared/entity/DatacenterEntity";
 import {AWSAddNodeFormComponent} from "../forms/add-node/aws/aws-add-node.component";
 import {DigitaloceanAddNodeComponent} from "../forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "../forms/add-node/openstack/openstack-add-node.component";
 import {NotificationComponent} from "../notification/notification.component";
-import {NodeProvider} from "../api/model/NodeProviderConstants";
+import {NodeProvider} from "../shared/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
-import {CustomEventService, CreateNodesService} from '../services';
+import { CustomEventService, CreateNodesService, DatacenterService } from '../core/services';
 import 'rxjs/add/operator/retry';
-import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
-import {UpgradeClusterComponentData} from "../api/model/UpgradeClusterDialogData";
+import {SSHKeyEntity} from "../shared/entity/SSHKeyEntity";
+import {UpgradeClusterComponentData} from "../shared/model/UpgradeClusterDialogData";
 
 @Component({
   selector: "kubermatic-cluster",

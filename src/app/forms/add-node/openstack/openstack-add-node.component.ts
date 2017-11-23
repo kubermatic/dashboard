@@ -1,14 +1,14 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
-import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
+import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
+import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
 import {ApiService} from "../../../api/api.service";
 import {Store} from "@ngrx/store";
 import * as fromRoot from "../../../reducers/index";
 import {AddNodeComponent} from "../add-node.component";
 import {MD_DIALOG_DATA} from "@angular/material";
-import {OpenstackNodeSpec} from "../../../api/entitiy/node/OpenstackNodeSpec";
-import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
+import {OpenstackNodeSpec} from "../../../shared/entity/node/OpenstackNodeSpec";
+import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
 import {AddNodeModalData} from "../add-node-modal-data";
 
 @Component({

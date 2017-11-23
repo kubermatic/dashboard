@@ -1,5 +1,5 @@
 import { Component, OnInit, Input} from "@angular/core";
-import { NodeEntity } from "../../api/entitiy/NodeEntity";
+import { NodeEntity } from "../../shared/entity/NodeEntity";
 import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
 import {NodeDeleteConfirmationComponent} from "../node-delete-confirmation/node-delete-confirmation.component";
 

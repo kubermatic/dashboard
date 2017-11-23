@@ -10,7 +10,7 @@ import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../../reducers/index";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {Auth} from "../../auth/auth.service";
+import {Auth} from "../../core/services";
 import {ApiService} from "../../api/api.service";
 
 describe('AddSshKeyComponent', () => {

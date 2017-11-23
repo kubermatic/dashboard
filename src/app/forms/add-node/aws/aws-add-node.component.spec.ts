@@ -7,7 +7,7 @@ import { ApiService } from "../../../api/api.service";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../../../reducers/index";
 import {HttpModule, ConnectionBackend} from "@angular/http";
-import {Auth} from "../../../auth/auth.service";
+import {Auth} from "../../../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AWSAddNodeFormComponent} from "./aws-add-node.component";
 
