@@ -5,4 +5,3 @@ export class Actions {
   public static get PUT_BREADCRUMB(): string { return "PUT_BREADCRUMB"; }
   public static get PUSH_NOTIFICATION(): string { return "PUSH_NOTIFICATION"; }
 }
-

@@ -4,14 +4,20 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { HttpModule, BrowserXhr } from "@angular/http";
 import { RouterModule } from '@angular/router';
 
+/* Modules */
+import { SharedModule } from 'app/shared/shared.module';
+import { ActionsModule } from 'app/actions/actions.module';
+import { SimpleNotificationsModule } from "angular2-notifications";
+
+/* Components */
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 
-import { SidenavService } from './components/sidenav/sidenav.service';
+/* Services */
 import { ClusterNameGenerator } from './util/name-generator.service';
 import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
-import { SharedModule } from 'app/shared/shared.module';
+import { SidenavService } from './components/sidenav/sidenav.service';
 import { 
   CreateNodesService,
   CustomEventService,
@@ -21,23 +27,29 @@ import {
   AUTH_PROVIDERS,
   Auth,
   AuthGuard } from './services';
+
+/* Interceptors */
 import { 
   LoaderInterceptor, 
   CheckTokenInterceptor, 
   ErrorNotificationsInterceptor } from './interceptors';
+import { NotificationComponent } from './components/notification/notification.component';
 
 const modules: any[] = [
   CommonModule,
   HttpModule,
   HttpClientModule,
   RouterModule,
-  SharedModule
+  SharedModule,
+  SimpleNotificationsModule.forRoot(),
+  ActionsModule
 ];
 
 const components: any[] = [
   SidenavComponent,
   NavigationComponent,
-  BreadcrumbsComponent
+  BreadcrumbsComponent,
+  NotificationComponent
 ];
 
 const services: any[] = [
@@ -90,6 +102,7 @@ const interceptors: any[] = [
     ...components
   ]
 })
+
 export class CoreModule {
   constructor (@Optional() @SkipSelf() parentModule: CoreModule) {
       if (parentModule) {

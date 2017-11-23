@@ -1,13 +1,11 @@
+import { NotificationActions } from 'app/actions/notification.actions';
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { NotificationComponent } from "../../../notification/notification.component";
-import { Store } from "@ngrx/store";
-import * as fromRoot from "../../../reducers/index";
 
 @Injectable()
-export class ErrorNotificationsInterceptor implements HttpInterceptor{
-  constructor(private store:Store<fromRoot.State>) { }
+export class ErrorNotificationsInterceptor implements HttpInterceptor {
+  constructor(private notificationActions: NotificationActions) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next
@@ -15,8 +13,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor{
         .do(
           event => {},
           errorInstance => {
-            NotificationComponent.error(
-              this.store,
+            this.notificationActions.error(
               `Error ${errorInstance.status}`,
               `${errorInstance.error.error.message || errorInstance.statusText}` 
             );

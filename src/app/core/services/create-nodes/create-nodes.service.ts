@@ -1,12 +1,10 @@
+import { NotificationActions } from 'app/actions/notification.actions';
 import { Injectable } from '@angular/core';
 import { Observable, Subscription } from "rxjs";
-import { Store } from "@ngrx/store";
 import { ApiService } from "../../../api/api.service";
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { CreateNodeModel } from "../../../shared/model/CreateNodeModel";
 import { LocalStorageService } from "../local-storage/local-storage.service";
-import { NotificationComponent } from "../../../notification/notification.component";
-import * as fromRoot from "../../../reducers/index";
 
 @Injectable()
 export class CreateNodesService {
@@ -17,7 +15,7 @@ export class CreateNodesService {
     constructor(
         private api: ApiService,
         private localStorageService: LocalStorageService,
-        private store: Store<fromRoot.State>) {
+        private notificationActions: NotificationActions) {
         let nodesData = this.localStorageService.getNodesData();
 
         if (nodesData) {
@@ -42,7 +40,7 @@ export class CreateNodesService {
                     if (cluster.status.phase === "Running") {
                         this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
                             this.preventCreatingInitialClusterNodes();
-                            NotificationComponent.success(this.store, "Success", `Creating Nodes`);
+                            this.notificationActions.success("Success", `Creating Nodes`);
                         });
                     }
                 });

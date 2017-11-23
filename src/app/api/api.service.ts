@@ -1,3 +1,4 @@
+import { NotificationActions } from 'app/actions/notification.actions';
 import {Injectable} from "@angular/core";
 import "rxjs/add/operator/map";
 import {Observable} from "rxjs";
@@ -13,9 +14,6 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {DropletSizeResponseEntity} from "./../shared/entity/digitalocean/DropletSizeEntity";
 import {CreateClusterModel} from "./../shared/model/CreateClusterModel";
 import 'rxjs/add/operator/catch';
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../reducers/index";
-import {NotificationComponent} from '../notification/notification.component';
 
 @Injectable()
 export class ApiService {
@@ -23,7 +21,7 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient, private auth: Auth, private store: Store<fromRoot.State>) {
+  constructor(private http: HttpClient, private auth: Auth, private notificationActions: NotificationActions) {
     let token = auth.getBearerToken();
     this.headers = this.headers.set("Authorization", "Bearer " + token);
   }
@@ -113,6 +111,6 @@ export class ApiService {
     let body = { to: upgradeVersion };
     const url = `${this.restRoot}/cluster/${cluster}/upgrade`;
     this.http.put(url, body, {headers: this.headers})
-     .subscribe(result => NotificationComponent.success(this.store, 'Success', `Cluster ${cluster} was upgraded`));
+     .subscribe(result => this.notificationActions.success('Success', `Cluster ${cluster} was upgraded`));
   }
 }

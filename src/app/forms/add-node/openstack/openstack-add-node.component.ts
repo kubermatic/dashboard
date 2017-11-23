@@ -1,3 +1,4 @@
+import { NotificationActions } from './../../../actions/notification.actions';
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
@@ -19,10 +20,13 @@ import {AddNodeModalData} from "../add-node-modal-data";
 
 export class OpenstackAddNodeComponent extends AddNodeComponent {
   form: FormGroup;
-  flavors:string[] = NodeInstanceFlavors.Openstack;
+  flavors: string[] = NodeInstanceFlavors.Openstack;
 
-  constructor(api: ApiService, fb: FormBuilder, store: Store<fromRoot.State>, @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
-    super(api, fb, store, data);
+  constructor(api: ApiService, 
+              fb: FormBuilder, 
+              notificationActions: NotificationActions, 
+              @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
+    super(api, fb, notificationActions, data);
     console.log(this.data.dc);
 
     this.form = fb.group({

@@ -1,10 +1,8 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../reducers/index";
 import {ApiService} from "../../api/api.service";
 import {NodeEntity} from "../../shared/entity/NodeEntity";
-import {NotificationComponent} from "../../notification/notification.component";
 import {CustomEventService} from '../../core/services';
+import { NotificationActions } from 'app/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
@@ -32,8 +30,8 @@ export class NodeDeleteConfirmationComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private store: Store<fromRoot.State>,
-    private customEventService: CustomEventService
+    private customEventService: CustomEventService,
+    private notificationActions: NotificationActions
   ) {}
 
   ngOnInit() {
@@ -42,7 +40,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public deleteNode(nodeName: string): void {
     this.onNodeRemoval(true);
     this.api.deleteClusterNode(this.clusterName, nodeName).subscribe(result => {
-      NotificationComponent.success(this.store, "Success", `Node removed successfully`);
+      this.notificationActions.success("Success", `Node removed successfully`);
       this.customEventService.publish('onNodeDelete', nodeName);
       this.onNodeRemoval(false);
     });

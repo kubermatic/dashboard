@@ -11,7 +11,7 @@ import {AUTH_PROVIDERS, Auth, AuthGuard} from "./core/services";
 import {ApiService} from "./api/api.service";
 import {combinedReducer} from "./reducers/index";
 import {StoreModule} from "@ngrx/store";
-import {NotificationComponent} from "./notification/notification.component";
+import {NotificationComponent} from "./shared/components/notification/notification.component";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import { MaterialModule } from '@angular/material';

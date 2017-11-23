@@ -1,10 +1,8 @@
+import { NotificationActions } from 'app/actions/notification.actions';
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {ApiService} from "../../api/api.service";
 import {SSHKeyEntity} from "../../shared/entity/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../reducers/index";
-import {NotificationComponent} from "../../notification/notification.component";
 import { InputValidationService } from '../../core/services';
 
 @Component({
@@ -21,8 +19,8 @@ export class AddSshKeyComponent implements OnInit {
   constructor(
     private api: ApiService, 
     private formBuilder: FormBuilder, 
-    private store: Store<fromRoot.State>,
-    public inputValidationService: InputValidationService
+    public inputValidationService: InputValidationService,
+    private notificationActions: NotificationActions
   ) {}
 
   ngOnInit() {
@@ -38,7 +36,7 @@ export class AddSshKeyComponent implements OnInit {
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
         .subscribe(result => {
-          NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
+          this.notificationActions.success("Success", `SSH key ${name} added successfully`);
           this.addSSHKeyForm.reset();
           this.syncSshKey.emit();
         });
