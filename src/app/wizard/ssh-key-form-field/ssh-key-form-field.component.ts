@@ -1,5 +1,5 @@
 import {Component, OnInit, Output, Input, EventEmitter} from '@angular/core';
-import {ApiService} from "../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {SSHKeyEntity} from "../../shared/entity/SSHKeyEntity";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {AddSshKeyModalComponent} from "../add-ssh-key-modal/add-ssh-key-modal.component";

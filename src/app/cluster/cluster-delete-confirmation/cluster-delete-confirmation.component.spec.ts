@@ -10,9 +10,9 @@ import {RouterTestingModule} from "@angular/router/testing";
 import {MaterialModule, MdDialogRef} from '@angular/material';
 import { RouterModule, Router } from "@angular/router";
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
-import {ApiService} from "../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {HttpModule} from "@angular/http";
-import {combinedReducer} from "../../reducers/index";
+import {combinedReducer} from "../../redux/reducers/index";
 
 
 

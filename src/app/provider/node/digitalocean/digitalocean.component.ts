@@ -1,7 +1,7 @@
 import {Component, OnInit, OnChanges, EventEmitter, Output, Input, SimpleChanges} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {CustomValidators} from "ng2-validation";
-import {ApiService} from "../../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
 import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
 import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";

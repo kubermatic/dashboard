@@ -1,11 +1,10 @@
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AWSNodeSpec} from "../../../shared/entity/node/AWSNodeSpec";
 import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
-import {ApiService} from "../../../api/api.service";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../reducers/index";
+import {ApiService} from "app/core/services/api/api.service";
 import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
 import {AddNodeComponent} from "../add-node.component";
 import {MD_DIALOG_DATA} from "@angular/material";
@@ -21,8 +20,10 @@ export class AWSAddNodeFormComponent extends AddNodeComponent {
   form: FormGroup;
   instanceTypes:string[] = NodeInstanceFlavors.AWS;
 
-  constructor(api: ApiService, fb: FormBuilder, store: Store<fromRoot.State>, @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
-    super(api, fb, store, data);
+  constructor(api: ApiService, fb: FormBuilder, 
+              notificationActions: NotificationActions, 
+              @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
+    super(api, fb, notificationActions, data);
     this.form = fb.group({
       node_count: [1, [Validators.required, Validators.min(1)]],
       instance_type: ["", [Validators.required]],

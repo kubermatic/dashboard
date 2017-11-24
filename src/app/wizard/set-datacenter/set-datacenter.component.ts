@@ -1,6 +1,6 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
-import {ApiService} from "../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 
 @Component({
   selector: 'kubermatic-set-datacenter',
