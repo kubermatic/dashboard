@@ -1,13 +1,11 @@
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { Store } from "@ngrx/store";
-import * as fromRoot from "../../reducers/index";
 import { RouterModule, Router } from "@angular/router";
-import { ApiService } from "../../api/api.service";
-import { NotificationComponent } from "../../notification/notification.component";
+import { ApiService } from "app/core/services/api/api.service";
 import { MdDialogRef } from '@angular/material';
 import { CreateNodesService } from '../../core/services';
 import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-cluster-delete-confirmation',
@@ -25,9 +23,9 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   constructor(
     private router: Router,
     private api: ApiService,
-    private store: Store<fromRoot.State>,
-    private dialogRef:MdDialogRef<ClusterDeleteConfirmationComponent>,
-    private createNodesService: CreateNodesService
+    private dialogRef: MdDialogRef<ClusterDeleteConfirmationComponent>,
+    private createNodesService: CreateNodesService,
+    private notificationActions: NotificationActions
   ) {}
 
   ngOnInit() {}
@@ -37,20 +35,20 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   }
 
   onChange(event: any) {
-    if (event.target.value == this.humanReadableName && event.target.value.length ) {
+    if (event.target.value === this.humanReadableName && event.target.value.length ) {
       this.disableDeleteCluster = true;
     } else {
       this.disableDeleteCluster = false;
     }
   }
 
-  deleteCluster(){
-    if(this.disableDeleteCluster == true) {
+  deleteCluster() {
+    if (this.disableDeleteCluster === true) {
         this.dialogRef.close();
         this.api.deleteCluster(this.clusterName).subscribe(result => {
           this.cluster = result;
           this.createNodesService.preventCreatingInitialClusterNodes();
-          NotificationComponent.success(this.store, "Success", `Cluster is beeing deleted`);
+          this.notificationActions.success("Success", `Cluster is beeing deleted`);
 
           this.router.navigate(['/clusters']);
         });

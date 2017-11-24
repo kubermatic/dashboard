@@ -1,10 +1,7 @@
 import {Component, OnInit} from "@angular/core";
-import {ApiService} from "../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {DataCenterEntity} from "../shared/entity/DatacenterEntity";
 import {Router} from "@angular/router";
-import {NotificationComponent} from "../notification/notification.component";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../reducers/index";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from "@angular/material";
 import {CloudSpec} from "../shared/entity/ClusterEntity";
@@ -20,6 +17,7 @@ import {AWSNodeSpec} from "../shared/entity/node/AWSNodeSpec";
 import {DigitaloceanNodeSpec} from "../shared/entity/node/DigitialoceanNodeSpec";
 import {AWSCloudSpec} from "../shared/entity/cloud/AWSCloudSpec";
 import {OpenstackCloudSpec} from "../shared/entity/cloud/OpenstackCloudSpec";
+import { NotificationActions } from "app/redux/actions/notification.actions";
 
 @Component({
   selector: "kubermatic-wizard",
@@ -65,12 +63,12 @@ export class WizardComponent implements OnInit {
   constructor(
     private api: ApiService,
     private router: Router,
-    private store: Store<fromRoot.State>,
     public dialog: MdDialog,
     private customEventService: CustomEventService,
     private createNodesService: CreateNodesService,
     public inputValidationService: InputValidationService,
-    public dcService: DatacenterService
+    public dcService: DatacenterService,
+    public notificationActions: NotificationActions
   ) {}
 
 
@@ -196,15 +194,14 @@ export class WizardComponent implements OnInit {
 
     console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {
-        NotificationComponent.success(this.store, "Success", `Cluster successfully created`);
+        this.notificationActions.success("Success", `Cluster successfully created`);
         this.router.navigate(["/cluster/" + cluster.metadata.name]);
 
         this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
 
       },
       error => {
-        NotificationComponent.error(this.store, "Error", `${error.status} ${error.statusText}`);
-
+        this.notificationActions.error("Error", `${error.status} ${error.statusText}`);
       });
   }
 }

@@ -1,20 +1,23 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {FrontpageComponent} from "./frontpage/frontpage.component";
 import {DashboardComponent} from "./dashboard/dashboard.component";
 import {AuthGuard} from "./core/services";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {SshkeyComponent} from "./sshkey/sshkey.component";
-import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 
 const appRoutes: Routes = [
   {
     path: "",
     component: DashboardComponent,
     children: [
+      {
+        path: '',
+        loadChildren: './pages/pages.module#PagesModule',
+        pathMatch: 'full'
+      },
       {
         path: "wizard",
         component: WizardComponent,
@@ -38,21 +41,12 @@ const appRoutes: Routes = [
         component: ClusterListComponent,
         canActivate: [AuthGuard],
         data: { title: "Manage Clusters" }
-      },
-      {
-        path: "",
-        component: FrontpageComponent,
-        pathMatch: 'full',
       }
     ]
   },
   {
-    path: "404",
-    component: PageNotFoundComponent
-  },
-  {
     path: "**",
-    redirectTo: "404"
+    redirectTo: '404'
   },
 ];
 

@@ -10,7 +10,7 @@ import {HttpModule} from "@angular/http";
 import {Auth} from "../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../reducers/index";
+import {combinedReducer} from "../redux/reducers/index";
 import {AddNodeComponent} from "../forms/add-node/add-node.component";
 
 describe('ClusterComponent', () => {

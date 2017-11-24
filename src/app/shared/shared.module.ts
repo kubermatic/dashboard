@@ -1,8 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 
+/* Modules */
+import { SlimLoadingBarModule } from "ng2-slim-loading-bar";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { CustomFormsModule } from "ng2-validation";
 import {
     MdButtonModule,
     MdIconModule,
@@ -23,12 +26,16 @@ import {
     MdSlideToggleModule,
     MdProgressBarModule
 } from '@angular/material';
+import 'hammerjs';
+
 
 const modules: Array<any> = [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    CustomFormsModule,
     SlimLoadingBarModule,
+    FlexLayoutModule,
     MdButtonModule,
     MdIconModule,
     MdInputModule,
@@ -52,8 +59,6 @@ const modules: Array<any> = [
 @NgModule({
     imports: [
         ...modules
-    ],
-    declarations: [
     ],
     exports: [
         ...modules

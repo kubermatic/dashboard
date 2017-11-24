@@ -1,3 +1,4 @@
+import { ApiService } from './api/api.service';
 import { AUTH_PROVIDERS } from './auth/auth.provider';
 import { AuthGuard } from './auth/auth.guard';
 import { Auth } from './auth/auth.service';
@@ -15,5 +16,6 @@ export {
     DatacenterService,
     Auth,
     AuthGuard,
-    AUTH_PROVIDERS
+    AUTH_PROVIDERS,
+    ApiService
 }

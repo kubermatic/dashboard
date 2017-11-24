@@ -2,8 +2,7 @@ import {Injectable} from "@angular/core";
 import {Router, NavigationStart} from "@angular/router";
 import {tokenNotExpired} from "angular2-jwt";
 import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../reducers/index";
-import {Actions} from "../../../reducers/actions";
+import * as fromRoot from "../../../redux/reducers/index";
 
 @Injectable()
 export class Auth {

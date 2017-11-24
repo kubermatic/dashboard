@@ -5,7 +5,7 @@ import { MaterialModule } from '@angular/material';
 import {Auth} from "../../services/auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
 import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../../reducers/index";
+import {combinedReducer} from "../../../redux/reducers/index";
 
 
 describe('SidenavComponent', () => {
