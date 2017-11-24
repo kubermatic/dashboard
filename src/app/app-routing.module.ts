@@ -5,7 +5,7 @@ import {DashboardComponent} from "./dashboard/dashboard.component";
 import {AuthGuard} from "./core/services";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
-import {ClusterListComponent} from "./cluster-list/cluster-list.component";
+import {ClusterListComponent} from "./cluster/cluster-list/cluster-list.component";
 import {SshkeyComponent} from "./sshkey/sshkey.component";
 
 const appRoutes: Routes = [

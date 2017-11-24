@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from "@angular/core";
-import {ApiService} from "app/core/services/api/api.service";
-import {ClusterEntity} from "../shared/entity/ClusterEntity";
+import {ApiService} from "../../core/services/api/api.service";
+import {ClusterEntity} from "../../shared/entity/ClusterEntity";
 import {Observable, Subscription} from "rxjs";
 
 
@@ -12,7 +12,7 @@ import {Observable, Subscription} from "rxjs";
 export class ClusterListComponent implements OnInit, OnDestroy {
 
   public clusters: ClusterEntity[] = [];
-  public timer: any = Observable.timer(0,10000);
+  public timer: any = Observable.timer(0, 10000);
   public sub: Subscription;
   public loading: boolean = true;
 
@@ -24,14 +24,14 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     });
   }
 
-  getClusters(){
+  getClusters() {
     this.api.getClusters().subscribe(result => {
       this.clusters = result;
       this.loading = false;
     });
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sub.unsubscribe();
   }
 }

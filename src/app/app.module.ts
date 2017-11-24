@@ -1,5 +1,5 @@
+import { ClusterModule } from './cluster/cluster.module';
 import { PagesModule } from './pages/pages.module';
-// import { ApiService } from 'app/core/services/api/api.service';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from "@angular/platform-browser";
@@ -8,32 +8,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { KubermaticComponent } from "./kubermatic.component";
 import { WizardComponent } from "./wizard/wizard.component";
-import { ClusterComponent } from "./cluster/cluster.component";
 import { AddSshKeyComponent } from "./sshkey/add-ssh-key/add-ssh-key.component";
-import { ClusterListComponent } from "./cluster-list/cluster-list.component";
-import { ClusterItemComponent } from "./cluster-list/cluster-item/cluster-item.component";
-import { NodeComponent } from "./cluster/node/node.component";
-import { NodeDeleteConfirmationComponent } from "./cluster/node-delete-confirmation/node-delete-confirmation.component";
-import { NodeDeleteConfirmationService } from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
 import { DashboardComponent } from "./dashboard/dashboard.component";
 import { SshkeyComponent } from "./sshkey/sshkey.component";
 import { AppRoutingModule } from "./app-routing.module";
 import { combinedReducer } from "./redux/reducers/index";
-import { ClusterDeleteConfirmationComponent } from "./cluster/cluster-delete-confirmation/cluster-delete-confirmation.component";
 import { ListSshKeyComponent } from './sshkey/list-ssh-key/list-ssh-key.component';
 import { AddSshKeyModalComponent } from './wizard/add-ssh-key-modal/add-ssh-key-modal.component';
-import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 import { SshKeyFormFieldComponent } from './wizard/ssh-key-form-field/ssh-key-form-field.component';
 import { AWSAddNodeFormComponent } from "./forms/add-node/aws/aws-add-node.component";
 import { DigitaloceanAddNodeComponent } from "./forms/add-node/digitalocean/digitalocean-add-node.component";
 import { OpenstackAddNodeComponent } from "./forms/add-node/openstack/openstack-add-node.component";
-import { ClipboardModule } from 'ngx-clipboard';
 import { ProgressComponent } from './wizard/progress/progress.component';
 import { NavigationButtonsComponent } from './wizard/navigation-buttons/navigation-buttons.component';
 import { SetProviderComponent } from './wizard/set-provider/set-provider.component';
 import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
-import { UpgradeClusterComponent } from './cluster/upgrade-cluster/upgrade-cluster.component';
 import { SummaryComponent } from './wizard/summary/summary.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component'
 import { ProviderNodeComponent } from './provider/node/node.component'
@@ -57,23 +47,16 @@ import { CoreModule } from 'app/core/core.module';
     AppRoutingModule,
     PagesModule,
     StoreModule.provideStore(combinedReducer),
-    ClipboardModule
+    ClusterModule
   ],
   declarations: [
     KubermaticComponent,
     DashboardComponent,
     WizardComponent,
-    ClusterComponent,
-    ClusterListComponent,
-    ClusterItemComponent,
-    NodeComponent,
     SshkeyComponent,
-    ClusterDeleteConfirmationComponent,
-    NodeDeleteConfirmationComponent,
     AddSshKeyComponent,
     ListSshKeyComponent,
     AddSshKeyModalComponent,
-    ClusterHealthStatusComponent,
     SshKeyFormFieldComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
@@ -83,7 +66,6 @@ import { CoreModule } from 'app/core/core.module';
     SetProviderComponent,
     SetDatacenterComponent,
     SetClusterNameComponent,
-    UpgradeClusterComponent,
     SummaryComponent,
     ProviderClusterComponent,
     ProviderNodeComponent,
@@ -97,19 +79,13 @@ import { CoreModule } from 'app/core/core.module';
     SetSettingsComponent
   ],
   entryComponents: [
-    ClusterDeleteConfirmationComponent,
-    NodeDeleteConfirmationComponent,
     AddSshKeyModalComponent,
     AWSAddNodeFormComponent,
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
-    UpgradeClusterComponent,
     MobileNavigationComponent
   ],
-  providers: [
-    // ApiService,
-    NodeDeleteConfirmationService
-  ],
+  providers: [],
   bootstrap: [KubermaticComponent]
 })
 
