@@ -11,7 +11,7 @@ import {ApiService} from "../api/api.service";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../redux/reducers/index";
 import {ClusterNameGenerator} from "../core/util/name-generator.service";
-import {FrontpageComponent} from "../frontpage/frontpage.component";
+import {FrontpageComponent} from "../pages/frontpage/frontpage.component";
 import { MaterialModule } from '@angular/material';
 
 describe("DashboardComponent", () => {

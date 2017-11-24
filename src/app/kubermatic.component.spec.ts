@@ -2,7 +2,7 @@
 import {TestBed, async} from "@angular/core/testing";
 import {KubermaticComponent} from "./kubermatic.component";
 import {NavigationComponent} from "./core/components/navigation/navigation.component";
-import {FrontpageComponent} from "./frontpage/frontpage.component";
+import {FrontpageComponent} from "./pages/frontpage/frontpage.component";
 import {BreadcrumbsComponent} from "./core/components/breadcrumbs/breadcrumbs.component";
 import {BrowserModule} from "@angular/platform-browser";
 import {Http, HttpModule} from "@angular/http";
@@ -11,7 +11,6 @@ import {AUTH_PROVIDERS, Auth, AuthGuard} from "./core/services";
 import {ApiService} from "./api/api.service";
 import {combinedReducer} from "./redux/reducers/index";
 import {StoreModule} from "@ngrx/store";
-import {NotificationComponent} from "./shared/components/notification/notification.component";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import { MaterialModule } from '@angular/material';
@@ -35,7 +34,6 @@ describe("KubermaticComponent", () => {
       declarations: [
         KubermaticComponent,
         NavigationComponent,
-        NotificationComponent,
         FrontpageComponent,
         BreadcrumbsComponent,
         SidenavComponent,
