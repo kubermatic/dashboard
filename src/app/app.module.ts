@@ -25,8 +25,8 @@ import { SetProviderComponent } from './wizard/set-provider/set-provider.compone
 import { SetDatacenterComponent } from './wizard/set-datacenter/set-datacenter.component';
 import { SetClusterNameComponent } from './wizard/set-cluster-name/set-cluster-name.component';
 import { SummaryComponent } from './wizard/summary/summary.component';
-import { ProviderClusterComponent } from './provider/cluster/cluster.component'
-import { ProviderNodeComponent } from './provider/node/node.component'
+import { ProviderClusterComponent } from './provider/cluster/cluster.component';
+import { ProviderNodeComponent } from './provider/node/node.component';
 import { DigitaloceanClusterComponent } from './provider/cluster/digitalocean/digitalocean.component';
 import { AWSClusterComponent } from './provider/cluster/aws/aws.component';
 import { OpenstackClusterComponent } from './provider/cluster/openstack/openstack.component';
