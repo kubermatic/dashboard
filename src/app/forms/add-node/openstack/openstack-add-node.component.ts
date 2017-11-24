@@ -27,7 +27,6 @@ export class OpenstackAddNodeComponent extends AddNodeComponent {
               notificationActions: NotificationActions, 
               @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
     super(api, fb, notificationActions, data);
-    console.log(this.data.dc);
 
     this.form = fb.group({
       node_count: [1, [Validators.required, Validators.min(1)]],
