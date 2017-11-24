@@ -8,7 +8,7 @@ import {BrowserModule} from "@angular/platform-browser";
 import {Http, HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AUTH_PROVIDERS, Auth, AuthGuard} from "./core/services";
-import {ApiService} from "./api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {combinedReducer} from "./redux/reducers/index";
 import {StoreModule} from "@ngrx/store";
 import {SimpleNotificationsModule} from "angular2-notifications";

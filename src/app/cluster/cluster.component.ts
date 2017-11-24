@@ -1,7 +1,7 @@
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, OnInit} from "@angular/core";
 import {Router, ActivatedRoute} from "@angular/router";
-import {ApiService} from "../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {environment} from "../../environments/environment";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from '@angular/material';

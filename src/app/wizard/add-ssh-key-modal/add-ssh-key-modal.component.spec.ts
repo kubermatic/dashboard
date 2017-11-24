@@ -12,7 +12,7 @@ import {combinedReducer} from "../../redux/reducers/index";
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {Auth} from "../../core/services";
-import {ApiService} from "../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 
 describe('AddSshKeyModalComponent', () => {
   let component: AddSshKeyModalComponent;

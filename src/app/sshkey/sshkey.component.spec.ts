@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {ApiService} from "../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {HttpModule} from "@angular/http";
 import {Auth} from "../core/services";
 import {RouterTestingModule} from "@angular/router/testing";

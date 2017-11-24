@@ -1,5 +1,5 @@
 import {Component, OnInit} from "@angular/core";
-import {ApiService} from "../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {DataCenterEntity} from "../shared/entity/DatacenterEntity";
 import {Router} from "@angular/router";
 import {Observable, Subscription} from "rxjs";

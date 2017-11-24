@@ -13,7 +13,7 @@ import {Auth} from "../../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
 import {FormBuilder, NgModel} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {ApiService} from "../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 
 describe('NodeDeleteConfirmationComponent', () => {
   let component: NodeDeleteConfirmationComponent;

@@ -2,17 +2,17 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Injectable} from "@angular/core";
 import "rxjs/add/operator/map";
 import {Observable} from "rxjs";
-import {environment} from "../../environments/environment";
-import {CreateNodeModel} from "./../shared/model/CreateNodeModel";
-import {DataCenterEntity} from "./../shared/entity/DatacenterEntity";
-import {ClusterEntity} from "./../shared/entity/ClusterEntity";
-import {NodeEntity} from "./../shared/entity/NodeEntity";
-import {Auth} from "../core/services/auth/auth.service";
-import {SSHKeyEntity} from "./../shared/entity/SSHKeyEntity";
+import {environment} from "../../../../environments/environment";
+import {CreateNodeModel} from "app/shared/model/CreateNodeModel";
+import {DataCenterEntity} from "app/shared/entity/DatacenterEntity";
+import {ClusterEntity} from "app/shared/entity/ClusterEntity";
+import {NodeEntity} from "app/shared/entity/NodeEntity";
+import {Auth} from "app/core/services/auth/auth.service";
+import {SSHKeyEntity} from "app/shared/entity/SSHKeyEntity";
 import {OpenStack} from 'openstack-lib';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {DropletSizeResponseEntity} from "./../shared/entity/digitalocean/DropletSizeEntity";
-import {CreateClusterModel} from "./../shared/model/CreateClusterModel";
+import {DropletSizeResponseEntity} from "app/shared/entity/digitalocean/DropletSizeEntity";
+import {CreateClusterModel} from "app/shared/model/CreateClusterModel";
 import 'rxjs/add/operator/catch';
 
 @Injectable()

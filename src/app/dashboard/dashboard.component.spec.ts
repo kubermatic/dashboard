@@ -7,7 +7,7 @@ import {ReactiveFormsModule, FormsModule} from "@angular/forms";
 import {HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
 import {Auth} from "../core/services";
-import {ApiService} from "../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {StoreModule} from "@ngrx/store";
 import {combinedReducer} from "../redux/reducers/index";
 import {ClusterNameGenerator} from "../core/util/name-generator.service";

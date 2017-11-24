@@ -1,7 +1,7 @@
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { RouterModule, Router } from "@angular/router";
-import { ApiService } from "../../api/api.service";
+import { ApiService } from "app/core/services/api/api.service";
 import { MdDialogRef } from '@angular/material';
 import { CreateNodesService } from '../../core/services';
 import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";

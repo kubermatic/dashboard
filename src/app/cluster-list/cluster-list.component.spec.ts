@@ -4,7 +4,7 @@ import { MaterialModule } from '@angular/material';
 import { ClusterListComponent } from './cluster-list.component';
 import { ClusterItemComponent } from "./cluster-item/cluster-item.component";
 import {Auth} from "../core/services";
-import {ApiService} from "../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Http, HttpModule, ConnectionBackend} from "@angular/http";

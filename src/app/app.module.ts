@@ -1,5 +1,5 @@
 import { PagesModule } from './pages/pages.module';
-import { ApiService } from 'app/api/api.service';
+// import { ApiService } from 'app/core/services/api/api.service';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from "@angular/platform-browser";
@@ -107,7 +107,7 @@ import { CoreModule } from 'app/core/core.module';
     MobileNavigationComponent
   ],
   providers: [
-    ApiService,
+    // ApiService,
     NodeDeleteConfirmationService
   ],
   bootstrap: [KubermaticComponent]

@@ -1,5 +1,5 @@
 import {Component, OnInit, OnDestroy} from "@angular/core";
-import {ApiService} from "../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {ClusterEntity} from "../shared/entity/ClusterEntity";
 import {Observable, Subscription} from "rxjs";
 

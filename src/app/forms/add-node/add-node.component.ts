@@ -1,7 +1,7 @@
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, Inject} from "@angular/core";
 import {FormBuilder} from "@angular/forms";
-import {ApiService} from "../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {CreateNodeModel} from "../../shared/model/CreateNodeModel";
 import {MD_DIALOG_DATA} from "@angular/material";
 import {AddNodeModalData} from "./add-node-modal-data";

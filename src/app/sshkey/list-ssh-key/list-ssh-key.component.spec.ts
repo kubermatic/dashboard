@@ -4,7 +4,7 @@ import {FormBuilder,} from "@angular/forms";
 import { ListSshKeyComponent } from './list-ssh-key.component';
 import { MaterialModule } from '@angular/material';
 import {Auth} from "../../core/services";
-import {ApiService} from "../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";

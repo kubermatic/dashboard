@@ -1,6 +1,6 @@
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, OnInit} from "@angular/core";
-import {ApiService} from "../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {SSHKeyEntity} from "../shared/entity/SSHKeyEntity";
 @Component({
   selector: "kubermatic-sshkey",

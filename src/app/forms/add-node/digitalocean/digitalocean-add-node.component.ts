@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
-import {ApiService} from "../../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {AddNodeComponent} from "../add-node.component";
 import {Size} from "../../../shared/entity/digitalocean/DropletSizeEntity";
 import {DigitaloceanNodeSpec} from "../../../shared/entity/node/DigitialoceanNodeSpec";

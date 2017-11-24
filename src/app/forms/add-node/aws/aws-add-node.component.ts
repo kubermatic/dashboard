@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AWSNodeSpec} from "../../../shared/entity/node/AWSNodeSpec";
 import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
-import {ApiService} from "../../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
 import {AddNodeComponent} from "../add-node.component";
 import {MD_DIALOG_DATA} from "@angular/material";
