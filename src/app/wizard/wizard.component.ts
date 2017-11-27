@@ -195,7 +195,7 @@ export class WizardComponent implements OnInit {
     console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {
         this.notificationActions.success("Success", `Cluster successfully created`);
-        this.router.navigate(["/cluster/" + cluster.metadata.name]);
+        this.router.navigate(["/clusters/" + cluster.metadata.name]);
 
         this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
 
