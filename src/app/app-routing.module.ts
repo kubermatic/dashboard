@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {DashboardComponent} from "./dashboard/dashboard.component";
-import {AuthGuard} from "./core/services";
 import {WizardComponent} from "./wizard/wizard.component";
 import {ClusterComponent} from "./cluster/cluster.component";
 import {ClusterListComponent} from "./cluster/cluster-list/cluster-list.component";

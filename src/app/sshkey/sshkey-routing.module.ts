@@ -1,8 +1,9 @@
-import { AuthGuard } from './../core/services/auth/auth.guard';
-import { SshkeyComponent } from './sshkey.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
+import { AuthGuard } from './../core/services/auth/auth.guard';
+
+import { SshkeyComponent } from './sshkey.component';
 
 const routes: Routes = [
     {

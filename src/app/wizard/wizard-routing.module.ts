@@ -1,6 +1,8 @@
-import { AuthGuard } from './../core/services/auth/auth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+
+import { AuthGuard } from './../core/services/auth/auth.guard';
+
 import { WizardComponent } from 'app/wizard/wizard.component';
 
 const routes: Routes = [
