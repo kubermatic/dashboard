@@ -32,15 +32,15 @@ export class AWSClusterComponent implements OnInit {
     });
   }
 
-  public onChange(){
+  public onChange() {
     this.cloudSpec = new AWSCloudSpec(
       this.awsClusterForm.controls["accessKeyId"].value,
       this.awsClusterForm.controls["secretAccessKey"].value,
       this.awsClusterForm.controls["vpcId"].value,
       this.awsClusterForm.controls["subnetId"].value,
       this.awsClusterForm.controls["routeTableId"].value,
-      "",
-    )
+      ""
+    );
 
     this.syncProviderCloudSpec.emit(this.cloudSpec);
     this.syncProviderCloudSpecValid.emit(this.awsClusterForm.valid);

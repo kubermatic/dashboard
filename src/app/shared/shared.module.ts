@@ -7,6 +7,7 @@ import { SlimLoadingBarModule } from "ng2-slim-loading-bar";
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { CustomFormsModule } from "ng2-validation";
 import { ClipboardModule } from 'ngx-clipboard';
+import { DynamicFormModule } from 'app/shared/dynamic-form/dynamic-form.module';
 import {
     MdButtonModule,
     MdIconModule,
@@ -55,7 +56,8 @@ const modules: Array<any> = [
     OverlayModule,
     MdSlideToggleModule,
     MdProgressBarModule,
-    ClipboardModule
+    ClipboardModule,
+    DynamicFormModule
 ];
 
 @NgModule({
