@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from "@angular/core";
-import {ClusterEntity} from "../../shared/entity/ClusterEntity";
+import {ClusterEntity} from "../../../shared/entity/ClusterEntity";
 
 @Component({
   selector: "kubermatic-cluster-item",
@@ -8,7 +8,7 @@ import {ClusterEntity} from "../../shared/entity/ClusterEntity";
 })
 export class ClusterItemComponent implements OnInit {
   @Input() cluster: ClusterEntity;
-  @Input() index: number
+  @Input() index: number;
 
   constructor() {}
 
@@ -18,6 +18,6 @@ export class ClusterItemComponent implements OnInit {
   public getShortClusterName(): string {
     let name = this.cluster.spec.humanReadableName;
 
-    return name.length > 12 ?  name.slice(0, 12) + '...': name;
+    return name.length > 12 ?  name.slice(0, 12) + '...' : name;
   }
 }

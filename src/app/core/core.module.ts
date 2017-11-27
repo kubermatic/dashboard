@@ -13,6 +13,7 @@ import { SimpleNotificationsModule } from "angular2-notifications";
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { NotificationComponent } from './components/notification/notification.component';
 
 /* Services */
 import { ClusterNameGenerator } from './util/name-generator.service';
@@ -34,7 +35,6 @@ import {
   LoaderInterceptor, 
   CheckTokenInterceptor, 
   ErrorNotificationsInterceptor } from './interceptors';
-import { NotificationComponent } from './components/notification/notification.component';
 
 const modules: any[] = [
   CommonModule,

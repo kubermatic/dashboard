@@ -1,12 +1,12 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
+import {NodeInstanceFlavors} from "../../../../shared/model/NodeProviderConstants";
 import {CustomValidators} from "ng2-validation";
-import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
-import {OpenstackNodeSpec} from "../../../shared/entity/node/OpenstackNodeSpec";
-import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
+import {NodeCreateSpec} from "../../../../shared/entity/NodeEntity";
+import {OpenstackNodeSpec} from "../../../../shared/entity/node/OpenstackNodeSpec";
+import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
 
-import {InputValidationService} from '../../../core/services';
+import {InputValidationService} from '../../../../core/services';
 
 @Component({
   selector: 'kubermatic-node-openstack',
