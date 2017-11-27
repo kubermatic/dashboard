@@ -14,34 +14,21 @@ const appRoutes: Routes = [
     component: DashboardComponent,
     children: [
       {
-        path: '',
-        loadChildren: './pages/pages.module#PagesModule',
-        pathMatch: 'full'
-      },
-      {
         path: "wizard",
-        component: WizardComponent,
-        canActivate: [AuthGuard],
-        data: { title: "Create Cluster with Nodes" }
+        loadChildren: './wizard/wizard.module#WizardModule',
       },
       {
         path: "sshkeys",
-        component: SshkeyComponent,
-        canActivate: [AuthGuard],
-        data: { title: "Manage SSH Keys" }
+        loadChildren: './sshkey/sshkey.module#SshkeyModule'
       },
       {
-        path: "cluster/:clusterName",
-        component: ClusterComponent,
-        canActivate: [AuthGuard],
-        data: { title: "Cluster details" }
+        path: 'clusters',
+        loadChildren: './cluster/cluster.module#ClusterModule'
       },
       {
-        path: "clusters",
-        component: ClusterListComponent,
-        canActivate: [AuthGuard],
-        data: { title: "Manage Clusters" }
-      }
+        path: '',
+        loadChildren: './pages/pages.module#PagesModule'
+      },
     ]
   },
   {

@@ -7,7 +7,7 @@ const routes: Routes = [
     {
         path: "",
         component: FrontpageComponent,
-        pathMatch: 'full',
+        pathMatch: 'full'
     },
     {
         path: "404",

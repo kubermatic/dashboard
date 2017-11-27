@@ -9,7 +9,7 @@ import { ClusterDeleteConfirmationComponent } from 'app/cluster/cluster-delete-c
 import { SharedModule } from 'app/shared/shared.module';
 import { ClusterItemComponent } from './cluster-list/cluster-item/cluster-item.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
-import { RouterModule } from '@angular/router';
+import { ClusterRoutingModule } from 'app/cluster/cluster-routing.module';
 
 const components: any[] = [
     ClusterComponent,
@@ -25,7 +25,7 @@ const components: any[] = [
 @NgModule({
     imports: [
         SharedModule,
-        RouterModule
+        ClusterRoutingModule
     ],
     declarations: [
         ...components

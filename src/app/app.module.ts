@@ -1,4 +1,3 @@
-import { PagesModule } from './pages/pages.module';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from "@angular/platform-browser";
@@ -16,10 +15,6 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from 'app/core/core.module';
 import { combinedReducer } from "./redux/reducers/index";
 
-/* Feature modules */
-import { WizardModule } from './wizard/wizard.module';
-import { ClusterModule } from './cluster/cluster.module';
-import { SshkeyModule } from 'app/sshkey/sshkey.module';
 
 @NgModule({
   imports: [
@@ -28,11 +23,7 @@ import { SshkeyModule } from 'app/sshkey/sshkey.module';
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    PagesModule,
     StoreModule.provideStore(combinedReducer),
-    ClusterModule,
-    WizardModule,
-    SshkeyModule
   ],
   declarations: [
     KubermaticComponent,

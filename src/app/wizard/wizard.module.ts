@@ -4,7 +4,6 @@ import { ProviderNodeComponent } from './provider/node/node.component';
 import { OpenstackClusterComponent } from './provider/cluster/openstack/openstack.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component';
 import { SharedModule } from 'app/shared/shared.module';
-import { RouterModule } from '@angular/router';
 import { SshKeyFormFieldComponent } from './ssh-key-form-field/ssh-key-form-field.component';
 import { NgModule } from '@angular/core';
 import { WizardComponent } from 'app/wizard/wizard.component';
@@ -19,6 +18,7 @@ import { SummaryComponent } from 'app/wizard/summary/summary.component';
 import { DigitaloceanClusterComponent } from './provider/cluster/digitalocean/digitalocean.component';
 import { AWSClusterComponent } from './provider/cluster/aws/aws.component';
 import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
+import { WizardRoutingModule } from 'app/wizard/wizard-routing.module';
 
 const components: any[] = [
     WizardComponent,
@@ -44,7 +44,7 @@ const components: any[] = [
 @NgModule({
     imports: [
         SharedModule,
-        RouterModule
+        WizardRoutingModule
     ],
     declarations: [
         ...components
