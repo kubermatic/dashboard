@@ -1,17 +1,16 @@
+import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { DynamicFormComponent } from 'app/shared/dynamic-form/dynamic-form.component';
-import { DynamicFormFieldComponent } from 'app/shared/dynamic-form/dynamic-form-field/dynamic-form-field.component';
+import { DynamicFormComponent } from './dynamic-form.component';
+import { DynamicFormFieldComponent } from './dynamic-form-field/dynamic-form-field.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
     imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule
+        SharedModule
     ],
     declarations: [DynamicFormComponent, DynamicFormFieldComponent],
-    exports: [],
+    exports: [DynamicFormComponent, DynamicFormFieldComponent],
     providers: [],
 })
 export class DynamicFormModule { }

@@ -17,7 +17,8 @@ export abstract class AddNodeComponent {
 
   public addNode(): void {
     let model = this.GetNodeCreateSpec();
-    this.api.createClusterNode(this.data.cluster, model).subscribe(node => {
+    this.api.createClusterNode(this.data.cluster, model)
+      .subscribe(node => {
         this.notificationActions.success("Success", `Node(s) successfully created`);
       });
   }

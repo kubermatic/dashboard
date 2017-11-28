@@ -1,0 +1,25 @@
+<div [formGroup]="form">
+  <label [attr.for]="field.key">{{field.label}}</label>
+ 
+  <div [ngSwitch]="field.controlType">
+ 
+    <md-input-container *ngSwitchCase="'textbox'" fxFlex>
+      <input [id]="field.key" [type]="field.type" mdInput [formControlName]="field.key" [placeholder]="field.placeholder" [title]="field.key">
+      <small class="form-text text-danger" *ngIf="!isValid">{{field.placeholder}} is required</small>
+    </md-input-container>
+ 
+
+    <md-select *ngSwitchCase="'dropdown'" style="width: 100%; margin-top: 10px; margin-bottom: 10px;" [placeholder]="field.placeholder" name="size" [formControlName]="field.key">
+      <md-option *ngFor="let opt of field.options" [value]="opt.key">
+        {{opt.value}}
+      </md-option>
+    </md-select>
+
+    <div class="slider-box" *ngSwitchCase="'checkbox'">
+      <md-slide-toggle [formControlName]="field.key">{{field.placeholder}}</md-slide-toggle>
+    </div>
+ 
+  </div> 
+
+  
+</div>

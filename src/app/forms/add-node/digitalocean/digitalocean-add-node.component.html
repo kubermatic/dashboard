@@ -9,19 +9,7 @@
   </md-toolbar>
   <md-dialog-content>
     <div class="md-dialog-content">
-      <div [formGroup]="form">
-        <md-input-container style="width: 100%;">
-          <input id="node_count" mdInput formControlName="node_count" type="number" min=1
-                 placeholder="Quantity of Nodes:"
-                 title="node_count">
-        </md-input-container>
-
-        <md-select style="width: 100%; margin-top: 10px; margin-bottom: 10px;" placeholder="Node Size:" name="size" formControlName="size">
-          <md-option *ngFor="let size of nodeSizes; let i = index;" [value]="size.slug">
-            {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
-          </md-option>
-        </md-select>
-      </div>
+      <kubermatic-dynamic-form [form]="form" [fields]="fields"></kubermatic-dynamic-form>      
     </div>
   </md-dialog-content>
 

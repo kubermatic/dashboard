@@ -1,3 +1,4 @@
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 import { StoreModule } from '@ngrx/store';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from "@angular/platform-browser";
@@ -20,6 +21,7 @@ import { combinedReducer } from "./redux/reducers/index";
   imports: [
     CoreModule,
     SharedModule,
+    DynamicFormModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

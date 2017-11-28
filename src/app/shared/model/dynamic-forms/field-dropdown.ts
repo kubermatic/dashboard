@@ -1,6 +1,6 @@
 import { FieldBase } from './field-base';
 
-export class DropdownQuestion extends FieldBase<string> {
+export class DropdownField extends FieldBase<string> {
     controlType = 'dropdown';
     options: { key: string, value: string }[] = [];
 
