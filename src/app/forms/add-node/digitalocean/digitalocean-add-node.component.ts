@@ -34,10 +34,11 @@ export class DigitaloceanAddNodeComponent extends AddNodeComponent implements On
   }
 
   public ngOnInit(): void {
-    let options: Array<{key: string, value: string}> = [];
+    let options = [];
     
     this.api.getDigitaloceanSizes(this.data.cluster.spec.cloud.digitalocean.token)
       .subscribe(result => {
+        this.nodeSizes = result.sizes;
         this.nodeSizes.forEach((size) => {
           options.push({
             key: size.slug,
