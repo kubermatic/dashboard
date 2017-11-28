@@ -1,11 +1,8 @@
-import { NotificationActions } from './../../../redux/actions/notification.actions';
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
 import {ApiService} from "app/core/services/api/api.service";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../redux/reducers/index";
 import {AddNodeComponent} from "../add-node.component";
 import {MD_DIALOG_DATA} from "@angular/material";
 import {OpenstackNodeSpec} from "../../../shared/entity/node/OpenstackNodeSpec";
@@ -23,10 +20,9 @@ export class OpenstackAddNodeComponent extends AddNodeComponent {
   flavors: string[] = NodeInstanceFlavors.Openstack;
 
   constructor(api: ApiService, 
-              fb: FormBuilder, 
-              notificationActions: NotificationActions, 
+              fb: FormBuilder,
               @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
-    super(api, fb, notificationActions, data);
+    super(api, fb, data);
 
     this.form = fb.group({
       node_count: [1, [Validators.required, Validators.min(1)]],

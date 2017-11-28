@@ -6,8 +6,6 @@ import {OverlayPositionBuilder} from "@angular/material/typings/core/overlay/pos
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../redux/reducers/index";
 
 describe('NodeDeleteConfirmationService', () => {
   beforeEach(() => {
@@ -16,7 +14,6 @@ describe('NodeDeleteConfirmationService', () => {
         BrowserModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer),
         OverlayModule
       ],
       providers: [

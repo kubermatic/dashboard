@@ -14,8 +14,7 @@ export class CreateNodesService {
 
     constructor(
         private api: ApiService,
-        private localStorageService: LocalStorageService,
-        private notificationActions: NotificationActions) {
+        private localStorageService: LocalStorageService) {
         let nodesData = this.localStorageService.getNodesData();
 
         if (nodesData) {
@@ -40,7 +39,7 @@ export class CreateNodesService {
                     if (cluster.status.phase === "Running") {
                         this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
                             this.preventCreatingInitialClusterNodes();
-                            this.notificationActions.success("Success", `Creating Nodes`);
+                            NotificationActions.success("Success", `Creating Nodes`);
                         });
                     }
                 });

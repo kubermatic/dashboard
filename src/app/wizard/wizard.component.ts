@@ -67,8 +67,7 @@ export class WizardComponent implements OnInit {
     private customEventService: CustomEventService,
     private createNodesService: CreateNodesService,
     public inputValidationService: InputValidationService,
-    public dcService: DatacenterService,
-    public notificationActions: NotificationActions
+    public dcService: DatacenterService
   ) {}
 
 
@@ -92,9 +91,9 @@ export class WizardComponent implements OnInit {
     this.cacheCloud =  new CloudSpec(
       '', 
       new DigitaloceanCloudSpec(''), 
-      new AWSCloudSpec('','','','','',''), 
+      new AWSCloudSpec('', '', '', '', '', ''), 
       null, 
-      new OpenstackCloudSpec('','','','Default','','',''), 
+      new OpenstackCloudSpec('', '', '', 'Default', '', '', ''), 
       null
     );
 
@@ -194,14 +193,14 @@ export class WizardComponent implements OnInit {
 
     console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {
-        this.notificationActions.success("Success", `Cluster successfully created`);
+        NotificationActions.success("Success", `Cluster successfully created`);
         this.router.navigate(["/clusters/" + cluster.metadata.name]);
 
         this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
 
       },
       error => {
-        this.notificationActions.error("Error", `${error.status} ${error.statusText}`);
+        NotificationActions.error("Error", `${error.status} ${error.statusText}`);
       });
   }
 }

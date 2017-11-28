@@ -30,9 +30,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
 
   constructor(
     private api: ApiService,
-    private customEventService: CustomEventService,
-    private notificationActions: NotificationActions
-  ) {}
+    private customEventService: CustomEventService) {}
 
   ngOnInit() {
   }
@@ -40,7 +38,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public deleteNode(nodeName: string): void {
     this.onNodeRemoval(true);
     this.api.deleteClusterNode(this.clusterName, nodeName).subscribe(result => {
-      this.notificationActions.success("Success", `Node removed successfully`);
+      NotificationActions.success("Success", `Node removed successfully`);
       this.customEventService.publish('onNodeDelete', nodeName);
       this.onNodeRemoval(false);
     });

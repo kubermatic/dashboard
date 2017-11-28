@@ -1,5 +1,6 @@
 import { NotificationActions } from './../actions/notification.actions';
-import {Action} from "@ngrx/store";
+import { Action } from "../../shared/interfaces/action.interface";
+import { Reducer } from 'redux';
 
 export enum NotificationToastType {
   success,
@@ -20,11 +21,11 @@ export interface Notification {
   toast: NotificationToast;
 }
 
-const initialState: Notification = {
+export const INITIAL_STATE: Notification = {
   toast: null,
 };
 
-export function notificationReducer(state: Notification = initialState, action: Action): Notification {
+export const NotificationReducer: Reducer<Notification> = (state: Notification = INITIAL_STATE, action: Action): Notification => {
   switch (action.type) {
     case NotificationActions.PUSH_NOTIFICATION:
       return Object.assign({}, state, {
@@ -33,6 +34,5 @@ export function notificationReducer(state: Notification = initialState, action: 
     default:
       return state;
   }
-}
+};
 
-export const getToast = (state: Notification) => state.toast;

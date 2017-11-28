@@ -4,8 +4,6 @@ import {ApiService} from "app/core/services/api/api.service";
 import {HttpModule} from "@angular/http";
 import {Auth} from "../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../redux/reducers/index";
 import { MaterialModule } from '@angular/material';
 import { SshkeyComponent } from "./sshkey.component";
 import { ListSshKeyComponent } from './list-ssh-key/list-ssh-key.component';
@@ -25,7 +23,6 @@ describe("SshkeyComponent", () => {
         ReactiveFormsModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer),
         MaterialModule
       ],
       declarations: [

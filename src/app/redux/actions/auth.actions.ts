@@ -1,33 +1,34 @@
-import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
-import * as fromRoot from "../reducers/index";
+import { ActionBase } from './action.base';
+import { Action } from '../../shared/interfaces/action.interface';
 
-@Injectable()
-export class AuthActions {
-    public static get LOGGED_IN(): string { return "LOGGED_IN"; }
-    public static get LOGGED_OUT(): string { return "LOGGED_OUT"; }
-    public static get FETCH_PROFILE(): string { return "FETCH_PROFILE"; }
+import { dispatch } from '@angular-redux/store';
 
-    constructor(private store: Store<fromRoot.State>) {
-    }
-
-    public login(profile: any[], token: string) {
-        this.store.dispatch({ 
+export class AuthActions extends ActionBase {
+    static readonly className: string = 'AuthActions';
+    static readonly LOGGED_IN = AuthActions.getActType('LOGGED_IN');
+    static readonly LOGGED_OUT = AuthActions.getActType('LOGGED_OUT');
+    static readonly FETCH_PROFILE = AuthActions.getActType('FETCH_PROFILE');
+    
+    @dispatch()
+    static login(profile: any[], token: string): Action {
+        return { 
             type: AuthActions.LOGGED_IN, 
             payload: { profile, token } 
-        });
+        };
     }
 
-    public logout() {
-        this.store.dispatch({ 
+    @dispatch()
+    static logout(): Action {
+        return { 
             type: AuthActions.LOGGED_OUT
-        });
+        };
     }
 
-    public fetchProfile(profile: any[]) {
-        this.store.dispatch({ 
+    @dispatch()
+    static fetchProfile(profile: any[]): Action {
+        return { 
             type: AuthActions.FETCH_PROFILE,
             payload: { profile } 
-        });
+        };
     }
 }
