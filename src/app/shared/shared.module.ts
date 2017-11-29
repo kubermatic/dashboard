@@ -28,6 +28,7 @@ import {
     MdProgressBarModule
 } from '@angular/material';
 import 'hammerjs';
+import { NgReduxFormModule } from '@angular-redux/form';
 
 
 const modules: Array<any> = [
@@ -55,7 +56,8 @@ const modules: Array<any> = [
     OverlayModule,
     MdSlideToggleModule,
     MdProgressBarModule,
-    ClipboardModule
+    ClipboardModule,
+    NgReduxFormModule
 ];
 
 @NgModule({

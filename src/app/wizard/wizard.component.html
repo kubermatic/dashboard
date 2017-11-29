@@ -1,15 +1,15 @@
-<kubermatic-progress [step]="currentStep" (syncStep)="gotoStep($event)"></kubermatic-progress>
+<kubermatic-progress></kubermatic-progress>
 
 <!-- Cluster Name: Step 1 -->
 <kubermatic-set-cluster-name
-  *ngIf="currentStep == 0"
+  *ngIf="step == 0"
   [clusterName]="clusterName"
   (syncName)="setClusterName($event)"
 ></kubermatic-set-cluster-name>
 
-<!-- Cluster Provider: Step 2 --->
+<!-- Cluster Provider: Step 2 -->
 <kubermatic-set-provider
-  *ngIf="currentStep == 1"
+  *ngIf="step == 1"
   [provider]="groupedDatacenters"
   [selectedProvider]="selectedProvider"
   (syncProvider)="setProvider($event)"
@@ -17,7 +17,7 @@
 
 <!-- Cluster Datacenter: Step 3 -->
 <kubermatic-set-datacenter
-  *ngIf="currentStep == 2"
+  *ngIf="step == 2"
   [datacenter]="groupedDatacenters[selectedProvider]"
   [selectedDatacenter]="selectedProviderRegion"
   (syncDatacenter)="setProviderRegion($event)"
@@ -25,7 +25,7 @@
 
 <!-- Provider Settings: Step 4 -->
 <kubermatic-set-settings
-  *ngIf="currentStep == 3"
+  *ngIf="step == 3"
   [clusterName]="clusterName.value"
   [provider]="selectedProvider"
   [region]="selectedProviderRegion.metadata.name"
@@ -42,7 +42,7 @@
 
 <!-- Provider Summary: Step 5 -->
 <kubermatic-summary
-  *ngIf="currentStep == 4"
+  *ngIf="step == 4"
   [provider]="selectedProvider"
   [region]="selectedProviderRegion"
   [clusterSpec]="createClusterModal"
@@ -52,12 +52,6 @@
 
 <!-- Navigation Buttons -->
 <kubermatic-navigation-buttons
-  [step]="currentStep"
-  [nextStep]="canGotoStep(currentStep)"
-  (syncStep)="gotoStep($event)"
 ></kubermatic-navigation-buttons>
 
-<!-- <form [formGroup]="form">
-  
-</form> -->
 

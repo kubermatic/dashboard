@@ -1,4 +1,4 @@
-<form [formGroup]="awsClusterForm" novalidate  fxLayout="column" (change)="onChange()">
+<form [connect]="['wizard', 'awsClusterForm']" [formGroup]="awsClusterForm" novalidate  fxLayout="column" (change)="onChange()">
   <p>
     We need a AWS Access Key and Secret Access Key <b>with write access</b>.
     You can create one
@@ -21,6 +21,6 @@
            ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
   </md-input-container>
   <div class="slider-box">
-    <md-slide-toggle formControlName="aws_cas">Extend Provider settings</md-slide-toggle>
+    <md-slide-toggle id="aws_cas" formControlName="aws_cas">Extend Provider settings</md-slide-toggle>
   </div>
 </form>

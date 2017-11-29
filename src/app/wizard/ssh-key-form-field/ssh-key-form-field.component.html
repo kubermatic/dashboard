@@ -1,4 +1,4 @@
-<form [formGroup]="sshKeyForm" novalidate  fxLayout="column"  >
+<form [connect]="['wizard', 'sshKeyForm']" [formGroup]="sshKeyForm" novalidate  fxLayout="column"  >
   <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
      <div *ngSwitchCase="true">
        <md-select fxFlex multiple  class="mat-select-content" placeholder="SSH Keys:" name="ssh_keys" formControlName="ssh_keys" (change)="change($event)">

@@ -1,3 +1,4 @@
+import { FormGroup } from '@angular/forms';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {CloudSpec, ClusterSpec} from "../../../shared/entity/ClusterEntity";
 import {NodeProvider} from "../../../shared/model/NodeProviderConstants";
@@ -24,7 +25,6 @@ export class ProviderClusterComponent implements OnInit {
   public setCloud(providerCloudSpec) {
 
     if (this.provider === NodeProvider.AWS) {
-
       this.cloudSpec = new CloudSpec(
         this.region,
         null,
@@ -32,10 +32,8 @@ export class ProviderClusterComponent implements OnInit {
         null,
         null,
         null,
-      )
-
+      );
     } else if (this.provider === NodeProvider.DIGITALOCEAN) {
-
       this.cloudSpec = new CloudSpec(
         this.region,
         providerCloudSpec,
@@ -43,7 +41,7 @@ export class ProviderClusterComponent implements OnInit {
         null,
         null,
         null,
-      )
+      );
     } else if (this.provider === NodeProvider.OPENSTACK) {
       this.cloudSpec = new CloudSpec(
         this.region,
@@ -52,7 +50,7 @@ export class ProviderClusterComponent implements OnInit {
         null,
         providerCloudSpec,
         null,
-      )
+      );
     }
 
     this.syncCloudSpec.emit(this.cloudSpec);

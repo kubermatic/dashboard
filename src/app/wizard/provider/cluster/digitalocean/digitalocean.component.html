@@ -1,4 +1,4 @@
-<form [formGroup]="digitalOceanClusterForm" novalidate fxLayout="column" (change)="onChange()">
+<form [connect]="['wizard', 'digitalOceanClusterForm']" [formGroup]="digitalOceanClusterForm" novalidate fxLayout="column" (change)="onChange()">
   <p fxFlex>
     We need a DigitalOcean Personal Access Token.
     You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.

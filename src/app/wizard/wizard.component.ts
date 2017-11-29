@@ -18,6 +18,7 @@ import {DigitaloceanNodeSpec} from "../shared/entity/node/DigitialoceanNodeSpec"
 import {AWSCloudSpec} from "../shared/entity/cloud/AWSCloudSpec";
 import {OpenstackCloudSpec} from "../shared/entity/cloud/OpenstackCloudSpec";
 import { NotificationActions } from "app/redux/actions/notification.actions";
+import { select } from "@angular-redux/store";
 
 @Component({
   selector: "kubermatic-wizard",
@@ -59,6 +60,9 @@ export class WizardComponent implements OnInit {
   public cacheCloud: CloudSpec;
   public cacheNode: CreateNodeModel;
 
+  @select(['wizard', 'step']) step$: Observable<number>;
+  public step: number;
+
 
   constructor(
     private api: ApiService,
@@ -83,6 +87,10 @@ export class WizardComponent implements OnInit {
           this.groupedDatacenters[elem.spec.provider].push(elem);
         }
       });
+    });
+
+    this.step$.subscribe(step => {
+      this.step = step;
     });
   }
 
@@ -117,13 +125,12 @@ export class WizardComponent implements OnInit {
     }
 
     this.selectedProvider = cloud;
-    this.gotoStep(2);
-
+    // this.gotoStep(2);
   }
 
   public setProviderRegion(cloud: DataCenterEntity) {
     this.selectedProviderRegion = cloud;
-    this.gotoStep(3);
+    // this.gotoStep(3);
   }
 
   public setCluster(cluster) {
@@ -149,44 +156,6 @@ export class WizardComponent implements OnInit {
 
   public checkNodeValid(value){
     this.nodeModalValid = value;
-  }
-
-  public gotoStep(step: number) {
-    switch (step) {
-      case 5:
-        this.createClusterAndNode();
-        break;
-
-      default:
-        this.currentStep = step;
-    }
-  }
-
-  public canGotoStep(step: number) {
-    switch (step) {
-      case 0:
-        return this.clusterName.valid;
-      case 1:
-        return !!this.selectedProvider;
-      case 2:
-        return !!this.selectedProviderRegion;
-      case 3:
-          if(!this.selectedSshKeys) {
-            return false;
-          } else if (this.clusterModalValid && this.nodeModalValid){
-            return true;
-          } else {
-            return false;
-          }
-      case 4:
-        return true;
-      default:
-        return false;
-    }
-  }
-
-  public canStepForward(): boolean {
-    return this.canGotoStep(this.currentStep);
   }
 
   public createClusterAndNode() {

@@ -30,9 +30,10 @@ export class AWSClusterComponent implements OnInit {
       routeTableId: [this.cloud.routeTableId],
       aws_cas: [false]
     });
+    console.log(this.cloud.routeTableId);
   }
 
-  public onChange(){
+  public onChange() {
     this.cloudSpec = new AWSCloudSpec(
       this.awsClusterForm.controls["accessKeyId"].value,
       this.awsClusterForm.controls["secretAccessKey"].value,
@@ -40,7 +41,7 @@ export class AWSClusterComponent implements OnInit {
       this.awsClusterForm.controls["subnetId"].value,
       this.awsClusterForm.controls["routeTableId"].value,
       "",
-    )
+    );
 
     this.syncProviderCloudSpec.emit(this.cloudSpec);
     this.syncProviderCloudSpecValid.emit(this.awsClusterForm.valid);

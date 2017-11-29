@@ -1,4 +1,4 @@
-<form [formGroup]="osClusterForm" novalidate fxLayout="column" (change)="onChange()">
+<form [connect]="['wizard', 'openstackClusterForm']" [formGroup]="osClusterForm" novalidate fxLayout="column" (change)="onChange()">
 
   <md-input-container fxFlex>
     <input id="os_domain" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_domain" type="text" placeholder="Domain:" title="Domain" >
@@ -35,6 +35,6 @@
   </md-input-container>
 
   <div class="slider-box">
-    <md-slide-toggle formControlName="os_cas">Extend Provider settings</md-slide-toggle>
+    <md-slide-toggle id="os_cas" formControlName="os_cas">Extend Provider settings</md-slide-toggle>
   </div>
 </form>

@@ -1,4 +1,7 @@
+import { Observable } from 'rxjs';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { select } from '@angular-redux/store/lib/src/decorators/select';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-progress',
@@ -7,19 +10,20 @@ import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 })
 export class ProgressComponent implements OnInit {
 
-  @Input() step: number;
-  @Output() syncStep = new EventEmitter();
-  public currentStep: number;
+  @select(['wizard', 'step']) step$: Observable<number>;
+  public step: number;
 
   constructor() { }
 
-  ngOnInit() { }
-
+  ngOnInit() { 
+    this.step$.subscribe(step => {
+      this.step = step;
+    });
+  }
 
   public gotoStep(clickStep: number) {
-    if(this.step >= clickStep) {
-      this.currentStep = clickStep;
-      this.syncStep.emit(this.currentStep);
+    if (this.step >= clickStep) {
+      WizardActions.goToStep(clickStep);
     }
   }
 

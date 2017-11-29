@@ -1,3 +1,6 @@
+import { DatacenterSpec } from './../../shared/entity/DatacenterEntity';
+import { FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
 import {ApiService} from "app/core/services/api/api.service";
@@ -11,10 +14,15 @@ export class SetDatacenterComponent implements OnInit {
   @Input() datacenter: DataCenterEntity[];
   @Input() selectedDatacenter: DataCenterEntity;
   @Output() syncDatacenter =  new EventEmitter();
+  public setDatacenterForm: FormGroup;
 
-  constructor() { }
+  constructor(private fb: FormBuilder) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.setDatacenterForm = this.fb.group({
+      datacenter: [null]
+    });
+  }
 
   public selectDatacenter(datacenter: DataCenterEntity) {
     this.selectedDatacenter = datacenter;
