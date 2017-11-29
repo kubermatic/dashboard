@@ -16,8 +16,6 @@ export class SummaryComponent implements OnInit {
   @Input() clusterSpec: CreateClusterModel;
   @Input() nodeSpec: CreateNodeModel;
 
-  @Output() syncStep = new EventEmitter();
-
   public shhKeysList: string[]  = [];
 
   constructor(private api: ApiService) { }
@@ -34,9 +32,5 @@ export class SummaryComponent implements OnInit {
           }
         }
       );
-  }
-
-  public gotoStep(step: number) {
-      this.syncStep.emit(step);
   }
 }

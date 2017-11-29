@@ -42,12 +42,11 @@
 
 <!-- Provider Summary: Step 5 -->
 <kubermatic-summary
-  *ngIf="step == 4"
+  *ngIf="step === 4 || step === 5"
   [provider]="selectedProvider"
   [region]="selectedProviderRegion"
   [clusterSpec]="createClusterModal"
   [nodeSpec]="createNodeModel"
-  (syncStep)="gotoStep($event)"
 ></kubermatic-summary>
 
 <!-- Navigation Buttons -->

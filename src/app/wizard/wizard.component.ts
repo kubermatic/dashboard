@@ -1,4 +1,4 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit, OnDestroy} from "@angular/core";
 import {ApiService} from "app/core/services/api/api.service";
 import {DataCenterEntity} from "../shared/entity/DatacenterEntity";
 import {Router} from "@angular/router";
@@ -19,6 +19,7 @@ import {AWSCloudSpec} from "../shared/entity/cloud/AWSCloudSpec";
 import {OpenstackCloudSpec} from "../shared/entity/cloud/OpenstackCloudSpec";
 import { NotificationActions } from "app/redux/actions/notification.actions";
 import { select } from "@angular-redux/store";
+import { WizardActions } from "app/redux/actions/wizard.actions";
 
 @Component({
   selector: "kubermatic-wizard",
@@ -26,7 +27,7 @@ import { select } from "@angular-redux/store";
   styleUrls: ["./wizard.component.scss"]
 })
 
-export class WizardComponent implements OnInit {
+export class WizardComponent implements OnInit, OnDestroy {
 
   // Current Create Cluster Step
   public currentStep: number = 0;
@@ -91,6 +92,9 @@ export class WizardComponent implements OnInit {
 
     this.step$.subscribe(step => {
       this.step = step;
+      if (step === 5) {
+        this.createClusterAndNode();
+      }
     });
   }
 
@@ -119,7 +123,7 @@ export class WizardComponent implements OnInit {
   }
 
   public setProvider(cloud: string) {
-    if(this.selectedProvider != cloud){
+    if (this.selectedProvider != cloud){
       this.resetCachedCredentials();
       this.selectedProviderRegion = null;
     }
@@ -171,5 +175,9 @@ export class WizardComponent implements OnInit {
       error => {
         NotificationActions.error("Error", `${error.status} ${error.statusText}`);
       });
+  }
+
+  public ngOnDestroy(): void {
+    WizardActions.clearStore();
   }
 }

@@ -149,6 +149,10 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
             valid.set(path[path.length - 1], action.payload.valid);
             return Object.assign({}, state, { valid });
         }
+        case WizardActions.CLEAR_STORE: {
+            const initialState = Object.assign({}, INITIAL_STATE);
+            return Object.assign({}, state, initialState);
+        }
     }
     return state;
 };
