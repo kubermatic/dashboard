@@ -1,6 +1,6 @@
 
 import { Component, ViewChild} from "@angular/core";
-
+import {Auth} from "./auth/auth.service";
 
 import { MdSidenav } from '@angular/material';
 import { SidenavService } from './sidenav/sidenav.service';
@@ -15,7 +15,8 @@ export class KubermaticComponent {
 
 
   public constructor(
-    private sidenavService: SidenavService
+    private sidenavService: SidenavService,
+    public auth: Auth
   ) {}
 
   public ngOnInit(): void {

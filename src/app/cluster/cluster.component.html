@@ -81,30 +81,22 @@
     </md-card-content>
   </md-card>
 
-  <md-card class="km-card-list" style="margin-bottom: 70px;">
-    <md-card-header class="km-card-list-header" >
-      <md-card-title fxLayout>
-        <div fxFlex="5%">#</div>
-        <div fxFlex="25%">Name</div>
-        <div fxFlex="20%">Capacity</div>
-        <div fxFlex="15%">Kubelet Version</div>
-        <div fxFlex="15%">Public IP</div>
-        <div fxFlex="10%" align="center">Status</div>
-        <div fxFlex="10%"></div>
-      </md-card-title>
-    </md-card-header>
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
-      <md-card-content *ngSwitchCase="true">
-        <kubermatic-node *ngFor="let n of nodes, let i = index" [node]="n"  [index]="i + 1" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node>
-      </md-card-content>
+      <ng-container *ngSwitchCase="true">
 
-      <md-card-content *ngSwitchCase="false" align="center">
+        <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node>
+
+        Node Group:
+        <kubermatic-node-group [nodes]="groupedNodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node-group>
+
+      </ng-container>
+
+      <ng-container *ngSwitchCase="false" align="center">
         <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>
         <md-spinner *ngIf="!cluster.isRunning() && !nodes" color="accent" class="node-list-spinner"></md-spinner>
-      </md-card-content>
+      </ng-container>
     </ng-container>
-  </md-card>
 </ng-container>
 
 

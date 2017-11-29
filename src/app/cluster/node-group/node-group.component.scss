@@ -1,6 +1,5 @@
 .km-node-row {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #E3E8EC;
+  padding-top: 10px;
   padding-bottom: 10px;
 
 }
@@ -72,4 +71,44 @@ button {
 }
 .km-btn-remove-node-wrapper{
   position: relative;
+}
+
+
+.km-node-group {
+  margin-left: -24px;
+  margin-right: -24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  height: 57px;
+  line-height: 57px;
+}
+
+
+.blue-container {
+  background-color: #EEF5FF;
+  box-shadow: inset 0px 4px 4px rgba(68, 77, 88, 0.1);
+  padding: 20px 25px 10px;
+
+  .km-single-node {
+    margin-left: -24px;
+    margin-right: -24px;
+    padding-left: 24px;
+    padding-right: 24px;
+    height: 57px;
+    line-height: 57px;
+  }
+
+  .km-single-node:nth-child(even) {
+    background-color: #F7FAFF;
+  }
+
+  .km-single-node:hover {
+    background-color: #F1F1F1;
+  }
+
+
+}
+
+md-card-header.km-card-list-header.mat-card-header {
+  margin-bottom: 0px !important;
 }

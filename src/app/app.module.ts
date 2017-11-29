@@ -25,8 +25,10 @@ import {
   MdSliderModule,
   OverlayModule,
   MdSlideToggleModule,
-  MdProgressBarModule
+  MdProgressBarModule,
+  MdExpansionModule
 } from '@angular/material';
+
 
 import 'hammerjs';
 import {FlexLayoutModule} from "@angular/flex-layout";
@@ -39,6 +41,7 @@ import {AddSshKeyComponent} from "./sshkey/add-ssh-key/add-ssh-key.component";
 import {ClusterListComponent} from "./cluster-list/cluster-list.component";
 import {ClusterItemComponent} from "./cluster-list/cluster-item/cluster-item.component";
 import {NodeComponent} from "./cluster/node/node.component";
+import {NodeGroupComponent} from "./cluster/node-group/node-group.component";
 import {NodeDeleteConfirmationComponent} from "./cluster/node-delete-confirmation/node-delete-confirmation.component";
 import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
 import {DashboardComponent} from "./dashboard/dashboard.component";
@@ -126,7 +129,8 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     OverlayModule,
     MdSlideToggleModule,
     MdProgressBarModule,
-    ClipboardModule
+    ClipboardModule,
+    MdExpansionModule
   ],
   declarations: [
     KubermaticComponent,
@@ -139,6 +143,7 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     ClusterListComponent,
     ClusterItemComponent,
     NodeComponent,
+    NodeGroupComponent,
     SshkeyComponent,
     NotificationComponent,
     ClusterDeleteConfirmationComponent,
@@ -190,7 +195,8 @@ import { SetSettingsComponent } from './wizard/set-settings/set-settings.compone
     MdMenuModule,
     MdCardModule,
     MdSliderModule,
-    OverlayModule
+    OverlayModule,
+    MdExpansionModule
   ],
   entryComponents: [
     ClusterDeleteConfirmationComponent,

@@ -1,5 +1,6 @@
 import {Component, OnInit, Input} from "@angular/core";
 import {ClusterEntity} from "../../api/entitiy/ClusterEntity";
+import { DatacenterService } from './../../services/datacenter/datacenter.service';
 
 @Component({
   selector: "kubermatic-cluster-item",
@@ -7,17 +8,15 @@ import {ClusterEntity} from "../../api/entitiy/ClusterEntity";
   styleUrls: ["./cluster-item.component.scss"]
 })
 export class ClusterItemComponent implements OnInit {
-  @Input() cluster: ClusterEntity;
+  @Input() clusters: ClusterEntity;
   @Input() index: number
 
-  constructor() {}
+  constructor(public dcService: DatacenterService) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  public getShortClusterName(): string {
-    let name = this.cluster.spec.humanReadableName;
 
+  public getShortClusterName(name): string {
     return name.length > 12 ?  name.slice(0, 12) + '...': name;
   }
 }

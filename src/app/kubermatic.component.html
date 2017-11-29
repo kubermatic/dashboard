@@ -3,14 +3,18 @@
     <div class="km-progress-bar-container">
       <md-progress-bar id="km-top-progress-bar" mode="indeterminate"></md-progress-bar>
     </div>
+
+    <kubermatic-navigation></kubermatic-navigation>
+
     <md-sidenav-container>
       <md-sidenav #sidenav opened mode="side" >
         <kubermatic-sidenav></kubermatic-sidenav>
       </md-sidenav>
 
+
       <div class="km-main">
-        <kubermatic-navigation></kubermatic-navigation>
         <div class="km-content">
+          <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
           <kubermatic-notification></kubermatic-notification>
           <router-outlet></router-outlet>
         </div>

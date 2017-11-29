@@ -90,5 +90,6 @@ export class NodeEntity {
   metadata: MetadataEntity;
   spec: Spec;
   status: Status;
+  groupname: string;
 }
 
