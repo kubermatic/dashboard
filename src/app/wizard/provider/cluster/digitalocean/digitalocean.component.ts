@@ -1,8 +1,11 @@
+import { NgRedux } from '@angular-redux/store';
+import { CloudSpec } from './../../../../shared/entity/ClusterEntity';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Validators, FormBuilder, FormGroup} from "@angular/forms";
 import {DigitaloceanCloudSpec} from "../../../../shared/entity/cloud/DigitialoceanCloudSpec";
 
 import {InputValidationService} from '../../../../core/services';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-cluster-digitalocean',
@@ -11,9 +14,10 @@ import {InputValidationService} from '../../../../core/services';
 })
 export class DigitaloceanClusterComponent implements OnInit {
   public digitalOceanClusterForm: FormGroup;
-  public cloudSpec: DigitaloceanCloudSpec;
 
-  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
+  constructor(private formBuilder: FormBuilder, 
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) { }
 
   @Input() cloud: DigitaloceanCloudSpec;
   @Output() syncProviderCloudSpec = new EventEmitter();
@@ -25,10 +29,17 @@ export class DigitaloceanClusterComponent implements OnInit {
     });
   }
 
-  public onChange(){
-    this.cloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls["access_token"].value);
+  public onChange() {
+    const doCloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls["access_token"].value);
 
+    const ruduxStore = this.ngRedux.getState();
+    const wizard = ruduxStore.wizard;
+    const region = wizard.setDatacenterForm.datacenter.metadata.name;
 
-      this.syncProviderCloudSpec.emit(this.cloudSpec);
+    WizardActions.setCloudSpec(
+      new CloudSpec(region, doCloudSpec, null, null, null, null)
+    );
+
+    this.syncProviderCloudSpec.emit(doCloudSpec);
   }
 }

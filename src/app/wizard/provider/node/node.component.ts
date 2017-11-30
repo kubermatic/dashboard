@@ -29,5 +29,4 @@ export class ProviderNodeComponent implements OnInit {
   public getNodeModel(model) {
     this.syncNodeModel.emit(model);
   }
-
 }

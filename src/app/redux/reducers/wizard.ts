@@ -1,9 +1,19 @@
+import { CreateNodeModel } from './../../shared/model/CreateNodeModel';
+import { AWSNodeSpec } from './../../shared/entity/node/AWSNodeSpec';
+import { CloudSpec } from './../../shared/entity/ClusterEntity';
+import { CreateClusterModel } from './../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
 import { Action } from "../../shared/interfaces/action.interface";
 import { Reducer } from 'redux';
 import { BreadcrumbActions } from "../actions/breadcrumb.actions";
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { FORM_CHANGED } from '@angular-redux/form';
+import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
+import { AWSCloudSpec } from 'app/shared/entity/cloud/AWSCloudSpec';
+import { OpenstackCloudSpec } from 'app/shared/entity/cloud/OpenstackCloudSpec';
+import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
+import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
+import { OpenstackNodeSpec } from 'app/shared/entity/node/OpenstackNodeSpec';
 
 const formOnStep: Map<number, string[]> = new Map([
     [0, ['clusterNameForm']],
@@ -66,6 +76,10 @@ export interface Wizard {
     sshKeyForm: {
         ssh_keys: string[];
     };
+    cloudSpec: CloudSpec;
+    clusterModel: CreateClusterModel;
+    nodeSpec: NodeCreateSpec;
+    nodeModel: CreateNodeModel;
 };
 
 export const INITIAL_STATE: Wizard = {
@@ -119,7 +133,11 @@ export const INITIAL_STATE: Wizard = {
     },
     sshKeyForm: {
         ssh_keys: []
-    }
+    },
+    cloudSpec: null,
+    clusterModel: null,
+    nodeSpec: null,
+    nodeModel: null
 };
 
 export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, action: Action): Wizard => {
@@ -162,6 +180,22 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
         case WizardActions.CLEAR_STORE: {
             const initialState = Object.assign({}, INITIAL_STATE);
             return Object.assign({}, state, initialState);
+        }
+        case WizardActions.SET_CLOUD_SPEC: {
+            const cloudSpec = action.payload.cloudSpec;
+            return Object.assign({}, state, { cloudSpec });
+        }
+        case WizardActions.SET_CLUSTER_MODEL: {
+            const clusterModel = action.payload.clusterModel;
+            return Object.assign({}, state, { clusterModel });
+        }
+        case WizardActions.SET_NODE_SPEC: {
+            const nodeSpec = action.payload.nodeSpec;
+            return Object.assign({}, state, { nodeSpec });
+        }
+        case WizardActions.SET_NODE_MODEL: {
+            const nodeModel = action.payload.nodeModel;
+            return Object.assign({}, state, { nodeModel });
         }
     }
     return state;

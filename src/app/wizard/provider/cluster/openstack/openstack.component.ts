@@ -1,8 +1,11 @@
+import { NgRedux } from '@angular-redux/store';
+import { CloudSpec } from './../../../../shared/entity/ClusterEntity';
 import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {OpenstackCloudSpec} from "../../../../shared/entity/cloud/OpenstackCloudSpec";
 
 import {InputValidationService} from '../../../../core/services';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-cluster-openstack',
@@ -11,9 +14,10 @@ import {InputValidationService} from '../../../../core/services';
 })
 export class OpenstackClusterComponent implements OnInit {
   public osClusterForm: FormGroup;
-  public cloudSpec: OpenstackCloudSpec;
 
-  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
+  constructor(private formBuilder: FormBuilder, 
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) { }
   @Input() cloud: OpenstackCloudSpec;
   @Output() syncProviderCloudSpec = new EventEmitter();
 
@@ -30,8 +34,8 @@ export class OpenstackClusterComponent implements OnInit {
     });
   }
 
-  public onChange (){
-    this.cloudSpec = new OpenstackCloudSpec(
+  public onChange() {
+    const osCloudSpec = new OpenstackCloudSpec(
       this.osClusterForm.controls["os_username"].value,
       this.osClusterForm.controls["os_password"].value,
       this.osClusterForm.controls["os_tenant"].value,
@@ -39,8 +43,16 @@ export class OpenstackClusterComponent implements OnInit {
       this.osClusterForm.controls["os_network"].value,
       this.osClusterForm.controls["os_security_groups"].value,
       this.osClusterForm.controls["os_floating_ip_pool"].value,
-    )
+    );
 
-    this.syncProviderCloudSpec.emit(this.cloudSpec);
+    const ruduxStore = this.ngRedux.getState();
+    const wizard = ruduxStore.wizard;
+    const region = wizard.setDatacenterForm.datacenter.metadata.name;
+
+    WizardActions.setCloudSpec(
+      new CloudSpec(region, null, null, null, osCloudSpec, null)
+    );
+
+    this.syncProviderCloudSpec.emit(osCloudSpec);
   }
 }

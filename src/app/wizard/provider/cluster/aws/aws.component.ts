@@ -1,9 +1,11 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AWSCloudSpec} from "../../../../shared/entity/cloud/AWSCloudSpec";
+import { NgRedux } from '@angular-redux/store';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AWSCloudSpec } from "../../../../shared/entity/cloud/AWSCloudSpec";
 
-import {InputValidationService} from '../../../../core/services';
-import {CloudSpec} from "../../../../shared/entity/ClusterEntity";
+import { InputValidationService } from '../../../../core/services';
+import { CloudSpec } from "../../../../shared/entity/ClusterEntity";
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 
 @Component({
@@ -13,10 +15,11 @@ import {CloudSpec} from "../../../../shared/entity/ClusterEntity";
 })
 export class AWSClusterComponent implements OnInit {
   public awsClusterForm: FormGroup;
-  public cloudSpec: AWSCloudSpec;
   @Input() cloud: AWSCloudSpec;
 
-  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
+  constructor(private formBuilder: FormBuilder,
+    public inputValidationService: InputValidationService,
+    private ngRedux: NgRedux<any>) { }
 
   @Output() syncProviderCloudSpec = new EventEmitter();
 
@@ -33,7 +36,7 @@ export class AWSClusterComponent implements OnInit {
   }
 
   public onChange() {
-    this.cloudSpec = new AWSCloudSpec(
+    const awsCloudSpec = new AWSCloudSpec(
       this.awsClusterForm.controls["accessKeyId"].value,
       this.awsClusterForm.controls["secretAccessKey"].value,
       this.awsClusterForm.controls["vpcId"].value,
@@ -42,6 +45,14 @@ export class AWSClusterComponent implements OnInit {
       "",
     );
 
-    this.syncProviderCloudSpec.emit(this.cloudSpec);
+    const ruduxStore = this.ngRedux.getState();
+    const wizard = ruduxStore.wizard;
+    const region = wizard.setDatacenterForm.datacenter.metadata.name;
+
+    WizardActions.setCloudSpec(
+      new CloudSpec(region, null, awsCloudSpec, null, null, null)
+    );
+
+    this.syncProviderCloudSpec.emit(awsCloudSpec);
   }
 }

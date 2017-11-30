@@ -7,6 +7,7 @@ import {NodeCreateSpec} from "../../../../shared/entity/NodeEntity";
 import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
 import {DigitaloceanNodeSpec} from "../../../../shared/entity/node/DigitialoceanNodeSpec";
 import {InputValidationService} from '../../../../core/services';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-node-digitalocean',
@@ -58,6 +59,9 @@ export class DigitaloceanNodeComponent implements OnInit, OnChanges {
       null,
       null,
     );
+
+    WizardActions.setNodeSpec(this.nodeSpec);
+
     this.nodeInstances = this.doNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
     this.syncNodeModel.emit(createNodeModel);

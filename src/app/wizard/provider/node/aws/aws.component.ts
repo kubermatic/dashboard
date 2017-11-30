@@ -5,6 +5,7 @@ import {NodeCreateSpec} from "../../../../shared/entity/NodeEntity";
 import {AWSNodeSpec} from "../../../../shared/entity/node/AWSNodeSpec";
 import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
 import {InputValidationService} from '../../../../core/services';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-node-aws',
@@ -46,8 +47,9 @@ export class AwsNodeComponent implements OnInit {
       null,
       null,
     );
-    this.nodeInstances = this.awsNodeForm.controls["node_count"].value;
+    WizardActions.setNodeSpec(this.nodeSpec);
 
+    this.nodeInstances = this.awsNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
     this.syncNodeModel.emit(createNodeModel);
   }

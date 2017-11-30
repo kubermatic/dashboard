@@ -1,3 +1,4 @@
+import { WizardActions } from './../redux/actions/wizard.actions';
 import {Component, OnInit, OnDestroy} from "@angular/core";
 import {ApiService} from "app/core/services/api/api.service";
 import {DataCenterEntity} from "../shared/entity/DatacenterEntity";
@@ -10,7 +11,7 @@ import * as testing from "selenium-webdriver/testing";
 import {CreateNodeModel} from "../shared/model/CreateNodeModel";
 import {DigitaloceanCloudSpec} from "../shared/entity/cloud/DigitialoceanCloudSpec";
 import {ClusterNameEntity} from "../shared/entity/wizard/ClusterNameEntity";
-import {CustomEventService, CreateNodesService, InputValidationService, DatacenterService } from '../core/services';
+import { CreateNodesService, InputValidationService, DatacenterService } from '../core/services';
 import {NodeCreateSpec} from "../shared/entity/NodeEntity";
 import {OpenstackNodeSpec} from "../shared/entity/node/OpenstackNodeSpec";
 import {AWSNodeSpec} from "../shared/entity/node/AWSNodeSpec";
@@ -18,8 +19,7 @@ import {DigitaloceanNodeSpec} from "../shared/entity/node/DigitialoceanNodeSpec"
 import {AWSCloudSpec} from "../shared/entity/cloud/AWSCloudSpec";
 import {OpenstackCloudSpec} from "../shared/entity/cloud/OpenstackCloudSpec";
 import { NotificationActions } from "app/redux/actions/notification.actions";
-import { select } from "@angular-redux/store";
-import { WizardActions } from "app/redux/actions/wizard.actions";
+import { select, NgRedux } from "@angular-redux/store";
 
 @Component({
   selector: "kubermatic-wizard",
@@ -28,10 +28,6 @@ import { WizardActions } from "app/redux/actions/wizard.actions";
 })
 
 export class WizardComponent implements OnInit, OnDestroy {
-
-  // step 5: get sshKeys for Summary
-  public selectedSshKeys: string[] = [];
-  
   // Step 5: get Cluster Modal
   public createClusterModal: CreateClusterModel;
   
@@ -44,9 +40,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
   
-  @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
-  public selectedProviderRegion: DataCenterEntity;
-  
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
 
@@ -54,26 +47,23 @@ export class WizardComponent implements OnInit, OnDestroy {
     private api: ApiService,
     private router: Router,
     public dialog: MdDialog,
-    private customEventService: CustomEventService,
     private createNodesService: CreateNodesService,
-    public inputValidationService: InputValidationService
+    public inputValidationService: InputValidationService,
+    private ngRedux: NgRedux<any>
   ) {}
 
   ngOnInit() {
     this.resetCachedCredentials();
 
-    this.step$.combineLatest(this.datacenter$, this.provider$)
-      .subscribe((data: [number, DataCenterEntity, string]) => {
+    this.step$.combineLatest(this.provider$)
+      .subscribe((data: [number, string]) => {
         const step = data[0];
-        const datacenter = data[1];
-        const provider = data[2];
+        const provider = data[1];
 
         this.step = step;
         if (step === 5) {
           this.createClusterAndNode();
         }
-
-        datacenter && (this.selectedProviderRegion = datacenter);
 
         provider && this.setProvider(provider);
       });
@@ -90,6 +80,17 @@ export class WizardComponent implements OnInit, OnDestroy {
       null
     );
 
+    WizardActions.setCloudSpec(
+      new CloudSpec(
+        '', 
+        new DigitaloceanCloudSpec(''), 
+        new AWSCloudSpec('', '', '', '', '', ''), 
+        null, 
+        new OpenstackCloudSpec('', '', '', 'Default', '', '', ''), 
+        null
+      )
+    );
+
     this.cacheNode = new CreateNodeModel(
       3, 
       new NodeCreateSpec(
@@ -97,12 +98,21 @@ export class WizardComponent implements OnInit, OnDestroy {
         new AWSNodeSpec('t2.medium', 20, '', ''),
         new OpenstackNodeSpec('m1.medium', ''), null)
     );
+
+    WizardActions.setNodeModel(
+      new CreateNodeModel(
+        3, 
+        new NodeCreateSpec(
+          new DigitaloceanNodeSpec(''),
+          new AWSNodeSpec('t2.medium', 20, '', ''),
+          new OpenstackNodeSpec('m1.medium', ''), null)
+      )
+    );
   }
 
   public setProvider(cloud: string) {
     if (this.selectedProvider !== cloud) {
       this.resetCachedCredentials();
-      this.selectedProviderRegion = null;
     }
 
     this.selectedProvider = cloud;
@@ -121,17 +131,16 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.cacheNode = node;
   }
 
-  public setSshKeys(keys) {
-    this.selectedSshKeys = keys;
-  }
-
   public createClusterAndNode() {
+    const reduxStore = this.ngRedux.getState();
+    const wizard = reduxStore.wizard;
+    const nodeModel = wizard.nodeModel;
     console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {
         NotificationActions.success("Success", `Cluster successfully created`);
         this.router.navigate(["/clusters/" + cluster.metadata.name]);
 
-        this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
+        this.createNodesService.createInitialClusterNodes(cluster, nodeModel);
       },
       error => {
         NotificationActions.error("Error", `${error.status} ${error.statusText}`);

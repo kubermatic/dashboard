@@ -5,6 +5,7 @@ import {CreateNodeModel} from "../../shared/model/CreateNodeModel";
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-set-settings',
@@ -19,7 +20,6 @@ export class SetSettingsComponent implements OnInit, OnChanges {
   @Output() syncCluster = new EventEmitter();
   @Output() syncCloud = new EventEmitter();
   @Output() syncNode = new EventEmitter();
-  @Output() syncSshKeys = new EventEmitter();
   
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
   public clusterName: string;
@@ -80,6 +80,8 @@ export class SetSettingsComponent implements OnInit, OnChanges {
       this.clusterSpec,
       this.sshKeys,
     );
+
+    WizardActions.setClusterModel(this.createClusterModal);
 
     this.syncCluster.emit(this.createClusterModal);
     this.syncCloud.emit(this.cloudSpec);

@@ -1,7 +1,11 @@
+import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
+import { CreateClusterModel } from 'app/shared/model/CreateClusterModel';
+import { CloudSpec } from './../../shared/entity/ClusterEntity';
 import { ActionBase } from './action.base';
 import { Action } from '../../shared/interfaces/action.interface';
 
 import { dispatch } from '@angular-redux/store';
+import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 
 export class WizardActions extends ActionBase {
     static readonly className: string = 'WizardActions';
@@ -9,6 +13,10 @@ export class WizardActions extends ActionBase {
     static readonly PREV_STEP = WizardActions.getActType('PREV_STEP');
     static readonly GO_TO_STEP = WizardActions.getActType('GO_TO_STEP');
     static readonly CLEAR_STORE = WizardActions.getActType('CLEAR_STORE'); 
+    static readonly SET_CLOUD_SPEC = WizardActions.getActType('SET_CLOUD_SPEC'); 
+    static readonly SET_CLUSTER_MODEL = WizardActions.getActType('SET_CLUSTER_MODEL');  
+    static readonly SET_NODE_SPEC = WizardActions.getActType('SET_NODE_SPEC'); 
+    static readonly SET_NODE_MODEL = WizardActions.getActType('SET_NODE_MODEL');      
     
     @dispatch()
     static nextStep(): Action {
@@ -28,6 +36,25 @@ export class WizardActions extends ActionBase {
     @dispatch()
     static clearStore(): Action {
         return { type: WizardActions.CLEAR_STORE };
-        
+    }
+
+    @dispatch()
+    static setCloudSpec(cloudSpec: CloudSpec): Action {
+        return { type: WizardActions.SET_CLOUD_SPEC, payload: { cloudSpec } };
+    }
+
+    @dispatch()
+    static setClusterModel(clusterModel: CreateClusterModel): Action {
+        return { type: WizardActions.SET_CLUSTER_MODEL, payload: { clusterModel } };
+    }
+
+    @dispatch()
+    static setNodeSpec(nodeSpec: NodeCreateSpec): Action {
+        return { type: WizardActions.SET_NODE_SPEC, payload: { nodeSpec } };
+    }
+
+    @dispatch()
+    static setNodeModel(nodeModel: CreateNodeModel): Action {
+        return { type: WizardActions.SET_NODE_MODEL, payload: { nodeModel } };
     }
 }

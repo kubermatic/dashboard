@@ -1,3 +1,4 @@
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {NodeInstanceFlavors} from "../../../../shared/model/NodeProviderConstants";
@@ -42,8 +43,9 @@ export class OpenstackNodeComponent implements OnInit {
       ),
       null,
     );
-    this.nodeInstances = this.osNodeForm.controls["node_count"].value;
+    WizardActions.setNodeSpec(this.nodeSpec);
 
+    this.nodeInstances = this.osNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
     this.syncNodeModel.emit(createNodeModel);
   }
