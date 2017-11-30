@@ -105,69 +105,69 @@
     </md-card-header>
     <md-card-content>
       <!-- General -->
-      <div fxLayout *ngIf="nodeSpec.instances" class="km-card-list-content">
+      <div fxLayout *ngIf="nodeModel.instances" class="km-card-list-content">
         <div fxFlex="30%">
           Quantity of Nodes
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec.instances }}
+          {{ nodeModel.instances }}
         </div>
       </div>
 
       <!-- DO -->
-     <div fxLayout *ngIf="nodeSpec.spec[provider].size" class="km-card-list-content">
+     <div fxLayout *ngIf="nodeModel.spec[provider].size" class="km-card-list-content">
         <div fxFlex="30%">
           Node Size
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec.spec[provider].size }}
+          {{ nodeModel.spec[provider].size }}
         </div>
       </div>
 
       <!-- AWS -->
-      <div fxLayout *ngIf="nodeSpec.spec[provider].instance_type" class="km-card-list-content">
+      <div fxLayout *ngIf="nodeModel.spec[provider].instance_type" class="km-card-list-content">
         <div fxFlex="30%">
           Node Size
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec.spec[provider].instance_type }}
+          {{ nodeModel.spec[provider].instance_type }}
         </div>
       </div>
 
-      <div fxLayout *ngIf=" nodeSpec.spec[provider].root_size" class="km-card-list-content">
+      <div fxLayout *ngIf=" nodeModel.spec[provider].root_size" class="km-card-list-content">
         <div fxFlex="30%">
           Disk Size in GB (gb2)
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec.spec[provider].root_size }}
+          {{ nodeModel.spec[provider].root_size }}
         </div>
       </div>
-      <div fxLayout *ngIf=" nodeSpec.spec[provider].ami" class="km-card-list-content">
+      <div fxLayout *ngIf=" nodeModel.spec[provider].ami" class="km-card-list-content">
         <div fxFlex="30%">
           AMI ID (optional)
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec.spec[provider].ami }}
+          {{ nodeModel.spec[provider].ami }}
         </div>
       </div>
 
       <!-- Open Stack -->
 
-      <div fxLayout *ngIf=" nodeSpec.spec[provider].flavor" class="km-card-list-content">
+      <div fxLayout *ngIf=" nodeModel.spec[provider].flavor" class="km-card-list-content">
         <div fxFlex="30%">
           Node Size
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec.spec[provider].flavor }}
+          {{ nodeModel.spec[provider].flavor }}
         </div>
       </div>
 
-      <div fxLayout *ngIf=" nodeSpec.spec[provider].image" class="km-card-list-content">
+      <div fxLayout *ngIf=" nodeModel.spec[provider].image" class="km-card-list-content">
         <div fxFlex="30%">
           Image (Ubuntu only)
         </div>
         <div fxFlex="70%">
-          {{ nodeSpec.spec[provider].image }}
+          {{ nodeModel.spec[provider].image }}
         </div>
       </div>
 

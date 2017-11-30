@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Rx';
-import { select } from '@angular-redux/store/lib/src/decorators/select';
+import { select } from '@angular-redux/store';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 
@@ -11,7 +11,6 @@ import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 export class ProviderNodeComponent implements OnInit {
 
   @Input() token: string;
-  @Input() node: CreateNodeModel;
 
   @Output() syncNodeModel = new EventEmitter();
 
@@ -24,9 +23,5 @@ export class ProviderNodeComponent implements OnInit {
     this.provider$.subscribe(provider => {
       provider && (this.provider = provider);
     });
-  }
-
-  public getNodeModel(model) {
-    this.syncNodeModel.emit(model);
   }
 }

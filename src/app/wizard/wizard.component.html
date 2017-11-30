@@ -13,18 +13,14 @@
 <kubermatic-set-settings
   *ngIf="step === 3"
   [cloud]="cacheCloud"
-  [node]="cacheNode"
   (syncCluster)="setCluster($event)"
   (syncCloud)="setCloud($event)"
-  (syncNode)="setNode($event)"
 ></kubermatic-set-settings>
 
 <!-- Provider Summary: Step 5 -->
 <kubermatic-summary
   *ngIf="step === 4 || step === 5"
-  [clusterSpec]="createClusterModal"
-  [nodeSpec]="createNodeModel"
-></kubermatic-summary>
+  [clusterSpec]="createClusterModal"></kubermatic-summary>
 
 <!-- Navigation Buttons -->
 <kubermatic-navigation-buttons></kubermatic-navigation-buttons>

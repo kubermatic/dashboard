@@ -15,13 +15,15 @@ import {ApiService} from "app/core/services/api/api.service";
 export class SummaryComponent implements OnInit {
 
   @Input() clusterSpec: CreateClusterModel;
-  @Input() nodeSpec: CreateNodeModel;
   
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
 
   @select(['wizard', 'setDatacenterForm', 'datacenter']) region$: Observable<DataCenterEntity>;
   public region: DataCenterEntity;
+
+  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
+  public nodeModel: CreateNodeModel;
 
   public shhKeysList: string[]  = [];
 
@@ -41,13 +43,15 @@ export class SummaryComponent implements OnInit {
         }
       );
     
-    this.provider$.combineLatest(this.region$)
-      .subscribe((data: [string, DataCenterEntity]) => {
+    this.provider$.combineLatest(this.region$, this.nodeModel$)
+      .subscribe((data: [string, DataCenterEntity, CreateNodeModel]) => {
         const provider = data[0];
         const region = data[1];
+        const nodeModel = data[2];
   
         provider && (this.provider = provider);
         region && (this.region = region);
+        nodeModel && (this.nodeModel = nodeModel);
       });
   }
 

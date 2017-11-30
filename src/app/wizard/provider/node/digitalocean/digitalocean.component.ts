@@ -8,6 +8,8 @@ import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
 import {DigitaloceanNodeSpec} from "../../../../shared/entity/node/DigitialoceanNodeSpec";
 import {InputValidationService} from '../../../../core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'kubermatic-node-digitalocean',
@@ -19,17 +21,21 @@ export class DigitaloceanNodeComponent implements OnInit, OnChanges {
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
-
-  constructor(private formBuilder: FormBuilder,private api: ApiService, public inputValidationService: InputValidationService) { }
-
-  @Input() node: CreateNodeModel;
   @Input() doToken: string;
-  @Output() syncNodeModel = new EventEmitter();
+
+  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
+  public nodeModel: CreateNodeModel;
+
+  constructor(private formBuilder: FormBuilder, private api: ApiService, public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
+    this.nodeModel$.subscribe(nodeModel => {
+      nodeModel && (this.nodeModel = nodeModel);
+    });
+
     this.doNodeForm = this.formBuilder.group({
-      node_count: [this.node.instances, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: [this.node.spec.digitalocean.size, [<any>Validators.required]]
+      node_count: [this.nodeModel.instances, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: [this.nodeModel.spec.digitalocean.size, [<any>Validators.required]]
     });
 
     this.getNodeSize(this.doToken);
@@ -64,6 +70,7 @@ export class DigitaloceanNodeComponent implements OnInit, OnChanges {
 
     this.nodeInstances = this.doNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
-    this.syncNodeModel.emit(createNodeModel);
+
+    WizardActions.setNodeModel(createNodeModel);
   }
 }

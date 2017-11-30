@@ -6,6 +6,8 @@ import {AWSNodeSpec} from "../../../../shared/entity/node/AWSNodeSpec";
 import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
 import {InputValidationService} from '../../../../core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'kubermatic-node-aws',
@@ -18,17 +20,21 @@ export class AwsNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
+  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
+  public nodeModel: CreateNodeModel;
+
   constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
-  @Input() node: CreateNodeModel;
-  @Output() syncNodeModel = new EventEmitter();
-
   ngOnInit() {
+    this.nodeModel$.subscribe(nodeModel => {
+      nodeModel && (this.nodeModel = nodeModel);
+    });
+
     this.awsNodeForm = this.formBuilder.group({
-      node_count: [this.node.instances, [<any>Validators.required, Validators.min(1)]],
-      node_size: [this.node.spec.aws.instance_type, [<any>Validators.required]],
-      root_size: [this.node.spec.aws.root_size, [Validators.required, Validators.min(10), Validators.max(16000)]],
-      ami: [this.node.spec.aws.ami],
+      node_count: [this.nodeModel.instances, [<any>Validators.required, Validators.min(1)]],
+      node_size: [this.nodeModel.spec.aws.instance_type, [<any>Validators.required]],
+      root_size: [this.nodeModel.spec.aws.root_size, [Validators.required, Validators.min(10), Validators.max(16000)]],
+      ami: [this.nodeModel.spec.aws.ami],
       aws_nas: [false]
     });
   }
@@ -51,7 +57,8 @@ export class AwsNodeComponent implements OnInit {
 
     this.nodeInstances = this.awsNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
-    this.syncNodeModel.emit(createNodeModel);
+
+    WizardActions.setNodeModel(createNodeModel);
   }
 }
 

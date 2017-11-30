@@ -66,10 +66,10 @@ describe("WizardComponent", () => {
     expect(component).toBeTruthy();
   });
 
-  it("initialized in initial step and allowed to step forward right away", () => {
-    component = fixture.componentInstance;
-    expect(component.currentStep).toBe(0);
-    fixture.detectChanges();
-    expect(component.canStepForward()).toBe(true);
-  });
+  // it("initialized in initial step and allowed to step forward right away", () => {
+  //   component = fixture.componentInstance;
+  //   expect(component.currentStep).toBe(0);
+  //   fixture.detectChanges();
+  //   expect(component.canStepForward()).toBe(true);
+  // });
 });

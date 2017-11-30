@@ -1,13 +1,7 @@
 <kubermatic-node-aws
-    *ngIf="provider == 'aws'"
-    [node]="node"
-    (syncNodeModel)="getNodeModel($event)"></kubermatic-node-aws>
+    *ngIf="provider == 'aws'"></kubermatic-node-aws>
 <kubermatic-node-digitalocean
     *ngIf="provider == 'digitalocean'"
-    [node]="node"
-    [doToken]="token"
-    (syncNodeModel)="getNodeModel($event)"></kubermatic-node-digitalocean>
+    [doToken]="token"></kubermatic-node-digitalocean>
 <kubermatic-node-openstack
-    *ngIf="provider == 'openstack'"
-    [node]="node"
-    (syncNodeModel)="getNodeModel($event)"></kubermatic-node-openstack>
+    *ngIf="provider == 'openstack'"></kubermatic-node-openstack>

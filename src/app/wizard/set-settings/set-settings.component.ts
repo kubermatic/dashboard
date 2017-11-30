@@ -15,11 +15,9 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
 export class SetSettingsComponent implements OnInit, OnChanges {
 
   @Input() cloud: CloudSpec;
-  @Input() node: CreateNodeModel;
   
   @Output() syncCluster = new EventEmitter();
   @Output() syncCloud = new EventEmitter();
-  @Output() syncNode = new EventEmitter();
   
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
   public clusterName: string;
@@ -59,10 +57,6 @@ export class SetSettingsComponent implements OnInit, OnChanges {
   public setCloud(spec) {
     this.cloudSpec = spec;
     this.createSpec();
-  }
-
-  public setNode(model) {
-    this.syncNode.emit(model);
   }
 
   public createSpec() {

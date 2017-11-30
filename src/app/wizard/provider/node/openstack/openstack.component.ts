@@ -6,7 +6,8 @@ import {CustomValidators} from "ng2-validation";
 import {NodeCreateSpec} from "../../../../shared/entity/NodeEntity";
 import {OpenstackNodeSpec} from "../../../../shared/entity/node/OpenstackNodeSpec";
 import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
-
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Rx';
 import {InputValidationService} from '../../../../core/services';
 
 @Component({
@@ -20,16 +21,20 @@ export class OpenstackNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
+  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
+  public nodeModel: CreateNodeModel;
+
   constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
-  @Input() node: CreateNodeModel;
-  @Output() syncNodeModel = new EventEmitter();
-
   ngOnInit() {
+    this.nodeModel$.subscribe(nodeModel => {
+      nodeModel && (this.nodeModel = nodeModel);
+    });
+
     this.osNodeForm = this.formBuilder.group({
-      os_node_image: [this.node.spec.openstack.image, [<any>Validators.required]],
-      node_count: [this.node.instances, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: [this.node.spec.openstack.flavor, [<any>Validators.required]],
+      os_node_image: [this.nodeModel.spec.openstack.image, [<any>Validators.required]],
+      node_count: [this.nodeModel.instances, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: [this.nodeModel.spec.openstack.flavor, [<any>Validators.required]],
     });
   }
 
@@ -47,6 +52,6 @@ export class OpenstackNodeComponent implements OnInit {
 
     this.nodeInstances = this.osNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
-    this.syncNodeModel.emit(createNodeModel);
+    WizardActions.setNodeModel(createNodeModel);
   }
 }

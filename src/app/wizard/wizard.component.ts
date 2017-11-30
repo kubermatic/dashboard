@@ -28,14 +28,8 @@ import { select, NgRedux } from "@angular-redux/store";
 })
 
 export class WizardComponent implements OnInit, OnDestroy {
-  // Step 5: get Cluster Modal
   public createClusterModal: CreateClusterModel;
-  
-  // step 5: get Node Modal for Summary
-  public createNodeModel: CreateNodeModel;
-    
   public cacheCloud: CloudSpec;
-  public cacheNode: CreateNodeModel;
   
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
@@ -91,14 +85,6 @@ export class WizardComponent implements OnInit, OnDestroy {
       )
     );
 
-    this.cacheNode = new CreateNodeModel(
-      3, 
-      new NodeCreateSpec(
-        new DigitaloceanNodeSpec(''),
-        new AWSNodeSpec('t2.medium', 20, '', ''),
-        new OpenstackNodeSpec('m1.medium', ''), null)
-    );
-
     WizardActions.setNodeModel(
       new CreateNodeModel(
         3, 
@@ -124,11 +110,6 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   public setCloud(cloud) {
     this.cacheCloud = cloud;
-  }
-
-  public setNode(node) {
-    this.createNodeModel = node;
-    this.cacheNode = node;
   }
 
   public createClusterAndNode() {
