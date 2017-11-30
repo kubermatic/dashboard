@@ -98,9 +98,9 @@ export class NodeComponent implements OnInit {
 
   }
 
-  public getNodeCapacity(): string {
+  public getFormattedNodeMemory(): string {
     let memRE = /([0-9]+)([a-zA-Z])i/;
-    let nodeAllocatable = this.node.status.allocatable.memory;
+    let nodeAllocatable = this.node.status.capacity.memory;
     let resRE = nodeAllocatable.match(memRE);
     let nodeCapacity;
     let prefixes = ['Ki', 'Mi','Gi','Ti'];
