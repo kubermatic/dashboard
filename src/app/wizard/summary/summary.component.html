@@ -14,7 +14,7 @@
       <!-- General -->
       <div fxLayout class="km-card-list-content">
         <div fxFlex="30%">Cluster name</div>
-        <div fxFlex="70%">{{ clusterSpec.cluster.humanReadableName }} <i class="fa fa-pencil" aria-hidden="true" (click)="gotoStep(0)"></i></div>
+        <div fxFlex="70%">{{ clusterSpec.cluster.humanReadableName }} <i class="fa fa-pencil" aria-hidden="true" (click)="goToStep(0)"></i></div>
       </div>
 
       <div fxLayout class="km-card-list-content provider">
@@ -151,7 +151,7 @@
         </div>
       </div>
 
-      <!-- Open Stack --->
+      <!-- Open Stack -->
 
       <div fxLayout *ngIf=" nodeSpec.spec[provider].flavor" class="km-card-list-content">
         <div fxFlex="30%">

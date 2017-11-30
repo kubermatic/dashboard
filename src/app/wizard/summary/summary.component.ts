@@ -1,3 +1,6 @@
+import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {CreateNodeModel} from "../../shared/model/CreateNodeModel";
 import {CreateClusterModel} from "../../shared/model/CreateClusterModel";
@@ -11,10 +14,14 @@ import {ApiService} from "app/core/services/api/api.service";
 })
 export class SummaryComponent implements OnInit {
 
-  @Input() provider: string;
-  @Input() region: DataCenterEntity;
   @Input() clusterSpec: CreateClusterModel;
   @Input() nodeSpec: CreateNodeModel;
+  
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public provider: string;
+
+  @select(['wizard', 'setDatacenterForm', 'datacenter']) region$: Observable<DataCenterEntity>;
+  public region: DataCenterEntity;
 
   public shhKeysList: string[]  = [];
 
@@ -24,13 +31,27 @@ export class SummaryComponent implements OnInit {
     this.api.getSSHKeys()
       .subscribe(
         result => {
-          for (var item of result) {
-            for (var key of this.clusterSpec.sshKeys)
-            if (item.metadata.name == key) {
-              this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
+          for (let item of result) {
+            for (let key of this.clusterSpec.sshKeys) {
+              if (item.metadata.name === key) {
+                this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
+              }
             }
           }
         }
       );
+    
+    this.provider$.combineLatest(this.region$)
+      .subscribe((data: [string, DataCenterEntity]) => {
+        const provider = data[0];
+        const region = data[1];
+  
+        provider && (this.provider = provider);
+        region && (this.region = region);
+      });
+  }
+
+  public goToStep(step: number): void {
+    WizardActions.goToStep(step);
   }
 }

@@ -8,7 +8,7 @@
     <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</p>
     <form [connect]="['wizard', 'clusterNameForm']" [formGroup]="clusterNameForm" novalidate fxLayout="column">
       <md-input-container fxFlex>
-        <input id="name" mdInput formControlName="name" type="text" placeholder="Name" title="name" (keyup)="syncClusterName()">
+        <input id="name" mdInput formControlName="name" type="text" placeholder="Name" title="name">
       </md-input-container>
       <div fxFlex>
         <button type="button" md-raised-button (click)="generateName()">Generate name</button>

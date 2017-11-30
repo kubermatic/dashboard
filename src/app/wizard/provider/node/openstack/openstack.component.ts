@@ -23,7 +23,6 @@ export class OpenstackNodeComponent implements OnInit {
 
   @Input() node: CreateNodeModel;
   @Output() syncNodeModel = new EventEmitter();
-  @Output() syncNodeSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.osNodeForm = this.formBuilder.group({
@@ -47,6 +46,5 @@ export class OpenstackNodeComponent implements OnInit {
 
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
     this.syncNodeModel.emit(createNodeModel);
-    this.syncNodeSpecValid.emit(this.osNodeForm.valid);
   }
 }

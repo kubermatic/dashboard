@@ -7,10 +7,9 @@
   <md-card-content>
     <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
       Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.</p>
-    <form [connect]="['wizard', 'setDatacenterForm']" [formGroup]="setDatacenterForm" fxLayoutAlign="center" fxLayout="row wrap">
-      <label class="wizard-box" fxFlex="100px" *ngFor="let dc of datacenter; let i = index;"
+    <form *ngIf="datacenters" [connect]="['wizard', 'setDatacenterForm']" [formGroup]="setDatacenterForm" fxLayoutAlign="center" fxLayout="row wrap">
+      <label class="wizard-box" fxFlex="100px" *ngFor="let dc of datacenters[selectedProvider]; let i = index;"
            [ngClass]="{'selected': !!selectedDatacenter && selectedDatacenter.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-           (click)="selectDatacenter(dc)"
            [attr.for]="dc.spec.country">
         <!-- TODO: OnClick go to next step -->
         <!-- TODO: Refresh Button is no region shown -->

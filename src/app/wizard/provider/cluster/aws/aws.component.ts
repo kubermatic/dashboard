@@ -19,7 +19,6 @@ export class AWSClusterComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
 
   @Output() syncProviderCloudSpec = new EventEmitter();
-  @Output() syncProviderCloudSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.awsClusterForm = this.formBuilder.group({
@@ -44,6 +43,5 @@ export class AWSClusterComponent implements OnInit {
     );
 
     this.syncProviderCloudSpec.emit(this.cloudSpec);
-    this.syncProviderCloudSpecValid.emit(this.awsClusterForm.valid);
   }
 }

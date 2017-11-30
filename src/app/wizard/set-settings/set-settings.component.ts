@@ -1,45 +1,55 @@
-import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import {ClusterSpec, CloudSpec} from "../../shared/entity/ClusterEntity";
 import {CreateClusterModel} from "../../shared/model/CreateClusterModel";
-import {CreateNodeModel} from "../../shared/model/CreateNodeModel"
+import {CreateNodeModel} from "../../shared/model/CreateNodeModel";
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Observable';
+import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-set-settings',
   templateUrl: './set-settings.component.html',
   styleUrls: ['./set-settings.component.scss']
 })
-export class SetSettingsComponent implements OnInit {
+export class SetSettingsComponent implements OnInit, OnChanges {
 
-  @Input() clusterName: string;
-  @Input() provider: string;
-  @Input() region: string;
   @Input() cloud: CloudSpec;
   @Input() node: CreateNodeModel;
-  @Input() selectedSshKeys: string[];
-
+  
   @Output() syncCluster = new EventEmitter();
   @Output() syncCloud = new EventEmitter();
   @Output() syncNode = new EventEmitter();
   @Output() syncSshKeys = new EventEmitter();
+  
+  @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
+  public clusterName: string;
 
-  @Output() cloudValid = new EventEmitter();
-  @Output() nodeValid = new EventEmitter();
+  @select(['wizard', 'sshKeyForm', 'ssh_keys']) sshKeys$: Observable<string[]>;  
+  public sshKeys: string[] = [];
 
   public createClusterModal: CreateClusterModel;
 
   public cloudSpec: CloudSpec;
   public clusterSpec: ClusterSpec;
-  public sshKeys: string[] = [];
 
   public token: string = "";
 
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.clusterName$.subscribe(clusterName => {
+        clusterName && (this.clusterName = clusterName);      
+      });
+
+    this.sshKeys$.subscribe(sshKeys => {
+      sshKeys && (this.sshKeys = sshKeys);
+      this.createSpec();
+    });
+  }
 
   ngOnChanges(changes: SimpleChanges) {
     /* TODO: Find a better solution */
-    if(!!this.cloud.digitalocean && this.cloud.digitalocean.token) {
+    if (!!this.cloud.digitalocean && this.cloud.digitalocean.token) {
       this.token = this.cloud.digitalocean.token;
     } else {
       this.token = "";
@@ -48,26 +58,11 @@ export class SetSettingsComponent implements OnInit {
 
   public setCloud(spec) {
     this.cloudSpec = spec;
-    this.sshKeys = this.selectedSshKeys;
     this.createSpec();
   }
 
   public setNode(model) {
     this.syncNode.emit(model);
-  }
-
-  public setSshKeys(keys) {
-    this.sshKeys = keys;
-    this.syncSshKeys.emit(keys);
-    this.createSpec();
-  }
-
-  public cloudSpecValid(value) {
-    this.cloudValid.emit(value);
-  }
-
-  public nodeSpecValid(value) {
-    this.nodeValid.emit(value);
   }
 
   public createSpec() {

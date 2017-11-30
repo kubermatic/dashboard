@@ -1,3 +1,5 @@
+import { Observable } from 'rxjs/Rx';
+import { select } from '@angular-redux/store/lib/src/decorators/select';
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 
@@ -8,23 +10,24 @@ import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
 })
 export class ProviderNodeComponent implements OnInit {
 
-  @Input() provider: string;
   @Input() token: string;
   @Input() node: CreateNodeModel;
 
   @Output() syncNodeModel = new EventEmitter();
-  @Output() syncNodeSpecValid = new EventEmitter();
+
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public provider: string;
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.provider$.subscribe(provider => {
+      provider && (this.provider = provider);
+    });
+  }
 
   public getNodeModel(model) {
     this.syncNodeModel.emit(model);
-  }
-
-  public valid(value) {
-    this.syncNodeSpecValid.emit(value);
   }
 
 }

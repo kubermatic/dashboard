@@ -130,18 +130,28 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
         case WizardActions.PREV_STEP: {
             const valid = new Map(state.valid);
             const step = state.step;
-            formOnStep.get(step).forEach(form => {
-                valid.set(form, false);
-            });
+
+            if (formOnStep.get(step)) {
+                formOnStep.get(step).forEach(form => {
+                    valid.set(form, false);
+                });
+            }
+
             return Object.assign({}, state, { step: state.step - 1, valid });
         }
         case WizardActions.GO_TO_STEP: {
             const step = action.payload.step;
             const valid = new Map(state.valid);
-            formOnStep.get(step).forEach(form => {
-                valid.set(form, false);
+
+            formOnStep.forEach((value, key) => {
+                if (key > step) {
+                    formOnStep.get(key).forEach(form => {
+                        valid.set(form, false);
+                    });
+                }
             });
-            return Object.assign({}, state, { step });
+
+            return Object.assign({}, state, { step, valid });
         }
         case FORM_CHANGED: {
             const valid = new Map(state.valid);

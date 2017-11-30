@@ -17,7 +17,6 @@ export class DigitaloceanClusterComponent implements OnInit {
 
   @Input() cloud: DigitaloceanCloudSpec;
   @Output() syncProviderCloudSpec = new EventEmitter();
-  @Output() syncProviderCloudSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.digitalOceanClusterForm = this.formBuilder.group({
@@ -31,6 +30,5 @@ export class DigitaloceanClusterComponent implements OnInit {
 
 
       this.syncProviderCloudSpec.emit(this.cloudSpec);
-      this.syncProviderCloudSpecValid.emit(this.digitalOceanClusterForm.valid);
   }
 }

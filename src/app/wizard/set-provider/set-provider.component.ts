@@ -1,7 +1,9 @@
+import { Observable } from 'rxjs/Rx';
+import { select } from '@angular-redux/store';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {NodeProvider} from "../../shared/model/NodeProviderConstants";
-import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { NodeProvider } from "../../shared/model/NodeProviderConstants";
+import { DataCenterEntity } from "../../shared/entity/DatacenterEntity";
 
 @Component({
   selector: 'kubermatic-set-provider',
@@ -10,22 +12,21 @@ import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
 })
 export class SetProviderComponent implements OnInit {
 
-  @Input() provider: { [key: string]: DataCenterEntity[] } = {};
-  @Input() selectedProvider: string;
-  @Output() syncProvider =  new EventEmitter();
   public setProviderForm: FormGroup;
   public supportedNodeProviders: string[] = NodeProvider.Supported;
+
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public selectedProvider: string;
 
   constructor(private fb: FormBuilder) { }
 
   ngOnInit() {
+    this.provider$.subscribe(provider => {
+      provider && (this.selectedProvider = provider);
+    });
+
     this.setProviderForm = this.fb.group({
       provider: ['']
     });
-  }
-
-  public selectProvider(provider: string) {
-    this.selectedProvider = provider;
-    this.syncProvider.emit(this.selectedProvider);
   }
 }

@@ -21,7 +21,6 @@ export class AwsNodeComponent implements OnInit {
 
   @Input() node: CreateNodeModel;
   @Output() syncNodeModel = new EventEmitter();
-  @Output() syncNodeSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.awsNodeForm = this.formBuilder.group({
@@ -39,7 +38,7 @@ export class AwsNodeComponent implements OnInit {
       new AWSNodeSpec(
         this.awsNodeForm.controls["node_size"].value,
         this.awsNodeForm.controls["root_size"].value,
-        //Can we implement at some point
+        // Can we implement at some point
         // this.awsForm.controls["volume_type"].value,
         "gp2",
         this.awsNodeForm.controls["ami"].value
@@ -51,7 +50,6 @@ export class AwsNodeComponent implements OnInit {
 
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
     this.syncNodeModel.emit(createNodeModel);
-    this.syncNodeSpecValid.emit(this.awsNodeForm.valid);
   }
 }
 

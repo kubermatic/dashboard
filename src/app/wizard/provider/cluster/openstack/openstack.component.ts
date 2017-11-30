@@ -16,7 +16,6 @@ export class OpenstackClusterComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
   @Input() cloud: OpenstackCloudSpec;
   @Output() syncProviderCloudSpec = new EventEmitter();
-  @Output() syncProviderCloudSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.osClusterForm = this.formBuilder.group({
@@ -43,6 +42,5 @@ export class OpenstackClusterComponent implements OnInit {
     )
 
     this.syncProviderCloudSpec.emit(this.cloudSpec);
-    this.syncProviderCloudSpecValid.emit(this.osClusterForm.valid);
   }
 }

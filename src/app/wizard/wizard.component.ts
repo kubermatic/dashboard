@@ -29,41 +29,26 @@ import { WizardActions } from "app/redux/actions/wizard.actions";
 
 export class WizardComponent implements OnInit, OnDestroy {
 
-  // Current Create Cluster Step
-  public currentStep: number = 0;
-
-  // Step 1: Cluster Name
-  public clusterName: ClusterNameEntity = {valid: false, value : ""};
-
-  // Step 2: Selected Provider
-  public selectedProvider: string;
-
-  // Step 3: Selected Provider Region
-  public selectedProviderRegion: DataCenterEntity;
-
   // step 5: get sshKeys for Summary
   public selectedSshKeys: string[] = [];
-
+  
   // Step 5: get Cluster Modal
   public createClusterModal: CreateClusterModel;
-
+  
   // step 5: get Node Modal for Summary
   public createNodeModel: CreateNodeModel;
-
-  //Validation: Cluster
-  public clusterModalValid: boolean = false;
-
-  //Validation: Node
-  public nodeModalValid: boolean = false;
-
-  public groupedDatacenters: { [key: string]: DataCenterEntity[] } = {};
-
+    
   public cacheCloud: CloudSpec;
   public cacheNode: CreateNodeModel;
-
+  
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
-
+  
+  @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
+  public selectedProviderRegion: DataCenterEntity;
+  
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public selectedProvider: string;
 
   constructor(
     private api: ApiService,
@@ -71,31 +56,27 @@ export class WizardComponent implements OnInit, OnDestroy {
     public dialog: MdDialog,
     private customEventService: CustomEventService,
     private createNodesService: CreateNodesService,
-    public inputValidationService: InputValidationService,
-    public dcService: DatacenterService
+    public inputValidationService: InputValidationService
   ) {}
-
 
   ngOnInit() {
     this.resetCachedCredentials();
-    this.dcService.getDataCenters().subscribe(result => {
-      result.forEach(elem => {
-        if (!elem.seed) {
-          if (!this.groupedDatacenters.hasOwnProperty(elem.spec.provider)) {
-            this.groupedDatacenters[elem.spec.provider] = [];
-          }
 
-          this.groupedDatacenters[elem.spec.provider].push(elem);
+    this.step$.combineLatest(this.datacenter$, this.provider$)
+      .subscribe((data: [number, DataCenterEntity, string]) => {
+        const step = data[0];
+        const datacenter = data[1];
+        const provider = data[2];
+
+        this.step = step;
+        if (step === 5) {
+          this.createClusterAndNode();
         }
-      });
-    });
 
-    this.step$.subscribe(step => {
-      this.step = step;
-      if (step === 5) {
-        this.createClusterAndNode();
-      }
-    });
+        datacenter && (this.selectedProviderRegion = datacenter);
+
+        provider && this.setProvider(provider);
+      });
   }
 
 
@@ -118,23 +99,13 @@ export class WizardComponent implements OnInit, OnDestroy {
     );
   }
 
-  public setClusterName(clusterNameChangeEvent: ClusterNameEntity) {
-    this.clusterName = clusterNameChangeEvent;
-  }
-
   public setProvider(cloud: string) {
-    if (this.selectedProvider != cloud){
+    if (this.selectedProvider !== cloud) {
       this.resetCachedCredentials();
       this.selectedProviderRegion = null;
     }
 
     this.selectedProvider = cloud;
-    // this.gotoStep(2);
-  }
-
-  public setProviderRegion(cloud: DataCenterEntity) {
-    this.selectedProviderRegion = cloud;
-    // this.gotoStep(3);
   }
 
   public setCluster(cluster) {
@@ -154,23 +125,13 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.selectedSshKeys = keys;
   }
 
-  public checkCloudValid(value){
-    this.clusterModalValid = value;
-  }
-
-  public checkNodeValid(value){
-    this.nodeModalValid = value;
-  }
-
   public createClusterAndNode() {
-
     console.log("Create cluster mode: \n" + JSON.stringify(this.createClusterModal));
     this.api.createCluster(this.createClusterModal).subscribe(cluster => {
         NotificationActions.success("Success", `Cluster successfully created`);
         this.router.navigate(["/clusters/" + cluster.metadata.name]);
 
         this.createNodesService.createInitialClusterNodes(cluster, this.createNodeModel);
-
       },
       error => {
         NotificationActions.error("Error", `${error.status} ${error.statusText}`);

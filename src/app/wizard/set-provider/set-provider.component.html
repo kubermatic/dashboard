@@ -15,7 +15,6 @@
              fxLayoutAlign="center center"
              class="wizard-box-provider"
              [ngClass]="{'selected': selectedProvider === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-             (click)="selectProvider(cloud)"
              [attr.for]="cloud">
           <!-- TODO: OnClick go to next step -->
           <div class="wizard-box-content">

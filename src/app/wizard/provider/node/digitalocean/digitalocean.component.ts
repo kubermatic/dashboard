@@ -24,7 +24,6 @@ export class DigitaloceanNodeComponent implements OnInit, OnChanges {
   @Input() node: CreateNodeModel;
   @Input() doToken: string;
   @Output() syncNodeModel = new EventEmitter();
-  @Output() syncNodeSpecValid = new EventEmitter();
 
   ngOnInit() {
     this.doNodeForm = this.formBuilder.group({
@@ -62,6 +61,5 @@ export class DigitaloceanNodeComponent implements OnInit, OnChanges {
     this.nodeInstances = this.doNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
     this.syncNodeModel.emit(createNodeModel);
-    this.syncNodeSpecValid.emit(this.doNodeForm.valid);
   }
 }
