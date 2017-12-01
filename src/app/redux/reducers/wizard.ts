@@ -106,9 +106,9 @@ export const INITIAL_STATE: Wizard = {
         aws_cas: false
     },
     awsNodeForm: {
-        node_count: null,
-        node_size: '',
-        root_size: null,
+        node_count: 3,
+        node_size: 't2.medium',
+        root_size: 20,
         ami: '',
         aws_nas: false
     },
@@ -116,11 +116,11 @@ export const INITIAL_STATE: Wizard = {
         access_token: ''
     },
     digitalOceanNodeForm: {
-        node_count: null,
+        node_count: 3,
         node_size: ''
     },
     openstackClusterForm: {
-        os_domain: '',
+        os_domain: 'Default',
         os_tenant: '',
         os_username: '',
         os_password: '',
@@ -130,8 +130,8 @@ export const INITIAL_STATE: Wizard = {
         os_cas: false
     },
     openstackNodeForm: {
-        node_count: null,
-        node_size: '',
+        node_count: 3,
+        node_size: 'm1.medium',
         os_node_image: ''
     },
     sshKeyForm: {
@@ -154,11 +154,11 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
         case WizardActions.PREV_STEP: {
             const step = state.step;
 
-            return Object.assign({}, state, { step: state.step - 1 });
+            return Object.assign({}, state, { step: state.step - 1, isChanged: false });
         }
         case WizardActions.GO_TO_STEP: {
             const step = action.payload.step;
-            const nextState = clearFormValues(state, step)
+            const nextState = clearFormValues(state, step);
 
             return Object.assign({}, state, { step });
         }

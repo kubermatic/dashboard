@@ -1,3 +1,4 @@
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "ng2-validation";
@@ -22,30 +23,27 @@ export class DigitaloceanNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
-  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
-  public nodeModel: CreateNodeModel;
-
   @select(['wizard', 'digitalOceanClusterForm', 'access_token']) token$: Observable<string>;
   public token: string = '';
 
   constructor(private formBuilder: FormBuilder, 
               private api: ApiService,
-              public inputValidationService: InputValidationService) { }
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.nodeModel$.subscribe(nodeModel => {
-      nodeModel && (this.nodeModel = nodeModel);
-    });
-
     this.token$.subscribe(token => {
       if (!token) { return; }
       this.token = token;
       this.getNodeSize(token);
     });
 
+    const reduxStore = this.ngRedux.getState();
+    const nodeForm = reduxStore.wizard.digitalOceanNodeForm;
+
     this.doNodeForm = this.formBuilder.group({
-      node_count: [this.nodeModel.instances, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: [this.nodeModel.spec.digitalocean.size, [<any>Validators.required]]
+      node_count: [nodeForm.node_count, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: ['', [<any>Validators.required]]
     });
   }
 

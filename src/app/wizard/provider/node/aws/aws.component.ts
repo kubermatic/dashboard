@@ -1,3 +1,4 @@
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import {Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from "@angular/forms";
 import { NodeInstanceFlavors } from "../../../../shared/model/NodeProviderConstants";
@@ -5,8 +6,6 @@ import { NodeCreateSpec } from "../../../../shared/entity/NodeEntity";
 import { AWSNodeSpec } from "../../../../shared/entity/node/AWSNodeSpec";
 import { CreateNodeModel } from "../../../../shared/model/CreateNodeModel";
 import { WizardActions } from 'app/redux/actions/wizard.actions';
-import { select } from '@angular-redux/store';
-import { Observable } from 'rxjs/Rx';
 
 @Component({
   selector: 'kubermatic-node-aws',
@@ -19,22 +18,19 @@ export class AwsNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
-  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
-  public nodeModel: CreateNodeModel;
-
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.nodeModel$.subscribe(nodeModel => {
-      nodeModel && (this.nodeModel = nodeModel);
-    });
+    const reduxStore = this.ngRedux.getState();
+    const nodeForm = reduxStore.wizard.awsNodeForm;
 
     this.awsNodeForm = this.formBuilder.group({
-      node_count: [this.nodeModel.instances, [<any>Validators.required, Validators.min(1)]],
-      node_size: [this.nodeModel.spec.aws.instance_type, [<any>Validators.required]],
-      root_size: [this.nodeModel.spec.aws.root_size, [Validators.required, Validators.min(10), Validators.max(16000)]],
-      ami: [this.nodeModel.spec.aws.ami],
-      aws_nas: [false]
+      node_count: [nodeForm.node_count, [<any>Validators.required, Validators.min(1)]],
+      node_size: [nodeForm.node_size, [<any>Validators.required]],
+      root_size: [nodeForm.root_size, [Validators.required, Validators.min(10), Validators.max(16000)]],
+      ami: [nodeForm.ami],
+      aws_nas: [nodeForm.aws_nas]
     });
   }
 

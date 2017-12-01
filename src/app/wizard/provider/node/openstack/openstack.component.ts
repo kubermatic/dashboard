@@ -1,3 +1,4 @@
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -24,17 +25,22 @@ export class OpenstackNodeComponent implements OnInit {
   @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
   public nodeModel: CreateNodeModel;
 
-  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
+  constructor(private formBuilder: FormBuilder, 
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
     this.nodeModel$.subscribe(nodeModel => {
       nodeModel && (this.nodeModel = nodeModel);
     });
 
+    const reduxStore = this.ngRedux.getState();
+    const nodeForm = reduxStore.wizard.openstackNodeForm;
+
     this.osNodeForm = this.formBuilder.group({
-      os_node_image: [this.nodeModel.spec.openstack.image, [<any>Validators.required]],
-      node_count: [this.nodeModel.instances, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: [this.nodeModel.spec.openstack.flavor, [<any>Validators.required]],
+      os_node_image: [nodeForm.os_node_image, [<any>Validators.required]],
+      node_count: [nodeForm.node_count, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: [nodeForm.node_size, [<any>Validators.required]],
     });
   }
 
