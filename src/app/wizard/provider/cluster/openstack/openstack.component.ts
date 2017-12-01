@@ -20,17 +20,17 @@ export class OpenstackClusterComponent implements OnInit {
 
   ngOnInit() {
     const reduxStore = this.ngRedux.getState();
-    const cloud = reduxStore.wizard.cloudSpec.openstack;
+    const clusterForm = reduxStore.wizard.openstackClusterForm;
 
     this.osClusterForm = this.formBuilder.group({
-      os_tenant: [cloud.tenant, [<any>Validators.required]],
-      os_domain: [cloud.domain, [<any>Validators.required]],
-      os_username: [cloud.username, [<any>Validators.required]],
-      os_password: [cloud.password, [<any>Validators.required]],
-      os_network: [cloud.network],
-      os_security_groups: [cloud.securityGroups],
-      os_floating_ip_pool: [cloud.floatingIpPool],
-      os_cas: [false]
+      os_tenant: [clusterForm.os_tenant, [<any>Validators.required]],
+      os_domain: [clusterForm.os_domain, [<any>Validators.required]],
+      os_username: [clusterForm.os_username, [<any>Validators.required]],
+      os_password: [clusterForm.os_password, [<any>Validators.required]],
+      os_network: [clusterForm.os_network],
+      os_security_groups: [clusterForm.os_security_groups],
+      os_floating_ip_pool: [clusterForm.os_floating_ip_pool],
+      os_cas: [clusterForm.os_cas]
     });
   }
 

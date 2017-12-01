@@ -21,15 +21,15 @@ export class AWSClusterComponent implements OnInit {
 
   ngOnInit() {
     const reduxStore = this.ngRedux.getState();
-    const cloud = reduxStore.wizard.cloudSpec.aws;
+    const clusterForm = reduxStore.wizard.awsClusterForm;
 
     this.awsClusterForm = this.formBuilder.group({
-      accessKeyId: [cloud.accessKeyId, [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
-      secretAccessKey: [cloud.secretAccessKey, [<any>Validators.required, <any>Validators.minLength(2)]],
-      vpcId: [cloud.vpcId],
-      subnetId: [cloud.subnetId],
-      routeTableId: [cloud.routeTableId],
-      aws_cas: [false]
+      accessKeyId: [clusterForm.accessKeyId, [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
+      secretAccessKey: [clusterForm.secretAccessKey, [<any>Validators.required, <any>Validators.minLength(2)]],
+      vpcId: [clusterForm.vpcId],
+      subnetId: [clusterForm.subnetId],
+      routeTableId: [clusterForm.routeTableId],
+      aws_cas: [clusterForm.aws_cas]
     });
   }
 

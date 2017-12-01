@@ -28,7 +28,9 @@ export class DigitaloceanNodeComponent implements OnInit {
   @select(['wizard', 'digitalOceanClusterForm', 'access_token']) token$: Observable<string>;
   public token: string = '';
 
-  constructor(private formBuilder: FormBuilder, private api: ApiService, public inputValidationService: InputValidationService) { }
+  constructor(private formBuilder: FormBuilder, 
+              private api: ApiService,
+              public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
     this.nodeModel$.subscribe(nodeModel => {
@@ -39,7 +41,7 @@ export class DigitaloceanNodeComponent implements OnInit {
       if (!token) { return; }
       this.token = token;
       this.getNodeSize(token);
-    })
+    });
 
     this.doNodeForm = this.formBuilder.group({
       node_count: [this.nodeModel.instances, [<any>Validators.required, CustomValidators.min(1)]],
