@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs/Rx';
 import { select } from '@angular-redux/store';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
+import {Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'kubermatic-provider-node',
@@ -9,10 +8,6 @@ import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
   styleUrls: ['./node.component.scss']
 })
 export class ProviderNodeComponent implements OnInit {
-
-  @Input() token: string;
-
-  @Output() syncNodeModel = new EventEmitter();
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;

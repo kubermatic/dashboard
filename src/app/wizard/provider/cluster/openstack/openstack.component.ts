@@ -1,10 +1,9 @@
 import { NgRedux } from '@angular-redux/store';
 import { CloudSpec } from './../../../../shared/entity/ClusterEntity';
-import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {OpenstackCloudSpec} from "../../../../shared/entity/cloud/OpenstackCloudSpec";
-
-import {InputValidationService} from '../../../../core/services';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { OpenstackCloudSpec } from "../../../../shared/entity/cloud/OpenstackCloudSpec";
+import { InputValidationService } from '../../../../core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
@@ -18,18 +17,19 @@ export class OpenstackClusterComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, 
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
-  @Input() cloud: OpenstackCloudSpec;
-  @Output() syncProviderCloudSpec = new EventEmitter();
 
   ngOnInit() {
+    const reduxStore = this.ngRedux.getState();
+    const cloud = reduxStore.wizard.cloudSpec.openstack;
+
     this.osClusterForm = this.formBuilder.group({
-      os_tenant: [this.cloud.tenant, [<any>Validators.required]],
-      os_domain: [this.cloud.domain, [<any>Validators.required]],
-      os_username: [this.cloud.username, [<any>Validators.required]],
-      os_password: [this.cloud.password, [<any>Validators.required]],
-      os_network: [this.cloud.network],
-      os_security_groups: [this.cloud.securityGroups],
-      os_floating_ip_pool: [this.cloud.floatingIpPool],
+      os_tenant: [cloud.tenant, [<any>Validators.required]],
+      os_domain: [cloud.domain, [<any>Validators.required]],
+      os_username: [cloud.username, [<any>Validators.required]],
+      os_password: [cloud.password, [<any>Validators.required]],
+      os_network: [cloud.network],
+      os_security_groups: [cloud.securityGroups],
+      os_floating_ip_pool: [cloud.floatingIpPool],
       os_cas: [false]
     });
   }
@@ -52,7 +52,5 @@ export class OpenstackClusterComponent implements OnInit {
     WizardActions.setCloudSpec(
       new CloudSpec(region, null, null, null, osCloudSpec, null)
     );
-
-    this.syncProviderCloudSpec.emit(osCloudSpec);
   }
 }

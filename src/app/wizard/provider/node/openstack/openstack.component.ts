@@ -1,14 +1,14 @@
 import { WizardActions } from 'app/redux/actions/wizard.actions';
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {NodeInstanceFlavors} from "../../../../shared/model/NodeProviderConstants";
-import {CustomValidators} from "ng2-validation";
-import {NodeCreateSpec} from "../../../../shared/entity/NodeEntity";
-import {OpenstackNodeSpec} from "../../../../shared/entity/node/OpenstackNodeSpec";
-import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NodeInstanceFlavors } from "../../../../shared/model/NodeProviderConstants";
+import { CustomValidators } from "ng2-validation";
+import { NodeCreateSpec } from "../../../../shared/entity/NodeEntity";
+import { OpenstackNodeSpec } from "../../../../shared/entity/node/OpenstackNodeSpec";
+import { CreateNodeModel } from "../../../../shared/model/CreateNodeModel";
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Rx';
-import {InputValidationService} from '../../../../core/services';
+import { InputValidationService } from '../../../../core/services';
 
 @Component({
   selector: 'kubermatic-node-openstack',

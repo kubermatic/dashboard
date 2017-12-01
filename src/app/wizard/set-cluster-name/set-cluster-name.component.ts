@@ -1,8 +1,7 @@
 import { Observable } from 'rxjs';
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {ClusterNameGenerator} from "../../core/util/name-generator.service";
-import {ClusterNameEntity} from "../../shared/entity/wizard/ClusterNameEntity";
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
+import { ClusterNameGenerator } from "../../core/util/name-generator.service";
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 
 @Component({

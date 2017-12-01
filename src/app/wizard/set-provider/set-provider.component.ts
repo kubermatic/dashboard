@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs/Rx';
 import { select } from '@angular-redux/store';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NodeProvider } from "../../shared/model/NodeProviderConstants";
-import { DataCenterEntity } from "../../shared/entity/DatacenterEntity";
 
 @Component({
   selector: 'kubermatic-set-provider',

@@ -1,10 +1,10 @@
 import { NgRedux } from '@angular-redux/store';
 import { CloudSpec } from './../../../../shared/entity/ClusterEntity';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Validators, FormBuilder, FormGroup} from "@angular/forms";
-import {DigitaloceanCloudSpec} from "../../../../shared/entity/cloud/DigitialoceanCloudSpec";
+import { Component, OnInit } from '@angular/core';
+import { Validators, FormBuilder, FormGroup } from "@angular/forms";
+import { DigitaloceanCloudSpec } from "../../../../shared/entity/cloud/DigitialoceanCloudSpec";
 
-import {InputValidationService} from '../../../../core/services';
+import { InputValidationService } from '../../../../core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
@@ -19,12 +19,12 @@ export class DigitaloceanClusterComponent implements OnInit {
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
-  @Input() cloud: DigitaloceanCloudSpec;
-  @Output() syncProviderCloudSpec = new EventEmitter();
-
   ngOnInit() {
+    const reduxStore = this.ngRedux.getState();
+    const cloud = reduxStore.wizard.cloudSpec.digitalocean;
+
     this.digitalOceanClusterForm = this.formBuilder.group({
-      access_token: [this.cloud.token, [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
+      access_token: [cloud.token, [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
     });
   }
@@ -39,7 +39,5 @@ export class DigitaloceanClusterComponent implements OnInit {
     WizardActions.setCloudSpec(
       new CloudSpec(region, doCloudSpec, null, null, null, null)
     );
-
-    this.syncProviderCloudSpec.emit(doCloudSpec);
   }
 }

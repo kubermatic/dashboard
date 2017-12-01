@@ -10,17 +10,10 @@
 <kubermatic-set-datacenter *ngIf="step === 2"></kubermatic-set-datacenter>
 
 <!-- Provider Settings: Step 4 -->
-<kubermatic-set-settings
-  *ngIf="step === 3"
-  [cloud]="cacheCloud"
-  (syncCluster)="setCluster($event)"
-  (syncCloud)="setCloud($event)"
-></kubermatic-set-settings>
+<kubermatic-set-settings *ngIf="step === 3"></kubermatic-set-settings>
 
 <!-- Provider Summary: Step 5 -->
-<kubermatic-summary
-  *ngIf="step === 4 || step === 5"
-  [clusterSpec]="createClusterModal"></kubermatic-summary>
+<kubermatic-summary *ngIf="step === 4 || step === 5"></kubermatic-summary>
 
 <!-- Navigation Buttons -->
 <kubermatic-navigation-buttons></kubermatic-navigation-buttons>

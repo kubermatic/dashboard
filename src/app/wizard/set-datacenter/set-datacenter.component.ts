@@ -1,12 +1,11 @@
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Observable } from 'rxjs/Rx';
-import { DatacenterSpec } from './../../shared/entity/DatacenterEntity';
 import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
-import {ApiService} from "app/core/services/api/api.service";
+import {Component, OnInit } from '@angular/core';
+import { DataCenterEntity } from "../../shared/entity/DatacenterEntity";
+import { ApiService } from "app/core/services/api/api.service";
 
 @Component({
   selector: 'kubermatic-set-datacenter',

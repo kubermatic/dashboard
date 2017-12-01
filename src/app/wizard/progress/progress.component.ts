@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 

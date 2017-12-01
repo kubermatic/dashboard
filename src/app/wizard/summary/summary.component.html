@@ -14,7 +14,7 @@
       <!-- General -->
       <div fxLayout class="km-card-list-content">
         <div fxFlex="30%">Cluster name</div>
-        <div fxFlex="70%">{{ clusterSpec.cluster.humanReadableName }} <i class="fa fa-pencil" aria-hidden="true" (click)="goToStep(0)"></i></div>
+        <div fxFlex="70%">{{ clusterModel.cluster.humanReadableName }} <i class="fa fa-pencil" aria-hidden="true" (click)="goToStep(0)"></i></div>
       </div>
 
       <div fxLayout class="km-card-list-content provider">
@@ -32,19 +32,19 @@
       </div>
 
       <!-- DO -->
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].token">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].token">
         <div fxFlex="30%">Digitalocean API token</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].token}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].token}}</div>
       </div>
 
       <!-- AWS -->
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].access_key_id">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].access_key_id">
         <div fxFlex="30%">Access Key ID</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].access_key_id}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].access_key_id}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].secret_access_key">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].secret_access_key">
         <div fxFlex="30%">Secret Access Key</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].secret_access_key}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].secret_access_key}}</div>
       </div>
 
       <div class="km-card-list-content ssh-key">
@@ -55,44 +55,44 @@
           </ul>
         </div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].vpc_id">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].vpc_id">
         <div fxFlex="30%">VPC ID (optional)</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].vpc_id}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].vpc_id}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].subnet_id">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].subnet_id">
         <div fxFlex="30%">Subnet ID (optional)</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].subnet_id}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].subnet_id}}</div>
       </div>
 
       <!-- Open Stack -->
 
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].domain">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].domain">
         <div fxFlex="30%">Domain</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].domain}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].domain}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].tenant">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].tenant">
         <div fxFlex="30%">Tenant/Project</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].tenant}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].tenant}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].username">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].username">
         <div fxFlex="30%">Username</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].username}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].username}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].password">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].password">
         <div fxFlex="30%">Password</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].password}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].password}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].network">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].network">
         <div fxFlex="30%">Network name</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].network}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].network}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].security_groups">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].security_groups">
         <div fxFlex="30%">Security groups</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].security_groups}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].security_groups}}</div>
       </div>
-      <div class="km-card-list-content" *ngIf="clusterSpec.cluster.cloud[provider].floating_ip_pool">
+      <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].floating_ip_pool">
         <div fxFlex="30%">Floating IP pool</div>
-        <div fxFlex="70%">{{clusterSpec.cluster.cloud[provider].floating_ip_pool}}</div>
+        <div fxFlex="70%">{{clusterModel.cluster.cloud[provider].floating_ip_pool}}</div>
       </div>
     </md-card-content>
   </md-card>

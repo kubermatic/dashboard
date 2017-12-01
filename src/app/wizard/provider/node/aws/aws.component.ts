@@ -1,10 +1,9 @@
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
-import {Validators, FormBuilder, FormGroup} from "@angular/forms";
-import {NodeInstanceFlavors} from "../../../../shared/model/NodeProviderConstants";
-import {NodeCreateSpec} from "../../../../shared/entity/NodeEntity";
-import {AWSNodeSpec} from "../../../../shared/entity/node/AWSNodeSpec";
-import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
-import {InputValidationService} from '../../../../core/services';
+import {Component, OnInit } from '@angular/core';
+import { Validators, FormBuilder, FormGroup } from "@angular/forms";
+import { NodeInstanceFlavors } from "../../../../shared/model/NodeProviderConstants";
+import { NodeCreateSpec } from "../../../../shared/entity/NodeEntity";
+import { AWSNodeSpec } from "../../../../shared/entity/node/AWSNodeSpec";
+import { CreateNodeModel } from "../../../../shared/model/CreateNodeModel";
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Rx';
@@ -23,7 +22,7 @@ export class AwsNodeComponent implements OnInit {
   @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
   public nodeModel: CreateNodeModel;
 
-  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
+  constructor(private formBuilder: FormBuilder) { }
 
   ngOnInit() {
     this.nodeModel$.subscribe(nodeModel => {
