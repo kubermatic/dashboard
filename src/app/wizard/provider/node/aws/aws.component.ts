@@ -32,6 +32,8 @@ export class AwsNodeComponent implements OnInit {
       ami: [nodeForm.ami],
       aws_nas: [nodeForm.aws_nas]
     });
+
+    WizardActions.setValidation('awsNodeForm', this.awsNodeForm.valid);
   }
 
   public onChange() {

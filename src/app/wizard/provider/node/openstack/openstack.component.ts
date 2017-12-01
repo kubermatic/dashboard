@@ -7,8 +7,6 @@ import { CustomValidators } from "ng2-validation";
 import { NodeCreateSpec } from "../../../../shared/entity/NodeEntity";
 import { OpenstackNodeSpec } from "../../../../shared/entity/node/OpenstackNodeSpec";
 import { CreateNodeModel } from "../../../../shared/model/CreateNodeModel";
-import { select } from '@angular-redux/store';
-import { Observable } from 'rxjs/Rx';
 import { InputValidationService } from '../../../../core/services';
 
 @Component({
@@ -22,18 +20,11 @@ export class OpenstackNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
-  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
-  public nodeModel: CreateNodeModel;
-
   constructor(private formBuilder: FormBuilder, 
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.nodeModel$.subscribe(nodeModel => {
-      nodeModel && (this.nodeModel = nodeModel);
-    });
-
     const reduxStore = this.ngRedux.getState();
     const nodeForm = reduxStore.wizard.openstackNodeForm;
 

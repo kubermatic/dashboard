@@ -189,6 +189,13 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
             const nodeModel = action.payload.nodeModel;
             return Object.assign({}, state, { nodeModel });
         }
+        case WizardActions.SET_VALIDATION: {
+            const formName = action.payload.formName;
+            const valid = new Map(state.valid);
+            valid.set(formName, action.payload.isValid);
+            
+            return Object.assign({}, state, { valid });
+        }
     }
     return state;
 };

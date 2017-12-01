@@ -1,3 +1,4 @@
+import { FORM_CHANGED } from '@angular-redux/form';
 import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
 import { CreateClusterModel } from 'app/shared/model/CreateClusterModel';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
@@ -16,7 +17,9 @@ export class WizardActions extends ActionBase {
     static readonly SET_CLOUD_SPEC = WizardActions.getActType('SET_CLOUD_SPEC'); 
     static readonly SET_CLUSTER_MODEL = WizardActions.getActType('SET_CLUSTER_MODEL');  
     static readonly SET_NODE_SPEC = WizardActions.getActType('SET_NODE_SPEC'); 
-    static readonly SET_NODE_MODEL = WizardActions.getActType('SET_NODE_MODEL');      
+    static readonly SET_NODE_MODEL = WizardActions.getActType('SET_NODE_MODEL');
+    static readonly SET_VALIDATION = WizardActions.getActType('SET_VALIDATION');
+    
     
     @dispatch()
     static nextStep(): Action {
@@ -56,5 +59,10 @@ export class WizardActions extends ActionBase {
     @dispatch()
     static setNodeModel(nodeModel: CreateNodeModel): Action {
         return { type: WizardActions.SET_NODE_MODEL, payload: { nodeModel } };
+    }
+
+    @dispatch()
+    static setValidation(formName: string, isValid: boolean): Action {
+        return { type: WizardActions.SET_VALIDATION, payload: { formName, isValid } };
     }
 }
