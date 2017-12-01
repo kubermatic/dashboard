@@ -52,7 +52,6 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     when:
       event: [tag]
-      branch: release/*
 
   deploy-dev:
     group: deploy
