@@ -21,10 +21,10 @@ export class DigitaloceanClusterComponent implements OnInit {
 
   ngOnInit() {
     const reduxStore = this.ngRedux.getState();
-    const cloud = reduxStore.wizard.cloudSpec.digitalocean;
+    const clusterForm = reduxStore.wizard.digitalOceanClusterForm;
 
     this.digitalOceanClusterForm = this.formBuilder.group({
-      access_token: [cloud.token, [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
+      access_token: [clusterForm.access_token, [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern("[a-z0-9]+")]],
     });
   }

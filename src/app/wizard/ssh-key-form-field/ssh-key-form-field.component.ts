@@ -32,6 +32,8 @@ export class SshKeyFormFieldComponent implements OnInit {
     this.sshKeyForm = this.formBuilder.group({
       ssh_keys: [this.selectedSshKeys, [<any>Validators.required]]
     });
+
+    this.sshKeyForm.updateValueAndValidity();
   
     this.refreshSSHKeys();
   }
