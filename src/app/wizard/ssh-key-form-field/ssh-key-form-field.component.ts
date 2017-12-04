@@ -1,23 +1,25 @@
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from "app/core/services/api/api.service";
 import { SSHKeyEntity } from "../../shared/entity/SSHKeyEntity";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { AddSshKeyModalComponent } from "../add-ssh-key-modal/add-ssh-key-modal.component";
 import { MdDialog, MdDialogConfig } from '@angular/material';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-ssh-key-form-field',
   templateUrl: './ssh-key-form-field.component.html',
   styleUrls: ['./ssh-key-form-field.component.scss']
 })
-export class SshKeyFormFieldComponent implements OnInit {
+export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
 
   public sshKeys: SSHKeyEntity[] = [];
   public config: MdDialogConfig = {};
   public selectedCloudProviderApiError: string;
   public sshKeyForm: FormGroup;
+  private subscription: Subscription;
 
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;  
   public selectedSshKeys: string[] = [];
@@ -25,7 +27,7 @@ export class SshKeyFormFieldComponent implements OnInit {
   constructor(private api: ApiService, private formBuilder: FormBuilder, public dialog: MdDialog) { }
 
   ngOnInit() {
-    this.selectedSshKeys$.subscribe(selectedSshKeys => {
+    this.subscription = this.selectedSshKeys$.subscribe(selectedSshKeys => {
       this.selectedSshKeys = selectedSshKeys;
     });
 
@@ -51,6 +53,10 @@ export class SshKeyFormFieldComponent implements OnInit {
       this.selectedSshKeys.push(result.metadata.name);
       this.refreshSSHKeys();
     });
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }

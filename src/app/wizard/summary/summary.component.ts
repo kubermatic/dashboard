@@ -1,18 +1,22 @@
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CreateNodeModel } from "../../shared/model/CreateNodeModel";
 import { CreateClusterModel } from "../../shared/model/CreateClusterModel";
 import { DataCenterEntity } from "../../shared/entity/DatacenterEntity";
 import { ApiService } from "app/core/services/api/api.service";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss']
 })
-export class SummaryComponent implements OnInit {
+export class SummaryComponent implements OnInit, OnDestroy {
+
+  private subscription: Subscription;
+
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
 
@@ -43,7 +47,7 @@ export class SummaryComponent implements OnInit {
         }
       );
     
-    this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
+    this.subscription = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
       .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel]) => {
         const provider = data[0];
         const region = data[1];
@@ -59,5 +63,9 @@ export class SummaryComponent implements OnInit {
 
   public goToStep(step: number): void {
     WizardActions.goToStep(step);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

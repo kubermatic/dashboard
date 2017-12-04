@@ -3,15 +3,18 @@ import { DatacenterService } from './../../core/services/datacenter/datacenter.s
 import { Observable } from 'rxjs/Rx';
 import { select } from '@angular-redux/store';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NodeProvider } from "../../shared/model/NodeProviderConstants";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-set-provider',
   templateUrl: 'set-provider.component.html',
   styleUrls: ['set-provider.component.scss']
 })
-export class SetProviderComponent implements OnInit {
+export class SetProviderComponent implements OnInit, OnDestroy {
+
+  private subscription: Subscription;
 
   public setProviderForm: FormGroup;
   public supportedNodeProviders: string[] = NodeProvider.Supported;
@@ -24,7 +27,7 @@ export class SetProviderComponent implements OnInit {
               private dcService: DatacenterService) { }
 
   ngOnInit() {
-    this.provider$.subscribe(provider => {
+    this.subscription = this.provider$.subscribe(provider => {
       provider && (this.selectedProvider = provider);
     });
 
@@ -47,5 +50,9 @@ export class SetProviderComponent implements OnInit {
         }
       });
     });
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

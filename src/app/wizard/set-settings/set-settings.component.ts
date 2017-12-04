@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClusterSpec, CloudSpec } from "../../shared/entity/ClusterEntity";
 import { CreateClusterModel } from "../../shared/model/CreateClusterModel";
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-set-settings',
   templateUrl: './set-settings.component.html',
   styleUrls: ['./set-settings.component.scss']
 })
-export class SetSettingsComponent implements OnInit {
+export class SetSettingsComponent implements OnInit, OnDestroy {
+
+  private subscriptions: Subscription[] = [];
   
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
   public clusterName: string;
@@ -26,24 +29,27 @@ export class SetSettingsComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-    this.clusterName$.subscribe(clusterName => {
+  public ngOnInit(): void {
+    let sub = this.clusterName$.subscribe(clusterName => {
         clusterName && (this.clusterName = clusterName);      
       });
+    this.subscriptions.push(sub);
 
-    this.sshKeys$.subscribe(sshKeys => {
+    let sub2 = this.sshKeys$.subscribe(sshKeys => {
       if (!Array.isArray(sshKeys) || !sshKeys.length || this.sshKeys === sshKeys) { return; }
 
       this.sshKeys = sshKeys;
       this.createSpec();
     });
+    this.subscriptions.push(sub2);    
     
-    this.cloudSpec$.subscribe(cloudSpec => {
+    let sub3 = this.cloudSpec$.subscribe(cloudSpec => {
       if (!cloudSpec || this.cloudSpec === cloudSpec) { return; }
 
       this.cloudSpec = cloudSpec;
       this.createSpec();
     });
+    this.subscriptions.push(sub3);
   }
 
   public createSpec() {
@@ -60,5 +66,11 @@ export class SetSettingsComponent implements OnInit {
     );
 
     WizardActions.setClusterModel(this.createClusterModal);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }

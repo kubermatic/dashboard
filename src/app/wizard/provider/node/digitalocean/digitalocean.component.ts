@@ -1,5 +1,5 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { CustomValidators } from "ng2-validation";
 import { ApiService } from "app/core/services/api/api.service";
@@ -11,17 +11,19 @@ import { InputValidationService } from '../../../../core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-node-digitalocean',
   templateUrl: './digitalocean.component.html',
   styleUrls: ['./digitalocean.component.scss']
 })
-export class DigitaloceanNodeComponent implements OnInit {
+export class DigitaloceanNodeComponent implements OnInit, OnDestroy {
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
+  private subscription: Subscription;  
 
   @select(['wizard', 'digitalOceanClusterForm', 'access_token']) token$: Observable<string>;
   public token: string = '';
@@ -32,7 +34,7 @@ export class DigitaloceanNodeComponent implements OnInit {
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.token$.subscribe(token => {
+    this.subscription = this.token$.subscribe(token => {
       if (!token) { return; }
       this.token = token;
       this.getNodeSize(token);
@@ -72,5 +74,9 @@ export class DigitaloceanNodeComponent implements OnInit {
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
 
     WizardActions.setNodeModel(createNodeModel);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

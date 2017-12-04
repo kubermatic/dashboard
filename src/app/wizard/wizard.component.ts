@@ -36,8 +36,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
 
-  private i: number = 0;
-
   constructor(
     private api: ApiService,
     private router: Router,
@@ -48,7 +46,6 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.resetCachedCredentials();
-    console.log(this.i, 'init');
 
     let sub = this.step$.combineLatest(this.provider$)
       .subscribe((data: [number, string]) => {

@@ -1,16 +1,18 @@
 import { Observable } from 'rxjs';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { ClusterNameGenerator } from "../../core/util/name-generator.service";
 import { select } from '@angular-redux/store/lib/src/decorators/select';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-set-cluster-name',
   templateUrl: 'set-cluster-name.component.html',
   styleUrls: ['set-cluster-name.component.scss']
 })
-export class SetClusterNameComponent implements OnInit {
+export class SetClusterNameComponent implements OnInit, OnDestroy {
   public clusterNameForm: FormGroup;
+  private subscription: Subscription;  
   
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
   public clusterName: string = '';
@@ -20,7 +22,7 @@ export class SetClusterNameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.clusterName$.subscribe(clusterName => {
+    this.subscription = this.clusterName$.subscribe(clusterName => {
       clusterName && (this.clusterName = clusterName);
     });
 
@@ -31,5 +33,9 @@ export class SetClusterNameComponent implements OnInit {
 
   public generateName() {
     this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

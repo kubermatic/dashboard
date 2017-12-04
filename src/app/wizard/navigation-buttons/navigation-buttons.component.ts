@@ -1,16 +1,19 @@
 import { select, NgRedux } from '@angular-redux/store';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-navigation-buttons',
   templateUrl: './navigation-buttons.component.html',
   styleUrls: ['./navigation-buttons.component.scss']
 })
-export class NavigationButtonsComponent implements OnInit {
+export class NavigationButtonsComponent implements OnInit, OnDestroy {
 
   public nextStep: boolean;
+  private subscriptions: Subscription[] = [];
+  
 
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
@@ -20,14 +23,16 @@ export class NavigationButtonsComponent implements OnInit {
   constructor(private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.step$.subscribe(step => {
+    let sub = this.step$.subscribe(step => {
       this.step = step;
       this.nextStep = this.canGotoStep();
     });
+    this.subscriptions.push(sub);
 
-    this.valid$.subscribe(valid => {
+    let sub2 = this.valid$.subscribe(valid => {
       this.nextStep = this.canGotoStep();
     });
+    this.subscriptions.push(sub2);
   }
 
   public canGotoStep() {
@@ -62,5 +67,11 @@ export class NavigationButtonsComponent implements OnInit {
 
   public stepForward() {
     WizardActions.nextStep();
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }

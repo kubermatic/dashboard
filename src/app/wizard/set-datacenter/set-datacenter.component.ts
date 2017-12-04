@@ -3,18 +3,20 @@ import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Observable } from 'rxjs/Rx';
 import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
-import {Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataCenterEntity } from "../../shared/entity/DatacenterEntity";
 import { ApiService } from "app/core/services/api/api.service";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-set-datacenter',
   templateUrl: 'set-datacenter.component.html',
   styleUrls: ['set-datacenter.component.scss']
 })
-export class SetDatacenterComponent implements OnInit {
+export class SetDatacenterComponent implements OnInit, OnDestroy {
   public setDatacenterForm: FormGroup;
-  public datacenters: { [key: string]: DataCenterEntity[] } = {};  
+  public datacenters: { [key: string]: DataCenterEntity[] } = {};
+  private subscription: Subscription;
 
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
   public selectedDatacenter: DataCenterEntity;
@@ -26,7 +28,7 @@ export class SetDatacenterComponent implements OnInit {
               private dcService: DatacenterService) { }
 
   ngOnInit() {
-    this.datacenter$.combineLatest(this.provider$)
+    this.subscription = this.datacenter$.combineLatest(this.provider$)
       .subscribe((data: [DataCenterEntity, string]) => {
         const datacenter = data[0];
         const provider = data[1];
@@ -54,5 +56,9 @@ export class SetDatacenterComponent implements OnInit {
         }
       });
     });
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }
