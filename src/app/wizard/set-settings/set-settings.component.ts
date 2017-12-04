@@ -32,14 +32,14 @@ export class SetSettingsComponent implements OnInit {
       });
 
     this.sshKeys$.subscribe(sshKeys => {
-      if (!Array.isArray(sshKeys) || !sshKeys.length) { return; }
+      if (!Array.isArray(sshKeys) || !sshKeys.length || this.sshKeys === sshKeys) { return; }
 
       this.sshKeys = sshKeys;
       this.createSpec();
     });
     
     this.cloudSpec$.subscribe(cloudSpec => {
-      if (!cloudSpec) { return; }
+      if (!cloudSpec || this.cloudSpec === cloudSpec) { return; }
 
       this.cloudSpec = cloudSpec;
       this.createSpec();

@@ -68,8 +68,6 @@ export class DigitaloceanNodeComponent implements OnInit {
       null,
     );
 
-    WizardActions.setNodeSpec(this.nodeSpec);
-
     this.nodeInstances = this.doNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
 

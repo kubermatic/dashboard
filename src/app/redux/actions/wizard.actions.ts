@@ -15,8 +15,7 @@ export class WizardActions extends ActionBase {
     static readonly GO_TO_STEP = WizardActions.getActType('GO_TO_STEP');
     static readonly CLEAR_STORE = WizardActions.getActType('CLEAR_STORE'); 
     static readonly SET_CLOUD_SPEC = WizardActions.getActType('SET_CLOUD_SPEC'); 
-    static readonly SET_CLUSTER_MODEL = WizardActions.getActType('SET_CLUSTER_MODEL');  
-    static readonly SET_NODE_SPEC = WizardActions.getActType('SET_NODE_SPEC'); 
+    static readonly SET_CLUSTER_MODEL = WizardActions.getActType('SET_CLUSTER_MODEL');
     static readonly SET_NODE_MODEL = WizardActions.getActType('SET_NODE_MODEL');
     static readonly SET_VALIDATION = WizardActions.getActType('SET_VALIDATION');
     
@@ -49,11 +48,6 @@ export class WizardActions extends ActionBase {
     @dispatch()
     static setClusterModel(clusterModel: CreateClusterModel): Action {
         return { type: WizardActions.SET_CLUSTER_MODEL, payload: { clusterModel } };
-    }
-
-    @dispatch()
-    static setNodeSpec(nodeSpec: NodeCreateSpec): Action {
-        return { type: WizardActions.SET_NODE_SPEC, payload: { nodeSpec } };
     }
 
     @dispatch()

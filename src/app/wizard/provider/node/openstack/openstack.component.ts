@@ -43,12 +43,13 @@ export class OpenstackNodeComponent implements OnInit {
         this.osNodeForm.controls["node_size"].value,
         this.osNodeForm.controls["os_node_image"].value
       ),
-      null,
+      null
     );
-    WizardActions.setNodeSpec(this.nodeSpec);
 
     this.nodeInstances = this.osNodeForm.controls["node_count"].value;
+    
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
+
     WizardActions.setNodeModel(createNodeModel);
   }
 }

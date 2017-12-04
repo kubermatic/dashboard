@@ -34,6 +34,10 @@ export class AwsNodeComponent implements OnInit {
     });
 
     WizardActions.setValidation('awsNodeForm', this.awsNodeForm.valid);
+    
+    if (this.awsNodeForm.valid) {
+      this.onChange();
+    }
   }
 
   public onChange() {
@@ -50,7 +54,6 @@ export class AwsNodeComponent implements OnInit {
       null,
       null,
     );
-    WizardActions.setNodeSpec(this.nodeSpec);
 
     this.nodeInstances = this.awsNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);

@@ -80,7 +80,6 @@ export interface Wizard {
     };
     cloudSpec: CloudSpec;
     clusterModel: CreateClusterModel;
-    nodeSpec: NodeCreateSpec;
     nodeModel: CreateNodeModel;
 };
 
@@ -139,7 +138,6 @@ export const INITIAL_STATE: Wizard = {
     },
     cloudSpec: null,
     clusterModel: null,
-    nodeSpec: null,
     nodeModel: null
 };
 
@@ -180,10 +178,6 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
         case WizardActions.SET_CLUSTER_MODEL: {
             const clusterModel = action.payload.clusterModel;
             return Object.assign({}, state, { clusterModel });
-        }
-        case WizardActions.SET_NODE_SPEC: {
-            const nodeSpec = action.payload.nodeSpec;
-            return Object.assign({}, state, { nodeSpec });
         }
         case WizardActions.SET_NODE_MODEL: {
             const nodeModel = action.payload.nodeModel;

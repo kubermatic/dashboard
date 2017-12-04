@@ -13,7 +13,7 @@
   </div>
 
   <md-input-container fxFlex>
-    <input id="root_size" mdInput formControlName="root_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="Disk size">
+    <input id="root_size" mdInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2):" title="Disk size">
   </md-input-container>
 
   <md-input-container fxFlex *ngIf="awsNodeForm.controls['aws_nas'].value">
