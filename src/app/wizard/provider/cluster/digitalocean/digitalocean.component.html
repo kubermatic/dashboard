@@ -4,7 +4,7 @@
     You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
   </p>
   <md-input-container fxFlex>
-    <input id="access_token" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="access_token" type="text" placeholder="API Token:" title="access_token">
+    <input id="access_token" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="access_token" type="text" placeholder="API Token*:" title="access_token">
     <small class="form-text text-danger" [hidden]="digitalOceanClusterForm.controls.access_token.valid || !digitalOceanClusterForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
   </md-input-container>
 </form>

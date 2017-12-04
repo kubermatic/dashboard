@@ -1,7 +1,7 @@
 <form [connect]="['wizard', 'sshKeyForm']" [formGroup]="sshKeyForm" novalidate  fxLayout="column"  >
   <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
      <div *ngSwitchCase="true">
-       <md-select fxFlex multiple  class="mat-select-content" placeholder="SSH Keys:" name="ssh_keys" formControlName="ssh_keys">
+       <md-select fxFlex multiple  class="mat-select-content" placeholder="SSH Keys*:" name="ssh_keys" formControlName="ssh_keys">
          <md-option *ngFor="let key of sshKeys; let i = index;" [value]="key.metadata.name">
            {{key.spec.name + ' - ' + key.spec.fingerprint}}
          </md-option>
