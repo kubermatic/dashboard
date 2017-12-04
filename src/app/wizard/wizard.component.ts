@@ -92,9 +92,9 @@ export class WizardComponent implements OnInit {
     this.cacheCloud =  new CloudSpec(
       '', 
       new DigitaloceanCloudSpec(''), 
-      new AWSCloudSpec('','','','','',''), 
+      new AWSCloudSpec('', '', '', '', '', ''), 
       null, 
-      new OpenstackCloudSpec('','','','Default','','',''), 
+      new OpenstackCloudSpec('', '', '', 'Default', '', '', ''), 
       null
     );
 
@@ -112,7 +112,7 @@ export class WizardComponent implements OnInit {
   }
 
   public setProvider(cloud: string) {
-    if(this.selectedProvider != cloud){
+    if (this.selectedProvider !== cloud) {
       this.resetCachedCredentials();
       this.selectedProviderRegion = null;
     }

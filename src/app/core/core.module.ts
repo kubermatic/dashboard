@@ -28,7 +28,8 @@ import {
   AUTH_PROVIDERS,
   Auth,
   AuthGuard,
-  ApiService } from './services';
+  ApiService,
+  FormControlService } from './services';
 
 /* Interceptors */
 import { 
@@ -64,7 +65,8 @@ const services: any[] = [
   LocalStorageService,
   ClusterNameGenerator,
   SidenavService,
-  ApiService
+  ApiService,
+  FormControlService
 ];
 
 const interceptors: any[] = [

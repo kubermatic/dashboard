@@ -15,10 +15,10 @@ export class AWSCloudSpec {
     securityGroup: string
   ) {
     this.accessKeyId =   accessKeyId;
-    this.secretAccessKey =   secretAccessKey;
-    this.vpcId =   vpcId;
-    this.subnetId =   subnetId;
-    this.routeTableId =   routeTableId;
-    this.securityGroup =   securityGroup;
+    this.secretAccessKey = secretAccessKey;
+    this.vpcId = vpcId;
+    this.subnetId = subnetId;
+    this.routeTableId = routeTableId;
+    this.securityGroup = securityGroup;
   }
 }

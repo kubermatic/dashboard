@@ -1,3 +1,4 @@
+import { FormControlService } from './form-control/form-control.service';
 import { ApiService } from './api/api.service';
 import { AUTH_PROVIDERS } from './auth/auth.provider';
 import { AuthGuard } from './auth/auth.guard';
@@ -17,5 +18,6 @@ export {
     Auth,
     AuthGuard,
     AUTH_PROVIDERS,
-    ApiService
+    ApiService,
+    FormControlService
 }

@@ -1,0 +1,5 @@
+<form [formGroup]="form">
+  <div *ngFor="let field of fields" class="form-row">
+    <kubermatic-dynamic-form-field [field]="field" [form]="form"></kubermatic-dynamic-form-field>
+  </div>
+</form>
