@@ -16,7 +16,7 @@
   </md-input-container>
 
   <md-input-container fxFlex>
-    <input id="os_password" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_password" type="text" placeholder="Password:" title="Password" >
+    <input id="os_password" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_password" type="password" placeholder="Password:" title="Password" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_password.valid || !osClusterForm.controls.os_password.touched">Password is required.</small>
   </md-input-container>
 
