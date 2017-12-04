@@ -11,12 +11,11 @@
   </md-card-header>
   <md-card-content>
     <ng-container *ngFor="let group of nodes">
-      <md-expansion-panel #expPanel>
+      <md-expansion-panel #expPanel [expanded]="getAccordionState(group.name)" (click)="onNodeGroupToggle(expPanel.expanded, group.name )">
+        <md-expansion-panel-header>
+          <md-panel-title fxLayout class="km-node-group">
 
-        <md-expansion-panel-header (click)="jfdhsl?onExpand():onCollapse()">
-          <md-panel-title>
-            <div fxLayout class="km-node-group">
-              <div fxFlex="40%">{{group.name}} {{expPanel.expanded}}</div>
+              <div fxFlex="40%">{{group.name}}</div>
               <div fxFlex="10%">{{group.nodes.group.length}}</div>
               <div fxFlex="25%">
                 {{group.nodes.kubeletVersion}}
@@ -24,7 +23,7 @@
               <div fxFlex="25%">
                 <span *ngIf="!!group.nodes.allocatable"> {{group.nodes.allocatable.cpu}} CPU, {{getNodeCapacity(group.nodes.allocatable.memory)}}</span>
               </div>
-            </div>
+
           </md-panel-title>
         </md-expansion-panel-header>
         <div class="blue-container">

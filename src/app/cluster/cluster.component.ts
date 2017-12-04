@@ -49,6 +49,7 @@ export class ClusterComponent implements OnInit {
   private upgradesList: string[] = [];
   private gotUpgradesList: boolean;
   public groupedNodes: any;
+  public stateOfTheAccordion: any;
 
   constructor(
     private customEventService: CustomEventService,
@@ -474,6 +475,11 @@ export class ClusterComponent implements OnInit {
     this.groupedNodes = Object.keys(groups).map(function(key){
       return {name: key,  nodes: groups[key]};
     });
+
+    this.stateOfTheAccordion = Object.keys(groups).map(function (key) {
+      return {name: key, state: false};
+
+    })
   }
 
   refreshData(): void {

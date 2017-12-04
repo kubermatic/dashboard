@@ -18,7 +18,7 @@ export class NodeGroupComponent implements OnInit {
   public nodeRemoval: boolean = false;
   public node: NodeEntity;
   // public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
-  public jfdhsl: boolean = true;
+  public stateOfTheAccordion: any= [];
 
 
   public config: MdDialogConfig = {
@@ -40,12 +40,18 @@ export class NodeGroupComponent implements OnInit {
 
   constructor(public dialog: MdDialog) {}
 
-  ngOnInit() {}
+  ngOnInit() {
 
-
-  openAccordion () {
-    return true;
   }
+
+  getAccordionState(group) {
+    return !!this.stateOfTheAccordion[group]? true : false;
+  };
+
+  onNodeGroupToggle (expanded, group) {
+    this.stateOfTheAccordion[group] = expanded;
+  }
+
 
   onNodeRemoval(nodeRemoval: boolean) {
     this.nodeRemoval = nodeRemoval;

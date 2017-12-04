@@ -112,3 +112,13 @@ button {
 md-card-header.km-card-list-header.mat-card-header {
   margin-bottom: 0px !important;
 }
+
+ .mat-expansion-panel {
+    box-shadow: none !important;
+    margin-left: -24px !important;
+    margin-right: -24px !important;
+}
+
+ .mat-expansion-panel-body {
+   padding: 0 !important;
+ }
