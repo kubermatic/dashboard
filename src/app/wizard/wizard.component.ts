@@ -18,6 +18,7 @@ import { AWSCloudSpec } from "../shared/entity/cloud/AWSCloudSpec";
 import { OpenstackCloudSpec } from "../shared/entity/cloud/OpenstackCloudSpec";
 import { NotificationActions } from "app/redux/actions/notification.actions";
 import { select, NgRedux } from "@angular-redux/store";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: "kubermatic-wizard",
@@ -27,11 +28,15 @@ import { select, NgRedux } from "@angular-redux/store";
 
 export class WizardComponent implements OnInit, OnDestroy {
   
+  private subscriptions: Subscription[] = [];
+
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
   
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
+
+  private i: number = 0;
 
   constructor(
     private api: ApiService,
@@ -43,19 +48,22 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.resetCachedCredentials();
+    console.log(this.i, 'init');
 
-    this.step$.combineLatest(this.provider$)
+    let sub = this.step$.combineLatest(this.provider$)
       .subscribe((data: [number, string]) => {
         const step = data[0];
         const provider = data[1];
 
-        this.step = step;
-        if (step === 5) {
+        if (this.step !== step && step === 5) {
           this.createClusterAndNode();
         }
+        this.step = step;
 
         provider && this.setProvider(provider);
       });
+
+    this.subscriptions.push(sub);
   }
 
   public resetCachedCredentials() {
@@ -109,5 +117,9 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   public ngOnDestroy(): void {
     WizardActions.clearStore();
+
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }
