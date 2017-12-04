@@ -19,7 +19,7 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   public config: MdDialogConfig = {};
   public selectedCloudProviderApiError: string;
   public sshKeyForm: FormGroup;
-  private subscription: Subscription;
+  private subscriptions: Subscription[] = [];
 
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;  
   public selectedSshKeys: string[] = [];
@@ -27,9 +27,10 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService, private formBuilder: FormBuilder, public dialog: MdDialog) { }
 
   ngOnInit() {
-    this.subscription = this.selectedSshKeys$.subscribe(selectedSshKeys => {
+    let sub = this.selectedSshKeys$.subscribe(selectedSshKeys => {
       this.selectedSshKeys = selectedSshKeys;
     });
+    this.subscriptions.push(sub);
 
     this.sshKeyForm = this.formBuilder.group({
       ssh_keys: [this.selectedSshKeys, [<any>Validators.required]]
@@ -37,13 +38,14 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
 
     this.sshKeyForm.updateValueAndValidity();
   
-    this.refreshSSHKeys();
+    let sub2 = this.refreshSSHKeys();
+    this.subscriptions.push(sub2);
   }
 
-  private refreshSSHKeys() {
-    this.api.getSSHKeys().subscribe(result => {
-     this.sshKeys = result;
-     });
+  private refreshSSHKeys(): Subscription {
+    return this.api.getSSHKeys().subscribe(result => {
+      this.sshKeys = result;
+    });
   }
 
   public addSshKeyDialog(): void {
@@ -56,7 +58,9 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
 }

@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SummaryComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;
+  private subscriptions: Subscription[] = [];
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
@@ -34,20 +34,10 @@ export class SummaryComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService) { }
 
   ngOnInit() {
-    this.api.getSSHKeys()
-      .subscribe(
-        result => {
-          for (let item of result) {
-            for (let key of this.clusterModel.sshKeys) {
-              if (item.metadata.name === key) {
-                this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
-              }
-            }
-          }
-        }
-      );
+    let sub = this.getSSHKeys();
+    this.subscriptions.push(sub);
     
-    this.subscription = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
+    let sub2 = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
       .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel]) => {
         const provider = data[0];
         const region = data[1];
@@ -59,6 +49,22 @@ export class SummaryComponent implements OnInit, OnDestroy {
         nodeModel && (this.nodeModel = nodeModel);
         clusterModel && (this.clusterModel = clusterModel);
       });
+    this.subscriptions.push(sub2);
+  }
+
+  public getSSHKeys(): Subscription {
+    return this.api.getSSHKeys()
+      .subscribe(
+        result => {
+          for (let item of result) {
+            for (let key of this.clusterModel.sshKeys) {
+              if (item.metadata.name === key) {
+                this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
+              }
+            }
+          }
+        }
+      );
   }
 
   public goToStep(step: number): void {
@@ -66,6 +72,8 @@ export class SummaryComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }

@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SetProviderComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;
+  private subscriptions: Subscription[] = [];
 
   public setProviderForm: FormGroup;
   public supportedNodeProviders: string[] = NodeProvider.Supported;
@@ -27,19 +27,21 @@ export class SetProviderComponent implements OnInit, OnDestroy {
               private dcService: DatacenterService) { }
 
   ngOnInit() {
-    this.subscription = this.provider$.subscribe(provider => {
+    let sub = this.provider$.subscribe(provider => {
       provider && (this.selectedProvider = provider);
     });
+    this.subscriptions.push(sub);
 
     this.setProviderForm = this.fb.group({
       provider: ['']
     });
 
-    this.getDatacenters();
+    let sub2 = this.getDatacenters();
+    this.subscriptions.push(sub2);
   }
 
-  public getDatacenters(): void {
-    this.dcService.getDataCenters().subscribe(result => {
+  public getDatacenters(): Subscription {
+    return this.dcService.getDataCenters().subscribe(result => {
       result.forEach(elem => {
         if (!elem.seed) {
           if (!this.datacenters.hasOwnProperty(elem.spec.provider)) {
@@ -53,6 +55,8 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }
