@@ -50,11 +50,15 @@ export class DigitaloceanNodeComponent implements OnInit, OnDestroy {
   }
 
   public getNodeSize(token: string): void {
+    const reduxStore = this.ngRedux.getState();
+    const selectedNodeSize = reduxStore.wizard.digitalOceanNodeForm.node_size;
+
     if (token.length) {
       this.api.getDigitaloceanSizes(token).subscribe(result => {
           this.nodeSize = result.sizes;
           if (this.nodeSize.length > 0 && this.doNodeForm.controls["node_size"].value === '') {
-            this.doNodeForm.patchValue({node_size: '4gb'});
+            const nodeSize = selectedNodeSize ? selectedNodeSize : '4gb';
+            this.doNodeForm.patchValue({node_size: nodeSize});
             this.onChange();
           }
         }
