@@ -9,13 +9,13 @@
       Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
     </p>
     
-    <form [connect]="['wizard', 'setProviderForm']" 
+    <form [connect]="['wizard', 'setProviderForm']"
           [formGroup]="setProviderForm"
-          (change)="onChange($event)" 
+          (change)="onChange()"
           fxLayoutAlign="center" 
-          fxLayout="row"  
-          fxLayout.sm="column" 
-          fxLayout.xs="column" 
+          fxLayout="row"
+          fxLayout.sm="column"
+          fxLayout.xs="column"
           fxLayoutGap="20px">
       <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
         <ng-container *ngIf="datacenters[cloud]?.length">
