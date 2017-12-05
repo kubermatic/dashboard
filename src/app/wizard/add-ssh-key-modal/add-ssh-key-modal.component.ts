@@ -1,12 +1,10 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
-import {ApiService} from "../../api/api.service";
-import {SSHKeyEntity} from "../../api/entitiy/SSHKeyEntity";
+import {ApiService} from "app/core/services/api/api.service";
+import {SSHKeyEntity} from "../../shared/entity/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators} from "@angular/forms";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../reducers/index";
-import {NotificationComponent} from "../../notification/notification.component";
 import {MdDialogRef} from '@angular/material';
-import { InputValidationService } from '../../services';
+import { InputValidationService } from '../../core/services';
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',
@@ -21,7 +19,6 @@ export class AddSshKeyModalComponent implements OnInit {
   constructor(
     private api: ApiService,
     private formBuilder: FormBuilder,
-    private store: Store<fromRoot.State>,
     private dialogRef: MdDialogRef<AddSshKeyModalComponent>,
     public inputValidationService: InputValidationService
   ) {}
@@ -40,7 +37,7 @@ export class AddSshKeyModalComponent implements OnInit {
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
       .subscribe(
         result => {
-          NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
+          NotificationActions.success("Success", `SSH key ${name} added successfully`);
           //this.newSshKey.emit(result.metadata.name)
           this.dialogRef.close(result);
         });

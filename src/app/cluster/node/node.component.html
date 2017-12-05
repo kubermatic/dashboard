@@ -1,3 +1,4 @@
+
 <md-card class="km-card-list" >
   <md-card-header class="km-card-list-header" >
     <md-card-title fxLayout>
@@ -8,8 +9,6 @@
       <div fxFlex="15%">Public IP</div>
       <div fxFlex="10%" align="center">Status</div>
       <div fxFlex="10%"></div>
-
-
     </md-card-title>
   </md-card-header>
   <md-card-content>
@@ -20,7 +19,7 @@
           {{node.metadata.name}}
         </div>
         <div fxFlex="20%">
-          <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{getNodeCapacity(node.status.allocatable.memory)}}</span>
+          <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{getFormattedNodeMemory(node.status.allocatable.memory)}}</span>
         </div>
         <div fxFlex="15%">
           <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>

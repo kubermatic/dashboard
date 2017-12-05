@@ -1,5 +1,5 @@
 import { Component, OnInit, Input} from "@angular/core";
-import { NodeEntity } from "../../api/entitiy/NodeEntity";
+import { NodeEntity } from "../../shared/entity/NodeEntity";
 import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
 import {NodeDeleteConfirmationComponent} from "../node-delete-confirmation/node-delete-confirmation.component";
 
@@ -100,9 +100,11 @@ export class NodeComponent implements OnInit {
 
   }
 
-  public getNodeCapacity(memory): string {
+
+  public getFormattedNodeMemory(memory): string {
     let memRE = /([0-9]+)([a-zA-Z])i/;
     let nodeAllocatable = memory;
+
     let resRE = nodeAllocatable.match(memRE);
     let nodeCapacity;
     let prefixes = ['Ki', 'Mi','Gi','Ti'];

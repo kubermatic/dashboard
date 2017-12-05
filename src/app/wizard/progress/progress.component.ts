@@ -1,25 +1,32 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { select } from '@angular-redux/store/lib/src/decorators/select';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-progress',
   templateUrl: 'progress.component.html',
   styleUrls: ['progress.component.scss']
 })
-export class ProgressComponent implements OnInit {
+export class ProgressComponent implements OnInit, OnDestroy {
 
-  @Input() step: number;
-  @Output() syncStep = new EventEmitter();
-  public currentStep: number;
+  private subscription: Subscription;  
+
+  @select(['wizard', 'step']) step$: Observable<number>;
+  public step: number;
 
   constructor() { }
 
-  ngOnInit() { }
-
+  ngOnInit() { 
+    this.subscription = this.step$.subscribe(step => {
+      this.step = step;
+    });
+  }
 
   public gotoStep(clickStep: number) {
-    if(this.step >= clickStep) {
-      this.currentStep = clickStep;
-      this.syncStep.emit(this.currentStep);
+    if (this.step >= clickStep) {
+      WizardActions.goToStep(clickStep);
     }
   }
 
@@ -43,6 +50,10 @@ export class ProgressComponent implements OnInit {
     }
 
     return curser;
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }

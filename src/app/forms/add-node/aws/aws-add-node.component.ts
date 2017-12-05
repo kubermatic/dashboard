@@ -1,12 +1,10 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {AWSNodeSpec} from "../../../api/entitiy/node/AWSNodeSpec";
-import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
-import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
-import {ApiService} from "../../../api/api.service";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../reducers/index";
-import {NodeInstanceFlavors} from "../../../api/model/NodeProviderConstants";
+import {AWSNodeSpec} from "../../../shared/entity/node/AWSNodeSpec";
+import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
+import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
+import {ApiService} from "app/core/services/api/api.service";
+import {NodeInstanceFlavors} from "../../../shared/model/NodeProviderConstants";
 import {AddNodeComponent} from "../add-node.component";
 import {MD_DIALOG_DATA} from "@angular/material";
 import {AddNodeModalData} from "../add-node-modal-data";
@@ -19,10 +17,11 @@ import {AddNodeModalData} from "../add-node-modal-data";
 
 export class AWSAddNodeFormComponent extends AddNodeComponent {
   form: FormGroup;
-  instanceTypes:string[] = NodeInstanceFlavors.AWS;
+  instanceTypes: string[] = NodeInstanceFlavors.AWS;
 
-  constructor(api: ApiService, fb: FormBuilder, store: Store<fromRoot.State>, @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
-    super(api, fb, store, data);
+  constructor(api: ApiService, fb: FormBuilder, 
+              @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
+    super(api, fb, data);
     this.form = fb.group({
       node_count: [1, [Validators.required, Validators.min(1)]],
       instance_type: ["", [Validators.required]],

@@ -7,10 +7,8 @@ import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
 import { ClusterComponent } from './cluster.component';
 import { NodeComponent } from "./node/node.component";
 import {HttpModule} from "@angular/http";
-import {Auth} from "../auth/auth.service";
+import {Auth} from "../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../reducers/index";
 import {AddNodeComponent} from "../forms/add-node/add-node.component";
 
 describe('ClusterComponent', () => {
@@ -25,7 +23,6 @@ describe('ClusterComponent', () => {
         FormsModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer),
       ],
       declarations: [
         ClusterComponent,

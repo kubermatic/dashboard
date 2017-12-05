@@ -1,28 +1,25 @@
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, OnInit} from "@angular/core";
 import {Router, ActivatedRoute} from "@angular/router";
-import {ApiService} from "../api/api.service";
-import { DatacenterService } from './../services/datacenter/datacenter.service';
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../reducers/index";
+import {ApiService} from "app/core/services/api/api.service";
 import {environment} from "../../environments/environment";
 import {Observable, Subscription} from "rxjs";
 import {MdDialog} from '@angular/material';
 import {ClusterDeleteConfirmationComponent} from "./cluster-delete-confirmation/cluster-delete-confirmation.component";
-import {NodeEntity} from "../api/entitiy/NodeEntity";
-import {ClusterEntity} from "../api/entitiy/ClusterEntity";
-import {DataCenterEntity} from "../api/entitiy/DatacenterEntity";
+import {NodeEntity} from "../shared/entity/NodeEntity";
+import {ClusterEntity} from "../shared/entity/ClusterEntity";
+import {DataCenterEntity} from "../shared/entity/DatacenterEntity";
 import {AWSAddNodeFormComponent} from "../forms/add-node/aws/aws-add-node.component";
 import {DigitaloceanAddNodeComponent} from "../forms/add-node/digitalocean/digitalocean-add-node.component";
 import {OpenstackAddNodeComponent} from "../forms/add-node/openstack/openstack-add-node.component";
-import {NotificationComponent} from "../notification/notification.component";
-import {NodeProvider} from "../api/model/NodeProviderConstants";
+import {NodeProvider} from "../shared/model/NodeProviderConstants";
 import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
-import {CustomEventService, CreateNodesService} from '../services';
+import { CustomEventService, CreateNodesService, DatacenterService } from '../core/services';
 import 'rxjs/add/operator/retry';
-import {SSHKeyEntity} from "../api/entitiy/SSHKeyEntity";
-import {UpgradeClusterComponentData} from "../api/model/UpgradeClusterDialogData";
-import {reduce} from "rxjs/operator/reduce";
+
+import {SSHKeyEntity} from "../shared/entity/SSHKeyEntity";
+import {UpgradeClusterComponentData} from "../shared/model/UpgradeClusterDialogData";
 
 @Component({
   selector: "kubermatic-cluster",
@@ -56,7 +53,6 @@ export class ClusterComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
-    private store: Store<fromRoot.State>,
     public dialog: MdDialog,
     private createNodesService: CreateNodesService,
     private dcService: DatacenterService
@@ -74,7 +70,7 @@ export class ClusterComponent implements OnInit {
       this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
   }
 
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.sub.unsubscribe();
   }
 
@@ -100,7 +96,7 @@ export class ClusterComponent implements OnInit {
     this.api.getSSHKeys().subscribe(keys => {
       this.sshKeys = keys.filter(key => {
         if (key.spec.clusters == null) {
-          return false
+          return false;
         }
         return key.spec.clusters.indexOf(this.clusterName) > -1
       });
@@ -493,28 +489,28 @@ export class ClusterComponent implements OnInit {
             res.status,
           );
 
-          if(!this.seedDc) {
+          if (!this.seedDc) {
             this.loadDataCenter(this.cluster.status.seed, 'seedDc');
           }
 
-          if(!this.nodeDc) {
+          if (!this.nodeDc) {
             this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
           }
 
-          if(this.cluster.isFailed() && this.createNodesService.hasData) {
+          if (this.cluster.isFailed() && this.createNodesService.hasData) {
             this.createNodesService.preventCreatingInitialClusterNodes();
           }
 
-          if(this.cluster.isRunning()) {
+          if (this.cluster.isRunning()) {
             this.loadNodes();
 
-            if(this.gotUpgradesList) return;
+            if (this.gotUpgradesList) return;
 
             this.loadUpgrades();
           }
         },
         error => {
-          if(error.status === 404) {
+          if (error.status === 404) {
             this.router.navigate(['404']);
           }
         }
@@ -523,14 +519,14 @@ export class ClusterComponent implements OnInit {
 
   public addNode(): void {
     let data = new AddNodeModalData(this.cluster, this.nodeDc);
-    if (this.cluster.provider == NodeProvider.AWS) {
+    if (this.cluster.provider === NodeProvider.AWS) {
       this.dialogRef = this.dialog.open(AWSAddNodeFormComponent, {data: data});
-    } else if (this.cluster.provider == NodeProvider.DIGITALOCEAN) {
+    } else if (this.cluster.provider === NodeProvider.DIGITALOCEAN) {
       this.dialogRef = this.dialog.open(DigitaloceanAddNodeComponent, {data: data});
-    } else if (this.cluster.provider == NodeProvider.OPENSTACK) {
+    } else if (this.cluster.provider === NodeProvider.OPENSTACK) {
       this.dialogRef = this.dialog.open(OpenstackAddNodeComponent, {data: data});
     } else {
-      NotificationComponent.error(this.store, "Error", `Add node form is missing.`);
+      NotificationActions.error("Error", `Add node form is missing.`);
       return;
     }
 

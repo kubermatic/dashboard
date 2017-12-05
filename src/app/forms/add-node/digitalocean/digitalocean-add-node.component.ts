@@ -1,13 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CreateNodeModel} from "../../../api/model/CreateNodeModel";
-import {NodeCreateSpec} from "../../../api/entitiy/NodeEntity";
-import {ApiService} from "../../../api/api.service";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../reducers/index";
+import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
+import {NodeCreateSpec} from "../../../shared/entity/NodeEntity";
+import {ApiService} from "app/core/services/api/api.service";
 import {AddNodeComponent} from "../add-node.component";
-import {Size} from "../../../api/entitiy/digitalocean/DropletSizeEntity";
-import {DigitaloceanNodeSpec} from "../../../api/entitiy/node/DigitialoceanNodeSpec";
+import {Size} from "../../../shared/entity/digitalocean/DropletSizeEntity";
+import {DigitaloceanNodeSpec} from "../../../shared/entity/node/DigitialoceanNodeSpec";
 import {MD_DIALOG_DATA} from "@angular/material";
 import {AddNodeModalData} from "../add-node-modal-data";
 
@@ -21,8 +19,10 @@ export class DigitaloceanAddNodeComponent extends AddNodeComponent {
   nodeSizes:Size[] = [];
   form: FormGroup;
 
-  constructor(api: ApiService, fb: FormBuilder, store: Store<fromRoot.State>, @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
-    super(api, fb, store, data);
+  constructor(api: ApiService, 
+              fb: FormBuilder, 
+              @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
+    super(api, fb, data);
     this.api.getDigitaloceanSizes(this.data.cluster.spec.cloud.digitalocean.token).subscribe(result => {
         this.nodeSizes = result.sizes;
       }

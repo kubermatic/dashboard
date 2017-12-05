@@ -1,11 +1,9 @@
+import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
-import {ApiService} from "../../api/api.service";
-import {SSHKeyEntity} from "../../api/entitiy/SSHKeyEntity";
+import {ApiService} from "app/core/services/api/api.service";
+import {SSHKeyEntity} from "../../shared/entity/SSHKeyEntity";
 import {FormGroup, FormBuilder, Validators, FormControl} from "@angular/forms";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../reducers/index";
-import {NotificationComponent} from "../../notification/notification.component";
-import { InputValidationService } from '../../services';
+import { InputValidationService } from '../../core/services';
 
 @Component({
   selector: 'kubermatic-add-ssh-key',
@@ -21,7 +19,6 @@ export class AddSshKeyComponent implements OnInit {
   constructor(
     private api: ApiService, 
     private formBuilder: FormBuilder, 
-    private store: Store<fromRoot.State>,
     public inputValidationService: InputValidationService
   ) {}
 
@@ -38,7 +35,7 @@ export class AddSshKeyComponent implements OnInit {
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
         .subscribe(result => {
-          NotificationComponent.success(this.store, "Success", `SSH key ${name} added successfully`);
+          NotificationActions.success("Success", `SSH key ${name} added successfully`);
           this.addSSHKeyForm.reset();
           this.syncSshKey.emit();
         });

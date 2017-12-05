@@ -7,13 +7,11 @@ import { DebugElement } from '@angular/core';
 import {MaterialModule, MdDialog, MdDialogModule } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 import {ConnectionBackend, RequestOptions, HttpModule} from "@angular/http";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../reducers/index";
-import {Auth} from "../../auth/auth.service";
+import {Auth} from "../../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
 import {FormBuilder, NgModel} from "@angular/forms";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {ApiService} from "../../api/api.service";
+import {ApiService} from "app/core/services/api/api.service";
 
 describe('NodeDeleteConfirmationComponent', () => {
   let component: NodeDeleteConfirmationComponent;
@@ -23,7 +21,6 @@ describe('NodeDeleteConfirmationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ NodeDeleteConfirmationComponent ],
       imports: [
-        StoreModule.provideStore(combinedReducer),
         MaterialModule,
         HttpModule,
         RouterTestingModule,

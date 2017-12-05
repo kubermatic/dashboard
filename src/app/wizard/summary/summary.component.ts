@@ -1,42 +1,79 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {CreateNodeModel} from "../../api/model/CreateNodeModel";
-import {CreateClusterModel} from "../../api/model/CreateClusterModel";
-import {DataCenterEntity} from "../../api/entitiy/DatacenterEntity";
-import {ApiService} from "../../api/api.service";
+import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { CreateNodeModel } from "../../shared/model/CreateNodeModel";
+import { CreateClusterModel } from "../../shared/model/CreateClusterModel";
+import { DataCenterEntity } from "../../shared/entity/DatacenterEntity";
+import { ApiService } from "app/core/services/api/api.service";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss']
 })
-export class SummaryComponent implements OnInit {
+export class SummaryComponent implements OnInit, OnDestroy {
 
-  @Input() provider: string;
-  @Input() region: DataCenterEntity;
-  @Input() clusterSpec: CreateClusterModel;
-  @Input() nodeSpec: CreateNodeModel;
+  private subscriptions: Subscription[] = [];
 
-  @Output() syncStep = new EventEmitter();
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public provider: string;
+
+  @select(['wizard', 'setDatacenterForm', 'datacenter']) region$: Observable<DataCenterEntity>;
+  public region: DataCenterEntity;
+
+  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
+  public nodeModel: CreateNodeModel;
+
+  @select(['wizard', 'clusterModel']) clusterModel$: Observable<CreateClusterModel>;
+  public clusterModel: CreateClusterModel;
 
   public shhKeysList: string[]  = [];
 
   constructor(private api: ApiService) { }
 
   ngOnInit() {
-    this.api.getSSHKeys()
+    let sub = this.getSSHKeys();
+    this.subscriptions.push(sub);
+    
+    let sub2 = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
+      .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel]) => {
+        const provider = data[0];
+        const region = data[1];
+        const nodeModel = data[2];
+        const clusterModel = data[3];
+  
+        provider && (this.provider = provider);
+        region && (this.region = region);
+        nodeModel && (this.nodeModel = nodeModel);
+        clusterModel && (this.clusterModel = clusterModel);
+      });
+    this.subscriptions.push(sub2);
+  }
+
+  public getSSHKeys(): Subscription {
+    return this.api.getSSHKeys()
       .subscribe(
         result => {
-          for (var item of result) {
-            for (var key of this.clusterSpec.sshKeys)
-            if (item.metadata.name == key) {
-              this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
+          for (let item of result) {
+            for (let key of this.clusterModel.sshKeys) {
+              if (item.metadata.name === key) {
+                this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
+              }
             }
           }
         }
       );
   }
 
-  public gotoStep(step: number) {
-      this.syncStep.emit(step);
+  public goToStep(step: number): void {
+    WizardActions.goToStep(step);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }
