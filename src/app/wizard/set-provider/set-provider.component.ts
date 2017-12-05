@@ -22,7 +22,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   public datacenters: { [key: string]: DataCenterEntity[] } = {};  
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
-  public selectedProvider: string;
+  public selectedProvider: string = '';
 
   constructor(private fb: FormBuilder,
               private dcService: DatacenterService) { }
