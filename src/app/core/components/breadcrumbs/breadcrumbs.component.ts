@@ -1,8 +1,10 @@
+import { Observable } from 'rxjs';
 import { Component, OnInit } from "@angular/core";
 import {Router} from '@angular/router';
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../redux/reducers/index";
 import {ApiService} from 'app/core/services/api/api.service';
+import { select } from "@angular-redux/store";
+import { Breadcrumb } from 'app/redux/reducers/breadcrumb';
+
 @Component({
   selector: "kubermatic-breadcrumbs",
   templateUrl: "./breadcrumbs.component.html",
@@ -13,12 +15,13 @@ export class BreadcrumbsComponent implements OnInit {
   public activePageTitle: string = "";
   public clusterName: string = '';
 
+  @select(['breadcrumb', 'crumb']) breadcrumb$: Observable<string>;
+
   constructor(
-    private store: Store<fromRoot.State>,
     private api: ApiService,
     private router: Router
   ) {
-    this.store.select(fromRoot.getBreadcrumb).subscribe(crumb => {
+    this.breadcrumb$.subscribe(crumb => {
       this.activePageTitle = crumb;
 
       const regExp = /\/cluster\/(.*)$/;

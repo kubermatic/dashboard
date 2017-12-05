@@ -1,8 +1,8 @@
+import { Observable } from 'rxjs';
 import { Component } from "@angular/core";
 import { NotificationsService } from "angular2-notifications";
-import { Store } from "@ngrx/store";
-import * as fromRoot from "../../../redux/reducers/index";
 import { NotificationToast, NotificationToastType } from "../../../redux/reducers/notification";
+import { select } from "@angular-redux/store";
 
 @Component({
   selector: "kubermatic-notification",
@@ -24,9 +24,11 @@ export class NotificationComponent {
     position: ["right", "top"]
   };
 
-  constructor(private _store: Store<fromRoot.State>, private _service: NotificationsService) {
-    this._store.select(fromRoot.getNotificationToast).subscribe(toast => {
-      if (!!toast) {
+  @select(['notification', 'toast']) notification$: Observable<NotificationToast>;  
+
+  constructor(private _service: NotificationsService) {
+    this.notification$.subscribe(toast => {
+      if (toast) {
         this.createToast(toast);
       }
     });

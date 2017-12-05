@@ -1,15 +1,14 @@
-import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
-import * as fromRoot from "../reducers/index";
+import { ActionBase } from './action.base';
+import { Action } from '../../shared/interfaces/action.interface';
 
-@Injectable()
-export class BreadcrumbActions {
-    public static get PUT_BREADCRUMB(): string { return "PUT_BREADCRUMB"; }
+import { dispatch } from '@angular-redux/store';
 
-    constructor(private store: Store<fromRoot.State>) {
-    }
+export class BreadcrumbActions extends ActionBase {
+    static readonly className: string = 'BreadcrumbActions';
+    static readonly PUT_BREADCRUMB = BreadcrumbActions.getActType('PUT_BREADCRUMB');
 
-    public putBreadcrumb(crumb: string) {
-        this.store.dispatch({ type: BreadcrumbActions.PUT_BREADCRUMB, payload: { crumb } });
+    @dispatch()
+    static putBreadcrumb(crumb: string): Action {
+        return { type: BreadcrumbActions.PUT_BREADCRUMB, payload: { crumb } };
     }
 }

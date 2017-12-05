@@ -6,8 +6,6 @@ import {BrowserModule} from "@angular/platform-browser";
 import {Http, HttpModule, ConnectionBackend} from "@angular/http";
 import {Auth} from "../auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../../redux/reducers/index";
 
 describe("ApiService", () => {
   beforeEach(() => {
@@ -15,8 +13,7 @@ describe("ApiService", () => {
       imports: [
         BrowserModule,
         HttpModule,
-        RouterTestingModule,
-        StoreModule.provideStore(combinedReducer)
+        RouterTestingModule
       ],
       declarations: [
       ],

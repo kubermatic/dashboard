@@ -5,8 +5,6 @@ import { Auth } from "./auth.service";
 import {HttpModule} from "@angular/http";
 import {BrowserModule} from "@angular/platform-browser";
 import {RouterTestingModule} from "@angular/router/testing";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../../redux/reducers/index";
 
 describe("Auth", () => {
   beforeEach(() => {
@@ -14,8 +12,7 @@ describe("Auth", () => {
       imports: [
         BrowserModule,
         HttpModule,
-        RouterTestingModule,
-        StoreModule.provideStore(combinedReducer)
+        RouterTestingModule
       ],
       declarations: [
       ],

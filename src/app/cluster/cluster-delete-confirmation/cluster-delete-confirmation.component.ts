@@ -24,8 +24,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
     private router: Router,
     private api: ApiService,
     private dialogRef: MdDialogRef<ClusterDeleteConfirmationComponent>,
-    private createNodesService: CreateNodesService,
-    private notificationActions: NotificationActions
+    private createNodesService: CreateNodesService
   ) {}
 
   ngOnInit() {}
@@ -48,7 +47,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
         this.api.deleteCluster(this.clusterName).subscribe(result => {
           this.cluster = result;
           this.createNodesService.preventCreatingInitialClusterNodes();
-          this.notificationActions.success("Success", `Cluster is beeing deleted`);
+          NotificationActions.success("Success", `Cluster is beeing deleted`);
 
           this.router.navigate(['/clusters']);
         });

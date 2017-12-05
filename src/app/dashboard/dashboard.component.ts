@@ -15,8 +15,7 @@ export class DashboardComponent implements OnInit {
   constructor(private auth: Auth, 
               private router: Router, 
               private activatedRoute: ActivatedRoute,
-              private api: ApiService,
-              private breadcrumbActions: BreadcrumbActions) {
+              private api: ApiService) {
     this.router.events
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
@@ -30,7 +29,7 @@ export class DashboardComponent implements OnInit {
       .filter(route => route.outlet === "primary")
       .mergeMap(route => route.data)
       .subscribe((event) => {
-        this.breadcrumbActions.putBreadcrumb(event['title']);
+        BreadcrumbActions.putBreadcrumb(event['title']);
       });
   }
 

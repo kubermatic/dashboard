@@ -1,8 +1,10 @@
-import {Component, OnInit, EventEmitter, Input, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {OpenstackCloudSpec} from "../../../../shared/entity/cloud/OpenstackCloudSpec";
-
-import {InputValidationService} from '../../../../core/services';
+import { NgRedux } from '@angular-redux/store';
+import { CloudSpec } from './../../../../shared/entity/ClusterEntity';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { OpenstackCloudSpec } from "../../../../shared/entity/cloud/OpenstackCloudSpec";
+import { InputValidationService } from '../../../../core/services';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-cluster-openstack',
@@ -11,28 +13,29 @@ import {InputValidationService} from '../../../../core/services';
 })
 export class OpenstackClusterComponent implements OnInit {
   public osClusterForm: FormGroup;
-  public cloudSpec: OpenstackCloudSpec;
 
-  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
-  @Input() cloud: OpenstackCloudSpec;
-  @Output() syncProviderCloudSpec = new EventEmitter();
-  @Output() syncProviderCloudSpecValid = new EventEmitter();
+  constructor(private formBuilder: FormBuilder, 
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
+    const reduxStore = this.ngRedux.getState();
+    const clusterForm = reduxStore.wizard.openstackClusterForm;
+
     this.osClusterForm = this.formBuilder.group({
-      os_tenant: [this.cloud.tenant, [<any>Validators.required]],
-      os_domain: [this.cloud.domain, [<any>Validators.required]],
-      os_username: [this.cloud.username, [<any>Validators.required]],
-      os_password: [this.cloud.password, [<any>Validators.required]],
-      os_network: [this.cloud.network],
-      os_security_groups: [this.cloud.securityGroups],
-      os_floating_ip_pool: [this.cloud.floatingIpPool],
-      os_cas: [false]
+      os_tenant: [clusterForm.os_tenant, [<any>Validators.required]],
+      os_domain: [clusterForm.os_domain, [<any>Validators.required]],
+      os_username: [clusterForm.os_username, [<any>Validators.required]],
+      os_password: [clusterForm.os_password, [<any>Validators.required]],
+      os_network: [clusterForm.os_network],
+      os_security_groups: [clusterForm.os_security_groups],
+      os_floating_ip_pool: [clusterForm.os_floating_ip_pool],
+      os_cas: [clusterForm.os_cas]
     });
   }
 
-  public onChange (){
-    this.cloudSpec = new OpenstackCloudSpec(
+  public onChange() {
+    const osCloudSpec = new OpenstackCloudSpec(
       this.osClusterForm.controls["os_username"].value,
       this.osClusterForm.controls["os_password"].value,
       this.osClusterForm.controls["os_tenant"].value,
@@ -40,9 +43,14 @@ export class OpenstackClusterComponent implements OnInit {
       this.osClusterForm.controls["os_network"].value,
       this.osClusterForm.controls["os_security_groups"].value,
       this.osClusterForm.controls["os_floating_ip_pool"].value,
-    )
+    );
 
-    this.syncProviderCloudSpec.emit(this.cloudSpec);
-    this.syncProviderCloudSpecValid.emit(this.osClusterForm.valid);
+    const ruduxStore = this.ngRedux.getState();
+    const wizard = ruduxStore.wizard;
+    const region = wizard.setDatacenterForm.datacenter.metadata.name;
+
+    WizardActions.setCloudSpec(
+      new CloudSpec(region, null, null, null, osCloudSpec, null)
+    );
   }
 }

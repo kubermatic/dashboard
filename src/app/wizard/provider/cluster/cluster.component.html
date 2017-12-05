@@ -1,12 +1,11 @@
-<kubermatic-cluster-aws *ngIf="provider == 'aws'"
-                        [cloud]="cloud.aws"
-                        (syncProviderCloudSpec)="setCloud($event)"
-                        (syncProviderCloudSpecValid)="valid($event)"></kubermatic-cluster-aws>
-<kubermatic-cluster-digitalocean *ngIf="provider == 'digitalocean'"
-                                 [cloud]="cloud.digitalocean"
-                                 (syncProviderCloudSpec)="setCloud($event)"
-                                 (syncProviderCloudSpecValid)="valid($event)"></kubermatic-cluster-digitalocean>
-<kubermatic-cluster-openstack *ngIf="provider == 'openstack'"
-                              [cloud]="cloud.openstack"
-                              (syncProviderCloudSpec)="setCloud($event)"
-                              (syncProviderCloudSpecValid)="valid($event)"></kubermatic-cluster-openstack>
+<kubermatic-cluster-aws 
+    *ngIf="provider == 'aws'">
+</kubermatic-cluster-aws>
+
+<kubermatic-cluster-digitalocean 
+    *ngIf="provider == 'digitalocean'">
+</kubermatic-cluster-digitalocean>
+
+<kubermatic-cluster-openstack 
+    *ngIf="provider == 'openstack'">
+</kubermatic-cluster-openstack>

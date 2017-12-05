@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
-  constructor(private notificationActions: NotificationActions) { }
+  constructor() { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next
@@ -13,7 +13,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
         .do(
           event => {},
           errorInstance => {
-            this.notificationActions.error(
+            NotificationActions.error(
               `Error ${errorInstance.status}`,
               `${errorInstance.error.error.message || errorInstance.statusText}` 
             );

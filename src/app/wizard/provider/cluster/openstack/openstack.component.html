@@ -1,22 +1,22 @@
-<form [formGroup]="osClusterForm" novalidate fxLayout="column" (change)="onChange()">
+<form [connect]="['wizard', 'openstackClusterForm']" [formGroup]="osClusterForm" novalidate fxLayout="column" (change)="onChange()">
 
   <md-input-container fxFlex>
-    <input id="os_domain" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_domain" type="text" placeholder="Domain:" title="Domain" >
+    <input id="os_domain" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_domain" type="text" placeholder="Domain*:" title="Domain" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_domain.valid || !osClusterForm.controls.os_domain.touched">Domain is required.</small>
   </md-input-container>
 
   <md-input-container fxFlex>
-    <input id="os_tenant" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_tenant" type="text" placeholder="Tenant/Project:" title="Tenant/Project" >
+    <input id="os_tenant" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_tenant" type="text" placeholder="Tenant/Project*:" title="Tenant/Project" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_tenant.valid || !osClusterForm.controls.os_tenant.touched">Tenant/Project is required.</small>
   </md-input-container>
 
   <md-input-container fxFlex>
-    <input id="os_username" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_username" type="text" placeholder="Username:" title="Username" >
+    <input id="os_username" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_username" type="text" placeholder="Username*:" title="Username" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_username.valid || !osClusterForm.controls.os_username.touched">Username is required.</small>
   </md-input-container>
 
   <md-input-container fxFlex>
-    <input id="os_password" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_password" type="password" placeholder="Password:" title="Password" >
+    <input id="os_password" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_password" type="password" placeholder="Password*:" title="Password" >
     <small class="form-text text-danger" [hidden]="osClusterForm.controls.os_password.valid || !osClusterForm.controls.os_password.touched">Password is required.</small>
   </md-input-container>
 
@@ -35,6 +35,6 @@
   </md-input-container>
 
   <div class="slider-box">
-    <md-slide-toggle formControlName="os_cas">Extend Provider settings</md-slide-toggle>
+    <md-slide-toggle id="os_cas" formControlName="os_cas">Extend Provider settings</md-slide-toggle>
   </div>
 </form>

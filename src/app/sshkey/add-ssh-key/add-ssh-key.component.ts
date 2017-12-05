@@ -19,8 +19,7 @@ export class AddSshKeyComponent implements OnInit {
   constructor(
     private api: ApiService, 
     private formBuilder: FormBuilder, 
-    public inputValidationService: InputValidationService,
-    private notificationActions: NotificationActions
+    public inputValidationService: InputValidationService
   ) {}
 
   ngOnInit() {
@@ -36,7 +35,7 @@ export class AddSshKeyComponent implements OnInit {
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
         .subscribe(result => {
-          this.notificationActions.success("Success", `SSH key ${name} added successfully`);
+          NotificationActions.success("Success", `SSH key ${name} added successfully`);
           this.addSSHKeyForm.reset();
           this.syncSshKey.emit();
         });

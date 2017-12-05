@@ -1,50 +1,64 @@
-import {Component, OnInit, OnChanges, EventEmitter, Output, Input, SimpleChanges} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {CustomValidators} from "ng2-validation";
-import {ApiService} from "app/core/services/api/api.service";
-import {NodeInstanceFlavors} from "../../../../shared/model/NodeProviderConstants";
-import {NodeCreateSpec} from "../../../../shared/entity/NodeEntity";
-import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
-import {DigitaloceanNodeSpec} from "../../../../shared/entity/node/DigitialoceanNodeSpec";
-import {InputValidationService} from '../../../../core/services';
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { CustomValidators } from "ng2-validation";
+import { ApiService } from "app/core/services/api/api.service";
+import { NodeInstanceFlavors } from "../../../../shared/model/NodeProviderConstants";
+import { NodeCreateSpec } from "../../../../shared/entity/NodeEntity";
+import { CreateNodeModel } from "../../../../shared/model/CreateNodeModel";
+import { DigitaloceanNodeSpec } from "../../../../shared/entity/node/DigitialoceanNodeSpec";
+import { InputValidationService } from '../../../../core/services';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-node-digitalocean',
   templateUrl: './digitalocean.component.html',
   styleUrls: ['./digitalocean.component.scss']
 })
-export class DigitaloceanNodeComponent implements OnInit, OnChanges {
+export class DigitaloceanNodeComponent implements OnInit, OnDestroy {
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
+  private subscription: Subscription;  
 
-  constructor(private formBuilder: FormBuilder,private api: ApiService, public inputValidationService: InputValidationService) { }
+  @select(['wizard', 'digitalOceanClusterForm', 'access_token']) token$: Observable<string>;
+  public token: string = '';
 
-  @Input() node: CreateNodeModel;
-  @Input() doToken: string;
-  @Output() syncNodeModel = new EventEmitter();
-  @Output() syncNodeSpecValid = new EventEmitter();
+  constructor(private formBuilder: FormBuilder, 
+              private api: ApiService,
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.doNodeForm = this.formBuilder.group({
-      node_count: [this.node.instances, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: [this.node.spec.digitalocean.size, [<any>Validators.required]]
+    this.subscription = this.token$.subscribe(token => {
+      if (!token) { return; }
+      this.token = token;
+      this.getNodeSize(token);
     });
 
-    this.getNodeSize(this.doToken);
-  }
+    const reduxStore = this.ngRedux.getState();
+    const nodeForm = reduxStore.wizard.digitalOceanNodeForm;
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.getNodeSize(this.doToken);
+    this.doNodeForm = this.formBuilder.group({
+      node_count: [nodeForm.node_count, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: ['', [<any>Validators.required]]
+    });
   }
 
   public getNodeSize(token: string): void {
+    const reduxStore = this.ngRedux.getState();
+    const selectedNodeSize = reduxStore.wizard.digitalOceanNodeForm.node_size;
+
     if (token.length) {
       this.api.getDigitaloceanSizes(token).subscribe(result => {
           this.nodeSize = result.sizes;
           if (this.nodeSize.length > 0 && this.doNodeForm.controls["node_size"].value === '') {
-            this.doNodeForm.patchValue({node_size: '4gb'});
+            const nodeSize = selectedNodeSize ? selectedNodeSize : '4gb';
+            this.doNodeForm.patchValue({node_size: nodeSize});
             this.onChange();
           }
         }
@@ -59,9 +73,14 @@ export class DigitaloceanNodeComponent implements OnInit, OnChanges {
       null,
       null,
     );
+
     this.nodeInstances = this.doNodeForm.controls["node_count"].value;
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
-    this.syncNodeModel.emit(createNodeModel);
-    this.syncNodeSpecValid.emit(this.doNodeForm.valid);
+
+    WizardActions.setNodeModel(createNodeModel);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

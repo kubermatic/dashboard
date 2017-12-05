@@ -1,15 +1,16 @@
-import { Action } from "@ngrx/store";
+import { Action } from "../../shared/interfaces/action.interface";
+import { Reducer } from 'redux';
 import { BreadcrumbActions } from "../actions/breadcrumb.actions";
 
 export interface Breadcrumb {
   crumb: string;
 }
 
-const initialState: Breadcrumb = {
+export const INITIAL_STATE: Breadcrumb = {
   crumb: "",
 };
 
-export function breadcrumbReducer(state: Breadcrumb = initialState, action: Action): Breadcrumb {
+export const BreadcrumbReducer: Reducer<Breadcrumb> = (state: Breadcrumb = INITIAL_STATE, action: Action): Breadcrumb => {
   switch (action.type) {
     case BreadcrumbActions.PUT_BREADCRUMB:
       return Object.assign({}, state, {
@@ -18,6 +19,6 @@ export function breadcrumbReducer(state: Breadcrumb = initialState, action: Acti
     default:
       return state;
   }
-}
+};
 
-export const getCrumb = (state: Breadcrumb) => state.crumb;
+

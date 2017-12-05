@@ -1,30 +1,29 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {CreateNodeModel} from "../../../shared/model/CreateNodeModel";
+import { Observable } from 'rxjs/Rx';
+import { select } from '@angular-redux/store';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-provider-node',
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.scss']
 })
-export class ProviderNodeComponent implements OnInit {
+export class ProviderNodeComponent implements OnInit, OnDestroy {
 
-  @Input() provider: string;
-  @Input() token: string;
-  @Input() node: CreateNodeModel;
+  private subscription: Subscription;  
 
-  @Output() syncNodeModel = new EventEmitter();
-  @Output() syncNodeSpecValid = new EventEmitter();
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public provider: string;
 
   constructor() { }
 
-  ngOnInit() { }
-
-  public getNodeModel(model) {
-    this.syncNodeModel.emit(model);
+  ngOnInit() { 
+    this.subscription = this.provider$.subscribe(provider => {
+      provider && (this.provider = provider);
+    });
   }
 
-  public valid(value) {
-    this.syncNodeSpecValid.emit(value);
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
-
 }

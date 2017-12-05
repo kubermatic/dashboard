@@ -8,8 +8,6 @@ import {HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
 import {Auth} from "../core/services";
 import {ApiService} from "app/core/services/api/api.service";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../redux/reducers/index";
 import {ClusterNameGenerator} from "../core/util/name-generator.service";
 import {FrontpageComponent} from "../pages/frontpage/frontpage.component";
 import { MaterialModule } from '@angular/material';
@@ -25,7 +23,6 @@ describe("DashboardComponent", () => {
         ReactiveFormsModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer),
         MaterialModule
       ],
       declarations: [

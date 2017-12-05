@@ -8,7 +8,6 @@ import {Size} from "../../../shared/entity/digitalocean/DropletSizeEntity";
 import {DigitaloceanNodeSpec} from "../../../shared/entity/node/DigitialoceanNodeSpec";
 import {MD_DIALOG_DATA} from "@angular/material";
 import {AddNodeModalData} from "../add-node-modal-data";
-import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
   styleUrls: ['./../add-node.component.scss'],
@@ -22,9 +21,8 @@ export class DigitaloceanAddNodeComponent extends AddNodeComponent {
 
   constructor(api: ApiService, 
               fb: FormBuilder, 
-              notificationActions: NotificationActions, 
               @Inject(MD_DIALOG_DATA) public data: AddNodeModalData) {
-    super(api, fb, notificationActions, data);
+    super(api, fb, data);
     this.api.getDigitaloceanSizes(this.data.cluster.spec.cloud.digitalocean.token).subscribe(result => {
         this.nodeSizes = result.sizes;
       }

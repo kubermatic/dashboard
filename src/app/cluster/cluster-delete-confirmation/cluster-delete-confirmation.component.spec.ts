@@ -2,7 +2,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {StoreModule} from "@ngrx/store";
 import { NgModule } from "@angular/core";
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
@@ -12,7 +11,6 @@ import { RouterModule, Router } from "@angular/router";
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
 import {ApiService} from "app/core/services/api/api.service";
 import {HttpModule} from "@angular/http";
-import {combinedReducer} from "../../redux/reducers/index";
 
 
 
@@ -27,7 +25,6 @@ describe('ClusterDeleteConfirmationComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer),
         HttpModule,
         MaterialModule,
         RouterModule

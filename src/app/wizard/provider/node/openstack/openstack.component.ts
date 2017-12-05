@@ -1,12 +1,13 @@
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {NodeInstanceFlavors} from "../../../../shared/model/NodeProviderConstants";
-import {CustomValidators} from "ng2-validation";
-import {NodeCreateSpec} from "../../../../shared/entity/NodeEntity";
-import {OpenstackNodeSpec} from "../../../../shared/entity/node/OpenstackNodeSpec";
-import {CreateNodeModel} from "../../../../shared/model/CreateNodeModel";
-
-import {InputValidationService} from '../../../../core/services';
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { NodeInstanceFlavors } from "../../../../shared/model/NodeProviderConstants";
+import { CustomValidators } from "ng2-validation";
+import { NodeCreateSpec } from "../../../../shared/entity/NodeEntity";
+import { OpenstackNodeSpec } from "../../../../shared/entity/node/OpenstackNodeSpec";
+import { CreateNodeModel } from "../../../../shared/model/CreateNodeModel";
+import { InputValidationService } from '../../../../core/services';
 
 @Component({
   selector: 'kubermatic-node-openstack',
@@ -19,17 +20,18 @@ export class OpenstackNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
   public nodeInstances: number;
 
-  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
-
-  @Input() node: CreateNodeModel;
-  @Output() syncNodeModel = new EventEmitter();
-  @Output() syncNodeSpecValid = new EventEmitter();
+  constructor(private formBuilder: FormBuilder, 
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
+    const reduxStore = this.ngRedux.getState();
+    const nodeForm = reduxStore.wizard.openstackNodeForm;
+
     this.osNodeForm = this.formBuilder.group({
-      os_node_image: [this.node.spec.openstack.image, [<any>Validators.required]],
-      node_count: [this.node.instances, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: [this.node.spec.openstack.flavor, [<any>Validators.required]],
+      os_node_image: [nodeForm.os_node_image, [<any>Validators.required]],
+      node_count: [nodeForm.node_count, [<any>Validators.required, CustomValidators.min(1)]],
+      node_size: [nodeForm.node_size, [<any>Validators.required]],
     });
   }
 
@@ -41,12 +43,13 @@ export class OpenstackNodeComponent implements OnInit {
         this.osNodeForm.controls["node_size"].value,
         this.osNodeForm.controls["os_node_image"].value
       ),
-      null,
+      null
     );
-    this.nodeInstances = this.osNodeForm.controls["node_count"].value;
 
+    this.nodeInstances = this.osNodeForm.controls["node_count"].value;
+    
     const createNodeModel = new CreateNodeModel(this.nodeInstances, this.nodeSpec);
-    this.syncNodeModel.emit(createNodeModel);
-    this.syncNodeSpecValid.emit(this.osNodeForm.valid);
+
+    WizardActions.setNodeModel(createNodeModel);
   }
 }

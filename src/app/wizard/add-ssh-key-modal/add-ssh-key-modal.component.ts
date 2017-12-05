@@ -19,7 +19,6 @@ export class AddSshKeyModalComponent implements OnInit {
   constructor(
     private api: ApiService,
     private formBuilder: FormBuilder,
-    private notificationActions: NotificationActions,
     private dialogRef: MdDialogRef<AddSshKeyModalComponent>,
     public inputValidationService: InputValidationService
   ) {}
@@ -38,7 +37,7 @@ export class AddSshKeyModalComponent implements OnInit {
     this.api.addSSHKey(new SSHKeyEntity(name, null, key))
       .subscribe(
         result => {
-          this.notificationActions.success("Success", `SSH key ${name} added successfully`);
+          NotificationActions.success("Success", `SSH key ${name} added successfully`);
           //this.newSshKey.emit(result.metadata.name)
           this.dialogRef.close(result);
         });
