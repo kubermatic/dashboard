@@ -8,7 +8,15 @@ export class NodeProvider {
   public static readonly BAREMETAL: string = "baremetal";
   public static readonly OPENSTACK: string = "openstack";
 
-  public static readonly Supported: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.OPENSTACK];
+
+  public static readonly GOOGLE: string = "google";
+  public static readonly HUAWEI: string = "huawei";
+  public static readonly TELEKOM: string = "telekom";
+  public static readonly AZURE: string = "azure";
+
+  public static readonly Supported: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.OPENSTACK, NodeProvider.GOOGLE, NodeProvider.HUAWEI, NodeProvider.TELEKOM, NodeProvider.BAREMETAL, NodeProvider.AZURE];
+  public static readonly DisabledProvider: string[] = [NodeProvider.GOOGLE, NodeProvider.HUAWEI, NodeProvider.TELEKOM, NodeProvider.BAREMETAL, NodeProvider.AZURE];
+
 }
 
 export namespace NodeInstanceFlavors {
