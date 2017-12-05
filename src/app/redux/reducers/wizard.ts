@@ -156,9 +156,10 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
         }
         case WizardActions.GO_TO_STEP: {
             const step = action.payload.step;
-            const nextState = clearFormValues(state, step);
+            const stateClone = Object.assign({}, state, { isChanged: false });
+            const nextState = clearFormValues(stateClone, step + 1);
 
-            return Object.assign({}, state, { step });
+            return Object.assign({}, state, nextState, { step });
         }
         case FORM_CHANGED: {
             const valid = new Map(state.valid);
