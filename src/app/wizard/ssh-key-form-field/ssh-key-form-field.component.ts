@@ -52,8 +52,10 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
 
     dialogRef.afterClosed().subscribe(result => {
-      this.sshKeyForm.patchValue({ssh_keys: [...this.selectedSshKeys, result.metadata.name]});
-      this.refreshSSHKeys();
+      if (result) {
+        this.sshKeyForm.patchValue({ssh_keys: [...this.selectedSshKeys, result.metadata.name]});
+        this.refreshSSHKeys();
+      }
     });
   }
 

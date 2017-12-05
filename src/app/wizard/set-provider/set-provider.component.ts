@@ -1,3 +1,4 @@
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { Observable } from 'rxjs/Rx';
@@ -26,18 +27,22 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   constructor(private fb: FormBuilder,
               private dcService: DatacenterService) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     let sub = this.provider$.subscribe(provider => {
       provider && (this.selectedProvider = provider);
     });
     this.subscriptions.push(sub);
 
     this.setProviderForm = this.fb.group({
-      provider: ['']
+      provider: [this.selectedProvider]
     });
 
     let sub2 = this.getDatacenters();
     this.subscriptions.push(sub2);
+  }
+
+  public onChange(): void {
+    WizardActions.resetForms();
   }
 
   public getDatacenters(): Subscription {

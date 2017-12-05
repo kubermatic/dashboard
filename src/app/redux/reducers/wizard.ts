@@ -27,7 +27,6 @@ const formOnStep: Map<number, string[]> = new Map([
 
 export interface Wizard {
     step: number;
-    isChanged: boolean;
     valid: Map<string, boolean>;
     clusterNameForm: {
         name: string;
@@ -85,7 +84,6 @@ export interface Wizard {
 
 export const INITIAL_STATE: Wizard = {
     step: 0,
-    isChanged: false,
     valid: new Map(),
     clusterNameForm: {
         name: ''
@@ -144,29 +142,20 @@ export const INITIAL_STATE: Wizard = {
 export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, action: Action): Wizard => {
     switch (action.type) {
         case WizardActions.NEXT_STEP: {
-            const nextStep = state.step + 1;
-            const nextState = clearFormValues(state, nextStep);
-
-            return Object.assign({}, state, nextState, { step: nextStep });
+            return Object.assign({}, state, { step: state.step + 1 });
         }
         case WizardActions.PREV_STEP: {
-            const step = state.step;
-
-            return Object.assign({}, state, { step: state.step - 1, isChanged: false });
+            return Object.assign({}, state, { step: state.step - 1 });
         }
         case WizardActions.GO_TO_STEP: {
-            const step = action.payload.step;
-            const stateClone = Object.assign({}, state, { isChanged: false });
-            const nextState = clearFormValues(stateClone, step + 1);
-
-            return Object.assign({}, state, nextState, { step });
+            return Object.assign({}, state, { step: action.payload.step });
         }
         case FORM_CHANGED: {
             const valid = new Map(state.valid);
             const path = action.payload.path;
 
             valid.set(path[path.length - 1], action.payload.valid);
-            return Object.assign({}, state, { valid, isChanged: true });
+            return Object.assign({}, state, { valid });
         }
         case WizardActions.CLEAR_STORE: {
             const initialState = Object.assign({}, INITIAL_STATE);
@@ -191,27 +180,22 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
             
             return Object.assign({}, state, { valid });
         }
+        case WizardActions.RESET_FORMS: {
+            const intialState = cloneDeep(INITIAL_STATE);
+            const nextState = Object.assign({}, state);
+            nextState.valid = new Map(state.valid);
+
+            formOnStep.forEach((value, key) => {
+                if (key > state.step) {
+                    formOnStep.get(key).forEach(form => {
+                        nextState[form] = intialState[form];
+                        nextState.valid.set(form, false);
+                    });
+                }
+            });
+            
+            return Object.assign({}, state, nextState);
+        }
     }
     return state;
 };
-
-function clearFormValues(state, step) {
-    const intialState = cloneDeep(INITIAL_STATE);
-    const nextState = Object.assign({}, state);
-    nextState.valid = new Map(state.valid);
-
-    if (state.isChanged) {
-        formOnStep.forEach((value, key) => {
-            if (key >= step) {
-                formOnStep.get(key).forEach(form => {
-                    nextState[form] = intialState[form];
-                    nextState.valid.set(form, false);
-                });
-            }
-        });
-    }
-
-    nextState.isChanged = false;
-
-    return nextState;
-}
