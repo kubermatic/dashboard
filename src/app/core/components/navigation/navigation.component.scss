@@ -19,7 +19,7 @@ header {
     display: block;
     margin: 0 auto;
     width: 184px;
-    background-image: url("../../assets/images/logo/header-logo-kubermatic.png");
+    background-image: url("../../../../assets/images/logo/header-logo-kubermatic.png");
     height: 45px;
     background-size: 218px;
     background-position: 0 -24px;
@@ -33,7 +33,7 @@ header {
     text-align: right;
 
     .login {
-      background-image: url("../../assets/images/login.svg");
+      background-image: url("../../../../assets/images/login.svg");
       background-repeat: no-repeat;
       background-size: auto 10px;
       background-position: center left;
@@ -42,7 +42,7 @@ header {
     }
 
     .logout {
-      background-image: url("../../assets/images/logout.svg");
+      background-image: url("../../../../assets/images/logout.svg");
       background-size: auto 10px;
       background-repeat: no-repeat;
 
