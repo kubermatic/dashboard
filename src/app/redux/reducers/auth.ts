@@ -1,5 +1,6 @@
 import { AuthActions } from './../actions/auth.actions';
-import { Action } from "@ngrx/store";
+import { Action } from "../../shared/interfaces/action.interface";
+import { Reducer } from 'redux';
 
 export enum AuthStatus {
   LoggedIn = 0,
@@ -12,13 +13,13 @@ export interface Auth {
   state: AuthStatus;
 }
 
-const initialState: Auth = {
+export const INITIAL_STATE: Auth = {
   profile: [],
   token: "",
   state: AuthStatus.LoggedOut
 };
 
-export function authReducer(state: Auth = initialState, action: Action): Auth {
+export const AuthReducer: Reducer<Auth>  = (state: Auth = INITIAL_STATE, action: Action): Auth => {
   switch (action.type) {
     case AuthActions.LOGGED_IN:
       return Object.assign({}, state, {
@@ -43,6 +44,3 @@ export function authReducer(state: Auth = initialState, action: Action): Auth {
   }
 }
 
-
-export const getProfile = (state: Auth) => state.profile;
-export const getAuthState = (state: Auth) => state.state;

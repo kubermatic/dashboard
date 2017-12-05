@@ -9,9 +9,6 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {Http, HttpModule, ConnectionBackend} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../redux/reducers/index";
-
 describe('ClusterListComponent', () => {
   let component: ClusterListComponent;
   let fixture: ComponentFixture<ClusterListComponent>;
@@ -28,8 +25,7 @@ describe('ClusterListComponent', () => {
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
-        RouterTestingModule,
-        StoreModule.provideStore(combinedReducer)
+        RouterTestingModule
 
       ],
       providers: [

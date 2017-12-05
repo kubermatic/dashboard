@@ -11,7 +11,7 @@ import {SSHKeyEntity} from "../../shared/entity/SSHKeyEntity";
 export class ListSshKeyComponent implements OnInit {
   @Input() sshKeys: Array<SSHKeyEntity>;
 
-  constructor(private api: ApiService, private notificationActions: NotificationActions) {}
+  constructor(private api: ApiService) {}
 
   ngOnInit() {
   }
@@ -19,7 +19,7 @@ export class ListSshKeyComponent implements OnInit {
   public deleteSSHKey(key: SSHKeyEntity): void {
     this.api.deleteSSHKey(key.metadata.name).subscribe(() => {
       this.sshKeys.splice(this.sshKeys.indexOf(key), 1);
-      this.notificationActions.success("Success", `SSH key ${name} deleted.`);
+      NotificationActions.success("Success", `SSH key ${name} deleted.`);
     });
   }
 

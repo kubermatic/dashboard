@@ -1,10 +1,10 @@
-<form [formGroup]="awsNodeForm" novalidate  fxLayout="column" (change)="onChange()">
+<form [connect]="['wizard', 'awsNodeForm']" [formGroup]="awsNodeForm" novalidate  fxLayout="column" (change)="onChange()">
   <md-input-container fxFlex >
-    <input id="node_count" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes:" title="node_count">
+    <input id="node_count" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count">
   </md-input-container>
 
   <div fxFlex class="mat-select-container" >
-    <md-select placeholder="Node Size:" name="nodeSize" formControlName="node_size" (change)="onChange()">
+    <md-select placeholder="Node Size*:" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
       <md-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</md-option>
       <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
         {{size}}
@@ -13,14 +13,14 @@
   </div>
 
   <md-input-container fxFlex>
-    <input id="root_size" mdInput formControlName="root_size" min="8" max="200" type="number" placeholder="Disk size in GB (gp2):" title="Disk size">
+    <input id="root_size" mdInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:" title="Disk size">
   </md-input-container>
 
   <md-input-container fxFlex *ngIf="awsNodeForm.controls['aws_nas'].value">
     <input type="text" mdInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off" />
   </md-input-container>
   <div class="slider-box">
-    <md-slide-toggle formControlName="aws_nas">Extend Node settings</md-slide-toggle>
+    <md-slide-toggle id="aws_nas" formControlName="aws_nas">Extend Node settings</md-slide-toggle>
   </div>
   <p class="km-warning-msg">
     You need to accept the Software Terms of CoreOS. For this please click on the link, select "manual launch" & click on "Accept Software Terms".

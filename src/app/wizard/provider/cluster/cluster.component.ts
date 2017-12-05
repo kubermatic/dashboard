@@ -1,65 +1,29 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {CloudSpec, ClusterSpec} from "../../../shared/entity/ClusterEntity";
-import {NodeProvider} from "../../../shared/model/NodeProviderConstants";
+import { Observable } from 'rxjs/Rx';
+import { select } from '@angular-redux/store';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-provider-cluster',
   templateUrl: './cluster.component.html',
   styleUrls: ['./cluster.component.scss']
 })
-export class ProviderClusterComponent implements OnInit {
+export class ProviderClusterComponent implements OnInit, OnDestroy {
+
+  private subscription: Subscription;  
+
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public provider: string;
 
   constructor() { }
 
-  public cloudSpec: CloudSpec;
-
-  @Input() provider: string;
-  @Input() region: string;
-  @Input() cloud: CloudSpec;
-  @Output() syncCloudSpec = new EventEmitter();
-  @Output() syncCloudSpecValid = new EventEmitter();
-
-  ngOnInit() { }
-
-  public setCloud(providerCloudSpec) {
-
-    if (this.provider === NodeProvider.AWS) {
-
-      this.cloudSpec = new CloudSpec(
-        this.region,
-        null,
-        providerCloudSpec,
-        null,
-        null,
-        null,
-      )
-
-    } else if (this.provider === NodeProvider.DIGITALOCEAN) {
-
-      this.cloudSpec = new CloudSpec(
-        this.region,
-        providerCloudSpec,
-        null,
-        null,
-        null,
-        null,
-      )
-    } else if (this.provider === NodeProvider.OPENSTACK) {
-      this.cloudSpec = new CloudSpec(
-        this.region,
-        null,
-        null,
-        null,
-        providerCloudSpec,
-        null,
-      )
-    }
-
-    this.syncCloudSpec.emit(this.cloudSpec);
+  ngOnInit() { 
+    this.subscription = this.provider$.subscribe((provider: string) => {
+        provider && (this.provider = provider);
+      });
   }
 
-  public valid(value) {
-    this.syncCloudSpecValid.emit(value);
+  public ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
-
 }

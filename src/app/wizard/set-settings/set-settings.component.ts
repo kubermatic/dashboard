@@ -1,79 +1,58 @@
-import {Component, OnInit, Input, Output, EventEmitter, SimpleChanges} from '@angular/core';
-import {ClusterSpec, CloudSpec} from "../../shared/entity/ClusterEntity";
-import {CreateClusterModel} from "../../shared/model/CreateClusterModel";
-import {CreateNodeModel} from "../../shared/model/CreateNodeModel"
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ClusterSpec, CloudSpec } from "../../shared/entity/ClusterEntity";
+import { CreateClusterModel } from "../../shared/model/CreateClusterModel";
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Observable';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-set-settings',
   templateUrl: './set-settings.component.html',
   styleUrls: ['./set-settings.component.scss']
 })
-export class SetSettingsComponent implements OnInit {
+export class SetSettingsComponent implements OnInit, OnDestroy {
 
-  @Input() clusterName: string;
-  @Input() provider: string;
-  @Input() region: string;
-  @Input() cloud: CloudSpec;
-  @Input() node: CreateNodeModel;
-  @Input() selectedSshKeys: string[];
+  private subscriptions: Subscription[] = [];
+  
+  @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
+  public clusterName: string;
 
-  @Output() syncCluster = new EventEmitter();
-  @Output() syncCloud = new EventEmitter();
-  @Output() syncNode = new EventEmitter();
-  @Output() syncSshKeys = new EventEmitter();
-
-  @Output() cloudValid = new EventEmitter();
-  @Output() nodeValid = new EventEmitter();
-
-  public createClusterModal: CreateClusterModel;
-
-  public cloudSpec: CloudSpec;
-  public clusterSpec: ClusterSpec;
+  @select(['wizard', 'sshKeyForm', 'ssh_keys']) sshKeys$: Observable<string[]>;  
   public sshKeys: string[] = [];
 
-  public token: string = "";
+  @select(['wizard', 'cloudSpec']) cloudSpec$: Observable<CloudSpec>;  
+  public cloudSpec: CloudSpec;
+
+  public createClusterModal: CreateClusterModel;
+  public clusterSpec: ClusterSpec;
 
   constructor() { }
 
-  ngOnInit() {}
+  public ngOnInit(): void {
+    let sub = this.clusterName$.subscribe(clusterName => {
+        clusterName && (this.clusterName = clusterName);      
+      });
+    this.subscriptions.push(sub);
 
-  ngOnChanges(changes: SimpleChanges) {
-    /* TODO: Find a better solution */
-    if(!!this.cloud.digitalocean && this.cloud.digitalocean.token) {
-      this.token = this.cloud.digitalocean.token;
-    } else {
-      this.token = "";
-    }
-  }
+    let sub2 = this.sshKeys$.subscribe(sshKeys => {
+      if (!Array.isArray(sshKeys) || !sshKeys.length || this.sshKeys === sshKeys) { return; }
 
-  public setCloud(spec) {
-    this.cloudSpec = spec;
-    this.sshKeys = this.selectedSshKeys;
-    this.createSpec();
-  }
+      this.sshKeys = sshKeys;
+      this.createSpec();
+    });
+    this.subscriptions.push(sub2);    
+    
+    let sub3 = this.cloudSpec$.subscribe(cloudSpec => {
+      if (!cloudSpec || this.cloudSpec === cloudSpec) { return; }
 
-  public setNode(model) {
-    this.syncNode.emit(model);
-  }
-
-  public setSshKeys(keys) {
-    this.sshKeys = keys;
-    this.syncSshKeys.emit(keys);
-    this.createSpec();
-  }
-
-  public cloudSpecValid(value) {
-    this.cloudValid.emit(value);
-  }
-
-  public nodeSpecValid(value) {
-    this.nodeValid.emit(value);
+      this.cloudSpec = cloudSpec;
+      this.createSpec();
+    });
+    this.subscriptions.push(sub3);
   }
 
   public createSpec() {
-    if (!this.cloudSpec) {
-      this.cloudSpec = this.cloud;
-    }
 
     this.clusterSpec = new ClusterSpec(
       this.cloudSpec,
@@ -86,7 +65,12 @@ export class SetSettingsComponent implements OnInit {
       this.sshKeys,
     );
 
-    this.syncCluster.emit(this.createClusterModal);
-    this.syncCloud.emit(this.cloudSpec);
+    WizardActions.setClusterModel(this.createClusterModal);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }

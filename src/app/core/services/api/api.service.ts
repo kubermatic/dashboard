@@ -21,7 +21,7 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient, private auth: Auth, private notificationActions: NotificationActions) {
+  constructor(private http: HttpClient, private auth: Auth) {
     let token = auth.getBearerToken();
     this.headers = this.headers.set("Authorization", "Bearer " + token);
   }
@@ -111,6 +111,6 @@ export class ApiService {
     let body = { to: upgradeVersion };
     const url = `${this.restRoot}/cluster/${cluster}/upgrade`;
     this.http.put(url, body, {headers: this.headers})
-     .subscribe(result => this.notificationActions.success('Success', `Cluster ${cluster} was upgraded`));
+     .subscribe(result => NotificationActions.success('Success', `Cluster ${cluster} was upgraded`));
   }
 }

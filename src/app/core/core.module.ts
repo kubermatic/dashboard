@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 
 /* Modules */
 import { SharedModule } from 'app/shared/shared.module';
-import { ActionsModule } from 'app/redux/actions/actions.module';
 import { SimpleNotificationsModule } from "angular2-notifications";
 
 /* Components */
@@ -42,8 +41,7 @@ const modules: any[] = [
   HttpClientModule,
   RouterModule,
   SharedModule,
-  SimpleNotificationsModule.forRoot(),
-  ActionsModule
+  SimpleNotificationsModule.forRoot()
 ];
 
 const components: any[] = [

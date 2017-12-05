@@ -8,20 +8,37 @@
     <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
       Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
     </p>
-
-    <div fxLayoutAlign="center" fxLayout="row"  fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+    
+    <form [connect]="['wizard', 'setProviderForm']"
+          [formGroup]="setProviderForm"
+          (change)="onChange()"
+          fxLayoutAlign="center" 
+          fxLayout="row"
+          fxLayout.sm="column"
+          fxLayout.xs="column"
+          fxLayoutGap="20px">
       <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
-        <div fxFlex="150px"
-             fxLayoutAlign="center center"
-             class="wizard-box-provider"
-             [ngClass]="{'selected': selectedProvider === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-             (click)="selectProvider(cloud)">
-          <!-- TODO: OnClick go to next step -->
-          <div class="wizard-box-content">
-            <img class="cloud-logo" src="/assets/images/clouds/{{cloud}}.png" alt="{{cloud}}">
-          </div>
-        </div>
+        <ng-container *ngIf="datacenters[cloud]?.length">
+          <label fxFlex="150px"
+               fxLayoutAlign="center center"
+               class="wizard-box-provider"
+               [ngClass]="{'selected': selectedProvider === cloud, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
+               [attr.for]="cloud">
+            <!-- TODO: OnClick go to next step -->
+            <div class="wizard-box-content">
+              <img class="cloud-logo" 
+                   src="/assets/images/clouds/{{cloud}}.png" 
+                   alt="{{cloud}}">
+            </div>
+          </label>
+          <input style="display: none"
+                 type="radio" 
+                 [attr.id]="cloud" 
+                 formControlName="provider" 
+                 [value]="cloud" 
+                 [attr.name]="cloud">
+        </ng-container>
       </ng-container>
-    </div>
+    </form>
   </md-card-content>
 </md-card>

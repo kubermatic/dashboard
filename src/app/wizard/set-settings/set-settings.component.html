@@ -13,8 +13,8 @@
         </md-card-title>
       </md-card-header>
       <md-card-content>
-        <kubermatic-provider-cluster [provider]="provider" [region]="region" [cloud]="cloud" (syncCloudSpec)="setCloud($event)" (syncCloudSpecValid)="cloudSpecValid($event)"></kubermatic-provider-cluster>
-        <kubermatic-ssh-key-form-field [selectedSshKeys]="selectedSshKeys" [provider]="provider" (syncSshKeys)="setSshKeys($event)"></kubermatic-ssh-key-form-field>
+        <kubermatic-provider-cluster></kubermatic-provider-cluster>
+        <kubermatic-ssh-key-form-field></kubermatic-ssh-key-form-field>
       </md-card-content>
     </md-card>
     <md-card  fxFlex>
@@ -26,7 +26,7 @@
         </md-card-title>
       </md-card-header>
       <md-card-content fxLayout="column">
-        <kubermatic-provider-node [provider]="provider" [token]="token" [node]="node" (syncNodeModel)="setNode($event)" (syncNodeSpecValid)="nodeSpecValid($event)"></kubermatic-provider-node>
+        <kubermatic-provider-node></kubermatic-provider-node>
       </md-card-content>
     </md-card>
   </div>

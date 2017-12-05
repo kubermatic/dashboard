@@ -1,9 +1,10 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {AWSCloudSpec} from "../../../../shared/entity/cloud/AWSCloudSpec";
-
-import {InputValidationService} from '../../../../core/services';
-import {CloudSpec} from "../../../../shared/entity/ClusterEntity";
+import { NgRedux } from '@angular-redux/store';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { AWSCloudSpec } from "../../../../shared/entity/cloud/AWSCloudSpec";
+import { InputValidationService } from '../../../../core/services';
+import { CloudSpec } from "../../../../shared/entity/ClusterEntity";
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 
 @Component({
@@ -13,36 +14,41 @@ import {CloudSpec} from "../../../../shared/entity/ClusterEntity";
 })
 export class AWSClusterComponent implements OnInit {
   public awsClusterForm: FormGroup;
-  public cloudSpec: AWSCloudSpec;
-  @Input() cloud: AWSCloudSpec;
 
-  constructor(private formBuilder: FormBuilder, public inputValidationService: InputValidationService) { }
-
-  @Output() syncProviderCloudSpec = new EventEmitter();
-  @Output() syncProviderCloudSpecValid = new EventEmitter();
+  constructor(private formBuilder: FormBuilder,
+    public inputValidationService: InputValidationService,
+    private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
+    const reduxStore = this.ngRedux.getState();
+    const clusterForm = reduxStore.wizard.awsClusterForm;
+
     this.awsClusterForm = this.formBuilder.group({
-      accessKeyId: [this.cloud.accessKeyId, [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
-      secretAccessKey: [this.cloud.secretAccessKey, [<any>Validators.required, <any>Validators.minLength(2)]],
-      vpcId: [this.cloud.vpcId],
-      subnetId: [this.cloud.subnetId],
-      routeTableId: [this.cloud.routeTableId],
-      aws_cas: [false]
+      accessKeyId: [clusterForm.accessKeyId, [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
+      secretAccessKey: [clusterForm.secretAccessKey, [<any>Validators.required, <any>Validators.minLength(2)]],
+      vpcId: [clusterForm.vpcId],
+      subnetId: [clusterForm.subnetId],
+      routeTableId: [clusterForm.routeTableId],
+      aws_cas: [clusterForm.aws_cas]
     });
   }
 
-  public onChange(){
-    this.cloudSpec = new AWSCloudSpec(
+  public onChange() {
+    const awsCloudSpec = new AWSCloudSpec(
       this.awsClusterForm.controls["accessKeyId"].value,
       this.awsClusterForm.controls["secretAccessKey"].value,
       this.awsClusterForm.controls["vpcId"].value,
       this.awsClusterForm.controls["subnetId"].value,
       this.awsClusterForm.controls["routeTableId"].value,
       "",
-    )
+    );
 
-    this.syncProviderCloudSpec.emit(this.cloudSpec);
-    this.syncProviderCloudSpecValid.emit(this.awsClusterForm.valid);
+    const ruduxStore = this.ngRedux.getState();
+    const wizard = ruduxStore.wizard;
+    const region = wizard.setDatacenterForm.datacenter.metadata.name;
+
+    WizardActions.setCloudSpec(
+      new CloudSpec(region, null, awsCloudSpec, null, null, null)
+    );
   }
 }

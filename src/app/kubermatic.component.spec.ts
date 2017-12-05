@@ -9,8 +9,6 @@ import {Http, HttpModule} from "@angular/http";
 import {RouterTestingModule} from "@angular/router/testing";
 import {AUTH_PROVIDERS, Auth, AuthGuard} from "./core/services";
 import {ApiService} from "app/core/services/api/api.service";
-import {combinedReducer} from "./redux/reducers/index";
-import {StoreModule} from "@ngrx/store";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
 import { MaterialModule } from '@angular/material';
@@ -25,7 +23,6 @@ describe("KubermaticComponent", () => {
         BrowserModule,
         HttpModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer),
         //SimpleNotificationsModule.forRoot(),
         SimpleNotificationsModule,
         SlimLoadingBarModule.forRoot(),

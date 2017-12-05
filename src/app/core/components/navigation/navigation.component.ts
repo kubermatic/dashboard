@@ -3,8 +3,6 @@ import { MdDialog } from '@angular/material';
 
 import {Auth} from "../../services";
 import {SidenavService} from "../sidenav/sidenav.service";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../redux/reducers/index";
 import {Router} from '@angular/router';
 import {environment} from "../../../../environments/environment";
 import {AppConstants} from '../../../shared/constants/constants';
@@ -24,8 +22,7 @@ export class NavigationComponent implements OnInit {
 
   constructor(
     public auth: Auth, 
-    private sidenavService: SidenavService, 
-    private store: Store<fromRoot.State>,
+    private sidenavService: SidenavService,
     private router: Router,
     private dialog: MdDialog
   ) {}

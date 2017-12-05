@@ -1,13 +1,11 @@
 import {Injectable} from "@angular/core";
 import {Router, NavigationStart} from "@angular/router";
 import {tokenNotExpired} from "angular2-jwt";
-import {Store} from "@ngrx/store";
-import * as fromRoot from "../../../redux/reducers/index";
 
 @Injectable()
 export class Auth {
   
-  constructor(private router: Router, private store: Store<fromRoot.State>) {
+  constructor(private router: Router) {
     let token = this.getTokenFromQuery();
     if (token) {
       localStorage.setItem('token', token);      

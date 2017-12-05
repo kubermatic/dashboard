@@ -51,8 +51,7 @@ export class ClusterComponent implements OnInit {
     private api: ApiService,
     public dialog: MdDialog,
     private createNodesService: CreateNodesService,
-    private dcService: DatacenterService,
-    private notificationActions: NotificationActions
+    private dcService: DatacenterService
   ) {}
 
   ngOnInit() {
@@ -154,7 +153,7 @@ export class ClusterComponent implements OnInit {
     } else if (this.cluster.provider === NodeProvider.OPENSTACK) {
       this.dialogRef = this.dialog.open(OpenstackAddNodeComponent, {data: data});
     } else {
-      this.notificationActions.error("Error", `Add node form is missing.`);
+      NotificationActions.error("Error", `Add node form is missing.`);
       return;
     }
 

@@ -1,17 +1,17 @@
-import { Injectable } from "@angular/core";
-import { Store } from "@ngrx/store";
-import * as fromRoot from "../reducers/index";
-import { NotificationToast, NotificationToastType } from "../reducers/index";
+import { ActionBase } from './action.base';
+import { Action } from '../../shared/interfaces/action.interface';
 
-@Injectable()
-export class NotificationActions {
-    public static get PUSH_NOTIFICATION(): string { return "PUSH_NOTIFICATION"; }
+import { dispatch } from '@angular-redux/store';
 
-    constructor(private store: Store<fromRoot.State>) {
-    }
+import { NotificationToast, NotificationToastType } from "../reducers/notification";
 
-    public success(title: string, content: string) {
-        this.store.dispatch({
+export class NotificationActions extends ActionBase {
+    static readonly className: string = 'NotificationActions';
+    static readonly PUSH_NOTIFICATION = NotificationActions.getActType('PUSH_NOTIFICATION');
+    
+    @dispatch()
+    static success(title: string, content: string): Action {
+        return {
             type: NotificationActions.PUSH_NOTIFICATION, payload: {
                 toast: <NotificationToast>{
                     type: NotificationToastType.success,
@@ -19,11 +19,12 @@ export class NotificationActions {
                     content: content
                 }
             }
-        });
+        };
     }
 
-    public alert(title: string, content: string) {
-        this.store.dispatch({
+    @dispatch()
+    static alert(title: string, content: string) {
+        return {
             type: NotificationActions.PUSH_NOTIFICATION, payload: {
                 toast: <NotificationToast>{
                     type: NotificationToastType.alert,
@@ -31,11 +32,12 @@ export class NotificationActions {
                     content: content
                 }
             }
-        });
+        };
     }
 
-    public info(title: string, content: string) {
-        this.store.dispatch({
+    @dispatch()
+    static info(title: string, content: string) {
+        return {
             type: NotificationActions.PUSH_NOTIFICATION, payload: {
                 toast: <NotificationToast>{
                     type: NotificationToastType.info,
@@ -43,11 +45,12 @@ export class NotificationActions {
                     content: content
                 }
             }
-        });
+        };
     }
 
-    public error(title: string, content: string) {
-        this.store.dispatch({
+    @dispatch()
+    static error(title: string, content: string) {
+        return {
             type: NotificationActions.PUSH_NOTIFICATION, payload: {
                 toast: <NotificationToast>{
                     type: NotificationToastType.error,
@@ -55,6 +58,6 @@ export class NotificationActions {
                     content: content
                 }
             }
-        });
+        };
     }
 }

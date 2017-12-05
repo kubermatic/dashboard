@@ -1,8 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import {async, ComponentFixture, TestBed} from "@angular/core/testing";
 import {BrowserModule} from "@angular/platform-browser";
-import {StoreModule} from "@ngrx/store";
-import {combinedReducer} from "../../../redux/reducers/index";
 import {NavigationComponent} from "./navigation.component";
 import {Auth} from "../../services/auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
@@ -21,7 +19,6 @@ describe("NavigationComponent", () => {
       imports: [
         BrowserModule,
         RouterTestingModule,
-        StoreModule.provideStore(combinedReducer),
         SlimLoadingBarModule.forRoot(),
         MaterialModule,
         HttpModule
