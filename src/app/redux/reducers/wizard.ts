@@ -20,9 +20,9 @@ const formOnStep: Map<number, string[]> = new Map([
     [0, ['clusterNameForm']],
     [1, ['setProviderForm']],
     [2, ['setDatacenterForm']],
-    [3, ['awsClusterForm', 'awsNodeForm', 
-        'digitalOceanClusterForm', 'digitalOceanNodeForm', 
-        'openstackClusterForm', 'openstackNodeForm', 'sshKeyForm']]  
+    [3, ['awsClusterForm', 'nodeForm', 
+        'digitalOceanClusterForm', 
+        'openstackClusterForm', 'sshKeyForm']]  
 ]);
 
 export interface Wizard {

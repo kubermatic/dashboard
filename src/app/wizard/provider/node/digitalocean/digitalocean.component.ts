@@ -34,11 +34,15 @@ export class DigitaloceanNodeComponent implements OnInit, OnDestroy {
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.subscription = this.token$.subscribe(token => {
-      if (!token) { return; }
-      this.token = token;
-      this.getNodeSize(token);
-    });
+
+    this.subscription = this.token$
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .subscribe(token => {
+        if (!token) { return; }
+        this.token = token;
+        this.getNodeSize(token);
+      });
 
     const reduxStore = this.ngRedux.getState();
     const nodeForm = reduxStore.wizard.digitalOceanNodeForm;

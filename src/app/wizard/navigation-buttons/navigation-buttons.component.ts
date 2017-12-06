@@ -49,7 +49,7 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
           if (!valid.get('sshKeyForm')) {
             return false;
           } else if ((valid.get('awsClusterForm') || valid.get('digitalOceanClusterForm') || valid.get('openstackClusterForm') ) && 
-                      (valid.get('awsNodeForm') || valid.get('digitalOceanNodeForm') || valid.get('openstackNodeForm'))) {
+                      valid.get('nodeForm')) {
             return true;
           } else {
             return false;

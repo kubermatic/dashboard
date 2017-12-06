@@ -19,6 +19,7 @@ import { DigitaloceanClusterComponent } from './provider/cluster/digitalocean/di
 import { AWSClusterComponent } from './provider/cluster/aws/aws.component';
 import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
 import { WizardRoutingModule } from 'app/wizard/wizard-routing.module';
+import { AddNodeModule } from 'app/add-node/add-node.module';
 
 const components: any[] = [
     WizardComponent,
@@ -44,7 +45,8 @@ const components: any[] = [
 @NgModule({
     imports: [
         SharedModule,
-        WizardRoutingModule
+        WizardRoutingModule,
+        AddNodeModule
     ],
     declarations: [
         ...components

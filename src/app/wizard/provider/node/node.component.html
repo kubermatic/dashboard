@@ -1,11 +1,16 @@
-<kubermatic-node-aws
-    *ngIf="provider == 'aws'">
+<!-- <kubermatic-node-aws
+    *ngIf="provider?.name == 'aws'">
 </kubermatic-node-aws>
 
 <kubermatic-node-digitalocean
-    *ngIf="provider == 'digitalocean'">
+    *ngIf="provider?.name == 'digitalocean'">
 </kubermatic-node-digitalocean>
 
 <kubermatic-node-openstack
-    *ngIf="provider == 'openstack'">
-</kubermatic-node-openstack>
+    *ngIf="provider?.name == 'openstack'">
+</kubermatic-node-openstack> -->
+
+<kubermatic-add-node 
+    [provider]="provider" 
+    (nodeModelChanges)="changeNodeModel($event)"
+    (formChanges)="changeForm($event)"></kubermatic-add-node>
