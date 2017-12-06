@@ -87,9 +87,9 @@
 
         <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node>
 
-        Node Group:
+        <!--
         <kubermatic-node-group [nodes]="groupedNodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node-group>
-
+-->
       </ng-container>
 
       <ng-container *ngSwitchCase="false" align="center">

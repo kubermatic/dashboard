@@ -6,6 +6,8 @@ import { Store, INITIAL_STATE, StoreReducer } from "./redux/store";
 import { MdSidenav } from '@angular/material';
 import { SidenavService } from './core/components/sidenav/sidenav.service';
 
+import { Auth } from './core/services';
+
 @Component({
   selector: "kubermatic-root",
   templateUrl: "./kubermatic.component.html",
@@ -16,7 +18,7 @@ export class KubermaticComponent implements OnInit {
 
   public constructor(
     private sidenavService: SidenavService,
-
+    private auth: Auth,
     private ngRedux: NgRedux<Store>,
     private devTools: DevToolsExtension,
   ) {
