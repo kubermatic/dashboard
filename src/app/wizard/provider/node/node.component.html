@@ -12,5 +12,6 @@
 
 <kubermatic-add-node 
     [provider]="provider" 
+    [connect]="connect"
     (nodeModelChanges)="changeNodeModel($event)"
     (formChanges)="changeForm($event)"></kubermatic-add-node>

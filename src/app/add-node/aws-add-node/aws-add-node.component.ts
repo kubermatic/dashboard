@@ -1,5 +1,6 @@
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
@@ -11,6 +12,7 @@ import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
   styleUrls: ['./aws-add-node.component.scss']
 })
 export class AwsAddNodeComponent implements OnInit {
+  @Input() public connect: string[];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
   
@@ -18,7 +20,8 @@ export class AwsAddNodeComponent implements OnInit {
   public nodeSize: any[] = NodeInstanceFlavors.AWS;  
   public nodeSpec: NodeCreateSpec;
   
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder,
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
     this.awsNodeForm = this.fb.group({
@@ -28,6 +31,23 @@ export class AwsAddNodeComponent implements OnInit {
       ami: [''],
       aws_nas: [false]
     });
+
+    if (Array.isArray(this.connect) && this.connect.length) {
+      const reduxStore = this.ngRedux.getState();
+      const nodeForm = reduxStore.wizard.nodeForm;
+
+      if (nodeForm) {
+        const formValue = {
+          node_count: nodeForm.node_count,
+          node_size: nodeForm.node_size,
+          root_size: nodeForm.root_size,
+          ami: nodeForm.ami,
+          aws_nas: nodeForm.aws_nas
+        };
+  
+        this.awsNodeForm.setValue(formValue);
+      }
+    }
 
     this.formChanges.emit(this.awsNodeForm);
   }

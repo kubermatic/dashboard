@@ -14,7 +14,8 @@ import { Provider } from 'app/shared/interfaces/provider.interface';
 })
 export class ProviderNodeComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;  
+  private subscription: Subscription;
+  public connect: string[] = ['wizard', 'nodeForm'];
 
   @select(['wizard', 'setProviderForm', 'provider']) providerName$: Observable<string>;
   public provider: Provider = { name: '', payload: {} };

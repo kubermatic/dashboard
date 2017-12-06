@@ -74,6 +74,7 @@ export interface Wizard {
         node_size: string;
         os_node_image: string;
     };
+    nodeForm: any;
     sshKeyForm: {
         ssh_keys: string[];
     };
@@ -131,6 +132,7 @@ export const INITIAL_STATE: Wizard = {
         node_size: 'm1.medium',
         os_node_image: ''
     },
+    nodeForm: null,
     sshKeyForm: {
         ssh_keys: []
     },

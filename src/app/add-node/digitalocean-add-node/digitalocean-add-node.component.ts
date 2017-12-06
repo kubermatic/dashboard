@@ -1,3 +1,4 @@
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
@@ -17,6 +18,7 @@ import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 })
 export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
   @Input() public token: string = '';
+  @Input() public connect: string[];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
   
@@ -25,13 +27,29 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
 
   constructor(private fb: FormBuilder, 
               private api: ApiService,
-              public inputValidationService: InputValidationService) { }
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
     this.doNodeForm = this.fb.group({
       node_count: [1, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['', [<any>Validators.required]]
     });
+
+    
+    if (Array.isArray(this.connect) && this.connect.length) {
+      const reduxStore = this.ngRedux.getState();
+      const nodeForm = reduxStore.wizard.nodeForm;
+
+      if (nodeForm) {
+        const formValue = {
+          node_count: nodeForm.node_count,
+          node_size: nodeForm.node_size
+        };
+  
+        this.doNodeForm.setValue(formValue);
+      }
+    }
   }
 
   public getNodeSize(token: string): void {
@@ -74,5 +92,4 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
       nodeSpec
     );
   }
-
 }
