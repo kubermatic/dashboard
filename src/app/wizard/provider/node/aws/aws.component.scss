@@ -15,9 +15,18 @@
   padding: 10px;
   text-align: justify;
 
+  ul {
+    list-style-type: decimal;
+  }
+
   a {
     color: #0288d1;
     text-decoration: none;
+  }
+
+  .fa-exclamation-triangle {
+    margin-right: 10px;
+    color: #dd4b39;
   }
 }
 
