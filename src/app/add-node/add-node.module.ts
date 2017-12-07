@@ -5,6 +5,7 @@ import { AddNodeComponent } from './add-node.component';
 import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node/digitalocean-add-node.component';
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
+import { FormComponent } from './form/form.component';
 
 const components: any[] = [
   AddNodeComponent, 
@@ -19,7 +20,8 @@ const components: any[] = [
     SharedModule
   ],
   declarations: [
-    ...components
+    ...components,
+    FormComponent
   ],
   exports: [
     ...components

@@ -15,7 +15,6 @@ import { Provider } from 'app/shared/interfaces/provider.interface';
 export class ProviderNodeComponent implements OnInit, OnDestroy {
 
   private subscription: Subscription;
-  public connect: string[] = ['wizard', 'nodeForm'];
 
   @select(['wizard', 'setProviderForm', 'provider']) providerName$: Observable<string>;
   public provider: Provider = { name: '', payload: {} };
@@ -43,7 +42,7 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
     WizardActions.setNodeModel(nodeModel);
   }
 
-  public changeForm(from: FormGroup): void {
-    WizardActions.setValidation('nodeForm', from.valid);
+  public changeForm(form: FormGroup): void {
+    WizardActions.setValidation('nodeForm', form.valid);
   }
 }

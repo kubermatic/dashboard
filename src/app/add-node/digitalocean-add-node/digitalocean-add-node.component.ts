@@ -18,7 +18,7 @@ import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 })
 export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
   @Input() public token: string = '';
-  @Input() public connect: string[];
+  @Input() public connect: string[] = [];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
   

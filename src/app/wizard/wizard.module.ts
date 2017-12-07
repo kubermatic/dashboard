@@ -1,5 +1,3 @@
-import { AwsNodeComponent } from './provider/node/aws/aws.component';
-import { DigitaloceanNodeComponent } from './provider/node/digitalocean/digitalocean.component';
 import { ProviderNodeComponent } from './provider/node/node.component';
 import { OpenstackClusterComponent } from './provider/cluster/openstack/openstack.component';
 import { ProviderClusterComponent } from './provider/cluster/cluster.component';
@@ -17,7 +15,6 @@ import { SetSettingsComponent } from 'app/wizard/set-settings/set-settings.compo
 import { SummaryComponent } from 'app/wizard/summary/summary.component';
 import { DigitaloceanClusterComponent } from './provider/cluster/digitalocean/digitalocean.component';
 import { AWSClusterComponent } from './provider/cluster/aws/aws.component';
-import { OpenstackNodeComponent } from './provider/node/openstack/openstack.component';
 import { WizardRoutingModule } from 'app/wizard/wizard-routing.module';
 import { AddNodeModule } from 'app/add-node/add-node.module';
 
@@ -36,10 +33,7 @@ const components: any[] = [
     OpenstackClusterComponent,
     DigitaloceanClusterComponent,
     AWSClusterComponent,
-    ProviderNodeComponent,
-    OpenstackNodeComponent,
-    DigitaloceanNodeComponent,
-    AwsNodeComponent
+    ProviderNodeComponent
 ];
 
 @NgModule({

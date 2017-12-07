@@ -1,4 +1,4 @@
-<form [connect]="connect" [formGroup]="awsNodeForm" novalidate fxLayout="column" (change)="onChange()">
+<kubermatic-form [connect]="connect" [formGroup]="awsNodeForm" (change)="onChange()">
   <md-input-container fxFlex>
     <input id="node_count" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:"
       title="node_count">
@@ -30,4 +30,4 @@
     Software Terms".
     <a target="_blank" href="https://aws.amazon.com/marketplace/pp?sku=ryg425ue2hwnsok9ccfastg4">CoreOS Software Terms</a>
   </p>
-</form>
+</kubermatic-form>

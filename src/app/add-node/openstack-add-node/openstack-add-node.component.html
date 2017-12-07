@@ -1,4 +1,4 @@
-<form [connect]="connect" [formGroup]="osNodeForm" novalidate fxLayout="column" (change)="onChange()">
+<kubermatic-form [connect]="connect" [formGroup]="osNodeForm" (change)="onChange()">
   <md-input-container fxFlex>
     <input id="node_count_osNodeForm" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count"
       min="3" max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count">
@@ -15,4 +15,4 @@
     <input id="os_node_image" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_node_image" placeholder="Image (Ubuntu only)*"
       title="Image">
   </md-input-container>
-</form>
+</kubermatic-form>

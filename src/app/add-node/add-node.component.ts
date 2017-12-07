@@ -20,7 +20,6 @@ export class AddNodeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.provider);
   }
 
   public changeNodeModel(data: {nodeSpec: NodeCreateSpec, count: number}): void {
