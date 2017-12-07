@@ -5,13 +5,14 @@ import { AddNodeComponent } from './add-node.component';
 import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node/digitalocean-add-node.component';
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
-import { FormComponent } from './form/form.component';
+import { AddNodeFormComponent } from './add-node-form/add-node-form.component';
 
 const components: any[] = [
   AddNodeComponent, 
   AwsAddNodeComponent, 
-  DigitaloceanAddNodeComponent, 
-  OpenstackAddNodeComponent
+  DigitaloceanAddNodeComponent,
+  OpenstackAddNodeComponent,
+  AddNodeFormComponent
 ];
 
 @NgModule({
@@ -21,10 +22,9 @@ const components: any[] = [
   ],
   declarations: [
     ...components,
-    FormComponent
   ],
   exports: [
-    ...components
+    AddNodeComponent
   ]
 })
 export class AddNodeModule { }

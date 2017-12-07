@@ -1,4 +1,4 @@
-<kubermatic-form [connect]="connect" [formGroup]="doNodeForm" (change)="onChange()">
+<kubermatic-add-node-form [connect]="connect" [formGroup]="doNodeForm" (change)="onChange()">
   <md-input-container fxFlex>
     <input id="node_count_do" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count" min="1"
       max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count">
@@ -11,4 +11,4 @@
       </md-option>
     </md-select>
   </div>
-</kubermatic-form>
+</kubermatic-add-node-form>
