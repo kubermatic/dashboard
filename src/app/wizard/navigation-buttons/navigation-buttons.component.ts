@@ -3,6 +3,7 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { NodeProvider } from "../../shared/model/NodeProviderConstants";
 
 @Component({
   selector: 'kubermatic-navigation-buttons',
@@ -13,7 +14,7 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
 
   public nextStep: boolean;
   private subscriptions: Subscription[] = [];
-  
+  public DisabledProvider: string[] = NodeProvider.DisabledProvider;
 
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
@@ -42,7 +43,7 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
       case 0:
         return valid.get('clusterNameForm');
       case 1:
-        return valid.get('setProviderForm');
+        return valid.get('setProviderForm') && this.DisabledProvider.indexOf(reduxStore.wizard.setProviderForm.provider) < 0;
       case 2:
         return valid.get('setDatacenterForm');
       case 3:

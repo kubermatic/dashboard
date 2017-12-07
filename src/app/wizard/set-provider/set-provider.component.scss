@@ -51,7 +51,7 @@ $wizard-box-content-cloud-margin-top: 50px;
 }
 
 .wizard-box-provider {
-  margin-top: 10px;
+  margin-top: 20px;
   background: #fff;
   border: 1px solid #E3E8EC;
   cursor: pointer;
@@ -86,4 +86,10 @@ $wizard-box-content-cloud-margin-top: 50px;
 img.cloud-logo {
   width: $wizard-box-content-cloud-logo-size ;
   margin-bottom: 15px;
+}
+
+
+.provider-fix {
+  margin: 20px;
+  display: inline-block !important;
 }
