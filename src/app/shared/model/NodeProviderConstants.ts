@@ -14,8 +14,8 @@ export class NodeProvider {
   public static readonly TELEKOM: string = "telekom";
   public static readonly AZURE: string = "azure";
 
-  public static readonly Supported: string[] = [ NodeProvider.OPENSTACK,  NodeProvider.BAREMETAL];
-  public static readonly DisabledProvider: string[] = [ NodeProvider.BAREMETAL];
+  public static readonly Supported: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.OPENSTACK, NodeProvider.GOOGLE, NodeProvider.HUAWEI, NodeProvider.TELEKOM, NodeProvider.BAREMETAL, NodeProvider.AZURE];
+  public static readonly DisabledProvider: string[] = [NodeProvider.GOOGLE, NodeProvider.HUAWEI, NodeProvider.TELEKOM, NodeProvider.BAREMETAL, NodeProvider.AZURE];
 
 }
 
