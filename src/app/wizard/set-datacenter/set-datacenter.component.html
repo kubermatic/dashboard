@@ -10,7 +10,7 @@
     <form *ngIf="datacenters" [connect]="['wizard', 'setDatacenterForm']" [formGroup]="setDatacenterForm" fxLayoutAlign="center" fxLayout="row wrap">
       <label class="wizard-box" fxFlex="100px" *ngFor="let dc of datacenters[selectedProvider]; let i = index;"
            [ngClass]="{'selected': !!selectedDatacenter && selectedDatacenter.metadata.name === dc.metadata.name, 'wizard-box-color_primary': i % 2 === 0, 'wizard-box-color_secondary': i % 2 !== 0}"
-           [attr.for]="dc.spec.location">
+           [attr.for]="dc.metadata.name">
         <!-- TODO: OnClick go to next step -->
         <!-- TODO: Refresh Button is no region shown -->
         <div class="wizard-box-content">
@@ -19,7 +19,7 @@
             {{dc.spec.location}}
           </div>
         </div>
-        <input style="display: none" type="radio" [attr.name]="dc.spec.location" formControlName="datacenter" [value]="dc" [attr.id]="dc.spec.location">
+        <input style="display: none" type="radio" [attr.name]="dc.metadata.name" formControlName="datacenter" [value]="dc" [attr.id]="dc.metadata.name">
       </label>
     </form>
   </md-card-content>
