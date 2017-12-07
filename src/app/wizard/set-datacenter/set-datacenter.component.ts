@@ -57,6 +57,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
           this.datacenters[elem.spec.provider].push(elem);
         }
       });
+      console.log(this.datacenters);
     });
   }
 
