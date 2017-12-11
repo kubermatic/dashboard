@@ -41,6 +41,7 @@ export class AddNodeModalComponent implements OnInit {
   }
 
   public changeForm(form: FormGroup): void {
+    console.log(form);
     setTimeout(() => {
       this.form = form;
     }, 0);
