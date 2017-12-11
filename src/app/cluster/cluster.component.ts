@@ -1,3 +1,4 @@
+import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Component, OnInit} from "@angular/core";
 import {Router, ActivatedRoute} from "@angular/router";
@@ -9,11 +10,8 @@ import {ClusterDeleteConfirmationComponent} from "./cluster-delete-confirmation/
 import {NodeEntity} from "../shared/entity/NodeEntity";
 import {ClusterEntity} from "../shared/entity/ClusterEntity";
 import {DataCenterEntity} from "../shared/entity/DatacenterEntity";
-import {AWSAddNodeFormComponent} from "../forms/add-node/aws/aws-add-node.component";
-import {DigitaloceanAddNodeComponent} from "../forms/add-node/digitalocean/digitalocean-add-node.component";
-import {OpenstackAddNodeComponent} from "../forms/add-node/openstack/openstack-add-node.component";
 import {NodeProvider} from "../shared/model/NodeProviderConstants";
-import {AddNodeModalData} from "../forms/add-node/add-node-modal-data";
+import {AddNodeModalData} from "../shared/model/add-node-modal-data";
 import {UpgradeClusterComponent} from './upgrade-cluster/upgrade-cluster.component';
 import { CustomEventService, CreateNodesService, DatacenterService } from '../core/services';
 import 'rxjs/add/operator/retry';
@@ -146,16 +144,8 @@ export class ClusterComponent implements OnInit {
 
   public addNode(): void {
     let data = new AddNodeModalData(this.cluster, this.nodeDc);
-    if (this.cluster.provider === NodeProvider.AWS) {
-      this.dialogRef = this.dialog.open(AWSAddNodeFormComponent, {data: data});
-    } else if (this.cluster.provider === NodeProvider.DIGITALOCEAN) {
-      this.dialogRef = this.dialog.open(DigitaloceanAddNodeComponent, {data: data});
-    } else if (this.cluster.provider === NodeProvider.OPENSTACK) {
-      this.dialogRef = this.dialog.open(OpenstackAddNodeComponent, {data: data});
-    } else {
-      NotificationActions.error("Error", `Add node form is missing.`);
-      return;
-    }
+
+    this.dialogRef = this.dialog.open(AddNodeModalComponent, { data });
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }

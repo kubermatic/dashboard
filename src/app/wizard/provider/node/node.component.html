@@ -1,11 +1,5 @@
-<kubermatic-node-aws
-    *ngIf="provider == 'aws'">
-</kubermatic-node-aws>
-
-<kubermatic-node-digitalocean
-    *ngIf="provider == 'digitalocean'">
-</kubermatic-node-digitalocean>
-
-<kubermatic-node-openstack
-    *ngIf="provider == 'openstack'">
-</kubermatic-node-openstack>
+<kubermatic-add-node 
+    [provider]="provider" 
+    [connect]="['wizard', 'nodeForm']"
+    (nodeModelChanges)="changeNodeModel($event)"
+    (formChanges)="changeForm($event)"></kubermatic-add-node>

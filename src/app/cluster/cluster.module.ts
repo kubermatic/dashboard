@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import { SharedModule } from 'app/shared/shared.module';
 import { ClusterRoutingModule } from 'app/cluster/cluster-routing.module';
+import { AddNodeModule } from 'app/add-node/add-node.module';
 
 import { NodeDeleteConfirmationService } from 'app/cluster/node-delete-confirmation/node-delete-confirmation.service';
 
@@ -13,25 +14,28 @@ import { NodeDeleteConfirmationComponent } from 'app/cluster/node-delete-confirm
 import { ClusterDeleteConfirmationComponent } from 'app/cluster/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { ClusterItemComponent } from './cluster-list/cluster-item/cluster-item.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
+import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
 
 const components: any[] = [
     ClusterComponent,
-    UpgradeClusterComponent,
-    NodeDeleteConfirmationComponent,
     NodeComponent,
-    ClusterDeleteConfirmationComponent,
     ClusterListComponent,
     ClusterItemComponent,
-    ClusterHealthStatusComponent
+    ClusterHealthStatusComponent,
 ];
 
 @NgModule({
     imports: [
         SharedModule,
-        ClusterRoutingModule
+        ClusterRoutingModule,
+        AddNodeModule
     ],
     declarations: [
-        ...components
+        ...components,
+        ClusterDeleteConfirmationComponent,
+        NodeDeleteConfirmationComponent,
+        UpgradeClusterComponent,
+        AddNodeModalComponent
     ],
     exports: [
         ...components
@@ -39,7 +43,8 @@ const components: any[] = [
     entryComponents: [
         ClusterDeleteConfirmationComponent,
         NodeDeleteConfirmationComponent,
-        UpgradeClusterComponent
+        UpgradeClusterComponent,
+        AddNodeModalComponent
     ],
     providers: [
         NodeDeleteConfirmationService
