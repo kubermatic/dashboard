@@ -17,8 +17,9 @@ import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
   styleUrls: ['./digitalocean-add-node.component.scss']
 })
 export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
+
   @Input() public token: string = '';
-  @Input() public connect: string[] = [];
+  @Input() public connect: string[];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
   
@@ -48,8 +49,12 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
         };
   
         this.doNodeForm.setValue(formValue);
+      } else { 
+        this.doNodeForm.patchValue({node_count: 3});
       }
     }
+
+    this.onChange();
   }
 
   public getNodeSize(token: string): void {
@@ -86,10 +91,5 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
     });
 
     this.formChanges.emit(this.doNodeForm);
-
-    const createNodeModel = new CreateNodeModel(
-      this.doNodeForm.controls["node_count"].value, 
-      nodeSpec
-    );
   }
 }

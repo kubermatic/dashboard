@@ -12,6 +12,7 @@ export class NodeProvider {
   public static readonly HUAWEI: string = "huawei";
   public static readonly TELEKOM: string = "telekom";
   public static readonly AZURE: string = "azure";
+  public static readonly VMWARE: string = "vmware";
 
   public static readonly Supported: string[] = [
     NodeProvider.AWS, 

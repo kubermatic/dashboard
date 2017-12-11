@@ -147,17 +147,6 @@ export class ClusterComponent implements OnInit {
 
     this.dialogRef = this.dialog.open(AddNodeModalComponent, { data });
 
-    // if (this.cluster.provider === NodeProvider.AWS) {
-    //   this.dialogRef = this.dialog.open(AWSAddNodeFormComponent, {data: data});
-    // } else if (this.cluster.provider === NodeProvider.DIGITALOCEAN) {
-    //   this.dialogRef = this.dialog.open(DigitaloceanAddNodeComponent, {data: data});
-    // } else if (this.cluster.provider === NodeProvider.OPENSTACK) {
-    //   this.dialogRef = this.dialog.open(OpenstackAddNodeComponent, {data: data});
-    // } else {
-    //   NotificationActions.error("Error", `Add node form is missing.`);
-    //   return;
-    // }
-
     this.dialogRef.afterClosed().subscribe(result => {});
   }
 

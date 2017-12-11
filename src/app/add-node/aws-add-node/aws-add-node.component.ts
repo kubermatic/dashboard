@@ -12,7 +12,8 @@ import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
   styleUrls: ['./aws-add-node.component.scss']
 })
 export class AwsAddNodeComponent implements OnInit {
-  @Input() public connect: string[] = [];
+
+  @Input() public connect: string[];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
   
@@ -46,6 +47,8 @@ export class AwsAddNodeComponent implements OnInit {
         };
   
         this.awsNodeForm.setValue(formValue);
+      } else { 
+        this.awsNodeForm.patchValue({node_count: 3});
       }
     }
 
@@ -73,11 +76,6 @@ export class AwsAddNodeComponent implements OnInit {
     });
 
     this.formChanges.emit(this.awsNodeForm);
-
-    const createNodeModel = new CreateNodeModel(
-      this.awsNodeForm.controls["node_count"].value, 
-      nodeSpec
-    );
   }
 
 }
