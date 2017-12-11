@@ -16,7 +16,7 @@
           fxLayoutAlign="center"
           >
       <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
-        <ng-container>
+        <ng-container *ngIf="datacenters[cloud]?.length">
           <label fxFlex="150px"
                fxLayoutAlign="center center"
                class="wizard-box-provider"
