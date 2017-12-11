@@ -57,7 +57,8 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
     this.clusterSpec = new ClusterSpec(
       this.cloudSpec,
       this.clusterName,
-      "",
+      '',
+      ''
     );
 
     this.createClusterModal = new CreateClusterModel(

@@ -21,6 +21,9 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
 
   @select(['wizard', 'valid']) valid$: Observable<boolean[]>;
 
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public provider: string;
+  
   constructor(private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
@@ -34,6 +37,10 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
       this.nextStep = this.canGotoStep();
     });
     this.subscriptions.push(sub2);
+
+    let sub3 = this.provider$.subscribe(provider => {
+      provider && (this.provider = provider);
+    });
   }
 
   public canGotoStep() {
@@ -63,10 +70,18 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
   }
 
   public stepBack() {
+    if (this.step === 4 && this.provider === 'bringyourown') {
+      WizardActions.goToStep(2);
+    }
+
     WizardActions.prevStep();
   }
 
   public stepForward() {
+    if (this.step === 2 && this.provider === 'bringyourown') {
+      WizardActions.goToStep(4);
+    }
+
     WizardActions.nextStep();
   }
 
