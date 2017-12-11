@@ -52,7 +52,7 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub3);
   }
 
-  public createSpec() {
+  public createSpec(): void {
 
     this.clusterSpec = new ClusterSpec(
       this.cloudSpec,

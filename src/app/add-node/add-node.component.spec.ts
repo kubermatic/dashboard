@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AwsNodeComponent } from './aws.component';
+import { AddNodeComponent } from './add-node.component';
 
-describe('AwsNodeComponent', () => {
-  let component: AwsNodeComponent;
-  let fixture: ComponentFixture<AwsNodeComponent>;
+describe('AddNodeComponent', () => {
+  let component: AddNodeComponent;
+  let fixture: ComponentFixture<AddNodeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AwsNodeComponent ]
+      declarations: [ AddNodeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AwsNodeComponent);
+    fixture = TestBed.createComponent(AddNodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

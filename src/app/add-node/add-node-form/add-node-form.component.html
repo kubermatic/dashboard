@@ -1,0 +1,9 @@
+<form *ngIf="connect.length" [connect]="connect" [formGroup]="formGroup" novalidate fxLayout="column" (change)="onChange()">
+  <ng-container *ngTemplateOutlet="contentTpl"></ng-container> 
+</form>
+
+<form *ngIf="!connect.length" [formGroup]="formGroup" novalidate fxLayout="column" (change)="onChange()">
+  <ng-container *ngTemplateOutlet="contentTpl"></ng-container> 
+</form>
+
+<ng-template #contentTpl><ng-content></ng-content></ng-template>

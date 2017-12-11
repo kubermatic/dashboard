@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DigitaloceanNodeComponent } from './digitalocean.component';
+import { OpenstackAddNodeComponent } from './openstack-add-node.component';
 
-describe('DigitaloceanNodeComponent', () => {
-  let component: DigitaloceanNodeComponent;
-  let fixture: ComponentFixture<DigitaloceanNodeComponent>;
+describe('OpenstackAddNodeComponent', () => {
+  let component: OpenstackAddNodeComponent;
+  let fixture: ComponentFixture<OpenstackAddNodeComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DigitaloceanNodeComponent ]
+      declarations: [ OpenstackAddNodeComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DigitaloceanNodeComponent);
+    fixture = TestBed.createComponent(OpenstackAddNodeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -20,9 +20,9 @@ const formOnStep: Map<number, string[]> = new Map([
     [0, ['clusterNameForm']],
     [1, ['setProviderForm']],
     [2, ['setDatacenterForm']],
-    [3, ['awsClusterForm', 'awsNodeForm', 
-        'digitalOceanClusterForm', 'digitalOceanNodeForm', 
-        'openstackClusterForm', 'openstackNodeForm', 'sshKeyForm']]  
+    [3, ['awsClusterForm', 'nodeForm', 
+        'digitalOceanClusterForm', 
+        'openstackClusterForm', 'sshKeyForm']]  
 ]);
 
 export interface Wizard {
@@ -45,19 +45,8 @@ export interface Wizard {
         aws_cas: boolean;
         routeTableId: string;
     };
-    awsNodeForm: {
-        node_count: number;
-        node_size: string;
-        root_size: number;
-        ami: string;
-        aws_nas: boolean;
-    };
     digitalOceanClusterForm: {
         access_token: string;
-    };
-    digitalOceanNodeForm: {
-        node_count: number;
-        node_size: string;
     };
     openstackClusterForm: {
         os_domain: string;
@@ -69,11 +58,7 @@ export interface Wizard {
         os_floating_ip_pool: string;
         os_cas: boolean;
     };
-    openstackNodeForm: {
-        node_count: number;
-        node_size: string;
-        os_node_image: string;
-    };
+    nodeForm: any;
     sshKeyForm: {
         ssh_keys: string[];
     };
@@ -102,19 +87,8 @@ export const INITIAL_STATE: Wizard = {
         routeTableId: '',
         aws_cas: false
     },
-    awsNodeForm: {
-        node_count: 3,
-        node_size: 't2.medium',
-        root_size: 20,
-        ami: '',
-        aws_nas: false
-    },
     digitalOceanClusterForm: {
         access_token: ''
-    },
-    digitalOceanNodeForm: {
-        node_count: 3,
-        node_size: ''
     },
     openstackClusterForm: {
         os_domain: 'Default',
@@ -126,11 +100,7 @@ export const INITIAL_STATE: Wizard = {
         os_floating_ip_pool: '',
         os_cas: false
     },
-    openstackNodeForm: {
-        node_count: 3,
-        node_size: 'm1.medium',
-        os_node_image: ''
-    },
+    nodeForm: null,
     sshKeyForm: {
         ssh_keys: []
     },
