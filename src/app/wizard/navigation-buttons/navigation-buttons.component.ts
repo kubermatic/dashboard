@@ -68,18 +68,14 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
   }
 
   public stepBack() {
-    // if (this.step === 4 && this.provider === 'bringyourown') {
-    //   WizardActions.goToStep(2);
-    // }
+    if (this.step === 4 && this.provider === 'bringyourown') {
+      WizardActions.goToStep(2);
+    }
 
     WizardActions.prevStep();
   }
 
   public stepForward() {
-    // if (this.step === 2 && this.provider === 'bringyourown') {
-    //   WizardActions.goToStep(4);
-    // }
-
     WizardActions.nextStep();
   }
 

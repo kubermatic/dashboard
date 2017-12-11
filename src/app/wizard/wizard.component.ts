@@ -45,7 +45,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private ngRedux: NgRedux<any>
   ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.resetCachedCredentials();
 
     let sub = this.step$.combineLatest(this.provider$)

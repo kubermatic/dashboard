@@ -66,7 +66,7 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
 
     this.createClusterModal = new CreateClusterModel(
       this.clusterSpec,
-      this.sshKeys,
+      this.sshKeys
     );
 
     WizardActions.setClusterModel(this.createClusterModal);

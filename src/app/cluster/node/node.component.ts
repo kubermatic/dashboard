@@ -39,7 +39,6 @@ export class NodeComponent implements OnInit {
   constructor(public dialog: MdDialog) {}
 
   ngOnInit() {
-
   }
 
   onNodeRemoval(nodeRemoval: boolean) {
@@ -73,13 +72,13 @@ export class NodeComponent implements OnInit {
     if(this.node.status.conditions) {
       this.conditionsMessage = "";
       for (let entry of this.node.status.conditions) {
-        if (entry.status == "True" && entry.type != "Ready"){
+        if (entry.status === "True" && entry.type !== "Ready"){
           this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
         }
       }
     }
 
-    if (this.conditionsMessage != "" && kubeMachineState == "running") {
+    if (this.conditionsMessage !== "" && kubeMachineState === "running") {
       return red;
     }
 
@@ -103,17 +102,17 @@ export class NodeComponent implements OnInit {
     let nodeAllocatable = this.node.status.capacity.memory;
     let resRE = nodeAllocatable.match(memRE);
     let nodeCapacity;
-    let prefixes = ['Ki', 'Mi','Gi','Ti'];
+    let prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
     let i = 0;
 
-    if(resRE) {
+    if (resRE) {
       let ki = parseInt(resRE[1]);
 
       do {
         ki /= 1024;
         i++;
       }
-      while(ki > 1);
+      while (ki > 1);
       nodeCapacity = (ki * 1024).toFixed(2);
     }
 

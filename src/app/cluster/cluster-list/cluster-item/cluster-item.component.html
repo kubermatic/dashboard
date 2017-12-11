@@ -16,6 +16,7 @@
           <img *ngIf="cluster.spec.cloud.digitalocean" src="/assets/images/clouds/digitalocean.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
           <img *ngIf="cluster.spec.cloud.baremetal" src="/assets/images/clouds/baremetal.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
           <img *ngIf="cluster.spec.cloud.openstack" src="/assets/images/clouds/openstack.png" class="icon-seed-cluster" alt="Cluster Icon" height="17" style="padding-top: 7px;" />
+          <img *ngIf="cluster.spec.cloud.bringyourown" src="/assets/images/clouds/bringyourown.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" style="padding-top: 7px;" />
         </span>
         <p *ngSwitchCase="false" class="text-muted">
           No provider
