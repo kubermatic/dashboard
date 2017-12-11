@@ -35,7 +35,7 @@ export class AwsAddNodeComponent implements OnInit {
     if (Array.isArray(this.connect) && this.connect.length) {
       const reduxStore = this.ngRedux.getState();
       const nodeForm = reduxStore.wizard.nodeForm;
-
+      let formValue;
       if (nodeForm) {
         const formValue = {
           node_count: nodeForm.node_count,
@@ -46,6 +46,8 @@ export class AwsAddNodeComponent implements OnInit {
         };
   
         this.awsNodeForm.setValue(formValue);
+      } else { 
+        this.awsNodeForm.patchValue({node_count: 3});
       }
     }
 

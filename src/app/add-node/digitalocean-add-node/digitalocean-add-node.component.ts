@@ -48,6 +48,8 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
         };
   
         this.doNodeForm.setValue(formValue);
+      } else { 
+        this.doNodeForm.patchValue({node_count: 3});
       }
     }
   }

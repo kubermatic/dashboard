@@ -45,6 +45,8 @@ export class OpenstackAddNodeComponent implements OnInit {
         };
   
         this.osNodeForm.setValue(formValue);
+      } else {
+        this.osNodeForm.patchValue({node_count: 3});
       }
     }
   }
