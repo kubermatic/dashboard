@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OpenstackNodeComponent } from './openstack.component';
+import { AddNodeModalComponent } from './add-node-modal.component';
 
-describe('OpenstackNodeComponent', () => {
-  let component: OpenstackNodeComponent;
-  let fixture: ComponentFixture<OpenstackNodeComponent>;
+describe('AddNodeModalComponent', () => {
+  let component: AddNodeModalComponent;
+  let fixture: ComponentFixture<AddNodeModalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OpenstackNodeComponent ]
+      declarations: [ AddNodeModalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OpenstackNodeComponent);
+    fixture = TestBed.createComponent(AddNodeModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

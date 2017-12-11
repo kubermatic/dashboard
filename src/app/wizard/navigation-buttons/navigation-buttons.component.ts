@@ -13,7 +13,6 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
 
   public nextStep: boolean;
   private subscriptions: Subscription[] = [];
-  
 
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
@@ -48,8 +47,8 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
       case 3:
           if (!valid.get('sshKeyForm')) {
             return false;
-          } else if ((valid.get('awsClusterForm') || valid.get('digitalOceanClusterForm') || valid.get('openstackClusterForm') ) && 
-                      (valid.get('awsNodeForm') || valid.get('digitalOceanNodeForm') || valid.get('openstackNodeForm'))) {
+          } else if ((valid.get('awsClusterForm') || valid.get('digitalOceanClusterForm') || valid.get('openstackClusterForm') ) &&
+                      valid.get('nodeForm')) {
             return true;
           } else {
             return false;

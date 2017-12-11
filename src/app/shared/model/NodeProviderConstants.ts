@@ -9,6 +9,7 @@ export class NodeProvider {
   public static readonly OPENSTACK: string = "openstack";
 
   public static readonly Supported: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.OPENSTACK];
+
 }
 
 export namespace NodeInstanceFlavors {

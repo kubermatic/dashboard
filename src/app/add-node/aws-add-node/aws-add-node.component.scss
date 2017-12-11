@@ -11,16 +11,24 @@
 }
 
 .km-warning-msg {
-  background-color: rgba(255,213,92,0.1);
+  background-color: rgba(255, 213, 92, 0.1);
   padding: 10px;
   text-align: justify;
+  
+  ul {
+    list-style-type: decimal;
+  }
 
   a {
     color: #0288d1;
     text-decoration: none;
   }
-}
 
+  .fa-exclamation-triangle {
+    margin-right: 10px;
+    color: #dd4b39;
+  }
+}
 
 .slider-box {
   margin-top: 15px;
