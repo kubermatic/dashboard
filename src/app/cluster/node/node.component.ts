@@ -39,7 +39,6 @@ export class NodeComponent implements OnInit {
   constructor(public dialog: MdDialog) {}
 
   ngOnInit() {
-    console.log(this.seedDcName);
   }
 
   onNodeRemoval(nodeRemoval: boolean) {
