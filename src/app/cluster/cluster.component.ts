@@ -32,7 +32,7 @@ export class ClusterComponent implements OnInit, OnDestroy {
   public cluster: ClusterEntity;
   public seedDc: DataCenterEntity;
   public nodeDc: DataCenterEntity;
-  public timer: any = Observable.timer(0,10000);
+  public timer: any = Observable.timer(0, 10000);
   public sub: Subscription;
   public dialogRef: any;
   public config: any = {};
@@ -76,7 +76,7 @@ export class ClusterComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadDataCenter(dcName, dcObjectName):void {
+  loadDataCenter(dcName, dcObjectName): void {
     this.dcService.getDataCenter(dcName).subscribe(res =>
       this[dcObjectName] = new DataCenterEntity(res.metadata, res.spec, res.seed));
   }
