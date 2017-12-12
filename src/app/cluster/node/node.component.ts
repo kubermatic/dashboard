@@ -40,9 +40,7 @@ export class NodeComponent implements OnInit {
   constructor(public dialog: MdDialog) {}
 
   ngOnInit() {
-    if (!this.node.metadata.annotations['node.k8s.io/driver-data']) {
-      this.managedByProvider = true;
-    }
+    this.managedByProvider = !!this.node.metadata.annotations['node.k8s.io/driver-data'];
   }
 
   onNodeRemoval(nodeRemoval: boolean) {
