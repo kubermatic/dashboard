@@ -28,9 +28,8 @@ import { CoreModule } from 'app/core/core.module';
     MobileNavigationComponent,
   ],
   entryComponents: [
-    MobileNavigationComponent,
+    MobileNavigationComponent
   ],
-  providers: [],
   bootstrap: [KubermaticComponent]
 })
 
