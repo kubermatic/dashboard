@@ -2,9 +2,9 @@
   <div fxLayout>
     <h2 fxFlex="50%">{{cluster.spec.humanReadableName}}</h2>
     <div fxFlex="50%" align="right" style="margin-top: 25px;">
-      <button class="add-node-btn" 
-              md-raised-button color="primary" 
-              (click)="addNode()" 
+      <button class="add-node-btn"
+              md-raised-button color="primary"
+              (click)="addNode()"
               [disabled]="cluster.status.phase != 'Running'"
               [fxHide]="cluster.provider === 'bringyourown'">
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
@@ -117,7 +117,9 @@
     </ng-container>
   </md-card>
 
-  <md-card [fxShow]="cluster.provider == 'bringyourown'">
+  <!-- TODO: Show with final content -->
+  <!-- [fxShow]="cluster.provider == 'bringyourown'" -->
+  <md-card [fxShow]="false">
     <md-card-content>
       <div class="code-block">
         <p>
