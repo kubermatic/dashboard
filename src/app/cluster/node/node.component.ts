@@ -17,6 +17,7 @@ export class NodeComponent implements OnInit {
   @Input() index: number;
   public conditionsMessage: string = "";
   public nodeRemoval: boolean = false;
+  public managedByProvider: boolean = false;
   // public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
 
   public config: MdDialogConfig = {
@@ -39,6 +40,7 @@ export class NodeComponent implements OnInit {
   constructor(public dialog: MdDialog) {}
 
   ngOnInit() {
+    this.managedByProvider = !!this.node.metadata.annotations['node.k8s.io/driver-data'];
   }
 
   onNodeRemoval(nodeRemoval: boolean) {
@@ -58,9 +60,6 @@ export class NodeComponent implements OnInit {
     });
   }
 
-
-
-
   public getNodeHealth() {
     const green = "fa fa-circle green";
     const red = "fa fa-circle-o red";
@@ -69,7 +68,7 @@ export class NodeComponent implements OnInit {
 
     let kubeMachineState = this.node.metadata.annotations['node.k8s.io/state'];
 
-    if(this.node.status.conditions) {
+    if (this.node.status.conditions) {
       this.conditionsMessage = "";
       for (let entry of this.node.status.conditions) {
         if (entry.status === "True" && entry.type !== "Ready"){
