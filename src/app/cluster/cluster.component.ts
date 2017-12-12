@@ -114,11 +114,7 @@ export class ClusterComponent implements OnInit, OnDestroy {
             res.status,
           );
 
-          if (!this.seedDc && this.cluster.provider !== NodeProvider.BRINGYOUROWN) {
-            this.loadDataCenter(this.cluster.status.seed, 'seedDc');
-          }
-
-          if (!this.seedDc && this.cluster.provider === NodeProvider.BRINGYOUROWN) {
+          if (!this.seedDc) {           
             this.loadDataCenter(this.cluster.spec.seedDatacenterName, 'seedDc');
           }
 
