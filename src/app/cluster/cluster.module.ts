@@ -7,6 +7,7 @@ import { AddNodeModule } from 'app/add-node/add-node.module';
 import { NodeDeleteConfirmationService } from 'app/cluster/node-delete-confirmation/node-delete-confirmation.service';
 
 import { NodeComponent } from 'app/cluster/node/node.component';
+import { NodeGroupComponent } from 'app/cluster/node-group/node-group.component';
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
 import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
 import { ClusterComponent } from 'app/cluster/cluster.component';
@@ -19,6 +20,7 @@ import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component
 const components: any[] = [
     ClusterComponent,
     NodeComponent,
+    NodeGroupComponent,
     ClusterListComponent,
     ClusterItemComponent,
     ClusterHealthStatusComponent,

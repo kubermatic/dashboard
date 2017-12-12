@@ -96,7 +96,7 @@ export class ClusterComponent implements OnInit {
         if (key.spec.clusters == null) {
           return false;
         }
-        return key.spec.clusters.indexOf(this.clusterName) > -1
+        return key.spec.clusters.indexOf(this.clusterName) > -1;
       });
     });
   }
@@ -108,8 +108,7 @@ export class ClusterComponent implements OnInit {
       this.nodes = nodes;
     });*/
 
-    var groups = [];
-    var nodesGrouped;
+    let groups = [];
 
     this.nodes = [
       {
@@ -457,7 +456,7 @@ export class ClusterComponent implements OnInit {
       }
   ];
 
-    groups = this.nodes.reduce(function(obj,item){
+    groups = this.nodes.reduce(function(obj, item){
       obj[item.groupname] = obj[item.groupname] || [];
       obj[item.groupname]['group'] = obj[item.groupname]['group'] || [];
       obj[item.groupname]['kubeletVersion'] = item.status.nodeInfo.kubeletVersion || "";
@@ -473,7 +472,7 @@ export class ClusterComponent implements OnInit {
     this.stateOfTheAccordion = Object.keys(groups).map(function (key) {
       return {name: key, state: false};
 
-    })
+    });
   }
 
   refreshData(): void {

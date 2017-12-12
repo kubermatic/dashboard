@@ -41,11 +41,10 @@ export class NodeGroupComponent implements OnInit {
   constructor(public dialog: MdDialog) {}
 
   ngOnInit() {
-
   }
 
   getAccordionState(group) {
-    return !!this.stateOfTheAccordion[group]? true : false;
+    return !!this.stateOfTheAccordion[group] ? true : false;
   };
 
   onNodeGroupToggle (expanded, group) {
@@ -78,16 +77,16 @@ export class NodeGroupComponent implements OnInit {
 
     let kubeMachineState = state;
 
-    if(conditions) {
+    if (conditions) {
       this.conditionsMessage = "";
       for (let entry of conditions) {
-        if (entry.status == "True" && entry.type != "Ready"){
+        if (entry.status == "True" && entry.type !== "Ready") {
           this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
         }
       }
     }
 
-    if (this.conditionsMessage != "" && kubeMachineState == "running") {
+    if (this.conditionsMessage !== "" && kubeMachineState == "running") {
       return red;
     }
 
@@ -114,14 +113,14 @@ export class NodeGroupComponent implements OnInit {
     let prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
     let i = 0;
 
-    if(resRE) {
+    if (resRE) {
       let ki = parseInt(resRE[1]);
 
       do {
         ki /= 1024;
         i++;
       }
-      while(ki > 1);
+      while (ki > 1);
       nodeCapacity = (ki * 1024).toFixed(2);
     }
 
