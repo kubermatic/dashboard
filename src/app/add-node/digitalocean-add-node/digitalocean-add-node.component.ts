@@ -17,6 +17,7 @@ import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
   styleUrls: ['./digitalocean-add-node.component.scss']
 })
 export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
+
   @Input() public token: string = '';
   @Input() public connect: string[];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  

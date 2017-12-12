@@ -12,8 +12,6 @@ import { AppRoutingModule } from "./app-routing.module";
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from 'app/core/core.module';
 
-
-
 @NgModule({
   imports: [
     CoreModule,
@@ -32,7 +30,6 @@ import { CoreModule } from 'app/core/core.module';
   entryComponents: [
     MobileNavigationComponent
   ],
-  providers: [],
   bootstrap: [KubermaticComponent]
 })
 
