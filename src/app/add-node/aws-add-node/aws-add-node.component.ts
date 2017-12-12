@@ -12,6 +12,7 @@ import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
   styleUrls: ['./aws-add-node.component.scss']
 })
 export class AwsAddNodeComponent implements OnInit {
+
   @Input() public connect: string[];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
@@ -35,7 +36,7 @@ export class AwsAddNodeComponent implements OnInit {
     if (Array.isArray(this.connect) && this.connect.length) {
       const reduxStore = this.ngRedux.getState();
       const nodeForm = reduxStore.wizard.nodeForm;
-      let formValue;
+
       if (nodeForm) {
         const formValue = {
           node_count: nodeForm.node_count,

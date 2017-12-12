@@ -15,6 +15,7 @@ import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
   styleUrls: ['./openstack-add-node.component.scss']
 })
 export class OpenstackAddNodeComponent implements OnInit {
+
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
   @Input() public connect: string[];

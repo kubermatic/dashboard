@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClusterSpec, CloudSpec } from "../../shared/entity/ClusterEntity";
 import { CreateClusterModel } from "../../shared/model/CreateClusterModel";
-import { select } from '@angular-redux/store';
+import { select, NgRedux } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { Subscription } from 'rxjs/Subscription';
@@ -27,7 +27,7 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
   public createClusterModal: CreateClusterModel;
   public clusterSpec: ClusterSpec;
 
-  constructor() { }
+  constructor(private ngRedux: NgRedux<any>) { }
 
   public ngOnInit(): void {
     let sub = this.clusterName$.subscribe(clusterName => {
@@ -53,16 +53,23 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
   }
 
   public createSpec(): void {
+    const ruduxStore = this.ngRedux.getState();
+    const wizard = ruduxStore.wizard;
+    const region = wizard.setDatacenterForm.datacenter.metadata.name;
+    const provider = wizard.setProviderForm.provider;
+
+    const seedDatacenterName = provider === 'bringyourown' ? region : '';
 
     this.clusterSpec = new ClusterSpec(
       this.cloudSpec,
       this.clusterName,
-      "",
+      '',
+      seedDatacenterName
     );
 
     this.createClusterModal = new CreateClusterModel(
       this.clusterSpec,
-      this.sshKeys,
+      this.sshKeys
     );
 
     WizardActions.setClusterModel(this.createClusterModal);

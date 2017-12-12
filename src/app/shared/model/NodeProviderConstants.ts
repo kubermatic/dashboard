@@ -8,8 +8,12 @@ export class NodeProvider {
   public static readonly BAREMETAL: string = "baremetal";
   public static readonly OPENSTACK: string = "openstack";
 
-  public static readonly Supported: string[] = [NodeProvider.AWS, NodeProvider.DIGITALOCEAN, NodeProvider.OPENSTACK];
-
+  public static readonly Supported: string[] = [
+    NodeProvider.AWS, 
+    NodeProvider.DIGITALOCEAN, 
+    NodeProvider.OPENSTACK, 
+    NodeProvider.BRINGYOUROWN
+  ];
 }
 
 export namespace NodeInstanceFlavors {

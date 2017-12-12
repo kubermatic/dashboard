@@ -19,6 +19,7 @@ import { OpenstackCloudSpec } from "../shared/entity/cloud/OpenstackCloudSpec";
 import { NotificationActions } from "app/redux/actions/notification.actions";
 import { select, NgRedux } from "@angular-redux/store";
 import { Subscription } from 'rxjs/Subscription';
+import { BringYourOwnCloudSpec } from 'app/shared/entity/cloud/BringYourOwnCloudSpec';
 
 @Component({
   selector: "kubermatic-wizard",
@@ -44,7 +45,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     private ngRedux: NgRedux<any>
   ) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.resetCachedCredentials();
 
     let sub = this.step$.combineLatest(this.provider$)
@@ -69,7 +70,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         '', 
         new DigitaloceanCloudSpec(''), 
         new AWSCloudSpec('', '', '', '', '', ''), 
-        null, 
+        new BringYourOwnCloudSpec(),
         new OpenstackCloudSpec('', '', '', 'Default', '', '', ''), 
         null
       )
@@ -105,7 +106,9 @@ export class WizardComponent implements OnInit, OnDestroy {
         NotificationActions.success("Success", `Cluster successfully created`);
         this.router.navigate(["/clusters/" + cluster.metadata.name]);
 
-        this.createNodesService.createInitialClusterNodes(cluster, nodeModel);
+        if (this.selectedProvider !== 'bringyourown') {
+          this.createNodesService.createInitialClusterNodes(cluster, nodeModel);
+        }
       },
       error => {
         NotificationActions.error("Error", `${error.status} ${error.statusText}`);
