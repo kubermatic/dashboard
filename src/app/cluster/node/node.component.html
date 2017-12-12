@@ -17,7 +17,7 @@
     <div fxFlex="10%" class="health-state">
         <i [mdTooltip]="this.node.metadata.annotations['node.k8s.io/state']" [ngClass]="getNodeHealth()"></i>
     </div>
-    <div fxFlex="10%" class="km-btn-remove-node-wrapper">
+    <div fxFlex="10%" class="km-btn-remove-node-wrapper" *ngIf="managedByProvider">
       <button *ngIf="!nodeRemoval" md-icon-button class="km-delete-node" (click)="deleteNodeDialog()">
         <i class="fa fa-trash-o" aria-hidden="true"></i>
       </button>
