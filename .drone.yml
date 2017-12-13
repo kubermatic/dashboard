@@ -8,6 +8,11 @@ pipeline:
     commands:
       - make install
 
+linting:
+  image: node:8
+  commands:
+    - make lint
+
   node-dist:
     image: node:8
     commands:
