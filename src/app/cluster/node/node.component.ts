@@ -1,12 +1,12 @@
-import { Component, OnInit, Input} from "@angular/core";
-import { NodeEntity } from "../../shared/entity/NodeEntity";
+import { Component, OnInit, Input} from '@angular/core';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
 import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
-import {NodeDeleteConfirmationComponent} from "../node-delete-confirmation/node-delete-confirmation.component";
+import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
 
 @Component({
-  selector: "kubermatic-node",
-  templateUrl: "node.component.html",
-  styleUrls: ["node.component.scss"]
+  selector: 'kubermatic-node',
+  templateUrl: 'node.component.html',
+  styleUrls: ['node.component.scss']
 })
 
 export class NodeComponent implements OnInit {
@@ -15,7 +15,7 @@ export class NodeComponent implements OnInit {
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
   @Input() index: number;
-  public conditionsMessage: string = "";
+  public conditionsMessage: string = '';
   public nodeRemoval: boolean = false;
   public managedByProvider: boolean = false;
   // public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
@@ -48,7 +48,7 @@ export class NodeComponent implements OnInit {
   }
 
   public deleteNodeDialog(): void {
-    let dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
+    const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.nodeName = this.node.metadata.name;
     dialogRef.componentInstance.nodeUID = this.node.metadata.uid;
     dialogRef.componentInstance.clusterName = this.clusterName;
@@ -61,34 +61,34 @@ export class NodeComponent implements OnInit {
   }
 
   public getNodeHealth() {
-    const green = "fa fa-circle green";
-    const red = "fa fa-circle-o red";
-    const orange = "fa fa-spin fa-circle-o-notch orange";
-    const orangeSpinner = "fa fa-spin fa-circle-o-notch orange";
+    const green = 'fa fa-circle green';
+    const red = 'fa fa-circle-o red';
+    const orange = 'fa fa-spin fa-circle-o-notch orange';
+    const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
-    let kubeMachineState = this.node.metadata.annotations['node.k8s.io/state'];
+    const kubeMachineState = this.node.metadata.annotations['node.k8s.io/state'];
 
     if (this.node.status.conditions) {
-      this.conditionsMessage = "";
-      for (let entry of this.node.status.conditions) {
-        if (entry.status === "True" && entry.type !== "Ready"){
+      this.conditionsMessage = '';
+      for (const entry of this.node.status.conditions) {
+        if (entry.status === 'True' && entry.type !== 'Ready') {
           this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
         }
       }
     }
 
-    if (this.conditionsMessage !== "" && kubeMachineState === "running") {
+    if (this.conditionsMessage !== '' && kubeMachineState === 'running') {
       return red;
     }
 
     switch (kubeMachineState) {
-      case "pending":
+      case 'pending':
         return orange;
-      case "provisioning":
+      case 'provisioning':
         return orangeSpinner;
-      case "launching":
+      case 'launching':
         return orangeSpinner;
-      case "running":
+      case 'running':
         return green;
       default:
         return red;
@@ -97,15 +97,15 @@ export class NodeComponent implements OnInit {
   }
 
   public getFormattedNodeMemory(): string {
-    let memRE = /([0-9]+)([a-zA-Z])i/;
-    let nodeAllocatable = this.node.status.capacity.memory;
-    let resRE = nodeAllocatable.match(memRE);
+    const memRE = /([0-9]+)([a-zA-Z])i/;
+    const nodeAllocatable = this.node.status.capacity.memory;
+    const resRE = nodeAllocatable.match(memRE);
     let nodeCapacity;
-    let prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
+    const prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
     let i = 0;
 
     if (resRE) {
-      let ki = parseInt(resRE[1]);
+      let ki = parseInt(resRE[1], 10);
 
       do {
         ki /= 1024;

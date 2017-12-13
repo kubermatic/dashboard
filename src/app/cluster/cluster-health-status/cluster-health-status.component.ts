@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Health} from "../../shared/entity/ClusterEntity";
+import {Health} from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-health-status',
@@ -8,9 +8,9 @@ import {Health} from "../../shared/entity/ClusterEntity";
 })
 export class ClusterHealthStatusComponent implements OnInit {
   @Input() health: Health;
-  green = "fa fa-circle green";
-  red = "fa fa-circle-o red";
-  orange = "fa fa-spin fa-circle-o-notch orange";
+  green = 'fa fa-circle green';
+  red = 'fa fa-circle-o red';
+  orange = 'fa fa-spin fa-circle-o-notch orange';
 
   constructor() { }
 
@@ -21,15 +21,15 @@ export class ClusterHealthStatusComponent implements OnInit {
   public getHealthStatusColor(type) {
     if (this.health) {
       switch (type) {
-        case "apiserver":
+        case 'apiserver':
           return this.health.apiserver ? this.green : this.red;
-        case "controller":
+        case 'controller':
           return this.health.controller ? this.green : this.red;
-        case "etcd":
+        case 'etcd':
           return this.health.etcd ? this.green : this.red;
-        case "scheduler":
+        case 'scheduler':
           return this.health.scheduler ? this.green : this.red;
-        case "node-controller":
+        case 'node-controller':
           return this.health.nodeController ? this.green : this.red;
         default:
           return this.orange;

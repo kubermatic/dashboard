@@ -1,11 +1,11 @@
-import {Component, OnInit} from "@angular/core";
-import {Auth} from "../../core/services";
-import {Router} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {Auth} from '../../core/services';
+import {Router} from '@angular/router';
 
 @Component({
-  selector: "kubermatic-frontpage",
-  templateUrl: "./frontpage.component.html",
-  styleUrls: ["./frontpage.component.scss"]
+  selector: 'kubermatic-frontpage',
+  templateUrl: './frontpage.component.html',
+  styleUrls: ['./frontpage.component.scss']
 })
 export class FrontpageComponent implements OnInit {
 
@@ -14,7 +14,7 @@ export class FrontpageComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.auth.authenticated()) {
-      this.router.navigate(["clusters"]);
+      this.router.navigate(['clusters']);
     }
   }
 }

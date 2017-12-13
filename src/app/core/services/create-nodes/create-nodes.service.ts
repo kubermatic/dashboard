@@ -1,10 +1,11 @@
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Injectable } from '@angular/core';
-import { Observable, Subscription } from "rxjs";
-import { ApiService } from "app/core/services/api/api.service";
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { ApiService } from 'app/core/services/api/api.service';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { CreateNodeModel } from "../../../shared/model/CreateNodeModel";
-import { LocalStorageService } from "../local-storage/local-storage.service";
+import { CreateNodeModel } from '../../../shared/model/CreateNodeModel';
+import { LocalStorageService } from '../local-storage/local-storage.service';
 
 @Injectable()
 export class CreateNodesService {
@@ -15,7 +16,7 @@ export class CreateNodesService {
     constructor(
         private api: ApiService,
         private localStorageService: LocalStorageService) {
-        let nodesData = this.localStorageService.getNodesData();
+        const nodesData = this.localStorageService.getNodesData();
 
         if (nodesData) {
             this.createInitialClusterNodes(nodesData.cluster, nodesData.createNodeModel);
@@ -35,11 +36,11 @@ export class CreateNodesService {
 
         this.sub = this.timer.subscribe(() => {
             this.api.getCluster(cluster.metadata.name)
-                .subscribe(cluster => {
-                    if (cluster.status.phase === "Running") {
-                        this.api.createClusterNode(cluster, createNodeModel).subscribe(result => {
+                .subscribe(curCluster => {
+                    if (curCluster.status.phase === 'Running') {
+                        this.api.createClusterNode(curCluster, createNodeModel).subscribe(result => {
                             this.preventCreatingInitialClusterNodes();
-                            NotificationActions.success("Success", `Creating Nodes`);
+                            NotificationActions.success('Success', `Creating Nodes`);
                         });
                     }
                 });

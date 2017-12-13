@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { select } from '@angular-redux/store';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
@@ -10,14 +10,14 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ProviderClusterComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;  
+  private subscription: Subscription;
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
 
   constructor() { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.subscription = this.provider$.subscribe((provider: string) => {
         provider && (this.provider = provider);
       });

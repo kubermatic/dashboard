@@ -3,9 +3,9 @@ import { AWSNodeSpec } from './../../shared/entity/node/AWSNodeSpec';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from './../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
-import { Action } from "../../shared/interfaces/action.interface";
+import { Action } from '../../shared/interfaces/action.interface';
 import { Reducer } from 'redux';
-import { BreadcrumbActions } from "../actions/breadcrumb.actions";
+import { BreadcrumbActions } from '../actions/breadcrumb.actions';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { FORM_CHANGED } from '@angular-redux/form';
 import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
@@ -20,9 +20,9 @@ const formOnStep: Map<number, string[]> = new Map([
     [0, ['clusterNameForm']],
     [1, ['setProviderForm']],
     [2, ['setDatacenterForm']],
-    [3, ['awsClusterForm', 'nodeForm', 
-        'digitalOceanClusterForm', 
-        'openstackClusterForm', 'sshKeyForm']]  
+    [3, ['awsClusterForm', 'nodeForm',
+        'digitalOceanClusterForm',
+        'openstackClusterForm', 'sshKeyForm']]
 ]);
 
 export interface Wizard {
@@ -65,7 +65,7 @@ export interface Wizard {
     cloudSpec: CloudSpec;
     clusterModel: CreateClusterModel;
     nodeModel: CreateNodeModel;
-};
+}
 
 export const INITIAL_STATE: Wizard = {
     step: 0,
@@ -147,7 +147,7 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
             const formName = action.payload.formName;
             const valid = new Map(state.valid);
             valid.set(formName, action.payload.isValid);
-            
+
             return Object.assign({}, state, { valid });
         }
         case WizardActions.RESET_FORMS: {
@@ -163,7 +163,7 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
                     });
                 }
             });
-            
+
             return Object.assign({}, state, nextState);
         }
     }

@@ -1,10 +1,10 @@
-import {Component, OnInit} from "@angular/core";
-import {ApiService} from "app/core/services/api/api.service";
-import {SSHKeyEntity} from "../shared/entity/SSHKeyEntity";
+import {Component, OnInit} from '@angular/core';
+import {ApiService} from 'app/core/services/api/api.service';
+import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 @Component({
-  selector: "kubermatic-sshkey",
-  templateUrl: "sshkey.component.html",
-  styleUrls: ["sshkey.component.scss"]
+  selector: 'kubermatic-sshkey',
+  templateUrl: 'sshkey.component.html',
+  styleUrls: ['sshkey.component.scss']
 })
 
 export class SshkeyComponent implements OnInit {
@@ -24,7 +24,7 @@ export class SshkeyComponent implements OnInit {
         result => {
           this.sshKeys = result;
           this.loading = false;
-        }, 
+        },
         error => this.loading = false
       );
   }

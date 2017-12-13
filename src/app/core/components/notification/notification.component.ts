@@ -1,30 +1,30 @@
-import { Observable } from 'rxjs';
-import { Component } from "@angular/core";
-import { NotificationsService } from "angular2-notifications";
-import { NotificationToast, NotificationToastType } from "../../../redux/reducers/notification";
-import { select } from "@angular-redux/store";
+import { Observable } from 'rxjs/Observable';
+import { Component } from '@angular/core';
+import { NotificationsService } from 'angular2-notifications';
+import { NotificationToast, NotificationToastType } from '../../../redux/reducers/notification';
+import { select } from '@angular-redux/store';
 
 @Component({
-  selector: "kubermatic-notification",
-  templateUrl: "./notification.component.html",
-  styleUrls: ["./notification.component.scss"],
+  selector: 'kubermatic-notification',
+  templateUrl: './notification.component.html',
+  styleUrls: ['./notification.component.scss'],
   providers: [NotificationsService]
 })
 export class NotificationComponent {
 
   public options = {
     timeOut: 5000,
-    theClass: "custom-simple-notification",
+    theClass: 'custom-simple-notification',
     lastOnBottom: true,
     clickToClose: true,
     showProgressBar: true,
     pauseOnHover: true,
     preventDuplicates: false,
-    preventLastDuplicates: "visible",
-    position: ["right", "top"]
+    preventLastDuplicates: 'visible',
+    position: ['right', 'top']
   };
 
-  @select(['notification', 'toast']) notification$: Observable<NotificationToast>;  
+  @select(['notification', 'toast']) notification$: Observable<NotificationToast>;
 
   constructor(private _service: NotificationsService) {
     this.notification$.subscribe(toast => {

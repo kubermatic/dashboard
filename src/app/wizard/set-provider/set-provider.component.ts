@@ -1,11 +1,11 @@
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { select } from '@angular-redux/store';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { NodeProvider } from "../../shared/model/NodeProviderConstants";
+import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -19,7 +19,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
 
   public setProviderForm: FormGroup;
   public supportedNodeProviders: string[] = NodeProvider.Supported;
-  public datacenters: { [key: string]: DataCenterEntity[] } = {};  
+  public datacenters: { [key: string]: DataCenterEntity[] } = {};
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string = '';
@@ -28,7 +28,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
               private dcService: DatacenterService) { }
 
   public ngOnInit(): void {
-    let sub = this.provider$.subscribe(provider => {
+    const sub = this.provider$.subscribe(provider => {
       provider && (this.selectedProvider = provider);
     });
     this.subscriptions.push(sub);
@@ -37,7 +37,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       provider: [this.selectedProvider]
     });
 
-    let sub2 = this.getDatacenters();
+    const sub2 = this.getDatacenters();
     this.subscriptions.push(sub2);
   }
 

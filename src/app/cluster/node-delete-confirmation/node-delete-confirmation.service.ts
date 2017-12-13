@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 import { MdDialog, MdDialogConfig } from '@angular/material';
@@ -9,11 +9,15 @@ export class NodeDeleteConfirmationService {
 
   constructor(private dialog: MdDialog) { }
 
-  public confirm(title: string, message: string, viewContainerRef: ViewContainerRef, btnOkText: string ='Ok', btnCancelText: string ='Cancel'): Observable<boolean> {
+  public confirm(title: string,
+                 message: string,
+                 viewContainerRef: ViewContainerRef,
+                 btnOkText: string = 'Ok',
+                 btnCancelText: string = 'Cancel'): Observable<boolean> {
 
    // let config = new MdDialogConfig();
 
-    let config: MdDialogConfig = {
+    const config: MdDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       backdropClass: '',
@@ -32,7 +36,7 @@ export class NodeDeleteConfirmationService {
 
     config.viewContainerRef = viewContainerRef;
 
-    let dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
+    const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
 
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.message = message;
@@ -42,12 +46,17 @@ export class NodeDeleteConfirmationService {
     return dialogRef.afterClosed();
   }
 
-  public confirmWithoutContainer(title: string, message: string, titleAlign: string='center', messageAlign: string='center', btnOkText: string ='Ok', btnCancelText: string ='Cancel' ): Observable<boolean> {
+  public confirmWithoutContainer(title: string,
+                                 message: string,
+                                 titleAlign: string= 'center',
+                                 messageAlign: string= 'center',
+                                 btnOkText: string = 'Ok',
+                                 btnCancelText: string = 'Cancel' ): Observable<boolean> {
 
-    let config = new MdDialogConfig();
+    const config = new MdDialogConfig();
     // config.viewContainerRef = viewContainerRef;
 
-    let dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
+    const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
 
     dialogRef.componentInstance.title = title;
     dialogRef.componentInstance.message = message;

@@ -1,8 +1,8 @@
 import { NgRedux } from '@angular-redux/store';
 import { CloudSpec } from './../../../../shared/entity/ClusterEntity';
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from "@angular/forms";
-import { DigitaloceanCloudSpec } from "../../../../shared/entity/cloud/DigitialoceanCloudSpec";
+import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { DigitaloceanCloudSpec } from '../../../../shared/entity/cloud/DigitialoceanCloudSpec';
 
 import { InputValidationService } from '../../../../core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
@@ -15,7 +15,7 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
 export class DigitaloceanClusterComponent implements OnInit {
   public digitalOceanClusterForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, 
+  constructor(private formBuilder: FormBuilder,
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
@@ -25,12 +25,12 @@ export class DigitaloceanClusterComponent implements OnInit {
 
     this.digitalOceanClusterForm = this.formBuilder.group({
       access_token: [clusterForm.access_token, [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
-        Validators.pattern("[a-z0-9]+")]],
+        Validators.pattern('[a-z0-9]+')]],
     });
   }
 
   public onChange() {
-    const doCloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls["access_token"].value);
+    const doCloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls['access_token'].value);
 
     const ruduxStore = this.ngRedux.getState();
     const wizard = ruduxStore.wizard;
