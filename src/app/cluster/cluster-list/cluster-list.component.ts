@@ -1,7 +1,8 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {ApiService} from '../../core/services/api/api.service';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
-import {Observable, Subscription} from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ApiService } from '../../core/services/api/api.service';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 
 @Component({

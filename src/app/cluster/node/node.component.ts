@@ -105,7 +105,7 @@ export class NodeComponent implements OnInit {
     let i = 0;
 
     if (resRE) {
-      let ki = parseInt(resRE[1]);
+      let ki = parseInt(resRE[1], 10);
 
       do {
         ki /= 1024;

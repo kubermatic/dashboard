@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { environment } from './../../../../environments/environment';
 import { Auth } from '../auth/auth.service';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';

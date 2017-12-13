@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
 import { NotificationsService } from 'angular2-notifications';
 import { NotificationToast, NotificationToastType } from '../../../redux/reducers/notification';
