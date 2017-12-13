@@ -1,9 +1,9 @@
 import { NgRedux } from '@angular-redux/store';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AWSCloudSpec } from "../../../../shared/entity/cloud/AWSCloudSpec";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AWSCloudSpec } from '../../../../shared/entity/cloud/AWSCloudSpec';
 import { InputValidationService } from '../../../../core/services';
-import { CloudSpec } from "../../../../shared/entity/ClusterEntity";
+import { CloudSpec } from '../../../../shared/entity/ClusterEntity';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 
@@ -35,12 +35,12 @@ export class AWSClusterComponent implements OnInit {
 
   public onChange() {
     const awsCloudSpec = new AWSCloudSpec(
-      this.awsClusterForm.controls["accessKeyId"].value,
-      this.awsClusterForm.controls["secretAccessKey"].value,
-      this.awsClusterForm.controls["vpcId"].value,
-      this.awsClusterForm.controls["subnetId"].value,
-      this.awsClusterForm.controls["routeTableId"].value,
-      "",
+      this.awsClusterForm.controls['accessKeyId'].value,
+      this.awsClusterForm.controls['secretAccessKey'].value,
+      this.awsClusterForm.controls['vpcId'].value,
+      this.awsClusterForm.controls['subnetId'].value,
+      this.awsClusterForm.controls['routeTableId'].value,
+      '',
     );
 
     const ruduxStore = this.ngRedux.getState();

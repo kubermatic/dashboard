@@ -1,7 +1,7 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from "@angular/forms";
-import { ClusterNameGenerator } from "../../core/util/name-generator.service";
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -12,8 +12,8 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SetClusterNameComponent implements OnInit, OnDestroy {
   public clusterNameForm: FormGroup;
-  private subscription: Subscription;  
-  
+  private subscription: Subscription;
+
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
   public clusterName: string = '';
 

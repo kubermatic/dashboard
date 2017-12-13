@@ -1,5 +1,5 @@
 import { AuthActions } from './../actions/auth.actions';
-import { Action } from "../../shared/interfaces/action.interface";
+import { Action } from '../../shared/interfaces/action.interface';
 import { Reducer } from 'redux';
 
 export enum AuthStatus {
@@ -15,7 +15,7 @@ export interface Auth {
 
 export const INITIAL_STATE: Auth = {
   profile: [],
-  token: "",
+  token: '',
   state: AuthStatus.LoggedOut
 };
 
@@ -42,5 +42,5 @@ export const AuthReducer: Reducer<Auth>  = (state: Auth = INITIAL_STATE, action:
     default:
       return state;
   }
-}
+};
 

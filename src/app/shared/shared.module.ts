@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 /* Modules */
-import { SlimLoadingBarModule } from "ng2-slim-loading-bar";
-import { FlexLayoutModule } from "@angular/flex-layout";
-import { CustomFormsModule } from "ng2-validation";
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { CustomFormsModule } from 'ng2-validation';
 import { ClipboardModule } from 'ngx-clipboard';
 import {
     MdButtonModule,

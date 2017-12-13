@@ -12,13 +12,13 @@ const routes: Routes = [
         path: '',
         component: ClusterListComponent,
         canActivate: [AuthGuard],
-        data: { title: "Manage Clusters" }
+        data: { title: 'Manage Clusters' }
     },
     {
         path: ':clusterName',
         component: ClusterComponent,
         canActivate: [AuthGuard],
-        data: { title: "Cluster details" }
+        data: { title: 'Cluster details' }
     }
 ];
 

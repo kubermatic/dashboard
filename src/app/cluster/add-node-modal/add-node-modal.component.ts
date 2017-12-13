@@ -32,7 +32,7 @@ export class AddNodeModalComponent implements OnInit {
 
   public addNode(): void {
     this.api.createClusterNode(this.data.cluster, this.nodeModel).subscribe(node => {
-        NotificationActions.success("Success", `Node(s) successfully created`);
+        NotificationActions.success('Success', `Node(s) successfully created`);
       });
   }
 

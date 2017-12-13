@@ -1,27 +1,28 @@
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import { Router, ActivatedRoute } from "@angular/router";
-import { ApiService } from "app/core/services/api/api.service";
-import { environment } from "../../environments/environment";
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ApiService } from 'app/core/services/api/api.service';
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { MdDialog } from '@angular/material';
-import { ClusterDeleteConfirmationComponent } from "./cluster-delete-confirmation/cluster-delete-confirmation.component";
-import { NodeEntity } from "../shared/entity/NodeEntity";
-import { ClusterEntity } from "../shared/entity/ClusterEntity";
-import { DataCenterEntity } from "../shared/entity/DatacenterEntity";
-import { NodeProvider } from "../shared/model/NodeProviderConstants";
-import { AddNodeModalData } from "../shared/model/add-node-modal-data";
+import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
+import { NodeEntity } from '../shared/entity/NodeEntity';
+import { ClusterEntity } from '../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../shared/entity/DatacenterEntity';
+import { NodeProvider } from '../shared/model/NodeProviderConstants';
+import { AddNodeModalData } from '../shared/model/add-node-modal-data';
 import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
 import { CustomEventService, CreateNodesService, DatacenterService } from '../core/services';
 import 'rxjs/add/operator/retry';
-import { SSHKeyEntity } from "../shared/entity/SSHKeyEntity";
-import { UpgradeClusterComponentData } from "../shared/model/UpgradeClusterDialogData";
+import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
+import { UpgradeClusterComponentData } from '../shared/model/UpgradeClusterDialogData';
 
 @Component({
-  selector: "kubermatic-cluster",
-  templateUrl: "./cluster.component.html",
-  styleUrls: ["./cluster.component.scss"],
+  selector: 'kubermatic-cluster',
+  templateUrl: './cluster.component.html',
+  styleUrls: ['./cluster.component.scss'],
   providers: [ApiService]
 })
 export class ClusterComponent implements OnInit, OnDestroy {
@@ -55,7 +56,7 @@ export class ClusterComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
 
     this.route.params.subscribe(params => {
-      this.clusterName = params["clusterName"];
+      this.clusterName = params['clusterName'];
       this.sub = this.timer.subscribe(() => this.refreshData());
     });
 
@@ -114,7 +115,7 @@ export class ClusterComponent implements OnInit, OnDestroy {
             res.status,
           );
 
-          if (!this.seedDc) {           
+          if (!this.seedDc) {
             this.loadDataCenter(this.cluster.spec.seedDatacenterName, 'seedDc');
           }
 
@@ -145,7 +146,7 @@ export class ClusterComponent implements OnInit, OnDestroy {
   }
 
   public addNode(): void {
-    let data = new AddNodeModalData(this.cluster, this.nodeDc);
+    const data = new AddNodeModalData(this.cluster, this.nodeDc);
 
     this.dialogRef = this.dialog.open(AddNodeModalComponent, { data });
 
@@ -162,7 +163,7 @@ export class ClusterComponent implements OnInit, OnDestroy {
   }
 
   public upgradeClusterDialog(): void {
-    let dialogWidth = '500px';
+    const dialogWidth = '500px';
 
     this.dialogRef = this.dialog.open(UpgradeClusterComponent, {
       data: new UpgradeClusterComponentData(this.clusterName, this.upgradesList),
@@ -171,7 +172,7 @@ export class ClusterComponent implements OnInit, OnDestroy {
   }
 
   public downloadKubeconfigUrl(): string {
-    const authorization_token = localStorage.getItem("token");
+    const authorization_token = localStorage.getItem('token');
     return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
 

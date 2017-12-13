@@ -18,17 +18,17 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
   public step: number;
 
   @select(['wizard', 'valid']) valid$: Observable<boolean[]>;
-  
+
   constructor(private ngRedux: NgRedux<any>) { }
 
   public ngOnInit(): void {
-    let sub = this.step$.subscribe(step => {
+    const sub = this.step$.subscribe(step => {
       this.step = step;
       this.nextStep = this.canGotoStep();
     });
     this.subscriptions.push(sub);
 
-    let sub2 = this.valid$.subscribe(valid => {
+    const sub2 = this.valid$.subscribe(valid => {
       this.nextStep = this.canGotoStep();
     });
     this.subscriptions.push(sub2);
