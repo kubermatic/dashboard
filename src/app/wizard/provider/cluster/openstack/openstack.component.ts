@@ -1,8 +1,8 @@
 import { NgRedux } from '@angular-redux/store';
 import { CloudSpec } from './../../../../shared/entity/ClusterEntity';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { OpenstackCloudSpec } from "../../../../shared/entity/cloud/OpenstackCloudSpec";
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { OpenstackCloudSpec } from '../../../../shared/entity/cloud/OpenstackCloudSpec';
 import { InputValidationService } from '../../../../core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 
@@ -14,7 +14,7 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
 export class OpenstackClusterComponent implements OnInit {
   public osClusterForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, 
+  constructor(private formBuilder: FormBuilder,
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
@@ -36,13 +36,13 @@ export class OpenstackClusterComponent implements OnInit {
 
   public onChange() {
     const osCloudSpec = new OpenstackCloudSpec(
-      this.osClusterForm.controls["os_username"].value,
-      this.osClusterForm.controls["os_password"].value,
-      this.osClusterForm.controls["os_tenant"].value,
-      this.osClusterForm.controls["os_domain"].value,
-      this.osClusterForm.controls["os_network"].value,
-      this.osClusterForm.controls["os_security_groups"].value,
-      this.osClusterForm.controls["os_floating_ip_pool"].value,
+      this.osClusterForm.controls['os_username'].value,
+      this.osClusterForm.controls['os_password'].value,
+      this.osClusterForm.controls['os_tenant'].value,
+      this.osClusterForm.controls['os_domain'].value,
+      this.osClusterForm.controls['os_network'].value,
+      this.osClusterForm.controls['os_security_groups'].value,
+      this.osClusterForm.controls['os_floating_ip_pool'].value,
     );
 
     const ruduxStore = this.ngRedux.getState();

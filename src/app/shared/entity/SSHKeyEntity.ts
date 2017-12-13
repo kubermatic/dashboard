@@ -1,4 +1,4 @@
-import {MetadataEntity} from "./MetadataEntity";
+import {MetadataEntity} from './MetadataEntity';
 
 export class SSHKeyEntity {
   metadata: MetadataEntity;

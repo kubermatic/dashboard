@@ -1,17 +1,17 @@
-import {Component, OnInit} from "@angular/core";
+import {Component, OnInit} from '@angular/core';
 import { MdDialog } from '@angular/material';
 
-import {Auth} from "../../services";
-import {SidenavService} from "../sidenav/sidenav.service";
+import {Auth} from '../../services';
+import {SidenavService} from '../sidenav/sidenav.service';
 import {Router} from '@angular/router';
-import {environment} from "../../../../environments/environment";
+import {environment} from '../../../../environments/environment';
 import {AppConstants} from '../../../shared/constants/constants';
 import { MobileNavigationComponent } from '../../../overlays';
 
 @Component({
-  selector: "kubermatic-navigation",
-  templateUrl: "./navigation.component.html",
-  styleUrls: ["./navigation.component.scss"]
+  selector: 'kubermatic-navigation',
+  templateUrl: './navigation.component.html',
+  styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit {
 
@@ -21,7 +21,7 @@ export class NavigationComponent implements OnInit {
   // public userProfile: any;
 
   constructor(
-    public auth: Auth, 
+    public auth: Auth,
     private sidenavService: SidenavService,
     private router: Router,
     private dialog: MdDialog
@@ -49,7 +49,7 @@ export class NavigationComponent implements OnInit {
   }
 
   public onResize(event): void {
-    if(event.target.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
+    if (event.target.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
       this.sidenavService.close();
     }
   }

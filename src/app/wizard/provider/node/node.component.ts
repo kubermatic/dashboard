@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { WizardActions } from './../../../redux/actions/wizard.actions';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { select } from '@angular-redux/store';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
@@ -23,7 +23,7 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
-  ngOnInit() { 
+  public ngOnInit(): void {
     this.subscription = this.providerName$.combineLatest(this.token$)
     .subscribe((data: [string, string]) => {
       const providerName = data[0];

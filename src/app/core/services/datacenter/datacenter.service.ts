@@ -14,9 +14,9 @@ export class DatacenterService {
   private dataCenterCache: Observable<DataCenterEntity[]>;
 
   constructor(private http: HttpClient,
-              private auth: Auth) { 
+              private auth: Auth) {
     const token = auth.getBearerToken();
-    this.headers = this.headers.set("Authorization", "Bearer " + token);
+    this.headers = this.headers.set('Authorization', 'Bearer ' + token);
   }
 
   getDataCenters(): Observable<DataCenterEntity[]> {

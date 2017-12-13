@@ -7,6 +7,6 @@ export class InputValidationService {
   constructor() { }
 
   public isValid(formControl: FormControl): boolean {
-    return !formControl.valid && formControl.touched;    
+    return !formControl.valid && formControl.touched;
   }
 }

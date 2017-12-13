@@ -1,11 +1,11 @@
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DataCenterEntity } from "../../shared/entity/DatacenterEntity";
-import { ApiService } from "app/core/services/api/api.service";
+import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
+import { ApiService } from 'app/core/services/api/api.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -28,7 +28,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
               private dcService: DatacenterService) { }
 
   ngOnInit() {
-    let sub = this.datacenter$.combineLatest(this.provider$)
+    const sub = this.datacenter$.combineLatest(this.provider$)
       .subscribe((data: [DataCenterEntity, string]) => {
         const datacenter = data[0];
         const provider = data[1];
@@ -38,7 +38,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
       });
     this.subscriptions.push(sub);
 
-    let sub2 = this.getDatacenters();
+    const sub2 = this.getDatacenters();
     this.subscriptions.push(sub2);
 
     this.setDatacenterForm = this.fb.group({

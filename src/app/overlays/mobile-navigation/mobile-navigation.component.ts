@@ -13,6 +13,6 @@ export class MobileNavigationComponent {
   ) {}
 
   public closeModal(): void {
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 }

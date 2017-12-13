@@ -11,7 +11,7 @@ export class CustomEventService {
   }
 
   subscribe(name: string, callback: any): void {
-    if(!this.storage[name]) {
+    if (!this.storage[name]) {
       this.storage[name] = [];
     }
 

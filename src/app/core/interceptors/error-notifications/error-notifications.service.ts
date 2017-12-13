@@ -1,7 +1,7 @@
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
@@ -15,7 +15,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
           errorInstance => {
             NotificationActions.error(
               `Error ${errorInstance.status}`,
-              `${errorInstance.error.error.message || errorInstance.statusText}` 
+              `${errorInstance.error.error.message || errorInstance.statusText}`
             );
           }
         );

@@ -1,9 +1,9 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiService } from "app/core/services/api/api.service";
-import { SSHKeyEntity } from "../../shared/entity/SSHKeyEntity";
-import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { AddSshKeyModalComponent } from "../add-ssh-key-modal/add-ssh-key-modal.component";
+import { ApiService } from 'app/core/services/api/api.service';
+import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AddSshKeyModalComponent } from '../add-ssh-key-modal/add-ssh-key-modal.component';
 import { MdDialog, MdDialogConfig } from '@angular/material';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Subscription } from 'rxjs/Subscription';
@@ -21,13 +21,13 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   public sshKeyForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;  
+  @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;
   public selectedSshKeys: string[] = [];
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, public dialog: MdDialog) { }
 
   ngOnInit() {
-    let sub = this.selectedSshKeys$.subscribe(selectedSshKeys => {
+    const sub = this.selectedSshKeys$.subscribe(selectedSshKeys => {
       this.selectedSshKeys = selectedSshKeys;
     });
     this.subscriptions.push(sub);
@@ -37,8 +37,8 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     });
 
     this.sshKeyForm.updateValueAndValidity();
-  
-    let sub2 = this.refreshSSHKeys();
+
+    const sub2 = this.refreshSSHKeys();
     this.subscriptions.push(sub2);
   }
 

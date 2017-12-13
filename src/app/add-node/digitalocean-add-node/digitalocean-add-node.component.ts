@@ -20,13 +20,13 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
 
   @Input() public token: string = '';
   @Input() public connect: string[];
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  
+  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
-  
-  public doNodeForm: FormGroup;
-  public nodeSize: any[] =  NodeInstanceFlavors.VOID;  
 
-  constructor(private fb: FormBuilder, 
+  public doNodeForm: FormGroup;
+  public nodeSize: any[] =  NodeInstanceFlavors.VOID;
+
+  constructor(private fb: FormBuilder,
               private api: ApiService,
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
@@ -37,7 +37,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
       node_size: ['', [<any>Validators.required]]
     });
 
-    
+
     if (Array.isArray(this.connect) && this.connect.length) {
       const reduxStore = this.ngRedux.getState();
       const nodeForm = reduxStore.wizard.nodeForm;
@@ -47,9 +47,9 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
           node_count: nodeForm.node_count,
           node_size: nodeForm.node_size
         };
-  
+
         this.doNodeForm.setValue(formValue);
-      } else { 
+      } else {
         this.doNodeForm.patchValue({node_count: 3});
       }
     }
@@ -59,11 +59,11 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
 
   public getNodeSize(token: string): void {
     const selectedNodeSize = null;
-    
+
     if (token) {
       this.api.getDigitaloceanSizes(token).subscribe(result => {
           this.nodeSize = result.sizes;
-          if (this.nodeSize.length > 0 && this.doNodeForm.controls["node_size"].value === '') {
+          if (this.nodeSize.length > 0 && this.doNodeForm.controls['node_size'].value === '') {
             const nodeSize = selectedNodeSize ? selectedNodeSize : '4gb';
             this.doNodeForm.patchValue({node_size: nodeSize});
             this.onChange();
@@ -79,7 +79,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
 
   public onChange() {
     const nodeSpec = new NodeCreateSpec(
-      new DigitaloceanNodeSpec(this.doNodeForm.controls["node_size"].value),
+      new DigitaloceanNodeSpec(this.doNodeForm.controls['node_size'].value),
       null,
       null,
       null,
@@ -87,7 +87,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
 
     this.nodeSpecChanges.emit({
       nodeSpec,
-      count: this.doNodeForm.controls["node_count"].value
+      count: this.doNodeForm.controls['node_count'].value
     });
 
     this.formChanges.emit(this.doNodeForm);
