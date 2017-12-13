@@ -1,11 +1,11 @@
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CreateNodeModel } from "../../shared/model/CreateNodeModel";
-import { CreateClusterModel } from "../../shared/model/CreateClusterModel";
-import { DataCenterEntity } from "../../shared/entity/DatacenterEntity";
-import { ApiService } from "app/core/services/api/api.service";
+import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
+import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
+import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
+import { ApiService } from 'app/core/services/api/api.service';
 import { Subscription } from 'rxjs/Subscription';
 
 @Component({
@@ -34,16 +34,16 @@ export class SummaryComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService) { }
 
   ngOnInit() {
-    let sub = this.getSSHKeys();
+    const sub = this.getSSHKeys();
     this.subscriptions.push(sub);
-    
-    let sub2 = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
+
+    const sub2 = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
       .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel]) => {
         const provider = data[0];
         const region = data[1];
         const nodeModel = data[2];
         const clusterModel = data[3];
-  
+
         provider && (this.provider = provider);
         region && (this.region = region);
         nodeModel && (this.nodeModel = nodeModel);
@@ -56,8 +56,8 @@ export class SummaryComponent implements OnInit, OnDestroy {
     return this.api.getSSHKeys()
       .subscribe(
         result => {
-          for (let item of result) {
-            for (let key of this.clusterModel.sshKeys) {
+          for (const item of result) {
+            for (const key of this.clusterModel.sshKeys) {
               if (item.metadata.name === key) {
                 this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
               }
