@@ -18,7 +18,7 @@ export class BringyourownClusterComponent implements OnInit {
     WizardActions.setCloudSpec(
       new CloudSpec(null, null, null, byoCloudSpec, null, null)
     );
-    
+
     setTimeout(() => {
       WizardActions.nextStep();
     }, 0);

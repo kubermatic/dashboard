@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
@@ -11,14 +11,14 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ProgressComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;  
+  private subscription: Subscription;
 
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
 
   constructor() { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.subscription = this.step$.subscribe(step => {
       this.step = step;
     });
@@ -31,12 +31,12 @@ export class ProgressComponent implements OnInit, OnDestroy {
   }
 
   public getIconClass (iconStep: number) {
-    let iconClass = "fa fa-circle-o-notch fa-spin";
+    let iconClass = 'fa fa-circle-o-notch fa-spin';
 
     if (this.step > iconStep) {
-      iconClass = "fa fa-check";
+      iconClass = 'fa fa-check';
     } else if (this.step < iconStep) {
-      iconClass = "fa fa-times";
+      iconClass = 'fa fa-times';
     }
 
     return iconClass;

@@ -1,10 +1,10 @@
 
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { RouterModule, Router } from "@angular/router";
-import { ApiService } from "app/core/services/api/api.service";
+import { RouterModule, Router } from '@angular/router';
+import { ApiService } from 'app/core/services/api/api.service';
 import { MdDialogRef } from '@angular/material';
 import { CreateNodesService } from '../../core/services';
-import {DataCenterEntity} from "../../shared/entity/DatacenterEntity";
+import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
@@ -47,7 +47,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
         this.api.deleteCluster(this.clusterName).subscribe(result => {
           this.cluster = result;
           this.createNodesService.preventCreatingInitialClusterNodes();
-          NotificationActions.success("Success", `Cluster is beeing deleted`);
+          NotificationActions.success('Success', `Cluster is beeing deleted`);
 
           this.router.navigate(['/clusters']);
         });

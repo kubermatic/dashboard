@@ -1,19 +1,19 @@
 import { BreadcrumbActions } from './../redux/actions/breadcrumb.actions';
-import {Component, OnInit} from "@angular/core";
-import {Auth} from "../core/services";
-import {Router, NavigationEnd, ActivatedRoute} from "@angular/router";
-import "rxjs/add/operator/filter";
-import {ApiService} from "app/core/services/api/api.service";
+import {Component, OnInit} from '@angular/core';
+import {Auth} from '../core/services';
+import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import 'rxjs/add/operator/filter';
+import {ApiService} from 'app/core/services/api/api.service';
 
 @Component({
-  selector: "kubermatic-dashboard",
-  templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.scss"]
+  selector: 'kubermatic-dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private auth: Auth, 
-              private router: Router, 
+  constructor(private auth: Auth,
+              private router: Router,
               private activatedRoute: ActivatedRoute,
               private api: ApiService) {
     this.router.events
@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
 
         return route;
       })
-      .filter(route => route.outlet === "primary")
+      .filter(route => route.outlet === 'primary')
       .mergeMap(route => route.data)
       .subscribe((event) => {
         BreadcrumbActions.putBreadcrumb(event['title']);
@@ -37,10 +37,10 @@ export class DashboardComponent implements OnInit {
     if (this.auth.authenticated()) {
       this.api.getClusters().subscribe(result => {
         if (!result) {
-          this.router.navigate(["wizard"]);
+          this.router.navigate(['wizard']);
         }
       }, error => {
-        this.router.navigate(["wizard"]);
+        this.router.navigate(['wizard']);
       });
     }
   }

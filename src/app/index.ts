@@ -1,2 +1,2 @@
-export * from "./kubermatic.component";
-export * from "./app.module";
+export * from './kubermatic.component';
+export * from './app.module';

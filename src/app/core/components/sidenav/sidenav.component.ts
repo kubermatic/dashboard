@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {Auth} from "../../services";
-import { environment } from "../../../../environments/environment";
+import {Auth} from '../../services';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'kubermatic-sidenav',
@@ -9,7 +9,7 @@ import { environment } from "../../../../environments/environment";
 })
 export class SidenavComponent implements OnInit {
 
-  public environment : any = environment;
+  public environment: any = environment;
 
   constructor(public auth: Auth) { }
 

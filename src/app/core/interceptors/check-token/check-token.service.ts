@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { Auth } from '../../services';
 import { Router } from '@angular/router';
 
 @Injectable()
-export class CheckTokenInterceptor implements HttpInterceptor{
+export class CheckTokenInterceptor implements HttpInterceptor {
   constructor(private auth: Auth, private router: Router) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

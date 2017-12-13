@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
-import {ApiService} from "app/core/services/api/api.service";
-import {NodeEntity} from "../../shared/entity/NodeEntity";
+import {ApiService} from 'app/core/services/api/api.service';
+import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {CustomEventService} from '../../core/services';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 
@@ -38,7 +38,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public deleteNode(nodeName: string): void {
     this.onNodeRemoval(true);
     this.api.deleteClusterNode(this.clusterName, nodeName).subscribe(result => {
-      NotificationActions.success("Success", `Node removed successfully`);
+      NotificationActions.success('Success', `Node removed successfully`);
       this.customEventService.publish('onNodeDelete', nodeName);
       this.onNodeRemoval(false);
     });
