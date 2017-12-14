@@ -1,7 +1,7 @@
 import { Component, Inject} from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
 import { MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
-import {UpgradeClusterComponentData} from '../../shared/model/UpgradeClusterDialogData';
+import {UpgradeClusterComponentData} from 'app/shared/model/UpgradeClusterDialogData';
 
 
 @Component({

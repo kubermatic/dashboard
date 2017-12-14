@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddSshKeyModalComponent } from '../add-ssh-key-modal/add-ssh-key-modal.component';
 import { MdDialog, MdDialogConfig } from '@angular/material';
