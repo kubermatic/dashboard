@@ -1,9 +1,9 @@
 import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {ApiService} from 'app/core/services/api/api.service';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {MdDialogRef} from '@angular/material';
-import { InputValidationService } from '../../core/services';
+import { InputValidationService } from '../../../core/services';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({

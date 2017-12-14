@@ -1,10 +1,10 @@
 import { Provider } from 'app/shared/interfaces/provider.interface';
-import { WizardActions } from './../../redux/actions/wizard.actions';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MD_DIALOG_DATA } from '@angular/material';
-import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
+import { AddNodeModalData } from 'app/shared/model/add-node-modal-data';
 import { ApiService } from 'app/core/services/api/api.service';
 import { FormGroup } from '@angular/forms/src/model';
 

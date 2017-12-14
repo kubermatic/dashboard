@@ -1,5 +1,5 @@
-import { BringYourOwnCloudSpec } from './../../../../shared/entity/cloud/BringYourOwnCloudSpec';
-import { WizardActions } from './../../../../redux/actions/wizard.actions';
+import { BringYourOwnCloudSpec } from 'app/shared/entity/cloud/BringYourOwnCloudSpec';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { Component, OnInit } from '@angular/core';
 import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 
