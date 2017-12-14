@@ -1,5 +1,5 @@
 import { FormGroup } from '@angular/forms';
-import { WizardActions } from './../../../redux/actions/wizard.actions';
+import { WizardActions } from './../../../../redux/actions/wizard.actions';
 import { Observable } from 'rxjs/Observable';
 import { select } from '@angular-redux/store';
 import { Component, OnInit, OnDestroy } from '@angular/core';

@@ -3,29 +3,29 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'app/core/services/api/api.service';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MdDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
-import { NodeEntity } from '../shared/entity/NodeEntity';
-import { ClusterEntity } from '../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../shared/entity/DatacenterEntity';
-import { NodeProvider } from '../shared/model/NodeProviderConstants';
-import { AddNodeModalData } from '../shared/model/add-node-modal-data';
+import { NodeEntity } from 'app/shared/entity/NodeEntity';
+import { ClusterEntity } from 'app/shared/entity/ClusterEntity';
+import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
+import { NodeProvider } from 'app/shared/model/NodeProviderConstants';
+import { AddNodeModalData } from 'app/shared/model/add-node-modal-data';
 import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
-import { CustomEventService, CreateNodesService, DatacenterService } from '../core/services';
+import { CustomEventService, CreateNodesService, DatacenterService } from 'app/core/services';
 import 'rxjs/add/operator/retry';
-import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
-import { UpgradeClusterComponentData } from '../shared/model/UpgradeClusterDialogData';
+import { SSHKeyEntity } from 'app/shared/entity/SSHKeyEntity';
+import { UpgradeClusterComponentData } from 'app/shared/model/UpgradeClusterDialogData';
 
 @Component({
-  selector: 'kubermatic-cluster',
-  templateUrl: './cluster.component.html',
-  styleUrls: ['./cluster.component.scss'],
+  selector: 'kubermatic-cluster-details',
+  templateUrl: './cluster-details.component.html',
+  styleUrls: ['./cluster-details.component.scss'],
   providers: [ApiService]
 })
-export class ClusterComponent implements OnInit, OnDestroy {
+export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   private restRoot: string = environment.restRoot;
 

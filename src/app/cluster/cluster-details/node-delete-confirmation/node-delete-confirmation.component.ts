@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {ApiService} from 'app/core/services/api/api.service';
-import {NodeEntity} from '../../shared/entity/NodeEntity';
-import {CustomEventService} from '../../core/services';
+import {NodeEntity} from 'app/shared/entity/NodeEntity';
+import {CustomEventService} from 'app/core/services';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 @Component({
