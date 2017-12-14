@@ -3,17 +3,16 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import {MaterialModule} from '@angular/material';
-import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
-import { ClusterComponent } from './cluster.component';
-import { NodeComponent } from "./node/node.component";
-import {HttpModule} from "@angular/http";
-import {Auth} from "../core/services";
-import {RouterTestingModule} from "@angular/router/testing";
-import {AddNodeComponent} from "../forms/add-node/add-node.component";
+import {FormBuilder, ReactiveFormsModule, FormsModule} from '@angular/forms';
+import { ClusterDetailsComponent } from './cluster-details.component';
+import { NodeComponent } from './node/node.component';
+import {HttpModule} from '@angular/http';
+import {Auth} from '../../core/services';
+import {RouterTestingModule} from '@angular/router/testing';
 
 describe('ClusterComponent', () => {
-  let component: ClusterComponent;
-  let fixture: ComponentFixture<ClusterComponent>;
+  let component: ClusterDetailsComponent;
+  let fixture: ComponentFixture<ClusterDetailsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -25,9 +24,8 @@ describe('ClusterComponent', () => {
         RouterTestingModule,
       ],
       declarations: [
-        ClusterComponent,
-        NodeComponent,
-        AddNodeComponent,
+        ClusterDetailsComponent,
+        NodeComponent
       ],
       providers: [
         FormBuilder,
@@ -38,7 +36,7 @@ describe('ClusterComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ClusterComponent);
+    fixture = TestBed.createComponent(ClusterDetailsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

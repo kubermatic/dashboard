@@ -1,9 +1,9 @@
 import { NgRedux } from '@angular-redux/store';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AWSCloudSpec } from '../../../../shared/entity/cloud/AWSCloudSpec';
-import { InputValidationService } from '../../../../core/services';
-import { CloudSpec } from '../../../../shared/entity/ClusterEntity';
+import { AWSCloudSpec } from 'app/shared/entity/cloud/AWSCloudSpec';
+import { InputValidationService } from 'app/core/services';
+import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 

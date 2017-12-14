@@ -1,10 +1,10 @@
 import { NgRedux } from '@angular-redux/store';
-import { CloudSpec } from './../../../../shared/entity/ClusterEntity';
+import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { DigitaloceanCloudSpec } from '../../../../shared/entity/cloud/DigitialoceanCloudSpec';
+import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
 
-import { InputValidationService } from '../../../../core/services';
+import { InputValidationService } from 'app/core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 
 @Component({

@@ -4,24 +4,32 @@ import { SharedModule } from 'app/shared/shared.module';
 import { ClusterRoutingModule } from 'app/cluster/cluster-routing.module';
 import { AddNodeModule } from 'app/add-node/add-node.module';
 
-import { NodeDeleteConfirmationService } from 'app/cluster/node-delete-confirmation/node-delete-confirmation.service';
+import { NodeDeleteConfirmationService } from 'app/cluster/cluster-details/node-delete-confirmation/node-delete-confirmation.service';
 
-import { NodeComponent } from 'app/cluster/node/node.component';
+import { NodeComponent } from 'app/cluster/cluster-details/node/node.component';
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
-import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
-import { ClusterComponent } from 'app/cluster/cluster.component';
-import { NodeDeleteConfirmationComponent } from 'app/cluster/node-delete-confirmation/node-delete-confirmation.component';
-import { ClusterDeleteConfirmationComponent } from 'app/cluster/cluster-delete-confirmation/cluster-delete-confirmation.component';
+import { ClusterDetailsComponent } from 'app/cluster/cluster-details/cluster-details.component';
 import { ClusterItemComponent } from './cluster-list/cluster-item/cluster-item.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
-import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
+
+import { NodeDeleteConfirmationComponent } from 'app/cluster/cluster-details/node-delete-confirmation/node-delete-confirmation.component';
+import { ClusterDeleteConfirmationComponent } from 'app/cluster/cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
+import { AddNodeModalComponent } from './cluster-details/add-node-modal/add-node-modal.component';
+import { UpgradeClusterComponent } from './cluster-details/upgrade-cluster/upgrade-cluster.component';
 
 const components: any[] = [
-    ClusterComponent,
+    ClusterDetailsComponent,
     NodeComponent,
     ClusterListComponent,
     ClusterItemComponent,
     ClusterHealthStatusComponent,
+];
+
+const entryComponents: any[] = [
+    ClusterDeleteConfirmationComponent,
+    NodeDeleteConfirmationComponent,
+    UpgradeClusterComponent,
+    AddNodeModalComponent
 ];
 
 @NgModule({
@@ -32,19 +40,13 @@ const components: any[] = [
     ],
     declarations: [
         ...components,
-        ClusterDeleteConfirmationComponent,
-        NodeDeleteConfirmationComponent,
-        UpgradeClusterComponent,
-        AddNodeModalComponent
+        ...entryComponents
     ],
     exports: [
         ...components
     ],
     entryComponents: [
-        ClusterDeleteConfirmationComponent,
-        NodeDeleteConfirmationComponent,
-        UpgradeClusterComponent,
-        AddNodeModalComponent
+        ...entryComponents
     ],
     providers: [
         NodeDeleteConfirmationService
