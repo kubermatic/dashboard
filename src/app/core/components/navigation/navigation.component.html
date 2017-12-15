@@ -26,8 +26,8 @@
       <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
     </div>
     <div fxFlex="20" fxFlexOffset="50px"  fxFlexOffset.xs="0">
-      <span md-button class="mat-button km-logout" *ngIf="auth.authenticated()" (click)="logout()"><i class="fa fa-lock"></i> Logout</span>
-      <a md-button class="mat-button km-login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}"> <i class="fa fa-unlock-alt"></i> Login</a>
+      <span md-button class="mat-button km-logout" *ngIf="auth.authenticated()" (click)="logout()"><img src="/assets/images/logout-icon.svg" alt="Logout icon"> Logout</span>
+      <a md-button class="mat-button km-login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}"><img src="/assets/images/login-icon.svg" alt="Login icon"> Login</a>
     </div>
   </nav>
 </header>
