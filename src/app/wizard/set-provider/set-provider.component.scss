@@ -1,34 +1,33 @@
 $wizard-box-content-cloud-logo-size: 100px;
 $wizard-box-content-cloud-margin-top: 50px;
 
-.mat-card {
-  .mat-card-header {
-    padding: 0;
-    margin-bottom: 10px;
-  }
+.mat-card-header {
+  padding: 0;
+  margin-bottom: 10px;
+}
 
-  .mat-card-header-text {
-    margin: 0;
-  }
+.mat-card-header-text {
+  margin: 0;
+}
 
-  .mat-card-title {
-    margin: 0;
-    h4 {
-      font-weight: 400;
-      margin: 10px 0;
-      font-size: 18px;
-      color: #444D58;
-    }
+.mat-card-title {
+  margin: 0;
+  h4 {
+    font-weight: 400;
+    margin: 10px 0;
+    font-size: 18px;
+    color: #444D58;
   }
+}
 
-  .mat-card-content {
-    form {
-      padding-top: 10px;
-    }
-    p {
-      color: #444D58;
-      margin: 0 8px 5px;
-    }
+.mat-card-content {
+  margin-bottom: 0;
+  form {
+    padding-top: 10px;
+  }
+  p {
+    color: #444D58;
+    margin: 0 8px 5px;
   }
 }
 

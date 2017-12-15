@@ -1,16 +1,16 @@
 <md-card-header>
   <md-card-title>
-    <h4>Name your Kubernetes cluster</h4>
+    <h4>Name your Cluster</h4>
   </md-card-title>
 </md-card-header>
 <md-card-content>
-  <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</p>
+  <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember</p>
   <form [connect]="['wizard', 'clusterNameForm']" [formGroup]="clusterNameForm" novalidate fxLayout="column">
     <md-input-container fxFlex>
-      <input id="name" mdInput formControlName="name" type="text" placeholder="Name" title="name">
+      <input id="name" mdInput formControlName="name" type="text" placeholder="Enter a cluster name" title="name">
     </md-input-container>
     <div fxFlex>
-      <button type="button" md-raised-button (click)="generateName()">Generate name</button>
+      <button type="button" (click)="generateName()">Generate name</button>
     </div>
   </form>
 </md-card-content>
