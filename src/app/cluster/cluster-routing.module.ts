@@ -3,22 +3,21 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthGuard } from './../core/services/auth/auth.guard';
 
-import { ClusterComponent } from 'app/cluster/cluster.component';
+import { ClusterDetailsComponent } from 'app/cluster/cluster-details/cluster-details.component';
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
-
 
 const routes: Routes = [
     {
         path: '',
         component: ClusterListComponent,
         canActivate: [AuthGuard],
-        data: { title: "Manage Clusters" }
+        data: { title: 'Manage Clusters' }
     },
     {
         path: ':clusterName',
-        component: ClusterComponent,
+        component: ClusterDetailsComponent,
         canActivate: [AuthGuard],
-        data: { title: "Cluster details" }
+        data: { title: 'Cluster details' }
     }
 ];
 

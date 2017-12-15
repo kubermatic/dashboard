@@ -13,13 +13,13 @@ export class WizardActions extends ActionBase {
     static readonly NEXT_STEP = WizardActions.getActType('NEXT_STEP');
     static readonly PREV_STEP = WizardActions.getActType('PREV_STEP');
     static readonly GO_TO_STEP = WizardActions.getActType('GO_TO_STEP');
-    static readonly CLEAR_STORE = WizardActions.getActType('CLEAR_STORE'); 
-    static readonly SET_CLOUD_SPEC = WizardActions.getActType('SET_CLOUD_SPEC'); 
+    static readonly CLEAR_STORE = WizardActions.getActType('CLEAR_STORE');
+    static readonly SET_CLOUD_SPEC = WizardActions.getActType('SET_CLOUD_SPEC');
     static readonly SET_CLUSTER_MODEL = WizardActions.getActType('SET_CLUSTER_MODEL');
     static readonly SET_NODE_MODEL = WizardActions.getActType('SET_NODE_MODEL');
     static readonly SET_VALIDATION = WizardActions.getActType('SET_VALIDATION');
-    static readonly RESET_FORMS = WizardActions.getActType('RESET_FORMS');    
-    
+    static readonly RESET_FORMS = WizardActions.getActType('RESET_FORMS');
+
     @dispatch()
     static nextStep(): Action {
         return { type: WizardActions.NEXT_STEP };

@@ -9,6 +9,9 @@ all: install run
 install:
 	@$(CC) install
 
+lint:
+	@$(CC) run lint
+
 run:
 	@$(CC) run serve:proxy
 

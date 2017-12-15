@@ -27,7 +27,7 @@ export class AddNodeComponent implements OnInit {
       data.count,
       data.nodeSpec
     );
-    
+
     this.nodeModelChanges.emit(nodeModel);
   }
 

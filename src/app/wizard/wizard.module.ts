@@ -1,11 +1,11 @@
-import { ProviderNodeComponent } from './provider/node/node.component';
-import { OpenstackClusterComponent } from './provider/cluster/openstack/openstack.component';
-import { ProviderClusterComponent } from './provider/cluster/cluster.component';
+import { ProviderNodeComponent } from './set-settings/provider/node/node.component';
+import { OpenstackClusterComponent } from './set-settings/provider/cluster/openstack/openstack.component';
+import { ProviderClusterComponent } from './set-settings/provider/cluster/cluster.component';
 import { SharedModule } from 'app/shared/shared.module';
-import { SshKeyFormFieldComponent } from './ssh-key-form-field/ssh-key-form-field.component';
+import { SshKeyFormFieldComponent } from './set-settings/ssh-key-form-field/ssh-key-form-field.component';
 import { NgModule } from '@angular/core';
 import { WizardComponent } from 'app/wizard/wizard.component';
-import { AddSshKeyModalComponent } from 'app/wizard/add-ssh-key-modal/add-ssh-key-modal.component';
+import { AddSshKeyModalComponent } from 'app/wizard/set-settings/add-ssh-key-modal/add-ssh-key-modal.component';
 import { NavigationButtonsComponent } from 'app/wizard/navigation-buttons/navigation-buttons.component';
 import { ProgressComponent } from 'app/wizard/progress/progress.component';
 import { SetClusterNameComponent } from 'app/wizard/set-cluster-name/set-cluster-name.component';
@@ -13,10 +13,11 @@ import { SetDatacenterComponent } from 'app/wizard/set-datacenter/set-datacenter
 import { SetProviderComponent } from 'app/wizard/set-provider/set-provider.component';
 import { SetSettingsComponent } from 'app/wizard/set-settings/set-settings.component';
 import { SummaryComponent } from 'app/wizard/summary/summary.component';
-import { DigitaloceanClusterComponent } from './provider/cluster/digitalocean/digitalocean.component';
-import { AWSClusterComponent } from './provider/cluster/aws/aws.component';
+import { DigitaloceanClusterComponent } from './set-settings/provider/cluster/digitalocean/digitalocean.component';
+import { AWSClusterComponent } from './set-settings/provider/cluster/aws/aws.component';
 import { WizardRoutingModule } from 'app/wizard/wizard-routing.module';
 import { AddNodeModule } from 'app/add-node/add-node.module';
+import { BringyourownClusterComponent } from 'app/wizard/set-settings/provider/cluster/bringyourown/bringyourown.component';
 
 const components: any[] = [
     WizardComponent,
@@ -33,7 +34,8 @@ const components: any[] = [
     OpenstackClusterComponent,
     DigitaloceanClusterComponent,
     AWSClusterComponent,
-    ProviderNodeComponent
+    ProviderNodeComponent,
+    BringyourownClusterComponent
 ];
 
 @NgModule({

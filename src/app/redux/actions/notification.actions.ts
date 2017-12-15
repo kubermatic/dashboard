@@ -3,12 +3,12 @@ import { Action } from '../../shared/interfaces/action.interface';
 
 import { dispatch } from '@angular-redux/store';
 
-import { NotificationToast, NotificationToastType } from "../reducers/notification";
+import { NotificationToast, NotificationToastType } from '../reducers/notification';
 
 export class NotificationActions extends ActionBase {
     static readonly className: string = 'NotificationActions';
     static readonly PUSH_NOTIFICATION = NotificationActions.getActType('PUSH_NOTIFICATION');
-    
+
     @dispatch()
     static success(title: string, content: string): Action {
         return {

@@ -1,11 +1,10 @@
-import {Component, OnInit, Input} from "@angular/core";
-
-import {ClusterEntity} from "../../../shared/entity/ClusterEntity";
+import {Component, OnInit, Input} from '@angular/core';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 
 @Component({
-  selector: "kubermatic-cluster-item",
-  templateUrl: "./cluster-item.component.html",
-  styleUrls: ["./cluster-item.component.scss"]
+  selector: 'kubermatic-cluster-item',
+  templateUrl: './cluster-item.component.html',
+  styleUrls: ['./cluster-item.component.scss']
 })
 export class ClusterItemComponent implements OnInit {
   @Input() clusters: ClusterEntity;

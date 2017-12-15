@@ -2,4 +2,4 @@ import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation
 
 export {
     MobileNavigationComponent
-}
+};

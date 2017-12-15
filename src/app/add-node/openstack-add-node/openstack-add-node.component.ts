@@ -15,6 +15,7 @@ import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
   styleUrls: ['./openstack-add-node.component.scss']
 })
 export class OpenstackAddNodeComponent implements OnInit {
+
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
   @Input() public connect: string[];
@@ -22,7 +23,7 @@ export class OpenstackAddNodeComponent implements OnInit {
   public osNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.Openstack;
 
-  constructor(private fb: FormBuilder, 
+  constructor(private fb: FormBuilder,
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
@@ -43,7 +44,7 @@ export class OpenstackAddNodeComponent implements OnInit {
           node_count: nodeForm.node_count,
           node_size: nodeForm.node_size
         };
-  
+
         this.osNodeForm.setValue(formValue);
       } else {
         this.osNodeForm.patchValue({node_count: 3});
@@ -58,15 +59,15 @@ export class OpenstackAddNodeComponent implements OnInit {
       null,
       null,
       new OpenstackNodeSpec(
-        this.osNodeForm.controls["node_size"].value,
-        this.osNodeForm.controls["os_node_image"].value
+        this.osNodeForm.controls['node_size'].value,
+        this.osNodeForm.controls['os_node_image'].value
       ),
       null
     );
 
     this.nodeSpecChanges.emit({
       nodeSpec,
-      count: this.osNodeForm.controls["node_count"].value
+      count: this.osNodeForm.controls['node_count'].value
     });
 
     this.formChanges.emit(this.osNodeForm);

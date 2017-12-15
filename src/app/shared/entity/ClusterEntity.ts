@@ -1,10 +1,10 @@
-import {DigitaloceanCloudSpec} from "./cloud/DigitialoceanCloudSpec";
-import {BringYourOwnCloudSpec} from "./cloud/BringYourOwnCloudSpec";
-import {AWSCloudSpec} from "./cloud/AWSCloudSpec";
-import {MetadataEntity} from "./MetadataEntity";
-import {OpenstackCloudSpec} from "./cloud/OpenstackCloudSpec";
-import {BareMetalCloudSpec} from "./cloud/BareMetalCloudSpec";
-import {NodeProvider} from "../model/NodeProviderConstants";
+import {DigitaloceanCloudSpec} from './cloud/DigitialoceanCloudSpec';
+import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
+import {AWSCloudSpec} from './cloud/AWSCloudSpec';
+import {MetadataEntity} from './MetadataEntity';
+import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
+import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
+import {NodeProvider} from '../model/NodeProviderConstants';
 
 export class ClusterEntity {
   metadata: MetadataEntity;
@@ -23,11 +23,11 @@ export class ClusterEntity {
   }
 
   isRunning(): boolean {
-    return this.status.phase == "Running";
+    return this.status.phase === 'Running';
   }
 
   isFailed(): boolean {
-    return this.status.phase == 'Failed';
+    return this.status.phase === 'Failed';
   }
 
   get provider(): string {
@@ -48,7 +48,7 @@ export class ClusterEntity {
         return NodeProvider.BAREMETAL;
       }
     }
-    return ""
+    return '';
   }
 }
 
@@ -80,13 +80,16 @@ export class ClusterSpec {
   cloud: CloudSpec;
   humanReadableName: string;
   masterVersion: string;
+  seedDatacenterName: string;
 
   constructor(cloud: CloudSpec,
               humanReadableName: string,
-              masterVersion: string,) {
+              masterVersion: string,
+              seedDatacenterName: string) {
     this.cloud = cloud;
     this.humanReadableName = humanReadableName;
     this.masterVersion = masterVersion;
+    this.seedDatacenterName = seedDatacenterName;
   }
 }
 

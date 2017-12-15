@@ -1,5 +1,5 @@
 import { NotificationActions } from './../actions/notification.actions';
-import { Action } from "../../shared/interfaces/action.interface";
+import { Action } from '../../shared/interfaces/action.interface';
 import { Reducer } from 'redux';
 
 export enum NotificationToastType {

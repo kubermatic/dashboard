@@ -8,8 +8,8 @@ import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-no
 import { AddNodeFormComponent } from './add-node-form/add-node-form.component';
 
 const components: any[] = [
-  AddNodeComponent, 
-  AwsAddNodeComponent, 
+  AddNodeComponent,
+  AwsAddNodeComponent,
   DigitaloceanAddNodeComponent,
   OpenstackAddNodeComponent,
   AddNodeFormComponent

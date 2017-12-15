@@ -12,14 +12,15 @@ import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
   styleUrls: ['./aws-add-node.component.scss']
 })
 export class AwsAddNodeComponent implements OnInit {
+
   @Input() public connect: string[];
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();  
+  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
-  
-  public awsNodeForm: FormGroup;  
-  public nodeSize: any[] = NodeInstanceFlavors.AWS;  
+
+  public awsNodeForm: FormGroup;
+  public nodeSize: any[] = NodeInstanceFlavors.AWS;
   public nodeSpec: NodeCreateSpec;
-  
+
   constructor(private fb: FormBuilder,
               private ngRedux: NgRedux<any>) { }
 
@@ -35,7 +36,7 @@ export class AwsAddNodeComponent implements OnInit {
     if (Array.isArray(this.connect) && this.connect.length) {
       const reduxStore = this.ngRedux.getState();
       const nodeForm = reduxStore.wizard.nodeForm;
-      let formValue;
+
       if (nodeForm) {
         const formValue = {
           node_count: nodeForm.node_count,
@@ -44,9 +45,9 @@ export class AwsAddNodeComponent implements OnInit {
           ami: nodeForm.ami,
           aws_nas: nodeForm.aws_nas
         };
-  
+
         this.awsNodeForm.setValue(formValue);
-      } else { 
+      } else {
         this.awsNodeForm.patchValue({node_count: 3});
       }
     }
@@ -58,12 +59,12 @@ export class AwsAddNodeComponent implements OnInit {
     const nodeSpec = new NodeCreateSpec(
       null,
       new AWSNodeSpec(
-        this.awsNodeForm.controls["node_size"].value,
-        this.awsNodeForm.controls["root_size"].value,
+        this.awsNodeForm.controls['node_size'].value,
+        this.awsNodeForm.controls['root_size'].value,
         // Can we implement at some point
         // this.awsForm.controls["volume_type"].value,
-        "gp2",
-        this.awsNodeForm.controls["ami"].value
+        'gp2',
+        this.awsNodeForm.controls['ami'].value
       ),
       null,
       null
@@ -71,7 +72,7 @@ export class AwsAddNodeComponent implements OnInit {
 
     this.nodeSpecChanges.emit({
       nodeSpec,
-      count: this.awsNodeForm.controls["node_count"].value
+      count: this.awsNodeForm.controls['node_count'].value
     });
 
     this.formChanges.emit(this.awsNodeForm);

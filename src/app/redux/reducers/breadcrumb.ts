@@ -1,13 +1,13 @@
-import { Action } from "../../shared/interfaces/action.interface";
+import { Action } from '../../shared/interfaces/action.interface';
 import { Reducer } from 'redux';
-import { BreadcrumbActions } from "../actions/breadcrumb.actions";
+import { BreadcrumbActions } from '../actions/breadcrumb.actions';
 
 export interface Breadcrumb {
   crumb: string;
 }
 
 export const INITIAL_STATE: Breadcrumb = {
-  crumb: "",
+  crumb: '',
 };
 
 export const BreadcrumbReducer: Reducer<Breadcrumb> = (state: Breadcrumb = INITIAL_STATE, action: Action): Breadcrumb => {

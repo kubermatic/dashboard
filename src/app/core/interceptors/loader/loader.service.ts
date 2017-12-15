@@ -1,10 +1,10 @@
 import { Injectable} from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/do';
 
 @Injectable()
-export class LoaderInterceptor implements HttpInterceptor{
+export class LoaderInterceptor implements HttpInterceptor {
   private progressBarElement: HTMLElement;
 
   constructor() {
@@ -15,7 +15,7 @@ export class LoaderInterceptor implements HttpInterceptor{
     this.progressBarElement.style.visibility = visibility;
   }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {    
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.setProgressBarVisibility('visible');
 
     return next
