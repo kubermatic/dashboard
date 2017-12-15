@@ -18,7 +18,7 @@ export class KubermaticComponent implements OnInit {
 
   public constructor(
     private sidenavService: SidenavService,
-    private auth: Auth,
+    public auth: Auth,
     private ngRedux: NgRedux<Store>,
     private devTools: DevToolsExtension,
   ) {
