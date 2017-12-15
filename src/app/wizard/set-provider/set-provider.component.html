@@ -4,8 +4,9 @@
   </md-card-title>
 </md-card-header>
 <md-card-content>
-  <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic.
-    Your nodes can be placed in any cloud you like, but for performance reasons as near to the master as possible.
+  <p>Choose a cloud provider for your Kubernetes nodes to be deployed by 
+    Kubermatic. Your nodes can be placed in any cloud you like. 
+    For performance reasons choose the place as close to the master as possible.
   </p>
   <form [connect]="['wizard', 'setProviderForm']"
         [formGroup]="setProviderForm"
@@ -16,7 +17,7 @@
         >
     <ng-container *ngFor="let cloud of supportedNodeProviders; let i = index;">
       <ng-container *ngIf="datacenters[cloud]?.length">
-        <label fxFlex="150px"
+        <label fxFlex="90px"
               fxLayoutAlign="center center"
               class="wizard-box-provider"
               style="float: left;"

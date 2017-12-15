@@ -1,9 +1,10 @@
-$wizard-box-content-cloud-logo-size: 100px;
+$wizard-box-content-cloud-logo-size: 70px;
 $wizard-box-content-cloud-margin-top: 50px;
 
 .mat-card-header {
   padding: 0;
   margin-bottom: 10px;
+  border: none;
 }
 
 .mat-card-header-text {
@@ -13,7 +14,7 @@ $wizard-box-content-cloud-margin-top: 50px;
 .mat-card-title {
   margin: 0;
   h4 {
-    font-weight: 400;
+    font-weight: 600;
     margin: 10px 0;
     font-size: 18px;
     color: #444D58;
@@ -24,10 +25,14 @@ $wizard-box-content-cloud-margin-top: 50px;
   margin-bottom: 0;
   form {
     padding-top: 10px;
+    margin-left: 0;
+    margin-right: 0;
   }
   p {
-    color: #444D58;
-    margin: 0 8px 5px;
+    color: #BDC6D1;
+    font-size: 12px;
+    max-width: 505px;
+    margin: 0;
   }
 }
 
@@ -41,7 +46,7 @@ $wizard-box-content-cloud-margin-top: 50px;
   img.cloud-logo {
     width: $wizard-box-content-cloud-logo-size;
     margin-top: $wizard-box-content-cloud-margin-top;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     position: relative;
     top: 20px;
     bottom: 0;
@@ -54,7 +59,7 @@ $wizard-box-content-cloud-margin-top: 50px;
   background: #fff;
   border: 1px solid #E3E8EC;
   cursor: pointer;
-  min-height: 140px;
+  min-height: 90px;
 }
 
 .wizard-box-provider [disabled] {
@@ -62,25 +67,20 @@ $wizard-box-content-cloud-margin-top: 50px;
 }
 
 .wizard-box-provider.selected {
-  background-color: #d5e3f5;
   cursor: default;
-  border: 1px solid #03a9f4;
+  border: 1px solid #0288D1;
 }
 
 .wizard-box-provider.selected:hover {
-  background-color: #d5e3f5;
   cursor: default;
-  border: 1px solid #03a9f4;
+  border: 1px solid #0288D1;
 }
 
 .wizard-box-provider:hover {
-  border: 1px solid #03a9f4;
-  background-color: #d5e3f5;
-}
-
-.wizard-box-provider:not([disabled]):not(.selected):hover {
+  border: 1px solid #0288D1;
   background: #f7f8f9;
 }
+
 
 img.cloud-logo {
   width: $wizard-box-content-cloud-logo-size ;
