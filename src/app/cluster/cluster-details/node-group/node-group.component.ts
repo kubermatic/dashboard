@@ -1,12 +1,12 @@
-import { Component, OnInit, Input} from "@angular/core";
-import { NodeEntity } from "../../../shared/entity/NodeEntity";
+import { Component, OnInit, Input} from '@angular/core';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
-import {NodeDeleteConfirmationComponent} from "../node-delete-confirmation/node-delete-confirmation.component";
+import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
 
 @Component({
-  selector: "kubermatic-node-group",
-  templateUrl: "node-group.component.html",
-  styleUrls: ["node-group.component.scss"]
+  selector: 'kubermatic-node-group',
+  templateUrl: 'node-group.component.html',
+  styleUrls: ['node-group.component.scss']
 })
 
 export class NodeGroupComponent implements OnInit {
@@ -14,7 +14,7 @@ export class NodeGroupComponent implements OnInit {
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
-  public conditionsMessage: string = "";
+  public conditionsMessage: string = '';
   public nodeRemoval: boolean = false;
   public node: NodeEntity;
   // public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
@@ -45,7 +45,7 @@ export class NodeGroupComponent implements OnInit {
 
   getAccordionState(group) {
     return !!this.stateOfTheAccordion[group] ? true : false;
-  };
+  }
 
   onNodeGroupToggle (expanded, group) {
     this.stateOfTheAccordion[group] = expanded;
@@ -57,7 +57,7 @@ export class NodeGroupComponent implements OnInit {
   }
 
   public deleteNodeDialog(node): void {
-    let dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
+    const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.nodeName = node.metadata.name;
     dialogRef.componentInstance.nodeUID = node.metadata.uid;
     dialogRef.componentInstance.clusterName = this.clusterName;
@@ -70,34 +70,34 @@ export class NodeGroupComponent implements OnInit {
   }
 
   public getNodeHealth(state, conditions) {
-    const green = "fa fa-circle green";
-    const red = "fa fa-circle-o red";
-    const orange = "fa fa-spin fa-circle-o-notch orange";
-    const orangeSpinner = "fa fa-spin fa-circle-o-notch orange";
+    const green = 'fa fa-circle green';
+    const red = 'fa fa-circle-o red';
+    const orange = 'fa fa-spin fa-circle-o-notch orange';
+    const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
-    let kubeMachineState = state;
+    const kubeMachineState = state;
 
     if (conditions) {
-      this.conditionsMessage = "";
+      this.conditionsMessage = '';
       for (let entry of conditions) {
-        if (entry.status == "True" && entry.type !== "Ready") {
+        if (entry.status === 'True' && entry.type !== 'Ready') {
           this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
         }
       }
     }
 
-    if (this.conditionsMessage !== "" && kubeMachineState == "running") {
+    if (this.conditionsMessage !== '' && kubeMachineState === 'running') {
       return red;
     }
 
     switch (kubeMachineState) {
-      case "pending":
+      case 'pending':
         return orange;
-      case "provisioning":
+      case 'provisioning':
         return orangeSpinner;
-      case "launching":
+      case 'launching':
         return orangeSpinner;
-      case "running":
+      case 'running':
         return green;
       default:
         return red;
