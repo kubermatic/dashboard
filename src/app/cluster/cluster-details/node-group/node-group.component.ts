@@ -79,7 +79,7 @@ export class NodeGroupComponent implements OnInit {
 
     if (conditions) {
       this.conditionsMessage = '';
-      for (let entry of conditions) {
+      for (const entry of conditions) {
         if (entry.status === 'True' && entry.type !== 'Ready') {
           this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
         }
@@ -106,10 +106,10 @@ export class NodeGroupComponent implements OnInit {
   }
 
   public getFormattedNodeMemory(memory): string {
-    let memRE = /([0-9]+)([a-zA-Z])i/;
-    let nodeAllocatable = memory;
+    const memRE = /([0-9]+)([a-zA-Z])i/;
+    const nodeAllocatable = memory;
 
-    let resRE = nodeAllocatable.match(memRE);
+    const resRE = nodeAllocatable.match(memRE);
 
     let nodeCapacity;
     const prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];

@@ -68,11 +68,11 @@ export class NodeComponent implements OnInit {
     const orange = 'a fa-spin fa-circle-o-notch orange';
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
-    let kubeMachineState = node.metadata.annotations['node.k8s.io/state'];
+    const kubeMachineState = node.metadata.annotations['node.k8s.io/state'];
 
-    if(node.status.conditions) {
+    if (node.status.conditions) {
       this.conditionsMessage = '';
-      for (let entry of node.status.conditions) {
+      for (const entry of node.status.conditions) {
         if (entry.status === 'True' && entry.type !== 'Ready') {
           this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
         }
@@ -99,10 +99,10 @@ export class NodeComponent implements OnInit {
   }
 
   public getFormattedNodeMemory(memory): string {
-    let memRE = /([0-9]+)([a-zA-Z])i/;
-    let nodeAllocatable = memory;
+    const memRE = /([0-9]+)([a-zA-Z])i/;
+    const nodeAllocatable = memory;
 
-    let resRE = nodeAllocatable.match(memRE);
+    const resRE = nodeAllocatable.match(memRE);
 
     let nodeCapacity;
     const prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
