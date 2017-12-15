@@ -8,7 +8,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 })
 export class ClusterItemComponent implements OnInit {
   @Input() clusters: ClusterEntity;
-  @Input() index: number
+  @Input() index: number;
 
   constructor() {}
 

@@ -105,16 +105,18 @@ export class NodeGroupComponent implements OnInit {
 
   }
 
-  public getNodeCapacity(memory): string {
+  public getFormattedNodeMemory(memory): string {
     let memRE = /([0-9]+)([a-zA-Z])i/;
     let nodeAllocatable = memory;
+
     let resRE = nodeAllocatable.match(memRE);
+
     let nodeCapacity;
-    let prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
+    const prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
     let i = 0;
 
     if (resRE) {
-      let ki = parseInt(resRE[1]);
+      let ki = parseInt(resRE[1], 10);
 
       do {
         ki /= 1024;

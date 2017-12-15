@@ -21,7 +21,7 @@
                 {{group.nodes.kubeletVersion}}
               </div>
               <div fxFlex="25%">
-                <span *ngIf="!!group.nodes.allocatable"> {{group.nodes.allocatable.cpu}} CPU, {{getNodeCapacity(group.nodes.allocatable.memory)}}</span>
+                <span *ngIf="!!group.nodes.allocatable"> {{group.nodes.allocatable.cpu}} CPU, {{getFormattedNodeMemory(group.nodes.allocatable.memory)}}</span>
               </div>
 
           </md-panel-title>
