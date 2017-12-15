@@ -122,3 +122,8 @@ md-card-header.km-card-list-header.mat-card-header {
  .mat-expansion-panel-body {
    padding: 0 !important;
  }
+
+
+ /deep/ .mat-expansion-panel-body {
+   padding: 0 !important;
+ }

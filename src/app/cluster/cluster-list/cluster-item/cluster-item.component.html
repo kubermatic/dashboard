@@ -1,16 +1,15 @@
 
 <div *ngIf="clusters" >
 
+
   <div *ngFor="let cluster of clusters; let i = index"  class="km-card-list-content">
-    <div fxLayout [routerLink]="['/cluster', cluster.metadata.name]" class="km-card-list-content-item">
+    <div fxLayout [routerLink]="['/clusters/', cluster.metadata.name]" class="km-card-list-content-item">
       <div fxFlex="3%" fxFlex.sm="3%" fxHide.xs>{{i + 1}}</div>
       <div fxFlex="38%" fxFlex.xs="40%">
         <span>
           <img fxHide.xs src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30" />
           <p fxHide.gt-sm >{{getShortClusterName(cluster.spec.humanReadableName)}}</p>
           <p fxHide.lt-md >{{this.cluster.spec.humanReadableName}}</p>
-
-
         </span>
       </div>
       <div fxFlex="16%" fxFlex.sm="20.66%" fxFlex.xs="25%">
