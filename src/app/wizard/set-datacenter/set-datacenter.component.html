@@ -6,7 +6,7 @@
 <md-card-content>
   <p>This is the cloud provider the Kubernetes nodes are deployed in by Kubermatic. Your nodes can be placed in any cloud you
     like, but for performance reasons as near to the master as possible.</p>
-  <form *ngIf="datacenters" [connect]="['wizard', 'setDatacenterForm']" [formGroup]="setDatacenterForm" fxLayoutAlign="center"
+  <form *ngIf="datacenters" [connect]="['wizard', 'setDatacenterForm']" [formGroup]="setDatacenterForm" fxLayoutAlign="left"
     fxLayout="row wrap">
     <label class="wizard-box" 
            fxFlex="90px" 
