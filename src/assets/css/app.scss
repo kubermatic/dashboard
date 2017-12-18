@@ -6,7 +6,7 @@ html, body {
   position: absolute;
   @include titillium-font;
 
-  background-color: #EFF3F8;
+  background-color: #F1F1F1;
   color: #444D58;
 }
 h2 {
@@ -36,10 +36,10 @@ h2 {
 
 md-card-header {
   border-bottom: 1px solid #E3E8EC;
-  padding-bottom: 10px;
+  //padding-bottom: 10px;
 
   &.km-card-list-header.mat-card-header {
-    margin-bottom: 10px;
+    //margin-bottom: 10px;
   }
 
   .mat-card-title {
@@ -142,10 +142,28 @@ md-card-header {
   background-color: transparent !important;
 }
 
-.mat-sidenav {
-  background-color: #444D58 !important;
-}
 
 .md-dialog-content {
   margin-top: 20px;
+}
+
+.mat-raised-button {
+  height: 30px;
+  line-height: 16px !important;
+  font-weight: 500 !important;
+  box-shadow: 0px 1px 4px rgba(68, 77, 88, 0.5) !important;
+}
+
+.mat-card {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+.button.white {
+  color: #0288d1;
+  height: 30px;
+  line-height: 30px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
 }

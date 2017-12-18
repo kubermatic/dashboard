@@ -16,6 +16,7 @@ import { AddNodeModalData } from 'app/shared/model/add-node-modal-data';
 import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
 import { CustomEventService, CreateNodesService, DatacenterService } from 'app/core/services';
 import 'rxjs/add/operator/retry';
+
 import { SSHKeyEntity } from 'app/shared/entity/SSHKeyEntity';
 import { UpgradeClusterComponentData } from 'app/shared/model/UpgradeClusterDialogData';
 
@@ -42,6 +43,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public sshKeys: SSHKeyEntity[] = [];
   private upgradesList: string[] = [];
   private gotUpgradesList: boolean;
+  public groupedNodes: object[];
+  public stateOfTheAccordion: object[];
 
   constructor(
     private customEventService: CustomEventService,

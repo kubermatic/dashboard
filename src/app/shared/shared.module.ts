@@ -25,7 +25,8 @@ import {
     MdSliderModule,
     OverlayModule,
     MdSlideToggleModule,
-    MdProgressBarModule
+    MdProgressBarModule,
+    MdExpansionModule
 } from '@angular/material';
 import 'hammerjs';
 import { NgReduxFormModule } from '@angular-redux/form';
@@ -56,6 +57,7 @@ const modules: Array<any> = [
     OverlayModule,
     MdSlideToggleModule,
     MdProgressBarModule,
+    MdExpansionModule,
     ClipboardModule,
     NgReduxFormModule
 ];
