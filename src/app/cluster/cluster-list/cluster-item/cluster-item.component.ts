@@ -7,17 +7,14 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
   styleUrls: ['./cluster-item.component.scss']
 })
 export class ClusterItemComponent implements OnInit {
-  @Input() cluster: ClusterEntity;
+  @Input() clusters: ClusterEntity;
   @Input() index: number;
 
   constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  public getShortClusterName(): string {
-    const name = this.cluster.spec.humanReadableName;
-
+  public getShortClusterName(name: string): string {
     return name.length > 12 ?  name.slice(0, 12) + '...' : name;
   }
 }

@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { NgRedux, DevToolsExtension  } from '@angular-redux/store';
@@ -6,6 +5,8 @@ import { Store, INITIAL_STATE, StoreReducer } from './redux/store';
 
 import { MdSidenav } from '@angular/material';
 import { SidenavService } from './core/components/sidenav/sidenav.service';
+
+import { Auth } from './core/services';
 
 @Component({
   selector: 'kubermatic-root',
@@ -17,6 +18,7 @@ export class KubermaticComponent implements OnInit {
 
   public constructor(
     private sidenavService: SidenavService,
+    public auth: Auth,
     private ngRedux: NgRedux<Store>,
     private devTools: DevToolsExtension,
   ) {
