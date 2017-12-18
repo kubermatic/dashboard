@@ -24,25 +24,34 @@ export class ProgressComponent implements OnInit, OnDestroy {
     });
   }
 
-  public gotoStep(clickStep: number) {
+  public gotoStep(clickStep: number): void {
     if (this.step >= clickStep) {
       WizardActions.goToStep(clickStep);
     }
   }
 
-  public getIconClass (iconStep: number) {
+  public getIconClass(iconStep: number): string {
     let iconClass = 'fa fa-circle-o-notch fa-spin';
 
     if (this.step > iconStep) {
       iconClass = 'fa fa-check';
     } else if (this.step < iconStep) {
-      iconClass = 'fa fa-times';
+      iconClass = '';
     }
 
     return iconClass;
   }
 
-  public getCurser (curserStep: number) {
+  public getTitleClass(step: number): string {
+    let titleClass = '';
+
+    if (this.step < step) {
+      titleClass = 'title-unchecked';
+    }
+    return titleClass;
+  }
+
+  public getCurser (curserStep: number): string {
     let curser = 'default';
 
     if (this.step > curserStep) {
