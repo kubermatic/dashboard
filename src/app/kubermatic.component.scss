@@ -2,8 +2,14 @@
   margin: 0;
   padding: 0;
   width: 100%;
-  height: 100%;
+  top: 0;
+  bottom: 0;
+  padding-top: 45px;
   position: absolute;
+}
+
+md-sidenav {
+  padding-top: 45px;
 }
 
 .km-main .km-content{
