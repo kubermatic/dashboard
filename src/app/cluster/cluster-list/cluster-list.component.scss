@@ -15,10 +15,10 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 }
 
 .km-card-list {
+  margin-top: 15px;
   padding-top: 10px;
   padding-bottom: 10px;
   margin-bottom: 50px;
-
   .km-card-list-header {
     height: 30px;
     padding-bottom: 0;
@@ -60,4 +60,4 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   .btn-text-default {
     display: none;
   }
-}  
+}

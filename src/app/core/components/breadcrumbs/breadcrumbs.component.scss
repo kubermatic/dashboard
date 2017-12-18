@@ -14,9 +14,14 @@
     li {
       font-size: 14px;
       float: left;
+      height: 36px;
+      line-height: 36px;
+      cursor: pointer;
+
       &:after {
         content: "/";
         padding: 0 5px;
+        color: #BCC5D0 !important;
       }
 
       a {
