@@ -4,34 +4,34 @@ $flag-icon-css-path: '~flag-icon-css/flags' !default;
 $wizard-box-content-dc-logo-size: 125px;
 $wizard-box-content-dc-margin-top: 0px;
 
-.mat-card {
-  .mat-card-header {
-    padding: 0;
-    margin-bottom: 10px;
-  }
+.mat-card-header {
+  padding: 0;
+  margin-bottom: 10px;
+  border: none;
+}
 
-  .mat-card-header-text {
+.mat-card-header-text {
+  margin: 0;
+}
+
+.mat-card-title {
+  margin: 0;
+  h4 {
+    font-weight: 600;
+    margin: 10px 0;
+    font-size: 18px;
+    color: #444D58;
+  }
+}
+
+.mat-card-content {
+  form {
+    margin: 35px 0 0;
+  }
+  p {
+    color: #BDC6D1;
+    font-size: 12px;
     margin: 0;
-  }
-
-  .mat-card-title {
-    margin: 0;
-    h4 {
-      font-weight: 400;
-      margin: 10px 0;
-      font-size: 18px;
-      color: #444D58;
-    }
-  }
-
-  .mat-card-content {
-    form {
-      padding-top: 10px;
-    }
-    p {
-      color: #444D58;
-      margin: 0 8px 5px;
-    }
   }
 }
 
@@ -48,8 +48,6 @@ $wizard-box-content-dc-margin-top: 0px;
   }
 }
 
-
-
 .wizard-box {
   margin: 5px;
   background: #fff;
@@ -62,35 +60,31 @@ $wizard-box-content-dc-margin-top: 0px;
 }
 
 .wizard-box.selected {
-  background-color: #d5e3f5;
   cursor: default;
-  border: 1px solid #03a9f4;
+  border: 1px solid #0288D1;
 }
 
 .wizard-box.selected:hover {
-  background-color: #d5e3f5;
   cursor: default;
-  border: 1px solid #03a9f4;
+  border: 1px solid #0288D1;
 }
 
 .wizard-box:hover {
-  border: 1px solid #03a9f4;
-  background-color: #d5e3f5;
+  border: 1px solid #0288D1;
 }
 
 .wizard-box:not([disabled]):not(.selected):hover {
   background: #f7f8f9;
 }
 
-
 div.location {
   font-weight: 300;
   font-size: 12px;
+  line-height: 14px;
   padding: 0 5px;
 }
 
-
 .flag-icon {
-  font-size: 40px;
+  font-size: 25px;
   margin-bottom: 5px;
 }

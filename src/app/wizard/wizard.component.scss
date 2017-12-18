@@ -61,12 +61,15 @@ $wizard-box-content-cloud-logo-size: 100px;
   }
 }
 
-
+.mat-card {
+  border-radius: 0;
+}
 
 
 // New Styling Create Cluster
 
 .mat-card {
+  margin-bottom: 50px;
   .mat-card-header {
     padding: 0;
     margin-bottom: 10px;

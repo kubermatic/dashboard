@@ -1,17 +1,23 @@
 .km-card-progress-bar {
-  margin-bottom: 10px;
   padding-top: 14px;
   background-color: #0288d1;
+  border-radius: 0;
 
   .mat-card-title {
     font-size: 16px;
-    font-weight: 400;
+    font-weight: 600;
     margin-bottom: 0;
     margin-top: 0px;
     padding-right: 15px;
+    text-align: center;
 
     i {
       color: #fff;
+      margin-left: 5px;
+
+      &.fa-check {
+        color: #78C347;
+      }
     }
   }
 }
@@ -20,4 +26,8 @@
   padding-top: 8px;
   color: #fff;
   font-weight: bold;
+}
+
+.title-unchecked {
+  color: #BDC6D1;
 }

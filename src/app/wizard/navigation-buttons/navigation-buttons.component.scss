@@ -1,14 +1,36 @@
 .km-buttom-navigation {
-  margin-top: 10px;
-  margin-bottom: 70px;
+  margin-top: 35px;
+  text-align: center;
+
+  .mat-raised-button {
+    line-height: 32px;
+  }
 
   button {
-    text-transform: uppercase;
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 600;
     letter-spacing: 0.4px;
-
-    i {
-      margin-left: 5px;
+    border-radius: 4px;
+    &.btn-back {
+      color: #444D58;
     }
+    &.mat-raised-button.mat-primary {
+      width: 110px;
+    }
+    &.mat-raised-button.mat-primary[disabled] {
+      color: #fff;
+      background-color: #BDC6D1;
+      box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    }
+  }
+
+  .cancel-button {
+    position: absolute;
+    right: 30px;
+    bottom: 25px;
+    color: #BDC6D1;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
   }
 }
