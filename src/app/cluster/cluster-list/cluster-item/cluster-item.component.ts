@@ -14,7 +14,7 @@ export class ClusterItemComponent implements OnInit {
 
   ngOnInit() {}
 
-  public getShortClusterName(name): string {
+  public getShortClusterName(name: string): string {
     return name.length > 12 ?  name.slice(0, 12) + '...' : name;
   }
 }

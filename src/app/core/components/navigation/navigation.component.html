@@ -21,36 +21,12 @@
       <a class="button login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}">
         Login
       </a>
-
     </div>
   </div>
 
 
-
-
-
-
-
-
-
+<!-- TODO: add mobile nav -->
   <!--
-
-  <div style="height: 42px; background-color: #fff">
-
-  </div>
-  <nav class="km-main-nav"
-       fxLayout
-       fxLayoutGap="10px">
-    <div fxFlex>
-      <div style="float: left;display: inline-block;">
-        <button class="sidenav-toggle mat-button nav-default" (click)="toggleSidenav()" md-button>
-                <span class="mat-button-wrapper">
-                  <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
-                  <span>Kubermatic</span>
-                </span>
-          <div class="mat-button-ripple mat-ripple" md-ripple></div>
-          <div class="mat-button-focus-overlay"></div>
-        </button>
         <button class="sidenav-toggle mat-button nav-mobile" (click)="showMobileNav()" md-button>
           <span class="mat-button-wrapper">
             <md-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</md-icon>
@@ -59,18 +35,7 @@
           <div class="mat-button-ripple mat-ripple" md-ripple></div>
           <div class="mat-button-focus-overlay"></div>
         </button>
-      </div>
-      <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
-    </div>
-    <div fxFlex="20" fxFlexOffset="50px"  fxFlexOffset.xs="0">
-      <span md-button class="mat-button km-logout" *ngIf="auth.authenticated()" (click)="logout()"><img src="/assets/images/logout-icon.svg" alt="Logout icon"> Logout</span>
-      <a md-button class="mat-button km-login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}"><img src="/assets/images/login-icon.svg" alt="Login icon"> Login</a>
-    </div>
-  </nav>
-
   --->
-
-
 
 </header>
 

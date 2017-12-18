@@ -98,7 +98,7 @@ export class NodeComponent implements OnInit {
 
   }
 
-  public getFormattedNodeMemory(memory): string {
+  public getFormattedNodeMemory(memory: string): string {
     const memRE = /([0-9]+)([a-zA-Z])i/;
     const nodeAllocatable = memory;
 
@@ -122,7 +122,7 @@ export class NodeComponent implements OnInit {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  public getNodeState(state): boolean {
+  public getNodeState(state: string): boolean {
     return state === 'running' ? true : false;
   }
 }

@@ -105,7 +105,7 @@ export class NodeGroupComponent implements OnInit {
 
   }
 
-  public getFormattedNodeMemory(memory): string {
+  public getFormattedNodeMemory(memory: string): string {
     const memRE = /([0-9]+)([a-zA-Z])i/;
     const nodeAllocatable = memory;
 
@@ -129,7 +129,7 @@ export class NodeGroupComponent implements OnInit {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  public getNodeState(node): boolean {
+  public getNodeState(node: NodeEntity): boolean {
     return node.metadata.annotations['node.k8s.io/state'] === 'running' ? true : false;
   }
 }

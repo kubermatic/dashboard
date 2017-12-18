@@ -102,32 +102,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodes(): void {
-
-
     this.api.getClusterNodes(this.clusterName).subscribe(nodes => {
       this.nodes = nodes;
     });
-
-
-    /*let groups = {};
-
-    groups = this.nodes.reduce(function(obj, item){
-      obj[item.groupname] = obj[item.groupname] || [];
-      obj[item.groupname]['group'] = obj[item.groupname]['group'] || [];
-      obj[item.groupname]['kubeletVersion'] = item.status.nodeInfo.kubeletVersion || "";
-      obj[item.groupname]['allocatable'] = item.status.allocatable;
-      obj[item.groupname]['group'].push(item);
-
-      return obj;
-    }, {});
-    this.groupedNodes = Object.keys(groups).map(function(key){
-      return {name: key,  nodes: groups[key]};
-    });
-
-    this.stateOfTheAccordion = Object.keys(groups).map(function (key) {
-      return {name: key, state: false};
-
-    });*/
   }
 
   refreshData(): void {

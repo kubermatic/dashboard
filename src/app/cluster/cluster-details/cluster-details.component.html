@@ -91,24 +91,22 @@
       </div>
     </md-card-content>
   </md-card>
-  <md-card>
-    <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
-      <ng-container *ngSwitchCase="true">
 
-        <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node>
+  <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
+    <ng-container *ngSwitchCase="true">
+
+      <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node>
 
 
-        <!--kubermatic-node-group [nodes]="groupedNodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node-group-->
+      <!--kubermatic-node-group [nodes]="groupedNodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node-group-->
 
-      </ng-container>
-
-      <ng-container *ngSwitchCase="false" align="center">
-        <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>
-        <md-spinner *ngIf="!cluster.isRunning() && !nodes" color="accent" class="node-list-spinner"></md-spinner>
-      </ng-container>
     </ng-container>
 
-  </md-card>
+    <ng-container *ngSwitchCase="false" align="center">
+      <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>
+      <md-spinner *ngIf="!cluster.isRunning() && !nodes" color="accent" class="node-list-spinner"></md-spinner>
+    </ng-container>
+  </ng-container>
 
   <!-- TODO: Show with final content -->
   <!-- [fxShow]="cluster.provider == 'bringyourown'" -->
