@@ -24,9 +24,7 @@ $wizard-box-content-cloud-margin-top: 50px;
 .mat-card-content {
   margin-bottom: 0;
   form {
-    padding-top: 10px;
-    margin-left: 0;
-    margin-right: 0;
+    margin: 35px 0 0;
   }
   p {
     color: #BDC6D1;
@@ -55,7 +53,6 @@ $wizard-box-content-cloud-margin-top: 50px;
 }
 
 .wizard-box-provider {
-  margin-top: 20px;
   background: #fff;
   border: 1px solid #E3E8EC;
   cursor: pointer;
@@ -78,6 +75,9 @@ $wizard-box-content-cloud-margin-top: 50px;
 
 .wizard-box-provider:hover {
   border: 1px solid #0288D1;
+}
+
+.wizard-box-provider:not([disabled]):not(.selected):hover {
   background: #f7f8f9;
 }
 
