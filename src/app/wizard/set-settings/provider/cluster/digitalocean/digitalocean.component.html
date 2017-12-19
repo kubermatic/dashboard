@@ -3,8 +3,8 @@
     We need a DigitalOcean Personal Access Token.
     You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
   </p>
-  <mat-input-container fxFlex>
+  <mat-form-field fxFlex>
     <input id="access_token" matInput formControlName="access_token" type="text" placeholder="API Token*:" title="access_token">
     <small class="form-text text-danger" [hidden]="digitalOceanClusterForm.controls.access_token.valid || !digitalOceanClusterForm.controls.access_token.touched">DigitalOcean Personal Access Tokens must be exactly 64 characters long.</small>
-  </mat-input-container>
+  </mat-form-field>
 </form>

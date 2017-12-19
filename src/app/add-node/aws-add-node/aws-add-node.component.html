@@ -1,8 +1,8 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="awsNodeForm" (change)="onChange()">
-  <mat-input-container fxFlex>
+  <mat-form-field fxFlex>
     <input id="node_count" matInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:"
       title="node_count">
-  </mat-input-container>
+  </mat-form-field>
 
   <div fxFlex class="mat-select-container">
     <mat-form-field>
@@ -15,15 +15,15 @@
     </mat-form-field>
   </div>
 
-  <mat-input-container fxFlex>
+  <mat-form-field fxFlex>
     <input id="root_size" matInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:"
       title="Disk size">
-  </mat-input-container>
+  </mat-form-field>
 
-  <mat-input-container fxFlex *ngIf="awsNodeForm.controls['aws_nas'].value">
+  <mat-form-field fxFlex *ngIf="awsNodeForm.controls['aws_nas'].value">
     <input type="text" matInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off"
     />
-  </mat-input-container>
+  </mat-form-field>
   <div class="slider-box">
     <mat-slide-toggle id="aws_nas" formControlName="aws_nas">Extend Node settings</mat-slide-toggle>
   </div>

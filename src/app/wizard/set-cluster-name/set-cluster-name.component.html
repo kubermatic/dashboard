@@ -6,9 +6,9 @@
 <mat-card-content>
   <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember</p>
   <form [connect]="['wizard', 'clusterNameForm']" [formGroup]="clusterNameForm" novalidate fxLayout="column">
-    <mat-input-container fxFlex>
+    <mat-form-field fxFlex>
       <input id="name" matInput formControlName="name" type="text" placeholder="Enter a cluster name" title="name">
-    </mat-input-container>
+    </mat-form-field>
     <div fxFlex>
       <button type="button" (click)="generateName()">Generate name</button>
     </div>

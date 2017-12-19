@@ -13,9 +13,9 @@
       <p>You are on the way to delete the cluster "{{humanReadableName}}". Deletion of clusters cannot be UNDONE!</p>
       <p>If you know what you are doing, <strong>please type the name of the cluster</strong>:</p>
 
-      <mat-input-container style="width: 100%" >
+      <mat-form-field style="width: 100%" >
         <input id="name" matInput type="text" placeholder="Name of the Cluster:" title="Cluster name" (blur)="onChange($event)" (keyup)="onChange($event)">
-      </mat-input-container>
+      </mat-form-field>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

@@ -1,8 +1,8 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="doNodeForm" (change)="onChange()">
-  <mat-input-container fxFlex>
+  <mat-form-field fxFlex>
     <input id="node_count_do" matInput formControlName="node_count" min="1"
       max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count">
-  </mat-input-container>
+  </mat-form-field>
   <div fxFlex class="mat-select-content">
     <mat-form-field>
       <mat-select class="mat-select" placeholder="Node Size*:" id="node_size" name="node_size" formControlName="node_size" (change)="onChange()">
