@@ -64,8 +64,8 @@ export class NodeComponent implements OnInit {
 
   public getNodeHealth(node) {
     const green = 'fa fa-circle green';
-    const red = 'a fa-circle-o red';
-    const orange = 'a fa-spin fa-circle-o-notch orange';
+    const red = 'fa fa-circle-o red';
+    const orange = 'fa fa-spin fa-circle-o-notch orange';
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
     const kubeMachineState = node.metadata.annotations['node.k8s.io/state'];
@@ -126,5 +126,8 @@ export class NodeComponent implements OnInit {
     return state === 'running' ? true : false;
   }
 }
+
+
+
 
 
