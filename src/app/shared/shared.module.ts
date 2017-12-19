@@ -26,7 +26,9 @@ import {
     // OverlayModule,
     MatSlideToggleModule,
     MatProgressBarModule,
-    MatExpansionModule
+    MatExpansionModule,
+    ErrorStateMatcher,
+    ShowOnDirtyErrorStateMatcher
 } from '@angular/material';
 import 'hammerjs';
 import { NgReduxFormModule } from '@angular-redux/form';
@@ -68,6 +70,9 @@ const modules: Array<any> = [
     ],
     exports: [
         ...modules
+    ],
+    providers: [
+        {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
     ]
 })
 
