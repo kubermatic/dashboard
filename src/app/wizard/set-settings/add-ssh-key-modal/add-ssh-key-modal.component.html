@@ -1,7 +1,7 @@
 <div>
   <mat-toolbar>
     <div class="mat-toolbar">
-      <h4 class="modal-title" id="myModalLabel">Add sshKey </h4>
+      <h4 class="modal-title" id="myModalLabel">Add SSH Key </h4>
     </div>
     <button mat-icon-button mat-dialog-close>
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -12,13 +12,19 @@
       <form [formGroup]="addSSHKeyForm" novalidate>
 
         <mat-form-field class="km-ssh-key-textarea">
-          <textarea id="key" matInput formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
-          <small class="form-text text-muted">Remember to past only the public part of your SSH key and store the private part safely.</small>
+          <textarea id="key" [errorStateMatcher]="inputValidationService" matInput formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
+          <mat-hint>Remember to past only the public part of your SSH key and store the private part safely.</mat-hint>
+          <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
+            Key is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="km-ssh-key-input">
-          <input id="name" matInput formControlName="name" type="text" placeholder="Name">
-          <small class="form-text text-muted">The unique name of your SSH key</small>
+          <input id="name" [errorStateMatcher]="inputValidationService" matInput formControlName="name" type="text" placeholder="Name">
+          <mat-hint class="form-text text-muted">The unique name of your SSH key</mat-hint>
+          <mat-error *ngIf="addSSHKeyForm.controls.name.hasError('required')">
+            Name is <strong>required</strong>
+          </mat-error>
         </mat-form-field>
       </form>
 

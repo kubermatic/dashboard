@@ -11,6 +11,16 @@ button.close {
   margin-top: 0;
 }
 
+.mat-toolbar {
+  border: none;
+  padding: 0;
+  h4 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #444D58;
+  }
+}
+
 .mat-card-title {
   font-size: 20px;
 }
