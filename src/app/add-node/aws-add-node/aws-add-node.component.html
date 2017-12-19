@@ -1,23 +1,39 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="awsNodeForm" (change)="onChange()">
   <mat-form-field fxFlex>
-    <input id="node_count" matInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:"
-      title="node_count">
+    <input id="node_count" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:">
+    <mat-error *ngIf="awsNodeForm.controls.node_count.hasError('min') && !awsNodeForm.controls.node_count.hasError('required')">
+      Quantity of Nodes must be minimum <strong>1</strong>
+    </mat-error>
+    <mat-error *ngIf="awsNodeForm.controls.node_count.hasError('required')">
+      Quantity of Nodes is <strong>required</strong>
+    </mat-error>
   </mat-form-field>
 
   <div fxFlex class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Node Size*:" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
+      <mat-select placeholder="Node Size*:" [errorStateMatcher]="inputValidationService" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
         <mat-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</mat-option>
         <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
           {{size}}
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="awsNodeForm.controls.node_size.hasError('required')">
+        Node size is <strong>required</strong>
+      </mat-error>
     </mat-form-field>
   </div>
 
   <mat-form-field fxFlex>
-    <input id="root_size" matInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:"
-      title="Disk size">
+    <input id="root_size" [errorStateMatcher]="inputValidationService" matInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:">
+    <mat-error *ngIf="awsNodeForm.controls.root_size.hasError('min') && !awsNodeForm.controls.root_size.hasError('required')">
+      Disk size must be minimum <strong>10</strong> GB
+    </mat-error>
+    <mat-error *ngIf="awsNodeForm.controls.root_size.hasError('max') && !awsNodeForm.controls.root_size.hasError('required')">
+      Disk size must be maximum <strong>16000</strong> GB
+    </mat-error>
+    <mat-error *ngIf="awsNodeForm.controls.root_size.hasError('required')">
+      Node size is <strong>required</strong>
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex *ngIf="awsNodeForm.controls['aws_nas'].value">

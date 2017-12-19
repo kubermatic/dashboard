@@ -1,16 +1,25 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="doNodeForm" (change)="onChange()">
   <mat-form-field fxFlex>
-    <input id="node_count_do" matInput formControlName="node_count" min="1"
-      max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count">
+    <input id="node_count_do" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1"
+      max="20" type="number" placeholder="Quantity of Nodes*:">
+    <mat-error *ngIf="doNodeForm.controls.node_count.hasError('min') && !doNodeForm.controls.node_count.hasError('required')">
+      Quantity of Nodes must be minimum <strong>1</strong>
+    </mat-error>
+    <mat-error *ngIf="doNodeForm.controls.node_count.hasError('required')">
+      Quantity of Nodes is <strong>required</strong>
+    </mat-error>
   </mat-form-field>
   <div fxFlex class="mat-select-content">
     <mat-form-field>
-      <mat-select class="mat-select" placeholder="Node Size*:" id="node_size" name="node_size" formControlName="node_size" (change)="onChange()">
+      <mat-select class="mat-select" [errorStateMatcher]="inputValidationService" placeholder="Node Size*:" id="node_size" name="node_size" formControlName="node_size" (change)="onChange()">
         <mat-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</mat-option>
         <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
           {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
         </mat-option>
       </mat-select>
+      <mat-error *ngIf="doNodeForm.controls.node_size.hasError('required')">
+        Node size is <strong>required</strong>
+      </mat-error>
     </mat-form-field>
   </div>
 </kubermatic-add-node-form>
