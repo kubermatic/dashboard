@@ -1,3 +1,4 @@
+import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
@@ -24,7 +25,10 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;
   public selectedSshKeys: string[] = [];
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, public dialog: MatDialog) { }
+  constructor(private api: ApiService,
+              private formBuilder: FormBuilder,
+              public dialog: MatDialog,
+              public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
     const sub = this.selectedSshKeys$.subscribe(selectedSshKeys => {

@@ -2,11 +2,14 @@
   <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
      <div *ngSwitchCase="true">
       <mat-form-field>
-        <mat-select fxFlex multiple  class="mat-select-content" placeholder="SSH Keys*:" name="ssh_keys" formControlName="ssh_keys">
+        <mat-select [errorStateMatcher]="inputValidationService" fxFlex multiple class="mat-select-content" placeholder="SSH Keys*:" name="ssh_keys" formControlName="ssh_keys">
           <mat-option *ngFor="let key of sshKeys; let i = index;" [value]="key.metadata.name">
             {{key.spec.name + ' - ' + key.spec.fingerprint}}
           </mat-option>
         </mat-select>
+        <mat-error *ngIf="sshKeyForm.controls.ssh_keys.hasError('required')">
+            SSH Keys are <strong>required</strong>
+        </mat-error>
       </mat-form-field>
     </div>
     <div *ngSwitchCase="false">
