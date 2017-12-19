@@ -4,7 +4,7 @@ import { ApiService } from 'app/core/services/api/api.service';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddSshKeyModalComponent } from '../add-ssh-key-modal/add-ssh-key-modal.component';
-import { MdDialog, MdDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
 
   public sshKeys: SSHKeyEntity[] = [];
-  public config: MdDialogConfig = {};
+  public config: MatDialogConfig = {};
   public selectedCloudProviderApiError: string;
   public sshKeyForm: FormGroup;
   private subscriptions: Subscription[] = [];
@@ -24,7 +24,7 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;
   public selectedSshKeys: string[] = [];
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, public dialog: MdDialog) { }
+  constructor(private api: ApiService, private formBuilder: FormBuilder, public dialog: MatDialog) { }
 
   ngOnInit() {
     const sub = this.selectedSshKeys$.subscribe(selectedSshKeys => {

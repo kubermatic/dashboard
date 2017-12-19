@@ -4,23 +4,23 @@
     You can create one
     <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
   </p>
-  <md-input-container fxFlex>
-    <input id="accessKeyId" mdInput [errorStateMatcher]="inputValidationService.isValid"  formControlName="accessKeyId" type="text" placeholder="Access Key ID*:" title="accessKeyId">
+  <mat-input-container fxFlex>
+    <input id="accessKeyId" matInput [errorStateMatcher]="inputValidationService.isValid"  formControlName="accessKeyId" type="text" placeholder="Access Key ID*:" title="accessKeyId">
     <small class="form-text text-danger" [hidden]="awsClusterForm.controls.accessKeyId.valid || !awsClusterForm.controls.accessKeyId.touched">Access Key ID must be between 16 and 32 characters long.</small>
-  </md-input-container>
-  <md-input-container fxFlex>
-    <input id="secretAccessKey" mdInput [errorStateMatcher]="inputValidationService.isValid"  formControlName="secretAccessKey" type="text" placeholder="Secret Access Key*:" title="secretAccessKey">
+  </mat-input-container>
+  <mat-input-container fxFlex>
+    <input id="secretAccessKey" matInput [errorStateMatcher]="inputValidationService.isValid"  formControlName="secretAccessKey" type="text" placeholder="Secret Access Key*:" title="secretAccessKey">
     <small class="form-text text-danger" [hidden]="awsClusterForm.controls.secretAccessKey.valid || !awsClusterForm.controls.secretAccessKey.touched">Secret access key is required.</small>
-  </md-input-container>
-  <md-input-container fxFlex *ngIf="awsClusterForm.controls['aws_cas'].value">
-    <input type="text" mdInput id="vpcId" name="vpcId" formControlName="vpcId"
+  </mat-input-container>
+  <mat-input-container fxFlex *ngIf="awsClusterForm.controls['aws_cas'].value">
+    <input type="text" matInput id="vpcId" name="vpcId" formControlName="vpcId"
            ng-trim="true" placeholder="VPC ID (optional):" autocomplete="off" />
-  </md-input-container>
-  <md-input-container fxFlex *ngIf="awsClusterForm.controls['aws_cas'].value">
-    <input type="text" mdInput id="subnetId" name="subnetId" formControlName="subnetId"
+  </mat-input-container>
+  <mat-input-container fxFlex *ngIf="awsClusterForm.controls['aws_cas'].value">
+    <input type="text" matInput id="subnetId" name="subnetId" formControlName="subnetId"
            ng-trim="true" placeholder="Subnet ID (optional):" autocomplete="off" />
-  </md-input-container>
+  </mat-input-container>
   <div class="slider-box">
-    <md-slide-toggle id="aws_cas" formControlName="aws_cas">Extend Provider settings</md-slide-toggle>
+    <mat-slide-toggle id="aws_cas" formControlName="aws_cas">Extend Provider settings</mat-slide-toggle>
   </div>
 </form>

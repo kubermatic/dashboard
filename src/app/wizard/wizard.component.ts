@@ -3,7 +3,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { CloudSpec } from '../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import * as testing from 'selenium-webdriver/testing';
@@ -40,7 +40,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   constructor(
     private api: ApiService,
     private router: Router,
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     private createNodesService: CreateNodesService,
     private ngRedux: NgRedux<any>
   ) {}

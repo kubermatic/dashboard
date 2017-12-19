@@ -1,19 +1,19 @@
-<md-card class="km-card-list" style="margin-bottom: 70px" >
-  <md-card-header class="km-card-list-header" >
-    <md-card-title fxLayout>
+<mat-card class="km-card-list" style="margin-bottom: 70px" >
+  <mat-card-header class="km-card-list-header" >
+    <mat-card-title fxLayout>
 
       <div fxFlex="40%">Groupname</div>
       <div fxFlex="10%">Size</div>
       <div fxFlex="25%">Kubelet Version</div>
       <div fxFlex="25%">Machine Type</div>
 
-    </md-card-title>
-  </md-card-header>
-  <md-card-content>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <ng-container *ngFor="let group of nodes">
-      <md-expansion-panel #expPanel [expanded]="getAccordionState(group.name)" (click)="onNodeGroupToggle(expPanel.expanded, group.name )">
-        <md-expansion-panel-header>
-          <md-panel-title fxLayout class="km-node-group">
+      <mat-expansion-panel #expPanel [expanded]="getAccordionState(group.name)" (click)="onNodeGroupToggle(expPanel.expanded, group.name )">
+        <mat-expansion-panel-header>
+          <mat-panel-title fxLayout class="km-node-group">
 
               <div fxFlex="40%">{{group.name}}</div>
               <div fxFlex="10%">{{group.nodes.group.length}}</div>
@@ -24,21 +24,21 @@
                 <span *ngIf="!!group.nodes.allocatable"> {{group.nodes.allocatable.cpu}} CPU, {{getFormattedNodeMemory(group.nodes.allocatable.memory)}}</span>
               </div>
 
-          </md-panel-title>
-        </md-expansion-panel-header>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
         <div class="blue-container">
-        <md-card class="km-card-list">
-          <md-card-header class="km-card-list-header" >
-            <md-card-title fxLayout>
+        <mat-card class="km-card-list">
+          <mat-card-header class="km-card-list-header" >
+            <mat-card-title fxLayout>
               <div fxFlex="5%">#</div>
               <div fxFlex="34%">Name</div>
               <div fxFlex="20%">Created at</div>
               <div fxFlex="20%">Public IP</div>
               <div fxFlex="6%" align="center">Status</div>
               <div fxFlex="15%"></div>
-            </md-card-title>
-          </md-card-header>
-          <md-card-content>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
             <div fxLayout class="km-single-node" *ngFor="let node of group.nodes.group, let i = index">
               <div fxFlex="5%">{{i + 1}}</div>
               <div fxFlex="34%">
@@ -52,14 +52,14 @@
                 <small>Copy</small>
               </div>
               <div fxFlex="6%" class="health-state">
-                <i [mdTooltip]="node.metadata.annotations['node.k8s.io/state']" [ngClass]="getNodeHealth(node.metadata.annotations['node.k8s.io/state'], node.status.conditions)"></i>
+                <i [matTooltip]="node.metadata.annotations['node.k8s.io/state']" [ngClass]="getNodeHealth(node.metadata.annotations['node.k8s.io/state'], node.status.conditions)"></i>
               </div>
               <div fxFlex="5%"></div>
               <div fxFlex="10%" class="km-btn-remove-node-wrapper">
-                <button *ngIf="!nodeRemoval" md-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
+                <button *ngIf="!nodeRemoval" mat-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
                   <i class="fa fa-trash-o" aria-hidden="true"></i>
                 </button>
-                <md-spinner class="km-spinner" color="accent" *ngIf="nodeRemoval"></md-spinner>
+                <mat-spinner class="km-spinner" color="accent" *ngIf="nodeRemoval"></mat-spinner>
               </div>
             </div>
             <!--
@@ -67,13 +67,13 @@
               <p color="accent">{{conditionsMessage}}</p>
             </div>--->
 
-          </md-card-content>
-        </md-card>
+          </mat-card-content>
+        </mat-card>
       </div>
-      </md-expansion-panel>
+      </mat-expansion-panel>
     </ng-container>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>
 
 
 

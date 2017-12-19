@@ -1,21 +1,21 @@
-<md-card class="km-add-ssh-key">
-  <md-card-header>
-    <md-card-title>Add SSH Key</md-card-title>
-  </md-card-header>
-  <md-card-content>
+<mat-card class="km-add-ssh-key">
+  <mat-card-header>
+    <mat-card-title>Add SSH Key</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <form [formGroup]="addSSHKeyForm" novalidate>
 
-      <md-input-container class="km-ssh-key-textarea" >
-        <textarea id="key" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
+      <mat-input-container class="km-ssh-key-textarea" >
+        <textarea id="key" matInput [errorStateMatcher]="inputValidationService.isValid" formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
         <small class="form-text text-muted">Remember to past only the public part of your SSH key and store the private part safely.</small>
-      </md-input-container>
+      </mat-input-container>
 
-      <md-input-container class="km-ssh-key-input">
-        <input id="name" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="name" type="text" placeholder="Name">
+      <mat-input-container class="km-ssh-key-input">
+        <input id="name" matInput [errorStateMatcher]="inputValidationService.isValid" formControlName="name" type="text" placeholder="Name">
         <small class="form-text text-muted">The unique name of your SSH key</small>
-      </md-input-container>
+      </mat-input-container>
 
-      <button md-raised-button color="primary" class="km-ssh-key-form-submit" (click)="addSSHKey()" [disabled]="!addSSHKeyForm.valid" >Add key</button>
+      <button mat-raised-button color="primary" class="km-ssh-key-form-submit" (click)="addSSHKey()" [disabled]="!addSSHKeyForm.valid" >Add key</button>
     </form>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

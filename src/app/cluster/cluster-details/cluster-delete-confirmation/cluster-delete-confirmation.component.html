@@ -1,31 +1,31 @@
 <div (keydown.enter)="deleteCluster()">
- <md-toolbar>
-    <div class="md-toolbar">
+ <mat-toolbar>
+    <div class="mat-toolbar">
         <h4 class="modal-title" id="myModalLabel">Delete Cluster confirmation</h4>
     </div>
-    <button md-icon-button md-dialog-close>
+    <button mat-icon-button mat-dialog-close>
       <i class="fa fa-times" aria-hidden="true"></i>
     </button>
-  </md-toolbar>
+  </mat-toolbar>
 
-  <md-dialog-content>
-    <div class="md-dialog-content">
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
       <p>You are on the way to delete the cluster "{{humanReadableName}}". Deletion of clusters cannot be UNDONE!</p>
       <p>If you know what you are doing, <strong>please type the name of the cluster</strong>:</p>
 
-      <md-input-container style="width: 100%" >
-        <input id="name" mdInput type="text" placeholder="Name of the Cluster:" title="Cluster name" (blur)="onChange($event)" (keyup)="onChange($event)">
-      </md-input-container>
+      <mat-input-container style="width: 100%" >
+        <input id="name" matInput type="text" placeholder="Name of the Cluster:" title="Cluster name" (blur)="onChange($event)" (keyup)="onChange($event)">
+      </mat-input-container>
     </div>
-  </md-dialog-content>
-  <md-dialog-actions>
-    <button md-dialog-close md-raised-button>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-dialog-close mat-raised-button>
       close
     </button>
-    <button (click)="deleteCluster()" md-dialog-close md-raised-button color="primary" class="md-primary" [disabled]="!disableDeleteCluster">
+    <button (click)="deleteCluster()" mat-dialog-close mat-raised-button color="primary" class="mat-primary" [disabled]="!disableDeleteCluster">
       delete
     </button>
-  </md-dialog-actions>
+  </mat-dialog-actions>
 </div>
 
 

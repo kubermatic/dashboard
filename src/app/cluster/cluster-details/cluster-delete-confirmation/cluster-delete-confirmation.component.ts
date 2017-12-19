@@ -2,7 +2,7 @@
 import { Component, OnInit, Input, DoCheck } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { ApiService } from 'app/core/services/api/api.service';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { CreateNodesService } from 'app/core/services';
 import {DataCenterEntity} from 'app/shared/entity/DatacenterEntity';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
@@ -23,7 +23,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   constructor(
     private router: Router,
     private api: ApiService,
-    private dialogRef: MdDialogRef<ClusterDeleteConfirmationComponent>,
+    private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
     private createNodesService: CreateNodesService
   ) {}
 

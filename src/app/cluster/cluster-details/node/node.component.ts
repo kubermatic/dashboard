@@ -1,6 +1,6 @@
 import { Component, OnInit, Input} from '@angular/core';
 import { NodeEntity } from 'app/shared/entity/NodeEntity';
-import {MdDialog, MdDialogRef, MdDialogConfig} from '@angular/material';
+import {MatDialog, MatDialogRef, MatDialogConfig} from '@angular/material';
 import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
 
 @Component({
@@ -17,9 +17,9 @@ export class NodeComponent implements OnInit {
   @Input() index: number;
   public conditionsMessage: string = '';
   public nodeRemoval: boolean = false;
-  // public dialogRef: MdDialogRef<NodeDeleteConfirmationComponent>;
+  // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
 
-  public config: MdDialogConfig = {
+  public config: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       backdropClass: '',
@@ -36,7 +36,7 @@ export class NodeComponent implements OnInit {
       }
   };
 
-  constructor(public dialog: MdDialog) {}
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit() {}
 

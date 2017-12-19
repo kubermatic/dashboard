@@ -1,7 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 
 import { NodeDeleteConfirmationService } from './node-delete-confirmation.service';
-import {MdDialog, Overlay, OverlayContainer, OverlayModule, MdDialogModule} from "@angular/material";
+import {MatDialog, Overlay, OverlayContainer, OverlayModule, MatDialogModule} from "@angular/material";
 import {OverlayPositionBuilder} from "@angular/material/typings/core/overlay/position/overlay-position-builder";
 import {BrowserModule} from "@angular/platform-browser";
 import {HttpModule} from "@angular/http";
@@ -18,10 +18,10 @@ describe('NodeDeleteConfirmationService', () => {
       ],
       providers: [
         NodeDeleteConfirmationService,
-        MdDialog,
+        MatDialog,
         Overlay,
         OverlayContainer,
-        MdDialogModule
+        MatDialogModule
       ]
     });
   });

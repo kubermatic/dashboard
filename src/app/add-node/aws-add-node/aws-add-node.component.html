@@ -1,29 +1,29 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="awsNodeForm" (change)="onChange()">
-  <md-input-container fxFlex>
-    <input id="node_count" mdInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:"
+  <mat-input-container fxFlex>
+    <input id="node_count" matInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:"
       title="node_count">
-  </md-input-container>
+  </mat-input-container>
 
   <div fxFlex class="mat-select-container">
-    <md-select placeholder="Node Size*:" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
-      <md-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</md-option>
-      <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
+    <mat-select placeholder="Node Size*:" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
+      <mat-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</mat-option>
+      <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
         {{size}}
-      </md-option>
-    </md-select>
+      </mat-option>
+    </mat-select>
   </div>
 
-  <md-input-container fxFlex>
-    <input id="root_size" mdInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:"
+  <mat-input-container fxFlex>
+    <input id="root_size" matInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:"
       title="Disk size">
-  </md-input-container>
+  </mat-input-container>
 
-  <md-input-container fxFlex *ngIf="awsNodeForm.controls['aws_nas'].value">
-    <input type="text" mdInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off"
+  <mat-input-container fxFlex *ngIf="awsNodeForm.controls['aws_nas'].value">
+    <input type="text" matInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off"
     />
-  </md-input-container>
+  </mat-input-container>
   <div class="slider-box">
-    <md-slide-toggle id="aws_nas" formControlName="aws_nas">Extend Node settings</md-slide-toggle>
+    <mat-slide-toggle id="aws_nas" formControlName="aws_nas">Extend Node settings</mat-slide-toggle>
   </div>
   <p class="km-warning-msg">
     You need to accept the Software Terms of CoreOS. For this please click on the link, select "manual launch" & click on "Accept

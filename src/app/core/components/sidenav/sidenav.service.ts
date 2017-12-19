@@ -1,26 +1,26 @@
 import { Injectable } from '@angular/core';
-import { MdSidenav, MdSidenavToggleResult } from '@angular/material';
+import { MatSidenav } from '@angular/material';
 
 @Injectable()
 export class SidenavService {
 
   constructor() { }
 
-  public sidenav: MdSidenav;
+  public sidenav: MatSidenav;
 
-  public setSidenav(sidenav: MdSidenav) {
+  public setSidenav(sidenav: MatSidenav) {
     this.sidenav = sidenav;
   }
 
-  public open(): Promise<MdSidenavToggleResult> {
+  public open(): Promise<void> {
     return this.sidenav.open();
   }
 
-  public close(): Promise<MdSidenavToggleResult> {
+  public close(): Promise<void> {
     return this.sidenav.close();
   }
 
-  public toggle(isOpen?: boolean): Promise<MdSidenavToggleResult> {
+  public toggle(isOpen?: boolean): Promise<void> {
     return this.sidenav.toggle(isOpen);
   }
 

@@ -6,8 +6,6 @@ import { Breadcrumb, BreadcrumbReducer, INITIAL_STATE as INITIAL_STATE_BREADCRUN
 import { Notification, NotificationReducer, INITIAL_STATE as INITIAL_STATE_NOTIFICATION } from './reducers/notification';
 import { Wizard, WizardReducer, INITIAL_STATE as INITIAL_STATE_WIZARD } from './reducers/wizard';
 
-
-
 /* Store Interface */
 export interface Store {
     auth: Auth;

@@ -1,35 +1,35 @@
 <div>
-  <md-toolbar>
-    <div class="md-toolbar">
+  <mat-toolbar>
+    <div class="mat-toolbar">
       <h4 class="modal-title" id="myModalLabel">Add sshKey </h4>
     </div>
-    <button md-icon-button md-dialog-close>
+    <button mat-icon-button mat-dialog-close>
       <i class="fa fa-times" aria-hidden="true"></i>
     </button>
-  </md-toolbar>
-  <md-dialog-content>
-    <div class="md-dialog-content">
+  </mat-toolbar>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
       <form [formGroup]="addSSHKeyForm" novalidate>
 
-        <md-input-container class="km-ssh-key-textarea">
-          <textarea id="key" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
+        <mat-input-container class="km-ssh-key-textarea">
+          <textarea id="key" matInput [errorStateMatcher]="inputValidationService.isValid" formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
           <small class="form-text text-muted">Remember to past only the public part of your SSH key and store the private part safely.</small>
-        </md-input-container>
+        </mat-input-container>
 
-        <md-input-container class="km-ssh-key-input">
-          <input id="name" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="name" type="text" placeholder="Name">
+        <mat-input-container class="km-ssh-key-input">
+          <input id="name" matInput [errorStateMatcher]="inputValidationService.isValid" formControlName="name" type="text" placeholder="Name">
           <small class="form-text text-muted">The unique name of your SSH key</small>
-        </md-input-container>
+        </mat-input-container>
       </form>
 
     </div>
-  </md-dialog-content>
-  <md-dialog-actions>
-    <button md-dialog-close md-raised-button>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-dialog-close mat-raised-button>
       close
     </button>
-    <button (click)="addSSHKey()" md-raised-button color="primary" class="md-primary" [disabled]="!addSSHKeyForm.valid">
+    <button (click)="addSSHKey()" mat-raised-button color="primary" class="mat-primary" [disabled]="!addSSHKeyForm.valid">
       add key
     </button>
-  </md-dialog-actions>
+  </mat-dialog-actions>
 </div>
