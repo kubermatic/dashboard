@@ -1,25 +1,18 @@
-
-.km-header-logo {
-  background-image: url("../../../../assets/images/logo/header-logo-kubermatic.png");
-  height: 100%;
-  background-size: 180px ;
-  background-repeat: no-repeat ;
-  background-position: center -16px;
-}
-
 .mat-nav-list {
-
+  padding: 0 !important;
   .mat-list-item, a {
-    font-size: 14px !important;
-    font-weight: 400 !important;
+    font-size: 14px;
+    font-weight: 400;
     color: #444D58;
+    height: 36px;
+
 
     i {
       color: #444D58;
     }
   }
   a {
-    padding: 20px 16px;
+    padding: 10px 16px !important;
     &:hover, &.active {
       color: #fff;
       background-color: #0288d1;
@@ -37,16 +30,4 @@
 
 /deep/ .mat-list-item-content {
   padding: 0 !important;
-  height: 36px !important;
-}
-
-/deep/ .mat-nav-list {
-  padding: 0 !important;
-
-}
-
-
-/deep/ .mat-nav-list a {
-  padding: 10px 16px !important;
-
 }
