@@ -14,11 +14,7 @@ button.close {
 .mat-toolbar {
   border: none;
   padding: 0;
-  h4 {
-      font-size: 18px;
-      font-weight: 600;
-      color: #444D58;
-  }
+  position: relative;
 }
 
 .mat-card-title {
