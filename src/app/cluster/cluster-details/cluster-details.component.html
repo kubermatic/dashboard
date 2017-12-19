@@ -49,7 +49,8 @@
       <div fxFlex="20%">API Server:</div>
       <div fxFlex="80%">
         <a [attr.href]="downloadKubeconfigUrl()" *ngIf="cluster.isRunning()" mat-button color="primary" class="km-download-config" target="_blank"><i class="fa fa-save"></i> download kubeconfig</a>
-        <mat-spinner *ngIf="!cluster.isRunning()" class="km-spinner-sm"></mat-spinner>
+        <mat-spinner *ngIf="!cluster.isRunning()" [diameter]="15" class="km-spinner-sm"></mat-spinner>
+        <!-- <i *ngIf="!cluster.isRunning()" class="fa fa-circle-o-notch fa-spin" style="color:#0288d1;"></i> -->
       </div>
     </mat-card-content>
 

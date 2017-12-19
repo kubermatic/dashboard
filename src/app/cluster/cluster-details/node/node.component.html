@@ -34,7 +34,7 @@
           <button *ngIf="!nodeRemoval" mat-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
             <i class="fa fa-trash-o" aria-hidden="true"></i>
           </button>
-          <mat-spinner class="km-spinner" color="accent" *ngIf="nodeRemoval"></mat-spinner>
+          <mat-spinner [diameter]="30" class="km-spinner" color="accent" *ngIf="nodeRemoval"></mat-spinner>
         </div>
       </div>
       <div fxLayout *ngIf="conditionsMessage && getNodeState(node.metadata.annotations['node.k8s.io/state'])" class="km-conditionsMessage">
