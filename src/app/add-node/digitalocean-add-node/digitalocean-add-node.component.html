@@ -1,14 +1,16 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="doNodeForm" (change)="onChange()">
   <mat-input-container fxFlex>
-    <input id="node_count_do" matInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count" min="1"
+    <input id="node_count_do" matInput formControlName="node_count" min="1"
       max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count">
   </mat-input-container>
   <div fxFlex class="mat-select-content">
-    <mat-select class="mat-select" placeholder="Node Size*:" id="node_size" name="node_size" formControlName="node_size" (change)="onChange()">
-      <mat-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</mat-option>
-      <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
-        {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
-      </mat-option>
-    </mat-select>
+    <mat-form-field>
+      <mat-select class="mat-select" placeholder="Node Size*:" id="node_size" name="node_size" formControlName="node_size" (change)="onChange()">
+        <mat-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</mat-option>
+        <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
+          {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 </kubermatic-add-node-form>

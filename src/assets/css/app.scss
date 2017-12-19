@@ -65,7 +65,25 @@ mat-card-header {
 }
 
 .mat-select-placeholder {
-  font-size: 14px;
+  font-size: 14px !important;
+} 
+
+.mat-input-placeholder, .mat-form-field-label {
+  font-size: 14px !important;
+  color: #BDC6D1 !important;
+  font-weight: 600 !important;
+}
+
+.mat-form-field-underline {
+  background-color: #E5E5E5 !important; 
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-form-field-invalid .mat-form-field-label {
+  color: #e91e63 !important;
 }
 
 .mat-select-value-text {

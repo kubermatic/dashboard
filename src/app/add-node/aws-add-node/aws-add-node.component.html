@@ -5,12 +5,14 @@
   </mat-input-container>
 
   <div fxFlex class="mat-select-container">
-    <mat-select placeholder="Node Size*:" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
-      <mat-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</mat-option>
-      <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
-        {{size}}
-      </mat-option>
-    </mat-select>
+    <mat-form-field>
+      <mat-select placeholder="Node Size*:" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
+        <mat-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</mat-option>
+        <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
+          {{size}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
 
   <mat-input-container fxFlex>

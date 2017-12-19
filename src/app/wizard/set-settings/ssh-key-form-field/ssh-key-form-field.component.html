@@ -1,11 +1,13 @@
 <form [connect]="['wizard', 'sshKeyForm']" [formGroup]="sshKeyForm" novalidate  fxLayout="column"  >
   <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
      <div *ngSwitchCase="true">
-       <mat-select fxFlex multiple  class="mat-select-content" placeholder="SSH Keys*:" name="ssh_keys" formControlName="ssh_keys">
-         <mat-option *ngFor="let key of sshKeys; let i = index;" [value]="key.metadata.name">
-           {{key.spec.name + ' - ' + key.spec.fingerprint}}
-         </mat-option>
-       </mat-select>
+      <mat-form-field>
+        <mat-select fxFlex multiple  class="mat-select-content" placeholder="SSH Keys*:" name="ssh_keys" formControlName="ssh_keys">
+          <mat-option *ngFor="let key of sshKeys; let i = index;" [value]="key.metadata.name">
+            {{key.spec.name + ' - ' + key.spec.fingerprint}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
     <div *ngSwitchCase="false">
       <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>

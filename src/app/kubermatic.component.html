@@ -6,6 +6,8 @@
 
     <kubermatic-navigation></kubermatic-navigation>
 
+    <kubermatic-notification></kubermatic-notification>
+
     <mat-sidenav-container>
       <mat-sidenav #sidenav opened mode="side">
         <kubermatic-sidenav></kubermatic-sidenav>
@@ -14,7 +16,6 @@
       <div class="km-main">
         <div class="km-content">
           <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
-          <kubermatic-notification></kubermatic-notification>
           <router-outlet></router-outlet>
         </div>
       </div>
