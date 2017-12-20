@@ -1,18 +1,31 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="osNodeForm" (change)="onChange()">
-  <md-input-container fxFlex>
-    <input id="node_count_osNodeForm" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="node_count"
+  <mat-form-field fxFlex>
+    <input id="node_count_osNodeForm" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count"
       min="1" max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count">
-  </md-input-container>
+    <mat-error *ngIf="osNodeForm.controls.node_count.hasError('min') && !osNodeForm.controls.node_count.hasError('required')">
+      Quantity of Nodes must be minimum <strong>1</strong>
+    </mat-error>
+    <mat-error *ngIf="osNodeForm.controls.node_count.hasError('required')">
+      Quantity of Nodes is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
 
-  <md-select fxFlex class="mat-select-content" placeholder="Node Size*:" name="node_size" formControlName="node_size" (change)="onChange()">
-    <md-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</md-option>
-    <md-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
-      {{size}}
-    </md-option>
-  </md-select>
+  <mat-form-field>
+    <mat-select fxFlex [errorStateMatcher]="inputValidationService" class="mat-select-content" placeholder="Node Size*:" name="node_size" formControlName="node_size" (change)="onChange()">
+      <mat-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</mat-option>
+      <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
+        {{size}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="osNodeForm.controls.node_size.hasError('required')">
+      Node size is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
 
-  <md-input-container fxFlex>
-    <input id="os_node_image" mdInput [errorStateMatcher]="inputValidationService.isValid" formControlName="os_node_image" placeholder="Image (Ubuntu only)*"
-      title="Image">
-  </md-input-container>
+  <mat-form-field fxFlex>
+    <input id="os_node_image" [errorStateMatcher]="inputValidationService" matInput formControlName="os_node_image" placeholder="Image (Ubuntu only)*">
+    <mat-error *ngIf="osNodeForm.controls.os_node_image.hasError('required')">
+      Image is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
 </kubermatic-add-node-form>

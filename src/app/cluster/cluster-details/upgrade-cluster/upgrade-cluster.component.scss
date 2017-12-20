@@ -1,5 +1,5 @@
 .km-upgrade-cluster {
-    md-select {
+    mat-select {
         width: 100%;
     }
 
@@ -7,4 +7,8 @@
         margin: 10px 0;
         font-size: 14px;
     }
+}
+
+.mat-form-field {
+    width: 100%;
 }

@@ -19,7 +19,8 @@
       "mobile": false,
       "styles": [
         "assets/css/global.scss",
-        "assets/css/custom_theme.scss"
+        "assets/css/custom_theme.scss",
+        "../node_modules/flag-icon-css/css/flag-icon.min.css"
       ],
       "scripts": [
         "../node_modules/jquery/dist/jquery.js"

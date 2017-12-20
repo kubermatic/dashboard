@@ -1,3 +1,4 @@
+import { InputValidationService } from './../../core/services/input-validation/input-validation.service';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
@@ -22,7 +23,8 @@ export class AwsAddNodeComponent implements OnInit {
   public nodeSpec: NodeCreateSpec;
 
   constructor(private fb: FormBuilder,
-              private ngRedux: NgRedux<any>) { }
+              private ngRedux: NgRedux<any>,
+              public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
     this.awsNodeForm = this.fb.group({

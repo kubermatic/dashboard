@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 
 import {Auth} from '../../services';
 import {SidenavService} from '../sidenav/sidenav.service';
@@ -24,7 +24,7 @@ export class NavigationComponent implements OnInit {
     public auth: Auth,
     private sidenavService: SidenavService,
     private router: Router,
-    private dialog: MdDialog
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {

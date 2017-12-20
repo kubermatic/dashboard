@@ -4,6 +4,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Subscription } from 'rxjs/Subscription';
+import { InputValidationService } from 'app/core/services';
 
 @Component({
   selector: 'kubermatic-set-cluster-name',
@@ -18,7 +19,8 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
   public clusterName: string = '';
 
   constructor(private nameGenerator: ClusterNameGenerator,
-              private formBuilder: FormBuilder) {
+              private formBuilder: FormBuilder,
+              public inputValidationService: InputValidationService) {
   }
 
   ngOnInit() {

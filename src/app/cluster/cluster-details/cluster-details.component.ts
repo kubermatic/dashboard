@@ -6,7 +6,7 @@ import { ApiService } from 'app/core/services/api/api.service';
 import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { NodeEntity } from 'app/shared/entity/NodeEntity';
 import { ClusterEntity } from 'app/shared/entity/ClusterEntity';
@@ -51,7 +51,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private api: ApiService,
-    public dialog: MdDialog,
+    public dialog: MatDialog,
     private createNodesService: CreateNodesService,
     private dcService: DatacenterService
   ) {}

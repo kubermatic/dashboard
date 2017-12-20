@@ -5,14 +5,18 @@ header {
   height: 45px;
 }
 
+ng2-slim-loading-bar {
+  z-index: 2;  
+}
+
 .navigation-bar {
+  z-index: 2;
   height: 45px;
   background-color: #fff;
   position: fixed;
   top:0;
   left:0;
   width: 100%;
-  z-index: 1;
   box-shadow: 0px 4px 4px rgba(68, 77, 88, 0.1);
 
   .logo {
@@ -59,11 +63,6 @@ header {
   text-decoration: none;
   font-family: "Titillium Web", "Roboto", "Kaushan Script", Helvetica, Arial, cursive;
   font-weight: 600;
-}
-
-kubermatic-breadcrumbs {
-  display: inline-block;
-  float: left;
 }
 
 .nav-mobile {

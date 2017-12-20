@@ -1,16 +1,19 @@
-<md-card-header>
-  <md-card-title>
+<mat-card-header>
+  <mat-card-title>
     <h4>Name your Cluster</h4>
-  </md-card-title>
-</md-card-header>
-<md-card-content>
+  </mat-card-title>
+</mat-card-header>
+<mat-card-content>
   <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember</p>
   <form [connect]="['wizard', 'clusterNameForm']" [formGroup]="clusterNameForm" novalidate fxLayout="column">
-    <md-input-container fxFlex>
-      <input id="name" mdInput formControlName="name" type="text" placeholder="Enter a cluster name" title="name">
-    </md-input-container>
+    <mat-form-field fxFlex>
+      <input id="name" [errorStateMatcher]="inputValidationService" matInput formControlName="name" type="text" placeholder="Enter a cluster name" title="name">
+      <mat-error *ngIf="clusterNameForm.controls.name.hasError('required')">
+        Name is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
     <div fxFlex>
       <button type="button" (click)="generateName()">Generate name</button>
     </div>
   </form>
-</md-card-content>
+</mat-card-content>

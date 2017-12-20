@@ -1,6 +1,6 @@
-<md-card class="km-card-list" >
-  <md-card-header class="km-card-list-header" >
-    <md-card-title fxLayout>
+<mat-card class="km-card-list" >
+  <mat-card-header class="km-card-list-header" >
+    <mat-card-title fxLayout>
       <div fxFlex="5%">#</div>
       <div fxFlex="25%">Name</div>
       <div fxFlex="20%">Capacity</div>
@@ -8,9 +8,9 @@
       <div fxFlex="15%">Public IP</div>
       <div fxFlex="10%" align="center">Status</div>
       <div fxFlex="10%"></div>
-    </md-card-title>
-  </md-card-header>
-  <md-card-content>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
     <div  class="km-node-row" *ngFor="let node of nodes, let i = index">
       <div fxLayout class="km-single-node">
         <div fxFlex="5%">{{i + 1}}</div>
@@ -28,18 +28,18 @@
           <small>Copy</small>
         </div>
         <div fxFlex="10%" class="health-state">
-            <i [mdTooltip]="node.metadata.annotations['node.k8s.io/state']" [ngClass]="getNodeHealth(node)"></i>
+            <i [matTooltip]="node.metadata.annotations['node.k8s.io/state']" [ngClass]="getNodeHealth(node)"></i>
         </div>
         <div fxFlex="10%" class="km-btn-remove-node-wrapper" *ngIf="managedByProvider(node)">
-          <button *ngIf="!nodeRemoval" md-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
+          <button *ngIf="!nodeRemoval" mat-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
             <i class="fa fa-trash-o" aria-hidden="true"></i>
           </button>
-          <md-spinner class="km-spinner" color="accent" *ngIf="nodeRemoval"></md-spinner>
+          <mat-spinner [diameter]="30" class="km-spinner" color="accent" *ngIf="nodeRemoval"></mat-spinner>
         </div>
       </div>
       <div fxLayout *ngIf="conditionsMessage && getNodeState(node.metadata.annotations['node.k8s.io/state'])" class="km-conditionsMessage">
         <p color="accent">{{conditionsMessage}}</p>
       </div>
     </div>
-  </md-card-content>
-</md-card>
+  </mat-card-content>
+</mat-card>

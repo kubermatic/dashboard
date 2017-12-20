@@ -7,8 +7,14 @@ button.close {
   float: right;
 }
 
-.md-dialog-content {
+.mat-dialog-content {
   margin-top: 0;
+}
+
+.mat-toolbar {
+  border: none;
+  padding: 0;
+  position: relative;
 }
 
 .mat-card-title {

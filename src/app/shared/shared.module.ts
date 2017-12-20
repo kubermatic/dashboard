@@ -8,25 +8,27 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomFormsModule } from 'ng2-validation';
 import { ClipboardModule } from 'ngx-clipboard';
 import {
-    MdButtonModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdProgressSpinnerModule,
-    MdSidenavModule,
-    MdSnackBarModule,
-    MdToolbarModule,
-    MdTooltipModule,
-    MdSelectModule,
-    MdCheckboxModule,
-    MdMenuModule,
-    MdCardModule,
-    MdDialogModule,
-    MdSliderModule,
-    OverlayModule,
-    MdSlideToggleModule,
-    MdProgressBarModule,
-    MdExpansionModule
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatSnackBarModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatMenuModule,
+    MatCardModule,
+    MatDialogModule,
+    MatSliderModule,
+    // OverlayModule,
+    MatSlideToggleModule,
+    MatProgressBarModule,
+    MatExpansionModule,
+    ErrorStateMatcher,
+    ShowOnDirtyErrorStateMatcher
 } from '@angular/material';
 import 'hammerjs';
 import { NgReduxFormModule } from '@angular-redux/form';
@@ -39,25 +41,25 @@ const modules: Array<any> = [
     CustomFormsModule,
     SlimLoadingBarModule,
     FlexLayoutModule,
-    MdButtonModule,
-    MdIconModule,
-    MdInputModule,
-    MdListModule,
-    MdProgressSpinnerModule,
-    MdSidenavModule,
-    MdSnackBarModule,
-    MdToolbarModule,
-    MdTooltipModule,
-    MdSelectModule,
-    MdCheckboxModule,
-    MdMenuModule,
-    MdCardModule,
-    MdDialogModule,
-    MdSliderModule,
-    OverlayModule,
-    MdSlideToggleModule,
-    MdProgressBarModule,
-    MdExpansionModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule,
+    MatListModule,
+    MatProgressSpinnerModule,
+    MatSidenavModule,
+    MatSnackBarModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    MatMenuModule,
+    MatCardModule,
+    MatDialogModule,
+    MatSliderModule,
+    // OverlayModule,
+    MatSlideToggleModule,
+    MatProgressBarModule,
+    MatExpansionModule,
     ClipboardModule,
     NgReduxFormModule
 ];
@@ -68,6 +70,9 @@ const modules: Array<any> = [
     ],
     exports: [
         ...modules
+    ],
+    providers: [
+        {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
     ]
 })
 

@@ -1,4 +1,4 @@
- kubermatic-root, md-sidenav-container, .my-content {
+ kubermatic-root, mat-sidenav-container, .my-content {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -8,7 +8,7 @@
   position: absolute;
 }
 
-md-sidenav {
+mat-sidenav {
   padding-top: 45px;
 }
 
@@ -18,18 +18,15 @@ md-sidenav {
 
  // ToDo: new file
 
- .mat-sidenav {
-   width: 190px;
-   background-color: #F7FAFF;
-   color: #fff;
+.mat-sidenav {
+  width: 190px;
+  background-color: #F7FAFF;
+  color: #fff;
+}
 
- }
-
-
- .mat-sidenav-container {
-   background-color: #F1F1F1;
- }
-
+.mat-sidenav-container {
+  background-color: #F1F1F1;
+}
 
 .mat-input-wrapper {
   margin: 0px;
