@@ -1,7 +1,7 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import { HttpModule, BrowserXhr } from '@angular/http';
+import { BrowserXhr } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 /* Modules */
@@ -37,7 +37,6 @@ import {
 
 const modules: any[] = [
   CommonModule,
-  HttpModule,
   HttpClientModule,
   RouterModule,
   SharedModule,

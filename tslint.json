@@ -8,9 +8,7 @@
     "class-name": true,
     "comment-format": true,
     "curly": true,
-    "deprecation": {
-      "severity": "warn"
-    },
+    "deprecation": false,
     "eofline": true,
     "forin": true,
     "import-blacklist": [
