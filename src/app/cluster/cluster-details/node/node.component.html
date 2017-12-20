@@ -18,7 +18,7 @@
           {{node.metadata.name}}
         </div>
         <div fxFlex="20%">
-          <span *ngIf="!!node.status.allocatable"> {{node.status.allocatable.cpu}} CPU, {{getFormattedNodeMemory(node.status.allocatable.memory)}}</span>
+          <span *ngIf="!!node.status.capacity"> {{node.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(node.status.capacity.memory)}}</span>
         </div>
         <div fxFlex="15%">
           <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
