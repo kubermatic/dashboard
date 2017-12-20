@@ -1,11 +1,16 @@
 <form [connect]="['wizard', 'sshKeyForm']" [formGroup]="sshKeyForm" novalidate  fxLayout="column"  >
   <div [ngSwitch]="!!sshKeys && sshKeys.length > 0">
      <div *ngSwitchCase="true">
-       <md-select fxFlex multiple  class="mat-select-content" placeholder="SSH Keys*:" name="ssh_keys" formControlName="ssh_keys">
-         <md-option *ngFor="let key of sshKeys; let i = index;" [value]="key.metadata.name">
-           {{key.spec.name + ' - ' + key.spec.fingerprint}}
-         </md-option>
-       </md-select>
+      <mat-form-field>
+        <mat-select [errorStateMatcher]="inputValidationService" fxFlex multiple class="mat-select-content" placeholder="SSH Keys*:" name="ssh_keys" formControlName="ssh_keys">
+          <mat-option *ngFor="let key of sshKeys; let i = index;" [value]="key.metadata.name">
+            {{key.spec.name + ' - ' + key.spec.fingerprint}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="sshKeyForm.controls.ssh_keys.hasError('required')">
+            SSH Keys are <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
     </div>
     <div *ngSwitchCase="false">
       <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
@@ -13,7 +18,7 @@
     <small class="form-text text-muted" >In addition, one SSH key is authorized automatically for the Kubernetes apiserver to provide kubectl logs, port-forward and exec functionality.
     </small>
     <br>
-    <button style="margin-top: 10px;" md-button color="primary" (click)="addSshKeyDialog()" md-raised-button >Add sshKey</button>
+    <button style="margin-top: 10px;" mat-button color="primary" (click)="addSshKeyDialog()" mat-raised-button >Add sshKey</button>
   </div>
   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
 </form>

@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Component } from '@angular/core';
 import { NotificationsService } from 'angular2-notifications';
-import { NotificationToast, NotificationToastType } from '../../../redux/reducers/notification';
+import { NotificationToast, NotificationToastType } from 'app/shared/interfaces/notification-toast.interface';
 import { select } from '@angular-redux/store';
 
 @Component({

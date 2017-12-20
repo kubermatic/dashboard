@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import {MaterialModule, MdDialog, MdDialogModule } from '@angular/material';
+import {MaterialModule, MatDialog, MatDialogModule } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 import {ConnectionBackend, RequestOptions, HttpModule} from "@angular/http";
 import {Auth} from "../../core/services";
@@ -25,14 +25,14 @@ describe('NodeDeleteConfirmationComponent', () => {
         HttpModule,
         RouterTestingModule,
         BrowserAnimationsModule,
-        MdDialogModule
+        MatDialogModule
       ],
       providers: [
         ConnectionBackend,
         Auth,
         FormBuilder,
         ApiService,
-        MdDialogModule
+        MatDialogModule
       ]
     })
     .compileComponents();

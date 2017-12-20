@@ -1,24 +1,25 @@
 <main>
   <div>
     <div class="km-progress-bar-container">
-      <md-progress-bar id="km-top-progress-bar" mode="indeterminate"></md-progress-bar>
+      <mat-progress-bar id="km-top-progress-bar" mode="indeterminate"></mat-progress-bar>
     </div>
 
     <kubermatic-navigation></kubermatic-navigation>
 
-    <md-sidenav-container>
-      <md-sidenav #sidenav opened mode="side">
+    <kubermatic-notification></kubermatic-notification>
+
+    <mat-sidenav-container>
+      <mat-sidenav #sidenav opened mode="side">
         <kubermatic-sidenav></kubermatic-sidenav>
-      </md-sidenav>
+      </mat-sidenav>
 
       <div class="km-main">
         <div class="km-content">
           <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
-          <kubermatic-notification></kubermatic-notification>
           <router-outlet></router-outlet>
         </div>
       </div>
-    </md-sidenav-container>
+    </mat-sidenav-container>
     <footer fxlayout>
       <div fxFlex="20%" class="km-copy">powered by <a href="https://loodse.com">Loodse <sup>®</sup></a></div>
       <div fxFlex="80%" class="km-footer-nav">

@@ -6,7 +6,7 @@ import { NgModule } from "@angular/core";
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import {RouterTestingModule} from "@angular/router/testing";
-import {MaterialModule, MdDialogRef} from '@angular/material';
+import {MaterialModule, MatDialogRef} from '@angular/material';
 import { RouterModule, Router } from "@angular/router";
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
 import {ApiService} from "app/core/services/api/api.service";
@@ -33,7 +33,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
         Router,
         ApiService,
         FormBuilder,
-        MdDialogRef
+        MatDialogRef
       ]
     })
     .compileComponents();

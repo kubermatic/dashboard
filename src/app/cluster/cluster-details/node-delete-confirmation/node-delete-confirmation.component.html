@@ -1,26 +1,26 @@
 <div>
-  <md-toolbar>
-    <div class="md-toolbar">
+  <mat-toolbar>
+    <div class="mat-toolbar">
       <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
       <h4 class="modal-title" id="myModalLabel">Delete Node confirmation</h4>
     </div>
-    <button md-icon-button md-dialog-close>
+    <button mat-icon-button mat-dialog-close>
       <i class="fa fa-times" aria-hidden="true"></i>
     </button>
-  </md-toolbar>
+  </mat-toolbar>
 
 
-  <md-dialog-content>
-      <div class="md-dialog-content">
+  <mat-dialog-content>
+      <div class="mat-dialog-content">
         <p>You are on the way to delete the node "{{ nodeName }}". Deletion of nodes cannot be UNDONE!</p>
       </div>
-  </md-dialog-content>
-  <md-dialog-actions>
-    <button md-dialog-close md-raised-button >
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-dialog-close mat-raised-button >
       close
     </button>
-    <button (click)="deleteNode(nodeName)" md-dialog-close md-raised-button color="primary" class="md-primary">
+    <button (click)="deleteNode(nodeName)" mat-dialog-close mat-raised-button color="primary" class="mat-primary">
       delete
     </button>
-  </md-dialog-actions>
+  </mat-dialog-actions>
 </div>

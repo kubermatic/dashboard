@@ -2,24 +2,24 @@
   <div fxLayout>
       <div fxFlex align="right">
         <a routerLink="/wizard">
-          <button md-raised-button color="primary" type="button">
+          <button mat-raised-button color="primary" type="button">
             <span class="btn-text-default">+ Add Cluster</span>
           </button>
         </a>
       </div>
   </div>
 
-  <md-card class="km-card-list">
-    <md-card-header class="km-card-list-header">
-      <md-card-title fxLayout>
+  <mat-card class="km-card-list">
+    <mat-card-header class="km-card-list-header">
+      <mat-card-title fxLayout>
         <div fxFlex="3%" fxFlex.sm="3%" fxHide.xs>#</div>
         <div fxFlex="38%" fxFlex.xs="40%">Name</div>
         <div fxFlex="16%" fxFlex.sm="20.66%" fxFlex.xs="25%">Provider</div>
         <div fxFlex="16%" fxHide.sm fxHide.xs>Seed Region</div>
         <div fxFlex="16%" fxHide.sm fxHide.xs>Node Region</div>
         <div fxFlex="16%" fxFlex.sm="20.66%" fxHide.xs>Status</div>
-      </md-card-title>
-    </md-card-header>
+      </mat-card-title>
+    </mat-card-header>
     <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
       <div *ngSwitchCase="true" fxLayout="column">
         <kubermatic-cluster-item [clusters]="clusters" fxFlex></kubermatic-cluster-item>
@@ -30,8 +30,8 @@
         </a>
       </div>
     </ng-container>
-  </md-card>
+  </mat-card>
 </div>
 <div *ngIf="loading" >
-  <md-spinner color="accent" class="km-spinner"></md-spinner>
+  <mat-spinner color="accent" class="km-spinner"></mat-spinner>
 </div>

@@ -1,6 +1,3 @@
-$flag-icon-css-path: '~flag-icon-css/flags' !default;
-@import "~flag-icon-css/sass/flag-icon";
-
 .mat-card {
   .mat-card-header {
     padding: 0;
@@ -51,10 +48,6 @@ $flag-icon-css-path: '~flag-icon-css/flags' !default;
     .icon-provider {
       float: left;
       padding-right: 10px;
-    }
-
-    .cloud {
-
     }
     .region {
       float: left;

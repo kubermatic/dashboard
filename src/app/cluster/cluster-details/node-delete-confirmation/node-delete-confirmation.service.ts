@@ -1,13 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
-import { MdDialog, MdDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Injectable, ViewContainerRef } from '@angular/core';
 
 @Injectable()
 export class NodeDeleteConfirmationService {
 
-  constructor(private dialog: MdDialog) { }
+  constructor(private dialog: MatDialog) { }
 
   public confirm(title: string,
                  message: string,
@@ -15,9 +15,9 @@ export class NodeDeleteConfirmationService {
                  btnOkText: string = 'Ok',
                  btnCancelText: string = 'Cancel'): Observable<boolean> {
 
-   // let config = new MdDialogConfig();
+   // let config = new MatDialogConfig();
 
-    const config: MdDialogConfig = {
+    const config: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
       backdropClass: '',
@@ -53,7 +53,7 @@ export class NodeDeleteConfirmationService {
                                  btnOkText: string = 'Ok',
                                  btnCancelText: string = 'Cancel' ): Observable<boolean> {
 
-    const config = new MdDialogConfig();
+    const config = new MatDialogConfig();
     // config.viewContainerRef = viewContainerRef;
 
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, config);
