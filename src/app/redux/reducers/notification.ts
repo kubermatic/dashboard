@@ -1,21 +1,7 @@
+import { NotificationToast } from './../../shared/interfaces/notification-toast.interface';
 import { NotificationActions } from './../actions/notification.actions';
 import { Action } from '../../shared/interfaces/action.interface';
 import { Reducer } from 'redux';
-
-export enum NotificationToastType {
-  success,
-  alert,
-  error,
-  info
-}
-
-export interface NotificationToast {
-  type: NotificationToastType;
-  title: string;
-  content: string;
-  icon?: string;
-}
-
 
 export interface Notification {
   toast: NotificationToast;
