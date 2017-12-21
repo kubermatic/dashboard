@@ -1,17 +1,10 @@
-<div class="container">
-  <div class="row frontpage-container">
-    <div class="col">
-      <div class="frontpage-text">
-        <img src="../../assets/images/logo/header-logo-kubermatic.png" width="100%" alt="Logo Kubermativ" style="max-width: 800px;">
-        <h3 class="intro-lead-in">Create your Kubernetes cluster – in seconds – where you want.</h3>
-
-          <p class="intro-lead-full">Kubermatic will host your Kubernetes master as a Service.
-            You can select the IaaS provider of your choice.
-            Create nodes with ease, update them, scale up and down.
-            Kubernetes made easy.</p>
-      </div>
-    </div>
-  </div>
+<div class="frontpage-content" fxLayout="column" fxLayoutAlign="center center">
+  <mat-card>
+      <img mat-card-image src="../../assets/images/logo/header-logo-kubermatic.png">
+  </mat-card>
+  <p class="frontpage-inner-text">Scale apps with one click -<br>
+    in cloud or your own datacenter</p>
+  <a mat-raised-button class="login-button" href="{{environment.coreOSdexAuth}}">Login</a>
 </div>
 
 <div class="frontpage-bg"></div>

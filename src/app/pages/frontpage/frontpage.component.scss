@@ -1,5 +1,6 @@
 //@import "../../assets/css/ng2admin/conf/conf";
 //@import "../../assets/css/bootstrap/variables";
+@import url('https://fonts.googleapis.com/css?family=Titillium+Web');
 
 .frontpage-container {
   padding: 0 0 0 0;
@@ -27,6 +28,47 @@
   }
 }
 
+.frontpage-bg {
+  background-color: #0288d1;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.mat-card {
+  max-width: 400px;
+  height: 120px;
+  z-index: 1;
+}
+
+.frontpage-content {
+  margin-top: 90px;
+
+  .frontpage-inner-text {
+    text-align: center;
+    color: #fff;
+    text-transform: uppercase;
+    font-family: 'Titillium Web', sans-serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 70px;
+  }
+
+  .mat-raised-button {
+    line-height: 57px !important;
+    color: #444D58;
+    font-size: 28px;
+    font-family: 'Titillium Web', sans-serif;
+    width: 170px;
+    height: 60px;
+    font-weight: 600 !important;
+    z-index: 1;
+  }
+}
+
 @media(min-width:768px) {
   header {
     .frontpage-text {
@@ -45,14 +87,4 @@
       }
     }
   }
-}
-
-.frontpage-bg {
-  background-color: #0288d1;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: -1;
 }
