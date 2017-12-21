@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
-import {Auth} from '../../core/services';
-import {Router} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Auth } from '../../core/services';
+import { Router } from '@angular/router';
+import {environment} from '../../../environments/environment';
+
 
 @Component({
   selector: 'kubermatic-frontpage',
@@ -8,6 +10,11 @@ import {Router} from '@angular/router';
   styleUrls: ['./frontpage.component.scss']
 })
 export class FrontpageComponent implements OnInit {
+  public myStyle: object = {};
+  public myParams: object = {};
+  public width: number = 100;
+  public height: number = 100;
+  public environment: any = environment;
 
   constructor(private auth: Auth, private router: Router) {
   }
@@ -16,5 +23,30 @@ export class FrontpageComponent implements OnInit {
     if (this.auth.authenticated()) {
       this.router.navigate(['clusters']);
     }
+
+    this.myStyle = {
+      'position': 'fixed',
+      'width': '100%',
+      'height': '100%',
+      'z-index': 0,
+      'top': 0,
+      'left': 0,
+      'right': 0,
+      'bottom': 0,
+    };
+
+    this.myParams = {
+      particles: {
+        number: {
+          value: 100,
+        },
+        color: {
+          value: '#fff'
+        },
+        shape: {
+          type: 'circle',
+        },
+      }
+    };
   }
 }
