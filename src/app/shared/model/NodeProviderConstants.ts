@@ -14,6 +14,13 @@ export class NodeProvider {
     NodeProvider.OPENSTACK,
     NodeProvider.BRINGYOUROWN
   ];
+
+  public static readonly ProviderNames: Object = {
+    [NodeProvider.AWS]: 'Amazon Web Services',
+    [NodeProvider.DIGITALOCEAN]: 'Digital Ocean',
+    [NodeProvider.OPENSTACK]: 'Openstack',
+    [NodeProvider.BRINGYOUROWN]: 'Bring Your Own'
+  };
 }
 
 export namespace NodeInstanceFlavors {
