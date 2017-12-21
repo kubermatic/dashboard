@@ -1,6 +1,5 @@
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
-
 header {
   height: 45px;
 }
@@ -58,6 +57,7 @@ ng2-slim-loading-bar {
 }
 
 .button {
+  cursor: pointer;
   display: inline-block;
   color: #444D58;
   text-decoration: none;
