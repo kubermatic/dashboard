@@ -1,12 +1,10 @@
-<div class="frontpage-content" fxLayout="column" fxLayoutAlign="center center">
-  <mat-card>
-      <img mat-card-image src="../../assets/images/logo/header-logo-kubermatic.png">
-  </mat-card>
-  <p class="frontpage-inner-text">Scale apps with one click -<br>
-    in cloud or your own datacenter</p>
-  <a mat-raised-button class="login-button" href="{{environment.coreOSdexAuth}}">Login</a>
-</div>
-
-<div class="frontpage-bg"></div>
-<particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles>
-
+<ng-container *ngIf="!auth.authenticated()">
+  <div class="frontpage-content" fxLayout="column" fxLayoutAlign="center center">
+    <p class="frontpage-inner-text">Scale apps with one click -<br>
+      in cloud or your own datacenter</p>
+    <a mat-raised-button class="login-button" href="{{environment.coreOSdexAuth}}">Login</a>
+  </div>
+  
+  <div class="frontpage-bg"></div>
+  <particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles>
+</ng-container>  

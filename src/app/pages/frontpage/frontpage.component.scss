@@ -10,14 +10,13 @@
   z-index: -1;
 }
 
-.mat-card {
-  max-width: 400px;
-  height: 120px;
-  z-index: 1;
-}
-
 .frontpage-content {
-  margin-top: 90px;
+  position: absolute;
+  top: -50px;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
 
   .frontpage-inner-text {
     text-align: center;
@@ -26,15 +25,17 @@
     font-family: 'Titillium Web', sans-serif;
     font-size: 28px;
     font-weight: 600;
-    margin-bottom: 70px;
+    margin-bottom: 15px;
   }
 
   .mat-raised-button {
     line-height: 57px !important;
     color: #444D58;
     font-size: 28px;
+    opacity: 0.8;
     font-family: 'Titillium Web', sans-serif;
-    width: 170px;
+    max-width: 470px;
+    width: 100%;
     height: 60px;
     font-weight: 600 !important;
     z-index: 1;
