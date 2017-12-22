@@ -14,7 +14,9 @@ export class FrontpageComponent implements OnInit {
   public myParams: object = {};
   public width: number = 100;
   public height: number = 100;
+
   public environment: any = environment;
+  public isAuth: boolean = false;
 
   constructor(private auth: Auth, private router: Router) {
   }
@@ -22,6 +24,7 @@ export class FrontpageComponent implements OnInit {
   ngOnInit(): void {
     if (this.auth.authenticated()) {
       this.router.navigate(['clusters']);
+      this.isAuth = true;
     }
 
     this.myStyle = {
