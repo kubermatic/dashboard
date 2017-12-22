@@ -93,21 +93,13 @@
     </mat-card-content>
   </mat-card>
 
-  <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
-    <ng-container *ngSwitchCase="true">
-
-      <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node>
 
 
-      <!--kubermatic-node-group [nodes]="groupedNodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node-group-->
+  <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider" [clusterRunning]="cluster.isRunning()"></kubermatic-node>
 
-    </ng-container>
 
-    <ng-container *ngSwitchCase="false" align="center">
-      <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>
-      <mat-spinner *ngIf="!cluster.isRunning() && !nodes" color="accent" class="node-list-spinner"></mat-spinner>
-    </ng-container>
-  </ng-container>
+  <!--kubermatic-node-group [nodes]="groupedNodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node-group-->
+
 
   <!-- TODO: Show with final content -->
   <!-- [fxShow]="cluster.provider == 'bringyourown'" -->
