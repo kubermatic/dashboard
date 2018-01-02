@@ -122,3 +122,19 @@ kubermatic-cluster-health-status {
   padding: 5px 15px;
   font-family: "Menlo", monospace;
 }
+
+.download {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 12px;
+  height: 10px;
+  background-image: url("../../../assets/images/download.svg");
+  background-repeat: no-repeat;
+}
+
+button { 
+  a {
+    text-decoration: none;
+    color: white;
+  }
+}
