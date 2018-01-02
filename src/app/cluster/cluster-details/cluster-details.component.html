@@ -61,7 +61,12 @@
       <mat-card-title fxLayout>
         <div fxFlex="25%">Provider</div>
         <div fxFlex="35%">Node Region</div>
-        <div fxFlex="40%">SSH keys</div>
+        <div fxFlex="40%">
+          SSH keys
+          <span class="km-card-ssh-tooltip" matTooltip="You can only login into the nodes with the user ‘apiserver’.">
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+          </span>
+        </div>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout>
