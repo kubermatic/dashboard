@@ -1,16 +1,10 @@
-<div class="container">
-  <div class="row frontpage-container">
-    <div class="col">
-      <div class="frontpage-text">
-        <img src="../../assets/images/logo/header-logo-kubermatic.png" width="100%" alt="Logo Kubermativ" style="max-width: 800px;">
-        <h3 class="intro-lead-in">Create your Kubernetes cluster – in seconds – where you want.</h3>
-
-          <p class="intro-lead-full">Kubermatic will host your Kubernetes master as a Service.
-            You can select the IaaS provider of your choice.
-            Create nodes with ease, update them, scale up and down.
-            Kubernetes made easy.</p>
-      </div>
-    </div>
+<ng-container *ngIf="!isAuth">
+  <div class="frontpage-content" fxLayout="column" fxLayoutAlign="center center">
+    <p class="frontpage-inner-text">Scale apps with one click -<br>
+      in cloud or your own datacenter</p>
+    <a mat-raised-button class="login-button" href="{{environment.coreOSdexAuth}}">Login</a>
   </div>
-</div>
-
+  
+  <div class="frontpage-bg"></div>
+  <particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles>
+</ng-container>  
