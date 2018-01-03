@@ -1,7 +1,9 @@
 .mat-card {
+  padding: 0;
   .mat-card-header {
     padding: 0;
     margin-bottom: 10px;
+    border: none;
   }
 
   .mat-card-header-text {
@@ -11,7 +13,7 @@
   .mat-card-title {
     margin: 0;
     h4 {
-      font-weight: 400;
+      font-weight: 600;
       margin: 10px 0;
       font-size: 18px;
       color: #444D58;
@@ -38,21 +40,23 @@
   height: 26px;
   line-height: 26px;
 
+  .km-card-list-key {
+    font-size: 14px;
+    font-weight: 600;
+    color: #444D58;
+  }
+
   &.ssh-key {
     height: auto;
   }
   &.provider  {
-    height: 50px;
+    height: auto;
     line-height: 50px;
 
-    .icon-provider {
-      float: left;
-      padding-right: 10px;
-    }
-    .region {
-      float: left;
-
-    }
+    // .icon-provider {
+    //   float: left;
+    //   padding-right: 10px;
+    // }
 
     .region-name {
       line-height: 40px;

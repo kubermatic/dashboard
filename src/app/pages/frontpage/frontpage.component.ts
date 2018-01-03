@@ -16,12 +16,14 @@ export class FrontpageComponent implements OnInit {
   public height: number = 100;
   public environment: any = environment;
 
+
   constructor(private auth: Auth, private router: Router) {
   }
 
   ngOnInit(): void {
     if (this.auth.authenticated()) {
       this.router.navigate(['clusters']);
+      this.isAuth = true;
     }
 
     this.myStyle = {
