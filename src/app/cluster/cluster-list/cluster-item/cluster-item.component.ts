@@ -1,9 +1,8 @@
 import { Subscription } from 'rxjs/Subscription';
 import { DatacenterService } from 'app/core/services';
-import { NodeProvider } from 'app/shared/model/NodeProviderConstants';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-item',
@@ -26,7 +25,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
       this.subscriptions.push(sub);
     }
 
-    if (!this.nodeDc && this.cluster.provider !== NodeProvider.BRINGYOUROWN) {
+    if (!this.nodeDc && !this.cluster.spec.cloud.bringyourown) {
       const sub = this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
       this.subscriptions.push(sub);
     }

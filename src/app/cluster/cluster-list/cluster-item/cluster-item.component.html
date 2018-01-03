@@ -31,8 +31,16 @@
       </ng-container>
     </div>
 
-    <div fxFlex="16%" *ngIf="seedDc" fxHide.sm fxHide.xs>{{seedDc.spec.country}} ({{seedDc.spec.location}})</div>
-    <div fxFlex="16%" *ngIf="nodeDc" fxHide.sm fxHide.xs>{{nodeDc.spec.country}} ({{nodeDc.spec.location}})</div>
+    <div fxFlex="16%" fxHide.sm fxHide.xs>
+      <ng-container *ngIf="seedDc">
+        {{seedDc.spec.country}} ({{seedDc.spec.location}})
+      </ng-container>
+    </div>
+    <div fxFlex="16%" fxHide.sm fxHide.xs>
+      <ng-container *ngIf="nodeDc">
+          {{nodeDc.spec.country}} ({{nodeDc.spec.location}})
+      </ng-container>
+    </div>
     <div fxFlex="16%" fxFlex.sm="20.66%" fxHide.xs>{{cluster.status.phase}}</div>
     <!--div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="35%">
         <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
