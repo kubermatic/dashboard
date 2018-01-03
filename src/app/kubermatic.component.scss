@@ -45,3 +45,28 @@ mat-sidenav {
 .km-progress-bar-container {
   background-color: #E3E8EC;
 }
+
+.km-copy {
+  position: absolute;
+  line-height: 30px;
+  left: 10px;
+}
+
+.km-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+
+  li {
+    float: none;
+    a {
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+footer {
+  z-index: 1;
+}
