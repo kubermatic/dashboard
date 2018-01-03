@@ -15,6 +15,13 @@
 
 .km-card-list .km-card-list-header {
   margin-bottom: 10px;
+  .km-card-ssh-tooltip {
+    i {
+      color: #CCCCCC;
+      font-size: 18px;
+      margin-left: 5px;
+    }
+  }
 }
 
 .km-card-list-content {

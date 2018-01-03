@@ -13,10 +13,12 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
         .do(
           event => {},
           errorInstance => {
-            NotificationActions.error(
-              `Error ${errorInstance.status}`,
-              `${errorInstance.error.error.message || errorInstance.statusText}`
-            );
+            if (errorInstance) {
+              NotificationActions.error(
+                `Error ${errorInstance.status}`,
+                `${errorInstance.message || errorInstance.statusText}`
+              );
+            }
           }
         );
   }

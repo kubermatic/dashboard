@@ -15,6 +15,7 @@ export class NodeComponent implements OnInit {
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
   @Input() index: number;
+  @Input() clusterRunning: boolean;
   public conditionsMessage: string = '';
   public nodeRemoval: boolean = false;
   // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
