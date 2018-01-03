@@ -46,6 +46,35 @@ mat-sidenav {
   background-color: #E3E8EC;
 }
 
+
+.km-copy {
+  position: absolute;
+  line-height: 30px;
+  left: 10px;
+}
+
+.km-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+
+  li {
+    float: none;
+    a {
+      display: flex;
+      align-items: center;
+      i {
+        color: rgba(68, 77, 88, 0.7);
+      }
+    }
+  }
+}
+
 footer {
   z-index: 1;
+  color: rgba(68, 77, 88, 0.7);
+  a {
+    color: rgba(68, 77, 88, 0.7);
+  }
 }
