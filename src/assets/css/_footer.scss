@@ -1,6 +1,6 @@
 footer {
   background-color: #fff;
-  color: #BCC5D0;
+  color: rgba(68, 77, 88, 0.7);
   border-top: 1px solid #BCC5D0;
   position: fixed;
   bottom: 0;
@@ -16,7 +16,7 @@ footer {
     font-weight: 400;
     line-height: 35px;
     a {
-      color: #BCC5D0;
+      color: rgba(68, 77, 88, 0.7);
       font-size: 14px;
       font-weight: 400;
       text-decoration: none;
@@ -30,7 +30,7 @@ footer {
       li {
         float: right;
         a {
-          margin: 5px;
+          margin: 8px 5px;
           text-decoration: none;
           display: inline-block;
           height: 24px;
@@ -38,7 +38,7 @@ footer {
           text-align: center;
 
           i {
-            color: #BCC5D0;
+            color: rgba(68, 77, 88, 0.7);
           }
         }
       }
