@@ -29,7 +29,6 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
       const sub = this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
       this.subscriptions.push(sub);
     }
-
   }
 
   public loadDataCenter(dcName: string, dcObjectName: string): Subscription {
@@ -38,6 +37,22 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
         this[dcObjectName] = new DataCenterEntity(res.metadata, res.spec, res.seed);
       }
     );
+  }
+
+  public getClusterImagePath(): string {
+    let path: string = '/assets/images/clouds/';
+
+    if (this.cluster.spec.cloud.aws) {
+      path += 'aws.png';
+    } else if (this.cluster.spec.cloud.digitalocean) {
+      path += 'digitalocean.png';
+    } else if (this.cluster.spec.cloud.openstack) {
+      path += 'openstack.png';
+    } else if (this.cluster.spec.cloud.bringyourown) {
+      path += 'bringyourown.png';
+    }
+
+    return path;
   }
 
   public getShortClusterName(name: string): string {

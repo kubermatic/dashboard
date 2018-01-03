@@ -10,20 +10,10 @@
 
       </span>
     </div>
-    <div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="25%">
+    <div fxFlex="16%" fxFlex.sm="20.66%" fxFlex.xs="25%">
       <ng-container [ngSwitch]="!!cluster.spec.cloud">
         <span *ngSwitchCase="true">
-          <img *ngIf="cluster.spec.cloud.aws" src="/assets/images/clouds/aws.png" class="icon-seed-cluster" alt="Cluster Icon" height="30"
-          />
-          <img *ngIf="cluster.spec.cloud.digitalocean" src="/assets/images/clouds/digitalocean.png" class="icon-seed-cluster" alt="Cluster Icon"
-            height="30" />
-          <img *ngIf="cluster.spec.cloud.baremetal" src="/assets/images/clouds/baremetal.png" class="icon-seed-cluster" alt="Cluster Icon"
-            height="30" />
-          <img *ngIf="cluster.spec.cloud.openstack" src="/assets/images/clouds/openstack.png" class="icon-seed-cluster" alt="Cluster Icon"
-            height="17" style="padding-top: 7px;" />
-          <img *ngIf="cluster.spec.cloud.bringyourown" src="/assets/images/clouds/bringyourown.png" class="icon-seed-cluster" alt="Cluster Icon"
-            height="30" />
-
+          <img [src]="getClusterImagePath()" class="icon-seed-cluster" alt="Cluster Icon" height="30"/>
         </span>
         <p *ngSwitchCase="false" class="text-muted">
           No provider
