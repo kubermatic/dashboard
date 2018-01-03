@@ -17,7 +17,7 @@
 }
 
 .frontpage-content {
-  margin-top: 90px;
+  margin-top: 15%;
 
   .frontpage-inner-text {
     text-align: center;
@@ -26,17 +26,22 @@
     font-family: 'Titillium Web', sans-serif;
     font-size: 28px;
     font-weight: 600;
-    margin-bottom: 70px;
+    margin-bottom: 25px;
   }
 
   .mat-raised-button {
     line-height: 57px !important;
-    color: #444D58;
+    color: #0288d1;
     font-size: 28px;
     font-family: 'Titillium Web', sans-serif;
-    width: 170px;
+    width: 470px;
     height: 60px;
     font-weight: 600 !important;
     z-index: 1;
+    background-color: rgba(255, 255, 255, 0.8);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.9);
+    }
   }
 }
