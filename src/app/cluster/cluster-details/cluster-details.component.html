@@ -61,7 +61,12 @@
       <mat-card-title fxLayout>
         <div fxFlex="25%">Provider</div>
         <div fxFlex="35%">Node Region</div>
-        <div fxFlex="40%">SSH keys</div>
+        <div fxFlex="40%">
+          SSH keys
+          <span class="km-card-ssh-tooltip" matTooltip="You can only login into the nodes with the user ‘apiserver’.">
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+          </span>
+        </div>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout>
@@ -93,21 +98,13 @@
     </mat-card-content>
   </mat-card>
 
-  <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
-    <ng-container *ngSwitchCase="true">
-
-      <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node>
 
 
-      <!--kubermatic-node-group [nodes]="groupedNodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node-group-->
+  <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider" [clusterRunning]="cluster.isRunning()"></kubermatic-node>
 
-    </ng-container>
 
-    <ng-container *ngSwitchCase="false" align="center">
-      <span *ngIf="cluster.isRunning()">No Node available. Please add a Node.</span>
-      <mat-spinner *ngIf="!cluster.isRunning() && !nodes" color="accent" class="node-list-spinner"></mat-spinner>
-    </ng-container>
-  </ng-container>
+  <!--kubermatic-node-group [nodes]="groupedNodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="seedDc.spec.provider"></kubermatic-node-group-->
+
 
   <!-- TODO: Show with final content -->
   <!-- [fxShow]="cluster.provider == 'bringyourown'" -->
