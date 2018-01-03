@@ -1,3 +1,4 @@
+import { NodeProvider } from './../../shared/model/NodeProviderConstants';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
@@ -16,6 +17,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class SummaryComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
+  public providerNames = NodeProvider.ProviderNames;
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
