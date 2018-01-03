@@ -1,7 +1,8 @@
+import { Subscription } from 'rxjs/Subscription';
 import { DatacenterService } from 'app/core/services';
 import { NodeProvider } from 'app/shared/model/NodeProviderConstants';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 
 @Component({
@@ -9,28 +10,31 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
   templateUrl: './cluster-item.component.html',
   styleUrls: ['./cluster-item.component.scss']
 })
-export class ClusterItemComponent implements OnInit {
+export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() index: number;
 
   public seedDc: DataCenterEntity;
   public nodeDc: DataCenterEntity;
+  public subscriptions: Subscription[] = [];
 
   constructor(private dcService: DatacenterService) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     if (!this.seedDc) {
-      this.loadDataCenter(this.cluster.spec.seedDatacenterName, 'seedDc');
+      const sub = this.loadDataCenter(this.cluster.spec.seedDatacenterName, 'seedDc');
+      this.subscriptions.push(sub);
     }
 
     if (!this.nodeDc && this.cluster.provider !== NodeProvider.BRINGYOUROWN) {
-      this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
+      const sub = this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
+      this.subscriptions.push(sub);
     }
 
   }
 
-  public loadDataCenter(dcName, dcObjectName): void {
-    this.dcService.getDataCenter(dcName).subscribe(
+  public loadDataCenter(dcName: string, dcObjectName: string): Subscription {
+    return this.dcService.getDataCenter(dcName).subscribe(
       res => {
         this[dcObjectName] = new DataCenterEntity(res.metadata, res.spec, res.seed);
       }
@@ -39,5 +43,11 @@ export class ClusterItemComponent implements OnInit {
 
   public getShortClusterName(name: string): string {
     return name.length > 12 ?  name.slice(0, 12) + '...' : name;
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }
