@@ -14,9 +14,9 @@ export class FrontpageComponent implements OnInit {
   public myParams: object = {};
   public width: number = 100;
   public height: number = 100;
-
   public environment: any = environment;
   public isAuth: boolean = false;
+
 
   constructor(private auth: Auth, private router: Router) {
   }
