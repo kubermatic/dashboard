@@ -22,7 +22,7 @@
     </mat-card-header>
     <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
       <div *ngSwitchCase="true" fxLayout="column">
-        <kubermatic-cluster-item *ngFor="let cluster of clusters; let i = index" [cluster]="cluster" [index]="i" fxFlex></kubermatic-cluster-item>
+        <kubermatic-cluster-item *ngFor="let cluster of clusters; let i = index; trackBy: trackCluster" [cluster]="cluster" [index]="i" fxFlex></kubermatic-cluster-item>
       </div>
       <div fxLayout>
         <a routerLink="/wizard" class="button white">

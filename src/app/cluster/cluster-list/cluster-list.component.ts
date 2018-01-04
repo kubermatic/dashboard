@@ -3,7 +3,7 @@ import { ApiService } from '../../core/services/api/api.service';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-
+import { find } from 'lodash';
 
 @Component({
   selector: 'kubermatic-cluster-list',
@@ -30,6 +30,14 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       this.clusters = result;
       this.loading = false;
     });
+  }
+
+  public trackCluster(index: number, cluster: ClusterEntity): number {
+    const prevCluster = find(this.clusters, item => {
+      return item.metadata.name === cluster.metadata.name;
+    });
+
+    return prevCluster && prevCluster.status.phase === cluster.status.phase ? index : undefined;
   }
 
   ngOnDestroy() {
