@@ -1,11 +1,13 @@
 <div *ngIf="!loading">
-  <kubermatic-add-ssh-key
-    (syncSshKey)="handleKeyUpdated()"
-  ></kubermatic-add-ssh-key>
-
-  <kubermatic-list-ssh-key
-    [sshKeys]="sshKeys"
-  ></kubermatic-list-ssh-key>
+  <div fxLayout>
+      <div fxFlex align="right">
+        <button mat-raised-button (click)="addSshKeyDialog()" color="primary" type="button">
+          <span class="btn-text-default">+ Add SSH Key</span>
+        </button>
+      </div>
+  </div>
+  
+  <kubermatic-list-ssh-key [sshKeys]="sshKeys"></kubermatic-list-ssh-key>
 </div>
 <div *ngIf="loading" >
   <mat-spinner color="accent" class="km-spinner"></mat-spinner>

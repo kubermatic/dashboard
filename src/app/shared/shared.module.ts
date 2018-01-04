@@ -1,3 +1,4 @@
+import { AddSshKeyModalComponent } from 'app/shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -68,12 +69,17 @@ const modules: Array<any> = [
     imports: [
         ...modules
     ],
+    declarations: [
+        AddSshKeyModalComponent
+    ],
     exports: [
-        ...modules
+        ...modules,
+        AddSshKeyModalComponent
     ],
     providers: [
         {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}
-    ]
+    ],
+    entryComponents: [AddSshKeyModalComponent]
 })
 
 export class SharedModule { }

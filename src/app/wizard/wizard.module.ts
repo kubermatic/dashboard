@@ -5,7 +5,6 @@ import { SharedModule } from 'app/shared/shared.module';
 import { SshKeyFormFieldComponent } from './set-settings/ssh-key-form-field/ssh-key-form-field.component';
 import { NgModule } from '@angular/core';
 import { WizardComponent } from 'app/wizard/wizard.component';
-import { AddSshKeyModalComponent } from 'app/wizard/set-settings/add-ssh-key-modal/add-ssh-key-modal.component';
 import { NavigationButtonsComponent } from 'app/wizard/navigation-buttons/navigation-buttons.component';
 import { ProgressComponent } from 'app/wizard/progress/progress.component';
 import { SetClusterNameComponent } from 'app/wizard/set-cluster-name/set-cluster-name.component';
@@ -21,7 +20,6 @@ import { BringyourownClusterComponent } from 'app/wizard/set-settings/provider/c
 
 const components: any[] = [
     WizardComponent,
-    AddSshKeyModalComponent,
     NavigationButtonsComponent,
     ProgressComponent,
     SetClusterNameComponent,
@@ -51,7 +49,6 @@ const components: any[] = [
         ...components
     ],
     entryComponents: [
-        AddSshKeyModalComponent
     ],
     providers: [],
 })
