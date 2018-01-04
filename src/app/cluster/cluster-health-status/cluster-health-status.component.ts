@@ -18,21 +18,16 @@ export class ClusterHealthStatusComponent implements OnInit {
 
   }
 
-  public getHealthStatusColor(type) {
+  public getHealthStatusColor() {
     if (this.health) {
-      switch (type) {
-        case 'apiserver':
-          return this.health.apiserver ? this.green : this.red;
-        case 'controller':
-          return this.health.controller ? this.green : this.red;
-        case 'etcd':
-          return this.health.etcd ? this.green : this.red;
-        case 'scheduler':
-          return this.health.scheduler ? this.green : this.red;
-        case 'node-controller':
-          return this.health.nodeController ? this.green : this.red;
-        default:
-          return this.orange;
+      if (this.health.apiserver && this.health.controller && this.health.etcd && this.health.scheduler && this.health.nodeController) {
+        return this.green;
+      }
+      else if (!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.scheduler || !this.health.nodeController) {
+        return this.red;
+      }
+      else {
+        return this.orange;
       }
     } else {
       return this.orange;
