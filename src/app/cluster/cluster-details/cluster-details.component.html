@@ -22,7 +22,7 @@
     </div>
   </div>
 
-  <mat-card class="km-card-list">
+  <mat-card class="km-card-list" [ngClass]="{'statusRunning': cluster.status.phase == 'Running', 'statusFailed': cluster.status.phase == 'Failed', 'statusWaiting': cluster.status.phase != 'Running' && cluster.status.phase != 'Failed'}">
     <mat-card-header class="km-card-list-header">
       <mat-card-title>
         {{cluster.spec.humanReadableName}} 

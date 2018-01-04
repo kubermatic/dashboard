@@ -133,6 +133,18 @@ kubermatic-cluster-health-status {
   background-repeat: no-repeat;
 }
 
+.statusRunning {
+  background-color: #FFFFFF;
+}
+
+.statusFailed {
+  background-color: #FFF0EC;
+}
+
+.statusWaiting {
+  background-color: #FFFBEB;
+}
+
 button { 
   a {
     text-decoration: none;
