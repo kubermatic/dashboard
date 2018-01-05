@@ -9,10 +9,6 @@
         font-weight: 600;
         font-size: 14px;
     }
-
-    .mat-icon-button {
-        margin-top: -11px;
-    }
 }
 
 .km-card-list-content {
@@ -20,8 +16,33 @@
     margin-left: -24px;
     margin-right: -24px;
     padding: 0 24px;
+    position: relative;    
 }
 
 .km-card-list-content:hover {
     background-color: #EEF5FF;
+}
+
+.button-delete {
+    position: absolute;
+    right: 24px;
+    top: 8px;
+    z-index: 1;
+}
+
+.publickey-content {
+    background-color: #EEF5FF;
+    margin-left: -24px;
+    margin-right: -24px;
+    padding: 23px 20px 15px;
+
+    .publickey {
+        padding: 15px 20px;
+        background-color: #F7FAFF;
+        word-wrap:break-word;
+        -ms-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+        font-size: 12px;
+    }
 }

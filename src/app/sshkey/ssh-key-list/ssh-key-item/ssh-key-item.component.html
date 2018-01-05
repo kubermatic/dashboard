@@ -1,23 +1,30 @@
 <div class="km-card-list-content">
-  <div fxLayout class="km-card-list-content-item">
-    <div fxFlex="48%">
+  <div fxLayout class="km-card-list-content-item" (click)="togglePublicKey()">
+    <div fxFlex="50%">
       <div class="key-name">
         {{sshKey.spec.name}}
       </div>
     </div>
-    <div fxFlex="48%">
+    <div fxFlex="50%">
       {{sshKey.spec.fingerprint}}
     </div>
-    <div fxFlex="4%">
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
+  </div>
+  <div class="button-delete">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="deleteSSHKey(sshKey, $event)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
       </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="deleteSSHKey(sshKey)">
-          <mat-icon>delete</mat-icon>
-          <span>Delete</span>
-        </button>
-      </mat-menu>
+    </mat-menu>
+  </div>
+</div>
+<div class="publickey-content" *ngIf="isShowPublicKey">
+  <div fxLayout>
+    <div fxFlex="100%" class="publickey">
+        {{sshKey.spec.publicKey}}
     </div>
   </div>
 </div>
