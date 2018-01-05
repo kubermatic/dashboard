@@ -26,7 +26,7 @@
     <mat-card-header class="km-card-list-header">
       <mat-card-title>
         {{cluster.spec.humanReadableName}} 
-        <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
+        <kubermatic-cluster-health-status [health]="cluster.status.health" [status]="cluster.status.phase"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout >

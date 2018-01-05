@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Health} from '../../shared/entity/ClusterEntity';
+import {Health, Status} from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-health-status',
@@ -8,9 +8,10 @@ import {Health} from '../../shared/entity/ClusterEntity';
 })
 export class ClusterHealthStatusComponent implements OnInit {
   @Input() health: Health;
+  @Input() status: Status;
   green = 'fa fa-circle green';
-  red = 'fa fa-circle-o red';
-  orange = 'fa fa-spin fa-circle-o-notch orange';
+  red = 'fa fa-circle red';
+  orange = 'fa fa-circle orange';
 
   constructor() { }
 
@@ -22,11 +23,9 @@ export class ClusterHealthStatusComponent implements OnInit {
     if (this.health) {
       if (this.health.apiserver && this.health.controller && this.health.etcd && this.health.scheduler && this.health.nodeController) {
         return this.green;
-      }
-      else if (!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.scheduler || !this.health.nodeController) {
+      } else if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.scheduler || !this.health.nodeController) && this.status.phase === 'Failed') {
         return this.red;
-      }
-      else {
+      } else {
         return this.orange;
       }
     } else {
