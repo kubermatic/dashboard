@@ -1,4 +1,4 @@
-<div class="km-card-list-content">
+<div class="km-card-list-content" [ngClass]="{odd: isOdd}">
   <div fxLayout class="km-card-list-content-item" (click)="togglePublicKey()">
     <div fxFlex="50%" fxFlex.sm="40%">
       <div class="key-name">

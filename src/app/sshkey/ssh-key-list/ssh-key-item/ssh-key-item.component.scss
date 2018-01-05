@@ -22,11 +22,10 @@
     margin-left: -24px;
     margin-right: -24px;
     padding: 0 24px;
-    position: relative;    
-}
-
-.km-card-list-content:hover {
-    background-color: #EEF5FF;
+    position: relative;  
+    &.odd {
+        background-color: #F7FAFF;        
+    }  
 }
 
 .button-delete {
@@ -44,6 +43,7 @@
 
     .publickey-content {
         background-color: #ffffff;
+        padding-bottom: 5px;
 
         .publickey-name {
             font-size: 18px;

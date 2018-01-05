@@ -41,7 +41,12 @@
           </mat-card-title>
         </mat-card-header>
         <ng-container *ngIf="sshKeys && sshKeys.length > 0">
-          <kubermatic-ssh-key-item *ngFor="let key of sshKeys" [sshKey]="key" (deleteSshKey)="deleteSSHKey($event)"></kubermatic-ssh-key-item>
+          <kubermatic-ssh-key-item 
+            *ngFor="let key of sshKeys; let odd = odd" 
+            [sshKey]="key" 
+            [isOdd]="odd"
+            (deleteSshKey)="deleteSSHKey($event)">
+          </kubermatic-ssh-key-item>
         </ng-container>
       </mat-card>
     </ng-container>

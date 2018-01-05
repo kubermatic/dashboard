@@ -9,28 +9,24 @@ import { ApiService } from 'app/core/services/api/api.service';
 })
 export class SshKeyItemComponent implements OnInit {
   @Input() sshKey: SSHKeyEntity;
+  @Input() isOdd: boolean;
   @Output() deleteSshKey: EventEmitter<SSHKeyEntity> = new EventEmitter();
+
   public isShowPublicKey: boolean = false;
   public publicKeyName: string;
   public publicKey: string;
 
   constructor(private api: ApiService) { }
 
-  ngOnInit() {
-    console.log(this.sshKey);
+  public ngOnInit(): void {
     this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
 
     this.publicKey = this.sshKey.spec.publicKey.slice(this.publicKeyName.length + 1, -1);
-
   }
 
   public deleteSSHKey(key: SSHKeyEntity, event: any): void {
-    event.preventDefault();
-
     this.api.deleteSSHKey(key.metadata.name).subscribe(() => {
-      // this.sshKeys.splice(this.sshKeys.indexOf(key), 1);
       this.deleteSshKey.emit(key);
-      // NotificationActions.success('Success', `SSH key ${name} deleted.`);
     });
   }
 
