@@ -9,6 +9,12 @@
         font-weight: 600;
         font-size: 14px;
     }
+
+    .key-fingerprint {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        padding-right: 30px;
+    }
 }
 
 .km-card-list-content {
@@ -30,19 +36,32 @@
     z-index: 1;
 }
 
-.publickey-content {
+.publickey-wrapper {
     background-color: #EEF5FF;
     margin-left: -24px;
     margin-right: -24px;
     padding: 23px 20px 15px;
 
-    .publickey {
-        padding: 15px 20px;
-        background-color: #F7FAFF;
-        word-wrap:break-word;
-        -ms-hyphens: auto;
-        -webkit-hyphens: auto;
-        hyphens: auto;
-        font-size: 12px;
+    .publickey-content {
+        background-color: #ffffff;
+
+        .publickey-name {
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #444D58;
+            padding: 20px;
+        }
+
+        .publickey {
+            padding: 15px 20px;
+            background-color: #F7FAFF;
+            word-wrap:break-word;
+            -ms-hyphens: auto;
+            -webkit-hyphens: auto;
+            hyphens: auto;
+            font-size: 12px;
+        }
     }
+
 }

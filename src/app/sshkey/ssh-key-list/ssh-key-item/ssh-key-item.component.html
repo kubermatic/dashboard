@@ -1,11 +1,11 @@
 <div class="km-card-list-content">
   <div fxLayout class="km-card-list-content-item" (click)="togglePublicKey()">
-    <div fxFlex="50%">
+    <div fxFlex="50%" fxFlex.sm="40%">
       <div class="key-name">
         {{sshKey.spec.name}}
       </div>
     </div>
-    <div fxFlex="50%">
+    <div fxFlex="50%" fxFlex.sm="60%" class="key-fingerprint">
       {{sshKey.spec.fingerprint}}
     </div>
   </div>
@@ -21,10 +21,13 @@
     </mat-menu>
   </div>
 </div>
-<div class="publickey-content" *ngIf="isShowPublicKey">
-  <div fxLayout>
-    <div fxFlex="100%" class="publickey">
-        {{sshKey.spec.publicKey}}
+<div class="publickey-wrapper" *ngIf="isShowPublicKey">
+  <div class="publickey-content">
+    <div class="publickey-name">
+      {{publicKeyName}}
+    </div>
+    <div class="publickey">
+      {{publicKey}}
     </div>
   </div>
 </div>

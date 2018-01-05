@@ -11,11 +11,17 @@ export class SshKeyItemComponent implements OnInit {
   @Input() sshKey: SSHKeyEntity;
   @Output() deleteSshKey: EventEmitter<SSHKeyEntity> = new EventEmitter();
   public isShowPublicKey: boolean = false;
+  public publicKeyName: string;
+  public publicKey: string;
 
   constructor(private api: ApiService) { }
 
   ngOnInit() {
     console.log(this.sshKey);
+    this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
+
+    this.publicKey = this.sshKey.spec.publicKey.slice(this.publicKeyName.length + 1, -1);
+
   }
 
   public deleteSSHKey(key: SSHKeyEntity, event: any): void {
