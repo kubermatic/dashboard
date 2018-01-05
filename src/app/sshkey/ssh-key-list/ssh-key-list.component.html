@@ -6,7 +6,7 @@
     </mat-card>
 
     <ng-container *ngSwitchCase="true">
-        <mat-card class="km-sshkey-card" *ngFor="let key of sshKeys; let i = index;">
+        <!-- <mat-card class="km-sshkey-card" *ngFor="let key of sshKeys; let i = index;">
             <mat-card-header>
               <mat-card-title fxLayout>
                   <div fxFlex="90%" class="km-ssh-key-name">
@@ -32,6 +32,17 @@
                   <small>Fingerprint: {{ key.spec.fingerprint }}</small>
                 </div>
             </mat-card-content>
-        </mat-card>
+        </mat-card> -->
+      <mat-card class="km-card-list">
+        <mat-card-header class="km-card-list-header">
+          <mat-card-title fxLayout>
+            <div fxFlex="48%">SSH Keys</div>
+            <div fxFlex="52%">Fingerprint</div>
+          </mat-card-title>
+        </mat-card-header>
+        <ng-container *ngIf="sshKeys && sshKeys.length > 0">
+          <kubermatic-ssh-key-item *ngFor="let key of sshKeys" [sshKey]="key" (deleteSshKey)="deleteSSHKey($event)"></kubermatic-ssh-key-item>
+        </ng-container>
+      </mat-card>
     </ng-container>
 </ng-container>

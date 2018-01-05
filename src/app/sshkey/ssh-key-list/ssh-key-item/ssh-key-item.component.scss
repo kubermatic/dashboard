@@ -1,0 +1,27 @@
+
+.km-card-list-content-item {
+    color: #444D58;
+    font-size: 12px;
+    height: 70px;
+    padding-top: 20px;
+
+    .key-name {
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .mat-icon-button {
+        margin-top: -11px;
+    }
+}
+
+.km-card-list-content {
+    cursor: pointer;
+    margin-left: -24px;
+    margin-right: -24px;
+    padding: 0 24px;
+}
+
+.km-card-list-content:hover {
+    background-color: #EEF5FF;
+}
