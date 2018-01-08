@@ -33,8 +33,9 @@
 }
 
 .km-card-list-content {
-  height: 26px;
-  line-height: 26px;
+  line-height: 14px;
+  font-size: 12px;
+  margin-bottom: 20px;
   &.seed  {
     .flag-icon {
       font-size: 24px;
