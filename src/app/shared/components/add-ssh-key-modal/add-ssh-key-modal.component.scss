@@ -52,6 +52,10 @@
       color: #444D58;
     }
 
+    &.mat-raised-button.mat-primary {
+      color: #fff;
+    }
+
     &.mat-raised-button.mat-primary[disabled] {
       color: #fff;
       background-color: #BDC6D1;
