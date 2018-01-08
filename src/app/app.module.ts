@@ -26,7 +26,7 @@ import { CoreModule } from 'app/core/core.module';
   declarations: [
     KubermaticComponent,
     DashboardComponent,
-    MobileNavigationComponent,
+    MobileNavigationComponent
   ],
   entryComponents: [
     MobileNavigationComponent

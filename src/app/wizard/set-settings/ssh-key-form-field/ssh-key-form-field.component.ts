@@ -4,7 +4,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AddSshKeyModalComponent } from '../add-ssh-key-modal/add-ssh-key-modal.component';
+import { AddSshKeyModalComponent } from '../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Subscription } from 'rxjs/Subscription';

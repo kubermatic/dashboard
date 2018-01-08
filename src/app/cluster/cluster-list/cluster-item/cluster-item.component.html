@@ -1,4 +1,4 @@
-<div class="km-card-list-content">
+<div class="km-card-list-content" [ngClass]="{odd: index % 2 !== 0}">
   <div fxLayout [routerLink]="['/clusters/', cluster.metadata.name]" class="km-card-list-content-item">
     <div fxFlex="3%" fxFlex.sm="3%" fxHide.xs>{{index + 1}}</div>
     <div fxFlex="38%" fxFlex.xs="40%">
