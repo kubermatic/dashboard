@@ -9,6 +9,7 @@ import {Health, Status} from '../../../shared/entity/ClusterEntity';
 })
 export class ClusterSecretsComponent implements OnInit {
   @Input() health: Health;
+  @Input() status: Status;
   expand = false;
 
   constructor() { }

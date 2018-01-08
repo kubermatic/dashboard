@@ -52,7 +52,7 @@
     </mat-card-content>
 
   </mat-card>
-  <kubermatic-cluster-secrets [health]="cluster.status.health"></kubermatic-cluster-secrets>
+  <kubermatic-cluster-secrets [health]="cluster.status.health" [status]="cluster.status.phase"></kubermatic-cluster-secrets>
 
   <mat-card class="km-card-list">
     <mat-card-header class="km-card-list-header" >
