@@ -2,12 +2,18 @@
 .km-card-list-content-item {
     color: #444D58;
     font-size: 12px;
-    height: 70px;
+    // height: 70px;
     padding-top: 20px;
+    padding-bottom: 20px;
 
     .key-name {
         font-weight: 600;
         font-size: 14px;
+    }
+
+    .key-timestamp {
+        margin-top: 10px;
+        font-size: 12px;
     }
 
     .key-fingerprint {

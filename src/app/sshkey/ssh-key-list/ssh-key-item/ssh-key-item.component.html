@@ -4,6 +4,9 @@
       <div class="key-name">
         {{sshKey.spec.name}}
       </div>
+      <div class="key-timestamp">
+        Created at {{sshKey.metadata.creationTimestamp | date:'dd/MM/yyyy'}}
+      </div>
     </div>
     <div fxFlex="50%" fxFlex.sm="60%" class="key-fingerprint">
       {{sshKey.spec.fingerprint}}

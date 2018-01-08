@@ -46,8 +46,9 @@
   button {
     font-size: 14px;
     font-weight: 600 !important;
-    letter-spacing: 0.4px;
     border-radius: 4px;
+    padding: 0px 22px;
+    line-height: 16px;
     &.mat-raised-button {
       color: #444D58;
     }
