@@ -10,18 +10,14 @@ import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
 export class ClusterSecretsComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() health: Health;
-  expand = false;
+  public expand: boolean = false;
 
   constructor() { }
 
   ngOnInit() {  }
 
-  public expandPanel(): void {
-    if (this.expand === false) {
-      this.expand = true;
-    } else {
-      this.expand = false;
-    }
+  isExpand(expand: boolean) {
+    this.expand = expand;
   }
 
   public decode(type: string): void {
