@@ -1,16 +1,14 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {ApiService} from "app/core/services/api/api.service";
-import {HttpModule} from "@angular/http";
-import {Auth} from "../core/services";
-import {RouterTestingModule} from "@angular/router/testing";
-import { SshkeyComponent } from "./sshkey.component";
-import { ListSshKeyComponent } from './list-ssh-key/list-ssh-key.component';
-import { AddSshKeyComponent } from './add-ssh-key/add-ssh-key.component';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import {FormBuilder, ReactiveFormsModule, FormsModule} from '@angular/forms';
+import {ApiService} from 'app/core/services/api/api.service';
+import {HttpModule} from '@angular/http';
+import {Auth} from 'app/core/services';
+import {RouterTestingModule} from '@angular/router/testing';
+import { SshkeyComponent } from './sshkey.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
-describe("SshkeyComponent", () => {
+describe('SshkeyComponent', () => {
   let component: SshkeyComponent;
   let fixture: ComponentFixture<SshkeyComponent>;
 
@@ -25,8 +23,6 @@ describe("SshkeyComponent", () => {
       ],
       declarations: [
         SshkeyComponent,
-        ListSshKeyComponent,
-        AddSshKeyComponent
       ],
       providers: [
         Auth,
@@ -43,7 +39,7 @@ describe("SshkeyComponent", () => {
     fixture.detectChanges();
   });
 
-  it("should create", () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

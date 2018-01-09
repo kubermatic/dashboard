@@ -6,12 +6,12 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
-import {ConnectionBackend, RequestOptions, HttpModule} from "@angular/http";
-import {Auth} from "../../core/services";
-import {RouterTestingModule} from "@angular/router/testing";
-import {FormBuilder, NgModel} from "@angular/forms";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {ApiService} from "app/core/services/api/api.service";
+import {ConnectionBackend, RequestOptions, HttpModule} from '@angular/http';
+import {Auth} from 'app/core/services';
+import {RouterTestingModule} from '@angular/router/testing';
+import {FormBuilder} from '@angular/forms';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ApiService} from 'app/core/services/api/api.service';
 
 describe('NodeDeleteConfirmationComponent', () => {
   let component: NodeDeleteConfirmationComponent;
