@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ClusterHealthStatusComponent } from './cluster-health-status.component';
-import {MaterialModule, MatTooltip, MatButton} from '@angular/material';
+import {MatTooltip, MatButton} from '@angular/material';
 
 describe('ClusterHealthStatusComponent', () => {
   let component: ClusterHealthStatusComponent;
@@ -10,7 +10,6 @@ describe('ClusterHealthStatusComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        MaterialModule,
         MatTooltip,
         MatButton
       ],

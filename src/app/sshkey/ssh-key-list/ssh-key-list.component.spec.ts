@@ -2,7 +2,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import {FormBuilder,} from "@angular/forms";
 import { ListSshKeyComponent } from './list-ssh-key.component';
-import { MaterialModule } from '@angular/material';
 import {Auth} from "../../core/services";
 import {ApiService} from "app/core/services/api/api.service";
 import {BrowserModule} from "@angular/platform-browser";
@@ -18,8 +17,7 @@ describe('ListSshKeyComponent', () => {
       imports: [
         BrowserModule,
         HttpModule,
-        RouterTestingModule,
-        MaterialModule
+        RouterTestingModule
       ],
       declarations: [ ListSshKeyComponent ],
       providers: [

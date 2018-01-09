@@ -4,7 +4,6 @@ import {ApiService} from "app/core/services/api/api.service";
 import {HttpModule} from "@angular/http";
 import {Auth} from "../core/services";
 import {RouterTestingModule} from "@angular/router/testing";
-import { MaterialModule } from '@angular/material';
 import { SshkeyComponent } from "./sshkey.component";
 import { ListSshKeyComponent } from './list-ssh-key/list-ssh-key.component';
 import { AddSshKeyComponent } from './add-ssh-key/add-ssh-key.component';
@@ -22,8 +21,7 @@ describe("SshkeyComponent", () => {
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
-        RouterTestingModule,
-        MaterialModule
+        RouterTestingModule
       ],
       declarations: [
         SshkeyComponent,

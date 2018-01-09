@@ -6,7 +6,6 @@ import {Auth} from "../../services/auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
 import {BreadcrumbsComponent} from "../breadcrumbs/breadcrumbs.component";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
-import { MaterialModule } from '@angular/material';
 import {ConnectionBackend, HttpModule} from "@angular/http";
 import {SidenavService} from "../sidenav/sidenav.service";
 
@@ -20,7 +19,6 @@ describe("NavigationComponent", () => {
         BrowserModule,
         RouterTestingModule,
         SlimLoadingBarModule.forRoot(),
-        MaterialModule,
         HttpModule
       ],
       declarations: [

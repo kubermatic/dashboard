@@ -11,7 +11,6 @@ import {AUTH_PROVIDERS, Auth, AuthGuard} from "./core/services";
 import {ApiService} from "app/core/services/api/api.service";
 import {SimpleNotificationsModule} from "angular2-notifications";
 import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
-import { MaterialModule } from '@angular/material';
 import { SidenavComponent } from './core/components/sidenav/sidenav.component';
 import { SidenavService} from './core/components/sidenav/sidenav.service';
 import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
@@ -25,8 +24,7 @@ describe("KubermaticComponent", () => {
         RouterTestingModule,
         //SimpleNotificationsModule.forRoot(),
         SimpleNotificationsModule,
-        SlimLoadingBarModule.forRoot(),
-        MaterialModule
+        SlimLoadingBarModule.forRoot()
       ],
       declarations: [
         KubermaticComponent,

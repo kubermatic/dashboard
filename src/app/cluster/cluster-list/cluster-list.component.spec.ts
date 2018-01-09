@@ -1,6 +1,6 @@
 /* tslint:disable:no-unused-variable */
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MaterialModule } from '@angular/material';
+
 import { ClusterListComponent } from './cluster-list.component';
 import { ClusterItemComponent } from "./cluster-item/cluster-item.component";
 import {Auth} from "../../core/services";
@@ -20,7 +20,6 @@ describe('ClusterListComponent', () => {
         ClusterItemComponent
       ],
       imports: [
-        MaterialModule,
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,

@@ -2,7 +2,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
-import {MaterialModule } from '@angular/material';
 
 import { NodeComponent } from './node.component';
 
@@ -14,7 +13,6 @@ describe('NodeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ NodeComponent ],
       imports: [
-        MaterialModule
       ],
       providers: [
       ]

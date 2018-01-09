@@ -10,7 +10,6 @@ import {Auth} from "../core/services";
 import {ApiService} from "app/core/services/api/api.service";
 import {ClusterNameGenerator} from "../core/util/name-generator.service";
 import {FrontpageComponent} from "../pages/frontpage/frontpage.component";
-import { MaterialModule } from '@angular/material';
 
 describe("DashboardComponent", () => {
   let component: DashboardComponent;
@@ -22,8 +21,7 @@ describe("DashboardComponent", () => {
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
-        RouterTestingModule,
-        MaterialModule
+        RouterTestingModule
       ],
       declarations: [
         DashboardComponent,

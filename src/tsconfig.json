@@ -15,7 +15,13 @@
       "../node_modules/@types"
     ]
   },
-  "exclude": [
-    "**/*.spec.ts"
+  "files": [
+    "test.ts",
+    "polyfills.ts"
+  ],
+  "include": [
+    "app/**/*",
+    "**/*.spec.ts",
+    "**/*.d.ts"
   ]
 }

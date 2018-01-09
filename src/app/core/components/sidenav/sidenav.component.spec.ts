@@ -1,7 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SidenavComponent } from './sidenav.component';
-import { MaterialModule } from '@angular/material';
 import {Auth} from "../../services/auth/auth.service";
 import {RouterTestingModule} from "@angular/router/testing";
 
@@ -13,8 +12,7 @@ describe('SidenavComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        RouterTestingModule,
-        MaterialModule
+        RouterTestingModule
       ],
       declarations: [ SidenavComponent ],
       providers: [Auth]
