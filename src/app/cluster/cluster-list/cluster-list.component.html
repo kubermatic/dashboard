@@ -12,12 +12,24 @@
   <mat-card class="km-card-list">
     <mat-card-header class="km-card-list-header">
       <mat-card-title fxLayout>
-        <div fxFlex="3%" fxFlex.sm="3%" fxHide.xs>#</div>
-        <div fxFlex="38%" fxFlex.xs="40%">Name</div>
-        <div fxFlex="16%" fxFlex.sm="20.66%" fxFlex.xs="25%">Provider</div>
-        <div fxFlex="16%" fxHide.sm fxHide.xs>Seed Region</div>
-        <div fxFlex="16%" fxHide.sm fxHide.xs>Node Region</div>
-        <div fxFlex="16%" fxFlex.sm="20.66%" fxHide.xs>Status</div>
+        <div fxFlex="3%" fxFlex.sm="3%" fxHide.xs>
+          <strong>#</strong>
+        </div>
+        <div fxFlex="38%" fxFlex.xs="40%">
+          <strong>Name</strong>
+        </div>
+        <div fxFlex="16%" fxFlex.sm="20.66%" fxFlex.xs="25%">
+          <strong>Provider</strong>
+        </div>
+        <div fxFlex="16%" fxHide.sm fxHide.xs>
+          <strong>Seed Region</strong>
+        </div>
+        <div fxFlex="16%" fxHide.sm fxHide.xs>
+          <strong>Region</strong>
+        </div>
+        <div fxFlex="16%" fxFlex.sm="20.66%" fxHide.xs>
+          <strong>Status</strong>
+        </div>
       </mat-card-title>
     </mat-card-header>
     <ng-container [ngSwitch]="!!clusters && clusters.length > 0">
