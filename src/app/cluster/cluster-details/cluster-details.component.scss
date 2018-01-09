@@ -150,9 +150,10 @@ kubermatic-cluster-health-status {
   background-color: #FFFBEB;
 }
 
-button { 
+.download-kubeconfig-btn {
   a {
     text-decoration: none;
     color: white;
+    vertical-align: baseline !important;
   }
 }

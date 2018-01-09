@@ -9,14 +9,14 @@
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
           Add Node
       </button>
-      <button mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
+      <button class="download-kubeconfig-btn" mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
         <a [attr.href]="downloadKubeconfigUrl()" target="_blank"> 
           <span class="button download"></span>
           Download config
         </a>
       </button>
       <button mat-button (click)="deleteClusterDialog()" mat-raised-button >
-        <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px;margin-top: -4px; color: #0288d1;" color="primary"></i>
+        <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px; color: #0288d1;" color="primary"></i>
         Delete Cluster
       </button>
     </div>
