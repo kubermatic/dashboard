@@ -24,9 +24,9 @@
       <div *ngSwitchCase="true" fxLayout="column">
         <kubermatic-cluster-item *ngFor="let cluster of clusters; let i = index; trackBy: trackCluster" [cluster]="cluster" [health]="cluster.status.health" [index]="i+1" fxFlex></kubermatic-cluster-item>
       </div>
-      <div fxLayout>
+      <div class="km-card-buttonbar" fxLayout>
         <a routerLink="/wizard" class="button white">
-            + Add Cluster
+            <strong>+ Add Cluster</strong>
         </a>
       </div>
     </ng-container>
