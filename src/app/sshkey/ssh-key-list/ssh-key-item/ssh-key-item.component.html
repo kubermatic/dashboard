@@ -1,0 +1,36 @@
+<div class="km-card-list-content" [ngClass]="{odd: isOdd}">
+  <div fxLayout class="km-card-list-content-item" (click)="togglePublicKey()">
+    <div fxFlex="50%" fxFlex.sm="40%">
+      <div class="key-name">
+        {{sshKey.spec.name}}
+      </div>
+      <div class="key-timestamp">
+        Created at {{sshKey.metadata.creationTimestamp | date:'dd/MM/yyyy'}}
+      </div>
+    </div>
+    <div fxFlex="50%" fxFlex.sm="60%" class="key-fingerprint">
+      {{sshKey.spec.fingerprint}}
+    </div>
+  </div>
+  <div class="button-delete">
+    <button mat-icon-button [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="deleteSSHKey(sshKey, $event)">
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
+<div class="publickey-wrapper" *ngIf="isShowPublicKey">
+  <div class="publickey-content">
+    <div class="publickey-name">
+      {{publicKeyName}}
+    </div>
+    <div class="publickey">
+      {{publicKey}}
+    </div>
+  </div>
+</div>

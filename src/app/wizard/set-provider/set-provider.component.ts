@@ -43,6 +43,11 @@ export class SetProviderComponent implements OnInit, OnDestroy {
 
   public onChange(): void {
     WizardActions.resetForms();
+
+    // TODO: find way to change logic for the sequence of events
+    setTimeout(() => {
+      WizardActions.nextStep();
+    }, 0);
   }
 
   public getDatacenters(): Subscription {

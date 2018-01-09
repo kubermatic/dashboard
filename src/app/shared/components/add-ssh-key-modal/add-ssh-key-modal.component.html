@@ -1,27 +1,22 @@
-<div>
+<div class="dialog">
   <mat-toolbar>
     Add SSH Key
-    <button mat-icon-button mat-dialog-close>
-      <i class="fa fa-times" aria-hidden="true"></i>
-    </button>
   </mat-toolbar>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <form [formGroup]="addSSHKeyForm" novalidate>
-
-        <mat-form-field class="km-ssh-key-textarea">
-          <textarea id="key" [errorStateMatcher]="inputValidationService" matInput formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Key"></textarea>
-          <mat-hint>Remember to past only the public part of your SSH key and store the private part safely.</mat-hint>
-          <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
-            Key is <strong>required</strong>
+        <mat-form-field class="km-ssh-key-input">
+          <input id="name" [errorStateMatcher]="inputValidationService" matInput formControlName="name" type="text" placeholder="Enter a unique name">
+          <mat-error *ngIf="addSSHKeyForm.controls.name.hasError('required')">
+            Name is <strong>required</strong>
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="km-ssh-key-input">
-          <input id="name" [errorStateMatcher]="inputValidationService" matInput formControlName="name" type="text" placeholder="Name">
-          <mat-hint class="form-text text-muted">The unique name of your SSH key</mat-hint>
-          <mat-error *ngIf="addSSHKeyForm.controls.name.hasError('required')">
-            Name is <strong>required</strong>
+        <mat-form-field class="km-ssh-key-textarea">
+          <textarea id="key" [errorStateMatcher]="inputValidationService" matInput formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Enter the key of your device"></textarea>
+          <mat-hint>Remember to past only the public part of your SSH key and store the private part safely.</mat-hint>
+          <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
+            Key is <strong>required</strong>
           </mat-error>
         </mat-form-field>
       </form>
@@ -30,10 +25,10 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close mat-raised-button>
-      close
+      Close
     </button>
     <button (click)="addSSHKey()" mat-raised-button color="primary" class="mat-primary" [disabled]="!addSSHKeyForm.valid">
-      add key
+      Add SSH Key
     </button>
   </mat-dialog-actions>
 </div>

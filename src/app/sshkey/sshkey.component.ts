@@ -1,6 +1,8 @@
+import { AddSshKeyModalComponent } from 'app/shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
 import {Component, OnInit} from '@angular/core';
 import {ApiService} from 'app/core/services/api/api.service';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 @Component({
   selector: 'kubermatic-sshkey',
   templateUrl: 'sshkey.component.html',
@@ -11,8 +13,10 @@ export class SshkeyComponent implements OnInit {
 
   public sshKeys: Array<SSHKeyEntity> = [];
   public loading: boolean = true;
+  public config: MatDialogConfig = {};
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService,
+              public dialog: MatDialog) {}
 
   ngOnInit() {
     this.refreshSSHKeys();
@@ -27,6 +31,14 @@ export class SshkeyComponent implements OnInit {
         },
         error => this.loading = false
       );
+  }
+
+  public addSshKeyDialog(): void {
+    const dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
+
+    dialogRef.afterClosed().subscribe(result => {
+      result && this.refreshSSHKeys();
+    });
   }
 
   public handleKeyUpdated() {

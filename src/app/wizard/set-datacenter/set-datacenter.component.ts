@@ -1,3 +1,4 @@
+import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Observable } from 'rxjs/Observable';
@@ -56,6 +57,13 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
         this.datacenters[elem.spec.provider].push(elem);
       });
     });
+  }
+
+  public onChange(): void {
+    // TODO: find way to change logic for the sequence of events
+    setTimeout(() => {
+      WizardActions.nextStep();
+    }, 0);
   }
 
   public ngOnDestroy(): void {
