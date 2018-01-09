@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BringyourownComponent } from './bringyourown.component';
+import { BringyourownClusterComponent } from './bringyourown.component';
 
-describe('BringyourownComponent', () => {
-  let component: BringyourownComponent;
-  let fixture: ComponentFixture<BringyourownComponent>;
+describe('BringyourownClusterComponent', () => {
+  let component: BringyourownClusterComponent;
+  let fixture: ComponentFixture<BringyourownClusterComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BringyourownComponent ]
+      declarations: [ BringyourownClusterComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BringyourownComponent);
+    fixture = TestBed.createComponent(BringyourownClusterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

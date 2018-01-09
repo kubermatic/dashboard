@@ -26,8 +26,6 @@ describe('ClusterComponent', () => {
       providers: [
         FormBuilder,
         Auth
-      ],
-      exports: [
       ]
     })
     .compileComponents();
