@@ -86,7 +86,11 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
     const provider = reduxStore.wizard.setProviderForm.provider;
 
     if (this.step === 4 && provider && provider === 'bringyourown') {
-      WizardActions.goToStep(2);
+      if (this.datacenters[provider].length === 1) {
+        WizardActions.goToStep(1);
+      } else {
+        WizardActions.goToStep(2);
+      }
       return;
     }
 
