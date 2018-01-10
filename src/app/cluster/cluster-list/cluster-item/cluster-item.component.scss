@@ -29,11 +29,31 @@
     background-color: #F7FAFF;  
   }
 
+  &.statusRunning:hover {
+    background-color: #EEF5FF;
+  }
+
+  &.statusWaiting {
+    background-color: rgba(255, 213, 92, 0.1);
+
+    &:hover {
+      background-color: rgba(255, 213, 92, 0.2);
+    }
+  }
+
+  &.statusFailed {
+    background-color: rgba(241, 92, 92, 0.15);
+
+    &:hover {
+      background-color: rgba(241, 92, 92, 0.25);
+    }
+  }
+
 }
 
 
 .km-card-list-content:nth-child(even) {
-  background-color: #F7FAFF;
+  background-color: #FFFFFF;
 }
 
 .km-card-list-content:hover {
