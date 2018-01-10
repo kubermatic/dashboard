@@ -114,6 +114,11 @@ kubermatic-cluster-health-status {
       margin-right: 5px;
     }
   }
+  .km-more-sshKeys-btn {
+    font-size: 14px;
+    color: #0288d1;
+    cursor: pointer;
+  }
 }
 
 .add-node-btn {
@@ -164,4 +169,20 @@ kubermatic-cluster-health-status {
     color: white;
     vertical-align: baseline !important;
   }
+}
+
+.iconArrowUp {
+    display: inline-block;
+    width: 12px;
+    height: 9px;
+    background-image: url("../../../assets/images/Arrow_up.svg");
+    background-repeat: no-repeat;
+}
+
+.iconArrowDown {
+    display: inline-block;
+    width: 12px;
+    height: 9px;
+    background-image: url("../../../assets/images/Arrow_down.svg");
+    background-repeat: no-repeat;
 }

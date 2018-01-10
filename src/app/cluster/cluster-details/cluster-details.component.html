@@ -85,10 +85,28 @@
       <div fxFlex="40%">
         <ng-container [ngSwitch]="sshKeys.length > 0">
           <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
-            <li *ngFor="let key of sshKeys">
+            <li *ngFor="let key of sshKeys.slice(0, 3)">
               <i class="fa fa-key"></i>
               {{key.spec.name}}
             </li>
+
+            <div class="km-ssh-keys-list-more" *ngIf="sshKeys.length > 3">
+              <div class="km-more-sshKeys-btn" (click)="loadMoreSshKeys(true)" *ngIf="!moreSshKeys">
+                <strong>More</strong>
+                <span class="iconArrowDown"></span>
+              </div>
+              <div class="km-more-sshKeys" *ngIf="moreSshKeys">
+                <li *ngFor="let key of sshKeys.slice(3, sshKeys.length+1)">
+                  <i class="fa fa-key"></i>
+                  {{key.spec.name}}
+                </li>
+              </div>
+              <div class="km-more-sshKeys-btn" (click)="loadMoreSshKeys(false)" *ngIf="moreSshKeys">
+                <strong>Less</strong>
+                <span class="iconArrowUp"></span>
+              </div>
+            </div>
+
           </ul>
           <ng-container *ngSwitchCase="false">no SSH Key selected</ng-container>
         </ng-container>
