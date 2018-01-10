@@ -1,3 +1,6 @@
+import { NodeProvider } from './../../shared/model/NodeProviderConstants';
+import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
+import { DatacenterService } from 'app/core/services';
 import { select, NgRedux } from '@angular-redux/store';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import {Component, OnInit, OnDestroy} from '@angular/core';
@@ -13,13 +16,16 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
 
   public nextStep: boolean;
   private subscriptions: Subscription[] = [];
+  public supportedNodeProviders: string[] = NodeProvider.Supported;
+  public datacenters: { [key: string]: DataCenterEntity[] } = {};
 
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
 
   @select(['wizard', 'valid']) valid$: Observable<boolean[]>;
 
-  constructor(private ngRedux: NgRedux<any>) { }
+  constructor(private ngRedux: NgRedux<any>,
+              private dcService: DatacenterService) { }
 
   public ngOnInit(): void {
     const sub = this.step$.subscribe(step => {
@@ -32,6 +38,21 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
       this.nextStep = this.canGotoStep();
     });
     this.subscriptions.push(sub2);
+
+    const sub3 = this.getDatacenters();
+    this.subscriptions.push(sub3);
+  }
+
+  public getDatacenters(): Subscription {
+    return this.dcService.getDataCenters().subscribe(result => {
+      result.forEach(elem => {
+        if (!this.datacenters.hasOwnProperty(elem.spec.provider)) {
+          this.datacenters[elem.spec.provider] = [];
+        }
+
+        this.datacenters[elem.spec.provider].push(elem);
+      });
+    });
   }
 
   public canGotoStep(): boolean {
@@ -65,7 +86,27 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
     const provider = reduxStore.wizard.setProviderForm.provider;
 
     if (this.step === 4 && provider && provider === 'bringyourown') {
-      WizardActions.goToStep(2);
+      if (this.datacenters[provider].length === 1) {
+        WizardActions.goToStep(1);
+      } else {
+        WizardActions.goToStep(2);
+      }
+      return;
+    }
+
+    if (this.step === 3 && this.datacenters[provider].length === 1
+        && this.supportedNodeProviders.length === 1) {
+      WizardActions.goToStep(0);
+      return;
+    }
+
+    if (this.step === 3 && this.datacenters[provider].length === 1) {
+      WizardActions.goToStep(1);
+      return;
+    }
+
+    if (this.step === 2 && this.supportedNodeProviders.length === 1) {
+      WizardActions.goToStep(0);
       return;
     }
 
