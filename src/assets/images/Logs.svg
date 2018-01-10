@@ -1,0 +1,14 @@
+<svg width="13" height="10" viewBox="0 0 13 10" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<title>Logs</title>
+<desc>Created using Figma</desc>
+<g id="Canvas" transform="translate(-7925 -982)">
+<g id="Logs">
+<g id="Vector">
+<use xlink:href="#path0_fill" transform="translate(7925 982)" fill="#BDC6D1"/>
+</g>
+</g>
+</g>
+<defs>
+<path id="path0_fill" d="M 12.0874 1.45631L 0 1.45631L 0 0L 12.0874 0L 12.0874 1.45631ZM 12.0874 4.32039L 0 4.32039L 0 2.86408L 12.0874 2.86408L 12.0874 4.32039ZM 12.0874 7.13592L 0 7.13592L 0 5.67961L 12.0874 5.67961L 12.0874 7.13592ZM 8.88349 10L 0 10L 0 8.54369L 8.88349 8.54369L 8.88349 10Z"/>
+</defs>
+</svg>

@@ -1,8 +1,4 @@
 <div class="health-state">
-  <div mat-button  matTooltip="apiserver" [ngClass]="getHealthStatusColor('apiserver')"></div>
-  <div mat-button  matTooltip="controller" [ngClass]="getHealthStatusColor('controller')"></div>
-  <div mat-button  matTooltip="etcd" [ngClass]="getHealthStatusColor('etcd')"></div>
-  <div mat-button  matTooltip="scheduler" [ngClass]="getHealthStatusColor('scheduler')"></div>
-  <div mat-button  matTooltip="node-controller" [ngClass]="getHealthStatusColor('node-controller')"></div>
+  <div mat-button [ngClass]="getHealthStatusColor()"></div>
 </div>
 

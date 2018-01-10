@@ -18,6 +18,7 @@ import { NodeDeleteConfirmationComponent } from 'app/cluster/cluster-details/nod
 import { ClusterDeleteConfirmationComponent } from 'app/cluster/cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { AddNodeModalComponent } from './cluster-details/add-node-modal/add-node-modal.component';
 import { UpgradeClusterComponent } from './cluster-details/upgrade-cluster/upgrade-cluster.component';
+import { ClusterSecretsComponent } from './cluster-details/cluster-secrets/cluster-secrets.component';
 
 const components: any[] = [
     ClusterDetailsComponent,
@@ -32,7 +33,8 @@ const entryComponents: any[] = [
     ClusterDeleteConfirmationComponent,
     NodeDeleteConfirmationComponent,
     UpgradeClusterComponent,
-    AddNodeModalComponent
+    AddNodeModalComponent,
+    ClusterSecretsComponent
 ];
 
 @NgModule({

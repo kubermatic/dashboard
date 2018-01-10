@@ -45,6 +45,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private gotUpgradesList: boolean;
   public groupedNodes: object[];
   public stateOfTheAccordion: object[];
+  public moreSshKeys: boolean = false;
 
   constructor(
     private customEventService: CustomEventService,
@@ -99,6 +100,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         return key.spec.clusters.indexOf(this.clusterName) > -1;
       });
     });
+  }
+
+  loadMoreSshKeys(moreSshKeys: boolean) {
+    this.moreSshKeys = moreSshKeys;
   }
 
   loadNodes(): void {
