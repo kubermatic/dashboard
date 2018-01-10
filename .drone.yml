@@ -81,13 +81,13 @@ pipeline:
     author_recipient_mapping:
       - mrIncompetent=henrik
       - metalmatze=matthias
-      - andriisoldatenko=a_soldatenko
       - guusvw=guus
       - realfake=luk
       - scheeles=sebastian
       - chaosaffe=jason
       - zsemenyuk=zsemenyuk
       - j3ank=eugenia
+      - kgroschoff=kristin
     when:
       status: [ failure ]
 
@@ -98,9 +98,12 @@ pipeline:
     username: drone
     icon_url: https://avatars2.githubusercontent.com/u/2181346?v=4&s=200
     channel: dev
-    image_url: http://thecatapi.com/api/images/get?format=src&type=gif&asdasdasd=${DRONE_COMMIT}
+    image_url: http://thecatapi.com/api/images/get?api_key=MjQyOTIx&size=small&format=src&type=gif&random-param=${DRONE_COMMIT}
     template: >
-        We just deployed a new version of the Dashboard-V2 to dev! :heart:
+        We just deployed a new version of the Dashboard-V2 to dev!
+        This commit has been brought to you by ${DRONE_COMMIT_AUTHOR} <3
+        What has been done:
+        ${DRONE_COMMIT_MESSAGE}
     when:
       status: [ success ]
       branch: master
