@@ -28,6 +28,18 @@ export class SetProviderComponent implements OnInit, OnDestroy {
               private dcService: DatacenterService) { }
 
   public ngOnInit(): void {
+    if (this.supportedNodeProviders.length === 1) {
+      WizardActions.formChanged(
+        ['wizard', 'setProviderForm'],
+        { provider: this.supportedNodeProviders[0] },
+        true
+      );
+
+      setTimeout(() => {
+        WizardActions.nextStep();
+      }, 0);
+    }
+
     const sub = this.provider$.subscribe(provider => {
       provider && (this.selectedProvider = provider);
     });
@@ -37,17 +49,23 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       provider: [this.selectedProvider]
     });
 
-    const sub2 = this.getDatacenters();
+    const sub2 = this.setProviderForm.valueChanges.subscribe(data => {
+      WizardActions.formChanged(
+        ['wizard', 'setProviderForm'],
+        { provider: data.provider },
+        this.setProviderForm.valid
+      );
+
+      WizardActions.nextStep();
+    });
     this.subscriptions.push(sub2);
+
+    const sub3 = this.getDatacenters();
+    this.subscriptions.push(sub3);
   }
 
   public onChange(): void {
     WizardActions.resetForms();
-
-    // TODO: find way to change logic for the sequence of events
-    setTimeout(() => {
-      WizardActions.nextStep();
-    }, 0);
   }
 
   public getDatacenters(): Subscription {

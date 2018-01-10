@@ -4,7 +4,7 @@ import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { ApiService } from 'app/core/services/api/api.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: 'set-datacenter.component.html',
   styleUrls: ['set-datacenter.component.scss']
 })
-export class SetDatacenterComponent implements OnInit, OnDestroy {
+export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentInit {
   public setDatacenterForm: FormGroup;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
   private subscriptions: Subscription[] = [];
@@ -39,12 +39,23 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
       });
     this.subscriptions.push(sub);
 
-    const sub2 = this.getDatacenters();
-    this.subscriptions.push(sub2);
-
     this.setDatacenterForm = this.fb.group({
       datacenter: [null]
     });
+
+    this.setDatacenterForm.valueChanges.subscribe(data => {
+      WizardActions.formChanged(
+        ['wizard', 'setDatacenterForm'],
+        { datacenter: data.datacenter },
+        this.setDatacenterForm.valid
+      );
+      WizardActions.nextStep();
+    });
+  }
+
+  public ngAfterContentInit(): void {
+    const sub2 = this.getDatacenters();
+    this.subscriptions.push(sub2);
   }
 
   public getDatacenters(): Subscription {
@@ -56,14 +67,19 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
 
         this.datacenters[elem.spec.provider].push(elem);
       });
-    });
-  }
 
-  public onChange(): void {
-    // TODO: find way to change logic for the sequence of events
-    setTimeout(() => {
-      WizardActions.nextStep();
-    }, 0);
+      if (this.datacenters[this.selectedProvider].length === 1) {
+        WizardActions.formChanged(
+          ['wizard', 'setDatacenterForm'],
+          { datacenter: this.datacenters[this.selectedProvider][0] },
+          this.setDatacenterForm.valid
+        );
+
+        setTimeout(() => {
+          WizardActions.nextStep();
+        }, 0);
+      }
+    });
   }
 
   public ngOnDestroy(): void {

@@ -8,8 +8,7 @@
     Kubermatic. Your nodes can be placed in any cloud you like. 
     For performance reasons choose the place as close to the master as possible.
   </p>
-  <form [connect]="['wizard', 'setProviderForm']"
-        [formGroup]="setProviderForm"
+  <form [formGroup]="setProviderForm"
         (change)="onChange()"
         class="provider-fix"
         fxLayoutGap="25px"
