@@ -1,12 +1,12 @@
 /* tslint:disable:no-unused-variable */
 
-import { TestBed, async, inject } from "@angular/core/testing";
-import { Auth } from "./auth.service";
-import {HttpModule} from "@angular/http";
-import {BrowserModule} from "@angular/platform-browser";
-import {RouterTestingModule} from "@angular/router/testing";
+import { TestBed, async, inject } from '@angular/core/testing';
+import { Auth } from './auth.service';
+import {HttpModule} from '@angular/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {RouterTestingModule} from '@angular/router/testing';
 
-describe("Auth", () => {
+describe('Auth', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [
@@ -23,7 +23,7 @@ describe("Auth", () => {
   });
 
 
-  it("should ...", inject([Auth], (service: Auth) => {
+  it('should ...', inject([Auth], (service: Auth) => {
     expect(service).toBeTruthy();
   }));
 });
