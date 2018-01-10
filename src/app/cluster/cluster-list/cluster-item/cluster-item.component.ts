@@ -86,17 +86,17 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
 
   public statusWaiting(): boolean {
     if (this.cluster.status.phase !== 'Running' && this.cluster.status.phase !== 'Failed') {
+      return true;
+    } else {
       if (this.health) {
-        if (!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) {
+        if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) && this.cluster.status.phase === 'Running') {
           return true;
         } else {
-          return true;
+          return false;
         }
       } else {
-        return true;
+        return false;
       }
-    } else {
-      return false;
     }
   }
 
