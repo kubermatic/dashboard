@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { DatacenterService } from 'app/core/services';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-item',
@@ -12,6 +12,7 @@ import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() index: number;
+  @Input() health: Health;
 
   public seedDc: DataCenterEntity;
   public nodeDc: DataCenterEntity;
@@ -57,6 +58,46 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
 
   public getShortClusterName(name: string): string {
     return name.length > 12 ?  name.slice(0, 12) + '...' : name;
+  }
+
+  public statusRunning(): boolean {
+    if (this.cluster.status.phase === 'Running') {
+      if (this.health) {
+        if (!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) {
+          return false;
+        } else {
+          return true;
+        }
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
+  public statusFailed(): boolean {
+    if (this.cluster.status.phase === 'Failed') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public statusWaiting(): boolean {
+    if (this.cluster.status.phase !== 'Running' && this.cluster.status.phase !== 'Failed') {
+      return true;
+    } else {
+      if (this.health) {
+        if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) && this.cluster.status.phase === 'Running') {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
   }
 
   public ngOnDestroy(): void {
