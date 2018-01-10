@@ -55,7 +55,7 @@ export class ClusterSecretsComponent implements OnInit {
         break;
       case 'ssh-apiserver-rsa':
         data = this.cluster.status.apiserverSshKey.privateKey;
-        name = 'apiserver_id-rsa';
+        name = 'apiserver_id-rsa.key';
         break;
       case 'ssh-apiserver-rsa-public':
         data = this.cluster.status.apiserverSshKey.publicKey;
