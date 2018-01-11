@@ -26,6 +26,11 @@ export class WizardActions extends ActionBase {
     }
 
     @dispatch()
+    static formChanged(path: Array<string>, value: any, valid: boolean): Action {
+        return { type: FORM_CHANGED, payload: { path, value, valid } };
+    }
+
+    @dispatch()
     static prevStep(): Action {
         return { type: WizardActions.PREV_STEP };
     }
