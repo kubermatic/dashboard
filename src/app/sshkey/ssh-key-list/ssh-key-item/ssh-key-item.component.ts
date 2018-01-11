@@ -22,6 +22,7 @@ export class SshKeyItemComponent implements OnInit {
     this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
 
     this.publicKey = this.sshKey.spec.publicKey.slice(this.publicKeyName.length + 1, -1);
+    console.log(this.sshKey);
   }
 
   public deleteSSHKey(key: SSHKeyEntity, event: any): void {
