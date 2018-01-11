@@ -18,7 +18,7 @@ export class NodeGroupComponent implements OnInit {
   public nodeRemoval: boolean = false;
   public node: NodeEntity;
   // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
-  public stateOfTheAccordion: any= [];
+  public stateOfTheAccordion: any = [];
 
 
   public config: MatDialogConfig = {
