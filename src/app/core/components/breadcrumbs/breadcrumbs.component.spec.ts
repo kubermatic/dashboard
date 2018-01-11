@@ -23,11 +23,18 @@ const modules: any[] = [
     BrowserAnimationsModule
 ];
 
+function setMockNgRedux<T>(fixture: ComponentFixture<T>, crumb: string): void {
+    const appLoader = MockNgRedux.getSelectorStub(['breadcrumb', 'crumb']);
+    appLoader.next(crumb);
+    appLoader.complete();
+}
+
 describe('BreadcrumbsComponent', () => {
     let fixture: ComponentFixture<BreadcrumbsComponent>;
     let component: BreadcrumbsComponent;
 
     beforeEach(() => {
+        MockNgRedux.reset();
         TestBed.configureTestingModule({
             imports: [
                 ...modules,
@@ -49,5 +56,21 @@ describe('BreadcrumbsComponent', () => {
 
     it('should create the Breadcrumbs', () => {
         expect(component).toBeTruthy();
+    });
+
+    it('should set activePageTitle', () => {
+        setMockNgRedux(fixture, 'Manage Clusters');
+        fixture.detectChanges();
+
+        const crumb = component.activePageTitle;
+
+        expect(crumb).toBe('Manage Clusters');
+    });
+
+    it('should render 2 breadcrumbs', () => {
+        fixture.detectChanges();
+
+        const de = fixture.debugElement.queryAll(By.css('.breadcrumb-item'));
+        expect(de.length).toBe(2);
     });
 });
