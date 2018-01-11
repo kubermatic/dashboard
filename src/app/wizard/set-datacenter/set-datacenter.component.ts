@@ -61,11 +61,13 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
   public getDatacenters(): Subscription {
     return this.dcService.getDataCenters().subscribe(result => {
       result.forEach(elem => {
-        if (!this.datacenters.hasOwnProperty(elem.spec.provider)) {
-          this.datacenters[elem.spec.provider] = [];
-        }
+        if (!elem.seed) {
+          if (!this.datacenters.hasOwnProperty(elem.spec.provider)) {
+            this.datacenters[elem.spec.provider] = [];
+          }
 
-        this.datacenters[elem.spec.provider].push(elem);
+          this.datacenters[elem.spec.provider].push(elem);
+        }
       });
 
       if (this.datacenters[this.selectedProvider].length === 1) {
