@@ -3,7 +3,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
+import { RouterTestingModule } from '../../../testing/router-stubs';
 
 import { By } from '@angular/platform-browser';
 import {TestBed, async, ComponentFixture, inject, fakeAsync, tick} from '@angular/core/testing';
@@ -18,6 +18,7 @@ const modules: any[] = [
     HttpClientModule,
     BrowserAnimationsModule,
     SlimLoadingBarModule.forRoot(),
+    RouterTestingModule,
     SharedModule
 ];
 
@@ -33,10 +34,7 @@ describe('SidenavComponent', () => {
                 ...modules,
             ],
             declarations: [
-                SidenavComponent,
-                RouterLinkStubDirective,
-                RouterOutletStubComponent,
-                RouterLinkActiveStubDirective
+                SidenavComponent
             ],
             providers: [
             ],
@@ -78,4 +76,5 @@ describe('SidenavComponent', () => {
 
         expect(wizardLink.navigatedTo).toBe('/wizard');
     });
+
 });

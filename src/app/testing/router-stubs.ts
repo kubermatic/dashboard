@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 export { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
 import { Component, Directive, Injectable, Input, HostListener } from '@angular/core';
@@ -62,3 +63,23 @@ export class ActivatedRouteStub {
         return { paramMap: this.testParamMap };
     }
 }
+
+import { NgModule } from '@angular/core';
+
+@NgModule({
+  imports: [
+      CommonModule
+  ],
+  declarations: [
+    RouterOutletStubComponent,
+    RouterLinkActiveStubDirective,
+    RouterLinkStubDirective
+  ],
+exports: [
+    RouterOutletStubComponent,
+    RouterLinkActiveStubDirective,
+    RouterLinkStubDirective
+]
+})
+export class RouterTestingModule { }
+
