@@ -50,6 +50,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
     });
 
     const sub2 = this.setProviderForm.valueChanges.subscribe(data => {
+      WizardActions.resetForms();
       WizardActions.formChanged(
         ['wizard', 'setProviderForm'],
         { provider: data.provider },
@@ -62,10 +63,6 @@ export class SetProviderComponent implements OnInit, OnDestroy {
 
     const sub3 = this.getDatacenters();
     this.subscriptions.push(sub3);
-  }
-
-  public onChange(): void {
-    WizardActions.resetForms();
   }
 
   public getDatacenters(): Subscription {
