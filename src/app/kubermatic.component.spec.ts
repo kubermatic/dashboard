@@ -5,6 +5,7 @@ import {SimpleNotificationsModule} from 'angular2-notifications';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {RouterTestingModule} from '@angular/router/testing';
+import { SharedModule } from './shared/shared.module';
 
 import { By } from '@angular/platform-browser';
 import {TestBed, async, ComponentFixture} from '@angular/core/testing';
@@ -35,15 +36,8 @@ const modules: any[] = [
     RouterTestingModule,
     NgReduxTestingModule,
     BrowserAnimationsModule,
-    SlimLoadingBarModule.forRoot()
-];
-
-const materialModules: any[] = [
-    MatProgressBarModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatDialogModule,
+    SlimLoadingBarModule.forRoot(),
+    SharedModule
 ];
 
 const components: any[] = [
@@ -63,7 +57,6 @@ describe('KubermaticComponent', () => {
         TestBed.configureTestingModule({
             imports: [
                 ...modules,
-                ...materialModules
             ],
             declarations: [
                 ...components

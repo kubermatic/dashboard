@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {Auth} from '../../services';
 import { environment } from '../../../../environments/environment';
 
 @Component({
@@ -11,13 +10,9 @@ export class SidenavComponent implements OnInit {
 
   public environment: any = environment;
 
-  constructor(public auth: Auth) { }
+  constructor() { }
 
   ngOnInit() {
-  }
-
-  public logout() {
-    this.auth.logout();
   }
 
 }

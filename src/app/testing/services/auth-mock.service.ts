@@ -12,4 +12,6 @@ export class AuthMockService {
         return 'token';
     }
 
+    public logout() {}
+
 }
