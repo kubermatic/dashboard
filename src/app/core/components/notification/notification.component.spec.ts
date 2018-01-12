@@ -1,4 +1,4 @@
-import { NotificationToastType } from 'app/shared/interfaces/notification-toast.interface';
+import { NotificationToastType } from './../../../shared/interfaces/notification-toast.interface';
 import { NotificationToast } from './../../../shared/interfaces/notification-toast.interface';
 import { NotificationMockService } from './../../../testing/services/notification-mock.service';
 import { HttpClientModule } from '@angular/common/http';
