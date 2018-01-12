@@ -42,15 +42,12 @@ export class RouterStub {
     navigate(commands: any[], extras?: NavigationExtras) { }
 }
 
-// Only implements params and part of snapshot.paramMap
 @Injectable()
 export class ActivatedRouteStub {
 
-    // ActivatedRoute.paramMap is Observable
     private subject = new BehaviorSubject(convertToParamMap(this.testParamMap));
     paramMap = this.subject.asObservable();
 
-    // Test parameters
     private _testParamMap: ParamMap;
     get testParamMap() { return this._testParamMap; }
     set testParamMap(params: {}) {
@@ -58,7 +55,6 @@ export class ActivatedRouteStub {
         this.subject.next(this._testParamMap);
     }
 
-    // ActivatedRoute.snapshot.paramMap
     get snapshot() {
         return { paramMap: this.testParamMap };
     }

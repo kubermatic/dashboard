@@ -94,7 +94,6 @@ export class ApiService {
 
     // List all flavors
     openStack.networkList().then((networks) => {
-      console.log(networks);
       return networks;
     });
   }
