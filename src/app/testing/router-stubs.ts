@@ -17,6 +17,19 @@ export class RouterLinkStubDirective {
     }
 }
 
+@Directive({
+    selector: '[routerLinkActive]', // tslint:disable-line
+})
+export class RouterLinkActiveStubDirective {
+    private classes: string[] = [];
+
+    @Input()
+    set routerLinkActive(data: string[]|string) {
+        const classes = Array.isArray(data) ? data : data.split(' ');
+        this.classes = classes.filter(c => !!c);
+    }
+}
+
 @Component({
     selector: 'router-outlet', // tslint:disable-line
     template: ''

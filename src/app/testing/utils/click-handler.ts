@@ -1,4 +1,4 @@
-import { DebugElement } from "@angular/core";
+import { DebugElement } from '@angular/core';
 
 export const ButtonClickEvents = {
     left:  { button: 0 },

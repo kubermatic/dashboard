@@ -6,12 +6,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { By } from '@angular/platform-browser';
-import {TestBed, async, ComponentFixture, inject} from '@angular/core/testing';
-import { RouterLinkStubDirective, RouterOutletStubComponent } from './../../../testing/router-stubs';
-import { AuthMockService } from '../../../testing/services/auth-mock.service';
+import {TestBed, async, ComponentFixture, inject, fakeAsync, tick} from '@angular/core/testing';
+import { RouterLinkStubDirective, RouterOutletStubComponent, RouterLinkActiveStubDirective } from './../../../testing/router-stubs';
 import { click } from './../../../testing/utils/click-handler';
 
-import { Auth } from '../../services/index';
 import { SidenavComponent } from './sidenav.component';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
 
@@ -19,7 +17,6 @@ const modules: any[] = [
     BrowserModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    RouterTestingModule,
     SlimLoadingBarModule.forRoot(),
     SharedModule
 ];
@@ -27,7 +24,6 @@ const modules: any[] = [
 describe('SidenavComponent', () => {
     let fixture: ComponentFixture<SidenavComponent>;
     let component: SidenavComponent;
-    let authService: AuthMockService;
     let linkDes: DebugElement[];
     let links: RouterLinkStubDirective[];
 
@@ -39,10 +35,10 @@ describe('SidenavComponent', () => {
             declarations: [
                 SidenavComponent,
                 RouterLinkStubDirective,
-                RouterOutletStubComponent
+                RouterOutletStubComponent,
+                RouterLinkActiveStubDirective
             ],
             providers: [
-                { provide: Auth, useClass: AuthMockService }
             ],
         }).compileComponents();
     });
@@ -60,15 +56,6 @@ describe('SidenavComponent', () => {
     it('should create the sidenav cmp', async(() => {
         expect(component).toBeTruthy();
     }));
-
-    it('should call logout from auth service', () => {
-        authService = fixture.debugElement.injector.get(Auth) as any;
-        const spyLogOut = spyOn(authService, 'logout');
-
-        component.logout();
-
-        expect(spyLogOut).toHaveBeenCalled();
-    });
 
     it('should get RouterLinks from template', () => {
         fixture.detectChanges();
