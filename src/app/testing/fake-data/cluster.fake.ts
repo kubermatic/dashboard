@@ -45,11 +45,11 @@ export const clusterFake = {
         lastTransitionTime: new Date(),
         phase: 'Running',
         health: {
-            apiserver: 'true',
-            scheduler: 'true',
-            controller: 'true',
-            nodeController: 'true',
-            etcd: 'true',
+            apiserver: true,
+            scheduler: true,
+            controller: true,
+            nodeController: true,
+            etcd: true,
             lastTransitionTime: '2018-01-15T07:43:57Z'
         },
         lastDeployedMasterVersion: '',

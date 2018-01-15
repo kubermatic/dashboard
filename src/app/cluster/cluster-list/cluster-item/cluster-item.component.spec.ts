@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs/Observable';
-import { Http } from '@angular/http';
 import { SharedModule } from '../../../shared/shared.module';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
