@@ -58,11 +58,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit(): void {
-
-    this.route.params.subscribe(params => {
-      this.clusterName = params['clusterName'];
-      this.sub = this.timer.subscribe(() => this.refreshData());
-    });
+    this.clusterName = this.route.snapshot.paramMap.get('clusterName');
+    this.sub = this.timer.subscribe(() => this.refreshData());
 
     this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
@@ -70,7 +67,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.sub && this.sub.unsubscribe();
   }
 
   loadUpgrades(): void {

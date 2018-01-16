@@ -37,7 +37,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
       node_size: ['', [<any>Validators.required]]
     });
 
-
     if (Array.isArray(this.connect) && this.connect.length) {
       const reduxStore = this.ngRedux.getState();
       const nodeForm = reduxStore.wizard.nodeForm;
@@ -74,7 +73,9 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(): void {
-    this.getNodeSize(this.token);
+    if (this.doNodeForm) {
+      this.getNodeSize(this.token);
+    }
   }
 
   public onChange() {

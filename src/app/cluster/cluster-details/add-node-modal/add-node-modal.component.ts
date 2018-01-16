@@ -15,7 +15,7 @@ import { FormGroup } from '@angular/forms/src/model';
 })
 export class AddNodeModalComponent implements OnInit {
 
-  private nodeModel: CreateNodeModel;
+  public nodeModel: CreateNodeModel;
   public form: FormGroup;
   public provider: Provider = { name: '', payload: {} };
 
