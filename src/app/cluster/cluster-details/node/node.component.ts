@@ -1,4 +1,4 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, Input} from '@angular/core';
 import { NodeEntity } from 'app/shared/entity/NodeEntity';
 import {MatDialog, MatDialogRef, MatDialogConfig} from '@angular/material';
 import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
@@ -9,7 +9,7 @@ import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-
   styleUrls: ['node.component.scss']
 })
 
-export class NodeComponent implements OnInit {
+export class NodeComponent {
   @Input() nodes: NodeEntity[];
   @Input() clusterName: string;
   @Input() seedDcName: string;
@@ -39,16 +39,13 @@ export class NodeComponent implements OnInit {
 
   constructor(public dialog: MatDialog) {}
 
-  ngOnInit() {}
-
   public managedByProvider (node: NodeEntity ): boolean {
     return node.metadata.annotations['node.k8s.io/driver-data'];
   }
 
-  onNodeRemoval(nodeRemoval: boolean) {
+  public onNodeRemoval(nodeRemoval: boolean): void {
     this.nodeRemoval = nodeRemoval;
   }
-
 
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
@@ -63,7 +60,7 @@ export class NodeComponent implements OnInit {
     });
   }
 
-  public getNodeHealth(node) {
+  public getNodeHealth(node): string {
     const green = 'fa fa-circle green';
     const red = 'fa fa-circle-o red';
     const orange = 'fa fa-spin fa-circle-o-notch orange';
@@ -124,7 +121,7 @@ export class NodeComponent implements OnInit {
   }
 
   public getNodeState(state: string): boolean {
-    return state === 'running' ? true : false;
+    return state === 'running';
   }
 }
 

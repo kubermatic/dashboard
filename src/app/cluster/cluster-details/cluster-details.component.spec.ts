@@ -130,16 +130,17 @@ describe('ClusterDetailsComponent', () => {
 
     it('should render template after requests', fakeAsync(() => {
         fixture.detectChanges();
-        const firstDe = fixture.debugElement.query(By.css('.cluster-detail-actions'));
+        let de = fixture.debugElement.query(By.css('.cluster-detail-actions'));
         const spinnerDe = fixture.debugElement.query(By.css('.km-spinner'));
-        expect(firstDe).toBeNull('element should not be rendered before requests');
+
+        expect(de).toBeNull('element should not be rendered before requests');
         expect(spinnerDe).not.toBeNull('spinner should be rendered before requests');
 
         tick();
         component.sub.unsubscribe();
         fixture.detectChanges();
 
-        const secondDe = fixture.debugElement.query(By.css('.cluster-detail-actions'));
-        expect(secondDe).not.toBeNull('element should be rendered after requests');
+        de = fixture.debugElement.query(By.css('.cluster-detail-actions'));
+        expect(de).not.toBeNull('element should be rendered after requests');
     }));
 });
