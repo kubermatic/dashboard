@@ -26,11 +26,19 @@ export class ApiMockService {
         return Observable.of(this.sshKeys);
     }
 
-    public getDigitaloceanSizes(token: string): any {
+    public getDigitaloceanSizes(token: string): Observable<any> {
         return Observable.of(this.sizes);
     }
 
     public createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<any> {
+        return Observable.of(null);
+    }
+
+    public deleteCluster(clusterName: string): Observable<any> {
+        return Observable.of(null);
+    }
+
+    public deleteClusterNode(clusterName: string, nodeName: string): Observable<any> {
         return Observable.of(null);
     }
 }

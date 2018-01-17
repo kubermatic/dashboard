@@ -2,21 +2,20 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
-import { Input, EventEmitter, Output } from '@angular/core';
+import { Input, EventEmitter, Output, AfterContentInit } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
-import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
   templateUrl: './digitalocean-add-node.component.html',
   styleUrls: ['./digitalocean-add-node.component.scss']
 })
-export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
+export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit {
 
   @Input() public token: string = '';
   @Input() public connect: string[];
@@ -72,10 +71,8 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
     }
   }
 
-  public ngOnChanges(): void {
-    if (this.doNodeForm) {
-      this.getNodeSize(this.token);
-    }
+  public ngAfterContentInit(): void {
+    this.getNodeSize(this.token);
   }
 
   public onChange() {
