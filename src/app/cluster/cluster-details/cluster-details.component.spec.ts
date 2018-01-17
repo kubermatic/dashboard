@@ -1,3 +1,5 @@
+import { ClusterEntity } from 'app/shared/entity/ClusterEntity';
+import { clusterFake } from './../../testing/fake-data/cluster.fake';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SharedModule } from '../../shared/shared.module';
@@ -24,6 +26,8 @@ import { MatDialog } from '@angular/material';
 import { CreateNodesService, DatacenterService } from '../../core/services/index';
 import { DatacenterMockService } from '../../testing/services/datacenter-mock.service';
 import { LocalStorageService } from '../../core/services/local-storage/local-storage.service';
+import { SSHKeysFake } from '../../testing/fake-data/sshkey.fake';
+import { nodesFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
     BrowserModule,
@@ -39,7 +43,7 @@ describe('ClusterDetailsComponent', () => {
     let component: ClusterDetailsComponent;
     let activatedRoute: ActivatedRouteStub;
 
-    beforeEach(() => {
+    beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [
                 ...modules,
@@ -51,28 +55,91 @@ describe('ClusterDetailsComponent', () => {
                 NodeComponent
             ],
             providers: [
+                { provide: ApiService, useClass: ApiMockService },
                 CustomEventService,
                 MatDialog,
                 CreateNodesService,
                 LocalStorageService,
                 { provide: DatacenterService, useClass: DatacenterMockService },
-                { provide: ApiService, useClass: ApiMockService },
                 { provide: Auth, useClass: AuthMockService },
                 { provide: Router, useClass: RouterStub },
-                { provide: ActivatedRoute, useClass: ActivatedRouteStub }
+                { provide: ActivatedRoute, useClass: ActivatedRouteStub },
             ],
         }).compileComponents();
-    });
+    }));
 
     beforeEach(() => {
         fixture = TestBed.createComponent(ClusterDetailsComponent);
         component = fixture.componentInstance;
 
         activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-        activatedRoute.testParamMap = { clusterName: 'tbbfvttvs' };
+        activatedRoute.testParamMap = { clusterName: 'clustername' };
     });
 
     it('should create the cluster details cmp', async(() => {
         expect(component).toBeTruthy();
+    }));
+
+    it('should get cluster name', fakeAsync(() => {
+        fixture.detectChanges();
+        tick();
+        component.sub.unsubscribe();
+
+        expect(component.clusterName).toBe('clustername', 'should get cluster name from url params');
+    }));
+
+    it('should get cluster', fakeAsync(() => {
+        const cluster = new ClusterEntity(
+            clusterFake.metadata,
+            clusterFake.spec,
+            clusterFake.address,
+            clusterFake.status
+        );
+
+        fixture.detectChanges();
+        tick();
+        component.sub.unsubscribe();
+
+        expect(component.cluster).toEqual(cluster, 'should get cluster by api');
+    }));
+
+    it('should get sshkeys', fakeAsync(() => {
+        const sshkeys = SSHKeysFake.filter(key => {
+            if (key.spec.clusters == null) {
+                return false;
+            }
+            return key.spec.clusters.indexOf('clustername') > -1;
+        });
+
+        fixture.detectChanges();
+        tick();
+        component.sub.unsubscribe();
+
+        expect(component.sshKeys).toEqual(sshkeys, 'should get sshkeys by api');
+    }));
+
+    it('should get nodes', fakeAsync(() => {
+        const nodes = nodesFake;
+
+        fixture.detectChanges();
+        tick();
+        component.sub.unsubscribe();
+
+        expect(component.nodes).toEqual(nodes, 'should get sshkeys by api');
+    }));
+
+    it('should render template after requests', fakeAsync(() => {
+        fixture.detectChanges();
+        const firstDe = fixture.debugElement.query(By.css('.cluster-detail-actions'));
+        const spinnerDe = fixture.debugElement.query(By.css('.km-spinner'));
+        expect(firstDe).toBeNull('element should not be rendered before requests');
+        expect(spinnerDe).not.toBeNull('spinner should be rendered before requests');
+
+        tick();
+        component.sub.unsubscribe();
+        fixture.detectChanges();
+
+        const secondDe = fixture.debugElement.query(By.css('.cluster-detail-actions'));
+        expect(secondDe).not.toBeNull('element should be rendered after requests');
     }));
 });

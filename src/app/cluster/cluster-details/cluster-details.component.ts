@@ -23,8 +23,7 @@ import { UpgradeClusterComponentData } from 'app/shared/model/UpgradeClusterDial
 @Component({
   selector: 'kubermatic-cluster-details',
   templateUrl: './cluster-details.component.html',
-  styleUrls: ['./cluster-details.component.scss'],
-  providers: [ApiService]
+  styleUrls: ['./cluster-details.component.scss']
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
@@ -59,7 +58,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.clusterName = this.route.snapshot.paramMap.get('clusterName');
-    this.sub = this.timer.subscribe(() => this.refreshData());
+    this.sub = this.timer.subscribe(() => {
+      this.refreshData();
+    });
 
     this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
