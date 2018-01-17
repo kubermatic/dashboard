@@ -55,5 +55,8 @@ export class ApiMockService {
     public getClusterUpgrades(cluster: string): Observable<string[]> {
         return Observable.of([]);
     }
+
+    public updateClusterUpgrade(cluster: string, upgradeVersion: string): void {
+    }
 }
 
