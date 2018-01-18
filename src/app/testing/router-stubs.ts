@@ -39,6 +39,7 @@ export class RouterOutletStubComponent { }
 
 @Injectable()
 export class RouterStub {
+    public events = new Subject();
     navigate(commands: any[], extras?: NavigationExtras) { }
 }
 
@@ -61,6 +62,7 @@ export class ActivatedRouteStub {
 }
 
 import { NgModule } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 
 @NgModule({
   imports: [
