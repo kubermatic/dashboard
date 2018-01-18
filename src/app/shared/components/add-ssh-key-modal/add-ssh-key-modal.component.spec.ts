@@ -1,0 +1,105 @@
+import { Router } from '@angular/router';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { By } from '@angular/platform-browser';
+import { TestBed, async, ComponentFixture, fakeAsync, tick, inject } from '@angular/core/testing';
+import { RouterTestingModule, RouterStub } from './../../../testing/router-stubs';
+import { click } from './../../../testing/utils/click-handler';
+import { DebugElement } from '@angular/core';
+
+import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
+import { ApiService } from '../../../core/services/api/api.service';
+import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { MatDialogRef, MatDialogModule, MatFormFieldModule, MatToolbarModule, ErrorStateMatcher, ShowOnDirtyErrorStateMatcher, MatInputModule } from '@angular/material';
+import { LocalStorageService } from './../../../core/services/local-storage/local-storage.service';
+import { CreateNodesService, InputValidationService } from '../../../core/services/index';
+import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+
+const modules: any[] = [
+    BrowserModule,
+    BrowserAnimationsModule,
+    SlimLoadingBarModule.forRoot(),
+    RouterTestingModule,
+    ReactiveFormsModule,
+    FormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatToolbarModule,
+    MatInputModule
+];
+
+describe('AddSshKeyModalComponent', () => {
+    let fixture: ComponentFixture<AddSshKeyModalComponent>;
+    let component: AddSshKeyModalComponent;
+    let apiService: ApiService;
+    let router: Router;
+    let dialogRef: MatDialogRef<AddSshKeyModalComponent>;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                ...modules,
+            ],
+            declarations: [
+                AddSshKeyModalComponent
+            ],
+            providers: [
+                InputValidationService,
+                { provide: MatDialogRef, useClass: MatDialogRefMock },
+                { provide: ApiService, useClass: ApiMockService },
+                { provide: Router, useClass: RouterStub }
+            ],
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(AddSshKeyModalComponent);
+        component = fixture.componentInstance;
+
+        apiService = fixture.debugElement.injector.get(ApiService);
+        router = fixture.debugElement.injector.get(Router);
+        dialogRef = fixture.debugElement.injector.get(MatDialogRef);
+    });
+
+    it('should create the add node modal cmp', async(() => {
+        expect(component).toBeTruthy();
+    }));
+
+    it('form invalid when empty', () => {
+        fixture.detectChanges();
+
+        expect(component.addSSHKeyForm.valid).toBeFalsy();
+    });
+
+    it('name field validity', () => {
+        fixture.detectChanges();
+
+        let errors = {};
+        const name = component.addSSHKeyForm.controls['name'];
+        errors = name.errors || {};
+        expect(errors['required']).toBeTruthy();
+
+        name.setValue('test');
+        errors = name.errors || {};
+        expect(errors['required']).toBeFalsy();
+    });
+
+    it('submitting a form emits a user', fakeAsync(() => {
+        fixture.detectChanges();
+
+        expect(component.addSSHKeyForm.valid).toBeFalsy();
+        component.addSSHKeyForm.controls['name'].setValue('testname');
+        component.addSSHKeyForm.controls['key'].setValue('testkey');
+        expect(component.addSSHKeyForm.valid).toBeTruthy();
+
+        const spyDialogRefClose = spyOn(dialogRef, 'close');
+        component.addSSHKey();
+        tick();
+        fixture.detectChanges();
+
+        expect(spyDialogRefClose.and.callThrough()).toHaveBeenCalledTimes(1);
+      }));
+});
