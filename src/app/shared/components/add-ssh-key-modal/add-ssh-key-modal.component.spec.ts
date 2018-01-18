@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
@@ -87,7 +88,7 @@ describe('AddSshKeyModalComponent', () => {
         expect(errors['required']).toBeFalsy();
     });
 
-    it('submitting a form emits a user', fakeAsync(() => {
+    it('submitting a form calls addSSHKey method and closes dialog', fakeAsync(() => {
         fixture.detectChanges();
 
         expect(component.addSSHKeyForm.valid).toBeFalsy();
@@ -96,10 +97,12 @@ describe('AddSshKeyModalComponent', () => {
         expect(component.addSSHKeyForm.valid).toBeTruthy();
 
         const spyDialogRefClose = spyOn(dialogRef, 'close');
+        const spyAddShhKey = spyOn(apiService, 'addSSHKey').and.returnValue(Observable.of(null));
         component.addSSHKey();
         tick();
         fixture.detectChanges();
 
+        expect(spyAddShhKey.and.callThrough()).toHaveBeenCalledTimes(1);
         expect(spyDialogRefClose.and.callThrough()).toHaveBeenCalledTimes(1);
       }));
 });
