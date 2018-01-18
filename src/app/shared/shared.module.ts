@@ -28,6 +28,7 @@ import {
     MatSlideToggleModule,
     MatProgressBarModule,
     MatExpansionModule,
+    MatSortModule,
     ErrorStateMatcher,
     ShowOnDirtyErrorStateMatcher
 } from '@angular/material';
@@ -61,6 +62,7 @@ const modules: Array<any> = [
     MatSlideToggleModule,
     MatProgressBarModule,
     MatExpansionModule,
+    MatSortModule,
     ClipboardModule,
     NgReduxFormModule
 ];
