@@ -7,13 +7,12 @@
         />
         <p fxHide.gt-sm>{{getShortClusterName(cluster.spec.humanReadableName)}}</p>
         <p fxHide.lt-md>{{this.cluster.spec.humanReadableName}}</p>
-
       </span>
     </div>
     <div fxFlex="16%" fxFlex.sm="20.66%" fxFlex.xs="25%">
       <ng-container [ngSwitch]="!!cluster.spec.cloud">
         <span *ngSwitchCase="true">
-          <img [src]="getClusterImagePath()" class="icon-seed-cluster" alt="Cluster Icon" height="30"/>
+          <img [src]="getClusterImagePath()" class="icon-seed-cluster cluster-image" alt="Cluster Icon" height="30"/>
         </span>
         <p *ngSwitchCase="false" class="text-muted">
           No provider
