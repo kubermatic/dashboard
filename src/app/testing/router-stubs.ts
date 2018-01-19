@@ -1,3 +1,5 @@
+import { NgModule } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 import { CommonModule } from '@angular/common';
 export { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
@@ -60,9 +62,6 @@ export class ActivatedRouteStub {
         return { paramMap: this.testParamMap };
     }
 }
-
-import { NgModule } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
 
 @NgModule({
   imports: [
