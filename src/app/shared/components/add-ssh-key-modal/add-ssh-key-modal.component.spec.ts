@@ -1,8 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 import { Router } from '@angular/router';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogRef, MatDialogModule, MatFormFieldModule, MatToolbarModule, ErrorStateMatcher, ShowOnDirtyErrorStateMatcher, MatInputModule } from '@angular/material';
 
 import { By } from '@angular/platform-browser';
 import { TestBed, async, ComponentFixture, fakeAsync, tick, inject } from '@angular/core/testing';
@@ -11,18 +11,15 @@ import { click } from './../../../testing/utils/click-handler';
 import { DebugElement } from '@angular/core';
 
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
-import { ApiService } from '../../../core/services/api/api.service';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
-import { MatDialogRef, MatDialogModule, MatFormFieldModule, MatToolbarModule, ErrorStateMatcher, ShowOnDirtyErrorStateMatcher, MatInputModule } from '@angular/material';
 import { LocalStorageService } from './../../../core/services/local-storage/local-storage.service';
-import { CreateNodesService, InputValidationService } from '../../../core/services/index';
+import { InputValidationService, ApiService } from '../../../core/services/index';
 import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 const modules: any[] = [
     BrowserModule,
     BrowserAnimationsModule,
-    SlimLoadingBarModule.forRoot(),
     RouterTestingModule,
     ReactiveFormsModule,
     FormsModule,
@@ -36,7 +33,6 @@ describe('AddSshKeyModalComponent', () => {
     let fixture: ComponentFixture<AddSshKeyModalComponent>;
     let component: AddSshKeyModalComponent;
     let apiService: ApiService;
-    let router: Router;
     let dialogRef: MatDialogRef<AddSshKeyModalComponent>;
 
     beforeEach(() => {
@@ -61,7 +57,6 @@ describe('AddSshKeyModalComponent', () => {
         component = fixture.componentInstance;
 
         apiService = fixture.debugElement.injector.get(ApiService);
-        router = fixture.debugElement.injector.get(Router);
         dialogRef = fixture.debugElement.injector.get(MatDialogRef);
     });
 
