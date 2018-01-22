@@ -1,10 +1,8 @@
 import { SharedModule } from './../../shared/shared.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
 
 import { By } from '@angular/platform-browser';
 import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
@@ -28,7 +26,6 @@ describe('SshKeyListComponent', () => {
     let component: SshKeyListComponent;
 
     beforeEach(() => {
-        MockNgRedux.reset();
         TestBed.configureTestingModule({
             imports: [
                 ...modules,
@@ -48,7 +45,7 @@ describe('SshKeyListComponent', () => {
         component = fixture.componentInstance;
     });
 
-    it('should create the sshkey cmp', () => {
+    it('should create the sshkey list cmp', () => {
         expect(component).toBeTruthy();
     });
 
