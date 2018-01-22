@@ -22,14 +22,10 @@
     </div>
 
     <div fxFlex="16%" fxHide.sm fxHide.xs>
-      <ng-container>
-        {{getDc(sortedData.spec.seedDatacenterName, 'seedDc')}}
-      </ng-container>
+      {{getDc(sortedData.spec.seedDatacenterName, 'seedDc')}}
     </div>
     <div fxFlex="16%" fxHide.sm fxHide.xs>
-      <ng-container>
-        {{getDc(sortedData.spec.cloud.dc, 'nodeDc')}}
-      </ng-container>
+      {{getDc(sortedData.spec.cloud.dc, 'nodeDc')}}
     </div>
     <div fxFlex="16%" fxFlex.sm="20.66%" fxHide.xs>{{sortedData.status.phase}}</div>
     <!--div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="35%">
