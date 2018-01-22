@@ -1,11 +1,9 @@
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SharedModule } from '../shared/shared.module';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
-import { click } from './../testing/utils/click-handler';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 
 import { AddNodeComponent } from './add-node.component';

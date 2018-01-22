@@ -14,7 +14,7 @@ import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
 })
 export class AwsAddNodeComponent implements OnInit {
 
-  @Input() public connect: string[];
+  @Input() public connect: string[] = [];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
