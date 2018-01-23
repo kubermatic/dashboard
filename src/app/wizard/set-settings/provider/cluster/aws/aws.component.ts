@@ -33,6 +33,16 @@ export class AWSClusterComponent implements OnInit {
     });
   }
 
+  public showRequiredFields(event: any) {
+    if (this.awsClusterForm.invalid) {
+      for (const i in event.clusterForm.awsClusterForm) {
+        if (event.clusterForm.awsClusterForm.hasOwnProperty(i)) {
+          this.awsClusterForm.get(i).markAsTouched();
+        }
+      }
+    }
+  }
+
   public onChange() {
     const awsCloudSpec = new AWSCloudSpec(
       this.awsClusterForm.controls['accessKeyId'].value,

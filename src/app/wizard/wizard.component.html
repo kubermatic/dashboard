@@ -17,6 +17,6 @@
     <kubermatic-summary *ngIf="step === 4 || step === 5"></kubermatic-summary>
 
     <!-- Navigation Buttons -->
-    <kubermatic-navigation-buttons></kubermatic-navigation-buttons>
+    <kubermatic-navigation-buttons (formClusters)="getFormCluster($event)"></kubermatic-navigation-buttons>
 </mat-card>
 

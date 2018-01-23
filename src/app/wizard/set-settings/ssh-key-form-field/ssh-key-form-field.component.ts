@@ -46,6 +46,12 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub2);
   }
 
+    public showRequiredFields(event: any) {
+    if (this.sshKeyForm.invalid) {
+      this.sshKeyForm.get('ssh_keys').markAsTouched();
+    }
+  }
+
   private refreshSSHKeys(): Subscription {
     return this.api.getSSHKeys().subscribe(result => {
       this.sshKeys = result;

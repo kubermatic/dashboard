@@ -33,6 +33,16 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
     });
   }
 
+  public showRequiredFields(event: any) {
+    if (this.clusterNameForm.invalid) {
+      for (const i in event.clusterForm.clusterNameForm) {
+        if (event.clusterForm.clusterNameForm.hasOwnProperty(i)) {
+          this.clusterNameForm.get(i).markAsTouched();
+        }
+      }
+    }
+  }
+
   public generateName() {
     this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
   }

@@ -18,6 +18,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
   public setDatacenterForm: FormGroup;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
   private subscriptions: Subscription[] = [];
+  public datacenterRequired: boolean = false;
 
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
   public selectedDatacenter: DataCenterEntity;
@@ -56,6 +57,14 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
   public ngAfterContentInit(): void {
     const sub2 = this.getDatacenters();
     this.subscriptions.push(sub2);
+  }
+
+  public showRequiredFields(event: any) {
+    if (event.clusterForm.setDatacenterForm.datacenter == null) {
+      this.datacenterRequired = true;
+    } else {
+      this.datacenterRequired = false;
+    }
   }
 
   public getDatacenters(): Subscription {
