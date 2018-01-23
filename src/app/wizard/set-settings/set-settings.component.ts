@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ClusterSpec, CloudSpec } from '../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { select, NgRedux } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { Subscription } from 'rxjs/Subscription';
+import { SshKeyFormFieldComponent } from './ssh-key-form-field/ssh-key-form-field.component';
+import { ProviderClusterComponent } from './provider/cluster/cluster.component';
 
 @Component({
   selector: 'kubermatic-set-settings',
@@ -26,6 +28,11 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
 
   public createClusterModal: CreateClusterModel;
   public clusterSpec: ClusterSpec;
+
+  @ViewChild(SshKeyFormFieldComponent)
+  private sshKeyFormFieldComponent: SshKeyFormFieldComponent;
+  @ViewChild(ProviderClusterComponent)
+  private providerClusterComponent: ProviderClusterComponent;
 
   constructor(private ngRedux: NgRedux<any>) { }
 
@@ -70,6 +77,12 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
     );
 
     WizardActions.setClusterModel(this.createClusterModal);
+  }
+
+  public showRequiredFields(event: any) {
+    const methodName = event.methodName;
+    this.sshKeyFormFieldComponent[methodName](event);
+    this.providerClusterComponent[methodName](event);
   }
 
   public ngOnDestroy(): void {

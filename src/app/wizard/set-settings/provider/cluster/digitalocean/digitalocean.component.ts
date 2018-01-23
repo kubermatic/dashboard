@@ -40,4 +40,14 @@ export class DigitaloceanClusterComponent implements OnInit {
       new CloudSpec(region, doCloudSpec, null, null, null, null)
     );
   }
+
+  public showRequiredFields(event: any) {
+    if (this.digitalOceanClusterForm.invalid) {
+      for (const i in event.clusterForm.digitalOceanClusterForm) {
+        if (event.clusterForm.digitalOceanClusterForm.hasOwnProperty(i)) {
+          this.digitalOceanClusterForm.get(i).markAsTouched();
+        }
+      }
+    }
+  }
 }

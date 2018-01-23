@@ -20,6 +20,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   public setProviderForm: FormGroup;
   public supportedNodeProviders: string[] = NodeProvider.Supported;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
+  public providerRequired: boolean = false;
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string = '';
@@ -63,6 +64,14 @@ export class SetProviderComponent implements OnInit, OnDestroy {
 
     const sub3 = this.getDatacenters();
     this.subscriptions.push(sub3);
+  }
+
+  public showRequiredFields(event: any) {
+    if (event.clusterForm.setProviderForm.provider === '') {
+      this.providerRequired = true;
+    } else {
+      this.providerRequired = false;
+    }
   }
 
   public getDatacenters(): Subscription {

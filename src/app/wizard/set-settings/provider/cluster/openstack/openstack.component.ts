@@ -34,6 +34,16 @@ export class OpenstackClusterComponent implements OnInit {
     });
   }
 
+  public showRequiredFields(event: any) {
+    if (this.osClusterForm.invalid) {
+      for (const i in event.clusterForm.openstackClusterForm) {
+        if (event.clusterForm.openstackClusterForm.hasOwnProperty(i)) {
+          this.osClusterForm.get(i).markAsTouched();
+        }
+      }
+    }
+  }
+
   public onChange() {
     const osCloudSpec = new OpenstackCloudSpec(
       this.osClusterForm.controls['os_username'].value,

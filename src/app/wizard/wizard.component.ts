@@ -1,5 +1,5 @@
 import { WizardActions } from './../redux/actions/wizard.actions';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
@@ -20,6 +20,10 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { select, NgRedux } from '@angular-redux/store';
 import { Subscription } from 'rxjs/Subscription';
 import { BringYourOwnCloudSpec } from 'app/shared/entity/cloud/BringYourOwnCloudSpec';
+import { SetClusterNameComponent } from './set-cluster-name/set-cluster-name.component';
+import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
+import { SetProviderComponent } from './set-provider/set-provider.component';
+import { SetSettingsComponent } from './set-settings/set-settings.component';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -36,6 +40,15 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
+
+  @ViewChild(SetClusterNameComponent)
+  private setClusterNameComponent: SetClusterNameComponent;
+  @ViewChild(SetDatacenterComponent)
+  private setDatacenterComponent: SetDatacenterComponent;
+  @ViewChild(SetProviderComponent)
+  private setProviderComponent: SetProviderComponent;
+  @ViewChild(SetSettingsComponent)
+  private setSettingsComponent: SetSettingsComponent;
 
   constructor(
     private api: ApiService,
@@ -62,6 +75,24 @@ export class WizardComponent implements OnInit, OnDestroy {
       });
 
     this.subscriptions.push(sub);
+  }
+
+  getFormCluster(event: any) {
+    const methodName = event.methodName;
+    const formName = event.formName;
+
+    switch (formName) {
+      case 'clusterNameForm':
+        return this.setClusterNameComponent[methodName](event);
+      case 'setProviderForm':
+        return this.setProviderComponent[methodName](event);
+      case 'setDatacenterForm':
+        return this.setDatacenterComponent[methodName](event);
+      case 'setSettings':
+        return this.setSettingsComponent[methodName](event);
+      default:
+        return;
+    }
   }
 
   public resetCachedCredentials() {
