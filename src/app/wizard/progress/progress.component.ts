@@ -51,7 +51,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
     return titleClass;
   }
 
-  public getCurser (curserStep: number): string {
+  public getCurser(curserStep: number): string {
     let curser = 'default';
 
     if (this.step > curserStep) {

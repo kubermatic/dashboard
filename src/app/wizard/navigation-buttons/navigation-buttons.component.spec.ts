@@ -1,33 +1,34 @@
+import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
+import { datacentersFake } from './../../testing/fake-data/datacenter.fake';
 import { NavigationButtonsComponent } from './navigation-buttons.component';
-import { HttpClientModule } from '@angular/common/http';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
 
 import { By } from '@angular/platform-browser';
-import {TestBed, async, ComponentFixture} from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 
-import { RouterStub } from '../../testing/router-stubs';
 import { DatacenterService } from '../../core/services/index';
 import { DatacenterMockService } from '../../testing/services/datacenter-mock.service';
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 
 const modules: any[] = [
     BrowserModule,
-    HttpClientModule,
-    RouterTestingModule,
     NgReduxTestingModule,
     BrowserAnimationsModule
 ];
 
-function setMockNgRedux<T>(fixture: ComponentFixture<T>, step: number, valid: Map<number, boolean>): void {
+function setMockNgRedux<T>(fixture: ComponentFixture<T>, step: number, valid: Map<string, boolean>): void {
     const stepStub = MockNgRedux.getSelectorStub(['wizard', 'step']);
     stepStub.next(step);
-    stepStub.complete();
     const validStub = MockNgRedux.getSelectorStub(['wizard', 'valid']);
     validStub.next(valid);
+}
+
+function completeRedux() {
+    const stepStub = MockNgRedux.getSelectorStub(['wizard', 'step']);
+    stepStub.complete();
+    const validStub = MockNgRedux.getSelectorStub(['wizard', 'valid']);
     validStub.complete();
 }
 
@@ -35,7 +36,7 @@ describe('NavigationButtonsComponent', () => {
     let fixture: ComponentFixture<NavigationButtonsComponent>;
     let component: NavigationButtonsComponent;
 
-    beforeEach(() => {
+    beforeEach(async(() => {
         MockNgRedux.reset();
         TestBed.configureTestingModule({
             imports: [
@@ -48,7 +49,7 @@ describe('NavigationButtonsComponent', () => {
                 { provide: DatacenterService, useClass: DatacenterMockService }
             ],
         }).compileComponents();
-    });
+    }));
 
     beforeEach(() => {
         fixture = TestBed.createComponent(NavigationButtonsComponent);
@@ -58,4 +59,39 @@ describe('NavigationButtonsComponent', () => {
     it('should create the Breadcrumbs', () => {
         expect(component).toBeTruthy();
     });
+
+    it('canGoToStep should works', () => {
+        const valid: Map<string, boolean> = new Map([
+            ['clusterNameForm', false]
+        ]);
+        const ngRedux = fixture.debugElement.injector.get(NgRedux);
+        const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({ wizard: { valid } });
+        setMockNgRedux(fixture, 0, valid);
+        fixture.detectChanges();
+        expect(component.nextStep).toBeFalsy();
+        valid.set('clusterNameForm', true);
+        setMockNgRedux(fixture, 0, valid);
+        fixture.detectChanges();
+
+        expect(component.nextStep).toBeTruthy();
+
+        setMockNgRedux(fixture, 4, valid);
+        fixture.detectChanges();
+
+        expect(component.nextStep).toBeTruthy();
+
+        completeRedux();
+    });
+
+    it('should get datacenters', fakeAsync(() => {
+        const datacenters: { [key: string]: DataCenterEntity[] } = {
+            [datacentersFake[0].spec.provider]: [datacentersFake[0]],
+            [datacentersFake[1].spec.provider]: [datacentersFake[1]]
+        };
+
+        fixture.detectChanges();
+        tick();
+
+        expect(component.datacenters).toEqual(datacenters, 'should get datacenters');
+    }));
 });
