@@ -1,4 +1,4 @@
-<div class="km-card-list-content" [ngClass]="{odd: isOdd}">
+<div class="km-card-list-content sshkey-item" [ngClass]="{odd: isOdd}">
   <div fxLayout class="km-card-list-content-item" (click)="togglePublicKey()">
     <div fxFlex="50%" fxFlex.sm="40%">
       <div class="key-name">
@@ -17,7 +17,7 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="deleteSSHKey(sshKey, $event)">
+      <button mat-menu-item (click)="deleteSSHKey()">
         <mat-icon>delete</mat-icon>
         <span>Delete</span>
       </button>

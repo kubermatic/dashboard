@@ -32,6 +32,10 @@ export class ApiMockService {
         return Observable.of(this.sshKeys);
     }
 
+    public deleteSSHKey(fingerprint: string): Observable<any> {
+        return Observable.of(null);
+    }
+
     public getDigitaloceanSizes(token: string): Observable<any> {
         return Observable.of(this.sizes);
     }
