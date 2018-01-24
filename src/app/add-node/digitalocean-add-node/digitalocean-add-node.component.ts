@@ -18,7 +18,7 @@ import { InputValidationService } from 'app/core/services/input-validation/input
 export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit {
 
   @Input() public token: string = '';
-  @Input() public connect: string[];
+  @Input() public connect: string[] = [];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
