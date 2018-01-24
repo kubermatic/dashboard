@@ -10,7 +10,7 @@ const routes: Routes = [
         path: '',
         component: SshkeyComponent,
         canActivate: [AuthGuard],
-        data: { title: 'Manage SSH Keys' }
+        data: { title: 'Manage SSH keys' }
     }
 ];
 
