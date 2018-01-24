@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { digitaloceanSizesFake } from '../fake-data/node.fake';
 import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
+import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 
 @Injectable()
 export class ApiMockService {
@@ -38,6 +39,10 @@ export class ApiMockService {
 
     public createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<any> {
         return Observable.of(null);
+    }
+
+    public createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
+        return Observable.of(this.cluster);
     }
 
     public deleteCluster(clusterName: string): Observable<any> {

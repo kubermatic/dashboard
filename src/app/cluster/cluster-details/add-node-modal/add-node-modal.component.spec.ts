@@ -1,6 +1,5 @@
+import { FormBuilder } from '@angular/forms';
 import { AddNodeModalData } from './../../../shared/model/add-node-modal-data';
-import { DigitaloceanAddNodeComponent } from './../../../add-node/digitalocean-add-node/digitalocean-add-node.component';
-import { OpenstackAddNodeComponent } from './../../../add-node/openstack-add-node/openstack-add-node.component';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SharedModule } from '../../../shared/shared.module';
@@ -19,13 +18,12 @@ import { DebugElement } from '@angular/core';
 import { ApiService } from '../../../core/services/api/api.service';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { AddNodeComponent } from './../../../add-node/add-node.component';
 import { AddNodeModalComponent } from './add-node-modal.component';
-import { AwsAddNodeComponent } from '../../../add-node/aws-add-node/aws-add-node.component';
 import { AddNodeFormComponent } from '../../../add-node/add-node-form/add-node-form.component';
 import { InputValidationService } from '../../../core/services/input-validation/input-validation.service';
 import { clusterFake } from './../../../testing/fake-data/cluster.fake';
 import { nodeModelFake } from './../../../testing/fake-data/node.fake';
+import { AddNodeStubComponent } from '../../../testing/components/add-node-stubs';
 
 const modules: any[] = [
     BrowserModule,
@@ -50,11 +48,7 @@ describe('AddNodeModalComponent', () => {
             ],
             declarations: [
                 AddNodeModalComponent,
-                AddNodeComponent,
-                OpenstackAddNodeComponent,
-                AwsAddNodeComponent,
-                DigitaloceanAddNodeComponent,
-                AddNodeFormComponent
+                AddNodeStubComponent
             ],
             providers: [
                 { provide: MAT_DIALOG_DATA, useValue: { cluster: clusterFake } },
@@ -99,15 +93,13 @@ describe('AddNodeModalComponent', () => {
         expect(spyCreateClusterNode.and.callThrough()).toHaveBeenCalled();
     }));
 
-    it('should render mat-dialog-actinos', fakeAsync(() => {
-        fixture.detectChanges();
-        tick();
+    it('should render mat-dialog-actinos', () => {
+        const formBuilder = fixture.debugElement.injector.get(FormBuilder);
+        component.form = formBuilder.group({});
         fixture.detectChanges();
 
-        fixture.whenStable().then(() => {
-            const de = fixture.debugElement.query(By.css('.mat-dialog-actions'));
+        const de = fixture.debugElement.query(By.css('.mat-dialog-actions'));
 
-            expect(de).not.toBeNull();
-        });
-    }));
+        expect(de).not.toBeNull();
+    });
 });
