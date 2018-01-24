@@ -1,3 +1,4 @@
+import { NgRedux } from '@angular-redux/store';
 import { BringYourOwnCloudSpec } from 'app/shared/entity/cloud/BringYourOwnCloudSpec';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { Component, OnInit } from '@angular/core';
@@ -10,13 +11,16 @@ import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 })
 export class BringyourownClusterComponent implements OnInit {
 
-  constructor() { }
+  constructor(private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
     const byoCloudSpec = new BringYourOwnCloudSpec();
+    const ruduxStore = this.ngRedux.getState();
+    const wizard = ruduxStore.wizard;
+    const region = wizard.setDatacenterForm.datacenter.metadata.name;
 
     WizardActions.setCloudSpec(
-      new CloudSpec(null, null, null, byoCloudSpec, null, null)
+      new CloudSpec(region, null, null, byoCloudSpec, null, null)
     );
 
     setTimeout(() => {
