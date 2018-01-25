@@ -19,6 +19,7 @@ export class WizardActions extends ActionBase {
     static readonly SET_NODE_MODEL = WizardActions.getActType('SET_NODE_MODEL');
     static readonly SET_VALIDATION = WizardActions.getActType('SET_VALIDATION');
     static readonly RESET_FORMS = WizardActions.getActType('RESET_FORMS');
+    static readonly CHECK_VALIDATION = WizardActions.getActType('CHECK_VALIDATION');
 
     @dispatch()
     static nextStep(): Action {
@@ -63,6 +64,11 @@ export class WizardActions extends ActionBase {
     @dispatch()
     static setValidation(formName: string, isValid: boolean): Action {
         return { type: WizardActions.SET_VALIDATION, payload: { formName, isValid } };
+    }
+
+    @dispatch()
+    static checkValidation(): Action {
+        return { type: WizardActions.CHECK_VALIDATION };
     }
 
     @dispatch()

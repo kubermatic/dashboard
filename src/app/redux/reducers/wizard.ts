@@ -28,6 +28,7 @@ const formOnStep: Map<number, string[]> = new Map([
 export interface Wizard {
     step: number;
     valid: Map<string, boolean>;
+    isCheckedForm: boolean;
     clusterNameForm: {
         name: string;
     };
@@ -70,6 +71,7 @@ export interface Wizard {
 export const INITIAL_STATE: Wizard = {
     step: 0,
     valid: new Map(),
+    isCheckedForm: false,
     clusterNameForm: {
         name: ''
     },
@@ -149,6 +151,22 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
             valid.set(formName, action.payload.isValid);
 
             return Object.assign({}, state, { valid });
+        }
+        case WizardActions.CHECK_VALIDATION: {
+            const step = state.step;
+            const valid = new Map(state.valid);
+            const forms = formOnStep.get(step);
+            let isCheckedForm = state.isCheckedForm;
+
+            forms.forEach(form => {
+                if (!valid.get(form)) {
+                    isCheckedForm = true;
+                    return;
+                }
+                isCheckedForm = false;
+            });
+
+            return Object.assign({}, state, { isCheckedForm });
         }
         case WizardActions.RESET_FORMS: {
             const intialState = cloneDeep(INITIAL_STATE);

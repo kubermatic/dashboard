@@ -41,15 +41,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
 
-  @ViewChild(SetClusterNameComponent)
-  private setClusterNameComponent: SetClusterNameComponent;
-  @ViewChild(SetDatacenterComponent)
-  private setDatacenterComponent: SetDatacenterComponent;
-  @ViewChild(SetProviderComponent)
-  private setProviderComponent: SetProviderComponent;
-  @ViewChild(SetSettingsComponent)
-  private setSettingsComponent: SetSettingsComponent;
-
   constructor(
     private api: ApiService,
     private router: Router,
@@ -75,24 +66,6 @@ export class WizardComponent implements OnInit, OnDestroy {
       });
 
     this.subscriptions.push(sub);
-  }
-
-  getFormCluster(event: any) {
-    const methodName = event.methodName;
-    const formName = event.formName;
-
-    switch (formName) {
-      case 'clusterNameForm':
-        return this.setClusterNameComponent[methodName](event);
-      case 'setProviderForm':
-        return this.setProviderComponent[methodName](event);
-      case 'setDatacenterForm':
-        return this.setDatacenterComponent[methodName](event);
-      case 'setSettings':
-        return this.setSettingsComponent[methodName](event);
-      default:
-        return;
-    }
   }
 
   public resetCachedCredentials() {

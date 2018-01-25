@@ -29,11 +29,6 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
   public createClusterModal: CreateClusterModel;
   public clusterSpec: ClusterSpec;
 
-  @ViewChild(SshKeyFormFieldComponent)
-  private sshKeyFormFieldComponent: SshKeyFormFieldComponent;
-  @ViewChild(ProviderClusterComponent)
-  private providerClusterComponent: ProviderClusterComponent;
-
   constructor(private ngRedux: NgRedux<any>) { }
 
   public ngOnInit(): void {
@@ -77,12 +72,6 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
     );
 
     WizardActions.setClusterModel(this.createClusterModal);
-  }
-
-  public showRequiredFields(event: any) {
-    const methodName = event.methodName;
-    this.sshKeyFormFieldComponent[methodName](event);
-    this.providerClusterComponent[methodName](event);
   }
 
   public ngOnDestroy(): void {

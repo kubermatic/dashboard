@@ -25,6 +25,9 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string = '';
 
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  public isChecked: boolean;
+
   constructor(private fb: FormBuilder,
               private dcService: DatacenterService) { }
 
@@ -41,9 +44,18 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       }, 0);
     }
 
-    const sub = this.provider$.subscribe(provider => {
-      provider && (this.selectedProvider = provider);
-    });
+    const sub = this.provider$.combineLatest(this.isChecked$)
+      .subscribe((data: [string, boolean]) => {
+        const provider = data[0];
+        const isChecked = data[1];
+
+        provider && (this.selectedProvider = provider);
+        this.isChecked = isChecked;
+
+        if (this.isChecked) {
+          this.showRequiredFields();
+        }
+      });
     this.subscriptions.push(sub);
 
     this.setProviderForm = this.fb.group({
@@ -58,7 +70,9 @@ export class SetProviderComponent implements OnInit, OnDestroy {
         this.setProviderForm.valid
       );
 
-      WizardActions.nextStep();
+      WizardActions.checkValidation();
+
+      !this.isChecked && WizardActions.nextStep();
     });
     this.subscriptions.push(sub2);
 
@@ -66,8 +80,8 @@ export class SetProviderComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub3);
   }
 
-  public showRequiredFields(event: any) {
-    if (event.clusterForm.setProviderForm.provider === '') {
+  public showRequiredFields() {
+    if (!this.selectedProvider) {
       this.providerRequired = true;
     } else {
       this.providerRequired = false;

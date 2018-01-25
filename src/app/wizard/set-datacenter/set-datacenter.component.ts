@@ -26,17 +26,26 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
 
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  public isChecked: boolean;
+
   constructor(private fb: FormBuilder,
               private dcService: DatacenterService) { }
 
   ngOnInit() {
-    const sub = this.datacenter$.combineLatest(this.provider$)
-      .subscribe((data: [DataCenterEntity, string]) => {
+    const sub = this.datacenter$.combineLatest(this.provider$, this.isChecked$)
+      .subscribe((data: [DataCenterEntity, string, boolean]) => {
         const datacenter = data[0];
         const provider = data[1];
+        const isChecked = data[2];
 
         datacenter && (this.selectedDatacenter = datacenter);
         provider && (this.selectedProvider = provider);
+        this.isChecked = isChecked;
+
+        if (isChecked) {
+          this.showRequiredFields();
+        }
       });
     this.subscriptions.push(sub);
 
@@ -50,7 +59,9 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
         { datacenter: data.datacenter },
         this.setDatacenterForm.valid
       );
-      WizardActions.nextStep();
+      WizardActions.checkValidation();
+
+      !this.isChecked && WizardActions.nextStep();
     });
   }
 
@@ -59,8 +70,8 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
     this.subscriptions.push(sub2);
   }
 
-  public showRequiredFields(event: any) {
-    if (event.clusterForm.setDatacenterForm.datacenter == null) {
+  public showRequiredFields() {
+    if (!this.selectedDatacenter) {
       this.datacenterRequired = true;
     } else {
       this.datacenterRequired = false;
