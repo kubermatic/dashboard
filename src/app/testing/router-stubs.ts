@@ -1,3 +1,5 @@
+import { NgModule } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 import { CommonModule } from '@angular/common';
 export { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 
@@ -39,6 +41,7 @@ export class RouterOutletStubComponent { }
 
 @Injectable()
 export class RouterStub {
+    public events = new Subject();
     navigate(commands: any[], extras?: NavigationExtras) { }
 }
 
@@ -59,8 +62,6 @@ export class ActivatedRouteStub {
         return { paramMap: this.testParamMap };
     }
 }
-
-import { NgModule } from '@angular/core';
 
 @NgModule({
   imports: [

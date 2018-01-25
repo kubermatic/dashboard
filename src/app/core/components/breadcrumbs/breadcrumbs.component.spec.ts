@@ -14,6 +14,7 @@ import { BreadcrumbsComponent } from './breadcrumbs.component';
 import { ApiService } from './../../services/api/api.service';
 import { Auth } from '../../services/index';
 import { RouterStub } from '../../../testing/router-stubs';
+import { ApiMockService } from '../../../testing/services/api-mock.service';
 
 const modules: any[] = [
     BrowserModule,
@@ -43,7 +44,7 @@ describe('BreadcrumbsComponent', () => {
                 BreadcrumbsComponent
             ],
             providers: [
-                ApiService,
+                { provide: ApiService, useClass: ApiMockService },
                 { provide: Auth, useClass: AuthMockService }
             ],
         }).compileComponents();

@@ -3,3 +3,5 @@ import 'rxjs/add/operator/combineLatest';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/observable/throw';
+
