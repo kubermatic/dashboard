@@ -70,6 +70,26 @@ describe('SetClusterNameComponent', () => {
         expect(component.clusterName).toBe('test-name', 'should get a cluster name');
     });
 
+    it('form invalid after creating', () => {
+        fixture.detectChanges();
+
+        expect(component.clusterNameForm.valid).toBeFalsy();
+    });
+
+    it('name field validity', () => {
+        fixture.detectChanges();
+
+        let errors = {};
+        const name = component.clusterNameForm.controls['name'];
+        errors = name.errors || {};
+        expect(errors['required']).toBeTruthy();
+
+        name.setValue('test-name');
+        errors = name.errors || {};
+        expect(errors['required']).toBeFalsy();
+        expect(component.clusterNameForm.valid).toBeTruthy();
+    });
+
     it('should caall generateName method', () => {
         const generatedName = 'generated-name';
         const spyGenerateName = spyOn(nameGenerator, 'generateName').and.returnValue(generatedName);
