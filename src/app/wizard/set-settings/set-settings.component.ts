@@ -5,8 +5,6 @@ import { select, NgRedux } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { Subscription } from 'rxjs/Subscription';
-import { SshKeyFormFieldComponent } from './ssh-key-form-field/ssh-key-form-field.component';
-import { ProviderClusterComponent } from './provider/cluster/cluster.component';
 
 @Component({
   selector: 'kubermatic-set-settings',

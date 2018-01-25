@@ -3,8 +3,6 @@ import { select } from '@angular-redux/store';
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { AWSClusterComponent } from './aws/aws.component';
-import { DigitaloceanClusterComponent } from './digitalocean/digitalocean.component';
-import { OpenstackClusterComponent } from './openstack/openstack.component';
 
 @Component({
   selector: 'kubermatic-provider-cluster',

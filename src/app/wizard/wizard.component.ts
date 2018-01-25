@@ -20,10 +20,6 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { select, NgRedux } from '@angular-redux/store';
 import { Subscription } from 'rxjs/Subscription';
 import { BringYourOwnCloudSpec } from 'app/shared/entity/cloud/BringYourOwnCloudSpec';
-import { SetClusterNameComponent } from './set-cluster-name/set-cluster-name.component';
-import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
-import { SetProviderComponent } from './set-provider/set-provider.component';
-import { SetSettingsComponent } from './set-settings/set-settings.component';
 
 @Component({
   selector: 'kubermatic-wizard',
