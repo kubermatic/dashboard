@@ -156,15 +156,8 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
             const step = state.step;
             const valid = new Map(state.valid);
             const forms = formOnStep.get(step);
-            let isCheckedForm = state.isCheckedForm;
 
-            forms.forEach(form => {
-                if (!valid.get(form)) {
-                    isCheckedForm = true;
-                    return;
-                }
-                isCheckedForm = false;
-            });
+            const isCheckedForm = !!forms.find(form => !valid.get(form));
 
             return Object.assign({}, state, { isCheckedForm });
         }
