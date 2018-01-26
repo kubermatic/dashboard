@@ -176,6 +176,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.dialogRef = this.dialog.open(UpgradeClusterComponent, {
       data: new UpgradeClusterComponentData(this.clusterName, this.upgradesList),
       width: dialogWidth
+    }).afterClosed().subscribe(() => {
+      this.gotUpgradesList = false;
+      this.loadUpgrades();
     });
   }
 
