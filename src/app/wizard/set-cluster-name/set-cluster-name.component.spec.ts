@@ -65,6 +65,7 @@ describe('SetClusterNameComponent', () => {
 
     it('should get name from redux', () => {
         setMockNgRedux('test-name');
+        completeRedux();
         fixture.detectChanges();
 
         expect(component.clusterName).toBe('test-name', 'should get a cluster name');
@@ -90,7 +91,7 @@ describe('SetClusterNameComponent', () => {
         expect(component.clusterNameForm.valid).toBeTruthy();
     });
 
-    it('should caall generateName method', () => {
+    it('should call generateName method', () => {
         const generatedName = 'generated-name';
         const spyGenerateName = spyOn(nameGenerator, 'generateName').and.returnValue(generatedName);
         fixture.detectChanges();
