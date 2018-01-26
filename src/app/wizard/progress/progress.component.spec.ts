@@ -49,7 +49,7 @@ describe('ProgressComponent', () => {
         component = fixture.componentInstance;
     });
 
-    it('should create the Breadcrumbs', () => {
+    it('should create the progress cmp', () => {
         expect(component).toBeTruthy();
     });
 

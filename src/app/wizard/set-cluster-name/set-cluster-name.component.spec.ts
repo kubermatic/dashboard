@@ -59,7 +59,7 @@ describe('SetClusterNameComponent', () => {
         nameGenerator = fixture.debugElement.injector.get(ClusterNameGenerator);
     });
 
-    it('should create the Breadcrumbs', () => {
+    it('should create the set-cluster-name cmp', () => {
         expect(component).toBeTruthy();
     });
 

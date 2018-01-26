@@ -1,3 +1,4 @@
+import { SetProviderComponent } from './set-provider.component';
 import { datacentersFake } from './../../testing/fake-data/datacenter.fake';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
@@ -12,7 +13,6 @@ import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core
 import { WizardActions } from '../../redux/actions/wizard.actions';
 import { InputValidationService } from '../../core/services';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SetDatacenterComponent } from './set-datacenter.component';
 import { DatacenterMockService } from '../../testing/services/datacenter-mock.service';
 import { Observable } from 'rxjs/Observable';
 import { click } from '../../testing/utils/click-handler';
@@ -25,25 +25,19 @@ const modules: any[] = [
     SharedModule
 ];
 
-function setMockNgRedux(datacenter: DataCenterEntity, provider: string): void {
-    const stepStub = MockNgRedux.getSelectorStub(['wizard', 'setDatacenterForm', 'datacenter']);
-    stepStub.next(datacenter);
-
+function setMockNgRedux(provider: string): void {
     const providerStub = MockNgRedux.getSelectorStub(['wizard', 'setProviderForm', 'provider']);
     providerStub.next(provider);
 }
 
 function completeRedux() {
-    const stepStub = MockNgRedux.getSelectorStub(['wizard', 'setDatacenterForm', 'datacenter']);
-    stepStub.complete();
-
     const providerStub = MockNgRedux.getSelectorStub(['wizard', 'setProviderForm', 'provider']);
     providerStub.complete();
 }
 
-describe('SetDatacenterComponent', () => {
-    let fixture: ComponentFixture<SetDatacenterComponent>;
-    let component: SetDatacenterComponent;
+describe('SetProviderComponent', () => {
+    let fixture: ComponentFixture<SetProviderComponent>;
+    let component: SetProviderComponent;
     let dcService: DatacenterService;
 
     beforeEach(async(() => {
@@ -53,7 +47,7 @@ describe('SetDatacenterComponent', () => {
                 ...modules,
             ],
             declarations: [
-                SetDatacenterComponent
+                SetProviderComponent
             ],
             providers: [
                 InputValidationService,
@@ -63,67 +57,48 @@ describe('SetDatacenterComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SetDatacenterComponent);
+        fixture = TestBed.createComponent(SetProviderComponent);
         component = fixture.componentInstance;
 
         dcService = fixture.debugElement.injector.get(DatacenterService);
     });
 
-    it('should create the set-datacenter cmp', () => {
+    it('should create the set-provider cmp', () => {
         expect(component).toBeTruthy();
     });
 
-    it('form invalid after creating', () => {
-        setMockNgRedux(null, 'digitalocean');
-        completeRedux();
-        fixture.detectChanges();
-
-        expect(component.setDatacenterForm.valid).toBeFalsy();
-    });
-
     it('should get datacenter and provider from redux', () => {
-        setMockNgRedux(datacentersFake[0], 'digitalocean');
+        setMockNgRedux('digitalocean');
         completeRedux();
+
         fixture.detectChanges();
 
-        expect(component.selectedDatacenter).toEqual(datacentersFake[0], 'should get datacenter');
         expect(component.selectedProvider).toBe('digitalocean', 'should get provider');
     });
 
     it('should get datacenter list', fakeAsync(() => {
         const datacenters = datacentersFake;
         const provider = 'digitalocean';
-        setMockNgRedux(datacenters[0], provider);
+
+        setMockNgRedux(provider);
         completeRedux();
+
         fixture.detectChanges();
         tick();
 
         expect(component.datacenters[provider]).toEqual([datacenters[0], datacenters[1]]);
     }));
 
-    it('should call nextStep if datacenter is alone', fakeAsync(() => {
-        const datacenters = datacentersFake;
-        const provider = 'digitalocean';
+    it('should call nextStep if provider is alone', fakeAsync(() => {
         const spyNextStep = spyOn(WizardActions, 'nextStep');
-        const spyGetDC = spyOn(dcService, 'getDataCenters').and.returnValue(Observable.of([datacenters[1]]));
-        setMockNgRedux(datacenters[0], provider);
+
+        component.supportedNodeProviders = ['provider'];
+        setMockNgRedux('digitalocean');
         completeRedux();
+
         fixture.detectChanges();
         tick();
 
         expect(spyNextStep.and.callThrough()).toHaveBeenCalledTimes(1);
     }));
-
-    it('should call nextStep after setDatacenterForm changes', () => {
-        const datacenters = datacentersFake;
-        const provider = 'digitalocean';
-        const spyNextStep = spyOn(WizardActions, 'nextStep');
-        setMockNgRedux(datacenters[0], provider);
-        completeRedux();
-        fixture.detectChanges();
-
-        component.setDatacenterForm.patchValue({ datacenter: component.datacenters[1] });
-
-        expect(spyNextStep.and.callThrough()).toHaveBeenCalledTimes(1);
-    });
 });

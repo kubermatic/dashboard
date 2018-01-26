@@ -56,7 +56,7 @@ describe('NavigationButtonsComponent', () => {
         component = fixture.componentInstance;
     });
 
-    it('should create the Breadcrumbs', () => {
+    it('should create the navigation-buttons', () => {
         expect(component).toBeTruthy();
     });
 
@@ -85,8 +85,8 @@ describe('NavigationButtonsComponent', () => {
 
     it('should get datacenters', fakeAsync(() => {
         const datacenters: { [key: string]: DataCenterEntity[] } = {
-            [datacentersFake[0].spec.provider]: [datacentersFake[0]],
-            [datacentersFake[1].spec.provider]: [datacentersFake[1]]
+            [datacentersFake[0].spec.provider]: [datacentersFake[0], datacentersFake[1]],
+            [datacentersFake[2].spec.provider]: [datacentersFake[2]]
         };
 
         fixture.detectChanges();
