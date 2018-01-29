@@ -17,7 +17,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <input id="secretAccessKey" [errorStateMatcher]="inputValidationService" matInput formControlName="secretAccessKey" type="text" placeholder="Secret Access Key*:">
+    <input id="secretAccessKey" [errorStateMatcher]="inputValidationService" matInput formControlName="secretAccessKey" type="password" placeholder="Secret Access Key*:">
     <mat-error *ngIf="awsClusterForm.controls.secretAccessKey.hasError('required')">
       Secret Access Key is <strong>required</strong>
     </mat-error>
