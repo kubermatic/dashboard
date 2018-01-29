@@ -19,7 +19,6 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public supportedNodeProviders: string[] = NodeProvider.Supported;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
-  public formFieldsRequired: any = [];
 
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;

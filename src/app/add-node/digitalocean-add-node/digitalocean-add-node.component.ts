@@ -2,14 +2,17 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
-import { Input, EventEmitter, Output } from '@angular/core';
+import { Input, EventEmitter, Output, Component, OnInit } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
-import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
 import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
@@ -25,6 +28,9 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
 
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
+  private sub: Subscription;
+
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
   constructor(private fb: FormBuilder,
               private api: ApiService,
@@ -32,6 +38,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
+    this.sub = this.isChecked$.subscribe(isChecked => {
+      isChecked && this.showRequiredFields();
+    });
+
     this.doNodeForm = this.fb.group({
       node_count: [1, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['', [<any>Validators.required]]
@@ -70,6 +80,16 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
           }
         }
       );
+    }
+  }
+
+  public showRequiredFields() {
+    if (this.doNodeForm.invalid) {
+      for (const i in this.doNodeForm.controls) {
+        if (this.doNodeForm.controls.hasOwnProperty(i)) {
+          this.doNodeForm.get(i).markAsTouched();
+        }
+      }
     }
   }
 

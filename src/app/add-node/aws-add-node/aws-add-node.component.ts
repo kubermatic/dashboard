@@ -6,6 +6,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -21,12 +24,19 @@ export class AwsAddNodeComponent implements OnInit {
   public awsNodeForm: FormGroup;
   public nodeSize: any[] = NodeInstanceFlavors.AWS;
   public nodeSpec: NodeCreateSpec;
+  private sub: Subscription;
+
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
   constructor(private fb: FormBuilder,
               private ngRedux: NgRedux<any>,
               public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
+    this.sub = this.isChecked$.subscribe(isChecked => {
+      isChecked && this.showRequiredFields();
+    });
+
     this.awsNodeForm = this.fb.group({
       node_count: [1, [<any>Validators.required, Validators.min(1)]],
       node_size: ['t2.medium', [<any>Validators.required]],
@@ -55,6 +65,16 @@ export class AwsAddNodeComponent implements OnInit {
     }
 
     this.onChange();
+  }
+
+  public showRequiredFields() {
+    if (this.awsNodeForm.invalid) {
+      for (const i in this.awsNodeForm.controls) {
+        if (this.awsNodeForm.controls.hasOwnProperty(i)) {
+          this.awsNodeForm.get(i).markAsTouched();
+        }
+      }
+    }
   }
 
   public onChange() {

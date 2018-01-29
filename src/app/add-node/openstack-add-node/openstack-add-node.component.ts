@@ -1,13 +1,15 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
-import { Validators, FormGroup } from '@angular/forms';
-import { FormBuilder } from '@angular/forms';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { InputValidationService } from 'app/core/services';
 import { CustomValidators } from 'ng2-validation';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { OpenstackNodeSpec } from 'app/shared/entity/node/OpenstackNodeSpec';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-openstack-add-node',
@@ -22,12 +24,19 @@ export class OpenstackAddNodeComponent implements OnInit {
 
   public osNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.Openstack;
+  private sub: Subscription;
+
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
   constructor(private fb: FormBuilder,
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
+    this.sub = this.isChecked$.subscribe(isChecked => {
+      isChecked && this.showRequiredFields();
+    });
+
     this.osNodeForm = this.fb.group({
       os_node_image: ['', [<any>Validators.required]],
       node_count: [1, [<any>Validators.required, CustomValidators.min(1)]],
@@ -52,6 +61,16 @@ export class OpenstackAddNodeComponent implements OnInit {
     }
 
     this.onChange();
+  }
+
+  public showRequiredFields() {
+    if (this.osNodeForm.invalid) {
+      for (const i in this.osNodeForm.controls) {
+        if (this.osNodeForm.controls.hasOwnProperty(i)) {
+          this.osNodeForm.get(i).markAsTouched();
+        }
+      }
+    }
   }
 
   public onChange() {
