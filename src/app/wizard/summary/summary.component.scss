@@ -81,6 +81,11 @@
   }
 }
 
+input[type="password"].km-card-list-secret {
+  border: 0px solid white;
+  background-color: transparent;
+  width: 100%
+}
 
 .km-ssh-keys-list {
   list-style-type: none;
