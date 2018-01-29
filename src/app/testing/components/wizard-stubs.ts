@@ -18,3 +18,20 @@ export class ProgressStubComponent { }
 })
 export class SummaryStubComponent { }
 
+@Component({
+    selector: 'kubermatic-provider-cluster',
+    template: '',
+})
+export class ProviderClusterStubComponent { }
+
+@Component({
+    selector: 'kubermatic-provider-node',
+    template: '',
+})
+export class ProviderNodeStubComponent { }
+
+@Component({
+    selector: 'kubermatic-ssh-key-form-field',
+    template: '',
+})
+export class SshKeyFormFieldStubComponent { }
