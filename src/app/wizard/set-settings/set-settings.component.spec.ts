@@ -71,9 +71,9 @@ describe('SetSettingsComponent', () => {
         component = fixture.componentInstance;
     });
 
-    it('should create the set-settings cmp', async(() => {
+    it('should create the set-settings cmp', () => {
         expect(component).toBeTruthy();
-    }));
+    });
 
     it('should get data from redux', () => {
         const ngRedux = fixture.debugElement.injector.get(NgRedux);
@@ -81,7 +81,10 @@ describe('SetSettingsComponent', () => {
             setDatacenterForm: { datacenter: datacentersFake[0] },
             setProviderForm: { provider: 'provider' }
         }});
+
         setMockNgRedux('cluster-name', ['ssh-test', 'ssh-test'], doCloudSpecFake);
+        completeRedux();
+
         fixture.detectChanges();
 
         expect(component.clusterName).toBe('cluster-name');
@@ -96,7 +99,10 @@ describe('SetSettingsComponent', () => {
             setProviderForm: { provider: 'provider' }
         }});
         const spySetClusterModel = spyOn(WizardActions, 'setClusterModel');
+
         setMockNgRedux('cluster-name', ['ssh-test', 'ssh-test'], doCloudSpecFake);
+        completeRedux();
+
         fixture.detectChanges();
 
         expect(spySetClusterModel.and.callThrough()).toHaveBeenCalled();

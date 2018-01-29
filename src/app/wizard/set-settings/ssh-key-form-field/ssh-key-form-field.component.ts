@@ -37,7 +37,7 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
 
     this.sshKeyForm = this.formBuilder.group({
-      ssh_keys: [this.selectedSshKeys, [<any>Validators.required]]
+      ssh_keys: [this.selectedSshKeys, [Validators.required]]
     });
 
     this.sshKeyForm.updateValueAndValidity();
