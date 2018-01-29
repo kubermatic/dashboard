@@ -35,3 +35,27 @@ export class ProviderNodeStubComponent { }
     template: '',
 })
 export class SshKeyFormFieldStubComponent { }
+
+@Component({
+    selector: 'kubermatic-cluster-openstack',
+    template: '',
+})
+export class OpenstackClusterStubComponent { }
+
+@Component({
+    selector: 'kubermatic-cluster-digitalocean',
+    template: '',
+})
+export class DigitaloceanClusterStubComponent { }
+
+@Component({
+    selector: 'kubermatic-cluster-bringyourown',
+    template: '',
+})
+export class BringyourownClusterStubComponent { }
+
+@Component({
+    selector: 'kubermatic-cluster-aws',
+    template: '',
+})
+export class AWSClusterStubComponent { }
