@@ -1,5 +1,5 @@
 import { Provider } from './../../shared/interfaces/provider.interface';
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
 import { FormGroup } from '@angular/forms/src/model';
 
