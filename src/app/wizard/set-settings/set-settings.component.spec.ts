@@ -1,19 +1,16 @@
 import { datacentersFake } from './../../testing/fake-data/datacenter.fake';
 import { doCloudSpecFake } from './../../testing/fake-data/cloud-spec.fake';
-import { SSHKeysFake } from './../../testing/fake-data/sshkey.fake';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
 import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { By } from '@angular/platform-browser';
-import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 
 import { WizardActions } from '../../redux/actions/wizard.actions';
 import { SetSettingsComponent } from './set-settings.component';
 import { ProviderClusterStubComponent, ProviderNodeStubComponent, SshKeyFormFieldStubComponent } from '../../testing/components/wizard-stubs';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 
 const modules: any[] = [

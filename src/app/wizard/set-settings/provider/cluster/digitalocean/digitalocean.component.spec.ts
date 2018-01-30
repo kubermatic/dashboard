@@ -5,8 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgRedux } from '@angular-redux/store';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { By } from '@angular/platform-browser';
-import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 
 import { InputValidationService } from './../../../../../core/services/input-validation/input-validation.service';
 import { datacentersFake } from '../../../../../testing/fake-data/datacenter.fake';
@@ -45,7 +44,7 @@ describe('DigitaloceanClusterComponent', () => {
         component = fixture.componentInstance;
     });
 
-    it('should create the aws cluster cmp', () => {
+    it('should create the digitalocean cluster cmp', () => {
         expect(component).toBeTruthy();
     });
 

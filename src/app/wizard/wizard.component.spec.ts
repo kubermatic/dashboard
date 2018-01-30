@@ -21,11 +21,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '../testing/router-stubs';
 
-import { By } from '@angular/platform-browser';
 import {TestBed, async, ComponentFixture, inject, fakeAsync, tick} from '@angular/core/testing';
 import { RouterStub } from './../testing/router-stubs';
 
-import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SetSettingsComponent } from './set-settings/set-settings.component';
 import { ApiMockService } from '../testing/services/api-mock.service';
@@ -36,7 +34,6 @@ import { BringyourownClusterComponent } from './set-settings/provider/cluster/br
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import { NavigationButtonsStubComponent, ProgressStubComponent } from '../testing/components/wizard-stubs';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
-import { nodeModelFake } from '../testing/fake-data/node.fake';
 import { Observable } from 'rxjs/Observable';
 
 const modules: any[] = [

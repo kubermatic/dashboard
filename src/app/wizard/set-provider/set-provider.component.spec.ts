@@ -7,15 +7,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { By } from '@angular/platform-browser';
 import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 
 import { WizardActions } from '../../redux/actions/wizard.actions';
 import { InputValidationService } from '../../core/services';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DatacenterMockService } from '../../testing/services/datacenter-mock.service';
-import { Observable } from 'rxjs/Observable';
-import { click } from '../../testing/utils/click-handler';
 
 const modules: any[] = [
     BrowserModule,

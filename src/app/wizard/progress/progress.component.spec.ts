@@ -3,8 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { By } from '@angular/platform-browser';
-import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 
 import { ProgressComponent } from './progress.component';
 import { WizardActions } from '../../redux/actions/wizard.actions';

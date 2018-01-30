@@ -31,26 +31,26 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @select(['wizard', 'clusterModel']) clusterModel$: Observable<CreateClusterModel>;
   public clusterModel: CreateClusterModel;
 
-  public shhKeysList: string[]  = [];
+  public sshKeysList: string[]  = [];
 
   constructor(private api: ApiService) { }
 
   ngOnInit() {
-    const sub = this.getSSHKeys();
+    const sub = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
+    .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel]) => {
+      const provider = data[0];
+      const region = data[1];
+      const nodeModel = data[2];
+      const clusterModel = data[3];
+
+      provider && (this.provider = provider);
+      region && (this.region = region);
+      nodeModel && (this.nodeModel = nodeModel);
+      clusterModel && (this.clusterModel = clusterModel);
+    });
     this.subscriptions.push(sub);
 
-    const sub2 = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$)
-      .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel]) => {
-        const provider = data[0];
-        const region = data[1];
-        const nodeModel = data[2];
-        const clusterModel = data[3];
-
-        provider && (this.provider = provider);
-        region && (this.region = region);
-        nodeModel && (this.nodeModel = nodeModel);
-        clusterModel && (this.clusterModel = clusterModel);
-      });
+    const sub2 = this.getSSHKeys();
     this.subscriptions.push(sub2);
   }
 
@@ -61,7 +61,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
           for (const item of result) {
             for (const key of this.clusterModel.sshKeys) {
               if (item.metadata.name === key) {
-                this.shhKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
+                this.sshKeysList.push(item.spec.name + ' - ' + item.spec.fingerprint);
               }
             }
           }

@@ -3,10 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { By } from '@angular/platform-browser';
-import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 
-import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { ProviderNodeComponent } from './node.component';
 import { AddNodeStubComponent } from '../../../../testing/components/add-node-stubs';
 

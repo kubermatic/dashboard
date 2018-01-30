@@ -1,3 +1,26 @@
+import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
+
+export const clusterModelFake: CreateClusterModel = {
+    cluster: {
+        cloud: {
+            dc: 'do-fra1',
+            digitalocean: {
+                token: 'token'
+            },
+            bringyourown: null,
+            aws: null,
+            openstack: null,
+            baremetal: null
+        },
+        humanReadableName: 'adoring-franklin',
+        masterVersion: '',
+        seedDatacenterName: ''
+    },
+    sshKeys: [
+        'key-ssh1'
+    ]
+};
+
 export const clusterFake = {
     isRunning: () => {
         return this.status.phase === 'Running';
@@ -73,8 +96,8 @@ export const clusterFake = {
         serviceAccountKey: 'LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFb3dJQkFBS0NBUUVBdUlGU0d4bThIc3ZibVowc3hkZ2JGa0FUbGZ6ZjZJV1c0ZU1adWZKcWY4S1VYeEhJCkxjY0NjVEpObzM2cHZqSDdZeURrcmViSzFhenZUZUUyLzVVQ0g3ODA0Y1dRek1qZkdSRDdRRVZJQ0lXRjdZWjUKNkRrM2hsYjJ5VlNKSnVmOGhFNU96M0FZODVUeUFLNDVDOXJmY2tYM0VyVGF6cGJOMWRCLytESmQwRnVtTDg2eQovbTZ6TmE3VGlxOVVqZ09MTUVDV3BwYjNRU0FEQ2dYUlh0cGJ3NVdnWjN0cTZQbHhtY0R2VTNub0l5MkMxc254CnVNeWhrZ2p3VG5QL0JhSFdNblM1VXdFQjMwUGY3ZzN0ZTNpdkgvSm9IaWdiOWw4RGhqWW5SZnJkVXArc0pXbnEKOHFrTDA0MnR4QjlhMGdWSTNoS2hlVlVMeDZGTlQ1eCt2RS9UMlFJREFRQUJBb0lCQUNlTEgrdkxBalNmZ0h0Vgo0bWlzdm5Gd1hrSkJKa1FSalpyd0wyMVk5VlpZZjdBNGdXeStRRm0rYkVGa1BrRVRPVXV2bXhOaWFZcU9PK08zCkp6Qno0VGFvcGs3Vkp3bWM2NlBWcmVQQ2RZUE9DancwSENDWFVyMHFHazVnSGQwR3oyb1QxblJERkRYd2NFV1IKRVl6bTVnajUwZEJpanByRVcyMDkrSTliVEJ3Qml2S2gvSXhKVGhWN1U4aHhQK05Eckk5eW9jQ2dtM2ZkTEgwSApDWGFvNE01SUlRbDhNcjBoMDBOdVR3bWZUZkNrSWUzNWxPR2RCamdHUWd1cG15WGoxZzFnSGZTSFZCQVNTdW51Ckp3S1N5Wis4SlNOWmJwbENhc1o1aEVCM2hCdG1xajZIY2hYNTJLNXp3YU5LVGV0L2ZjaGY4V3VoN2RUUjhsdGUKZm1FMWhqa0NnWUVBN3ZCZ1UrNXBYYjBLSmVvUEovelZxNHZSZkZveFJjNjV2QUdrT0RqdVVhajFwaUN5OExiMAp0K042M29mbTBxODhpa3QydC9sOS9FSVJveCtGWHJJZGVoZGFKT3lxYUcvdWpQbml3VTFaRWZqUXFYSER3cTRwCkJFdm80RHQ3bjgxUHpHS0Q2WDFtU25wTGEwb2NDcjRSM0NUSG9OclVMdktHOG9yU3dZOFRoQnNDZ1lFQXhhM3YKZjMva3hwcFYyTUVESzdnbmJNTkFHRHZ6YzdCdHRRcEpEcXgremJnSzV4d21DMjVWN3JudE9YQ29hbjdnSHF1egovVGM4SWFFK21ZTzVuRnk0cTBHOVQrVXovdmExVWRzdUNQMjRLUlROQStlQmxYelVINmRKZVNtTzNod3IzY1ZyClZhd0RLKzJKUkErNGtKblpPcVJEN3oxTWRIVXFqZG1XSU1TZS94c0NnWUFoMGF3UXRTSDh2cEQ5Sk0vWVhSVHgKSHUwYnFMaG9wUVhzOGw2SUJxYlVzQkYwM2hQMXRpK1ZCNEdRbGJPNkJrdVBWM2NLT3luMTFuUWdub21HQ2JmYQpYQXZLUmlVb2V3OU1yT0hIY21jMC8vNm92UTEwTktwaGpVejh6KzZEZzgvVG9lNEIwbG4wR0xNc0VHVS9yLzlmCkpXV01BdTBkWi81cHZmUnVxUTJlR1FLQmdRQ2ppTzV1TXhiSE9seTBzWkIyOWFVZjlETXRHVU9oUEo2MXUrbU8KaXlObitzNkNQU1k0SkxKUWlWMzRPL3dJQmloUkYwa1N2VVF3cWgySWtKSFlDbGozekszWno4c0JMWVg1VHZLNQptM1JrQUFKUExaRmxZdHgxeDBZZ1IwSWErNEZLdVl5L1ZrdFZadkE4N3lpSDc4N25GWWZoL25zbWlOdUllQzRiCnM2MjVhd0tCZ0UwdG9HN1NpbVBOM1VXeHRvQjhxS21DcURwNzI0TWdCUGFodFFsUm5EWktUTTNibExSd0J5WWUKMXg5MmhaQnh6SzIvRXBhTXBnck5zRnZFMkJFejhIdXFManB3VmxrWXg0Y2lldUoxUTVGalN0dC9DaWliTzBkMwphRmxzV3BjRkVaWmJ4ZzNVSE9TZXVLT013akJna1VoUkZpcmEvQjlxZSt0b2VwMlc0SDJRCi0tLS0tRU5EIFJTQSBQUklWQVRFIEtFWS0tLS0tCg==',
         seed: 'europe-west3-c',
         namespaceName: 'cluster-4k6txp5sq',
-        userName: 'Евгений Домбровский',
-        userEmail: 'eugene.dombrowsky@gmail.com'
+        userName: 'User Name',
+        userEmail: 'user@gmail.com'
     }
 };
 

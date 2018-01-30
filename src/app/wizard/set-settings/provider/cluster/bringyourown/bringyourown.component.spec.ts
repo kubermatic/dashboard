@@ -2,10 +2,7 @@ import { SharedModule } from '../../../../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgRedux } from '@angular-redux/store';
-import { ReactiveFormsModule } from '@angular/forms';
 
-import { By } from '@angular/platform-browser';
 import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 
 import { WizardActions } from '../../../../../redux/actions/wizard.actions';

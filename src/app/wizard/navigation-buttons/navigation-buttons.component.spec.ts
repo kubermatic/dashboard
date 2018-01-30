@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { By } from '@angular/platform-browser';
 import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 
 import { DatacenterService } from '../../core/services/index';
