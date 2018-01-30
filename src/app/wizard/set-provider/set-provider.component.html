@@ -36,5 +36,8 @@
                 [attr.name]="cloud">
       </ng-container>
     </ng-container>
+    <mat-error *ngIf="providerRequired">
+      Provider is <strong>required</strong>
+    </mat-error>
   </form>
 </mat-card-content>

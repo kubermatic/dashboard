@@ -2,7 +2,7 @@
   <button type="button" class="btn-back" mat-raised-button (click)="stepBack()" *ngIf="step !== 0">
     Back
   </button>
-  <button type="button" mat-raised-button color="primary" (click)="stepForward()"  [disabled]="!nextStep">
+  <button type="button" mat-raised-button color="primary" (click)="stepForward()" [ngClass]="{'nextGrey': !nextStep}">
     <ng-container *ngIf="step < 4; else summaryStep">
       Next
     </ng-container>

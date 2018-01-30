@@ -3,9 +3,10 @@ import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
 import { DatacenterService } from 'app/core/services';
 import { select, NgRedux } from '@angular-redux/store';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'kubermatic-navigation-buttons',
@@ -18,6 +19,9 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public supportedNodeProviders: string[] = NodeProvider.Supported;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
+  public formFieldsRequired: any = [];
+
+  @Output() formClusters = new EventEmitter<any>();
 
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
@@ -53,6 +57,10 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
         this.datacenters[elem.spec.provider].push(elem);
       });
     });
+  }
+
+  shareClusterForm(action: any) {
+    this.formClusters.emit(action);
   }
 
   public canGotoStep(): boolean {
@@ -114,7 +122,37 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
   }
 
   public stepForward(): void {
-    WizardActions.nextStep();
+    const reduxStore = this.ngRedux.getState();
+    const valid = reduxStore.wizard.valid;
+    if (valid.size === this.step || (valid.size === 8 && (this.step === 2 || this.step === 3))) {
+      this.formFieldsRequired = [];
+      switch (this.step) {
+        case 0:
+          this.formFieldsRequired['clusterNameForm'] = reduxStore.wizard.clusterNameForm;
+          return this.shareClusterForm({ methodName: 'showRequiredFields', formName: 'clusterNameForm', clusterForm: this.formFieldsRequired });
+        case 1:
+          this.formFieldsRequired['setProviderForm'] = reduxStore.wizard.setProviderForm;
+          return this.shareClusterForm({ methodName: 'showRequiredFields', formName: 'setProviderForm', clusterForm: this.formFieldsRequired });
+        case 2:
+          this.formFieldsRequired['setDatacenterForm'] = reduxStore.wizard.setDatacenterForm;
+          return this.shareClusterForm({ methodName: 'showRequiredFields', formName: 'setDatacenterForm', clusterForm: this.formFieldsRequired });
+        case 3:
+          if ((valid.get('awsClusterForm') || valid.get('digitalOceanClusterForm') || valid.get('openstackClusterForm') ) && valid.get('nodeForm') && valid.get('sshKeyForm')) {
+            WizardActions.nextStep();
+          } else {
+            this.formFieldsRequired['sshKeyForm'] = reduxStore.wizard.sshKeyForm;
+            this.formFieldsRequired['awsClusterForm'] = reduxStore.wizard.awsClusterForm;
+            this.formFieldsRequired['digitalOceanClusterForm'] = reduxStore.wizard.digitalOceanClusterForm;
+            this.formFieldsRequired['openstackClusterForm'] = reduxStore.wizard.openstackClusterForm;
+            return this.shareClusterForm({ methodName: 'showRequiredFields', formName: 'setSettings', clusterForm: this.formFieldsRequired });
+          }
+          return;
+        default:
+          return;
+      }
+    } else {
+      WizardActions.nextStep();
+    }
   }
 
   public ngOnDestroy(): void {

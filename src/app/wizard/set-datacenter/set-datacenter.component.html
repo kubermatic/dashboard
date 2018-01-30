@@ -26,4 +26,7 @@
       <input style="display: none" type="radio" [attr.name]="dc.metadata.name" formControlName="datacenter" [value]="dc" [attr.id]="dc.metadata.name">
     </label>
   </form>
+  <mat-error *ngIf="datacenterRequired">
+    Datacenter is <strong>required</strong>
+  </mat-error>
 </mat-card-content>
