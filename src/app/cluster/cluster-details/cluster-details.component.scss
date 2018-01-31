@@ -147,7 +147,16 @@ kubermatic-cluster-health-status {
   margin: 0 5px 0 0;
   width: 12px;
   height: 10px;
-  background-image: url("../../../assets/images/download.svg");
+  background-image: url("../../../assets/images/Download_white.svg");
+  background-repeat: no-repeat;
+}
+
+.downloadDisabled {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 12px;
+  height: 10px;
+  background-image: url("../../../assets/images/Download_grey.svg");
   background-repeat: no-repeat;
 }
 
@@ -168,6 +177,9 @@ kubermatic-cluster-health-status {
     text-decoration: none;
     color: white;
     vertical-align: baseline !important;
+  }
+  a.disabled {
+    color: rgba(0, 0, 0, 0.38);
   }
 }
 

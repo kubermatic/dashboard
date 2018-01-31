@@ -57,4 +57,63 @@ export class ClusterSecretsComponent implements OnInit {
       return;
     }
   }
+
+  public getIcon(name: string): string {
+    if (this.health) {
+      switch (name) {
+        case 'apiserver': return this.getIconClass(this.health.apiserver);
+        case 'controller': return this.getIconClass(this.health.controller);
+        case 'etcd': return this.getIconClass(this.health.etcd);
+        case 'scheduler': return this.getIconClass(this.health.scheduler);
+        case 'nodeController': return this.getIconClass(this.health.nodeController);
+        default: return '';
+      }
+    } else {
+      return 'fa fa-spin fa-circle-o-notch';
+    }
+  }
+
+  public getIconClass(isHealthy: boolean): string {
+    if (isHealthy) {
+      return 'iconRunning';
+    } else if (!(isHealthy)) {
+      if (this.cluster.status.phase === 'Failed') {
+        return 'iconFailed';
+      } else {
+        return 'fa fa-spin fa-circle-o-notch';
+      }
+    } else {
+      return '';
+    }
+  }
+
+  public getStatus(name: string): string {
+    if (this.health) {
+      switch (name) {
+        case 'apiserver': return this.getHealthStatus(this.health.apiserver);
+        case 'controller': return this.getHealthStatus(this.health.controller);
+        case 'etcd': return this.getHealthStatus(this.health.etcd);
+        case 'scheduler': return this.getHealthStatus(this.health.scheduler);
+        case 'nodeController': return this.getHealthStatus(this.health.nodeController);
+        default: return '';
+      }
+    } else {
+      return 'Pending';
+    }
+  }
+
+  public getHealthStatus(isHealthy: boolean): string {
+    if (isHealthy) {
+      return 'Running';
+    } else if (!isHealthy) {
+      if (this.cluster.status.phase === 'Failed') {
+        return 'Failed';
+      } else {
+        return 'Pending';
+      }
+    } else {
+      return '';
+    }
+  }
+
 }

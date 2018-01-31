@@ -1,16 +1,16 @@
 <div class="km-card-list-content" [ngClass]="{odd: index % 2 !== 0, 'statusRunning': statusRunning(), 'statusWaiting': statusWaiting(), 'statusFailed': statusFailed()}">
-  <div fxLayout [routerLink]="['/clusters/', cluster.metadata.name]" class="km-card-list-content-item">
+  <div fxLayout [routerLink]="['/clusters/', sortedData.metadata.name]" class="km-card-list-content-item">
     <div fxFlex="3%" fxFlex.sm="3%" fxHide.xs>{{index + 1}}</div>
     <div fxFlex="38%" fxFlex.xs="40%">
       <span>
         <img fxHide.xs src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30"
         />
-        <p fxHide.gt-sm>{{getShortClusterName(cluster.spec.humanReadableName)}}</p>
-        <p fxHide.lt-md>{{this.cluster.spec.humanReadableName}}</p>
+        <p fxHide.gt-sm>{{getShortClusterName(sortedData.spec.humanReadableName)}}</p>
+        <p fxHide.lt-md>{{this.sortedData.spec.humanReadableName}}</p>
       </span>
     </div>
     <div fxFlex="16%" fxFlex.sm="20.66%" fxFlex.xs="25%">
-      <ng-container [ngSwitch]="!!cluster.spec.cloud">
+      <ng-container [ngSwitch]="!!sortedData.spec.cloud">
         <span *ngSwitchCase="true">
           <img [src]="getClusterImagePath()" class="icon-seed-cluster cluster-image" alt="Cluster Icon" height="30"/>
         </span>
@@ -21,16 +21,12 @@
     </div>
 
     <div fxFlex="16%" fxHide.sm fxHide.xs>
-      <ng-container *ngIf="seedDc">
-        {{seedDc.spec.country}} ({{seedDc.spec.location}})
-      </ng-container>
+      {{getDc(sortedData.spec.seedDatacenterName, 'seedDc')}}
     </div>
     <div fxFlex="16%" fxHide.sm fxHide.xs>
-      <ng-container *ngIf="nodeDc">
-          {{nodeDc.spec.country}} ({{nodeDc.spec.location}})
-      </ng-container>
+      {{getDc(sortedData.spec.cloud.dc, 'nodeDc')}}
     </div>
-    <div fxFlex="16%" fxFlex.sm="20.66%" fxHide.xs>{{cluster.status.phase}}</div>
+    <div fxFlex="16%" fxFlex.sm="20.66%" fxHide.xs>{{sortedData.status.phase}}</div>
     <!--div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="35%">
         <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
       </div-->

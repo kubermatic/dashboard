@@ -1,5 +1,5 @@
 <ng-container [ngSwitch]="!!sshKeys && sshKeys.length > 0">
-    <mat-card *ngSwitchCase="false" style="margin-bottom: 20px;">
+    <mat-card *ngSwitchCase="false" class="km-card-list-no-keys" style="margin-bottom: 20px;">
       <mat-card-content>
         You have not added any SSH keys yet.
       </mat-card-content>

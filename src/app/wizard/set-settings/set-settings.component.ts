@@ -56,15 +56,12 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
     const ruduxStore = this.ngRedux.getState();
     const wizard = ruduxStore.wizard;
     const region = wizard.setDatacenterForm.datacenter.metadata.name;
-    const provider = wizard.setProviderForm.provider;
-
-    const seedDatacenterName = provider === 'bringyourown' ? region : '';
 
     this.clusterSpec = new ClusterSpec(
       this.cloudSpec,
       this.clusterName,
       '',
-      seedDatacenterName
+      ''
     );
 
     this.createClusterModal = new CreateClusterModel(
