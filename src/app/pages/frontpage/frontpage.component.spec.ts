@@ -1,38 +1,67 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import {By, BrowserModule} from "@angular/platform-browser";
+import { SharedModule } from '../../shared/shared.module';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ParticlesModule } from 'angular-particle';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
-import { FrontpageComponent } from "./frontpage.component";
-import {RouterTestingModule} from "@angular/router/testing";
-import {Auth} from "../../core/services";
+import { By } from '@angular/platform-browser';
+import {TestBed, async, ComponentFixture, inject} from '@angular/core/testing';
+import { RouterStub } from './../../testing/router-stubs';
+import { AuthMockService } from '../../testing/services/auth-mock.service';
 
-describe("FrontpageComponent", () => {
-  let component: FrontpageComponent;
-  let fixture: ComponentFixture<FrontpageComponent>;
+import { Auth } from './../../core/services/index';
+import { FrontpageComponent } from './frontpage.component';
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        RouterTestingModule,
-      ],
-      declarations: [
-        FrontpageComponent,
-      ],
-      providers: [
-        Auth,
-      ],
-    })
-    .compileComponents();
-  }));
+const modules: any[] = [
+    BrowserModule,
+    RouterTestingModule,
+    BrowserAnimationsModule,
+    ParticlesModule,
+    SlimLoadingBarModule.forRoot(),
+    SharedModule
+];
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(FrontpageComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+describe('FrontpageComponent', () => {
+    let fixture: ComponentFixture<FrontpageComponent>;
+    let component: FrontpageComponent;
+    let authService: AuthMockService;
+    let router: Router;
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                ...modules,
+            ],
+            declarations: [
+                FrontpageComponent
+            ],
+            providers: [
+                { provide: Router, useClass: RouterStub },
+                { provide: Auth, useClass: AuthMockService }
+            ],
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(FrontpageComponent);
+        component = fixture.componentInstance;
+
+        authService = fixture.debugElement.injector.get(Auth) as any;
+        router = fixture.debugElement.injector.get(Router);
+    });
+
+    it('should create the cmp', async(() => {
+        expect(component).toBeTruthy();
+    }));
+
+    it('should navigate to clusters list if not authenticated', () => {
+        const spyNavigate = spyOn(router, 'navigate');
+        authService.isAuth = true;
+
+        fixture.detectChanges();
+
+        expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
+    });
 });

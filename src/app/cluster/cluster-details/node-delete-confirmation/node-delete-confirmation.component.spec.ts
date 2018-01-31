@@ -1,50 +1,74 @@
-/* tslint:disable:no-unused-variable */
-import { NgModule } from '@angular/core';
+import { CustomEventServiceMock } from './../../../testing/services/custom-event-mock.service';
+import { CustomEventService } from 'app/core/services';
+import { Observable } from 'rxjs/Observable';
+import { SharedModule } from '../../../shared/shared.module';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { TestBed, async, ComponentFixture, fakeAsync, tick, inject } from '@angular/core/testing';
+import { click } from './../../../testing/utils/click-handler';
 import { DebugElement } from '@angular/core';
-import {MaterialModule, MatDialog, MatDialogModule } from '@angular/material';
+
+import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
+import { ApiService } from '../../../core/services/api/api.service';
+import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { MatDialogRef } from '@angular/material';
+import { CreateNodesService } from '../../../core/services/index';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
-import {ConnectionBackend, RequestOptions, HttpModule} from "@angular/http";
-import {Auth} from "../../core/services";
-import {RouterTestingModule} from "@angular/router/testing";
-import {FormBuilder, NgModel} from "@angular/forms";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {ApiService} from "app/core/services/api/api.service";
+
+const modules: any[] = [
+    BrowserModule,
+    HttpClientModule,
+    BrowserAnimationsModule,
+    SlimLoadingBarModule.forRoot(),
+    SharedModule
+];
 
 describe('NodeDeleteConfirmationComponent', () => {
-  let component: NodeDeleteConfirmationComponent;
-  let fixture: ComponentFixture<NodeDeleteConfirmationComponent>;
+    let fixture: ComponentFixture<NodeDeleteConfirmationComponent>;
+    let component: NodeDeleteConfirmationComponent;
+    let apiService: ApiService;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ NodeDeleteConfirmationComponent ],
-      imports: [
-        MaterialModule,
-        HttpModule,
-        RouterTestingModule,
-        BrowserAnimationsModule,
-        MatDialogModule
-      ],
-      providers: [
-        ConnectionBackend,
-        Auth,
-        FormBuilder,
-        ApiService,
-        MatDialogModule
-      ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                ...modules,
+            ],
+            declarations: [
+                NodeDeleteConfirmationComponent
+            ],
+            providers: [
+                { provide: CustomEventService, useClass: CustomEventServiceMock },
+                { provide: MatDialogRef, useClass: MatDialogRefMock },
+                { provide: ApiService, useClass: ApiMockService },
+            ],
+        }).compileComponents();
+    });
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(NodeDeleteConfirmationComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(NodeDeleteConfirmationComponent);
+        component = fixture.componentInstance;
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        apiService = fixture.debugElement.injector.get(ApiService);
+    });
+
+    it('should create the add node modal cmp', async(() => {
+        expect(component).toBeTruthy();
+    }));
+
+    it('should call deleteClusterNode', fakeAsync(() => {
+        fixture.detectChanges();
+        component.clusterName = 'cluster-name';
+        component.nodeName = 'node-name';
+        component.onNodeRemoval = function() {};
+        const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(Observable.of(null));
+
+        component.deleteNode();
+        tick();
+
+        expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
+    }));
 });

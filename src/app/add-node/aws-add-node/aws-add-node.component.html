@@ -1,4 +1,4 @@
-<kubermatic-add-node-form [connect]="connect" [formGroup]="awsNodeForm" (change)="onChange()">
+<kubermatic-add-node-form [connect]="connect" [formGroup]="awsNodeForm" (change)="onChange()" class="aws-form">
   <mat-form-field fxFlex>
     <input id="node_count" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:">
     <mat-error *ngIf="awsNodeForm.controls.node_count.hasError('min') && !awsNodeForm.controls.node_count.hasError('required')">

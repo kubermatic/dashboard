@@ -17,7 +17,9 @@ export class SidenavService {
   }
 
   public close(): Promise<void> {
-    return this.sidenav.close();
+    if (this.sidenav) {
+      return this.sidenav.close();
+    }
   }
 
   public toggle(isOpen?: boolean): Promise<void> {

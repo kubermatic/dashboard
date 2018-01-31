@@ -35,7 +35,7 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription && this.subscription.unsubscribe();
   }
 
   public changeNodeModel(nodeModel: CreateNodeModel): void {

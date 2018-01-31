@@ -2,24 +2,23 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
-import { Input, EventEmitter, Output } from '@angular/core';
+import { Input, EventEmitter, Output, AfterContentInit, OnChanges } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
-import { OnChanges } from '@angular/core/src/metadata/lifecycle_hooks';
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
   templateUrl: './digitalocean-add-node.component.html',
   styleUrls: ['./digitalocean-add-node.component.scss']
 })
-export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
+export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, OnChanges {
 
   @Input() public token: string = '';
-  @Input() public connect: string[];
+  @Input() public connect: string[] = [];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
@@ -36,7 +35,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
       node_count: [1, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['', [<any>Validators.required]]
     });
-
 
     if (Array.isArray(this.connect) && this.connect.length) {
       const reduxStore = this.ngRedux.getState();
@@ -71,6 +69,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
         }
       );
     }
+  }
+
+  public ngAfterContentInit(): void {
+    this.getNodeSize(this.token);
   }
 
   public ngOnChanges(): void {
