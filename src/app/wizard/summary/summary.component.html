@@ -54,10 +54,10 @@
         <div fxFlex="80%"><input class="km-card-list-secret" type="password" value="{{clusterModel.cluster.cloud[provider].secretAccessKey}}" disabled/></div>
       </div>
 
-      <div class="km-card-list-content ssh-key" *ngIf="shhKeysList.length">
-        <div fxFlex="20%" class="km-card-list-key">SSH keys</div>
+      <div class="km-card-list-content ssh-key" *ngIf="sshKeysList.length">
+        <div fxFlex="20%" class="km-card-list-key">SSH Keys</div>
         <div fxFlex="80%">
-          <ul *ngFor="let key of shhKeysList" class="km-ssh-keys-list">
+          <ul *ngFor="let key of sshKeysList" class="km-ssh-keys-list">
             <li>
               <i class="fa fa-key"></i> {{key}}</li>
           </ul>

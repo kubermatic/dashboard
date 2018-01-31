@@ -1,5 +1,5 @@
-<div *ngIf="!loading">
-  <div fxLayout>
+<ng-container *ngIf="!loading">
+  <div fxLayout class="sshkey-list-wrap">
       <div fxFlex align="right">
         <button mat-raised-button (click)="addSshKeyDialog()" color="primary" type="button">
           <span class="btn-text-default">+ Add SSH key</span>
@@ -8,7 +8,7 @@
   </div>
   
   <kubermatic-ssh-key-list [sshKeys]="sshKeys"></kubermatic-ssh-key-list>
-</div>
-<div *ngIf="loading" >
+</ng-container>
+<ng-container *ngIf="loading" >
   <mat-spinner color="accent" class="km-spinner"></mat-spinner>
-</div>
+</ng-container>

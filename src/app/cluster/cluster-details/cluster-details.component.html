@@ -1,5 +1,5 @@
 <ng-container *ngIf="isLoaded()">
-  <div fxLayout>
+  <div fxLayout class="cluster-detail-actions">
     <div fxFlex="100%" align="right" style="margin-top: 25px; margin-bottom: 12px;">
       <button class="add-node-btn"
               mat-raised-button color="primary"
@@ -26,7 +26,7 @@
     <mat-card-header class="km-card-list-header">
       <mat-card-title>
         {{cluster.spec.humanReadableName}}
-        <kubermatic-cluster-health-status [health]="cluster.status.health" [status]="cluster.status.phase"></kubermatic-cluster-health-status>
+        <kubermatic-cluster-health-status [health]="cluster.status.health" [phase]="cluster.status.phase"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout >

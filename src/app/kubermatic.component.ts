@@ -20,8 +20,7 @@ export class KubermaticComponent implements OnInit {
     private sidenavService: SidenavService,
     public auth: Auth,
     private ngRedux: NgRedux<Store>,
-    private devTools: DevToolsExtension,
-  ) {
+    private devTools: DevToolsExtension) {
     let enhancers = [];
 
     if (devTools.isEnabled()) {

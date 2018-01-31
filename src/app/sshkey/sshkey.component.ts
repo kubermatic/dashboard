@@ -18,11 +18,11 @@ export class SshkeyComponent implements OnInit {
   constructor(private api: ApiService,
               public dialog: MatDialog) {}
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.refreshSSHKeys();
   }
 
-  private refreshSSHKeys() {
+  private refreshSSHKeys(): void {
     this.api.getSSHKeys().retry(3)
       .subscribe(
         result => {
@@ -39,9 +39,5 @@ export class SshkeyComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       result && this.refreshSSHKeys();
     });
-  }
-
-  public handleKeyUpdated() {
-    this.refreshSSHKeys();
   }
 }

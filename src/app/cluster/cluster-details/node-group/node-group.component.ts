@@ -1,7 +1,7 @@
-import { Component, OnInit, Input} from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import {MatDialog, MatDialogRef, MatDialogConfig} from '@angular/material';
-import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
+import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-node-group',
@@ -20,25 +20,24 @@ export class NodeGroupComponent implements OnInit {
   // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
   public stateOfTheAccordion: any = [];
 
-
   public config: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
-      backdropClass: '',
-      width: '',
-      height: '',
-      position: {
-        top: '',
-        bottom: '',
-        left: '',
-        right: ''
-      },
-      data: {
-        message: 'Jazzy jazz jazz'
-      }
+    disableClose: false,
+    hasBackdrop: true,
+    backdropClass: '',
+    width: '',
+    height: '',
+    position: {
+      top: '',
+      bottom: '',
+      left: '',
+      right: ''
+    },
+    data: {
+      message: 'Jazzy jazz jazz'
+    }
   };
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
   }
@@ -47,7 +46,7 @@ export class NodeGroupComponent implements OnInit {
     return !!this.stateOfTheAccordion[group] ? true : false;
   }
 
-  onNodeGroupToggle (expanded, group) {
+  onNodeGroupToggle(expanded, group) {
     this.stateOfTheAccordion[group] = expanded;
   }
 
