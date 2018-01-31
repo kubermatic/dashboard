@@ -100,7 +100,6 @@ export class WizardComponent implements OnInit, OnDestroy {
     const wizard = reduxStore.wizard;
     const nodeModel = wizard.nodeModel;
     const clusterModel = wizard.clusterModel;
-
     console.log('Create cluster mode: \n' + JSON.stringify(clusterModel));
     this.api.createCluster(clusterModel).subscribe(cluster => {
         NotificationActions.success('Success', `Cluster successfully created`);

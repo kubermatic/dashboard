@@ -2,7 +2,7 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
-import { Input, EventEmitter, Output, AfterContentInit } from '@angular/core';
+import { Input, EventEmitter, Output, AfterContentInit, OnChanges } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -15,7 +15,7 @@ import { InputValidationService } from 'app/core/services/input-validation/input
   templateUrl: './digitalocean-add-node.component.html',
   styleUrls: ['./digitalocean-add-node.component.scss']
 })
-export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit {
+export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, OnChanges {
 
   @Input() public token: string = '';
   @Input() public connect: string[] = [];
@@ -72,6 +72,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit {
   }
 
   public ngAfterContentInit(): void {
+    this.getNodeSize(this.token);
+  }
+
+  public ngOnChanges(): void {
     this.getNodeSize(this.token);
   }
 
