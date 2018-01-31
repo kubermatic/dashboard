@@ -1,3 +1,4 @@
+import { datacentersFake } from './../../../../../testing/fake-data/datacenter.fake';
 import { SharedModule } from '../../../../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
@@ -7,6 +8,7 @@ import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core
 
 import { WizardActions } from '../../../../../redux/actions/wizard.actions';
 import { BringyourownClusterComponent } from './bringyourown.component';
+import { NgRedux } from '@angular-redux/store';
 
 const modules: any[] = [
     BrowserModule,
@@ -43,6 +45,14 @@ describe('BringyourownClusterComponent', () => {
     });
 
     it('should set cloud spec and go to next step', fakeAsync(() => {
+        const ngRedux = fixture.debugElement.injector.get(NgRedux);
+        const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
+            wizard: {
+                setDatacenterForm: {
+                    datacenter: datacentersFake[0]
+                }
+            }
+        });
         const spySetCloudSpec = spyOn(WizardActions, 'setCloudSpec');
         const spyNextStep = spyOn(WizardActions, 'nextStep');
 

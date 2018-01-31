@@ -52,7 +52,7 @@ function completeRedux() {
     clusterModelStub.complete();
 }
 
-describe('SetSettingsComponent', () => {
+describe('SummaryComponent', () => {
     let fixture: ComponentFixture<SummaryComponent>;
     let component: SummaryComponent;
 

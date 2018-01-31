@@ -58,21 +58,8 @@ describe('ClusterItemComponent', () => {
         expect(component).toBeTruthy();
     }));
 
-    it('should get nodeDc', fakeAsync(() => {
-        component.cluster = clusterFake;
-        const nodeDc: DataCenterEntity = datacentersFake[0];
-
-        const spyGetDatacenter = spyOn(dcService, 'getDataCenter').and.returnValue(Observable.of(nodeDc));
-
-        fixture.detectChanges();
-        tick();
-
-        expect(spyGetDatacenter.and.callThrough()).toHaveBeenCalled();
-        expect(component.nodeDc.metadata.name).toBe(nodeDc.metadata.name, 'Dc name should be the same');
-    }));
-
     it('should set statusRunning class', fakeAsync(() => {
-        component.cluster = clusterFake;
+        component.sortedData = clusterFake;
 
         fixture.detectChanges();
         tick();
@@ -82,7 +69,7 @@ describe('ClusterItemComponent', () => {
     }));
 
     it('should set path of cluster image', fakeAsync(() => {
-        component.cluster = clusterFake;
+        component.sortedData = clusterFake;
 
         fixture.detectChanges();
         tick();

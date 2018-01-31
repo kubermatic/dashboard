@@ -1,3 +1,4 @@
+import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import { SharedModule } from '../../shared/shared.module';
@@ -19,6 +20,7 @@ import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { ApiService } from '../../core/services/api/api.service';
 import { ApiMockService } from '../../testing/services/api-mock.service';
 import { clustersFake } from '../../testing/fake-data/cluster.fake';
+import { DatacenterMockService } from '../../testing/services/datacenter-mock.service';
 
 const modules: any[] = [
     BrowserModule,
@@ -45,7 +47,8 @@ describe('ClusterListComponent', () => {
             ],
             providers: [
                 { provide: ApiService, useClass: ApiMockService },
-                { provide: Auth, useClass: AuthMockService }
+                { provide: Auth, useClass: AuthMockService },
+                { provide: DatacenterService, useClass: DatacenterMockService }
             ],
         }).compileComponents();
     });
@@ -98,9 +101,7 @@ describe('ClusterListComponent', () => {
         const links = linkDes
             .map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
 
-        expect(links.length).toBe(2, 'should have 2 links');
-        expect(links[0].linkParams).toBe('/wizard', '1st link should go to Wizard');
-        expect(links[1].linkParams).toBe('/wizard', '1st link should go to Wizard');
+        expect(links.length).toBe(4, 'should have 4 links');
     });
 
     it('can click Wizard link in template', () => {
