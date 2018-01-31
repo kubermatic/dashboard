@@ -1,7 +1,7 @@
 import { InputValidationService } from './../../core/services/input-validation/input-validation.service';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
@@ -15,7 +15,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './aws-add-node.component.html',
   styleUrls: ['./aws-add-node.component.scss']
 })
-export class AwsAddNodeComponent implements OnInit {
+export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
   @Input() public connect: string[];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
@@ -24,7 +24,7 @@ export class AwsAddNodeComponent implements OnInit {
   public awsNodeForm: FormGroup;
   public nodeSize: any[] = NodeInstanceFlavors.AWS;
   public nodeSpec: NodeCreateSpec;
-  private sub: Subscription;
+  private subscriptions: Subscription[] = [];
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
@@ -33,9 +33,10 @@ export class AwsAddNodeComponent implements OnInit {
               public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
-    this.sub = this.isChecked$.subscribe(isChecked => {
+    const sub = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
+    this.subscriptions.push(sub);
 
     this.awsNodeForm = this.fb.group({
       node_count: [1, [<any>Validators.required, Validators.min(1)]],
@@ -98,6 +99,12 @@ export class AwsAddNodeComponent implements OnInit {
     });
 
     this.formChanges.emit(this.awsNodeForm);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
 }

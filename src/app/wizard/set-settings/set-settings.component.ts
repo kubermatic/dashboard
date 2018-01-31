@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ClusterSpec, CloudSpec } from '../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { select, NgRedux } from '@angular-redux/store';

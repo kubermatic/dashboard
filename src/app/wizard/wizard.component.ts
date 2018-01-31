@@ -1,5 +1,5 @@
 import { WizardActions } from './../redux/actions/wizard.actions';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';

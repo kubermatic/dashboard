@@ -2,7 +2,7 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
-import { Input, EventEmitter, Output, Component, OnInit } from '@angular/core';
+import { Input, EventEmitter, Output, Component, OnInit, OnDestroy } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './digitalocean-add-node.component.html',
   styleUrls: ['./digitalocean-add-node.component.scss']
 })
-export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
+export class DigitaloceanAddNodeComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() public token: string = '';
   @Input() public connect: string[];
@@ -28,7 +28,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
 
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
-  private sub: Subscription;
+  private subscriptions: Subscription[] = [];
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
@@ -38,9 +38,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.sub = this.isChecked$.subscribe(isChecked => {
+    const sub = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
+    this.subscriptions.push(sub);
 
     this.doNodeForm = this.fb.group({
       node_count: [1, [<any>Validators.required, CustomValidators.min(1)]],
@@ -111,5 +112,11 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnChanges {
     });
 
     this.formChanges.emit(this.doNodeForm);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }

@@ -1,7 +1,7 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input, OnDestroy } from '@angular/core';
 import { InputValidationService } from 'app/core/services';
 import { CustomValidators } from 'ng2-validation';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
@@ -16,7 +16,7 @@ import { Subscription } from 'rxjs/Subscription';
   templateUrl: './openstack-add-node.component.html',
   styleUrls: ['./openstack-add-node.component.scss']
 })
-export class OpenstackAddNodeComponent implements OnInit {
+export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
@@ -24,7 +24,7 @@ export class OpenstackAddNodeComponent implements OnInit {
 
   public osNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.Openstack;
-  private sub: Subscription;
+  private subscriptions: Subscription[] = [];
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
@@ -33,9 +33,10 @@ export class OpenstackAddNodeComponent implements OnInit {
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    this.sub = this.isChecked$.subscribe(isChecked => {
+    const sub = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
+    this.subscriptions.push(sub);
 
     this.osNodeForm = this.fb.group({
       os_node_image: ['', [<any>Validators.required]],
@@ -90,6 +91,12 @@ export class OpenstackAddNodeComponent implements OnInit {
     });
 
     this.formChanges.emit(this.osNodeForm);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 
 }
