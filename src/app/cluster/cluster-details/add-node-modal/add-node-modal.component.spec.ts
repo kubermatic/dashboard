@@ -23,6 +23,7 @@ import { AddNodeModalComponent } from './add-node-modal.component';
 import { InputValidationService } from '../../../core/services/input-validation/input-validation.service';
 import { clusterFake } from './../../../testing/fake-data/cluster.fake';
 import { nodeModelFake } from './../../../testing/fake-data/node.fake';
+import { AddNodeStubComponent } from '../../../testing/components/add-node-stubs';
 
 const modules: any[] = [
     BrowserModule,

@@ -1,5 +1,5 @@
 import { nodesFake } from './../fake-data/node.fake';
-import { NodeEntity } from 'app/shared/entity/NodeEntity';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { SSHKeysFake } from './../fake-data/sshkey.fake';
 import { clusterFake, clustersFake } from './../fake-data/cluster.fake';
 import { ClusterEntity } from './../../shared/entity/ClusterEntity';

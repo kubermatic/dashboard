@@ -1,3 +1,4 @@
+
 import { WizardStubsModule } from './../testing/components/wizard-stubs';
 import { clusterFake } from './../testing/fake-data/cluster.fake';
 import { doClusterModelFake, doNodeModelFake } from './../testing/fake-data/wizard.fake';
@@ -70,7 +71,7 @@ describe('WizardComponent', () => {
                 ...modules,
             ],
             declarations: [
-                WizardComponent,
+                WizardComponent
             ],
             providers: [
                 { provide: Router, useClass: RouterStub },

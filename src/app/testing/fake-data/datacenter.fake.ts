@@ -1,4 +1,4 @@
-import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
+import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 
 export const datacentersFake: DataCenterEntity[] = [
     {
