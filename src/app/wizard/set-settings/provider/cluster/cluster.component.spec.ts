@@ -1,4 +1,4 @@
-import { OpenstackClusterStubComponent, BringyourownClusterStubComponent, AWSClusterStubComponent, DigitaloceanClusterStubComponent } from './../../../../testing/components/wizard-stubs';
+import { WizardStubsModule } from './../../../../testing/components/wizard-stubs';
 import { ProviderClusterComponent } from './cluster.component';
 import { SharedModule } from '../../../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
@@ -11,7 +11,8 @@ const modules: any[] = [
     BrowserModule,
     NgReduxTestingModule,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    WizardStubsModule
 ];
 
 function setMockNgRedux(provider: string): void {
@@ -35,11 +36,7 @@ describe('ProviderClusterComponent', () => {
                 ...modules,
             ],
             declarations: [
-                ProviderClusterComponent,
-                OpenstackClusterStubComponent,
-                BringyourownClusterStubComponent,
-                AWSClusterStubComponent,
-                DigitaloceanClusterStubComponent
+                ProviderClusterComponent
             ],
             providers: [
             ],

@@ -1,3 +1,4 @@
+import { AddNodeStubsModule } from './../../../testing/components/add-node-stubs';
 import { FormBuilder } from '@angular/forms';
 import { AddNodeModalData } from './../../../shared/model/add-node-modal-data';
 import { ActivatedRoute } from '@angular/router';
@@ -19,11 +20,9 @@ import { ApiService } from '../../../core/services/api/api.service';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { AddNodeModalComponent } from './add-node-modal.component';
-import { AddNodeFormComponent } from '../../../add-node/add-node-form/add-node-form.component';
 import { InputValidationService } from '../../../core/services/input-validation/input-validation.service';
 import { clusterFake } from './../../../testing/fake-data/cluster.fake';
 import { nodeModelFake } from './../../../testing/fake-data/node.fake';
-import { AddNodeStubComponent } from '../../../testing/components/add-node-stubs';
 
 const modules: any[] = [
     BrowserModule,
@@ -32,7 +31,8 @@ const modules: any[] = [
     SlimLoadingBarModule.forRoot(),
     RouterTestingModule,
     NgReduxTestingModule,
-    SharedModule
+    SharedModule,
+    AddNodeStubsModule
 ];
 
 describe('AddNodeModalComponent', () => {
@@ -48,7 +48,6 @@ describe('AddNodeModalComponent', () => {
             ],
             declarations: [
                 AddNodeModalComponent,
-                AddNodeStubComponent
             ],
             providers: [
                 { provide: MAT_DIALOG_DATA, useValue: { cluster: clusterFake } },

@@ -1,3 +1,4 @@
+import { WizardStubsModule } from './../../testing/components/wizard-stubs';
 import { datacentersFake } from './../../testing/fake-data/datacenter.fake';
 import { doCloudSpecFake } from './../../testing/fake-data/cloud-spec.fake';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
@@ -10,14 +11,14 @@ import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 
 import { WizardActions } from '../../redux/actions/wizard.actions';
 import { SetSettingsComponent } from './set-settings.component';
-import { ProviderClusterStubComponent, ProviderNodeStubComponent, SshKeyFormFieldStubComponent } from '../../testing/components/wizard-stubs';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 
 const modules: any[] = [
     BrowserModule,
     NgReduxTestingModule,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    WizardStubsModule
 ];
 
 function setMockNgRedux(name: string, sshKeys: string[], cloudSpec: CloudSpec): void {
@@ -53,10 +54,7 @@ describe('SetSettingsComponent', () => {
                 ...modules,
             ],
             declarations: [
-                SetSettingsComponent,
-                ProviderClusterStubComponent,
-                ProviderNodeStubComponent,
-                SshKeyFormFieldStubComponent
+                SetSettingsComponent
             ],
             providers: [
             ],

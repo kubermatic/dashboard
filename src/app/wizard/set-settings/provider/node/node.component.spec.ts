@@ -6,13 +6,14 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 
 import { ProviderNodeComponent } from './node.component';
-import { AddNodeStubComponent } from '../../../../testing/components/add-node-stubs';
+import { AddNodeStubsModule } from '../../../../testing/components/add-node-stubs';
 
 const modules: any[] = [
     BrowserModule,
     NgReduxTestingModule,
     BrowserAnimationsModule,
-    SharedModule
+    SharedModule,
+    AddNodeStubsModule
 ];
 
 function setMockNgRedux(provider: string, token: string): void {
@@ -43,7 +44,6 @@ describe('ProviderNodeComponent', () => {
             ],
             declarations: [
                 ProviderNodeComponent,
-                AddNodeStubComponent
             ],
             providers: [
             ],

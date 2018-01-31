@@ -1,18 +1,10 @@
+import { WizardStubsModule } from './../testing/components/wizard-stubs';
 import { clusterFake } from './../testing/fake-data/cluster.fake';
-import { SummaryStubComponent } from './../testing/components/wizard-stubs';
 import { doClusterModelFake, doNodeModelFake } from './../testing/fake-data/wizard.fake';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { AddNodeStubComponent } from './../testing/components/add-node-stubs';
+import { AddNodeStubsModule } from './../testing/components/add-node-stubs';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { DatacenterService, LocalStorageService, ApiService } from '../core/services';
-import { OpenstackClusterComponent } from './set-settings/provider/cluster/openstack/openstack.component';
-import { DigitaloceanClusterComponent } from './set-settings/provider/cluster/digitalocean/digitalocean.component';
-import { AWSClusterComponent } from './set-settings/provider/cluster/aws/aws.component';
-import { ProviderNodeComponent } from './set-settings/provider/node/node.component';
-import { SshKeyFormFieldComponent } from './set-settings/ssh-key-form-field/ssh-key-form-field.component';
-import { ProviderClusterComponent } from './set-settings/provider/cluster/cluster.component';
-import { SetProviderComponent } from './set-provider/set-provider.component';
-import { SetClusterNameComponent } from './set-cluster-name/set-cluster-name.component';
 import { WizardComponent } from './wizard.component';
 import { Router } from '@angular/router';
 import { SharedModule } from '..//shared/shared.module';
@@ -32,7 +24,6 @@ import { CreateNodesService } from '../core/services/index';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BringyourownClusterComponent } from './set-settings/provider/cluster/bringyourown/bringyourown.component';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
-import { NavigationButtonsStubComponent, ProgressStubComponent } from '../testing/components/wizard-stubs';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import { Observable } from 'rxjs/Observable';
 
@@ -42,7 +33,9 @@ const modules: any[] = [
     SlimLoadingBarModule.forRoot(),
     RouterTestingModule,
     NgReduxTestingModule,
-    SharedModule
+    SharedModule,
+    WizardStubsModule,
+    AddNodeStubsModule
 ];
 
 function setMockNgRedux<T>(fixture: ComponentFixture<T>, provider: string, step: number): void {
@@ -78,21 +71,6 @@ describe('WizardComponent', () => {
             ],
             declarations: [
                 WizardComponent,
-                ProgressStubComponent,
-                SetClusterNameComponent,
-                SetProviderComponent,
-                SetDatacenterComponent,
-                SetSettingsComponent,
-                SummaryStubComponent,
-                NavigationButtonsStubComponent,
-                ProviderClusterComponent,
-                SshKeyFormFieldComponent,
-                ProviderNodeComponent,
-                AWSClusterComponent,
-                DigitaloceanClusterComponent,
-                OpenstackClusterComponent,
-                BringyourownClusterComponent,
-                AddNodeStubComponent
             ],
             providers: [
                 { provide: Router, useClass: RouterStub },
