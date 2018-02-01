@@ -60,11 +60,13 @@ pipeline:
 
   deploy-dev:
     group: deploy
-    image: gcr.io/google_containers/hyperkube-amd64:v1.6.10
-    commands:
-      - echo $KUBECONFIG | base64 -d > kubeconfig
-      - /hyperkube kubectl --kubeconfig kubeconfig -n kubermatic set image deployment/kubermatic-ui-v2 webserver=kubermatic/ui-v2:$DRONE_COMMIT
-    secrets: [ kubeconfig ]
+    image: kubeciio/kubectl:0.1
+    pull: true
+    kubectl: set image deployment/kubermatic-ui-v2 webserver=kubermatic/ui-v2:$DRONE_COMMIT
+    namespace: kubermatic
+    secrets:
+      - source: kubeconfig_dev
+        target: kubeconfig
     when:
       branch: master
 
