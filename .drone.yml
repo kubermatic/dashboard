@@ -60,9 +60,9 @@ pipeline:
 
   deploy-dev:
     group: deploy
-    image: kubeciio/kubectl:0.1
+    image: kubeciio/kubectl:0.2
     pull: true
-    kubectl: set image deployment/kubermatic-ui-v2 webserver=kubermatic/ui-v2:$DRONE_COMMIT
+    kubectl: set image deployment/kubermatic-ui-v2 webserver=kubermatic/ui-v2:{{ .DroneCommit }}
     namespace: kubermatic
     secrets:
       - source: kubeconfig_dev
