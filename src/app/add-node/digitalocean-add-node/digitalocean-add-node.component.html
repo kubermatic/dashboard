@@ -13,9 +13,16 @@
     <mat-form-field>
       <mat-select class="mat-select" [errorStateMatcher]="inputValidationService" placeholder="Node Size*:" id="node_size" name="node_size" formControlName="node_size" (change)="onChange()">
         <mat-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</mat-option>
-        <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size.slug">
-          {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
-        </mat-option>
+        <mat-optgroup label="Standard Droplets">
+          <mat-option *ngFor="let size of nodeSize.standard; let i = index;" [value]="size.slug">
+            {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+          </mat-option>
+        </mat-optgroup>
+        <mat-optgroup label="Optimized Droplets">
+          <mat-option *ngFor="let size of nodeSize.optimized; let i = index;" [value]="size.slug">
+            {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
+          </mat-option>
+        </mat-optgroup>
       </mat-select>
       <mat-error *ngIf="doNodeForm.controls.node_size.hasError('required')">
         Node size is <strong>required</strong>
