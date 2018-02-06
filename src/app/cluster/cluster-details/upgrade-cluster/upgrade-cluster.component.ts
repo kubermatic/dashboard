@@ -18,7 +18,7 @@ export class UpgradeClusterComponent implements OnInit {
     private dialogRef: MatDialogRef<UpgradeClusterComponent>
   ) { }
 
-  public ngOnInit(){
+  public ngOnInit() {
     if (this.data.upgradesList) {
       this.selectedVersion = this.data.upgradesList[this.data.upgradesList.length - 1];
     }
