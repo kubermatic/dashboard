@@ -16,7 +16,7 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
             if (errorInstance) {
               NotificationActions.error(
                 `Error ${errorInstance.status}`,
-                `${errorInstance.message || errorInstance.statusText}`
+                `${errorInstance.error.error.message || errorInstance.message || errorInstance.statusText}`
               );
             }
           }
