@@ -10,7 +10,7 @@ import {UpgradeClusterComponentData} from 'app/shared/model/UpgradeClusterDialog
   styleUrls: ['./upgrade-cluster.component.scss']
 })
 export class UpgradeClusterComponent {
-  selectedVersion: string = null;
+  selectedVersion: string = this.data.upgradesList[this.data.upgradesList.length - 1];
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: UpgradeClusterComponentData,
