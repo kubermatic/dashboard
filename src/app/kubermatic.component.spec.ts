@@ -1,57 +1,100 @@
-/* tslint:disable:no-unused-variable */
-import {TestBed, async} from "@angular/core/testing";
-import {KubermaticComponent} from "./kubermatic.component";
-import {NavigationComponent} from "./core/components/navigation/navigation.component";
-import {FrontpageComponent} from "./pages/frontpage/frontpage.component";
-import {BreadcrumbsComponent} from "./core/components/breadcrumbs/breadcrumbs.component";
-import {BrowserModule} from "@angular/platform-browser";
-import {Http, HttpModule} from "@angular/http";
-import {RouterTestingModule} from "@angular/router/testing";
-import {AUTH_PROVIDERS, Auth, AuthGuard} from "./core/services";
-import {ApiService} from "app/core/services/api/api.service";
-import {SimpleNotificationsModule} from "angular2-notifications";
-import {SlimLoadingBarModule} from "ng2-slim-loading-bar";
-import { MaterialModule } from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import {BrowserModule} from '@angular/platform-browser';
+import {SimpleNotificationsModule} from 'angular2-notifications';
+import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {RouterTestingModule} from '@angular/router/testing';
+import { SharedModule } from './shared/shared.module';
+
+import { By } from '@angular/platform-browser';
+import {TestBed, async, ComponentFixture} from '@angular/core/testing';
+
+import { Auth, AuthGuard, AUTH_PROVIDERS, ApiService } from './core/services/index';
+import { SidenavService } from './core/components/sidenav/sidenav.service';
+
+import { BreadcrumbsComponent } from './core/components/breadcrumbs/breadcrumbs.component';
+import { NotificationComponent } from './core/components/notification/notification.component';
+import { KubermaticComponent } from './kubermatic.component';
 import { SidenavComponent } from './core/components/sidenav/sidenav.component';
-import { SidenavService} from './core/components/sidenav/sidenav.service';
-import {NodeDeleteConfirmationService} from "./cluster/node-delete-confirmation/node-delete-confirmation.service";
+import { NavigationComponent } from './core/components/navigation/navigation.component';
 
-describe("KubermaticComponent", () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        HttpModule,
-        RouterTestingModule,
-        //SimpleNotificationsModule.forRoot(),
-        SimpleNotificationsModule,
-        SlimLoadingBarModule.forRoot(),
-        MaterialModule
-      ],
-      declarations: [
-        KubermaticComponent,
-        NavigationComponent,
-        FrontpageComponent,
-        BreadcrumbsComponent,
-        SidenavComponent,
+import {
+    MatProgressBarModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatListModule,
+    MatDialogModule } from '@angular/material';
 
-      ],
-      providers: [
-        AUTH_PROVIDERS,
-        Auth,
-        ApiService,
-        AuthGuard,
-        SidenavService,
-        NodeDeleteConfirmationService,
-        Http
-      ],
-    }).compileComponents();
-  });
+import { AuthMockService } from './testing/services/auth-mock.service';
 
-  it("should create the Kubermatic", async(() => {
-    let fixture = TestBed.createComponent(KubermaticComponent);
-    let app = fixture.debugElement.componentInstance;
-    expect(app).toBeTruthy();
-  }));
+const modules: any[] = [
+    BrowserModule,
+    HttpClientModule,
+    RouterTestingModule,
+    SimpleNotificationsModule,
+    RouterTestingModule,
+    NgReduxTestingModule,
+    BrowserAnimationsModule,
+    SlimLoadingBarModule.forRoot(),
+    SharedModule
+];
+
+const components: any[] = [
+    KubermaticComponent,
+    NavigationComponent,
+    BreadcrumbsComponent,
+    NotificationComponent,
+    SidenavComponent,
+];
+
+describe('KubermaticComponent', () => {
+    let fixture: ComponentFixture<KubermaticComponent>;
+    let component: KubermaticComponent;
+    let authService: AuthMockService;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [
+                ...modules,
+            ],
+            declarations: [
+                ...components
+            ],
+            providers: [
+                AUTH_PROVIDERS,
+                { provide: Auth, useClass: AuthMockService },
+                ApiService,
+                AuthGuard,
+                SidenavService
+            ],
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(KubermaticComponent);
+        component = fixture.componentInstance;
+        authService = fixture.debugElement.injector.get(Auth) as any;
+    });
+
+    it('should create the Kubermatic', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('should show sidenav', () => {
+        fixture.detectChanges();
+
+        const de = fixture.debugElement.query(By.css('.mat-sidenav'));
+        expect(de).not.toBeNull('sidenav should not be rendered');
+    });
+
+    it('should not show sidenav', () => {
+        authService.isAuth = false;
+        fixture.detectChanges();
+
+        const de = fixture.debugElement.query(By.css('.mat-sidenav'));
+        expect(de).toBeNull('sidenav should not be rendered');
+    });
+
 
 });

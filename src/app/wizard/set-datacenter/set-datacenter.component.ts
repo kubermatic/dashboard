@@ -2,8 +2,7 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Observable } from 'rxjs/Observable';
-import { FormGroup } from '@angular/forms';
-import { FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { ApiService } from 'app/core/services/api/api.service';
@@ -50,7 +49,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
     this.subscriptions.push(sub);
 
     this.setDatacenterForm = this.fb.group({
-      datacenter: [null]
+      datacenter: [null, [Validators.required]]
     });
 
     this.setDatacenterForm.valueChanges.subscribe(data => {

@@ -1,28 +1,77 @@
-/* tslint:disable:no-unused-variable */
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { AuthMockService } from './../../../testing/services/auth-mock.service';
+import { HttpClientModule } from '@angular/common/http';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
-import { BreadcrumbsComponent } from "./breadcrumbs.component";
+import { By } from '@angular/platform-browser';
+import {TestBed, async, ComponentFixture} from '@angular/core/testing';
 
-describe("BreadcrumbsComponent", () => {
-  let component: BreadcrumbsComponent;
-  let fixture: ComponentFixture<BreadcrumbsComponent>;
+import { BreadcrumbsComponent } from './breadcrumbs.component';
+import { ApiService } from './../../services/api/api.service';
+import { Auth } from '../../services/index';
+import { RouterStub } from '../../../testing/router-stubs';
+import { ApiMockService } from '../../../testing/services/api-mock.service';
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports : [
-      ],
-      declarations: [ BreadcrumbsComponent ]
-    })
-      .compileComponents();
-  }));
+const modules: any[] = [
+    BrowserModule,
+    HttpClientModule,
+    RouterTestingModule,
+    NgReduxTestingModule,
+    BrowserAnimationsModule
+];
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BreadcrumbsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+function setMockNgRedux<T>(fixture: ComponentFixture<T>, crumb: string): void {
+    const appLoader = MockNgRedux.getSelectorStub(['breadcrumb', 'crumb']);
+    appLoader.next(crumb);
+    appLoader.complete();
+}
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
+describe('BreadcrumbsComponent', () => {
+    let fixture: ComponentFixture<BreadcrumbsComponent>;
+    let component: BreadcrumbsComponent;
+
+    beforeEach(() => {
+        MockNgRedux.reset();
+        TestBed.configureTestingModule({
+            imports: [
+                ...modules,
+            ],
+            declarations: [
+                BreadcrumbsComponent
+            ],
+            providers: [
+                { provide: ApiService, useClass: ApiMockService },
+                { provide: Auth, useClass: AuthMockService }
+            ],
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(BreadcrumbsComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('should create the Breadcrumbs', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('should set activePageTitle', () => {
+        setMockNgRedux(fixture, 'Manage Clusters');
+        fixture.detectChanges();
+
+        const crumb = component.activePageTitle;
+
+        expect(crumb).toBe('Manage Clusters');
+    });
+
+    it('should render 2 breadcrumbs', () => {
+        fixture.detectChanges();
+
+        const de = fixture.debugElement.queryAll(By.css('.breadcrumb-item'));
+        expect(de.length).toBe(2);
+    });
 });

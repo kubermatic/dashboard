@@ -1,51 +1,67 @@
-import { async, ComponentFixture, TestBed } from "@angular/core/testing";
-import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {ApiService} from "app/core/services/api/api.service";
-import {HttpModule} from "@angular/http";
-import {Auth} from "../core/services";
-import {RouterTestingModule} from "@angular/router/testing";
-import { MaterialModule } from '@angular/material';
-import { SshkeyComponent } from "./sshkey.component";
-import { ListSshKeyComponent } from './list-ssh-key/list-ssh-key.component';
-import { AddSshKeyComponent } from './add-ssh-key/add-ssh-key.component';
+import { SSHKeysFake } from './../testing/fake-data/sshkey.fake';
+import { SshKeyItemComponent } from './ssh-key-list/ssh-key-item/ssh-key-item.component';
+import { SharedModule } from './../shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '@angular/router/testing';
+import { Router } from '@angular/router';
 
+import { By } from '@angular/platform-browser';
+import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
 
-describe("SshkeyComponent", () => {
-  let component: SshkeyComponent;
-  let fixture: ComponentFixture<SshkeyComponent>;
+import { ApiService } from '../core/services/index';
+import { SshkeyComponent } from './sshkey.component';
+import { MatDialog } from '@angular/material';
+import { ApiMockService } from '../testing/services/api-mock.service';
+import { SshKeyListComponent } from './ssh-key-list/ssh-key-list.component';
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        BrowserAnimationsModule,
-        FormsModule,
-        ReactiveFormsModule,
-        HttpModule,
-        RouterTestingModule,
-        MaterialModule
-      ],
-      declarations: [
-        SshkeyComponent,
-        ListSshKeyComponent,
-        AddSshKeyComponent
-      ],
-      providers: [
-        Auth,
-        ApiService,
-        FormBuilder,
-      ],
-    })
-      .compileComponents();
-  }));
+const modules: any[] = [
+    BrowserModule,
+    HttpClientModule,
+    RouterTestingModule,
+    BrowserAnimationsModule,
+    SharedModule
+];
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(SshkeyComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+describe('SshkeyComponent', () => {
+    let fixture: ComponentFixture<SshkeyComponent>;
+    let component: SshkeyComponent;
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
+    beforeEach(() => {
+        MockNgRedux.reset();
+        TestBed.configureTestingModule({
+            imports: [
+                ...modules,
+            ],
+            declarations: [
+                SshkeyComponent,
+                SshKeyListComponent,
+                SshKeyItemComponent
+            ],
+            providers: [
+                MatDialog,
+                { provide: ApiService, useClass: ApiMockService },
+            ],
+        }).compileComponents();
+    });
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(SshkeyComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('should create the sshkey cmp', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('should get sshkeys list', fakeAsync(() => {
+        const sshkeys = SSHKeysFake;
+        fixture.detectChanges();
+        tick();
+
+        expect(component.sshKeys).toEqual(sshkeys, 'should be obtained');
+    }));
 });

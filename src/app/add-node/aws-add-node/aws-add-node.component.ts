@@ -17,7 +17,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
-  @Input() public connect: string[];
+  @Input() public connect: string[] = [];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 

@@ -24,9 +24,9 @@ export class SshKeyItemComponent implements OnInit {
     this.publicKey = this.sshKey.spec.publicKey.slice(this.publicKeyName.length + 1, -1);
   }
 
-  public deleteSSHKey(key: SSHKeyEntity, event: any): void {
-    this.api.deleteSSHKey(key.metadata.name).subscribe(() => {
-      this.deleteSshKey.emit(key);
+  public deleteSSHKey(): void {
+    this.api.deleteSSHKey(this.sshKey.metadata.name).subscribe(() => {
+      this.deleteSshKey.emit(this.sshKey);
     });
   }
 

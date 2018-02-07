@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Health, Status} from '../../shared/entity/ClusterEntity';
 
 @Component({
@@ -6,24 +6,20 @@ import {Health, Status} from '../../shared/entity/ClusterEntity';
   templateUrl: './cluster-health-status.component.html',
   styleUrls: ['./cluster-health-status.component.scss']
 })
-export class ClusterHealthStatusComponent implements OnInit {
-  @Input() health: Health;
-  @Input() status: Status;
-  green = 'fa fa-circle green';
-  red = 'fa fa-circle red';
-  orange = 'fa fa-circle orange';
+export class ClusterHealthStatusComponent {
+  @Input() public health: Health;
+  @Input() public phase: string;
+  public green: string = 'fa fa-circle green';
+  public red: string = 'fa fa-circle red';
+  public orange: string = 'fa fa-circle orange';
 
   constructor() { }
 
-  ngOnInit() {
-
-  }
-
-  public getHealthStatusColor() {
+  public getHealthStatusColor(): string {
     if (this.health) {
       if (this.health.apiserver && this.health.controller && this.health.etcd && this.health.scheduler && this.health.nodeController) {
         return this.green;
-      } else if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.scheduler || !this.health.nodeController) && this.status.phase === 'Failed') {
+      } else if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.scheduler || !this.health.nodeController) && this.phase === 'Failed') {
         return this.red;
       } else {
         return this.orange;

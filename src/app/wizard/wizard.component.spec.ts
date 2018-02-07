@@ -1,75 +1,126 @@
-/* tslint:disable:no-unused-variable */
-import {async, ComponentFixture, TestBed, inject} from "@angular/core/testing";
 
-import { WizardComponent } from "./wizard.component";
-import {FormBuilder, ReactiveFormsModule, FormsModule} from "@angular/forms";
-import {ClusterNameGenerator} from "../core/util/name-generator.service";
-import {ApiService} from "app/core/services/api/api.service";
-import {HttpModule, BaseRequestOptions, Http, XHRBackend, Response, ResponseOptions} from "@angular/http";
-import {Auth} from "../core/services";
-import {RouterTestingModule} from "@angular/router/testing";
-import {MockBackend} from "@angular/http/testing";
+import { WizardStubsModule } from './../testing/components/wizard-stubs';
+import { clusterFake } from './../testing/fake-data/cluster.fake';
+import { doClusterModelFake, doNodeModelFake } from './../testing/fake-data/wizard.fake';
+import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
+import { AddNodeStubsModule } from './../testing/components/add-node-stubs';
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
+import { DatacenterService, LocalStorageService, ApiService } from '../core/services';
+import { WizardComponent } from './wizard.component';
+import { Router } from '@angular/router';
+import { SharedModule } from '..//shared/shared.module';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from '@angular/material';
+import { RouterTestingModule } from '../testing/router-stubs';
 
-describe("WizardComponent", () => {
-  let component: WizardComponent;
-  let fixture: ComponentFixture<WizardComponent>;
+import {TestBed, async, ComponentFixture, inject, fakeAsync, tick} from '@angular/core/testing';
+import { RouterStub } from './../testing/router-stubs';
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        FormsModule,
-        ReactiveFormsModule,
-        HttpModule,
-        RouterTestingModule,
-        MaterialModule,
-        BrowserAnimationsModule
-      ],
-      declarations: [
-        WizardComponent
-      ],
-      providers: [
-        Auth,
-        ApiService,
-        ClusterNameGenerator,
-        FormBuilder,
-        {
-          provide: Http,
-          useFactory: (mockBackend, options) => {
-            return new Http(mockBackend, options);
-          },
-          deps: [MockBackend, BaseRequestOptions]
-        },
-        MockBackend,
-        BaseRequestOptions
-      ],
-    })
-    .compileComponents();
-  }));
+import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
+import { SetSettingsComponent } from './set-settings/set-settings.component';
+import { ApiMockService } from '../testing/services/api-mock.service';
+import { MatDialog } from '@angular/material';
+import { CreateNodesService } from '../core/services/index';
+import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
+import { BringyourownClusterComponent } from './set-settings/provider/cluster/bringyourown/bringyourown.component';
+import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
+import { CreateClusterModel } from '../shared/model/CreateClusterModel';
+import { Observable } from 'rxjs/Observable';
 
-  beforeEach(inject([MockBackend], (backend: MockBackend) => {
-    // define mock response
-    const mockResponse = [{"metadata":{"name":"asia-east1","revision":"1"},"spec":{"country":"TW","location":"Asia-East (Taiwan)","provider":"bringyourown","bringyourown":{}},"seed":true},{"metadata":{"name":"aws-ap-northeast-1a","revision":"1"},"spec":{"country":"JP","location":"Asia Pacific (Tokyo)","provider":"aws","aws":{"region":"ap-northeast-1"}}},{"metadata":{"name":"aws-ap-northeast-2a","revision":"1"},"spec":{"country":"KR","location":"Asia Pacific (Seoul)","provider":"aws","aws":{"region":"ap-northeast-2"}}},{"metadata":{"name":"aws-ap-south-1a","revision":"1"},"spec":{"country":"AU","location":"Asia Pacific (Mumbai)","provider":"aws","aws":{"region":"ap-south-1"}}},{"metadata":{"name":"aws-ap-southeast-1a","revision":"1"},"spec":{"country":"SG","location":"Asia Pacific (Singapore)","provider":"aws","aws":{"region":"ap-southeast-1"}}},{"metadata":{"name":"aws-ap-southeast-2a","revision":"1"},"spec":{"country":"AU","location":"Asia Pacific (Sydney)","provider":"aws","aws":{"region":"ap-southeast-2"}}},{"metadata":{"name":"aws-ca-central-1a","revision":"1"},"spec":{"country":"CA","location":"Canada (Central)","provider":"aws","aws":{"region":"ca-central-1"}}},{"metadata":{"name":"aws-eu-central-1a","revision":"1"},"spec":{"country":"DE","location":"EU (Frankfurt)","provider":"aws","aws":{"region":"eu-central-1"}}},{"metadata":{"name":"aws-eu-west-1a","revision":"1"},"spec":{"country":"IE","location":"EU (Ireland)","provider":"aws","aws":{"region":"eu-west-1"}}},{"metadata":{"name":"aws-eu-west-2a","revision":"1"},"spec":{"country":"GB","location":"EU (London)","provider":"aws","aws":{"region":"eu-west-2"}}},{"metadata":{"name":"aws-sa-east-1a","revision":"1"},"spec":{"country":"BR","location":"South America (S├úo Paulo)","provider":"aws","aws":{"region":"sa-east-1"}}},{"metadata":{"name":"aws-us-east-1a","revision":"1"},"spec":{"country":"US","location":"US East (N. Virginia)","provider":"aws","aws":{"region":"us-east-1"}}},{"metadata":{"name":"aws-us-east-2a","revision":"1"},"spec":{"country":"US","location":"US East (Ohio)","provider":"aws","aws":{"region":"us-east-2"}}},{"metadata":{"name":"aws-us-west-1b","revision":"1"},"spec":{"country":"US","location":"US West (N. California)","provider":"aws","aws":{"region":"us-west-1"}}},{"metadata":{"name":"aws-us-west-2a","revision":"1"},"spec":{"country":"US","location":"US West (Oregon)","provider":"aws","aws":{"region":"us-west-2"}}},{"metadata":{"name":"do-ams2","revision":"1"},"spec":{"country":"NL","location":"Amsterdam","provider":"digitalocean","digitalocean":{"region":"ams2"}}},{"metadata":{"name":"do-blr1","revision":"1"},"spec":{"country":"IN","location":"Bangalore","provider":"digitalocean","digitalocean":{"region":"blr1"}}},{"metadata":{"name":"do-fra1","revision":"1"},"spec":{"country":"DE","location":"Frankfurt","provider":"digitalocean","digitalocean":{"region":"fra1"}}},{"metadata":{"name":"do-lon1","revision":"1"},"spec":{"country":"GB","location":"London","provider":"digitalocean","digitalocean":{"region":"lon1"}}},{"metadata":{"name":"do-nyc1","revision":"1"},"spec":{"country":"US","location":"New York","provider":"digitalocean","digitalocean":{"region":"nyc1"}}},{"metadata":{"name":"do-sfo1","revision":"1"},"spec":{"country":"US","location":"San Francisco","provider":"digitalocean","digitalocean":{"region":"sfo1"}}},{"metadata":{"name":"do-sgp1","revision":"1"},"spec":{"country":"SG","location":"Singapore","provider":"digitalocean","digitalocean":{"region":"sgp1"}}},{"metadata":{"name":"do-tor1","revision":"1"},"spec":{"country":"CA","location":"Toronto","provider":"digitalocean","digitalocean":{"region":"tor1"}}},{"metadata":{"name":"europe-west1","revision":"1"},"spec":{"country":"BE","location":"Europe-West (Belgium)","provider":"bringyourown","bringyourown":{}},"seed":true},{"metadata":{"name":"us-central1","revision":"1"},"spec":{"country":"US","location":"US-Central","provider":"bringyourown","bringyourown":{}},"seed":true}];
+const modules: any[] = [
+    BrowserModule,
+    BrowserAnimationsModule,
+    SlimLoadingBarModule.forRoot(),
+    RouterTestingModule,
+    NgReduxTestingModule,
+    SharedModule,
+    WizardStubsModule,
+    AddNodeStubsModule
+];
 
-    // configure mock
-    backend.connections.subscribe(conn => {
-      conn.mockRespond(new Response(new ResponseOptions({ body: JSON.stringify(mockResponse) })));
+function setMockNgRedux<T>(fixture: ComponentFixture<T>, provider: string, step: number): void {
+    const stepStub = MockNgRedux.getSelectorStub(['wizard', 'step']);
+    const providerStub = MockNgRedux.getSelectorStub(['wizard', 'setProviderForm', 'provider']);
+    providerStub.next(provider);
+    providerStub.complete();
+    stepStub.next(step);
+    stepStub.complete();
+}
+
+function setMockModels<T>(fixture: ComponentFixture<T>, nodeModel: CreateNodeModel, clusterModel: CreateClusterModel): void {
+    const nodeModelStub = MockNgRedux.getSelectorStub(['wizard', 'nodeModel']);
+    const clusterModelStub = MockNgRedux.getSelectorStub(['wizard', 'clusterModel']);
+    nodeModelStub.next(nodeModel);
+    nodeModelStub.complete();
+    clusterModelStub.next(clusterModel);
+    clusterModelStub.complete();
+}
+
+describe('WizardComponent', () => {
+    let fixture: ComponentFixture<WizardComponent>;
+    let component: WizardComponent;
+    let router: Router;
+    let apiService: ApiService;
+
+    beforeEach(() => {
+        MockNgRedux.reset();
+
+        TestBed.configureTestingModule({
+            imports: [
+                ...modules,
+            ],
+            declarations: [
+                WizardComponent
+            ],
+            providers: [
+                { provide: Router, useClass: RouterStub },
+                { provide: ApiService, useClass: ApiMockService },
+                { provide: DatacenterService, useClass: DatacenterMockService },
+                MatDialog,
+                CreateNodesService,
+                LocalStorageService,
+            ],
+        }).compileComponents();
     });
 
-    fixture = TestBed.createComponent(WizardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  }));
+    beforeEach(() => {
+        fixture = TestBed.createComponent(WizardComponent);
+        component = fixture.componentInstance;
 
-  it("should create", () => {
-    expect(component).toBeTruthy();
-  });
+        router = fixture.debugElement.injector.get(Router);
+        apiService = fixture.debugElement.injector.get(ApiService);
+    });
 
-  // it("initialized in initial step and allowed to step forward right away", () => {
-  //   component = fixture.componentInstance;
-  //   expect(component.currentStep).toBe(0);
-  //   fixture.detectChanges();
-  //   expect(component.canStepForward()).toBe(true);
-  // });
+    it('should create the sidenav cmp', () => {
+        expect(component).toBeTruthy();
+    });
+
+    it('should get step and provider from the store', () => {
+        setMockNgRedux(fixture, 'provider', 1);
+        fixture.detectChanges();
+
+        expect(component.step).toBe(1, 'should get step');
+        expect(component.selectedProvider).toBe('provider', 'should get provider');
+    });
+
+    it('should call methods after craating cluster', fakeAsync(() => {
+        const spyNavigate = spyOn(router, 'navigate');
+        const spyCreateClusterNode = spyOn(apiService, 'createClusterNode').and.returnValue(Observable.of(null));
+        const speGetCluster = spyOn(apiService, 'getCluster').and.returnValue(Observable.of(clusterFake));
+        const ngRedux = fixture.debugElement.injector.get(NgRedux);
+        const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
+            wizard: {
+                nodeModel: doNodeModelFake,
+                clusterModel: doClusterModelFake
+            }
+        });
+        setMockNgRedux(fixture, 'provider', 5);
+        fixture.detectChanges();
+        tick();
+
+        expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
+        expect(spyCreateClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
+        expect(speGetCluster.and.callThrough()).toHaveBeenCalledTimes(1);
+    }));
 });
