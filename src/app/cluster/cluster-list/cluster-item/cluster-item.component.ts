@@ -28,7 +28,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
         if (this.nodeDc[i].metadata.name === dcName) {
           country = this.nodeDc[i].spec.country;
           location = this.nodeDc[i].spec.location;
-        } else if (dcName === '') {
+        } else {
           return '';
         }
       }
@@ -39,7 +39,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
         if (this.seedDc[i].metadata.name === dcName) {
           country = this.seedDc[i].spec.country;
           location = this.seedDc[i].spec.location;
-        } else if (dcName === '') {
+        } else {
           return '';
         }
       }
