@@ -60,8 +60,8 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        <div class="km-no-node" *ngIf="clusterRunning">No Node available. Please add a Node.</div>
-        <mat-spinner *ngIf="!clusterRunning && !nodes" color="accent" class="node-list-spinner"></mat-spinner>
+        <div class="km-no-node" *ngIf="clusterRunning || nodeProvider == 'bringyourown'">No Node available. Please add a Node.</div>
+        <mat-spinner *ngIf="!clusterRunning && !nodes && nodeProvider != 'bringyourown'" color="accent" class="node-list-spinner" [diameter]="40"></mat-spinner>
       </ng-container>
     </ng-container>
 
