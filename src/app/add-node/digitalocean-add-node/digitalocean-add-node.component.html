@@ -12,13 +12,13 @@
   <div fxFlex class="mat-select-content">
     <mat-form-field>
       <mat-select class="mat-select" [errorStateMatcher]="inputValidationService" placeholder="Node Size*:" id="node_size" name="node_size" formControlName="node_size" (change)="onChange()">
-        <mat-option *ngIf="!nodeSize.length" [value]="">Please add a Digital Ocean Token first!</mat-option>
-        <mat-optgroup label="Standard Droplets">
+        <mat-option *ngIf="!nodeSizeAvailable" [value]="">Please add a Digital Ocean Token first!</mat-option>
+        <mat-optgroup *ngIf="nodeSizeAvailable" label="Standard Droplets">
           <mat-option *ngFor="let size of nodeSize.standard; let i = index;" [value]="size.slug">
             {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
           </mat-option>
         </mat-optgroup>
-        <mat-optgroup label="Optimized Droplets">
+        <mat-optgroup *ngIf="nodeSizeAvailable" label="Optimized Droplets">
           <mat-option *ngFor="let size of nodeSize.optimized; let i = index;" [value]="size.slug">
             {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
           </mat-option>

@@ -31,7 +31,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
-  private subscriptions: Subscription[] = [];
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
@@ -78,6 +77,12 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
           const nodeSize = selectedNodeSize ? selectedNodeSize : 's-2vcpu-4gb';
           this.doNodeForm.patchValue({node_size: nodeSize});
           this.onChange();
+        }
+
+        if (result.standard.length > 0 && result.optimized.length > 0) {
+          this.nodeSizeAvailable = true;
+        } else if (result.standard.length === 0 && result.optimized.length === 0) {
+          this.nodeSizeAvailable = false;
         }
       });
     }
