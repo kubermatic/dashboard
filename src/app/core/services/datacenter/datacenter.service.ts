@@ -29,9 +29,15 @@ export class DatacenterService {
     return this.dataCenterCache;
   }
 
-  getDataCenter(dc: string): Observable<DataCenterEntity> {
-    const url = `${this.restRoot}/dc/${dc}`;
-    return this.http.get<DataCenterEntity>(url, { headers: this.headers });
+  getDataCenter(name: string): Observable<DataCenterEntity> {
+    return this.getDataCenters().map(res => {
+      for (const i in res) {
+        if (res[i].metadata.name === name) {
+          return res[i];
+        }
+      }
+      return null;
+    });
   }
 
 }
