@@ -31,6 +31,8 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
+  private subscriptions: Subscription[] = [];
+  public nodeSizeAvailable: boolean;
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 

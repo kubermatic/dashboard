@@ -77,7 +77,7 @@ export class ApiService {
   }
 
   getDigitaloceanSizes(token: string): Observable<any> {
-    const url = `${this.restRoot}/digitaloceansizes/${token}`;
+    const url = `${this.restRoot}/digitalocean/sizes/${token}`;
     return this.http.get(url, { headers: this.headers });
   }
 
