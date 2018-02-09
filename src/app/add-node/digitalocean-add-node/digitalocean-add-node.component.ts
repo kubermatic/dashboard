@@ -9,6 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
+import {WizardActions} from "../../redux/actions/wizard.actions";
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
@@ -47,8 +48,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
         };
 
         this.doNodeForm.setValue(formValue);
-      } else {
-        this.doNodeForm.patchValue({node_count: 3});
       }
     }
 
@@ -80,18 +79,33 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
   }
 
   public onChange() {
-    const nodeSpec = new NodeCreateSpec(
-      new DigitaloceanNodeSpec(this.doNodeForm.controls['node_size'].value),
-      null,
-      null,
-      null,
-    );
+    if (Array.isArray(this.connect) && this.connect.length) {
 
-    this.nodeSpecChanges.emit({
-      nodeSpec,
-      count: this.doNodeForm.controls['node_count'].value
-    });
+      WizardActions.formChanged(
+        ['wizard', 'nodeForm'],
+        {
+          node_size: this.doNodeForm.controls['node_size'].value,
+          node_count: this.doNodeForm.controls['node_count'].value,
+        },
+        this.doNodeForm.valid
+      );
 
+      let nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+
+
+      const nodeSpec = new NodeCreateSpec(
+        new DigitaloceanNodeSpec(nodeInfo.node_size),
+        null,
+        null,
+        null,
+      );
+
+      this.nodeSpecChanges.emit({
+        nodeSpec,
+        count: nodeInfo.node_count
+      });
+    }
+    
     this.formChanges.emit(this.doNodeForm);
   }
 }
