@@ -10,6 +10,8 @@ import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { WizardActions } from '../../redux/actions/wizard.actions';
+
 
 @Component({
   selector: 'kubermatic-openstack-add-node',
@@ -40,25 +42,21 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
     this.osNodeForm = this.fb.group({
       os_node_image: ['', [<any>Validators.required]],
-      node_count: [1, [<any>Validators.required, CustomValidators.min(1)]],
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['m1.medium', [<any>Validators.required]],
     });
 
-    if (Array.isArray(this.connect) && this.connect.length) {
-      const reduxStore = this.ngRedux.getState();
-      const nodeForm = reduxStore.wizard.nodeForm;
+    const reduxStore = this.ngRedux.getState();
+    const nodeForm = reduxStore.wizard.nodeForm;
 
-      if (nodeForm) {
-        const formValue = {
-          os_node_image: nodeForm.os_node_image,
-          node_count: nodeForm.node_count,
-          node_size: nodeForm.node_size
-        };
+    if (nodeForm) {
+      const formValue = {
+        os_node_image: nodeForm.os_node_image,
+        node_count: nodeForm.node_count,
+        node_size: nodeForm.node_size
+      };
 
-        this.osNodeForm.setValue(formValue);
-      } else {
-        this.osNodeForm.patchValue({node_count: 3});
-      }
+      this.osNodeForm.setValue(formValue);
     }
 
     this.onChange();
@@ -75,19 +73,31 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
   }
 
   public onChange() {
+    WizardActions.formChanged(
+      ['wizard', 'nodeForm'],
+      {
+        os_node_image: this.osNodeForm.controls['os_node_image'].value,
+        node_count: this.osNodeForm.controls['node_count'].value,
+        node_size: this.osNodeForm.controls['node_size'].value,
+      },
+      this.osNodeForm.valid
+    );
+
+    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+
     const nodeSpec = new NodeCreateSpec(
       null,
       null,
       new OpenstackNodeSpec(
-        this.osNodeForm.controls['node_size'].value,
-        this.osNodeForm.controls['os_node_image'].value
+        nodeInfo.node_size,
+        nodeInfo.os_node_image
       ),
       null
     );
 
     this.nodeSpecChanges.emit({
       nodeSpec,
-      count: this.osNodeForm.controls['node_count'].value
+      count: nodeInfo.node_count
     });
 
     this.formChanges.emit(this.osNodeForm);
@@ -98,5 +108,4 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
       sub.unsubscribe();
     });
   }
-
 }

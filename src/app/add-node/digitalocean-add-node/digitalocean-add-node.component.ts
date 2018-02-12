@@ -44,7 +44,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     this.subscriptions.push(sub);
 
     this.doNodeForm = this.fb.group({
-      node_count: [1, [<any>Validators.required, CustomValidators.min(1)]],
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['', [<any>Validators.required]]
     });
 
@@ -59,8 +59,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
         };
 
         this.doNodeForm.setValue(formValue);
-      } else {
-        this.doNodeForm.patchValue({node_count: 3});
       }
     }
 
@@ -102,8 +100,19 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
   }
 
   public onChange() {
+    WizardActions.formChanged(
+      ['wizard', 'nodeForm'],
+      {
+        node_size: this.doNodeForm.controls['node_size'].value,
+        node_count: this.doNodeForm.controls['node_count'].value,
+      },
+      this.doNodeForm.valid
+    );
+
+    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+
     const nodeSpec = new NodeCreateSpec(
-      new DigitaloceanNodeSpec(this.doNodeForm.controls['node_size'].value),
+      new DigitaloceanNodeSpec(nodeInfo.node_size),
       null,
       null,
       null,
@@ -111,7 +120,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
     this.nodeSpecChanges.emit({
       nodeSpec,
-      count: this.doNodeForm.controls['node_count'].value
+      count: nodeInfo.node_count
     });
 
     this.formChanges.emit(this.doNodeForm);
