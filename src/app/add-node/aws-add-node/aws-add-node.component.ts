@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
+import {WizardActions} from '../../redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -20,15 +21,14 @@ export class AwsAddNodeComponent implements OnInit {
 
   public awsNodeForm: FormGroup;
   public nodeSize: any[] = NodeInstanceFlavors.AWS;
-  public nodeSpec: NodeCreateSpec;
 
-  constructor(private fb: FormBuilder,
+  constructor(private formBuilder: FormBuilder,
               private ngRedux: NgRedux<any>,
               public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
-    this.awsNodeForm = this.fb.group({
-      node_count: [1, [<any>Validators.required, Validators.min(1)]],
+    this.awsNodeForm = this.formBuilder.group({
+      node_count: [3, [<any>Validators.required, Validators.min(1)]],
       node_size: ['t2.medium', [<any>Validators.required]],
       root_size: [20, [Validators.required, Validators.min(10), Validators.max(16000)]],
       ami: [''],
@@ -49,8 +49,6 @@ export class AwsAddNodeComponent implements OnInit {
         };
 
         this.awsNodeForm.setValue(formValue);
-      } else {
-        this.awsNodeForm.patchValue({node_count: 3});
       }
     }
 
@@ -58,26 +56,40 @@ export class AwsAddNodeComponent implements OnInit {
   }
 
   public onChange() {
-    const nodeSpec = new NodeCreateSpec(
-      null,
-      new AWSNodeSpec(
-        this.awsNodeForm.controls['node_size'].value,
-        this.awsNodeForm.controls['root_size'].value,
-        // Can we implement at some point
-        // this.awsForm.controls["volume_type"].value,
-        'gp2',
-        this.awsNodeForm.controls['ami'].value
-      ),
-      null,
-      null
-    );
+      WizardActions.formChanged(
+        ['wizard', 'nodeForm'],
+        {
+          node_size: this.awsNodeForm.controls['node_size'].value,
+          root_size: this.awsNodeForm.controls['root_size'].value,
+          node_count: this.awsNodeForm.controls['node_count'].value,
+          ami: this.awsNodeForm.controls['ami'].value,
+          aws_nas: this.awsNodeForm.controls['aws_nas'].value
+         },
+        this.awsNodeForm.valid
+      );
 
-    this.nodeSpecChanges.emit({
-      nodeSpec,
-      count: this.awsNodeForm.controls['node_count'].value
-    });
+      const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
 
-    this.formChanges.emit(this.awsNodeForm);
-  }
+      if (this.awsNodeForm.valid) {
+        const nodeSpec = new NodeCreateSpec(
+          null,
+          new AWSNodeSpec(
+            nodeInfo.node_size,
+            nodeInfo.root_size,
+            // Can we implement at some point
+            // this.awsForm.controls["volume_type"].value,
+            'gp2',
+            nodeInfo.ami
+          ),
+          null,
+          null
+        );
 
+        this.nodeSpecChanges.emit({
+          nodeSpec,
+          count: nodeInfo.node_count
+        });
+      }
+      this.formChanges.emit(this.awsNodeForm);
+    }
 }
