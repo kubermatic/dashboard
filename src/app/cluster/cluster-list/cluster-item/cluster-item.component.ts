@@ -1,5 +1,6 @@
 import { Subscription } from 'rxjs/Subscription';
-import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
 
@@ -9,55 +10,37 @@ import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
   styleUrls: ['./cluster-item.component.scss']
 })
 export class ClusterItemComponent implements OnInit, OnDestroy {
-  @Input() sortedData: ClusterEntity;
+  @Input() cluster: ClusterEntity;
   @Input() index: number;
   @Input() health: Health;
-  @Input() seedDc: DataCenterEntity[];
-  @Input() nodeDc: DataCenterEntity[];
+  public nodeDC: DataCenterEntity;
+  public seedDC: DataCenterEntity;
 
-  constructor() {}
+  constructor(private dcService: DatacenterService) {}
 
-  public ngOnInit(): void {}
-
-  public getDc(dcName: string, dcObjectName: string): string {
-    let country: string;
-    let location: string;
-
-    if (dcObjectName === 'nodeDc') {
-      for (const i in this.nodeDc) {
-        if (this.nodeDc[i].metadata.name === dcName) {
-          country = this.nodeDc[i].spec.country;
-          location = this.nodeDc[i].spec.location;
-        } else {
-          return '';
+  public ngOnInit(): void {
+    if (this.cluster.spec.cloud.bringyourown === undefined) {
+      this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
+          this.nodeDC = result;
         }
-      }
+      );
     }
+    this.dcService.getDataCenter(this.cluster.spec.seedDatacenterName).subscribe(result => {
+      this.seedDC = result;
+    });
 
-    if (dcObjectName === 'seedDc') {
-      for (const i in this.seedDc) {
-        if (this.seedDc[i].metadata.name === dcName) {
-          country = this.seedDc[i].spec.country;
-          location = this.seedDc[i].spec.location;
-        } else {
-          return '';
-        }
-      }
-    }
-
-    return (country + ' (' + location + ')');
   }
 
   public getClusterImagePath(): string {
     let path: string = '/assets/images/clouds/';
 
-    if (this.sortedData.spec.cloud.aws) {
+    if (this.cluster.spec.cloud.aws) {
       path += 'aws.png';
-    } else if (this.sortedData.spec.cloud.digitalocean) {
+    } else if (this.cluster.spec.cloud.digitalocean) {
       path += 'digitalocean.png';
-    } else if (this.sortedData.spec.cloud.openstack) {
+    } else if (this.cluster.spec.cloud.openstack) {
       path += 'openstack.png';
-    } else if (this.sortedData.spec.cloud.bringyourown) {
+    } else if (this.cluster.spec.cloud.bringyourown) {
       path += 'bringyourown.png';
     }
 
@@ -69,7 +52,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   }
 
   public statusRunning(): boolean {
-    if (this.sortedData.status.phase === 'Running') {
+    if (this.cluster.status.phase === 'Running') {
       if (this.health) {
         if (!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) {
           return false;
@@ -85,7 +68,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   }
 
   public statusFailed(): boolean {
-    if (this.sortedData.status.phase === 'Failed') {
+    if (this.cluster.status.phase === 'Failed') {
       return true;
     } else {
       return false;
@@ -93,11 +76,11 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   }
 
   public statusWaiting(): boolean {
-    if (this.sortedData.status.phase !== 'Running' && this.sortedData.status.phase !== 'Failed') {
+    if (this.cluster.status.phase !== 'Running' && this.cluster.status.phase !== 'Failed') {
       return true;
     } else {
       if (this.health) {
-        if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) && this.sortedData.status.phase === 'Running') {
+        if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) && this.cluster.status.phase === 'Running') {
           return true;
         } else {
           return false;
