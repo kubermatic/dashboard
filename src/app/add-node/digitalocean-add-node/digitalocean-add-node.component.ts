@@ -79,33 +79,29 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
   }
 
   public onChange() {
-    if (Array.isArray(this.connect) && this.connect.length) {
+    WizardActions.formChanged(
+      ['wizard', 'nodeForm'],
+      {
+        node_size: this.doNodeForm.controls['node_size'].value,
+        node_count: this.doNodeForm.controls['node_count'].value,
+      },
+      this.doNodeForm.valid
+    );
 
-      WizardActions.formChanged(
-        ['wizard', 'nodeForm'],
-        {
-          node_size: this.doNodeForm.controls['node_size'].value,
-          node_count: this.doNodeForm.controls['node_count'].value,
-        },
-        this.doNodeForm.valid
-      );
+    let nodeInfo = this.ngRedux.getState().wizard.nodeForm;
 
-      let nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+    const nodeSpec = new NodeCreateSpec(
+      new DigitaloceanNodeSpec(nodeInfo.node_size),
+      null,
+      null,
+      null,
+    );
 
+    this.nodeSpecChanges.emit({
+      nodeSpec,
+      count: nodeInfo.node_count
+    });
 
-      const nodeSpec = new NodeCreateSpec(
-        new DigitaloceanNodeSpec(nodeInfo.node_size),
-        null,
-        null,
-        null,
-      );
-
-      this.nodeSpecChanges.emit({
-        nodeSpec,
-        count: nodeInfo.node_count
-      });
-    }
-    
     this.formChanges.emit(this.doNodeForm);
   }
 }

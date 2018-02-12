@@ -52,8 +52,6 @@ export class OpenstackAddNodeComponent implements OnInit {
   }
 
   public onChange() {
-    if (Array.isArray(this.connect) && this.connect.length) {
-
       WizardActions.formChanged(
         ['wizard', 'nodeForm'],
         {
@@ -81,7 +79,6 @@ export class OpenstackAddNodeComponent implements OnInit {
         count: nodeInfo.node_count
       });
 
-      //this.formChanges.emit(this.osNodeForm);
-    }
+      this.formChanges.emit(this.osNodeForm);
   }
 }
