@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ApiService } from '../../core/services/api/api.service';
-import { DatacenterService } from 'app/core/services';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { Observable } from 'rxjs/Observable';
@@ -21,19 +20,14 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public loading: boolean = true;
 
   public sortedData: ClusterEntity[] = [];
-  public nodeDcList: string[] = [];
-  public seedDcList: string[] = [];
-  public nodeDc: DataCenterEntity[] = [];
-  public seedDc: DataCenterEntity[] = [];
 
-  constructor(public api: ApiService, private dcService: DatacenterService) {}
+  constructor(public api: ApiService) {}
 
   ngOnInit() {
     this.sub = this.timer.subscribe(() => {
       this.getClusters();
     });
     this.sortData(null);
-    this.getDatacenters();
   }
 
   getClusters() {
@@ -49,62 +43,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     });
 
     return prevCluster && prevCluster.status.phase === cluster.status.phase ? index : undefined;
-  }
-
-  getDatacenters() {
-    if (this.clusters.length === 0) {
-      this.api.getClusters().subscribe(result => {
-        this.clusters = result;
-        for (const i in this.clusters) {
-          if (this.clusters.hasOwnProperty(i)) {
-            if (!this.nodeDcList.some(x => x === this.clusters[i].spec.cloud.dc) && this.clusters[i].spec.cloud.dc !== '' && !this.clusters[i].spec.cloud.bringyourown) {
-              this.nodeDcList.push(this.clusters[i].spec.cloud.dc);
-            }
-            if (!this.seedDcList.some(x => x === this.clusters[i].spec.seedDatacenterName)) {
-              this.seedDcList.push(this.clusters[i].spec.seedDatacenterName);
-            }
-          }
-        }
-        this.loadDc();
-      });
-    } else {
-      for (const i in this.clusters) {
-        if (this.clusters.hasOwnProperty(i)) {
-          if (!this.nodeDcList.some(x => x === this.clusters[i].spec.cloud.dc) && this.clusters[i].spec.cloud.dc !== '' && !this.clusters[i].spec.cloud.bringyourown) {
-            this.nodeDcList.push(this.clusters[i].spec.cloud.dc);
-          }
-          if (!this.seedDcList.some(x => x === this.clusters[i].spec.seedDatacenterName)) {
-            this.seedDcList.push(this.clusters[i].spec.seedDatacenterName);
-          }
-        }
-      }
-      this.loadDc();
-    }
-  }
-
-  public loadDc(): void {
-    if (this.nodeDcList) {
-      for (const i in this.nodeDcList) {
-        if (this.nodeDcList.hasOwnProperty(i)) {
-          this.loadDataCenter(this.nodeDcList[i], 'nodeDc');
-        }
-      }
-    }
-    if (this.seedDcList) {
-      for (const i in this.seedDcList) {
-        if (this.seedDcList.hasOwnProperty(i)) {
-          this.loadDataCenter(this.seedDcList[i], 'seedDc');
-        }
-      }
-    }
-  }
-
-  public loadDataCenter(dcName: string, dcObjectName: string): Subscription {
-    return this.dcService.getDataCenter(dcName).subscribe(
-      res => {
-        this[dcObjectName].push(new DataCenterEntity(res.metadata, res.spec, res.seed));
-      }
-    );
   }
 
   sortData(sort: Sort) {
