@@ -8,7 +8,7 @@ import { CustomValidators } from 'ng2-validation';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { OpenstackNodeSpec } from 'app/shared/entity/node/OpenstackNodeSpec';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import {WizardActions} from "../../redux/actions/wizard.actions";
+import { WizardActions } from '../../redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-openstack-add-node',
@@ -62,7 +62,7 @@ export class OpenstackAddNodeComponent implements OnInit {
         this.osNodeForm.valid
       );
 
-      let nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+      const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
 
       const nodeSpec = new NodeCreateSpec(
         null,

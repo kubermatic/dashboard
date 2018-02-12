@@ -9,7 +9,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
-import {WizardActions} from "../../redux/actions/wizard.actions";
+import {WizardActions} from '../../redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
@@ -88,7 +88,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
       this.doNodeForm.valid
     );
 
-    let nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
 
     const nodeSpec = new NodeCreateSpec(
       new DigitaloceanNodeSpec(nodeInfo.node_size),

@@ -6,7 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
-import {WizardActions} from "../../redux/actions/wizard.actions";
+import {WizardActions} from '../../redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -68,7 +68,7 @@ export class AwsAddNodeComponent implements OnInit {
         this.awsNodeForm.valid
       );
 
-      let nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+      const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
 
       if (this.awsNodeForm.valid) {
         const nodeSpec = new NodeCreateSpec(
