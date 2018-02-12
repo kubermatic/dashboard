@@ -10,7 +10,7 @@
           Add Node
       </button>
       <button class="download-kubeconfig-btn" mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
-        <a [attr.href]="downloadKubeconfigUrl()" target="_blank" [ngClass]="{'disabled': cluster.status.phase != 'Running'}">
+        <a [attr.href]="cluster.status.phase != 'Running' ? null : downloadKubeconfigUrl()" target="_blank" [ngClass]="{'disabled': cluster.status.phase != 'Running'}">
           <span class="button" [ngClass]="{'download': cluster.status.phase == 'Running', 'downloadDisabled': cluster.status.phase != 'Running'}"></span>
           Download config
         </a>
@@ -142,7 +142,6 @@
   </mat-card>
   <div style="margin-bottom: 70px;"></div>
 </ng-container>
-
 
 <div *ngIf="!isLoaded()">
   <mat-spinner color="accent" class="km-spinner"></mat-spinner>
