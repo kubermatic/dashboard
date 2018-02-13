@@ -41,6 +41,8 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
       os_floating_ip_pool: [clusterForm.os_floating_ip_pool],
       os_cas: [clusterForm.os_cas]
     });
+
+    this.onChange();
   }
 
   public showRequiredFields() {
@@ -67,6 +69,8 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
     const ruduxStore = this.ngRedux.getState();
     const wizard = ruduxStore.wizard;
     const region = wizard.setDatacenterForm.datacenter.metadata.name;
+
+    WizardActions.setValidation('clusterForm', this.osClusterForm.valid);
 
     WizardActions.setCloudSpec(
       new CloudSpec(region, null, null, null, osCloudSpec, null)

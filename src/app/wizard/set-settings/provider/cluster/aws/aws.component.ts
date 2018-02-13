@@ -41,6 +41,8 @@ export class AWSClusterComponent implements OnInit, OnDestroy {
       routeTableId: [clusterForm.routeTableId],
       aws_cas: [clusterForm.aws_cas]
     });
+
+    this.onChange();
   }
 
   public showRequiredFields() {
@@ -66,6 +68,7 @@ export class AWSClusterComponent implements OnInit, OnDestroy {
     const ruduxStore = this.ngRedux.getState();
     const wizard = ruduxStore.wizard;
     const region = wizard.setDatacenterForm.datacenter.metadata.name;
+    WizardActions.setValidation('clusterForm', this.awsClusterForm.valid);
 
     WizardActions.setCloudSpec(
       new CloudSpec(region, null, awsCloudSpec, null, null, null)

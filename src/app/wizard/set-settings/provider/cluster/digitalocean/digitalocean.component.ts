@@ -37,6 +37,8 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
       access_token: [clusterForm.access_token, [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
         Validators.pattern('[a-z0-9]+')]],
     });
+
+    this.onChange();
   }
 
   public onChange() {
@@ -45,6 +47,8 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
     const ruduxStore = this.ngRedux.getState();
     const wizard = ruduxStore.wizard;
     const region = wizard.setDatacenterForm.datacenter.metadata.name;
+
+    WizardActions.setValidation('clusterForm', this.digitalOceanClusterForm.valid);
 
     WizardActions.setCloudSpec(
       new CloudSpec(region, doCloudSpec, null, null, null, null)

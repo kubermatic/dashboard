@@ -7,6 +7,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { FormGroup } from '@angular/forms';
+import {Wizard} from "../../redux/reducers/wizard";
 
 @Component({
   selector: 'kubermatic-navigation-buttons',
