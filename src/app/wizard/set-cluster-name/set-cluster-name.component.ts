@@ -18,19 +18,39 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
   public clusterName: string = '';
 
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+
   constructor(private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder,
               public inputValidationService: InputValidationService) {
   }
 
   ngOnInit() {
-    this.subscription = this.clusterName$.subscribe(clusterName => {
+    this.subscription = this.clusterName$.combineLatest(this.isChecked$)
+    .subscribe((data: [string, boolean]) => {
+      const clusterName = data[0];
+      const isChecked = data[1];
+
       clusterName && (this.clusterName = clusterName);
+
+      if (isChecked) {
+        this.showRequiredFields();
+      }
     });
 
     this.clusterNameForm = this.formBuilder.group({
       name: [this.clusterName, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
     });
+  }
+
+  public showRequiredFields() {
+    if (this.clusterNameForm.invalid) {
+      for (const i in this.clusterNameForm.controls) {
+        if (this.clusterNameForm.controls.hasOwnProperty(i)) {
+          this.clusterNameForm.get(i).markAsTouched();
+        }
+      }
+    }
   }
 
   public generateName() {

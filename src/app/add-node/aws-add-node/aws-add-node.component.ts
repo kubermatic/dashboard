@@ -1,11 +1,14 @@
 import { InputValidationService } from './../../core/services/input-validation/input-validation.service';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import {WizardActions} from '../../redux/actions/wizard.actions';
 
 @Component({
@@ -13,7 +16,7 @@ import {WizardActions} from '../../redux/actions/wizard.actions';
   templateUrl: './aws-add-node.component.html',
   styleUrls: ['./aws-add-node.component.scss']
 })
-export class AwsAddNodeComponent implements OnInit {
+export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
   @Input() public connect: string[] = [];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
@@ -21,12 +24,22 @@ export class AwsAddNodeComponent implements OnInit {
 
   public awsNodeForm: FormGroup;
   public nodeSize: any[] = NodeInstanceFlavors.AWS;
+  public nodeSpec: NodeCreateSpec;
+  private subscriptions: Subscription[] = [];
+
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+
 
   constructor(private formBuilder: FormBuilder,
               private ngRedux: NgRedux<any>,
               public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
+    const sub = this.isChecked$.subscribe(isChecked => {
+      isChecked && this.showRequiredFields();
+    });
+    this.subscriptions.push(sub);
+
     this.awsNodeForm = this.formBuilder.group({
       node_count: [3, [<any>Validators.required, Validators.min(1)]],
       node_size: ['t2.medium', [<any>Validators.required]],
@@ -55,41 +68,58 @@ export class AwsAddNodeComponent implements OnInit {
     this.onChange();
   }
 
+  public showRequiredFields() {
+    if (this.awsNodeForm.invalid) {
+      for (const i in this.awsNodeForm.controls) {
+        if (this.awsNodeForm.controls.hasOwnProperty(i)) {
+          this.awsNodeForm.get(i).markAsTouched();
+        }
+      }
+    }
+  }
+
   public onChange() {
-      WizardActions.formChanged(
-        ['wizard', 'nodeForm'],
-        {
-          node_size: this.awsNodeForm.controls['node_size'].value,
-          root_size: this.awsNodeForm.controls['root_size'].value,
-          node_count: this.awsNodeForm.controls['node_count'].value,
-          ami: this.awsNodeForm.controls['ami'].value,
-          aws_nas: this.awsNodeForm.controls['aws_nas'].value
-         },
-        this.awsNodeForm.valid
+    WizardActions.formChanged(
+      ['wizard', 'nodeForm'],
+      {
+        node_size: this.awsNodeForm.controls['node_size'].value,
+        root_size: this.awsNodeForm.controls['root_size'].value,
+        node_count: this.awsNodeForm.controls['node_count'].value,
+        ami: this.awsNodeForm.controls['ami'].value,
+        aws_nas: this.awsNodeForm.controls['aws_nas'].value
+       },
+      this.awsNodeForm.valid
+    );
+
+    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+
+    if (this.awsNodeForm.valid) {
+      const nodeSpec = new NodeCreateSpec(
+        null,
+        new AWSNodeSpec(
+          nodeInfo.node_size,
+          nodeInfo.root_size,
+          // Can we implement at some point
+          // this.awsForm.controls["volume_type"].value,
+          'gp2',
+          nodeInfo.ami
+        ),
+        null,
+        null
       );
 
-      const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
 
-      if (this.awsNodeForm.valid) {
-        const nodeSpec = new NodeCreateSpec(
-          null,
-          new AWSNodeSpec(
-            nodeInfo.node_size,
-            nodeInfo.root_size,
-            // Can we implement at some point
-            // this.awsForm.controls["volume_type"].value,
-            'gp2',
-            nodeInfo.ami
-          ),
-          null,
-          null
-        );
-
-        this.nodeSpecChanges.emit({
-          nodeSpec,
-          count: nodeInfo.node_count
-        });
-      }
-      this.formChanges.emit(this.awsNodeForm);
+      this.nodeSpecChanges.emit({
+        nodeSpec,
+        count: nodeInfo.node_count
+      });
     }
+    this.formChanges.emit(this.awsNodeForm);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
+  }
 }

@@ -2,21 +2,24 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
-import { Input, EventEmitter, Output, AfterContentInit, OnChanges } from '@angular/core';
+import { Input, EventEmitter, Output, AfterContentInit, OnChanges, OnDestroy, OnInit, Component } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
-import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
-import {WizardActions} from '../../redux/actions/wizard.actions';
+import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { select } from '@angular-redux/store';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
   templateUrl: './digitalocean-add-node.component.html',
   styleUrls: ['./digitalocean-add-node.component.scss']
 })
-export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, OnChanges {
+
+export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
   @Input() public token: string = '';
   @Input() public connect: string[] = [];
@@ -25,6 +28,9 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
+  private subscriptions: Subscription[] = [];
+
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
   constructor(private fb: FormBuilder,
               private api: ApiService,
@@ -32,8 +38,13 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
+    const sub = this.isChecked$.subscribe(isChecked => {
+      isChecked && this.showRequiredFields();
+    });
+    this.subscriptions.push(sub);
+
     this.doNodeForm = this.fb.group({
-      node_count: [1, [<any>Validators.required, CustomValidators.min(1)]],
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['', [<any>Validators.required]]
     });
 
@@ -70,6 +81,16 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     }
   }
 
+  public showRequiredFields() {
+    if (this.doNodeForm.invalid) {
+      for (const i in this.doNodeForm.controls) {
+        if (this.doNodeForm.controls.hasOwnProperty(i)) {
+          this.doNodeForm.get(i).markAsTouched();
+        }
+      }
+    }
+  }
+
   public ngAfterContentInit(): void {
     this.getNodeSize(this.token);
   }
@@ -103,5 +124,11 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     });
 
     this.formChanges.emit(this.doNodeForm);
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => {
+      sub.unsubscribe();
+    });
   }
 }

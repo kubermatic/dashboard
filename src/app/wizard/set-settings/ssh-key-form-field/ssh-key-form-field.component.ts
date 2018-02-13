@@ -25,6 +25,8 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;
   public selectedSshKeys: string[] = [];
 
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+
   constructor(private api: ApiService,
               private formBuilder: FormBuilder,
               public dialog: MatDialog,
@@ -36,14 +38,25 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(sub);
 
+    const sub2 = this.isChecked$.subscribe(isChecked => {
+      isChecked && this.showRequiredFields();
+    });
+    this.subscriptions.push(sub2);
+
     this.sshKeyForm = this.formBuilder.group({
       ssh_keys: [this.selectedSshKeys, [Validators.required]]
     });
 
     this.sshKeyForm.updateValueAndValidity();
 
-    const sub2 = this.refreshSSHKeys();
-    this.subscriptions.push(sub2);
+    const sub3 = this.refreshSSHKeys();
+    this.subscriptions.push(sub3);
+  }
+
+    public showRequiredFields() {
+    if (this.sshKeyForm.invalid) {
+      this.sshKeyForm.get('ssh_keys').markAsTouched();
+    }
   }
 
   private refreshSSHKeys(): Subscription {
