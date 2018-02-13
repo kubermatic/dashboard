@@ -3,7 +3,7 @@ import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
 import { DatacenterService } from 'app/core/services';
 import { select, NgRedux } from '@angular-redux/store';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -114,7 +114,14 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
   }
 
   public stepForward(): void {
-    WizardActions.nextStep();
+    WizardActions.checkValidation();
+
+    const reduxStore = this.ngRedux.getState();
+    const isChecked = reduxStore.wizard.isCheckedForm;
+
+    if (!isChecked) {
+      WizardActions.nextStep();
+    }
   }
 
   public ngOnDestroy(): void {

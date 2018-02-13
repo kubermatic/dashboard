@@ -20,14 +20,14 @@ const formOnStep: Map<number, string[]> = new Map([
     [0, ['clusterNameForm']],
     [1, ['setProviderForm']],
     [2, ['setDatacenterForm']],
-    [3, ['awsClusterForm', 'nodeForm',
-        'digitalOceanClusterForm',
-        'openstackClusterForm', 'sshKeyForm']]
+    [3, ['nodeForm', 'sshKeyForm', 'clusterForm']],
+    [4, ['submitForm']]
 ]);
 
 export interface Wizard {
     step: number;
     valid: Map<string, boolean>;
+    isCheckedForm: boolean;
     clusterNameForm: {
         name: string;
     };
@@ -70,6 +70,7 @@ export interface Wizard {
 export const INITIAL_STATE: Wizard = {
     step: 0,
     valid: new Map(),
+    isCheckedForm: false,
     clusterNameForm: {
         name: ''
     },
@@ -149,6 +150,14 @@ export const WizardReducer: Reducer<Wizard> = (state: Wizard = INITIAL_STATE, ac
             valid.set(formName, action.payload.isValid);
 
             return Object.assign({}, state, { valid });
+        }
+        case WizardActions.CHECK_VALIDATION: {
+            const step = state.step;
+            const valid = new Map(state.valid);
+            const forms = formOnStep.get(step);
+            const isCheckedForm = step !== 4 ? !!forms.find(form => !valid.get(form)) : false;
+
+            return Object.assign({}, state, { isCheckedForm });
         }
         case WizardActions.RESET_FORMS: {
             const intialState = cloneDeep(INITIAL_STATE);
