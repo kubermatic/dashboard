@@ -1,3 +1,19 @@
-<p>
-  cluster-chart works!
-</p>
+<div fxLayout="row">
+  <div fxFlex="50%">
+    <google-chart [data]="cpuChartData"></google-chart>
+  </div>
+  <div fxFlex="50%">
+    <google-chart [data]="memoryChartData"></google-chart>
+  </div>
+</div>
+
+<div fxLayout="row">
+  <div fxFlex="50%">
+    <google-chart [data]="diskChartData"></google-chart>
+  </div>
+  <div fxFlex="50%">
+    <google-chart [data]="resourceSummaryChartData"></google-chart>
+  </div>
+</div>
+
+
