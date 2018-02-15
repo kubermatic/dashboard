@@ -8,6 +8,7 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomFormsModule } from 'ng2-validation';
 import { ClipboardModule } from 'ngx-clipboard';
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 import {
     MatButtonModule,
     MatIconModule,
@@ -64,7 +65,8 @@ const modules: Array<any> = [
     MatExpansionModule,
     MatSortModule,
     ClipboardModule,
-    NgReduxFormModule
+    NgReduxFormModule,
+    Ng2GoogleChartsModule
 ];
 
 @NgModule({
