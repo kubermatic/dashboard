@@ -2,8 +2,10 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
+
 import { Input, EventEmitter, Output, AfterContentInit, OnChanges, OnDestroy, OnInit, Component } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
+
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
@@ -12,6 +14,7 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
@@ -29,6 +32,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
   public doNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.VOID;
   private subscriptions: Subscription[] = [];
+  public nodeSizeAvailable: boolean;
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
@@ -70,14 +74,19 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
     if (token) {
       this.api.getDigitaloceanSizes(token).subscribe(result => {
-          this.nodeSize = result.sizes;
-          if (this.nodeSize.length > 0 && this.doNodeForm.controls['node_size'].value === '') {
-            const nodeSize = selectedNodeSize ? selectedNodeSize : '4gb';
-            this.doNodeForm.patchValue({node_size: nodeSize});
-            this.onChange();
-          }
+        this.nodeSize = result;
+        if (result.standard.length > 0 && result.optimized.length > 0 && this.doNodeForm.controls['node_size'].value === '') {
+          const nodeSize = selectedNodeSize ? selectedNodeSize : 's-2vcpu-4gb';
+          this.doNodeForm.patchValue({node_size: nodeSize});
+          this.onChange();
         }
-      );
+
+        if (result.standard.length > 0 && result.optimized.length > 0) {
+          this.nodeSizeAvailable = true;
+        } else if (result.standard.length === 0 && result.optimized.length === 0) {
+          this.nodeSizeAvailable = false;
+        }
+      });
     }
   }
 

@@ -76,9 +76,10 @@ export class ApiService {
     return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.headers });
   }
 
-  getDigitaloceanSizes(token: string)  {
-    const url = `${environment.digitalOceanRestRoot}/sizes`;
-    return this.http.get<DropletSizeResponseEntity>(url, { headers: new HttpHeaders({'Authorization': 'Bearer ' + token}) });
+  getDigitaloceanSizes(token: string): Observable<any> {
+    this.headers = this.headers.set('DoToken', token);
+    const url = `${this.restRoot}/digitalocean/sizes`;
+    return this.http.get(url, { headers: this.headers });
   }
 
   getOpenStackImages(location: string, project: string, name: string, password: string, authUrl: string) {
