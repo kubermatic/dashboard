@@ -65,7 +65,7 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
         ],
         options: {title: 'Memory'}
       };
-    })
+    });
 
 
     this.api.getClusterDiskChart(this.clusterName).subscribe(data => {
@@ -82,7 +82,7 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
         ],
         options: {title: 'Disk'}
       };
-    })
+    });
 
 
     this.api.getClusterresourceSummaryChart(this.clusterName).subscribe(data => {
@@ -101,7 +101,7 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
         ],
         options: {title: 'Resource Summary'}
       };
-    })
+    });
   }
 
 }
