@@ -35,8 +35,7 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
 
   public refreshData(): void {
 
-    this.api.getClusterCpuChart(this.clusterName).subscribe(data => {
-      this.cpuChartData = data;
+    //this.api.getClusterCpuChart(this.clusterName).subscribe(data => { });
 
       this.cpuChartData =  {
         chartType: 'LineChart',
@@ -47,12 +46,29 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
           ['2006',  660,       1120],
           ['2007',  1030,      540]
         ],
-        options: {title: 'CPU'}
+        options: {
+          legend: {
+            position: 'bottom'
+          },
+          hAxis: {
+            //title: 'Time',
+            gridlines: {
+              color: '#E3E8EC',
+            },
+            ticks: [5, 10, 15, 20]
+          },
+          vAxis: {
+            title: 'CPU',
+            gridlines: {
+              color: '#E3E8EC'
+            }
+          }
+        }
       };
-    });
 
-    this.api.getClusterMemoryChart(this.clusterName).subscribe(data => {
-      this.memoryChartData = data;
+
+    //this.api.getClusterMemoryChart(this.clusterName).subscribe(data => {    });
+
 
       this.memoryChartData =  {
         chartType: 'LineChart',
@@ -63,13 +79,25 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
           ['2006',  660,       1120],
           ['2007',  1030,      540]
         ],
-        options: {title: 'Memory'}
+        options: {
+          //title: 'Memory',
+          legend: {
+            position: 'bottom'
+          },
+          hAxis: {
+            gridlines: {
+              count: 6
+            }
+          },
+          vAxis: {
+            title: 'Memory'
+          }
+        }
       };
-    });
 
 
-    this.api.getClusterDiskChart(this.clusterName).subscribe(data => {
-      this.diskChartData = data;
+
+    //this.api.getClusterDiskChart(this.clusterName).subscribe(data => {    });
 
       this.diskChartData =  {
         chartType: 'LineChart',
@@ -80,28 +108,35 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
           ['2006',  660,       1120],
           ['2007',  1030,      540]
         ],
-        options: {title: 'Disk'}
+        options: {
+          //title: 'Disk',
+          legend: {
+            position: 'bottom'
+          },
+          vAxis: {
+            title: 'Disk'
+          }
+        }
       };
-    });
 
 
-    this.api.getClusterresourceSummaryChart(this.clusterName).subscribe(data => {
-      this.resourceSummaryChartData = data;
 
-      this.resourceSummaryChartData =  {
-        chartType: 'Table',
-        dataTable: [
-          ['Resource type', 'Capacity', 'Allocatable', 'Total requested'],
-          ['CPU', '2 CPU', '1.93 CPU', '410 mCPU'],
-          ['Ephemeral storage', '0 B', '0 B', '0 B'],
-          ['GPU', '0 GPU', '0 GPU', '0 GPU'],
-          ['Memory', '7.85 GB', '5.92 GB', '310.38 MB'],
-          ['Pods', '110', '110', '0'],
-          ['Storage', '0 B', '0 B', '0 B']
-        ],
-        options: {title: 'Resource Summary'}
-      };
-    });
+    //this.api.getClusterresourceSummaryChart(this.clusterName).subscribe(data => { });
+
+    this.resourceSummaryChartData =  {
+      chartType: 'Table',
+      dataTable: [
+        ['Resource type', 'Capacity', 'Allocatable', 'Total requested'],
+        ['CPU', '2 CPU', '1.93 CPU', '410 mCPU'],
+        ['Ephemeral storage', '0 B', '0 B', '0 B'],
+        ['GPU', '0 GPU', '0 GPU', '0 GPU'],
+        ['Memory', '7.85 GB', '5.92 GB', '310.38 MB'],
+        ['Pods', '110', '110', '0'],
+        ['Storage', '0 B', '0 B', '0 B']
+      ],
+      options: {title: 'Resource Summary'}
+    };
+
   }
 
 }
