@@ -51,7 +51,6 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
             position: 'bottom'
           },
           hAxis: {
-            //title: 'Time',
             gridlines: {
               color: '#E3E8EC',
             },
@@ -80,17 +79,19 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
           ['2007',  1030,      540]
         ],
         options: {
-          //title: 'Memory',
           legend: {
             position: 'bottom'
           },
           hAxis: {
             gridlines: {
-              count: 6
+              color: '#E3E8EC'
             }
           },
           vAxis: {
-            title: 'Memory'
+            title: 'Memory',
+            gridlines: {
+              color: '#E3E8EC'
+            }
           }
         }
       };
@@ -109,13 +110,20 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
           ['2007',  1030,      540]
         ],
         options: {
-          //title: 'Disk',
           legend: {
             position: 'bottom'
           },
           vAxis: {
-            title: 'Disk'
-          }
+            title: 'Disk',
+            gridlines: {
+              color: '#E3E8EC'
+            }
+          },
+          hAxis: {
+            gridlines: {
+              color: '#E3E8EC'
+            }
+          },
         }
       };
 
