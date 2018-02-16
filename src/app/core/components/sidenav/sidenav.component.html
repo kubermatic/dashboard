@@ -2,14 +2,23 @@
   <mat-nav-list>
     <!-- Menus for logged in users -->
     <div class="km-sidenav-top">
+      <!-- Default User -->
       <mat-list-item>
         <a mat-line routerLink="/wizard" [routerLinkActive]="['active']"><i class="fa fa-magic"></i> Create Cluster</a>
       </mat-list-item>
       <mat-list-item>
-        <a mat-line routerLink="/clusters" [routerLinkActive]="['active']"><i class="fa fa-cubes"></i> Manage Cluster</a>
+        <a mat-line routerLink="/clusters" [routerLinkActive]="['active']"><i class="fa fa-cubes"></i> Your Cluster</a>
       </mat-list-item>
       <mat-list-item>
-        <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']"><i class="fa fa-key"></i> Manage SSH keys</a>
+        <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']"><i class="fa fa-key"></i> Your SSH keys</a>
+      </mat-list-item>
+
+      <!-- Admin User -->
+      <mat-list-item>
+        <a mat-line routerLink="/admin/clusters" [routerLinkActive]="['active']"><i class="fa fa-cubes"></i> Admin Cluster</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-line routerLink="/admin/sshkeys" [routerLinkActive]="['active']"><i class="fa fa-key"></i> Admin SSH keys</a>
       </mat-list-item>
     </div>
   </mat-nav-list>
