@@ -1,3 +1,4 @@
+
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
@@ -9,15 +10,15 @@ import {ClusterEntity} from 'app/shared/entity/ClusterEntity';
 import {NodeEntity} from 'app/shared/entity/NodeEntity';
 import {Auth} from 'app/core/services/auth/auth.service';
 import {SSHKeyEntity} from 'app/shared/entity/SSHKeyEntity';
-import {ClusterCpuChartEntity} from '../../../shared/entity/chart/ClusterCpuChartEntity';
-import {ClusterMemoryChartEntity} from '../../../shared/entity/chart/ClusterMemoryChartEntity';
-import {ClusterDiskChartEntity} from '../../../shared/entity/chart/ClusterDiskChartEntity';
-import {ClusterResourceSummaryChartEntity} from '../../../shared/entity/chart/ClusterResourceSummaryChartEntity';
 import {OpenStack} from 'openstack-lib';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {DropletSizeResponseEntity} from 'app/shared/entity/digitalocean/DropletSizeEntity';
 import {CreateClusterModel} from 'app/shared/model/CreateClusterModel';
 import 'rxjs/add/operator/catch';
+import {ClusterResourceSummaryChartEntity} from '../../../shared/entity/chart/ClusterResourceSummaryChartEntity';
+import {ClusterDiskChartEntity} from '../../../shared/entity/chart/ClusterDiskChartEntity';
+import {ClusterMemoryChartEntity} from '../../../shared/entity/chart/ClusterMemoryChartEntity';
+import {ClusterCpuChartEntity} from '../../../shared/entity/chart/ClusterCpuChartEntity';
 
 @Injectable()
 export class ApiService {
@@ -32,57 +33,58 @@ export class ApiService {
 
   getClusters(): Observable<ClusterEntity[]> {
     const url = `${this.restRoot}/cluster`;
-    return this.http.get<ClusterEntity[]>(url, {headers: this.headers});
+    return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
   }
 
   getCluster(cluster: string): Observable<ClusterEntity> {
     const url = `${this.restRoot}/cluster/${cluster}`;
-    return this.http.get<ClusterEntity>(url, {headers: this.headers});
+    return this.http.get<ClusterEntity>(url, { headers: this.headers });
   }
 
   createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
     const url = `${this.restRoot}/cluster`;
-    return this.http.post<ClusterEntity>(url, createClusterModel, {headers: this.headers});
+    return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
   }
 
   deleteCluster(cluster: string) {
     const url = `${this.restRoot}/cluster/${cluster}`;
-    return this.http.delete(url, {headers: this.headers});
+    return this.http.delete(url, { headers: this.headers });
   }
 
   getClusterNodes(cluster: string): Observable<NodeEntity[]> {
     const url = `/api/v1/cluster/${cluster}/node`;
-    return this.http.get<NodeEntity[]>(url, {headers: this.headers});
+    return this.http.get<NodeEntity[]>(url, { headers: this.headers });
   }
 
   createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<NodeEntity> {
     const url = `${this.restRoot}/cluster/${cluster.metadata.name}/node`;
-    return this.http.post<NodeEntity>(url, nodeModel, {headers: this.headers});
+    return this.http.post<NodeEntity>(url, nodeModel, { headers: this.headers });
   }
 
   deleteClusterNode(cluster: string, node_name: string) {
     const url = `${this.restRoot}/cluster/${cluster}/node/${node_name}`;
-    return this.http.delete(url, {headers: this.headers});
+    return this.http.delete(url, { headers: this.headers });
   }
 
   getSSHKeys(): Observable<SSHKeyEntity[]> {
     const url = `${this.restRoot}/ssh-keys`;
-    return this.http.get<SSHKeyEntity[]>(url, {headers: this.headers});
+    return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 
   deleteSSHKey(fingerprint: string) {
     const url = `${this.restRoot}/ssh-keys/${fingerprint}`;
-    return this.http.delete(url, {headers: this.headers});
+    return this.http.delete(url, { headers: this.headers });
   }
 
   addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
     const url = `${this.restRoot}/ssh-keys`;
-    return this.http.post<SSHKeyEntity>(url, sshKey, {headers: this.headers});
+    return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.headers });
   }
 
-  getDigitaloceanSizes(token: string) {
-    const url = `${environment.digitalOceanRestRoot}/sizes`;
-    return this.http.get<DropletSizeResponseEntity>(url, {headers: new HttpHeaders({'Authorization': 'Bearer ' + token})});
+  getDigitaloceanSizes(token: string): Observable<any> {
+    this.headers = this.headers.set('DoToken', token);
+    const url = `${this.restRoot}/digitalocean/sizes`;
+    return this.http.get(url, { headers: this.headers });
   }
 
   getOpenStackImages(location: string, project: string, name: string, password: string, authUrl: string) {
@@ -111,10 +113,10 @@ export class ApiService {
   }
 
   updateClusterUpgrade(cluster: string, upgradeVersion: string): void {
-    const body = {to: upgradeVersion};
+    const body = { to: upgradeVersion };
     const url = `${this.restRoot}/cluster/${cluster}/upgrade`;
     this.http.put(url, body, {headers: this.headers})
-      .subscribe(result => NotificationActions.success('Success', `Cluster ${cluster} was upgraded`));
+     .subscribe(result => NotificationActions.success('Success', `Cluster ${cluster} was upgraded`));
   }
 
   getClusterCpuChart(cluster: string): Observable<ClusterCpuChartEntity[]> {

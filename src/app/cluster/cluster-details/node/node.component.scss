@@ -49,15 +49,15 @@ button {
 .km-copy {
   cursor: pointer;
 
-  small {
-    display: none;
-    color: #0288d1;
-  }
-
   &:hover {
     small {
       display: inline-block;
     }
+  }
+
+  small {
+    display: none;
+    color: #0288d1;
   }
 }
 
