@@ -40,15 +40,22 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
       this.cpuChartData =  {
         chartType: 'LineChart',
         dataTable: [
-          ['Year', 'Sales', 'Expenses'],
-          ['2004',  1000,      400],
-          ['2005',  1170,      460],
-          ['2006',  660,       1120],
-          ['2007',  1030,      540]
+          ['Year', 'Sales', 'Expenses', 'test', 'test', 'test'],
+          ['2004',  1000,      400, 400, 140, 50],
+          ['2005',  1170,      460, 400, 0, 1200],
+          ['2006',  660,       1120, 400, 0, 600],
+          ['2007',  1030,      540, 400, 20, 700]
         ],
         options: {
           legend: {
             position: 'bottom'
+          },
+          series: {
+            0: { color: '#79c447' },
+            1: { color: '#0288d1' },
+            2: { color: '#CCCCCC' },
+            3: { color: 'orange' },
+            4: { color: '#ff5454' }
           },
           hAxis: {
             gridlines: {
@@ -82,6 +89,13 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
           legend: {
             position: 'bottom'
           },
+          series: {
+            0: { color: '#79c447' },
+            1: { color: '#0288d1' },
+            2: { color: '#CCCCCC' },
+            3: { color: 'orange' },
+            4: { color: '#ff5454' }
+          },
           hAxis: {
             gridlines: {
               color: '#E3E8EC'
@@ -112,6 +126,13 @@ export class ClusterChartComponent implements OnInit, OnDestroy {
         options: {
           legend: {
             position: 'bottom'
+          },
+          series: {
+            0: { color: '#79c447' },
+            1: { color: '#0288d1' },
+            2: { color: '#CCCCCC' },
+            3: { color: 'orange' },
+            4: { color: '#ff5454' }
           },
           vAxis: {
             title: 'Disk',
