@@ -13,6 +13,16 @@ button.close {
   position: relative;
 }
 
+.mat-dialog-content {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+
+.mat-dialog-container .mat-dialog-content p {
+  line-height: 22px;
+}
+
+
 .code-block {
   background-color: #F7FAFF;
   padding: 5px 15px;
@@ -48,9 +58,4 @@ button.close {
 
 .km-button-link {
   margin-bottom: 20px;
-
-  a {
-    font-family: "Menlo", monospace;
-    font-weight: 400;
-  }
 }
