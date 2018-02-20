@@ -40,7 +40,7 @@
               <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
             </div>
             <div fxFlex="15%">
-              <span class="km-copy" *ngIf="node.metadata.annotations['node.k8s.io/public-ip'].length" ngxClipboard [cbContent]="node.metadata.annotations['node.k8s.io/public-ip']">
+              <span class="km-copy" *ngIf="node.metadata.annotations['node.k8s.io/public-ip'] && node.metadata.annotations['node.k8s.io/public-ip'].length" ngxClipboard [cbContent]="node.metadata.annotations['node.k8s.io/public-ip']">
                 {{node.metadata.annotations["node.k8s.io/public-ip"]}}
                 <small>Copy</small>
               </span>
