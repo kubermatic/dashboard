@@ -7,12 +7,10 @@ import {environment} from '../../../../environments/environment';
   styleUrls: ['./cluster-connect.component.scss']
 })
 export class ClusterConnectComponent implements OnInit {
+  @Input() clusterName: string;
+  private restRoot: string = environment.restRoot;
 
   constructor() { }
-
-  @Input() clusterName: string;
-
-  private restRoot: string = environment.restRoot;
 
   ngOnInit() {}
 
@@ -20,6 +18,4 @@ export class ClusterConnectComponent implements OnInit {
     const authorization_token = localStorage.getItem('token');
     return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
-
-
 }
