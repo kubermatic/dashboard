@@ -3,13 +3,13 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
+import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, ContainerLinuxSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
-import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
+import { AWSNodeSpecV2 } from 'app/shared/entity/node/AWSNodeSpec';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import {WizardActions} from '../../redux/actions/wizard.actions';
+import { WizardActions } from '../../redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -95,17 +95,25 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
     if (this.awsNodeForm.valid) {
       const nodeSpec = new NodeCreateSpec(
-        null,
-        new AWSNodeSpec(
-          nodeInfo.node_size,
-          nodeInfo.root_size,
-          // Can we implement at some point
-          // this.awsForm.controls["volume_type"].value,
-          'gp2',
-          nodeInfo.ami
+        new NodeCloudSpec(
+          null,
+          new AWSNodeSpecV2(
+            nodeInfo.node_size,
+            nodeInfo.root_size,
+            'gp2',
+            nodeInfo.ami,
+            null
+          ),
+          null
         ),
-        null,
-        null
+        new OperatingSystemSpec(
+          new UbuntuSpec(false),
+          null
+        ),
+        new NodeVersionInfo(
+          null,
+          new NodeContainerRuntimeInfo(null, null)
+        )
       );
 
 

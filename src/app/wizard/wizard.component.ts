@@ -10,10 +10,10 @@ import * as testing from 'selenium-webdriver/testing';
 import { CreateNodeModel } from '../shared/model/CreateNodeModel';
 import { DigitaloceanCloudSpec } from '../shared/entity/cloud/DigitialoceanCloudSpec';
 import { CreateNodesService } from '../core/services';
-import { NodeCreateSpec } from '../shared/entity/NodeEntity';
+import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from '../shared/entity/NodeEntity';
 import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
-import { AWSNodeSpec } from '../shared/entity/node/AWSNodeSpec';
-import { DigitaloceanNodeSpec } from '../shared/entity/node/DigitialoceanNodeSpec';
+import { AWSNodeSpecV2 } from '../shared/entity/node/AWSNodeSpec';
+import { DigitaloceanNodeSpecV2 } from '../shared/entity/node/DigitialoceanNodeSpec';
 import { AWSCloudSpec } from '../shared/entity/cloud/AWSCloudSpec';
 import { OpenstackCloudSpec } from '../shared/entity/cloud/OpenstackCloudSpec';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
@@ -80,9 +80,20 @@ export class WizardComponent implements OnInit, OnDestroy {
       new CreateNodeModel(
         3,
         new NodeCreateSpec(
-          new DigitaloceanNodeSpec(''),
-          new AWSNodeSpec('t2.medium', 20, '', ''),
-          new OpenstackNodeSpec('m1.medium', ''), null)
+          new NodeCloudSpec(
+            new DigitaloceanNodeSpecV2('', null, null, null, null),
+            new AWSNodeSpecV2('t2.medium', 20, '', '', null),
+            new OpenstackNodeSpec('m1.medium', '')
+          ),
+          new OperatingSystemSpec(
+            new UbuntuSpec(true),
+            null
+          ),
+          new NodeVersionInfo(
+            null,
+            new NodeContainerRuntimeInfo(null, null)
+          )
+        )
       )
     );
   }

@@ -4,12 +4,30 @@ import { NodeEntity } from '../../shared/entity/NodeEntity';
 export const nodeModelFake: CreateNodeModel = {
     instances: 3,
     spec: {
-      digitalocean: {
-        size: '4gb'
+      cloud: {
+        digitalocean: {
+          size: '4gb',
+          backups: null,
+          ipv6: null,
+          monitoring: null,
+          tags: null
+        },
+        aws: null,
+        openstack: null
       },
-      aws: null,
-      openstack: null,
-      baremetal: null
+      operatingSystem: {
+        ubuntu: {
+          distUpgradeOnBoot: false
+        },
+        containerLinux: null
+      },
+      versions: {
+        kubelet: null,
+        containerRuntime: {
+          name: null,
+          version: null
+        }
+      }
     }
 };
 

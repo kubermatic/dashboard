@@ -1,5 +1,5 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
+import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, ContainerLinuxSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from 'app/shared/entity/NodeEntity';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Component, EventEmitter, OnInit, Output, Input, OnDestroy } from '@angular/core';
 import { InputValidationService } from 'app/core/services';
@@ -86,13 +86,22 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
     const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
 
     const nodeSpec = new NodeCreateSpec(
-      null,
-      null,
-      new OpenstackNodeSpec(
-        nodeInfo.node_size,
-        nodeInfo.os_node_image
+      new NodeCloudSpec(
+        null,
+        null,
+        new OpenstackNodeSpec(
+          nodeInfo.node_size,
+          nodeInfo.os_node_image
+        )
       ),
-      null
+      new OperatingSystemSpec(
+        new UbuntuSpec(false),
+        null
+      ),
+      new NodeVersionInfo(
+        null,
+        new NodeContainerRuntimeInfo(null, null)
+      )
     );
 
     this.nodeSpecChanges.emit({

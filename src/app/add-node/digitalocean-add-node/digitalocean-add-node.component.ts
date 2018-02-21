@@ -7,8 +7,8 @@ import { Input, EventEmitter, Output, AfterContentInit, OnChanges, OnDestroy, On
 import { CustomValidators } from 'ng2-validation';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
-import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
+import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, NodeVersionInfo, UbuntuSpec, ContainerLinuxSpec, NodeContainerRuntimeInfo } from 'app/shared/entity/NodeEntity';
+import { DigitaloceanNodeSpecV2 } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
@@ -121,10 +121,25 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
 
     const nodeSpec = new NodeCreateSpec(
-      new DigitaloceanNodeSpec(nodeInfo.node_size),
-      null,
-      null,
-      null,
+      new NodeCloudSpec(
+        new DigitaloceanNodeSpecV2(
+          nodeInfo.node_size,
+          false,
+          false,
+          false,
+          null
+        ),
+        null,
+        null
+      ),
+      new OperatingSystemSpec(
+        new UbuntuSpec(true),
+        null
+      ),
+      new NodeVersionInfo(
+        '',
+        new NodeContainerRuntimeInfo('', '')
+      )
     );
 
     this.nodeSpecChanges.emit({

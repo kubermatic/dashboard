@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
-import { NodeEntity } from 'app/shared/entity/NodeEntity';
+import { NodeEntityV2 } from 'app/shared/entity/NodeEntity';
 import { ClusterEntity } from 'app/shared/entity/ClusterEntity';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import { NodeProvider } from 'app/shared/model/NodeProviderConstants';
@@ -27,7 +27,7 @@ import {ClusterConnectComponent} from './cluster-connect/cluster-connect.compone
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
-  public nodes: NodeEntity[];
+  public nodes: NodeEntityV2[];
   public cluster: ClusterEntity;
   public seedDc: DataCenterEntity;
   public nodeDc: DataCenterEntity;
@@ -184,8 +184,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       this.loadUpgrades();
     });
   }
-
-
 
   public isLoaded(): boolean {
     if (this.cluster && this.cluster.provider === NodeProvider.BRINGYOUROWN) {
