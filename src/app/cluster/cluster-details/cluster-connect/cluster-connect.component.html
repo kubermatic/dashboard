@@ -1,0 +1,34 @@
+<mat-toolbar>
+  Connect to the Cluster
+  <button mat-icon-button mat-dialog-close>
+    <i class="fa fa-times" aria-hidden="true"></i>
+  </button>
+</mat-toolbar>
+<mat-dialog-content>
+  <div class="mat-dialog-content">
+    <p>Download the kubeconfig
+      <button class="download-kubeconfig-btn" mat-raised-button color="primary" >
+        <a [attr.href]="downloadKubeconfigUrl()" target="_blank">
+          <span class="button download"></span>
+          Download config
+        </a>
+      </button>
+    </p>
+    <p>Configure kubectl command line by running the following command in Directory where the kubeconfig is located:</p>
+    <p class="code-block">$ export KUBECONFIG=$PWD/kubeconfig</p>
+    <p>Then start a proxy to connect to the Kubernetes control plane:</p>
+    <p class="code-block">$ kubectl proxy</p>
+    <p>Then open the Dashboard interface by navigating to the following location in your browser:</p>
+    <p class="km-button-link">
+      <a href="http://localhost:8001/ui" target="_blank" class="button white">
+        http://localhost:8001/ui
+      </a>
+    </p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-dialog-close mat-raised-button>
+    Close
+  </button>
+</mat-dialog-actions>
+
