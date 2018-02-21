@@ -1,7 +1,7 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="doNodeForm" (change)="onChange()">
   <mat-form-field fxFlex>
     <input id="node_count_do" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1"
-      max="20" type="number" placeholder="Quantity of Nodes*:">
+      max="20" type="number" placeholder="Quantity of Nodes*:" autocomplete="off">
     <mat-error *ngIf="doNodeForm.controls.node_count.hasError('min') && !doNodeForm.controls.node_count.hasError('required')">
       Quantity of Nodes must be minimum <strong>1</strong>
     </mat-error>
