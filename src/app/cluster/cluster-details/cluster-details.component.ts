@@ -3,7 +3,6 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'app/core/services/api/api.service';
-import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material';
@@ -19,6 +18,7 @@ import 'rxjs/add/operator/retry';
 
 import { SSHKeyEntity } from 'app/shared/entity/SSHKeyEntity';
 import { UpgradeClusterComponentData } from 'app/shared/model/UpgradeClusterDialogData';
+import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -26,8 +26,6 @@ import { UpgradeClusterComponentData } from 'app/shared/model/UpgradeClusterDial
   styleUrls: ['./cluster-details.component.scss']
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
-
-  private restRoot: string = environment.restRoot;
 
   public nodes: NodeEntity[];
   public cluster: ClusterEntity;
@@ -168,6 +166,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.dialogRef.afterClosed().subscribe(result => {});
   }
 
+  public connectClusterDialog(): void {
+    this.dialogRef = this.dialog.open(ClusterConnectComponent, this.config);
+    this.dialogRef.componentInstance.clusterName = this.clusterName;
+
+    this.dialogRef.afterClosed().subscribe(result => {});
+  }
+
   public upgradeClusterDialog(): void {
     const dialogWidth = '500px';
 
@@ -180,10 +185,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public downloadKubeconfigUrl(): string {
-    const authorization_token = localStorage.getItem('token');
-    return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
-  }
+
 
   public isLoaded(): boolean {
     if (this.cluster && this.cluster.provider === NodeProvider.BRINGYOUROWN) {
