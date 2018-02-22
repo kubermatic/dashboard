@@ -2,6 +2,7 @@ import { Component, Input} from '@angular/core';
 import { NodeEntityV2 } from 'app/shared/entity/NodeEntity';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-node',
@@ -70,7 +71,12 @@ export class NodeComponent {
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
     if (!!node.status.nodeInfo.kubeletVersion) {
-      return green;
+      if (!!node.status.ErrorMessage) {
+        NotificationActions.error('Error', node.status.ErrorMessage);
+        return red;
+      } else {
+        return green;
+      }
     } else {
       return orangeSpinner;
     }
