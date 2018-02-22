@@ -13,6 +13,7 @@ import { DigitaloceanAddNodeComponent } from './digitalocean-add-node/digitaloce
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
 import { InputValidationService } from '../core/services/index';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
+import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 
 const modules: any[] = [
     BrowserModule,
@@ -56,6 +57,18 @@ describe('AddNodeComponent', () => {
         component.provider = {
             name: 'aws'
         };
+        const ngRedux = fixture.debugElement.injector.get(NgRedux);
+        let spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
+            wizard: {
+                nodeForm: {
+                    ami: '',
+                    aws_nas: false,
+                    node_count: 3,
+                    node_size: 't2.medium',
+                    root_size: 20
+                }
+            }
+        });
         fixture.detectChanges();
 
         let deAwsForm = fixture.debugElement.query(By.css('.aws-form'));
@@ -64,6 +77,15 @@ describe('AddNodeComponent', () => {
         component.provider = {
             name: 'openstack'
         };
+        spyGetState.and.returnValue({
+            wizard: {
+                nodeForm: {
+                    os_node_image: '',
+                    node_count: 2,
+                    node_size: 'm1.medium'
+                }
+            }
+        });
         fixture.detectChanges();
 
         deAwsForm = fixture.debugElement.query(By.css('.aws-form'));
