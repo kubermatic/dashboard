@@ -26,7 +26,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   @Input() public token: string = '';
   @Input() public connect: string[] = [];
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public doNodeForm: FormGroup;
@@ -143,8 +143,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     );
 
     this.nodeSpecChanges.emit({
-      nodeSpec,
-      count: nodeInfo.node_count
+      nodeSpec
     });
 
     this.formChanges.emit(this.doNodeForm);

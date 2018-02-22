@@ -2,7 +2,6 @@ import { CreateNodeModel } from './../../shared/model/CreateNodeModel';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 
 export const nodeModelFake: CreateNodeModel = {
-    instances: 3,
     spec: {
       cloud: {
         digitalocean: {

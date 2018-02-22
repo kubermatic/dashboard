@@ -20,7 +20,7 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
   @Input() public connect: string[] = [];
 
@@ -105,8 +105,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
     );
 
     this.nodeSpecChanges.emit({
-      nodeSpec,
-      count: nodeInfo.node_count
+      nodeSpec
     });
 
     this.formChanges.emit(this.osNodeForm);

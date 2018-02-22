@@ -78,7 +78,6 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     WizardActions.setNodeModel(
       new CreateNodeModel(
-        3,
         new NodeCreateSpec(
           new NodeCloudSpec(
             new DigitaloceanNodeSpecV2('', null, null, null, null),
@@ -110,6 +109,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     const reduxStore = this.ngRedux.getState();
     const wizard = reduxStore.wizard;
     const nodeModel = wizard.nodeModel;
+    const nodeCount = wizard.nodeForm.node_count;
     const clusterModel = wizard.clusterModel;
     console.log('Create cluster mode: \n' + JSON.stringify(clusterModel));
     this.api.createCluster(clusterModel).subscribe(cluster => {
@@ -117,7 +117,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.router.navigate(['/clusters/' + cluster.metadata.name]);
 
         if (this.selectedProvider !== 'bringyourown') {
-          this.createNodesService.createInitialClusterNodes(cluster, nodeModel);
+          this.createNodesService.createInitialClusterNodes(nodeCount, cluster, nodeModel);
         }
       },
       error => {

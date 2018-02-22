@@ -19,7 +19,7 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
   @Input() public connect: string[] = [];
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public awsNodeForm: FormGroup;
@@ -118,8 +118,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
 
       this.nodeSpecChanges.emit({
-        nodeSpec,
-        count: nodeInfo.node_count
+        nodeSpec
       });
     }
     this.formChanges.emit(this.awsNodeForm);
