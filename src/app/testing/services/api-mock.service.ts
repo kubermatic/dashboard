@@ -1,5 +1,5 @@
 import { nodesFake } from './../fake-data/node.fake';
-import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { NodeEntityV2 } from '../../shared/entity/NodeEntity';
 import { SSHKeysFake } from './../fake-data/sshkey.fake';
 import { clusterFake, clustersFake } from './../fake-data/cluster.fake';
 import { ClusterEntity } from './../../shared/entity/ClusterEntity';
@@ -16,7 +16,7 @@ export class ApiMockService {
     private clusters: ClusterEntity[] = clustersFake;
     private sshKeys: SSHKeyEntity[] = SSHKeysFake;
     private sizes: any = digitaloceanSizesFake;
-    private nodes: NodeEntity[] = nodesFake;
+    private nodes: NodeEntityV2[] = nodesFake;
 
     constructor() {
     }
@@ -57,7 +57,7 @@ export class ApiMockService {
         return Observable.of(null);
     }
 
-    public getClusterNodes(cluster: string): Observable<NodeEntity[]> {
+    public getClusterNodes(cluster: string): Observable<NodeEntityV2[]> {
         return Observable.of(this.nodes);
     }
 

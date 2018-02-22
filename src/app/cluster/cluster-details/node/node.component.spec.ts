@@ -46,7 +46,6 @@ describe('NodeComponent', () => {
 
     it('should hide remove button', () => {
         component.nodes = nodesFake;
-        component.nodes[0].metadata.annotations['node.k8s.io/driver-data'] = 'driver-data';
         fixture.detectChanges();
 
         const deRemoveButtons = fixture.debugElement.queryAll(By.css('.km-btn-remove-node-wrapper'));
@@ -60,8 +59,6 @@ describe('NodeComponent', () => {
         const orange = 'fa fa-spin fa-circle-o-notch orange';
 
         const nodes = nodesFake;
-        nodes[0].metadata.annotations['node.k8s.io/state'] = 'running';
-        nodes[1].metadata.annotations['node.k8s.io/state'] = 'pending';
 
         expect(component.getNodeHealth(nodes[0])).toBe(green, 'should return classes for green icon');
         expect(component.getNodeHealth(nodes[1])).toBe(orange, 'should return classes for orange icon');

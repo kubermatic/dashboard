@@ -1,5 +1,5 @@
 import { CreateNodeModel } from './../../shared/model/CreateNodeModel';
-import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { NodeEntityV2 } from '../../shared/entity/NodeEntity';
 
 export const nodeModelFake: CreateNodeModel = {
     spec: {
@@ -30,59 +30,51 @@ export const nodeModelFake: CreateNodeModel = {
     }
 };
 
-export const nodeFake: NodeEntity = {
-  groupname: 'group',
+export const nodeFake: NodeEntityV2 = {
   metadata : {
-    name : 'kubermatic-tbbfvttvs-v5hmk',
-    selfLink : '/api/v1/nodes/kubermatic-tbbfvttvs-v5hmk',
-    uid : 'df2711c4-fb7d-11e7-a535-0a580a2c210c',
-    creationTimestamp : new Date(),
-    labels : new Map(),
-    annotations : new Map()
+    name : 'machine-kubermatic-tbbfvttvs-v5hmk',
+    displayName: 'kubermatic-tbbfvttvs-v5hmk',
+    deletionTimestamp : new Date(),
+    annotations : new Map(),
+    labels : new Map()
   },
   spec : {
-    podCIDR : '172.25.1.0/24',
-    externalID : 'kubermatic-tbbfvttvs-v5hmk'
+    cloud : {
+      digitalocean : {
+        size: 's-1vcpu-1gb',
+        backups: false,
+        ipv6: false,
+        monitoring: false,
+        tags: []
+      },
+      aws : null,
+      openstack : null
+    },
+    operatingSystem : {
+      ubuntu : {
+        distUpgradeOnBoot : false
+      },
+      containerLinux : null
+    },
+    versions : {
+      kubelet: 'v1.8.5',
+      containerRuntime: {
+        name: 'docker',
+        version: '17.03.2',
+      }
+    }
   },
   status : {
+    machineName : 'machine-kubermatic-tbbfvttvs-v5hmk',
     capacity : {
       cpu : '1',
-      memory : '2045940Ki',
-      pods : '110'
+      memory : '2045940Ki'
     },
     allocatable : {
       cpu : '950m',
-      memory : '1841140Ki',
-      pods : '110'
+      memory : '1841140Ki'
     },
-    conditions : [
-      {
-        type : 'KernelDeadlock',
-        status : 'False',
-        lastHeartbeatTime : new Date(),
-        lastTransitionTime : new Date(),
-        reason : 'KernelHasNoDeadlock',
-        message : 'kernel has no deadlock'
-      },
-      {
-        type : 'Ready',
-        status : 'True',
-        lastHeartbeatTime : new Date(),
-        lastTransitionTime : new Date(),
-        reason : 'KubeletReady',
-        message : 'kubelet is posting ready status'
-      },
-      {
-        type : 'OutOfDisk',
-        status : 'False',
-        lastHeartbeatTime : new Date(),
-        lastTransitionTime : new Date(),
-        reason : 'KubeletHasSufficientDisk',
-        message : 'kubelet has sufficient disk space available'
-      }
-    ],
     addresses : [
-
       {
         type : 'InternalIP',
         address : '46.101.127.190'
@@ -92,94 +84,65 @@ export const nodeFake: NodeEntity = {
         address : 'kubermatic-tbbfvttvs-v5hmk'
       }
     ],
-    daemonEndpoints : {
-      kubeletEndpoint : {
-        Port : 10250
-      }
-    },
     nodeInfo : {
-      machineID : '01d0a0f066f8406ca465f1d50b09715f',
-      systemUUID : '01D0A0F0-66F8-406C-A465-F1D50B09715F',
-      bootID : 'd9077a9d-2337-4eab-8603-efe2e097b5e9',
       kernelVersion : '4.14.11-coreos',
-      osImage : 'Container Linux by CoreOS 1576.5.0 (Ladybug)',
+      containerRuntime : 'docker',
       containerRuntimeVersion : 'docker://Unknown',
       kubeletVersion : 'v1.8.5',
-      kubeProxyVersion : 'v1.8.5',
       operatingSystem : 'linux',
       architecture : 'amd64'
     },
-    images : [
-      {
-        names : [
-          'kubermatic/hyperkube-amd64@sha256:6e78121c61340ca8137adb8cd88fd201f6b9647bccabf747501fbb1bcf3534e3',  'kubermatic/hyperkube-amd64:v1.8.5'
-        ],
-        sizeBytes : 512237319
-      },
-      {
-        names : [
-          'gcr.io/google_containers/node-problem-detector@sha256:f95cab985c26b2f46e9bd43283e0bfa88860c14e0fb0649266babe8b65e9eb2b',  'gcr.io/google_containers/node-problem-detector:v0.4.1'
-        ],
-        sizeBytes : 286572743
-      }
-    ]
+    errorReason: null,
+    errorMessage: null
   }
 };
 
-export const nodesFake: NodeEntity[] = [
+export const nodesFake: NodeEntityV2[] = [
   {
-    groupname: 'group',
     metadata : {
-      name : 'kubermatic-tbbfvttvs-v5hmk',
-      selfLink : '/api/v1/nodes/kubermatic-tbbfvttvs-v5hmk',
-      uid : 'df2711c4-fb7d-11e7-a535-0a580a2c210c',
-      creationTimestamp : new Date(),
-      labels : new Map(),
-      annotations : new Map()
+      name : 'machine-kubermatic-tbbfvttvs-v5hmk',
+      displayName: 'kubermatic-tbbfvttvs-v5hmk',
+      deletionTimestamp : new Date(),
+      annotations : new Map(),
+      labels : new Map()
     },
     spec : {
-      podCIDR : '172.25.1.0/24',
-      externalID : 'kubermatic-tbbfvttvs-v5hmk'
+      cloud : {
+        digitalocean : {
+          size: 's-1vcpu-1gb',
+          backups: false,
+          ipv6: false,
+          monitoring: false,
+          tags: []
+        },
+        aws : null,
+        openstack : null
+      },
+      operatingSystem : {
+        ubuntu : {
+          distUpgradeOnBoot : false
+        },
+        containerLinux : null
+      },
+      versions : {
+        kubelet: 'v1.8.5',
+        containerRuntime: {
+          name: 'docker',
+          version: '17.03.2',
+        }
+      }
     },
     status : {
+      machineName : 'machine-kubermatic-tbbfvttvs-v5hmk',
       capacity : {
         cpu : '1',
-        memory : '2045940Ki',
-        pods : '110'
+        memory : '2045940Ki'
       },
       allocatable : {
         cpu : '950m',
-        memory : '1841140Ki',
-        pods : '110'
+        memory : '1841140Ki'
       },
-      conditions : [
-        {
-          type : 'KernelDeadlock',
-          status : 'False',
-          lastHeartbeatTime : new Date(),
-          lastTransitionTime : new Date(),
-          reason : 'KernelHasNoDeadlock',
-          message : 'kernel has no deadlock'
-        },
-        {
-          type : 'Ready',
-          status : 'True',
-          lastHeartbeatTime : new Date(),
-          lastTransitionTime : new Date(),
-          reason : 'KubeletReady',
-          message : 'kubelet is posting ready status'
-        },
-        {
-          type : 'OutOfDisk',
-          status : 'False',
-          lastHeartbeatTime : new Date(),
-          lastTransitionTime : new Date(),
-          reason : 'KubeletHasSufficientDisk',
-          message : 'kubelet has sufficient disk space available'
-        }
-      ],
       addresses : [
-
         {
           type : 'InternalIP',
           address : '46.101.127.190'
@@ -189,92 +152,63 @@ export const nodesFake: NodeEntity[] = [
           address : 'kubermatic-tbbfvttvs-v5hmk'
         }
       ],
-      daemonEndpoints : {
-        kubeletEndpoint : {
-          Port : 10250
-        }
-      },
       nodeInfo : {
-        machineID : '01d0a0f066f8406ca465f1d50b09715f',
-        systemUUID : '01D0A0F0-66F8-406C-A465-F1D50B09715F',
-        bootID : 'd9077a9d-2337-4eab-8603-efe2e097b5e9',
         kernelVersion : '4.14.11-coreos',
-        osImage : 'Container Linux by CoreOS 1576.5.0 (Ladybug)',
+        containerRuntime : 'docker',
         containerRuntimeVersion : 'docker://Unknown',
         kubeletVersion : 'v1.8.5',
-        kubeProxyVersion : 'v1.8.5',
         operatingSystem : 'linux',
         architecture : 'amd64'
       },
-      images : [
-        {
-          names : [
-            'kubermatic/hyperkube-amd64@sha256:6e78121c61340ca8137adb8cd88fd201f6b9647bccabf747501fbb1bcf3534e3',  'kubermatic/hyperkube-amd64:v1.8.5'
-          ],
-          sizeBytes : 512237319
-        },
-        {
-          names : [
-            'gcr.io/google_containers/node-problem-detector@sha256:f95cab985c26b2f46e9bd43283e0bfa88860c14e0fb0649266babe8b65e9eb2b',  'gcr.io/google_containers/node-problem-detector:v0.4.1'
-          ],
-          sizeBytes : 286572743
-        }
-      ]
+      errorReason: null,
+      errorMessage: null
     }
   },
   {
-    groupname: 'group',
     metadata : {
-      name : 'kubermatic-tbbfvttvs-v5hmk',
-      selfLink : '/api/v1/nodes/kubermatic-tbbfvttvs-v5hmk',
-      uid : 'df2711c4-fb7d-11e7-a535-0a580a2c210c',
-      creationTimestamp : new Date(),
-      labels : new Map(),
-      annotations : new Map()
+      name : 'machine-kubermatic-tbbfvttvs-v5hmk',
+      displayName: 'kubermatic-tbbfvttvs-v5hmk',
+      deletionTimestamp : new Date(),
+      annotations : new Map(),
+      labels : new Map()
     },
     spec : {
-      podCIDR : '172.25.1.0/24',
-      externalID : 'kubermatic-tbbfvttvs-v5hmk'
+      cloud : {
+        digitalocean : {
+          size: 's-1vcpu-1gb',
+          backups: false,
+          ipv6: false,
+          monitoring: false,
+          tags: []
+        },
+        aws : null,
+        openstack : null
+      },
+      operatingSystem : {
+        ubuntu : {
+          distUpgradeOnBoot : false
+        },
+        containerLinux : null
+      },
+      versions : {
+        kubelet: 'v1.8.5',
+        containerRuntime: {
+          name: 'docker',
+          version: '17.03.2',
+        }
+      }
     },
     status : {
+      machineName : 'machine-kubermatic-tbbfvttvs-v5hmk',
       capacity : {
         cpu : '1',
-        memory : '2045940Ki',
-        pods : '110'
+        memory : '2045940Ki'
       },
       allocatable : {
         cpu : '950m',
-        memory : '1841140Ki',
-        pods : '110'
+        memory : '1841140Ki'
       },
-      conditions : [
-        {
-          type : 'KernelDeadlock',
-          status : 'False',
-          lastHeartbeatTime : new Date(),
-          lastTransitionTime : new Date(),
-          reason : 'KernelHasNoDeadlock',
-          message : 'kernel has no deadlock'
-        },
-        {
-          type : 'Ready',
-          status : 'True',
-          lastHeartbeatTime : new Date(),
-          lastTransitionTime : new Date(),
-          reason : 'KubeletReady',
-          message : 'kubelet is posting ready status'
-        },
-        {
-          type : 'OutOfDisk',
-          status : 'False',
-          lastHeartbeatTime : new Date(),
-          lastTransitionTime : new Date(),
-          reason : 'KubeletHasSufficientDisk',
-          message : 'kubelet has sufficient disk space available'
-        }
-      ],
       addresses : [
-
         {
           type : 'InternalIP',
           address : '46.101.127.190'
@@ -284,37 +218,16 @@ export const nodesFake: NodeEntity[] = [
           address : 'kubermatic-tbbfvttvs-v5hmk'
         }
       ],
-      daemonEndpoints : {
-        kubeletEndpoint : {
-          Port : 10250
-        }
-      },
       nodeInfo : {
-        machineID : '01d0a0f066f8406ca465f1d50b09715f',
-        systemUUID : '01D0A0F0-66F8-406C-A465-F1D50B09715F',
-        bootID : 'd9077a9d-2337-4eab-8603-efe2e097b5e9',
         kernelVersion : '4.14.11-coreos',
-        osImage : 'Container Linux by CoreOS 1576.5.0 (Ladybug)',
+        containerRuntime : 'docker',
         containerRuntimeVersion : 'docker://Unknown',
-        kubeletVersion : 'v1.8.5',
-        kubeProxyVersion : 'v1.8.5',
+        kubeletVersion : null,
         operatingSystem : 'linux',
         architecture : 'amd64'
       },
-      images : [
-        {
-          names : [
-            'kubermatic/hyperkube-amd64@sha256:6e78121c61340ca8137adb8cd88fd201f6b9647bccabf747501fbb1bcf3534e3',  'kubermatic/hyperkube-amd64:v1.8.5'
-          ],
-          sizeBytes : 512237319
-        },
-        {
-          names : [
-            'gcr.io/google_containers/node-problem-detector@sha256:f95cab985c26b2f46e9bd43283e0bfa88860c14e0fb0649266babe8b65e9eb2b',  'gcr.io/google_containers/node-problem-detector:v0.4.1'
-          ],
-          sizeBytes : 286572743
-        }
-      ]
+      errorReason: null,
+      errorMessage: null
     }
   }
 ];

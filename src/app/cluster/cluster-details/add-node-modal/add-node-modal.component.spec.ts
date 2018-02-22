@@ -83,6 +83,8 @@ describe('AddNodeModalComponent', () => {
 
     it('should call createClusterNode method from the api', fakeAsync(() => {
         component.nodeModel = nodeModelFake;
+        const formBuilder = fixture.debugElement.injector.get(FormBuilder);
+        component.form = formBuilder.group({node_count: 1});
         fixture.detectChanges();
 
         const spyCreateClusterNode = spyOn(apiService, 'createClusterNode').and.returnValue(Observable.of(null));
