@@ -13,7 +13,6 @@ import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-
 import { ReactiveFormsModule } from '@angular/forms';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node.component';
 import { ApiMockService } from '../../testing/services/api-mock.service';
-import { digitaloceanSizesFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
     BrowserModule,
@@ -60,17 +59,6 @@ describe('DigitaloceanAddNodeComponent', () => {
 
         expect(component.doNodeForm.valid).toBeFalsy();
     });
-
-    it('should get digitalocean sizes', fakeAsync(() => {
-        const nodeSizes = digitaloceanSizesFake;
-        const spyGetSizes = spyOn(apiSevice, 'getDigitaloceanSizes').and.returnValue(Observable.of(nodeSizes));
-        component.token = 'token';
-        fixture.detectChanges();
-        tick();
-
-        expect(spyGetSizes.and.callThrough()).toHaveBeenCalledTimes(1);
-        expect(component.nodeSize).toEqual(nodeSizes.sizes, 'should get sizes');
-    }));
 
     it('node count field validity', fakeAsync(() => {
         fixture.detectChanges();

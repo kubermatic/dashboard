@@ -6,7 +6,6 @@ import { ClusterEntity } from './../../shared/entity/ClusterEntity';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { digitaloceanSizesFake } from '../fake-data/node.fake';
 import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 
@@ -15,7 +14,6 @@ export class ApiMockService {
     private cluster: ClusterEntity = clusterFake;
     private clusters: ClusterEntity[] = clustersFake;
     private sshKeys: SSHKeyEntity[] = SSHKeysFake;
-    private sizes: any = digitaloceanSizesFake;
     private nodes: NodeEntityV2[] = nodesFake;
 
     constructor() {
@@ -35,10 +33,6 @@ export class ApiMockService {
 
     public deleteSSHKey(fingerprint: string): Observable<any> {
         return Observable.of(null);
-    }
-
-    public getDigitaloceanSizes(token: string): Observable<any> {
-        return Observable.of(this.sizes);
     }
 
     public createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<any> {
