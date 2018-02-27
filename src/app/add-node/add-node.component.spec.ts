@@ -58,7 +58,7 @@ describe('AddNodeComponent', () => {
             name: 'aws'
         };
         const ngRedux = fixture.debugElement.injector.get(NgRedux);
-        let spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
+        const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
             wizard: {
                 nodeForm: {
                     ami: '',
