@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { NgRedux, select } from '@angular-redux/store';
 import { CloudSpec } from 'app/shared/entity/ClusterEntity';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OpenstackCloudSpec } from 'app/shared/entity/cloud/OpenstackCloudSpec';
 import { InputValidationService } from 'app/core/services';
@@ -14,6 +14,9 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
   styleUrls: ['./openstack.component.scss']
 })
 export class OpenstackClusterComponent implements OnInit, OnDestroy {
+
+  @Input() connect: string[] = [];
+
   public osClusterForm: FormGroup;
   private sub: Subscription;
 
@@ -41,8 +44,10 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
       os_floating_ip_pool: [clusterForm.os_floating_ip_pool],
       os_cas: [clusterForm.os_cas]
     });
-
-    this.onChange();
+    
+    if (Array.isArray(this.connect) && this.connect.length) {
+      this.onChange();
+    }
   }
 
   public showRequiredFields() {

@@ -2,7 +2,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { NgRedux } from '@angular-redux/store';
 import { CloudSpec } from 'app/shared/entity/ClusterEntity';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
 
@@ -16,6 +16,9 @@ import { select } from '@angular-redux/store';
   styleUrls: ['./digitalocean.component.scss']
 })
 export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
+
+  @Input() connect: string[] = [];
+
   public digitalOceanClusterForm: FormGroup;
   private sub: Subscription;
 
@@ -38,7 +41,9 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
         Validators.pattern('[a-z0-9]+')]],
     });
 
-    this.onChange();
+    if (Array.isArray(this.connect) && this.connect.length) {
+      this.onChange();
+    }
   }
 
   public onChange() {

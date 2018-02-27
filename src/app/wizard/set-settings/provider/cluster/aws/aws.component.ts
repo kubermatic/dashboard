@@ -1,6 +1,6 @@
 import { Subscription } from 'rxjs/Subscription';
 import { NgRedux } from '@angular-redux/store';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AWSCloudSpec } from 'app/shared/entity/cloud/AWSCloudSpec';
 import { InputValidationService } from 'app/core/services';
@@ -16,6 +16,8 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./aws.component.scss']
 })
 export class AWSClusterComponent implements OnInit, OnDestroy {
+  @Input() connect: string[] = [];
+
   public awsClusterForm: FormGroup;
   private sub: Subscription;
 
@@ -42,7 +44,9 @@ export class AWSClusterComponent implements OnInit, OnDestroy {
       aws_cas: [clusterForm.aws_cas]
     });
 
-    this.onChange();
+    if (Array.isArray(this.connect) && this.connect.length) {
+      this.onChange();
+    }
   }
 
   public showRequiredFields() {

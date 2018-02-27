@@ -1,13 +1,16 @@
-<kubermatic-cluster-aws 
-    *ngIf="provider == 'aws'">
+<kubermatic-cluster-aws
+    *ngIf="provider == 'aws'"
+    [connect]="['wizard', 'awsClusterForm']">
 </kubermatic-cluster-aws>
 
-<kubermatic-cluster-digitalocean 
-    *ngIf="provider == 'digitalocean'">
+<kubermatic-cluster-digitalocean
+    *ngIf="provider == 'digitalocean'"
+    [connect]="['wizard', 'digitalOceanClusterForm']">
 </kubermatic-cluster-digitalocean>
 
-<kubermatic-cluster-openstack 
-    *ngIf="provider == 'openstack'">
+<kubermatic-cluster-openstack
+    *ngIf="provider == 'openstack'"
+    [connect]="['wizard', 'openstackClusterForm']">
 </kubermatic-cluster-openstack>
 
 <kubermatic-cluster-bringyourown
