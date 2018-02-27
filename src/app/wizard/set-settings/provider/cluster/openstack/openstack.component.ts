@@ -44,7 +44,6 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
       os_floating_ip_pool: [clusterForm.os_floating_ip_pool],
       os_cas: [clusterForm.os_cas]
     });
-    
     if (Array.isArray(this.connect) && this.connect.length) {
       this.onChange();
     }
