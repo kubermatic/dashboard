@@ -79,6 +79,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   public onChange() {
+
     WizardActions.formChanged(
       ['wizard', 'nodeForm'],
       {
@@ -91,37 +92,43 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
       this.awsNodeForm.valid
     );
 
-    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+    if (Array.isArray(this.connect) && this.connect.length) {
+      const reduxStore = this.ngRedux.getState();
+      const nodeInfo = reduxStore.wizard.nodeForm;
 
-    if (this.awsNodeForm.valid) {
-      const nodeSpec = new NodeCreateSpec(
-        new NodeCloudSpec(
-          null,
-          new AWSNodeSpecV2(
-            nodeInfo.node_size,
-            nodeInfo.root_size,
-            'gp2',
-            nodeInfo.ami,
-            null
-          ),
-          null
-        ),
-        new OperatingSystemSpec(
-          new UbuntuSpec(false),
-          null
-        ),
-        new NodeVersionInfo(
-          null,
-          new NodeContainerRuntimeInfo(null, null)
-        )
-      );
+      if (nodeInfo) {
+            if (this.awsNodeForm.valid) {
+              const nodeSpec = new NodeCreateSpec(
+                new NodeCloudSpec(
+                  null,
+                  new AWSNodeSpecV2(
+                    nodeInfo.node_size,
+                    nodeInfo.root_size,
+                    'gp2',
+                    nodeInfo.ami,
+                    null
+                  ),
+                  null
+                ),
+                new OperatingSystemSpec(
+                  new UbuntuSpec(false),
+                  null
+                ),
+                new NodeVersionInfo(
+                  null,
+                  new NodeContainerRuntimeInfo(null, null)
+                )
+              );
 
 
-      this.nodeSpecChanges.emit({
-        nodeSpec
-      });
+              this.nodeSpecChanges.emit({
+                nodeSpec
+              });
+            }
+            this.formChanges.emit(this.awsNodeForm);
+      }
     }
-    this.formChanges.emit(this.awsNodeForm);
+
   }
 
   public ngOnDestroy(): void {
