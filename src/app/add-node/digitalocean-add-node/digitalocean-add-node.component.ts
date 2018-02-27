@@ -101,11 +101,15 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
   }
 
   public ngAfterContentInit(): void {
-    this.getNodeSize(this.token);
+    if (Array.isArray(this.connect) && this.connect.length) {
+      this.getNodeSize(this.token);
+    }
   }
 
   public ngOnChanges(): void {
-    this.getNodeSize(this.token);
+    if (Array.isArray(this.connect) && this.connect.length) {
+      this.getNodeSize(this.token);
+    }
   }
 
   public onChange() {
@@ -118,35 +122,41 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
       this.doNodeForm.valid
     );
 
-    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+    if (Array.isArray(this.connect) && this.connect.length) {
+      const reduxStore = this.ngRedux.getState();
+      const nodeInfo = reduxStore.wizard.nodeForm;
 
-    const nodeSpec = new NodeCreateSpec(
-      new NodeCloudSpec(
-        new DigitaloceanNodeSpecV2(
-          nodeInfo.node_size,
-          false,
-          false,
-          false,
-          null
-        ),
-        null,
-        null
-      ),
-      new OperatingSystemSpec(
-        new UbuntuSpec(true),
-        null
-      ),
-      new NodeVersionInfo(
-        '',
-        new NodeContainerRuntimeInfo('', '')
-      )
-    );
+      if (nodeInfo) {
+        const nodeSpec = new NodeCreateSpec(
+          new NodeCloudSpec(
+            new DigitaloceanNodeSpecV2(
+              nodeInfo.node_size,
+              false,
+              false,
+              false,
+              null
+            ),
+            null,
+            null
+          ),
+          new OperatingSystemSpec(
+            new UbuntuSpec(true),
+            null
+          ),
+          new NodeVersionInfo(
+            '',
+            new NodeContainerRuntimeInfo('', '')
+          )
+        );
 
-    this.nodeSpecChanges.emit({
-      nodeSpec
-    });
+        this.nodeSpecChanges.emit({
+          nodeSpec
+        });
 
-    this.formChanges.emit(this.doNodeForm);
+        this.formChanges.emit(this.doNodeForm);
+
+      }
+    }
   }
 
   public ngOnDestroy(): void {
