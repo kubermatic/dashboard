@@ -67,7 +67,9 @@ describe('SetClusterNameComponent', () => {
         completeRedux();
         fixture.detectChanges();
 
-        expect(component.clusterName).toBe('test-name', 'should get a cluster name');
+        component.clusterName$.subscribe(
+           clusterName => expect(clusterName).toBe('test-name'),
+        );
     });
 
     it('form invalid after creating', () => {
