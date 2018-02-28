@@ -24,6 +24,14 @@ const appRoutes: Routes = [
         loadChildren: './cluster/cluster.module#ClusterModule'
       },
       {
+        path: 'admin/sshkeys',
+        loadChildren: './sshkey/sshkey.module#SshkeyModule'
+      },
+      {
+        path: 'admin/clusters',
+        loadChildren: './cluster/cluster.module#ClusterModule'
+      },
+      {
         path: '',
         loadChildren: './pages/pages.module#PagesModule'
       },
