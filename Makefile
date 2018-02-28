@@ -27,7 +27,7 @@ dist:
 	@$(CC) run build -prod
 
 build: dist
-	go build -o dashboard-v2 .
+	CGO_ENABLED=0 go build -ldflags '-w -extldflags '-static'' -o dashboard-v2 .
 
 docker-build:
 	docker build $(BUILD_FLAG) .
