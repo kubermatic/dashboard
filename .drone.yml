@@ -18,6 +18,11 @@ pipeline:
     commands:
       - make dist
 
+  test:
+    image: node:8
+    commands:
+      - make test
+
   build:
     image: golang:1.10
     commands:
