@@ -2,6 +2,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { NgRedux } from '@angular-redux/store';
 import { CloudSpec } from 'app/shared/entity/ClusterEntity';
+import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
 import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
@@ -17,12 +18,13 @@ import { select } from '@angular-redux/store';
 })
 export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
 
-  @Input() connect: string[] = [];
 
   public digitalOceanClusterForm: FormGroup;
   private sub: Subscription;
+  private region: string = '';
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
 
   constructor(private formBuilder: FormBuilder,
               public inputValidationService: InputValidationService,
@@ -33,6 +35,10 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
       isChecked && this.showRequiredFields();
     });
 
+    this.sub = this.datacenter$.subscribe(datacenter => {
+      this.region = datacenter.metadata.name;
+    });
+
     const reduxStore = this.ngRedux.getState();
     const clusterForm = reduxStore.wizard.digitalOceanClusterForm;
 
@@ -41,22 +47,17 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
         Validators.pattern('[a-z0-9]+')]],
     });
 
-    if (Array.isArray(this.connect) && this.connect.length) {
-      this.onChange();
-    }
+    this.onChange();
+
   }
 
   public onChange() {
     const doCloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls['access_token'].value);
 
-    const ruduxStore = this.ngRedux.getState();
-    const wizard = ruduxStore.wizard;
-    const region = wizard.setDatacenterForm.datacenter.metadata.name;
-
     WizardActions.setValidation('clusterForm', this.digitalOceanClusterForm.valid);
 
     WizardActions.setCloudSpec(
-      new CloudSpec(region, doCloudSpec, null, null, null, null)
+      new CloudSpec(this.region, doCloudSpec, null, null, null, null)
     );
   }
 
