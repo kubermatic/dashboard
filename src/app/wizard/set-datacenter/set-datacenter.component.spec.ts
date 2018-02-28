@@ -84,8 +84,12 @@ describe('SetDatacenterComponent', () => {
         completeRedux();
         fixture.detectChanges();
 
-        expect(component.selectedDatacenter).toEqual(datacentersFake[0], 'should get datacenter');
-        expect(component.selectedProvider).toBe('digitalocean', 'should get provider');
+        component.datacenter$.subscribe(
+           selectedDatacenter => expect(selectedDatacenter).toEqual(datacentersFake[0], 'should get datacenter'),
+        );
+        component.provider$.subscribe(
+           selectedProvider => expect(selectedProvider).toBe('digitalocean', 'should get provider'),
+        );
     });
 
     it('should get datacenter list', fakeAsync(() => {
@@ -101,10 +105,10 @@ describe('SetDatacenterComponent', () => {
 
     it('should call nextStep if datacenter is alone', fakeAsync(() => {
         const datacenters = datacentersFake;
-        const provider = 'digitalocean';
+        component.selectedProvider = 'digitalocean';
         const spyNextStep = spyOn(WizardActions, 'nextStep');
         const spyGetDC = spyOn(dcService, 'getDataCenters').and.returnValue(Observable.of([datacenters[1]]));
-        setMockNgRedux(datacenters[0], provider);
+        setMockNgRedux(datacenters[1], component.selectedProvider);
         completeRedux();
         fixture.detectChanges();
         tick();
