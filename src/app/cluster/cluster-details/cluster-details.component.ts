@@ -62,7 +62,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
-      this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
+      this.nodes = this.nodes.filter(node => node.metadata.displayName !== nodeName));
   }
 
   public ngOnDestroy(): void {

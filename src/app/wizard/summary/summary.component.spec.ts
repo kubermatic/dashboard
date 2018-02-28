@@ -24,7 +24,7 @@ const modules: any[] = [
     SharedModule
 ];
 
-function setMockNgRedux(provider: string, datacenter: DataCenterEntity, nodeModel: CreateNodeModel, clusterModel: CreateClusterModel): void {
+function setMockNgRedux(provider: string, datacenter: DataCenterEntity, nodeModel: CreateNodeModel, clusterModel: CreateClusterModel, nodeCount: number): void {
     const providerStub = MockNgRedux.getSelectorStub(['wizard', 'setProviderForm', 'provider']);
     providerStub.next(provider);
 
@@ -36,6 +36,9 @@ function setMockNgRedux(provider: string, datacenter: DataCenterEntity, nodeMode
 
     const clusterModelStub = MockNgRedux.getSelectorStub(['wizard', 'clusterModel']);
     clusterModelStub.next(clusterModel);
+
+    const nodeCountStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm', 'nodeCount']);
+    nodeCountStub.next(nodeCount);
 }
 
 function completeRedux() {
@@ -50,6 +53,9 @@ function completeRedux() {
 
     const clusterModelStub = MockNgRedux.getSelectorStub(['wizard', 'clusterModel']);
     clusterModelStub.complete();
+
+    const nodeCountStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm', 'nodeCount']);
+    nodeCountStub.complete();
 }
 
 describe('SummaryComponent', () => {
@@ -81,7 +87,7 @@ describe('SummaryComponent', () => {
     });
 
     it('should get data from redux', fakeAsync(() => {
-        setMockNgRedux('digitalocean', datacentersFake[0], nodeModelFake, clusterModelFake);
+        setMockNgRedux('digitalocean', datacentersFake[0], nodeModelFake, clusterModelFake, 3);
         completeRedux();
         fixture.detectChanges();
         tick();
@@ -90,13 +96,14 @@ describe('SummaryComponent', () => {
         expect(component.region).toEqual(datacentersFake[0], 'should get datacenter');
         expect(component.nodeModel).toEqual(nodeModelFake, 'should get node model');
         expect(component.clusterModel).toEqual(clusterModelFake, 'should get cluster model');
+        expect(component.nodeCount).toBe(3, 'should get node count');
     }));
 
     it('should call get sshkeys method', fakeAsync(() => {
         const apiService = fixture.debugElement.injector.get(ApiService);
         const spyGetSSHKeys = spyOn(apiService, 'getSSHKeys').and.returnValue(Observable.of(SSHKeysFake));
 
-        setMockNgRedux('digitalocean', datacentersFake[0], nodeModelFake, clusterModelFake);
+        setMockNgRedux('digitalocean', datacentersFake[0], nodeModelFake, clusterModelFake, 3);
         completeRedux();
 
         fixture.detectChanges();

@@ -57,7 +57,7 @@ export class NodeGroupComponent implements OnInit {
 
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
-    dialogRef.componentInstance.nodeName = node.metadata.name;
+    dialogRef.componentInstance.nodeName = node.metadata.displayName;
     dialogRef.componentInstance.nodeUID = node.metadata.uid;
     dialogRef.componentInstance.clusterName = this.clusterName;
     dialogRef.componentInstance.seedDcName = this.seedDcName;

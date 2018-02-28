@@ -54,7 +54,7 @@ export class NodeComponent {
 
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
-    dialogRef.componentInstance.nodeName = node.metadata.name;
+    dialogRef.componentInstance.nodeName = node.metadata.displayName;
     dialogRef.componentInstance.clusterName = this.clusterName;
     dialogRef.componentInstance.seedDcName = this.seedDcName;
     dialogRef.componentInstance.onNodeRemoval = this.onNodeRemoval.bind(this);

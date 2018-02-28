@@ -105,12 +105,12 @@
 
       <ng-container *ngIf="provider !== 'bringyourown'">
         <!-- General -->
-        <div fxLayout *ngIf="nodeModel.instances" class="km-card-list-content">
+        <div fxLayout *ngIf="nodeCount" class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">
             Node Count
           </div>
           <div fxFlex="80%">
-            {{ nodeModel.instances }}
+            {{ nodeCount }}
           </div> 
         </div>
 

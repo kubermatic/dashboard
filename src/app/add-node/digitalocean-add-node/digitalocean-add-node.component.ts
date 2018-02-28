@@ -66,6 +66,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
       }
     }
 
+    this.getNodeSize(this.token);
     this.onChange();
   }
 
