@@ -27,10 +27,6 @@ dist:
 	@$(CC) run build -prod
 
 build: dist
-	go get github.com/jteeuwen/go-bindata/...
-	go get github.com/elazarl/go-bindata-assetfs/...
-	go-bindata-assetfs $$(find dist -type d)
-	go get .
 	go build -o dashboard-v2 .
 
 docker-build:

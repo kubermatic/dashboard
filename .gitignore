@@ -4,6 +4,7 @@
 /dist
 /tmp
 /coverage
+/dashboard-v2
 
 # dependencies
 /node_modules
