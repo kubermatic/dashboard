@@ -41,12 +41,6 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ['Chrome, ChromeHeadless, ChromeHeadless_without_security'],
-    customLaunchers: {
-      ChromeHeadless_without_security: {
-        base: 'ChromeHeadless',
-        flags: ['--disable-web-security']
-      }
-    }
+    browsers: ['PhantomJS', 'Chrome']
   });
 };
