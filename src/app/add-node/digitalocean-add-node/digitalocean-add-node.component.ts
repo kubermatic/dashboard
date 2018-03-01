@@ -153,11 +153,9 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
         this.nodeSpecChanges.emit({
           nodeSpec
         });
-
-        this.formChanges.emit(this.doNodeForm);
-
       }
     }
+    this.formChanges.emit(this.doNodeForm);
   }
 
   public ngOnDestroy(): void {
