@@ -3,6 +3,7 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ApiService } from 'app/core/services/api/api.service';
+import { environment } from '../../../environments/environment';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material';
@@ -27,6 +28,7 @@ import {ClusterConnectComponent} from './cluster-connect/cluster-connect.compone
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
+  private restRoot: string = environment.restRoot;
   public nodes: NodeEntity[];
   public cluster: ClusterEntity;
   public seedDc: DataCenterEntity;
@@ -185,7 +187,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  public downloadKubeconfigUrl(): string {
+    const authorization_token = localStorage.getItem('token');
+    return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
+  }
 
   public isLoaded(): boolean {
     if (this.cluster && this.cluster.provider === NodeProvider.BRINGYOUROWN) {
