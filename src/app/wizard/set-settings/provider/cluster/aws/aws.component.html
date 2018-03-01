@@ -5,7 +5,7 @@
     <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
   </p>
   <mat-form-field fxFlex>
-    <input id="accessKeyId" [errorStateMatcher]="inputValidationService" matInput formControlName="accessKeyId" type="text" placeholder="Access Key ID*:">
+    <input id="accessKeyId" [errorStateMatcher]="inputValidationService" matInput formControlName="accessKeyId" type="text" placeholder="Access Key ID*:" autocomplete="off">
     <mat-error *ngIf="awsClusterForm.controls.accessKeyId.hasError('minlength') && !awsClusterForm.controls.accessKeyId.hasError('required')">
         Access Key ID must be minimum <strong>16</strong> characters long.
     </mat-error>
@@ -17,7 +17,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <input id="secretAccessKey" [errorStateMatcher]="inputValidationService" matInput formControlName="secretAccessKey" type="password" placeholder="Secret Access Key*:">
+    <input id="secretAccessKey" [errorStateMatcher]="inputValidationService" matInput formControlName="secretAccessKey" type="password" placeholder="Secret Access Key*:" autocomplete="off">
     <mat-error *ngIf="awsClusterForm.controls.secretAccessKey.hasError('required')">
       Secret Access Key is <strong>required</strong>
     </mat-error>
