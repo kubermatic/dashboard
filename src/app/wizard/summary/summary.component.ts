@@ -31,7 +31,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @select(['wizard', 'clusterModel']) clusterModel$: Observable<CreateClusterModel>;
   public clusterModel: CreateClusterModel;
 
-  @select(['wizard', 'nodeForm', 'node_count']) nodeCount$: Observable<number>
+  @select(['wizard', 'nodeForm', 'node_count']) nodeCount$: Observable<number>;
   public nodeCount: number;
 
   public sshKeysList: string[] = [];
