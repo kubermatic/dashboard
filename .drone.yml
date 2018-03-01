@@ -19,7 +19,7 @@ pipeline:
       - make dist
 
   build:
-    image: golang:1.8.3
+    image: golang:1.10
     commands:
       - CGO_ENABLED=0 make build
 
