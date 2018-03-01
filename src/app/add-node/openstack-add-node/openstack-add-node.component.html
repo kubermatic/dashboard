@@ -1,7 +1,7 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="osNodeForm" (change)="onChange()" class="openstack-form">
   <mat-form-field fxFlex>
     <input id="node_count_osNodeForm" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count"
-      min="1" max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count">
+      min="1" max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count" autocomplete="off">
     <mat-error *ngIf="osNodeForm.controls.node_count.hasError('min') && !osNodeForm.controls.node_count.hasError('required')">
       Quantity of Nodes must be minimum <strong>1</strong>
     </mat-error>
@@ -23,7 +23,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <input id="os_node_image" [errorStateMatcher]="inputValidationService" matInput formControlName="os_node_image" placeholder="Image (Ubuntu only)*">
+    <input id="os_node_image" [errorStateMatcher]="inputValidationService" matInput formControlName="os_node_image" placeholder="Image (Ubuntu only)*" autocomplete="off">
     <mat-error *ngIf="osNodeForm.controls.os_node_image.hasError('required')">
       Image is <strong>required</strong>
     </mat-error>
