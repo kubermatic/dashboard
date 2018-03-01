@@ -36,6 +36,9 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
+  @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
+  public nodeForm: any;
+
   constructor(private fb: FormBuilder,
               private api: ApiService,
               public inputValidationService: InputValidationService,
@@ -47,23 +50,23 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     });
     this.subscriptions.push(sub);
 
+    const sub2 = this.nodeForm$.subscribe(nodeForm => {
+      nodeForm && (this.nodeForm = nodeForm);
+    });
+    this.subscriptions.push(sub2);
+
     this.doNodeForm = this.fb.group({
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['', [<any>Validators.required]]
     });
 
-    if (Array.isArray(this.connect) && this.connect.length) {
-      const reduxStore = this.ngRedux.getState();
-      const nodeForm = reduxStore.wizard.nodeForm;
+    if (this.nodeForm) {
+      const formValue = {
+        node_count: this.nodeForm.node_count,
+        node_size: this.nodeForm.node_size
+      };
 
-      if (nodeForm) {
-        const formValue = {
-          node_count: nodeForm.node_count,
-          node_size: nodeForm.node_size
-        };
-
-        this.doNodeForm.setValue(formValue);
-      }
+      this.doNodeForm.setValue(formValue);
     }
 
     this.getNodeSize(this.token);
@@ -123,37 +126,32 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
       this.doNodeForm.valid
     );
 
-    if (Array.isArray(this.connect) && this.connect.length) {
-      const reduxStore = this.ngRedux.getState();
-      const nodeInfo = reduxStore.wizard.nodeForm;
-
-      if (nodeInfo) {
-        const nodeSpec = new NodeCreateSpec(
-          new NodeCloudSpec(
-            new DigitaloceanNodeSpecV2(
-              nodeInfo.node_size,
-              false,
-              false,
-              false,
-              null
-            ),
-            null,
+    if (this.nodeForm) {
+      const nodeSpec = new NodeCreateSpec(
+        new NodeCloudSpec(
+          new DigitaloceanNodeSpecV2(
+            this.nodeForm.node_size,
+            false,
+            false,
+            false,
             null
           ),
-          new OperatingSystemSpec(
-            new UbuntuSpec(true),
-            null
-          ),
-          new NodeVersionInfo(
-            '',
-            new NodeContainerRuntimeInfo('', '')
-          )
-        );
+          null,
+          null
+        ),
+        new OperatingSystemSpec(
+          new UbuntuSpec(true),
+          null
+        ),
+        new NodeVersionInfo(
+          '',
+          new NodeContainerRuntimeInfo('', '')
+        )
+      );
 
-        this.nodeSpecChanges.emit({
-          nodeSpec
-        });
-      }
+      this.nodeSpecChanges.emit({
+        nodeSpec
+      });
     }
     this.formChanges.emit(this.doNodeForm);
   }
