@@ -120,7 +120,7 @@
             Node Size
           </div>
           <div fxFlex="80%">
-            {{ nodeModel.spec.cloud.digitalocean.size }}
+            {{ getReadableSizes(nodeModel.spec.cloud.digitalocean.size) }}
           </div>
         </div>
 

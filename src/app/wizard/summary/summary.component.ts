@@ -6,6 +6,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
+import { Size } from '../../shared/entity/digitalocean/DropletSizeEntity';
 import { ApiService } from 'app/core/services/api/api.service';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -35,6 +36,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   public nodeCount: number;
 
   public sshKeysList: string[] = [];
+  public doOptimizedSizes: Size[];
 
   constructor(private api: ApiService) { }
 
@@ -57,6 +59,15 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
     const sub2 = this.getSSHKeys();
     this.subscriptions.push(sub2);
+
+    if (this.provider === 'digitalocean' && this.nodeModel.spec.cloud.digitalocean.size.match(/^(c)\-/)) {
+      if (!this.doOptimizedSizes) {
+        const sub3 = this.api.getDigitaloceanSizes(this.clusterModel.cluster.cloud.digitalocean.token).subscribe(result => {
+          this.doOptimizedSizes = result.optimized;
+        });
+        this.subscriptions.push(sub3);
+      }
+    }
   }
 
   public getSSHKeys(): Subscription {
@@ -72,6 +83,28 @@ export class SummaryComponent implements OnInit, OnDestroy {
           }
         }
       );
+  }
+
+  public getReadableSizes(doSize: string): string {
+    if (doSize.match(/^(s)\-/)) {
+      const cpu = doSize.match(/\-(\d+)\w+\-/);
+      const gb = doSize.match(/\-(\d+)\w+$/);
+      return gb[1] + ' GB RAM, ' + cpu[1] + ' CPUs';
+    } else {
+      let gb: number;
+      let cpu: number;
+      for (const i in this.doOptimizedSizes) {
+        if (this.doOptimizedSizes[i].slug === doSize) {
+          gb = this.doOptimizedSizes[i].memory / 1024;
+          cpu = this.doOptimizedSizes[i].vcpus;
+        }
+      }
+      if (cpu && gb) {
+        return gb + ' GB RAM, ' + cpu + ' CPUs';
+      } else {
+        return '';
+      }
+    }
   }
 
   public goToStep(step: number): void {
