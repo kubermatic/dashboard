@@ -1,6 +1,6 @@
 <kubermatic-add-node-form [connect]="connect" [formGroup]="awsNodeForm" (change)="onChange()" class="aws-form">
   <mat-form-field fxFlex>
-    <input id="node_count" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:">
+    <input id="node_count" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:" autocomplete="off">
     <mat-error *ngIf="awsNodeForm.controls.node_count.hasError('min') && !awsNodeForm.controls.node_count.hasError('required')">
       Quantity of Nodes must be minimum <strong>1</strong>
     </mat-error>
@@ -24,7 +24,7 @@
   </div>
 
   <mat-form-field fxFlex>
-    <input id="root_size" [errorStateMatcher]="inputValidationService" matInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:">
+    <input id="root_size" [errorStateMatcher]="inputValidationService" matInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:" autocomplete="off">
     <mat-error *ngIf="awsNodeForm.controls.root_size.hasError('min') && !awsNodeForm.controls.root_size.hasError('required')">
       Disk size must be minimum <strong>10</strong> GB
     </mat-error>
