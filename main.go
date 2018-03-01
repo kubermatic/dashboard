@@ -63,4 +63,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		http.FileServer(dir).ServeHTTP(w, r)
 		return
 	}
+
+	// If we can't find the file, we still serve index.html
+	// to show dynamic pages or a 404 page
+	http.ServeFile(w, r, "./dist/index.html")
 }
