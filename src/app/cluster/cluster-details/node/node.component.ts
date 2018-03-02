@@ -73,7 +73,6 @@ export class NodeComponent {
 
     if (!!node.status.nodeInfo.kubeletVersion) {
       if (!!node.status.errorMessage) {
-        NotificationActions.error('Error', node.status.errorMessage);
         return red;
       } else {
         return green;
