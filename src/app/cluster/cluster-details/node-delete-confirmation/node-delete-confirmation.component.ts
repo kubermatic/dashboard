@@ -14,6 +14,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
 
   @Input() nodeUID: string;
   @Input() nodeName: string;
+  @Input() nodeInternalName: string;
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() onNodeRemoval;
@@ -37,7 +38,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
 
   public deleteNode(): void {
     this.onNodeRemoval(true);
-    this.api.deleteClusterNode(this.clusterName, this.nodeName).subscribe(result => {
+    this.api.deleteClusterNode(this.clusterName, this.nodeInternalName).subscribe(result => {
       NotificationActions.success('Success', `Node removed successfully`);
       this.customEventService.publish('onNodeDelete', this.nodeName);
       this.onNodeRemoval(false);
