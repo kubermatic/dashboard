@@ -1,4 +1,4 @@
-<kubermatic-add-node-form [connect]="connect" [formGroup]="doNodeForm" (change)="onChange()">
+<kubermatic-add-node-form [formGroup]="doNodeForm" (change)="onChange()">
   <mat-form-field fxFlex>
     <input id="node_count_do" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1"
       max="20" type="number" placeholder="Quantity of Nodes*:" autocomplete="off">

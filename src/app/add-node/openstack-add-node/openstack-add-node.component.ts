@@ -22,7 +22,6 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
-  @Input() public connect: string[] = [];
 
   public osNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.Openstack;
@@ -30,37 +29,41 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
+  @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
+  public nodeForm: any;
+
   constructor(private fb: FormBuilder,
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    const sub = this.isChecked$.subscribe(isChecked => {
+    const subIsChecked = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
-    this.subscriptions.push(sub);
+    this.subscriptions.push(subIsChecked);
+
+    const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
+      nodeForm && (this.nodeForm = nodeForm);
+    });
+    this.subscriptions.push(subNodeForm);
 
     this.osNodeForm = this.fb.group({
       os_node_image: ['', [<any>Validators.required]],
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['m1.medium', [<any>Validators.required]],
     });
-    if (Array.isArray(this.connect) && this.connect.length) {
-      const reduxStore = this.ngRedux.getState();
-      const nodeForm = reduxStore.wizard.nodeForm;
 
-      if (nodeForm) {
-        const formValue = {
-          os_node_image: nodeForm.os_node_image,
-          node_count: nodeForm.node_count,
-          node_size: nodeForm.node_size
-        };
+    if (this.nodeForm) {
+      const formValue = {
+        os_node_image: this.nodeForm.os_node_image,
+        node_count: this.nodeForm.node_count,
+        node_size: this.nodeForm.node_size
+      };
 
-        this.osNodeForm.setValue(formValue);
-      }
-
-      this.onChange();
+      this.osNodeForm.setValue(formValue);
     }
+
+    this.onChange();
   }
 
   public showRequiredFields() {
@@ -84,36 +87,31 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
       this.osNodeForm.valid
     );
 
-    if (Array.isArray(this.connect) && this.connect.length) {
-      const reduxStore = this.ngRedux.getState();
-      const nodeInfo = reduxStore.wizard.nodeForm;
-
-      if (nodeInfo) {
-        const nodeSpec = new NodeCreateSpec(
-          new NodeCloudSpec(
-            null,
-            null,
-            new OpenstackNodeSpec(
-              nodeInfo.node_size,
-              nodeInfo.os_node_image
-            )
-          ),
-          new OperatingSystemSpec(
-            new UbuntuSpec(false),
-            null
-          ),
-          new NodeVersionInfo(
-            null,
-            new NodeContainerRuntimeInfo(null, null)
+    if (this.nodeForm) {
+      const nodeSpec = new NodeCreateSpec(
+        new NodeCloudSpec(
+          null,
+          null,
+          new OpenstackNodeSpec(
+            this.nodeForm.node_size,
+            this.nodeForm.os_node_image
           )
-        );
+        ),
+        new OperatingSystemSpec(
+          new UbuntuSpec(false),
+          null
+        ),
+        new NodeVersionInfo(
+          null,
+          new NodeContainerRuntimeInfo(null, null)
+        )
+      );
 
-        this.nodeSpecChanges.emit({
-          nodeSpec
-        });
+      this.nodeSpecChanges.emit({
+        nodeSpec
+      });
 
-        this.formChanges.emit(this.osNodeForm);
-      }
+      this.formChanges.emit(this.osNodeForm);
     }
   }
 

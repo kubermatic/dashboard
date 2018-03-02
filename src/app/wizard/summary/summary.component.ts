@@ -41,7 +41,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService) { }
 
   ngOnInit() {
-    const sub = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$, this.nodeCount$)
+    const subWizard = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$, this.nodeCount$)
     .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel, number]) => {
       const provider = data[0];
       const region = data[1];
@@ -55,17 +55,17 @@ export class SummaryComponent implements OnInit, OnDestroy {
       clusterModel && (this.clusterModel = clusterModel);
       nodeCount && (this.nodeCount = nodeCount);
     });
-    this.subscriptions.push(sub);
+    this.subscriptions.push(subWizard);
 
-    const sub2 = this.getSSHKeys();
-    this.subscriptions.push(sub2);
+    const subSSHKeys = this.getSSHKeys();
+    this.subscriptions.push(subSSHKeys);
 
     if (this.provider === 'digitalocean' && this.nodeModel.spec.cloud.digitalocean.size.match(/^(c)\-/)) {
       if (!this.doOptimizedSizes) {
-        const sub3 = this.api.getDigitaloceanSizes(this.clusterModel.cluster.cloud.digitalocean.token).subscribe(result => {
+        const subDoSizes = this.api.getDigitaloceanSizes(this.clusterModel.cluster.cloud.digitalocean.token).subscribe(result => {
           this.doOptimizedSizes = result.optimized;
         });
-        this.subscriptions.push(sub3);
+        this.subscriptions.push(subDoSizes);
       }
     }
   }

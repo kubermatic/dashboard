@@ -40,8 +40,8 @@ export class NodeComponent {
 
   constructor(public dialog: MatDialog) {}
 
-  public managedByProvider (node: NodeEntityV2 ): boolean {
-    if (!!node.status.nodeInfo.kubeletVersion) {
+  public managedByProvider (node: NodeEntityV2): boolean {
+    if (!!node.status.machineName) {
       return true;
     } else {
       return false;
@@ -71,8 +71,8 @@ export class NodeComponent {
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
     if (!!node.status.nodeInfo.kubeletVersion) {
-      if (!!node.status.ErrorMessage) {
-        NotificationActions.error('Error', node.status.ErrorMessage);
+      if (!!node.status.errorMessage) {
+        NotificationActions.error('Error', node.status.errorMessage);
         return red;
       } else {
         return green;

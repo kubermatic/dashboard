@@ -85,7 +85,7 @@ export class WizardComponent implements OnInit, OnDestroy {
             new OpenstackNodeSpec('m1.medium', '')
           ),
           new OperatingSystemSpec(
-            new UbuntuSpec(true),
+            new UbuntuSpec(false),
             null
           ),
           new NodeVersionInfo(

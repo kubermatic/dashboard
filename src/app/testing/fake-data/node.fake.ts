@@ -199,7 +199,7 @@ export const nodesFake: NodeEntityV2[] = [
       }
     },
     status : {
-      machineName : 'machine-kubermatic-tbbfvttvs-v5hmk',
+      machineName : null,
       capacity : {
         cpu : '1',
         memory : '2045940Ki'

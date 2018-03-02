@@ -37,7 +37,7 @@ function setMockNgRedux(provider: string, datacenter: DataCenterEntity, nodeMode
     const clusterModelStub = MockNgRedux.getSelectorStub(['wizard', 'clusterModel']);
     clusterModelStub.next(clusterModel);
 
-    const nodeCountStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm', 'nodeCount']);
+    const nodeCountStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm', 'node_count']);
     nodeCountStub.next(nodeCount);
 }
 
@@ -54,7 +54,7 @@ function completeRedux() {
     const clusterModelStub = MockNgRedux.getSelectorStub(['wizard', 'clusterModel']);
     clusterModelStub.complete();
 
-    const nodeCountStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm', 'nodeCount']);
+    const nodeCountStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm', 'node_count']);
     nodeCountStub.complete();
 }
 

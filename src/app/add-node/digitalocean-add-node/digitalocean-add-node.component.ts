@@ -45,15 +45,15 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    const sub = this.isChecked$.subscribe(isChecked => {
+    const subIsChecked = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
-    this.subscriptions.push(sub);
+    this.subscriptions.push(subIsChecked);
 
-    const sub2 = this.nodeForm$.subscribe(nodeForm => {
+    const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
       nodeForm && (this.nodeForm = nodeForm);
     });
-    this.subscriptions.push(sub2);
+    this.subscriptions.push(subNodeForm);
 
     this.doNodeForm = this.fb.group({
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
@@ -69,7 +69,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
       this.doNodeForm.setValue(formValue);
     }
 
-    this.getNodeSize(this.token);
     this.onChange();
   }
 
@@ -105,15 +104,11 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
   }
 
   public ngAfterContentInit(): void {
-    if (Array.isArray(this.connect) && this.connect.length) {
-      this.getNodeSize(this.token);
-    }
+    this.getNodeSize(this.token);
   }
 
   public ngOnChanges(): void {
-    if (Array.isArray(this.connect) && this.connect.length) {
-      this.getNodeSize(this.token);
-    }
+    this.getNodeSize(this.token);
   }
 
   public onChange() {
@@ -140,7 +135,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
           null
         ),
         new OperatingSystemSpec(
-          new UbuntuSpec(true),
+          new UbuntuSpec(false),
           null
         ),
         new NodeVersionInfo(
