@@ -39,10 +39,14 @@ export class CreateNodesService {
             this.api.getCluster(cluster.metadata.name)
                 .subscribe(curCluster => {
                     if (curCluster.status.phase === 'Running') {
+                        let successCounter: number = 0;
                         for (let i = 0; i < nodeCount; i ++) {
                             this.api.createClusterNode(curCluster, createNodeModel).subscribe(result => {
                                 this.preventCreatingInitialClusterNodes();
-                                NotificationActions.success('Success', `Creating Nodes`);
+                                successCounter++;
+                                if (successCounter === nodeCount) {
+                                    NotificationActions.success('Success', `Creating Nodes`);
+                                }
                             });
                         }
                     }

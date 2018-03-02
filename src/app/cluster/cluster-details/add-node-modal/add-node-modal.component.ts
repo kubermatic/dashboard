@@ -31,10 +31,14 @@ export class AddNodeModalComponent implements OnInit {
   }
 
   public addNode(): void {
+    let successCounter: number = 0;
     for (let i = 0; i < this.form.value.node_count; i ++) {
       this.api.createClusterNode(this.data.cluster, this.nodeModel).subscribe(node => {
+        successCounter++;
+        if (successCounter === this.form.value.node_count) {
           NotificationActions.success('Success', `Node(s) successfully created`);
-        });
+        }
+      });
     }
   }
 
