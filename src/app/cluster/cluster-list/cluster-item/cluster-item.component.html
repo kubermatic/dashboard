@@ -1,7 +1,7 @@
 <div class="km-card-list-content" [ngClass]="{odd: index % 2 !== 0, 'statusRunning': statusRunning(), 'statusWaiting': statusWaiting(), 'statusFailed': statusFailed()}">
   <div fxLayout [routerLink]="['/clusters/', cluster.metadata.name]" class="km-card-list-content-item">
     <div fxFlex="3%" fxFlex.sm="3%" fxHide.xs>{{index + 1}}</div>
-    <div fxFlex="38%" fxFlex.xs="40%">
+    <div fxFlex="42%" fxFlex.xs="40%">
       <span>
         <img fxHide.xs src="/assets/images/clouds/loodsecluster.png" class="icon-seed-cluster" alt="Loodse Seed Cluster Icon" height="30"
         />
@@ -9,7 +9,7 @@
         <p fxHide.lt-md>{{this.cluster.spec.humanReadableName}}</p>
       </span>
     </div>
-    <div fxFlex="16%" fxFlex.sm="20.66%" fxFlex.xs="25%">
+    <div fxFlex="25%" fxFlex.sm="20.66%" fxFlex.xs="25%">
       <ng-container [ngSwitch]="!!cluster.spec.cloud">
         <span *ngSwitchCase="true">
           <img [src]="getClusterImagePath()" class="icon-seed-cluster cluster-image" alt="Cluster Icon" height="30"/>
@@ -19,12 +19,12 @@
         </p>
       </ng-container>
     </div>
-    <div fxFlex="32%" fxHide.sm fxHide.xs>
+    <div fxFlex="25%" fxHide.sm fxHide.xs>
       <ng-container *ngIf="nodeDC">
         {{this.nodeDC.spec.country}} ({{this.nodeDC.spec.location}})
       </ng-container>
     </div>
-    <div fxFlex="16%" fxFlex.sm="20.66%" fxHide.xs>{{cluster.status.phase}}</div>
+    <div fxFlex="15%" fxFlex.sm="20.66%" fxHide.xs>{{cluster.status.phase}}</div>
     <!--div fxFlex="13%" fxFlex.sm="20.66%" fxFlex.xs="35%">
         <kubermatic-cluster-health-status [health]="cluster.status.health"></kubermatic-cluster-health-status>
       </div-->
