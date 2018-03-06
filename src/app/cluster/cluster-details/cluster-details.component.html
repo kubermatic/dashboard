@@ -10,12 +10,12 @@
           Add Node
       </button>
       <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
-        Cluster connect
+        Connect
       </button>
       <button class="download-kubeconfig-btn" mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
         <a [attr.href]="cluster.status.phase != 'Running' ? null : downloadKubeconfigUrl()" target="_blank" [ngClass]="{'disabled': cluster.status.phase != 'Running'}">
-          <span class="button" [ngClass]="{'download': cluster.status.phase == 'Running', 'downloadDisabled': cluster.status.phase != 'Running'}"></span>  
-          Download config  
+          <span class="button" [ngClass]="{'download': cluster.status.phase == 'Running', 'downloadDisabled': cluster.status.phase != 'Running'}"></span>
+          Download config
         </a>
       </button>
       <button mat-button (click)="deleteClusterDialog()" mat-raised-button >
