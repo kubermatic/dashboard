@@ -44,7 +44,6 @@ export const doClusterModelFake: CreateClusterModel = {
         },
         humanReadableName: 'wizardly-pike',
         masterVersion: '',
-        seedDatacenterName: ''
     },
     sshKeys: [
         'key1'

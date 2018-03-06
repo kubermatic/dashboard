@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ApiService } from '../../core/services/api/api.service';
-import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,7 +17,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public timer: any = Observable.timer(0, 10000);
   public sub: Subscription;
   public loading: boolean = true;
-
   public sortedData: ClusterEntity[] = [];
 
   constructor(public api: ApiService) {}
@@ -68,7 +66,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       switch (sort.active) {
         case 'name': return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
         case 'provider': return this.getProvider(a, b, isAsc);
-        case 'seed-region': return this.compare(a.spec.seedDatacenterName, b.spec.seedDatacenterName, isAsc);
         case 'region': return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
         case 'status': return this.compare(a.status.phase, b.status.phase, isAsc);
         default: return 0;

@@ -14,7 +14,6 @@ export const clusterModelFake: CreateClusterModel = {
         },
         humanReadableName: 'adoring-franklin',
         masterVersion: '',
-        seedDatacenterName: ''
     },
     sshKeys: [
         'key-ssh1'
@@ -55,7 +54,6 @@ export const clusterFake = {
         humanReadableName: 'nifty-haibt',
         masterVersion: '1.8.5',
         workerName: '',
-        seedDatacenterName: 'europe-west3-c'
     },
     address: {
         url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',

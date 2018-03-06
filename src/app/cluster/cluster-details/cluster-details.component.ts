@@ -1,25 +1,23 @@
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
-import { NotificationActions } from 'app/redux/actions/notification.actions';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { ApiService } from 'app/core/services/api/api.service';
-import { environment } from '../../../environments/environment';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { NodeEntityV2 } from 'app/shared/entity/NodeEntity';
-import { ClusterEntity } from 'app/shared/entity/ClusterEntity';
-import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
-import { NodeProvider } from 'app/shared/model/NodeProviderConstants';
-import { AddNodeModalData } from 'app/shared/model/add-node-modal-data';
 import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
-import { CustomEventService, CreateNodesService, DatacenterService } from 'app/core/services';
 import 'rxjs/add/operator/retry';
-
-import { SSHKeyEntity } from 'app/shared/entity/SSHKeyEntity';
-import { UpgradeClusterComponentData } from 'app/shared/model/UpgradeClusterDialogData';
-import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
+import { environment } from '../../../environments/environment';
+import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
+import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { ApiService, CreateNodesService, CustomEventService, DatacenterService } from '../../core/services';
+import { NodeProvider } from '../../shared/model/NodeProviderConstants';
+import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
+import { UpgradeClusterComponentData } from '../../shared/model/UpgradeClusterDialogData';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -32,7 +30,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public nodes: NodeEntityV2[];
   private restRoot: string = environment.restRoot;
   public cluster: ClusterEntity;
-  public seedDc: DataCenterEntity;
   public nodeDc: DataCenterEntity;
   public timer: any = Observable.timer(0, 10000);
   public sub: Subscription;
@@ -41,21 +38,21 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public clusterName: string;
   public loading: boolean = true;
   public sshKeys: SSHKeyEntity[] = [];
-  private upgradesList: string[] = [];
-  private gotUpgradesList: boolean;
   public groupedNodes: object[];
   public stateOfTheAccordion: object[];
   public moreSshKeys: boolean = false;
 
-  constructor(
-    private customEventService: CustomEventService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private api: ApiService,
-    public dialog: MatDialog,
-    private createNodesService: CreateNodesService,
-    private dcService: DatacenterService
-  ) {}
+  private upgradesList: string[] = [];
+  private gotUpgradesList: boolean;
+
+  constructor(private customEventService: CustomEventService,
+              private route: ActivatedRoute,
+              private router: Router,
+              private api: ApiService,
+              public dialog: MatDialog,
+              private createNodesService: CreateNodesService,
+              private dcService: DatacenterService) {
+  }
 
   public ngOnInit(): void {
     this.clusterName = this.route.snapshot.paramMap.get('clusterName');
@@ -127,10 +124,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             res.status,
           );
 
-          if (!this.seedDc) {
-            this.loadDataCenter(this.cluster.spec.seedDatacenterName, 'seedDc');
-          }
-
           if (!this.nodeDc && this.cluster.provider !== NodeProvider.BRINGYOUROWN) {
             this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
           }
@@ -200,9 +193,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public isLoaded(): boolean {
     if (this.cluster && this.cluster.provider === NodeProvider.BRINGYOUROWN) {
-      return !!this.seedDc;
+      return true;
     } else if (this.cluster) {
-      return !!this.seedDc && !!this.nodeDc;
+      return !!this.nodeDc;
     }
   }
 }
