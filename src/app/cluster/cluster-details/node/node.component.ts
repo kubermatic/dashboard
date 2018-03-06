@@ -17,7 +17,6 @@ export class NodeComponent {
   @Input() nodeProvider: string;
   @Input() index: number;
   @Input() clusterRunning: boolean;
-  public nodeRemoval: boolean = false;
   // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
 
   public config: MatDialogConfig = {
@@ -47,16 +46,11 @@ export class NodeComponent {
     }
   }
 
-  public onNodeRemoval(nodeRemoval: boolean): void {
-    this.nodeRemoval = nodeRemoval;
-  }
-
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.clusterName = this.clusterName;
     dialogRef.componentInstance.seedDcName = this.seedDcName;
-    dialogRef.componentInstance.onNodeRemoval = this.onNodeRemoval.bind(this);
 
     dialogRef.afterClosed().subscribe(result => {
       // this.dialogRef = null;
