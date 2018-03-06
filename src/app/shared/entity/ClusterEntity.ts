@@ -80,16 +80,13 @@ export class ClusterSpec {
   cloud: CloudSpec;
   humanReadableName: string;
   masterVersion: string;
-  seedDatacenterName: string;
 
   constructor(cloud: CloudSpec,
               humanReadableName: string,
-              masterVersion: string,
-              seedDatacenterName: string) {
+              masterVersion: string) {
     this.cloud = cloud;
     this.humanReadableName = humanReadableName;
     this.masterVersion = masterVersion;
-    this.seedDatacenterName = seedDatacenterName;
   }
 }
 
@@ -125,7 +122,6 @@ export class Status {
   kubeletCert: Certificate;
   apiserverSshKey: SSHKeyPair;
   serviceAccountKey: string;
-  seed: string;
   namespaceName: string;
 }
 
