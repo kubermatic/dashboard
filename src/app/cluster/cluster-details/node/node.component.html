@@ -41,20 +41,20 @@
             </div>
             <div fxFlex="17%">
               <span *ngIf="!!node.status.addresses && !!getAddresses(node).InternalIP">
-                Int.IP: 
+                Int.IP:
                 <span class="km-copy" [cbContent]="getAddresses(node).InternalIP" ngxClipboard>{{getAddresses(node).InternalIP}}
                   <small>Copy</small>
                 </span>
               </span>
               <span *ngIf="!!node.status.addresses && !!getAddresses(node).ExternalIP">
-                Ext.IP: 
+                Ext.IP:
                 <span class="km-copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard>{{getAddresses(node).ExternalIP}}
                   <small>Copy</small>
                 </span>
               </span>
             </div>
             <div fxFlex="10%" class="health-state">
-                <i [matTooltip]="node.status.nodeInfo.kubeletVersion" [ngClass]="getNodeHealth(node)"></i>
+                <i [matTooltip]="node.status.nodeInfo.kubeletVersion ? 'Running' : node.status.errorReason " [ngClass]="getNodeHealth(node)"></i>
             </div>
             <div fxFlex="10%" class="km-btn-remove-node-wrapper" *ngIf="managedByProvider(node)">
               <button *ngIf="!nodeRemoval" mat-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
@@ -63,8 +63,8 @@
               <mat-spinner [diameter]="30" class="km-spinner" color="accent" *ngIf="nodeRemoval"></mat-spinner>
             </div>
           </div>
-          <div fxLayout *ngIf="conditionsMessage && node.status.nodeInfo.kubeletVersion" class="km-conditionsMessage">
-            <p color="accent">{{conditionsMessage}}</p>
+          <div fxLayout *ngIf="node.status.errorMessage && node.status.errorMessage.length" class="km-conditionsMessage">
+            <p color="accent">{{node.status.errorMessage}}</p>
           </div>
         </div>
       </ng-container>
