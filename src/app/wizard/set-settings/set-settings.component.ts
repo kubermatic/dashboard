@@ -3,8 +3,8 @@ import { ClusterSpec, CloudSpec } from '../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { select, NgRedux } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
-import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { Subscription } from 'rxjs/Subscription';
+import { WizardActions } from '../../redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-set-settings',
@@ -60,7 +60,6 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
     this.clusterSpec = new ClusterSpec(
       this.cloudSpec,
       this.clusterName,
-      '',
       ''
     );
 

@@ -46,12 +46,6 @@
       </div>
     </mat-card-content>
     <mat-card-content class="km-card-list-content" fxLayout>
-      <div fxFlex="20%">
-        <strong>Seed Region:</strong>
-      </div>
-      <div fxFlex="25%">{{seedDc.spec.country}} / {{seedDc.spec.location}}</div>
-      <div fxFlex="20%"></div>
-      <div fxFlex="35%"></div>
     </mat-card-content>
 
   </mat-card>
@@ -117,7 +111,7 @@
     </mat-card-content>
   </mat-card>
 
-  <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="cluster.provider" [clusterRunning]="cluster.isRunning()"></kubermatic-node>
+  <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [nodeProvider]="cluster.provider" [clusterRunning]="cluster.isRunning()"></kubermatic-node>
 
   <mat-card [fxShow]="cluster.provider == 'bringyourown'">
     <mat-card-content>

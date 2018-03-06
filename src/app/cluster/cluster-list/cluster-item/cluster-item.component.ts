@@ -14,7 +14,6 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() index: number;
   @Input() health: Health;
   public nodeDC: DataCenterEntity;
-  public seedDC: DataCenterEntity;
 
   constructor(private dcService: DatacenterService) {}
 
@@ -25,10 +24,6 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
         }
       );
     }
-    this.dcService.getDataCenter(this.cluster.spec.seedDatacenterName).subscribe(result => {
-      this.seedDC = result;
-    });
-
   }
 
   public getClusterImagePath(): string {
