@@ -102,7 +102,7 @@ export const nodesFake: NodeEntityV2[] = [
     metadata : {
       name : 'machine-kubermatic-tbbfvttvs-v5hmk',
       displayName: 'kubermatic-tbbfvttvs-v5hmk',
-      deletionTimestamp : new Date(),
+      deletionTimestamp : undefined,
       annotations : new Map(),
       labels : new Map()
     },
@@ -168,7 +168,7 @@ export const nodesFake: NodeEntityV2[] = [
     metadata : {
       name : 'machine-kubermatic-tbbfvttvs-v5hmk',
       displayName: 'kubermatic-tbbfvttvs-v5hmk',
-      deletionTimestamp : new Date(),
+      deletionTimestamp : undefined,
       annotations : new Map(),
       labels : new Map()
     },

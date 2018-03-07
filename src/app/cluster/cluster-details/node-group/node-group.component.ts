@@ -51,16 +51,11 @@ export class NodeGroupComponent implements OnInit {
   }
 
 
-  onNodeRemoval(nodeRemoval: boolean) {
-    this.nodeRemoval = nodeRemoval;
-  }
-
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.clusterName = this.clusterName;
     dialogRef.componentInstance.seedDcName = this.seedDcName;
-    dialogRef.componentInstance.onNodeRemoval = this.onNodeRemoval.bind(this);
 
     dialogRef.afterClosed().subscribe(result => {
       // this.dialogRef = null;

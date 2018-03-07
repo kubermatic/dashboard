@@ -51,7 +51,7 @@ describe('NodeComponent', () => {
         const deRemoveButtons = fixture.debugElement.queryAll(By.css('.km-btn-remove-node-wrapper'));
 
         expect(deRemoveButtons[0]).not.toBeNull();
-        expect(deRemoveButtons.length).toBe(1, 'should display only one remove button');
+        expect(deRemoveButtons.length).toBe(2, 'should display only one remove button');
     });
 
     it('should return correct css-classes', () => {

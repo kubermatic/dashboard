@@ -64,7 +64,6 @@ describe('NodeDeleteConfirmationComponent', () => {
         component.clusterName = 'cluster-name';
         component.node = nodeFake;
         fixture.detectChanges();
-        component.onNodeRemoval = function() {};
         const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(Observable.of(null));
 
         component.deleteNode();
