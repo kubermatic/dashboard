@@ -1,0 +1,37 @@
+.km-expansion-panel-chart {
+  display: block;
+  margin-top: 15px;
+  min-height: 220px;
+   > div {
+     background-color: #fff;
+   }
+}
+
+
+/deep/ .google-visualization-table {
+  background-color: #fff;
+  width: 100% -40px;
+  min-height: 200px;
+  margin: 0 20px;
+}
+
+/deep/ .google-visualization-table-table td {
+  border: 0 !important;
+  line-height: 1.75em;
+}
+
+/deep/ .google-visualization-table-table th {
+  width: 20%;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 16px;
+  background-color: #fff;
+  line-height: 35px;
+  border-right: 0 !important;
+  border-left: 0 !important;
+  text-align: left;
+}
+
+/deep/ .google-visualization-table-tr-odd {
+  background-color: #F7FAFF !important;
+}

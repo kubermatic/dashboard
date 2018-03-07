@@ -1,3 +1,4 @@
+
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 import {Injectable} from '@angular/core';
 import 'rxjs/add/operator/map';
@@ -14,6 +15,10 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {DropletSizeResponseEntity} from 'app/shared/entity/digitalocean/DropletSizeEntity';
 import {CreateClusterModel} from 'app/shared/model/CreateClusterModel';
 import 'rxjs/add/operator/catch';
+import {ClusterResourceSummaryChartEntity} from '../../../shared/entity/chart/ClusterResourceSummaryChartEntity';
+import {ClusterDiskChartEntity} from '../../../shared/entity/chart/ClusterDiskChartEntity';
+import {ClusterMemoryChartEntity} from '../../../shared/entity/chart/ClusterMemoryChartEntity';
+import {ClusterCpuChartEntity} from '../../../shared/entity/chart/ClusterCpuChartEntity';
 
 @Injectable()
 export class ApiService {
@@ -112,5 +117,29 @@ export class ApiService {
     const url = `${this.restRoot}/cluster/${cluster}/upgrade`;
     this.http.put(url, body, {headers: this.headers})
      .subscribe(result => NotificationActions.success('Success', `Cluster ${cluster} was upgraded`));
+  }
+
+  getClusterCpuChart(cluster: string): Observable<ClusterCpuChartEntity[]> {
+    const url = `${this.restRoot}/cluster/${cluster}/chart/cpu`;
+
+    return this.http.get<ClusterCpuChartEntity[]>(url, {headers: this.headers});
+  }
+
+  getClusterMemoryChart(cluster: string): Observable<ClusterMemoryChartEntity[]> {
+    const url = `${this.restRoot}/cluster/${cluster}/chart/memory`;
+
+    return this.http.get<ClusterMemoryChartEntity[]>(url, {headers: this.headers});
+  }
+
+  getClusterDiskChart(cluster: string): Observable<ClusterDiskChartEntity[]> {
+    const url = `${this.restRoot}/cluster/${cluster}/chart/disk`;
+
+    return this.http.get<ClusterDiskChartEntity[]>(url, {headers: this.headers});
+  }
+
+  getClusterresourceSummaryChart(cluster: string): Observable<ClusterResourceSummaryChartEntity[]> {
+    const url = `${this.restRoot}/cluster/${cluster}/chart/resource`;
+
+    return this.http.get<ClusterResourceSummaryChartEntity[]>(url, {headers: this.headers});
   }
 }
