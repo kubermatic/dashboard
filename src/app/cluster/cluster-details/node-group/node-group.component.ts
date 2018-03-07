@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import { NodeEntityV2 } from '../../../shared/entity/NodeEntity';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 
@@ -10,13 +10,13 @@ import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/nod
 })
 
 export class NodeGroupComponent implements OnInit {
-  @Input() nodes: NodeEntity[];
+  @Input() nodes: NodeEntityV2[];
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
   public conditionsMessage: string = '';
   public nodeRemoval: boolean = false;
-  public node: NodeEntity;
+  public node: NodeEntityV2;
   // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
   public stateOfTheAccordion: any = [];
 
@@ -51,17 +51,11 @@ export class NodeGroupComponent implements OnInit {
   }
 
 
-  onNodeRemoval(nodeRemoval: boolean) {
-    this.nodeRemoval = nodeRemoval;
-  }
-
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
-    dialogRef.componentInstance.nodeName = node.metadata.name;
-    dialogRef.componentInstance.nodeUID = node.metadata.uid;
+    dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.clusterName = this.clusterName;
     dialogRef.componentInstance.seedDcName = this.seedDcName;
-    dialogRef.componentInstance.onNodeRemoval = this.onNodeRemoval.bind(this);
 
     dialogRef.afterClosed().subscribe(result => {
       // this.dialogRef = null;
@@ -128,7 +122,7 @@ export class NodeGroupComponent implements OnInit {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  public getNodeState(node: NodeEntity): boolean {
+  public getNodeState(node: NodeEntityV2): boolean {
     return node.metadata.annotations['node.k8s.io/state'] === 'running' ? true : false;
   }
 }

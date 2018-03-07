@@ -89,16 +89,18 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
         }
       });
 
-      if (this.datacenters[this.selectedProvider].length === 1) {
-        WizardActions.formChanged(
-          ['wizard', 'setDatacenterForm'],
-          { datacenter: this.datacenters[this.selectedProvider][0] },
-          this.setDatacenterForm.valid
-        );
+      if (!!this.selectedProvider) {
+        if (this.datacenters[this.selectedProvider].length === 1) {
+          WizardActions.formChanged(
+            ['wizard', 'setDatacenterForm'],
+            { datacenter: this.datacenters[this.selectedProvider][0] },
+            this.setDatacenterForm.valid
+          );
 
-        setTimeout(() => {
-          WizardActions.nextStep();
-        }, 0);
+          setTimeout(() => {
+            WizardActions.nextStep();
+          }, 0);
+        }
       }
     });
   }

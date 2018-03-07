@@ -1,10 +1,11 @@
 import { Subscription } from 'rxjs/Subscription';
 import { NgRedux } from '@angular-redux/store';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AWSCloudSpec } from 'app/shared/entity/cloud/AWSCloudSpec';
 import { InputValidationService } from 'app/core/services';
 import { CloudSpec } from 'app/shared/entity/ClusterEntity';
+import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { ErrorStateMatcher } from '@angular/material';
 import { select } from '@angular-redux/store';
@@ -16,10 +17,13 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./aws.component.scss']
 })
 export class AWSClusterComponent implements OnInit, OnDestroy {
+
   public awsClusterForm: FormGroup;
   private sub: Subscription;
+  private region: string = '';
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
 
   constructor(private formBuilder: FormBuilder,
     public inputValidationService: InputValidationService,
@@ -30,8 +34,13 @@ export class AWSClusterComponent implements OnInit, OnDestroy {
       isChecked && this.showRequiredFields();
     });
 
+    this.sub = this.datacenter$.subscribe(datacenter => {
+      this.region = datacenter.metadata.name;
+    });
+
     const reduxStore = this.ngRedux.getState();
     const clusterForm = reduxStore.wizard.awsClusterForm;
+
 
     this.awsClusterForm = this.formBuilder.group({
       accessKeyId: [clusterForm.accessKeyId, [<any>Validators.required, <any>Validators.minLength(16), <any>Validators.maxLength(32)]],
@@ -65,13 +74,10 @@ export class AWSClusterComponent implements OnInit, OnDestroy {
       '',
     );
 
-    const ruduxStore = this.ngRedux.getState();
-    const wizard = ruduxStore.wizard;
-    const region = wizard.setDatacenterForm.datacenter.metadata.name;
     WizardActions.setValidation('clusterForm', this.awsClusterForm.valid);
 
     WizardActions.setCloudSpec(
-      new CloudSpec(region, null, awsCloudSpec, null, null, null)
+      new CloudSpec(this.region, null, awsCloudSpec, null, null, null)
     );
   }
 

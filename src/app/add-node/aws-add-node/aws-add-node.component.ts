@@ -3,13 +3,13 @@ import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
+import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, ContainerLinuxSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
-import { AWSNodeSpec } from 'app/shared/entity/node/AWSNodeSpec';
+import { AWSNodeSpecV2 } from 'app/shared/entity/node/AWSNodeSpec';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import {WizardActions} from '../../redux/actions/wizard.actions';
+import { WizardActions } from '../../redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -18,8 +18,7 @@ import {WizardActions} from '../../redux/actions/wizard.actions';
 })
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
-  @Input() public connect: string[] = [];
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public awsNodeForm: FormGroup;
@@ -29,16 +28,23 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
+  @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
+  public nodeForm: any;
 
   constructor(private formBuilder: FormBuilder,
               private ngRedux: NgRedux<any>,
               public inputValidationService: InputValidationService) { }
 
   ngOnInit() {
-    const sub = this.isChecked$.subscribe(isChecked => {
+    const subIsChecked = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
-    this.subscriptions.push(sub);
+    this.subscriptions.push(subIsChecked);
+
+    const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
+      nodeForm && (this.nodeForm = nodeForm);
+    });
+    this.subscriptions.push(subNodeForm);
 
     this.awsNodeForm = this.formBuilder.group({
       node_count: [3, [<any>Validators.required, Validators.min(1)]],
@@ -48,21 +54,16 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
       aws_nas: [false]
     });
 
-    if (Array.isArray(this.connect) && this.connect.length) {
-      const reduxStore = this.ngRedux.getState();
-      const nodeForm = reduxStore.wizard.nodeForm;
+    if (this.nodeForm) {
+      const formValue = {
+        node_count: this.nodeForm.node_count,
+        node_size: this.nodeForm.node_size,
+        root_size: this.nodeForm.root_size,
+        ami: this.nodeForm.ami,
+        aws_nas: this.nodeForm.aws_nas
+      };
 
-      if (nodeForm) {
-        const formValue = {
-          node_count: nodeForm.node_count,
-          node_size: nodeForm.node_size,
-          root_size: nodeForm.root_size,
-          ami: nodeForm.ami,
-          aws_nas: nodeForm.aws_nas
-        };
-
-        this.awsNodeForm.setValue(formValue);
-      }
+      this.awsNodeForm.setValue(formValue);
     }
 
     this.onChange();
@@ -79,6 +80,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   public onChange() {
+
     WizardActions.formChanged(
       ['wizard', 'nodeForm'],
       {
@@ -91,31 +93,38 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
       this.awsNodeForm.valid
     );
 
-    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+    if (this.nodeForm) {
+      if (this.awsNodeForm.valid) {
+        const nodeSpec = new NodeCreateSpec(
+          new NodeCloudSpec(
+            null,
+            new AWSNodeSpecV2(
+              this.nodeForm.node_size,
+              this.nodeForm.root_size,
+              'gp2',
+              this.nodeForm.ami,
+              null
+            ),
+            null
+          ),
+          new OperatingSystemSpec(
+            new UbuntuSpec(false),
+            null
+          ),
+          new NodeVersionInfo(
+            null,
+            new NodeContainerRuntimeInfo(null, null)
+          )
+        );
 
-    if (this.awsNodeForm.valid) {
-      const nodeSpec = new NodeCreateSpec(
-        null,
-        new AWSNodeSpec(
-          nodeInfo.node_size,
-          nodeInfo.root_size,
-          // Can we implement at some point
-          // this.awsForm.controls["volume_type"].value,
-          'gp2',
-          nodeInfo.ami
-        ),
-        null,
-        null
-      );
-
-
-      this.nodeSpecChanges.emit({
-        nodeSpec,
-        count: nodeInfo.node_count
-      });
+        this.nodeSpecChanges.emit({
+          nodeSpec
+        });
+      }
+      this.formChanges.emit(this.awsNodeForm);
     }
-    this.formChanges.emit(this.awsNodeForm);
   }
+
 
   public ngOnDestroy(): void {
     this.subscriptions.forEach(sub => {

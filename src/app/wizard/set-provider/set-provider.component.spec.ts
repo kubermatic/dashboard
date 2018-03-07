@@ -70,7 +70,9 @@ describe('SetProviderComponent', () => {
 
         fixture.detectChanges();
 
-        expect(component.selectedProvider).toBe('digitalocean', 'should get provider');
+        component.provider$.subscribe(
+           selectedProvider => expect(selectedProvider).toBe('digitalocean'),
+        );
     });
 
     it('should get datacenter list', fakeAsync(() => {

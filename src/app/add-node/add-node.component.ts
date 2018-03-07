@@ -22,9 +22,8 @@ export class AddNodeComponent implements OnInit {
   ngOnInit() {
   }
 
-  public changeNodeModel(data: {nodeSpec: NodeCreateSpec, count: number}): void {
+  public changeNodeModel(data: {nodeSpec: NodeCreateSpec}): void {
     const nodeModel = new CreateNodeModel(
-      data.count,
       data.nodeSpec
     );
 
