@@ -9,6 +9,9 @@
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
           Add Node
       </button>
+      <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
+        Connect
+      </button>
       <button class="download-kubeconfig-btn" mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
         <a [attr.href]="cluster.status.phase != 'Running' ? null : downloadKubeconfigUrl()" target="_blank" [ngClass]="{'disabled': cluster.status.phase != 'Running'}">
           <span class="button" [ngClass]="{'download': cluster.status.phase == 'Running', 'downloadDisabled': cluster.status.phase != 'Running'}"></span>
@@ -43,12 +46,6 @@
       </div>
     </mat-card-content>
     <mat-card-content class="km-card-list-content" fxLayout>
-      <div fxFlex="20%">
-        <strong>Seed Region:</strong>
-      </div>
-      <div fxFlex="25%">{{seedDc.spec.country}} / {{seedDc.spec.location}}</div>
-      <div fxFlex="20%"></div>
-      <div fxFlex="35%"></div>
     </mat-card-content>
 
   </mat-card>
@@ -114,7 +111,7 @@
     </mat-card-content>
   </mat-card>
 
-  <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [seedDcName]="cluster.seed" [nodeProvider]="cluster.provider" [clusterRunning]="cluster.isRunning()"></kubermatic-node>
+  <kubermatic-node [nodes]="nodes" [clusterName]="cluster.metadata.name" [nodeProvider]="cluster.provider" [clusterRunning]="cluster.isRunning()"></kubermatic-node>
 
   <mat-card [fxShow]="cluster.provider == 'bringyourown'">
     <mat-card-content>

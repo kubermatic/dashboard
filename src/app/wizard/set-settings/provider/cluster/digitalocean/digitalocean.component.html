@@ -4,8 +4,8 @@
     You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
   </p>
   <mat-form-field fxFlex>
-    <input id="access_token" [errorStateMatcher]="inputValidationService" matInput formControlName="access_token" type="text" placeholder="API Token*:">
-    <mat-error *ngIf="(digitalOceanClusterForm.controls.access_token.hasError('minlength') 
+    <input id="access_token" [errorStateMatcher]="inputValidationService" matInput formControlName="access_token" type="text" placeholder="API Token*:" autocomplete="off">
+    <mat-error *ngIf="(digitalOceanClusterForm.controls.access_token.hasError('minlength')
                       || digitalOceanClusterForm.controls.access_token.hasError('maxlength'))
                       && !digitalOceanClusterForm.controls.access_token.hasError('required')">
         DigitalOcean Personal Access Tokens must be exactly <strong>64</strong> characters long.
