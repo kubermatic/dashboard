@@ -2,7 +2,8 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { NgRedux, select } from '@angular-redux/store';
 import { CloudSpec } from 'app/shared/entity/ClusterEntity';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
+import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { OpenstackCloudSpec } from 'app/shared/entity/cloud/OpenstackCloudSpec';
 import { InputValidationService } from 'app/core/services';
@@ -14,10 +15,14 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
   styleUrls: ['./openstack.component.scss']
 })
 export class OpenstackClusterComponent implements OnInit, OnDestroy {
+
+
   public osClusterForm: FormGroup;
   private sub: Subscription;
+  private region: string = '';
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
 
   constructor(private formBuilder: FormBuilder,
               public inputValidationService: InputValidationService,
@@ -26,6 +31,10 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
+    });
+
+    this.sub = this.datacenter$.subscribe(datacenter => {
+      this.region = datacenter.metadata.name;
     });
 
     const reduxStore = this.ngRedux.getState();
@@ -42,7 +51,9 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
       os_cas: [clusterForm.os_cas]
     });
 
+
     this.onChange();
+
   }
 
   public showRequiredFields() {
@@ -66,14 +77,10 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
       this.osClusterForm.controls['os_floating_ip_pool'].value,
     );
 
-    const ruduxStore = this.ngRedux.getState();
-    const wizard = ruduxStore.wizard;
-    const region = wizard.setDatacenterForm.datacenter.metadata.name;
-
     WizardActions.setValidation('clusterForm', this.osClusterForm.valid);
 
     WizardActions.setCloudSpec(
-      new CloudSpec(region, null, null, null, osCloudSpec, null)
+      new CloudSpec(this.region, null, null, null, osCloudSpec, null)
     );
   }
 

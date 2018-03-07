@@ -59,7 +59,7 @@ describe('ClusterItemComponent', () => {
     }));
 
     it('should set statusRunning class', fakeAsync(() => {
-        component.sortedData = clusterFake;
+        component.cluster = clusterFake;
 
         fixture.detectChanges();
         tick();
@@ -69,7 +69,7 @@ describe('ClusterItemComponent', () => {
     }));
 
     it('should set path of cluster image', fakeAsync(() => {
-        component.sortedData = clusterFake;
+        component.cluster = clusterFake;
 
         fixture.detectChanges();
         tick();

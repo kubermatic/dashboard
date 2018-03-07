@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
+import { NodeEntityV2 } from 'app/shared/entity/NodeEntity';
 import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
 import 'rxjs/add/operator/retry';
 import { environment } from '../../../environments/environment';
@@ -25,8 +26,9 @@ import { UpgradeClusterComponentData } from '../../shared/model/UpgradeClusterDi
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
+
+  public nodes: NodeEntityV2[];
   private restRoot: string = environment.restRoot;
-  public nodes: NodeEntity[];
   public cluster: ClusterEntity;
   public nodeDc: DataCenterEntity;
   public timer: any = Observable.timer(0, 10000);
@@ -59,8 +61,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
 
     this.loadSshKeys();
-    this.customEventService.subscribe('onNodeDelete', (nodeName: string) =>
-      this.nodes = this.nodes.filter(node => node.metadata.name !== nodeName));
+    this.customEventService.subscribe('onNodeDelete', (nodeName: string) => {
+      this.api.getClusterNodes(this.clusterName).subscribe(nodes => {
+        this.nodes = nodes;
+        this.refreshData();
+      });
+    });
+
   }
 
   public ngOnDestroy(): void {

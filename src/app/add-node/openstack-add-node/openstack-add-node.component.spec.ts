@@ -9,6 +9,7 @@ import { DebugElement } from '@angular/core';
 
 import { AddNodeFormComponent } from './../add-node-form/add-node-form.component';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
+import { MockNgRedux } from '@angular-redux/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OpenstackAddNodeComponent } from './openstack-add-node.component';
 
@@ -19,6 +20,16 @@ const modules: any[] = [
     ReactiveFormsModule,
     NgReduxTestingModule
 ];
+
+function setMockNgRedux(nodeForm: any): void {
+    const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
+    nodeFormStub.next(nodeForm);
+}
+
+function completeRedux() {
+    const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
+    nodeFormStub.complete();
+}
 
 describe('OpenstackAddNodeComponent', () => {
     let fixture: ComponentFixture<OpenstackAddNodeComponent>;
@@ -40,6 +51,7 @@ describe('OpenstackAddNodeComponent', () => {
     });
 
     beforeEach(() => {
+        MockNgRedux.reset();
         fixture = TestBed.createComponent(OpenstackAddNodeComponent);
         component = fixture.componentInstance;
     });

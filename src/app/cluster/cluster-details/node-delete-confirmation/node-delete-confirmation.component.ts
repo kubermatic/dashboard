@@ -1,8 +1,8 @@
 import {Component, Input, OnInit, Output} from '@angular/core';
 import {ApiService} from 'app/core/services/api/api.service';
-import {NodeEntity} from 'app/shared/entity/NodeEntity';
 import {CustomEventService} from 'app/core/services';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
+import { NodeEntityV2 } from 'app/shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
@@ -12,13 +12,9 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 
 export class NodeDeleteConfirmationComponent implements OnInit {
 
-  @Input() nodeUID: string;
-  @Input() nodeName: string;
+  @Input() node: NodeEntityV2;
   @Input() clusterName: string;
   @Input() seedDcName: string;
-  @Input() onNodeRemoval;
-
-  public node: NodeEntity;
 
   public title: string;
   public message: string;
@@ -36,11 +32,9 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   }
 
   public deleteNode(): void {
-    this.onNodeRemoval(true);
-    this.api.deleteClusterNode(this.clusterName, this.nodeName).subscribe(result => {
+    this.api.deleteClusterNode(this.clusterName, this.node).subscribe(result => {
       NotificationActions.success('Success', `Node removed successfully`);
-      this.customEventService.publish('onNodeDelete', this.nodeName);
-      this.onNodeRemoval(false);
+      this.customEventService.publish('onNodeDelete', this.node.metadata.name);
     });
   }
 }

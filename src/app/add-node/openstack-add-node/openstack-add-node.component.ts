@@ -1,5 +1,5 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
+import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, ContainerLinuxSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from 'app/shared/entity/NodeEntity';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Component, EventEmitter, OnInit, Output, Input, OnDestroy } from '@angular/core';
 import { InputValidationService } from 'app/core/services';
@@ -20,9 +20,8 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
-  @Input() public connect: string[] = [];
 
   public osNodeForm: FormGroup;
   public nodeSize: any[] =  NodeInstanceFlavors.Openstack;
@@ -30,15 +29,23 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
+  @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
+  public nodeForm: any;
+
   constructor(private fb: FormBuilder,
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    const sub = this.isChecked$.subscribe(isChecked => {
+    const subIsChecked = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
-    this.subscriptions.push(sub);
+    this.subscriptions.push(subIsChecked);
+
+    const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
+      nodeForm && (this.nodeForm = nodeForm);
+    });
+    this.subscriptions.push(subNodeForm);
 
     this.osNodeForm = this.fb.group({
       os_node_image: ['', [<any>Validators.required]],
@@ -46,14 +53,11 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
       node_size: ['m1.medium', [<any>Validators.required]],
     });
 
-    const reduxStore = this.ngRedux.getState();
-    const nodeForm = reduxStore.wizard.nodeForm;
-
-    if (nodeForm) {
+    if (this.nodeForm) {
       const formValue = {
-        os_node_image: nodeForm.os_node_image,
-        node_count: nodeForm.node_count,
-        node_size: nodeForm.node_size
+        os_node_image: this.nodeForm.os_node_image,
+        node_count: this.nodeForm.node_count,
+        node_size: this.nodeForm.node_size
       };
 
       this.osNodeForm.setValue(formValue);
@@ -83,24 +87,32 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
       this.osNodeForm.valid
     );
 
-    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+    if (this.nodeForm) {
+      const nodeSpec = new NodeCreateSpec(
+        new NodeCloudSpec(
+          null,
+          null,
+          new OpenstackNodeSpec(
+            this.nodeForm.node_size,
+            this.nodeForm.os_node_image
+          )
+        ),
+        new OperatingSystemSpec(
+          new UbuntuSpec(false),
+          null
+        ),
+        new NodeVersionInfo(
+          null,
+          new NodeContainerRuntimeInfo(null, null)
+        )
+      );
 
-    const nodeSpec = new NodeCreateSpec(
-      null,
-      null,
-      new OpenstackNodeSpec(
-        nodeInfo.node_size,
-        nodeInfo.os_node_image
-      ),
-      null
-    );
+      this.nodeSpecChanges.emit({
+        nodeSpec
+      });
 
-    this.nodeSpecChanges.emit({
-      nodeSpec,
-      count: nodeInfo.node_count
-    });
-
-    this.formChanges.emit(this.osNodeForm);
+      this.formChanges.emit(this.osNodeForm);
+    }
   }
 
   public ngOnDestroy(): void {

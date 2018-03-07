@@ -1,24 +1,117 @@
-import {MetadataEntity} from './MetadataEntity';
-import {DigitaloceanNodeSpec} from './node/DigitialoceanNodeSpec';
-import {AWSNodeSpec} from './node/AWSNodeSpec';
+import {MetadataEntity, MetadataEntityV2} from './MetadataEntity';
+import {DigitaloceanNodeSpec, DigitaloceanNodeSpecV2} from './node/DigitialoceanNodeSpec';
+import {AWSNodeSpec, AWSNodeSpecV2} from './node/AWSNodeSpec';
 import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
 import {BareMetalNodeSpec} from './node/BareMetalNodeSpec';
 
 
 export class NodeCreateSpec {
-  digitalocean: DigitaloceanNodeSpec;
-  aws: AWSNodeSpec;
-  openstack: OpenstackNodeSpec;
-  baremetal: BareMetalNodeSpec;
+  cloud: NodeCloudSpec;
+  operatingSystem: OperatingSystemSpec;
+  versions: NodeVersionInfo;
 
-  constructor(digitalocean: DigitaloceanNodeSpec, aws: AWSNodeSpec, openstack: OpenstackNodeSpec, baremetal: BareMetalNodeSpec) {
-    this.digitalocean = digitalocean;
-    this.aws = aws;
-    this.openstack = openstack;
-    this.baremetal = baremetal;
+  constructor(cloud: NodeCloudSpec, operatingSystem: OperatingSystemSpec, versions: NodeVersionInfo) {
+    this.cloud = cloud;
+    this.operatingSystem = operatingSystem;
+    this.versions = versions;
   }
 }
 
+export class NodeCloudSpec {
+  digitalocean: DigitaloceanNodeSpecV2;
+  aws: AWSNodeSpecV2;
+  openstack: OpenstackNodeSpec;
+
+  constructor(digitalocean: DigitaloceanNodeSpecV2, aws: AWSNodeSpecV2, openstack: OpenstackNodeSpec) {
+    this.digitalocean = digitalocean;
+    this.aws = aws;
+    this.openstack = openstack;
+  }
+}
+
+export class OperatingSystemSpec {
+  ubuntu: UbuntuSpec;
+  containerLinux: ContainerLinuxSpec;
+
+  constructor(ubuntu: UbuntuSpec, containerLinux: ContainerLinuxSpec) {
+    this.ubuntu = ubuntu;
+    this.containerLinux = containerLinux;
+  }
+}
+
+export class UbuntuSpec {
+  distUpgradeOnBoot: boolean;
+
+  constructor(distUpgradeOnBoot: boolean) {
+    this.distUpgradeOnBoot = distUpgradeOnBoot;
+  }
+}
+
+export class ContainerLinuxSpec {
+  disableAutoUpdate: boolean;
+
+  constructor(disableAutoUpdate: boolean) {
+    this.disableAutoUpdate = disableAutoUpdate;
+  }
+}
+
+export class NodeVersionInfo {
+  kubelet: string;
+  containerRuntime: NodeContainerRuntimeInfo;
+
+  constructor(kubelet: string, containerRuntime: NodeContainerRuntimeInfo) {
+    this.kubelet = kubelet;
+    this.containerRuntime = containerRuntime;
+  }
+}
+
+export class NodeContainerRuntimeInfo {
+  name: string;
+  version: string;
+
+  constructor(name: string, version: string) {
+    this.name = name;
+    this.version = version;
+  }
+}
+
+export class NodeStatus {
+  machineName: string;
+  capacity: NodeResources;
+  allocatable: NodeResources;
+  addresses: NodeAddress[];
+  nodeInfo: NodeSystemInfo;
+  errorReason: string;
+  errorMessage: string;
+}
+
+export class NodeResources {
+  cpu: string;
+  memory: string;
+}
+
+export class NodeAddress {
+  type: string;
+  address: string;
+}
+
+export class NodeSystemInfo {
+  kernelVersion: string;
+  containerRuntime: string;
+  containerRuntimeVersion: string;
+  kubeletVersion: string;
+  operatingSystem: string;
+  architecture: string;
+}
+
+export class NodeEntityV2 {
+  metadata: MetadataEntityV2;
+  spec: NodeCreateSpec;
+  status: NodeStatus;
+}
+
+// Following are from api/v1
+// TODO: cleanup
 export class Spec {
   podCIDR: string;
   externalID: string;
@@ -92,4 +185,3 @@ export class NodeEntity {
   status: Status;
   groupname: string;
 }
-

@@ -1,24 +1,25 @@
 import { NotificationActions } from 'app/redux/actions/notification.actions';
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import {Observable} from 'rxjs/Observable';
-import {environment} from '../../../../environments/environment';
-import {CreateNodeModel} from 'app/shared/model/CreateNodeModel';
-import {DataCenterEntity} from 'app/shared/entity/DatacenterEntity';
-import {ClusterEntity} from 'app/shared/entity/ClusterEntity';
-import {NodeEntity} from 'app/shared/entity/NodeEntity';
-import {Auth} from 'app/core/services/auth/auth.service';
-import {SSHKeyEntity} from 'app/shared/entity/SSHKeyEntity';
-import {OpenStack} from 'openstack-lib';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {DropletSizeResponseEntity} from 'app/shared/entity/digitalocean/DropletSizeEntity';
-import {CreateClusterModel} from 'app/shared/model/CreateClusterModel';
+import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../../environments/environment';
+import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
+import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
+import { ClusterEntity } from 'app/shared/entity/ClusterEntity';
+import { NodeEntity, NodeEntityV2 } from 'app/shared/entity/NodeEntity';
+import { Auth } from 'app/core/services/auth/auth.service';
+import { SSHKeyEntity } from 'app/shared/entity/SSHKeyEntity';
+import { OpenStack } from 'openstack-lib';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { DropletSizeResponseEntity } from 'app/shared/entity/digitalocean/DropletSizeEntity';
+import { CreateClusterModel } from 'app/shared/model/CreateClusterModel';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class ApiService {
 
   private restRoot: string = environment.restRoot;
+  private restRootV2: string = environment.restRootV2;
   private headers: HttpHeaders = new HttpHeaders();
 
   constructor(private http: HttpClient, private auth: Auth) {
@@ -46,18 +47,18 @@ export class ApiService {
     return this.http.delete(url, { headers: this.headers });
   }
 
-  getClusterNodes(cluster: string): Observable<NodeEntity[]> {
-    const url = `/api/v1/cluster/${cluster}/node`;
-    return this.http.get<NodeEntity[]>(url, { headers: this.headers });
+  getClusterNodes(cluster: string): Observable<NodeEntityV2[]> {
+    const url = `${this.restRootV2}/cluster/${cluster}/nodes`;
+    return this.http.get<NodeEntityV2[]>(url, { headers: this.headers });
   }
 
-  createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<NodeEntity> {
-    const url = `${this.restRoot}/cluster/${cluster.metadata.name}/node`;
-    return this.http.post<NodeEntity>(url, nodeModel, { headers: this.headers });
+  createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<NodeEntityV2> {
+    const url = `${this.restRootV2}/cluster/${cluster.metadata.name}/nodes`;
+    return this.http.post<NodeEntityV2>(url, nodeModel, { headers: this.headers });
   }
 
-  deleteClusterNode(cluster: string, node_name: string) {
-    const url = `${this.restRoot}/cluster/${cluster}/node/${node_name}`;
+  deleteClusterNode(cluster: string, node: NodeEntityV2) {
+    const url = `${this.restRootV2}/cluster/${cluster}/nodes/${node.metadata.name}`;
     return this.http.delete(url, { headers: this.headers });
   }
 

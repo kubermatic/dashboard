@@ -17,6 +17,7 @@ import { ApiService } from '../../../core/services/api/api.service';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { MatDialogRef } from '@angular/material';
 import { CreateNodesService } from '../../../core/services/index';
+import { nodeFake } from '../../../testing/fake-data/node.fake';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 
 const modules: any[] = [
@@ -60,10 +61,9 @@ describe('NodeDeleteConfirmationComponent', () => {
     }));
 
     it('should call deleteClusterNode', fakeAsync(() => {
-        fixture.detectChanges();
         component.clusterName = 'cluster-name';
-        component.nodeName = 'node-name';
-        component.onNodeRemoval = function() {};
+        component.node = nodeFake;
+        fixture.detectChanges();
         const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(Observable.of(null));
 
         component.deleteNode();

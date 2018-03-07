@@ -112,7 +112,8 @@ describe('WizardComponent', () => {
         const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
             wizard: {
                 nodeModel: doNodeModelFake,
-                clusterModel: doClusterModelFake
+                clusterModel: doClusterModelFake,
+                nodeForm: {node_count: 1}
             }
         });
         setMockNgRedux(fixture, 'provider', 5);

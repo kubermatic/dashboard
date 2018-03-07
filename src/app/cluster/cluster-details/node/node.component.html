@@ -7,13 +7,13 @@
       <div fxFlex="25%">
         <strong>Name</strong>
       </div>
-      <div fxFlex="20%">
+      <div fxFlex="18%">
         <strong>Capacity</strong>
       </div>
       <div fxFlex="15%">
         <strong>Kubelet Version</strong>
       </div>
-      <div fxFlex="15%">
+      <div fxFlex="17%">
         <strong>Public IP</strong>
       </div>
       <div fxFlex="10%" align="center">
@@ -31,32 +31,48 @@
           <div fxLayout class="km-single-node">
             <div fxFlex="5%">{{i + 1}}</div>
             <div fxFlex="25%">
-              {{node.metadata.name}}
+              {{node.metadata.displayName}}
             </div>
-            <div fxFlex="20%">
-              <span *ngIf="!!node.status.capacity"> {{node.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(node.status.capacity.memory)}}</span>
+            <div fxFlex="18%">
+              <span *ngIf="!!node.status.capacity.cpu && !!node.status.capacity.memory"> {{node.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(node.status.capacity.memory)}}</span>
             </div>
             <div fxFlex="15%">
               <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
             </div>
-            <div fxFlex="15%">
-              <span class="km-copy" *ngIf="node.metadata.annotations['node.k8s.io/public-ip'] && node.metadata.annotations['node.k8s.io/public-ip'].length" ngxClipboard [cbContent]="node.metadata.annotations['node.k8s.io/public-ip']">
-                {{node.metadata.annotations["node.k8s.io/public-ip"]}}
-                <small>Copy</small>
+            <div fxFlex="17%">
+              <span *ngIf="!!node.status.addresses && !!getAddresses(node).InternalIP">
+                Int.IP:
+                <span class="km-copy" [cbContent]="getAddresses(node).InternalIP" ngxClipboard>{{getAddresses(node).InternalIP}}
+                  <small>Copy</small>
+                </span>
+              </span>
+              <span *ngIf="!!node.status.addresses && !!getAddresses(node).ExternalIP">
+                Ext.IP:
+                <span class="km-copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard>{{getAddresses(node).ExternalIP}}
+                  <small>Copy</small>
+                </span>
               </span>
             </div>
             <div fxFlex="10%" class="health-state">
-                <i [matTooltip]="node.metadata.annotations['node.k8s.io/state']" [ngClass]="getNodeHealth(node)"></i>
+                <i [matTooltip]="node.status.nodeInfo.kubeletVersion ? 'Running' : node.status.errorReason " [ngClass]="getNodeHealth(node)"></i>
             </div>
-            <div fxFlex="10%" class="km-btn-remove-node-wrapper" *ngIf="managedByProvider(node)">
-              <button *ngIf="!nodeRemoval" mat-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
-                <i class="fa fa-trash-o" aria-hidden="true"></i>
-              </button>
-              <mat-spinner [diameter]="30" class="km-spinner" color="accent" *ngIf="nodeRemoval"></mat-spinner>
+
+            <div fxFlex="10%" class="km-btn-remove-node-wrapper">
+              <ng-container [ngSwitch]="!!node.metadata.deletionTimestamp">
+                <ng-container *ngSwitchCase="true">
+                  <mat-spinner [diameter]="30" class="km-spinner" color="accent"></mat-spinner>
+                </ng-container>
+
+                <ng-container *ngSwitchCase="false">
+                  <button mat-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  </button>
+                </ng-container>
+              </ng-container>
             </div>
           </div>
-          <div fxLayout *ngIf="conditionsMessage && getNodeState(node.metadata.annotations['node.k8s.io/state'])" class="km-conditionsMessage">
-            <p color="accent">{{conditionsMessage}}</p>
+          <div fxLayout *ngIf="node.status.errorMessage && node.status.errorMessage.length" class="km-conditionsMessage">
+            <p color="accent">{{node.status.errorMessage}}</p>
           </div>
         </div>
       </ng-container>
@@ -69,7 +85,4 @@
 
   </mat-card-content>
 </mat-card>
-
-
-
 

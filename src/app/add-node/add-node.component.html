@@ -1,21 +1,18 @@
 <kubermatic-aws-add-node 
   *ngIf="provider && provider.name === 'aws'" 
-  [connect]="connect"
   (nodeSpecChanges)="changeNodeModel($event)"
   (formChanges)="changeForm($event)">
 </kubermatic-aws-add-node>
 
 <kubermatic-digitalocean-add-node 
-  *ngIf="provider && provider.name === 'digitalocean'"
-  [connect]="connect" 
+  *ngIf="provider && provider.name === 'digitalocean'" 
   (nodeSpecChanges)="changeNodeModel($event)"
   (formChanges)="changeForm($event)"
   [token]="provider.payload?.token">
 </kubermatic-digitalocean-add-node>
 
 <kubermatic-openstack-add-node 
-  *ngIf="provider && provider.name === 'openstack'"
-  [connect]="connect" 
+  *ngIf="provider && provider.name === 'openstack'" 
   (nodeSpecChanges)="changeNodeModel($event)"
   (formChanges)="changeForm($event)">
 </kubermatic-openstack-add-node>

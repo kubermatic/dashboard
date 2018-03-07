@@ -19,15 +19,16 @@ export class CreateNodesService {
         const nodesData = this.localStorageService.getNodesData();
 
         if (nodesData) {
-            this.createInitialClusterNodes(nodesData.cluster, nodesData.createNodeModel);
+            this.createInitialClusterNodes(nodesData.nodeCount, nodesData.cluster, nodesData.createNodeModel);
             this.hasData = true;
         }
     }
 
-    public createInitialClusterNodes(cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
+    public createInitialClusterNodes(nodeCount: number, cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
 
         if (!this.localStorageService.getNodesData()) {
             this.localStorageService.setNodesCreationData({
+                nodeCount: nodeCount,
                 cluster: cluster,
                 createNodeModel: createNodeModel
             });
@@ -38,10 +39,16 @@ export class CreateNodesService {
             this.api.getCluster(cluster.metadata.name)
                 .subscribe(curCluster => {
                     if (curCluster.status.phase === 'Running') {
-                        this.api.createClusterNode(curCluster, createNodeModel).subscribe(result => {
-                            this.preventCreatingInitialClusterNodes();
-                            NotificationActions.success('Success', `Creating Nodes`);
-                        });
+                        let successCounter: number = 0;
+                        for (let i = 0; i < nodeCount; i ++) {
+                            this.api.createClusterNode(curCluster, createNodeModel).subscribe(result => {
+                                this.preventCreatingInitialClusterNodes();
+                                successCounter++;
+                                if (successCounter === nodeCount) {
+                                    NotificationActions.success('Success', `Creating Nodes`);
+                                }
+                            });
+                        }
                     }
                 });
         });

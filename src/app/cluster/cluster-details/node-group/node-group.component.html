@@ -42,7 +42,7 @@
             <div fxLayout class="km-single-node" *ngFor="let node of group.nodes.group, let i = index">
               <div fxFlex="5%">{{i + 1}}</div>
               <div fxFlex="34%">
-                {{node.metadata.name}}
+                {{node.metadata.displayName}}
               </div>
               <div fxFlex="20%">
                 {{node.metadata.creationTimestamp | date:'yyyy-MM-dd HH:mm'}}

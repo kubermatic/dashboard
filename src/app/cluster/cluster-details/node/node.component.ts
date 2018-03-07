@@ -1,7 +1,8 @@
 import { Component, Input} from '@angular/core';
-import { NodeEntity } from 'app/shared/entity/NodeEntity';
-import {MatDialog, MatDialogRef, MatDialogConfig} from '@angular/material';
-import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
+import { NodeEntityV2 } from 'app/shared/entity/NodeEntity';
+import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-node',
@@ -10,14 +11,12 @@ import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-
 })
 
 export class NodeComponent {
-  @Input() nodes: NodeEntity[];
+  @Input() nodes: NodeEntityV2[];
   @Input() clusterName: string;
   @Input() seedDcName: string;
   @Input() nodeProvider: string;
   @Input() index: number;
   @Input() clusterRunning: boolean;
-  public conditionsMessage: string = '';
-  public nodeRemoval: boolean = false;
   // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
 
   public config: MatDialogConfig = {
@@ -39,21 +38,19 @@ export class NodeComponent {
 
   constructor(public dialog: MatDialog) {}
 
-  public managedByProvider (node: NodeEntity ): boolean {
-    return node.metadata.annotations['node.k8s.io/driver-data'];
-  }
-
-  public onNodeRemoval(nodeRemoval: boolean): void {
-    this.nodeRemoval = nodeRemoval;
+  public managedByProvider (node: NodeEntityV2): boolean {
+    if (!!node.status.machineName) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
-    dialogRef.componentInstance.nodeName = node.metadata.name;
-    dialogRef.componentInstance.nodeUID = node.metadata.uid;
+    dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.clusterName = this.clusterName;
     dialogRef.componentInstance.seedDcName = this.seedDcName;
-    dialogRef.componentInstance.onNodeRemoval = this.onNodeRemoval.bind(this);
 
     dialogRef.afterClosed().subscribe(result => {
       // this.dialogRef = null;
@@ -66,34 +63,15 @@ export class NodeComponent {
     const orange = 'fa fa-spin fa-circle-o-notch orange';
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
-    const kubeMachineState = node.metadata.annotations['node.k8s.io/state'];
-
-    if (node.status.conditions) {
-      this.conditionsMessage = '';
-      for (const entry of node.status.conditions) {
-        if (entry.status === 'True' && entry.type !== 'Ready') {
-          this.conditionsMessage = this.conditionsMessage + entry.type + ': ' + entry.message + ' ';
-        }
-      }
-    }
-
-    if (this.conditionsMessage !== '' && kubeMachineState === 'running') {
-      return red;
-    }
-
-    switch (kubeMachineState) {
-      case 'pending':
-        return orange;
-      case 'provisioning':
-        return orangeSpinner;
-      case 'launching':
-        return orangeSpinner;
-      case 'running':
-        return green;
-      default:
+    if (!!node.status.nodeInfo.kubeletVersion) {
+      if (!!node.status.errorMessage) {
         return red;
+      } else {
+        return green;
+      }
+    } else {
+      return orangeSpinner;
     }
-
   }
 
   public getFormattedNodeMemory(memory: string): string {
@@ -123,9 +101,16 @@ export class NodeComponent {
   public getNodeState(state: string): boolean {
     return state === 'running';
   }
+
+  public getAddresses(node: NodeEntityV2): object {
+    const addresses = {};
+    for (const i in node.status.addresses) {
+      if (node.status.addresses[i].type === 'InternalIP') {
+        addresses['InternalIP'] = node.status.addresses[i].address;
+      } else if (node.status.addresses[i].type === 'ExternalIP') {
+        addresses['ExternalIP'] = node.status.addresses[i].address;
+      }
+    }
+    return addresses;
+  }
 }
-
-
-
-
-

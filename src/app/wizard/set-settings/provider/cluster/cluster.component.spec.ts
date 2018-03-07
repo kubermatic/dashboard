@@ -58,6 +58,8 @@ describe('ProviderClusterComponent', () => {
 
         fixture.detectChanges();
 
-        expect(component.provider).toBe('provider');
+      component.provider$.subscribe(
+        provider => expect(provider).toBe('provider'),
+      );
     });
 });

@@ -10,10 +10,10 @@ import { DebugElement } from '@angular/core';
 
 import { AddNodeFormComponent } from './../add-node-form/add-node-form.component';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
+import { MockNgRedux } from '@angular-redux/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node.component';
 import { ApiMockService } from '../../testing/services/api-mock.service';
-import { digitaloceanSizesFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
     BrowserModule,
@@ -23,12 +23,23 @@ const modules: any[] = [
     NgReduxTestingModule
 ];
 
+function setMockNgRedux(nodeForm: any): void {
+    const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
+    nodeFormStub.next(nodeForm);
+}
+
+function completeRedux() {
+    const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
+    nodeFormStub.complete();
+}
+
 describe('DigitaloceanAddNodeComponent', () => {
     let fixture: ComponentFixture<DigitaloceanAddNodeComponent>;
     let component: DigitaloceanAddNodeComponent;
     let apiSevice: ApiService;
 
     beforeEach(() => {
+        MockNgRedux.reset();
         TestBed.configureTestingModule({
             imports: [
                 ...modules,
@@ -60,17 +71,6 @@ describe('DigitaloceanAddNodeComponent', () => {
 
         expect(component.doNodeForm.valid).toBeFalsy();
     });
-
-    it('should get digitalocean sizes', fakeAsync(() => {
-        const nodeSizes = digitaloceanSizesFake;
-        const spyGetSizes = spyOn(apiSevice, 'getDigitaloceanSizes').and.returnValue(Observable.of(nodeSizes));
-        component.token = 'token';
-        fixture.detectChanges();
-        tick();
-
-        expect(spyGetSizes.and.callThrough()).toHaveBeenCalledTimes(1);
-        expect(component.nodeSize).toEqual(nodeSizes.sizes, 'should get sizes');
-    }));
 
     it('node count field validity', fakeAsync(() => {
         fixture.detectChanges();

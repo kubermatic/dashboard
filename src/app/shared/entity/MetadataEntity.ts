@@ -6,3 +6,11 @@ export class MetadataEntity {
   creationTimestamp: Date;
   labels: Map<string, string>;
 }
+
+export class MetadataEntityV2 {
+  name: string;
+  displayName: string;
+  deletionTimestamp: Date;
+  annotations: Map<string, string>;
+  labels: Map<string, string>;
+}

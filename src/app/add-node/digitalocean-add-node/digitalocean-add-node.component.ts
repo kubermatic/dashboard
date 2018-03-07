@@ -7,8 +7,8 @@ import { Input, EventEmitter, Output, AfterContentInit, OnChanges, OnDestroy, On
 import { CustomValidators } from 'ng2-validation';
 
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
-import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
+import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, NodeVersionInfo, UbuntuSpec, ContainerLinuxSpec, NodeContainerRuntimeInfo } from 'app/shared/entity/NodeEntity';
+import { DigitaloceanNodeSpecV2 } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
@@ -26,7 +26,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   @Input() public token: string = '';
   @Input() public connect: string[] = [];
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec, count: number}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public doNodeForm: FormGroup;
@@ -36,34 +36,37 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
+  @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
+  public nodeForm: any;
+
   constructor(private fb: FormBuilder,
               private api: ApiService,
               public inputValidationService: InputValidationService,
               private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
-    const sub = this.isChecked$.subscribe(isChecked => {
+    const subIsChecked = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
-    this.subscriptions.push(sub);
+    this.subscriptions.push(subIsChecked);
+
+    const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
+      nodeForm && (this.nodeForm = nodeForm);
+    });
+    this.subscriptions.push(subNodeForm);
 
     this.doNodeForm = this.fb.group({
       node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['', [<any>Validators.required]]
     });
 
-    if (Array.isArray(this.connect) && this.connect.length) {
-      const reduxStore = this.ngRedux.getState();
-      const nodeForm = reduxStore.wizard.nodeForm;
+    if (this.nodeForm) {
+      const formValue = {
+        node_count: this.nodeForm.node_count,
+        node_size: this.nodeForm.node_size
+      };
 
-      if (nodeForm) {
-        const formValue = {
-          node_count: nodeForm.node_count,
-          node_size: nodeForm.node_size
-        };
-
-        this.doNodeForm.setValue(formValue);
-      }
+      this.doNodeForm.setValue(formValue);
     }
 
     this.onChange();
@@ -118,20 +121,33 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
       this.doNodeForm.valid
     );
 
-    const nodeInfo = this.ngRedux.getState().wizard.nodeForm;
+    if (this.nodeForm) {
+      const nodeSpec = new NodeCreateSpec(
+        new NodeCloudSpec(
+          new DigitaloceanNodeSpecV2(
+            this.nodeForm.node_size,
+            false,
+            false,
+            false,
+            null
+          ),
+          null,
+          null
+        ),
+        new OperatingSystemSpec(
+          new UbuntuSpec(false),
+          null
+        ),
+        new NodeVersionInfo(
+          '',
+          new NodeContainerRuntimeInfo('', '')
+        )
+      );
 
-    const nodeSpec = new NodeCreateSpec(
-      new DigitaloceanNodeSpec(nodeInfo.node_size),
-      null,
-      null,
-      null,
-    );
-
-    this.nodeSpecChanges.emit({
-      nodeSpec,
-      count: nodeInfo.node_count
-    });
-
+      this.nodeSpecChanges.emit({
+        nodeSpec
+      });
+    }
     this.formChanges.emit(this.doNodeForm);
   }
 
