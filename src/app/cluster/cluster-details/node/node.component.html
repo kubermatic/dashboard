@@ -46,7 +46,7 @@
               </div>
               <div *ngIf="!!node.status.addresses && !!getAddresses(node).ExternalIP">
                 Ext.IP:
-                <span class="km-copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).ExternalIP}}</span>
+                <span class="copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).ExternalIP}}</span>
               </div>
             </div>
             <div fxFlex="5%" class="health-state">
