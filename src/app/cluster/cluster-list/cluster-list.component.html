@@ -10,7 +10,7 @@
   </div>
   <mat-card class="km-card-list">
     <mat-card-header class="km-card-list-header">
-      <mat-card-title fxLayout matSort (matSortChange)="sortData($event)">
+      <mat-card-title fxLayout matSort (matSortChange)="sortData($event)" matSortActive="name" matSortDirection="asc">
         <div fxFlex="3%" fxFlex.sm="3%" fxHide.xs>
           <strong>#</strong>
         </div>

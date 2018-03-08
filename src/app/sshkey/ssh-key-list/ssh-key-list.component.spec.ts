@@ -50,7 +50,6 @@ describe('SshKeyListComponent', () => {
     });
 
     it('should render sshkey items', fakeAsync(() => {
-        fixture.detectChanges();
         component.sshKeys = SSHKeysFake;
 
         tick();
@@ -61,18 +60,22 @@ describe('SshKeyListComponent', () => {
     }));
 
     it('should delete sshkey', () => {
-        fixture.detectChanges();
         component.sshKeys = SSHKeysFake;
-        const initialLength = component.sshKeys.length;
-        const deletedItem = component.sshKeys[0];
+        component.sortedData = SSHKeysFake;
 
+        const initialLength = component.sortedData.length;
+        const deletedItem = component.sortedData[0];
+
+        fixture.detectChanges();
         component.deleteSSHKey(deletedItem);
-        const foundItem = component.sshKeys.find(item => item === deletedItem);
-        expect(component.sshKeys.length).toBe(initialLength - 1, 'should delete item from the array');
+        const foundItem = component.sortedData.find(item => item === deletedItem);
+
+        expect(component.sortedData.length).toBe(initialLength - 1, 'should delete item from the array');
         expect(foundItem).toBeUndefined('should not find deleted item in the array');
     });
 
     it('should render sshkeys when they are', () => {
+        component.sshKeys = [];
         fixture.detectChanges();
         let sshKeyListDe = fixture.debugElement.query(By.css('.sshkey-list'));
 

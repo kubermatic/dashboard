@@ -8,15 +8,15 @@
     <ng-container *ngSwitchCase="true">
       <mat-card class="km-card-list sshkey-list">
         <mat-card-header class="km-card-list-header">
-          <mat-card-title fxLayout>
-            <div fxFlex="50%" fxFlex.sm="40%">SSH Keys</div>
-            <div fxFlex="50%" fxFlex.sm="60%">Fingerprint</div>
+          <mat-card-title fxLayout matSort (matSortChange)="sortData($event)" matSortActive="name" matSortDirection="asc">
+            <div fxFlex="50%" fxFlex.sm="40%" mat-sort-header="name">SSH Keys</div>
+            <div fxFlex="50%" fxFlex.sm="60%" mat-sort-header="fingerprint">Fingerprint</div>
           </mat-card-title>
         </mat-card-header>
         <ng-container *ngIf="sshKeys && sshKeys.length > 0">
-          <kubermatic-ssh-key-item 
-            *ngFor="let key of sshKeys; let odd = odd" 
-            [sshKey]="key" 
+          <kubermatic-ssh-key-item
+            *ngFor="let key of sortedData; let odd = odd"
+            [sshKey]="key"
             [isOdd]="odd"
             (deleteSshKey)="deleteSSHKey($event)">
           </kubermatic-ssh-key-item>

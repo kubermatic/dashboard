@@ -25,7 +25,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.sub = this.timer.subscribe(() => {
       this.getClusters();
     });
-    this.sortData(null);
+    this.sortData({active: 'name', direction: 'asc'});
   }
 
   getClusters() {
