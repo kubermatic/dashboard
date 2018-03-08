@@ -16,6 +16,10 @@
 .km-card-list .km-card-list-header {
   margin-bottom: 20px;
   border-bottom: none;
+
+  span {
+    cursor: pointer;
+  }
   &.providerinfo {
     border-bottom: 1px solid #E3E8EC;
 
@@ -23,6 +27,8 @@
       font-size: 14px;
       font-weight: 600;
     }
+
+
   }
   .km-card-ssh-tooltip {
     i {

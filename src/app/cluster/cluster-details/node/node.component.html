@@ -42,15 +42,11 @@
             <div fxFlex="17%">
               <span *ngIf="!!node.status.addresses && !!getAddresses(node).InternalIP">
                 Int.IP:
-                <span class="km-copy" [cbContent]="getAddresses(node).InternalIP" ngxClipboard>{{getAddresses(node).InternalIP}}
-                  <small>Copy</small>
-                </span>
+                <span class="copy" [cbContent]="getAddresses(node).InternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).InternalIP}}</span>
               </span>
               <span *ngIf="!!node.status.addresses && !!getAddresses(node).ExternalIP">
                 Ext.IP:
-                <span class="km-copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard>{{getAddresses(node).ExternalIP}}
-                  <small>Copy</small>
-                </span>
+                <span class="km-copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).ExternalIP}}</span>
               </span>
             </div>
             <div fxFlex="10%" class="health-state">

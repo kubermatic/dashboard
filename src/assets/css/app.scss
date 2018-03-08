@@ -185,3 +185,22 @@ mat-card-header {
   font-size: 14px;
   font-weight: 500;
 }
+
+
+// tooltip
+.mat-tooltip {
+  background-color: rgba(2, 136, 209, 0.7) !important;
+  margin-top: 5px !important;
+}
+
+// copy text
+.copy {
+  cursor: pointer;
+
+  &:hover {
+    color: #0288d1;
+  }
+  &:active {
+    color: rgba(2, 136, 209, 0.7);
+  }
+}

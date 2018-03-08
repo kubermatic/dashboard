@@ -46,30 +46,9 @@ button {
   border-radius: 0;
 }
 
-.km-copy {
-  cursor: pointer;
-
-  &:hover {
-    small {
-      display: inline-block;
-    }
-  }
-
-  small {
-    display: none;
-    color: #0288d1;
-  }
-}
-
 .km-spinner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-  width: 50%;
-  height: 70%;
+  float: right;
+  margin: 5px;
 }
 
 .km-btn-remove-node-wrapper{
