@@ -10,11 +10,7 @@ import {Sort} from '@angular/material';
 })
 export class SshKeyListComponent implements OnInit {
   @Input() sshKeys: Array<SSHKeyEntity>;
-
   public sortedData: Array<SSHKeyEntity>;
-
-  constructor() {
-  }
 
   ngOnInit() {
     this.sortData({active: 'name', direction: 'asc'});
