@@ -45,7 +45,7 @@ export class SshKeyListComponent implements OnInit, OnChanges {
 
   public deleteSSHKey(key: SSHKeyEntity): void {
     this.sortedData.splice(this.sortedData.indexOf(key), 1);
-    NotificationActions.success('Success', `SSH key ${name} deleted.`);
+    NotificationActions.success('Success', `SSH key ${key.spec.name} deleted.`);
   }
 
 }
