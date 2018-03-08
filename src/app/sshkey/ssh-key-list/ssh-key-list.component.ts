@@ -1,5 +1,5 @@
 import { NotificationActions } from 'app/redux/actions/notification.actions';
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, OnChanges} from '@angular/core';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Sort} from '@angular/material';
 
@@ -8,11 +8,15 @@ import {Sort} from '@angular/material';
   templateUrl: './ssh-key-list.component.html',
   styleUrls: ['./ssh-key-list.component.scss']
 })
-export class SshKeyListComponent implements OnInit {
+export class SshKeyListComponent implements OnInit, OnChanges {
   @Input() sshKeys: Array<SSHKeyEntity>;
   public sortedData: Array<SSHKeyEntity>;
 
   ngOnInit() {
+    this.sortData({active: 'name', direction: 'asc'});
+  }
+
+  ngOnChanges() {
     this.sortData({active: 'name', direction: 'asc'});
   }
 
@@ -40,7 +44,7 @@ export class SshKeyListComponent implements OnInit {
   }
 
   public deleteSSHKey(key: SSHKeyEntity): void {
-    this.sshKeys.splice(this.sshKeys.indexOf(key), 1);
+    this.sortedData.splice(this.sortedData.indexOf(key), 1);
     NotificationActions.success('Success', `SSH key ${name} deleted.`);
   }
 
