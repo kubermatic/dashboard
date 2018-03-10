@@ -3,7 +3,7 @@ workspace:
   path: src/github.com/kubermatic/dashboard-v2
 
 pipeline:
-  cache:
+  cache-restore:
     image: drillster/drone-volume-cache
     restore: true
     mount:
