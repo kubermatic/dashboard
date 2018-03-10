@@ -3,6 +3,14 @@ workspace:
   path: src/github.com/kubermatic/dashboard-v2
 
 pipeline:
+  cache-restore:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - ./node_modules
+    volumes:
+      - /tmp/cache:/cache
+
   dependencies:
     image: node:8
     commands:
@@ -69,6 +77,14 @@ pipeline:
         target: kubeconfig
     when:
       branch: master
+
+  cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - ./node_modules
+    volumes:
+      - /tmp/cache:/cache
 
   slack-failure:
     group: notify
