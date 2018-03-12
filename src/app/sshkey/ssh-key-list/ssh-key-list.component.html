@@ -6,9 +6,7 @@
       <div fxFlex="50%" fxFlex.sm="60%" mat-sort-header="fingerprint">Fingerprint</div>
     </mat-card-title>
   </mat-card-header>
-
-
-  {{!!sshKeys && sshKeys.length > 0}}
+  
   <ng-container [ngSwitch]="!!sshKeys && sshKeys.length > 0">
     <ng-container *ngSwitchCase="true">
       <kubermatic-ssh-key-item
