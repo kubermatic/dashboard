@@ -55,7 +55,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   getSortData(sort: Sort) {
-    const data = this.clusters.slice();
+    const data = this.clusters ? this.clusters.slice() : [];
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedData = data;
       return;

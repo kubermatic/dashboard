@@ -13,15 +13,18 @@ export class SshKeyListComponent implements OnInit, OnChanges {
   public sortedData: Array<SSHKeyEntity>;
 
   ngOnInit() {
-    this.sortData({active: 'name', direction: 'asc'});
+    if (this.sshKeys) {
+      this.sortData({active: 'name', direction: 'asc'});
+    }
   }
 
   ngOnChanges() {
-    this.sortData({active: 'name', direction: 'asc'});
+    if (this.sshKeys) {
+      this.sortData({active: 'name', direction: 'asc'});
+    }
   }
 
   sortData(sort: Sort) {
-
     const data = this.sshKeys.slice();
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedData = data;
@@ -47,5 +50,4 @@ export class SshKeyListComponent implements OnInit, OnChanges {
     this.sortedData.splice(this.sortedData.indexOf(key), 1);
     NotificationActions.success('Success', `SSH key ${key.spec.name} deleted.`);
   }
-
 }
