@@ -31,7 +31,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private restRoot: string = environment.restRoot;
   public cluster: ClusterEntity;
   public nodeDc: DataCenterEntity;
-  public timer: any = Observable.timer(0, 10000);
+  public timer: any = Observable.timer(0, 5000);
   public sub: Subscription;
   public dialogRef: any;
   public config: any = {};
