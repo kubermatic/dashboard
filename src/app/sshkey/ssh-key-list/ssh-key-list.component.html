@@ -1,4 +1,3 @@
-
 <mat-card class="km-card-list sshkey-list">
   <mat-card-header class="km-card-list-header">
     <mat-card-title fxLayout matSort (matSortChange)="sortData($event)" matSortActive="name" matSortDirection="asc">
@@ -7,7 +6,7 @@
     </mat-card-title>
   </mat-card-header>
   
-  <ng-container [ngSwitch]="!!sshKeys && sshKeys.length > 0">
+  <ng-container [ngSwitch]="!!sortedData && sortedData.length > 0">
     <ng-container *ngSwitchCase="true">
       <kubermatic-ssh-key-item
         *ngFor="let key of sortedData; let odd = odd"

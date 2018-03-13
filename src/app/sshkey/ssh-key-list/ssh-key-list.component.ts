@@ -36,7 +36,6 @@ export class SshKeyListComponent implements OnInit, OnChanges {
       switch (sort.active) {
         case 'name': return this.compare(a.spec.name, b.spec.name, isAsc);
         case 'fingerprint': return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
-
         default: return 0;
       }
     });
