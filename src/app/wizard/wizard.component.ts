@@ -109,7 +109,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     const reduxStore = this.ngRedux.getState();
     const wizard = reduxStore.wizard;
     const nodeModel = wizard.nodeModel;
-    const nodeCount = wizard.nodeForm.node_count;
+    const nodeCount = (this.selectedProvider !== 'bringyourown') ? wizard.nodeForm.node_count : null;
     const clusterModel = wizard.clusterModel;
     console.log('Create cluster mode: \n' + JSON.stringify(clusterModel));
     this.api.createCluster(clusterModel).subscribe(cluster => {
