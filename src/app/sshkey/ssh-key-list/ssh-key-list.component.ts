@@ -21,22 +21,23 @@ export class SshKeyListComponent implements OnInit, OnChanges {
   }
 
   sortData(sort: Sort) {
-
-    const data = this.sshKeys.slice();
-    if (sort === null || !sort.active || sort.direction === '') {
-      this.sortedData = data;
-      return;
-    }
-
-    this.sortedData = data.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name': return this.compare(a.spec.name, b.spec.name, isAsc);
-        case 'fingerprint': return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
-
-        default: return 0;
+    if (this.sshKeys) {
+      const data = this.sshKeys.slice();
+      if (sort === null || !sort.active || sort.direction === '') {
+        this.sortedData = data;
+        return;
       }
-    });
+
+      this.sortedData = data.sort((a, b) => {
+        const isAsc = sort.direction === 'asc';
+        switch (sort.active) {
+          case 'name': return this.compare(a.spec.name, b.spec.name, isAsc);
+          case 'fingerprint': return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
+
+          default: return 0;
+        }
+      });
+    }
   }
 
   compare(a, b, isAsc) {
