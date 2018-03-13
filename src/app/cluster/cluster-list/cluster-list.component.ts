@@ -14,7 +14,7 @@ import { find } from 'lodash';
 export class ClusterListComponent implements OnInit, OnDestroy {
 
   public clusters: ClusterEntity[] = [];
-  public timer: any = Observable.timer(0, 10000);
+  public timer: any = Observable.timer(0, 5000);
   public sub: Subscription;
   public loading: boolean = true;
   public sortedData: ClusterEntity[] = [];
