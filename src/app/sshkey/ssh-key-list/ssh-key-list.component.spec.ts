@@ -77,9 +77,9 @@ describe('SshKeyListComponent', () => {
     it('should render sshkeys when they are', () => {
         component.sortedData = [];
         fixture.detectChanges();
-        let sshKeyListDe = fixture.debugElement.query(By.css('.sshkey-list'));
+        let sshKeyListDe = fixture.debugElement.query(By.css('.km-card-list-no-keys'));
 
-        expect(sshKeyListDe).toBeNull('should not render sshkey list if it is not obtained');
+        expect(sshKeyListDe).toBeTruthy('should not render sshkey list if it is not obtained');
 
         component.sortedData = SSHKeysFake;
         fixture.detectChanges();
