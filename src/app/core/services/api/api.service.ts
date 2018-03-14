@@ -13,6 +13,7 @@ import { OpenStack } from 'openstack-lib';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DropletSizeResponseEntity } from 'app/shared/entity/digitalocean/DropletSizeEntity';
 import { CreateClusterModel } from 'app/shared/model/CreateClusterModel';
+import { DatacenterService } from '../datacenter/datacenter.service';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
@@ -20,16 +21,17 @@ export class ApiService {
 
   private restRoot: string = environment.restRoot;
   private restRootV2: string = environment.restRootV2;
+  private restRootV3: string = environment.restRootV3;
   private headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient, private auth: Auth) {
+  constructor(private http: HttpClient, private auth: Auth, public dcService: DatacenterService) {
     const token = auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + token);
   }
 
-  getClusters(): Observable<ClusterEntity[]> {
-    const url = `${this.restRoot}/cluster`;
-    return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
+  getClusters(dc: string): Observable<ClusterEntity> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster`;
+    return this.http.get<ClusterEntity>(url, { headers: this.headers });
   }
 
   getCluster(cluster: string): Observable<ClusterEntity> {
