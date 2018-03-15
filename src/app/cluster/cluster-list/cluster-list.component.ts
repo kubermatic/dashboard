@@ -14,7 +14,7 @@ import { find } from 'lodash';
 export class ClusterListComponent implements OnInit, OnDestroy {
 
   public clusters: ClusterEntity[] = [];
-  public timer: any = Observable.timer(0, 10000);
+  public timer: any = Observable.timer(0, 5000);
   public sub: Subscription;
   public loading: boolean = true;
   public sortedData: ClusterEntity[] = [];
@@ -55,7 +55,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   getSortData(sort: Sort) {
-    const data = this.clusters.slice();
+    const data = this.clusters ? this.clusters.slice() : [];
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedData = data;
       return;

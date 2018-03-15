@@ -57,21 +57,28 @@ export class NodeComponent {
     });
   }
 
-  public getNodeHealth(node): string {
+  public getNodeHealth(node: NodeEntityV2): object {
     const green = 'fa fa-circle green';
     const red = 'fa fa-circle-o red';
     const orange = 'fa fa-spin fa-circle-o-notch orange';
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
-    if (!!node.status.nodeInfo.kubeletVersion) {
-      if (!!node.status.errorMessage) {
-        return red;
-      } else {
-        return green;
-      }
+    const nodeHealthStatus = {};
+
+    if (!!node.status.errorMessage && !node.metadata.deletionTimestamp) {
+      nodeHealthStatus['color'] = red;
+      nodeHealthStatus['status'] = 'Failed';
+    } else if (!!node.status.nodeInfo.kubeletVersion && !node.status.errorMessage && !node.metadata.deletionTimestamp) {
+      nodeHealthStatus['color'] = green;
+      nodeHealthStatus['status'] = 'Running';
+    } else if (!!node.metadata.deletionTimestamp) {
+      nodeHealthStatus['color'] = orangeSpinner;
+      nodeHealthStatus['status'] = 'Deleting';
     } else {
-      return orangeSpinner;
+      nodeHealthStatus['color'] = orangeSpinner;
+      nodeHealthStatus['status'] = 'Pending';
     }
+    return nodeHealthStatus;
   }
 
   public getFormattedNodeMemory(memory: string): string {
@@ -96,10 +103,6 @@ export class NodeComponent {
     }
 
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
-  }
-
-  public getNodeState(state: string): boolean {
-    return state === 'running';
   }
 
   public getAddresses(node: NodeEntityV2): object {

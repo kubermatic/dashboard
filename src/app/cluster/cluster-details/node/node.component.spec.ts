@@ -60,7 +60,7 @@ describe('NodeComponent', () => {
 
         const nodes = nodesFake;
 
-        expect(component.getNodeHealth(nodes[0])).toBe(green, 'should return classes for green icon');
-        expect(component.getNodeHealth(nodes[1])).toBe(orange, 'should return classes for orange icon');
+        expect(component.getNodeHealth(nodes[0])).toEqual({color: green, status: 'Running'}, 'should return classes for green icon');
+        expect(component.getNodeHealth(nodes[1])).toEqual({color: orange, status: 'Pending'}, 'should return classes for orange icon');
     });
 });
