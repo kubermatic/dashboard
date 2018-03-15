@@ -27,30 +27,47 @@ export class CreateNodesService {
     public createInitialClusterNodes(nodeCount: number, cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
 
         if (!this.localStorageService.getNodesData()) {
-            this.localStorageService.setNodesCreationData({
+            this.localStorageService.setNodesCreationData([{
                 nodeCount: nodeCount,
                 cluster: cluster,
                 createNodeModel: createNodeModel
-            });
+            }]);
             this.hasData = true;
+        } else {
+          const onWaiting = this.localStorageService.getNodesData()
+          onWaiting.push({
+            nodeCount: nodeCount,
+            cluster: cluster,
+            createNodeModel: createNodeModel
+          });
+          this.localStorageService.setNodesCreationData(onWaiting);
         }
 
         this.sub = this.timer.subscribe(() => {
-            this.api.getCluster(cluster.metadata.name)
+            const createNodePipline = this.localStorageService.getNodesData();
+            for (let i = 0; i < createNodePipline.length; i ++) {
+              this.api.getCluster(createNodePipline[i].cluster.metadata.name)
                 .subscribe(curCluster => {
-                    if (curCluster.status.phase === 'Running') {
-                        let successCounter: number = 0;
-                        for (let i = 0; i < nodeCount; i ++) {
-                            this.api.createClusterNode(curCluster, createNodeModel).subscribe(result => {
-                                this.preventCreatingInitialClusterNodes();
-                                successCounter++;
-                                if (successCounter === nodeCount) {
-                                    NotificationActions.success('Success', `Creating Nodes`);
-                                }
-                            });
-                        }
-                    }
+                  if (curCluster.status.phase === 'Running') {
+
+
+                    //let successCounter: number = 0;
+                    //for (let n = 0; n < createNodePipline[i]nodeCount; n ++) {
+
+                    this.api.createClusterNode(createNodePipline[i].curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
+                      //this.preventCreatingInitialClusterNodes();
+                      // successCounter++;
+                      //if (successCounter === nodeCount) {
+                      NotificationActions.success('Success', `Creating Nodes`);
+                      // }
+                    }, error => {
+
+                    });
+                    //}
+                  }
                 });
+            }
+
         });
     }
 
