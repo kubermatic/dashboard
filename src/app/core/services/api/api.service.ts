@@ -29,9 +29,9 @@ export class ApiService {
     this.headers = this.headers.set('Authorization', 'Bearer ' + token);
   }
 
-  getClusters(dc: string): Observable<ClusterEntity> {
+  getClusters(dc: string): Observable<ClusterEntity[]> {
     const url = `${this.restRootV3}/dc/${dc}/cluster`;
-    return this.http.get<ClusterEntity>(url, { headers: this.headers });
+    return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
   }
 
   getCluster(cluster: string): Observable<ClusterEntity> {

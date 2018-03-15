@@ -23,7 +23,7 @@ export class ApiMockService {
         return Observable.of(this.cluster);
     }
 
-    public getClusters(): Observable<ClusterEntity[]> {
+    public getClusters(dc: string): Observable<ClusterEntity[]> {
         return Observable.of(this.clusters);
     }
 

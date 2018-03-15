@@ -66,3 +66,5 @@ export const datacentersFake: DataCenterEntity[] = [
         }
     }
 ];
+
+export const seedDatacentersFake: string[] = ["europe-west3-c"];

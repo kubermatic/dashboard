@@ -74,7 +74,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     for (const i in this.clusters) {
       if (this.clusters.hasOwnProperty(i)) {
         for (const j in this.clusters[i]) {
-          if (this.clusters.hasOwnProperty(j)) {
+          if (this.clusters[i].hasOwnProperty(j)) {
             data.push(this.clusters[i][j]);
           }
         }

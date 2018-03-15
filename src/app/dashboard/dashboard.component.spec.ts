@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { ApiService } from './../core/services/api/api.service';
+import { DatacenterService } from './../core/services/datacenter/datacenter.service';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,6 +16,7 @@ import { AuthMockService } from '../testing/services/auth-mock.service';
 import { Auth } from './../core/services/index';
 import { DashboardComponent } from './dashboard.component';
 import { ApiMockService } from '../testing/services/api-mock.service';
+import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 
 const modules: any[] = [
     BrowserModule,
@@ -30,6 +32,7 @@ describe('DashboardComponent', () => {
     let authService: AuthMockService;
     let router: Router;
     let apiService: ApiService;
+    let dcService: DatacenterService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -43,6 +46,7 @@ describe('DashboardComponent', () => {
                 { provide: Router, useClass: RouterStub },
                 { provide: Auth, useClass: AuthMockService },
                 { provide: ApiService, useClass: ApiMockService },
+                { provide: DatacenterService, useClass: DatacenterMockService },
                 { provide: ActivatedRoute, useClass: ActivatedRouteStub }
             ],
         }).compileComponents();
