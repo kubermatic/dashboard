@@ -34,42 +34,76 @@ export class CreateNodesService {
             }]);
             this.hasData = true;
         } else {
-          const onWaiting = this.localStorageService.getNodesData()
-          onWaiting.push({
-            nodeCount: nodeCount,
-            cluster: cluster,
-            createNodeModel: createNodeModel
-          });
-          this.localStorageService.setNodesCreationData(onWaiting);
+          if (nodeCount) {
+            const onWaiting = this.localStorageService.getNodesData()
+            onWaiting.push({
+              nodeCount: nodeCount,
+              cluster: cluster,
+              createNodeModel: createNodeModel
+            });
+            this.localStorageService.setNodesCreationData(onWaiting);
+          }
         }
 
         this.sub = this.timer.subscribe(() => {
             const createNodePipline = this.localStorageService.getNodesData();
-            for (let i = 0; i < createNodePipline.length; i ++) {
-              this.api.getCluster(createNodePipline[i].cluster.metadata.name)
-                .subscribe(curCluster => {
-                  if (curCluster.status.phase === 'Running') {
+            if (createNodePipline && createNodePipline.length) {
+              for (let i = 0; i < createNodePipline.length; i ++) {
+              let anyErrors: boolean;
+                if (createNodePipline[i].cluster) {
+                  this.api.getCluster(createNodePipline[i].cluster.metadata.name)
+                    .subscribe(curCluster => {
+                      if (curCluster.status.phase === 'Running') {
 
 
-                    //let successCounter: number = 0;
-                    //for (let n = 0; n < createNodePipline[i]nodeCount; n ++) {
+                        //let successCounter: number = 0;
+                        //for (let n = 0; n < createNodePipline[i]nodeCount; n ++) {
 
-                    this.api.createClusterNode(createNodePipline[i].curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
-                      //this.preventCreatingInitialClusterNodes();
-                      // successCounter++;
-                      //if (successCounter === nodeCount) {
-                      NotificationActions.success('Success', `Creating Nodes`);
-                      // }
-                    }, error => {
+                        this.api.createClusterNode(curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
 
+                          this.removeCreateNodesLocalStorage(i);
+                          //this.preventCreatingInitialClusterNodes();
+                          // successCounter++;
+                          //if (successCounter === nodeCount) {
+                          NotificationActions.success('Success', `Creating Nodes`);
+                          // }
+                        }, error => {
+                            console.log(error);
+                            debugger;
+                          },
+                          () => {
+                            console.log(this);
+                            debugger;
+                          }
+                        );
+                        //}
+                      }
                     });
-                    //}
-                  }
-                });
+                } else {
+                  this.removeCreateNodesLocalStorage(i);
+                  debugger;
+                }
+              }
             }
-
         });
     }
+
+    public removeCreateNodesLocalStorage(key) {
+      debugger;
+      const nodePipline = this.localStorageService.getNodesData();
+      //delete nodePipline[key];
+      //nodePipline.splice(key, 1);
+      //console.log(nodePipline);
+      if (nodePipline.length === 1) {
+        this.localStorageService.removeNodesCreationData();
+      } else {
+        this.localStorageService.setNodesCreationData(nodePipline);
+      }
+
+    }
+
+
+
 
     public preventCreatingInitialClusterNodes(): void {
         if (this.sub) {
