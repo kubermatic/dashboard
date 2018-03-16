@@ -164,6 +164,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     this.dialogRef.componentInstance.humanReadableName = this.cluster.spec.humanReadableName;
     this.dialogRef.componentInstance.clusterName = this.clusterName;
+    this.dialogRef.componentInstance.datacenter = this.datacenter;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
