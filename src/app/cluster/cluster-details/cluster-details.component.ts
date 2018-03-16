@@ -27,7 +27,7 @@ import { UpgradeClusterComponentData } from '../../shared/model/UpgradeClusterDi
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public nodes: NodeEntityV2[];
-  private restRoot: string = environment.restRoot;
+  private restRootV3: string = environment.restRootV3;
   public cluster: ClusterEntity;
   public nodeDc: DataCenterEntity;
   public timer: any = Observable.timer(0, 5000);
@@ -172,6 +172,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public connectClusterDialog(): void {
     this.dialogRef = this.dialog.open(ClusterConnectComponent, this.config);
     this.dialogRef.componentInstance.clusterName = this.clusterName;
+    this.dialogRef.componentInstance.datacenter = this.datacenter;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
@@ -190,7 +191,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem('token');
-    return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
+    return `${this.restRootV3}/dc/${this.datacenter}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
 
   public isLoaded(): boolean {
