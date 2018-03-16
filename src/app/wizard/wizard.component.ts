@@ -111,13 +111,14 @@ export class WizardComponent implements OnInit, OnDestroy {
     const nodeModel = wizard.nodeModel;
     const nodeCount = (this.selectedProvider !== 'bringyourown') ? wizard.nodeForm.node_count : null;
     const clusterModel = wizard.clusterModel;
+    const datacenter = wizard.setDatacenterForm.datacenter.spec.seed;
     console.log('Create cluster mode: \n' + JSON.stringify(clusterModel));
-    this.api.createCluster(clusterModel).subscribe(cluster => {
+    this.api.createCluster(clusterModel, datacenter).subscribe(cluster => {
         NotificationActions.success('Success', `Cluster successfully created`);
-        this.router.navigate(['/clusters/' + cluster.metadata.name]);
+        this.router.navigate(['/clusters/' + datacenter + '/' + cluster.metadata.name]);
 
         if (this.selectedProvider !== 'bringyourown') {
-          this.createNodesService.createInitialClusterNodes(nodeCount, cluster, nodeModel);
+          this.createNodesService.createInitialClusterNodes(nodeCount, cluster, nodeModel, datacenter);
         }
       },
       error => {

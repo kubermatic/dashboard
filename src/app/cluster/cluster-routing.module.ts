@@ -14,7 +14,7 @@ const routes: Routes = [
         data: { title: 'Manage Clusters' }
     },
     {
-        path: ':clusterName',
+        path: ':seedDc/:clusterName',
         component: ClusterDetailsComponent,
         canActivate: [AuthGuard],
         data: { title: 'Cluster details' }

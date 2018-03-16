@@ -26,7 +26,6 @@ import { UpgradeClusterComponentData } from '../../shared/model/UpgradeClusterDi
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
-
   public nodes: NodeEntityV2[];
   private restRoot: string = environment.restRoot;
   public cluster: ClusterEntity;
@@ -44,6 +43,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   private upgradesList: string[] = [];
   private gotUpgradesList: boolean;
+  public datacenter: string;
 
   constructor(private customEventService: CustomEventService,
               private route: ActivatedRoute,
@@ -56,6 +56,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.clusterName = this.route.snapshot.paramMap.get('clusterName');
+    this.datacenter = this.route.snapshot.paramMap.get('seedDc');
     this.sub = this.timer.subscribe(() => {
       this.refreshData();
     });
@@ -88,8 +89,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadCluster(): Observable<ClusterEntity> {
-    return this.api.getCluster(this.clusterName)
-      .retry(3);
+    return this.api.getCluster(this.clusterName, this.datacenter)
+    .retry(3);
   }
 
   loadSshKeys(): void {

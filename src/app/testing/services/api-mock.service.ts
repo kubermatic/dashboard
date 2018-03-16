@@ -19,7 +19,7 @@ export class ApiMockService {
     constructor() {
     }
 
-    public getCluster(clusterId: string): Observable<ClusterEntity> {
+    public getCluster(clusterId: string, dc: string): Observable<ClusterEntity> {
         return Observable.of(this.cluster);
     }
 
@@ -39,7 +39,7 @@ export class ApiMockService {
         return Observable.of(null);
     }
 
-    public createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
+    public createCluster(createClusterModel: CreateClusterModel, dc: string): Observable<ClusterEntity> {
         return Observable.of(this.cluster);
     }
 

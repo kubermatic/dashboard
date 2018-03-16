@@ -34,13 +34,13 @@ export class ApiService {
     return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
   }
 
-  getCluster(cluster: string): Observable<ClusterEntity> {
-    const url = `${this.restRoot}/cluster/${cluster}`;
+  getCluster(cluster: string, dc: string): Observable<ClusterEntity> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}`;
     return this.http.get<ClusterEntity>(url, { headers: this.headers });
   }
 
-  createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
-    const url = `${this.restRoot}/cluster`;
+  createCluster(createClusterModel: CreateClusterModel, dc: string): Observable<ClusterEntity> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster`;
     return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
   }
 

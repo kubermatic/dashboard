@@ -71,7 +71,7 @@ describe('ClusterListComponent', () => {
         component.sub.unsubscribe();
 
         expect(spyGetClusters.and.callThrough()).toHaveBeenCalled();
-        expect(component.clusters["europe-west3-c"]).toEqual(clusters);
+        expect(component.clusters['europe-west3-c']).toEqual(clusters);
     }));
 
     it('should render cluster list', () => {

@@ -19,7 +19,7 @@ export class DatacenterMockService {
     }
 
     public getSeedDataCenters(): Observable<string[]> {
-    	return Observable.of(this.seedDatacenters);
+        return Observable.of(this.seedDatacenters);
     }
 }
 

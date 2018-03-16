@@ -15,6 +15,8 @@ import { DebugElement } from '@angular/core';
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
 import { ApiService } from '../../../core/services/api/api.service';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
+import { DatacenterMockService } from '../../../testing/services/datacenter-mock.service';
 import { MatDialogRef } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
 import { LocalStorageService } from './../../../core/services/local-storage/local-storage.service';
@@ -48,6 +50,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
                 LocalStorageService,
                 { provide: MatDialogRef, useClass: MatDialogRefMock },
                 { provide: ApiService, useClass: ApiMockService },
+                { provide: DatacenterService, useClass: DatacenterMockService },
                 { provide: Router, useClass: RouterStub },
             ],
         }).compileComponents();

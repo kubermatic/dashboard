@@ -32,7 +32,6 @@ describe('DashboardComponent', () => {
     let authService: AuthMockService;
     let router: Router;
     let apiService: ApiService;
-    let dcService: DatacenterService;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
