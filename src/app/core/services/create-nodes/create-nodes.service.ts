@@ -9,6 +9,11 @@ import { LocalStorageService } from '../local-storage/local-storage.service';
 
 @Injectable()
 export class CreateNodesService {
+    /*private timer = new Observable(observer => {
+      setTimeout(() => {
+        observer.complete();
+      }, 3000);
+    });*/
     private timer = Observable.timer(0, 10000);
     private sub: Subscription;
     public hasData: boolean;
@@ -48,39 +53,43 @@ export class CreateNodesService {
         this.sub = this.timer.subscribe(() => {
             const createNodePipline = this.localStorageService.getNodesData();
             if (createNodePipline && createNodePipline.length) {
+              const waitTillNodeIsRunning = Observable.timer(0, 300000);
+              //waitTillNodeIsRunning.subscribe();
+
               for (let i = 0; i < createNodePipline.length; i ++) {
-              let anyErrors: boolean;
                 if (createNodePipline[i].cluster) {
-                  this.api.getCluster(createNodePipline[i].cluster.metadata.name)
-                    .subscribe(curCluster => {
+                  waitTillNodeIsRunning.subscribe(() => {
+                    this.api.getCluster(createNodePipline[i].cluster.metadata.name).subscribe(curCluster => {
                       if (curCluster.status.phase === 'Running') {
 
 
-                        //let successCounter: number = 0;
-                        //for (let n = 0; n < createNodePipline[i]nodeCount; n ++) {
+                        let successCounter: number = 0;
+                        for (let n = 0; n < createNodePipline[i].nodeCount; n ++) {
 
-                        this.api.createClusterNode(curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
+                          this.api.createClusterNode(curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
 
-                          this.removeCreateNodesLocalStorage(i);
-                          //this.preventCreatingInitialClusterNodes();
-                          // successCounter++;
-                          //if (successCounter === nodeCount) {
-                          NotificationActions.success('Success', `Creating Nodes`);
-                          // }
-                        }, error => {
-                            console.log(error);
-                            debugger;
-                          },
-                          () => {
-                            console.log(this);
-                            debugger;
-                          }
-                        );
-                        //}
+                              //this.preventCreatingInitialClusterNodes();
+
+                            }, error => {
+                              this.removeCreateNodesLocalStorage(i);
+                            },
+                            () => {
+                             // debugger;
+                               //waitTillNodeIsRunning.unsubscribe();
+                              successCounter++;
+                              console.log(successCounter);
+                              if (successCounter === nodeCount) {
+                                NotificationActions.success('Success', `Creating Nodes`);
+                              }
+                            }
+                          );
+                        }
                       }
                     });
+
+                  });
                 } else {
-                  this.removeCreateNodesLocalStorage(i);
+                  //this.removeCreateNodesLocalStorage(i);
                   debugger;
                 }
               }
@@ -92,11 +101,11 @@ export class CreateNodesService {
       debugger;
       const nodePipline = this.localStorageService.getNodesData();
       //delete nodePipline[key];
-      //nodePipline.splice(key, 1);
       //console.log(nodePipline);
       if (nodePipline.length === 1) {
         this.localStorageService.removeNodesCreationData();
       } else {
+        nodePipline.splice(key, 1);
         this.localStorageService.setNodesCreationData(nodePipline);
       }
 
