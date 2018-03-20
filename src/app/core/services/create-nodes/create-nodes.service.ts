@@ -37,7 +37,7 @@ export class CreateNodesService {
             this.hasData = true;
         } else {
             if (nodeCount) {
-              const onWaiting = this.localStorageService.getNodesData()
+              const onWaiting = this.localStorageService.getNodesData();
               onWaiting.push({
                 nodeCount: nodeCount,
                 cluster: cluster,
@@ -62,7 +62,6 @@ export class CreateNodesService {
                                     this.api.createClusterNode(curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
                                     }, error => {
                                         this.removeCreateNodesLocalStorage(i, createNodePipline[i].cluster.metadata.name);
-                                        return;
                                     }, () => {
                                         currentNodeCount = this.localStorageService.getNodeCountData(createNodePipline[i].cluster.metadata.name) + 1;
                                         this.localStorageService.setNodeCountData(createNodePipline[i].cluster.metadata.name, currentNodeCount);
