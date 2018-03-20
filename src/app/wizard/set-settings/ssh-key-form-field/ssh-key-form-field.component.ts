@@ -5,7 +5,7 @@ import { ApiService } from 'app/core/services/api/api.service';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AddSshKeyModalComponent } from '../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, Sort } from '@angular/material';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -17,6 +17,7 @@ import { Subscription } from 'rxjs/Subscription';
 export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
 
   public sshKeys: SSHKeyEntity[] = [];
+  public sortedData: SSHKeyEntity[] = [];
   public config: MatDialogConfig = {};
   public selectedCloudProviderApiError: string;
   public sshKeyForm: FormGroup;
@@ -59,9 +60,31 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     }
   }
 
+  sortData(sort: Sort) {
+    const data = this.sshKeys.slice();
+    if (sort === null || !sort.active || sort.direction === '') {
+      this.sortedData = data;
+      return;
+    }
+
+    this.sortedData = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'name': return this.compare(a.spec.name, b.spec.name, isAsc);
+        default: return 0;
+      }
+    });
+  }
+
+  compare(a, b, isAsc) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
   private refreshSSHKeys(): Subscription {
     return this.api.getSSHKeys().subscribe(result => {
       this.sshKeys = result;
+      this.sortData({active: 'name', direction: 'asc'});
+      this.sshKeys = this.sortedData;
     });
   }
 
