@@ -122,6 +122,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
       error => {
         NotificationActions.error('Error', `${error.status} ${error.statusText}`);
+        WizardActions.goToStep(4);
       });
   }
 
