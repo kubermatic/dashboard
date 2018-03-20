@@ -81,6 +81,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
               }
             }
           }
+          this.sshKeysList.sort();
         }
       );
   }
