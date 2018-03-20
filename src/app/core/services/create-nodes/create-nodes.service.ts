@@ -55,22 +55,22 @@ export class CreateNodesService {
                     if (!!createNodePipline[i] && !!createNodePipline[i].nodeCount) {
                         this.api.getCluster(createNodePipline[i].cluster.metadata.name).subscribe(curCluster => {
                             if (curCluster.status.phase === 'Running') {
-                                let waitTillNodeIsCreated = false;
                                 let currentNodeCount = this.localStorageService.getNodeCountData(createNodePipline[i].cluster.metadata.name);
-                                if (!waitTillNodeIsCreated && currentNodeCount !== createNodePipline[i].nodeCount) {
-                                    waitTillNodeIsCreated = true;
+                                if (currentNodeCount !== createNodePipline[i].nodeCount) {
                                     this.api.createClusterNode(curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
                                     }, error => {
                                         this.removeCreateNodesLocalStorage(i, createNodePipline[i].cluster.metadata.name);
                                     }, () => {
                                         currentNodeCount = this.localStorageService.getNodeCountData(createNodePipline[i].cluster.metadata.name) + 1;
                                         this.localStorageService.setNodeCountData(createNodePipline[i].cluster.metadata.name, currentNodeCount);
-                                        waitTillNodeIsCreated = false;
+
                                         if ( currentNodeCount === createNodePipline[i].nodeCount ) {
                                             NotificationActions.success('Success', `Creating Nodes`);
                                             this.removeCreateNodesLocalStorage(i, createNodePipline[i].cluster.metadata.name);
                                         }
                                     });
+                                } else {
+                                  this.removeCreateNodesLocalStorage(i, createNodePipline[i].cluster.metadata.name);
                                 }
                             }
                         });
