@@ -33,7 +33,8 @@ export class CreateNodesService {
             this.localStorageService.setNodesCreationData({
                 nodeCount: nodeCount,
                 cluster: cluster,
-                createNodeModel: createNodeModel
+                createNodeModel: createNodeModel,
+                datacenter: datacenter
             });
             this.hasData = true;
         }
@@ -44,7 +45,7 @@ export class CreateNodesService {
                     if (curCluster.status.phase === 'Running') {
                         let successCounter: number = 0;
                         for (let i = 0; i < nodeCount; i ++) {
-                            this.api.createClusterNode(curCluster, createNodeModel).subscribe(result => {
+                            this.api.createClusterNode(curCluster, createNodeModel, datacenter).subscribe(result => {
                                 this.preventCreatingInitialClusterNodes();
                                 successCounter++;
                                 if (successCounter === nodeCount) {

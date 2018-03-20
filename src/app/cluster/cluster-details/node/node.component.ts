@@ -13,7 +13,7 @@ import { NotificationActions } from '../../../redux/actions/notification.actions
 export class NodeComponent {
   @Input() nodes: NodeEntityV2[];
   @Input() clusterName: string;
-  @Input() seedDcName: string;
+  @Input() datacenter: string;
   @Input() nodeProvider: string;
   @Input() index: number;
   @Input() clusterRunning: boolean;
@@ -50,7 +50,7 @@ export class NodeComponent {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.clusterName = this.clusterName;
-    dialogRef.componentInstance.seedDcName = this.seedDcName;
+    dialogRef.componentInstance.datacenter = this.datacenter;
 
     dialogRef.afterClosed().subscribe(result => {
       // this.dialogRef = null;

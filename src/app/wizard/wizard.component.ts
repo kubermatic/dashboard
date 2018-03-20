@@ -13,6 +13,7 @@ import { CreateNodesService } from '../core/services';
 import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from '../shared/entity/NodeEntity';
 import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
 import { AWSNodeSpecV2 } from '../shared/entity/node/AWSNodeSpec';
+import { HetznerNodeSpec } from '../shared/entity/node/HetznerNodeSpec';
 import { DigitaloceanNodeSpecV2 } from '../shared/entity/node/DigitialoceanNodeSpec';
 import { AWSCloudSpec } from '../shared/entity/cloud/AWSCloudSpec';
 import { OpenstackCloudSpec } from '../shared/entity/cloud/OpenstackCloudSpec';
@@ -82,7 +83,8 @@ export class WizardComponent implements OnInit, OnDestroy {
           new NodeCloudSpec(
             new DigitaloceanNodeSpecV2('', null, null, null, null),
             new AWSNodeSpecV2('t2.medium', 20, '', '', null),
-            new OpenstackNodeSpec('m1.medium', '')
+            new OpenstackNodeSpec('m1.medium', ''),
+            new HetznerNodeSpec('')
           ),
           new OperatingSystemSpec(
             new UbuntuSpec(false),

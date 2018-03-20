@@ -23,6 +23,7 @@ import { AddNodeModalComponent } from './add-node-modal.component';
 import { InputValidationService } from '../../../core/services/input-validation/input-validation.service';
 import { clusterFake } from './../../../testing/fake-data/cluster.fake';
 import { nodeModelFake } from './../../../testing/fake-data/node.fake';
+import { addNodeModalFake } from './../../../testing/fake-data/addNodeModal.fake';
 import { AddNodeStubComponent } from '../../../testing/components/add-node-stubs';
 
 const modules: any[] = [
@@ -85,6 +86,7 @@ describe('AddNodeModalComponent', () => {
         component.nodeModel = nodeModelFake;
         const formBuilder = fixture.debugElement.injector.get(FormBuilder);
         component.form = formBuilder.group({node_count: 1});
+        component.data = addNodeModalFake;
         fixture.detectChanges();
 
         const spyCreateClusterNode = spyOn(apiService, 'createClusterNode').and.returnValue(Observable.of(null));

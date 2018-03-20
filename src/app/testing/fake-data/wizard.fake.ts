@@ -12,7 +12,8 @@ export const doNodeModelFake: CreateNodeModel = {
           tags: null
         },
         aws: null,
-        openstack: null
+        openstack: null,
+        hetzner: null
       },
       operatingSystem: {
         ubuntu: {

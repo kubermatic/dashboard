@@ -63,7 +63,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) => {
-      this.api.getClusterNodes(this.clusterName).subscribe(nodes => {
+      this.api.getClusterNodes(this.clusterName, this.datacenter).subscribe(nodes => {
         this.nodes = nodes;
         this.refreshData();
       });
@@ -109,7 +109,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodes(): void {
-    this.api.getClusterNodes(this.clusterName).subscribe(nodes => {
+    this.api.getClusterNodes(this.clusterName, this.datacenter).subscribe(nodes => {
       this.nodes = nodes;
     });
   }

@@ -95,7 +95,8 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
           new OpenstackNodeSpec(
             this.nodeForm.node_size,
             this.nodeForm.os_node_image
-          )
+          ),
+          null
         ),
         new OperatingSystemSpec(
           new UbuntuSpec(false),

@@ -12,7 +12,7 @@ import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/nod
 export class NodeGroupComponent implements OnInit {
   @Input() nodes: NodeEntityV2[];
   @Input() clusterName: string;
-  @Input() seedDcName: string;
+  @Input() datacenter: string;
   @Input() nodeProvider: string;
   public conditionsMessage: string = '';
   public nodeRemoval: boolean = false;
@@ -55,7 +55,7 @@ export class NodeGroupComponent implements OnInit {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.clusterName = this.clusterName;
-    dialogRef.componentInstance.seedDcName = this.seedDcName;
+    dialogRef.componentInstance.datacenter = this.datacenter;
 
     dialogRef.afterClosed().subscribe(result => {
       // this.dialogRef = null;
