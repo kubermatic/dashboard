@@ -16,4 +16,16 @@ export class LocalStorageService {
   public getNodesData(): any {
     return JSON.parse(localStorage.getItem('nodesCreationData'));
   }
+
+  public getNodeCountData(clusterName): any {
+    return JSON.parse(localStorage.getItem(clusterName));
+  }
+
+  public setNodeCountData(clusterName, count): void {
+    localStorage.setItem(clusterName, JSON.stringify(count));
+  }
+
+  public removeNodeCountData(clusterName) {
+    localStorage.removeItem(clusterName);
+  }
 }
