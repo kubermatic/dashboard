@@ -35,23 +35,5 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
-    if (this.auth.authenticated()) {
-      let dcNames: string[];
-      this.dcService.getSeedDataCenters().subscribe(res => {
-        dcNames = res;
-        for (const i in dcNames) {
-          if (dcNames.hasOwnProperty(i)) {
-            this.api.getClusters(dcNames[i]).subscribe(result => {
-              if (!result) {
-                this.router.navigate(['wizard']);
-              }
-            }, error => {
-              this.router.navigate(['wizard']);
-            });
-          }
-        }
-      });
-    }
-  }
+  ngOnInit() {}
 }
