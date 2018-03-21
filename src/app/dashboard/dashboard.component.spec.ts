@@ -63,17 +63,4 @@ describe('DashboardComponent', () => {
     it('should create the cmp', async(() => {
         expect(component).toBeTruthy();
     }));
-
-    it('should navigate to wizard when there is error', fakeAsync(() => {
-        const spyGetClusters = spyOn(apiService, 'getClusters').and.returnValue(Observable.throw('Error'));
-        const spyNavigate = spyOn(router, 'navigate');
-        authService.isAuth = true;
-
-        fixture.detectChanges();
-        tick();
-
-        const navArgs = spyNavigate.calls.first().args[0];
-        expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-        expect(navArgs[0]).toBe('wizard', 'should navigate to the Wizard');
-    }));
 });

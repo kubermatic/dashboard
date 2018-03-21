@@ -21,6 +21,7 @@ import { MatDialogRef } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
 import { LocalStorageService } from './../../../core/services/local-storage/local-storage.service';
 import { CreateNodesService } from '../../../core/services/index';
+import { datacentersFake } from '../../../testing/fake-data/datacenter.fake';
 
 const modules: any[] = [
     BrowserModule,
@@ -82,6 +83,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     it('should call deleteCluster method', fakeAsync(() => {
         fixture.detectChanges();
         component.clusterName = 'cluster-name';
+        component.datacenter = datacentersFake[0];
         const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));
 
         component.deleteCluster();
@@ -99,6 +101,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     it('should call navigate to cluster list after deleting', fakeAsync(() => {
         fixture.detectChanges();
         component.clusterName = 'cluster-name';
+        component.datacenter = datacentersFake[0];
         component.disableDeleteCluster = true;
         const spyNavigate = spyOn(router, 'navigate');
 
