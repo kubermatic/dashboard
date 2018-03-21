@@ -18,20 +18,26 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public sub: Subscription;
   public loading: boolean = true;
   public sortedData: ClusterEntity[] = [];
+  public sort: Sort = {active: 'name', direction: 'asc'};
 
   constructor(public api: ApiService) {}
 
   ngOnInit() {
     this.sub = this.timer.subscribe(() => {
       this.getClusters();
+      this.sortData(this.sort);
     });
-    this.sortData({active: 'name', direction: 'asc'});
+
   }
 
   getClusters() {
     this.api.getClusters().subscribe(result => {
-      this.clusters = result;
+
+      this.clusters = result.slice().sort((a, b) => {
+        return this.compare(a.metadata.name, b.metadata.name, true);
+      })
       this.loading = false;
+
     });
   }
 
@@ -61,13 +67,26 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.sortedData = data.sort((a, b) => {
+
+    this.sort = sort;
+
+    this.sortedData = this.clusters.slice().sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'name': return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
-        case 'provider': return this.getProvider(a, b, isAsc);
-        case 'region': return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
-        case 'status': return this.compare(a.status.phase, b.status.phase, isAsc);
+        case 'name': {
+          return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
+        }
+        case 'provider': {
+          return this.getProvider(a, b, isAsc);
+        }
+        case 'region': {
+
+          return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
+        }
+        case 'status': {
+          console.log(this.compare(a.status.phase, b.status.phase, isAsc));
+          return this.compare(a.status.phase, b.status.phase, isAsc);
+        }
         default: return 0;
       }
     });
