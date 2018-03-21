@@ -32,12 +32,12 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   getClusters() {
     this.api.getClusters().subscribe(result => {
-
-      this.clusters = result.slice().sort((a, b) => {
+      this.clusters = result.length ? result.slice().sort((a, b) => {
         return this.compare(a.metadata.name, b.metadata.name, true);
-      })
+      }) :  [];
+    }, error => {
+    }, () => {
       this.loading = false;
-
     });
   }
 
@@ -50,43 +50,21 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    if (this.clusters.length === 0) {
-      this.api.getClusters().subscribe(result => {
-        this.clusters = result;
-        this.getSortData(sort);
-      });
-    } else {
-        this.getSortData(sort);
-    }
-  }
-
-  getSortData(sort: Sort) {
     const data = this.clusters ? this.clusters.slice() : [];
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedData = data;
       return;
     }
 
-
     this.sort = sort;
 
     this.sortedData = this.clusters.slice().sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'name': {
-          return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
-        }
-        case 'provider': {
-          return this.getProvider(a, b, isAsc);
-        }
-        case 'region': {
-
-          return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
-        }
-        case 'status': {
-          console.log(this.compare(a.status.phase, b.status.phase, isAsc));
-          return this.compare(a.status.phase, b.status.phase, isAsc);
-        }
+        case 'name': return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
+        case 'provider': return this.getProvider(a, b, isAsc);
+        case 'region': return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
+        case 'status': return this.compare(a.status.phase, b.status.phase, isAsc);
         default: return 0;
       }
     });
