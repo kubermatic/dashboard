@@ -10,6 +10,7 @@ import {RouterTestingModule} from '../../../testing/router-stubs';
 import {HttpClientModule} from '@angular/common/http';
 import {NgReduxTestingModule} from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {datacentersFake} from '../../../testing/fake-data/datacenter.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -42,6 +43,7 @@ describe('ClusterConnectComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterConnectComponent);
     component = fixture.componentInstance;
+    component.datacenter = datacentersFake[0];
     fixture.detectChanges();
   });
 
