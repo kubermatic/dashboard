@@ -60,6 +60,7 @@ export class CreateNodesService {
                                     this.api.createClusterNode(curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
                                     }, error => {
                                         this.removeCreateNodesLocalStorage(i, createNodePipline[i].cluster.metadata.name);
+                                        NotificationActions.error('Error', `${error.status} ${error.statusText}`);
                                         return;
                                     }, () => {
                                         currentNodeCount = this.localStorageService.getNodeCountData(createNodePipline[i].cluster.metadata.name) + 1;
