@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { NodeEntityV2 } from '../../../shared/entity/NodeEntity';
 import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-node-group',
@@ -12,7 +13,7 @@ import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/nod
 export class NodeGroupComponent implements OnInit {
   @Input() nodes: NodeEntityV2[];
   @Input() clusterName: string;
-  @Input() datacenter: string;
+  @Input() datacenter: DataCenterEntity;
   @Input() nodeProvider: string;
   public conditionsMessage: string = '';
   public nodeRemoval: boolean = false;

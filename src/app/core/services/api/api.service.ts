@@ -20,7 +20,6 @@ import 'rxjs/add/operator/catch';
 export class ApiService {
 
   private restRoot: string = environment.restRoot;
-  private restRootV2: string = environment.restRootV2;
   private restRootV3: string = environment.restRootV3;
   private headers: HttpHeaders = new HttpHeaders();
 

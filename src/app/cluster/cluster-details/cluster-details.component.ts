@@ -43,7 +43,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   private upgradesList: string[] = [];
   private gotUpgradesList: boolean;
-  public datacenter: string;
+  public datacenter: DataCenterEntity;
+  public dc: string;
 
   constructor(private customEventService: CustomEventService,
               private route: ActivatedRoute,
@@ -56,14 +57,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.clusterName = this.route.snapshot.paramMap.get('clusterName');
-    this.datacenter = this.route.snapshot.paramMap.get('seedDc');
+    this.dc = this.route.snapshot.paramMap.get('seedDc');
     this.sub = this.timer.subscribe(() => {
       this.refreshData();
     });
 
     this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) => {
-      this.api.getClusterNodes(this.clusterName, this.datacenter).subscribe(nodes => {
+      this.api.getClusterNodes(this.clusterName, this.dc).subscribe(nodes => {
         this.nodes = nodes;
         this.refreshData();
       });
@@ -89,7 +90,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadCluster(): Observable<ClusterEntity> {
-    return this.api.getCluster(this.clusterName, this.datacenter)
+    return this.api.getCluster(this.clusterName, this.dc)
     .retry(3);
   }
 
@@ -109,7 +110,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodes(): void {
-    this.api.getClusterNodes(this.clusterName, this.datacenter).subscribe(nodes => {
+    this.api.getClusterNodes(this.clusterName, this.dc).subscribe(nodes => {
       this.nodes = nodes;
     });
   }
@@ -124,6 +125,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             res.address,
             res.status,
           );
+
+          this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
+            this.datacenter = new DataCenterEntity(result.metadata, result.spec, result.seed);
+          });
 
           if (!this.nodeDc && this.cluster.provider !== NodeProvider.BRINGYOUROWN) {
             this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
@@ -191,7 +196,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem('token');
-    return `${this.restRootV3}/dc/${this.datacenter}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
+    return `${this.restRootV3}/dc/${this.dc}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
 
   public isLoaded(): boolean {
