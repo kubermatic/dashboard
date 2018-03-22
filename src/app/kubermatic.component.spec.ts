@@ -1,16 +1,16 @@
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import {BrowserModule} from '@angular/platform-browser';
-import {SimpleNotificationsModule} from 'angular2-notifications';
+import { BrowserModule } from '@angular/platform-browser';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 import { NgReduxTestingModule, MockNgRedux } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {RouterTestingModule} from '@angular/router/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from './shared/shared.module';
 
 import { By } from '@angular/platform-browser';
-import {TestBed, async, ComponentFixture} from '@angular/core/testing';
+import { TestBed, async, ComponentFixture } from '@angular/core/testing';
 
-import { Auth, AuthGuard, AUTH_PROVIDERS, ApiService } from './core/services/index';
+import { Auth, AuthGuard, AUTH_PROVIDERS, ApiService, DatacenterService } from './core/services/index';
 import { SidenavService } from './core/components/sidenav/sidenav.service';
 
 import { BreadcrumbsComponent } from './core/components/breadcrumbs/breadcrumbs.component';
@@ -27,6 +27,7 @@ import {
     MatDialogModule } from '@angular/material';
 
 import { AuthMockService } from './testing/services/auth-mock.service';
+import { DatacenterMockService } from './testing/services/datacenter-mock.service';
 
 const modules: any[] = [
     BrowserModule,
@@ -65,6 +66,7 @@ describe('KubermaticComponent', () => {
                 AUTH_PROVIDERS,
                 { provide: Auth, useClass: AuthMockService },
                 ApiService,
+                { provide: DatacenterService, useClass: DatacenterMockService },
                 AuthGuard,
                 SidenavService
             ],

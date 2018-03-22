@@ -5,7 +5,7 @@ const scope: string[] = ['openid', 'email', 'profile', 'groups'];
 export const environment = {
   production: true,
   restRoot : '/api/v1',
-  restRootV2 : '/api/v2',
+  restRootV3 : '/api/v3',
   digitalOceanRestRoot : 'https://api.digitalocean.com/v2',
   coreOSdexAuth : oauth + '?response_type=id_token&client_id=kubermatic&redirect_uri='
   + redirect_uri + '&scope=' + scope.join(' ') + '&nonce=random',

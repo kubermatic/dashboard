@@ -4,6 +4,7 @@ import {Auth} from '../core/services';
 import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
 import 'rxjs/add/operator/filter';
 import {ApiService} from 'app/core/services/api/api.service';
+import {DatacenterService} from 'app/core/services/datacenter/datacenter.service';
 
 @Component({
   selector: 'kubermatic-dashboard',
@@ -15,7 +16,8 @@ export class DashboardComponent implements OnInit {
   constructor(private auth: Auth,
               private router: Router,
               private activatedRoute: ActivatedRoute,
-              private api: ApiService) {
+              private api: ApiService,
+              private dcService: DatacenterService) {
     this.router.events
       .filter(event => event instanceof NavigationEnd)
       .map(() => this.activatedRoute)
@@ -33,15 +35,5 @@ export class DashboardComponent implements OnInit {
       });
   }
 
-  ngOnInit() {
-    if (this.auth.authenticated()) {
-      this.api.getClusters().subscribe(result => {
-        if (!result) {
-          this.router.navigate(['wizard']);
-        }
-      }, error => {
-        this.router.navigate(['wizard']);
-      });
-    }
-  }
+  ngOnInit() {}
 }

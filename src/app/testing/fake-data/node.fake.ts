@@ -12,7 +12,8 @@ export const nodeModelFake: CreateNodeModel = {
           tags: null
         },
         aws: null,
-        openstack: null
+        openstack: null,
+        hetzner: null
       },
       operatingSystem: {
         ubuntu: {
@@ -48,7 +49,8 @@ export const nodeFake: NodeEntityV2 = {
         tags: []
       },
       aws : null,
-      openstack : null
+      openstack : null,
+      hetzner : null
     },
     operatingSystem : {
       ubuntu : {
@@ -116,7 +118,8 @@ export const nodesFake: NodeEntityV2[] = [
           tags: []
         },
         aws : null,
-        openstack : null
+        openstack : null,
+        hetzner : null
       },
       operatingSystem : {
         ubuntu : {
@@ -182,7 +185,8 @@ export const nodesFake: NodeEntityV2[] = [
           tags: []
         },
         aws : null,
-        openstack : null
+        openstack : null,
+        hetzner : null
       },
       operatingSystem : {
         ubuntu : {

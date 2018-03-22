@@ -13,52 +13,53 @@ import { OpenStack } from 'openstack-lib';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { DropletSizeResponseEntity } from 'app/shared/entity/digitalocean/DropletSizeEntity';
 import { CreateClusterModel } from 'app/shared/model/CreateClusterModel';
+import { DatacenterService } from '../datacenter/datacenter.service';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class ApiService {
 
   private restRoot: string = environment.restRoot;
-  private restRootV2: string = environment.restRootV2;
+  private restRootV3: string = environment.restRootV3;
   private headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient, private auth: Auth) {
+  constructor(private http: HttpClient, private auth: Auth, public dcService: DatacenterService) {
     const token = auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + token);
   }
 
-  getClusters(): Observable<ClusterEntity[]> {
-    const url = `${this.restRoot}/cluster`;
+  getClusters(dc: string): Observable<ClusterEntity[]> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster`;
     return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
   }
 
-  getCluster(cluster: string): Observable<ClusterEntity> {
-    const url = `${this.restRoot}/cluster/${cluster}`;
+  getCluster(cluster: string, dc: string): Observable<ClusterEntity> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}`;
     return this.http.get<ClusterEntity>(url, { headers: this.headers });
   }
 
-  createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
-    const url = `${this.restRoot}/cluster`;
+  createCluster(createClusterModel: CreateClusterModel, dc: string): Observable<ClusterEntity> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster`;
     return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
   }
 
-  deleteCluster(cluster: string) {
-    const url = `${this.restRoot}/cluster/${cluster}`;
+  deleteCluster(cluster: string, dc: string) {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}`;
     return this.http.delete(url, { headers: this.headers });
   }
 
-  getClusterNodes(cluster: string): Observable<NodeEntityV2[]> {
-    const url = `${this.restRootV2}/cluster/${cluster}/nodes`;
+  getClusterNodes(cluster: string, dc: string): Observable<NodeEntityV2[]> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node`;
     return this.http.get<NodeEntityV2[]>(url, { headers: this.headers });
   }
 
-  createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<NodeEntityV2> {
-    const url = `${this.restRootV2}/cluster/${cluster.metadata.name}/nodes`;
+  createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel, dc: string): Observable<NodeEntityV2> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.metadata.name}/node`;
     return this.http.post<NodeEntityV2>(url, nodeModel, { headers: this.headers });
   }
 
-  deleteClusterNode(cluster: string, node: NodeEntityV2) {
-    const url = `${this.restRootV2}/cluster/${cluster}/nodes/${node.metadata.name}`;
+  deleteClusterNode(cluster: string, node: NodeEntityV2, dc: string) {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node/${node.metadata.name}`;
     return this.http.delete(url, { headers: this.headers });
   }
 

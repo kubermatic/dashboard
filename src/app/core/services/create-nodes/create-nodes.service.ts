@@ -2,7 +2,8 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
-import { ApiService } from 'app/core/services/api/api.service';
+import { ApiService } from './../../services/api/api.service';
+import { DatacenterService } from './../../services/datacenter/datacenter.service';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { CreateNodeModel } from '../../../shared/model/CreateNodeModel';
 import { LocalStorageService } from '../local-storage/local-storage.service';
@@ -15,25 +16,27 @@ export class CreateNodesService {
 
     constructor(
         private api: ApiService,
+        private dcService: DatacenterService,
         private localStorageService: LocalStorageService) {
         const nodesData = this.localStorageService.getNodesData();
 
         if (nodesData) {
-            this.createInitialClusterNodes(nodesData.nodeCount, nodesData.cluster, nodesData.createNodeModel);
-            this.hasData = true;
+            this.dcService.getDataCenter(nodesData.cluster.spec.cloud.dc).subscribe(res => {
+                this.createInitialClusterNodes(nodesData.nodeCount, nodesData.cluster, nodesData.createNodeModel, res.spec.seed);
+                this.hasData = true;
+            });
         }
     }
 
-    public createInitialClusterNodes(nodeCount: number, cluster: ClusterEntity, createNodeModel: CreateNodeModel): void {
-
+    public createInitialClusterNodes(nodeCount: number, cluster: ClusterEntity, createNodeModel: CreateNodeModel, datacenter: string): void {
         if (!this.localStorageService.getNodesData()) {
             this.localStorageService.setNodesCreationData([{
                 nodeCount: nodeCount,
                 cluster: cluster,
+                datacenter: datacenter,
                 createNodeModel: createNodeModel
             }]);
             this.localStorageService.setNodeCountData(cluster.metadata.name, 0);
-
             this.hasData = true;
         } else {
             if (nodeCount) {
@@ -41,6 +44,7 @@ export class CreateNodesService {
               onWaiting.push({
                 nodeCount: nodeCount,
                 cluster: cluster,
+                datacenter: datacenter,
                 createNodeModel: createNodeModel
               });
               this.localStorageService.setNodeCountData(cluster.metadata.name, 0);
@@ -53,11 +57,11 @@ export class CreateNodesService {
             if (createNodePipline && createNodePipline.length) {
                 for (let i = 0; i < createNodePipline.length; i ++) {
                     if (!!createNodePipline[i] && !!createNodePipline[i].nodeCount) {
-                        this.api.getCluster(createNodePipline[i].cluster.metadata.name).subscribe(curCluster => {
+                        this.api.getCluster(createNodePipline[i].cluster.metadata.name, createNodePipline[i].datacenter).subscribe(curCluster => {
                             if (curCluster.status.phase === 'Running') {
                                 let currentNodeCount = this.localStorageService.getNodeCountData(createNodePipline[i].cluster.metadata.name);
                                 if (currentNodeCount !== createNodePipline[i].nodeCount) {
-                                    this.api.createClusterNode(curCluster, createNodePipline[i].createNodeModel).subscribe(result => {
+                                    this.api.createClusterNode(curCluster, createNodePipline[i].createNodeModel, createNodePipline[i].datacenter).subscribe(result => {
                                     }, error => {
                                         this.removeCreateNodesLocalStorage(i, createNodePipline[i].cluster.metadata.name);
                                         NotificationActions.error('Error', `${error.status} ${error.statusText}`);

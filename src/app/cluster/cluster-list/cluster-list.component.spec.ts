@@ -71,7 +71,7 @@ describe('ClusterListComponent', () => {
         component.sub.unsubscribe();
 
         expect(spyGetClusters.and.callThrough()).toHaveBeenCalled();
-        expect(component.clusters).toEqual(clusters);
+        expect(component.clusters['europe-west3-c']).toEqual(clusters);
     }));
 
     it('should render cluster list', () => {
@@ -100,8 +100,7 @@ describe('ClusterListComponent', () => {
 
         const links = linkDes
             .map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
-
-        expect(links.length).toBe(4, 'should have 4 links');
+        expect(links.length).toBe(2, 'should have 2 links');
     });
 
     it('can click Wizard link in template', () => {
