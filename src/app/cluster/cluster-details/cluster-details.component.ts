@@ -26,9 +26,8 @@ import { UpgradeClusterComponentData } from '../../shared/model/UpgradeClusterDi
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
-
   public nodes: NodeEntityV2[];
-  private restRoot: string = environment.restRoot;
+  private restRootV3: string = environment.restRootV3;
   public cluster: ClusterEntity;
   public nodeDc: DataCenterEntity;
   public timer: any = Observable.timer(0, 5000);
@@ -44,6 +43,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   private upgradesList: string[] = [];
   private gotUpgradesList: boolean;
+  public datacenter: DataCenterEntity;
+  public dc: string;
 
   constructor(private customEventService: CustomEventService,
               private route: ActivatedRoute,
@@ -56,13 +57,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.clusterName = this.route.snapshot.paramMap.get('clusterName');
+    this.dc = this.route.snapshot.paramMap.get('seedDc');
     this.sub = this.timer.subscribe(() => {
       this.refreshData();
     });
 
     this.loadSshKeys();
     this.customEventService.subscribe('onNodeDelete', (nodeName: string) => {
-      this.api.getClusterNodes(this.clusterName).subscribe(nodes => {
+      this.api.getClusterNodes(this.clusterName, this.dc).subscribe(nodes => {
         this.nodes = nodes;
         this.refreshData();
       });
@@ -88,8 +90,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadCluster(): Observable<ClusterEntity> {
-    return this.api.getCluster(this.clusterName)
-      .retry(3);
+    return this.api.getCluster(this.clusterName, this.dc)
+    .retry(3);
   }
 
   loadSshKeys(): void {
@@ -108,7 +110,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodes(): void {
-    this.api.getClusterNodes(this.clusterName).subscribe(nodes => {
+    this.api.getClusterNodes(this.clusterName, this.dc).subscribe(nodes => {
       this.nodes = nodes;
     });
   }
@@ -123,6 +125,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             res.address,
             res.status,
           );
+
+          this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
+            this.datacenter = new DataCenterEntity(result.metadata, result.spec, result.seed);
+          });
 
           if (!this.nodeDc && this.cluster.provider !== NodeProvider.BRINGYOUROWN) {
             this.loadDataCenter(this.cluster.spec.cloud.dc, 'nodeDc');
@@ -163,6 +169,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     this.dialogRef.componentInstance.humanReadableName = this.cluster.spec.humanReadableName;
     this.dialogRef.componentInstance.clusterName = this.clusterName;
+    this.dialogRef.componentInstance.datacenter = this.datacenter;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
@@ -170,6 +177,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public connectClusterDialog(): void {
     this.dialogRef = this.dialog.open(ClusterConnectComponent, this.config);
     this.dialogRef.componentInstance.clusterName = this.clusterName;
+    this.dialogRef.componentInstance.datacenter = this.datacenter;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
@@ -188,7 +196,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem('token');
-    return `${this.restRoot}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
+    return `${this.restRootV3}/dc/${this.dc}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
   }
 
   public isLoaded(): boolean {

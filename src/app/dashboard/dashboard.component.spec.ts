@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { ApiService } from './../core/services/api/api.service';
+import { DatacenterService } from './../core/services/datacenter/datacenter.service';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,6 +16,7 @@ import { AuthMockService } from '../testing/services/auth-mock.service';
 import { Auth } from './../core/services/index';
 import { DashboardComponent } from './dashboard.component';
 import { ApiMockService } from '../testing/services/api-mock.service';
+import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 
 const modules: any[] = [
     BrowserModule,
@@ -43,6 +45,7 @@ describe('DashboardComponent', () => {
                 { provide: Router, useClass: RouterStub },
                 { provide: Auth, useClass: AuthMockService },
                 { provide: ApiService, useClass: ApiMockService },
+                { provide: DatacenterService, useClass: DatacenterMockService },
                 { provide: ActivatedRoute, useClass: ActivatedRouteStub }
             ],
         }).compileComponents();
@@ -59,18 +62,5 @@ describe('DashboardComponent', () => {
 
     it('should create the cmp', async(() => {
         expect(component).toBeTruthy();
-    }));
-
-    it('should navigate to wizard when there is error', fakeAsync(() => {
-        const spyGetClusters = spyOn(apiService, 'getClusters').and.returnValue(Observable.throw('Error'));
-        const spyNavigate = spyOn(router, 'navigate');
-        authService.isAuth = true;
-
-        fixture.detectChanges();
-        tick();
-
-        const navArgs = spyNavigate.calls.first().args[0];
-        expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-        expect(navArgs[0]).toBe('wizard', 'should navigate to the Wizard');
     }));
 });

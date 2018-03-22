@@ -19,11 +19,11 @@ export class ApiMockService {
     constructor() {
     }
 
-    public getCluster(clusterId: string): Observable<ClusterEntity> {
+    public getCluster(clusterId: string, dc: string): Observable<ClusterEntity> {
         return Observable.of(this.cluster);
     }
 
-    public getClusters(): Observable<ClusterEntity[]> {
+    public getClusters(dc: string): Observable<ClusterEntity[]> {
         return Observable.of(this.clusters);
     }
 
@@ -35,23 +35,23 @@ export class ApiMockService {
         return Observable.of(null);
     }
 
-    public createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel): Observable<any> {
+    public createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel, dc: string): Observable<any> {
         return Observable.of(null);
     }
 
-    public createCluster(createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
+    public createCluster(createClusterModel: CreateClusterModel, dc: string): Observable<ClusterEntity> {
         return Observable.of(this.cluster);
     }
 
-    public deleteCluster(clusterName: string): Observable<any> {
+    public deleteCluster(clusterName: string, dc: string): Observable<any> {
         return Observable.of(null);
     }
 
-    public deleteClusterNode(clusterName: string, nodeName: string): Observable<any> {
+    public deleteClusterNode(clusterName: string, nodeName: string, dc: string): Observable<any> {
         return Observable.of(null);
     }
 
-    public getClusterNodes(cluster: string): Observable<NodeEntityV2[]> {
+    public getClusterNodes(cluster: string, nodeModel: CreateNodeModel, dc: string): Observable<NodeEntityV2[]> {
         return Observable.of(this.nodes);
     }
 

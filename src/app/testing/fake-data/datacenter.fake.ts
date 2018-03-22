@@ -12,6 +12,7 @@ export const datacentersFake: DataCenterEntity[] = [
         },
         seed: undefined,
         spec: {
+            seed: 'europe-west3-c',
             country: 'DE',
             digitalocean: {
                 region: 'fra1'
@@ -34,6 +35,7 @@ export const datacentersFake: DataCenterEntity[] = [
         },
         seed: undefined,
         spec: {
+            seed: 'europe-west3-c',
             country: 'DE',
             digitalocean: {
                 region: 'fra1'
@@ -56,6 +58,7 @@ export const datacentersFake: DataCenterEntity[] = [
         },
         seed: true,
         spec: {
+            seed: 'europe-west3-c',
             country: 'DE',
             digitalocean: undefined,
             bringyourown: undefined,
@@ -66,3 +69,5 @@ export const datacentersFake: DataCenterEntity[] = [
         }
     }
 ];
+
+export const seedDatacentersFake: string[] = ['europe-west3-c'];
