@@ -100,8 +100,7 @@ describe('ClusterListComponent', () => {
 
         const links = linkDes
             .map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
-
-        expect(links.length).toBe(4, 'should have 4 links');
+        expect(links.length).toBe(2, 'should have 2 links');
     });
 
     it('can click Wizard link in template', () => {

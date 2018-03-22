@@ -19,6 +19,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public sub: Subscription;
   public loading: boolean = true;
   public sortedData: ClusterEntity[] = [];
+  public sort: Sort = {active: 'name', direction: 'asc'};
 
   constructor(public api: ApiService, public dcService: DatacenterService) {}
 
@@ -26,7 +27,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.sub = this.timer.subscribe(() => {
       this.getClusters();
     });
-    this.sortData({active: 'name', direction: 'asc'});
   }
 
   getClusters() {
@@ -36,8 +36,13 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       for (const i in dcNames) {
         if (dcNames.hasOwnProperty(i)) {
           this.api.getClusters(dcNames[i]).subscribe(result => {
-            this.clusters[dcNames[i]] = result;
+            this.clusters[dcNames[i]] = result.length ? result.slice().sort((a, b) => {
+              return this.compare(a.metadata.name, b.metadata.name, true);
+            }) : [];
             this.loading = false;
+          }, error => {
+          }, () => {
+            this.sortData(this.sort);
           });
         }
       }
@@ -53,23 +58,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    let dcNames: string[];
-    this.dcService.getSeedDataCenters().subscribe(res => {
-      dcNames = res;
-      for (const i in dcNames) {
-        if (!this.clusters[dcNames[i]]) {
-          this.api.getClusters(dcNames[i]).subscribe(result => {
-            this.clusters[dcNames[i]] = result;
-            this.getSortData(sort);
-          });
-        } else {
-          this.getSortData(sort);
-        }
-      }
-    });
-  }
-
-  getSortData(sort: Sort) {
     const data = [];
     for (const i in this.clusters) {
       if (this.clusters.hasOwnProperty(i)) {
@@ -85,6 +73,8 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       this.sortedData = data;
       return;
     }
+
+    this.sort = sort;
 
     this.sortedData = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
