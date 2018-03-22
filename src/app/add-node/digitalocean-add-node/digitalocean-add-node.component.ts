@@ -132,6 +132,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
             null
           ),
           null,
+          null,
           null
         ),
         new OperatingSystemSpec(

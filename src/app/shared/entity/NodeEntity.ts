@@ -2,6 +2,7 @@ import {MetadataEntity, MetadataEntityV2} from './MetadataEntity';
 import {DigitaloceanNodeSpec, DigitaloceanNodeSpecV2} from './node/DigitialoceanNodeSpec';
 import {AWSNodeSpec, AWSNodeSpecV2} from './node/AWSNodeSpec';
 import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
+import {HetznerNodeSpec} from './node/HetznerNodeSpec';
 import {BareMetalNodeSpec} from './node/BareMetalNodeSpec';
 
 
@@ -21,11 +22,13 @@ export class NodeCloudSpec {
   digitalocean: DigitaloceanNodeSpecV2;
   aws: AWSNodeSpecV2;
   openstack: OpenstackNodeSpec;
+  hetzner: HetznerNodeSpec;
 
-  constructor(digitalocean: DigitaloceanNodeSpecV2, aws: AWSNodeSpecV2, openstack: OpenstackNodeSpec) {
+  constructor(digitalocean: DigitaloceanNodeSpecV2, aws: AWSNodeSpecV2, openstack: OpenstackNodeSpec, hetzner: HetznerNodeSpec) {
     this.digitalocean = digitalocean;
     this.aws = aws;
     this.openstack = openstack;
+    this.hetzner = hetzner;
   }
 }
 

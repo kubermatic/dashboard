@@ -40,4 +40,16 @@ export class DatacenterService {
     });
   }
 
+  getSeedDataCenters(): Observable<string[]> {
+    const dcNames: string[] = [];
+    return this.getDataCenters().map(res => {
+      for (const i in res) {
+        if (res[i].seed === true) {
+          dcNames.push(res[i].metadata.name);
+        }
+      }
+      return dcNames;
+    });
+  }
+
 }

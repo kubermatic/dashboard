@@ -14,7 +14,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '../testing/router-stubs';
 
-import {TestBed, async, ComponentFixture, inject, fakeAsync, tick} from '@angular/core/testing';
+import { TestBed, async, ComponentFixture, inject, fakeAsync, tick } from '@angular/core/testing';
 import { RouterStub } from './../testing/router-stubs';
 
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
@@ -113,7 +113,12 @@ describe('WizardComponent', () => {
             wizard: {
                 nodeModel: doNodeModelFake,
                 clusterModel: doClusterModelFake,
-                nodeForm: {node_count: 1}
+                nodeForm: {node_count: 1},
+                setDatacenterForm: {
+                    datacenter: {
+                        spec: {seed: 'europe-west3-c'}
+                    }
+                }
             }
         });
         setMockNgRedux(fixture, 'provider', 5);

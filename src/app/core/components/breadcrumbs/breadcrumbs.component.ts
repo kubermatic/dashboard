@@ -22,13 +22,16 @@ export class BreadcrumbsComponent implements OnInit {
     this.breadcrumb$.subscribe(crumb => {
       this.activePageTitle = crumb;
 
-      const regExp = /\/cluster\/(.*)$/;
-      const matchRes = regExp.exec(this.router.url);
+      const regExpDatacenter = /\/cluster\/(.*)\/.*$/;
+      const regExpCluster = /\/cluster\/.*\/(.*)$/;
+      const matchResDatacenter = regExpDatacenter.exec(this.router.url);
+      const matchResCluster = regExpCluster.exec(this.router.url);
 
-      if (matchRes) {
+      if (matchResDatacenter && matchResCluster) {
         this.clusterName = '...';
-        const clusterId = matchRes[1];
-        this.api.getCluster(clusterId)
+        const clusterId = matchResCluster[1];
+        const datacenter = matchResDatacenter[1];
+        this.api.getCluster(clusterId, datacenter)
           .subscribe(cluster => this.clusterName = cluster.spec.humanReadableName);
       } else {
         this.clusterName = '';

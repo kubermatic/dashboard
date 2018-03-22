@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ApiService } from '../../core/services/api/api.service';
+import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,20 +19,33 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public sub: Subscription;
   public loading: boolean = true;
   public sortedData: ClusterEntity[] = [];
+  public sort: Sort = {active: 'name', direction: 'asc'};
 
-  constructor(public api: ApiService) {}
+  constructor(public api: ApiService, public dcService: DatacenterService) {}
 
   ngOnInit() {
     this.sub = this.timer.subscribe(() => {
       this.getClusters();
     });
-    this.sortData({active: 'name', direction: 'asc'});
   }
 
   getClusters() {
-    this.api.getClusters().subscribe(result => {
-      this.clusters = result;
-      this.loading = false;
+    let dcNames: string[];
+    this.dcService.getSeedDataCenters().subscribe(res => {
+      dcNames = res;
+      for (const i in dcNames) {
+        if (dcNames.hasOwnProperty(i)) {
+          this.api.getClusters(dcNames[i]).subscribe(result => {
+            this.clusters[dcNames[i]] = result.length ? result.slice().sort((a, b) => {
+              return this.compare(a.metadata.name, b.metadata.name, true);
+            }) : [];
+            this.loading = false;
+          }, error => {
+          }, () => {
+            this.sortData(this.sort);
+          });
+        }
+      }
     });
   }
 
@@ -44,22 +58,23 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    if (this.clusters.length === 0) {
-      this.api.getClusters().subscribe(result => {
-        this.clusters = result;
-        this.getSortData(sort);
-      });
-    } else {
-        this.getSortData(sort);
+    const data = [];
+    for (const i in this.clusters) {
+      if (this.clusters.hasOwnProperty(i)) {
+        for (const j in this.clusters[i]) {
+          if (this.clusters[i].hasOwnProperty(j)) {
+            data.push(this.clusters[i][j]);
+          }
+        }
+      }
     }
-  }
 
-  getSortData(sort: Sort) {
-    const data = this.clusters ? this.clusters.slice() : [];
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedData = data;
       return;
     }
+
+    this.sort = sort;
 
     this.sortedData = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';

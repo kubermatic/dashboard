@@ -105,6 +105,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
               this.nodeForm.ami,
               null
             ),
+            null,
             null
           ),
           new OperatingSystemSpec(
