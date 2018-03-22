@@ -95,13 +95,11 @@ describe('ClusterListComponent', () => {
         component.loading = false;
         fixture.detectChanges();
 
-        const linkDes = fixture.debugElement
-            .queryAll(By.directive(RouterLinkStubDirective));
+        const linkDes = fixture.debugElement.queryAll(By.directive(RouterLinkStubDirective));
 
-        const links = linkDes
-            .map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
+        const links = linkDes.map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
 
-        expect(links.length).toBe(4, 'should have 4 links');
+        expect(links.length).toBe(2, 'should have 2 links');
     });
 
     it('can click Wizard link in template', () => {
