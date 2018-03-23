@@ -1,10 +1,13 @@
 import { NodeProvider } from './../../shared/model/NodeProviderConstants';
+
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
-import { Size } from '../../shared/entity/digitalocean/DropletSizeEntity';
+
+import { DigitaloceanSize } from '../../shared/entity/provider/DigitaloceanSizeEntity';
+
 import { Subscription } from 'rxjs/Subscription';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { ApiService } from '../../core/services';
@@ -17,11 +20,13 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class SummaryComponent implements OnInit, OnDestroy {
 
+
   public providerNames = NodeProvider.ProviderNames;
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
   @select(['wizard', 'setDatacenterForm', 'datacenter']) region$: Observable<DataCenterEntity>;
   public region: DataCenterEntity;
+
   @select(['wizard', 'nodeModel']) nodeModel$: Observable<NodeEntity>;
   public nodeModel: NodeEntity;
   @select(['wizard', 'clusterModel']) clusterModel$: Observable<CreateClusterModel>;
@@ -29,19 +34,22 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @select(['wizard', 'nodeForm', 'node_count']) nodeCount$: Observable<number>;
   public nodeCount: number;
   public sshKeysList: string[] = [];
-  public doOptimizedSizes: Size[];
+
+  public doOptimizedSizes: DigitaloceanSize[];
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService) { }
 
   ngOnInit() {
     const subWizard = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$, this.nodeCount$)
+
       .subscribe((data: [string, DataCenterEntity, NodeEntity, CreateClusterModel, number]) => {
         const provider = data[0];
         const region = data[1];
         const nodeModel = data[2];
         const clusterModel = data[3];
         const nodeCount = data[4];
+
 
         provider && (this.provider = provider);
         region && (this.region = region);
@@ -50,6 +58,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
         nodeCount && (this.nodeCount = nodeCount);
       });
     this.subscriptions.push(subWizard);
+
 
     if (this.provider !== 'bringyourown') {
       const subSSHKeys = this.getSSHKeys();

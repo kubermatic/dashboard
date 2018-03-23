@@ -1,11 +1,12 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { CustomValidators } from 'ng2-validation';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';import { CustomValidators } from 'ng2-validation';
+
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { WizardActions } from '../../redux/actions/wizard.actions';
+
 import {
   NodeCloudSpec,
   NodeContainerRuntimeInfo,
@@ -17,28 +18,34 @@ import {
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { InputValidationService } from '../../core/services';
 import { OpenstackNodeSpec } from '../../shared/entity/node/OpenstackNodeSpec';
-
+import { ApiService } from '../../core/services/api/api.service';
+import { CloudSpec } from '../../shared/entity/ClusterEntity';
+import { OpenstackSize } from '../../shared/entity/provider/OpenstackSizeEntity';
 
 @Component({
   selector: 'kubermatic-openstack-add-node',
   templateUrl: './openstack-add-node.component.html',
   styleUrls: ['./openstack-add-node.component.scss']
 })
-export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
+export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() public nodeSpecChanges: EventEmitter<NodeSpec> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
+  @Input() cloudSpec: CloudSpec;
 
   public osNodeForm: FormGroup;
-  public nodeSize: any[] = NodeInstanceFlavors.Openstack;
-  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+
+  public nodeSize: OpenstackSize[] = [];
+  public nodeSizeSorted: OpenstackSize[] = [];  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
   public nodeForm: any;
   private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder,
               public inputValidationService: InputValidationService,
-              private ngRedux: NgRedux<any>) { }
+
+              private ngRedux: NgRedux<any>,
+              private api: ApiService) { }
 
   ngOnInit() {
     const subIsChecked = this.isChecked$.subscribe(isChecked => {
@@ -80,6 +87,30 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
     }
   }
 
+  public getNodeSizes() {
+    const selectedNodeSize = null;
+    return this.api.getOpenStackSizes(this.cloudSpec.openstack.username, this.cloudSpec.openstack.password, this.cloudSpec.openstack.tenant, this.cloudSpec.openstack.domain, this.cloudSpec.dc).subscribe(res => {
+      this.nodeSize = res;
+
+      const data = this.nodeSize ? this.nodeSize.slice() : [];
+      this.nodeSizeSorted = data.sort((a, b) => {
+        return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
+      });
+
+      if (res.length > 0 && this.osNodeForm.controls['node_size'].value === '') {
+        const nodeSizeSorted = selectedNodeSize ? selectedNodeSize : 'm1.medium';
+        this.osNodeForm.patchValue({node_size: nodeSizeSorted});
+        this.onChange();
+      }
+    });
+  }
+
+  public ngOnChanges(): void {
+    if (!!this.cloudSpec.openstack.username && !!this.cloudSpec.openstack.password && !!this.cloudSpec.openstack.tenant && !!this.cloudSpec.openstack.domain && !!this.cloudSpec.dc) {
+      this.getNodeSizes();
+    }
+  }
+
   public onChange() {
     WizardActions.formChanged(
       ['wizard', 'nodeForm'],
@@ -92,6 +123,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
     );
 
     if (this.nodeForm) {
+
       const nodeSpec = new NodeSpec(
         new NodeCloudSpec(
           null,
@@ -111,6 +143,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
           new NodeContainerRuntimeInfo(null, null)
         )
       );
+
 
       this.nodeSpecChanges.emit(nodeSpec);
       this.formChanges.emit(this.osNodeForm);

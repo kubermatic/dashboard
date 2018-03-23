@@ -13,8 +13,8 @@
   <mat-form-field>
     <mat-select fxFlex [errorStateMatcher]="inputValidationService" class="mat-select-content" placeholder="Node Size*:" name="node_size" formControlName="node_size" (change)="onChange()">
       <mat-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</mat-option>
-      <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
-        {{size}}
+      <mat-option *ngFor="let size of nodeSizeSorted; let i = index;" [value]="size.slug">
+        {{size.slug}}
       </mat-option>
     </mat-select>
     <mat-error *ngIf="osNodeForm.controls.node_size.hasError('required')">

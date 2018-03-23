@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../../environments/environment';
+
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { Auth } from 'app/core/services/auth/auth.service';
@@ -15,6 +16,7 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private restRootV3: string = environment.restRootV3;
   private headers: HttpHeaders = new HttpHeaders();
+
 
   constructor(private http: HttpClient, private auth: Auth) {
     const token = auth.getBearerToken();
@@ -46,15 +48,20 @@ export class ApiService {
     return this.http.delete(url, { headers: this.headers });
   }
 
+
   getClusterNodes(cluster: string, dc: string): Observable<NodeEntity[]> {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node`;
+
     return this.http.get<NodeEntity[]>(url, { headers: this.headers });
   }
 
+
   createClusterNode(cluster: ClusterEntity, node: NodeEntity, dc: string): Observable<NodeEntity> {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.metadata.name}/node`;
+
     return this.http.post<NodeEntity>(url, node, { headers: this.headers });
   }
+
 
   deleteClusterNode(cluster: string, node: NodeEntity, dc: string) {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node/${node.metadata.name}`;
@@ -82,6 +89,34 @@ export class ApiService {
     return this.http.get(url, { headers: this.headers });
   }
 
+
+  getOpenStackSizes(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackSize[]> {
+    this.headers = this.headers.set('Username', username);
+    this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('Tenant', tenant);
+    this.headers = this.headers.set('Domain', domain);
+    this.headers = this.headers.set('DatacenterName', datacenterName);
+    const url = `${this.restRoot}/openstack/sizes`;
+    return this.http.get<OpenstackSize[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackImages(location: string, project: string, name: string, password: string, authUrl: string) {
+    const openStack = new OpenStack({
+      region_name: location,
+      auth: {
+        username: name,
+        password: password,
+        project_name: project,
+        auth_url: authUrl
+      }
+    });
+
+    // List all flavors
+    openStack.networkList().then((networks) => {
+      return networks;
+    });
+  }
+
   getClusterUpgrades(cluster: string, dc: string): Observable<string[]> {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/upgrades`;
     return this.http.get<string[]>(url, { headers: this.headers })
@@ -90,9 +125,11 @@ export class ApiService {
       });
   }
 
+
   updateClusterUpgrade(cluster: string, upgradeVersion: string): Observable<ClusterEntity> {
     const body = { to: upgradeVersion };
     const url = `${this.restRoot}/cluster/${cluster}/upgrade`;
+
     return this.http.put<ClusterEntity>(url, body, { headers: this.headers });
   }
 }
