@@ -20,6 +20,7 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
+  @Input() public initialNodes: boolean;
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
@@ -47,9 +48,16 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(subNodeForm);
 
+    let nodeCount;
+    if (this.initialNodes) {
+      nodeCount = 3;
+    } else {
+      nodeCount = 1;
+    }
+
     this.osNodeForm = this.fb.group({
       os_node_image: ['', [<any>Validators.required]],
-      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
+      node_count: [nodeCount, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['m1.medium', [<any>Validators.required]],
     });
 

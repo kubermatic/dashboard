@@ -18,6 +18,7 @@ export class AddNodeModalComponent implements OnInit {
   public nodeModel: CreateNodeModel;
   public form: FormGroup;
   public provider: Provider = { name: '', payload: {} };
+  public initialNodes: boolean = false;
 
   constructor(private api: ApiService,
               @Inject(MAT_DIALOG_DATA) public data: AddNodeModalData) { }

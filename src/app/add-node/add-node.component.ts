@@ -13,6 +13,7 @@ import { Provider } from 'app/shared/interfaces/provider.interface';
 export class AddNodeComponent implements OnInit {
   @Input() provider: Provider;
   @Input() connect: string[] = [];
+  @Input() initialNodes: boolean;
   @Output() nodeModelChanges: EventEmitter<CreateNodeModel> = new EventEmitter();
   @Output() formChanges: EventEmitter<FormGroup> = new EventEmitter();
 

@@ -2,4 +2,5 @@
     [provider]="provider" 
     [connect]="['wizard', 'nodeForm']"
     (nodeModelChanges)="changeNodeModel($event)"
-    (formChanges)="changeForm($event)"></kubermatic-add-node>
+    (formChanges)="changeForm($event)"
+    [initialNodes]="initialNodes"></kubermatic-add-node>
