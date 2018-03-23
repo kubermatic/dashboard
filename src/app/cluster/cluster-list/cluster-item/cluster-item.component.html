@@ -24,6 +24,6 @@
         {{this.nodeDC.spec.country}} ({{this.nodeDC.spec.location}})
       </ng-container>
     </div>
-    <div fxFlex="15%" fxFlex.sm="20.66%" fxHide.xs>{{cluster.status.phase}}</div>
+    <div fxFlex="15%" fxFlex.sm="20.66%" fxHide.xs>{{clusterService.validateClusterPhase(cluster)}}</div>
   </div>
 </div>

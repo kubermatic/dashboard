@@ -12,7 +12,7 @@ import { ClusterConnectComponent } from './cluster-connect/cluster-connect.compo
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ApiService, DatacenterService, InitialNodeDataService } from '../../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import 'rxjs/add/observable/interval';
@@ -44,7 +44,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               private api: ApiService,
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
-              private dcService: DatacenterService) {
+              private dcService: DatacenterService,
+              public clusterService: ClusterService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 

@@ -5,6 +5,7 @@ export class MetadataEntity {
   annotations?: Map<string, string>;
   creationTimestamp?: Date;
   labels?: Map<string, string>;
+  deletionTimestamp: Date;
 }
 
 export class MetadataEntityV2 {
