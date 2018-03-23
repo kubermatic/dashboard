@@ -5,7 +5,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 export class ClusterService {
 
   constructor() { }
-  public validateClusterPhase (cluster: ClusterEntity): string {
+  public getClusterPhase (cluster: ClusterEntity): string {
 
       if (!cluster.status || !cluster.status.phase) {
         return 'Waiting';
