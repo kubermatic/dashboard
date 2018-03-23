@@ -1,7 +1,11 @@
-import { InputValidationService } from 'app/core/services';
+
+import { InputValidationService } from '../../core/services';
+
 import { SharedModule } from '../../shared/shared.module';
+
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -10,6 +14,8 @@ import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OpenstackAddNodeComponent } from './openstack-add-node.component';
+import { ApiService } from '../../core/services/api/api.service';
+import { ApiMockService } from '../../testing/services/api-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -20,18 +26,22 @@ const modules: any[] = [
 ];
 
 function setMockNgRedux(nodeForm: any): void {
+
   const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
   nodeFormStub.next(nodeForm);
 }
 
 function completeRedux() {
+
   const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
   nodeFormStub.complete();
 }
 
 describe('OpenstackAddNodeComponent', () => {
+
   let fixture: ComponentFixture<OpenstackAddNodeComponent>;
   let component: OpenstackAddNodeComponent;
+
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -43,7 +53,8 @@ describe('OpenstackAddNodeComponent', () => {
         AddNodeFormComponent
       ],
       providers: [
-        InputValidationService
+        InputValidationService,
+        { provide: ApiService, useClass: ApiMockService }
       ],
     }).compileComponents();
   });
@@ -58,14 +69,18 @@ describe('OpenstackAddNodeComponent', () => {
     expect(component).toBeTruthy();
   });
 
+
   it('form invalid after creating', () => {
     fixture.detectChanges();
+
 
     expect(component.osNodeForm.valid).toBeFalsy();
   });
 
+
   it('node count field validity', () => {
     fixture.detectChanges();
+
 
     let errors = {};
     const name = component.osNodeForm.controls['node_count'];
@@ -73,10 +88,12 @@ describe('OpenstackAddNodeComponent', () => {
     expect(errors['required']).toBeFalsy();
     expect(errors['min']).toBeFalsy();
 
+
     name.setValue(0);
     errors = name.errors || {};
     expect(errors['required']).toBeFalsy();
     expect(errors['min']).toBeTruthy();
+
 
     name.setValue('');
     errors = name.errors || {};
