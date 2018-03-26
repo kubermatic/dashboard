@@ -7,7 +7,7 @@ import {ClusterService} from '../../../core/services';
 @Component({
   selector: 'kubermatic-cluster-item',
   templateUrl: './cluster-item.component.html',
-  styleUrls: ['./cluster-item.component.scss'
+  styleUrls: ['./cluster-item.component.scss',
 })
 export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
