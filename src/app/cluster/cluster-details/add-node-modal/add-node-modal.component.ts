@@ -28,6 +28,15 @@ export class AddNodeModalComponent implements OnInit {
     if (this.provider.name === 'digitalocean') {
       this.provider.payload.token = this.data.cluster.spec.cloud.digitalocean.token;
     }
+
+    WizardActions.formChanged(
+      ['wizard', 'nodeForm'],
+      {
+        node_size: '',
+        node_count: 1,
+      },
+      false
+    );
   }
 
   public addNode(): void {

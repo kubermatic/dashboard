@@ -65,7 +65,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
         node_count: this.nodeForm.node_count,
         node_size: this.nodeForm.node_size
       };
-
       this.doNodeForm.setValue(formValue);
     }
 
