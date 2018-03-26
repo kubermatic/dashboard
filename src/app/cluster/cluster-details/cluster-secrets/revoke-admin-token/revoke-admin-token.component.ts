@@ -19,7 +19,7 @@ export class RevokeAdminTokenComponent implements OnInit {
   public revokeAdminTokenForm: FormGroup;
   public pattern: string = '[bcdfghjklmnpqrstvwxz2456789]{6}.[bcdfghjklmnpqrstvwxz2456789]{16}';
 
-  constructor(private api: ApiService, private fb: FormBuilder) {}
+  constructor(private api: ApiService, private fb: FormBuilder, private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
 
   ngOnInit() {
     this.revokeAdminTokenForm = this.fb.group({
@@ -40,6 +40,7 @@ export class RevokeAdminTokenComponent implements OnInit {
       this.cluster.address.adminToken = this.revokeAdminTokenForm.controls['adminToken'].value;
       this.api.editCluster(this.cluster, this.datacenter.spec.seed).subscribe(res => {
         NotificationActions.success('Success', `Revoke Admin Token successfully`);
+        this.dialogRef.close(res);
       });
     }
   }
