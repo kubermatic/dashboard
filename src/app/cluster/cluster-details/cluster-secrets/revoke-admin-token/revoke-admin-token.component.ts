@@ -1,5 +1,4 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ApiService } from '../../../../core/services/api/api.service';
@@ -15,33 +14,36 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 export class RevokeAdminTokenComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  public disableRevoke: boolean = true;
-  public revokeAdminTokenForm: FormGroup;
-  public pattern: string = '[bcdfghjklmnpqrstvwxz2456789]{6}.[bcdfghjklmnpqrstvwxz2456789]{16}';
+  public generatedToken: string;
+  public adminToken: string = '';
 
-  constructor(private api: ApiService, private fb: FormBuilder, private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
+  constructor(private api: ApiService, private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
 
   ngOnInit() {
-    this.revokeAdminTokenForm = this.fb.group({
-      adminToken: ['', Validators.pattern(this.pattern)]
-    });
+    do {
+      this.generatedToken = this.generate(6) + '.' + this.generate(16);
+    } while (this.generatedToken === this.cluster.address.adminToken);
+    this.adminToken = this.generatedToken;
   }
 
-  onChange(event: any) {
-    if ((this.revokeAdminTokenForm.controls['adminToken'].value).match(this.pattern)) {
-      this.disableRevoke = false;
-    } else {
-      this.disableRevoke = true;
+  public generate(length: number): string {
+    let token = '';
+    let randomValue;
+    const possible = 'bcdfghjklmnpqrstvwxz2456789';
+    for (let i = 0; i < length; i++) {
+      do {
+        randomValue = possible.charAt(Math.floor(Math.random() * possible.length));
+      } while (token.search(randomValue) > -1);
+      token += randomValue;
     }
+    return token;
   }
 
   public revokeAdminToken() {
-    if (!this.disableRevoke) {
-      this.cluster.address.adminToken = this.revokeAdminTokenForm.controls['adminToken'].value;
-      this.api.editCluster(this.cluster, this.datacenter.spec.seed).subscribe(res => {
-        NotificationActions.success('Success', `Revoke Admin Token successfully`);
-        this.dialogRef.close(res);
-      });
-    }
+    this.cluster.address.adminToken = this.adminToken;
+    this.api.editCluster(this.cluster, this.datacenter.spec.seed).subscribe(res => {
+      NotificationActions.success('Success', `Revoke Admin Token successfully`);
+      this.dialogRef.close(res);
+    });
   }
 }

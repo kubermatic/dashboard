@@ -6,24 +6,16 @@
     </button>
   </mat-toolbar>
 
-  <mat-dialog-content [formGroup]="revokeAdminTokenForm">
+  <mat-dialog-content>
       <div class="mat-dialog-content">
         <p>You are on the way to revoke the admin token for the cluster "{{ cluster.spec.humanReadableName }}".</p>
-        <p>Make sure it matches this pattern: {{ pattern }}.</p>
-
-        <mat-form-field style="width: 100%" >
-          <mat-error *ngIf="revokeAdminTokenForm.controls.adminToken.hasError('pattern')">
-            Must match pattern
-          </mat-error>
-          <input id="node_count" [errorStateMatcher]="inputValidationService" matInput formControlName="adminToken" type="text" placeholder="New Admin Token:" autocomplete="off" (keyup)="onChange()">
-        </mat-form-field>
       </div>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close mat-raised-button >
       Close
     </button>
-    <button (click)="revokeAdminToken()" mat-raised-button color="primary" class="mat-primary" [disabled]="disableRevoke">
+    <button (click)="revokeAdminToken()" mat-raised-button color="primary" class="mat-primary" [disabled]="!adminToken">
       Revoke
     </button>
   </mat-dialog-actions>
