@@ -26,6 +26,9 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;
   public selectedSshKeys: string[] = [];
 
+  @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public provider: string;
+
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
   constructor(private api: ApiService,
@@ -39,10 +42,15 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(sub);
 
-    const sub2 = this.isChecked$.subscribe(isChecked => {
+    const subIsChecked = this.isChecked$.subscribe(isChecked => {
       isChecked && this.showRequiredFields();
     });
-    this.subscriptions.push(sub2);
+    this.subscriptions.push(subIsChecked);
+
+    const subProvider = this.provider$.subscribe(provider => {
+      provider && (this.provider = provider);
+    });
+    this.subscriptions.push(subProvider);
 
     this.sshKeyForm = this.formBuilder.group({
       ssh_keys: [this.selectedSshKeys, [Validators.required]]
@@ -50,8 +58,10 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
 
     this.sshKeyForm.updateValueAndValidity();
 
-    const sub3 = this.refreshSSHKeys();
-    this.subscriptions.push(sub3);
+    if (this.provider !== 'bringyourown') {
+      const subRefreshSSHKeys = this.refreshSSHKeys();
+      this.subscriptions.push(subRefreshSSHKeys);
+    }
   }
 
     public showRequiredFields() {
