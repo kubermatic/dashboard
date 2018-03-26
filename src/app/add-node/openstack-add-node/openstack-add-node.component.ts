@@ -49,7 +49,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
     this.osNodeForm = this.fb.group({
       os_node_image: ['', [<any>Validators.required]],
-      node_count: ['3', [<any>Validators.required, CustomValidators.min(1)]],
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['m1.medium', [<any>Validators.required]],
     });
 

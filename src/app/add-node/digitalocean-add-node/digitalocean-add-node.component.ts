@@ -52,12 +52,11 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
     const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
       nodeForm && (this.nodeForm = nodeForm);
-      console.log(nodeForm);
     });
     this.subscriptions.push(subNodeForm);
 
     this.doNodeForm = this.fb.group({
-      node_count: ['3', [<any>Validators.required, CustomValidators.min(1)]],
+      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
       node_size: ['', [<any>Validators.required]]
     });
 

@@ -47,7 +47,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(subNodeForm);
 
     this.awsNodeForm = this.formBuilder.group({
-      node_count: ['3', [<any>Validators.required, Validators.min(1)]],
+      node_count: [3, [<any>Validators.required, Validators.min(1)]],
       node_size: ['t2.medium', [<any>Validators.required]],
       root_size: [20, [Validators.required, Validators.min(10), Validators.max(16000)]],
       ami: [''],
