@@ -1,6 +1,8 @@
 import { Component,  OnInit, Input, Inject} from '@angular/core';
 import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
-
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
@@ -10,9 +12,11 @@ import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
 export class ClusterSecretsComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() health: Health;
+  @Input() datacenter: DataCenterEntity;
   public expand: boolean = false;
+  public dialogRef: any;
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
   ngOnInit() {  }
 
@@ -114,6 +118,15 @@ export class ClusterSecretsComponent implements OnInit {
     } else {
       return '';
     }
+  }
+
+  public revokeAdminTokenDialog(): void {
+    this.dialogRef = this.dialog.open(RevokeAdminTokenComponent);
+
+    this.dialogRef.componentInstance.cluster = this.cluster;
+    this.dialogRef.componentInstance.datacenter = this.datacenter;
+
+    this.dialogRef.afterClosed().subscribe(result => {});
   }
 
 }
