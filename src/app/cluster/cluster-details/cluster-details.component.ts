@@ -52,8 +52,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.dcService.getDataCenter(seedDCName)
       .subscribe(res => {
-      this.datacenter = new DataCenterEntity(res.metadata, res.spec, res.seed);
-    });
+        this.datacenter = new DataCenterEntity(res.metadata, res.spec, res.seed);
+      });
 
     const nodeDCSubscription = this.clusterSubject.subscribe(cluster => {
       this.dcService.getDataCenter(cluster.spec.cloud.dc)

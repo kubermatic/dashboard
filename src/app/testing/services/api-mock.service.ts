@@ -8,6 +8,7 @@ import { Observable } from 'rxjs/Observable';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
+import { defer } from 'rxjs/observable/defer';
 
 @Injectable()
 export class ApiMockService {
@@ -71,3 +72,6 @@ export class ApiMockService {
   }
 }
 
+export function asyncData<T>(data: T) {
+  return defer(() => Promise.resolve(data));
+}
