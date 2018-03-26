@@ -37,6 +37,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public config: any = {};
   public stateOfTheAccordion: object[];
 
+  private refreshInterval: number = 10000;
+
   constructor(private customEventService: CustomEventService,
               private route: ActivatedRoute,
               private router: Router,
@@ -89,7 +91,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       });
     });
 
-    const timer = Observable.interval(5000);
+    const timer = Observable.interval(refreshInterval);
     timer.subscribe(tick => {
       this.reloadCluster(clusterName, seedDCName);
     });
