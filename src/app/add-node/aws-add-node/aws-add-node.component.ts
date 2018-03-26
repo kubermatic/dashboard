@@ -18,7 +18,6 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
-  @Input() public initialNodes: boolean;
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
@@ -47,15 +46,8 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(subNodeForm);
 
-    let nodeCount;
-    if (this.initialNodes) {
-      nodeCount = 3;
-    } else {
-      nodeCount = 1;
-    }
-
     this.awsNodeForm = this.formBuilder.group({
-      node_count: [nodeCount, [<any>Validators.required, Validators.min(1)]],
+      node_count: ['3', [<any>Validators.required, Validators.min(1)]],
       node_size: ['t2.medium', [<any>Validators.required]],
       root_size: [20, [Validators.required, Validators.min(10), Validators.max(16000)]],
       ami: [''],

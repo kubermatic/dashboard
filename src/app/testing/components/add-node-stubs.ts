@@ -11,7 +11,6 @@ import { FormGroup } from '@angular/forms/src/model';
 export class AddNodeStubComponent {
   @Input() provider: Provider;
   @Input() connect: string[] = [];
-  @Input() initialNodes: boolean;
   @Output() nodeModelChanges: EventEmitter<CreateNodeModel> = new EventEmitter();
   @Output() formChanges: EventEmitter<FormGroup> = new EventEmitter();
 }
