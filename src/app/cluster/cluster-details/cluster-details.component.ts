@@ -91,7 +91,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       });
     });
 
-    const timer = Observable.interval(refreshInterval);
+    const timer = Observable.interval(this.refreshInterval);
     timer.subscribe(tick => {
       this.reloadCluster(clusterName, seedDCName);
     });
