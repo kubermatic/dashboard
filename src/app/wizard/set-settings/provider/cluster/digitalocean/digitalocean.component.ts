@@ -1,15 +1,14 @@
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
-import { NgRedux } from '@angular-redux/store';
+import { NgRedux, select } from '@angular-redux/store';
 import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
-import {Component, OnInit, OnDestroy, Input} from '@angular/core';
-import { Validators, FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
 
 import { InputValidationService } from 'app/core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
-import { select } from '@angular-redux/store';
 
 @Component({
   selector: 'kubermatic-cluster-digitalocean',
@@ -28,7 +27,8 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
 
   constructor(private formBuilder: FormBuilder,
               public inputValidationService: InputValidationService,
-              private ngRedux: NgRedux<any>) { }
+              private ngRedux: NgRedux<any>) {
+  }
 
   ngOnInit() {
     this.sub = this.isChecked$.subscribe(isChecked => {
@@ -52,13 +52,13 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
   }
 
   public onChange() {
-    const doCloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls['access_token'].value);
+    const doCloudSpec: DigitaloceanCloudSpec = {token: this.digitalOceanClusterForm.controls['access_token'].value};
 
     WizardActions.setValidation('clusterForm', this.digitalOceanClusterForm.valid);
-
-    WizardActions.setCloudSpec(
-      new CloudSpec(this.region, doCloudSpec, null, null, null, null)
-    );
+    WizardActions.setCloudSpec({
+      dc: this.region,
+      digitalocean: doCloudSpec
+    });
   }
 
   public showRequiredFields() {

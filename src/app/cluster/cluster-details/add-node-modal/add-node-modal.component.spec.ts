@@ -25,6 +25,7 @@ import { clusterFake } from './../../../testing/fake-data/cluster.fake';
 import { nodeModelFake } from './../../../testing/fake-data/node.fake';
 import { addNodeModalFake } from './../../../testing/fake-data/addNodeModal.fake';
 import { AddNodeStubComponent } from '../../../testing/components/add-node-stubs';
+import { getProvider } from '../../../shared/entity/ClusterEntity';
 
 const modules: any[] = [
     BrowserModule,
@@ -78,7 +79,7 @@ describe('AddNodeModalComponent', () => {
         const cluster = clusterFake;
         fixture.detectChanges();
 
-        expect(component.provider.name).toBe(cluster.provider, 'Provider name should be obtained from mat dialog data');
+        expect(component.provider.name).toBe(getProvider(cluster), 'Provider name should be obtained from mat dialog data');
         expect(component.provider.payload.token).toBe(cluster.spec.cloud.digitalocean.token, 'Digitalocean token should be obtained from mat dialog data');
     });
 

@@ -1,11 +1,13 @@
-import { DigitaloceanCloudSpec } from './../../shared/entity/cloud/DigitialoceanCloudSpec';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
 
-export const doCloudSpecFake = new CloudSpec(
-    'region',
-    new DigitaloceanCloudSpec('token'),
-    null,
-    null,
-    null,
-    null
-);
+export const doCloudSpecFake: CloudSpec = {
+  dc: 'datacenter1',
+  digitalocean: {
+    token: 'foo-bar'
+  },
+  aws: null,
+  baremetal: null,
+  bringyourown: null,
+  openstack: null,
+};
+

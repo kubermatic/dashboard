@@ -1,4 +1,4 @@
-import { clusterFake } from './../../testing/fake-data/cluster.fake';
+import { clusterFake, clusterFake1 } from './../../testing/fake-data/cluster.fake';
 import { Observable } from 'rxjs/Observable';
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';

@@ -106,8 +106,8 @@ export class ApiService {
     });
   }
 
-  getClusterUpgrades(cluster: string): Observable<string[]> {
-    const url = `${this.restRoot}/cluster/${cluster}/upgrades`;
+  getClusterUpgrades(cluster: string, dc: string): Observable<string[]> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/upgrades`;
     return this.http.get<string[]>(url, {headers: this.headers})
       .catch(error => {
         return Observable.of<string[]>([]);

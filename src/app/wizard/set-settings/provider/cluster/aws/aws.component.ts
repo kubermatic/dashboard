@@ -1,15 +1,13 @@
 import { Subscription } from 'rxjs/Subscription';
-import { NgRedux } from '@angular-redux/store';
-import {Component, OnInit, OnDestroy, Input} from '@angular/core';
+import { NgRedux, select } from '@angular-redux/store';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AWSCloudSpec } from 'app/shared/entity/cloud/AWSCloudSpec';
 import { InputValidationService } from 'app/core/services';
 import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
-import { ErrorStateMatcher } from '@angular/material';
-import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
+import { AWSCloudSpec } from '../../../../../shared/entity/cloud/AWSCloudSpec';
 
 @Component({
   selector: 'kubermatic-cluster-aws',
@@ -26,8 +24,9 @@ export class AWSClusterComponent implements OnInit, OnDestroy {
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
 
   constructor(private formBuilder: FormBuilder,
-    public inputValidationService: InputValidationService,
-    private ngRedux: NgRedux<any>) { }
+              public inputValidationService: InputValidationService,
+              private ngRedux: NgRedux<any>) {
+  }
 
   ngOnInit() {
     this.sub = this.isChecked$.subscribe(isChecked => {
@@ -65,20 +64,21 @@ export class AWSClusterComponent implements OnInit, OnDestroy {
   }
 
   public onChange() {
-    const awsCloudSpec = new AWSCloudSpec(
-      this.awsClusterForm.controls['accessKeyId'].value,
-      this.awsClusterForm.controls['secretAccessKey'].value,
-      this.awsClusterForm.controls['vpcId'].value,
-      this.awsClusterForm.controls['subnetId'].value,
-      this.awsClusterForm.controls['routeTableId'].value,
-      '',
-    );
+    const awsCloudSpec: AWSCloudSpec = {
+      accessKeyId: this.awsClusterForm.controls['accessKeyId'].value,
+      secretAccessKey: this.awsClusterForm.controls['secretAccessKey'].value,
+      routeTableId: this.awsClusterForm.controls['routeTableId'].value,
+      vpcId: this.awsClusterForm.controls['vpcId'].value,
+      subnetId: this.awsClusterForm.controls['subnetId'].value,
+      securityGroup: '',
+    };
 
     WizardActions.setValidation('clusterForm', this.awsClusterForm.valid);
 
-    WizardActions.setCloudSpec(
-      new CloudSpec(this.region, null, awsCloudSpec, null, null, null)
-    );
+    WizardActions.setCloudSpec({
+      dc: this.region,
+      aws: awsCloudSpec,
+    });
   }
 
   public ngOnDestroy(): void {

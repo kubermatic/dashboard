@@ -1,6 +1,5 @@
 import { WizardActions } from './../redux/actions/wizard.actions';
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ApiService } from 'app/core/services/api/api.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MatDialog } from '@angular/material';
@@ -9,7 +8,7 @@ import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import * as testing from 'selenium-webdriver/testing';
 import { CreateNodeModel } from '../shared/model/CreateNodeModel';
 import { DigitaloceanCloudSpec } from '../shared/entity/cloud/DigitialoceanCloudSpec';
-import { CreateNodesService } from '../core/services';
+import { ApiService, CreateNodesService } from '../core/services';
 import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from '../shared/entity/NodeEntity';
 import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
 import { AWSNodeSpecV2 } from '../shared/entity/node/AWSNodeSpec';
@@ -17,10 +16,9 @@ import { HetznerNodeSpec } from '../shared/entity/node/HetznerNodeSpec';
 import { DigitaloceanNodeSpecV2 } from '../shared/entity/node/DigitialoceanNodeSpec';
 import { AWSCloudSpec } from '../shared/entity/cloud/AWSCloudSpec';
 import { OpenstackCloudSpec } from '../shared/entity/cloud/OpenstackCloudSpec';
-import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { select, NgRedux } from '@angular-redux/store';
 import { Subscription } from 'rxjs/Subscription';
-import { BringYourOwnCloudSpec } from 'app/shared/entity/cloud/BringYourOwnCloudSpec';
+import { NotificationActions } from '../redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -66,16 +64,9 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   public resetCachedCredentials() {
-    WizardActions.setCloudSpec(
-      new CloudSpec(
-        '',
-        new DigitaloceanCloudSpec(''),
-        new AWSCloudSpec('', '', '', '', '', ''),
-        new BringYourOwnCloudSpec(),
-        new OpenstackCloudSpec('', '', '', 'Default', '', '', ''),
-        null
-      )
-    );
+    WizardActions.setCloudSpec({
+      dc: ''
+    });
 
     WizardActions.setNodeModel(
       new CreateNodeModel(
@@ -114,7 +105,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     const nodeCount = (this.selectedProvider !== 'bringyourown') ? wizard.nodeForm.node_count : null;
     const clusterModel = wizard.clusterModel;
     const datacenter = wizard.setDatacenterForm.datacenter.spec.seed;
-    console.log('Create cluster mode: \n' + JSON.stringify(clusterModel));
+
     this.api.createCluster(clusterModel, datacenter).subscribe(cluster => {
         NotificationActions.success('Success', `Cluster successfully created`);
         this.router.navigate(['/clusters/' + datacenter + '/' + cluster.metadata.name]);
