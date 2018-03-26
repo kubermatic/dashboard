@@ -57,8 +57,10 @@ export class SummaryComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(subWizard);
 
-    const subSSHKeys = this.getSSHKeys();
-    this.subscriptions.push(subSSHKeys);
+    if (this.provider !== 'bringyourown') {
+      const subSSHKeys = this.getSSHKeys();
+      this.subscriptions.push(subSSHKeys);
+    }
 
     if (this.provider === 'digitalocean' && this.nodeModel.spec.cloud.digitalocean.size.match(/^(c)\-/)) {
       if (!this.doOptimizedSizes) {

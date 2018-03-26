@@ -84,9 +84,16 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
   public stepBack(): void {
     const reduxStore = this.ngRedux.getState();
     const provider = reduxStore.wizard.setProviderForm.provider;
+    const nodeDatacenters = [];
+
+    for (const i in this.datacenters[provider]) {
+      if (!this.datacenters[provider][i].seed) {
+        nodeDatacenters.push(this.datacenters[provider][i]);
+      }
+    }
 
     if (this.step === 4 && provider && provider === 'bringyourown') {
-      if (this.datacenters[provider].length === 1) {
+      if (nodeDatacenters.length === 1) {
         WizardActions.goToStep(1);
       } else {
         WizardActions.goToStep(2);
@@ -94,13 +101,13 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (this.step === 3 && this.datacenters[provider].length === 1
+    if (this.step === 3 && nodeDatacenters.length === 1
         && this.supportedNodeProviders.length === 1) {
       WizardActions.goToStep(0);
       return;
     }
 
-    if (this.step === 3 && this.datacenters[provider].length === 1) {
+    if (this.step === 3 && nodeDatacenters.length === 1) {
       WizardActions.goToStep(1);
       return;
     }
