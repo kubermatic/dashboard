@@ -16,8 +16,8 @@ export class NodeGroupComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
 
-  public conditionsMessage: string = '';
-  public nodeRemoval: boolean = false;
+  public conditionsMessage = '';
+  public nodeRemoval = false;
   public node: NodeEntityV2;
   public stateOfTheAccordion: any = [];
 

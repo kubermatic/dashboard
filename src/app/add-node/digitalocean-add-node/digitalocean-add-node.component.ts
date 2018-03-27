@@ -24,7 +24,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
-  @Input() public token: string = '';
+  @Input() public token = '';
   @Input() public connect: string[] = [];
   @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
@@ -46,12 +46,12 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   ngOnInit() {
     const subIsChecked = this.isChecked$.subscribe(isChecked => {
-      isChecked && this.showRequiredFields();
+      this.showRequiredFields();
     });
     this.subscriptions.push(subIsChecked);
 
     const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
-      nodeForm && (this.nodeForm = nodeForm);
+      (this.nodeForm = nodeForm);
     });
     this.subscriptions.push(subNodeForm);
 

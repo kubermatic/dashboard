@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ApiService } from '../../core/services/api/api.service';
 import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
@@ -17,11 +17,12 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public clusters: ClusterEntity[] = [];
   public timer: any = Observable.timer(0, 5000);
   public sub: Subscription;
-  public loading: boolean = true;
+  public loading = true;
   public sortedData: ClusterEntity[] = [];
-  public sort: Sort = {active: 'name', direction: 'asc'};
+  public sort: Sort = { active: 'name', direction: 'asc' };
 
-  constructor(public api: ApiService, public dcService: DatacenterService) {}
+  constructor(public api: ApiService, public dcService: DatacenterService) {
+  }
 
   ngOnInit() {
     this.sub = this.timer.subscribe(() => {
@@ -79,11 +80,16 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.sortedData = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'name': return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
-        case 'provider': return this.getProvider(a, b, isAsc);
-        case 'region': return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
-        case 'status': return this.compare(a.status.phase, b.status.phase, isAsc);
-        default: return 0;
+        case 'name':
+          return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
+        case 'provider':
+          return this.getProvider(a, b, isAsc);
+        case 'region':
+          return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
+        case 'status':
+          return this.compare(a.status.phase, b.status.phase, isAsc);
+        default:
+          return 0;
       }
     });
   }
@@ -124,6 +130,8 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.sub && this.sub.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 }

@@ -15,10 +15,8 @@ import { MobileNavigationComponent } from '../../../overlays';
 })
 export class NavigationComponent implements OnInit {
 
-  public isScrolled: boolean = false;
+  public isScrolled = false;
   public environment: any = environment;
-
-  // public userProfile: any;
 
   constructor(
     public auth: Auth,

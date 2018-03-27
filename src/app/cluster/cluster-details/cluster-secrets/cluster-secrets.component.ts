@@ -13,7 +13,7 @@ export class ClusterSecretsComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() health: Health;
   @Input() datacenter: DataCenterEntity;
-  public expand: boolean = false;
+  public expand = false;
   public dialogRef: any;
 
   constructor(public dialog: MatDialog) { }

@@ -15,7 +15,7 @@ export class NodeListComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntityV2[] = [];
-  @Output() onDelete = new EventEmitter<NodeEntityV2>();
+  @Output() deleteNode = new EventEmitter<NodeEntityV2>();
   public config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -51,7 +51,7 @@ export class NodeListComponent {
     dialogRef.componentInstance.datacenter = this.datacenter;
 
     dialogRef.afterClosed().subscribe(result => {
-      this.onDelete.emit(node);
+      this.deleteNode.emit(node);
     });
   }
 

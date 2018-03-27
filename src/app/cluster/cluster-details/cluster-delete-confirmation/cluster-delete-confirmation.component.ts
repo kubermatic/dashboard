@@ -16,7 +16,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
 
-  public disableDeleteCluster: boolean = false;
+  public disableDeleteCluster = false;
 
   constructor(private router: Router,
               private api: ApiService,

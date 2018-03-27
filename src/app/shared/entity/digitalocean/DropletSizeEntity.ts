@@ -10,15 +10,11 @@ export interface Size {
   available: boolean;
 }
 
-export interface Links {
-}
-
 export interface Meta {
   total: number;
 }
 
 export interface DropletSizeResponseEntity {
   sizes: Size[];
-  links: Links;
   meta: Meta;
 }

@@ -42,7 +42,7 @@ export class AddNodeModalComponent implements OnInit {
   }
 
   public addNode(): void {
-    let successCounter: number = 0;
+    let successCounter = 0;
     for (let i = 0; i < this.form.value.node_count; i++) {
       this.api.createClusterNode(this.data.cluster, this.nodeModel, this.data.dc.spec.seed).subscribe(node => {
         successCounter++;

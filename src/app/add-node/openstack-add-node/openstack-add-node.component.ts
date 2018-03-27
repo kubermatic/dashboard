@@ -38,12 +38,12 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const subIsChecked = this.isChecked$.subscribe(isChecked => {
-      isChecked && this.showRequiredFields();
+      this.showRequiredFields();
     });
     this.subscriptions.push(subIsChecked);
 
     const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
-      nodeForm && (this.nodeForm = nodeForm);
+      (this.nodeForm = nodeForm);
     });
     this.subscriptions.push(subNodeForm);
 

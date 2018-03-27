@@ -20,42 +20,43 @@ import { NodeDeleteConfirmationService } from './cluster-details/node-delete-con
 import { RevokeAdminTokenComponent } from './cluster-details/cluster-secrets/revoke-admin-token/revoke-admin-token.component';
 
 const components: any[] = [
-    ClusterDetailsComponent,
-    NodeListComponent,
-    NodeGroupComponent,
-    ClusterListComponent,
-    ClusterItemComponent,
-    ClusterHealthStatusComponent,
+  ClusterDetailsComponent,
+  NodeListComponent,
+  NodeGroupComponent,
+  ClusterListComponent,
+  ClusterItemComponent,
+  ClusterHealthStatusComponent,
 ];
 
 const entryComponents: any[] = [
-    ClusterDeleteConfirmationComponent,
-    NodeDeleteConfirmationComponent,
-    UpgradeClusterComponent,
-    AddNodeModalComponent,
-    ClusterSecretsComponent,
-    ClusterConnectComponent,
-    RevokeAdminTokenComponent,
+  ClusterDeleteConfirmationComponent,
+  NodeDeleteConfirmationComponent,
+  UpgradeClusterComponent,
+  AddNodeModalComponent,
+  ClusterSecretsComponent,
+  ClusterConnectComponent,
+  RevokeAdminTokenComponent,
 ];
 
 @NgModule({
-    imports: [
-        SharedModule,
-        ClusterRoutingModule,
-        AddNodeModule
-    ],
-    declarations: [
-        ...components,
-        ...entryComponents
-    ],
-    exports: [
-        ...components
-    ],
-    entryComponents: [
-        ...entryComponents
-    ],
-    providers: [
-        NodeDeleteConfirmationService
-    ],
+  imports: [
+    SharedModule,
+    ClusterRoutingModule,
+    AddNodeModule
+  ],
+  declarations: [
+    ...components,
+    ...entryComponents
+  ],
+  exports: [
+    ...components
+  ],
+  entryComponents: [
+    ...entryComponents
+  ],
+  providers: [
+    NodeDeleteConfirmationService
+  ],
 })
-export class ClusterModule { }
+export class ClusterModule {
+}

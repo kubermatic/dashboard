@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {Health, Status} from '../../shared/entity/ClusterEntity';
+import { Component, Input } from '@angular/core';
+import { Health } from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-health-status',
@@ -9,9 +9,9 @@ import {Health, Status} from '../../shared/entity/ClusterEntity';
 export class ClusterHealthStatusComponent {
   @Input() public health: Health;
   @Input() public phase: string;
-  public green: string = 'fa fa-circle green';
-  public red: string = 'fa fa-circle red';
-  public orange: string = 'fa fa-circle orange';
+  public green = 'fa fa-circle green';
+  public red = 'fa fa-circle red';
+  public orange = 'fa fa-circle orange';
 
   constructor() { }
 

@@ -39,7 +39,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private upgradesList: string[] = [];
   private unsubscribe: Subject<any> = new Subject();
 
-  private refreshInterval: number = 10000;
+  private refreshInterval = 10000;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -54,7 +54,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
 
-    //Node datacenter & ssh keys - both once
+    // Node datacenter & ssh keys - both once
     const onceSub = this.clusterSubject
       .subscribe(cluster => {
 

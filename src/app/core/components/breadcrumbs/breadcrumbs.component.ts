@@ -12,8 +12,8 @@ import { Breadcrumb } from 'app/redux/reducers/breadcrumb';
 })
 export class BreadcrumbsComponent implements OnInit {
 
-  public activePageTitle: string = '';
-  public clusterName: string = '';
+  public activePageTitle = '';
+  public clusterName = '';
 
   @select(['breadcrumb', 'crumb']) breadcrumb$: Observable<string>;
 
