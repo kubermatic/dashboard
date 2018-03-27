@@ -1,10 +1,10 @@
-import { Component, OnInit, Input, DoCheck } from '@angular/core';
-import { RouterModule, Router } from '@angular/router';
-import { ApiService } from 'app/core/services/api/api.service';
+import { Component, DoCheck, Input, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material';
-import { CreateNodesService } from 'app/core/services';
-import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
-import { NotificationActions } from 'app/redux/actions/notification.actions';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { ApiService, CreateNodesService } from '../../../core/services';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
 
 
 @Component({
@@ -13,29 +13,26 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
   styleUrls: ['./cluster-delete-confirmation.component.scss']
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
-
-  @Input() humanReadableName: string;
-  @Input() clusterName: string;
+  @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
 
   public disableDeleteCluster: boolean = false;
-  public cluster: any;
 
-  constructor(
-    private router: Router,
-    private api: ApiService,
-    private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
-    private createNodesService: CreateNodesService
-  ) {}
+  constructor(private router: Router,
+              private api: ApiService,
+              private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
+              private createNodesService: CreateNodesService) {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   ngDoCheck(): void {
     document.getElementById('name').focus();
   }
 
   onChange(event: any) {
-    if (event.target.value === this.humanReadableName && event.target.value.length ) {
+    if (event.target.value === this.cluster.spec.humanReadableName && event.target.value.length) {
       this.disableDeleteCluster = true;
     } else {
       this.disableDeleteCluster = false;
@@ -44,14 +41,12 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
 
   deleteCluster() {
     if (this.disableDeleteCluster === true) {
-        this.dialogRef.close();
-        this.api.deleteCluster(this.clusterName, this.datacenter.spec.seed).subscribe(result => {
-          this.cluster = result;
-          this.createNodesService.preventCreatingInitialClusterNodes();
-          NotificationActions.success('Success', `Cluster is beeing deleted`);
-
-          this.router.navigate(['/clusters']);
-        });
+      this.api.deleteCluster(this.cluster.metadata.name, this.datacenter.metadata.name).subscribe(result => {
+        this.createNodesService.preventCreatingInitialClusterNodes();
+        NotificationActions.success('Success', `Cluster is beeing deleted`);
+        this.router.navigate(['/clusters']);
+      });
+      this.dialogRef.close();
     }
   }
 }

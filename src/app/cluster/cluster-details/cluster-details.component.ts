@@ -52,11 +52,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
+
+    //Seed datacenter
     this.dcService.getDataCenter(seedDCName)
       .subscribe(res => {
         this.datacenter = new DataCenterEntity(res.metadata, res.spec, res.seed);
       });
 
+    //Node datacenter
     const nodeDCSubscription = this.clusterSubject.subscribe(cluster => {
       this.dcService.getDataCenter(cluster.spec.cloud.dc)
         .subscribe(datacenter => {
@@ -65,20 +68,24 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         });
     });
 
+    //Upgrades
     this.clusterSubject.subscribe(cluster => {
-      this.api.getClusterUpgrades(cluster.metadata.name, seedDCName)
-        .subscribe(upgrades => {
-          this.upgradesList = upgrades;
-        });
+      if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController) {
+        this.api.getClusterUpgrades(cluster.metadata.name, seedDCName)
+          .subscribe(upgrades => {
+            this.upgradesList = upgrades;
+          });
+      }
     });
 
+    //Nodes
     this.clusterSubject.subscribe(cluster => {
       if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver) {
         this.reloadClusterNodes(clusterName, seedDCName);
       }
     });
 
-    //Loads the keys once
+    //SSH keys - once
     const sshKeySubscription = this.clusterSubject.subscribe(cluster => {
       this.api.getSSHKeys().subscribe(keys => {
         this.sshKeys = keys.filter(key => {
@@ -139,8 +146,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public deleteClusterDialog(): void {
     this.dialogRef = this.dialog.open(ClusterDeleteConfirmationComponent, this.config);
 
-    this.dialogRef.componentInstance.humanReadableName = this.cluster.spec.humanReadableName;
-    this.dialogRef.componentInstance.clusterName = this.cluster.metadata.name;
+    this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
 
     this.dialogRef.afterClosed().subscribe(result => {
