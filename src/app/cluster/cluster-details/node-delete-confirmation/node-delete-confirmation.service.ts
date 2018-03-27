@@ -7,7 +7,8 @@ import { Injectable, ViewContainerRef } from '@angular/core';
 @Injectable()
 export class NodeDeleteConfirmationService {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {
+  }
 
   public confirm(title: string,
                  message: string,
@@ -15,7 +16,7 @@ export class NodeDeleteConfirmationService {
                  btnOkText: string = 'Ok',
                  btnCancelText: string = 'Cancel'): Observable<boolean> {
 
-   // let config = new MatDialogConfig();
+    // let config = new MatDialogConfig();
 
     const config: MatDialogConfig = {
       disableClose: false,
@@ -48,10 +49,10 @@ export class NodeDeleteConfirmationService {
 
   public confirmWithoutContainer(title: string,
                                  message: string,
-                                 titleAlign: string= 'center',
-                                 messageAlign: string= 'center',
+                                 titleAlign: string = 'center',
+                                 messageAlign: string = 'center',
                                  btnOkText: string = 'Ok',
-                                 btnCancelText: string = 'Cancel' ): Observable<boolean> {
+                                 btnCancelText: string = 'Cancel'): Observable<boolean> {
 
     const config = new MatDialogConfig();
     // config.viewContainerRef = viewContainerRef;

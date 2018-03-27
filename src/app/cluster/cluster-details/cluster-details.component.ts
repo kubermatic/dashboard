@@ -5,19 +5,21 @@ import { MatDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
 import 'rxjs/add/operator/retry';
+import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/observable/combineLatest';
 import { environment } from '../../../environments/environment';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
-import { NodeEntityV2 } from '../../shared/entity/NodeEntity';
 import { ClusterEntity, getProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ApiService, CreateNodesService, CustomEventService, DatacenterService } from '../../core/services';
+import { ApiService, CreateNodesService, DatacenterService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import { UpgradeClusterComponentData } from '../../shared/model/UpgradeClusterDialogData';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
+import { NodeEntityV2 } from '../../shared/entity/NodeEntity';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -25,22 +27,21 @@ import { Subject } from 'rxjs/Subject';
   styleUrls: ['./cluster-details.component.scss']
 })
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
-  private clusterSubject: Subject<ClusterEntity>;
   public cluster: ClusterEntity;
   public nodeDc: DataCenterEntity;
   public datacenter: DataCenterEntity;
-  public nodes: NodeEntityV2[] = [];
   public sshKeys: SSHKeyEntity[] = [];
-  private upgradesList: string[] = [];
-
+  public nodes: NodeEntityV2[] = [];
   public dialogRef: any;
   public config: any = {};
   public stateOfTheAccordion: object[];
+  private clusterSubject: Subject<ClusterEntity>;
+  private upgradesList: string[] = [];
+  private unsubscribe: Subject<any> = new Subject();
 
   private refreshInterval: number = 10000;
 
-  constructor(private customEventService: CustomEventService,
-              private route: ActivatedRoute,
+  constructor(private route: ActivatedRoute,
               private router: Router,
               private api: ApiService,
               public dialog: MatDialog,
@@ -53,80 +54,65 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
 
-    //Seed datacenter
-    this.dcService.getDataCenter(seedDCName)
-      .subscribe(res => {
-        this.datacenter = new DataCenterEntity(res.metadata, res.spec, res.seed);
-      });
+    //Node datacenter & ssh keys - both once
+    const onceSub = this.clusterSubject
+      .subscribe(cluster => {
 
-    //Node datacenter
-    const nodeDCSubscription = this.clusterSubject.subscribe(cluster => {
-      this.dcService.getDataCenter(cluster.spec.cloud.dc)
-        .subscribe(datacenter => {
-          this.nodeDc = new DataCenterEntity(datacenter.metadata, datacenter.spec, datacenter.seed);
-          nodeDCSubscription.unsubscribe();
-        });
-    });
-
-    //Upgrades
-    this.clusterSubject.subscribe(cluster => {
-      if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController) {
-        this.api.getClusterUpgrades(cluster.metadata.name, seedDCName)
-          .subscribe(upgrades => {
-            this.upgradesList = upgrades;
+        this.dcService.getDataCenter(cluster.spec.cloud.dc)
+          .takeUntil(this.unsubscribe)
+          .subscribe(datacenter => {
+            this.nodeDc = new DataCenterEntity(datacenter.metadata, datacenter.spec, datacenter.seed);
           });
-      }
-    });
 
-    //Nodes
-    this.clusterSubject.subscribe(cluster => {
-      if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver) {
-        this.reloadClusterNodes(clusterName, seedDCName);
-      }
-    });
+        this.api.getSSHKeys()
+          .takeUntil(this.unsubscribe)
+          .subscribe(keys => {
+            this.sshKeys = keys.filter(key => {
+              if (key.spec.clusters == null) {
+                return false;
+              }
+              return key.spec.clusters.indexOf(cluster.metadata.name) > -1;
+            });
+          });
 
-    //SSH keys - once
-    const sshKeySubscription = this.clusterSubject.subscribe(cluster => {
-      this.api.getSSHKeys().subscribe(keys => {
-        this.sshKeys = keys.filter(key => {
-          if (key.spec.clusters == null) {
-            return false;
-          }
-          return key.spec.clusters.indexOf(cluster.metadata.name) > -1;
-        });
-        sshKeySubscription.unsubscribe();
+        onceSub.unsubscribe();
       });
-    });
 
-    const timer = Observable.interval(this.refreshInterval);
-    timer.subscribe(tick => {
-      this.reloadCluster(clusterName, seedDCName);
-    });
-    this.reloadCluster(clusterName, seedDCName);
-  }
+    // Upgrades
+    this.clusterSubject
+      .takeUntil(this.unsubscribe)
+      .subscribe(cluster => {
+        if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController) {
+          this.api.getClusterUpgrades(cluster.metadata.name, seedDCName)
+            .takeUntil(this.unsubscribe)
+            .subscribe(upgrades => {
+              this.upgradesList = upgrades;
+            });
+        }
+      });
 
-  public ngOnDestroy(): void {
-  }
+    // Nodes
+    this.clusterSubject
+      .takeUntil(this.unsubscribe)
+      .subscribe(cluster => {
+        this.reloadClusterNodes();
+      });
 
-  public reloadClusterNodes(clusterName: string, seedDCName: string) {
-    this.api.getClusterNodes(clusterName, seedDCName).subscribe(nodes => {
-      this.nodes = nodes;
-    });
-  }
-
-  public reloadCluster(clusterName: string, seedDCName: string): void {
-    this.api.getCluster(clusterName, seedDCName).retry(3)
+    Observable.combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName))
+      .takeUntil(this.unsubscribe)
+      .retry(3)
       .subscribe(
-        res => {
-          const clusterEntity: ClusterEntity = {
-            metadata: res.metadata,
-            spec: res.spec,
-            address: res.address,
-            status: res.status,
-          };
+        (data: any[]): void => {
+          this.datacenter = data[0];
+          this.cluster = data[1];
+          this.clusterSubject.next(data[1]);
 
-          this.cluster = clusterEntity;
-          this.clusterSubject.next(clusterEntity);
+          const timer = Observable.interval(this.refreshInterval);
+          timer
+            .takeUntil(this.unsubscribe)
+            .subscribe(tick => {
+              this.reloadCluster(clusterName, seedDCName);
+            });
         },
         error => {
           if (error.status === 404) {
@@ -135,11 +121,36 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         });
   }
 
+  public ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  public reloadCluster(clusterName: string, seedDCName: string): void {
+    this.api.getCluster(clusterName, seedDCName)
+      .takeUntil(this.unsubscribe)
+      .retry(3)
+      .subscribe(res => {
+        this.cluster = res;
+        this.clusterSubject.next(res);
+      });
+  }
+
+  public reloadClusterNodes() {
+    if (this.cluster && this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController) {
+      this.api.getClusterNodes(this.cluster.metadata.name, this.datacenter.metadata.name)
+        .takeUntil(this.unsubscribe)
+        .subscribe(nodes => {
+          this.nodes = nodes;
+        });
+    }
+  }
+
   public addNode(): void {
     const data = new AddNodeModalData(this.cluster, this.nodeDc);
-    this.dialogRef = this.dialog.open(AddNodeModalComponent, {data});
+    this.dialogRef = this.dialog.open(AddNodeModalComponent, { data });
     this.dialogRef.afterClosed().subscribe(result => {
-      this.reloadClusterNodes(this.cluster.metadata.name, this.datacenter.metadata.name);
+      this.reloadClusterNodes();
     });
   }
 
@@ -155,7 +166,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public connectClusterDialog(): void {
     this.dialogRef = this.dialog.open(ClusterConnectComponent, this.config);
-    this.dialogRef.componentInstance.clusterName = this.cluster.metadata.name;
+    this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
   }
 
@@ -173,10 +184,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem('token');
     return `${environment.restRootV3}/dc/${this.datacenter.metadata.name}/cluster/${this.cluster.metadata.name}/kubeconfig?token=${authorization_token}`;
-  }
-
-  public clusterIsRunning(): boolean {
-    return this.cluster.status.phase === 'Running';
   }
 
   public isLoaded(): boolean {

@@ -8,13 +8,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRouteStub, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
 import { ClusterDetailsComponent } from './cluster-details.component';
-import { CustomEventService } from './../../core/services/custom-event/custom-event.service';
 import { Auth } from './../../core/services/auth/auth.service';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { ApiService } from '../../core/services/api/api.service';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
-import { NodeComponent } from './node/node.component';
 import { ClusterSecretsComponent } from './cluster-secrets/cluster-secrets.component';
 import { MatDialog } from '@angular/material';
 import { CreateNodesService, DatacenterService } from '../../core/services/index';
@@ -23,6 +21,7 @@ import { SSHKeysFake } from '../../testing/fake-data/sshkey.fake';
 import { nodesFake } from '../../testing/fake-data/node.fake';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { datacenterFake1 } from '../../testing/fake-data/datacenter.fake';
+import { NodeListComponent } from './node-list/node-list.component';
 import Spy = jasmine.Spy;
 
 const modules: any[] = [
@@ -65,18 +64,17 @@ describe('ClusterDetailsComponent', () => {
         ClusterDetailsComponent,
         ClusterHealthStatusComponent,
         ClusterSecretsComponent,
-        NodeComponent
+        NodeListComponent
       ],
       providers: [
-        {provide: ApiService, useValue: apiMock},
-        CustomEventService,
+        { provide: ApiService, useValue: apiMock },
         MatDialog,
         CreateNodesService,
         LocalStorageService,
-        {provide: DatacenterService, useValue: datacenterMock},
-        {provide: Auth, useClass: AuthMockService},
-        {provide: Router, useClass: RouterStub},
-        {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+        { provide: DatacenterService, useValue: datacenterMock },
+        { provide: Auth, useClass: AuthMockService },
+        { provide: Router, useClass: RouterStub },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
       ],
     }).compileComponents();
   }));
@@ -86,7 +84,7 @@ describe('ClusterDetailsComponent', () => {
     component = fixture.componentInstance;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-    activatedRoute.testParamMap = {clusterName: '4k6txp5sq', seedDc: 'europe-west3-c'};
+    activatedRoute.testParamMap = { clusterName: '4k6txp5sq', seedDc: 'europe-west3-c' };
 
     spinner = fixture.debugElement.query(By.css('.km-spinner'));
     clusterDetailActions = fixture.debugElement.query(By.css('.cluster-detail-actions'));

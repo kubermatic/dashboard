@@ -2,7 +2,7 @@ import { Provider } from 'app/shared/interfaces/provider.interface';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
 import { AddNodeModalData } from 'app/shared/model/add-node-modal-data';
 import { ApiService } from 'app/core/services/api/api.service';
@@ -21,7 +21,8 @@ export class AddNodeModalComponent implements OnInit {
   public provider: Provider = { name: '', payload: {} };
 
   constructor(private api: ApiService,
-              @Inject(MAT_DIALOG_DATA) public data: AddNodeModalData) { }
+              @Inject(MAT_DIALOG_DATA) public data: AddNodeModalData) {
+  }
 
   public ngOnInit(): void {
     this.provider.name = getProvider(this.data.cluster);
@@ -42,7 +43,7 @@ export class AddNodeModalComponent implements OnInit {
 
   public addNode(): void {
     let successCounter: number = 0;
-    for (let i = 0; i < this.form.value.node_count; i ++) {
+    for (let i = 0; i < this.form.value.node_count; i++) {
       this.api.createClusterNode(this.data.cluster, this.nodeModel, this.data.dc.spec.seed).subscribe(node => {
         successCounter++;
         if (successCounter === this.form.value.node_count) {

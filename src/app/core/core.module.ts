@@ -20,7 +20,6 @@ import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
 import { SidenavService } from './components/sidenav/sidenav.service';
 import {
   CreateNodesService,
-  CustomEventService,
   DatacenterService,
   InputValidationService,
   LocalStorageService,
@@ -55,7 +54,6 @@ const services: any[] = [
   Auth,
   AuthGuard,
   CreateNodesService,
-  CustomEventService,
   DatacenterService,
   InputValidationService,
   LocalStorageService,
