@@ -20,6 +20,7 @@ import { AddNodeModalComponent } from './cluster-details/add-node-modal/add-node
 import { UpgradeClusterComponent } from './cluster-details/upgrade-cluster/upgrade-cluster.component';
 import { ClusterSecretsComponent } from './cluster-details/cluster-secrets/cluster-secrets.component';
 import { ClusterConnectComponent } from './cluster-details/cluster-connect/cluster-connect.component';
+import { RevokeAdminTokenComponent } from './cluster-details/cluster-secrets/revoke-admin-token/revoke-admin-token.component';
 
 const components: any[] = [
     ClusterDetailsComponent,
@@ -37,6 +38,7 @@ const entryComponents: any[] = [
     AddNodeModalComponent,
     ClusterSecretsComponent,
     ClusterConnectComponent,
+    RevokeAdminTokenComponent,
 ];
 
 @NgModule({
