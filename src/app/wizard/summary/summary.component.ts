@@ -49,11 +49,11 @@ export class SummaryComponent implements OnInit, OnDestroy {
       const clusterModel = data[3];
       const nodeCount = data[4];
 
-      provider && (this.provider = provider);
-      region && (this.region = region);
-      nodeModel && (this.nodeModel = nodeModel);
-      clusterModel && (this.clusterModel = clusterModel);
-      nodeCount && (this.nodeCount = nodeCount);
+      this.provider = provider;
+      this.region = region;
+      this.nodeModel = nodeModel;
+      this.clusterModel = clusterModel;
+      this.nodeCount = nodeCount;
     });
     this.subscriptions.push(subWizard);
 

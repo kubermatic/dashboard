@@ -20,7 +20,7 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
 
   public digitalOceanClusterForm: FormGroup;
   private sub: Subscription;
-  private region: string = '';
+  private region = '';
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
@@ -32,7 +32,9 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.isChecked$.subscribe(isChecked => {
-      isChecked && this.showRequiredFields();
+      if (isChecked) {
+        this.showRequiredFields();
+      }
     });
 
     this.sub = this.datacenter$.subscribe(datacenter => {
@@ -52,7 +54,7 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
   }
 
   public onChange() {
-    const doCloudSpec: DigitaloceanCloudSpec = {token: this.digitalOceanClusterForm.controls['access_token'].value};
+    const doCloudSpec: DigitaloceanCloudSpec = { token: this.digitalOceanClusterForm.controls['access_token'].value };
 
     WizardActions.setValidation('clusterForm', this.digitalOceanClusterForm.valid);
     WizardActions.setCloudSpec({
@@ -72,6 +74,8 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    this.sub && this.sub.unsubscribe();
+    if (this.sub) {
+      this.sub.unsubscribe();
+    }
   }
 }

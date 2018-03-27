@@ -17,7 +17,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
   public setDatacenterForm: FormGroup;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
   private subscriptions: Subscription[] = [];
-  public datacenterRequired: boolean = false;
+  public datacenterRequired = false;
 
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
   public selectedDatacenter: DataCenterEntity;
@@ -38,8 +38,8 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
         const provider = data[1];
         const isChecked = data[2];
 
-        datacenter && (this.selectedDatacenter = datacenter);
-        provider && (this.selectedProvider = provider);
+        this.selectedDatacenter = datacenter;
+        this.selectedProvider = provider;
         this.isChecked = isChecked;
 
         if (isChecked) {
@@ -60,7 +60,9 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
       );
       WizardActions.checkValidation();
 
-      !this.isChecked && WizardActions.nextStep();
+      if (!this.isChecked) {
+        WizardActions.nextStep();
+      }
     });
   }
 

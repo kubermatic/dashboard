@@ -56,8 +56,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           this.createClusterAndNode();
         }
         this.step = step;
-
-        provider && this.setProvider(provider);
+        this.setProvider(provider);
       });
 
     this.subscriptions.push(sub);

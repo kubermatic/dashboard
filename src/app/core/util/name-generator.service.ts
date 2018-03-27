@@ -355,7 +355,7 @@ export class ClusterNameGenerator {
     'hypatia',
 
     // Yeong-Sil Jang was a Korean scientist and astronomer during the Joseon Dynasty; he
-    //invented the first metal printing press and water gauge. https://en.wikipedia.org/wiki/Jang_Yeong-sil
+    // invented the first metal printing press and water gauge. https://en.wikipedia.org/wiki/Jang_Yeong-sil
     'jang',
 
     // Betty Jennings - one of the original programmers of the ENIAC. https://en.wikipedia.org/wiki/ENIAC -

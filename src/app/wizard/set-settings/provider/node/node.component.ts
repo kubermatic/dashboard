@@ -2,7 +2,7 @@ import { FormGroup } from '@angular/forms';
 import { WizardActions } from './../../../../redux/actions/wizard.actions';
 import { Observable } from 'rxjs/Observable';
 import { select } from '@angular-redux/store';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { Provider } from 'app/shared/interfaces/provider.interface';
@@ -25,17 +25,19 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.subscription = this.providerName$.combineLatest(this.token$)
-    .subscribe((data: [string, string]) => {
-      const providerName = data[0];
-      const token = data[1];
+      .subscribe((data: [string, string]) => {
+        const providerName = data[0];
+        const token = data[1];
 
-      providerName && (this.provider.name = providerName);
-      token && (this.provider.payload.token = token);
-    });
+        this.provider.name = providerName;
+        this.provider.payload.token = token;
+      });
   }
 
   public ngOnDestroy(): void {
-    this.subscription && this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   public changeNodeModel(nodeModel: CreateNodeModel): void {
