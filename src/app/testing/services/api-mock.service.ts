@@ -43,6 +43,10 @@ export class ApiMockService {
         return Observable.of(this.cluster);
     }
 
+    public editCluster(cluster: ClusterEntity, dc: string): Observable<ClusterEntity> {
+        return Observable.of(this.cluster);
+    }
+
     public deleteCluster(clusterName: string, dc: string): Observable<any> {
         return Observable.of(null);
     }
