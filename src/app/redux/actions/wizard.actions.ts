@@ -1,11 +1,11 @@
 import { FORM_CHANGED } from '@angular-redux/form';
-import { CreateClusterModel } from 'app/shared/model/CreateClusterModel';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
 import { ActionBase } from './action.base';
 import { Action } from '../../shared/interfaces/action.interface';
 
 import { dispatch } from '@angular-redux/store';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 
 export class WizardActions extends ActionBase {
   static readonly className: string = 'WizardActions';
@@ -56,7 +56,7 @@ export class WizardActions extends ActionBase {
   }
 
   @dispatch()
-  static setNodeModel(nodeModel: CreateNodeModel): Action {
+  static setNodeModel(nodeModel: NodeEntity): Action {
     return { type: WizardActions.SET_NODE_MODEL, payload: { nodeModel } };
   }
 

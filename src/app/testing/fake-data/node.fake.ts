@@ -1,7 +1,7 @@
-import { CreateNodeModel } from './../../shared/model/CreateNodeModel';
-import { NodeEntityV2 } from '../../shared/entity/NodeEntity';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
 
-export const nodeModelFake: CreateNodeModel = {
+export const nodeCreateFake: NodeEntity = {
+  metadata: {},
   spec: {
     cloud: {
       digitalocean: {
@@ -31,7 +31,7 @@ export const nodeModelFake: CreateNodeModel = {
   }
 };
 
-export const nodeFake: NodeEntityV2 = {
+export const nodeFake: NodeEntity = {
   metadata: {
     name: 'machine-kubermatic-tbbfvttvs-v5hmk',
     displayName: 'kubermatic-tbbfvttvs-v5hmk',
@@ -99,7 +99,7 @@ export const nodeFake: NodeEntityV2 = {
   }
 };
 
-export const nodesFake: NodeEntityV2[] = [
+export const nodesFake: NodeEntity[] = [
   {
     metadata: {
       name: 'machine-kubermatic-tbbfvttvs-v5hmk',

@@ -1,24 +1,22 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import {
-  ContainerLinuxSpec,
-  NodeCloudSpec,
-  NodeContainerRuntimeInfo,
-  NodeCreateSpec,
-  NodeVersionInfo,
-  OperatingSystemSpec,
-  UbuntuSpec
-} from 'app/shared/entity/NodeEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { InputValidationService } from 'app/core/services';
 import { CustomValidators } from 'ng2-validation';
-import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
-import { OpenstackNodeSpec } from 'app/shared/entity/node/OpenstackNodeSpec';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { WizardActions } from '../../redux/actions/wizard.actions';
+import {
+  NodeCloudSpec,
+  NodeContainerRuntimeInfo,
+  NodeSpec,
+  NodeVersionInfo,
+  OperatingSystemSpec,
+  UbuntuSpec
+} from '../../shared/entity/NodeEntity';
+import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
+import { InputValidationService } from '../../core/services';
+import { OpenstackNodeSpec } from '../../shared/entity/node/OpenstackNodeSpec';
 
 
 @Component({
@@ -28,7 +26,7 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
-  @Output() public nodeSpecChanges: EventEmitter<{ nodeSpec: NodeCreateSpec }> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<NodeSpec> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public osNodeForm: FormGroup;
@@ -94,7 +92,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
     );
 
     if (this.nodeForm) {
-      const nodeSpec = new NodeCreateSpec(
+      const nodeSpec = new NodeSpec(
         new NodeCloudSpec(
           null,
           null,
@@ -114,10 +112,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
         )
       );
 
-      this.nodeSpecChanges.emit({
-        nodeSpec
-      });
-
+      this.nodeSpecChanges.emit(nodeSpec);
       this.formChanges.emit(this.osNodeForm);
     }
   }

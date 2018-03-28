@@ -1,11 +1,3 @@
-export class DigitaloceanNodeSpec {
-  size: string;
-
-  constructor(size: string) {
-    this.size = size;
-  }
-}
-
 export class DigitaloceanNodeSpecV2 {
   size: string;
   backups: boolean;

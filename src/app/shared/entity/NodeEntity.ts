@@ -1,11 +1,16 @@
-import { MetadataEntity, MetadataEntityV2 } from './MetadataEntity';
+import { MetadataEntityV2 } from './MetadataEntity';
 import { DigitaloceanNodeSpecV2 } from './node/DigitialoceanNodeSpec';
-import { AWSNodeSpecV2 } from './node/AWSNodeSpec';
+import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
 import { HetznerNodeSpec } from './node/HetznerNodeSpec';
 
+export class NodeEntity {
+  metadata: MetadataEntityV2;
+  spec: NodeSpec;
+  status?: NodeStatus;
+}
 
-export class NodeCreateSpec {
+export class NodeSpec {
   cloud: NodeCloudSpec;
   operatingSystem: OperatingSystemSpec;
   versions: NodeVersionInfo;
@@ -19,11 +24,11 @@ export class NodeCreateSpec {
 
 export class NodeCloudSpec {
   digitalocean: DigitaloceanNodeSpecV2;
-  aws: AWSNodeSpecV2;
+  aws: AWSNodeSpec;
   openstack: OpenstackNodeSpec;
   hetzner: HetznerNodeSpec;
 
-  constructor(digitalocean: DigitaloceanNodeSpecV2, aws: AWSNodeSpecV2, openstack: OpenstackNodeSpec, hetzner: HetznerNodeSpec) {
+  constructor(digitalocean: DigitaloceanNodeSpecV2, aws: AWSNodeSpec, openstack: OpenstackNodeSpec, hetzner: HetznerNodeSpec) {
     this.digitalocean = digitalocean;
     this.aws = aws;
     this.openstack = openstack;
@@ -78,13 +83,13 @@ export class NodeContainerRuntimeInfo {
 }
 
 export class NodeStatus {
-  machineName: string;
-  capacity: NodeResources;
-  allocatable: NodeResources;
-  addresses: NodeAddress[];
-  nodeInfo: NodeSystemInfo;
-  errorReason: string;
-  errorMessage: string;
+  machineName?: string;
+  capacity?: NodeResources;
+  allocatable?: NodeResources;
+  addresses?: NodeAddress[];
+  nodeInfo?: NodeSystemInfo;
+  errorReason?: string;
+  errorMessage?: string;
 }
 
 export class NodeResources {
@@ -104,86 +109,4 @@ export class NodeSystemInfo {
   kubeletVersion: string;
   operatingSystem: string;
   architecture: string;
-}
-
-export class NodeEntityV2 {
-  metadata: MetadataEntityV2;
-  spec: NodeCreateSpec;
-  status: NodeStatus;
-}
-
-// Following are from api/v1
-// TODO: cleanup
-export class Spec {
-  podCIDR: string;
-  externalID: string;
-}
-
-export class Capacity {
-  cpu: string;
-  memory: string;
-  pods: string;
-}
-
-export class Allocatable {
-  cpu: string;
-  memory: string;
-  pods: string;
-}
-
-export class Condition {
-  type: string;
-  status: string;
-  lastHeartbeatTime: Date;
-  lastTransitionTime: Date;
-  reason: string;
-  message: string;
-}
-
-export class Address {
-  type: string;
-  address: string;
-}
-
-export class KubeletEndpoint {
-  Port: number;
-}
-
-export class DaemonEndpoints {
-  kubeletEndpoint: KubeletEndpoint;
-}
-
-export class NodeInfo {
-  machineID: string;
-  systemUUID: string;
-  bootID: string;
-  kernelVersion: string;
-  osImage: string;
-  containerRuntimeVersion: string;
-  kubeletVersion: string;
-  kubeProxyVersion: string;
-  operatingSystem: string;
-  architecture: string;
-}
-
-export class Image {
-  names: string[];
-  sizeBytes: number;
-}
-
-export class Status {
-  capacity: Capacity;
-  allocatable: Allocatable;
-  conditions: Condition[];
-  addresses: Address[];
-  daemonEndpoints: DaemonEndpoints;
-  nodeInfo: NodeInfo;
-  images: Image[];
-}
-
-export class NodeEntity {
-  metadata: MetadataEntity;
-  spec: Spec;
-  status: Status;
-  groupname: string;
 }

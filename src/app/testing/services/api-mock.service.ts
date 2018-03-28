@@ -1,12 +1,11 @@
 import { nodesFake } from './../fake-data/node.fake';
-import { NodeEntityV2 } from '../../shared/entity/NodeEntity';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { SSHKeysFake } from './../fake-data/sshkey.fake';
 import { clusterFake1, clustersFake } from './../fake-data/cluster.fake';
 import { ClusterEntity } from './../../shared/entity/ClusterEntity';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { defer } from 'rxjs/observable/defer';
 
@@ -15,7 +14,7 @@ export class ApiMockService {
   public cluster: ClusterEntity = clusterFake1;
   public clusters: ClusterEntity[] = clustersFake;
   public sshKeys: SSHKeyEntity[] = SSHKeysFake;
-  public nodes: NodeEntityV2[] = nodesFake;
+  public nodes: NodeEntity[] = nodesFake;
 
   constructor() {
   }
@@ -36,7 +35,7 @@ export class ApiMockService {
     return Observable.of(null);
   }
 
-  public createClusterNode(cluster: ClusterEntity, nodeModel: CreateNodeModel, dc: string): Observable<any> {
+  public createClusterNode(cluster: ClusterEntity, nodeModel: NodeEntity, dc: string): Observable<any> {
     return Observable.of(null);
   }
 
@@ -56,7 +55,7 @@ export class ApiMockService {
     return Observable.of(null);
   }
 
-  public getClusterNodes(cluster: string, nodeModel: CreateNodeModel, dc: string): Observable<NodeEntityV2[]> {
+  public getClusterNodes(cluster: string, dc: string): Observable<NodeEntity[]> {
     return Observable.of(this.nodes);
   }
 

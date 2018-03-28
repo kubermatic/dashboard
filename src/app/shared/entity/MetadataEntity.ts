@@ -8,9 +8,9 @@ export class MetadataEntity {
 }
 
 export class MetadataEntityV2 {
-  name: string;
-  displayName: string;
-  deletionTimestamp: Date;
-  annotations: Map<string, string>;
-  labels: Map<string, string>;
+  name?: string;
+  displayName?: string;
+  deletionTimestamp?: Date;
+  annotations?: Map<string, string>;
+  labels?: Map<string, string>;
 }

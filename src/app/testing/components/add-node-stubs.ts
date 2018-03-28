@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Provider } from './../../shared/interfaces/provider.interface';
 import { Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
-import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
 import { FormGroup } from '@angular/forms/src/model';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-add-node',
@@ -11,7 +11,7 @@ import { FormGroup } from '@angular/forms/src/model';
 export class AddNodeStubComponent {
   @Input() provider: Provider;
   @Input() connect: string[] = [];
-  @Output() nodeModelChanges: EventEmitter<CreateNodeModel> = new EventEmitter();
+  @Output() nodeChanges: EventEmitter<NodeEntity> = new EventEmitter();
   @Output() formChanges: EventEmitter<FormGroup> = new EventEmitter();
 }
 

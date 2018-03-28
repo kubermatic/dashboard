@@ -1,12 +1,12 @@
-import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { ApiService } from './../../services/api/api.service';
 import { DatacenterService } from './../../services/datacenter/datacenter.service';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { CreateNodeModel } from '../../../shared/model/CreateNodeModel';
 import { LocalStorageService } from '../local-storage/local-storage.service';
+import { NodeEntity, NodeSpec } from '../../../shared/entity/NodeEntity';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
 
 @Injectable()
 export class CreateNodesService {
@@ -27,12 +27,12 @@ export class CreateNodesService {
     }
   }
 
-  public createInitialClusterNodes(nodeCount: number, cluster: ClusterEntity, createNodeModel: CreateNodeModel, datacenter: string): void {
+  public createInitialClusterNodes(nodeCount: number, cluster: ClusterEntity, nodeSpec: NodeEntity, datacenter: string): void {
     if (!this.localStorageService.getNodesData()) {
       this.localStorageService.setNodesCreationData({
         nodeCount: nodeCount,
         cluster: cluster,
-        createNodeModel: createNodeModel,
+        createNodeModel: NodeEntity,
         datacenter: datacenter
       });
       this.hasData = true;
@@ -44,7 +44,7 @@ export class CreateNodesService {
           if (curCluster.status.phase === 'Running') {
             let successCounter = 0;
             for (let i = 0; i < nodeCount; i++) {
-              this.api.createClusterNode(curCluster, createNodeModel, datacenter).subscribe(result => {
+              this.api.createClusterNode(curCluster, nodeSpec, datacenter).subscribe(result => {
                 this.preventCreatingInitialClusterNodes();
                 successCounter++;
                 if (successCounter === nodeCount) {
