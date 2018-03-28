@@ -160,7 +160,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
 
-    this.dialogRef.afterClosed().subscribe(result => {
+    this.dialogRef.afterClosed().subscribe(deleted => {
+      if (deleted) {
+        this.router.navigate(['/clusters']);
+      }
     });
   }
 

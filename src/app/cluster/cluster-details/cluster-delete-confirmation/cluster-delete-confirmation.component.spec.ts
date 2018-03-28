@@ -67,9 +67,11 @@ describe('ClusterDeleteConfirmationComponent', () => {
   }));
 
   it('should able add button', () => {
-    fixture.detectChanges();
     component.cluster = clusterFake1;
     component.datacenter = datacenterFake1;
+
+    fixture.detectChanges();
+
     const input = fixture.debugElement.query(By.css('#name'));
     const inputElement = input.nativeElement;
     inputElement.value = clusterFake1.spec.humanReadableName;
@@ -79,9 +81,10 @@ describe('ClusterDeleteConfirmationComponent', () => {
   });
 
   it('should call deleteCluster method', fakeAsync(() => {
-    fixture.detectChanges();
     component.cluster = clusterFake1;
     component.datacenter = datacenterFake1;
+
+    fixture.detectChanges();
     const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));
 
     component.deleteCluster();
@@ -97,9 +100,10 @@ describe('ClusterDeleteConfirmationComponent', () => {
   }));
 
   it('should call navigate to cluster list after deleting', fakeAsync(() => {
-    fixture.detectChanges();
     component.cluster = clusterFake1;
     component.datacenter = datacenterFake1;
+
+    fixture.detectChanges();
     component.disableDeleteCluster = true;
     const spyNavigate = spyOn(router, 'navigate');
 
