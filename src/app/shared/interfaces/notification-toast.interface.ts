@@ -1,13 +1,13 @@
 export enum NotificationToastType {
-    success,
-    alert,
-    error,
-    info
+  success,
+  alert,
+  error,
+  info
 }
 
 export interface NotificationToast {
-    type: NotificationToastType;
-    title: string;
-    content: string;
-    icon?: string;
+  type: NotificationToastType;
+  title: string;
+  content: string;
+  icon?: string;
 }

@@ -1,9 +1,9 @@
 import { NodeProvider } from './../../shared/model/NodeProviderConstants';
 import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
 import { DatacenterService } from 'app/core/services';
-import { select, NgRedux } from '@angular-redux/store';
+import { NgRedux, select } from '@angular-redux/store';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -15,14 +15,12 @@ import { Subscription } from 'rxjs/Subscription';
 export class NavigationButtonsComponent implements OnInit, OnDestroy {
 
   public nextStep: boolean;
-  private subscriptions: Subscription[] = [];
   public supportedNodeProviders: string[] = NodeProvider.Supported;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
-
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
-
   @select(['wizard', 'valid']) valid$: Observable<boolean[]>;
+  private subscriptions: Subscription[] = [];
 
   constructor(private ngRedux: NgRedux<any>,
               private dcService: DatacenterService) { }
@@ -66,14 +64,14 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
       case 2:
         return valid.get('setDatacenterForm');
       case 3:
-          if (!valid.get('sshKeyForm')) {
-            return false;
-          } else if ((valid.get('awsClusterForm') || valid.get('digitalOceanClusterForm') || valid.get('openstackClusterForm') ) &&
-                      valid.get('nodeForm')) {
-            return true;
-          } else {
-            return false;
-          }
+        if (!valid.get('sshKeyForm')) {
+          return false;
+        } else if ((valid.get('awsClusterForm') || valid.get('digitalOceanClusterForm') || valid.get('openstackClusterForm')) &&
+          valid.get('nodeForm')) {
+          return true;
+        } else {
+          return false;
+        }
       case 4:
         return true;
       default:
@@ -102,7 +100,7 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
     }
 
     if (this.step === 3 && nodeDatacenters.length === 1
-        && this.supportedNodeProviders.length === 1) {
+      && this.supportedNodeProviders.length === 1) {
       WizardActions.goToStep(0);
       return;
     }

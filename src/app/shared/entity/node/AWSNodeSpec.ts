@@ -1,7 +1,7 @@
 export class AWSNodeSpec {
   root_size: number;
   instance_type: string;
-  volume_type:   string;
+  volume_type: string;
   ami: string;
 
   constructor(instance_type: string, root_size: number, volume_type: string, ami: string) {

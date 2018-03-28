@@ -1,13 +1,8 @@
 import { SharedModule } from './../../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-
-import { By } from '@angular/platform-browser';
-import { TestBed, async, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
-
-import { MatDialog } from '@angular/material';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SshKeyListComponent } from './ssh-key-list.component';
 import { SshKeyItemComponent } from './ssh-key-item/ssh-key-item.component';
 import { SSHKeysFake } from '../../testing/fake-data/sshkey.fake';
@@ -15,76 +10,76 @@ import { ApiService } from '../../core/services/api/api.service';
 import { ApiMockService } from '../../testing/services/api-mock.service';
 
 const modules: any[] = [
-    BrowserModule,
-    RouterTestingModule,
-    BrowserAnimationsModule,
-    SharedModule
+  BrowserModule,
+  RouterTestingModule,
+  BrowserAnimationsModule,
+  SharedModule
 ];
 
 describe('SshKeyListComponent', () => {
-    let fixture: ComponentFixture<SshKeyListComponent>;
-    let component: SshKeyListComponent;
+  let fixture: ComponentFixture<SshKeyListComponent>;
+  let component: SshKeyListComponent;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                ...modules,
-            ],
-            declarations: [
-                SshKeyListComponent,
-                SshKeyItemComponent
-            ],
-            providers: [
-                { provide: ApiService, useClass: ApiMockService }
-            ],
-        }).compileComponents();
-    });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        ...modules,
+      ],
+      declarations: [
+        SshKeyListComponent,
+        SshKeyItemComponent
+      ],
+      providers: [
+        { provide: ApiService, useClass: ApiMockService }
+      ],
+    }).compileComponents();
+  });
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(SshKeyListComponent);
-        component = fixture.componentInstance;
-    });
+  beforeEach(() => {
+    fixture = TestBed.createComponent(SshKeyListComponent);
+    component = fixture.componentInstance;
+  });
 
-    it('should create the sshkey list cmp', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create the sshkey list cmp', () => {
+    expect(component).toBeTruthy();
+  });
 
-    it('should render sshkey items', fakeAsync(() => {
-        component.sshKeys = SSHKeysFake;
+  it('should render sshkey items', fakeAsync(() => {
+    component.sshKeys = SSHKeysFake;
 
-        tick();
-        fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
 
-       const deItems = fixture.debugElement.queryAll(By.css('.sshkey-item'));
-       expect(deItems.length).toBe(component.sshKeys.length);
-    }));
+    const deItems = fixture.debugElement.queryAll(By.css('.sshkey-item'));
+    expect(deItems.length).toBe(component.sshKeys.length);
+  }));
 
-    it('should delete sshkey', () => {
-        component.sshKeys = SSHKeysFake;
-        component.sortedData = SSHKeysFake;
+  it('should delete sshkey', () => {
+    component.sshKeys = SSHKeysFake;
+    component.sortedData = SSHKeysFake;
 
-        const initialLength = component.sortedData.length;
-        const deletedItem = component.sortedData[0];
+    const initialLength = component.sortedData.length;
+    const deletedItem = component.sortedData[0];
 
-        fixture.detectChanges();
-        component.deleteSSHKey(deletedItem);
-        const foundItem = component.sortedData.find(item => item === deletedItem);
+    fixture.detectChanges();
+    component.deleteSSHKey(deletedItem);
+    const foundItem = component.sortedData.find(item => item === deletedItem);
 
-        expect(component.sortedData.length).toBe(initialLength - 1, 'should delete item from the array');
-        expect(foundItem).toBeUndefined('should not find deleted item in the array');
-    });
+    expect(component.sortedData.length).toBe(initialLength - 1, 'should delete item from the array');
+    expect(foundItem).toBeUndefined('should not find deleted item in the array');
+  });
 
-    it('should render sshkeys when they are', () => {
-        component.sortedData = [];
-        fixture.detectChanges();
-        let sshKeyListDe = fixture.debugElement.query(By.css('.km-card-list-no-keys'));
+  it('should render sshkeys when they are', () => {
+    component.sortedData = [];
+    fixture.detectChanges();
+    let sshKeyListDe = fixture.debugElement.query(By.css('.km-card-list-no-keys'));
 
-        expect(sshKeyListDe).toBeTruthy('should not render sshkey list if it is not obtained');
+    expect(sshKeyListDe).toBeTruthy('should not render sshkey list if it is not obtained');
 
-        component.sortedData = SSHKeysFake;
-        fixture.detectChanges();
-        sshKeyListDe = fixture.debugElement.query(By.css('.sshkey-list'));
+    component.sortedData = SSHKeysFake;
+    fixture.detectChanges();
+    sshKeyListDe = fixture.debugElement.query(By.css('.sshkey-list'));
 
-        expect(sshKeyListDe).not.toBeNull('should render sshkey list if it is');
-    });
+    expect(sshKeyListDe).not.toBeNull('should render sshkey list if it is');
+  });
 });

@@ -19,37 +19,37 @@ import { AddNodeModule } from 'app/add-node/add-node.module';
 import { BringyourownClusterComponent } from 'app/wizard/set-settings/provider/cluster/bringyourown/bringyourown.component';
 
 const components: any[] = [
-    WizardComponent,
-    NavigationButtonsComponent,
-    ProgressComponent,
-    SetClusterNameComponent,
-    SetDatacenterComponent,
-    SetProviderComponent,
-    SetSettingsComponent,
-    SshKeyFormFieldComponent,
-    SummaryComponent,
-    ProviderClusterComponent,
-    OpenstackClusterComponent,
-    DigitaloceanClusterComponent,
-    AWSClusterComponent,
-    ProviderNodeComponent,
-    BringyourownClusterComponent
+  WizardComponent,
+  NavigationButtonsComponent,
+  ProgressComponent,
+  SetClusterNameComponent,
+  SetDatacenterComponent,
+  SetProviderComponent,
+  SetSettingsComponent,
+  SshKeyFormFieldComponent,
+  SummaryComponent,
+  ProviderClusterComponent,
+  OpenstackClusterComponent,
+  DigitaloceanClusterComponent,
+  AWSClusterComponent,
+  ProviderNodeComponent,
+  BringyourownClusterComponent
 ];
 
 @NgModule({
-    imports: [
-        SharedModule,
-        WizardRoutingModule,
-        AddNodeModule
-    ],
-    declarations: [
-        ...components
-    ],
-    exports: [
-        ...components
-    ],
-    entryComponents: [
-    ],
-    providers: [],
+  imports: [
+    SharedModule,
+    WizardRoutingModule,
+    AddNodeModule
+  ],
+  declarations: [
+    ...components
+  ],
+  exports: [
+    ...components
+  ],
+  entryComponents: [],
+  providers: [],
 })
-export class WizardModule { }
+export class WizardModule {
+}

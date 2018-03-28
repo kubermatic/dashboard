@@ -4,9 +4,9 @@ import { MatSidenav } from '@angular/material';
 @Injectable()
 export class SidenavService {
 
-  constructor() { }
-
   public sidenav: MatSidenav;
+
+  constructor() { }
 
   public setSidenav(sidenav: MatSidenav) {
     this.sidenav = sidenav;

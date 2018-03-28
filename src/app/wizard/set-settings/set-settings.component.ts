@@ -13,19 +13,15 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class SetSettingsComponent implements OnInit, OnDestroy {
 
-  private subscriptions: Subscription[] = [];
-
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
   public clusterName: string;
-
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) sshKeys$: Observable<string[]>;
   public sshKeys: string[] = [];
-
   @select(['wizard', 'cloudSpec']) cloudSpec$: Observable<CloudSpec>;
   public cloudSpec: CloudSpec;
-
   public createClusterModal: CreateClusterModel;
   public clusterSpec: ClusterSpec;
+  private subscriptions: Subscription[] = [];
 
   constructor(private ngRedux: NgRedux<any>) {
   }

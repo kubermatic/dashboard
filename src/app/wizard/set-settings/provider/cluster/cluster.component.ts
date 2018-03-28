@@ -10,10 +10,9 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ProviderClusterComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
+  private subscription: Subscription;
 
   constructor() { }
 

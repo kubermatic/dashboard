@@ -1,5 +1,5 @@
-import {AuthHttp, AuthConfig} from 'angular2-jwt';
-import {RequestOptions, Http} from '@angular/http';
+import { AuthConfig, AuthHttp } from 'angular2-jwt';
+import { Http, RequestOptions } from '@angular/http';
 
 export function authFactory(http: Http, options: RequestOptions) {
   return new AuthHttp(new AuthConfig({

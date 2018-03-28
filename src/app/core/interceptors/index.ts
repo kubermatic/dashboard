@@ -3,7 +3,7 @@ import { LoaderInterceptor } from './loader/loader.service';
 import { ErrorNotificationsInterceptor } from './error-notifications/error-notifications.service';
 
 export {
-    CheckTokenInterceptor,
-    LoaderInterceptor,
-    ErrorNotificationsInterceptor
+  CheckTokenInterceptor,
+  LoaderInterceptor,
+  ErrorNotificationsInterceptor
 };

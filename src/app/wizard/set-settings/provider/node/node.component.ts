@@ -14,12 +14,10 @@ import { Provider } from 'app/shared/interfaces/provider.interface';
 })
 export class ProviderNodeComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;
-
   @select(['wizard', 'setProviderForm', 'provider']) providerName$: Observable<string>;
   public provider: Provider = { name: '', payload: {} };
-
   @select(['wizard', 'digitalOceanClusterForm', 'access_token']) token$: Observable<string>;
+  private subscription: Subscription;
 
   constructor() { }
 

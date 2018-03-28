@@ -21,15 +21,12 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   public config: MatDialogConfig = {};
   public selectedCloudProviderApiError: string;
   public sshKeyForm: FormGroup;
-  private subscriptions: Subscription[] = [];
-
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;
   public selectedSshKeys: string[] = [];
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
               private formBuilder: FormBuilder,
@@ -92,14 +89,6 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  private refreshSSHKeys(): Subscription {
-    return this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-      this.sortData({ active: 'name', direction: 'asc' });
-      this.sshKeys = this.sortedData;
-    });
-  }
-
   public addSshKeyDialog(): void {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
 
@@ -114,6 +103,14 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
+    });
+  }
+
+  private refreshSSHKeys(): Subscription {
+    return this.api.getSSHKeys().subscribe(result => {
+      this.sshKeys = result;
+      this.sortData({ active: 'name', direction: 'asc' });
+      this.sshKeys = this.sortedData;
     });
   }
 

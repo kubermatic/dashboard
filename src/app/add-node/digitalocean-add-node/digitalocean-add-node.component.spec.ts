@@ -1,12 +1,10 @@
 import { ApiService } from 'app/core/services/api/api.service';
 import { InputValidationService } from 'app/core/services';
-import { Observable } from 'rxjs/Observable';
 import { SharedModule } from '../../shared/shared.module';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { TestBed, ComponentFixture, fakeAsync, tick } from '@angular/core/testing';
-import { DebugElement } from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { AddNodeFormComponent } from './../add-node-form/add-node-form.component';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
@@ -16,79 +14,79 @@ import { DigitaloceanAddNodeComponent } from './digitalocean-add-node.component'
 import { ApiMockService } from '../../testing/services/api-mock.service';
 
 const modules: any[] = [
-    BrowserModule,
-    BrowserAnimationsModule,
-    SharedModule,
-    ReactiveFormsModule,
-    NgReduxTestingModule
+  BrowserModule,
+  BrowserAnimationsModule,
+  SharedModule,
+  ReactiveFormsModule,
+  NgReduxTestingModule
 ];
 
 function setMockNgRedux(nodeForm: any): void {
-    const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
-    nodeFormStub.next(nodeForm);
+  const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
+  nodeFormStub.next(nodeForm);
 }
 
 function completeRedux() {
-    const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
-    nodeFormStub.complete();
+  const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
+  nodeFormStub.complete();
 }
 
 describe('DigitaloceanAddNodeComponent', () => {
-    let fixture: ComponentFixture<DigitaloceanAddNodeComponent>;
-    let component: DigitaloceanAddNodeComponent;
-    let apiSevice: ApiService;
+  let fixture: ComponentFixture<DigitaloceanAddNodeComponent>;
+  let component: DigitaloceanAddNodeComponent;
+  let apiSevice: ApiService;
 
-    beforeEach(() => {
-        MockNgRedux.reset();
-        TestBed.configureTestingModule({
-            imports: [
-                ...modules,
-            ],
-            declarations: [
-                DigitaloceanAddNodeComponent,
-                AddNodeFormComponent
-            ],
-            providers: [
-                InputValidationService,
-                { provide: ApiService, useClass: ApiMockService }
-            ],
-        }).compileComponents();
-    });
+  beforeEach(() => {
+    MockNgRedux.reset();
+    TestBed.configureTestingModule({
+      imports: [
+        ...modules,
+      ],
+      declarations: [
+        DigitaloceanAddNodeComponent,
+        AddNodeFormComponent
+      ],
+      providers: [
+        InputValidationService,
+        { provide: ApiService, useClass: ApiMockService }
+      ],
+    }).compileComponents();
+  });
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(DigitaloceanAddNodeComponent);
-        component = fixture.componentInstance;
+  beforeEach(() => {
+    fixture = TestBed.createComponent(DigitaloceanAddNodeComponent);
+    component = fixture.componentInstance;
 
-        apiSevice = fixture.debugElement.injector.get(ApiService);
-    });
+    apiSevice = fixture.debugElement.injector.get(ApiService);
+  });
 
-    it('should create the add node cmp', () => {
-        expect(component).toBeTruthy();
-    });
+  it('should create the add node cmp', () => {
+    expect(component).toBeTruthy();
+  });
 
-    it('form invalid after creating', () => {
-        fixture.detectChanges();
+  it('form invalid after creating', () => {
+    fixture.detectChanges();
 
-        expect(component.doNodeForm.valid).toBeFalsy();
-    });
+    expect(component.doNodeForm.valid).toBeFalsy();
+  });
 
-    it('node count field validity', fakeAsync(() => {
-        fixture.detectChanges();
-        tick();
+  it('node count field validity', fakeAsync(() => {
+    fixture.detectChanges();
+    tick();
 
-        let errors = {};
-        const name = component.doNodeForm.controls['node_count'];
-        errors = name.errors || {};
-        expect(errors['required']).toBeFalsy();
-        expect(errors['min']).toBeFalsy();
+    let errors = {};
+    const name = component.doNodeForm.controls['node_count'];
+    errors = name.errors || {};
+    expect(errors['required']).toBeFalsy();
+    expect(errors['min']).toBeFalsy();
 
-        name.setValue(0);
-        errors = name.errors || {};
-        expect(errors['required']).toBeFalsy();
-        expect(errors['min']).toBeTruthy();
+    name.setValue(0);
+    errors = name.errors || {};
+    expect(errors['required']).toBeFalsy();
+    expect(errors['min']).toBeTruthy();
 
-        name.setValue('');
-        errors = name.errors || {};
-        expect(errors['required']).toBeTruthy();
-    }));
+    name.setValue('');
+    errors = name.errors || {};
+    expect(errors['required']).toBeTruthy();
+  }));
 });

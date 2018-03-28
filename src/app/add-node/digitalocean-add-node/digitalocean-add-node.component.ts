@@ -3,11 +3,19 @@ import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { ApiService } from 'app/core/services/api/api.service';
 
-import { Input, EventEmitter, Output, AfterContentInit, OnChanges, OnDestroy, OnInit, Component } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
 
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, NodeVersionInfo, UbuntuSpec, ContainerLinuxSpec, NodeContainerRuntimeInfo } from 'app/shared/entity/NodeEntity';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  ContainerLinuxSpec,
+  NodeCloudSpec,
+  NodeContainerRuntimeInfo,
+  NodeCreateSpec,
+  NodeVersionInfo,
+  OperatingSystemSpec,
+  UbuntuSpec
+} from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpecV2 } from 'app/shared/entity/node/DigitialoceanNodeSpec';
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
@@ -26,18 +34,16 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   @Input() public token = '';
   @Input() public connect: string[] = [];
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{ nodeSpec: NodeCreateSpec }> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public doNodeForm: FormGroup;
-  public nodeSize: any[] =  NodeInstanceFlavors.VOID;
-  private subscriptions: Subscription[] = [];
+  public nodeSize: any[] = NodeInstanceFlavors.VOID;
   public nodeSizeAvailable: boolean;
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
-
   @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
   public nodeForm: any;
+  private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder,
               private api: ApiService,
@@ -79,7 +85,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
         this.nodeSize = result;
         if (result.standard.length > 0 && result.optimized.length > 0 && this.doNodeForm.controls['node_size'].value === '') {
           const nodeSize = selectedNodeSize ? selectedNodeSize : 's-2vcpu-4gb';
-          this.doNodeForm.patchValue({node_size: nodeSize});
+          this.doNodeForm.patchValue({ node_size: nodeSize });
           this.onChange();
         }
 

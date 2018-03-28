@@ -15,18 +15,15 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SetProviderComponent implements OnInit, OnDestroy {
 
-  private subscriptions: Subscription[] = [];
-
   public setProviderForm: FormGroup;
   public supportedNodeProviders: string[] = NodeProvider.Supported;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
   public providerRequired = false;
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider = '';
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   public isChecked: boolean;
+  private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder,
               private dcService: DatacenterService) { }

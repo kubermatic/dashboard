@@ -27,4 +27,5 @@ const components: any[] = [
     AddNodeComponent
   ]
 })
-export class AddNodeModule { }
+export class AddNodeModule {
+}
