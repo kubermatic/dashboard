@@ -29,15 +29,13 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
         const providerName = data[0];
         const token = data[1];
 
-        this.provider.name = providerName;
-        this.provider.payload.token = token;
+        providerName && (this.provider.name = providerName);
+        token && (this.provider.payload.token = token);
       });
   }
 
   public ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription && this.subscription.unsubscribe();
   }
 
   public changeNodeModel(nodeModel: CreateNodeModel): void {

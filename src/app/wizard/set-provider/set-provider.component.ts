@@ -49,7 +49,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
         const provider = data[0];
         const isChecked = data[1];
 
-        this.selectedProvider = provider;
+        provider && (this.selectedProvider = provider);
         this.isChecked = isChecked;
 
         if (this.isChecked) {

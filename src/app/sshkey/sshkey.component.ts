@@ -37,7 +37,7 @@ export class SshkeyComponent implements OnInit {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
 
     dialogRef.afterClosed().subscribe(result => {
-      this.refreshSSHKeys();
+      result && this.refreshSSHKeys();
     });
   }
 }

@@ -43,14 +43,12 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
 
     const subIsChecked = this.isChecked$.subscribe(isChecked => {
-      if (isChecked) {
-        this.showRequiredFields();
-      }
+      isChecked && this.showRequiredFields();
     });
     this.subscriptions.push(subIsChecked);
 
     const subProvider = this.provider$.subscribe(provider => {
-      this.provider = provider;
+      provider && (this.provider = provider);
     });
     this.subscriptions.push(subProvider);
 

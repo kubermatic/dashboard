@@ -1,22 +1,23 @@
 import { WizardActions } from './../redux/actions/wizard.actions';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MatDialog } from '@angular/material';
-import { CloudSpec } from '../shared/entity/ClusterEntity';
-import { CreateClusterModel } from '../shared/model/CreateClusterModel';
-import * as testing from 'selenium-webdriver/testing';
 import { CreateNodeModel } from '../shared/model/CreateNodeModel';
-import { DigitaloceanCloudSpec } from '../shared/entity/cloud/DigitialoceanCloudSpec';
 import { ApiService, CreateNodesService } from '../core/services';
-import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from '../shared/entity/NodeEntity';
+import {
+  NodeCloudSpec,
+  NodeContainerRuntimeInfo,
+  NodeCreateSpec,
+  NodeVersionInfo,
+  OperatingSystemSpec,
+  UbuntuSpec
+} from '../shared/entity/NodeEntity';
 import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
 import { AWSNodeSpecV2 } from '../shared/entity/node/AWSNodeSpec';
 import { HetznerNodeSpec } from '../shared/entity/node/HetznerNodeSpec';
 import { DigitaloceanNodeSpecV2 } from '../shared/entity/node/DigitialoceanNodeSpec';
-import { AWSCloudSpec } from '../shared/entity/cloud/AWSCloudSpec';
-import { OpenstackCloudSpec } from '../shared/entity/cloud/OpenstackCloudSpec';
-import { select, NgRedux } from '@angular-redux/store';
+import { NgRedux, select } from '@angular-redux/store';
 import { Subscription } from 'rxjs/Subscription';
 import { NotificationActions } from '../redux/actions/notification.actions';
 
@@ -36,13 +37,11 @@ export class WizardComponent implements OnInit, OnDestroy {
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
 
-  constructor(
-    private api: ApiService,
-    private router: Router,
-    public dialog: MatDialog,
-    private createNodesService: CreateNodesService,
-    private ngRedux: NgRedux<any>
-  ) {}
+  constructor(private api: ApiService,
+              private router: Router,
+              public dialog: MatDialog,
+              private createNodesService: CreateNodesService,
+              private ngRedux: NgRedux<any>) {}
 
   public ngOnInit(): void {
     this.resetCachedCredentials();
@@ -56,7 +55,8 @@ export class WizardComponent implements OnInit, OnDestroy {
           this.createClusterAndNode();
         }
         this.step = step;
-        this.setProvider(provider);
+
+        provider && this.setProvider(provider);
       });
 
     this.subscriptions.push(sub);

@@ -31,7 +31,7 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
         const clusterName = data[0];
         const isChecked = data[1];
 
-        this.clusterName = clusterName;
+        clusterName && (this.clusterName = clusterName);
 
         if (isChecked) {
           this.showRequiredFields();
@@ -58,8 +58,6 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription && this.subscription.unsubscribe();
   }
 }

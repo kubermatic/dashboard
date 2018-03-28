@@ -46,12 +46,12 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
 
   ngOnInit() {
     const subIsChecked = this.isChecked$.subscribe(isChecked => {
-      this.showRequiredFields();
+      isChecked && this.showRequiredFields();
     });
     this.subscriptions.push(subIsChecked);
 
     const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
-      (this.nodeForm = nodeForm);
+      nodeForm && (this.nodeForm = nodeForm);
     });
     this.subscriptions.push(subNodeForm);
 

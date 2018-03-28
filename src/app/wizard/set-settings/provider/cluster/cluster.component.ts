@@ -24,8 +24,6 @@ export class ProviderClusterComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription && this.subscription.unsubscribe();
   }
 }

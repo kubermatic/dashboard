@@ -30,9 +30,7 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.sub = this.isChecked$.subscribe(isChecked => {
-      if (isChecked) {
-        this.showRequiredFields();
-      }
+      isChecked && this.showRequiredFields();
     });
 
     this.sub = this.datacenter$.subscribe(datacenter => {
@@ -86,8 +84,6 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy(): void {
-    if (this.sub) {
-      this.sub.unsubscribe();
-    }
+    this.sub && this.sub.unsubscribe();
   }
 }

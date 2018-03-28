@@ -16,8 +16,6 @@ export class NodeDeleteConfirmationService {
                  btnOkText: string = 'Ok',
                  btnCancelText: string = 'Cancel'): Observable<boolean> {
 
-    // let config = new MatDialogConfig();
-
     const config: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,

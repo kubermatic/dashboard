@@ -32,7 +32,7 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     const sub = this.clusterName$.subscribe(clusterName => {
-      this.clusterName = clusterName;
+      clusterName && (this.clusterName = clusterName);
     });
     this.subscriptions.push(sub);
 

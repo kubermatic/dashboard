@@ -1,5 +1,3 @@
-import { Address, ClusterSpec, Status } from './ClusterEntity';
-
 export class MetadataEntity {
   name: string;
   selfLink: string;

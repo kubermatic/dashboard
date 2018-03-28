@@ -2,8 +2,8 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Observable } from 'rxjs/Observable';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { ApiService } from 'app/core/services/api/api.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -38,8 +38,8 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
         const provider = data[1];
         const isChecked = data[2];
 
-        this.selectedDatacenter = datacenter;
-        this.selectedProvider = provider;
+        datacenter && (this.selectedDatacenter = datacenter);
+        provider && (this.selectedProvider = provider);
         this.isChecked = isChecked;
 
         if (isChecked) {
@@ -60,9 +60,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentIn
       );
       WizardActions.checkValidation();
 
-      if (!this.isChecked) {
-        WizardActions.nextStep();
-      }
+      !this.isChecked && WizardActions.nextStep();
     });
   }
 

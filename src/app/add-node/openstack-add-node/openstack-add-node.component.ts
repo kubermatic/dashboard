@@ -1,7 +1,15 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, ContainerLinuxSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from 'app/shared/entity/NodeEntity';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Component, EventEmitter, OnInit, Output, Input, OnDestroy } from '@angular/core';
+import {
+  ContainerLinuxSpec,
+  NodeCloudSpec,
+  NodeContainerRuntimeInfo,
+  NodeCreateSpec,
+  NodeVersionInfo,
+  OperatingSystemSpec,
+  UbuntuSpec
+} from 'app/shared/entity/NodeEntity';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { InputValidationService } from 'app/core/services';
 import { CustomValidators } from 'ng2-validation';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
@@ -20,11 +28,11 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{ nodeSpec: NodeCreateSpec }> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public osNodeForm: FormGroup;
-  public nodeSize: any[] =  NodeInstanceFlavors.Openstack;
+  public nodeSize: any[] = NodeInstanceFlavors.Openstack;
   private subscriptions: Subscription[] = [];
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
@@ -38,12 +46,12 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const subIsChecked = this.isChecked$.subscribe(isChecked => {
-      this.showRequiredFields();
+      isChecked && this.showRequiredFields();
     });
     this.subscriptions.push(subIsChecked);
 
     const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
-      (this.nodeForm = nodeForm);
+      nodeForm && (this.nodeForm = nodeForm);
     });
     this.subscriptions.push(subNodeForm);
 
