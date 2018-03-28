@@ -12,7 +12,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 export class SshkeyComponent implements OnInit {
 
   public sshKeys: Array<SSHKeyEntity> = [];
-  public loading: boolean = true;
+  public loading = true;
   public config: MatDialogConfig = {};
 
   constructor(private api: ApiService,

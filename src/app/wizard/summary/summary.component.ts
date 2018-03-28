@@ -2,7 +2,7 @@ import { NodeProvider } from './../../shared/model/NodeProviderConstants';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
@@ -42,19 +42,19 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const subWizard = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$, this.nodeCount$)
-    .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel, number]) => {
-      const provider = data[0];
-      const region = data[1];
-      const nodeModel = data[2];
-      const clusterModel = data[3];
-      const nodeCount = data[4];
+      .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel, number]) => {
+        const provider = data[0];
+        const region = data[1];
+        const nodeModel = data[2];
+        const clusterModel = data[3];
+        const nodeCount = data[4];
 
-      provider && (this.provider = provider);
-      region && (this.region = region);
-      nodeModel && (this.nodeModel = nodeModel);
-      clusterModel && (this.clusterModel = clusterModel);
-      nodeCount && (this.nodeCount = nodeCount);
-    });
+        provider && (this.provider = provider);
+        region && (this.region = region);
+        nodeModel && (this.nodeModel = nodeModel);
+        clusterModel && (this.clusterModel = clusterModel);
+        nodeCount && (this.nodeCount = nodeCount);
+      });
     this.subscriptions.push(subWizard);
 
     if (this.provider !== 'bringyourown') {

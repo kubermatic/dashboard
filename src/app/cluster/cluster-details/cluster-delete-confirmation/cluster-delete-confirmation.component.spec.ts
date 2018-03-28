@@ -1,16 +1,12 @@
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { SharedModule } from '../../../shared/shared.module';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { By } from '@angular/platform-browser';
-import { TestBed, async, ComponentFixture, fakeAsync, tick, inject } from '@angular/core/testing';
-import { RouterTestingModule, RouterStub } from './../../../testing/router-stubs';
-import { click } from './../../../testing/utils/click-handler';
-import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { RouterStub, RouterTestingModule } from './../../../testing/router-stubs';
 
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
 import { ApiService } from '../../../core/services/api/api.service';
@@ -21,96 +17,79 @@ import { MatDialogRef } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
 import { LocalStorageService } from './../../../core/services/local-storage/local-storage.service';
 import { CreateNodesService } from '../../../core/services/index';
-import { datacentersFake } from '../../../testing/fake-data/datacenter.fake';
+import { datacenterFake1 } from '../../../testing/fake-data/datacenter.fake';
+import { clusterFake1 } from '../../../testing/fake-data/cluster.fake';
 
 const modules: any[] = [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    SlimLoadingBarModule.forRoot(),
-    RouterTestingModule,
-    SharedModule
+  BrowserModule,
+  HttpClientModule,
+  BrowserAnimationsModule,
+  SlimLoadingBarModule.forRoot(),
+  RouterTestingModule,
+  SharedModule
 ];
 
 describe('ClusterDeleteConfirmationComponent', () => {
-    let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;
-    let component: ClusterDeleteConfirmationComponent;
-    let apiService: ApiService;
-    let router: Router;
+  let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;
+  let component: ClusterDeleteConfirmationComponent;
+  let apiService: ApiService;
+  let router: Router;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                ...modules,
-            ],
-            declarations: [
-                ClusterDeleteConfirmationComponent
-            ],
-            providers: [
-                CreateNodesService,
-                LocalStorageService,
-                { provide: MatDialogRef, useClass: MatDialogRefMock },
-                { provide: ApiService, useClass: ApiMockService },
-                { provide: DatacenterService, useClass: DatacenterMockService },
-                { provide: Router, useClass: RouterStub },
-            ],
-        }).compileComponents();
-    });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        ...modules,
+      ],
+      declarations: [
+        ClusterDeleteConfirmationComponent
+      ],
+      providers: [
+        CreateNodesService,
+        LocalStorageService,
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
+        { provide: ApiService, useClass: ApiMockService },
+        { provide: DatacenterService, useClass: DatacenterMockService },
+        { provide: Router, useClass: RouterStub },
+      ],
+    }).compileComponents();
+  });
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(ClusterDeleteConfirmationComponent);
-        component = fixture.componentInstance;
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ClusterDeleteConfirmationComponent);
+    component = fixture.componentInstance;
 
-        apiService = fixture.debugElement.injector.get(ApiService);
-        router = fixture.debugElement.injector.get(Router);
-    });
+    apiService = fixture.debugElement.injector.get(ApiService);
+    router = fixture.debugElement.injector.get(Router);
+  });
 
-    it('should create the add node modal cmp', async(() => {
-        expect(component).toBeTruthy();
-    }));
+  it('should create the add node modal cmp', async(() => {
+    expect(component).toBeTruthy();
+  }));
 
-    it('should able add button', () => {
-        fixture.detectChanges();
-        component.humanReadableName = 'cluster-name';
-        const input = fixture.debugElement.query(By.css('#name'));
-        const inputElement = input.nativeElement;
-        inputElement.value = 'cluster-name';
-        inputElement.dispatchEvent(new Event('blur'));
+  it('should able add button', () => {
+    component.cluster = clusterFake1;
+    component.datacenter = datacenterFake1;
 
-        expect(component.disableDeleteCluster).toBeTruthy();
-    });
+    fixture.detectChanges();
 
-    it('should call deleteCluster method', fakeAsync(() => {
-        fixture.detectChanges();
-        component.clusterName = 'cluster-name';
-        component.datacenter = datacentersFake[0];
-        const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));
+    const input = fixture.debugElement.query(By.css('#name'));
+    const inputElement = input.nativeElement;
+    inputElement.value = clusterFake1.spec.humanReadableName;
+    inputElement.dispatchEvent(new Event('blur'));
 
-        component.deleteCluster();
-        tick();
+    expect(component.inputNameMatches()).toBeTruthy();
+  });
 
-        expect(spyDeleteCluster.and.callThrough()).not.toHaveBeenCalled();
+  it('should call deleteCluster method', fakeAsync(() => {
+    component.cluster = clusterFake1;
+    component.datacenter = datacenterFake1;
 
-        component.disableDeleteCluster = true;
-        component.deleteCluster();
-        tick();
+    fixture.detectChanges();
+    const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));
 
-        expect(spyDeleteCluster.and.callThrough()).toHaveBeenCalled();
-    }));
+    component.deleteCluster();
+    tick();
 
-    it('should call navigate to cluster list after deleting', fakeAsync(() => {
-        fixture.detectChanges();
-        component.clusterName = 'cluster-name';
-        component.datacenter = datacentersFake[0];
-        component.disableDeleteCluster = true;
-        const spyNavigate = spyOn(router, 'navigate');
-
-        component.deleteCluster();
-        tick();
-
-        const navArgs = spyNavigate.calls.first().args[0];
-
-        expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-        expect(navArgs[0]).toBe('/clusters', 'should nav to the cluster list');
-    }));
+    expect(spyDeleteCluster.and.callThrough()).toHaveBeenCalled();
+  }));
 });

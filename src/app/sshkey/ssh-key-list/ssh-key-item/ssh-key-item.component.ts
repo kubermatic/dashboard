@@ -12,7 +12,7 @@ export class SshKeyItemComponent implements OnInit {
   @Input() isOdd: boolean;
   @Output() deleteSshKey: EventEmitter<SSHKeyEntity> = new EventEmitter();
 
-  public isShowPublicKey: boolean = false;
+  public isShowPublicKey = false;
   public publicKeyName: string;
   public publicKey: string;
 

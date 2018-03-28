@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ClusterSpec, CloudSpec } from '../../shared/entity/ClusterEntity';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { CloudSpec, ClusterSpec } from '../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
-import { select, NgRedux } from '@angular-redux/store';
+import { NgRedux, select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { WizardActions } from '../../redux/actions/wizard.actions';
@@ -27,16 +27,19 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
   public createClusterModal: CreateClusterModel;
   public clusterSpec: ClusterSpec;
 
-  constructor(private ngRedux: NgRedux<any>) { }
+  constructor(private ngRedux: NgRedux<any>) {
+  }
 
   public ngOnInit(): void {
     const sub = this.clusterName$.subscribe(clusterName => {
-        clusterName && (this.clusterName = clusterName);
-      });
+      clusterName && (this.clusterName = clusterName);
+    });
     this.subscriptions.push(sub);
 
     const sub2 = this.sshKeys$.subscribe(sshKeys => {
-      if (!Array.isArray(sshKeys) || !sshKeys.length || this.sshKeys === sshKeys) { return; }
+      if (!Array.isArray(sshKeys) || !sshKeys.length || this.sshKeys === sshKeys) {
+        return;
+      }
 
       this.sshKeys = sshKeys;
       this.createSpec();
@@ -44,7 +47,9 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub2);
 
     const sub3 = this.cloudSpec$.subscribe(cloudSpec => {
-      if (!cloudSpec || this.cloudSpec === cloudSpec) { return; }
+      if (!cloudSpec || this.cloudSpec === cloudSpec) {
+        return;
+      }
 
       this.cloudSpec = cloudSpec;
       this.createSpec();
@@ -57,11 +62,10 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
     const wizard = ruduxStore.wizard;
     const region = wizard.setDatacenterForm.datacenter.metadata.name;
 
-    this.clusterSpec = new ClusterSpec(
-      this.cloudSpec,
-      this.clusterName,
-      ''
-    );
+    this.clusterSpec = {
+      cloud: this.cloudSpec,
+      humanReadableName: this.clusterName,
+    };
 
     this.createClusterModal = new CreateClusterModel(
       this.clusterSpec,

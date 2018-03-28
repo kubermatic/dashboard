@@ -4,7 +4,7 @@ import { DatacenterService } from './../../core/services/datacenter/datacenter.s
 import { Observable } from 'rxjs/Observable';
 import { select } from '@angular-redux/store';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -20,10 +20,10 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   public setProviderForm: FormGroup;
   public supportedNodeProviders: string[] = NodeProvider.Supported;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
-  public providerRequired: boolean = false;
+  public providerRequired = false;
 
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
-  public selectedProvider: string = '';
+  public selectedProvider = '';
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   public isChecked: boolean;
@@ -72,7 +72,9 @@ export class SetProviderComponent implements OnInit, OnDestroy {
 
       WizardActions.checkValidation();
 
-      !this.isChecked && WizardActions.nextStep();
+      if (!this.isChecked) {
+        WizardActions.nextStep();
+      }
     });
     this.subscriptions.push(sub2);
 

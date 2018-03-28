@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Subscription } from 'rxjs/Subscription';
@@ -16,7 +16,7 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
-  public clusterName: string = '';
+  public clusterName = '';
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
 
@@ -27,16 +27,16 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscription = this.clusterName$.combineLatest(this.isChecked$)
-    .subscribe((data: [string, boolean]) => {
-      const clusterName = data[0];
-      const isChecked = data[1];
+      .subscribe((data: [string, boolean]) => {
+        const clusterName = data[0];
+        const isChecked = data[1];
 
-      clusterName && (this.clusterName = clusterName);
+        clusterName && (this.clusterName = clusterName);
 
-      if (isChecked) {
-        this.showRequiredFields();
-      }
-    });
+        if (isChecked) {
+          this.showRequiredFields();
+        }
+      });
 
     this.clusterNameForm = this.formBuilder.group({
       name: [this.clusterName, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
@@ -54,7 +54,7 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
   }
 
   public generateName() {
-    this.clusterNameForm.patchValue({name: this.nameGenerator.generateName()});
+    this.clusterNameForm.patchValue({ name: this.nameGenerator.generateName() });
   }
 
   public ngOnDestroy(): void {

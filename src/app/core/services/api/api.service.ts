@@ -106,9 +106,9 @@ export class ApiService {
     });
   }
 
-  getClusterUpgrades(cluster: string): Observable<string[]> {
-    const url = `${this.restRoot}/cluster/${cluster}/upgrades`;
-    return this.http.get<string[]>(url, {headers: this.headers})
+  getClusterUpgrades(cluster: string, dc: string): Observable<string[]> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/upgrades`;
+    return this.http.get<string[]>(url, { headers: this.headers })
       .catch(error => {
         return Observable.of<string[]>([]);
       });
@@ -117,7 +117,7 @@ export class ApiService {
   updateClusterUpgrade(cluster: string, upgradeVersion: string): void {
     const body = { to: upgradeVersion };
     const url = `${this.restRoot}/cluster/${cluster}/upgrade`;
-    this.http.put(url, body, {headers: this.headers})
-     .subscribe(result => NotificationActions.success('Success', `Cluster ${cluster} was upgraded`));
+    this.http.put(url, body, { headers: this.headers })
+      .subscribe(result => NotificationActions.success('Success', `Cluster ${cluster} was upgraded`));
   }
 }
