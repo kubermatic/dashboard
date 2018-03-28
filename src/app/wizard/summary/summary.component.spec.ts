@@ -1,6 +1,4 @@
 import { Observable } from 'rxjs/Observable';
-import { CreateNodeModel } from './../../shared/model/CreateNodeModel';
-import { ApiService } from 'app/core/services/api/api.service';
 import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
 import { datacentersFake } from './../../testing/fake-data/datacenter.fake';
 import { SSHKeysFake } from './../../testing/fake-data/sshkey.fake';
@@ -8,14 +6,14 @@ import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-
 import { SummaryComponent } from './summary.component';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { ApiMockService } from '../../testing/services/api-mock.service';
-import { nodeModelFake } from '../../testing/fake-data/node.fake';
 import { clusterModelFake } from '../../testing/fake-data/cluster.fake';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { ApiService } from '../../core/services';
+import { nodeCreateFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -24,7 +22,7 @@ const modules: any[] = [
   SharedModule
 ];
 
-function setMockNgRedux(provider: string, datacenter: DataCenterEntity, nodeModel: CreateNodeModel, clusterModel: CreateClusterModel, nodeCount: number): void {
+function setMockNgRedux(provider: string, datacenter: DataCenterEntity, nodeModel: NodeEntity, clusterModel: CreateClusterModel, nodeCount: number): void {
   const providerStub = MockNgRedux.getSelectorStub(['wizard', 'setProviderForm', 'provider']);
   providerStub.next(provider);
 
@@ -87,14 +85,14 @@ describe('SummaryComponent', () => {
   });
 
   it('should get data from redux', fakeAsync(() => {
-    setMockNgRedux('digitalocean', datacentersFake[0], nodeModelFake, clusterModelFake, 3);
+    setMockNgRedux('digitalocean', datacentersFake[0], nodeCreateFake, clusterModelFake, 3);
     completeRedux();
     fixture.detectChanges();
     tick();
 
     expect(component.provider).toBe('digitalocean', 'should get provider');
     expect(component.region).toEqual(datacentersFake[0], 'should get datacenter');
-    expect(component.nodeModel).toEqual(nodeModelFake, 'should get node model');
+    expect(component.nodeModel).toEqual(nodeCreateFake, 'should get node model');
     expect(component.clusterModel).toEqual(clusterModelFake, 'should get cluster model');
     expect(component.nodeCount).toBe(3, 'should get node count');
   }));
@@ -103,7 +101,7 @@ describe('SummaryComponent', () => {
     const apiService = fixture.debugElement.injector.get(ApiService);
     const spyGetSSHKeys = spyOn(apiService, 'getSSHKeys').and.returnValue(Observable.of(SSHKeysFake));
 
-    setMockNgRedux('digitalocean', datacentersFake[0], nodeModelFake, clusterModelFake, 3);
+    setMockNgRedux('digitalocean', datacentersFake[0], nodeCreateFake, clusterModelFake, 3);
     completeRedux();
 
     fixture.detectChanges();
