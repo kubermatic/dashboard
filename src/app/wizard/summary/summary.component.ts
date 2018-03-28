@@ -17,26 +17,20 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SummaryComponent implements OnInit, OnDestroy {
 
-  private subscriptions: Subscription[] = [];
   public providerNames = NodeProvider.ProviderNames;
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
-
   @select(['wizard', 'setDatacenterForm', 'datacenter']) region$: Observable<DataCenterEntity>;
   public region: DataCenterEntity;
-
   @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
   public nodeModel: CreateNodeModel;
-
   @select(['wizard', 'clusterModel']) clusterModel$: Observable<CreateClusterModel>;
   public clusterModel: CreateClusterModel;
-
   @select(['wizard', 'nodeForm', 'node_count']) nodeCount$: Observable<number>;
   public nodeCount: number;
-
   public sshKeysList: string[] = [];
   public doOptimizedSizes: Size[];
+  private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService) { }
 

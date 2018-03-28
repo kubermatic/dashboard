@@ -9,6 +9,12 @@ export class DataCenterEntity {
   spec: DatacenterSpec;
   seed: boolean;
 
+  constructor(metadata: MetadataEntity, spec: DatacenterSpec, seed: boolean) {
+    this.metadata = metadata;
+    this.spec = spec;
+    this.seed = seed;
+  }
+
   public static sortByName(a: DataCenterEntity, b: DataCenterEntity): number {
     const nameA = a.metadata.name.toLowerCase;
     const nameB = b.metadata.name.toLowerCase;
@@ -22,12 +28,6 @@ export class DataCenterEntity {
 
     // names must be equal
     return 0;
-  }
-
-  constructor(metadata: MetadataEntity, spec: DatacenterSpec, seed: boolean) {
-    this.metadata = metadata;
-    this.spec = spec;
-    this.seed = seed;
   }
 }
 

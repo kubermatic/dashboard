@@ -9,21 +9,22 @@ import { SshKeyItemComponent } from './ssh-key-list/ssh-key-item/ssh-key-item.co
 
 
 const components: any[] = [
-    SshkeyComponent,
-    SshKeyListComponent,
-    SshKeyItemComponent
+  SshkeyComponent,
+  SshKeyListComponent,
+  SshKeyItemComponent
 ];
 
 @NgModule({
-    imports: [
-        SharedModule,
-        SshkeyRoutingModule
-    ],
-    declarations: [
-        ...components
-    ],
-    exports: [
-        ...components
-    ]
+  imports: [
+    SharedModule,
+    SshkeyRoutingModule
+  ],
+  declarations: [
+    ...components
+  ],
+  exports: [
+    ...components
+  ]
 })
-export class SshkeyModule { }
+export class SshkeyModule {
+}

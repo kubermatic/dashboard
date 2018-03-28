@@ -1,3 +1,3 @@
 export class AppConstants {
-    public static MOBILE_RESOLUTION_BREAKPOINT = 504;
+  public static MOBILE_RESOLUTION_BREAKPOINT = 504;
 }

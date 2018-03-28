@@ -19,7 +19,7 @@ export const INITIAL_STATE: Auth = {
   state: AuthStatus.LoggedOut
 };
 
-export const AuthReducer: Reducer<Auth>  = (state: Auth = INITIAL_STATE, action: Action): Auth => {
+export const AuthReducer: Reducer<Auth> = (state: Auth = INITIAL_STATE, action: Action): Auth => {
   switch (action.type) {
     case AuthActions.LOGGED_IN:
       return Object.assign({}, state, {

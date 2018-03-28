@@ -11,10 +11,9 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ProgressComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;
-
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
+  private subscription: Subscription;
 
   constructor() { }
 

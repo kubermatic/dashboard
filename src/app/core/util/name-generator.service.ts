@@ -698,12 +698,12 @@ export class ClusterNameGenerator {
     'yonath'
   ];
 
-  private randomNumberInsideInterval(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1) + min);
-  }
-
   public generateName(): string {
     return this.prefix[this.randomNumberInsideInterval(0, this.prefix.length)] + '-' +
       this.suffix[this.randomNumberInsideInterval(0, this.suffix.length)];
+  }
+
+  private randomNumberInsideInterval(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 }

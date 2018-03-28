@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 
-import {Auth} from '../../services';
-import {SidenavService} from '../sidenav/sidenav.service';
-import {Router} from '@angular/router';
-import {environment} from '../../../../environments/environment';
-import {AppConstants} from '../../../shared/constants/constants';
+import { Auth } from '../../services';
+import { SidenavService } from '../sidenav/sidenav.service';
+import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
+import { AppConstants } from '../../../shared/constants/constants';
 import { MobileNavigationComponent } from '../../../overlays';
 
 @Component({
@@ -18,12 +18,10 @@ export class NavigationComponent implements OnInit {
   public isScrolled = false;
   public environment: any = environment;
 
-  constructor(
-    public auth: Auth,
-    private sidenavService: SidenavService,
-    private router: Router,
-    private dialog: MatDialog
-  ) {}
+  constructor(public auth: Auth,
+              private sidenavService: SidenavService,
+              private router: Router,
+              private dialog: MatDialog) {}
 
   ngOnInit(): void {
     if (window.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {

@@ -13,12 +13,10 @@ import { InputValidationService } from 'app/core/services';
 })
 export class SetClusterNameComponent implements OnInit, OnDestroy {
   public clusterNameForm: FormGroup;
-  private subscription: Subscription;
-
   @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
   public clusterName = '';
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  private subscription: Subscription;
 
   constructor(private nameGenerator: ClusterNameGenerator,
               private formBuilder: FormBuilder,

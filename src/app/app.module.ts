@@ -34,4 +34,5 @@ import { CoreModule } from 'app/core/core.module';
   bootstrap: [KubermaticComponent]
 })
 
-export class AppModule { }
+export class AppModule {
+}
