@@ -3,6 +3,7 @@ import { DigitialoceanDatacenterSpec } from './datacenter/DigitialoceanDatacente
 import { BringYourOwnDatacenterSpec } from './datacenter/BringYourOwnDatacenterSpec';
 import { AWSDatacenterSpec } from './datacenter/AWSDatacenterSpec';
 import { OpenStackDatacenterSpec } from './datacenter/OpenStackDatacenterSpec';
+import { HetznerDatacenterSpec } from './datacenter/HetznerDatacenterSpec';
 
 export class DataCenterEntity {
   metadata: MetadataEntity;
@@ -41,6 +42,7 @@ export class DatacenterSpec {
   bringyourown: BringYourOwnDatacenterSpec;
   aws: AWSDatacenterSpec;
   openstack: OpenStackDatacenterSpec;
+  hetzner: HetznerDatacenterSpec;
 
   constructor(country: string,
               location: string,
@@ -48,7 +50,8 @@ export class DatacenterSpec {
               digitalocean: DigitialoceanDatacenterSpec,
               bringyourown: BringYourOwnDatacenterSpec,
               aws: AWSDatacenterSpec,
-              openstack: OpenStackDatacenterSpec) {
+              openstack: OpenStackDatacenterSpec,
+              hetzner: HetznerDatacenterSpec) {
     this.country = country;
     this.location = location;
     this.provider = provider;
@@ -56,5 +59,6 @@ export class DatacenterSpec {
     this.bringyourown = bringyourown;
     this.aws = aws;
     this.openstack = openstack;
+    this.hetzner = hetzner;
   }
 }

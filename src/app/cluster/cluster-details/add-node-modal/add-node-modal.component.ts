@@ -1,11 +1,11 @@
-import { Provider } from 'app/shared/interfaces/provider.interface';
-import { WizardActions } from 'app/redux/actions/wizard.actions';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { NotificationActions } from 'app/redux/actions/notification.actions';
+import { Provider } from '../../../shared/interfaces/provider.interface';
+import { WizardActions } from '../../../redux/actions/wizard.actions';
+import { CreateNodeModel } from '../../../shared/model/CreateNodeModel';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { AddNodeModalData } from 'app/shared/model/add-node-modal-data';
-import { ApiService } from 'app/core/services/api/api.service';
+import { AddNodeModalData } from '../../../shared/model/add-node-modal-data';
+import { ApiService } from '../../../core/services/api/api.service';
 import { FormGroup } from '@angular/forms/src/model';
 
 @Component({

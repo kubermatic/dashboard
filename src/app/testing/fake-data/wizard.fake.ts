@@ -41,7 +41,8 @@ export const doClusterModelFake: CreateClusterModel = {
             bringyourown: null,
             aws: null,
             openstack: null,
-            baremetal: null
+            baremetal: null,
+            hetzner: null,
         },
         humanReadableName: 'wizardly-pike',
         masterVersion: '',

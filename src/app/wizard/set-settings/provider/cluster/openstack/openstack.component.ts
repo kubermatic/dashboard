@@ -80,7 +80,7 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
     WizardActions.setValidation('clusterForm', this.osClusterForm.valid);
 
     WizardActions.setCloudSpec(
-      new CloudSpec(this.region, null, null, null, osCloudSpec, null)
+      new CloudSpec(this.region, null, null, null, osCloudSpec, null, null)
     );
   }
 

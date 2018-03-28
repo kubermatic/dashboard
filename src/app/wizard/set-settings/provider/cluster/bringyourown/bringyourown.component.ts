@@ -20,7 +20,7 @@ export class BringyourownClusterComponent implements OnInit {
     const region = wizard.setDatacenterForm.datacenter.metadata.name;
 
     WizardActions.setCloudSpec(
-      new CloudSpec(region, null, null, byoCloudSpec, null, null)
+      new CloudSpec(region, null, null, byoCloudSpec, null, null, null)
     );
 
     setTimeout(() => {

@@ -4,6 +4,6 @@ import { datacentersFake } from './datacenter.fake';
 
 
 export const addNodeModalFake: AddNodeModalData = {
-    cluster: clusterFake,
+   cluster: clusterFake,
     dc: datacentersFake[0]
 };

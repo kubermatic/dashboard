@@ -5,6 +5,7 @@ import {MetadataEntity} from './MetadataEntity';
 import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
 import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
 import {NodeProvider} from '../model/NodeProviderConstants';
+import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
 
 export class ClusterEntity {
   metadata: MetadataEntity;
@@ -47,6 +48,9 @@ export class ClusterEntity {
       case !!this.spec.cloud.baremetal: {
         return NodeProvider.BAREMETAL;
       }
+      case !!this.spec.cloud.hetzner: {
+        return NodeProvider.HETZNER;
+      }
     }
     return '';
   }
@@ -59,6 +63,7 @@ export class CloudSpec {
   bringyourown: BringYourOwnCloudSpec;
   openstack: OpenstackCloudSpec;
   baremetal: BareMetalCloudSpec;
+  hetzner: HetznerCloudSpec;
 
   constructor(dc: string,
               digitalocean: DigitaloceanCloudSpec,
@@ -66,6 +71,7 @@ export class CloudSpec {
               bringyourown: BringYourOwnCloudSpec,
               openstack: OpenstackCloudSpec,
               baremetal: BareMetalCloudSpec,
+              hetzner: HetznerCloudSpec,
   ) {
     this.dc = dc;
     this.digitalocean = digitalocean;
@@ -73,6 +79,7 @@ export class CloudSpec {
     this.aws = aws;
     this.openstack = openstack;
     this.baremetal = baremetal;
+    this.hetzner = hetzner;
   }
 }
 

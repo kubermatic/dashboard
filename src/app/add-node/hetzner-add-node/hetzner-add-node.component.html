@@ -1,0 +1,25 @@
+<kubermatic-add-node-form [formGroup]="hetznerNodeForm" (change)="onChange()">
+  <mat-form-field fxFlex>
+    <input id="node_count_hentzner" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1"
+      max="20" type="number" placeholder="Quantity of Nodes*:" autocomplete="off">
+    <mat-error *ngIf="hetznerNodeForm.controls.node_count.hasError('min') && !hetznerNodeForm.controls.node_count.hasError('required')">
+      Quantity of Nodes must be minimum <strong>1</strong>
+    </mat-error>
+    <mat-error *ngIf="hetznerNodeForm.controls.node_count.hasError('required')">
+      Quantity of Nodes is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <div fxFlex class="mat-select-content">
+    <mat-form-field>
+      <mat-select placeholder="Node Size*:" [errorStateMatcher]="inputValidationService" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
+        <mat-option *ngIf="!nodeSize.length" [value]="">Please add your Hetzner API Token first!</mat-option>
+        <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
+          {{size}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="hetznerNodeForm.controls.node_size.hasError('required')">
+        Node size is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </div>
+</kubermatic-add-node-form>

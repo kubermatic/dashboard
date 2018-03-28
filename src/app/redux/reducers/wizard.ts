@@ -1,5 +1,4 @@
 import { CreateNodeModel } from './../../shared/model/CreateNodeModel';
-import { AWSNodeSpec } from './../../shared/entity/node/AWSNodeSpec';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from './../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
@@ -9,11 +8,14 @@ import { BreadcrumbActions } from '../actions/breadcrumb.actions';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { FORM_CHANGED } from '@angular-redux/form';
 import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
-import { AWSCloudSpec } from 'app/shared/entity/cloud/AWSCloudSpec';
-import { OpenstackCloudSpec } from 'app/shared/entity/cloud/OpenstackCloudSpec';
-import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
+import { AWSCloudSpec } from 'app/shared/entity/cloud/AWSCloudSpec';
+import { AWSNodeSpec } from './../../shared/entity/node/AWSNodeSpec';
+import { OpenstackCloudSpec } from 'app/shared/entity/cloud/OpenstackCloudSpec';
 import { OpenstackNodeSpec } from 'app/shared/entity/node/OpenstackNodeSpec';
+import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
+import { HetznerCloudSpec} from 'app/shared/entity/cloud/HetznerCloudSpec';
+import { HetznerNodeSpec} from 'app/shared/entity/node/HetznerNodeSpec';
 import { cloneDeep } from 'lodash';
 
 const formOnStep: Map<number, string[]> = new Map([
@@ -58,6 +60,9 @@ export interface Wizard {
         os_floating_ip_pool: string;
         os_cas: boolean;
     };
+    hetznerClusterForm: {
+      access_token: string;
+    };
     nodeForm: any;
     sshKeyForm: {
         ssh_keys: string[];
@@ -100,6 +105,9 @@ export const INITIAL_STATE: Wizard = {
         os_security_groups: '',
         os_floating_ip_pool: '',
         os_cas: false
+    },
+    hetznerClusterForm: {
+      access_token: ''
     },
     nodeForm: null,
     sshKeyForm: {

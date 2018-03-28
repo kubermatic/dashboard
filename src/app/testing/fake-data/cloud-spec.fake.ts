@@ -7,5 +7,6 @@ export const doCloudSpecFake = new CloudSpec(
     null,
     null,
     null,
+    null,
     null
 );

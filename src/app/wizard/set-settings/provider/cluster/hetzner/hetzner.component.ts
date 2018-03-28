@@ -5,21 +5,21 @@ import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
 import {Component, OnInit, OnDestroy, Input} from '@angular/core';
 import { Validators, FormBuilder, FormGroup } from '@angular/forms';
-import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
+import { HetznerCloudSpec } from 'app/shared/entity/cloud/HetznerCloudSpec';
 
 import { InputValidationService } from 'app/core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
 
 @Component({
-  selector: 'kubermatic-cluster-digitalocean',
-  templateUrl: './digitalocean.component.html',
-  styleUrls: ['./digitalocean.component.scss']
+  selector: 'kubermatic-cluster-hetzner',
+  templateUrl: './hetzner.component.html',
+  styleUrls: ['./hetzner.component.scss']
 })
-export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
+export class HetznerClusterComponent implements OnInit, OnDestroy {
 
 
-  public digitalOceanClusterForm: FormGroup;
+  public hetznerClusterForm: FormGroup;
   private sub: Subscription;
   private region: string = '';
 
@@ -40,11 +40,11 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
     });
 
     const reduxStore = this.ngRedux.getState();
-    const clusterForm = reduxStore.wizard.digitalOceanClusterForm;
+    const clusterForm = reduxStore.wizard.hetznerClusterForm;
 
-    this.digitalOceanClusterForm = this.formBuilder.group({
+    this.hetznerClusterForm = this.formBuilder.group({
       access_token: [clusterForm.access_token, [<any>Validators.required, <any>Validators.minLength(64), <any>Validators.maxLength(64),
-        Validators.pattern('[a-z0-9]+')]],
+        ]],
     });
 
     this.onChange();
@@ -52,20 +52,20 @@ export class DigitaloceanClusterComponent implements OnInit, OnDestroy {
   }
 
   public onChange() {
-    const doCloudSpec = new DigitaloceanCloudSpec(this.digitalOceanClusterForm.controls['access_token'].value);
+    const hetznerCloudSpec = new HetznerCloudSpec(this.hetznerClusterForm.controls['access_token'].value);
 
-    WizardActions.setValidation('clusterForm', this.digitalOceanClusterForm.valid);
+    WizardActions.setValidation('clusterForm', this.hetznerClusterForm.valid);
 
     WizardActions.setCloudSpec(
-      new CloudSpec(this.region, doCloudSpec, null, null, null, null, null)
+      new CloudSpec(this.region, null, null, null, null, null, hetznerCloudSpec)
     );
   }
 
   public showRequiredFields() {
-    if (this.digitalOceanClusterForm.invalid) {
-      for (const i in this.digitalOceanClusterForm.controls) {
-        if (this.digitalOceanClusterForm.controls.hasOwnProperty(i)) {
-          this.digitalOceanClusterForm.get(i).markAsTouched();
+    if (this.hetznerClusterForm.invalid) {
+      for (const i in this.hetznerClusterForm.controls) {
+        if (this.hetznerClusterForm.controls.hasOwnProperty(i)) {
+          this.hetznerClusterForm.get(i).markAsTouched();
         }
       }
     }

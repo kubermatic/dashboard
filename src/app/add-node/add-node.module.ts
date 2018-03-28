@@ -6,11 +6,13 @@ import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node/digitalocean-add-node.component';
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
 import { AddNodeFormComponent } from './add-node-form/add-node-form.component';
+import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
 
 const components: any[] = [
   AddNodeComponent,
   AwsAddNodeComponent,
   DigitaloceanAddNodeComponent,
+  HetznerAddNodeComponent,
   OpenstackAddNodeComponent,
   AddNodeFormComponent
 ];

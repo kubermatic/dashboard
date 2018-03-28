@@ -66,14 +66,14 @@ export class NavigationButtonsComponent implements OnInit, OnDestroy {
       case 2:
         return valid.get('setDatacenterForm');
       case 3:
-          if (!valid.get('sshKeyForm')) {
-            return false;
-          } else if ((valid.get('awsClusterForm') || valid.get('digitalOceanClusterForm') || valid.get('openstackClusterForm') ) &&
-                      valid.get('nodeForm')) {
-            return true;
-          } else {
-            return false;
-          }
+        if (!valid.get('sshKeyForm')) {
+          return false;
+        } else if ((valid.get('awsClusterForm') || valid.get('digitalOceanClusterForm') || valid.get('openstackClusterForm') || valid.get('hetznerClusterForm')) &&
+                    valid.get('nodeForm')) {
+          return true;
+        } else {
+          return false;
+        }
       case 4:
         return true;
       default:

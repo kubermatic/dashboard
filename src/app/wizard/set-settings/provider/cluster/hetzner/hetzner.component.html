@@ -1,0 +1,17 @@
+<form [connect]="['wizard', 'hetznerClusterForm']" [formGroup]="hetznerClusterForm" novalidate fxLayout="column" (change)="onChange()">
+  <!--<p fxFlex>
+    We need a DigitalOcean Personal Access Token.
+    You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
+  </p>-->
+  <mat-form-field fxFlex>
+    <input id="access_token" [errorStateMatcher]="inputValidationService" matInput formControlName="access_token" type="text" placeholder="API Token*:" autocomplete="off">
+    <mat-error *ngIf="(hetznerClusterForm.controls.access_token.hasError('minlength')
+                      || hetznerClusterForm.controls.access_token.hasError('maxlength'))
+                      && !hetznerClusterForm.controls.access_token.hasError('required')">
+        Hetzner Personal Access Tokens must be exactly <strong>64</strong> characters long.
+    </mat-error>
+    <mat-error *ngIf="hetznerClusterForm.controls.access_token.hasError('required')">
+        Hetzner Personal Access Token is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+</form>

@@ -10,7 +10,8 @@ export const clusterModelFake: CreateClusterModel = {
             bringyourown: null,
             aws: null,
             openstack: null,
-            baremetal: null
+            baremetal: null,
+            hetzner: null,
         },
         humanReadableName: 'adoring-franklin',
         masterVersion: '',
@@ -49,7 +50,8 @@ export const clusterFake = {
             aws: null,
             openstack: null,
             baremetal: null,
-            bringyourown: null
+            bringyourown: null,
+            hetzner: null,
         },
         humanReadableName: 'nifty-haibt',
         masterVersion: '1.8.5',

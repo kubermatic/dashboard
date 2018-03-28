@@ -23,7 +23,8 @@
           <div class="cloud">
             {{providerNames[provider]}}
             <div class="provider-icon">
-              <img src="/assets/images/clouds/{{provider}}.png" height="40px" alt="{{provider}}">
+              <img *ngIf="provider != 'hetzner'" src="/assets/images/clouds/{{provider}}.png" height="40px" alt="{{provider}}">
+              <img *ngIf="provider == 'hetzner'" src="/assets/images/clouds/{{provider}}.svg" height="40px" alt="{{provider}}">
             </div>
           </div>
         </div>
@@ -38,9 +39,9 @@
         </div>
       </div>
 
-      <!-- DO -->
+      <!-- DO & Hetzner -->
       <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].token">
-        <div fxFlex="20%" class="km-card-list-key">Digitalocean API token</div>
+        <div fxFlex="20%" class="km-card-list-key">Provider API token</div>
         <div fxFlex="80%">{{clusterModel.cluster.cloud[provider].token}}</div>
       </div>
 
@@ -73,7 +74,6 @@
       </div>
 
       <!-- Open Stack -->
-
       <div class="km-card-list-content" *ngIf="clusterModel.cluster.cloud[provider].domain">
         <div fxFlex="20%" class="km-card-list-key">Domain</div>
         <div fxFlex="80%">{{clusterModel.cluster.cloud[provider].domain}}</div>
@@ -111,7 +111,7 @@
           </div>
           <div fxFlex="80%">
             {{ nodeCount }}
-          </div> 
+          </div>
         </div>
 
         <!-- DO -->
@@ -152,7 +152,6 @@
         </div>
 
         <!-- Open Stack -->
-
         <div fxLayout *ngIf="provider === 'openstack' && nodeModel.spec.cloud.openstack.flavor" class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">
             Node Size
@@ -168,6 +167,16 @@
           </div>
           <div fxFlex="80%">
             {{ nodeModel.spec.cloud.openstack.image }}
+          </div>
+        </div>
+
+        <!-- Hetzner -->
+        <div fxLayout *ngIf="provider === 'hetzner' && nodeModel.spec.cloud.hetzner.type" class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">
+            Node Size
+          </div>
+          <div fxFlex="80%">
+            {{ nodeModel.spec.cloud.hetzner.type }}
           </div>
         </div>
       </ng-container>

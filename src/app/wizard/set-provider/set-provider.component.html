@@ -4,8 +4,8 @@
   </mat-card-title>
 </mat-card-header>
 <mat-card-content>
-  <p>Choose a cloud provider for your Kubernetes nodes to be deployed by 
-    Kubermatic. Your nodes can be placed in any cloud you like. 
+  <p>Choose a cloud provider for your Kubernetes nodes to be deployed by
+    Kubermatic. Your nodes can be placed in any cloud you like.
     For performance reasons choose the place as close to the master as possible.
   </p>
   <form [formGroup]="setProviderForm"
@@ -21,11 +21,16 @@
               style="float: left;"
               [ngClass]="{'selected': selectedProvider === cloud}"
               [attr.for]="cloud">
-          <!-- TODO: OnClick go to next step -->
           <div class="wizard-box-content">
+
             <img class="cloud-logo"
                   src="/assets/images/clouds/{{cloud}}.png"
-                  alt="{{cloud}}">
+                  alt="{{cloud}}"
+                 *ngIf="cloud != 'hetzner'">
+            <img class="cloud-logo"
+                 src="/assets/images/clouds/{{cloud}}.svg"
+                 alt="{{cloud}}"
+                 *ngIf="cloud == 'hetzner'">
           </div>
         </label>
         <input style="display: none"

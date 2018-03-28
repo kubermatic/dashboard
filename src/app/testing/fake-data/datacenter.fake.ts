@@ -20,6 +20,7 @@ export const datacentersFake: DataCenterEntity[] = [
             bringyourown: undefined,
             openstack: undefined,
             aws: undefined,
+            hetzner: undefined,
             location: 'Frankfurt',
             provider: 'digitalocean'
         }
@@ -43,6 +44,7 @@ export const datacentersFake: DataCenterEntity[] = [
             bringyourown: undefined,
             openstack: undefined,
             aws: undefined,
+            hetzner: undefined,
             location: 'Frankfurt',
             provider: 'digitalocean'
         }
@@ -64,6 +66,7 @@ export const datacentersFake: DataCenterEntity[] = [
             bringyourown: undefined,
             openstack: undefined,
             aws: undefined,
+            hetzner: undefined,
             location: 'Frankfurt',
             provider: 'bringyourown'
         }

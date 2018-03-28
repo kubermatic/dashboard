@@ -77,7 +77,7 @@ export class AWSClusterComponent implements OnInit, OnDestroy {
     WizardActions.setValidation('clusterForm', this.awsClusterForm.valid);
 
     WizardActions.setCloudSpec(
-      new CloudSpec(this.region, null, awsCloudSpec, null, null, null)
+      new CloudSpec(this.region, null, awsCloudSpec, null, null, null, null)
     );
   }
 

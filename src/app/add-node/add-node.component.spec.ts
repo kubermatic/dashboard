@@ -11,6 +11,7 @@ import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
 import { AddNodeFormComponent } from './add-node-form/add-node-form.component';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node/digitalocean-add-node.component';
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
+import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
 import { InputValidationService } from '../core/services/index';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
@@ -36,6 +37,7 @@ describe('AddNodeComponent', () => {
                 OpenstackAddNodeComponent,
                 AwsAddNodeComponent,
                 DigitaloceanAddNodeComponent,
+                HetznerAddNodeComponent,
                 AddNodeFormComponent
             ],
             providers: [

@@ -6,6 +6,10 @@
     *ngIf="provider == 'digitalocean'">
 </kubermatic-cluster-digitalocean>
 
+<kubermatic-cluster-hetzner
+  *ngIf="provider == 'hetzner'">
+</kubermatic-cluster-hetzner>
+
 <kubermatic-cluster-openstack
     *ngIf="provider == 'openstack'">
 </kubermatic-cluster-openstack>

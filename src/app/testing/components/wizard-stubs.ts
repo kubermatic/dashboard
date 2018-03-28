@@ -50,6 +50,12 @@ export class OpenstackClusterStubComponent { }
 export class DigitaloceanClusterStubComponent { }
 
 @Component({
+  selector: 'kubermatic-cluster-hetzner',
+  template: '',
+})
+export class HetznerClusterStubComponent { }
+
+@Component({
     selector: 'kubermatic-cluster-bringyourown',
     template: '',
 })
@@ -94,6 +100,7 @@ const components: any[] = [
     SshKeyFormFieldStubComponent,
     OpenstackClusterStubComponent,
     DigitaloceanClusterStubComponent,
+    HetznerClusterStubComponent,
     BringyourownClusterStubComponent,
     AWSClusterStubComponent,
     SetClusterNameStubComponent,

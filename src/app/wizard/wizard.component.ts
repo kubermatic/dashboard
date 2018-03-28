@@ -9,6 +9,7 @@ import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import * as testing from 'selenium-webdriver/testing';
 import { CreateNodeModel } from '../shared/model/CreateNodeModel';
 import { DigitaloceanCloudSpec } from '../shared/entity/cloud/DigitialoceanCloudSpec';
+import { HetznerCloudSpec } from '../shared/entity/cloud/HetznerCloudSpec';
 import { CreateNodesService } from '../core/services';
 import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from '../shared/entity/NodeEntity';
 import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
@@ -73,7 +74,8 @@ export class WizardComponent implements OnInit, OnDestroy {
         new AWSCloudSpec('', '', '', '', '', ''),
         new BringYourOwnCloudSpec(),
         new OpenstackCloudSpec('', '', '', 'Default', '', '', ''),
-        null
+        null,
+        new HetznerCloudSpec('')
       )
     );
 
@@ -115,6 +117,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     const clusterModel = wizard.clusterModel;
     const datacenter = wizard.setDatacenterForm.datacenter.spec.seed;
     console.log('Create cluster mode: \n' + JSON.stringify(clusterModel));
+
     this.api.createCluster(clusterModel, datacenter).subscribe(cluster => {
         NotificationActions.success('Success', `Cluster successfully created`);
         this.router.navigate(['/clusters/' + datacenter + '/' + cluster.metadata.name]);

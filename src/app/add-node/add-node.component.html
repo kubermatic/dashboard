@@ -11,6 +11,12 @@
   [token]="provider.payload?.token">
 </kubermatic-digitalocean-add-node>
 
+<kubermatic-hetzner-add-node
+  *ngIf="provider && provider.name === 'hetzner'"
+  (nodeSpecChanges)="changeNodeModel($event)"
+  (formChanges)="changeForm($event)">
+</kubermatic-hetzner-add-node>
+
 <kubermatic-openstack-add-node
   *ngIf="provider && provider.name === 'openstack'"
   (nodeSpecChanges)="changeNodeModel($event)"

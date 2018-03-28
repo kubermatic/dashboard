@@ -37,6 +37,8 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
       path += 'openstack.png';
     } else if (this.cluster.spec.cloud.bringyourown) {
       path += 'bringyourown.png';
+    } else if (this.cluster.spec.cloud.hetzner) {
+      path += 'hetzner.svg';
     }
 
     return path;
