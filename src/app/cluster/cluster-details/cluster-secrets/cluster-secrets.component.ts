@@ -11,7 +11,6 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 })
 export class ClusterSecretsComponent implements OnInit {
   @Input() cluster: ClusterEntity;
-  @Input() health: Health;
   @Input() datacenter: DataCenterEntity;
   public expand = false;
   public dialogRef: any;
@@ -64,18 +63,18 @@ export class ClusterSecretsComponent implements OnInit {
   }
 
   public getIcon(name: string): string {
-    if (this.health) {
+    if (this.cluster.status.health) {
       switch (name) {
         case 'apiserver':
-          return this.getIconClass(this.health.apiserver);
+          return this.getIconClass(this.cluster.status.health.apiserver);
         case 'controller':
-          return this.getIconClass(this.health.controller);
+          return this.getIconClass(this.cluster.status.health.controller);
         case 'etcd':
-          return this.getIconClass(this.health.etcd);
+          return this.getIconClass(this.cluster.status.health.etcd);
         case 'scheduler':
-          return this.getIconClass(this.health.scheduler);
+          return this.getIconClass(this.cluster.status.health.scheduler);
         case 'nodeController':
-          return this.getIconClass(this.health.nodeController);
+          return this.getIconClass(this.cluster.status.health.nodeController);
         default:
           return '';
       }
@@ -99,18 +98,18 @@ export class ClusterSecretsComponent implements OnInit {
   }
 
   public getStatus(name: string): string {
-    if (this.health) {
+    if (this.cluster.status.health) {
       switch (name) {
         case 'apiserver':
-          return this.getHealthStatus(this.health.apiserver);
+          return this.getHealthStatus(this.cluster.status.health.apiserver);
         case 'controller':
-          return this.getHealthStatus(this.health.controller);
+          return this.getHealthStatus(this.cluster.status.health.controller);
         case 'etcd':
-          return this.getHealthStatus(this.health.etcd);
+          return this.getHealthStatus(this.cluster.status.health.etcd);
         case 'scheduler':
-          return this.getHealthStatus(this.health.scheduler);
+          return this.getHealthStatus(this.cluster.status.health.scheduler);
         case 'nodeController':
-          return this.getHealthStatus(this.health.nodeController);
+          return this.getHealthStatus(this.cluster.status.health.nodeController);
         default:
           return '';
       }

@@ -15,7 +15,7 @@ export class RevokeAdminTokenComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   public generatedToken: string;
-  public adminToken: string = '';
+  public adminToken = '';
 
   constructor(private api: ApiService, private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
 
@@ -41,7 +41,7 @@ export class RevokeAdminTokenComponent implements OnInit {
 
   public revokeAdminToken() {
     this.cluster.address.adminToken = this.adminToken;
-    this.api.editCluster(this.cluster, this.datacenter.spec.seed).subscribe(res => {
+    this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(res => {
       NotificationActions.success('Success', `Revoke Admin Token successfully`);
       this.dialogRef.close(res);
     });
