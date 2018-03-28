@@ -77,7 +77,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     inputElement.value = clusterFake1.spec.humanReadableName;
     inputElement.dispatchEvent(new Event('blur'));
 
-    expect(component.disableDeleteCluster).toBeTruthy();
+    expect(component.inputNameMatches()).toBeTruthy();
   });
 
   it('should call deleteCluster method', fakeAsync(() => {
@@ -90,29 +90,6 @@ describe('ClusterDeleteConfirmationComponent', () => {
     component.deleteCluster();
     tick();
 
-    expect(spyDeleteCluster.and.callThrough()).not.toHaveBeenCalled();
-
-    component.disableDeleteCluster = true;
-    component.deleteCluster();
-    tick();
-
     expect(spyDeleteCluster.and.callThrough()).toHaveBeenCalled();
-  }));
-
-  it('should call navigate to cluster list after deleting', fakeAsync(() => {
-    component.cluster = clusterFake1;
-    component.datacenter = datacenterFake1;
-
-    fixture.detectChanges();
-    component.disableDeleteCluster = true;
-    const spyNavigate = spyOn(router, 'navigate');
-
-    component.deleteCluster();
-    tick();
-
-    const navArgs = spyNavigate.calls.first().args[0];
-
-    expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(navArgs[0]).toBe('/clusters', 'should nav to the cluster list');
   }));
 });
