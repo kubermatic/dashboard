@@ -17,11 +17,10 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
 
 
   public osClusterForm: FormGroup;
-  private sub: Subscription;
-  private region = '';
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
+  private sub: Subscription;
+  private region = '';
 
   constructor(private formBuilder: FormBuilder,
               public inputValidationService: InputValidationService,

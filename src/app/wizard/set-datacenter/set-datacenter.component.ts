@@ -16,17 +16,14 @@ import { Subscription } from 'rxjs/Subscription';
 export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentInit {
   public setDatacenterForm: FormGroup;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
-  private subscriptions: Subscription[] = [];
   public datacenterRequired = false;
-
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
   public selectedDatacenter: DataCenterEntity;
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   public isChecked: boolean;
+  private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder,
               private dcService: DatacenterService) { }

@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
-import {RouterModule, Routes} from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import {DashboardComponent} from './dashboard/dashboard.component';
-import {WizardComponent} from './wizard/wizard.component';
-import {ClusterListComponent} from './cluster/cluster-list/cluster-list.component';
-import {SshkeyComponent} from './sshkey/sshkey.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const appRoutes: Routes = [
   {
@@ -36,9 +33,10 @@ const appRoutes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(appRoutes) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(appRoutes)],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+}
 
 

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Provider } from './../../shared/interfaces/provider.interface';
-import { Component, Input, Output, EventEmitter, NgModule } from '@angular/core';
+import { Component, EventEmitter, Input, NgModule, Output } from '@angular/core';
 import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
 import { FormGroup } from '@angular/forms/src/model';
 
@@ -26,4 +26,5 @@ export class AddNodeStubComponent {
     AddNodeStubComponent
   ]
 })
-export class AddNodeStubsModule { }
+export class AddNodeStubsModule {
+}

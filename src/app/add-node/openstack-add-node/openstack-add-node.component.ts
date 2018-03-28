@@ -33,12 +33,10 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
   public osNodeForm: FormGroup;
   public nodeSize: any[] = NodeInstanceFlavors.Openstack;
-  private subscriptions: Subscription[] = [];
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
-
   @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
   public nodeForm: any;
+  private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder,
               public inputValidationService: InputValidationService,

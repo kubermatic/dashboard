@@ -29,13 +29,11 @@ import { NotificationActions } from '../redux/actions/notification.actions';
 
 export class WizardComponent implements OnInit, OnDestroy {
 
-  private subscriptions: Subscription[] = [];
-
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
+  private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
               private router: Router,

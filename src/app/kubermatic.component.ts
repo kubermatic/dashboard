@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 
-import { NgRedux, DevToolsExtension  } from '@angular-redux/store';
-import { Store, INITIAL_STATE, StoreReducer } from './redux/store';
+import { DevToolsExtension, NgRedux } from '@angular-redux/store';
+import { INITIAL_STATE, Store, StoreReducer } from './redux/store';
 
 import { MatSidenav } from '@angular/material';
 import { SidenavService } from './core/components/sidenav/sidenav.service';
@@ -16,15 +16,14 @@ import { Auth } from './core/services';
 export class KubermaticComponent implements OnInit {
   @ViewChild('sidenav') public sidenav: MatSidenav;
 
-  public constructor(
-    private sidenavService: SidenavService,
-    public auth: Auth,
-    private ngRedux: NgRedux<Store>,
-    private devTools: DevToolsExtension) {
+  public constructor(private sidenavService: SidenavService,
+                     public auth: Auth,
+                     private ngRedux: NgRedux<Store>,
+                     private devTools: DevToolsExtension) {
     let enhancers = [];
 
     if (devTools.isEnabled()) {
-        enhancers = [ ...enhancers, devTools.enhancer() ];
+      enhancers = [...enhancers, devTools.enhancer()];
     }
     this.ngRedux.configureStore(StoreReducer, INITIAL_STATE, null, enhancers);
   }

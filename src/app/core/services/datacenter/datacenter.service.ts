@@ -21,8 +21,8 @@ export class DatacenterService {
 
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
-    if  (!this.dataCenterCache) {
-      this.dataCenterCache =  this.http.get<DataCenterEntity[]>(url, { headers: this.headers })
+    if (!this.dataCenterCache) {
+      this.dataCenterCache = this.http.get<DataCenterEntity[]>(url, { headers: this.headers })
         .publishReplay(1)
         .refCount();
     }

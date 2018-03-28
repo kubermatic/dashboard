@@ -1,10 +1,10 @@
 import { BreadcrumbActions } from './../redux/actions/breadcrumb.actions';
-import {Component, OnInit} from '@angular/core';
-import {Auth} from '../core/services';
-import {Router, NavigationEnd, ActivatedRoute} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Auth } from '../core/services';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
-import {ApiService} from 'app/core/services/api/api.service';
-import {DatacenterService} from 'app/core/services/datacenter/datacenter.service';
+import { ApiService } from 'app/core/services/api/api.service';
+import { DatacenterService } from 'app/core/services/datacenter/datacenter.service';
 
 @Component({
   selector: 'kubermatic-dashboard',

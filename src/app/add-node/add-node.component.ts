@@ -1,7 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
-import { Input, Output, EventEmitter } from '@angular/core';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
 import { Provider } from 'app/shared/interfaces/provider.interface';
 
@@ -22,7 +21,7 @@ export class AddNodeComponent implements OnInit {
   ngOnInit() {
   }
 
-  public changeNodeModel(data: {nodeSpec: NodeCreateSpec}): void {
+  public changeNodeModel(data: { nodeSpec: NodeCreateSpec }): void {
     const nodeModel = new CreateNodeModel(
       data.nodeSpec
     );

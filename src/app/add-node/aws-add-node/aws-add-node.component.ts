@@ -31,12 +31,10 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   public awsNodeForm: FormGroup;
   public nodeSize: any[] = NodeInstanceFlavors.AWS;
   public nodeSpec: NodeCreateSpec;
-  private subscriptions: Subscription[] = [];
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
-
   @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
   public nodeForm: any;
+  private subscriptions: Subscription[] = [];
 
   constructor(private formBuilder: FormBuilder,
               private ngRedux: NgRedux<any>,

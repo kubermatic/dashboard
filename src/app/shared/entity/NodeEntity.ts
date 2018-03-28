@@ -1,9 +1,8 @@
-import {MetadataEntity, MetadataEntityV2} from './MetadataEntity';
-import {DigitaloceanNodeSpec, DigitaloceanNodeSpecV2} from './node/DigitialoceanNodeSpec';
-import {AWSNodeSpec, AWSNodeSpecV2} from './node/AWSNodeSpec';
-import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
-import {HetznerNodeSpec} from './node/HetznerNodeSpec';
-import {BareMetalNodeSpec} from './node/BareMetalNodeSpec';
+import { MetadataEntity, MetadataEntityV2 } from './MetadataEntity';
+import { DigitaloceanNodeSpecV2 } from './node/DigitialoceanNodeSpec';
+import { AWSNodeSpecV2 } from './node/AWSNodeSpec';
+import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
+import { HetznerNodeSpec } from './node/HetznerNodeSpec';
 
 
 export class NodeCreateSpec {

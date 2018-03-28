@@ -1,7 +1,7 @@
 import { NotificationActions } from 'app/redux/actions/notification.actions';
-import {Component, OnInit, Input, OnChanges} from '@angular/core';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {Sort} from '@angular/material';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { Sort } from '@angular/material';
 
 @Component({
   selector: 'kubermatic-ssh-key-list',
@@ -14,13 +14,13 @@ export class SshKeyListComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (this.sshKeys) {
-      this.sortData({active: 'name', direction: 'asc'});
+      this.sortData({ active: 'name', direction: 'asc' });
     }
   }
 
   ngOnChanges() {
     if (this.sshKeys) {
-      this.sortData({active: 'name', direction: 'asc'});
+      this.sortData({ active: 'name', direction: 'asc' });
     }
   }
 
@@ -34,9 +34,12 @@ export class SshKeyListComponent implements OnInit, OnChanges {
     this.sortedData = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'name': return this.compare(a.spec.name, b.spec.name, isAsc);
-        case 'fingerprint': return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
-        default: return 0;
+        case 'name':
+          return this.compare(a.spec.name, b.spec.name, isAsc);
+        case 'fingerprint':
+          return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
+        default:
+          return 0;
       }
     });
   }
