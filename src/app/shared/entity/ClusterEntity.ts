@@ -1,93 +1,52 @@
-import {DigitaloceanCloudSpec} from './cloud/DigitialoceanCloudSpec';
-import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
-import {AWSCloudSpec} from './cloud/AWSCloudSpec';
-import {MetadataEntity} from './MetadataEntity';
-import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
-import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
-import {NodeProvider} from '../model/NodeProviderConstants';
+import { DigitaloceanCloudSpec } from './cloud/DigitialoceanCloudSpec';
+import { BringYourOwnCloudSpec } from './cloud/BringYourOwnCloudSpec';
+import { AWSCloudSpec } from './cloud/AWSCloudSpec';
+import { MetadataEntity } from './MetadataEntity';
+import { OpenstackCloudSpec } from './cloud/OpenstackCloudSpec';
+import { BareMetalCloudSpec } from './cloud/BareMetalCloudSpec';
+import { NodeProvider } from '../model/NodeProviderConstants';
+
+export function getProvider(cluster: ClusterEntity): string {
+  switch (true) {
+    case !!cluster.spec.cloud.digitalocean: {
+      return NodeProvider.DIGITALOCEAN;
+    }
+    case !!cluster.spec.cloud.aws: {
+      return NodeProvider.AWS;
+    }
+    case !!cluster.spec.cloud.bringyourown: {
+      return NodeProvider.BRINGYOUROWN;
+    }
+    case !!cluster.spec.cloud.openstack: {
+      return NodeProvider.OPENSTACK;
+    }
+    case !!cluster.spec.cloud.baremetal: {
+      return NodeProvider.BAREMETAL;
+    }
+  }
+  return '';
+}
 
 export class ClusterEntity {
   metadata: MetadataEntity;
   spec: ClusterSpec;
   address: Address;
   status: Status;
-
-  constructor(metadata: MetadataEntity,
-              spec: ClusterSpec,
-              address: Address,
-              status: Status) {
-    this.metadata = metadata;
-    this.spec = spec;
-    this.address = address;
-    this.status = status;
-  }
-
-  isRunning(): boolean {
-    return this.status.phase === 'Running';
-  }
-
-  isFailed(): boolean {
-    return this.status.phase === 'Failed';
-  }
-
-  get provider(): string {
-    switch (true) {
-      case !!this.spec.cloud.digitalocean: {
-        return NodeProvider.DIGITALOCEAN;
-      }
-      case !!this.spec.cloud.aws: {
-        return NodeProvider.AWS;
-      }
-      case !!this.spec.cloud.bringyourown: {
-        return NodeProvider.BRINGYOUROWN;
-      }
-      case !!this.spec.cloud.openstack: {
-        return NodeProvider.OPENSTACK;
-      }
-      case !!this.spec.cloud.baremetal: {
-        return NodeProvider.BAREMETAL;
-      }
-    }
-    return '';
-  }
 }
 
 export class CloudSpec {
   dc: string;
-  digitalocean: DigitaloceanCloudSpec;
-  aws: AWSCloudSpec;
-  bringyourown: BringYourOwnCloudSpec;
-  openstack: OpenstackCloudSpec;
-  baremetal: BareMetalCloudSpec;
-
-  constructor(dc: string,
-              digitalocean: DigitaloceanCloudSpec,
-              aws: AWSCloudSpec,
-              bringyourown: BringYourOwnCloudSpec,
-              openstack: OpenstackCloudSpec,
-              baremetal: BareMetalCloudSpec,
-  ) {
-    this.dc = dc;
-    this.digitalocean = digitalocean;
-    this.bringyourown = bringyourown;
-    this.aws = aws;
-    this.openstack = openstack;
-    this.baremetal = baremetal;
-  }
+  digitalocean?: DigitaloceanCloudSpec;
+  aws?: AWSCloudSpec;
+  bringyourown?: BringYourOwnCloudSpec;
+  openstack?: OpenstackCloudSpec;
+  baremetal?: BareMetalCloudSpec;
 }
 
 export class ClusterSpec {
   cloud: CloudSpec;
   humanReadableName: string;
-  masterVersion: string;
-
-  constructor(cloud: CloudSpec,
-              humanReadableName: string,
-              masterVersion: string) {
-    this.cloud = cloud;
-    this.humanReadableName = humanReadableName;
-    this.masterVersion = masterVersion;
-  }
+  masterVersion?: string;
 }
 
 export class Address {
@@ -103,15 +62,6 @@ export class Certificate {
   cert: string;
 }
 
-export class Health {
-  apiserver: boolean;
-  scheduler: boolean;
-  controller: boolean;
-  nodeController: boolean;
-  etcd: boolean;
-  lastTransitionTime: string;
-}
-
 export class Status {
   lastTransitionTime: Date;
   phase: string;
@@ -123,10 +73,20 @@ export class Status {
   apiserverSshKey: SSHKeyPair;
   serviceAccountKey: string;
   namespaceName: string;
+  health: Health;
+}
+
+export class Health {
+  apiserver: boolean;
+  controller: boolean;
+  etcd: boolean;
+  machineController: boolean;
+  nodeController: boolean;
+  scheduler: boolean;
+  lastTransitionTime: string;
 }
 
 export class SSHKeyPair {
   privateKey: string;
   publicKey: string;
 }
-

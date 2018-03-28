@@ -13,7 +13,6 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 })
 export class AddSshKeyModalComponent implements OnInit {
   @Input() sshKeys: Array<SSHKeyEntity> = [];
-  //@Output() newSshKey = new EventEmitter();
   public addSSHKeyForm: FormGroup;
 
   constructor(
@@ -38,7 +37,6 @@ export class AddSshKeyModalComponent implements OnInit {
       .subscribe(
         result => {
           NotificationActions.success('Success', `SSH key ${name} added successfully`);
-          //this.newSshKey.emit(result.metadata.name)
           this.dialogRef.close(result);
         });
   }

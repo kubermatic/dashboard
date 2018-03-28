@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ClusterConnectComponent } from './cluster-connect.component';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import {clusterFake} from '../../../testing/fake-data/cluster.fake';
-import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SharedModule} from '../../../shared/shared.module';
-import {RouterTestingModule} from '../../../testing/router-stubs';
-import {HttpClientModule} from '@angular/common/http';
-import {NgReduxTestingModule} from '@angular-redux/store/lib/testing/ng-redux-testing.module';
-import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import {datacentersFake} from '../../../testing/fake-data/datacenter.fake';
+import { clusterFake, clusterFake1 } from '../../../testing/fake-data/cluster.fake';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '../../../shared/shared.module';
+import { RouterTestingModule } from '../../../testing/router-stubs';
+import { HttpClientModule } from '@angular/common/http';
+import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { datacenterFake1 } from '../../../testing/fake-data/datacenter.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -31,19 +31,20 @@ describe('ClusterConnectComponent', () => {
       imports: [
         ...modules,
       ],
-      declarations: [ ClusterConnectComponent ],
+      declarations: [ClusterConnectComponent],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { cluster: clusterFake } },
         { provide: MatDialogRef, useValue: {} },
       ]
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterConnectComponent);
     component = fixture.componentInstance;
-    component.datacenter = datacentersFake[0];
+    component.cluster = clusterFake1;
+    component.datacenter = datacenterFake1;
     fixture.detectChanges();
   });
 

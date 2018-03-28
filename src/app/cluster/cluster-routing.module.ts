@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './../core/services/auth/auth.guard';
 
@@ -7,22 +7,23 @@ import { ClusterDetailsComponent } from 'app/cluster/cluster-details/cluster-det
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
 
 const routes: Routes = [
-    {
-        path: '',
-        component: ClusterListComponent,
-        canActivate: [AuthGuard],
-        data: { title: 'Manage Clusters' }
-    },
-    {
-        path: ':seedDc/:clusterName',
-        component: ClusterDetailsComponent,
-        canActivate: [AuthGuard],
-        data: { title: 'Cluster details' }
-    }
+  {
+    path: '',
+    component: ClusterListComponent,
+    canActivate: [AuthGuard],
+    data: { title: 'Manage Clusters' }
+  },
+  {
+    path: ':seedDc/:clusterName',
+    component: ClusterDetailsComponent,
+    canActivate: [AuthGuard],
+    data: { title: 'Cluster details' }
+  }
 ];
 
 @NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-export class ClusterRoutingModule { }
+export class ClusterRoutingModule {
+}

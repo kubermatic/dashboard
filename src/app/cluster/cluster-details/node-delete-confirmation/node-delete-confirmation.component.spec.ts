@@ -1,76 +1,69 @@
-import { CustomEventServiceMock } from './../../../testing/services/custom-event-mock.service';
-import { CustomEventService } from 'app/core/services';
 import { Observable } from 'rxjs/Observable';
 import { SharedModule } from '../../../shared/shared.module';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { By } from '@angular/platform-browser';
-import { TestBed, async, ComponentFixture, fakeAsync, tick, inject } from '@angular/core/testing';
-import { click } from './../../../testing/utils/click-handler';
-import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
 import { ApiService } from '../../../core/services/api/api.service';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { MatDialogRef } from '@angular/material';
-import { CreateNodesService } from '../../../core/services/index';
 import { nodeFake } from '../../../testing/fake-data/node.fake';
-import { datacentersFake } from '../../../testing/fake-data/datacenter.fake';
+import { datacenterFake1 } from '../../../testing/fake-data/datacenter.fake';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
+import { clusterFake1 } from '../../../testing/fake-data/cluster.fake';
 
 const modules: any[] = [
-    BrowserModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    SlimLoadingBarModule.forRoot(),
-    SharedModule
+  BrowserModule,
+  HttpClientModule,
+  BrowserAnimationsModule,
+  SlimLoadingBarModule.forRoot(),
+  SharedModule
 ];
 
 describe('NodeDeleteConfirmationComponent', () => {
-    let fixture: ComponentFixture<NodeDeleteConfirmationComponent>;
-    let component: NodeDeleteConfirmationComponent;
-    let apiService: ApiService;
+  let fixture: ComponentFixture<NodeDeleteConfirmationComponent>;
+  let component: NodeDeleteConfirmationComponent;
+  let apiService: ApiService;
 
-    beforeEach(() => {
-        TestBed.configureTestingModule({
-            imports: [
-                ...modules,
-            ],
-            declarations: [
-                NodeDeleteConfirmationComponent
-            ],
-            providers: [
-                { provide: CustomEventService, useClass: CustomEventServiceMock },
-                { provide: MatDialogRef, useClass: MatDialogRefMock },
-                { provide: ApiService, useClass: ApiMockService },
-            ],
-        }).compileComponents();
-    });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        ...modules,
+      ],
+      declarations: [
+        NodeDeleteConfirmationComponent
+      ],
+      providers: [
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
+        { provide: ApiService, useClass: ApiMockService },
+      ],
+    }).compileComponents();
+  });
 
-    beforeEach(() => {
-        fixture = TestBed.createComponent(NodeDeleteConfirmationComponent);
-        component = fixture.componentInstance;
+  beforeEach(() => {
+    fixture = TestBed.createComponent(NodeDeleteConfirmationComponent);
+    component = fixture.componentInstance;
 
-        apiService = fixture.debugElement.injector.get(ApiService);
-    });
+    apiService = fixture.debugElement.injector.get(ApiService);
+  });
 
-    it('should create the add node modal cmp', async(() => {
-        expect(component).toBeTruthy();
-    }));
+  it('should create the add node modal cmp', async(() => {
+    expect(component).toBeTruthy();
+  }));
 
-    it('should call deleteClusterNode', fakeAsync(() => {
-        component.clusterName = 'cluster-name';
-        component.node = nodeFake;
-        component.datacenter = datacentersFake[0];
-        fixture.detectChanges();
-        const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(Observable.of(null));
+  it('should call deleteClusterNode', fakeAsync(() => {
+    component.cluster = clusterFake1;
+    component.node = nodeFake;
+    component.datacenter = datacenterFake1;
+    fixture.detectChanges();
+    const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(Observable.of(null));
 
-        component.deleteNode();
-        tick();
+    component.deleteNode();
+    tick();
 
-        expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
-    }));
+    expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
+  }));
 });

@@ -1,9 +1,16 @@
 import { InputValidationService } from './../../core/services/input-validation/input-validation.service';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, ContainerLinuxSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from './../../shared/entity/NodeEntity';
+import {
+  NodeCloudSpec,
+  NodeContainerRuntimeInfo,
+  NodeCreateSpec,
+  NodeVersionInfo,
+  OperatingSystemSpec,
+  UbuntuSpec
+} from './../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
 import { AWSNodeSpecV2 } from 'app/shared/entity/node/AWSNodeSpec';
 import { select } from '@angular-redux/store';
@@ -18,7 +25,7 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<{ nodeSpec: NodeCreateSpec }> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public awsNodeForm: FormGroup;
@@ -89,7 +96,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
         node_count: this.awsNodeForm.controls['node_count'].value,
         ami: this.awsNodeForm.controls['ami'].value,
         aws_nas: this.awsNodeForm.controls['aws_nas'].value
-       },
+      },
       this.awsNodeForm.valid
     );
 

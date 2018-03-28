@@ -1,13 +1,12 @@
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { NgRedux, select } from '@angular-redux/store';
-import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
-import {Component, OnInit, OnDestroy, Input} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { OpenstackCloudSpec } from 'app/shared/entity/cloud/OpenstackCloudSpec';
 import { InputValidationService } from 'app/core/services';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { OpenstackCloudSpec } from '../../../../../shared/entity/cloud/OpenstackCloudSpec';
 
 @Component({
   selector: 'kubermatic-cluster-openstack',
@@ -19,14 +18,15 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
 
   public osClusterForm: FormGroup;
   private sub: Subscription;
-  private region: string = '';
+  private region = '';
 
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
 
   constructor(private formBuilder: FormBuilder,
               public inputValidationService: InputValidationService,
-              private ngRedux: NgRedux<any>) { }
+              private ngRedux: NgRedux<any>) {
+  }
 
   ngOnInit() {
     this.sub = this.isChecked$.subscribe(isChecked => {
@@ -51,9 +51,7 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
       os_cas: [clusterForm.os_cas]
     });
 
-
     this.onChange();
-
   }
 
   public showRequiredFields() {
@@ -67,21 +65,22 @@ export class OpenstackClusterComponent implements OnInit, OnDestroy {
   }
 
   public onChange() {
-    const osCloudSpec = new OpenstackCloudSpec(
-      this.osClusterForm.controls['os_username'].value,
-      this.osClusterForm.controls['os_password'].value,
-      this.osClusterForm.controls['os_tenant'].value,
-      this.osClusterForm.controls['os_domain'].value,
-      this.osClusterForm.controls['os_network'].value,
-      this.osClusterForm.controls['os_security_groups'].value,
-      this.osClusterForm.controls['os_floating_ip_pool'].value,
-    );
+    const osCloudSpec: OpenstackCloudSpec = {
+      username: this.osClusterForm.controls['os_username'].value,
+      password: this.osClusterForm.controls['os_password'].value,
+      tenant: this.osClusterForm.controls['os_tenant'].value,
+      domain: this.osClusterForm.controls['os_domain'].value,
+      network: this.osClusterForm.controls['os_network'].value,
+      securityGroups: this.osClusterForm.controls['os_security_groups'].value,
+      floatingIpPool: this.osClusterForm.controls['os_floating_ip_pool'].value,
+    };
 
     WizardActions.setValidation('clusterForm', this.osClusterForm.valid);
 
-    WizardActions.setCloudSpec(
-      new CloudSpec(this.region, null, null, null, osCloudSpec, null)
-    );
+    WizardActions.setCloudSpec({
+      dc: this.region,
+      openstack: osCloudSpec,
+    });
   }
 
   public ngOnDestroy(): void {
