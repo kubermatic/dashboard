@@ -1,4 +1,4 @@
-export class DigitaloceanNodeSpecV2 {
+export class DigitaloceanNodeSpec {
   size: string;
   backups: boolean;
   ipv6: boolean;

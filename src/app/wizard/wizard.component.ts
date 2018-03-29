@@ -7,7 +7,7 @@ import { ApiService, CreateNodesService } from '../core/services';
 import { NgRedux, select } from '@angular-redux/store';
 import { Subscription } from 'rxjs/Subscription';
 import { NotificationActions } from '../redux/actions/notification.actions';
-import { DigitaloceanNodeSpecV2 } from '../shared/entity/node/DigitialoceanNodeSpec';
+import { DigitaloceanNodeSpec } from '../shared/entity/node/DigitialoceanNodeSpec';
 import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
 import {
   NodeCloudSpec,
@@ -68,7 +68,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       metadata: {},
       spec: new NodeSpec(
         new NodeCloudSpec(
-          new DigitaloceanNodeSpecV2('', null, null, null, null),
+          new DigitaloceanNodeSpec('', null, null, null, null),
           new AWSNodeSpec('t2.medium', 20, '', '', null),
           new OpenstackNodeSpec('m1.medium', ''),
           new HetznerNodeSpec('')

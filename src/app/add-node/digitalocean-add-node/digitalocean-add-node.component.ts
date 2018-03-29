@@ -16,7 +16,7 @@ import {
   UbuntuSpec
 } from '../../shared/entity/NodeEntity';
 import { WizardActions } from '../../redux/actions/wizard.actions';
-import { DigitaloceanNodeSpecV2 } from '../../shared/entity/node/DigitialoceanNodeSpec';
+import { DigitaloceanNodeSpec } from '../../shared/entity/node/DigitialoceanNodeSpec';
 
 
 @Component({
@@ -124,7 +124,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     if (this.nodeForm) {
       const nodeSpec = new NodeSpec(
         new NodeCloudSpec(
-          new DigitaloceanNodeSpecV2(
+          new DigitaloceanNodeSpec(
             this.nodeForm.node_size,
             false,
             false,
