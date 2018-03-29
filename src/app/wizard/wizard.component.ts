@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MatDialog } from '@angular/material';
-import { ApiService, CreateNodesService } from '../core/services';
+import { ApiService, InitialNodeDataService } from '../core/services';
 import { NgRedux, select } from '@angular-redux/store';
 import { Subscription } from 'rxjs/Subscription';
 import { NotificationActions } from '../redux/actions/notification.actions';
@@ -37,7 +37,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService,
               private router: Router,
               public dialog: MatDialog,
-              private createNodesService: CreateNodesService,
+              private initialNodeDataService: InitialNodeDataService,
               private ngRedux: NgRedux<any>) {}
 
   public ngOnInit(): void {
@@ -96,7 +96,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   public createClusterAndNode() {
     const reduxStore = this.ngRedux.getState();
     const wizard = reduxStore.wizard;
-    const nodeModel = wizard.nodeModel;
+    const node = wizard.nodeModel;
     const nodeCount = (this.selectedProvider !== 'bringyourown') ? wizard.nodeForm.node_count : null;
     const clusterModel = wizard.clusterModel;
     const datacenter = wizard.setDatacenterForm.datacenter.spec.seed;
@@ -106,7 +106,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.router.navigate(['/clusters/' + datacenter + '/' + cluster.metadata.name]);
 
         if (this.selectedProvider !== 'bringyourown') {
-          this.createNodesService.createInitialClusterNodes(nodeCount, cluster, nodeModel, datacenter);
+          this.initialNodeDataService.storeInitialNodeData(nodeCount, cluster, node);
         }
       },
       error => {
