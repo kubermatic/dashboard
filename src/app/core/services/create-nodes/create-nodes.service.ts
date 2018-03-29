@@ -83,9 +83,7 @@ export class CreateNodesService {
               }
           }
       });
-  });
-
-
+  }
 
   public removeCreateNodesLocalStorage(key, clusterName) {
     const nodePipline = this.localStorageService.getNodesData();
