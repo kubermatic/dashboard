@@ -3,23 +3,22 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { MatDialog } from '@angular/material';
-import { CreateNodeModel } from '../shared/model/CreateNodeModel';
 import { ApiService, CreateNodesService } from '../core/services';
+import { NgRedux, select } from '@angular-redux/store';
+import { Subscription } from 'rxjs/Subscription';
+import { NotificationActions } from '../redux/actions/notification.actions';
+import { DigitaloceanNodeSpec } from '../shared/entity/node/DigitialoceanNodeSpec';
+import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
 import {
   NodeCloudSpec,
   NodeContainerRuntimeInfo,
-  NodeCreateSpec,
+  NodeSpec,
   NodeVersionInfo,
   OperatingSystemSpec,
   UbuntuSpec
 } from '../shared/entity/NodeEntity';
-import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
-import { AWSNodeSpecV2 } from '../shared/entity/node/AWSNodeSpec';
+import { AWSNodeSpec } from '../shared/entity/node/AWSNodeSpec';
 import { HetznerNodeSpec } from '../shared/entity/node/HetznerNodeSpec';
-import { DigitaloceanNodeSpecV2 } from '../shared/entity/node/DigitialoceanNodeSpec';
-import { NgRedux, select } from '@angular-redux/store';
-import { Subscription } from 'rxjs/Subscription';
-import { NotificationActions } from '../redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -65,26 +64,25 @@ export class WizardComponent implements OnInit, OnDestroy {
       dc: ''
     });
 
-    WizardActions.setNodeModel(
-      new CreateNodeModel(
-        new NodeCreateSpec(
-          new NodeCloudSpec(
-            new DigitaloceanNodeSpecV2('', null, null, null, null),
-            new AWSNodeSpecV2('t2.medium', 20, '', '', null),
-            new OpenstackNodeSpec('m1.medium', ''),
-            new HetznerNodeSpec('')
-          ),
-          new OperatingSystemSpec(
-            new UbuntuSpec(false),
-            null
-          ),
-          new NodeVersionInfo(
-            null,
-            new NodeContainerRuntimeInfo(null, null)
-          )
+    WizardActions.setNodeModel({
+      metadata: {},
+      spec: new NodeSpec(
+        new NodeCloudSpec(
+          new DigitaloceanNodeSpec('', null, null, null, null),
+          new AWSNodeSpec('t2.medium', 20, '', '', null),
+          new OpenstackNodeSpec('m1.medium', ''),
+          new HetznerNodeSpec('')
+        ),
+        new OperatingSystemSpec(
+          new UbuntuSpec(false),
+          null
+        ),
+        new NodeVersionInfo(
+          null,
+          new NodeContainerRuntimeInfo(null, null)
         )
       )
-    );
+    });
   }
 
   public setProvider(cloud: string) {

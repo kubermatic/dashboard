@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { NodeEntityV2 } from '../../../shared/entity/NodeEntity';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -14,8 +14,8 @@ import { NodeEntityV2 } from '../../../shared/entity/NodeEntity';
 export class NodeListComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  @Input() nodes: NodeEntityV2[] = [];
-  @Output() deleteNode = new EventEmitter<NodeEntityV2>();
+  @Input() nodes: NodeEntity[] = [];
+  @Output() deleteNode = new EventEmitter<NodeEntity>();
   public config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -36,7 +36,7 @@ export class NodeListComponent {
   constructor(public dialog: MatDialog) {
   }
 
-  public managedByProvider(node: NodeEntityV2): boolean {
+  public managedByProvider(node: NodeEntity): boolean {
     if (!!node.status.machineName) {
       return true;
     } else {
@@ -44,7 +44,7 @@ export class NodeListComponent {
     }
   }
 
-  public deleteNodeDialog(node: NodeEntityV2): void {
+  public deleteNodeDialog(node: NodeEntity): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
@@ -55,7 +55,7 @@ export class NodeListComponent {
     });
   }
 
-  public getNodeHealth(node: NodeEntityV2): object {
+  public getNodeHealth(node: NodeEntity): object {
     const green = 'fa fa-circle green';
     const red = 'fa fa-circle-o red';
     const orange = 'fa fa-spin fa-circle-o-notch orange';
@@ -103,7 +103,7 @@ export class NodeListComponent {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  public getAddresses(node: NodeEntityV2): object {
+  public getAddresses(node: NodeEntity): object {
     const addresses = {};
     for (const i in node.status.addresses) {
       if (node.status.addresses[i].type === 'InternalIP') {

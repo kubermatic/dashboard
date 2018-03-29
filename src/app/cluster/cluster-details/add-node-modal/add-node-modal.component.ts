@@ -1,13 +1,12 @@
-import { Provider } from 'app/shared/interfaces/provider.interface';
-import { WizardActions } from 'app/redux/actions/wizard.actions';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { NotificationActions } from 'app/redux/actions/notification.actions';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { AddNodeModalData } from 'app/shared/model/add-node-modal-data';
-import { ApiService } from 'app/core/services/api/api.service';
 import { FormGroup } from '@angular/forms/src/model';
 import { getProvider } from '../../../shared/entity/ClusterEntity';
+import { Provider } from '../../../shared/interfaces/provider.interface';
+import { ApiService } from '../../../core/services';
+import { AddNodeModalData } from '../../../shared/model/add-node-modal-data';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
+import { NodeEntity, NodeSpec } from '../../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-add-node-modal',
@@ -16,7 +15,7 @@ import { getProvider } from '../../../shared/entity/ClusterEntity';
 })
 export class AddNodeModalComponent implements OnInit {
 
-  public nodeModel: CreateNodeModel;
+  public nodeModel: NodeEntity;
   public form: FormGroup;
   public provider: Provider = { name: '', payload: {} };
 
@@ -44,8 +43,8 @@ export class AddNodeModalComponent implements OnInit {
     }
   }
 
-  public changeNodeModel(nodeModel: CreateNodeModel): void {
-    this.nodeModel = nodeModel;
+  public changeNodeModel(node: NodeEntity): void {
+    this.nodeModel = node;
   }
 
   public changeForm(form: FormGroup): void {

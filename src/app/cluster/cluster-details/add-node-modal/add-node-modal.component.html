@@ -9,7 +9,7 @@
     <div class="mat-dialog-content">
       <kubermatic-add-node
         [provider]="provider"
-        (nodeModelChanges)="changeNodeModel($event)"
+        (nodeChanges)="changeNodeModel($event)"
         (formChanges)="changeForm($event)">
       </kubermatic-add-node>
     </div>

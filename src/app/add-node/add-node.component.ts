@@ -1,8 +1,7 @@
 import { FormGroup } from '@angular/forms';
-import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { Provider } from 'app/shared/interfaces/provider.interface';
+import { NodeEntity, NodeSpec } from '../shared/entity/NodeEntity';
+import { Provider } from '../shared/interfaces/provider.interface';
 
 @Component({
   selector: 'kubermatic-add-node',
@@ -12,7 +11,7 @@ import { Provider } from 'app/shared/interfaces/provider.interface';
 export class AddNodeComponent implements OnInit {
   @Input() provider: Provider;
   @Input() connect: string[] = [];
-  @Output() nodeModelChanges: EventEmitter<CreateNodeModel> = new EventEmitter();
+  @Output() nodeChanges: EventEmitter<NodeEntity> = new EventEmitter();
   @Output() formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   constructor() {
@@ -21,12 +20,11 @@ export class AddNodeComponent implements OnInit {
   ngOnInit() {
   }
 
-  public changeNodeModel(data: { nodeSpec: NodeCreateSpec }): void {
-    const nodeModel = new CreateNodeModel(
-      data.nodeSpec
-    );
-
-    this.nodeModelChanges.emit(nodeModel);
+  public changeNodeModel(nodeSpec: NodeSpec): void {
+    this.nodeChanges.emit({
+      metadata: {},
+      spec: nodeSpec
+    });
   }
 
   public changeForm(form: FormGroup) {

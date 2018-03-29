@@ -15,10 +15,9 @@ import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { ApiService, CreateNodesService, DatacenterService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
-import { UpgradeClusterComponentData } from '../../shared/model/UpgradeClusterDialogData';
 import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
-import { NodeEntityV2 } from '../../shared/entity/NodeEntity';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -31,9 +30,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public nodeDc: DataCenterEntity;
   public datacenter: DataCenterEntity;
   public sshKeys: SSHKeyEntity[] = [];
-  public nodes: NodeEntityV2[] = [];
-  public dialogRef: any;
-  public config: any = {};
+  public nodes: NodeEntity[] = [];
   public stateOfTheAccordion: object[];
   private clusterSubject: Subject<ClusterEntity>;
   private upgradesList: string[] = [];
@@ -148,39 +145,38 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public addNode(): void {
     const data = new AddNodeModalData(this.cluster, this.nodeDc);
-    this.dialogRef = this.dialog.open(AddNodeModalComponent, { data });
-    this.dialogRef.afterClosed().subscribe(result => {
+    const modal = this.dialog.open(AddNodeModalComponent, { data });
+    const sub = modal.afterClosed().subscribe(result => {
       this.reloadClusterNodes();
+      sub.unsubscribe();
     });
   }
 
   public deleteClusterDialog(): void {
-    this.dialogRef = this.dialog.open(ClusterDeleteConfirmationComponent, this.config);
-
-    this.dialogRef.componentInstance.cluster = this.cluster;
-    this.dialogRef.componentInstance.datacenter = this.datacenter;
-
-    this.dialogRef.afterClosed().subscribe(deleted => {
+    const modal = this.dialog.open(ClusterDeleteConfirmationComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
+    const sub = modal.afterClosed().subscribe(deleted => {
       if (deleted) {
         this.router.navigate(['/clusters']);
       }
+      sub.unsubscribe();
     });
   }
 
   public connectClusterDialog(): void {
-    this.dialogRef = this.dialog.open(ClusterConnectComponent, this.config);
-    this.dialogRef.componentInstance.cluster = this.cluster;
-    this.dialogRef.componentInstance.datacenter = this.datacenter;
+    const modal = this.dialog.open(ClusterConnectComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
   }
 
   public upgradeClusterDialog(): void {
-    const dialogWidth = '500px';
-
-    this.dialogRef = this.dialog.open(UpgradeClusterComponent, {
-      data: new UpgradeClusterComponentData(this.cluster.metadata.name, this.upgradesList),
-      width: dialogWidth
-    }).afterClosed().subscribe(() => {
+    const modal = this.dialog.open(UpgradeClusterComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.possibleVersions = this.upgradesList;
+    const sub = modal.afterClosed().subscribe(() => {
       this.reloadCluster(this.cluster.metadata.name, this.datacenter.metadata.name);
+      sub.unsubscribe();
     });
   }
 

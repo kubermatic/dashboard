@@ -17,9 +17,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { AddNodeModalComponent } from './add-node-modal.component';
 import { InputValidationService } from '../../../core/services/input-validation/input-validation.service';
 import { clusterFake } from './../../../testing/fake-data/cluster.fake';
-import { nodeModelFake } from './../../../testing/fake-data/node.fake';
 import { addNodeModalFake } from './../../../testing/fake-data/addNodeModal.fake';
 import { getProvider } from '../../../shared/entity/ClusterEntity';
+import { nodeCreateFake } from '../../../testing/fake-data/node.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -78,7 +78,7 @@ describe('AddNodeModalComponent', () => {
   });
 
   it('should call createClusterNode method from the api', fakeAsync(() => {
-    component.nodeModel = nodeModelFake;
+    component.nodeModel = nodeCreateFake;
     const formBuilder = fixture.debugElement.injector.get(FormBuilder);
     component.form = formBuilder.group({ node_count: 1 });
     component.data = addNodeModalFake;

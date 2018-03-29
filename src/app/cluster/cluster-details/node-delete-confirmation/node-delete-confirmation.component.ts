@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { NodeEntityV2 } from '../../../shared/entity/NodeEntity';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { ApiService } from '../../../core/services';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
@@ -13,7 +13,7 @@ import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 
 export class NodeDeleteConfirmationComponent implements OnInit {
 
-  @Input() node: NodeEntityV2;
+  @Input() node: NodeEntity;
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
 

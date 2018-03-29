@@ -1,18 +1,12 @@
-import { CreateNodeModel } from './../../shared/model/CreateNodeModel';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from './../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from './../../shared/entity/DatacenterEntity';
 import { Action } from '../../shared/interfaces/action.interface';
 import { Reducer } from 'redux';
-import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { FORM_CHANGED } from '@angular-redux/form';
-import { DigitaloceanCloudSpec } from 'app/shared/entity/cloud/DigitialoceanCloudSpec';
-import { AWSCloudSpec } from 'app/shared/entity/cloud/AWSCloudSpec';
-import { OpenstackCloudSpec } from 'app/shared/entity/cloud/OpenstackCloudSpec';
-import { NodeCreateSpec } from 'app/shared/entity/NodeEntity';
-import { DigitaloceanNodeSpec } from 'app/shared/entity/node/DigitialoceanNodeSpec';
-import { OpenstackNodeSpec } from 'app/shared/entity/node/OpenstackNodeSpec';
 import { cloneDeep } from 'lodash';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { WizardActions } from '../actions/wizard.actions';
 
 const formOnStep: Map<number, string[]> = new Map([
   [0, ['clusterNameForm']],
@@ -62,7 +56,7 @@ export interface Wizard {
   };
   cloudSpec: CloudSpec;
   clusterModel: CreateClusterModel;
-  nodeModel: CreateNodeModel;
+  nodeModel: NodeEntity;
 }
 
 export const INITIAL_STATE: Wizard = {

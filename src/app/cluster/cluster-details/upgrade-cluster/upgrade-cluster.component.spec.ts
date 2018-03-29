@@ -7,8 +7,10 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { UpgradeClusterComponent } from './upgrade-cluster.component';
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
 import { ApiService } from '../../../core/services/api/api.service';
-import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { ApiMockService, asyncData } from '../../../testing/services/api-mock.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { clusterFake1 } from '../../../testing/fake-data/cluster.fake';
+import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -20,9 +22,13 @@ const modules: any[] = [
 describe('UpgradeClusterComponent', () => {
   let fixture: ComponentFixture<UpgradeClusterComponent>;
   let component: UpgradeClusterComponent;
-  let apiService: ApiService;
+  let updateClusterUpgradeSpy: Spy;
 
-  beforeEach(() => {
+
+  beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['updateClusterUpgrade']);
+    updateClusterUpgradeSpy = apiMock.updateClusterUpgrade.and.returnValue(asyncData(clusterFake1));
+
     TestBed.configureTestingModule({
       imports: [
         ...modules,
@@ -33,28 +39,28 @@ describe('UpgradeClusterComponent', () => {
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { clusterName: 'clustername' } },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
-        { provide: ApiService, useClass: ApiMockService },
+        { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();
-  });
+  }));
 
-  beforeEach(() => {
+  beforeEach(async(() => {
     fixture = TestBed.createComponent(UpgradeClusterComponent);
     component = fixture.componentInstance;
+  }));
 
-    apiService = fixture.debugElement.injector.get(ApiService);
-  });
-
-  it('should create the add node modal cmp', async(() => {
+  it('should create the upgrade cluster component', async(() => {
     expect(component).toBeTruthy();
   }));
 
   it('should call updateClusterUpgrade method from api', fakeAsync(() => {
-    fixture.detectChanges();
-    const spyUpdate = spyOn(apiService, 'updateClusterUpgrade');
     component.selectedVersion = 'new version';
+    component.cluster = clusterFake1;
+    component.possibleVersions = ['1.9.5'];
+
+    fixture.detectChanges();
     component.upgrade();
     tick();
-    expect(spyUpdate.and.callThrough()).toHaveBeenCalledTimes(1);
+    expect(updateClusterUpgradeSpy.and.callThrough()).toHaveBeenCalledTimes(1);
   }));
 });
