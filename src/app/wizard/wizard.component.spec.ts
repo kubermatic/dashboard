@@ -1,9 +1,8 @@
 import { WizardStubsModule } from './../testing/components/wizard-stubs';
 import { clusterFake } from './../testing/fake-data/cluster.fake';
-import { doClusterModelFake } from './../testing/fake-data/wizard.fake';
 import { AddNodeStubsModule } from './../testing/components/add-node-stubs';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { ApiService, DatacenterService, LocalStorageService } from '../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService } from '../core/services';
 import { WizardComponent } from './wizard.component';
 import { Router } from '@angular/router';
 import { SharedModule } from '..//shared/shared.module';
@@ -11,17 +10,17 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '../testing/router-stubs';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterStub } from './../testing/router-stubs';
-import { ApiMockService } from '../testing/services/api-mock.service';
+import { asyncData } from '../testing/services/api-mock.service';
 import { MatDialog } from '@angular/material';
-import { CreateNodesService } from '../core/services/index';
 import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
-import { Observable } from 'rxjs/Observable';
 import { NodeEntity } from '../shared/entity/NodeEntity';
 import { nodeCreateFake } from '../testing/fake-data/node.fake';
+import { clusterFake1 } from '../testing/fake-data/cluster.fake';
+import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -56,11 +55,15 @@ describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
   let component: WizardComponent;
   let router: Router;
-  let apiService: ApiService;
+  let createClusterSpy: Spy;
+  let getClusterSpy: Spy;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster']);
+    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(clusterFake1));
+    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(clusterFake1));
+
     MockNgRedux.reset();
-
     TestBed.configureTestingModule({
       imports: [
         ...modules,
@@ -70,21 +73,19 @@ describe('WizardComponent', () => {
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
-        { provide: ApiService, useClass: ApiMockService },
+        { provide: ApiService, useValue: apiMock },
         { provide: DatacenterService, useClass: DatacenterMockService },
         MatDialog,
-        CreateNodesService,
-        LocalStorageService,
+        InitialNodeDataService,
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(WizardComponent);
     component = fixture.componentInstance;
 
     router = fixture.debugElement.injector.get(Router);
-    apiService = fixture.debugElement.injector.get(ApiService);
   });
 
   it('should create the sidenav cmp', () => {
@@ -99,15 +100,13 @@ describe('WizardComponent', () => {
     expect(component.selectedProvider).toBe('provider', 'should get provider');
   });
 
-  it('should call methods after craating cluster', fakeAsync(() => {
+  it('should call methods after creating cluster', fakeAsync(() => {
     const spyNavigate = spyOn(router, 'navigate');
-    const spyCreateClusterNode = spyOn(apiService, 'createClusterNode').and.returnValue(Observable.of(null));
-    const speGetCluster = spyOn(apiService, 'getCluster').and.returnValue(Observable.of(clusterFake));
     const ngRedux = fixture.debugElement.injector.get(NgRedux);
     const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
       wizard: {
         nodeModel: nodeCreateFake,
-        clusterModel: doClusterModelFake,
+        clusterModel: clusterFake,
         nodeForm: { node_count: 1 },
         setDatacenterForm: {
           datacenter: {
@@ -116,12 +115,12 @@ describe('WizardComponent', () => {
         }
       }
     });
-    setMockNgRedux(fixture, 'provider', 5);
+    setMockNgRedux(fixture, 'digitalocean', 5);
     fixture.detectChanges();
     tick();
 
+    expect(component.selectedProvider).toBe('digitalocean', 'should get provider');
     expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(spyCreateClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(speGetCluster.and.callThrough()).toHaveBeenCalledTimes(1);
+    expect(createClusterSpy.and.callThrough()).toHaveBeenCalledTimes(1);
   }));
 });

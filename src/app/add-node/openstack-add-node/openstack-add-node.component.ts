@@ -6,17 +6,9 @@ import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { WizardActions } from '../../redux/actions/wizard.actions';
-import {
-  NodeCloudSpec,
-  NodeContainerRuntimeInfo,
-  NodeSpec,
-  NodeVersionInfo,
-  OperatingSystemSpec,
-  UbuntuSpec
-} from '../../shared/entity/NodeEntity';
+import { NodeSpec } from '../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { InputValidationService } from '../../core/services';
-import { OpenstackNodeSpec } from '../../shared/entity/node/OpenstackNodeSpec';
 
 
 @Component({
@@ -92,25 +84,19 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
     );
 
     if (this.nodeForm) {
-      const nodeSpec = new NodeSpec(
-        new NodeCloudSpec(
-          null,
-          null,
-          new OpenstackNodeSpec(
-            this.nodeForm.node_size,
-            this.nodeForm.os_node_image
-          ),
-          null
-        ),
-        new OperatingSystemSpec(
-          new UbuntuSpec(false),
-          null
-        ),
-        new NodeVersionInfo(
-          null,
-          new NodeContainerRuntimeInfo(null, null)
-        )
-      );
+      const nodeSpec: NodeSpec = {
+        cloud: {
+          openstack: {
+            image: this.nodeForm.os_node_image,
+            flavor: this.nodeForm.node_size,
+          },
+        },
+        operatingSystem: {
+          ubuntu: {
+            distUpgradeOnBoot: false,
+          },
+        },
+      };
 
       this.nodeSpecChanges.emit(nodeSpec);
       this.formChanges.emit(this.osNodeForm);
