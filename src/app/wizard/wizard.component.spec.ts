@@ -1,7 +1,6 @@
 import { WizardStubsModule } from './../testing/components/wizard-stubs';
 import { clusterFake } from './../testing/fake-data/cluster.fake';
-import { doClusterModelFake, doNodeModelFake } from './../testing/fake-data/wizard.fake';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
+import { doClusterModelFake } from './../testing/fake-data/wizard.fake';
 import { AddNodeStubsModule } from './../testing/components/add-node-stubs';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { ApiService, DatacenterService, LocalStorageService } from '../core/services';
@@ -12,7 +11,6 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '../testing/router-stubs';
-
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterStub } from './../testing/router-stubs';
 import { ApiMockService } from '../testing/services/api-mock.service';
@@ -22,6 +20,8 @@ import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing'
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import { Observable } from 'rxjs/Observable';
+import { NodeEntity } from '../shared/entity/NodeEntity';
+import { nodeCreateFake } from '../testing/fake-data/node.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -43,7 +43,7 @@ function setMockNgRedux<T>(fixture: ComponentFixture<T>, provider: string, step:
   stepStub.complete();
 }
 
-function setMockModels<T>(fixture: ComponentFixture<T>, nodeModel: CreateNodeModel, clusterModel: CreateClusterModel): void {
+function setMockModels<T>(fixture: ComponentFixture<T>, nodeModel: NodeEntity, clusterModel: CreateClusterModel): void {
   const nodeModelStub = MockNgRedux.getSelectorStub(['wizard', 'nodeModel']);
   const clusterModelStub = MockNgRedux.getSelectorStub(['wizard', 'clusterModel']);
   nodeModelStub.next(nodeModel);
@@ -106,7 +106,7 @@ describe('WizardComponent', () => {
     const ngRedux = fixture.debugElement.injector.get(NgRedux);
     const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
       wizard: {
-        nodeModel: doNodeModelFake,
+        nodeModel: nodeCreateFake,
         clusterModel: doClusterModelFake,
         nodeForm: { node_count: 1 },
         setDatacenterForm: {

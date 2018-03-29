@@ -4,8 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { select } from '@angular-redux/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { Provider } from 'app/shared/interfaces/provider.interface';
+import { Provider } from '../../../../shared/interfaces/provider.interface';
+import { NodeEntity } from '../../../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-provider-node',
@@ -19,7 +19,7 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
   @select(['wizard', 'digitalOceanClusterForm', 'access_token']) token$: Observable<string>;
   private subscription: Subscription;
 
-  constructor() { }
+  constructor() {}
 
   public ngOnInit(): void {
     this.subscription = this.providerName$.combineLatest(this.token$)
@@ -36,7 +36,7 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
     this.subscription && this.subscription.unsubscribe();
   }
 
-  public changeNodeModel(nodeModel: CreateNodeModel): void {
+  public changeNodeModel(nodeModel: NodeEntity): void {
     WizardActions.setNodeModel(nodeModel);
   }
 

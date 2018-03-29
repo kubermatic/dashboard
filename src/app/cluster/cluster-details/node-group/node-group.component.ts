@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { NodeEntityV2 } from '../../../shared/entity/NodeEntity';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
@@ -12,13 +12,13 @@ import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 })
 
 export class NodeGroupComponent implements OnInit {
-  @Input() nodes: NodeEntityV2[];
+  @Input() nodes: NodeEntity[];
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
 
   public conditionsMessage = '';
   public nodeRemoval = false;
-  public node: NodeEntityV2;
+  public node: NodeEntity;
   public stateOfTheAccordion: any = [];
 
   public config: MatDialogConfig = {
@@ -124,7 +124,7 @@ export class NodeGroupComponent implements OnInit {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  public getNodeState(node: NodeEntityV2): boolean {
+  public getNodeState(node: NodeEntity): boolean {
     return node.metadata.annotations['node.k8s.io/state'] === 'running' ? true : false;
   }
 }

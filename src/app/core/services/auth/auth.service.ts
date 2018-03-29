@@ -4,8 +4,7 @@ import { tokenNotExpired } from 'angular2-jwt';
 
 @Injectable()
 export class Auth {
-
-  constructor(private router: Router) {
+  constructor() {
     const token = this.getTokenFromQuery();
     if (token) {
       localStorage.setItem('token', token);
