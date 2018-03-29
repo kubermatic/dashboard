@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../../environments/environment';
-
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { Auth } from 'app/core/services/auth/auth.service';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import { OpenstackSize } from '../../../shared/entity/provider/OpenstackSizeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 
 @Injectable()
@@ -89,7 +89,6 @@ export class ApiService {
     return this.http.get(url, { headers: this.headers });
   }
 
-
   getOpenStackSizes(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackSize[]> {
     this.headers = this.headers.set('Username', username);
     this.headers = this.headers.set('Password', password);
@@ -100,23 +99,6 @@ export class ApiService {
     return this.http.get<OpenstackSize[]>(url, { headers: this.headers });
   }
 
-  getOpenStackImages(location: string, project: string, name: string, password: string, authUrl: string) {
-    const openStack = new OpenStack({
-      region_name: location,
-      auth: {
-        username: name,
-        password: password,
-        project_name: project,
-        auth_url: authUrl
-      }
-    });
-
-    // List all flavors
-    openStack.networkList().then((networks) => {
-      return networks;
-    });
-  }
-
   getClusterUpgrades(cluster: string, dc: string): Observable<string[]> {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/upgrades`;
     return this.http.get<string[]>(url, { headers: this.headers })
@@ -124,7 +106,6 @@ export class ApiService {
         return Observable.of<string[]>([]);
       });
   }
-
 
   updateClusterUpgrade(cluster: string, upgradeVersion: string): Observable<ClusterEntity> {
     const body = { to: upgradeVersion };

@@ -1,7 +1,7 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';import { CustomValidators } from 'ng2-validation';
-
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { CustomValidators } from 'ng2-validation';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -27,6 +27,7 @@ import { OpenstackSize } from '../../shared/entity/provider/OpenstackSizeEntity'
   templateUrl: './openstack-add-node.component.html',
   styleUrls: ['./openstack-add-node.component.scss']
 })
+
 export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() public nodeSpecChanges: EventEmitter<NodeSpec> = new EventEmitter();
