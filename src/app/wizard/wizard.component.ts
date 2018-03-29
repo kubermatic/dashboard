@@ -7,18 +7,7 @@ import { ApiService, InitialNodeDataService } from '../core/services';
 import { NgRedux, select } from '@angular-redux/store';
 import { Subscription } from 'rxjs/Subscription';
 import { NotificationActions } from '../redux/actions/notification.actions';
-import { DigitaloceanNodeSpec } from '../shared/entity/node/DigitialoceanNodeSpec';
-import { OpenstackNodeSpec } from '../shared/entity/node/OpenstackNodeSpec';
-import {
-  NodeCloudSpec,
-  NodeContainerRuntimeInfo,
-  NodeSpec,
-  NodeVersionInfo,
-  OperatingSystemSpec,
-  UbuntuSpec
-} from '../shared/entity/NodeEntity';
-import { AWSNodeSpec } from '../shared/entity/node/AWSNodeSpec';
-import { HetznerNodeSpec } from '../shared/entity/node/HetznerNodeSpec';
+import { Store } from '../redux/store';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -29,16 +18,18 @@ import { HetznerNodeSpec } from '../shared/entity/node/HetznerNodeSpec';
 export class WizardComponent implements OnInit, OnDestroy {
 
   @select(['wizard', 'step']) step$: Observable<number>;
-  public step: number;
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
+  public step: number;
   public selectedProvider: string;
   private subscriptions: Subscription[] = [];
+
+  public triggered = false;
 
   constructor(private api: ApiService,
               private router: Router,
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
-              private ngRedux: NgRedux<any>) {}
+              private ngRedux: NgRedux<Store>) {}
 
   public ngOnInit(): void {
     this.resetCachedCredentials();
@@ -66,22 +57,36 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     WizardActions.setNodeModel({
       metadata: {},
-      spec: new NodeSpec(
-        new NodeCloudSpec(
-          new DigitaloceanNodeSpec('', null, null, null, null),
-          new AWSNodeSpec('t2.medium', 20, '', '', null),
-          new OpenstackNodeSpec('m1.medium', ''),
-          new HetznerNodeSpec('')
-        ),
-        new OperatingSystemSpec(
-          new UbuntuSpec(false),
-          null
-        ),
-        new NodeVersionInfo(
-          null,
-          new NodeContainerRuntimeInfo(null, null)
-        )
-      )
+      spec: {
+        cloud: {
+          digitalocean: {
+            backups: false,
+            ipv6: false,
+            monitoring: false,
+            size: '',
+            tags: [],
+          },
+          aws: {
+            ami: '',
+            diskSize: 20,
+            instanceType: 't2.medium',
+            tags: new Map<string, string>(),
+            volumeType: 'gp2',
+          },
+          openstack: {
+            flavor: '',
+            image: '',
+          },
+          hetzner: {
+            type: '',
+          },
+        },
+        operatingSystem: {
+          ubuntu: {
+            distUpgradeOnBoot: false
+          }
+        }
+      }
     });
   }
 
@@ -102,6 +107,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     const datacenter = wizard.setDatacenterForm.datacenter.spec.seed;
 
     this.api.createCluster(clusterModel, datacenter).subscribe(cluster => {
+        this.triggered = true;
         NotificationActions.success('Success', `Cluster successfully created`);
         this.router.navigate(['/clusters/' + datacenter + '/' + cluster.metadata.name]);
 

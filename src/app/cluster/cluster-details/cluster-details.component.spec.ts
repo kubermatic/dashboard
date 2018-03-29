@@ -15,8 +15,7 @@ import { asyncData } from '../../testing/services/api-mock.service';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
 import { ClusterSecretsComponent } from './cluster-secrets/cluster-secrets.component';
 import { MatDialog } from '@angular/material';
-import { CreateNodesService, DatacenterService } from '../../core/services/index';
-import { LocalStorageService } from '../../core/services/local-storage/local-storage.service';
+import { DatacenterService, InitialNodeDataService } from '../../core/services/index';
 import { SSHKeysFake } from '../../testing/fake-data/sshkey.fake';
 import { nodesFake } from '../../testing/fake-data/node.fake';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
@@ -69,8 +68,7 @@ describe('ClusterDetailsComponent', () => {
       providers: [
         { provide: ApiService, useValue: apiMock },
         MatDialog,
-        CreateNodesService,
-        LocalStorageService,
+        InitialNodeDataService,
         { provide: DatacenterService, useValue: datacenterMock },
         { provide: Auth, useClass: AuthMockService },
         { provide: Router, useClass: RouterStub },

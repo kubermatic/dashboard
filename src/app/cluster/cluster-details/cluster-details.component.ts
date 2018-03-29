@@ -19,6 +19,7 @@ import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
+import { NotificationActions } from '../../redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -115,6 +116,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           Observable.combineLatest(createNodeObservables)
             .takeUntil(this.unsubscribe)
             .subscribe((createdNodes: NodeEntity[]): void => {
+              NotificationActions.success('Success', `Node(s) successfully created`);
               this.reloadClusterNodes();
             });
           this.initialNodeDataService.clearInitialNodeData(cluster);

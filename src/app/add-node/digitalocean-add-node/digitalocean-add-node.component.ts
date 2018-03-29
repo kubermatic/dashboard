@@ -7,17 +7,8 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { ApiService, InputValidationService } from '../../core/services';
-import {
-  NodeCloudSpec,
-  NodeContainerRuntimeInfo,
-  NodeSpec,
-  NodeVersionInfo,
-  OperatingSystemSpec,
-  UbuntuSpec
-} from '../../shared/entity/NodeEntity';
+import { NodeSpec } from '../../shared/entity/NodeEntity';
 import { WizardActions } from '../../redux/actions/wizard.actions';
-import { DigitaloceanNodeSpec } from '../../shared/entity/node/DigitialoceanNodeSpec';
-
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
@@ -122,28 +113,22 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     );
 
     if (this.nodeForm) {
-      const nodeSpec = new NodeSpec(
-        new NodeCloudSpec(
-          new DigitaloceanNodeSpec(
-            this.nodeForm.node_size,
-            false,
-            false,
-            false,
-            null
-          ),
-          null,
-          null,
-          null
-        ),
-        new OperatingSystemSpec(
-          new UbuntuSpec(false),
-          null
-        ),
-        new NodeVersionInfo(
-          '',
-          new NodeContainerRuntimeInfo('', '')
-        )
-      );
+      const nodeSpec: NodeSpec = {
+        cloud: {
+          digitalocean: {
+            size: this.nodeForm.node_size,
+            tags: [],
+            monitoring: false,
+            ipv6: false,
+            backups: false,
+          },
+        },
+        operatingSystem: {
+          ubuntu: {
+            distUpgradeOnBoot: false,
+          },
+        },
+      };
 
       this.nodeSpecChanges.emit(nodeSpec);
       this.formChanges.emit(this.doNodeForm);

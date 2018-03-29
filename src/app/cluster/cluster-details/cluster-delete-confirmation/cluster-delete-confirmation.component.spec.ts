@@ -15,10 +15,9 @@ import { DatacenterService } from '../../../core/services/datacenter/datacenter.
 import { DatacenterMockService } from '../../../testing/services/datacenter-mock.service';
 import { MatDialogRef } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
-import { LocalStorageService } from './../../../core/services/local-storage/local-storage.service';
-import { CreateNodesService } from '../../../core/services/index';
 import { datacenterFake1 } from '../../../testing/fake-data/datacenter.fake';
 import { clusterFake1 } from '../../../testing/fake-data/cluster.fake';
+import { InitialNodeDataService } from '../../../core/services';
 
 const modules: any[] = [
   BrowserModule,
@@ -44,8 +43,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
         ClusterDeleteConfirmationComponent
       ],
       providers: [
-        CreateNodesService,
-        LocalStorageService,
+        InitialNodeDataService,
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useClass: ApiMockService },
         { provide: DatacenterService, useClass: DatacenterMockService },
