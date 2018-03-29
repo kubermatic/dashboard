@@ -1,11 +1,7 @@
-
 import { SharedModule } from '../shared/shared.module';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AddNodeComponent } from './add-node.component';
 import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
 import { AddNodeFormComponent } from './add-node-form/add-node-form.component';
@@ -18,7 +14,6 @@ import { ApiService } from '../core/services/api/api.service';
 import { ApiMockService } from '../testing/services/api-mock.service';
 
 const modules: any[] = [
-
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
@@ -28,7 +23,6 @@ const modules: any[] = [
 describe('AddNodeComponent', () => {
   let fixture: ComponentFixture<AddNodeComponent>;
   let component: AddNodeComponent;
-
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -53,7 +47,6 @@ describe('AddNodeComponent', () => {
     fixture = TestBed.createComponent(AddNodeComponent);
     component = fixture.componentInstance;
   });
-
 
   it('should create the add node cmp', () => {
     expect(component).toBeTruthy();
@@ -80,24 +73,6 @@ describe('AddNodeComponent', () => {
     let deAwsForm = fixture.debugElement.query(By.css('.aws-form'));
     expect(deAwsForm).not.toBeNull('should render aws form');
 
-
-    component.provider = {
-      name: 'openstack'
-    };
-    spyGetState.and.returnValue({
-      wizard: {
-        nodeForm: {
-          os_node_image: '',
-          node_count: 2,
-          node_size: 'm1.medium'
-        }
-      }
-    });
-    fixture.detectChanges();
-
-
-    deAwsForm = fixture.debugElement.query(By.css('.aws-form'));
-    const deOpenstackForm = fixture.debugElement.query(By.css('.openstack-form'));
     component.provider = {
       name: 'openstack',
       payload: {
@@ -114,17 +89,21 @@ describe('AddNodeComponent', () => {
           }
         }
       }
-        };
-        spyGetState.and.returnValue({
-            wizard: {
-                nodeForm: {
-                    os_node_image: '',
-                    node_count: 2,
-                    node_size: 'm1.medium'
-                }
-            }
-        });
-        fixture.detectChanges();
+    };
+    spyGetState.and.returnValue({
+      wizard: {
+        nodeForm: {
+          os_node_image: '',
+          node_count: 2,
+          node_size: 'm1.medium'
+        }
+      }
+    });
+    fixture.detectChanges();
+
+    deAwsForm = fixture.debugElement.query(By.css('.aws-form'));
+    const deOpenstackForm = fixture.debugElement.query(By.css('.openstack-form'));
+
     expect(deAwsForm).toBeNull('should hide aws form');
     expect(deOpenstackForm).not.toBeNull('should render openstack form');
   });

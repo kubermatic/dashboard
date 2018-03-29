@@ -13,13 +13,13 @@ import { CloudSpec } from '../../../../shared/entity/ClusterEntity';
   templateUrl: './node.component.html',
   styleUrls: ['./node.component.scss']
 })
+
 export class ProviderNodeComponent implements OnInit, OnDestroy {
 
   @select(['wizard', 'setProviderForm', 'provider']) providerName$: Observable<string>;
   public provider: Provider = { name: '', payload: {} };
   @select(['wizard', 'digitalOceanClusterForm', 'access_token']) token$: Observable<string>;
   private subscription: Subscription;
-
 
   @select(['wizard', 'cloudSpec']) cloudSpec$: Observable<any>;
   public cloudSpec: CloudSpec;
@@ -34,7 +34,6 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
         const token = data[1];
         const cloudSpec = data[2];
 
-
         providerName && (this.provider.name = providerName);
         token && (this.provider.payload.token = token);
         cloudSpec && (this.provider.payload.cloudSpec = cloudSpec);
@@ -44,7 +43,6 @@ export class ProviderNodeComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.subscription && this.subscription.unsubscribe();
   }
-
 
   public changeNodeModel(nodeModel: NodeEntity): void {
     WizardActions.setNodeModel(nodeModel);

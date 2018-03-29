@@ -12,6 +12,7 @@ import { find } from 'lodash';
   templateUrl: './cluster-list.component.html',
   styleUrls: ['./cluster-list.component.scss']
 })
+
 export class ClusterListComponent implements OnInit, OnDestroy {
 
   public clusters: ClusterEntity[] = [];
@@ -33,7 +34,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   getClusters() {
     let dcNames: string[];
-    let loadClusters: boolean = false;
+    let loadClusters = false;
     this.dcService.getSeedDataCenters().subscribe(res => {
       dcNames = res;
       for (const i in dcNames) {

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
-import { Auth } from 'app/core/services/auth/auth.service';
+import { Auth } from '../auth/auth.service';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
@@ -48,20 +48,15 @@ export class ApiService {
     return this.http.delete(url, { headers: this.headers });
   }
 
-
   getClusterNodes(cluster: string, dc: string): Observable<NodeEntity[]> {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node`;
-
     return this.http.get<NodeEntity[]>(url, { headers: this.headers });
   }
 
-
   createClusterNode(cluster: ClusterEntity, node: NodeEntity, dc: string): Observable<NodeEntity> {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.metadata.name}/node`;
-
     return this.http.post<NodeEntity>(url, node, { headers: this.headers });
   }
-
 
   deleteClusterNode(cluster: string, node: NodeEntity, dc: string) {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node/${node.metadata.name}`;
@@ -110,7 +105,6 @@ export class ApiService {
   updateClusterUpgrade(cluster: string, upgradeVersion: string): Observable<ClusterEntity> {
     const body = { to: upgradeVersion };
     const url = `${this.restRoot}/cluster/${cluster}/upgrade`;
-
     return this.http.put<ClusterEntity>(url, body, { headers: this.headers });
   }
 }

@@ -6,7 +6,6 @@ import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { WizardActions } from '../../redux/actions/wizard.actions';
-
 import {
   NodeCloudSpec,
   NodeContainerRuntimeInfo,
@@ -35,16 +34,15 @@ export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cloudSpec: CloudSpec;
 
   public osNodeForm: FormGroup;
-
   public nodeSize: OpenstackSize[] = [];
-  public nodeSizeSorted: OpenstackSize[] = [];  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  public nodeSizeSorted: OpenstackSize[] = [];
+  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
   public nodeForm: any;
   private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder,
               public inputValidationService: InputValidationService,
-
               private ngRedux: NgRedux<any>,
               private api: ApiService) { }
 
@@ -71,7 +69,6 @@ export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
         node_count: this.nodeForm.node_count,
         node_size: this.nodeForm.node_size
       };
-
       this.osNodeForm.setValue(formValue);
     }
 
@@ -144,7 +141,6 @@ export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
           new NodeContainerRuntimeInfo(null, null)
         )
       );
-
 
       this.nodeSpecChanges.emit(nodeSpec);
       this.formChanges.emit(this.osNodeForm);
