@@ -8,10 +8,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./page-not-found.component.scss']
 })
 export class PageNotFoundComponent {
-  constructor(
-    private auth: Auth,
-    private router: Router
-  ) { }
+  constructor(private auth: Auth,
+              private router: Router) { }
 
   backToApp(): void {
     if (this.auth.authenticated()) {

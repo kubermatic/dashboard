@@ -1,12 +1,12 @@
-import { Provider } from 'app/shared/interfaces/provider.interface';
-import { WizardActions } from 'app/redux/actions/wizard.actions';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { NotificationActions } from 'app/redux/actions/notification.actions';
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material';
-import { AddNodeModalData } from 'app/shared/model/add-node-modal-data';
-import { ApiService } from 'app/core/services/api/api.service';
 import { FormGroup } from '@angular/forms/src/model';
+import { getProvider } from '../../../shared/entity/ClusterEntity';
+import { Provider } from '../../../shared/interfaces/provider.interface';
+import { ApiService } from '../../../core/services';
+import { AddNodeModalData } from '../../../shared/model/add-node-modal-data';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
+import { NodeEntity, NodeSpec } from '../../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-add-node-modal',
@@ -15,33 +15,25 @@ import { FormGroup } from '@angular/forms/src/model';
 })
 export class AddNodeModalComponent implements OnInit {
 
-  public nodeModel: CreateNodeModel;
+  public nodeModel: NodeEntity;
   public form: FormGroup;
   public provider: Provider = { name: '', payload: {} };
 
   constructor(private api: ApiService,
-              @Inject(MAT_DIALOG_DATA) public data: AddNodeModalData) { }
+              @Inject(MAT_DIALOG_DATA) public data: AddNodeModalData) {
+  }
 
   public ngOnInit(): void {
-    this.provider.name = this.data.cluster.provider;
+    this.provider.name = getProvider(this.data.cluster);
 
     if (this.provider.name === 'digitalocean') {
       this.provider.payload.token = this.data.cluster.spec.cloud.digitalocean.token;
     }
-
-    WizardActions.formChanged(
-      ['wizard', 'nodeForm'],
-      {
-        node_size: '',
-        node_count: 1,
-      },
-      false
-    );
   }
 
   public addNode(): void {
-    let successCounter: number = 0;
-    for (let i = 0; i < this.form.value.node_count; i ++) {
+    let successCounter = 0;
+    for (let i = 0; i < this.form.value.node_count; i++) {
       this.api.createClusterNode(this.data.cluster, this.nodeModel, this.data.dc.spec.seed).subscribe(node => {
         successCounter++;
         if (successCounter === this.form.value.node_count) {
@@ -51,8 +43,8 @@ export class AddNodeModalComponent implements OnInit {
     }
   }
 
-  public changeNodeModel(nodeModel: CreateNodeModel): void {
-    this.nodeModel = nodeModel;
+  public changeNodeModel(node: NodeEntity): void {
+    this.nodeModel = node;
   }
 
   public changeForm(form: FormGroup): void {

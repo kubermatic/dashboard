@@ -2,8 +2,8 @@ import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { Observable } from 'rxjs/Observable';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
-import { Component, OnInit, OnDestroy, AfterContentInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { ApiService } from 'app/core/services/api/api.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -16,17 +16,14 @@ import { Subscription } from 'rxjs/Subscription';
 export class SetDatacenterComponent implements OnInit, OnDestroy, AfterContentInit {
   public setDatacenterForm: FormGroup;
   public datacenters: { [key: string]: DataCenterEntity[] } = {};
-  private subscriptions: Subscription[] = [];
-  public datacenterRequired: boolean = false;
-
+  public datacenterRequired = false;
   @select(['wizard', 'setDatacenterForm', 'datacenter']) datacenter$: Observable<DataCenterEntity>;
   public selectedDatacenter: DataCenterEntity;
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public selectedProvider: string;
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   public isChecked: boolean;
+  private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder,
               private dcService: DatacenterService) { }

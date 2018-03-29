@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
-import { ApiService } from 'app/core/services/api/api.service';
-import { CustomEventService } from 'app/core/services';
-import { NotificationActions } from 'app/redux/actions/notification.actions';
-import { NodeEntityV2 } from 'app/shared/entity/NodeEntity';
+import { Component, Input, OnInit } from '@angular/core';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import { ApiService } from '../../../core/services';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
@@ -13,8 +13,8 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 
 export class NodeDeleteConfirmationComponent implements OnInit {
 
-  @Input() node: NodeEntityV2;
-  @Input() clusterName: string;
+  @Input() node: NodeEntity;
+  @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
 
   public title: string;
@@ -24,18 +24,15 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public btnOkText?: string;
   public btnCancelText?: string;
 
-
-  constructor(
-    private api: ApiService,
-    private customEventService: CustomEventService) {}
+  constructor(private api: ApiService) {
+  }
 
   ngOnInit() {
   }
 
   public deleteNode(): void {
-    this.api.deleteClusterNode(this.clusterName, this.node, this.datacenter.spec.seed).subscribe(result => {
+    this.api.deleteClusterNode(this.cluster.metadata.name, this.node, this.datacenter.metadata.name).subscribe(result => {
       NotificationActions.success('Success', `Node removed successfully`);
-      this.customEventService.publish('onNodeDelete', this.node.metadata.name);
     });
   }
 }

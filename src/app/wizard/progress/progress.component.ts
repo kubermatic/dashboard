@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { select } from '@angular-redux/store/lib/src/decorators/select';
 import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { Subscription } from 'rxjs/Subscription';
@@ -11,10 +11,9 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ProgressComponent implements OnInit, OnDestroy {
 
-  private subscription: Subscription;
-
   @select(['wizard', 'step']) step$: Observable<number>;
   public step: number;
+  private subscription: Subscription;
 
   constructor() { }
 
@@ -64,5 +63,4 @@ export class ProgressComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.subscription && this.subscription.unsubscribe();
   }
-
 }

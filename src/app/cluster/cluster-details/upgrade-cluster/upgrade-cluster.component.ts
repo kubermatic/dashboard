@@ -1,7 +1,8 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import { ApiService } from 'app/core/services/api/api.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import {UpgradeClusterComponentData} from 'app/shared/model/UpgradeClusterDialogData';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ApiService } from '../../../core/services';
 
 
 @Component({
@@ -10,23 +11,25 @@ import {UpgradeClusterComponentData} from 'app/shared/model/UpgradeClusterDialog
   styleUrls: ['./upgrade-cluster.component.scss']
 })
 export class UpgradeClusterComponent implements OnInit {
+  @Input() cluster: ClusterEntity;
+  possibleVersions: string[];
   selectedVersion: string;
 
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public data: UpgradeClusterComponentData,
-    private api: ApiService,
-    private dialogRef: MatDialogRef<UpgradeClusterComponent>
-  ) { }
+  constructor(private api: ApiService,
+              private dialogRef: MatDialogRef<UpgradeClusterComponent>) {
+  }
 
   public ngOnInit() {
-    if (this.data.upgradesList) {
-      this.selectedVersion = this.data.upgradesList[this.data.upgradesList.length - 1];
+    if (this.possibleVersions.length > 0) {
+      this.selectedVersion = this.possibleVersions[this.possibleVersions.length - 1];
     }
   }
 
   upgrade(): void {
-      this.api.updateClusterUpgrade(this.data.clusterName, this.selectedVersion);
-      this.selectedVersion = null;
-      this.dialogRef.close();
+    this.api.updateClusterUpgrade(this.cluster.metadata.name, this.selectedVersion)
+      .subscribe(result => NotificationActions.success('Success', `Cluster is being upgraded`));
+
+    this.selectedVersion = null;
+    this.dialogRef.close();
   }
 }

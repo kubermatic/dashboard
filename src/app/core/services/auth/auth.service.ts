@@ -1,20 +1,14 @@
-import {Injectable} from '@angular/core';
-import {Router, NavigationStart} from '@angular/router';
-import {tokenNotExpired} from 'angular2-jwt';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { tokenNotExpired } from 'angular2-jwt';
 
 @Injectable()
 export class Auth {
-
-  constructor(private router: Router) {
+  constructor() {
     const token = this.getTokenFromQuery();
     if (token) {
       localStorage.setItem('token', token);
     }
-  }
-
-  private getTokenFromQuery(): string {
-    const results = new RegExp('[\?&]id_token=([^&#]*)').exec(window.location.href);
-    return results == null ? null : results[1] || '';
   }
 
   public getBearerToken(): string {
@@ -29,5 +23,10 @@ export class Auth {
 
   public logout() {
     localStorage.removeItem('token');
+  }
+
+  private getTokenFromQuery(): string {
+    const results = new RegExp('[\?&]id_token=([^&#]*)').exec(window.location.href);
+    return results == null ? null : results[1] || '';
   }
 }

@@ -1,4 +1,4 @@
 export interface Provider {
-    name: string;
-    payload?: any;
+  name: string;
+  payload?: any;
 }

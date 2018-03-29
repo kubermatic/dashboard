@@ -1,6 +1,8 @@
-import { Component,  OnInit, Input, Inject} from '@angular/core';
-import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
-
+import { Component, Input, OnInit } from '@angular/core';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { MatDialog } from '@angular/material';
+import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
@@ -9,12 +11,14 @@ import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
 })
 export class ClusterSecretsComponent implements OnInit {
   @Input() cluster: ClusterEntity;
-  @Input() health: Health;
-  public expand: boolean = false;
+  @Input() datacenter: DataCenterEntity;
+  public expand = false;
+  public dialogRef: any;
 
-  constructor() { }
+  constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {  }
+  ngOnInit() {
+  }
 
   isExpand(expand: boolean) {
     this.expand = expand;
@@ -46,7 +50,7 @@ export class ClusterSecretsComponent implements OnInit {
     }
 
     if (data && name) {
-      const blob = new Blob([atob(data)], {type: 'text/plain'});
+      const blob = new Blob([atob(data)], { type: 'text/plain' });
       const a = window.document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
       a.download = name;
@@ -59,14 +63,20 @@ export class ClusterSecretsComponent implements OnInit {
   }
 
   public getIcon(name: string): string {
-    if (this.health) {
+    if (this.cluster.status.health) {
       switch (name) {
-        case 'apiserver': return this.getIconClass(this.health.apiserver);
-        case 'controller': return this.getIconClass(this.health.controller);
-        case 'etcd': return this.getIconClass(this.health.etcd);
-        case 'scheduler': return this.getIconClass(this.health.scheduler);
-        case 'nodeController': return this.getIconClass(this.health.nodeController);
-        default: return '';
+        case 'apiserver':
+          return this.getIconClass(this.cluster.status.health.apiserver);
+        case 'controller':
+          return this.getIconClass(this.cluster.status.health.controller);
+        case 'etcd':
+          return this.getIconClass(this.cluster.status.health.etcd);
+        case 'scheduler':
+          return this.getIconClass(this.cluster.status.health.scheduler);
+        case 'nodeController':
+          return this.getIconClass(this.cluster.status.health.nodeController);
+        default:
+          return '';
       }
     } else {
       return 'fa fa-spin fa-circle-o-notch';
@@ -88,14 +98,20 @@ export class ClusterSecretsComponent implements OnInit {
   }
 
   public getStatus(name: string): string {
-    if (this.health) {
+    if (this.cluster.status.health) {
       switch (name) {
-        case 'apiserver': return this.getHealthStatus(this.health.apiserver);
-        case 'controller': return this.getHealthStatus(this.health.controller);
-        case 'etcd': return this.getHealthStatus(this.health.etcd);
-        case 'scheduler': return this.getHealthStatus(this.health.scheduler);
-        case 'nodeController': return this.getHealthStatus(this.health.nodeController);
-        default: return '';
+        case 'apiserver':
+          return this.getHealthStatus(this.cluster.status.health.apiserver);
+        case 'controller':
+          return this.getHealthStatus(this.cluster.status.health.controller);
+        case 'etcd':
+          return this.getHealthStatus(this.cluster.status.health.etcd);
+        case 'scheduler':
+          return this.getHealthStatus(this.cluster.status.health.scheduler);
+        case 'nodeController':
+          return this.getHealthStatus(this.cluster.status.health.nodeController);
+        default:
+          return '';
       }
     } else {
       return 'Pending';
@@ -114,6 +130,15 @@ export class ClusterSecretsComponent implements OnInit {
     } else {
       return '';
     }
+  }
+
+  public revokeAdminTokenDialog(): void {
+    this.dialogRef = this.dialog.open(RevokeAdminTokenComponent);
+
+    this.dialogRef.componentInstance.cluster = this.cluster;
+    this.dialogRef.componentInstance.datacenter = this.datacenter;
+
+    this.dialogRef.afterClosed().subscribe(result => {});
   }
 
 }

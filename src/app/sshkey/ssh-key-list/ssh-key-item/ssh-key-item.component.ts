@@ -1,5 +1,5 @@
 import { SSHKeyEntity } from 'app/shared/entity/SSHKeyEntity';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class SshKeyItemComponent implements OnInit {
   @Input() isOdd: boolean;
   @Output() deleteSshKey: EventEmitter<SSHKeyEntity> = new EventEmitter();
 
-  public isShowPublicKey: boolean = false;
+  public isShowPublicKey = false;
   public publicKeyName: string;
   public publicKey: string;
 

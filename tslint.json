@@ -6,9 +6,14 @@
     "arrow-return-shorthand": true,
     "callable-types": true,
     "class-name": true,
-    "comment-format": true,
+    "comment-format": [
+      true,
+      "check-space"
+    ],
     "curly": true,
-    "deprecation": false,
+    "deprecation": {
+      "severity": "warn"
+    },
     "eofline": true,
     "forin": true,
     "import-blacklist": [
@@ -17,10 +22,7 @@
       "rxjs/Rx"
     ],
     "import-spacing": true,
-    "indent": [
-      true,
-      "spaces"
-    ],
+    "indent": [true, "spaces", 2],
     "interface-over-type-literal": true,
     "label-position": true,
     "max-line-length": false,
@@ -50,9 +52,12 @@
     "no-debugger": true,
     "no-duplicate-super": true,
     "no-empty": false,
-    "no-empty-interface": false,
+    "no-empty-interface": true,
     "no-eval": true,
-    "no-inferrable-types": false,
+    "no-inferrable-types": [
+      true,
+      "ignore-params"
+    ],
     "no-misused-new": true,
     "no-non-null-assertion": true,
     "no-shadowed-variable": true,
@@ -96,7 +101,6 @@
         "variable-declaration": "nospace"
       }
     ],
-    "typeof-compare": true,
     "unified-signatures": true,
     "variable-name": false,
     "whitespace": [

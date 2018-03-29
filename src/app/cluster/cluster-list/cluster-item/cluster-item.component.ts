@@ -1,7 +1,6 @@
-import { Subscription } from 'rxjs/Subscription';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
 
 @Component({
@@ -27,7 +26,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   }
 
   public getClusterImagePath(): string {
-    let path: string = '/assets/images/clouds/';
+    let path = '/assets/images/clouds/';
 
     if (this.cluster.spec.cloud.aws) {
       path += 'aws.png';
@@ -43,7 +42,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   }
 
   public getShortClusterName(name: string): string {
-    return name.length > 12 ?  name.slice(0, 12) + '...' : name;
+    return name.length > 12 ? name.slice(0, 12) + '...' : name;
   }
 
   public statusRunning(): boolean {

@@ -1,14 +1,14 @@
 import { NodeProvider } from './../../shared/model/NodeProviderConstants';
-import { WizardActions } from 'app/redux/actions/wizard.actions';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CreateNodeModel } from '../../shared/model/CreateNodeModel';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { Size } from '../../shared/entity/digitalocean/DropletSizeEntity';
-import { ApiService } from 'app/core/services/api/api.service';
 import { Subscription } from 'rxjs/Subscription';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { ApiService } from '../../core/services';
+import { WizardActions } from '../../redux/actions/wizard.actions';
 
 @Component({
   selector: 'kubermatic-summary',
@@ -17,44 +17,38 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class SummaryComponent implements OnInit, OnDestroy {
 
-  private subscriptions: Subscription[] = [];
   public providerNames = NodeProvider.ProviderNames;
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
-
   @select(['wizard', 'setDatacenterForm', 'datacenter']) region$: Observable<DataCenterEntity>;
   public region: DataCenterEntity;
-
-  @select(['wizard', 'nodeModel']) nodeModel$: Observable<CreateNodeModel>;
-  public nodeModel: CreateNodeModel;
-
+  @select(['wizard', 'nodeModel']) nodeModel$: Observable<NodeEntity>;
+  public nodeModel: NodeEntity;
   @select(['wizard', 'clusterModel']) clusterModel$: Observable<CreateClusterModel>;
   public clusterModel: CreateClusterModel;
-
   @select(['wizard', 'nodeForm', 'node_count']) nodeCount$: Observable<number>;
   public nodeCount: number;
-
   public sshKeysList: string[] = [];
   public doOptimizedSizes: Size[];
+  private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService) { }
 
   ngOnInit() {
     const subWizard = this.provider$.combineLatest(this.region$, this.nodeModel$, this.clusterModel$, this.nodeCount$)
-    .subscribe((data: [string, DataCenterEntity, CreateNodeModel, CreateClusterModel, number]) => {
-      const provider = data[0];
-      const region = data[1];
-      const nodeModel = data[2];
-      const clusterModel = data[3];
-      const nodeCount = data[4];
+      .subscribe((data: [string, DataCenterEntity, NodeEntity, CreateClusterModel, number]) => {
+        const provider = data[0];
+        const region = data[1];
+        const nodeModel = data[2];
+        const clusterModel = data[3];
+        const nodeCount = data[4];
 
-      provider && (this.provider = provider);
-      region && (this.region = region);
-      nodeModel && (this.nodeModel = nodeModel);
-      clusterModel && (this.clusterModel = clusterModel);
-      nodeCount && (this.nodeCount = nodeCount);
-    });
+        provider && (this.provider = provider);
+        region && (this.region = region);
+        nodeModel && (this.nodeModel = nodeModel);
+        clusterModel && (this.clusterModel = clusterModel);
+        nodeCount && (this.nodeCount = nodeCount);
+      });
     this.subscriptions.push(subWizard);
 
     if (this.provider !== 'bringyourown') {

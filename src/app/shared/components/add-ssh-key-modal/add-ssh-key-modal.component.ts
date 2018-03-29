@@ -1,8 +1,8 @@
-import {Component, Input, Output, OnInit, EventEmitter} from '@angular/core';
-import {ApiService} from 'app/core/services/api/api.service';
-import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material';
+import { Component, Input, OnInit } from '@angular/core';
+import { ApiService } from 'app/core/services/api/api.service';
+import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material';
 import { InputValidationService } from '../../../core/services';
 import { NotificationActions } from 'app/redux/actions/notification.actions';
 
@@ -13,15 +13,12 @@ import { NotificationActions } from 'app/redux/actions/notification.actions';
 })
 export class AddSshKeyModalComponent implements OnInit {
   @Input() sshKeys: Array<SSHKeyEntity> = [];
-  //@Output() newSshKey = new EventEmitter();
   public addSSHKeyForm: FormGroup;
 
-  constructor(
-    private api: ApiService,
-    private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<AddSshKeyModalComponent>,
-    public inputValidationService: InputValidationService
-  ) {}
+  constructor(private api: ApiService,
+              private formBuilder: FormBuilder,
+              private dialogRef: MatDialogRef<AddSshKeyModalComponent>,
+              public inputValidationService: InputValidationService) {}
 
   ngOnInit() {
     this.addSSHKeyForm = this.formBuilder.group({
@@ -38,7 +35,6 @@ export class AddSshKeyModalComponent implements OnInit {
       .subscribe(
         result => {
           NotificationActions.success('Success', `SSH key ${name} added successfully`);
-          //this.newSshKey.emit(result.metadata.name)
           this.dialogRef.close(result);
         });
   }
@@ -49,7 +45,7 @@ export class AddSshKeyModalComponent implements OnInit {
     const keyName = key.match(/^\S+ \S+ (.+)\n?$/);
 
     if (keyName && keyName.length > 1 && '' === name) {
-      this.addSSHKeyForm.patchValue({name: keyName[1]});
+      this.addSSHKeyForm.patchValue({ name: keyName[1] });
     }
   }
 

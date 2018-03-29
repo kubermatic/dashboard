@@ -1,15 +1,21 @@
 import { InputValidationService } from './../../core/services/input-validation/input-validation.service';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { Component, OnInit, EventEmitter, Output, Input, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, UbuntuSpec, ContainerLinuxSpec, NodeVersionInfo, NodeContainerRuntimeInfo } from './../../shared/entity/NodeEntity';
-import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
-import { AWSNodeSpecV2 } from 'app/shared/entity/node/AWSNodeSpec';
+import {
+  NodeCloudSpec,
+  NodeContainerRuntimeInfo,
+  NodeSpec,
+  NodeVersionInfo,
+  OperatingSystemSpec,
+  UbuntuSpec
+} from './../../shared/entity/NodeEntity';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { WizardActions } from '../../redux/actions/wizard.actions';
+import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
+import { AWSNodeSpec } from '../../shared/entity/node/AWSNodeSpec';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -18,18 +24,16 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 })
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<NodeSpec> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public awsNodeForm: FormGroup;
   public nodeSize: any[] = NodeInstanceFlavors.AWS;
-  public nodeSpec: NodeCreateSpec;
-  private subscriptions: Subscription[] = [];
-
+  public nodeSpec: NodeSpec;
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
-
   @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
   public nodeForm: any;
+  private subscriptions: Subscription[] = [];
 
   constructor(private formBuilder: FormBuilder,
               private ngRedux: NgRedux<any>,
@@ -89,16 +93,16 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
         node_count: this.awsNodeForm.controls['node_count'].value,
         ami: this.awsNodeForm.controls['ami'].value,
         aws_nas: this.awsNodeForm.controls['aws_nas'].value
-       },
+      },
       this.awsNodeForm.valid
     );
 
     if (this.nodeForm) {
       if (this.awsNodeForm.valid) {
-        const nodeSpec = new NodeCreateSpec(
+        const nodeSpec = new NodeSpec(
           new NodeCloudSpec(
             null,
-            new AWSNodeSpecV2(
+            new AWSNodeSpec(
               this.nodeForm.node_size,
               this.nodeForm.root_size,
               'gp2',
@@ -118,11 +122,9 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
           )
         );
 
-        this.nodeSpecChanges.emit({
-          nodeSpec
-        });
+        this.nodeSpecChanges.emit(nodeSpec);
+        this.formChanges.emit(this.awsNodeForm);
       }
-      this.formChanges.emit(this.awsNodeForm);
     }
   }
 

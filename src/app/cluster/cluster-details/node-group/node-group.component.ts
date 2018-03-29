@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { NodeEntityV2 } from '../../../shared/entity/NodeEntity';
-import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { Component, Input, OnInit } from '@angular/core';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-node-group',
@@ -11,14 +12,13 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 })
 
 export class NodeGroupComponent implements OnInit {
-  @Input() nodes: NodeEntityV2[];
-  @Input() clusterName: string;
+  @Input() nodes: NodeEntity[];
+  @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  @Input() nodeProvider: string;
-  public conditionsMessage: string = '';
-  public nodeRemoval: boolean = false;
-  public node: NodeEntityV2;
-  // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
+
+  public conditionsMessage = '';
+  public nodeRemoval = false;
+  public node: NodeEntity;
   public stateOfTheAccordion: any = [];
 
   public config: MatDialogConfig = {
@@ -38,7 +38,8 @@ export class NodeGroupComponent implements OnInit {
     }
   };
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {
+  }
 
   ngOnInit() {
   }
@@ -55,7 +56,7 @@ export class NodeGroupComponent implements OnInit {
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
-    dialogRef.componentInstance.clusterName = this.clusterName;
+    dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
 
     dialogRef.afterClosed().subscribe(result => {
@@ -123,7 +124,7 @@ export class NodeGroupComponent implements OnInit {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  public getNodeState(node: NodeEntityV2): boolean {
+  public getNodeState(node: NodeEntity): boolean {
     return node.metadata.annotations['node.k8s.io/state'] === 'running' ? true : false;
   }
 }

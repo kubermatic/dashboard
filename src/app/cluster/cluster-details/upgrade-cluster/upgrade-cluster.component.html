@@ -10,8 +10,8 @@
     <div class="mat-dialog-content">
       <mat-form-field>
         <mat-select class="top-bottom-distance" [(ngModel)]="selectedVersion" placeholder="Upgradable version:">
-          <mat-option *ngFor="let upgradeVersion of data.upgradesList" [value]="upgradeVersion">
-            {{upgradeVersion}}
+          <mat-option *ngFor="let version of possibleVersions" [value]="upgradeVersion">
+            {{version}}
           </mat-option>
         </mat-select>
       </mat-form-field>

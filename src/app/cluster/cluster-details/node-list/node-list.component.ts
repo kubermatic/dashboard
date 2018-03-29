@@ -1,45 +1,42 @@
-import { Component, Input} from '@angular/core';
-import { NodeEntityV2 } from 'app/shared/entity/NodeEntity';
-import { MatDialog, MatDialogRef, MatDialogConfig } from '@angular/material';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
-import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
 
 @Component({
-  selector: 'kubermatic-node',
-  templateUrl: 'node.component.html',
-  styleUrls: ['node.component.scss']
+  selector: 'kubermatic-node-list',
+  templateUrl: 'node-list.component.html',
+  styleUrls: ['node-list.component.scss']
 })
 
-export class NodeComponent {
-  @Input() nodes: NodeEntityV2[];
-  @Input() clusterName: string;
+export class NodeListComponent {
+  @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  @Input() nodeProvider: string;
-  @Input() index: number;
-  @Input() clusterRunning: boolean;
-  // public dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>;
-
+  @Input() nodes: NodeEntity[] = [];
+  @Output() deleteNode = new EventEmitter<NodeEntity>();
   public config: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
-      backdropClass: '',
-      width: '',
-      height: '',
-      position: {
-        top: '',
-        bottom: '',
-        left: '',
-        right: ''
-      },
-      data: {
-        message: 'Jazzy jazz jazz'
-      }
+    disableClose: false,
+    hasBackdrop: true,
+    backdropClass: '',
+    width: '',
+    height: '',
+    position: {
+      top: '',
+      bottom: '',
+      left: '',
+      right: ''
+    },
+    data: {
+      message: 'Jazzy jazz jazz'
+    }
   };
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) {
+  }
 
-  public managedByProvider (node: NodeEntityV2): boolean {
+  public managedByProvider(node: NodeEntity): boolean {
     if (!!node.status.machineName) {
       return true;
     } else {
@@ -47,18 +44,18 @@ export class NodeComponent {
     }
   }
 
-  public deleteNodeDialog(node): void {
+  public deleteNodeDialog(node: NodeEntity): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
-    dialogRef.componentInstance.clusterName = this.clusterName;
+    dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
 
     dialogRef.afterClosed().subscribe(result => {
-      // this.dialogRef = null;
+      this.deleteNode.emit(node);
     });
   }
 
-  public getNodeHealth(node: NodeEntityV2): object {
+  public getNodeHealth(node: NodeEntity): object {
     const green = 'fa fa-circle green';
     const red = 'fa fa-circle-o red';
     const orange = 'fa fa-spin fa-circle-o-notch orange';
@@ -106,7 +103,7 @@ export class NodeComponent {
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  public getAddresses(node: NodeEntityV2): object {
+  public getAddresses(node: NodeEntity): object {
     const addresses = {};
     for (const i in node.status.addresses) {
       if (node.status.addresses[i].type === 'InternalIP') {

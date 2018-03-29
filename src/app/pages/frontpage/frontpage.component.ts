@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '../../core/services';
 import { Router } from '@angular/router';
-import {environment} from '../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 
 @Component({
@@ -12,10 +12,10 @@ import {environment} from '../../../environments/environment';
 export class FrontpageComponent implements OnInit {
   public myStyle: object = {};
   public myParams: object = {};
-  public width: number = 100;
-  public height: number = 100;
+  public width = 100;
+  public height = 100;
   public environment: any = environment;
-  public isAuth: boolean = false;
+  public isAuth = false;
 
 
   constructor(private auth: Auth, private router: Router) {

@@ -1,6 +1,7 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {environment} from '../../../../environments/environment';
+import { Component, Input, OnInit } from '@angular/core';
+import { environment } from '../../../../environments/environment';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-connect',
@@ -8,16 +9,17 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
   styleUrls: ['./cluster-connect.component.scss']
 })
 export class ClusterConnectComponent implements OnInit {
-  @Input() clusterName: string;
+  @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  private restRootV3: string = environment.restRootV3;
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
   public downloadKubeconfigUrl(): string {
     const authorization_token = localStorage.getItem('token');
-    return `${this.restRootV3}/dc/${this.datacenter.spec.seed}/cluster/${this.clusterName}/kubeconfig?token=${authorization_token}`;
+    return `${environment.restRootV3}/dc/${this.datacenter.metadata.name}/cluster/${this.cluster.metadata.name}/kubeconfig?token=${authorization_token}`;
   }
 }

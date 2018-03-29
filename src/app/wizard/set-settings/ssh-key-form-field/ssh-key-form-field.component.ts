@@ -1,6 +1,6 @@
 import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
 import { Observable } from 'rxjs/Observable';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApiService } from 'app/core/services/api/api.service';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -21,15 +21,12 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   public config: MatDialogConfig = {};
   public selectedCloudProviderApiError: string;
   public sshKeyForm: FormGroup;
-  private subscriptions: Subscription[] = [];
-
   @select(['wizard', 'sshKeyForm', 'ssh_keys']) selectedSshKeys$: Observable<string[]>;
   public selectedSshKeys: string[] = [];
-
   @select(['wizard', 'setProviderForm', 'provider']) provider$: Observable<string>;
   public provider: string;
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
+  private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
               private formBuilder: FormBuilder,
@@ -64,7 +61,7 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     }
   }
 
-    public showRequiredFields() {
+  public showRequiredFields() {
     if (this.sshKeyForm.invalid) {
       this.sshKeyForm.get('ssh_keys').markAsTouched();
     }
@@ -80,8 +77,10 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     this.sortedData = data.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
-        case 'name': return this.compare(a.spec.name, b.spec.name, isAsc);
-        default: return 0;
+        case 'name':
+          return this.compare(a.spec.name, b.spec.name, isAsc);
+        default:
+          return 0;
       }
     });
   }
@@ -90,20 +89,12 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  private refreshSSHKeys(): Subscription {
-    return this.api.getSSHKeys().subscribe(result => {
-      this.sshKeys = result;
-      this.sortData({active: 'name', direction: 'asc'});
-      this.sshKeys = this.sortedData;
-    });
-  }
-
   public addSshKeyDialog(): void {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.sshKeyForm.patchValue({ssh_keys: [...this.selectedSshKeys, result.metadata.name]});
+        this.sshKeyForm.patchValue({ ssh_keys: [...this.selectedSshKeys, result.metadata.name] });
         this.refreshSSHKeys();
       }
     });
@@ -112,6 +103,14 @@ export class SshKeyFormFieldComponent implements OnInit, OnDestroy {
   public ngOnDestroy(): void {
     this.subscriptions.forEach(sub => {
       sub.unsubscribe();
+    });
+  }
+
+  private refreshSSHKeys(): Subscription {
+    return this.api.getSSHKeys().subscribe(result => {
+      this.sshKeys = result;
+      this.sortData({ active: 'name', direction: 'asc' });
+      this.sshKeys = this.sortedData;
     });
   }
 

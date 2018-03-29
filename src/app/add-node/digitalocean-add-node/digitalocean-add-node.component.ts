@@ -1,19 +1,22 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
-import { NodeInstanceFlavors } from 'app/shared/model/NodeProviderConstants';
-import { ApiService } from 'app/core/services/api/api.service';
-
-import { Input, EventEmitter, Output, AfterContentInit, OnChanges, OnDestroy, OnInit, Component } from '@angular/core';
+import { AfterContentInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
-
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { NodeCreateSpec, NodeCloudSpec, OperatingSystemSpec, NodeVersionInfo, UbuntuSpec, ContainerLinuxSpec, NodeContainerRuntimeInfo } from 'app/shared/entity/NodeEntity';
-import { DigitaloceanNodeSpecV2 } from 'app/shared/entity/node/DigitialoceanNodeSpec';
-import { InputValidationService } from 'app/core/services/input-validation/input-validation.service';
-import { WizardActions } from 'app/redux/actions/wizard.actions';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
+import { ApiService, InputValidationService } from '../../core/services';
+import {
+  NodeCloudSpec,
+  NodeContainerRuntimeInfo,
+  NodeSpec,
+  NodeVersionInfo,
+  OperatingSystemSpec,
+  UbuntuSpec
+} from '../../shared/entity/NodeEntity';
+import { WizardActions } from '../../redux/actions/wizard.actions';
+import { DigitaloceanNodeSpec } from '../../shared/entity/node/DigitialoceanNodeSpec';
 
 
 @Component({
@@ -24,20 +27,18 @@ import { Subscription } from 'rxjs/Subscription';
 
 export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, OnChanges, OnDestroy {
 
-  @Input() public token: string = '';
+  @Input() public token = '';
   @Input() public connect: string[] = [];
-  @Output() public nodeSpecChanges: EventEmitter<{nodeSpec: NodeCreateSpec}> = new EventEmitter();
+  @Output() public nodeSpecChanges: EventEmitter<NodeSpec> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
 
   public doNodeForm: FormGroup;
-  public nodeSize: any[] =  NodeInstanceFlavors.VOID;
-  private subscriptions: Subscription[] = [];
+  public nodeSize: any[] = NodeInstanceFlavors.VOID;
   public nodeSizeAvailable: boolean;
-
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
-
   @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
   public nodeForm: any;
+  private subscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder,
               private api: ApiService,
@@ -79,7 +80,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
         this.nodeSize = result;
         if (result.standard.length > 0 && result.optimized.length > 0 && this.doNodeForm.controls['node_size'].value === '') {
           const nodeSize = selectedNodeSize ? selectedNodeSize : 's-2vcpu-4gb';
-          this.doNodeForm.patchValue({node_size: nodeSize});
+          this.doNodeForm.patchValue({ node_size: nodeSize });
           this.onChange();
         }
 
@@ -121,9 +122,9 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
     );
 
     if (this.nodeForm) {
-      const nodeSpec = new NodeCreateSpec(
+      const nodeSpec = new NodeSpec(
         new NodeCloudSpec(
-          new DigitaloceanNodeSpecV2(
+          new DigitaloceanNodeSpec(
             this.nodeForm.node_size,
             false,
             false,
@@ -144,11 +145,9 @@ export class DigitaloceanAddNodeComponent implements OnInit, AfterContentInit, O
         )
       );
 
-      this.nodeSpecChanges.emit({
-        nodeSpec
-      });
+      this.nodeSpecChanges.emit(nodeSpec);
+      this.formChanges.emit(this.doNodeForm);
     }
-    this.formChanges.emit(this.doNodeForm);
   }
 
   public ngOnDestroy(): void {

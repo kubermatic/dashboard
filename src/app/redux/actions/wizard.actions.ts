@@ -1,78 +1,77 @@
 import { FORM_CHANGED } from '@angular-redux/form';
-import { NodeCreateSpec } from './../../shared/entity/NodeEntity';
-import { CreateClusterModel } from 'app/shared/model/CreateClusterModel';
 import { CloudSpec } from './../../shared/entity/ClusterEntity';
 import { ActionBase } from './action.base';
 import { Action } from '../../shared/interfaces/action.interface';
 
 import { dispatch } from '@angular-redux/store';
-import { CreateNodeModel } from 'app/shared/model/CreateNodeModel';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 
 export class WizardActions extends ActionBase {
-    static readonly className: string = 'WizardActions';
-    static readonly NEXT_STEP = WizardActions.getActType('NEXT_STEP');
-    static readonly PREV_STEP = WizardActions.getActType('PREV_STEP');
-    static readonly GO_TO_STEP = WizardActions.getActType('GO_TO_STEP');
-    static readonly CLEAR_STORE = WizardActions.getActType('CLEAR_STORE');
-    static readonly SET_CLOUD_SPEC = WizardActions.getActType('SET_CLOUD_SPEC');
-    static readonly SET_CLUSTER_MODEL = WizardActions.getActType('SET_CLUSTER_MODEL');
-    static readonly SET_NODE_MODEL = WizardActions.getActType('SET_NODE_MODEL');
-    static readonly SET_VALIDATION = WizardActions.getActType('SET_VALIDATION');
-    static readonly RESET_FORMS = WizardActions.getActType('RESET_FORMS');
-    static readonly CHECK_VALIDATION = WizardActions.getActType('CHECK_VALIDATION');
+  static readonly className: string = 'WizardActions';
+  static readonly NEXT_STEP = WizardActions.getActType('NEXT_STEP');
+  static readonly PREV_STEP = WizardActions.getActType('PREV_STEP');
+  static readonly GO_TO_STEP = WizardActions.getActType('GO_TO_STEP');
+  static readonly CLEAR_STORE = WizardActions.getActType('CLEAR_STORE');
+  static readonly SET_CLOUD_SPEC = WizardActions.getActType('SET_CLOUD_SPEC');
+  static readonly SET_CLUSTER_MODEL = WizardActions.getActType('SET_CLUSTER_MODEL');
+  static readonly SET_NODE_MODEL = WizardActions.getActType('SET_NODE_MODEL');
+  static readonly SET_VALIDATION = WizardActions.getActType('SET_VALIDATION');
+  static readonly RESET_FORMS = WizardActions.getActType('RESET_FORMS');
+  static readonly CHECK_VALIDATION = WizardActions.getActType('CHECK_VALIDATION');
 
-    @dispatch()
-    static nextStep(): Action {
-        return { type: WizardActions.NEXT_STEP };
-    }
+  @dispatch()
+  static nextStep(): Action {
+    return { type: WizardActions.NEXT_STEP };
+  }
 
-    @dispatch()
-    static formChanged(path: Array<string>, value: any, valid: boolean): Action {
-        return { type: FORM_CHANGED, payload: { path, value, valid } };
-    }
+  @dispatch()
+  static formChanged(path: Array<string>, value: any, valid: boolean): Action {
+    return { type: FORM_CHANGED, payload: { path, value, valid } };
+  }
 
-    @dispatch()
-    static prevStep(): Action {
-        return { type: WizardActions.PREV_STEP };
-    }
+  @dispatch()
+  static prevStep(): Action {
+    return { type: WizardActions.PREV_STEP };
+  }
 
-    @dispatch()
-    static goToStep(step: number): Action {
-        return { type: WizardActions.GO_TO_STEP, payload: { step } };
-    }
+  @dispatch()
+  static goToStep(step: number): Action {
+    return { type: WizardActions.GO_TO_STEP, payload: { step } };
+  }
 
-    @dispatch()
-    static clearStore(): Action {
-        return { type: WizardActions.CLEAR_STORE };
-    }
+  @dispatch()
+  static clearStore(): Action {
+    return { type: WizardActions.CLEAR_STORE };
+  }
 
-    @dispatch()
-    static setCloudSpec(cloudSpec: CloudSpec): Action {
-        return { type: WizardActions.SET_CLOUD_SPEC, payload: { cloudSpec } };
-    }
+  @dispatch()
+  static setCloudSpec(cloudSpec: CloudSpec): Action {
+    return { type: WizardActions.SET_CLOUD_SPEC, payload: { cloudSpec } };
+  }
 
-    @dispatch()
-    static setClusterModel(clusterModel: CreateClusterModel): Action {
-        return { type: WizardActions.SET_CLUSTER_MODEL, payload: { clusterModel } };
-    }
+  @dispatch()
+  static setClusterModel(clusterModel: CreateClusterModel): Action {
+    return { type: WizardActions.SET_CLUSTER_MODEL, payload: { clusterModel } };
+  }
 
-    @dispatch()
-    static setNodeModel(nodeModel: CreateNodeModel): Action {
-        return { type: WizardActions.SET_NODE_MODEL, payload: { nodeModel } };
-    }
+  @dispatch()
+  static setNodeModel(nodeModel: NodeEntity): Action {
+    return { type: WizardActions.SET_NODE_MODEL, payload: { nodeModel } };
+  }
 
-    @dispatch()
-    static setValidation(formName: string, isValid: boolean): Action {
-        return { type: WizardActions.SET_VALIDATION, payload: { formName, isValid } };
-    }
+  @dispatch()
+  static setValidation(formName: string, isValid: boolean): Action {
+    return { type: WizardActions.SET_VALIDATION, payload: { formName, isValid } };
+  }
 
-    @dispatch()
-    static checkValidation(): Action {
-        return { type: WizardActions.CHECK_VALIDATION };
-    }
+  @dispatch()
+  static checkValidation(): Action {
+    return { type: WizardActions.CHECK_VALIDATION };
+  }
 
-    @dispatch()
-    static resetForms(): Action {
-        return { type: WizardActions.RESET_FORMS };
-    }
+  @dispatch()
+  static resetForms(): Action {
+    return { type: WizardActions.RESET_FORMS };
+  }
 }

@@ -11,17 +11,19 @@ import { CloudSpec } from 'app/shared/entity/ClusterEntity';
 })
 export class BringyourownClusterComponent implements OnInit {
 
-  constructor(private ngRedux: NgRedux<any>) { }
+  constructor(private ngRedux: NgRedux<any>) {
+  }
 
   ngOnInit() {
-    const byoCloudSpec = new BringYourOwnCloudSpec();
+    const byoCloudSpec: BringYourOwnCloudSpec = {};
     const ruduxStore = this.ngRedux.getState();
     const wizard = ruduxStore.wizard;
     const region = wizard.setDatacenterForm.datacenter.metadata.name;
 
-    WizardActions.setCloudSpec(
-      new CloudSpec(region, null, null, byoCloudSpec, null, null)
-    );
+    WizardActions.setCloudSpec({
+      dc: region,
+      bringyourown: byoCloudSpec,
+    });
 
     setTimeout(() => {
       WizardActions.nextStep();

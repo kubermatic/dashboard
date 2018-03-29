@@ -2,115 +2,130 @@ import { CommonModule } from '@angular/common';
 import { Component, NgModule } from '@angular/core';
 
 @Component({
-    selector: 'kubermatic-navigation-buttons',
-    template: '',
+  selector: 'kubermatic-navigation-buttons',
+  template: '',
 })
-export class NavigationButtonsStubComponent { }
+export class NavigationButtonsStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-progress',
-    template: '',
+  selector: 'kubermatic-progress',
+  template: '',
 })
-export class ProgressStubComponent { }
+export class ProgressStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-summary',
-    template: '',
+  selector: 'kubermatic-summary',
+  template: '',
 })
-export class SummaryStubComponent { }
+export class SummaryStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-provider-cluster',
-    template: '',
+  selector: 'kubermatic-provider-cluster',
+  template: '',
 })
-export class ProviderClusterStubComponent { }
+export class ProviderClusterStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-provider-node',
-    template: '',
+  selector: 'kubermatic-provider-node',
+  template: '',
 })
-export class ProviderNodeStubComponent { }
+export class ProviderNodeStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-ssh-key-form-field',
-    template: '',
+  selector: 'kubermatic-ssh-key-form-field',
+  template: '',
 })
-export class SshKeyFormFieldStubComponent { }
+export class SshKeyFormFieldStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-cluster-openstack',
-    template: '',
+  selector: 'kubermatic-cluster-openstack',
+  template: '',
 })
-export class OpenstackClusterStubComponent { }
+export class OpenstackClusterStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-cluster-digitalocean',
-    template: '',
+  selector: 'kubermatic-cluster-digitalocean',
+  template: '',
 })
-export class DigitaloceanClusterStubComponent { }
+export class DigitaloceanClusterStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-cluster-bringyourown',
-    template: '',
+  selector: 'kubermatic-cluster-bringyourown',
+  template: '',
 })
-export class BringyourownClusterStubComponent { }
+export class BringyourownClusterStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-cluster-aws',
-    template: '',
+  selector: 'kubermatic-cluster-aws',
+  template: '',
 })
-export class AWSClusterStubComponent { }
+export class AWSClusterStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-set-cluster-name',
-    template: '',
+  selector: 'kubermatic-set-cluster-name',
+  template: '',
 })
-export class SetClusterNameStubComponent { }
+export class SetClusterNameStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-set-provider',
-    template: '',
+  selector: 'kubermatic-set-provider',
+  template: '',
 })
-export class SetProviderStubComponent { }
+export class SetProviderStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-set-datacenter',
-    template: '',
+  selector: 'kubermatic-set-datacenter',
+  template: '',
 })
-export class SetDatacenterStubComponent { }
+export class SetDatacenterStubComponent {
+}
 
 @Component({
-    selector: 'kubermatic-set-settings',
-    template: '',
+  selector: 'kubermatic-set-settings',
+  template: '',
 })
-export class SetSettingsStubComponent { }
+export class SetSettingsStubComponent {
+}
 
 const components: any[] = [
-    NavigationButtonsStubComponent,
-    ProgressStubComponent,
-    SummaryStubComponent,
-    ProviderClusterStubComponent,
-    ProviderNodeStubComponent,
-    SshKeyFormFieldStubComponent,
-    OpenstackClusterStubComponent,
-    DigitaloceanClusterStubComponent,
-    BringyourownClusterStubComponent,
-    AWSClusterStubComponent,
-    SetClusterNameStubComponent,
-    SetProviderStubComponent,
-    SetDatacenterStubComponent,
-    SetSettingsStubComponent
+  NavigationButtonsStubComponent,
+  ProgressStubComponent,
+  SummaryStubComponent,
+  ProviderClusterStubComponent,
+  ProviderNodeStubComponent,
+  SshKeyFormFieldStubComponent,
+  OpenstackClusterStubComponent,
+  DigitaloceanClusterStubComponent,
+  BringyourownClusterStubComponent,
+  AWSClusterStubComponent,
+  SetClusterNameStubComponent,
+  SetProviderStubComponent,
+  SetDatacenterStubComponent,
+  SetSettingsStubComponent
 ];
 
 @NgModule({
-    imports: [
-        CommonModule
-    ],
-    declarations: [
-        ...components
-    ],
-    exports: [
-        ...components
-    ]
+  imports: [
+    CommonModule
+  ],
+  declarations: [
+    ...components
+  ],
+  exports: [
+    ...components
+  ]
 })
-export class WizardStubsModule { }
+export class WizardStubsModule {
+}
