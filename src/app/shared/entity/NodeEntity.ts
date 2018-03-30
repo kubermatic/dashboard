@@ -3,6 +3,7 @@ import { DigitaloceanNodeSpec } from './node/DigitialoceanNodeSpec';
 import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
 import { HetznerNodeSpec } from './node/HetznerNodeSpec';
+import { VSphereNodeSpec } from './node/VSphereNodeSpec';
 
 export class NodeEntity {
   metadata: MetadataEntityV2;
@@ -21,6 +22,7 @@ export class NodeCloudSpec {
   aws?: AWSNodeSpec;
   openstack?: OpenstackNodeSpec;
   hetzner?: HetznerNodeSpec;
+  vshpere?: VSphereNodeSpec;
 }
 
 export class OperatingSystemSpec {
