@@ -59,7 +59,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         this.dcService.getDataCenter(cluster.spec.cloud.dc)
           .takeUntil(this.unsubscribe)
           .subscribe(datacenter => {
-            this.nodeDc = new DataCenterEntity(datacenter.metadata, datacenter.spec, datacenter.seed);
+            this.nodeDc = datacenter;
           });
 
         this.api.getSSHKeys()

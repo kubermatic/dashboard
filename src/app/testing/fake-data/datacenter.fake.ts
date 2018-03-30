@@ -1,6 +1,6 @@
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 
-export const datacenterFake1 = {
+export const datacenterFake1: DataCenterEntity = {
   metadata: {
     name: 'do-fra1',
     selfLink: '',
@@ -9,22 +9,19 @@ export const datacenterFake1 = {
     labels: new Map(),
     annotations: new Map()
   },
-  seed: undefined,
+  seed: false,
   spec: {
     seed: 'europe-west3-c',
     country: 'DE',
     digitalocean: {
       region: 'fra1'
     },
-    bringyourown: undefined,
-    openstack: undefined,
-    aws: undefined,
     location: 'Frankfurt',
     provider: 'digitalocean'
   }
 };
 
-export const datacenterFake2 = {
+export const datacenterFake2: DataCenterEntity = {
   metadata: {
     name: 'do-fra1',
     selfLink: '',
@@ -33,22 +30,19 @@ export const datacenterFake2 = {
     labels: new Map(),
     annotations: new Map()
   },
-  seed: undefined,
+  seed: false,
   spec: {
     seed: 'europe-west3-c',
     country: 'DE',
     digitalocean: {
       region: 'fra1'
     },
-    bringyourown: undefined,
-    openstack: undefined,
-    aws: undefined,
     location: 'Frankfurt',
     provider: 'digitalocean'
   }
 };
 
-export const datacenterFake3 = {
+export const datacenterFake3: DataCenterEntity = {
   metadata: {
     name: 'europe-west3-c',
     selfLink: '',
@@ -61,14 +55,14 @@ export const datacenterFake3 = {
   spec: {
     seed: 'europe-west3-c',
     country: 'DE',
-    digitalocean: undefined,
-    bringyourown: undefined,
-    openstack: undefined,
-    aws: undefined,
+    digitalocean: {
+      region: 'ams1',
+    },
     location: 'Frankfurt',
     provider: 'bringyourown'
   }
 };
+
 export const datacentersFake: DataCenterEntity[] = [
   datacenterFake1,
   datacenterFake2,
