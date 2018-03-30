@@ -4,19 +4,22 @@ export class NodeProvider {
   public static readonly BRINGYOUROWN: string = 'bringyourown';
   public static readonly BAREMETAL: string = 'baremetal';
   public static readonly OPENSTACK: string = 'openstack';
+  public static readonly VSPHERE: string = 'vsphere';
 
   public static readonly Supported: string[] = [
     NodeProvider.AWS,
     NodeProvider.DIGITALOCEAN,
     NodeProvider.OPENSTACK,
-    NodeProvider.BRINGYOUROWN
+    NodeProvider.BRINGYOUROWN,
+    NodeProvider.VSPHERE
   ];
 
   public static readonly ProviderNames: Object = {
     [NodeProvider.AWS]: 'Amazon Web Services',
     [NodeProvider.DIGITALOCEAN]: 'Digital Ocean',
     [NodeProvider.OPENSTACK]: 'Openstack',
-    [NodeProvider.BRINGYOUROWN]: 'Bring Your Own'
+    [NodeProvider.BRINGYOUROWN]: 'Bring Your Own',
+    [NodeProvider.VSPHERE]: 'VMware vSphere'
   };
 }
 
