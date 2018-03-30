@@ -5,6 +5,7 @@ import { MetadataEntity } from './MetadataEntity';
 import { OpenstackCloudSpec } from './cloud/OpenstackCloudSpec';
 import { BareMetalCloudSpec } from './cloud/BareMetalCloudSpec';
 import { NodeProvider } from '../model/NodeProviderConstants';
+import { VSphereCloudSpec } from './cloud/VSphereCloudSpec';
 
 export function getProvider(cluster: ClusterEntity): string {
   switch (true) {
@@ -41,6 +42,7 @@ export class CloudSpec {
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
   baremetal?: BareMetalCloudSpec;
+  vsphere?: VSphereCloudSpec;
 }
 
 export class ClusterSpec {
