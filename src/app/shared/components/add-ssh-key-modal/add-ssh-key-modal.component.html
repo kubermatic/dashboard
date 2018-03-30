@@ -14,7 +14,7 @@
 
         <mat-form-field class="km-ssh-key-textarea">
           <textarea id="key" [errorStateMatcher]="inputValidationService" matInput formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Enter the key of your device"></textarea>
-          <mat-hint>Remember to past only the public part of your SSH key and store the private part safely.</mat-hint>
+          <mat-hint>Remember to paste only the public part of your SSH key and store the private part safely.</mat-hint>
           <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
             Key is <strong>required</strong>
           </mat-error>
