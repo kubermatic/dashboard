@@ -3,7 +3,7 @@
        fxLayout.md="column"
        fxLayout.sm="column"
        fxLayout.xs="column"
-       fxLayoutGap="20px" >
+       fxLayoutGap="20px">
     <mat-card fxFlex>
       <mat-card-header>
         <mat-card-title>
@@ -13,8 +13,7 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <kubermatic-provider-cluster></kubermatic-provider-cluster>
-        <kubermatic-ssh-key-form-field></kubermatic-ssh-key-form-field>
+        <kubermatic-cluster-provider-settings [cluster]="cluster"></kubermatic-cluster-provider-settings>
       </mat-card-content>
     </mat-card>
     <mat-card class="node-settings-card" fxFlex>
@@ -26,7 +25,8 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content fxLayout="column">
-        <kubermatic-provider-node></kubermatic-provider-node>
+        <kubermatic-add-node [cluster]="cluster"></kubermatic-add-node>
+        <kubermatic-cluster-ssh-keys [cluster]="cluster" [selectedKeys]="clusterSSHKeys"></kubermatic-cluster-ssh-keys>
       </mat-card-content>
     </mat-card>
   </div>

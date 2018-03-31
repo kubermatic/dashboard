@@ -5,10 +5,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule, MatDialogRef, MatFormFieldModule, MatInputModule, MatToolbarModule } from '@angular/material';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterStub, RouterTestingModule } from './../../../testing/router-stubs';
-
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
-import { ApiService, InputValidationService } from '../../../core/services/index';
+import { ApiService } from '../../../core/services/index';
 import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -39,7 +38,6 @@ describe('AddSshKeyModalComponent', () => {
         AddSshKeyModalComponent
       ],
       providers: [
-        InputValidationService,
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useClass: ApiMockService },
         { provide: Router, useClass: RouterStub }
@@ -50,6 +48,7 @@ describe('AddSshKeyModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddSshKeyModalComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
 
     apiService = fixture.debugElement.injector.get(ApiService);
     dialogRef = fixture.debugElement.injector.get(MatDialogRef);
@@ -60,14 +59,10 @@ describe('AddSshKeyModalComponent', () => {
   }));
 
   it('form invalid when empty', () => {
-    fixture.detectChanges();
-
     expect(component.addSSHKeyForm.valid).toBeFalsy();
   });
 
   it('name field validity', () => {
-    fixture.detectChanges();
-
     let errors = {};
     const name = component.addSSHKeyForm.controls['name'];
     errors = name.errors || {};
@@ -79,8 +74,6 @@ describe('AddSshKeyModalComponent', () => {
   });
 
   it('submitting a form calls addSSHKey method and closes dialog', fakeAsync(() => {
-    fixture.detectChanges();
-
     expect(component.addSSHKeyForm.valid).toBeFalsy();
     component.addSSHKeyForm.controls['name'].setValue('testname');
     component.addSSHKeyForm.controls['key'].setValue('testkey');

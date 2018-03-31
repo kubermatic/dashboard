@@ -1,8 +1,5 @@
-import { Observable } from 'rxjs/Observable';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { select } from '@angular-redux/store/lib/src/decorators/select';
-import { WizardActions } from 'app/redux/actions/wizard.actions';
-import { Subscription } from 'rxjs/Subscription';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Step, StepsService } from '../../core/services/wizard/steps.service';
 
 @Component({
   selector: 'kubermatic-progress',
@@ -10,57 +7,48 @@ import { Subscription } from 'rxjs/Subscription';
   styleUrls: ['progress.component.scss']
 })
 export class ProgressComponent implements OnInit, OnDestroy {
+  @Input() steps: Step[] = [];
+  @Input() currentStepIndex = 0;
+  @Input() currentStep: Step;
 
-  @select(['wizard', 'step']) step$: Observable<number>;
-  public step: number;
-  private subscription: Subscription;
+  constructor(private stepsService: StepsService) { }
 
-  constructor() { }
+  ngOnInit() {}
 
-  ngOnInit() {
-    this.subscription = this.step$.subscribe(step => {
-      this.step = step;
-    });
-  }
+  ngOnDestroy() { }
 
-  public gotoStep(clickStep: number): void {
-    if (this.step >= clickStep) {
-      WizardActions.goToStep(clickStep);
-    }
-  }
-
-  public getIconClass(iconStep: number): string {
+  getIconClass(step: number): string {
     let iconClass = 'fa fa-circle-o-notch fa-spin';
 
-    if (this.step > iconStep) {
+    if (this.currentStepIndex > step) {
       iconClass = 'fa fa-check';
-    } else if (this.step < iconStep) {
+    } else if (this.currentStepIndex < step) {
       iconClass = '';
     }
 
     return iconClass;
   }
 
-  public getTitleClass(step: number): string {
+  getTitleClass(step: number): string {
     let titleClass = '';
 
-    if (this.step < step) {
+    if (this.currentStepIndex < step) {
       titleClass = 'title-unchecked';
     }
     return titleClass;
   }
 
-  public getCurser(curserStep: number): string {
-    let curser = 'default';
+  getCursor(step: number): string {
+    let cursor = 'default';
 
-    if (this.step > curserStep) {
-      curser = 'pointer';
+    if (this.currentStepIndex > step) {
+      cursor = 'pointer';
     }
 
-    return curser;
+    return cursor;
   }
 
-  public ngOnDestroy(): void {
-    this.subscription && this.subscription.unsubscribe();
+  gotoStep(i: number, step: Step) {
+    this.stepsService.changeCurrentStep(i, step);
   }
 }

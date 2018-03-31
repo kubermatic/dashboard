@@ -3,7 +3,6 @@ import { Auth } from '../../core/services';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
-
 @Component({
   selector: 'kubermatic-frontpage',
   templateUrl: './frontpage.component.html',
@@ -16,7 +15,6 @@ export class FrontpageComponent implements OnInit {
   public height = 100;
   public environment: any = environment;
   public isAuth = false;
-
 
   constructor(private auth: Auth, private router: Router) {
   }

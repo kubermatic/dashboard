@@ -1,7 +1,7 @@
 import { nodesFake } from './../fake-data/node.fake';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
-import { SSHKeysFake } from './../fake-data/sshkey.fake';
-import { clusterFake1, clustersFake } from './../fake-data/cluster.fake';
+import { fakeSSHKeys } from './../fake-data/sshkey.fake';
+import { fakeClusters, fakeDigitaloceanCluster } from './../fake-data/cluster.fake';
 import { ClusterEntity } from './../../shared/entity/ClusterEntity';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -11,9 +11,9 @@ import { defer } from 'rxjs/observable/defer';
 
 @Injectable()
 export class ApiMockService {
-  public cluster: ClusterEntity = clusterFake1;
-  public clusters: ClusterEntity[] = clustersFake;
-  public sshKeys: SSHKeyEntity[] = SSHKeysFake;
+  public cluster: ClusterEntity = fakeDigitaloceanCluster;
+  public clusters: ClusterEntity[] = fakeClusters;
+  public sshKeys: SSHKeyEntity[] = fakeSSHKeys;
   public nodes: NodeEntity[] = nodesFake;
 
   constructor() {

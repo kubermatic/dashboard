@@ -15,9 +15,9 @@ import { ClusterDeleteConfirmationComponent } from './cluster-details/cluster-de
 import { NodeDeleteConfirmationComponent } from './cluster-details/node-delete-confirmation/node-delete-confirmation.component';
 import { SharedModule } from '../shared/shared.module';
 import { ClusterRoutingModule } from './cluster-routing.module';
-import { AddNodeModule } from '../add-node/add-node.module';
 import { NodeDeleteConfirmationService } from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
 import { RevokeAdminTokenComponent } from './cluster-details/cluster-secrets/revoke-admin-token/revoke-admin-token.component';
+import { AddNodeModule } from '../add-node/add-node.module';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -42,7 +42,7 @@ const entryComponents: any[] = [
   imports: [
     SharedModule,
     ClusterRoutingModule,
-    AddNodeModule
+    AddNodeModule,
   ],
   declarations: [
     ...components,

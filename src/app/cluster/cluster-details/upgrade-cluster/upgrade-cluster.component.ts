@@ -1,9 +1,8 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Component, Input, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ApiService } from '../../../core/services';
-
 
 @Component({
   selector: 'kubermatic-upgrade-cluster',

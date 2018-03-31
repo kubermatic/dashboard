@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { environment } from './../../../../environments/environment';
 import { Auth } from '../auth/auth.service';
-import { DataCenterEntity } from 'app/shared/entity/DatacenterEntity';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 
 @Injectable()
 export class DatacenterService {
@@ -40,15 +40,15 @@ export class DatacenterService {
     });
   }
 
-  getSeedDataCenters(): Observable<string[]> {
-    const dcNames: string[] = [];
+  getSeedDataCenters(): Observable<DataCenterEntity[]> {
+    const datacenters: DataCenterEntity[] = [];
     return this.getDataCenters().map(res => {
       for (const i in res) {
         if (res[i].seed === true) {
-          dcNames.push(res[i].metadata.name);
+          datacenters.push(res[i]);
         }
       }
-      return dcNames;
+      return datacenters;
     });
   }
 

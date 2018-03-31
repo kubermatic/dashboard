@@ -1,31 +1,18 @@
-<kubermatic-add-node-form [formGroup]="osNodeForm" (change)="onChange()" class="openstack-form">
-  <mat-form-field fxFlex>
-    <input id="node_count_osNodeForm" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count"
-      min="1" max="20" type="number" placeholder="Quantity of Nodes*:" title="node_count" autocomplete="off">
-    <mat-error *ngIf="osNodeForm.controls.node_count.hasError('min') && !osNodeForm.controls.node_count.hasError('required')">
-      Quantity of Nodes must be minimum <strong>1</strong>
-    </mat-error>
-    <mat-error *ngIf="osNodeForm.controls.node_count.hasError('required')">
-      Quantity of Nodes is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
+<form [formGroup]="osNodeForm" fxLayout="column">
+  <div fxFlex class="mat-select-container">
+    <mat-form-field>
+      <mat-select placeholder="Flavor*:" formControlName="flavor">
+        <mat-option *ngIf="!loadingFlavors && (cloudSpec.openstack.username === '' || cloudSpec.openstack.password === '' || cloudSpec.openstack.tenant === '' || cloudSpec.openstack.domain === '')" [value]="0">Please enter your credentials first!</mat-option>
+        <mat-option *ngIf="loadingFlavors" [value]="0">Loading sizes...</mat-option>
 
-  <mat-form-field>
-    <mat-select fxFlex [errorStateMatcher]="inputValidationService" class="mat-select-content" placeholder="Node Size*:" name="node_size" formControlName="node_size" (change)="onChange()">
-      <mat-option *ngIf="!nodeSize.length" [value]="">Please add your Open Stack credentials first!</mat-option>
-      <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
-        {{size}}
-      </mat-option>
-    </mat-select>
-    <mat-error *ngIf="osNodeForm.controls.node_size.hasError('required')">
-      Node size is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
+        <mat-option *ngFor="let flavor of flavors" [value]="flavor.slug">
+        {{flavor.slug}} - {{ flavor.memory / 1024 }} GB RAM, {{ flavor.vcpus }} CPU{{ (flavor.vcpus!=1) ? 's' : '' }}, {{ flavor.disk }} GB Disk
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
   <mat-form-field fxFlex>
-    <input id="os_node_image" [errorStateMatcher]="inputValidationService" matInput formControlName="os_node_image" placeholder="Image (Ubuntu only)*" autocomplete="off">
-    <mat-error *ngIf="osNodeForm.controls.os_node_image.hasError('required')">
-      Image is <strong>required</strong>
-    </mat-error>
+    <input matInput formControlName="image" placeholder="Image:">
   </mat-form-field>
-</kubermatic-add-node-form>
+</form>

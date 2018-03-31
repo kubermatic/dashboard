@@ -1,111 +1,83 @@
-import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { CustomValidators } from 'ng2-validation';
-import { select } from '@angular-redux/store';
-import { Observable } from 'rxjs/Observable';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
-import { WizardActions } from '../../redux/actions/wizard.actions';
-import { NodeSpec } from '../../shared/entity/NodeEntity';
-import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
-import { InputValidationService } from '../../core/services';
-
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { NodeProviderData } from '../../shared/model/NodeSpecChange';
+import { ApiService } from '../../core/services';
+import { CloudSpec } from '../../shared/entity/ClusterEntity';
+import { OpenstackFlavor } from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 
 @Component({
   selector: 'kubermatic-openstack-add-node',
   templateUrl: './openstack-add-node.component.html',
   styleUrls: ['./openstack-add-node.component.scss']
 })
-export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
-
-  @Output() public nodeSpecChanges: EventEmitter<NodeSpec> = new EventEmitter();
-  @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
-
-  public osNodeForm: FormGroup;
-  public nodeSize: any[] = NodeInstanceFlavors.Openstack;
-  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
-  @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
-  public nodeForm: any;
+export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() public cloudSpec: CloudSpec;
+  public flavors: OpenstackFlavor[] = [];
+  public loadingFlavors = false;
+  public osNodeForm: FormGroup = new FormGroup({
+    flavor: new FormControl(0, Validators.required),
+    image: new FormControl('', Validators.required),
+  });
   private subscriptions: Subscription[] = [];
 
-  constructor(private fb: FormBuilder,
-              public inputValidationService: InputValidationService,
-              private ngRedux: NgRedux<any>) { }
+  constructor(private addNodeService: AddNodeService, private api: ApiService) { }
 
-  ngOnInit() {
-    const subIsChecked = this.isChecked$.subscribe(isChecked => {
-      isChecked && this.showRequiredFields();
-    });
-    this.subscriptions.push(subIsChecked);
+  ngOnInit(): void {
+    this.subscriptions.push(this.osNodeForm.valueChanges.subscribe(data => {
+      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    }));
 
-    const subNodeForm = this.nodeForm$.subscribe(nodeForm => {
-      nodeForm && (this.nodeForm = nodeForm);
-    });
-    this.subscriptions.push(subNodeForm);
-
-    this.osNodeForm = this.fb.group({
-      os_node_image: ['', [<any>Validators.required]],
-      node_count: [3, [<any>Validators.required, CustomValidators.min(1)]],
-      node_size: ['m1.medium', [<any>Validators.required]],
-    });
-
-    if (this.nodeForm) {
-      const formValue = {
-        os_node_image: this.nodeForm.os_node_image,
-        node_count: this.nodeForm.node_count,
-        node_size: this.nodeForm.node_size
-      };
-
-      this.osNodeForm.setValue(formValue);
-    }
-
-    this.onChange();
+    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this.loadFlavors();
   }
 
-  public showRequiredFields() {
-    if (this.osNodeForm.invalid) {
-      for (const i in this.osNodeForm.controls) {
-        if (this.osNodeForm.controls.hasOwnProperty(i)) {
-          this.osNodeForm.get(i).markAsTouched();
-        }
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
       }
     }
   }
 
-  public onChange() {
-    WizardActions.formChanged(
-      ['wizard', 'nodeForm'],
-      {
-        os_node_image: this.osNodeForm.controls['os_node_image'].value,
-        node_count: this.osNodeForm.controls['node_count'].value,
-        node_size: this.osNodeForm.controls['node_size'].value,
-      },
-      this.osNodeForm.valid
-    );
-
-    if (this.nodeForm) {
-      const nodeSpec: NodeSpec = {
-        cloud: {
-          openstack: {
-            image: this.nodeForm.os_node_image,
-            flavor: this.nodeForm.node_size,
-          },
-        },
-        operatingSystem: {
-          ubuntu: {
-            distUpgradeOnBoot: false,
-          },
-        },
-      };
-
-      this.nodeSpecChanges.emit(nodeSpec);
-      this.formChanges.emit(this.osNodeForm);
-    }
+  ngOnChanges(changes: SimpleChanges) {
+    this.loadFlavors();
   }
 
-  public ngOnDestroy(): void {
-    this.subscriptions.forEach(sub => {
-      sub.unsubscribe();
-    });
+  getNodeProviderData(): NodeProviderData {
+    return {
+      spec: {
+        openstack: {
+          flavor: this.osNodeForm.controls.flavor.value,
+          image: this.osNodeForm.controls.image.value,
+        },
+      },
+      valid: this.osNodeForm.valid,
+    };
+  }
+
+  public loadFlavors() {
+    if (
+      this.cloudSpec.openstack.username === '' ||
+      this.cloudSpec.openstack.password === '' ||
+      this.cloudSpec.openstack.tenant === '' ||
+      this.cloudSpec.openstack.domain === '' ||
+      this.flavors.length > 0) {
+      return;
+    }
+
+    this.loadingFlavors = true;
+    this.subscriptions.push(this.api.getOpenStackFlavors(this.cloudSpec.openstack.username, this.cloudSpec.openstack.password, this.cloudSpec.openstack.tenant, this.cloudSpec.openstack.domain, this.cloudSpec.dc).subscribe(
+      flavors => {
+        const sortedFlavors = flavors.sort((a, b) => {
+          return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
+        });
+        this.flavors = sortedFlavors;
+        if (sortedFlavors.length > 0 && this.osNodeForm.controls.flavor.value !== '0') {
+          this.osNodeForm.controls.flavor.setValue(sortedFlavors[0].slug);
+        }
+        this.loadingFlavors = false;
+      }));
   }
 }

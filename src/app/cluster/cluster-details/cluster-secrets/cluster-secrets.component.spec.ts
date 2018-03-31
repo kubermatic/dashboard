@@ -7,7 +7,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ClusterSecretsComponent } from './cluster-secrets.component';
 
-
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,

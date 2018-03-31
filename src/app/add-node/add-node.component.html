@@ -1,18 +1,11 @@
-<kubermatic-aws-add-node
-  *ngIf="provider && provider.name === 'aws'"
-  (nodeSpecChanges)="changeNodeModel($event)"
-  (formChanges)="changeForm($event)">
-</kubermatic-aws-add-node>
+<form [formGroup]="nodeForm" fxLayout="column">
+  <mat-form-field fxFlex>
+    <input matInput formControlName="count" min="1" type="number" placeholder="Number of nodes*:" autocomplete="off">
+  </mat-form-field>
+</form>
 
-<kubermatic-digitalocean-add-node
-  *ngIf="provider && provider.name === 'digitalocean'"
-  (nodeSpecChanges)="changeNodeModel($event)"
-  (formChanges)="changeForm($event)"
-  [token]="provider.payload?.token">
-</kubermatic-digitalocean-add-node>
+<kubermatic-aws-add-node *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud"></kubermatic-aws-add-node>
 
-<kubermatic-openstack-add-node
-  *ngIf="provider && provider.name === 'openstack'"
-  (nodeSpecChanges)="changeNodeModel($event)"
-  (formChanges)="changeForm($event)">
-</kubermatic-openstack-add-node>
+<kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud"></kubermatic-digitalocean-add-node>
+
+<kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-add-node>
