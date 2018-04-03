@@ -3,6 +3,7 @@ import { DigitaloceanNodeSpec } from './node/DigitialoceanNodeSpec';
 import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
 import { HetznerNodeSpec } from './node/HetznerNodeSpec';
+import { VSphereNodeSpec } from './node/VSphereNodeSpec';
 
 export class NodeEntity {
   metadata: MetadataEntityV2;
@@ -13,73 +14,38 @@ export class NodeEntity {
 export class NodeSpec {
   cloud: NodeCloudSpec;
   operatingSystem: OperatingSystemSpec;
-  versions: NodeVersionInfo;
-
-  constructor(cloud: NodeCloudSpec, operatingSystem: OperatingSystemSpec, versions: NodeVersionInfo) {
-    this.cloud = cloud;
-    this.operatingSystem = operatingSystem;
-    this.versions = versions;
-  }
+  versions?: NodeVersionInfo;
 }
 
 export class NodeCloudSpec {
-  digitalocean: DigitaloceanNodeSpec;
-  aws: AWSNodeSpec;
-  openstack: OpenstackNodeSpec;
-  hetzner: HetznerNodeSpec;
-
-  constructor(digitalocean: DigitaloceanNodeSpec, aws: AWSNodeSpec, openstack: OpenstackNodeSpec, hetzner: HetznerNodeSpec) {
-    this.digitalocean = digitalocean;
-    this.aws = aws;
-    this.openstack = openstack;
-    this.hetzner = hetzner;
-  }
+  digitalocean?: DigitaloceanNodeSpec;
+  aws?: AWSNodeSpec;
+  openstack?: OpenstackNodeSpec;
+  hetzner?: HetznerNodeSpec;
+  vshpere?: VSphereNodeSpec;
 }
 
 export class OperatingSystemSpec {
-  ubuntu: UbuntuSpec;
-  containerLinux: ContainerLinuxSpec;
-
-  constructor(ubuntu: UbuntuSpec, containerLinux: ContainerLinuxSpec) {
-    this.ubuntu = ubuntu;
-    this.containerLinux = containerLinux;
-  }
+  ubuntu?: UbuntuSpec;
+  containerLinux?: ContainerLinuxSpec;
 }
 
 export class UbuntuSpec {
   distUpgradeOnBoot: boolean;
-
-  constructor(distUpgradeOnBoot: boolean) {
-    this.distUpgradeOnBoot = distUpgradeOnBoot;
-  }
 }
 
 export class ContainerLinuxSpec {
   disableAutoUpdate: boolean;
-
-  constructor(disableAutoUpdate: boolean) {
-    this.disableAutoUpdate = disableAutoUpdate;
-  }
 }
 
 export class NodeVersionInfo {
   kubelet: string;
   containerRuntime: NodeContainerRuntimeInfo;
-
-  constructor(kubelet: string, containerRuntime: NodeContainerRuntimeInfo) {
-    this.kubelet = kubelet;
-    this.containerRuntime = containerRuntime;
-  }
 }
 
 export class NodeContainerRuntimeInfo {
   name: string;
   version: string;
-
-  constructor(name: string, version: string) {
-    this.name = name;
-    this.version = version;
-  }
 }
 
 export class NodeStatus {

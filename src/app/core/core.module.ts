@@ -20,10 +20,8 @@ import {
   Auth,
   AUTH_PROVIDERS,
   AuthGuard,
-  CreateNodesService,
-  DatacenterService,
+  DatacenterService, InitialNodeDataService,
   InputValidationService,
-  LocalStorageService
 } from './services';
 /* Interceptors */
 import { CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor } from './interceptors';
@@ -47,13 +45,12 @@ const services: any[] = [
   AUTH_PROVIDERS,
   Auth,
   AuthGuard,
-  CreateNodesService,
   DatacenterService,
   InputValidationService,
-  LocalStorageService,
   ClusterNameGenerator,
   SidenavService,
-  ApiService
+  ApiService,
+  InitialNodeDataService
 ];
 
 const interceptors: any[] = [

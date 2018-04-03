@@ -15,10 +15,8 @@
     <div *ngSwitchCase="false">
       <p style=" color: #0288d1;">You have not added any SSH keys. Please add one first.</p>
     </div>
-    <small class="form-text text-muted" >In addition, one SSH key is authorized automatically for the Kubernetes apiserver to provide kubectl logs, port-forward and exec functionality.
-    </small>
     <br>
-    <button style="margin-top: 10px;" mat-button color="primary" (click)="addSshKeyDialog()" mat-raised-button >Add sshKey</button>
+    <button style="margin-top: 10px;" mat-button color="primary" (click)="addSshKeyDialog()" mat-raised-button >Add SSH key</button>
   </div>
   <div class="form-text text-danger" *ngIf="selectedCloudProviderApiError">Connection error: {{ selectedCloudProviderApiError }}</div>
 </form>

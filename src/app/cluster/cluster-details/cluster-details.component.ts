@@ -12,13 +12,14 @@ import { ClusterConnectComponent } from './cluster-connect/cluster-connect.compo
 import { ClusterEntity, getProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ApiService, CreateNodesService, DatacenterService } from '../../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ObservableInput } from 'rxjs/Observable';
+import { NotificationActions } from '../../redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -42,7 +43,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               private router: Router,
               private api: ApiService,
               public dialog: MatDialog,
-              private createNodesService: CreateNodesService,
+              private initialNodeDataService: InitialNodeDataService,
               private dcService: DatacenterService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
@@ -58,7 +59,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         this.dcService.getDataCenter(cluster.spec.cloud.dc)
           .takeUntil(this.unsubscribe)
           .subscribe(datacenter => {
-            this.nodeDc = new DataCenterEntity(datacenter.metadata, datacenter.spec, datacenter.seed);
+            this.nodeDc = datacenter;
           });
 
         this.api.getSSHKeys()
@@ -93,6 +94,33 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .takeUntil(this.unsubscribe)
       .subscribe(cluster => {
         this.reloadClusterNodes();
+      });
+
+    // Initial node creation
+    const initialNodeCreationSub = this.clusterSubject
+      .takeUntil(this.unsubscribe)
+      .subscribe(cluster => {
+        const data = this.initialNodeDataService.getInitialNodeData(cluster);
+        if (data == null) {
+          if (initialNodeCreationSub) {
+            initialNodeCreationSub.unsubscribe();
+            return;
+          }
+        }
+
+        if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController) {
+          const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
+          for (let i = 0; i < data.nodeCount; i++) {
+            createNodeObservables.push(this.api.createClusterNode(cluster, data.node, this.datacenter.metadata.name));
+          }
+          Observable.combineLatest(createNodeObservables)
+            .takeUntil(this.unsubscribe)
+            .subscribe((createdNodes: NodeEntity[]): void => {
+              NotificationActions.success('Success', `Node(s) successfully created`);
+              this.reloadClusterNodes();
+            });
+          this.initialNodeDataService.clearInitialNodeData(cluster);
+        }
       });
 
     Observable.combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName))

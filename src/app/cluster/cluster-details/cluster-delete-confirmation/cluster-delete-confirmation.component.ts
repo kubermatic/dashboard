@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ApiService, CreateNodesService } from '../../../core/services';
+import { ApiService, InitialNodeDataService } from '../../../core/services';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 
 @Component({
@@ -20,7 +20,7 @@ export class ClusterDeleteConfirmationComponent implements DoCheck {
   constructor(private router: Router,
               private api: ApiService,
               private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
-              private createNodesService: CreateNodesService) {
+              private initialNodeDataService: InitialNodeDataService) {
   }
 
   ngDoCheck(): void {
@@ -37,7 +37,7 @@ export class ClusterDeleteConfirmationComponent implements DoCheck {
 
   deleteCluster() {
     this.api.deleteCluster(this.cluster.metadata.name, this.datacenter.metadata.name).subscribe(result => {
-      this.createNodesService.preventCreatingInitialClusterNodes();
+      this.initialNodeDataService.clearInitialNodeData(this.cluster);
       NotificationActions.success('Success', `Cluster is being deleted`);
     });
     this.dialogRef.close(true);

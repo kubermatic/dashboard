@@ -2,20 +2,12 @@ import { InputValidationService } from './../../core/services/input-validation/i
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  NodeCloudSpec,
-  NodeContainerRuntimeInfo,
-  NodeSpec,
-  NodeVersionInfo,
-  OperatingSystemSpec,
-  UbuntuSpec
-} from './../../shared/entity/NodeEntity';
+import { NodeSpec } from './../../shared/entity/NodeEntity';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { WizardActions } from '../../redux/actions/wizard.actions';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
-import { AWSNodeSpec } from '../../shared/entity/node/AWSNodeSpec';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -99,28 +91,22 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
     if (this.nodeForm) {
       if (this.awsNodeForm.valid) {
-        const nodeSpec = new NodeSpec(
-          new NodeCloudSpec(
-            null,
-            new AWSNodeSpec(
-              this.nodeForm.node_size,
-              this.nodeForm.root_size,
-              'gp2',
-              this.nodeForm.ami,
-              null
-            ),
-            null,
-            null
-          ),
-          new OperatingSystemSpec(
-            new UbuntuSpec(false),
-            null
-          ),
-          new NodeVersionInfo(
-            null,
-            new NodeContainerRuntimeInfo(null, null)
-          )
-        );
+        const nodeSpec: NodeSpec = {
+          cloud: {
+            aws: {
+              instanceType: this.nodeForm.node_size,
+              diskSize: this.nodeForm.root_size,
+              volumeType: 'gp2',
+              ami: this.nodeForm.ami,
+              tags: new Map<string, string>(),
+            },
+          },
+          operatingSystem: {
+            ubuntu: {
+              distUpgradeOnBoot: false,
+            },
+          },
+        };
 
         this.nodeSpecChanges.emit(nodeSpec);
         this.formChanges.emit(this.awsNodeForm);
