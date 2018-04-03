@@ -1,3 +1,3 @@
-export class DigitialoceanDatacenterSpec {
+export class DigitaloceanDatacenterSpec {
   region: string;
 }
