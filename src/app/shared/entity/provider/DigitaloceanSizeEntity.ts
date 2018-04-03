@@ -1,4 +1,5 @@
-export interface Size {
+
+export interface DigitaloceanSize {
   slug: string;
   memory: number;
   vcpus: number;
@@ -14,7 +15,9 @@ export interface Meta {
   total: number;
 }
 
-export interface DropletSizeResponseEntity {
-  sizes: Size[];
+
+export interface DigitaloceanSizeResponseEntity {
+  sizes: DigitaloceanSize[];
+
   meta: Meta;
 }

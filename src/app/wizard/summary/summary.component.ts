@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
-import { Size } from '../../shared/entity/digitalocean/DropletSizeEntity';
+import { DigitaloceanSize } from '../../shared/entity/provider/DigitaloceanSizeEntity';
 import { Subscription } from 'rxjs/Subscription';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { ApiService } from '../../core/services';
@@ -15,6 +15,7 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss']
 })
+
 export class SummaryComponent implements OnInit, OnDestroy {
 
   public providerNames = NodeProvider.ProviderNames;
@@ -29,7 +30,8 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @select(['wizard', 'nodeForm', 'node_count']) nodeCount$: Observable<number>;
   public nodeCount: number;
   public sshKeysList: string[] = [];
-  public doOptimizedSizes: Size[];
+
+  public doOptimizedSizes: DigitaloceanSize[];
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService) { }
@@ -42,6 +44,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
         const nodeModel = data[2];
         const clusterModel = data[3];
         const nodeCount = data[4];
+
 
         provider && (this.provider = provider);
         region && (this.region = region);

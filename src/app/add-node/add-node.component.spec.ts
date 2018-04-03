@@ -1,9 +1,7 @@
 import { SharedModule } from '../shared/shared.module';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { AddNodeComponent } from './add-node.component';
 import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
 import { AddNodeFormComponent } from './add-node-form/add-node-form.component';
@@ -12,6 +10,8 @@ import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-no
 import { InputValidationService } from '../core/services/index';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
+import { ApiService } from '../core/services/api/api.service';
+import { ApiMockService } from '../testing/services/api-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -37,7 +37,8 @@ describe('AddNodeComponent', () => {
         AddNodeFormComponent
       ],
       providers: [
-        InputValidationService
+        InputValidationService,
+        { provide: ApiService, useClass: ApiMockService }
       ],
     }).compileComponents();
   });
@@ -73,7 +74,21 @@ describe('AddNodeComponent', () => {
     expect(deAwsForm).not.toBeNull('should render aws form');
 
     component.provider = {
-      name: 'openstack'
+      name: 'openstack',
+      payload: {
+        cloudSpec: {
+          dc: 'openstack-dc',
+          openstack: {
+            username: '',
+            password: '',
+            tenant: '',
+            domain: '',
+            network: '',
+            securityGroups: '',
+            floatingIpPool: ''
+          }
+        }
+      }
     };
     spyGetState.and.returnValue({
       wizard: {
