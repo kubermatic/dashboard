@@ -1,0 +1,13 @@
+<form [formGroup]="vsphereNodeForm" fxLayout="column">
+  <div fxFlex class="mat-select-container">
+    <mat-form-field fxFlex>
+      <input matInput formControlName="cpu" min="1" type="number" placeholder="Number of cpu's*:" autocomplete="off">
+    </mat-form-field>
+    <mat-form-field fxFlex>
+      <input matInput formControlName="memory" min="512" type="number" placeholder="Memory in MB*:" autocomplete="off">
+    </mat-form-field>
+    <mat-form-field fxFlex>
+      <input matInput formControlName="disk" min="10" type="number" placeholder="Disk size in GB*:" autocomplete="off">
+    </mat-form-field>
+  </div>
+</form>

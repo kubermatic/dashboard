@@ -24,6 +24,7 @@ import { HetznerClusterSettingsComponent } from './provider-settings/hetzner/het
 import { VSphereClusterSettingsComponent } from './provider-settings/vsphere/vsphere.component';
 import Spy = jasmine.Spy;
 import { HetznerAddNodeComponent } from '../../add-node/hetzner-add-node/hetzner-add-node.component';
+import { VSphereAddNodeComponent } from '../../add-node/vsphere-add-node/vsphere-add-node.component';
 
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
@@ -57,6 +58,7 @@ describe('SetSettingsComponent', () => {
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
         HetznerAddNodeComponent,
+        VSphereAddNodeComponent,
       ],
       providers: [
         AddNodeService,

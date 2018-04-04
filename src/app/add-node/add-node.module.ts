@@ -7,6 +7,7 @@ import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-no
 import { ReactiveFormsModule } from '@angular/forms';
 import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
 import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule } from '@angular/material';
+import { VSphereAddNodeComponent } from './vsphere-add-node/vsphere-add-node.component';
 
 @NgModule({
   imports: [
@@ -23,6 +24,7 @@ import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule } 
     DigitaloceanAddNodeComponent,
     OpenstackAddNodeComponent,
     HetznerAddNodeComponent,
+    VSphereAddNodeComponent,
   ],
   exports: [
     AddNodeComponent

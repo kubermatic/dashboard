@@ -36,6 +36,7 @@ import Spy = jasmine.Spy;
 import { HetznerClusterSettingsComponent } from './set-settings/provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './set-settings/provider-settings/vsphere/vsphere.component';
 import { HetznerAddNodeComponent } from '../add-node/hetzner-add-node/hetzner-add-node.component';
+import { VSphereAddNodeComponent } from '../add-node/vsphere-add-node/vsphere-add-node.component';
 
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
@@ -75,6 +76,7 @@ describe('WizardComponent', () => {
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
         HetznerAddNodeComponent,
+        VSphereAddNodeComponent,
         SetClusterNameComponent,
         SetProviderComponent,
         SetDatacenterComponent,
