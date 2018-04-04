@@ -16,6 +16,7 @@ import { BringyourownClusterSettingsComponent } from './set-settings/provider-se
 import { ClusterProviderSettingsComponent } from './set-settings/provider-settings/provider-settings.component';
 import { ClusterSSHKeysComponent } from './set-settings/ssh-keys/cluster-ssh-keys.component';
 import { AddNodeModule } from '../add-node/add-node.module';
+import { HetznerClusterSettingsComponent } from './set-settings/provider-settings/hetzner/hetzner.component';
 
 const components: any[] = [
   WizardComponent,
@@ -31,6 +32,7 @@ const components: any[] = [
   DigitaloceanClusterSettingsComponent,
   AWSClusterSettingsComponent,
   BringyourownClusterSettingsComponent,
+  HetznerClusterSettingsComponent,
 ];
 
 @NgModule({

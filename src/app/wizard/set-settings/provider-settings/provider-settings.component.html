@@ -9,3 +9,6 @@
 
 <kubermatic-bringyourown-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.bringyourown">
 </kubermatic-bringyourown-cluster-settings>
+
+<kubermatic-hetzner-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.hetzner">
+</kubermatic-hetzner-cluster-settings>
