@@ -32,7 +32,7 @@ describe('HetznerClusterSettingsComponent', () => {
     fixture = TestBed.createComponent(HetznerClusterSettingsComponent);
     component = fixture.componentInstance;
     component.cluster = fakeHetznerCluster;
-    component.cluster.spec.cloud.digitalocean.token = '';
+    component.cluster.spec.cloud.hetzner.token = '';
     fixture.detectChanges();
   });
 

@@ -20,6 +20,8 @@ import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake
 import { asyncData } from '../../testing/services/api-mock.service';
 import { ApiService } from '../../core/services';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
+import { HetznerClusterSettingsComponent } from './provider-settings/hetzner/hetzner.component';
+import { VSphereClusterSettingsComponent } from './provider-settings/vsphere/vsphere.component';
 import Spy = jasmine.Spy;
 
 describe('SetSettingsComponent', () => {
@@ -47,6 +49,8 @@ describe('SetSettingsComponent', () => {
         AWSClusterSettingsComponent,
         OpenstackClusterSettingsComponent,
         BringyourownClusterSettingsComponent,
+        HetznerClusterSettingsComponent,
+        VSphereClusterSettingsComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
@@ -55,7 +59,7 @@ describe('SetSettingsComponent', () => {
       providers: [
         AddNodeService,
         WizardService,
-        { provide: ApiService, useValue: apiMock },
+        {provide: ApiService, useValue: apiMock},
       ],
     }).compileComponents();
   }));

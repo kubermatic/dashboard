@@ -33,6 +33,8 @@ import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { StepsService } from '../core/services/wizard/steps.service';
 import { ClusterNameGenerator } from '../core/util/name-generator.service';
 import Spy = jasmine.Spy;
+import { HetznerClusterSettingsComponent } from './set-settings/provider-settings/hetzner/hetzner.component';
+import { VSphereClusterSettingsComponent } from './set-settings/provider-settings/vsphere/vsphere.component';
 
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
@@ -65,6 +67,8 @@ describe('WizardComponent', () => {
         AWSClusterSettingsComponent,
         OpenstackClusterSettingsComponent,
         BringyourownClusterSettingsComponent,
+        HetznerClusterSettingsComponent,
+        VSphereClusterSettingsComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,

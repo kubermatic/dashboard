@@ -12,3 +12,6 @@
 
 <kubermatic-hetzner-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.hetzner">
 </kubermatic-hetzner-cluster-settings>
+
+<kubermatic-vsphere-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.vsphere">
+</kubermatic-vsphere-cluster-settings>

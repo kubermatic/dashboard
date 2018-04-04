@@ -10,6 +10,8 @@ import { OpenstackClusterSettingsComponent } from './openstack/openstack.compone
 import { BringyourownClusterSettingsComponent } from './bringyourown/bringyourown.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
+import { HetznerClusterSettingsComponent } from './hetzner/hetzner.component';
+import { VSphereClusterSettingsComponent } from './vsphere/vsphere.component';
 
 describe('ClusterProviderSettingsComponent', () => {
   let fixture: ComponentFixture<ClusterProviderSettingsComponent>;
@@ -30,6 +32,8 @@ describe('ClusterProviderSettingsComponent', () => {
         AWSClusterSettingsComponent,
         OpenstackClusterSettingsComponent,
         BringyourownClusterSettingsComponent,
+        HetznerClusterSettingsComponent,
+        VSphereClusterSettingsComponent,
       ],
       providers: [
         WizardService,
