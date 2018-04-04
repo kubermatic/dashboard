@@ -1,60 +1,29 @@
-<kubermatic-add-node-form [formGroup]="awsNodeForm" (change)="onChange()" class="aws-form">
-  <mat-form-field fxFlex>
-    <input id="node_count" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1" max="20" type="number" placeholder="Quantity of Nodes*:" autocomplete="off">
-    <mat-error *ngIf="awsNodeForm.controls.node_count.hasError('min') && !awsNodeForm.controls.node_count.hasError('required')">
-      Quantity of Nodes must be minimum <strong>1</strong>
-    </mat-error>
-    <mat-error *ngIf="awsNodeForm.controls.node_count.hasError('required')">
-      Quantity of Nodes is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
+<form [formGroup]="awsNodeForm" fxLayout="column">
+  <div fxFlex class="mat-select-container">
+    <mat-form-field>
+      <mat-select placeholder="Node Size*:" formControlName="type">
+        <mat-option *ngFor="let type of instanceTypes" [value]="type">
+        {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
   <div fxFlex class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Node Size*:" [errorStateMatcher]="inputValidationService" id="node_size" name="nodeSize" formControlName="node_size" (change)="onChange()">
-        <mat-option *ngIf="!nodeSize.length" [value]="">Please add your AWS credentials first!</mat-option>
-        <mat-option *ngFor="let size of nodeSize; let i = index;" [value]="size">
-          {{size}}
+      <mat-select placeholder="Disk type*:" formControlName="disk_type">
+        <mat-option *ngFor="let type of diskTypes" [value]="type">
+        {{type}}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="awsNodeForm.controls.node_size.hasError('required')">
-        Node size is <strong>required</strong>
-      </mat-error>
     </mat-form-field>
   </div>
 
   <mat-form-field fxFlex>
-    <input id="root_size" [errorStateMatcher]="inputValidationService" matInput formControlName="root_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:" autocomplete="off">
-    <mat-error *ngIf="awsNodeForm.controls.root_size.hasError('min') && !awsNodeForm.controls.root_size.hasError('required')">
-      Disk size must be minimum <strong>10</strong> GB
-    </mat-error>
-    <mat-error *ngIf="awsNodeForm.controls.root_size.hasError('max') && !awsNodeForm.controls.root_size.hasError('required')">
-      Disk size must be maximum <strong>16000</strong> GB
-    </mat-error>
-    <mat-error *ngIf="awsNodeForm.controls.root_size.hasError('required')">
-      Node size is <strong>required</strong>
-    </mat-error>
+    <input matInput formControlName="disk_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:" autocomplete="off">
   </mat-form-field>
 
-  <mat-form-field fxFlex *ngIf="awsNodeForm.controls['aws_nas'].value">
-    <input type="text" matInput id="ami" name="ami" formControlName="ami" ng-trim="true" placeholder="AMI ID (optional):" autocomplete="off"
-    />
+  <mat-form-field fxFlex>
+    <input matInput formControlName="ami" placeholder="AMI ID:" autocomplete="off">
   </mat-form-field>
-  <div class="slider-box">
-    <mat-slide-toggle id="aws_nas" formControlName="aws_nas">Extend Node settings</mat-slide-toggle>
-  </div>
-  <p class="km-warning-msg">
-    You need to accept the Software Terms of CoreOS. For this please click on the link, select "manual launch" & click on "Accept
-    Software Terms".
-    <a target="_blank" href="https://aws.amazon.com/marketplace/pp?sku=ryg425ue2hwnsok9ccfastg4">CoreOS Software Terms</a>
-  </p>
-  <div class="km-warning-msg pointer">
-    <strong><i class="fa fa-exclamation-triangle" aria-hidden="true"></i>How to accept the Software Terms</strong>
-    <ol>
-      <li>Go to <a target="_blank" href="https://aws.amazon.com/marketplace/pp?sku=ryg425ue2hwnsok9ccfastg4">CoreOS Software Terms</a></li>
-      <li>Click on "Continue"</li>
-      <li>Login with your credentials</li>
-      <li>Click on "Accept Software Terms & Launch with 1-Click"</li>
-    </ol>
-  </div>
-</kubermatic-add-node-form>
+</form>

@@ -1,21 +1,41 @@
-<kubermatic-progress></kubermatic-progress>
+<kubermatic-progress [steps]="steps" [currentStepIndex]="currentStepIndex" [currentStep]="currentStep"></kubermatic-progress>
 
 <mat-card>
-    <!-- Cluster Name: Step 1 -->
-    <kubermatic-set-cluster-name *ngIf="step === 0"></kubermatic-set-cluster-name>
+  <!-- Cluster Name -->
+  <kubermatic-set-cluster-name [cluster]="cluster" *ngIf="currentStep.name === 'set-name'"></kubermatic-set-cluster-name>
 
-    <!-- Cluster Provider: Step 2 -->
-    <kubermatic-set-provider *ngIf="step === 1"></kubermatic-set-provider>
+  <!-- Cluster Provider -->
+  <kubermatic-set-provider [cluster]="cluster" *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
 
-    <!-- Cluster Datacenter: Step 3 -->
-    <kubermatic-set-datacenter *ngIf="step === 2"></kubermatic-set-datacenter>
+  <!-- Cluster Datacenter -->
+  <kubermatic-set-datacenter [cluster]="cluster" *ngIf="currentStep.name === 'set-datacenter'"></kubermatic-set-datacenter>
 
-    <!-- Provider Settings: Step 4 -->
-    <kubermatic-set-settings *ngIf="step === 3"></kubermatic-set-settings>
+  <!-- Provider Settings -->
+  <kubermatic-set-settings [cluster]="cluster" [clusterSSHKeys]="clusterSSHKeys" *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
 
-    <!-- Provider Summary: Step 5 -->
-    <kubermatic-summary *ngIf="step === 4 || step === 5"></kubermatic-summary>
+  <!-- Provider Summary -->
+  <kubermatic-summary *ngIf="currentStep.name === 'summary'" [clusterSSHKeys]="clusterSSHKeys"
+                      [nodeData]="addNodeData"
+                      [cluster]="cluster"
+                      [providerFormData]="clusterProviderFormData"
+                      [datacenterFormData]="clusterDatacenterFormData"></kubermatic-summary>
 
-    <!-- Navigation Buttons -->
-    <kubermatic-navigation-buttons></kubermatic-navigation-buttons>
+  <!-- Navigation Buttons -->
+  <div class="km-buttom-navigation">
+    <button type="button" class="btn-back" mat-raised-button (click)="stepBack()" *ngIf="currentStepIndex !== 0">
+      Back
+    </button>
+    <button *ngIf="currentStepIndex < steps.length - 1" type="button" [disabled]="!currentStep.valid()" mat-raised-button color="primary" (click)="stepForward()">
+      <ng-container>
+        Next
+      </ng-container>
+    </button>
+    <button *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating" type="button" mat-raised-button color="primary" (click)="createCluster()">
+      <ng-container>
+        Create
+      </ng-container>
+    </button>
+    <a type="button" class="cancel-button" routerLink="/clusters">Cancel</a>
+  </div>
+
 </mat-card>

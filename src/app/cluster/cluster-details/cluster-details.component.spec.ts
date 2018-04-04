@@ -1,4 +1,4 @@
-import { clusterFake1 } from './../../testing/fake-data/cluster.fake';
+import { fakeDigitaloceanCluster } from './../../testing/fake-data/cluster.fake';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,21 +16,12 @@ import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-h
 import { ClusterSecretsComponent } from './cluster-secrets/cluster-secrets.component';
 import { MatDialog } from '@angular/material';
 import { DatacenterService, InitialNodeDataService } from '../../core/services/index';
-import { SSHKeysFake } from '../../testing/fake-data/sshkey.fake';
+import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { nodesFake } from '../../testing/fake-data/node.fake';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
-import { datacenterFake1 } from '../../testing/fake-data/datacenter.fake';
+import { fakeDigitaloceanDatacenter } from '../../testing/fake-data/datacenter.fake';
 import { NodeListComponent } from './node-list/node-list.component';
 import Spy = jasmine.Spy;
-
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
-  RouterTestingModule,
-  SharedModule
-];
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -47,17 +38,22 @@ describe('ClusterDetailsComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys']);
-    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(clusterFake1));
+    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
     getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
     getClusterNodesSpy = apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake));
-    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(SSHKeysFake));
+    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(datacenterFake1));
+    getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter));
 
     TestBed.configureTestingModule({
       imports: [
-        ...modules,
+        BrowserModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        SlimLoadingBarModule.forRoot(),
+        RouterTestingModule,
+        SharedModule
       ],
       declarations: [
         ClusterDetailsComponent,
@@ -67,12 +63,12 @@ describe('ClusterDetailsComponent', () => {
       ],
       providers: [
         { provide: ApiService, useValue: apiMock },
-        MatDialog,
-        InitialNodeDataService,
         { provide: DatacenterService, useValue: datacenterMock },
         { provide: Auth, useClass: AuthMockService },
         { provide: Router, useClass: RouterStub },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        MatDialog,
+        InitialNodeDataService,
       ],
     }).compileComponents();
   }));
@@ -95,12 +91,12 @@ describe('ClusterDetailsComponent', () => {
   it('should get cluster', fakeAsync(() => {
     fixture.detectChanges();
     tick();
-    expect(component.cluster).toEqual(clusterFake1, 'should get cluster by api');
+    expect(component.cluster).toEqual(fakeDigitaloceanCluster, 'should get cluster by api');
     discardPeriodicTasks();
   }));
 
   it('should get sshkeys', fakeAsync(() => {
-    const sshkeys = SSHKeysFake.filter(key => {
+    const sshkeys = fakeSSHKeys.filter(key => {
       if (key.spec.clusters == null) {
         return false;
       }

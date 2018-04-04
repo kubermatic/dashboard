@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ApiService } from 'app/core/services/api/api.service';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { InputValidationService } from '../../../core/services';
-import { NotificationActions } from 'app/redux/actions/notification.actions';
+import { ApiService } from '../../../core/services';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',
@@ -17,8 +16,7 @@ export class AddSshKeyModalComponent implements OnInit {
 
   constructor(private api: ApiService,
               private formBuilder: FormBuilder,
-              private dialogRef: MatDialogRef<AddSshKeyModalComponent>,
-              public inputValidationService: InputValidationService) {}
+              private dialogRef: MatDialogRef<AddSshKeyModalComponent>) {}
 
   ngOnInit() {
     this.addSSHKeyForm = this.formBuilder.group({

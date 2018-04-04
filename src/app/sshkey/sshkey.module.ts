@@ -7,7 +7,6 @@ import { SshKeyListComponent } from 'app/sshkey/ssh-key-list/ssh-key-list.compon
 import { SshkeyComponent } from './sshkey.component';
 import { SshKeyItemComponent } from './ssh-key-list/ssh-key-item/ssh-key-item.component';
 
-
 const components: any[] = [
   SshkeyComponent,
   SshKeyListComponent,

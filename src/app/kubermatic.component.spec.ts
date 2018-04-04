@@ -89,5 +89,4 @@ describe('KubermaticComponent', () => {
     expect(de).toBeNull('sidenav should not be rendered');
   });
 
-
 });

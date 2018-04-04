@@ -11,7 +11,7 @@ import { Auth } from './../../../core/services/auth/auth.service';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
 import { DatacenterService } from '../../../core/services/index';
 import { DatacenterMockService } from './../../../testing/services/datacenter-mock.service';
-import { clusterFake } from '../../../testing/fake-data/cluster.fake';
+import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -53,7 +53,7 @@ describe('ClusterItemComponent', () => {
   }));
 
   it('should set statusRunning class', fakeAsync(() => {
-    component.cluster = clusterFake;
+    component.cluster = fakeDigitaloceanCluster;
 
     fixture.detectChanges();
     tick();
@@ -63,7 +63,7 @@ describe('ClusterItemComponent', () => {
   }));
 
   it('should set path of cluster image', fakeAsync(() => {
-    component.cluster = clusterFake;
+    component.cluster = fakeDigitaloceanCluster;
 
     fixture.detectChanges();
     tick();

@@ -1,6 +1,6 @@
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 
-export const SSHKeysFake: SSHKeyEntity[] = [
+export const fakeSSHKeys: SSHKeyEntity[] = [
   {
     metadata: {
       name: 'key-62a96571691c1f2d65575cef4fae6d6b-b0lm',

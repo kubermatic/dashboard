@@ -3,7 +3,7 @@ import { Sort } from '@angular/material';
 import { ApiService } from '../../core/services/api/api.service';
 import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { Observable } from 'rxjs/Observable';
+import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
 
@@ -12,52 +12,50 @@ import { find } from 'lodash';
   templateUrl: './cluster-list.component.html',
   styleUrls: ['./cluster-list.component.scss']
 })
-
 export class ClusterListComponent implements OnInit, OnDestroy {
 
   public clusters: ClusterEntity[] = [];
-  public timer: any = Observable.timer(0, 5000);
-  public sub: Subscription;
   public loading = true;
   public sortedData: ClusterEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
+  private subscriptions: Subscription[] = [];
 
-  constructor(public api: ApiService, public dcService: DatacenterService) {
+  constructor(private api: ApiService, private dcService: DatacenterService) {
   }
 
   ngOnInit() {
-    this.sub = this.timer.subscribe(() => {
-      this.getClusters();
-      this.sortData(this.sort);
-    });
+    const timer = Observable.interval(5000);
+    this.subscriptions.push(timer.subscribe(tick => {
+      this.refreshClusters();
+    }));
+    this.refreshClusters();
   }
 
-  getClusters() {
-    let dcNames: string[];
-    let loadClusters = false;
-    this.dcService.getSeedDataCenters().subscribe(res => {
-      dcNames = res;
-      for (const i in dcNames) {
-        if (dcNames.hasOwnProperty(i)) {
-          this.api.getClusters(dcNames[i]).subscribe(result => {
-            if (result !== null) {
-              this.clusters[dcNames[i]] = result.length ? result.slice().sort((a, b) => {
-                return this.compare(a.metadata.name, b.metadata.name, true);
-              }) : [];
-              loadClusters = true;
-              this.loading = false;
-            }
-          }, error => {
-          }, () => {
-            if (loadClusters) {
-              this.sortData(this.sort);
-            } else {
-              this.loading = false;
-            }
-          });
-        }
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
       }
-    });
+    }
+  }
+
+  refreshClusters() {
+    this.subscriptions.push(this.dcService.getSeedDataCenters().subscribe(datacenters => {
+      const clusters: ClusterEntity[] = [];
+      const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
+      for (const dc of datacenters) {
+        dcClustersObservables.push(this.api.getClusters(dc.metadata.name));
+      }
+      this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
+        .subscribe(dcClusters => {
+          for (const cs of dcClusters) {
+            clusters.push(...cs);
+          }
+          this.clusters = clusters;
+          this.sortData(this.sort);
+          this.loading = false;
+        }));
+    }));
   }
 
   public trackCluster(index: number, cluster: ClusterEntity): number {
@@ -69,25 +67,14 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   sortData(sort: Sort) {
-    const data = [];
-    for (const i in this.clusters) {
-      if (this.clusters.hasOwnProperty(i)) {
-        for (const j in this.clusters[i]) {
-          if (this.clusters[i].hasOwnProperty(j)) {
-            data.push(this.clusters[i][j]);
-          }
-        }
-      }
-    }
-
     if (sort === null || !sort.active || sort.direction === '') {
-      this.sortedData = data;
+      this.sortedData = this.clusters;
       return;
     }
 
     this.sort = sort;
 
-    this.sortedData = data.sort((a, b) => {
+    this.sortedData = this.clusters.sort((a, b) => {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name':
@@ -137,9 +124,5 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   compare(a, b, isAsc) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
-
-  ngOnDestroy() {
-    this.sub && this.sub.unsubscribe();
   }
 }

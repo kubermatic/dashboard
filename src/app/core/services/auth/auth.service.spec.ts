@@ -21,7 +21,6 @@ describe('Auth', () => {
     }).compileComponents();
   });
 
-
   it('should ...', inject([Auth], (service: Auth) => {
     expect(service).toBeTruthy();
   }));

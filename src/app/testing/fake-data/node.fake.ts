@@ -1,6 +1,6 @@
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 
-export const nodeCreateFake: NodeEntity = {
+export const fakeDigitaloceanCreateNode: NodeEntity = {
   metadata: {},
   spec: {
     cloud: {

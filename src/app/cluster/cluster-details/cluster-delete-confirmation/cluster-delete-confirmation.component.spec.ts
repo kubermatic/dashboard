@@ -15,8 +15,8 @@ import { DatacenterService } from '../../../core/services/datacenter/datacenter.
 import { DatacenterMockService } from '../../../testing/services/datacenter-mock.service';
 import { MatDialogRef } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
-import { datacenterFake1 } from '../../../testing/fake-data/datacenter.fake';
-import { clusterFake1 } from '../../../testing/fake-data/cluster.fake';
+import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
+import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { InitialNodeDataService } from '../../../core/services';
 
 const modules: any[] = [
@@ -65,22 +65,22 @@ describe('ClusterDeleteConfirmationComponent', () => {
   }));
 
   it('should able add button', () => {
-    component.cluster = clusterFake1;
-    component.datacenter = datacenterFake1;
+    component.cluster = fakeDigitaloceanCluster;
+    component.datacenter = fakeDigitaloceanDatacenter;
 
     fixture.detectChanges();
 
     const input = fixture.debugElement.query(By.css('#name'));
     const inputElement = input.nativeElement;
-    inputElement.value = clusterFake1.spec.humanReadableName;
+    inputElement.value = fakeDigitaloceanCluster.spec.humanReadableName;
     inputElement.dispatchEvent(new Event('blur'));
 
     expect(component.inputNameMatches()).toBeTruthy();
   });
 
   it('should call deleteCluster method', fakeAsync(() => {
-    component.cluster = clusterFake1;
-    component.datacenter = datacenterFake1;
+    component.cluster = fakeDigitaloceanCluster;
+    component.datacenter = fakeDigitaloceanDatacenter;
 
     fixture.detectChanges();
     const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));

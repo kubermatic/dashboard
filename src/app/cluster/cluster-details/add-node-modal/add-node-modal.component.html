@@ -7,19 +7,15 @@
   </mat-toolbar>
   <mat-dialog-content>
     <div class="mat-dialog-content">
-      <kubermatic-add-node
-        [provider]="provider"
-        (nodeChanges)="changeNodeModel($event)"
-        (formChanges)="changeForm($event)">
-      </kubermatic-add-node>
+      <kubermatic-add-node [cluster]="cluster"></kubermatic-add-node>
     </div>
   </mat-dialog-content>
 
-  <mat-dialog-actions *ngIf="form">
+  <mat-dialog-actions>
     <button mat-dialog-close mat-raised-button>
       Close
     </button>
-    <button mat-raised-button mat-dialog-close color="primary" value="submit" [disabled]="!form.valid" (click)="addNode()" class="btn btn-primary">
+    <button mat-raised-button mat-dialog-close color="primary" [disabled]="!addNodeData.valid" (click)="addNode()" class="btn btn-primary">
       Add Node(s)
     </button>
   </mat-dialog-actions>

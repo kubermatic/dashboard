@@ -52,7 +52,6 @@ export class NodeGroupComponent implements OnInit {
     this.stateOfTheAccordion[group] = expanded;
   }
 
-
   public deleteNodeDialog(node): void {
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;

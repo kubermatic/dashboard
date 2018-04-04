@@ -1,32 +1,21 @@
-<kubermatic-add-node-form [formGroup]="doNodeForm" (change)="onChange()">
-  <mat-form-field fxFlex>
-    <input id="node_count_do" [errorStateMatcher]="inputValidationService" matInput formControlName="node_count" min="1"
-      max="20" type="number" placeholder="Quantity of Nodes*:" autocomplete="off">
-    <mat-error *ngIf="doNodeForm.controls.node_count.hasError('min') && !doNodeForm.controls.node_count.hasError('required')">
-      Quantity of Nodes must be minimum <strong>1</strong>
-    </mat-error>
-    <mat-error *ngIf="doNodeForm.controls.node_count.hasError('required')">
-      Quantity of Nodes is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <div fxFlex class="mat-select-content">
+<form [formGroup]="doNodeForm" fxLayout="column">
+  <div fxFlex class="mat-select-container">
     <mat-form-field>
-      <mat-select class="mat-select" [errorStateMatcher]="inputValidationService" placeholder="Node Size*:" id="node_size" name="node_size" formControlName="node_size" (change)="onChange()">
-        <mat-option *ngIf="!nodeSizeAvailable" [value]="">Please add a Digital Ocean Token first!</mat-option>
-        <mat-optgroup *ngIf="nodeSizeAvailable" label="Standard Droplets">
-          <mat-option *ngFor="let size of nodeSize.standard; let i = index;" [value]="size.slug">
+      <mat-select placeholder="Node Size*:" formControlName="size">
+        <mat-option *ngIf="cloudSpec.digitalocean.token.length == 0" [value]="0">Please enter a valid DigitalOcean token first!</mat-option>
+        <mat-option *ngIf="sizes.standard.length == 0 && sizes.optimized.length == 0" [value]="0">Loading sizes...</mat-option>
+
+        <mat-optgroup *ngIf="sizes.standard.length > 0" label="Standard Droplets">
+          <mat-option *ngFor="let size of sizes.standard" [value]="size.slug">
             {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
           </mat-option>
         </mat-optgroup>
-        <mat-optgroup *ngIf="nodeSizeAvailable" label="Optimized Droplets">
-          <mat-option *ngFor="let size of nodeSize.optimized; let i = index;" [value]="size.slug">
+        <mat-optgroup *ngIf="sizes.optimized.length > 0" label="Optimized Droplets">
+          <mat-option *ngFor="let size of sizes.optimized" [value]="size.slug">
             {{ size.memory / 1024 }} GB RAM, {{ size.vcpus }} CPU{{ (size.vcpus!=1) ? 's' : '' }}, ${{ size.price_monthly }} per month
           </mat-option>
         </mat-optgroup>
       </mat-select>
-      <mat-error *ngIf="doNodeForm.controls.node_size.hasError('required')">
-        Node size is <strong>required</strong>
-      </mat-error>
     </mat-form-field>
   </div>
-</kubermatic-add-node-form>
+</form>

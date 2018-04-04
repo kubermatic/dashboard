@@ -9,7 +9,7 @@ import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/combineLatest';
 import { environment } from '../../../environments/environment';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
-import { ClusterEntity, getProvider } from '../../shared/entity/ClusterEntity';
+import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { ApiService, DatacenterService, InitialNodeDataService } from '../../core/services';
@@ -173,7 +173,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public addNode(): void {
     const data = new AddNodeModalData(this.cluster, this.nodeDc);
-    const modal = this.dialog.open(AddNodeModalComponent, { data });
+    const modal = this.dialog.open(AddNodeModalComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
+
     const sub = modal.afterClosed().subscribe(result => {
       this.reloadClusterNodes();
       sub.unsubscribe();
@@ -214,7 +217,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public isLoaded(): boolean {
-    if (this.cluster && getProvider(this.cluster) === NodeProvider.BRINGYOUROWN) {
+    if (this.cluster && getClusterProvider(this.cluster) === NodeProvider.BRINGYOUROWN) {
       return true;
     } else if (this.cluster) {
       return !!this.nodeDc;

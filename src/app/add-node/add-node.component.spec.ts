@@ -1,110 +1,77 @@
 import { SharedModule } from '../shared/shared.module';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AddNodeComponent } from './add-node.component';
 import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
-import { AddNodeFormComponent } from './add-node-form/add-node-form.component';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node/digitalocean-add-node.component';
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
-import { InputValidationService } from '../core/services/index';
-import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
-import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
-import { ApiService } from '../core/services/api/api.service';
-import { ApiMockService } from '../testing/services/api-mock.service';
-
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  NgReduxTestingModule
-];
+import { fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster } from '../testing/fake-data/cluster.fake';
+import { AddNodeService } from '../core/services/add-node/add-node.service';
+import { ApiService } from '../core/services';
+import { asyncData } from '../testing/services/api-mock.service';
+import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-data/addNodeModal.fake';
+import Spy = jasmine.Spy;
 
 describe('AddNodeComponent', () => {
   let fixture: ComponentFixture<AddNodeComponent>;
   let component: AddNodeComponent;
+  let getDigitaloceanSizesSpy: Spy;
+  let getOpenStackFlavorsSpy: Spy;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getOpenStackFlavors']);
+    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
+    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors));
+
     TestBed.configureTestingModule({
       imports: [
-        ...modules,
+        BrowserModule,
+        BrowserAnimationsModule,
+        SharedModule,
       ],
       declarations: [
         AddNodeComponent,
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
-        AddNodeFormComponent
       ],
       providers: [
-        InputValidationService,
-        { provide: ApiService, useClass: ApiMockService }
+        AddNodeService,
+        { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AddNodeComponent);
     component = fixture.componentInstance;
+    component.cluster = fakeAWSCluster;
   });
 
   it('should create the add node cmp', () => {
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
-  it('should render specific form by provider name', () => {
-    component.provider = {
-      name: 'aws'
-    };
-    const ngRedux = fixture.debugElement.injector.get(NgRedux);
-    const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
-      wizard: {
-        nodeForm: {
-          ami: '',
-          aws_nas: false,
-          node_count: 3,
-          node_size: 't2.medium',
-          root_size: 20
-        }
-      }
-    });
+  it('should render specific form by provider in cluster.spec.cloud', () => {
     fixture.detectChanges();
+    const addNodeElement: HTMLElement = fixture.nativeElement;
 
-    let deAwsForm = fixture.debugElement.query(By.css('.aws-form'));
-    expect(deAwsForm).not.toBeNull('should render aws form');
+    expect(addNodeElement.querySelector('kubermatic-aws-add-node')).not.toBeNull();
+    expect(addNodeElement.querySelector('kubermatic-openstack-add-node')).toBeNull();
+    expect(addNodeElement.querySelector('kubermatic-digitalocean-add-node')).toBeNull();
 
-    component.provider = {
-      name: 'openstack',
-      payload: {
-        cloudSpec: {
-          dc: 'openstack-dc',
-          openstack: {
-            username: '',
-            password: '',
-            tenant: '',
-            domain: '',
-            network: '',
-            securityGroups: '',
-            floatingIpPool: ''
-          }
-        }
-      }
-    };
-    spyGetState.and.returnValue({
-      wizard: {
-        nodeForm: {
-          os_node_image: '',
-          node_count: 2,
-          node_size: 'm1.medium'
-        }
-      }
-    });
+    component.cluster = fakeDigitaloceanCluster;
     fixture.detectChanges();
+    expect(addNodeElement.querySelector('kubermatic-digitalocean-add-node')).not.toBeNull();
+    expect(addNodeElement.querySelector('kubermatic-aws-add-node')).toBeNull();
+    expect(addNodeElement.querySelector('kubermatic-openstack-add-node')).toBeNull();
 
-    deAwsForm = fixture.debugElement.query(By.css('.aws-form'));
-    const deOpenstackForm = fixture.debugElement.query(By.css('.openstack-form'));
-
-    expect(deAwsForm).toBeNull('should hide aws form');
-    expect(deOpenstackForm).not.toBeNull('should render openstack form');
+    component.cluster = fakeOpenstackCluster;
+    fixture.detectChanges();
+    expect(addNodeElement.querySelector('kubermatic-openstack-add-node')).not.toBeNull();
+    expect(addNodeElement.querySelector('kubermatic-digitalocean-add-node')).toBeNull();
+    expect(addNodeElement.querySelector('kubermatic-aws-add-node')).toBeNull();
   });
 });

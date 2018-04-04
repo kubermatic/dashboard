@@ -7,7 +7,7 @@ import { BareMetalCloudSpec } from './cloud/BareMetalCloudSpec';
 import { NodeProvider } from '../model/NodeProviderConstants';
 import { VSphereCloudSpec } from './cloud/VSphereCloudSpec';
 
-export function getProvider(cluster: ClusterEntity): string {
+export function getClusterProvider(cluster: ClusterEntity): string {
   switch (true) {
     case !!cluster.spec.cloud.digitalocean: {
       return NodeProvider.DIGITALOCEAN;
@@ -31,8 +31,54 @@ export function getProvider(cluster: ClusterEntity): string {
 export class ClusterEntity {
   metadata: MetadataEntity;
   spec: ClusterSpec;
-  address: Address;
-  status: Status;
+  address?: Address;
+  status?: Status;
+}
+
+export function getEmptyCloudProviderSpec(provider: string): object {
+  switch (provider) {
+    case NodeProvider.AWS:
+      const awsSpec: AWSCloudSpec = {
+        accessKeyId: '',
+        secretAccessKey: '',
+        routeTableId: '',
+        vpcId: '',
+        securityGroup: '',
+        subnetId: '',
+      };
+      return awsSpec;
+    case NodeProvider.DIGITALOCEAN:
+      const doSpec: DigitaloceanCloudSpec = {
+        token: ''
+      };
+      return doSpec;
+    case NodeProvider.BAREMETAL:
+      const bmSpec: BareMetalCloudSpec = {
+        name: '',
+      };
+      return bmSpec;
+    case NodeProvider.OPENSTACK:
+      const osSpec: OpenstackCloudSpec = {
+        tenant: '',
+        domain: '',
+        username: '',
+        password: '',
+        network: '',
+        securityGroups: '',
+        floatingIpPool: '',
+      };
+      return osSpec;
+    case NodeProvider.BRINGYOUROWN:
+      const byoSpec: BringYourOwnCloudSpec = {};
+      return byoSpec;
+    case NodeProvider.VSPHERE:
+      const vsSpec: VSphereCloudSpec = {
+        username: '',
+        password: '',
+      };
+      return vsSpec;
+  }
+  return {};
 }
 
 export class CloudSpec {
@@ -47,7 +93,7 @@ export class CloudSpec {
 
 export class ClusterSpec {
   cloud: CloudSpec;
-  humanReadableName: string;
+  humanReadableName?: string;
   masterVersion?: string;
 }
 

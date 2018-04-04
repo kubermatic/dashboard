@@ -7,9 +7,9 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 import { UpgradeClusterComponent } from './upgrade-cluster.component';
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
 import { ApiService } from '../../../core/services/api/api.service';
-import { ApiMockService, asyncData } from '../../../testing/services/api-mock.service';
+import { asyncData } from '../../../testing/services/api-mock.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { clusterFake1 } from '../../../testing/fake-data/cluster.fake';
+import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import Spy = jasmine.Spy;
 
 const modules: any[] = [
@@ -24,10 +24,9 @@ describe('UpgradeClusterComponent', () => {
   let component: UpgradeClusterComponent;
   let updateClusterUpgradeSpy: Spy;
 
-
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['updateClusterUpgrade']);
-    updateClusterUpgradeSpy = apiMock.updateClusterUpgrade.and.returnValue(asyncData(clusterFake1));
+    updateClusterUpgradeSpy = apiMock.updateClusterUpgrade.and.returnValue(asyncData(fakeDigitaloceanCluster));
 
     TestBed.configureTestingModule({
       imports: [
@@ -55,7 +54,7 @@ describe('UpgradeClusterComponent', () => {
 
   it('should call updateClusterUpgrade method from api', fakeAsync(() => {
     component.selectedVersion = 'new version';
-    component.cluster = clusterFake1;
+    component.cluster = fakeDigitaloceanCluster;
     component.possibleVersions = ['1.9.5'];
 
     fixture.detectChanges();

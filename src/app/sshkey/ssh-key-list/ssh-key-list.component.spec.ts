@@ -5,7 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SshKeyListComponent } from './ssh-key-list.component';
 import { SshKeyItemComponent } from './ssh-key-item/ssh-key-item.component';
-import { SSHKeysFake } from '../../testing/fake-data/sshkey.fake';
+import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { ApiService } from '../../core/services/api/api.service';
 import { ApiMockService } from '../../testing/services/api-mock.service';
 
@@ -45,7 +45,7 @@ describe('SshKeyListComponent', () => {
   });
 
   it('should render sshkey items', fakeAsync(() => {
-    component.sshKeys = SSHKeysFake;
+    component.sshKeys = fakeSSHKeys;
 
     tick();
     fixture.detectChanges();
@@ -55,8 +55,8 @@ describe('SshKeyListComponent', () => {
   }));
 
   it('should delete sshkey', () => {
-    component.sshKeys = SSHKeysFake;
-    component.sortedData = SSHKeysFake;
+    component.sshKeys = fakeSSHKeys;
+    component.sortedData = fakeSSHKeys;
 
     const initialLength = component.sortedData.length;
     const deletedItem = component.sortedData[0];
@@ -76,7 +76,7 @@ describe('SshKeyListComponent', () => {
 
     expect(sshKeyListDe).toBeTruthy('should not render sshkey list if it is not obtained');
 
-    component.sortedData = SSHKeysFake;
+    component.sortedData = fakeSSHKeys;
     fixture.detectChanges();
     sshKeyListDe = fixture.debugElement.query(By.css('.sshkey-list'));
 

@@ -15,16 +15,12 @@ import { NotificationComponent } from './components/notification/notification.co
 import { ClusterNameGenerator } from './util/name-generator.service';
 import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
 import { SidenavService } from './components/sidenav/sidenav.service';
-import {
-  ApiService,
-  Auth,
-  AUTH_PROVIDERS,
-  AuthGuard,
-  DatacenterService, InitialNodeDataService,
-  InputValidationService,
-} from './services';
+import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, InitialNodeDataService } from './services';
 /* Interceptors */
 import { CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor } from './interceptors';
+import { AddNodeService } from './services/add-node/add-node.service';
+import { WizardService } from './services/wizard/wizard.service';
+import { StepsService } from './services/wizard/steps.service';
 
 const modules: any[] = [
   CommonModule,
@@ -46,7 +42,9 @@ const services: any[] = [
   Auth,
   AuthGuard,
   DatacenterService,
-  InputValidationService,
+  AddNodeService,
+  WizardService,
+  StepsService,
   ClusterNameGenerator,
   SidenavService,
   ApiService,

@@ -1,4 +1,4 @@
-import { SSHKeysFake } from './../testing/fake-data/sshkey.fake';
+import { fakeSSHKeys } from './../testing/fake-data/sshkey.fake';
 import { SshKeyItemComponent } from './ssh-key-list/ssh-key-item/ssh-key-item.component';
 import { SharedModule } from './../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -54,7 +54,7 @@ describe('SshkeyComponent', () => {
   });
 
   it('should get sshkeys list', fakeAsync(() => {
-    const sshkeys = SSHKeysFake;
+    const sshkeys = fakeSSHKeys;
     fixture.detectChanges();
     tick();
 
