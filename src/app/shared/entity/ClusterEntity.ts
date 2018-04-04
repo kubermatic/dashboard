@@ -1,11 +1,12 @@
-import { DigitaloceanCloudSpec } from './cloud/DigitialoceanCloudSpec';
-import { BringYourOwnCloudSpec } from './cloud/BringYourOwnCloudSpec';
-import { AWSCloudSpec } from './cloud/AWSCloudSpec';
-import { MetadataEntity } from './MetadataEntity';
-import { OpenstackCloudSpec } from './cloud/OpenstackCloudSpec';
-import { BareMetalCloudSpec } from './cloud/BareMetalCloudSpec';
-import { NodeProvider } from '../model/NodeProviderConstants';
-import { VSphereCloudSpec } from './cloud/VSphereCloudSpec';
+import {DigitaloceanCloudSpec} from './cloud/DigitialoceanCloudSpec';
+import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
+import {AWSCloudSpec} from './cloud/AWSCloudSpec';
+import {MetadataEntity} from './MetadataEntity';
+import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
+import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
+import {NodeProvider} from '../model/NodeProviderConstants';
+import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
+import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
 
 export function getClusterProvider(cluster: ClusterEntity): string {
   switch (true) {
@@ -23,6 +24,12 @@ export function getClusterProvider(cluster: ClusterEntity): string {
     }
     case !!cluster.spec.cloud.baremetal: {
       return NodeProvider.BAREMETAL;
+    }
+    case !!cluster.spec.cloud.hetzner: {
+      return NodeProvider.HETZNER;
+    }
+    case !!cluster.spec.cloud.vsphere: {
+      return NodeProvider.VSPHERE;
     }
   }
   return '';
@@ -77,6 +84,11 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         password: '',
       };
       return vsSpec;
+    case NodeProvider.HETZNER:
+      const hSpec: HetznerCloudSpec = {
+        token: '',
+      };
+      return hSpec;
   }
   return {};
 }
@@ -89,6 +101,7 @@ export class CloudSpec {
   openstack?: OpenstackCloudSpec;
   baremetal?: BareMetalCloudSpec;
   vsphere?: VSphereCloudSpec;
+  hetzner?: HetznerCloudSpec;
 }
 
 export class ClusterSpec {
