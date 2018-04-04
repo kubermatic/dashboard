@@ -10,10 +10,9 @@
   (formChanges)="changeForm($event)"
   [token]="provider.payload?.token">
 </kubermatic-digitalocean-add-node>
- 
+
 <kubermatic-openstack-add-node
   *ngIf="provider && provider.name === 'openstack'"
   (nodeSpecChanges)="changeNodeModel($event)"
-  (formChanges)="changeForm($event)"
-  [cloudSpec]="provider.payload?.cloudSpec">
+  (formChanges)="changeForm($event)">
 </kubermatic-openstack-add-node>

@@ -12,7 +12,6 @@ import { find } from 'lodash';
   templateUrl: './cluster-list.component.html',
   styleUrls: ['./cluster-list.component.scss']
 })
-
 export class ClusterListComponent implements OnInit, OnDestroy {
 
   public clusters: ClusterEntity[] = [];
@@ -28,32 +27,23 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.sub = this.timer.subscribe(() => {
       this.getClusters();
-      this.sortData(this.sort);
     });
   }
 
   getClusters() {
     let dcNames: string[];
-    let loadClusters = false;
     this.dcService.getSeedDataCenters().subscribe(res => {
       dcNames = res;
       for (const i in dcNames) {
         if (dcNames.hasOwnProperty(i)) {
           this.api.getClusters(dcNames[i]).subscribe(result => {
-            if (result !== null) {
-              this.clusters[dcNames[i]] = result.length ? result.slice().sort((a, b) => {
-                return this.compare(a.metadata.name, b.metadata.name, true);
-              }) : [];
-              loadClusters = true;
-              this.loading = false;
-            }
+            this.clusters[dcNames[i]] = result.length ? result.slice().sort((a, b) => {
+              return this.compare(a.metadata.name, b.metadata.name, true);
+            }) : [];
+            this.loading = false;
           }, error => {
           }, () => {
-            if (loadClusters) {
-              this.sortData(this.sort);
-            } else {
-              this.loading = false;
-            }
+            this.sortData(this.sort);
           });
         }
       }

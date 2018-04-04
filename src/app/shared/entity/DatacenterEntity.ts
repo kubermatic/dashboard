@@ -1,5 +1,5 @@
 import { MetadataEntity } from './MetadataEntity';
-import { DigitaloceanDatacenterSpec } from './datacenter/DigitialoceanDatacenterSpec';
+import { DigitialoceanDatacenterSpec } from './datacenter/DigitialoceanDatacenterSpec';
 import { BringYourOwnDatacenterSpec } from './datacenter/BringYourOwnDatacenterSpec';
 import { AWSDatacenterSpec } from './datacenter/AWSDatacenterSpec';
 import { OpenStackDatacenterSpec } from './datacenter/OpenStackDatacenterSpec';
@@ -32,7 +32,7 @@ export class DatacenterSpec {
   location: string;
   provider: string;
 
-  digitalocean?: DigitaloceanDatacenterSpec;
+  digitalocean?: DigitialoceanDatacenterSpec;
   bringyourown?: BringYourOwnDatacenterSpec;
   aws?: AWSDatacenterSpec;
   openstack?: OpenStackDatacenterSpec;

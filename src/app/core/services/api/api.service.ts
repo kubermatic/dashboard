@@ -4,11 +4,10 @@ import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
-import { Auth } from '../auth/auth.service';
+import { Auth } from 'app/core/services/auth/auth.service';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { OpenstackSize } from '../../../shared/entity/provider/OpenstackSizeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 
 @Injectable()
@@ -16,7 +15,6 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private restRootV3: string = environment.restRootV3;
   private headers: HttpHeaders = new HttpHeaders();
-
 
   constructor(private http: HttpClient, private auth: Auth) {
     const token = auth.getBearerToken();
@@ -82,16 +80,6 @@ export class ApiService {
     this.headers = this.headers.set('DoToken', token);
     const url = `${this.restRoot}/digitalocean/sizes`;
     return this.http.get(url, { headers: this.headers });
-  }
-
-  getOpenStackSizes(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackSize[]> {
-    this.headers = this.headers.set('Username', username);
-    this.headers = this.headers.set('Password', password);
-    this.headers = this.headers.set('Tenant', tenant);
-    this.headers = this.headers.set('Domain', domain);
-    this.headers = this.headers.set('DatacenterName', datacenterName);
-    const url = `${this.restRoot}/openstack/sizes`;
-    return this.http.get<OpenstackSize[]>(url, { headers: this.headers });
   }
 
   getClusterUpgrades(cluster: string, dc: string): Observable<string[]> {

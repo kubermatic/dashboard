@@ -1,6 +1,6 @@
 import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { CustomValidators } from 'ng2-validation';
 import { select } from '@angular-redux/store';
 import { Observable } from 'rxjs/Observable';
@@ -9,26 +9,20 @@ import { WizardActions } from '../../redux/actions/wizard.actions';
 import { NodeSpec } from '../../shared/entity/NodeEntity';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { InputValidationService } from '../../core/services';
-import { OpenstackNodeSpec } from '../../shared/entity/node/OpenstackNodeSpec';
-import { ApiService } from '../../core/services/api/api.service';
-import { CloudSpec } from '../../shared/entity/ClusterEntity';
-import { OpenstackSize } from '../../shared/entity/provider/OpenstackSizeEntity';
+
 
 @Component({
   selector: 'kubermatic-openstack-add-node',
   templateUrl: './openstack-add-node.component.html',
   styleUrls: ['./openstack-add-node.component.scss']
 })
-
-export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
+export class OpenstackAddNodeComponent implements OnInit, OnDestroy {
 
   @Output() public nodeSpecChanges: EventEmitter<NodeSpec> = new EventEmitter();
   @Output() public formChanges: EventEmitter<FormGroup> = new EventEmitter();
-  @Input() cloudSpec: CloudSpec;
 
   public osNodeForm: FormGroup;
-  public nodeSize: OpenstackSize[] = [];
-  public nodeSizeSorted: OpenstackSize[] = [];
+  public nodeSize: any[] = NodeInstanceFlavors.Openstack;
   @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
   @select(['wizard', 'nodeForm']) nodeForm$: Observable<any>;
   public nodeForm: any;
@@ -36,8 +30,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(private fb: FormBuilder,
               public inputValidationService: InputValidationService,
-              private ngRedux: NgRedux<any>,
-              private api: ApiService) { }
+              private ngRedux: NgRedux<any>) { }
 
   ngOnInit() {
     const subIsChecked = this.isChecked$.subscribe(isChecked => {
@@ -62,6 +55,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
         node_count: this.nodeForm.node_count,
         node_size: this.nodeForm.node_size
       };
+
       this.osNodeForm.setValue(formValue);
     }
 
@@ -75,30 +69,6 @@ export class OpenstackAddNodeComponent implements OnInit, OnChanges, OnDestroy {
           this.osNodeForm.get(i).markAsTouched();
         }
       }
-    }
-  }
-
-  public getNodeSizes() {
-    const selectedNodeSize = null;
-    return this.api.getOpenStackSizes(this.cloudSpec.openstack.username, this.cloudSpec.openstack.password, this.cloudSpec.openstack.tenant, this.cloudSpec.openstack.domain, this.cloudSpec.dc).subscribe(res => {
-      this.nodeSize = res;
-
-      const data = this.nodeSize ? this.nodeSize.slice() : [];
-      this.nodeSizeSorted = data.sort((a, b) => {
-        return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
-      });
-
-      if (res.length > 0 && this.osNodeForm.controls['node_size'].value === '') {
-        const nodeSizeSorted = selectedNodeSize ? selectedNodeSize : 'm1.medium';
-        this.osNodeForm.patchValue({node_size: nodeSizeSorted});
-        this.onChange();
-      }
-    });
-  }
-
-  public ngOnChanges(): void {
-    if (!!this.cloudSpec.openstack.username && !!this.cloudSpec.openstack.password && !!this.cloudSpec.openstack.tenant && !!this.cloudSpec.openstack.domain && !!this.cloudSpec.dc) {
-      this.getNodeSizes();
     }
   }
 

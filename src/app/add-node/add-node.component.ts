@@ -8,7 +8,6 @@ import { Provider } from '../shared/interfaces/provider.interface';
   templateUrl: './add-node.component.html',
   styleUrls: ['./add-node.component.scss']
 })
-
 export class AddNodeComponent implements OnInit {
   @Input() provider: Provider;
   @Input() connect: string[] = [];

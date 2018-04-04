@@ -1,15 +1,15 @@
-import { InputValidationService } from '../../core/services';
+import { InputValidationService } from 'app/core/services';
 import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { AddNodeFormComponent } from './../add-node-form/add-node-form.component';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { MockNgRedux } from '@angular-redux/store/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OpenstackAddNodeComponent } from './openstack-add-node.component';
-import { ApiService } from '../../core/services/api/api.service';
-import { ApiMockService } from '../../testing/services/api-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -43,8 +43,7 @@ describe('OpenstackAddNodeComponent', () => {
         AddNodeFormComponent
       ],
       providers: [
-        InputValidationService,
-        { provide: ApiService, useClass: ApiMockService }
+        InputValidationService
       ],
     }).compileComponents();
   });
@@ -61,9 +60,9 @@ describe('OpenstackAddNodeComponent', () => {
 
   it('form invalid after creating', () => {
     fixture.detectChanges();
+
     expect(component.osNodeForm.valid).toBeFalsy();
   });
-
 
   it('node count field validity', () => {
     fixture.detectChanges();
