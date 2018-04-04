@@ -23,6 +23,7 @@ import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { HetznerClusterSettingsComponent } from './provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './provider-settings/vsphere/vsphere.component';
 import Spy = jasmine.Spy;
+import { HetznerAddNodeComponent } from '../../add-node/hetzner-add-node/hetzner-add-node.component';
 
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
@@ -55,6 +56,7 @@ describe('SetSettingsComponent', () => {
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        HetznerAddNodeComponent,
       ],
       providers: [
         AddNodeService,

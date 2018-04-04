@@ -21,6 +21,7 @@ import { AddNodeService } from '../../../core/services/add-node/add-node.service
 import { fakeDigitaloceanCreateNode } from '../../../testing/fake-data/node.fake';
 import { fakeDigitaloceanSizes } from '../../../testing/fake-data/addNodeModal.fake';
 import Spy = jasmine.Spy;
+import { HetznerAddNodeComponent } from '../../../add-node/hetzner-add-node/hetzner-add-node.component';
 
 describe('AddNodeModalComponent', () => {
   let fixture: ComponentFixture<AddNodeModalComponent>;
@@ -51,6 +52,7 @@ describe('AddNodeModalComponent', () => {
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        HetznerAddNodeComponent,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { cluster: fakeDigitaloceanCluster } },

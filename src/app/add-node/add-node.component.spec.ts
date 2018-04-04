@@ -11,6 +11,7 @@ import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { ApiService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-data/addNodeModal.fake';
+import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
 import Spy = jasmine.Spy;
 
 describe('AddNodeComponent', () => {
@@ -35,10 +36,11 @@ describe('AddNodeComponent', () => {
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        HetznerAddNodeComponent,
       ],
       providers: [
         AddNodeService,
-        { provide: ApiService, useValue: apiMock },
+        {provide: ApiService, useValue: apiMock},
       ],
     }).compileComponents();
   }));
