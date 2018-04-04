@@ -26,6 +26,11 @@ pipeline:
     commands:
       - make dist
 
+  test:
+    image: kubermatic/chrome-headless:v0.1
+    commands:
+      - make test-headless
+
   build:
     image: golang:1.10
     commands:
