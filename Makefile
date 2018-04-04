@@ -20,6 +20,9 @@ test-full: test e2e
 test:
 	@$(CC) run test
 
+test-headless:
+	@$(CC) run test-headless
+
 e2e:
 	@$(CC) run e2e
 
