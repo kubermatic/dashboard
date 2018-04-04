@@ -5,6 +5,7 @@ import { AWSDatacenterSpec } from './datacenter/AWSDatacenterSpec';
 import { OpenStackDatacenterSpec } from './datacenter/OpenStackDatacenterSpec';
 import { VSphereDatacenterSpec } from './datacenter/VSphereDatacenterSpec';
 import { NodeProvider } from '../model/NodeProviderConstants';
+import { HetznerDatacenterSpec } from './datacenter/HetznerDatacenterSpec';
 
 export class DataCenterEntity {
   metadata: MetadataEntity;
@@ -38,6 +39,7 @@ export class DatacenterSpec {
   aws?: AWSDatacenterSpec;
   openstack?: OpenStackDatacenterSpec;
   vsphere?: VSphereDatacenterSpec;
+  hetzner?: HetznerDatacenterSpec;
 }
 
 export function getDatacenterProvider(datacenter: DataCenterEntity): string {
@@ -56,6 +58,9 @@ export function getDatacenterProvider(datacenter: DataCenterEntity): string {
     }
     case !!datacenter.spec.vsphere: {
       return NodeProvider.VSPHERE;
+    }
+    case !!datacenter.spec.hetzner: {
+      return NodeProvider.HETZNER;
     }
   }
   return '';
