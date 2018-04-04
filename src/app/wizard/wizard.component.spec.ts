@@ -1,7 +1,3 @@
-import { WizardStubsModule } from './../testing/components/wizard-stubs';
-import { clusterFake } from './../testing/fake-data/cluster.fake';
-import { AddNodeStubsModule } from './../testing/components/add-node-stubs';
-import { NgRedux } from '@angular-redux/store/lib/src/components/ng-redux';
 import { ApiService, DatacenterService, InitialNodeDataService } from '../core/services';
 import { WizardComponent } from './wizard.component';
 import { Router } from '@angular/router';
@@ -10,46 +6,33 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '../testing/router-stubs';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterStub } from './../testing/router-stubs';
 import { asyncData } from '../testing/services/api-mock.service';
-import { MatDialog } from '@angular/material';
-import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing';
+import { MatButtonToggleModule, MatDialog } from '@angular/material';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
-import { CreateClusterModel } from '../shared/model/CreateClusterModel';
-import { NodeEntity } from '../shared/entity/NodeEntity';
-import { nodeCreateFake } from '../testing/fake-data/node.fake';
-import { clusterFake1 } from '../testing/fake-data/cluster.fake';
+import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
+import { ProgressComponent } from './progress/progress.component';
+import { SetSettingsComponent } from './set-settings/set-settings.component';
+import { AddNodeComponent } from '../add-node/add-node.component';
+import { DigitaloceanClusterSettingsComponent } from './set-settings/provider-settings/digitalocean/digitalocean.component';
+import { OpenstackAddNodeComponent } from '../add-node/openstack-add-node/openstack-add-node.component';
+import { ClusterSSHKeysComponent } from './set-settings/ssh-keys/cluster-ssh-keys.component';
+import { ClusterProviderSettingsComponent } from './set-settings/provider-settings/provider-settings.component';
+import { DigitaloceanAddNodeComponent } from '../add-node/digitalocean-add-node/digitalocean-add-node.component';
+import { BringyourownClusterSettingsComponent } from './set-settings/provider-settings/bringyourown/bringyourown.component';
+import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aws/aws.component';
+import { AwsAddNodeComponent } from '../add-node/aws-add-node/aws-add-node.component';
+import { OpenstackClusterSettingsComponent } from './set-settings/provider-settings/openstack/openstack.component';
+import { SetClusterNameComponent } from './set-cluster-name/set-cluster-name.component';
+import { SetProviderComponent } from './set-provider/set-provider.component';
+import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
+import { SummaryComponent } from './summary/summary.component';
+import { WizardService } from '../core/services/wizard/wizard.service';
+import { AddNodeService } from '../core/services/add-node/add-node.service';
+import { StepsService } from '../core/services/wizard/steps.service';
+import { ClusterNameGenerator } from '../core/util/name-generator.service';
 import Spy = jasmine.Spy;
-
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SlimLoadingBarModule.forRoot(),
-  RouterTestingModule,
-  NgReduxTestingModule,
-  SharedModule,
-  WizardStubsModule,
-  AddNodeStubsModule
-];
-
-function setMockNgRedux<T>(fixture: ComponentFixture<T>, provider: string, step: number): void {
-  const stepStub = MockNgRedux.getSelectorStub(['wizard', 'step']);
-  const providerStub = MockNgRedux.getSelectorStub(['wizard', 'setProviderForm', 'provider']);
-  providerStub.next(provider);
-  providerStub.complete();
-  stepStub.next(step);
-  stepStub.complete();
-}
-
-function setMockModels<T>(fixture: ComponentFixture<T>, nodeModel: NodeEntity, clusterModel: CreateClusterModel): void {
-  const nodeModelStub = MockNgRedux.getSelectorStub(['wizard', 'nodeModel']);
-  const clusterModelStub = MockNgRedux.getSelectorStub(['wizard', 'clusterModel']);
-  nodeModelStub.next(nodeModel);
-  nodeModelStub.complete();
-  clusterModelStub.next(clusterModel);
-  clusterModelStub.complete();
-}
 
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
@@ -60,16 +43,36 @@ describe('WizardComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster']);
-    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(clusterFake1));
-    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(clusterFake1));
+    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
 
-    MockNgRedux.reset();
     TestBed.configureTestingModule({
       imports: [
-        ...modules,
+        BrowserModule,
+        BrowserAnimationsModule,
+        SlimLoadingBarModule.forRoot(),
+        RouterTestingModule,
+        SharedModule,
+        MatButtonToggleModule,
       ],
       declarations: [
-        WizardComponent
+        WizardComponent,
+        ProgressComponent,
+        SetSettingsComponent,
+        ClusterSSHKeysComponent,
+        ClusterProviderSettingsComponent,
+        DigitaloceanClusterSettingsComponent,
+        AWSClusterSettingsComponent,
+        OpenstackClusterSettingsComponent,
+        BringyourownClusterSettingsComponent,
+        AddNodeComponent,
+        OpenstackAddNodeComponent,
+        AwsAddNodeComponent,
+        DigitaloceanAddNodeComponent,
+        SetClusterNameComponent,
+        SetProviderComponent,
+        SetDatacenterComponent,
+        SummaryComponent,
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
@@ -77,6 +80,10 @@ describe('WizardComponent', () => {
         { provide: DatacenterService, useClass: DatacenterMockService },
         MatDialog,
         InitialNodeDataService,
+        WizardService,
+        AddNodeService,
+        StepsService,
+        ClusterNameGenerator,
       ],
     }).compileComponents();
   }));
@@ -84,43 +91,15 @@ describe('WizardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(WizardComponent);
     component = fixture.componentInstance;
-
+    fixture.detectChanges();
     router = fixture.debugElement.injector.get(Router);
   });
 
-  it('should create the sidenav cmp', () => {
+  it('should create wizard cmp', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get step and provider from the store', () => {
-    setMockNgRedux(fixture, 'provider', 1);
-    fixture.detectChanges();
-
-    expect(component.step).toBe(1, 'should get step');
-    expect(component.selectedProvider).toBe('provider', 'should get provider');
+  it('initially start with step 0', () => {
+    expect(component.currentStepIndex).toBe(0, 'initially start with step 0');
   });
-
-  it('should call methods after creating cluster', fakeAsync(() => {
-    const spyNavigate = spyOn(router, 'navigate');
-    const ngRedux = fixture.debugElement.injector.get(NgRedux);
-    const spyGetState = spyOn(ngRedux, 'getState').and.returnValue({
-      wizard: {
-        nodeModel: nodeCreateFake,
-        clusterModel: clusterFake,
-        nodeForm: { node_count: 1 },
-        setDatacenterForm: {
-          datacenter: {
-            spec: { seed: 'europe-west3-c' }
-          }
-        }
-      }
-    });
-    setMockNgRedux(fixture, 'digitalocean', 5);
-    fixture.detectChanges();
-    tick();
-
-    expect(component.selectedProvider).toBe('digitalocean', 'should get provider');
-    expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(createClusterSpy.and.callThrough()).toHaveBeenCalledTimes(1);
-  }));
 });

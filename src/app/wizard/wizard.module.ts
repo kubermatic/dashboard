@@ -1,46 +1,44 @@
-import { ProviderNodeComponent } from './set-settings/provider/node/node.component';
-import { OpenstackClusterComponent } from './set-settings/provider/cluster/openstack/openstack.component';
-import { ProviderClusterComponent } from './set-settings/provider/cluster/cluster.component';
-import { SharedModule } from 'app/shared/shared.module';
-import { SshKeyFormFieldComponent } from './set-settings/ssh-key-form-field/ssh-key-form-field.component';
 import { NgModule } from '@angular/core';
-import { WizardComponent } from 'app/wizard/wizard.component';
-import { NavigationButtonsComponent } from 'app/wizard/navigation-buttons/navigation-buttons.component';
-import { ProgressComponent } from 'app/wizard/progress/progress.component';
-import { SetClusterNameComponent } from 'app/wizard/set-cluster-name/set-cluster-name.component';
-import { SetDatacenterComponent } from 'app/wizard/set-datacenter/set-datacenter.component';
-import { SetProviderComponent } from 'app/wizard/set-provider/set-provider.component';
-import { SetSettingsComponent } from 'app/wizard/set-settings/set-settings.component';
-import { SummaryComponent } from 'app/wizard/summary/summary.component';
-import { DigitaloceanClusterComponent } from './set-settings/provider/cluster/digitalocean/digitalocean.component';
-import { AWSClusterComponent } from './set-settings/provider/cluster/aws/aws.component';
-import { WizardRoutingModule } from 'app/wizard/wizard-routing.module';
-import { AddNodeModule } from 'app/add-node/add-node.module';
-import { BringyourownClusterComponent } from 'app/wizard/set-settings/provider/cluster/bringyourown/bringyourown.component';
+import { WizardComponent } from './wizard.component';
+import { ProgressComponent } from './progress/progress.component';
+import { SetClusterNameComponent } from './set-cluster-name/set-cluster-name.component';
+import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
+import { SetProviderComponent } from './set-provider/set-provider.component';
+import { SetSettingsComponent } from './set-settings/set-settings.component';
+import { SummaryComponent } from './summary/summary.component';
+import { SharedModule } from '../shared/shared.module';
+import { WizardRoutingModule } from './wizard-routing.module';
+import { MatButtonToggleModule } from '@angular/material';
+import { OpenstackClusterSettingsComponent } from './set-settings/provider-settings/openstack/openstack.component';
+import { DigitaloceanClusterSettingsComponent } from './set-settings/provider-settings/digitalocean/digitalocean.component';
+import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aws/aws.component';
+import { BringyourownClusterSettingsComponent } from './set-settings/provider-settings/bringyourown/bringyourown.component';
+import { ClusterProviderSettingsComponent } from './set-settings/provider-settings/provider-settings.component';
+import { ClusterSSHKeysComponent } from './set-settings/ssh-keys/cluster-ssh-keys.component';
+import { AddNodeModule } from '../add-node/add-node.module';
 
 const components: any[] = [
   WizardComponent,
-  NavigationButtonsComponent,
   ProgressComponent,
   SetClusterNameComponent,
   SetDatacenterComponent,
   SetProviderComponent,
   SetSettingsComponent,
-  SshKeyFormFieldComponent,
+  ClusterSSHKeysComponent,
   SummaryComponent,
-  ProviderClusterComponent,
-  OpenstackClusterComponent,
-  DigitaloceanClusterComponent,
-  AWSClusterComponent,
-  ProviderNodeComponent,
-  BringyourownClusterComponent
+  ClusterProviderSettingsComponent,
+  OpenstackClusterSettingsComponent,
+  DigitaloceanClusterSettingsComponent,
+  AWSClusterSettingsComponent,
+  BringyourownClusterSettingsComponent,
 ];
 
 @NgModule({
   imports: [
     SharedModule,
     WizardRoutingModule,
-    AddNodeModule
+    MatButtonToggleModule,
+    AddNodeModule,
   ],
   declarations: [
     ...components
@@ -48,8 +46,7 @@ const components: any[] = [
   exports: [
     ...components
   ],
-  entryComponents: [],
-  providers: [],
+  entryComponents: []
 })
 export class WizardModule {
 }

@@ -1,86 +1,55 @@
-import { InputValidationService } from '../../core/services';
 import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AddNodeFormComponent } from './../add-node-form/add-node-form.component';
-import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
-import { MockNgRedux } from '@angular-redux/store/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { OpenstackAddNodeComponent } from './openstack-add-node.component';
-import { ApiService } from '../../core/services/api/api.service';
-import { ApiMockService } from '../../testing/services/api-mock.service';
-
-const modules: any[] = [
-  BrowserModule,
-  BrowserAnimationsModule,
-  SharedModule,
-  ReactiveFormsModule,
-  NgReduxTestingModule
-];
-
-function setMockNgRedux(nodeForm: any): void {
-  const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
-  nodeFormStub.next(nodeForm);
-}
-
-function completeRedux() {
-  const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
-  nodeFormStub.complete();
-}
+import { fakeOpenstackCluster } from '../../testing/fake-data/cluster.fake';
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { fakeOpenstackFlavors } from '../../testing/fake-data/addNodeModal.fake';
+import { asyncData } from '../../testing/services/api-mock.service';
+import { ApiService } from '../../core/services';
+import Spy = jasmine.Spy;
 
 describe('OpenstackAddNodeComponent', () => {
   let fixture: ComponentFixture<OpenstackAddNodeComponent>;
   let component: OpenstackAddNodeComponent;
+  let getOpenStackFlavorsSpy: Spy;
 
-  beforeEach(() => {
+  beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavors']);
+    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors));
+
     TestBed.configureTestingModule({
       imports: [
-        ...modules,
+        BrowserModule,
+        BrowserAnimationsModule,
+        SharedModule,
+        ReactiveFormsModule
       ],
       declarations: [
         OpenstackAddNodeComponent,
-        AddNodeFormComponent
       ],
       providers: [
-        InputValidationService,
-        { provide: ApiService, useClass: ApiMockService }
+        AddNodeService,
+        { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
-    MockNgRedux.reset();
     fixture = TestBed.createComponent(OpenstackAddNodeComponent);
     component = fixture.componentInstance;
+    component.cloudSpec = fakeOpenstackCluster.spec.cloud;
   });
 
   it('should create the add node cmp', () => {
     expect(component).toBeTruthy();
+    fixture.detectChanges();
   });
 
   it('form invalid after creating', () => {
     fixture.detectChanges();
     expect(component.osNodeForm.valid).toBeFalsy();
-  });
-
-
-  it('node count field validity', () => {
-    fixture.detectChanges();
-
-    let errors = {};
-    const name = component.osNodeForm.controls['node_count'];
-    errors = name.errors || {};
-    expect(errors['required']).toBeFalsy();
-    expect(errors['min']).toBeFalsy();
-
-    name.setValue(0);
-    errors = name.errors || {};
-    expect(errors['required']).toBeFalsy();
-    expect(errors['min']).toBeTruthy();
-
-    name.setValue('');
-    errors = name.errors || {};
-    expect(errors['required']).toBeTruthy();
   });
 });

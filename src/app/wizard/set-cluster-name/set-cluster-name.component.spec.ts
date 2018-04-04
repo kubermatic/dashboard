@@ -1,32 +1,19 @@
 import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule, By } from '@angular/platform-browser';
-import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SetClusterNameComponent } from './set-cluster-name.component';
-
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
-import { InputValidationService } from '../../core/services';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClusterNameGeneratorMock } from '../../testing/services/name-generator-mock.service';
+import { WizardService } from '../../core/services/wizard/wizard.service';
 
 const modules: any[] = [
   BrowserModule,
-  NgReduxTestingModule,
   BrowserAnimationsModule,
   ReactiveFormsModule,
   SharedModule
 ];
-
-function setMockNgRedux(name: string): void {
-  const stepStub = MockNgRedux.getSelectorStub(['wizard', 'clusterNameForm', 'name']);
-  stepStub.next(name);
-}
-
-function completeRedux() {
-  const stepStub = MockNgRedux.getSelectorStub(['wizard', 'clusterNameForm', 'name']);
-  stepStub.complete();
-}
 
 describe('SetClusterNameComponent', () => {
   let fixture: ComponentFixture<SetClusterNameComponent>;
@@ -34,7 +21,6 @@ describe('SetClusterNameComponent', () => {
   let nameGenerator: ClusterNameGenerator;
 
   beforeEach(async(() => {
-    MockNgRedux.reset();
     TestBed.configureTestingModule({
       imports: [
         ...modules,
@@ -43,8 +29,8 @@ describe('SetClusterNameComponent', () => {
         SetClusterNameComponent
       ],
       providers: [
+        WizardService,
         { provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock },
-        InputValidationService
       ],
     }).compileComponents();
   }));
@@ -52,7 +38,18 @@ describe('SetClusterNameComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SetClusterNameComponent);
     component = fixture.componentInstance;
+    component.cluster = {
+      metadata: {},
+      spec: {
+        humanReadableName: '',
+        masterVersion: '',
+        cloud: {
+          dc: '',
+        },
+      },
 
+    };
+    fixture.detectChanges();
     nameGenerator = fixture.debugElement.injector.get(ClusterNameGenerator);
   });
 
@@ -60,34 +57,18 @@ describe('SetClusterNameComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should get name from redux', () => {
-    setMockNgRedux('test-name');
-    completeRedux();
-    fixture.detectChanges();
-
-    component.clusterName$.subscribe(
-      clusterName => expect(clusterName).toBe('test-name'),
-    );
-  });
-
   it('form invalid after creating', () => {
-    fixture.detectChanges();
-
     expect(component.clusterNameForm.valid).toBeFalsy();
   });
 
   it('name field validity', () => {
-    fixture.detectChanges();
-
-    let errors = {};
-    const name = component.clusterNameForm.controls['name'];
-    errors = name.errors || {};
-    expect(errors['required']).toBeTruthy();
+    const name = component.clusterNameForm.controls.name;
+    expect(name.hasError('required')).toBeTruthy('name field has required error');
 
     name.setValue('test-name');
-    errors = name.errors || {};
-    expect(errors['required']).toBeFalsy();
-    expect(component.clusterNameForm.valid).toBeTruthy();
+    expect(name.hasError('required')).toBeFalsy('name field has no required error');
+
+    expect(component.clusterNameForm.valid).toBeTruthy('form is valid');
   });
 
   it('should call generateName method', () => {

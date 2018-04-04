@@ -8,7 +8,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { nodesFake } from '../../../testing/fake-data/node.fake';
 import { NodeListComponent } from './node-list.component';
-import { clusterFake1 } from '../../../testing/fake-data/cluster.fake';
+import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -46,7 +46,7 @@ describe('NodeComponent', () => {
 
   it('should hide remove button', () => {
     component.nodes = nodesFake;
-    component.cluster = clusterFake1;
+    component.cluster = fakeDigitaloceanCluster;
     fixture.detectChanges();
 
     const deRemoveButtons = fixture.debugElement.queryAll(By.css('.km-btn-remove-node-wrapper'));

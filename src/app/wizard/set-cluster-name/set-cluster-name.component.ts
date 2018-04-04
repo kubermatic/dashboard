@@ -1,10 +1,9 @@
-import { Observable } from 'rxjs/Observable';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
-import { select } from '@angular-redux/store/lib/src/decorators/select';
+import { WizardService } from '../../core/services/wizard/wizard.service';
 import { Subscription } from 'rxjs/Subscription';
-import { InputValidationService } from 'app/core/services';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-set-cluster-name',
@@ -12,50 +11,31 @@ import { InputValidationService } from 'app/core/services';
   styleUrls: ['set-cluster-name.component.scss']
 })
 export class SetClusterNameComponent implements OnInit, OnDestroy {
+  @Input() public cluster: ClusterEntity;
   public clusterNameForm: FormGroup;
-  @select(['wizard', 'clusterNameForm', 'name']) clusterName$: Observable<string>;
-  public clusterName = '';
-  @select(['wizard', 'isCheckedForm']) isChecked$: Observable<boolean>;
-  private subscription: Subscription;
+  private clusterNameFormChangeSub: Subscription;
 
-  constructor(private nameGenerator: ClusterNameGenerator,
-              private formBuilder: FormBuilder,
-              public inputValidationService: InputValidationService) {
-  }
+  constructor(private nameGenerator: ClusterNameGenerator, private wizardService: WizardService) { }
 
   ngOnInit() {
-    this.subscription = this.clusterName$.combineLatest(this.isChecked$)
-      .subscribe((data: [string, boolean]) => {
-        const clusterName = data[0];
-        const isChecked = data[1];
+    this.clusterNameForm = new FormGroup({
+      name: new FormControl(this.cluster.spec.humanReadableName, [Validators.required, Validators.minLength(5)]),
+    });
 
-        clusterName && (this.clusterName = clusterName);
-
-        if (isChecked) {
-          this.showRequiredFields();
-        }
+    this.clusterNameFormChangeSub = this.clusterNameForm.valueChanges.subscribe(data => {
+      this.wizardService.changeClusterName({
+        name: this.clusterNameForm.controls.name.value,
+        valid: this.clusterNameForm.valid,
       });
-
-    this.clusterNameForm = this.formBuilder.group({
-      name: [this.clusterName, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
     });
   }
 
-  public showRequiredFields() {
-    if (this.clusterNameForm.invalid) {
-      for (const i in this.clusterNameForm.controls) {
-        if (this.clusterNameForm.controls.hasOwnProperty(i)) {
-          this.clusterNameForm.get(i).markAsTouched();
-        }
-      }
-    }
+  public ngOnDestroy(): void {
+    this.clusterNameFormChangeSub.unsubscribe();
   }
 
   public generateName() {
     this.clusterNameForm.patchValue({ name: this.nameGenerator.generateName() });
   }
 
-  public ngOnDestroy(): void {
-    this.subscription && this.subscription.unsubscribe();
-  }
 }

@@ -1,92 +1,58 @@
-import { ApiService } from 'app/core/services/api/api.service';
-import { InputValidationService } from 'app/core/services';
 import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-
-import { AddNodeFormComponent } from './../add-node-form/add-node-form.component';
-import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
-import { MockNgRedux } from '@angular-redux/store/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node.component';
-import { ApiMockService } from '../../testing/services/api-mock.service';
+import { asyncData } from '../../testing/services/api-mock.service';
+import { ApiService } from '../../core/services';
+import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
+import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
-  ReactiveFormsModule,
-  NgReduxTestingModule
+  ReactiveFormsModule
 ];
-
-function setMockNgRedux(nodeForm: any): void {
-  const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
-  nodeFormStub.next(nodeForm);
-}
-
-function completeRedux() {
-  const nodeFormStub = MockNgRedux.getSelectorStub(['wizard', 'nodeForm']);
-  nodeFormStub.complete();
-}
 
 describe('DigitaloceanAddNodeComponent', () => {
   let fixture: ComponentFixture<DigitaloceanAddNodeComponent>;
   let component: DigitaloceanAddNodeComponent;
-  let apiSevice: ApiService;
+  let getDigitaloceanSizesSpy: Spy;
 
-  beforeEach(() => {
-    MockNgRedux.reset();
+  beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes']);
+    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
     TestBed.configureTestingModule({
       imports: [
         ...modules,
       ],
       declarations: [
         DigitaloceanAddNodeComponent,
-        AddNodeFormComponent
       ],
       providers: [
-        InputValidationService,
-        { provide: ApiService, useClass: ApiMockService }
+        AddNodeService,
+        { provide: ApiService, useValue: apiMock }
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(DigitaloceanAddNodeComponent);
     component = fixture.componentInstance;
-
-    apiSevice = fixture.debugElement.injector.get(ApiService);
+    component.cloudSpec = fakeDigitaloceanCluster.spec.cloud;
   });
 
   it('should create the add node cmp', () => {
     expect(component).toBeTruthy();
+    fixture.detectChanges();
   });
 
-  it('form invalid after creating', () => {
+  it('form valid when initializing since digitalocean has sane defaults for required fields', () => {
     fixture.detectChanges();
-
-    expect(component.doNodeForm.valid).toBeFalsy();
+    expect(component.doNodeForm.valid).toBeTruthy();
   });
-
-  it('node count field validity', fakeAsync(() => {
-    fixture.detectChanges();
-    tick();
-
-    let errors = {};
-    const name = component.doNodeForm.controls['node_count'];
-    errors = name.errors || {};
-    expect(errors['required']).toBeFalsy();
-    expect(errors['min']).toBeFalsy();
-
-    name.setValue(0);
-    errors = name.errors || {};
-    expect(errors['required']).toBeFalsy();
-    expect(errors['min']).toBeTruthy();
-
-    name.setValue('');
-    errors = name.errors || {};
-    expect(errors['required']).toBeTruthy();
-  }));
 });

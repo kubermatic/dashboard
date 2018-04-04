@@ -5,9 +5,9 @@
 </mat-card-header>
 <mat-card-content>
   <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember</p>
-  <form [connect]="['wizard', 'clusterNameForm']" [formGroup]="clusterNameForm" novalidate fxLayout="column">
+  <form [formGroup]="clusterNameForm" fxLayout="column">
     <mat-form-field fxFlex>
-      <input id="name" [errorStateMatcher]="inputValidationService" matInput formControlName="name" type="text" placeholder="Enter a cluster name" title="name" autocomplete="off">
+      <input id="name" matInput formControlName="name" type="text" placeholder="Enter a cluster name" title="name" autocomplete="off">
       <mat-error *ngIf="clusterNameForm.controls.name.hasError('required')">
         Name is <strong>required</strong>
       </mat-error>

@@ -1,4 +1,3 @@
-import { clusterFake } from './../../testing/fake-data/cluster.fake';
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -9,6 +8,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from './../../testing/router-stubs';
 
 import { ClusterHealthStatusComponent } from './cluster-health-status.component';
+import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -39,8 +39,8 @@ describe('ClusterHealthStatusComponent', () => {
     fixture = TestBed.createComponent(ClusterHealthStatusComponent);
     component = fixture.componentInstance;
 
-    component.health = clusterFake.status.health;
-    component.phase = clusterFake.status.phase;
+    component.health = fakeDigitaloceanCluster.status.health;
+    component.phase = fakeDigitaloceanCluster.status.phase;
   });
 
   it('should create the cluster health status cmp', async(() => {
