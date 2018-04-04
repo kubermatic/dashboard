@@ -3,12 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { asyncData } from '../../testing/services/api-mock.service';
-import { ApiService } from '../../core/services';
-import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { fakeDigitaloceanCluster, fakeHetznerCluster } from '../../testing/fake-data/cluster.fake';
-import Spy = jasmine.Spy;
+import { fakeHetznerCluster } from '../../testing/fake-data/cluster.fake';
 import { HetznerAddNodeComponent } from './hetzner-add-node.component';
 
 const modules: any[] = [

@@ -40,7 +40,7 @@ describe('AddNodeComponent', () => {
       ],
       providers: [
         AddNodeService,
-        {provide: ApiService, useValue: apiMock},
+        { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();
   }));
