@@ -57,9 +57,6 @@ export function getDatacenterProvider(datacenter: DataCenterEntity): string {
     case !!datacenter.spec.vsphere: {
       return NodeProvider.VSPHERE;
     }
-    case !!datacenter.spec.vsphere: {
-      return NodeProvider.VSPHERE;
-    }
   }
   return '';
 }

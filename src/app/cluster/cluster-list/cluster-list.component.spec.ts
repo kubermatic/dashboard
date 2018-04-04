@@ -12,7 +12,7 @@ import { ClusterItemComponent } from './cluster-item/cluster-item.component';
 import { Auth } from './../../core/services/auth/auth.service';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { ApiService } from '../../core/services/api/api.service';
-import { fakeClusters } from '../../testing/fake-data/cluster.fake';
+import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { fakeSeedDatacenters } from '../../testing/fake-data/datacenter.fake';
 import Spy = jasmine.Spy;
@@ -25,7 +25,7 @@ describe('ClusterListComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getClusters']);
-    getClustersSpy = apiMock.getClusters.and.returnValue(asyncData(fakeClusters));
+    getClustersSpy = apiMock.getClusters.and.returnValue(asyncData([fakeAWSCluster]));
     const dcMock = jasmine.createSpyObj('DatacenterService', ['getSeedDataCenters']);
     getSeedDatacentersSpy = dcMock.getSeedDataCenters.and.returnValue(asyncData(fakeSeedDatacenters));
 
@@ -66,7 +66,7 @@ describe('ClusterListComponent', () => {
     tick(1);
     expect(getSeedDatacentersSpy.and.callThrough()).toHaveBeenCalled();
     expect(getClustersSpy.and.callThrough()).toHaveBeenCalled();
-    // expect(component.clusters['europe-west3-c']).toEqual([fakeClusters]);
+    expect(component.clusters).toEqual([fakeAWSCluster]);
     discardPeriodicTasks();
   }));
 
