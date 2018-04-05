@@ -20,7 +20,11 @@ import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake
 import { asyncData } from '../../testing/services/api-mock.service';
 import { ApiService } from '../../core/services';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
+import { HetznerClusterSettingsComponent } from './provider-settings/hetzner/hetzner.component';
+import { VSphereClusterSettingsComponent } from './provider-settings/vsphere/vsphere.component';
 import Spy = jasmine.Spy;
+import { HetznerAddNodeComponent } from '../../add-node/hetzner-add-node/hetzner-add-node.component';
+import { VSphereAddNodeComponent } from '../../add-node/vsphere-add-node/vsphere-add-node.component';
 
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
@@ -47,15 +51,19 @@ describe('SetSettingsComponent', () => {
         AWSClusterSettingsComponent,
         OpenstackClusterSettingsComponent,
         BringyourownClusterSettingsComponent,
+        HetznerClusterSettingsComponent,
+        VSphereClusterSettingsComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        HetznerAddNodeComponent,
+        VSphereAddNodeComponent,
       ],
       providers: [
         AddNodeService,
         WizardService,
-        { provide: ApiService, useValue: apiMock },
+        {provide: ApiService, useValue: apiMock},
       ],
     }).compileComponents();
   }));

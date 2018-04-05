@@ -9,3 +9,7 @@
 <kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud"></kubermatic-digitalocean-add-node>
 
 <kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-add-node>
+
+<kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner" [cloudSpec]="cluster.spec.cloud"></kubermatic-hetzner-add-node>
+
+<kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-add-node>

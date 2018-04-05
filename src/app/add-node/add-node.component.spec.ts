@@ -11,7 +11,9 @@ import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { ApiService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-data/addNodeModal.fake';
+import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
 import Spy = jasmine.Spy;
+import { VSphereAddNodeComponent } from './vsphere-add-node/vsphere-add-node.component';
 
 describe('AddNodeComponent', () => {
   let fixture: ComponentFixture<AddNodeComponent>;
@@ -35,6 +37,8 @@ describe('AddNodeComponent', () => {
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        HetznerAddNodeComponent,
+        VSphereAddNodeComponent,
       ],
       providers: [
         AddNodeService,

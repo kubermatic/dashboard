@@ -22,7 +22,7 @@ export class NodeCloudSpec {
   aws?: AWSNodeSpec;
   openstack?: OpenstackNodeSpec;
   hetzner?: HetznerNodeSpec;
-  vshpere?: VSphereNodeSpec;
+  vsphere?: VSphereNodeSpec;
 }
 
 export class OperatingSystemSpec {
