@@ -34,10 +34,6 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     }
     this.keysForm.controls.keys.patchValue(keyNames);
 
-    this.keysSub = this.api.getSSHKeys().subscribe(sshKeys => {
-      this.keys = sshKeys;
-    });
-
     this.keysFormSub = this.keysForm.valueChanges.subscribe(data => {
       const clusterKeys: SSHKeyEntity[] = [];
       for (const selectedKey of this.keysForm.controls.keys.value) {
@@ -49,11 +45,21 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
       }
       this.wizardService.changeClusterSSHKeys(clusterKeys);
     });
+
+    this.reloadKeys();
   }
 
   ngOnDestroy() {
     this.keysSub.unsubscribe();
     this.keysFormSub.unsubscribe();
+  }
+
+  reloadKeys() {
+    this.keysSub = this.api.getSSHKeys().subscribe(sshKeys => {
+      this.keys = sshKeys.sort((a, b) => {
+        return a.spec.name.localeCompare(b.spec.name);
+      });
+    });
   }
 
   public addSshKeyDialog(): void {
@@ -64,9 +70,9 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
         if (this.keysSub) {
           this.keysSub.unsubscribe();
         }
-        this.keysSub = this.api.getSSHKeys().subscribe(sshKeys => {
-          this.keys = sshKeys;
-        });
+
+        this.reloadKeys();
+
         this.keysForm.setValue({
           keys: [result.metadata.name]
         });
