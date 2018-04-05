@@ -8,11 +8,13 @@
   <p *ngIf="!cluster.spec.cloud.bringyourown">This is the datacenter of your cloud provider. Your worker nodes will get deployed there.</p>
   <p *ngIf="cluster.spec.cloud.bringyourown">This is the kubermatic datacenter you want your master components to run in.</p>
   <form [formGroup]="setDatacenterForm" fxLayoutAlign="left" fxLayout="row wrap">
-    <mat-button-toggle-group [vertical]="true" group="datacenterGroup" formControlName="datacenter">
+    <mat-button-toggle-group group="datacenterGroup" formControlName="datacenter">
       <mat-button-toggle *ngFor="let datacenter of datacenters;" value="{{datacenter.metadata.name}}">
         <span class="flag-icon flag-icon-{{ datacenter.spec.country.toLowerCase() }}">
         </span>
-      {{ datacenter.spec.location }}
+        <div class="location">
+          {{ datacenter.spec.location }}
+        </div>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </form>
