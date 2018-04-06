@@ -36,7 +36,7 @@
       </div>
 
       <!-- DO -->
-      <div class="km-card-list-content" *ngIf="cluster.spec.cloud.digitalocean">
+      <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.digitalocean">
         <div fxFlex="20%" class="km-card-list-key">Digitalocean API token</div>
         <div fxFlex="80%">{{cluster.spec.cloud.digitalocean.token}}</div>
       </div>
