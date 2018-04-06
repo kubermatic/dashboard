@@ -68,6 +68,31 @@ mat-sidenav {
   }
 }
 
+/deep/.mat-checkbox-frame {
+  border-color: #C1C9D4;
+}
+
+/deep/.mat-checkbox-background {
+  background-color: transparent;
+}
+
+/deep/.mat-checkbox-checked.mat-accent {
+  .mat-checkbox-background {
+    background-color: transparent;
+  }
+  .mat-checkbox-frame {
+    border-color: #444D58;
+  }
+}
+
+/deep/.mat-checkbox-checkmark {
+  fill: #444D58;
+}
+
+/deep/.mat-checkbox-checkmark-path {
+  stroke: #444D58 !important;
+}
+
 footer {
   z-index: 1;
 }

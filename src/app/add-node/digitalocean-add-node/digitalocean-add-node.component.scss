@@ -5,3 +5,18 @@
 .mat-select {
   width: 100%;
 }
+
+div.node-options {
+  width: 100%;
+  line-height: 30px;
+  font-size: 14px;
+  display: flex;
+
+  mat-checkbox, label {
+    flex: 1 1 100%;
+  }
+}
+
+textarea.mat-input-element {
+  line-height: 20px;
+} 
