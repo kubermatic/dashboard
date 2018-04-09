@@ -2,12 +2,12 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
-import {ClusterService} from '../../../core/services';
+import { ClusterService } from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-item',
   templateUrl: './cluster-item.component.html',
-  styleUrls: ['./cluster-item.component.scss',
+  styleUrls: ['./cluster-item.component.scss'],
 })
 export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -15,8 +15,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() health: Health;
   public nodeDC: DataCenterEntity;
 
-  constructor(private dcService: DatacenterService,
-              public clusterService: ClusterService) {}
+  constructor(private dcService: DatacenterService, public clusterService: ClusterService) {}
 
   public ngOnInit(): void {
     if (this.cluster.spec.cloud.bringyourown === undefined) {
