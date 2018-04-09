@@ -30,3 +30,36 @@
   margin-top: 15px;
   margin-bottom: 10px;
 }
+
+div.km-form-group-tags-header {
+  margin: 10px 0;
+
+  i.fa-plus {
+    cursor: pointer;
+  }
+}
+
+div.km-form-group-tags {
+  display: flex;
+  flex-direction: column;
+
+  div.km-form-group-tags-inner {
+    display: flex;
+  }
+
+  span.seperator {
+    display: flex;
+    flex: 1 1 10%;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+
+  i.fa-times {
+    display: flex;
+    flex: 1 1 6%;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}
