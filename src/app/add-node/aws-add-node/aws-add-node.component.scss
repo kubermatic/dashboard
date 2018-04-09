@@ -32,7 +32,10 @@
 }
 
 div.km-form-group-tags-header {
-  margin: 10px 0;
+  margin: 20px 0 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #E3E8EC;
+  padding-bottom: 15px;
 
   i.fa-plus {
     cursor: pointer;
@@ -53,6 +56,7 @@ div.km-form-group-tags {
     align-items: center;
     justify-content: center;
     font-weight: 600;
+    padding-bottom: 6px;
   }
 
   i.fa-times {
@@ -62,4 +66,11 @@ div.km-form-group-tags {
     justify-content: center;
     cursor: pointer;
   }
+}
+
+.mat-select-container {
+    padding: 0;
+}
+/deep/.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
+  margin: 0;
 }
