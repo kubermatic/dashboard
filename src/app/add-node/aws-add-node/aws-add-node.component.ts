@@ -45,11 +45,11 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    const tagMap = new Map<string, string>();
+    const tagMap = {};
     const tagListValue = this.tagForm.get('tagList').value;
     for (const i in tagListValue) {
       if (tagListValue[i].key !== '' && tagListValue[i].value !== '') {
-        tagMap.set(tagListValue[i].key, tagListValue[i].value);
+        tagMap[tagListValue[i].key] = tagListValue[i].value;
       }
     }
 

@@ -74,6 +74,7 @@
           <div fxFlex="80%">{{cluster.spec.cloud.aws.routeTableId}}</div>
         </div>
       </ng-container>
+
       <!-- Open Stack -->
       <ng-container *ngIf="cluster.spec.cloud.openstack">
         <div fxLayout class="km-card-list-content">
@@ -126,7 +127,7 @@
       </ng-container>
 
       <!-- DO Nodes -->
-      <div *ngIf="cluster.spec.cloud.digitalocean">
+      <ng-container *ngIf="cluster.spec.cloud.digitalocean">
         <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.digitalocean.size }}</div>
@@ -147,7 +148,7 @@
           <div fxFlex="20%" class="km-card-list-key">Tags</div>
           <div fxFlex="80%">{{nodeData.node.spec.cloud.digitalocean.tags}}</div>
         </div>
-      </div>
+      </ng-container>
 
         <ng-container *ngIf="nodeData.node.spec.cloud.aws">
           <div fxLayout class="km-card-list-content" >
@@ -179,17 +180,19 @@
           <div fxFlex="20%" class="km-card-list-key">AMI ID</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.ami }}</div>
         </div>
-      </div>
+      </ng-container>
 
       <!-- Open Stack Nodes -->
-      <div *ngIf="cluster.spec.cloud.openstack">
+      <ng-container *ngIf="cluster.spec.cloud.openstack">
         <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.openstack.flavor }}</div>
         </div>
-      </div>
+      </ng-container>
 
-        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.hetzner">
+      <!-- Hetzner Nodes -->
+      <ng-container *ngIf="nodeData.node.spec.cloud.hetzner">
+        <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.hetzner.type }}</div>
         </div>
