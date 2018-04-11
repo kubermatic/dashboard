@@ -19,7 +19,7 @@ export class ClusterSecretsComponent implements OnInit {
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
-   this.isClusterRunning = isClusterRunning(this.cluster);
+
   }
 
   isExpand(expand: boolean) {
@@ -100,6 +100,9 @@ export class ClusterSecretsComponent implements OnInit {
   }
 
   public getStatus(name: string): string {
+
+    this.isClusterRunning = isClusterRunning(this.cluster);
+
     if (this.cluster.status.health) {
       switch (name) {
         case 'apiserver':
@@ -121,10 +124,11 @@ export class ClusterSecretsComponent implements OnInit {
   }
 
   public getHealthStatus(isHealthy: boolean): string {
+
     if (isHealthy) {
       return 'Running';
     } else if (!isHealthy) {
-      if (!isClusterRunning(this.cluster)) {
+      if (this.isClusterRunning) {
         return 'Failed';
       } else {
         return 'Pending';

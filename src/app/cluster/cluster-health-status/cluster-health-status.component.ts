@@ -11,7 +11,7 @@ export class ClusterHealthStatusComponent {
 
   public green = 'fa fa-circle green';
   public red = 'fa fa-circle red';
-  public orange = 'fa fa-spin fa-circle-o-notch';
+  public orange = 'fa fa-spin fa-circle-o-notch orange';
 
   constructor() { }
 
