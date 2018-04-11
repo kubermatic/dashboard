@@ -14,10 +14,12 @@ export class ClusterSecretsComponent implements OnInit {
   @Input() datacenter: DataCenterEntity;
   public expand = false;
   public dialogRef: any;
+  public isClusterRunning: boolean;
 
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
+   this.isClusterRunning = isClusterRunning(this.cluster);
   }
 
   isExpand(expand: boolean) {
