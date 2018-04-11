@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ApiService } from '../../core/services/api/api.service';
 import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import {ClusterEntity, isClusterRunning} from '../../shared/entity/ClusterEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
@@ -63,7 +63,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       return item.metadata.name === cluster.metadata.name;
     });
 
-    return prevCluster && prevCluster.status.phase === cluster.status.phase ? index : undefined;
+    return prevCluster && isClusterRunning(prevCluster) === isClusterRunning(cluster) ? index : undefined;
   }
 
   sortData(sort: Sort) {
