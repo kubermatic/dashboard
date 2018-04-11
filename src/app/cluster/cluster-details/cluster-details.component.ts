@@ -9,10 +9,10 @@ import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/combineLatest';
 import { environment } from '../../../environments/environment';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
-import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
+import { ClusterEntity, getClusterProvider, isClusterRunning, getClusterHealthStatus } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ApiService, DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import 'rxjs/add/observable/interval';
@@ -36,7 +36,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private clusterSubject: Subject<ClusterEntity>;
   private upgradesList: string[] = [];
   private unsubscribe: Subject<any> = new Subject();
-
+  public isClusterRunning: boolean = false;
+  public clusterHealthClass: string;
   private refreshInterval = 10000;
 
   constructor(private route: ActivatedRoute,
@@ -44,8 +45,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               private api: ApiService,
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
-              private dcService: DatacenterService,
-              public clusterService: ClusterService) {
+              private dcService: DatacenterService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
@@ -89,7 +89,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             });
         }
       });
-
     // Nodes
     this.clusterSubject
       .takeUntil(this.unsubscribe)
@@ -133,6 +132,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.cluster = data[1];
           this.clusterSubject.next(data[1]);
 
+          this.isClusterRunning = isClusterRunning(this.cluster);
+          this.clusterHealthClass = getClusterHealthStatus(this.cluster);
+
+
           const timer = Observable.interval(this.refreshInterval);
           timer
             .takeUntil(this.unsubscribe)
@@ -160,6 +163,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         this.cluster = res;
         this.clusterSubject.next(res);
       });
+
+    this.isClusterRunning = isClusterRunning(this.cluster);
+    this.clusterHealthClass = getClusterHealthStatus(this.cluster);
   }
 
   public reloadClusterNodes() {

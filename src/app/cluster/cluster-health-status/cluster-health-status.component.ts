@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Health } from '../../shared/entity/ClusterEntity';
+import { ClusterEntity, getClusterHealthStatus } from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-health-status',
@@ -7,8 +7,8 @@ import { Health } from '../../shared/entity/ClusterEntity';
   styleUrls: ['./cluster-health-status.component.scss']
 })
 export class ClusterHealthStatusComponent {
-  @Input() public health: Health;
-  @Input() public phase: string;
+  @Input() public cluster: ClusterEntity;
+
   public green = 'fa fa-circle green';
   public red = 'fa fa-circle red';
   public orange = 'fa fa-circle orange';
@@ -16,10 +16,12 @@ export class ClusterHealthStatusComponent {
   constructor() { }
 
   public getHealthStatusColor(): string {
-    if (this.health) {
-      if (this.health.apiserver && this.health.controller && this.health.etcd && this.health.scheduler && this.health.nodeController) {
+    const healthStatus = getClusterHealthStatus(this.cluster);
+
+    if (this.cluster.status.health) {
+      if (healthStatus === 'statusRunning') {
         return this.green;
-      } else if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.scheduler || !this.health.nodeController) && this.phase === 'Failed') {
+      } else if (healthStatus === 'statusFailed' || healthStatus === 'statusDeleting') {
         return this.red;
       } else {
         return this.orange;

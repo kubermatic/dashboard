@@ -26,7 +26,7 @@
   }
 
   &.odd {
-    background-color: #F7FAFF;  
+    background-color: #F7FAFF;
   }
 
   &.statusRunning:hover {
@@ -41,7 +41,7 @@
     }
   }
 
-  &.statusFailed {
+  &.statusFailed, &.statusDeleting {
     background-color: rgba(241, 92, 92, 0.15);
 
     &:hover {

@@ -8,7 +8,7 @@ import {NodeProvider} from '../model/NodeProviderConstants';
 import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
 import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
 
-export function getClusterProvider(cluster: ClusterEntity): string {
+export function  getClusterProvider(cluster: ClusterEntity): string {
   switch (true) {
     case !!cluster.spec.cloud.digitalocean: {
       return NodeProvider.DIGITALOCEAN;
@@ -33,6 +33,30 @@ export function getClusterProvider(cluster: ClusterEntity): string {
     }
   }
   return '';
+}
+
+export function getClusterHealthStatus (cluster: ClusterEntity): string {
+  if (!!cluster.status.health) {
+    if (cluster.metadata.deletionTimestamp) {
+      return 'statusDeleting';
+    }
+
+    if (cluster.status.health.apiserver && cluster.status.health.scheduler && cluster.status.health.controller && cluster.status.health.nodeController && cluster.status.health.etcd) {
+      return 'statusRunning';
+    }
+
+    if (!cluster.status.health.apiserver) {
+      return 'statusFailed';
+    }
+  }
+  return 'statusWaiting';
+}
+
+export function isClusterRunning(cluster: ClusterEntity): boolean {
+  if (!!cluster.status.health && cluster.status.health.apiserver) {
+    return true;
+  }
+  return false;
 }
 
 export class ClusterEntity {

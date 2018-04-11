@@ -1,11 +1,44 @@
 .health-state {
+  position: relative;
+
   div.orange {
    color: orange;
   }
+  .orange.static {
+    display: none;
+  }
+
   div.green {
     color: #79c447;
+    opacity: 1;
+    -webkit-animation-name: server-status-pulse; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    fill: inherit;
+    stroke: inherit;
+    transform: scale(1);
+
+    animation: server-status-pulse 6s linear infinite;
   }
+  .green.static {
+    color: #79c447;
+    position: absolute;
+    left: 0px;
+    top: 5px;
+  }
+
   div.red {
     color: #ff5454;
   }
+  .red.static {
+    display: none;
+  }
+}
+
+
+@keyframes server-status-pulse{
+  0%{transform:scale(1);opacity:0}
+  12%{opacity:.6}
+  20%{opacity:.1}
+  25%{transform:scale(1.6);opacity:0}
+  to{transform:scale(1.6);opacity:0}
 }

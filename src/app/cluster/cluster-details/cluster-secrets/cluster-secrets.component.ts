@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, isClusterRunning } from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
@@ -73,8 +73,8 @@ export class ClusterSecretsComponent implements OnInit {
           return this.getIconClass(this.cluster.status.health.etcd);
         case 'scheduler':
           return this.getIconClass(this.cluster.status.health.scheduler);
-        case 'nodeController':
-          return this.getIconClass(this.cluster.status.health.nodeController);
+        case 'machineController':
+          return this.getIconClass(this.cluster.status.health.machineController);
         default:
           return '';
       }
@@ -87,7 +87,7 @@ export class ClusterSecretsComponent implements OnInit {
     if (isHealthy) {
       return 'iconRunning';
     } else if (!(isHealthy)) {
-      if (this.cluster.status.phase === 'Failed') {
+      if (!this.cluster.status.health.apiserver) {
         return 'iconFailed';
       } else {
         return 'fa fa-spin fa-circle-o-notch';
@@ -108,8 +108,8 @@ export class ClusterSecretsComponent implements OnInit {
           return this.getHealthStatus(this.cluster.status.health.etcd);
         case 'scheduler':
           return this.getHealthStatus(this.cluster.status.health.scheduler);
-        case 'nodeController':
-          return this.getHealthStatus(this.cluster.status.health.nodeController);
+        case 'machineController':
+          return this.getHealthStatus(this.cluster.status.health.machineController);
         default:
           return '';
       }
@@ -122,7 +122,7 @@ export class ClusterSecretsComponent implements OnInit {
     if (isHealthy) {
       return 'Running';
     } else if (!isHealthy) {
-      if (this.cluster.status.phase === 'Failed') {
+      if (!isClusterRunning(this.cluster)) {
         return 'Failed';
       } else {
         return 'Pending';

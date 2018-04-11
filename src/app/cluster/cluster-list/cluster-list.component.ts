@@ -83,8 +83,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
           return this.getProvider(a, b, isAsc);
         case 'region':
           return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
-        case 'status':
-          return this.compare(a.status.phase, b.status.phase, isAsc);
         default:
           return 0;
       }

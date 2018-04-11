@@ -9,7 +9,7 @@ import { RouterTestingModule } from './../../../testing/router-stubs';
 import { ClusterItemComponent } from './cluster-item.component';
 import { Auth } from './../../../core/services/auth/auth.service';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
-import { ClusterService, DatacenterService } from '../../../core/services/index';
+import { DatacenterService } from '../../../core/services/index';
 import { DatacenterMockService } from './../../../testing/services/datacenter-mock.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 
@@ -37,8 +37,7 @@ describe('ClusterItemComponent', () => {
       ],
       providers: [
         { provide: DatacenterService, useClass: DatacenterMockService },
-        { provide: Auth, useClass: AuthMockService },
-        ClusterService,
+        { provide: Auth, useClass: AuthMockService }
       ],
     }).compileComponents();
   });

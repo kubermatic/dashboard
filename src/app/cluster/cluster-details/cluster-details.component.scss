@@ -168,7 +168,7 @@ kubermatic-cluster-health-status {
   background-color: #FFFFFF;
 }
 
-.statusFailed {
+.statusFailed, .statusDeleting {
   background-color: #FFF0EC;
 }
 
