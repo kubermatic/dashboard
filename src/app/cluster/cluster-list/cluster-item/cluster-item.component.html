@@ -2,11 +2,11 @@
 <div class="km-card-list-content" [ngClass]="getClusterItemClass()">
   <div fxLayout [routerLink]="['/clusters/', getDatacenter(), cluster.metadata.name]" class="km-card-list-content-item">
     <div fxFlex="40%" fxFlex.xs="40%">
-      <span>
-        <div style="display: inline-block; line-height: 30px; height: 30px;"><kubermatic-cluster-health-status [cluster]="cluster"></kubermatic-cluster-health-status></div>
+
+        <span class="health-state-container"><kubermatic-cluster-health-status [cluster]="cluster"></kubermatic-cluster-health-status></span>
         <p fxHide.gt-sm >{{getShortClusterName(cluster.spec.humanReadableName)}}</p>
         <p fxHide.lt-md >{{this.cluster.spec.humanReadableName}}</p>
-      </span>
+
     </div>
     <div fxFlex="30%" fxFlex.sm="20%" fxFlex.xs="25%">
       <ng-container [ngSwitch]="!!cluster.spec.cloud">

@@ -1,33 +1,58 @@
 .health-state {
   position: relative;
+  height: 30px;
+  width: 30px;
 
   div.orange {
    color: orange;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0;
+  bottom: 0;
+  font-size: 18px;
+  line-height: 30px;
+  text-align: center;
+  display: inline-block;
   }
   .orange.static {
     display: none;
   }
 
-  div.green {
+  .green {
     color: #79c447;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0;
+    bottom: 0;
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+    display: inline-block;
+  }
+
+  .green.animated {
     opacity: 1;
     -webkit-animation-name: server-status-pulse; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
     fill: inherit;
     stroke: inherit;
     transform: scale(1);
-
-    animation: server-status-pulse 6s linear infinite;
-  }
-  .green.static {
-    color: #79c447;
-    position: absolute;
-    left: 0px;
-    top: 5px;
+    animation: server-status-pulse 3s linear infinite;
   }
 
   div.red {
     color: #ff5454;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    right: 0;
+    bottom: 0;
+    font-size: 18px;
+    line-height: 30px;
+    text-align: center;
+    display: inline-block;
   }
   .red.static {
     display: none;
