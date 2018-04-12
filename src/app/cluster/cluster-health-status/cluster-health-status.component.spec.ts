@@ -40,8 +40,6 @@ describe('ClusterHealthStatusComponent', () => {
     component = fixture.componentInstance;
 
     component.cluster = fakeDigitaloceanCluster;
-    component.cluster.status = fakeDigitaloceanCluster.status;
-    component.cluster.status.health.apiserver = fakeDigitaloceanCluster.status.health.apiserver;
   });
 
   it('should create the cluster health status cmp', async(() => {
