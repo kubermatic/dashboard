@@ -39,8 +39,9 @@ describe('ClusterHealthStatusComponent', () => {
     fixture = TestBed.createComponent(ClusterHealthStatusComponent);
     component = fixture.componentInstance;
 
-    component.health = fakeDigitaloceanCluster.status.health;
-    component.phase = fakeDigitaloceanCluster.status.phase;
+    component.cluster = fakeDigitaloceanCluster;
+    component.cluster.status = fakeDigitaloceanCluster.status;
+    component.cluster.status.health.apiserver = fakeDigitaloceanCluster.status.health.apiserver;
   });
 
   it('should create the cluster health status cmp', async(() => {
@@ -57,13 +58,15 @@ describe('ClusterHealthStatusComponent', () => {
   it('should get HealthStatusColor', () => {
     fixture.detectChanges();
 
+    component.cluster.status.health.apiserver = true;
     expect(component.getHealthStatusColor()).toBe(component.green, 'should be green color');
 
-    component.health.apiserver = false;
+    component.cluster.status.health.apiserver = false;
+    expect(component.getHealthStatusColor()).toBe(component.red, 'should be red color');
+
+    component.cluster.status.health = null;
     expect(component.getHealthStatusColor()).toBe(component.orange, 'should be orange color');
 
-    component.phase = 'Failed';
-    expect(component.getHealthStatusColor()).toBe(component.red, 'should be red color');
   });
 
 });
