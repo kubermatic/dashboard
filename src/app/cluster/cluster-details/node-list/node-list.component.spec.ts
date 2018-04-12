@@ -61,6 +61,8 @@ describe('NodeComponent', () => {
 
     const nodes = nodesFake;
 
+    component.cluster = fakeDigitaloceanCluster;
+
     expect(component.getNodeHealth(nodes[0])).toEqual({
       color: green,
       status: 'Running'
