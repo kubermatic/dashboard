@@ -101,6 +101,14 @@
         </div>
       </ng-container>
 
+      <!-- Hetzner -->
+      <ng-container *ngIf="cluster.spec.cloud.hetzner">
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Hetzner API token</div>
+          <div fxFlex="80%">{{cluster.spec.cloud.hetzner.token}}</div>
+        </div>
+      </ng-container>
+
       <ng-container *ngIf="!cluster.spec.cloud.bringyourown">
         <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">
@@ -138,6 +146,11 @@
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.openstack">
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.openstack.flavor }}</div>
+        </div>
+
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.hetzner">
+          <div fxFlex="20%" class="km-card-list-key">Node Size</div>
+          <div fxFlex="80%">{{ nodeData.node.spec.cloud.hetzner.type }}</div>
         </div>
       </ng-container>
     </mat-card-content>
