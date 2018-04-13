@@ -18,12 +18,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
-  ngOnInit() {
-
-    console.log(this.nodeData);
-    console.log(this);
-    debugger;
-  }
+  ngOnInit() { }
 
   ngOnDestroy() { }
 }
