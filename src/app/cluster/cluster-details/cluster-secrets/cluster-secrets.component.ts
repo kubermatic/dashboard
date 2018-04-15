@@ -73,8 +73,8 @@ export class ClusterSecretsComponent implements OnInit {
           return this.getIconClass(this.cluster.status.health.etcd);
         case 'scheduler':
           return this.getIconClass(this.cluster.status.health.scheduler);
-        case 'nodeController':
-          return this.getIconClass(this.cluster.status.health.nodeController);
+        case 'machineController':
+          return this.getIconClass(this.cluster.status.health.machineController);
         default:
           return '';
       }
@@ -108,8 +108,8 @@ export class ClusterSecretsComponent implements OnInit {
           return this.getHealthStatus(this.cluster.status.health.etcd);
         case 'scheduler':
           return this.getHealthStatus(this.cluster.status.health.scheduler);
-        case 'nodeController':
-          return this.getHealthStatus(this.cluster.status.health.nodeController);
+        case 'machineController':
+          return this.getHealthStatus(this.cluster.status.health.machineController);
         default:
           return '';
       }
