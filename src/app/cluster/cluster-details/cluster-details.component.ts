@@ -204,6 +204,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public upgradeClusterDialog(): void {
     const modal = this.dialog.open(UpgradeClusterComponent);
     modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.possibleVersions = this.upgradesList;
     const sub = modal.afterClosed().subscribe(() => {
       this.reloadCluster(this.cluster.metadata.name, this.datacenter.metadata.name);
