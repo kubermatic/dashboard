@@ -11,6 +11,7 @@ import { asyncData } from '../../../testing/services/api-mock.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import Spy = jasmine.Spy;
+import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -55,6 +56,7 @@ describe('UpgradeClusterComponent', () => {
   it('should call updateClusterUpgrade method from api', fakeAsync(() => {
     component.selectedVersion = 'new version';
     component.cluster = fakeDigitaloceanCluster;
+    component.datacenter = fakeDigitaloceanDatacenter;
     component.possibleVersions = ['1.9.5'];
 
     fixture.detectChanges();
