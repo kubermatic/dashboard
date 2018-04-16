@@ -5,7 +5,7 @@ header {
 }
 
 ng2-slim-loading-bar {
-  z-index: 2;  
+  z-index: 2;
 }
 
 .navigation-bar {
@@ -42,6 +42,8 @@ ng2-slim-loading-bar {
       background-position: center left;
       padding-left: 15px;
       margin-right: 25px;
+      font-weight: 500;
+      line-height: 22px;
     }
 
     .logout {
@@ -52,6 +54,8 @@ ng2-slim-loading-bar {
       background-position: center left;
       padding-left: 15px;
       margin-right: 25px;
+      font-weight: 500;
+      line-height: 22px;
     }
   }
 }
