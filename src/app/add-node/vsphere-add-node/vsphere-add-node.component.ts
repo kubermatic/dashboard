@@ -16,7 +16,6 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
   public vsphereNodeForm: FormGroup = new FormGroup({
     cpu: new FormControl(1, [Validators.required, Validators.min(1)]),
     memory: new FormControl(512, [Validators.required, Validators.min(512)]),
-    disk: new FormControl(10, [Validators.required, Validators.min(10)]),
   });
   private subscriptions: Subscription[] = [];
 
@@ -42,8 +41,7 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
     return {
       spec: {
         vsphere: {
-          cpu: this.vsphereNodeForm.controls.cpu.value,
-          disk: this.vsphereNodeForm.controls.disk.value,
+          cpus: this.vsphereNodeForm.controls.cpu.value,
           memory: this.vsphereNodeForm.controls.memory.value,
         },
       },
