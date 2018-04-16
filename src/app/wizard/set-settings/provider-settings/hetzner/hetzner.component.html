@@ -1,8 +1,8 @@
 <form [formGroup]="hetznerSettingsForm" fxLayout="column">
-  <p fxFlex>
+  <div fxLayoutAlign="center center" class="provider-message">
     We need a Hetzner API token.
     You can create one in your project access settings.
-  </p>
+  </div>
   <mat-form-field fxFlex>
     <input matInput formControlName="token" type="text" placeholder="API Token*:" autocomplete="off">
     <mat-error *ngIf="hetznerSettingsForm.controls.token.hasError('required')">
