@@ -49,6 +49,8 @@ export class ProgressComponent implements OnInit, OnDestroy {
   }
 
   gotoStep(i: number, step: Step) {
-    this.stepsService.changeCurrentStep(i, step);
+    if (this.currentStepIndex > i) {
+      this.stepsService.changeCurrentStep(i, step);
+    }
   }
 }
