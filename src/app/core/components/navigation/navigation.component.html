@@ -16,10 +16,10 @@
     <div fxFlex.sm="60%"><a class="logo"></a></div>
     <div fxFlex.sm="20%" class="auth">
       <span class="button logout" *ngIf="auth.authenticated()" (click)="logout()">
-        Sign-out
+        Logout
       </span>
       <a class="button login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}">
-        Sign-in
+        Login
       </a>
     </div>
   </div>
