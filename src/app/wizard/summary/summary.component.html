@@ -151,7 +151,7 @@
       </ng-container>
 
       <!-- AWS Nodes -->
-      <ng-container *ngIf="nodeData.node.spec.cloud.aws">
+      <ng-container *ngIf="cluster.spec.cloud.aws">
         <div fxLayout class="km-card-list-content" >
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.instanceType }}</div>
@@ -179,7 +179,7 @@
       </ng-container>
 
       <!-- Hetzner Nodes -->
-      <ng-container *ngIf="nodeData.node.spec.cloud.hetzner">
+      <ng-container *ngIf="cluster.spec.cloud.hetzner">
         <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.hetzner.type }}</div>
