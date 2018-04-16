@@ -48,7 +48,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   public statusRunning(): boolean {
     if (this.cluster.status.phase === 'Running') {
       if (this.health) {
-        if (!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) {
+        if (!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.machineController || !this.health.scheduler) {
           return false;
         } else {
           return true;
@@ -74,7 +74,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
       return true;
     } else {
       if (this.health) {
-        if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.nodeController || !this.health.scheduler) && this.cluster.status.phase === 'Running') {
+        if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.machineController || !this.health.scheduler) && this.cluster.status.phase === 'Running') {
           return true;
         } else {
           return false;

@@ -17,9 +17,9 @@ export class ClusterHealthStatusComponent {
 
   public getHealthStatusColor(): string {
     if (this.health) {
-      if (this.health.apiserver && this.health.controller && this.health.etcd && this.health.scheduler && this.health.nodeController) {
+      if (this.health.apiserver && this.health.controller && this.health.etcd && this.health.scheduler && this.health.machineController) {
         return this.green;
-      } else if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.scheduler || !this.health.nodeController) && this.phase === 'Failed') {
+      } else if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.scheduler || !this.health.machineController) && this.phase === 'Failed') {
         return this.red;
       } else {
         return this.orange;

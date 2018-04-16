@@ -203,7 +203,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         }
       },
       error => {
-        NotificationActions.error('Error', `Could not create cluster :(`);
+        NotificationActions.error('Error', `Could not create cluster`);
         this.creating = false;
       }));
   }

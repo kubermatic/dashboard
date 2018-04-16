@@ -58,7 +58,6 @@ export const fakeDigitaloceanCluster: ClusterEntity = {
       apiserver: true,
       scheduler: true,
       controller: true,
-      nodeController: true,
       machineController: true,
       etcd: true,
       lastTransitionTime: '2018-01-15T07:43:57Z'
@@ -125,7 +124,6 @@ export const fakeHetznerCluster: ClusterEntity = {
       apiserver: true,
       scheduler: true,
       controller: true,
-      nodeController: true,
       machineController: true,
       etcd: true,
       lastTransitionTime: '2018-01-15T07:43:57Z'
@@ -193,7 +191,6 @@ export const fakeVSphereCluster: ClusterEntity = {
       apiserver: true,
       scheduler: true,
       controller: true,
-      nodeController: true,
       machineController: true,
       etcd: true,
       lastTransitionTime: '2018-01-15T07:43:57Z'
@@ -263,7 +260,6 @@ export const fakeAWSCluster: ClusterEntity = {
       apiserver: true,
       scheduler: true,
       controller: true,
-      nodeController: true,
       machineController: true,
       etcd: true,
       lastTransitionTime: '2018-01-15T07:43:57Z'
@@ -333,7 +329,6 @@ export const fakeOpenstackCluster: ClusterEntity = {
       apiserver: true,
       scheduler: true,
       controller: true,
-      nodeController: true,
       machineController: true,
       etcd: true,
       lastTransitionTime: '2018-01-15T07:43:57Z'
