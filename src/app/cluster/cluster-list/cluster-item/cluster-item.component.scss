@@ -14,7 +14,10 @@
   > div {
     outline: none;
   }
+
   img {
+    max-height: 30px;
+    max-width: 140px;
     float: left;
   }
 
@@ -26,7 +29,7 @@
   }
 
   &.odd {
-    background-color: #F7FAFF;  
+    background-color: #F7FAFF;
   }
 
   &.statusRunning:hover {

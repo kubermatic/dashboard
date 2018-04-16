@@ -46,6 +46,12 @@
   line-height: 16px;
   font-size: 14px;
   margin-bottom: 20px;
+
+  .icon-seed-cluster {
+    max-height: 30px;
+    max-width: 140px;
+
+  }
   &.seed  {
     .flag-icon {
       font-size: 24px;
