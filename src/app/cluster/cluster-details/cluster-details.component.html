@@ -54,9 +54,9 @@
   <mat-card class="km-card-list">
     <mat-card-header class="km-card-list-header providerinfo" >
       <mat-card-title fxLayout>
-        <div fxFlex="25%">Provider</div>
-        <div fxFlex="35%">Node Region</div>
-        <div fxFlex="40%">
+        <div fxFlex="45%">Provider</div>
+        <div fxFlex="30%">Node Region</div>
+        <div fxFlex="25%">
           SSH keys
           <span class="km-card-ssh-tooltip" matTooltip="You can only login into the nodes with the user ‘apiserver’.">
             <i class="fa fa-question-circle" aria-hidden="true"></i>
@@ -65,21 +65,21 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout>
-      <div fxFlex="25%">
+      <div fxFlex="45%" fxLayoutAlign="left center">
         <ng-container *ngIf="cluster.provider === 'bringyourown'">
-          <img src="/assets/images/clouds/{{cluster.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+          <img src="/assets/images/clouds/{{cluster.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" />
         </ng-container>
         <ng-container *ngIf="cluster.provider !== 'bringyourown'">
-          <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" height="30" />
+          <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" />
         </ng-container>
       </div>
-      <div fxFlex="35%" class="km-provider-region" >
+      <div fxFlex="30%" class="km-provider-region" >
         <ng-container *ngIf="cluster.provider !== 'bringyourown'">
           <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
           <span class="location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
         </ng-container>
       </div>
-      <div fxFlex="40%">
+      <div fxFlex="25%">
         <ng-container [ngSwitch]="sshKeys.length > 0">
           <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
             <li *ngFor="let key of sshKeys.slice(0, 3)">
