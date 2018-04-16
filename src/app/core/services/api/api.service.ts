@@ -92,9 +92,9 @@ export class ApiService {
       });
   }
 
-  updateClusterUpgrade(cluster: string, upgradeVersion: string): Observable<ClusterEntity> {
+  updateClusterUpgrade(cluster: string, dc: string, upgradeVersion: string): Observable<ClusterEntity> {
     const body = { to: upgradeVersion };
-    const url = `${this.restRoot}/cluster/${cluster}/upgrade`;
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/upgrade`;
     return this.http.put<ClusterEntity>(url, body, { headers: this.headers });
   }
 
