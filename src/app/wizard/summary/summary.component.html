@@ -150,34 +150,22 @@
         </div>
       </ng-container>
 
-        <ng-container *ngIf="nodeData.node.spec.cloud.aws">
-          <div fxLayout class="km-card-list-content" >
-            <div fxFlex="20%" class="km-card-list-key">Node Size</div>
-            <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.instanceType }}</div>
-          </div>
-          <div fxLayout class="km-card-list-content" >
-            <div fxFlex="20%" class="km-card-list-key">Disk Type</div>
-            <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.volumeType }}</div>
-          </div>
-          <div fxLayout class="km-card-list-content" >
-            <div fxFlex="20%" class="km-card-list-key">Disk Size</div>
-            <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.diskSize }}</div>
-          </div>
-          <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.aws.ami" >
-            <div fxFlex="20%" class="km-card-list-key">AMI ID (optional)</div>
-            <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.ami }}</div>
-          </div>
-        </ng-container>
-        <div fxLayout class="km-card-list-content">
+      <!-- AWS Nodes -->
+      <ng-container *ngIf="nodeData.node.spec.cloud.aws">
+        <div fxLayout class="km-card-list-content" >
+          <div fxFlex="20%" class="km-card-list-key">Node Size</div>
+          <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.instanceType }}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" >
           <div fxFlex="20%" class="km-card-list-key">Disk Type</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.volumeType }}</div>
         </div>
-        <div fxLayout class="km-card-list-content">
+        <div fxLayout class="km-card-list-content" >
           <div fxFlex="20%" class="km-card-list-key">Disk Size in GB</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.diskSize }}</div>
         </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">AMI ID</div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.aws.ami" >
+          <div fxFlex="20%" class="km-card-list-key">AMI ID (optional)</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.ami }}</div>
         </div>
       </ng-container>
