@@ -30,7 +30,7 @@
         <div  class="km-node-row" *ngFor="let node of nodes, let i = index">
           <div fxLayout class="km-single-node">
             <div fxFlex="5%">{{i + 1}}</div>
-            <div fxFlex="40%" style="word-break: normal ;">
+            <div fxFlex="40%" style="word-break: normal ;" matTooltip="{{getTooltip(node)}}">
               {{node.metadata.displayName}}
             </div>
             <div fxFlex="15%">

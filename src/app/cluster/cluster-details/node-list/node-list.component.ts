@@ -114,4 +114,12 @@ export class NodeListComponent {
     }
     return addresses;
   }
+
+  public getTooltip(node: NodeEntity): string {
+    if (node.spec.cloud.digitalocean) {
+      return 'Backups: ' + node.spec.cloud.digitalocean.backups + ', IPv6: ' + node.spec.cloud.digitalocean.ipv6 + ', Monitoring: ' + node.spec.cloud.digitalocean.monitoring;
+    } else {
+      return '';
+    }
+  }
 }
