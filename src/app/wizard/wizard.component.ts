@@ -79,6 +79,9 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = oldProviderSpec;
       }
       this.wizardService.changeCluster(this.cluster);
+      if (this.clusterProviderFormData.valid) {
+        this.stepForward();
+      }
     }));
 
     // When the datacenter got changed, update the cluster
@@ -90,6 +93,9 @@ export class WizardComponent implements OnInit, OnDestroy {
 
       this.cluster.spec.cloud.dc = this.clusterDatacenterFormData.datacenter.metadata.name;
       this.wizardService.changeCluster(this.cluster);
+      if (this.clusterDatacenterFormData.valid) {
+        this.stepForward();
+      }
     }));
 
     // When the provider settings got changed, update the cluster
@@ -197,7 +203,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         }
       },
       error => {
-        NotificationActions.error('Error', `Could not create cluster :(`);
+        NotificationActions.error('Error', `Could not create cluster`);
         this.creating = false;
       }));
   }

@@ -163,7 +163,6 @@ export class Health {
   controller: boolean;
   etcd: boolean;
   machineController: boolean;
-  nodeController: boolean;
   scheduler: boolean;
   lastTransitionTime: string;
 }

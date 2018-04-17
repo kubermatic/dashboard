@@ -1,5 +1,4 @@
 export class VSphereNodeSpec {
-  cpu: number;
+  cpus: number;
   memory: number;
-  disk: number;
 }

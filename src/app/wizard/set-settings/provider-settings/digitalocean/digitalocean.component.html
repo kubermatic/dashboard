@@ -1,8 +1,8 @@
 <form [formGroup]="digitaloceanSettingsForm" fxLayout="column">
-  <p fxFlex>
+  <div fxLayoutAlign="center center" class="provider-message">
     We need a DigitalOcean Personal Access Token.
-    You can create one <a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
-  </p>
+    You can create one&nbsp;<a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
+  </div>
   <mat-form-field fxFlex>
     <input matInput formControlName="token" type="text" placeholder="API Token*:" autocomplete="off">
     <mat-error *ngIf="digitaloceanSettingsForm.controls.token.hasError('required')">

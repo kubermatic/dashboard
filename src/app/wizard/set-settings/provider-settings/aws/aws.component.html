@@ -1,9 +1,10 @@
 <form [formGroup]="awsSettingsForm" fxLayout="column">
-  <p fxFlex>
-    We need a AWS Access Key and Secret Access Key <b>with write access</b>.
-    You can create one
-    <a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
-  </p>
+  <div fxLayoutAlign="center center" class="provider-message">
+    <p>
+      We need a AWS Access Key and Secret Access Key <b>with write access</b>.<br>
+      You can create one&nbsp;<a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+    </p>
+  </div>
   <mat-form-field fxFlex>
     <input matInput formControlName="accessKeyId" type="text" placeholder="Access key ID*:" autocomplete="off">
     <mat-error *ngIf="awsSettingsForm.controls.accessKeyId.hasError('required')">

@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ApiService } from '../../../core/services';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-upgrade-cluster',
@@ -11,6 +12,7 @@ import { ApiService } from '../../../core/services';
 })
 export class UpgradeClusterComponent implements OnInit {
   @Input() cluster: ClusterEntity;
+  @Input() datacenter: DataCenterEntity;
   possibleVersions: string[];
   selectedVersion: string;
 
@@ -25,8 +27,11 @@ export class UpgradeClusterComponent implements OnInit {
   }
 
   upgrade(): void {
-    this.api.updateClusterUpgrade(this.cluster.metadata.name, this.selectedVersion)
-      .subscribe(result => NotificationActions.success('Success', `Cluster is being upgraded`));
+    this.cluster.spec.masterVersion = this.selectedVersion;
+
+    this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(result => {
+      NotificationActions.success('Success', `Cluster is being upgraded`);
+    });
 
     this.selectedVersion = null;
     this.dialogRef.close();

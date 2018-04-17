@@ -19,6 +19,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   public loadingSizes = false;
   public doNodeForm: FormGroup = new FormGroup({
     size: new FormControl(0, Validators.required),
+    backups: new FormControl(false),
+    ipv6: new FormControl(false),
+    monitoring: new FormControl(false),
+    tags: new FormControl([]),
   });
   private subscriptions: Subscription[] = [];
 
@@ -57,14 +61,19 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   }
 
   getNodeProviderData(): NodeProviderData {
+    let doTags: string[] = [];
+    if ((this.doNodeForm.controls.tags.value).length > 0) {
+      doTags = (this.doNodeForm.controls.tags.value).split(/[\s]?,[\s]?/);
+    }
+
     return {
       spec: {
         digitalocean: {
           size: this.doNodeForm.controls.size.value,
-          backups: false,
-          ipv6: false,
-          monitoring: false,
-          tags: [],
+          backups: this.doNodeForm.controls.backups.value,
+          ipv6: this.doNodeForm.controls.ipv6.value,
+          monitoring: this.doNodeForm.controls.monitoring.value,
+          tags: doTags,
         },
       },
       valid: this.doNodeForm.valid,
