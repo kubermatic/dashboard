@@ -22,4 +22,12 @@ export class ClusterConnectComponent implements OnInit {
     const authorization_token = localStorage.getItem('token');
     return `${environment.restRootV3}/dc/${this.datacenter.metadata.name}/cluster/${this.cluster.metadata.name}/kubeconfig?token=${authorization_token}`;
   }
+
+  copy(type: string): string {
+    if (type === 'exportKubeconfig') {
+      return 'export KUBECONFIG=$PWD/kubeconfig-' + this.cluster.metadata.name;
+    } else if (type === 'kubectlProxy') {
+      return 'kubectl proxy';
+    }
+  }
 }
