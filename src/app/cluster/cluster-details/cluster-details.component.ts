@@ -33,11 +33,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public sshKeys: SSHKeyEntity[] = [];
   public nodes: NodeEntity[] = [];
   public stateOfTheAccordion: object[];
+  public isClusterRunning: boolean;
+  public clusterHealthClass: string;
   private clusterSubject: Subject<ClusterEntity>;
   private upgradesList: string[] = [];
   private unsubscribe: Subject<any> = new Subject();
-  public isClusterRunning: boolean;
-  public clusterHealthClass: string;
   private refreshInterval = 10000;
 
   constructor(private route: ActivatedRoute,
