@@ -126,6 +126,18 @@
         </div>
       </ng-container>
 
+      <!-- vSphere -->
+      <ng-container *ngIf="cluster.spec.cloud.vsphere">
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Username</div>
+          <div fxFlex="80%">{{cluster.spec.cloud.vsphere.username}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Password</div>
+          <div fxFlex="80%">***************</div>
+        </div>
+      </ng-container>
+
       <!-- DO Nodes -->
       <ng-container *ngIf="cluster.spec.cloud.digitalocean">
         <div fxLayout class="km-card-list-content">
@@ -185,6 +197,24 @@
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.hetzner.type }}</div>
         </div>
       </ng-container>
+
+
+      <!-- vSphere -->
+      <ng-container *ngIf="cluster.spec.cloud.vsphere">
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">
+            Number of CPU's
+          </div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.vsphere.cpus}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">
+            Memory im MB
+          </div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.vsphere.memory}}</div>
+        </div>
+      </ng-container>
+
 
       <!-- SSH keys -->
       <ng-container *ngIf="clusterSSHKeys.length">

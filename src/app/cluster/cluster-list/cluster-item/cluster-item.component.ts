@@ -39,7 +39,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     } else if (this.cluster.spec.cloud.hetzner) {
       path += 'hetzner.png';
     } else if (this.cluster.spec.cloud.vsphere) {
-      path += 'vshere.png';
+      path += 'vsphere.png';
     }
 
     return path;
