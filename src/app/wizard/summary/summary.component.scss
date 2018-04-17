@@ -49,14 +49,9 @@
   &.ssh-key {
     height: auto;
   }
-  &.provider  {
+  &.provider {
     height: auto;
     line-height: 50px;
-
-    // .icon-provider {
-    //   float: left;
-    //   padding-right: 10px;
-    // }
 
     .region-name {
       line-height: 40px;
@@ -79,6 +74,10 @@
     color: #0288d1;
     cursor: pointer;
   }
+}
+
+.nodes, .provider-settings {
+  margin-top: 10px;
 }
 
 input[type="password"].km-card-list-secret {

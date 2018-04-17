@@ -3,5 +3,5 @@ export class AWSNodeSpec {
   diskSize: number;
   volumeType: string;
   ami: string;
-  tags: Map<string, string>;
+  tags: Object;
 }
