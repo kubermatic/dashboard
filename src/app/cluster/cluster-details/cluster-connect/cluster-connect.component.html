@@ -15,9 +15,9 @@
       </button>
     </p>
     <p>Configure kubectl command line by running the following command in Directory where the kubeconfig-{{cluster.metadata.name}} is located:</p>
-    <p class="code-block">$ export KUBECONFIG=$PWD/kubeconfig-{{cluster.metadata.name}}</p>
+    <p class="code-block copy" ngxClipboard [cbContent]="copy('exportKubeconfig')" matTooltip="click to copy">$ export KUBECONFIG=$PWD/kubeconfig-{{cluster.metadata.name}}</p>
     <p>Then start a proxy to connect to the Kubernetes control plane:</p>
-    <p class="code-block">$ kubectl proxy</p>
+    <p class="code-block copy" ngxClipboard [cbContent]="copy('kubectlProxy')" matTooltip="click to copy">$ kubectl proxy</p>
     <p>Then open the Dashboard interface by navigating to the following location in your browser:</p>
     <p class="km-button-link">
       <a href="http://localhost:8001/ui" target="_blank" class="button white">
