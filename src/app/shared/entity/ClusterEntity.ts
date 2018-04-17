@@ -39,7 +39,7 @@ export function getClusterHealthStatus (cluster: ClusterEntity): string {
   if (!!cluster.status.health) {
     if (cluster.metadata.deletionTimestamp) {
       return 'statusDeleting';
-    } else if (cluster.status.health.apiserver && cluster.status.health.scheduler && cluster.status.health.controller && cluster.status.health.nodeController && cluster.status.health.etcd) {
+    } else if (cluster.status.health.apiserver && cluster.status.health.scheduler && cluster.status.health.controller && cluster.status.health.machineController && cluster.status.health.etcd) {
       return 'statusRunning';
     } else if (!cluster.status.health.apiserver) {
       return 'statusFailed';
