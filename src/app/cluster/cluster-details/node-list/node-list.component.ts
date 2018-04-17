@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
@@ -11,7 +11,7 @@ import { NodeEntity } from '../../../shared/entity/NodeEntity';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent implements OnInit {
+export class NodeListComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
@@ -36,8 +36,6 @@ export class NodeListComponent implements OnInit {
 
   constructor(public dialog: MatDialog) {
   }
-
-  ngOnInit () { }
 
   public managedByProvider(node: NodeEntity): boolean {
     if (!!node.status.machineName) {
