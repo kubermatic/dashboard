@@ -131,10 +131,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.datacenter = data[0];
           this.cluster = data[1];
           this.clusterSubject.next(data[1]);
-
           this.isClusterRunning = isClusterRunning(this.cluster);
           this.clusterHealthClass = getClusterHealthStatus(this.cluster);
-
 
           const timer = Observable.interval(this.refreshInterval);
           timer
