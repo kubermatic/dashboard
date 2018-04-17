@@ -23,11 +23,11 @@ const modules: any[] = [
 describe('UpgradeClusterComponent', () => {
   let fixture: ComponentFixture<UpgradeClusterComponent>;
   let component: UpgradeClusterComponent;
-  let updateClusterUpgradeSpy: Spy;
+  let editClusterSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['updateClusterUpgrade']);
-    updateClusterUpgradeSpy = apiMock.updateClusterUpgrade.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    const apiMock = jasmine.createSpyObj('ApiService', ['editCluster']);
+    editClusterSpy = apiMock.editCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
 
     TestBed.configureTestingModule({
       imports: [
@@ -53,7 +53,7 @@ describe('UpgradeClusterComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should call updateClusterUpgrade method from api', fakeAsync(() => {
+  it('should call editCluster method from api', fakeAsync(() => {
     component.selectedVersion = 'new version';
     component.cluster = fakeDigitaloceanCluster;
     component.datacenter = fakeDigitaloceanDatacenter;
@@ -62,6 +62,6 @@ describe('UpgradeClusterComponent', () => {
     fixture.detectChanges();
     component.upgrade();
     tick();
-    expect(updateClusterUpgradeSpy.and.callThrough()).toHaveBeenCalledTimes(1);
+    expect(editClusterSpy.and.callThrough()).toHaveBeenCalledTimes(1);
   }));
 });
