@@ -8,7 +8,7 @@ import {NodeProvider} from '../model/NodeProviderConstants';
 import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
 import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
 
-export function  getClusterProvider(cluster: ClusterEntity): string {
+export function getClusterProvider(cluster: ClusterEntity): string {
   switch (true) {
     case !!cluster.spec.cloud.digitalocean: {
       return NodeProvider.DIGITALOCEAN;
