@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import { ClusterEntity, getClusterHealthStatus } from '../../shared/entity/ClusterEntity';
 
 @Component({
@@ -6,22 +6,25 @@ import { ClusterEntity, getClusterHealthStatus } from '../../shared/entity/Clust
   templateUrl: './cluster-health-status.component.html',
   styleUrls: ['./cluster-health-status.component.scss']
 })
-export class ClusterHealthStatusComponent {
+export class ClusterHealthStatusComponent implements OnChanges {
   @Input() public cluster: ClusterEntity;
 
   public green = 'fa fa-circle green';
   public red = 'fa fa-circle red';
   public orange = 'fa fa-spin fa-circle-o-notch orange';
+  private healthStatus: string;
 
   constructor() { }
 
-  public getHealthStatusColor(): string {
-    const healthStatus = getClusterHealthStatus(this.cluster);
+  ngOnChanges() {
+    this.healthStatus = getClusterHealthStatus(this.cluster);
+  }
 
+  public getHealthStatusColor(): string {
     if (this.cluster.status.health) {
-      if (healthStatus === 'statusRunning') {
+      if (this.healthStatus === 'statusRunning') {
         return this.green;
-      } else if (healthStatus === 'statusFailed' || healthStatus === 'statusDeleting') {
+      } else if (this.healthStatus === 'statusFailed' || this.healthStatus === 'statusDeleting') {
         return this.red;
       } else {
         return this.orange;

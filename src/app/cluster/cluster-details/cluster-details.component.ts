@@ -1,5 +1,5 @@
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -77,6 +77,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         onceSub.unsubscribe();
       });
 
+    // Health
+    this.clusterSubject
+      .takeUntil(this.unsubscribe)
+      .subscribe(cluster => {
+        this.isClusterRunning = isClusterRunning(this.cluster);
+        this.clusterHealthClass = getClusterHealthStatus(this.cluster);
+      })
+
     // Upgrades
     this.clusterSubject
       .takeUntil(this.unsubscribe)
@@ -131,8 +139,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.datacenter = data[0];
           this.cluster = data[1];
           this.clusterSubject.next(data[1]);
-          this.isClusterRunning = isClusterRunning(this.cluster);
-          this.clusterHealthClass = getClusterHealthStatus(this.cluster);
 
           const timer = Observable.interval(this.refreshInterval);
           timer
@@ -161,9 +167,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         this.cluster = res;
         this.clusterSubject.next(res);
       });
-
-    this.isClusterRunning = isClusterRunning(this.cluster);
-    this.clusterHealthClass = getClusterHealthStatus(this.cluster);
   }
 
   public reloadClusterNodes() {

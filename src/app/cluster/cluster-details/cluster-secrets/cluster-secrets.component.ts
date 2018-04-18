@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ClusterEntity, isClusterRunning } from '../../../shared/entity/ClusterEntity';
+import { Component, Input, OnChanges } from '@angular/core';
+import {ClusterEntity, getClusterHealthStatus, isClusterRunning} from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
@@ -9,17 +9,19 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
   templateUrl: './cluster-secrets.component.html',
   styleUrls: ['./cluster-secrets.component.scss']
 })
-export class ClusterSecretsComponent implements OnInit {
+export class ClusterSecretsComponent implements OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   public expand = false;
   public dialogRef: any;
   public isClusterRunning: boolean;
+  public healthStatus: string;
 
   constructor(public dialog: MatDialog) { }
 
-  ngOnInit() {
+  ngOnChanges() {
     this.isClusterRunning = isClusterRunning(this.cluster);
+    this.healthStatus = getClusterHealthStatus(this.cluster);
   }
 
   isExpand(expand: boolean) {

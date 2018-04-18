@@ -50,7 +50,9 @@ export function getClusterHealthStatus (cluster: ClusterEntity): string {
 }
 
 export function isClusterRunning(cluster: ClusterEntity): boolean {
-  if (!!cluster.status.health && cluster.status.health.apiserver) {
+  if (cluster.metadata.deletionTimestamp) {
+    return false;
+  } else if (!!cluster.status.health && cluster.status.health.apiserver) {
     return true;
   }
   return false;
