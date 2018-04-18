@@ -37,26 +37,26 @@ export class Auth {
   // Helper Functions for decoding JWT token:
   public decodeToken(token: string) {
     if (!!token) {
-      var parts = token.split('.');
+      const parts = token.split('.');
       if (parts.length !== 3) {
         throw new Error('JWT must have 3 parts');
       }
-      var decoded = this.urlBase64Decode(parts[1]);
+      const decoded = this.urlBase64Decode(parts[1]);
       if (!decoded) {
         throw new Error('Cannot decode the token');
       }
       return JSON.parse(decoded);
     }
   }
-  
+
   private urlBase64Decode(str: string) {
-    var output = str.replace(/-/g, '+').replace(/_/g, '/');
+    let output = str.replace(/-/g, '+').replace(/_/g, '/');
     switch (output.length % 4) {
       case 0: { break; }
       case 2: { output += '=='; break; }
       case 3: { output += '='; break; }
       default: {
-        throw 'Illegal base64url string!';
+        throw new Error('Illegal base64url string!');
       }
     }
     return decodeURIComponent(window.atob(output));

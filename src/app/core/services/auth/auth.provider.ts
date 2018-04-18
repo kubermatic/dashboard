@@ -8,5 +8,5 @@ export function authFactory() {
 export const AUTH_PROVIDERS = {
   provide: Auth,
   deps: [HttpClient, HttpParams],
-  useFactory: authFactory,
-}
+  useFactory: authFactory
+};
