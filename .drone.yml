@@ -27,7 +27,7 @@ pipeline:
       - make dist
 
   test:
-    image: kubermatic/chrome-headless:v0.1
+    image: kubermatic/chrome-headless:v0.2
     commands:
       - make test-headless
 
