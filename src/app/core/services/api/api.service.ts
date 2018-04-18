@@ -49,7 +49,7 @@ export class ApiService {
   }
 
   getClusterNodes(cluster: string, dc: string): Observable<NodeEntity[]> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node`;
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node?hideInitialConditions=true`;
     return this.http.get<NodeEntity[]>(url, { headers: this.headers });
   }
 
