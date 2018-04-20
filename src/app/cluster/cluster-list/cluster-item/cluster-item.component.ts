@@ -1,7 +1,8 @@
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClusterEntity, Health, getClusterHealthStatus } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
+import { ClusterService} from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-item',
@@ -14,7 +15,8 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() health: Health;
   public nodeDC: DataCenterEntity;
 
-  constructor(private dcService: DatacenterService) {}
+  constructor(private dcService: DatacenterService,
+              private clusterService: ClusterService) {}
 
   public ngOnInit(): void {
     if (this.cluster.spec.cloud.bringyourown === undefined) {
@@ -50,7 +52,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   }
 
   public getClusterItemClass() {
-    let itemClass = getClusterHealthStatus(this.cluster);
+    let itemClass = this.clusterService.getClusterHealthStatus(this.cluster);
     if (this.index % 2 !== 0) {
       itemClass = itemClass  + ' odd';
     }

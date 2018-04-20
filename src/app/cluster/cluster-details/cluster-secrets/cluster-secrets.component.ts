@@ -1,8 +1,10 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import {ClusterEntity, getClusterHealthStatus, isClusterRunning} from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { ClusterService } from '../../../core/services';
+
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
@@ -17,11 +19,12 @@ export class ClusterSecretsComponent implements OnChanges {
   public isClusterRunning: boolean;
   public healthStatus: string;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+              private clusterService: ClusterService) { }
 
   ngOnChanges() {
-    this.isClusterRunning = isClusterRunning(this.cluster);
-    this.healthStatus = getClusterHealthStatus(this.cluster);
+    this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
+    this.healthStatus = this.clusterService.getClusterHealthStatus(this.cluster);
   }
 
   isExpand(expand: boolean) {

@@ -35,29 +35,6 @@ export function getClusterProvider(cluster: ClusterEntity): string {
   return '';
 }
 
-export function getClusterHealthStatus (cluster: ClusterEntity): string {
-  if (!!cluster.status.health) {
-    if (cluster.metadata.deletionTimestamp) {
-      return 'statusDeleting';
-    } else if (cluster.status.health.apiserver && cluster.status.health.scheduler && cluster.status.health.controller && cluster.status.health.machineController && cluster.status.health.etcd) {
-      return 'statusRunning';
-    } else if (!cluster.status.health.apiserver) {
-      return 'statusFailed';
-    }
-    return 'statusWaiting';
-  }
-  return 'statusWaiting';
-}
-
-export function isClusterRunning(cluster: ClusterEntity): boolean {
-  if (cluster.metadata.deletionTimestamp) {
-    return false;
-  } else if (!!cluster.status.health && cluster.status.health.apiserver) {
-    return true;
-  }
-  return false;
-}
-
 export class ClusterEntity {
   metadata: MetadataEntity;
   spec: ClusterSpec;

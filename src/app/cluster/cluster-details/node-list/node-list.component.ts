@@ -2,8 +2,10 @@ import {Component, EventEmitter, Input, Output, OnChanges} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import {ClusterEntity, isClusterRunning} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import { ClusterService } from '../../../core/services';
+
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -34,11 +36,12 @@ export class NodeListComponent implements OnChanges {
     }
   };
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog,
+              private clusterService: ClusterService) {
   }
 
   ngOnChanges() {
-    this.isClusterRunning = isClusterRunning(this.cluster);
+    this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
   }
 
   public managedByProvider(node: NodeEntity): boolean {

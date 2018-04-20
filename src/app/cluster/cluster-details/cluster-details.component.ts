@@ -9,10 +9,10 @@ import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/combineLatest';
 import { environment } from '../../../environments/environment';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
-import { ClusterEntity, getClusterProvider, isClusterRunning, getClusterHealthStatus } from '../../shared/entity/ClusterEntity';
+import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ApiService, DatacenterService, InitialNodeDataService } from '../../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import 'rxjs/add/observable/interval';
@@ -45,7 +45,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               private api: ApiService,
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
-              private dcService: DatacenterService) {
+              private dcService: DatacenterService,
+              private clusterService: ClusterService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
@@ -81,9 +82,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.clusterSubject
       .takeUntil(this.unsubscribe)
       .subscribe(cluster => {
-        this.isClusterRunning = isClusterRunning(this.cluster);
-        this.clusterHealthClass = getClusterHealthStatus(this.cluster);
-      })
+        this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
+        this.clusterHealthClass = this.clusterService.getClusterHealthStatus(this.cluster);
+      });
 
     // Upgrades
     this.clusterSubject

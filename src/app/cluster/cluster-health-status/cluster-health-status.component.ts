@@ -1,5 +1,7 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
-import { ClusterEntity, getClusterHealthStatus } from '../../shared/entity/ClusterEntity';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { ClusterService } from '../../core/services';
+
 
 @Component({
   selector: 'kubermatic-cluster-health-status',
@@ -14,10 +16,10 @@ export class ClusterHealthStatusComponent implements OnChanges {
   public orange = 'fa fa-spin fa-circle-o-notch orange';
   private healthStatus: string;
 
-  constructor() { }
+  constructor( private clusterService: ClusterService) {}
 
   ngOnChanges() {
-    this.healthStatus = getClusterHealthStatus(this.cluster);
+    this.healthStatus = this.clusterService.getClusterHealthStatus(this.cluster);
   }
 
   public getHealthStatusColor(): string {

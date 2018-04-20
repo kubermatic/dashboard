@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ApiService } from '../../core/services/api/api.service';
 import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
-import {ClusterEntity, isClusterRunning} from '../../shared/entity/ClusterEntity';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
+import { ClusterService } from '../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-list',
@@ -20,7 +21,9 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public sort: Sort = { active: 'name', direction: 'asc' };
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private dcService: DatacenterService) {
+  constructor(private api: ApiService,
+              private dcService: DatacenterService,
+              private clusterService: ClusterService) {
   }
 
   ngOnInit() {
@@ -63,7 +66,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       return item.metadata.name === cluster.metadata.name;
     });
 
-    return prevCluster && isClusterRunning(prevCluster) === isClusterRunning(cluster) ? index : undefined;
+    return prevCluster && this.clusterService.isClusterRunning(prevCluster) === this.clusterService.isClusterRunning(cluster) ? index : undefined;
   }
 
   sortData(sort: Sort) {
