@@ -92,12 +92,6 @@ export class ApiService {
       });
   }
 
-  updateClusterUpgrade(cluster: string, dc: string, upgradeVersion: string): Observable<ClusterEntity> {
-    const body = { to: upgradeVersion };
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/upgrade`;
-    return this.http.put<ClusterEntity>(url, body, { headers: this.headers });
-  }
-
   getOpenStackFlavors(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackFlavor[]> {
     this.headers = this.headers.set('Username', username);
     this.headers = this.headers.set('Password', password);
