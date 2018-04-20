@@ -1,15 +1,12 @@
-import { AuthConfig, AuthHttp } from 'angular2-jwt';
-import { Http, RequestOptions } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Auth } from './auth.service';
 
-export function authFactory(http: Http, options: RequestOptions) {
-  return new AuthHttp(new AuthConfig({
-    // Config options if you want
-  }), http, options);
+export function authFactory() {
+  return new Auth();
 }
 
-// Include this in your ngModule providers
 export const AUTH_PROVIDERS = {
-  provide: AuthHttp,
-  deps: [Http, RequestOptions],
+  provide: Auth,
+  deps: [HttpClient, HttpParams],
   useFactory: authFactory
 };
