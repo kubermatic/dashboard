@@ -14,7 +14,7 @@ export class ClusterHealthStatusComponent implements OnChanges {
   public green = 'fa fa-circle green';
   public red = 'fa fa-circle red';
   public orange = 'fa fa-spin fa-circle-o-notch orange';
-  private healthStatus: string;
+  public healthStatus: string;
 
   constructor( private clusterService: ClusterService) {}
 

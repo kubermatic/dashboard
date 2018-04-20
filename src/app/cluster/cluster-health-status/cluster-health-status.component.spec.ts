@@ -9,6 +9,7 @@ import { RouterTestingModule } from './../../testing/router-stubs';
 
 import { ClusterHealthStatusComponent } from './cluster-health-status.component';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
+import { ClusterService } from '../../core/services';
 
 const modules: any[] = [
   BrowserModule,
@@ -31,7 +32,9 @@ describe('ClusterHealthStatusComponent', () => {
       declarations: [
         ClusterHealthStatusComponent
       ],
-      providers: [],
+      providers: [
+        ClusterService
+      ],
     }).compileComponents();
   });
 
@@ -47,8 +50,9 @@ describe('ClusterHealthStatusComponent', () => {
   }));
 
   it('should set class to circle', () => {
+    component.healthStatus = 'statusRunning';
     fixture.detectChanges();
-
+    
     const de = fixture.debugElement.query(By.css('.green'));
     expect(de).not.toBeNull('should have class green');
   });
@@ -56,13 +60,16 @@ describe('ClusterHealthStatusComponent', () => {
   it('should get HealthStatusColor', () => {
     fixture.detectChanges();
 
-    component.cluster.status.health.apiserver = true;
+    component.healthStatus = 'statusRunning';
     expect(component.getHealthStatusColor()).toBe(component.green, 'should be green color');
 
-    component.cluster.status.health.apiserver = false;
+    component.healthStatus = 'statusFailed';
     expect(component.getHealthStatusColor()).toBe(component.red, 'should be red color');
 
-    component.cluster.status.health = null;
+    component.healthStatus = 'statusDeleting';
+    expect(component.getHealthStatusColor()).toBe(component.red, 'should be red color');
+
+    component.healthStatus = 'statusWaiting';
     expect(component.getHealthStatusColor()).toBe(component.orange, 'should be orange color');
 
   });

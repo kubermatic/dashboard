@@ -13,6 +13,8 @@ import { DatacenterService } from '../../../core/services/index';
 import { DatacenterMockService } from './../../../testing/services/datacenter-mock.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { ClusterHealthStatusComponent } from '../../cluster-health-status/cluster-health-status.component';
+import { ClusterService} from '../../../core/services';
+
 
 const modules: any[] = [
   BrowserModule,
@@ -39,7 +41,8 @@ describe('ClusterItemComponent', () => {
       ],
       providers: [
         { provide: DatacenterService, useClass: DatacenterMockService },
-        { provide: Auth, useClass: AuthMockService }
+        { provide: Auth, useClass: AuthMockService },
+        ClusterService
       ],
     }).compileComponents();
   });
