@@ -32,7 +32,6 @@ const modules: Array<any> = [
   MatCardModule,
   MatDialogModule,
   MatSliderModule,
-  // OverlayModule,
   MatSlideToggleModule,
   MatProgressBarModule,
   MatExpansionModule,

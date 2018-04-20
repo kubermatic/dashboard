@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './../core/services/auth/auth.guard';
 
-import { WizardComponent } from 'app/wizard/wizard.component';
+import { WizardComponent } from '../wizard/wizard.component';
 
 const routes: Routes = [
   {
