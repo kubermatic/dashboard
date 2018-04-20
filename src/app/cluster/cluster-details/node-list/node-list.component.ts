@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnChanges} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
@@ -11,7 +11,7 @@ import { NodeEntity } from '../../../shared/entity/NodeEntity';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent {
+export class NodeListComponent implements OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
@@ -37,6 +37,10 @@ export class NodeListComponent {
   constructor(public dialog: MatDialog) {
   }
 
+  ngOnChanges() {
+    this.isClusterRunning = isClusterRunning(this.cluster);
+  }
+
   public managedByProvider(node: NodeEntity): boolean {
     if (!!node.status.machineName) {
       return true;
@@ -59,10 +63,7 @@ export class NodeListComponent {
   public getNodeHealth(node: NodeEntity): object {
     const green = 'fa fa-circle green';
     const red = 'fa fa-circle-o red';
-    const orange = 'fa fa-spin fa-circle-o-notch orange';
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
-
-    this.isClusterRunning = isClusterRunning(this.cluster);
 
     const nodeHealthStatus = {};
 
