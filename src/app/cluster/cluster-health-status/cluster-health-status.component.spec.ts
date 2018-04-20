@@ -52,7 +52,6 @@ describe('ClusterHealthStatusComponent', () => {
   it('should set class to circle', () => {
     component.healthStatus = 'statusRunning';
     fixture.detectChanges();
-    
     const de = fixture.debugElement.query(By.css('.green'));
     expect(de).not.toBeNull('should have class green');
   });
