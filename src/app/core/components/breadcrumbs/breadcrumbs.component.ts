@@ -1,9 +1,8 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from 'app/core/services/api/api.service';
+import { ApiService } from '../../../core/services/api/api.service';
 import { select } from '@angular-redux/store';
-import { Breadcrumb } from 'app/redux/reducers/breadcrumb';
 
 @Component({
   selector: 'kubermatic-breadcrumbs',

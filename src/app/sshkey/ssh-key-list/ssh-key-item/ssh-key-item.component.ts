@@ -1,6 +1,6 @@
-import { SSHKeyEntity } from 'app/shared/entity/SSHKeyEntity';
+import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ApiService } from 'app/core/services/api/api.service';
+import { ApiService } from '../../../core/services/api/api.service';
 
 @Component({
   selector: 'kubermatic-ssh-key-item',
