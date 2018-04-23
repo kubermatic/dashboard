@@ -67,7 +67,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
     case NodeProvider.OPENSTACK:
       const osSpec: OpenstackCloudSpec = {
         tenant: '',
-        domain: '',
+        domain: 'Default',
         username: '',
         password: '',
         network: '',
