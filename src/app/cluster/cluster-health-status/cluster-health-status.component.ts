@@ -1,7 +1,6 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnChanges} from '@angular/core';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { ClusterService } from '../../core/services';
-
 
 @Component({
   selector: 'kubermatic-cluster-health-status',
@@ -33,6 +32,14 @@ export class ClusterHealthStatusComponent implements OnChanges {
       }
     } else {
       return this.orange;
+    }
+  }
+
+  public getHealthTooltipText(): string {
+    if (this.healthStatus === 'statusDeleting') {
+      return 'Deleting might take up to 15 minutes';
+    } else {
+      return '';
     }
   }
 }

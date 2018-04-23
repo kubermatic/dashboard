@@ -2,7 +2,7 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
-import { ClusterService} from '../../../core/services';
+import { ClusterService } from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-item',
