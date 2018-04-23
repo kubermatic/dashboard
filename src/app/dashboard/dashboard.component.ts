@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Auth } from '../core/services';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/mergeMap';
 import { ApiService } from 'app/core/services/api/api.service';
 import { DatacenterService } from 'app/core/services/datacenter/datacenter.service';
 
