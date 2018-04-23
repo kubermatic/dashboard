@@ -213,6 +213,12 @@
           </div>
           <div fxFlex="80%">{{nodeData.node.spec.cloud.vsphere.memory}}</div>
         </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.vsphere.template">
+          <div fxFlex="20%" class="km-card-list-key">
+            VM Template
+          </div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.vsphere.template}}</div>
+        </div>
       </ng-container>
 
 
