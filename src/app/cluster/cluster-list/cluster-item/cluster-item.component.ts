@@ -97,5 +97,13 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     return datacenter;
   }
 
+  public getTooltip(status: string): string {
+    if (status === 'Deleting') {
+      return 'Deleting might take up to 15 minutes';
+    } else {
+      return '';
+    }
+  }
+
   public ngOnDestroy(): void { }
 }
