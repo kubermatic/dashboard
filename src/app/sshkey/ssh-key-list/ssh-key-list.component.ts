@@ -1,4 +1,4 @@
-import { NotificationActions } from 'app/redux/actions/notification.actions';
+import { NotificationActions } from '../../redux/actions/notification.actions';
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { Sort } from '@angular/material';

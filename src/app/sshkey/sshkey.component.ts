@@ -1,6 +1,6 @@
-import { AddSshKeyModalComponent } from 'app/shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import { AddSshKeyModalComponent } from '../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
 import { Component, OnInit } from '@angular/core';
-import { ApiService } from 'app/core/services/api/api.service';
+import { ApiService } from '../core/services/api/api.service';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 
