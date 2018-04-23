@@ -63,7 +63,7 @@ describe('ClusterItemComponent', () => {
     fixture.detectChanges();
     tick();
 
-    expect(component.getClusterItemClass()).toBe('statusWaiting odd');
+    expect(component.getClusterItemClass()).toBe('statusRunning odd');
   }));
 
   it('should set path of cluster image', fakeAsync(() => {
