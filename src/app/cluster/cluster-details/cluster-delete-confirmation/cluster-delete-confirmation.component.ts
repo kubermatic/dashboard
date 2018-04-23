@@ -1,5 +1,4 @@
 import { Component, DoCheck, Input } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
@@ -17,8 +16,7 @@ export class ClusterDeleteConfirmationComponent implements DoCheck {
 
   public inputName = '';
 
-  constructor(private router: Router,
-              private api: ApiService,
+  constructor(private api: ApiService,
               private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
               private initialNodeDataService: InitialNodeDataService) {
   }

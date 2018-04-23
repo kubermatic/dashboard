@@ -63,9 +63,6 @@ export class ApiMockService {
     return Observable.of([]);
   }
 
-  public updateClusterUpgrade(cluster: string, upgradeVersion: string): void {
-  }
-
   public addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
     return Observable.of(null);
   }
