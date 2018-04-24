@@ -1,11 +1,14 @@
 <mat-card class="km-card-list" >
   <mat-card-header class="km-card-list-header" >
     <mat-card-title fxLayout>
-      <div fxFlex="5%">
+      <div fxFlex="3%">
         <strong>#</strong>
       </div>
-      <div fxFlex="40%">
+      <div fxFlex="32%">
         <strong>Name</strong>
+      </div>
+      <div fxFlex="10%">
+        <strong>OS</strong>
       </div>
       <div fxFlex="15%">
         <strong>Capacity</strong>
@@ -27,11 +30,14 @@
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
 
-        <div  class="km-node-row" *ngFor="let node of nodes, let i = index">
+        <div class="km-node-row" *ngFor="let node of nodes, let i = index">
           <div fxLayout class="km-single-node">
-            <div fxFlex="5%">{{i + 1}}</div>
-            <div fxFlex="40%" style="word-break: normal ;" matTooltip="{{getTooltip(node)}}">
+            <div fxFlex="3%">{{i + 1}}</div>
+            <div fxFlex="32%" style="word-break: normal ;" matTooltip="{{getTooltip(node)}}">
               {{node.metadata.displayName}}
+            </div>
+            <div fxFlex="10%">
+              <img [src]="getOsImagePath(node)" class="os-image"/>
             </div>
             <div fxFlex="15%">
               <span *ngIf="!!node.status.capacity.cpu && !!node.status.capacity.memory"> {{node.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(node.status.capacity.memory)}}</span>
@@ -79,7 +85,6 @@
       </ng-container>
     </ng-container>
   </mat-card-content>
-</mat-card>
 
 <mat-card [fxShow]="!!cluster.spec.cloud.bringyourown">
   <mat-card-content>
