@@ -10,8 +10,6 @@ export class ClusterService {
         return 'statusDeleting';
       } else if (cluster.status.health.apiserver && cluster.status.health.scheduler && cluster.status.health.controller && cluster.status.health.machineController && cluster.status.health.etcd) {
         return 'statusRunning';
-      } else if (!cluster.status.health.apiserver) {
-        return 'statusFailed';
       }
       return 'statusWaiting';
     }
