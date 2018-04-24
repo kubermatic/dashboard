@@ -12,6 +12,7 @@ import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
 })
 export class AddNodeComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+  @Input() initialNode: boolean;
   public nodeForm: FormGroup = new FormGroup({
     count: new FormControl(1, [Validators.required, Validators.min(1)]),
   });
@@ -23,6 +24,10 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (this.initialNode) {
+      this.nodeForm.setValue({count: 3});
+    }
+
     this.formOnChangeSub = this.nodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
     });
