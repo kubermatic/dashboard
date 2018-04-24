@@ -9,6 +9,8 @@ import { MatDialog } from '@angular/material';
 import { nodesFake } from '../../../testing/fake-data/node.fake';
 import { NodeListComponent } from './node-list.component';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { ClusterService } from '../../../core/services';
+
 
 const modules: any[] = [
   BrowserModule,
@@ -30,7 +32,8 @@ describe('NodeComponent', () => {
         NodeListComponent
       ],
       providers: [
-        MatDialog
+        MatDialog,
+        ClusterService
       ],
     }).compileComponents();
   }));
@@ -60,6 +63,8 @@ describe('NodeComponent', () => {
     const orange = 'fa fa-spin fa-circle-o-notch orange';
 
     const nodes = nodesFake;
+
+    component.cluster = fakeDigitaloceanCluster;
 
     expect(component.getNodeHealth(nodes[0])).toEqual({
       color: green,

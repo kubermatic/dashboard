@@ -15,7 +15,7 @@ import { asyncData } from '../../testing/services/api-mock.service';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
 import { ClusterSecretsComponent } from './cluster-secrets/cluster-secrets.component';
 import { MatDialog } from '@angular/material';
-import { DatacenterService, InitialNodeDataService } from '../../core/services/index';
+import { DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services/index';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { nodesFake } from '../../testing/fake-data/node.fake';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
@@ -69,6 +69,7 @@ describe('ClusterDetailsComponent', () => {
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         MatDialog,
         InitialNodeDataService,
+        ClusterService
       ],
     }).compileComponents();
   }));

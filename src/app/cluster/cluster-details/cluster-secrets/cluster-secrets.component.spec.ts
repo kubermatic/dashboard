@@ -2,10 +2,9 @@ import { SharedModule } from '../../../shared/shared.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ClusterSecretsComponent } from './cluster-secrets.component';
+import { ClusterService } from '../../../core/services';
 
 const modules: any[] = [
   BrowserModule,
@@ -26,7 +25,9 @@ describe('ClusterSecretsComponent', () => {
       declarations: [
         ClusterSecretsComponent
       ],
-      providers: [],
+      providers: [
+        ClusterService
+      ],
     }).compileComponents();
   }));
 
