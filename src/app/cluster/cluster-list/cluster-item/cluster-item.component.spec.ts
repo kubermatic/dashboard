@@ -14,6 +14,7 @@ import { DatacenterMockService } from './../../../testing/services/datacenter-mo
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { ClusterHealthStatusComponent } from '../../cluster-health-status/cluster-health-status.component';
 import { ClusterService} from '../../../core/services';
+import { ClusterHealth } from '../../../shared/model/ClusterHealthConstants';
 
 
 const modules: any[] = [
@@ -63,7 +64,7 @@ describe('ClusterItemComponent', () => {
     fixture.detectChanges();
     tick();
 
-    expect(component.getClusterItemClass()).toBe('statusRunning odd');
+    expect(component.getClusterItemClass()).toBe(ClusterHealth.RUNNING + ' odd');
   }));
 
   it('should set path of cluster image', fakeAsync(() => {

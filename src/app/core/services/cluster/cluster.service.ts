@@ -1,22 +1,19 @@
 import { Injectable } from '@angular/core';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ClusterHealth } from '../../../shared/model/ClusterHealthConstants';
 
 @Injectable()
 export class ClusterService {
 
   getClusterHealthStatus (cluster: ClusterEntity): string {
-    const waiting = 'statusWaiting';
-    const running = 'statusRunning';
-    const deleting = 'statusDeleting';
-
     if (!!cluster.status.health) {
       if (cluster.metadata.deletionTimestamp) {
-        return deleting;
+        return ClusterHealth.DELETING;
       } else if (cluster.status.health.apiserver && cluster.status.health.scheduler && cluster.status.health.controller && cluster.status.health.machineController && cluster.status.health.etcd) {
-        return running;
+        return ClusterHealth.RUNNING;
       }
     }
-    return waiting;
+    return ClusterHealth.WAITING;
   }
 
   isClusterRunning(cluster: ClusterEntity): boolean {
