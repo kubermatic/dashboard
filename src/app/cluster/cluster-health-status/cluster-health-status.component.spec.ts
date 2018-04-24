@@ -9,6 +9,8 @@ import { RouterTestingModule } from './../../testing/router-stubs';
 
 import { ClusterHealthStatusComponent } from './cluster-health-status.component';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
+import { ClusterService } from '../../core/services';
+import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 
 const modules: any[] = [
   BrowserModule,
@@ -31,7 +33,9 @@ describe('ClusterHealthStatusComponent', () => {
       declarations: [
         ClusterHealthStatusComponent
       ],
-      providers: [],
+      providers: [
+        ClusterService
+      ],
     }).compileComponents();
   });
 
@@ -39,8 +43,7 @@ describe('ClusterHealthStatusComponent', () => {
     fixture = TestBed.createComponent(ClusterHealthStatusComponent);
     component = fixture.componentInstance;
 
-    component.health = fakeDigitaloceanCluster.status.health;
-    component.phase = fakeDigitaloceanCluster.status.phase;
+    component.cluster = fakeDigitaloceanCluster;
   });
 
   it('should create the cluster health status cmp', async(() => {
@@ -48,8 +51,8 @@ describe('ClusterHealthStatusComponent', () => {
   }));
 
   it('should set class to circle', () => {
+    component.healthStatus = ClusterHealth.RUNNING;
     fixture.detectChanges();
-
     const de = fixture.debugElement.query(By.css('.green'));
     expect(de).not.toBeNull('should have class green');
   });
@@ -57,13 +60,15 @@ describe('ClusterHealthStatusComponent', () => {
   it('should get HealthStatusColor', () => {
     fixture.detectChanges();
 
+    component.healthStatus = ClusterHealth.RUNNING;
     expect(component.getHealthStatusColor()).toBe(component.green, 'should be green color');
 
-    component.health.apiserver = false;
+    component.healthStatus = ClusterHealth.DELETING;
+    expect(component.getHealthStatusColor()).toBe(component.red, 'should be red color');
+
+    component.healthStatus = ClusterHealth.WAITING;
     expect(component.getHealthStatusColor()).toBe(component.orange, 'should be orange color');
 
-    component.phase = 'Failed';
-    expect(component.getHealthStatusColor()).toBe(component.red, 'should be red color');
   });
 
 });

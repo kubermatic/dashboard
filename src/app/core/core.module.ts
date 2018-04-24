@@ -15,7 +15,7 @@ import { NotificationComponent } from './components/notification/notification.co
 import { ClusterNameGenerator } from './util/name-generator.service';
 import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
 import { SidenavService } from './components/sidenav/sidenav.service';
-import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, InitialNodeDataService } from './services';
+import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, InitialNodeDataService, ClusterService } from './services';
 /* Interceptors */
 import { CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor } from './interceptors';
 import { AddNodeService } from './services/add-node/add-node.service';
@@ -48,7 +48,8 @@ const services: any[] = [
   ClusterNameGenerator,
   SidenavService,
   ApiService,
-  InitialNodeDataService
+  InitialNodeDataService,
+  ClusterService
 ];
 
 const interceptors: any[] = [
