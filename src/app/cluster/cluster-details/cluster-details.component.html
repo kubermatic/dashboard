@@ -5,7 +5,7 @@
               mat-raised-button color="primary"
               (click)="addNode()"
               [disabled]="!isClusterRunning"
-              [fxHide]="cluster.provider === 'bringyourown'">
+              [fxHide]="nodeDc.spec.provider === 'bringyourown'">
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
           Add Node
       </button>
@@ -63,15 +63,10 @@
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="45%" fxLayoutAlign="left center">
-        <ng-container *ngIf="cluster.provider === 'bringyourown'">
-          <img src="/assets/images/clouds/{{cluster.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" />
-        </ng-container>
-        <ng-container *ngIf="cluster.provider !== 'bringyourown'">
-          <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" />
-        </ng-container>
+        <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" />
       </div>
       <div fxFlex="30%" class="km-provider-region" >
-        <ng-container *ngIf="cluster.provider !== 'bringyourown'">
+        <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">
           <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
           <span class="location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
         </ng-container>
