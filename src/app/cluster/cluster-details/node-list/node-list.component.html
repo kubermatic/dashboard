@@ -80,8 +80,8 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        <div class="km-no-node" *ngIf="cluster.status.phase == 'Running' ">No Node available. Please add a Node.</div>
-        <mat-spinner *ngIf="cluster.status.phase != 'Running' && !!!cluster.spec.cloud.bringyourown" color="accent" class="node-list-spinner" [diameter]="40"></mat-spinner>
+        <div class="km-no-node" *ngIf="isClusterRunning">No Node available. Please add a Node.</div>
+        <mat-spinner *ngIf="!isClusterRunning && !!!cluster.spec.cloud.bringyourown" color="accent" class="node-list-spinner" [diameter]="40"></mat-spinner>
       </ng-container>
     </ng-container>
   </mat-card-content>

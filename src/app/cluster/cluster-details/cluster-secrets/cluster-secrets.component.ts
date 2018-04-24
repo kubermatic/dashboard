@@ -1,23 +1,30 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { ClusterService } from '../../../core/services';
+
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
   templateUrl: './cluster-secrets.component.html',
   styleUrls: ['./cluster-secrets.component.scss']
 })
-export class ClusterSecretsComponent implements OnInit {
+export class ClusterSecretsComponent implements OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   public expand = false;
   public dialogRef: any;
+  public isClusterRunning: boolean;
+  public healthStatus: string;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+              private clusterService: ClusterService) { }
 
-  ngOnInit() {
+  ngOnChanges() {
+    this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
+    this.healthStatus = this.clusterService.getClusterHealthStatus(this.cluster);
   }
 
   isExpand(expand: boolean) {
@@ -87,7 +94,7 @@ export class ClusterSecretsComponent implements OnInit {
     if (isHealthy) {
       return 'iconRunning';
     } else if (!(isHealthy)) {
-      if (this.cluster.status.phase === 'Failed') {
+      if (!this.cluster.status.health.apiserver) {
         return 'iconFailed';
       } else {
         return 'fa fa-spin fa-circle-o-notch';
@@ -122,7 +129,7 @@ export class ClusterSecretsComponent implements OnInit {
     if (isHealthy) {
       return 'Running';
     } else if (!isHealthy) {
-      if (this.cluster.status.phase === 'Failed') {
+      if (!this.cluster.status.health.apiserver) {
         return 'Failed';
       } else {
         return 'Pending';

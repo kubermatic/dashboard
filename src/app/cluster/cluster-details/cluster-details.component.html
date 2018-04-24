@@ -4,17 +4,17 @@
       <button class="add-node-btn"
               mat-raised-button color="primary"
               (click)="addNode()"
-              [disabled]="cluster.status.phase != 'Running'"
-              [fxHide]="cluster.provider === 'bringyourown'">
+              [disabled]="!isClusterRunning"
+              [fxHide]="nodeDc.spec.provider === 'bringyourown'">
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
           Add Node
       </button>
-      <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
+      <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="!isClusterRunning">
         Connect
       </button>
-      <button class="download-kubeconfig-btn" mat-button mat-raised-button color="primary" [disabled]="cluster.status.phase != 'Running'">
-        <a [attr.href]="cluster.status.phase != 'Running' ? null : downloadKubeconfigUrl()" target="_blank" [ngClass]="{'disabled': cluster.status.phase != 'Running'}">
-          <span class="button" [ngClass]="{'download': cluster.status.phase == 'Running', 'downloadDisabled': cluster.status.phase != 'Running'}"></span>
+      <button class="download-kubeconfig-btn" mat-button mat-raised-button color="primary" [disabled]="!isClusterRunning">
+        <a [attr.href]="!isClusterRunning ? null : downloadKubeconfigUrl()" target="_blank" [ngClass]="{'disabled': !isClusterRunning}">
+          <span class="button" [ngClass]="{'download': isClusterRunning, 'downloadDisabled': !isClusterRunning}"></span>
           Download config
         </a>
       </button>
@@ -25,26 +25,23 @@
     </div>
   </div>
 
-  <mat-card class="km-card-list km-card-list-info" [ngClass]="{'statusRunning': cluster.status.phase == 'Running', 'statusFailed': cluster.status.phase == 'Failed', 'statusWaiting': cluster.status.phase != 'Running' && cluster.status.phase != 'Failed'}">
+  <mat-card class="km-card-list km-card-list-info" [ngClass]="clusterHealthClass">
     <mat-card-header class="km-card-list-header">
       <mat-card-title>
-        <span ngxClipboard [cbContent]="cluster.spec.humanReadableName" matTooltip="click to copy" class="copy">{{cluster.spec.humanReadableName}}</span>
-        <kubermatic-cluster-health-status [health]="cluster.status.health" [phase]="cluster.status.phase"></kubermatic-cluster-health-status>
+        <span ngxClipboard [cbContent]="cluster.spec.humanReadableName" matTooltip="click to copy" class="copy cluster-name">{{cluster.spec.humanReadableName}}</span>
+        <kubermatic-cluster-health-status [cluster]="cluster"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout >
-      <div fxFlex="20%">
-        <strong>Status:</strong>
-      </div>
-      <div fxFlex="25%">{{cluster.status.phase}}</div>
       <div fxFlex="20%">
         <strong>Master Version:</strong>
       </div>
       <div fxFlex="35%">
         {{cluster.spec.masterVersion}}
-        <small (click)="upgradeClusterDialog()" [hidden]="cluster.status.phase != 'Running' || upgradesList.length === 0">upgrade available</small>
+        <small (click)="upgradeClusterDialog()" [hidden]="!isClusterRunning || upgradesList.length === 0">upgrade available</small>
       </div>
     </mat-card-content>
+    <!-- TODO: Whats this? -->
     <mat-card-content class="km-card-list-content" fxLayout>
     </mat-card-content>
 
@@ -66,15 +63,10 @@
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout>
       <div fxFlex="45%" fxLayoutAlign="left center">
-        <ng-container *ngIf="cluster.provider === 'bringyourown'">
-          <img src="/assets/images/clouds/{{cluster.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" />
-        </ng-container>
-        <ng-container *ngIf="cluster.provider !== 'bringyourown'">
-          <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" />
-        </ng-container>
+        <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="icon-seed-cluster" alt="Cluster Icon" />
       </div>
       <div fxFlex="30%" class="km-provider-region" >
-        <ng-container *ngIf="cluster.provider !== 'bringyourown'">
+        <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">
           <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
           <span class="location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
         </ng-container>

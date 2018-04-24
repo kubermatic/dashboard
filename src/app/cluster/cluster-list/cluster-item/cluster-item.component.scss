@@ -44,7 +44,7 @@
     }
   }
 
-  &.statusFailed {
+  &.statusFailed, &.statusDeleting {
     background-color: rgba(241, 92, 92, 0.15);
 
     &:hover {
@@ -61,4 +61,9 @@
 
 .km-card-list-content:hover {
   background-color: #EEF5FF;
+}
+
+
+.health-state-container {
+  float: left;
 }

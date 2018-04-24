@@ -2,11 +2,12 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
+import { ClusterService } from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-item',
   templateUrl: './cluster-item.component.html',
-  styleUrls: ['./cluster-item.component.scss']
+  styleUrls: ['./cluster-item.component.scss'],
 })
 export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -14,7 +15,8 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() health: Health;
   public nodeDC: DataCenterEntity;
 
-  constructor(private dcService: DatacenterService) {}
+  constructor(private dcService: DatacenterService,
+              private clusterService: ClusterService) {}
 
   public ngOnInit(): void {
     if (this.cluster.spec.cloud.bringyourown === undefined) {
@@ -49,44 +51,12 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     return name.length > 12 ? name.slice(0, 12) + '...' : name;
   }
 
-  public statusRunning(): boolean {
-    if (this.cluster.status.phase === 'Running') {
-      if (this.health) {
-        if (!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.machineController || !this.health.scheduler) {
-          return false;
-        } else {
-          return true;
-        }
-      } else {
-        return true;
-      }
-    } else {
-      return false;
+  public getClusterItemClass() {
+    let itemClass = this.clusterService.getClusterHealthStatus(this.cluster);
+    if (this.index % 2 !== 0) {
+      itemClass = itemClass  + ' odd';
     }
-  }
-
-  public statusFailed(): boolean {
-    if (this.cluster.status.phase === 'Failed') {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public statusWaiting(): boolean {
-    if (this.cluster.status.phase !== 'Running' && this.cluster.status.phase !== 'Failed') {
-      return true;
-    } else {
-      if (this.health) {
-        if ((!this.health.apiserver || !this.health.controller || !this.health.etcd || !this.health.machineController || !this.health.scheduler) && this.cluster.status.phase === 'Running') {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        return false;
-      }
-    }
+    return itemClass;
   }
 
   public getDatacenter(): string {
