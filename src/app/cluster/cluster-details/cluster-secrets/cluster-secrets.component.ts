@@ -129,7 +129,7 @@ export class ClusterSecretsComponent implements OnChanges {
     if (isHealthy) {
       return 'Running';
     } else if (!isHealthy) {
-      if (this.isClusterRunning) {
+      if (!this.cluster.status.health.apiserver) {
         return 'Failed';
       } else {
         return 'Pending';
