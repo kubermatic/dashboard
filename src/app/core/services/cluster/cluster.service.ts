@@ -5,15 +5,18 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 export class ClusterService {
 
   getClusterHealthStatus (cluster: ClusterEntity): string {
+    const waiting = 'statusWaiting';
+    const running = 'statusRunning';
+    const deleting = 'statusDeleting';
+
     if (!!cluster.status.health) {
       if (cluster.metadata.deletionTimestamp) {
-        return 'statusDeleting';
+        return deleting;
       } else if (cluster.status.health.apiserver && cluster.status.health.scheduler && cluster.status.health.controller && cluster.status.health.machineController && cluster.status.health.etcd) {
-        return 'statusRunning';
+        return running;
       }
-      return 'statusWaiting';
     }
-    return 'statusWaiting';
+    return waiting;
   }
 
   isClusterRunning(cluster: ClusterEntity): boolean {
