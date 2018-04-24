@@ -7,7 +7,7 @@
 }
 
 .km-single-node {
-  line-height: 38px;
+  line-height: 40px;
 }
 
 .km-conditionsMessage {
@@ -72,4 +72,9 @@ button {
   font-size: 13px;
   line-height: 18px;
   font-family: "Menlo", monospace;
+}
+
+.os-image {
+  max-height: 20px;
+  max-width: 65px;
 }

@@ -129,4 +129,20 @@ export class NodeListComponent implements OnChanges {
       return '';
     }
   }
+
+  public getOsImagePath(node: NodeEntity): string {
+    let path = '/assets/images/operating-system/';
+
+    if (node.spec.operatingSystem.containerLinux) {
+      path += 'containerlinux.png';
+    } else if (node.spec.operatingSystem.ubuntu) {
+      path += 'ubuntu.png';
+    }
+    /* TODO: update operatingSystemSpec for centOS
+     else if (node.spec.operatingSystem.centOS) {
+      path += 'centos.png';
+    }*/
+
+    return path;
+  }
 }
