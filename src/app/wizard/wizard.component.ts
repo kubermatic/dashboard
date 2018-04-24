@@ -12,6 +12,7 @@ import { ApiService, InitialNodeDataService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
+import {NodeEntity, NodeSpec, NodeStatus, getEmptyNodeProviderSpec} from '../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -49,6 +50,18 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
       },
     };
+
+    this.addNodeData = {
+      node: {
+        metadata: {},
+        spec: {
+          cloud: {},
+          operatingSystem: {}
+        },
+        status: {},
+      },
+      count: 3
+    };
   }
 
   ngOnInit(): void {
@@ -65,17 +78,34 @@ export class WizardComponent implements OnInit, OnDestroy {
     // Caveat: We must not delete existing provider settings.
     // Caveat: The DC stays set. When changing the provider we have a invalid dc stored in the cluster. But will be changed on the next step.
     this.subscriptions.push(this.wizardService.clusterProviderFormChanges$.subscribe(data => {
+
+      console.log(this.cluster.spec);
+      debugger;
       this.clusterProviderFormData = data;
-      if (!this.clusterProviderFormData.valid) {
+
+      /*if (!this.clusterProviderFormData.valid) {
         return;
-      }
+      }*/
 
       const oldProviderSpec = this.cluster.spec.cloud[this.clusterProviderFormData.provider];
       const oldDC = this.cluster.spec.cloud.dc;
       this.cluster.spec.cloud = { dc: oldDC };
+
+      console.log(oldProviderSpec);
+
       if (oldProviderSpec == null) {
+
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
+        this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
+        console.log(this.cluster.spec.cloud[this.clusterProviderFormData.provider]);
       } else {
+
+        //TODO: hab noch keinen fall gefunden
+        console.log(oldProviderSpec);
+        console.log(this.cluster.spec.cloud[this.clusterProviderFormData.provider]);
+        debugger;
+
+
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = oldProviderSpec;
       }
       this.wizardService.changeCluster(this.cluster);
