@@ -96,7 +96,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         backups: false,
         ipv6: false,
         monitoring: false,
-        tags: ''
+        tags: []
       };
       return doSpec;
     case NodeProvider.OPENSTACK:
