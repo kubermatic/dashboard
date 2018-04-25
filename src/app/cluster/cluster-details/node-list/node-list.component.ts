@@ -145,4 +145,16 @@ export class NodeListComponent implements OnChanges {
 
     return path;
   }
+
+  public showInfo(node: NodeEntity): boolean {
+    if (node.metadata.displayName !== node.metadata.name.replace('machine-', '') && node.metadata.name !== '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public getInfo(node: NodeEntity): string {
+    return node.metadata.name.replace('machine-', '');
+  }
 }
