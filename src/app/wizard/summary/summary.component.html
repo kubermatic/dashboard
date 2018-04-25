@@ -54,14 +54,10 @@
           <div fxFlex="80%">{{cluster.spec.cloud.aws.secretAccessKey}}</div>
         </div>
         <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.securityGroup">
-          <div fxFlex="20%" class="km-card-list-key">Security group ID (optional)</div>
-          <div fxFlex="80%">{{cluster.spec.cloud.aws.securityGroup}}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.vpcId">
           <div fxFlex="20%" class="km-card-list-key">Security Group ID (optional)</div>
           <div fxFlex="80%">{{cluster.spec.cloud.aws.securityGroup}}</div>
         </div>
-        <div fxLayout class="km-card-list-content">
+        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.vpcId">
           <div fxFlex="20%" class="km-card-list-key">VPC ID (optional)</div>
           <div fxFlex="80%">{{cluster.spec.cloud.aws.vpcId}}</div>
         </div>
