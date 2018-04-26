@@ -221,9 +221,18 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public downloadKubeconfigUrl(): string {
+  public downloadKubeconfig() {
     const authorization_token = localStorage.getItem('token');
-    return `${environment.restRootV3}/dc/${this.datacenter.metadata.name}/cluster/${this.cluster.metadata.name}/kubeconfig?token=${authorization_token}`;
+    this.api.getKubeconfig(this.datacenter.metadata.name, this.cluster.metadata.name, authorization_token).subscribe(res => {
+      const data = res;
+      const blob = new Blob([data], { type: 'text/plain' });
+      const a = window.document.createElement('a');
+      a.href = window.URL.createObjectURL(blob);
+      a.download = 'kubeconfig';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    });
   }
 
   public isLoaded(): boolean {

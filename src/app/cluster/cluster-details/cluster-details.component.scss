@@ -179,26 +179,7 @@ kubermatic-cluster-health-status {
   background-color: #FFFBEB;
 }
 
-.connect-kubeconfig-btn {
-  a {
-    display: flex;
-    align-items: center;
-    width: auto;
-    height: 100%;
-    text-decoration: none;
-    color: white;
-    vertical-align: baseline !important;
-    padding: 0 16px;
-  }
-  a.disabled {
-    color: rgba(0, 0, 0, 0.38);
-  }
-}
-
-.download-kubeconfig-btn {
-  padding: 0;
-  top: 1px;
-
+.connect-kubeconfig-btn, download-kubeconfig-btn {
   a {
     display: flex;
     align-items: center;
