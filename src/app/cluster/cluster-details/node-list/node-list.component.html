@@ -35,8 +35,9 @@
             <div fxFlex="3%">{{i + 1}}</div>
             <div fxFlex="32%" style="word-break: normal ;" matTooltip="{{getTooltip(node)}}">
               {{node.metadata.displayName}}
+              <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
             </div>
-            <div fxFlex="10%" fxLayoutAlign="left center">
+            <div fxFlex="10%">
               <img [src]="getOsImagePath(node)" class="os-image"/>
             </div>
             <div fxFlex="15%">
