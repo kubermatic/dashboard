@@ -7,11 +7,9 @@
 <mat-dialog-content>
   <div class="mat-dialog-content">
     <p>Download the kubeconfig
-      <button class="download-kubeconfig-btn" mat-raised-button color="primary" >
-        <a [attr.href]="downloadKubeconfigUrl()" target="_blank">
-          <span class="button download"></span>
-          Download config
-        </a>
+      <button class="download-kubeconfig-btn" mat-raised-button color="primary" (click)="downloadKubeconfig()">
+        <span class="button download"></span>
+        Download config
       </button>
     </p>
     <p>Configure kubectl command line by running the following command in Directory where the kubeconfig-{{cluster.metadata.name}} is located:</p>
