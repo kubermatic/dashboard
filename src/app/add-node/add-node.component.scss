@@ -7,9 +7,21 @@ div.os-options {
   line-height: 30px;
   font-size: 14px;
   display: flex;
-  margin: 5px 0 10px;
+  margin: 0 0 10px;
 
   mat-checkbox, label {
     flex: 1 1 100%;
   }
+
+  &.with-margin {
+    margin: 5px 0 10px;
+  }
+}
+
+/deep/.mat-dialog-content {
+  padding: 5px 24px;
+}
+
+/deep/.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
+  margin: 5px 0 0;
 }

@@ -28,16 +28,16 @@
   <div fxFlex="100%">
 
     <!-- Options for Ubuntu -->
-    <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'" class="os-options">
+    <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'" class="os-options" [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'with-margin' : ''">
       <label fxFlex="50%">dist Upgrade On Boot</label>
       <mat-checkbox fxFlex="50%" id="distUpgradeOnBoot" formControlName="distUpgradeOnBoot"></mat-checkbox>
     </div>
 
     <!-- Options for Container Linux -->
-    <div *ngIf="nodeForm.controls.operatingSystem.value === 'containerLinux'" class="os-options">
+    <div *ngIf="nodeForm.controls.operatingSystem.value === 'containerLinux'" class="os-options" [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'with-margin' : ''">
       <label fxFlex="50%">disable Auto Update</label>
       <mat-checkbox fxFlex="50%" id="disableAutoUpdate" formControlName="disableAutoUpdate"></mat-checkbox>
     </div>
-    
+
   </div>
 </form>
