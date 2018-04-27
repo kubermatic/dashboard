@@ -41,9 +41,6 @@ p {
 }
 
 .download-kubeconfig-btn {
-  padding: 0;
-  margin-left: 10px;
-
   a {
     display: flex;
     align-items: center;
@@ -53,6 +50,9 @@ p {
     color: white;
     vertical-align: baseline !important;
     padding: 0 16px;
+  }
+  a.disabled {
+    color: rgba(0, 0, 0, 0.38);
   }
 }
 
