@@ -2,14 +2,42 @@
   <mat-form-field fxFlex>
     <input matInput formControlName="count" min="1" type="number" placeholder="Number of nodes*:" autocomplete="off">
   </mat-form-field>
+
+  <kubermatic-aws-add-node *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud"></kubermatic-aws-add-node>
+
+  <kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud"></kubermatic-digitalocean-add-node>
+
+  <kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-add-node>
+
+  <kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner" [cloudSpec]="cluster.spec.cloud"></kubermatic-hetzner-add-node>
+
+  <kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-add-node>
+
+  <mat-form-field class="operating-system">
+    <mat-select placeholder="Operating System*:" formControlName="operatingSystem">
+      <mat-option value="ubuntu">Ubuntu</mat-option>
+      <mat-option value="containerLinux" *ngIf="!cluster.spec.cloud.hetzner">Container Linux</mat-option>
+      <mat-option value="coreOS">CoreOS</mat-option>
+    </mat-select>
+    <mat-hint *ngIf="cluster.spec.cloud.openstack">Select the operating system of the entered image</mat-hint>
+    <mat-hint *ngIf="cluster.spec.cloud.vsphere">Select the operating system of the entered template</mat-hint>
+  </mat-form-field>
 </form>
 
-<kubermatic-aws-add-node *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud"></kubermatic-aws-add-node>
+<form [formGroup]="operatingSystemForm" fxLayout="column">
+  <div fxFlex="100%">
 
-<kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud"></kubermatic-digitalocean-add-node>
+    <!-- Options for Ubuntu -->
+    <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'" class="os-options">
+      <label fxFlex="50%">dist Upgrade On Boot</label>
+      <mat-checkbox fxFlex="50%" id="distUpgradeOnBoot" formControlName="distUpgradeOnBoot"></mat-checkbox>
+    </div>
 
-<kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-add-node>
-
-<kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner" [cloudSpec]="cluster.spec.cloud"></kubermatic-hetzner-add-node>
-
-<kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-add-node>
+    <!-- Options for Container Linux -->
+    <div *ngIf="nodeForm.controls.operatingSystem.value === 'containerLinux'" class="os-options">
+      <label fxFlex="50%">disable Auto Update</label>
+      <mat-checkbox fxFlex="50%" id="disableAutoUpdate" formControlName="disableAutoUpdate"></mat-checkbox>
+    </div>
+    
+  </div>
+</form>
