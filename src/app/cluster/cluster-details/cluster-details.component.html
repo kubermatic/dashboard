@@ -12,11 +12,9 @@
       <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="!isClusterRunning">
         Connect
       </button>
-      <button class="download-kubeconfig-btn" mat-button mat-raised-button color="primary" [disabled]="!isClusterRunning">
-        <a [attr.href]="!isClusterRunning ? null : downloadKubeconfigUrl()" target="_blank" [ngClass]="{'disabled': !isClusterRunning}">
-          <span class="button" [ngClass]="{'download': isClusterRunning, 'downloadDisabled': !isClusterRunning}"></span>
-          Download config
-        </a>
+      <button class="download-kubeconfig-btn" mat-button mat-raised-button color="primary" [disabled]="!isClusterRunning" (click)="downloadKubeconfig()">
+        <span class="button" [ngClass]="{'download': isClusterRunning, 'downloadDisabled': !isClusterRunning}"></span>
+        Download config
       </button>
       <button mat-button (click)="deleteClusterDialog()" mat-raised-button >
         <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px; color: #0288d1;" color="primary"></i>

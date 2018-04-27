@@ -101,4 +101,9 @@ export class ApiService {
     const url = `${this.restRoot}/openstack/sizes`;
     return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
   }
+
+  getKubeconfig(dc: string, cluster: string, token: string) {
+    const url = `${environment.restRootV3}/dc/${dc}/cluster/${cluster}/kubeconfig?token=${token}`;
+    return this.http.get(url, { responseType: 'text', headers: this.headers });
+  }
 }
