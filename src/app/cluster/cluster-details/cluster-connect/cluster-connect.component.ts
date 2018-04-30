@@ -26,7 +26,7 @@ export class ClusterConnectComponent implements OnInit {
       const blob = new Blob([data], { type: 'text/plain' });
       const a = window.document.createElement('a');
       a.href = window.URL.createObjectURL(blob);
-      a.download = 'kubeconfig';
+      a.download = 'kubeconfig-' + this.cluster.metadata.name;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
