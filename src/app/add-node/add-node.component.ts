@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
-import { OperatingSystemSpec } from '../shared/entity/NodeEntity';
+import { OperatingSystemSpec, NodeCloudSpec } from '../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-add-node',
@@ -57,35 +57,68 @@ export class AddNodeComponent implements OnInit, OnDestroy {
     this.providerDataChangedSub.unsubscribe();
   }
 
-  getAddNodeData(): NodeData {
-    let osSpec: OperatingSystemSpec;
+  getOSSpec(): OperatingSystemSpec {
     switch (this.nodeForm.controls.operatingSystem.value) {
       case 'ubuntu':
-        osSpec = {
+        return {
           ubuntu: {
             distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBoot.value,
           }
         };
-        break;
       case 'containerLinux':
-        osSpec = {
+        return {
           containerLinux: {
             disableAutoUpdate: this.operatingSystemForm.controls.disableAutoUpdate.value,
           }
         };
-        break;
       default:
-        osSpec = {
+        return {
           ubuntu: {
             distUpgradeOnBoot: false,
           }
         };
     }
+  }
+
+  getProviderSpec(): NodeCloudSpec {
+    if (this.providerData.spec.vsphere) {
+      if (this.providerData.spec.vsphere.template === '') {
+        switch (this.nodeForm.controls.operatingSystem.value) {
+          case 'ubuntu':
+            return {
+              vsphere: {
+                cpus: this.providerData.spec.vsphere.cpus,
+                memory: this.providerData.spec.vsphere.memory,
+                template: 'ubuntu-template',
+              },
+            };
+          case 'containerLinux':
+            return {
+              vsphere: {
+                cpus: this.providerData.spec.vsphere.cpus,
+                memory: this.providerData.spec.vsphere.memory,
+                template: 'container-linux-template',
+              },
+            };
+          default:
+            return this.providerData.spec;
+        }
+      } else {
+        return this.providerData.spec;
+      }
+    } else {
+      return this.providerData.spec;
+    }
+  }
+
+  getAddNodeData(): NodeData {
+    const providerSpec = this.getProviderSpec();
+    const osSpec = this.getOSSpec();
     return {
       node: {
         metadata: {},
         spec: {
-          cloud: this.providerData.spec,
+          cloud: providerSpec,
           operatingSystem: osSpec,
         },
       },

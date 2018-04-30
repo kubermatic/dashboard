@@ -137,6 +137,8 @@ export class NodeListComponent implements OnChanges {
       path += 'containerlinux.png';
     } else if (node.spec.operatingSystem.ubuntu) {
       path += 'ubuntu.png';
+    } else {
+      path = '';
     }
     /* TODO: update operatingSystemSpec for centOS
      else if (node.spec.operatingSystem.centOS) {
