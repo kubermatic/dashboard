@@ -39,13 +39,13 @@ export class ContainerLinuxSpec {
 }
 
 export class NodeVersionInfo {
-  kubelet: string;
-  containerRuntime: NodeContainerRuntimeInfo;
+  kubelet?: string;
+  containerRuntime?: NodeContainerRuntimeInfo;
 }
 
 export class NodeContainerRuntimeInfo {
-  name: string;
-  version: string;
+  name?: string;
+  version?: string;
 }
 
 export class NodeStatus {
