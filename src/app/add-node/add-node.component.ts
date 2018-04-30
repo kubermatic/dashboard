@@ -98,7 +98,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
               vsphere: {
                 cpus: this.providerData.spec.vsphere.cpus,
                 memory: this.providerData.spec.vsphere.memory,
-                template: 'container-linux-template',
+                template: 'coreos_production_vmware_ova',
               },
             };
           default:
