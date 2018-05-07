@@ -43,6 +43,7 @@ describe('SetClusterNameComponent', () => {
       spec: {
         humanReadableName: '',
         masterVersion: '',
+        pause: false,
         cloud: {
           dc: '',
         },

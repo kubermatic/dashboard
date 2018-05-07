@@ -15,6 +15,7 @@ export const clusterModelFake: CreateClusterModel = {
     },
     humanReadableName: 'adoring-franklin',
     masterVersion: '',
+    pause: false,
   },
   sshKeys: [
     'key-ssh1'
@@ -43,6 +44,7 @@ export const fakeDigitaloceanCluster: ClusterEntity = {
     },
     humanReadableName: 'nifty-haibt',
     masterVersion: '1.8.5',
+    pause: false,
   },
   address: {
     url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -109,6 +111,7 @@ export const fakeHetznerCluster: ClusterEntity = {
     },
     humanReadableName: 'nifty-haibt',
     masterVersion: '1.8.5',
+    pause: false,
   },
   address: {
     url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -176,6 +179,7 @@ export const fakeVSphereCluster: ClusterEntity = {
     },
     humanReadableName: 'nifty-haibt',
     masterVersion: '1.8.5',
+    pause: false,
   },
   address: {
     url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
@@ -245,6 +249,7 @@ export const fakeAWSCluster: ClusterEntity = {
     },
     humanReadableName: 'foo-bar',
     masterVersion: '1.9.6',
+    pause: false,
   },
   address: {
     url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
@@ -314,6 +319,7 @@ export const fakeOpenstackCluster: ClusterEntity = {
     },
     humanReadableName: 'foo-bar',
     masterVersion: '1.9.6',
+    pause: false,
   },
   address: {
     url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
