@@ -1,23 +1,20 @@
 <mat-card class="km-card-list" >
   <mat-card-header class="km-card-list-header" >
     <mat-card-title fxLayout>
-      <div fxFlex="3%">
+      <div fxFlex="5%">
         <strong>#</strong>
       </div>
-      <div fxFlex="32%">
+      <div fxFlex="36%">
         <strong>Name</strong>
-      </div>
-      <div fxFlex="10%">
-        <strong>OS</strong>
-      </div>
-      <div fxFlex="15%">
-        <strong>Capacity</strong>
       </div>
       <div fxFlex="15%">
         <strong>Kubelet Version</strong>
       </div>
-      <div fxFlex="15%">
+      <div fxFlex="17%">
         <strong>IP addresses</strong>
+      </div>
+      <div fxFlex="17%">
+        <strong>Created</strong>
       </div>
       <div fxFlex="5%" align="center">
         <strong>Status</strong>
@@ -30,23 +27,17 @@
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
 
-        <div class="km-node-row" *ngFor="let node of nodes, let i = index">
+        <div class="km-node-row" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)">
           <div fxLayout class="km-single-node">
-            <div fxFlex="3%">{{i + 1}}</div>
-            <div fxFlex="32%" style="word-break: normal ;" matTooltip="{{getTooltip(node)}}">
+            <div fxFlex="5%">{{i + 1}}</div>
+            <div fxFlex="36%" style="word-break: normal ;">
               {{node.metadata.displayName}}
               <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
-            </div>
-            <div fxFlex="10%">
-              <img [src]="getOsImagePath(node)" class="os-image"/>
-            </div>
-            <div fxFlex="15%">
-              <span *ngIf="!!node.status.capacity.cpu && !!node.status.capacity.memory"> {{node.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(node.status.capacity.memory)}}</span>
             </div>
             <div fxFlex="15%">
               <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
             </div>
-            <div fxFlex="15%">
+            <div fxFlex="17%">
               <div *ngIf="!!node.status.addresses && !!getAddresses(node).InternalIP">
                 Int.IP:
                 <span class="copy" [cbContent]="getAddresses(node).InternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).InternalIP}}</span>
@@ -55,6 +46,9 @@
                 Ext.IP:
                 <span class="copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).ExternalIP}}</span>
               </div>
+            </div>
+            <div fxFlex="17%">
+              <span *ngIf="!!node.metadata.creationTimestamp">{{node.metadata.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
             </div>
             <div fxFlex="5%" class="health-state">
                 <i [matTooltip]="getNodeHealth(node).status" [ngClass]="getNodeHealth(node).color"></i>
@@ -77,7 +71,92 @@
           <div fxLayout *ngIf="node.status.errorMessage && node.status.errorMessage.length" class="km-conditionsMessage">
             <p color="accent">{{node.status.errorMessage}}</p>
           </div>
+
+          <div class="node-details-wrapper" *ngIf="isShowNodeDetails[node.metadata.name]">
+            <div class="node-details-content">
+              <div fxLayout>
+                <mat-card class="km-card-list" fxFlex="50%">
+                  <mat-card-content class="km-card-list-content" fxLayout >
+                    <div fxFlex="50%">
+                      <strong>Operating System:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      <img [src]="getOsImagePath(node)" class="os-image"/>
+                    </div>
+                  </mat-card-content>
+                  <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.operatingSystem.ubuntu">
+                    <div fxFlex="50%">
+                      <strong>Upgrade system on first boot:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      <i [ngClass]="node.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+                    </div>
+                  </mat-card-content>
+                  <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.operatingSystem.containerLinux">
+                    <div fxFlex="50%">
+                      <strong>Disable auto-update:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      <i [ngClass]="node.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
+                    </div>
+                  </mat-card-content>
+                  <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.cloud.aws">
+                    <div fxFlex="50%">
+                      <strong>Disk Type:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      {{node.spec.cloud.aws.volumeType}}
+                    </div>
+                  </mat-card-content>
+                  <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.cloud.digitalocean">
+                    <div fxFlex="50%">
+                      <strong>Backups:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      <i [ngClass]="node.spec.cloud.digitalocean.backups ? 'fa fa-check' : 'fa fa-times'"></i>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+
+                <mat-card class="km-card-list" fxFlex="50%">
+                  <mat-card-content class="km-card-list-content" fxLayout >
+                    <div fxFlex="50%">
+                      <strong>Capacity:</strong>
+                    </div>
+                    <div fxFlex="50%" *ngIf="!!node.status.capacity.cpu && !!node.status.capacity.memory">
+                      {{node.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(node.status.capacity.memory)}}
+                    </div>
+                  </mat-card-content>
+                  <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.cloud.aws">
+                    <div fxFlex="50%">
+                      <strong>Disk Size:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      {{node.spec.cloud.aws.diskSize}}
+                    </div>
+                  </mat-card-content>
+                  <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.cloud.digitalocean">
+                    <div fxFlex="50%">
+                      <strong>IPv6:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      <i [ngClass]="node.spec.cloud.digitalocean.ipv6 ? 'fa fa-check' : 'fa fa-times'"></i>
+                    </div>
+                  </mat-card-content>
+                  <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.cloud.digitalocean">
+                    <div fxFlex="50%">
+                      <strong>Monitoring:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      <i [ngClass]="node.spec.cloud.digitalocean.monitoring? 'fa fa-check' : 'fa fa-times'"></i>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+          </div>
         </div>
+
       </ng-container>
 
       <ng-container *ngSwitchCase="false">

@@ -19,6 +19,7 @@ export class NodeListComponent implements OnChanges {
   @Input() nodes: NodeEntity[] = [];
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   public isClusterRunning: boolean;
+  public isShowNodeDetails = {};
   public config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -122,14 +123,6 @@ export class NodeListComponent implements OnChanges {
     return addresses;
   }
 
-  public getTooltip(node: NodeEntity): string {
-    if (node.spec.cloud.digitalocean) {
-      return 'Backups: ' + node.spec.cloud.digitalocean.backups + ', IPv6: ' + node.spec.cloud.digitalocean.ipv6 + ', Monitoring: ' + node.spec.cloud.digitalocean.monitoring;
-    } else {
-      return '';
-    }
-  }
-
   public getOsImagePath(node: NodeEntity): string {
     let path = '/assets/images/operating-system/';
 
@@ -158,5 +151,13 @@ export class NodeListComponent implements OnChanges {
 
   public getInfo(node: NodeEntity): string {
     return node.metadata.name.replace('machine-', '');
+  }
+
+  public toggleNode(nodeName: string): void {
+    if (this.isShowNodeDetails[nodeName]) {
+      this.isShowNodeDetails[nodeName] = false;
+    } else if (!this.isShowNodeDetails[nodeName]) {
+      this.isShowNodeDetails[nodeName] = true;
+    }
   }
 }
