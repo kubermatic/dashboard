@@ -86,7 +86,7 @@
                   </mat-card-content>
                   <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.operatingSystem.ubuntu">
                     <div fxFlex="50%">
-                      <strong>dist Upgrade On Boot:</strong>
+                      <strong>Upgrade system on first boot:</strong>
                     </div>
                     <div fxFlex="50%">
                       <i [ngClass]="node.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
@@ -94,7 +94,7 @@
                   </mat-card-content>
                   <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.operatingSystem.containerLinux">
                     <div fxFlex="50%">
-                      <strong>disable Auto Update:</strong>
+                      <strong>Disable auto-update:</strong>
                     </div>
                     <div fxFlex="50%">
                       <i [ngClass]="node.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
