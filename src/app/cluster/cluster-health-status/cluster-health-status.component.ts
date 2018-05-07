@@ -14,6 +14,7 @@ export class ClusterHealthStatusComponent implements OnChanges {
   public green = 'fa fa-circle green';
   public red = 'fa fa-circle red';
   public orange = 'fa fa-spin fa-circle-o-notch orange';
+  public redAction = 'fa fa-exclamation-triangle red';
   public healthStatus: string;
 
   constructor( private clusterService: ClusterService) {}
@@ -28,6 +29,8 @@ export class ClusterHealthStatusComponent implements OnChanges {
         return this.green;
       } else if (this.healthStatus === ClusterHealth.DELETING) {
         return this.red;
+      } else if (this.healthStatus === ClusterHealth.ACTIONREQUIRED) {
+        return this.redAction;
       } else {
         return this.orange;
       }
@@ -39,6 +42,8 @@ export class ClusterHealthStatusComponent implements OnChanges {
   public getHealthTooltipText(): string {
     if (this.healthStatus === ClusterHealth.DELETING) {
       return 'Deleting might take up to 15 minutes';
+    } else if (this.healthStatus === ClusterHealth.ACTIONREQUIRED) {
+      return 'Manual action required';
     } else {
       return '';
     }
