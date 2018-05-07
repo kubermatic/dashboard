@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
-import { NodeProviderData } from '../../shared/model/NodeSpecChange';
+import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 
 @Component({
@@ -13,16 +13,21 @@ import { CloudSpec } from '../../shared/entity/ClusterEntity';
 
 export class VSphereAddNodeComponent implements OnInit, OnDestroy {
   @Input() public cloudSpec: CloudSpec;
-  public vsphereNodeForm: FormGroup = new FormGroup({
-    cpu: new FormControl(1, [Validators.required, Validators.min(1)]),
-    memory: new FormControl(512, [Validators.required, Validators.min(512)]),
-    template: new FormControl(''),
-  });
+  @Input() public nodeData: NodeData;
+  public vsphereNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
   constructor(private addNodeService: AddNodeService) { }
 
   ngOnInit(): void {
+    //cpu: new FormControl(1, [Validators.required, Validators.min(1)]),
+    //memory: new FormControl(512, [Validators.required, Validators.min(512)]),
+    this.vsphereNodeForm = new FormGroup({
+      cpu: new FormControl(this.nodeData.node.spec.cloud.vsphere.cpus, [Validators.required, Validators.min(1)]),
+      memory: new FormControl(this.nodeData.node.spec.cloud.vsphere.memory, [Validators.required, Validators.min(512)]),
+      template: new FormControl(this.nodeData.node.spec.cloud.vsphere.template),
+    });
+
     this.subscriptions.push(this.vsphereNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));

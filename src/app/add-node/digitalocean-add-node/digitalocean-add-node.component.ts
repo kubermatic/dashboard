@@ -3,9 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
 import { ApiService } from '../../core/services';
-import { NodeProviderData } from '../../shared/model/NodeSpecChange';
-import { CloudSpec } from '../../shared/entity/ClusterEntity';
+import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import {NodeEntity} from '../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
@@ -15,20 +16,30 @@ import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/Dro
 
 export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
+  @Input() nodeData: NodeData;
   public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
   public loadingSizes = false;
-  public doNodeForm: FormGroup = new FormGroup({
+  public doNodeForm: FormGroup;
+  /*public doNodeForm: FormGroup = new FormGroup({
     size: new FormControl(0, Validators.required),
     backups: new FormControl(false),
     ipv6: new FormControl(false),
     monitoring: new FormControl(false),
     tags: new FormControl([]),
-  });
+  });*/
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService, private addNodeService: AddNodeService) { }
 
   ngOnInit(): void {
+    this.doNodeForm = new FormGroup({
+      size: new FormControl(this.nodeData.node.spec.cloud.digitalocean.size, Validators.required),
+      backups: new FormControl(this.nodeData.node.spec.cloud.digitalocean.backups),
+      ipv6: new FormControl(this.nodeData.node.spec.cloud.digitalocean.ipv6),
+      monitoring: new FormControl(this.nodeData.node.spec.cloud.digitalocean.monitoring),
+      tags: new FormControl([this.nodeData.node.spec.cloud.digitalocean.tags]),
+    });
+
     this.subscriptions.push(this.doNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));

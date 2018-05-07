@@ -24,6 +24,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   public currentStep: Step;
   public currentStepIndex: number;
   public cluster: ClusterEntity;
+  public node: NodeEntity;
   public clusterNameFormData: ClusterNameForm = { valid: false, name: '' };
   public clusterFormData: ClusterFormData = { valid: false };
   public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
@@ -78,35 +79,32 @@ export class WizardComponent implements OnInit, OnDestroy {
     // Caveat: We must not delete existing provider settings.
     // Caveat: The DC stays set. When changing the provider we have a invalid dc stored in the cluster. But will be changed on the next step.
     this.subscriptions.push(this.wizardService.clusterProviderFormChanges$.subscribe(data => {
-
-      console.log(this.cluster.spec);
-      debugger;
       this.clusterProviderFormData = data;
 
-      /*if (!this.clusterProviderFormData.valid) {
+      if (!this.clusterProviderFormData.valid) {
         return;
-      }*/
+      }
 
-      const oldProviderSpec = this.cluster.spec.cloud[this.clusterProviderFormData.provider];
-      const oldDC = this.cluster.spec.cloud.dc;
+      let oldProviderSpec = null;
+      let oldProviderNodeSpec = null;
+      let oldDC = '';
+
+      if (!!this.clusterDatacenterFormData.datacenter) {
+        oldProviderSpec = this.clusterDatacenterFormData.datacenter.spec[this.clusterDatacenterFormData.datacenter.spec.provider];
+        oldProviderNodeSpec = this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider]
+        oldDC = this.clusterDatacenterFormData.datacenter.spec.seed;
+
+
+      }
       this.cluster.spec.cloud = { dc: oldDC };
 
-      console.log(oldProviderSpec);
-
       if (oldProviderSpec == null) {
-
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
         this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
-        console.log(this.cluster.spec.cloud[this.clusterProviderFormData.provider]);
       } else {
-
-        //TODO: hab noch keinen fall gefunden
-        console.log(oldProviderSpec);
-        console.log(this.cluster.spec.cloud[this.clusterProviderFormData.provider]);
-        debugger;
-
-
+        this.clusterDatacenterFormData.valid = false;
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = oldProviderSpec;
+        this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = oldProviderNodeSpec;
       }
       this.wizardService.changeCluster(this.cluster);
       if (this.clusterProviderFormData.valid) {

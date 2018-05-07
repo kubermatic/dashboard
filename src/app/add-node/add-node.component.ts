@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
+import {NodeEntity} from '../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-add-node',
@@ -12,9 +13,8 @@ import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
 })
 export class AddNodeComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  public nodeForm: FormGroup = new FormGroup({
-    count: new FormControl(1, [Validators.required, Validators.min(1)]),
-  });
+  @Input() nodeData: NodeData;
+  public nodeForm: FormGroup;
   private formOnChangeSub: Subscription;
   private providerDataChangedSub: Subscription;
   private providerData: NodeProviderData = { valid: false };
@@ -23,6 +23,9 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.nodeForm =  new FormGroup({
+      count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1)]),
+    });
     this.formOnChangeSub = this.nodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
     });

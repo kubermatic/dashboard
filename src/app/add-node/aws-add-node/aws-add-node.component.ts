@@ -3,7 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { NodeProviderData } from '../../shared/model/NodeSpecChange';
+import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 
 @Component({
@@ -13,20 +13,10 @@ import { CloudSpec } from '../../shared/entity/ClusterEntity';
 })
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
   @Input() public cloudSpec: CloudSpec;
+  @Input() public nodeData: NodeData;
   public instanceTypes: string[] = NodeInstanceFlavors.AWS;
   public diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
-  public awsNodeForm: FormGroup = new FormGroup({
-    type: new FormControl('t2.small', Validators.required),
-    disk_size: new FormControl(25, Validators.required),
-    disk_type: new FormControl('standard', Validators.required),
-    ami: new FormControl(''),
-    tags: new FormArray([
-      new FormGroup({
-        key: new FormControl(''),
-        value: new FormControl('')
-      })
-    ])
-  });
+  public awsNodeForm: FormGroup;
   public tags: FormArray;
   private formOnChangeSub: Subscription;
 
@@ -34,6 +24,22 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    //type: new FormControl('t2.small', Validators.required),
+    //disk_size: new FormControl(25, Validators.required),
+    //disk_type: new FormControl('standard', Validators.required),
+
+    this.awsNodeForm = new FormGroup({
+      type: new FormControl(this.nodeData.node.spec.cloud.aws.volumeType, Validators.required),
+      disk_size: new FormControl(this.nodeData.node.spec.cloud.aws.diskSize, Validators.required),
+      disk_type: new FormControl(this.nodeData.node.spec.cloud.aws.instanceType, Validators.required),
+      ami: new FormControl(this.nodeData.node.spec.cloud.aws.ami),
+      tags: new FormArray([
+        new FormGroup({
+          key: new FormControl(''),
+          value: new FormControl('')
+        })
+      ])
+    });
 
     this.formOnChangeSub = this.awsNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());

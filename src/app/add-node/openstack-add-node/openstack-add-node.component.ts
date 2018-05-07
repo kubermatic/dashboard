@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { NodeProviderData } from '../../shared/model/NodeSpecChange';
+import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 import { ApiService } from '../../core/services';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { OpenstackFlavor } from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
@@ -14,17 +14,21 @@ import { OpenstackFlavor } from '../../shared/entity/provider/openstack/Openstac
 })
 export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
+  @Input() public nodeData: NodeData;
+
   public flavors: OpenstackFlavor[] = [];
   public loadingFlavors = false;
-  public osNodeForm: FormGroup = new FormGroup({
-    flavor: new FormControl(0, Validators.required),
-    image: new FormControl('', Validators.required),
-  });
+  public osNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
   constructor(private addNodeService: AddNodeService, private api: ApiService) { }
 
   ngOnInit(): void {
+    //flavor: new FormControl(0, Validators.required),
+    this.osNodeForm = new FormGroup({
+      flavor: new FormControl(this.nodeData.node.spec.cloud.openstack.flavor, Validators.required),
+      image: new FormControl(this.nodeData.node.spec.cloud.openstack.image, Validators.required),
+    });
     this.subscriptions.push(this.osNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
