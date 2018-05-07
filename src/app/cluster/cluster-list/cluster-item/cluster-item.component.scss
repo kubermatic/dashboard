@@ -44,7 +44,7 @@
     }
   }
 
-  &.statusFailed, &.statusDeleting {
+  &.statusFailed, &.statusDeleting, &.statusActionRequired {
     background-color: rgba(241, 92, 92, 0.15);
 
     &:hover {
