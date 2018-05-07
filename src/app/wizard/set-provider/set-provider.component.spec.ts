@@ -64,6 +64,7 @@ describe('SetProviderComponent', () => {
         cloud: {
           dc: '',
         },
+        pause: false,
       },
     };
     fixture.detectChanges();

@@ -108,6 +108,8 @@ export class ClusterSpec {
   cloud: CloudSpec;
   humanReadableName?: string;
   masterVersion?: string;
+  pause: boolean;
+  pauseReason?: string;
 }
 
 export class Address {
