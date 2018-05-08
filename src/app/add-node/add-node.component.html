@@ -49,3 +49,5 @@
     </mat-select>
   </mat-form-field>
 </form>
+
+<kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-options>

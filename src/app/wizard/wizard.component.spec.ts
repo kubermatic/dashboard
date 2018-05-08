@@ -20,6 +20,7 @@ import { OpenstackAddNodeComponent } from '../add-node/openstack-add-node/openst
 import { ClusterSSHKeysComponent } from './set-settings/ssh-keys/cluster-ssh-keys.component';
 import { ClusterProviderSettingsComponent } from './set-settings/provider-settings/provider-settings.component';
 import { DigitaloceanAddNodeComponent } from '../add-node/digitalocean-add-node/digitalocean-add-node.component';
+import { DigitaloceanOptionsComponent } from '../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { BringyourownClusterSettingsComponent } from './set-settings/provider-settings/bringyourown/bringyourown.component';
 import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aws/aws.component';
 import { AwsAddNodeComponent } from '../add-node/aws-add-node/aws-add-node.component';
@@ -75,6 +76,7 @@ describe('WizardComponent', () => {
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
         SetClusterNameComponent,
