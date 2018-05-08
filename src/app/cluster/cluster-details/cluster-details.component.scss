@@ -45,7 +45,7 @@
 
 .km-card-list-subtitle {
   color: red;
-  
+
   .km-pauseReason {
     margin-top: 0;
   }
@@ -187,7 +187,7 @@ kubermatic-cluster-health-status {
   background-color: #FFFBEB;
 }
 
-.connect-kubeconfig-btn, .download-kubeconfig-btn {
+.connect-kubeconfig-btn {
   a {
     display: flex;
     align-items: center;
@@ -200,6 +200,18 @@ kubermatic-cluster-health-status {
   }
   a.disabled {
     color: rgba(0, 0, 0, 0.38);
+  }
+}
+
+a.download-kubeconfig-btn {
+  display: inline-block;
+  vertical-align: middle;
+  top: -1px;
+
+  /deep/span.mat-button-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
   }
 }
 
@@ -218,3 +230,4 @@ kubermatic-cluster-health-status {
     background-image: url("../../../assets/images/Arrow_down.svg");
     background-repeat: no-repeat;
 }
+
