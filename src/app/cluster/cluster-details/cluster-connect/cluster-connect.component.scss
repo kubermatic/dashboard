@@ -40,22 +40,18 @@ p {
   background-repeat: no-repeat;
 }
 
-.download-kubeconfig-btn {
-  a {
-    display: flex;
-    align-items: center;
-    width: auto;
-    height: 100%;
-    text-decoration: none;
-    color: white;
-    vertical-align: baseline !important;
-    padding: 0 16px;
-  }
-  a.disabled {
-    color: rgba(0, 0, 0, 0.38);
-  }
-}
-
 .km-button-link {
   margin-bottom: 20px;
+}
+
+a.download-kubeconfig-btn {
+  display: inline-block;
+  vertical-align: middle;
+  top: -1px;
+
+  /deep/span.mat-button-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
 }
