@@ -18,7 +18,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   public nodeForm: FormGroup = new FormGroup({
     count: new FormControl(1, [Validators.required, Validators.min(1)]),
     operatingSystem: new FormControl('ubuntu', Validators.required),
-    containerRuntime: new FormControl(''),
+    containerRuntime: new FormControl('docker'),
   });
   public operatingSystemForm: FormGroup = new FormGroup({
     distUpgradeOnBoot: new FormControl(false),
@@ -34,7 +34,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (this.initialNode) {
-      this.nodeForm.setValue({count: 3, operatingSystem: 'ubuntu', containerRuntime: ''});
+      this.nodeForm.setValue({count: 3, operatingSystem: 'ubuntu', containerRuntime: 'docker'});
     }
 
     this.formOnChangeSub = this.nodeForm.valueChanges.subscribe(data => {
