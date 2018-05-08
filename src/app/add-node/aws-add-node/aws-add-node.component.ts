@@ -20,7 +20,6 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   public awsNodeForm: FormGroup;
   public tags: FormArray;
   public hideOptional = true;
-  private formOnChangeSub: Subscription;
   private subscriptions: Subscription[] = [];
 
   constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {
@@ -40,9 +39,9 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
       ])
     });
 
-    this.formOnChangeSub = this.awsNodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    });
+    }));
 
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
       this.hideOptional = data.hideOptional;
@@ -91,7 +90,6 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.formOnChangeSub.unsubscribe();
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

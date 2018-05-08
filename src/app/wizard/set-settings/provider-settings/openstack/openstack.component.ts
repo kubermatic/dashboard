@@ -13,7 +13,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   public openstackSettingsForm: FormGroup;
   public hideOptional = true;
-  private openstackSettingsFormSub: Subscription;
   private subscriptions: Subscription[] = [];
 
   constructor(private wizardService: WizardService) { }
@@ -29,7 +28,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       network: new FormControl(this.cluster.spec.cloud.openstack.network, []),
     });
 
-    this.openstackSettingsFormSub = this.openstackSettingsForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.openstackSettingsForm.valueChanges.subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           openstack: {
@@ -45,7 +44,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         },
         valid: this.openstackSettingsForm.valid,
       });
-    });
+    }));
 
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
       this.hideOptional = data.hideOptional;
@@ -53,7 +52,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.openstackSettingsFormSub.unsubscribe();
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

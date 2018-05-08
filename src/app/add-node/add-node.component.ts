@@ -22,9 +22,6 @@ export class AddNodeComponent implements OnInit, OnDestroy {
 
   public hideOptional = true;
   private subscriptions: Subscription[] = [];
-  private formOnChangeSub: Subscription;
-  private operatingSystemDataChangeSub: Subscription;
-  private providerDataChangedSub: Subscription;
   private providerData: NodeProviderData = { valid: false };
 
   constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {
@@ -42,20 +39,23 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(false),
     });
 
-    this.formOnChangeSub = this.nodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.nodeForm.valueChanges.subscribe(data => {
       this.operatingSystemForm.setValue({distUpgradeOnBoot: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
-    });
+    }));
 
-    this.operatingSystemDataChangeSub = this.operatingSystemForm.valueChanges.subscribe(data => {
+
+    this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
-    });
+    }));
 
-    this.providerDataChangedSub = this.addNodeService.nodeProviderDataChanges$.subscribe(data => {
+
+    this.subscriptions.push(this.addNodeService.nodeProviderDataChanges$.subscribe(data => {
       this.providerData = data;
       this.addNodeService.changeNodeData(this.getAddNodeData());
-    });
+
+    }));
 
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
       this.hideOptional = data.hideOptional;
@@ -63,9 +63,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.formOnChangeSub.unsubscribe();
-    this.operatingSystemDataChangeSub.unsubscribe();
-    this.providerDataChangedSub.unsubscribe();
+
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -96,12 +94,15 @@ export class AddNodeComponent implements OnInit, OnDestroy {
     }
   }
 
+
   getAddNodeData(): NodeData {
+
     const osSpec = this.getOSSpec();
     return {
       node: {
         metadata: {},
         spec: {
+
           cloud: this.providerData.spec,
           operatingSystem: osSpec,
           versions: {
