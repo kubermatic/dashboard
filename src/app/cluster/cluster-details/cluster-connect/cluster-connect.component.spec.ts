@@ -29,7 +29,7 @@ describe('ClusterConnectComponent', () => {
   let fixture: ComponentFixture<ClusterConnectComponent>;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getKubeconfig']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getKubeconfigURL']);
 
     TestBed.configureTestingModule({
       imports: [
