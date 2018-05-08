@@ -1,4 +1,4 @@
-import {DigitaloceanCloudSpec} from './cloud/DigitialoceanCloudSpec';
+import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
 import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
 import {AWSCloudSpec} from './cloud/AWSCloudSpec';
 import {MetadataEntity} from './MetadataEntity';
