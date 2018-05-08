@@ -4,6 +4,7 @@ import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
 import { ApiService } from '../../core/services';
 import { NodeProviderData } from '../../shared/model/NodeSpecChange';
+import { DigitaloceanOptions } from '../../shared/entity/node/DigitaloceanNodeSpec';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 
@@ -19,17 +20,24 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   public loadingSizes = false;
   public doNodeForm: FormGroup = new FormGroup({
     size: new FormControl(0, Validators.required),
-    backups: new FormControl(false),
-    ipv6: new FormControl(false),
-    monitoring: new FormControl(false),
-    tags: new FormControl([]),
   });
+  private doOptionsData: DigitaloceanOptions = {
+    backups: false,
+    ipv6: false,
+    monitoring: false,
+    tags: [],
+  };
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService, private addNodeService: AddNodeService) { }
 
   ngOnInit(): void {
     this.subscriptions.push(this.doNodeForm.valueChanges.subscribe(data => {
+      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    }));
+
+    this.subscriptions.push(this.addNodeService.doOptionsDataChanges$.subscribe(data => {
+      this.doOptionsData = data;
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
@@ -61,19 +69,14 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   }
 
   getNodeProviderData(): NodeProviderData {
-    let doTags: string[] = [];
-    if ((this.doNodeForm.controls.tags.value).length > 0) {
-      doTags = (this.doNodeForm.controls.tags.value).split(/[\s]?,[\s]?/);
-    }
-
     return {
       spec: {
         digitalocean: {
           size: this.doNodeForm.controls.size.value,
-          backups: this.doNodeForm.controls.backups.value,
-          ipv6: this.doNodeForm.controls.ipv6.value,
-          monitoring: this.doNodeForm.controls.monitoring.value,
-          tags: doTags,
+          backups: this.doOptionsData.backups,
+          ipv6: this.doOptionsData.ipv6,
+          monitoring: this.doOptionsData.monitoring,
+          tags: this.doOptionsData.tags,
         },
       },
       valid: this.doNodeForm.valid,

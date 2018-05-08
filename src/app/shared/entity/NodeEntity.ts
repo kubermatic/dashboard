@@ -1,5 +1,5 @@
 import { MetadataEntityV2 } from './MetadataEntity';
-import { DigitaloceanNodeSpec } from './node/DigitialoceanNodeSpec';
+import { DigitaloceanNodeSpec } from './node/DigitaloceanNodeSpec';
 import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
 import { HetznerNodeSpec } from './node/HetznerNodeSpec';
