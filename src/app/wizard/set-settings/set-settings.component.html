@@ -1,4 +1,12 @@
 <ng-container>
+  <mat-button-toggle-group #group="matButtonToggleGroup" (change)="changeView(group.value)" *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.bringyourown">
+    <mat-button-toggle value="standard" checked="true">
+      Standard
+    </mat-button-toggle>
+    <mat-button-toggle value="extended">
+      Extended
+    </mat-button-toggle>
+  </mat-button-toggle-group>
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"

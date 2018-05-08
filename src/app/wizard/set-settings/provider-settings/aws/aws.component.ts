@@ -12,7 +12,9 @@ import { Subscription } from 'rxjs/Subscription';
 export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   public awsSettingsForm: FormGroup;
+  public hideOptional = true;
   private awsSettingsFormSub: Subscription;
+  private subscriptions: Subscription[] = [];
 
   constructor(private wizardService: WizardService) { }
 
@@ -42,9 +44,18 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         valid: this.awsSettingsForm.valid,
       });
     });
+
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    }));
   }
 
   ngOnDestroy() {
     this.awsSettingsFormSub.unsubscribe();
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 }

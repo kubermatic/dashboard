@@ -19,4 +19,15 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
   ngOnInit() { }
 
   ngOnDestroy() { }
+
+  public changeView(value: string) {
+    switch (value) {
+      case 'standard':
+        return this.wizardService.changeSettingsFormView({hideOptional: true});
+      case 'extended':
+        return this.wizardService.changeSettingsFormView({hideOptional: false});
+      default:
+        return this.wizardService.changeSettingsFormView({hideOptional: true});
+    }
+  }
 }

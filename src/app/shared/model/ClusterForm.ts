@@ -25,3 +25,7 @@ export class ClusterProviderSettingsForm {
   cloudSpec?: CloudSpec;
   valid: boolean;
 }
+
+export class ClusterSettingsFormView {
+  hideOptional: boolean;
+}

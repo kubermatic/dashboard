@@ -3,8 +3,9 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
+
 import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
-import { CloudSpec } from '../../shared/entity/ClusterEntity';
+import { WizardService } from '../../core/services/wizard/wizard.service';import { CloudSpec } from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -18,9 +19,11 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   public diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   public awsNodeForm: FormGroup;
   public tags: FormArray;
+  public hideOptional = true;
   private formOnChangeSub: Subscription;
+  private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService) {
+  constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {
   }
 
   ngOnInit(): void {
@@ -40,6 +43,10 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
     this.formOnChangeSub = this.awsNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
+
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    }));
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -85,5 +92,10 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.formOnChangeSub.unsubscribe();
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 }

@@ -48,5 +48,4 @@
   </mat-form-field>
 </form>
 
-<kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean" [nodeData]="nodeData"></kubermatic-digitalocean-options>
-
+<kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean && !hideOptional" [nodeData]="nodeData"></kubermatic-digitalocean-options>

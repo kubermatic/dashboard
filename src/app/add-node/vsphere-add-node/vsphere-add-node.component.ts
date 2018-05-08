@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { WizardService } from '../../core/services/wizard/wizard.service';
 import { Subscription } from 'rxjs/Subscription';
 import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
@@ -16,9 +17,10 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
   @Input() public nodeData: NodeData;
   public vsphereNodeForm: FormGroup;
   public defaultTemplate = 'ubuntu-template';
+  public hideOptional = true;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService) { }
+  constructor(private addNodeService: AddNodeService, private wizardService: WizardService) { }
 
   ngOnInit(): void {
     this.vsphereNodeForm = new FormGroup({
@@ -31,6 +33,9 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    }));
     this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe(data => {
       if (data.ubuntu) {
         if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova') {
@@ -46,7 +51,6 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
         this.defaultTemplate = 'ubuntu-template';
       }
     }));
-
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 

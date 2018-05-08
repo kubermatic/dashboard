@@ -6,6 +6,7 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { MatButtonToggleModule } from '@angular/material';
 import { ActivatedRouteStub, RouterTestingModule } from './../../../testing/router-stubs';
 import { ApiService } from '../../../core/services/api/api.service';
 import { asyncData } from '../../../testing/services/api-mock.service';
@@ -19,8 +20,8 @@ import { DigitaloceanAddNodeComponent } from '../../../add-node/digitalocean-add
 import { DigitaloceanOptionsComponent } from '../../../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { AwsAddNodeComponent } from '../../../add-node/aws-add-node/aws-add-node.component';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
-import {fakeDigitaloceanCreateNode, nodeDataFake} from '../../../testing/fake-data/node.fake';
-import { fakeDigitaloceanSizes } from '../../../testing/fake-data/addNodeModal.fake';
+import { fakeDigitaloceanCreateNode, nodeDataFake } from '../../../testing/fake-data/node.fake';
+import { WizardService } from '../../../core/services/wizard/wizard.service';import { fakeDigitaloceanSizes } from '../../../testing/fake-data/addNodeModal.fake';
 import Spy = jasmine.Spy;
 import { HetznerAddNodeComponent } from '../../../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../../../add-node/vsphere-add-node/vsphere-add-node.component';
@@ -49,6 +50,7 @@ describe('AddNodeModalComponent', () => {
         RouterTestingModule,
         NgReduxTestingModule,
         SharedModule,
+        MatButtonToggleModule,
       ],
       declarations: [
         AddNodeModalComponent,
@@ -67,6 +69,7 @@ describe('AddNodeModalComponent', () => {
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: DatacenterService, useClass: DatacenterMockService },
         AddNodeService
+        WizardService,
       ],
     }).compileComponents();
   }));

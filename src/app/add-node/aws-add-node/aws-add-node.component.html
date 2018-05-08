@@ -29,11 +29,11 @@
 
   </mat-form-field> -->
 
-  <div class="km-form-group-tags-header">
+  <div class="km-form-group-tags-header" *ngIf="!hideOptional">
     Tags
     <i class="fa fa-plus" style="float: right;" aria-hidden="true" (click)="addTag()"></i>
   </div>
-  <div class="km-form-group-tags">
+  <div class="km-form-group-tags" *ngIf="!hideOptional">
     <div fxFlex="100%" *ngFor="let tag of getTagForm(awsNodeForm); let i=index" formArrayName="tags">
       <div class="km-form-group-tags-inner" [formGroupName]="i">
         <mat-form-field fxFlex="42%">
