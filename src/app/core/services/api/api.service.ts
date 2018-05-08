@@ -17,7 +17,7 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private restRootV3: string = environment.restRootV3;
   private headers: HttpHeaders = new HttpHeaders();
-  private token: string
+  private token: string;
 
   constructor(private http: HttpClient, private auth: Auth) {
     this.token = auth.getBearerToken();
