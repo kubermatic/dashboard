@@ -1,5 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { environment } from '../../../../environments/environment';
+import { Component, Input } from '@angular/core';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ApiService } from '../../../core/services';
@@ -9,28 +8,14 @@ import { ApiService } from '../../../core/services';
   templateUrl: './cluster-connect.component.html',
   styleUrls: ['./cluster-connect.component.scss']
 })
-export class ClusterConnectComponent implements OnInit {
+export class ClusterConnectComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
 
-  constructor(private api: ApiService) {
-  }
+  constructor(private api: ApiService) {}
 
-  ngOnInit() {
-  }
-
-  public downloadKubeconfig() {
-    const authorization_token = localStorage.getItem('token');
-    this.api.getKubeconfig(this.datacenter.metadata.name, this.cluster.metadata.name, authorization_token).subscribe(res => {
-      const data = res;
-      const blob = new Blob([data], { type: 'text/plain' });
-      const a = window.document.createElement('a');
-      a.href = window.URL.createObjectURL(blob);
-      a.download = 'kubeconfig-' + this.cluster.metadata.name;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    });
+  public getDownloadURL(): string {
+    return this.api.getKubeconfigURL(this.datacenter.metadata.name, this.cluster.metadata.name);
   }
 
   copy(type: string): string {
