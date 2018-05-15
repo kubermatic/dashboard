@@ -3,7 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 
 @Component({
@@ -24,10 +24,6 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    //type: new FormControl('t2.small', Validators.required),
-    //disk_size: new FormControl(25, Validators.required),
-    //disk_type: new FormControl('standard', Validators.required),
-
     this.awsNodeForm = new FormGroup({
       type: new FormControl(this.nodeData.node.spec.cloud.aws.volumeType, Validators.required),
       disk_size: new FormControl(this.nodeData.node.spec.cloud.aws.diskSize, Validators.required),

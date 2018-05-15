@@ -1,4 +1,10 @@
-import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { NodeEntity, getEmptyNodeProviderSpec } from '../../shared/entity/NodeEntity';
+import {NodeData} from '../../shared/model/NodeSpecChange';
+import {VSphereNodeSpec} from '../../shared/entity/node/VSphereNodeSpec';
+import {HetznerNodeSpec} from '../../shared/entity/node/HetznerNodeSpec';
+import {OpenstackNodeSpec} from '../../shared/entity/node/OpenstackNodeSpec';
+import {DigitaloceanNodeSpec} from '../../shared/entity/node/DigitialoceanNodeSpec';
+import {AWSNodeSpec} from '../../shared/entity/node/AWSNodeSpec';
 
 export const fakeDigitaloceanCreateNode: NodeEntity = {
   metadata: {},
@@ -235,3 +241,54 @@ export const nodesFake: NodeEntity[] = [
     }
   }
 ];
+
+export const nodeDataFake: NodeData = {
+  node: {
+    metadata: {},
+    spec: {
+      cloud: {
+        digitalocean: {
+          size: 's-1vcpu-1gb',
+          backups: null,
+          ipv6: null,
+          monitoring: null,
+          tags: []
+        },
+        aws: {
+          instanceType: 't2.small',
+          diskSize: 25,
+          volumeType: 'standard',
+          ami: '',
+          tags: ''
+        },
+        openstack: {
+          flavor: 'm1.small',
+          image: ''
+        },
+        hetzner: {
+          type: 'cx31'
+        },
+        vsphere: {
+          cpus: 1,
+          memory: 512,
+          template: ''
+        },
+      },
+      operatingSystem: {
+        ubuntu: {
+          distUpgradeOnBoot: false
+        },
+        containerLinux: null
+      },
+      versions: {
+        kubelet: null,
+        containerRuntime: {
+          name: null,
+          version: null
+        }
+      }
+    }
+  },
+  count: 3,
+  valid: true,
+}

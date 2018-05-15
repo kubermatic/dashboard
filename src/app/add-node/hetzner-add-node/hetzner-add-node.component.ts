@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
-import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 
@@ -24,7 +24,6 @@ export class HetznerAddNodeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hetznerNodeForm = new FormGroup({
-      //type: new FormControl(NodeInstanceFlavors.Hetzner[0], Validators.required),
       type: new FormControl(this.nodeData.node.spec.cloud.hetzner.type, Validators.required),
     });
     this.subscriptions.push(this.hetznerNodeForm.valueChanges.subscribe(data => {

@@ -10,6 +10,7 @@ import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import Spy = jasmine.Spy;
+import {nodeDataFake} from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -44,6 +45,7 @@ describe('DigitaloceanAddNodeComponent', () => {
     fixture = TestBed.createComponent(DigitaloceanAddNodeComponent);
     component = fixture.componentInstance;
     component.cloudSpec = fakeDigitaloceanCluster.spec.cloud;
+    component.nodeData = nodeDataFake;
   });
 
   it('should create the add node cmp', () => {

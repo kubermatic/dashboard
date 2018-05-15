@@ -12,7 +12,7 @@ import { ApiService, InitialNodeDataService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
-import {NodeEntity, NodeSpec, NodeStatus, getEmptyNodeProviderSpec} from '../shared/entity/NodeEntity';
+import { NodeEntity, getEmptyNodeProviderSpec } from '../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -31,7 +31,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
   public clusterProviderSettingsFormData: ClusterProviderSettingsForm = { valid: false };
   public clusterSSHKeys: SSHKeyEntity[] = [];
-  public addNodeData: NodeData = {};
+  public addNodeData: NodeData;
   public creating = false;
   private subscriptions: Subscription[] = [];
 
@@ -91,10 +91,8 @@ export class WizardComponent implements OnInit, OnDestroy {
 
       if (!!this.clusterDatacenterFormData.datacenter) {
         oldProviderSpec = this.clusterDatacenterFormData.datacenter.spec[this.clusterDatacenterFormData.datacenter.spec.provider];
-        oldProviderNodeSpec = this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider]
+        oldProviderNodeSpec = this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider];
         oldDC = this.clusterDatacenterFormData.datacenter.spec.seed;
-
-
       }
       this.cluster.spec.cloud = { dc: oldDC };
 

@@ -3,10 +3,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
 import { ApiService } from '../../core/services';
-import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
-import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
+import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {NodeEntity} from '../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
@@ -20,13 +19,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
   public loadingSizes = false;
   public doNodeForm: FormGroup;
-  /*public doNodeForm: FormGroup = new FormGroup({
-    size: new FormControl(0, Validators.required),
-    backups: new FormControl(false),
-    ipv6: new FormControl(false),
-    monitoring: new FormControl(false),
-    tags: new FormControl([]),
-  });*/
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService, private addNodeService: AddNodeService) { }
@@ -37,7 +29,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
       backups: new FormControl(this.nodeData.node.spec.cloud.digitalocean.backups),
       ipv6: new FormControl(this.nodeData.node.spec.cloud.digitalocean.ipv6),
       monitoring: new FormControl(this.nodeData.node.spec.cloud.digitalocean.monitoring),
-      tags: new FormControl([this.nodeData.node.spec.cloud.digitalocean.tags]),
+      tags: new FormControl([]),
     });
 
     this.subscriptions.push(this.doNodeForm.valueChanges.subscribe(data => {
@@ -66,8 +58,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!!!changes.cloudSpec.previousValue || (changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token)) {
-      this.reloadDigitaloceanSizes();
+    if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
+      if (!!!changes.cloudSpec.previousValue || (changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token)) {
+        this.reloadDigitaloceanSizes();
+      }
     }
   }
 

@@ -83,38 +83,38 @@ export function getEmptyNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
       const awsSpec: AWSNodeSpec = {
-        instanceType: '',
+        instanceType: 't2.small',
         diskSize: 25,
-        volumeType: '',
+        volumeType: 'standard',
         ami: '',
         tags: ''
       };
       return awsSpec;
     case NodeProvider.DIGITALOCEAN:
       const doSpec: DigitaloceanNodeSpec = {
-        size: '',
-        backups: false,
-        ipv6: false,
-        monitoring: false,
+        size: 's-1vcpu-1gb',
+        backups: null,
+        ipv6: null,
+        monitoring: null,
         tags: []
       };
       return doSpec;
     case NodeProvider.OPENSTACK:
       const osSpec: OpenstackNodeSpec = {
-        flavor: '',
+        flavor: 'm1.small',
         image: ''
       };
       return osSpec;
     case NodeProvider.VSPHERE:
       const vsSpec: VSphereNodeSpec = {
         cpus: 1,
-        memory: 20,
+        memory: 512,
         template: ''
       };
       return vsSpec;
     case NodeProvider.HETZNER:
       const hSpec: HetznerNodeSpec = {
-        type: ''
+        type: 'cx31'
       };
       return hSpec;
   }

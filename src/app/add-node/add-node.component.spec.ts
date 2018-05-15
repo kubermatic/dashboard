@@ -14,6 +14,7 @@ import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-dat
 import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
 import Spy = jasmine.Spy;
 import { VSphereAddNodeComponent } from './vsphere-add-node/vsphere-add-node.component';
+import { nodeDataFake } from '../testing/fake-data/node.fake';
 
 describe('AddNodeComponent', () => {
   let fixture: ComponentFixture<AddNodeComponent>;
@@ -51,6 +52,7 @@ describe('AddNodeComponent', () => {
     fixture = TestBed.createComponent(AddNodeComponent);
     component = fixture.componentInstance;
     component.cluster = fakeAWSCluster;
+    component.nodeData = nodeDataFake;
   });
 
   it('should create the add node cmp', () => {

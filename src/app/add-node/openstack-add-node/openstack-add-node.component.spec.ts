@@ -10,6 +10,7 @@ import { fakeOpenstackFlavors } from '../../testing/fake-data/addNodeModal.fake'
 import { asyncData } from '../../testing/services/api-mock.service';
 import { ApiService } from '../../core/services';
 import Spy = jasmine.Spy;
+import { nodeDataFake } from '../../testing/fake-data/node.fake';
 
 describe('OpenstackAddNodeComponent', () => {
   let fixture: ComponentFixture<OpenstackAddNodeComponent>;
@@ -41,6 +42,7 @@ describe('OpenstackAddNodeComponent', () => {
     fixture = TestBed.createComponent(OpenstackAddNodeComponent);
     component = fixture.componentInstance;
     component.cloudSpec = fakeOpenstackCluster.spec.cloud;
+    component.nodeData = nodeDataFake;
   });
 
   it('should create the add node cmp', () => {

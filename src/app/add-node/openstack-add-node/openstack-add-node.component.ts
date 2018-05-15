@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { ApiService } from '../../core/services';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { OpenstackFlavor } from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
@@ -24,7 +24,6 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   constructor(private addNodeService: AddNodeService, private api: ApiService) { }
 
   ngOnInit(): void {
-    //flavor: new FormControl(0, Validators.required),
     this.osNodeForm = new FormGroup({
       flavor: new FormControl(this.nodeData.node.spec.cloud.openstack.flavor, Validators.required),
       image: new FormControl(this.nodeData.node.spec.cloud.openstack.image, Validators.required),

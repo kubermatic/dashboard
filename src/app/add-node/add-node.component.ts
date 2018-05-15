@@ -4,7 +4,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
-import {NodeEntity} from '../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-add-node',
