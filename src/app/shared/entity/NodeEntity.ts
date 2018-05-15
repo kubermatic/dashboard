@@ -93,9 +93,9 @@ export function getEmptyNodeProviderSpec(provider: string): object {
     case NodeProvider.DIGITALOCEAN:
       const doSpec: DigitaloceanNodeSpec = {
         size: 's-1vcpu-1gb',
-        backups: null,
-        ipv6: null,
-        monitoring: null,
+        backups: false,
+        ipv6: false,
+        monitoring: false,
         tags: []
       };
       return doSpec;

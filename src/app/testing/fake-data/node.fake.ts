@@ -249,9 +249,9 @@ export const nodeDataFake: NodeData = {
       cloud: {
         digitalocean: {
           size: 's-1vcpu-1gb',
-          backups: null,
-          ipv6: null,
-          monitoring: null,
+          backups: false,
+          ipv6: false,
+          monitoring: false,
           tags: []
         },
         aws: {
