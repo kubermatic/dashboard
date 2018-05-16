@@ -78,7 +78,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
         });
         this.flavors = sortedFlavors;
         if (sortedFlavors.length > 0 && this.osNodeForm.controls.flavor.value !== '0') {
-          this.osNodeForm.controls.flavor.setValue(sortedFlavors[0].slug);
+          this.osNodeForm.controls.flavor.setValue(this.nodeData.node.spec.cloud.openstack.flavor);
         }
         this.loadingFlavors = false;
       }));
