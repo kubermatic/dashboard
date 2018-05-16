@@ -40,7 +40,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
     if (this.cloudSpec.digitalocean.token) {
       this.subscriptions.push(this.api.getDigitaloceanSizes(this.cloudSpec.digitalocean.token).subscribe(data => {
         this.sizes = data;
-        this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
+        this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
       }));
     }
   }
@@ -66,10 +66,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
       spec: {
         digitalocean: {
           size: this.doNodeForm.controls.size.value,
-          backups: this.doNodeForm.controls.backups.value,
-          ipv6: this.doNodeForm.controls.ipv6.value,
-          monitoring: this.doNodeForm.controls.monitoring.value,
-          tags: this.doNodeForm.controls.tags.value,
+          backups: this.nodeData.node.spec.cloud.digitalocean.backups,
+          ipv6: this.nodeData.node.spec.cloud.digitalocean.ipv6,
+          monitoring: this.nodeData.node.spec.cloud.digitalocean.monitoring,
+          tags: this.nodeData.node.spec.cloud.digitalocean.tags,
         },
       },
       valid: this.doNodeForm.valid,
