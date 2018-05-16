@@ -4,7 +4,7 @@ import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
 import { HetznerNodeSpec } from './node/HetznerNodeSpec';
 import { VSphereNodeSpec } from './node/VSphereNodeSpec';
-import {NodeProvider} from '../model/NodeProviderConstants';
+import { NodeProvider } from '../model/NodeProviderConstants';
 
 export class NodeEntity {
   metadata: MetadataEntityV2;
