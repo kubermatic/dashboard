@@ -25,9 +25,9 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.awsNodeForm = new FormGroup({
-      type: new FormControl(this.nodeData.node.spec.cloud.aws.volumeType, Validators.required),
+      type: new FormControl(this.nodeData.node.spec.cloud.aws.instanceType, Validators.required),
       disk_size: new FormControl(this.nodeData.node.spec.cloud.aws.diskSize, Validators.required),
-      disk_type: new FormControl(this.nodeData.node.spec.cloud.aws.instanceType, Validators.required),
+      disk_type: new FormControl(this.nodeData.node.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.node.spec.cloud.aws.ami),
       tags: new FormArray([
         new FormGroup({
