@@ -6,8 +6,9 @@ import { AddNodeService } from '../../../core/services/add-node/add-node.service
 import { Subscription } from 'rxjs/Subscription';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import {getEmptyNodeProviderSpec, NodeEntity} from '../../../shared/entity/NodeEntity';
 import { NodeData } from '../../../shared/model/NodeSpecChange';
+import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
 
 @Component({
   selector: 'kubermatic-add-node-modal',
@@ -17,12 +18,31 @@ import { NodeData } from '../../../shared/model/NodeSpecChange';
 export class AddNodeModalComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  public addNodeData: NodeData = {};
   private subscriptions: Subscription[] = [];
+  public nodeDC: DataCenterEntity;
+  public addNodeData: NodeData = {
+    node: {
+      metadata: {},
+      spec: {
+        cloud: {},
+        operatingSystem: {}
+      },
+      status: {},
+    },
+    count: 1,
+    valid: true
+  };
 
-  constructor(private api: ApiService, private addNodeService: AddNodeService) {}
+  constructor(private api: ApiService, private addNodeService: AddNodeService, private dcService: DatacenterService) {}
 
   ngOnInit(): void {
+    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
+        this.nodeDC = result;
+      }
+    );
+
+    this.addNodeData.node.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
+
     this.subscriptions.push(this.addNodeService.nodeDataChanges$.subscribe(async (data: NodeData) => {
       this.addNodeData = await data;
     }));
