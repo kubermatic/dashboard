@@ -13,11 +13,6 @@ import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import { NodeEntity, getEmptyNodeProviderSpec } from '../shared/entity/NodeEntity';
-import {AWSNodeSpec} from '../shared/entity/node/AWSNodeSpec';
-import {HetznerNodeSpec} from '../shared/entity/node/HetznerNodeSpec';
-import {DigitaloceanNodeSpec} from '../shared/entity/node/DigitaloceanNodeSpec';
-import {OpenstackNodeSpec} from '../shared/entity/node/OpenstackNodeSpec';
-import {VSphereNodeSpec} from '../shared/entity/node/VSphereNodeSpec';
 
 @Component({
   selector: 'kubermatic-wizard',
