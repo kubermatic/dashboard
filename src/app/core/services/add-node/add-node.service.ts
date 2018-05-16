@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
-import { DigitaloceanOptions } from '../../../shared/entity/node/DigitaloceanNodeSpec';
 
 @Injectable()
 export class AddNodeService {
