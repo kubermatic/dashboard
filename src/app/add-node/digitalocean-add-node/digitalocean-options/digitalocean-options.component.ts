@@ -53,7 +53,7 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
           backups: this.doOptionsForm.controls.backups.value,
           ipv6: this.doOptionsForm.controls.ipv6.value,
           monitoring: this.doOptionsForm.controls.monitoring.value,
-          tags: this.doOptionsForm.controls.tags.value,
+          tags: doTags,
         },
       },
       valid: this.nodeData.valid,
