@@ -6,9 +6,9 @@ import { AddNodeService } from '../../../core/services/add-node/add-node.service
 import { Subscription } from 'rxjs/Subscription';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
-import {getEmptyNodeProviderSpec, NodeEntity} from '../../../shared/entity/NodeEntity';
+import { getEmptyNodeProviderSpec, NodeEntity } from '../../../shared/entity/NodeEntity';
 import { NodeData } from '../../../shared/model/NodeSpecChange';
-import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
+import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 
 @Component({
   selector: 'kubermatic-add-node-modal',

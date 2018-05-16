@@ -24,6 +24,8 @@ import { fakeDigitaloceanSizes } from '../../../testing/fake-data/addNodeModal.f
 import Spy = jasmine.Spy;
 import { HetznerAddNodeComponent } from '../../../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../../../add-node/vsphere-add-node/vsphere-add-node.component';
+import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
+import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 
 describe('AddNodeModalComponent', () => {
   let fixture: ComponentFixture<AddNodeModalComponent>;
@@ -63,7 +65,8 @@ describe('AddNodeModalComponent', () => {
         { provide: MatDialogRef, useValue: {} },
         { provide: ApiService, useValue: apiMock },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-        AddNodeService,
+        { provide: DatacenterService, useClass: DatacenterMockService },
+        AddNodeService
       ],
     }).compileComponents();
   }));
@@ -78,6 +81,7 @@ describe('AddNodeModalComponent', () => {
       count: 1,
       valid: true
     };
+    component.addNodeData = nodeDataFake;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = { clusterName: 'tbbfvttvs' };
