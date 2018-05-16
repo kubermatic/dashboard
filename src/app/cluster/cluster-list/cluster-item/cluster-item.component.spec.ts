@@ -12,6 +12,10 @@ import { AuthMockService } from '../../../testing/services/auth-mock.service';
 import { DatacenterService } from '../../../core/services/index';
 import { DatacenterMockService } from './../../../testing/services/datacenter-mock.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { ClusterHealthStatusComponent } from '../../cluster-health-status/cluster-health-status.component';
+import { ClusterService} from '../../../core/services';
+import { ClusterHealth } from '../../../shared/model/ClusterHealthConstants';
+
 
 const modules: any[] = [
   BrowserModule,
@@ -33,11 +37,13 @@ describe('ClusterItemComponent', () => {
         ...modules,
       ],
       declarations: [
-        ClusterItemComponent
+        ClusterItemComponent,
+        ClusterHealthStatusComponent
       ],
       providers: [
         { provide: DatacenterService, useClass: DatacenterMockService },
-        { provide: Auth, useClass: AuthMockService }
+        { provide: Auth, useClass: AuthMockService },
+        ClusterService
       ],
     }).compileComponents();
   });
@@ -52,14 +58,13 @@ describe('ClusterItemComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should set statusRunning class', fakeAsync(() => {
+  it('should set statusWaiting class odd', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster;
-
+    component.index = 1;
     fixture.detectChanges();
     tick();
 
-    const de = fixture.debugElement.query(By.css('.statusRunning'));
-    expect(de).toBeTruthy();
+    expect(component.getClusterItemClass()).toBe(ClusterHealth.RUNNING + ' odd');
   }));
 
   it('should set path of cluster image', fakeAsync(() => {

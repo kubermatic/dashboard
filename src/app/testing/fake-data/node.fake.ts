@@ -3,7 +3,7 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 import {VSphereNodeSpec} from '../../shared/entity/node/VSphereNodeSpec';
 import {HetznerNodeSpec} from '../../shared/entity/node/HetznerNodeSpec';
 import {OpenstackNodeSpec} from '../../shared/entity/node/OpenstackNodeSpec';
-import {DigitaloceanNodeSpec} from '../../shared/entity/node/DigitialoceanNodeSpec';
+import { DigitaloceanNodeSpec } from '../../shared/entity/node/DigitaloceanNodeSpec';
 import {AWSNodeSpec} from '../../shared/entity/node/AWSNodeSpec';
 
 export const fakeDigitaloceanCreateNode: NodeEntity = {

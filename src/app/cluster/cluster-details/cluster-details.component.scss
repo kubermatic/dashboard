@@ -5,6 +5,7 @@
   .card-header {
     background: #f7f7f9;
     color: #333;
+    float: left;
 
     a {
       float: right;
@@ -35,6 +36,18 @@
   }
   .mat-card-title {
       font-size: 18px;
+
+    .cluster-name {
+      float: left;
+    }
+  }
+}
+
+.km-card-list-subtitle {
+  color: red;
+
+  .km-pauseReason {
+    margin-top: 0;
   }
 }
 
@@ -166,7 +179,7 @@ kubermatic-cluster-health-status {
   background-color: #FFFFFF;
 }
 
-.statusFailed {
+.statusFailed, .statusDeleting {
   background-color: #FFF0EC;
 }
 
@@ -190,22 +203,15 @@ kubermatic-cluster-health-status {
   }
 }
 
-.download-kubeconfig-btn {
-  padding: 0;
-  top: 1px;
+a.download-kubeconfig-btn {
+  display: inline-block;
+  vertical-align: middle;
+  top: -1px;
 
-  a {
+  /deep/span.mat-button-wrapper {
     display: flex;
-    align-items: center;
-    width: auto;
     height: 100%;
-    text-decoration: none;
-    color: white;
-    vertical-align: baseline !important;
-    padding: 0 16px;
-  }
-  a.disabled {
-    color: rgba(0, 0, 0, 0.38);
+    align-items: center;
   }
 }
 
@@ -224,3 +230,4 @@ kubermatic-cluster-health-status {
     background-image: url("../../../assets/images/Arrow_down.svg");
     background-repeat: no-repeat;
 }
+

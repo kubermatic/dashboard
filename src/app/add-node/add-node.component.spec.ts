@@ -5,6 +5,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { AddNodeComponent } from './add-node.component';
 import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node/digitalocean-add-node.component';
+import { DigitaloceanOptionsComponent } from './digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
 import { fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster } from '../testing/fake-data/cluster.fake';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
@@ -38,6 +39,7 @@ describe('AddNodeComponent', () => {
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
       ],

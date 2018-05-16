@@ -1,9 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, Output, OnChanges} from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import { ClusterService } from '../../../core/services';
+
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -11,11 +13,13 @@ import { NodeEntity } from '../../../shared/entity/NodeEntity';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent {
+export class NodeListComponent implements OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
   @Output() deleteNode = new EventEmitter<NodeEntity>();
+  public isClusterRunning: boolean;
+  public isShowNodeDetails = {};
   public config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -33,7 +37,12 @@ export class NodeListComponent {
     }
   };
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog,
+              private clusterService: ClusterService) {
+  }
+
+  ngOnChanges() {
+    this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
   }
 
   public managedByProvider(node: NodeEntity): boolean {
@@ -58,7 +67,6 @@ export class NodeListComponent {
   public getNodeHealth(node: NodeEntity): object {
     const green = 'fa fa-circle green';
     const red = 'fa fa-circle-o red';
-    const orange = 'fa fa-spin fa-circle-o-notch orange';
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
 
     const nodeHealthStatus = {};
@@ -115,11 +123,41 @@ export class NodeListComponent {
     return addresses;
   }
 
-  public getTooltip(node: NodeEntity): string {
-    if (node.spec.cloud.digitalocean) {
-      return 'Backups: ' + node.spec.cloud.digitalocean.backups + ', IPv6: ' + node.spec.cloud.digitalocean.ipv6 + ', Monitoring: ' + node.spec.cloud.digitalocean.monitoring;
+  public getOsImagePath(node: NodeEntity): string {
+    let path = '/assets/images/operating-system/';
+
+    if (node.spec.operatingSystem.containerLinux) {
+      path += 'containerlinux.png';
+    } else if (node.spec.operatingSystem.ubuntu) {
+      path += 'ubuntu.png';
     } else {
-      return '';
+      path = '';
+    }
+    /* TODO: update operatingSystemSpec for centOS
+     else if (node.spec.operatingSystem.centOS) {
+      path += 'centos.png';
+    }*/
+
+    return path;
+  }
+
+  public showInfo(node: NodeEntity): boolean {
+    if (node.metadata.displayName !== node.metadata.name.replace('machine-', '') && node.metadata.name !== '') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  public getInfo(node: NodeEntity): string {
+    return node.metadata.name.replace('machine-', '');
+  }
+
+  public toggleNode(nodeName: string): void {
+    if (this.isShowNodeDetails[nodeName]) {
+      this.isShowNodeDetails[nodeName] = false;
+    } else if (!this.isShowNodeDetails[nodeName]) {
+      this.isShowNodeDetails[nodeName] = true;
     }
   }
 }

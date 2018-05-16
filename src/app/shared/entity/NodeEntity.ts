@@ -1,5 +1,5 @@
 import { MetadataEntityV2 } from './MetadataEntity';
-import { DigitaloceanNodeSpec } from './node/DigitialoceanNodeSpec';
+import { DigitaloceanNodeSpec } from './node/DigitaloceanNodeSpec';
 import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
 import { HetznerNodeSpec } from './node/HetznerNodeSpec';
@@ -40,13 +40,13 @@ export class ContainerLinuxSpec {
 }
 
 export class NodeVersionInfo {
-  kubelet: string;
-  containerRuntime: NodeContainerRuntimeInfo;
+  kubelet?: string;
+  containerRuntime?: NodeContainerRuntimeInfo;
 }
 
 export class NodeContainerRuntimeInfo {
-  name: string;
-  version: string;
+  name?: string;
+  version?: string;
 }
 
 export class NodeStatus {

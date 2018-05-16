@@ -1,4 +1,6 @@
 <div class="health-state">
-  <div mat-button [ngClass]="getHealthStatusColor()"></div>
+  <div mat-button [ngClass]="getHealthStatusColor()" class="animated" [matTooltip]="getHealthTooltipText()">
+  </div>
+  <div [ngClass]="getHealthStatusColor()" class="static"></div>
 </div>
 

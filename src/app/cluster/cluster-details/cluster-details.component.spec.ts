@@ -15,7 +15,7 @@ import { asyncData } from '../../testing/services/api-mock.service';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
 import { ClusterSecretsComponent } from './cluster-secrets/cluster-secrets.component';
 import { MatDialog } from '@angular/material';
-import { DatacenterService, InitialNodeDataService } from '../../core/services/index';
+import { DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services/index';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { nodesFake } from '../../testing/fake-data/node.fake';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
@@ -35,13 +35,15 @@ describe('ClusterDetailsComponent', () => {
   let getClusterNodesSpy: Spy;
   let getSSHKeysSpy: Spy;
   let getDatacenterSpy: Spy;
+  let getKubeconfigURL: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys', 'getKubeconfigURL']);
     getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
     getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
     getClusterNodesSpy = apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake));
     getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys));
+    getKubeconfigURL = apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
     getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter));
@@ -69,6 +71,7 @@ describe('ClusterDetailsComponent', () => {
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         MatDialog,
         InitialNodeDataService,
+        ClusterService
       ],
     }).compileComponents();
   }));

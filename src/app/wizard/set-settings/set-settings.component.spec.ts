@@ -14,6 +14,7 @@ import { AWSClusterSettingsComponent } from './provider-settings/aws/aws.compone
 import { OpenstackClusterSettingsComponent } from './provider-settings/openstack/openstack.component';
 import { OpenstackAddNodeComponent } from '../../add-node/openstack-add-node/openstack-add-node.component';
 import { DigitaloceanAddNodeComponent } from '../../add-node/digitalocean-add-node/digitalocean-add-node.component';
+import { DigitaloceanOptionsComponent } from '../../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { AwsAddNodeComponent } from '../../add-node/aws-add-node/aws-add-node.component';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
@@ -58,6 +59,7 @@ describe('SetSettingsComponent', () => {
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
       ],

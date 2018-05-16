@@ -26,10 +26,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   ngOnInit(): void {
     this.doNodeForm = new FormGroup({
       size: new FormControl(this.nodeData.node.spec.cloud.digitalocean.size, Validators.required),
-      backups: new FormControl(this.nodeData.node.spec.cloud.digitalocean.backups),
-      ipv6: new FormControl(this.nodeData.node.spec.cloud.digitalocean.ipv6),
-      monitoring: new FormControl(this.nodeData.node.spec.cloud.digitalocean.monitoring),
-      tags: new FormControl([]),
     });
 
     this.subscriptions.push(this.doNodeForm.valueChanges.subscribe(data => {
@@ -66,11 +62,6 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   }
 
   getNodeProviderData(): NodeProviderData {
-    let doTags: string[] = [];
-    if ((this.doNodeForm.controls.tags.value).length > 0) {
-      doTags = (this.doNodeForm.controls.tags.value).split(/[\s]?,[\s]?/);
-    }
-
     return {
       spec: {
         digitalocean: {
@@ -78,7 +69,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
           backups: this.doNodeForm.controls.backups.value,
           ipv6: this.doNodeForm.controls.ipv6.value,
           monitoring: this.doNodeForm.controls.monitoring.value,
-          tags: doTags,
+          tags: this.doNodeForm.controls.tags.value,
         },
       },
       valid: this.doNodeForm.valid,

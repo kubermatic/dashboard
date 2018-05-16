@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
+import { ApiService } from '../../../core/services/api/api.service';
+
 
 const modules: any[] = [
   BrowserModule,
@@ -27,12 +29,15 @@ describe('ClusterConnectComponent', () => {
   let fixture: ComponentFixture<ClusterConnectComponent>;
 
   beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getKubeconfigURL']);
+
     TestBed.configureTestingModule({
       imports: [
         ...modules,
       ],
       declarations: [ClusterConnectComponent],
       providers: [
+        { provide: ApiService, useValue: apiMock },
         { provide: MAT_DIALOG_DATA, useValue: { cluster: fakeDigitaloceanCluster } },
         { provide: MatDialogRef, useValue: {} },
       ]

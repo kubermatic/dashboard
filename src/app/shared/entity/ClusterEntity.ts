@@ -1,4 +1,4 @@
-import {DigitaloceanCloudSpec} from './cloud/DigitialoceanCloudSpec';
+import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
 import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
 import {AWSCloudSpec} from './cloud/AWSCloudSpec';
 import {MetadataEntity} from './MetadataEntity';
@@ -108,6 +108,8 @@ export class ClusterSpec {
   cloud: CloudSpec;
   humanReadableName?: string;
   masterVersion?: string;
+  pause: boolean;
+  pauseReason?: string;
 }
 
 export class Address {

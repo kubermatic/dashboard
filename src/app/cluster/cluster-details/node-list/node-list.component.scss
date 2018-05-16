@@ -1,18 +1,17 @@
 .km-node-row {
-
   border-bottom: 1px solid #E3E8EC;
-  padding-bottom: 10px;
-  padding-top: 10px;
-
+  cursor: pointer;
 }
 
 .km-single-node {
-  line-height: 38px;
+  line-height: 40px;
+  margin: 10px 0;
 }
 
 .km-conditionsMessage {
   border-top: 1px solid rgba(227,232,236, 0.3);
   margin-top: 10px;
+  margin-bottom: 10px;
   p {
     margin: 10px auto 0;
     color: #ff5454;
@@ -72,4 +71,34 @@ button {
   font-size: 13px;
   line-height: 18px;
   font-family: "Menlo", monospace;
+}
+
+.os-image {
+  max-height: 20px;
+  max-width: 65px;
+}
+
+i.fa-info-circle {
+  color: #CCCCCC;
+  padding-left: 5px;
+}
+
+.node-details-wrapper {
+  background-color: #EEF5FF;
+  margin-left: -24px;
+  margin-right: -24px;
+  padding: 23px 20px 15px;
+  box-shadow: inset 0px 4px 4px rgba(68, 77, 88, 0.1);
+}
+
+.node-details-content {
+  background-color: #ffffff;
+  
+  .fa-check {
+    color: #79c447;
+  }
+
+  .fa-times {
+    color: #ff5454;
+  }
 }

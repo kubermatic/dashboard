@@ -16,6 +16,7 @@ import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacente
 import { AddNodeComponent } from '../../../add-node/add-node.component';
 import { OpenstackAddNodeComponent } from '../../../add-node/openstack-add-node/openstack-add-node.component';
 import { DigitaloceanAddNodeComponent } from '../../../add-node/digitalocean-add-node/digitalocean-add-node.component';
+import { DigitaloceanOptionsComponent } from '../../../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { AwsAddNodeComponent } from '../../../add-node/aws-add-node/aws-add-node.component';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
 import {fakeDigitaloceanCreateNode, nodeDataFake} from '../../../testing/fake-data/node.fake';
@@ -53,6 +54,7 @@ describe('AddNodeModalComponent', () => {
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
+        DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
       ],

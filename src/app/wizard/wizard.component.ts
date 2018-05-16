@@ -13,6 +13,11 @@ import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import { NodeEntity, getEmptyNodeProviderSpec } from '../shared/entity/NodeEntity';
+import {AWSNodeSpec} from '../shared/entity/node/AWSNodeSpec';
+import {HetznerNodeSpec} from '../shared/entity/node/HetznerNodeSpec';
+import {DigitaloceanNodeSpec} from '../shared/entity/node/DigitaloceanNodeSpec';
+import {OpenstackNodeSpec} from '../shared/entity/node/OpenstackNodeSpec';
+import {VSphereNodeSpec} from '../shared/entity/node/VSphereNodeSpec';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -46,6 +51,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       spec: {
         humanReadableName: '',
         masterVersion: '',
+        pause: false,
         cloud: {
           dc: '',
         },
@@ -56,7 +62,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       node: {
         metadata: {},
         spec: {
-          cloud: {},
+          cloud: { },
           operatingSystem: {}
         },
         status: {},
@@ -96,11 +102,11 @@ export class WizardComponent implements OnInit, OnDestroy {
       }
       this.cluster.spec.cloud = { dc: oldDC };
 
-      if (oldProviderSpec == null) {
+      if (oldProviderSpec == null || oldProviderSpec !== undefined) {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
         this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
-      } else {
         this.clusterDatacenterFormData.valid = false;
+      } else {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = oldProviderSpec;
         this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = oldProviderNodeSpec;
       }

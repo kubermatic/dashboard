@@ -6,14 +6,7 @@
 </mat-toolbar>
 <mat-dialog-content>
   <div class="mat-dialog-content">
-    <p>Download the kubeconfig
-      <button class="download-kubeconfig-btn" mat-raised-button color="primary" >
-        <a [attr.href]="downloadKubeconfigUrl()" target="_blank">
-          <span class="button download"></span>
-          Download config
-        </a>
-      </button>
-    </p>
+    <a class="download-kubeconfig-btn" mat-raised-button color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
     <p>Configure kubectl command line by running the following command in Directory where the kubeconfig-{{cluster.metadata.name}} is located:</p>
     <p class="code-block copy" ngxClipboard [cbContent]="copy('exportKubeconfig')" matTooltip="click to copy">$ export KUBECONFIG=$PWD/kubeconfig-{{cluster.metadata.name}}</p>
     <p>Then start a proxy to connect to the Kubernetes control plane:</p>

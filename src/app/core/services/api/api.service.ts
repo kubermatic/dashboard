@@ -17,10 +17,11 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private restRootV3: string = environment.restRootV3;
   private headers: HttpHeaders = new HttpHeaders();
+  private token: string;
 
   constructor(private http: HttpClient, private auth: Auth) {
-    const token = auth.getBearerToken();
-    this.headers = this.headers.set('Authorization', 'Bearer ' + token);
+    this.token = auth.getBearerToken();
+    this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
   }
 
   getClusters(dc: string): Observable<ClusterEntity[]> {
@@ -100,5 +101,9 @@ export class ApiService {
     this.headers = this.headers.set('DatacenterName', datacenterName);
     const url = `${this.restRoot}/openstack/sizes`;
     return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
+  }
+
+  getKubeconfigURL(dc: string, cluster: string): string {
+    return `${environment.restRootV3}/dc/${dc}/cluster/${cluster}/kubeconfig?token=${this.token}`;
   }
 }

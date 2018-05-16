@@ -1,5 +1,5 @@
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -12,7 +12,7 @@ import { ClusterConnectComponent } from './cluster-connect/cluster-connect.compo
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ApiService, DatacenterService, InitialNodeDataService } from '../../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import 'rxjs/add/observable/interval';
@@ -33,10 +33,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public sshKeys: SSHKeyEntity[] = [];
   public nodes: NodeEntity[] = [];
   public stateOfTheAccordion: object[];
+  public isClusterRunning: boolean;
+  public clusterHealthClass: string;
   private clusterSubject: Subject<ClusterEntity>;
   private upgradesList: string[] = [];
   private unsubscribe: Subject<any> = new Subject();
-
   private refreshInterval = 10000;
 
   constructor(private route: ActivatedRoute,
@@ -44,7 +45,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               private api: ApiService,
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
-              private dcService: DatacenterService) {
+              private dcService: DatacenterService,
+              private clusterService: ClusterService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
@@ -76,6 +78,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         onceSub.unsubscribe();
       });
 
+    // Health
+    this.clusterSubject
+      .takeUntil(this.unsubscribe)
+      .subscribe(cluster => {
+        this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
+        this.clusterHealthClass = this.clusterService.getClusterHealthStatus(this.cluster);
+      });
+
     // Upgrades
     this.clusterSubject
       .takeUntil(this.unsubscribe)
@@ -88,7 +98,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             });
         }
       });
-
     // Nodes
     this.clusterSubject
       .takeUntil(this.unsubscribe)
@@ -212,9 +221,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public downloadKubeconfigUrl(): string {
-    const authorization_token = localStorage.getItem('token');
-    return `${environment.restRootV3}/dc/${this.datacenter.metadata.name}/cluster/${this.cluster.metadata.name}/kubeconfig?token=${authorization_token}`;
+  public getDownloadURL(): string {
+    return this.api.getKubeconfigURL(this.datacenter.metadata.name, this.cluster.metadata.name);
   }
 
   public isLoaded(): boolean {
