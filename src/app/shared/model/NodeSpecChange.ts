@@ -1,4 +1,4 @@
-import { NodeCloudSpec, NodeEntity } from '../entity/NodeEntity';
+import { NodeCloudSpec, NodeEntity, UbuntuSpec, ContainerLinuxSpec } from '../entity/NodeEntity';
 
 export class NodeData {
   node?: NodeEntity;
@@ -9,4 +9,9 @@ export class NodeData {
 export class NodeProviderData {
   spec?: NodeCloudSpec;
   valid?: boolean;
+}
+
+export class NodeOperatingSystemData {
+  ubuntu?: UbuntuSpec;
+  containerLinux?: ContainerLinuxSpec;
 }
