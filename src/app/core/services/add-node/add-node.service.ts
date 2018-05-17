@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
+import { NodeData, NodeProviderData, NodeOperatingSystemData } from '../../../shared/model/NodeSpecChange';
 import { DigitaloceanOptions } from '../../../shared/entity/node/DigitaloceanNodeSpec';
 
 @Injectable()
@@ -10,6 +10,8 @@ export class AddNodeService {
   nodeProviderDataChanges$ = this._nodeProviderData.asObservable();
   private _nodeData = new Subject<NodeData>();
   nodeDataChanges$ = this._nodeData.asObservable();
+  private _nodeOperatingSystemData = new Subject<NodeOperatingSystemData>();
+  nodeOperatingSystemDataChanges$ = this._nodeOperatingSystemData.asObservable();
   private _doOptionsData = new Subject<DigitaloceanOptions>();
   doOptionsDataChanges$ = this._doOptionsData.asObservable();
 
@@ -19,6 +21,10 @@ export class AddNodeService {
 
   changeNodeData(data: NodeData) {
     this._nodeData.next(data);
+  }
+
+  changeNodeOperatingSystemData(data: NodeOperatingSystemData) {
+    this._nodeOperatingSystemData.next(data);
   }
 
   changeDoOptionsData(data: DigitaloceanOptions) {
