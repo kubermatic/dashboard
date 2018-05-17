@@ -1,8 +1,8 @@
-import {Component, EventEmitter, Input, Output, OnChanges} from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { ClusterService } from '../../../core/services';
 
@@ -19,6 +19,7 @@ export class NodeListComponent implements OnChanges {
   @Input() nodes: NodeEntity[] = [];
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   public isClusterRunning: boolean;
+  public clickedDeleteNode = {};
   public isShowNodeDetails = {};
   public config: MatDialogConfig = {
     disableClose: false,
@@ -54,6 +55,7 @@ export class NodeListComponent implements OnChanges {
   }
 
   public deleteNodeDialog(node: NodeEntity): void {
+    this.clickedDeleteNode[node.metadata.name] = true;
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
@@ -154,10 +156,12 @@ export class NodeListComponent implements OnChanges {
   }
 
   public toggleNode(nodeName: string): void {
-    if (this.isShowNodeDetails[nodeName]) {
-      this.isShowNodeDetails[nodeName] = false;
-    } else if (!this.isShowNodeDetails[nodeName]) {
-      this.isShowNodeDetails[nodeName] = true;
+    if (!this.clickedDeleteNode[nodeName]) {
+      if (this.isShowNodeDetails[nodeName]) {
+        this.isShowNodeDetails[nodeName] = false;
+      } else if (!this.isShowNodeDetails[nodeName]) {
+        this.isShowNodeDetails[nodeName] = true;
+      }
     }
   }
 }
