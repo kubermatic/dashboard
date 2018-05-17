@@ -1,7 +1,7 @@
 import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatButtonToggleModule } from '@angular/material';
+import { MatTabsModule } from '@angular/material';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SetSettingsComponent } from './set-settings.component';
 import { WizardService } from '../../core/services/wizard/wizard.service';
@@ -45,7 +45,7 @@ describe('SetSettingsComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         SharedModule,
-        MatButtonToggleModule,
+        MatTabsModule,
       ],
       declarations: [
         SetSettingsComponent,

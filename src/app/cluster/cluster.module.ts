@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
-import { MatButtonToggleModule } from '@angular/material';
+import { MatTabsModule } from '@angular/material';
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
 import { ClusterItemComponent } from './cluster-list/cluster-item/cluster-item.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
-
 import { AddNodeModalComponent } from './cluster-details/add-node-modal/add-node-modal.component';
 import { UpgradeClusterComponent } from './cluster-details/upgrade-cluster/upgrade-cluster.component';
 import { ClusterSecretsComponent } from './cluster-details/cluster-secrets/cluster-secrets.component';
@@ -43,7 +42,7 @@ const entryComponents: any[] = [
     SharedModule,
     ClusterRoutingModule,
     AddNodeModule,
-    MatButtonToggleModule,
+    MatTabsModule,
   ],
   declarations: [
     ...components,

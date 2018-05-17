@@ -44,17 +44,14 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
 
-
     this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
     }));
 
-
     this.subscriptions.push(this.addNodeService.nodeProviderDataChanges$.subscribe(data => {
       this.providerData = data;
       this.addNodeService.changeNodeData(this.getAddNodeData());
-
     }));
 
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
@@ -63,7 +60,6 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -96,13 +92,11 @@ export class AddNodeComponent implements OnInit, OnDestroy {
 
 
   getAddNodeData(): NodeData {
-
     const osSpec = this.getOSSpec();
     return {
       node: {
         metadata: {},
         spec: {
-
           cloud: this.providerData.spec,
           operatingSystem: osSpec,
           versions: {

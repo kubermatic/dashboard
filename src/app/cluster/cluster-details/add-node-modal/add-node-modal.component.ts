@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ApiService, WizardService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
@@ -71,11 +72,11 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public changeView(value: string) {
-    switch (value) {
-      case 'standard':
+  public changeView(event: MatTabChangeEvent) {
+    switch (event.tab.textLabel) {
+      case 'Simple':
         return this.wizardService.changeSettingsFormView({hideOptional: true});
-      case 'extended':
+      case 'Extended':
         return this.wizardService.changeSettingsFormView({hideOptional: false});
       default:
         return this.wizardService.changeSettingsFormView({hideOptional: true});

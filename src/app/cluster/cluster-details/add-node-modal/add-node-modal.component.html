@@ -5,14 +5,10 @@
       <i class="fa fa-times" aria-hidden="true"></i>
     </button>
   </mat-toolbar>
-  <mat-button-toggle-group #group="matButtonToggleGroup" (change)="changeView(group.value)" *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.openstack && !cluster.spec.cloud.bringyourown">
-    <mat-button-toggle value="standard" checked="true">
-      Standard
-    </mat-button-toggle>
-    <mat-button-toggle value="extended">
-      Extended
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+  <mat-tab-group (selectedTabChange)="changeView($event)" *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.bringyourown">
+    <mat-tab label="Simple"></mat-tab>
+    <mat-tab label="Extended"></mat-tab>
+  </mat-tab-group>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <kubermatic-add-node [cluster]="cluster" [nodeData]="addNodeData"></kubermatic-add-node>

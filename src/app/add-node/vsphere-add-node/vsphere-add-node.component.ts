@@ -36,6 +36,7 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
       this.hideOptional = data.hideOptional;
     }));
+
     this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe(data => {
       if (data.ubuntu) {
         if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova') {
@@ -51,6 +52,7 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
         this.defaultTemplate = 'ubuntu-template';
       }
     }));
+
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
