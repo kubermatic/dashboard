@@ -27,7 +27,6 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.nodeForm = new FormGroup({
       count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1)]),
       operatingSystem: new FormControl('ubuntu', Validators.required),
@@ -46,6 +45,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
 
     this.operatingSystemDataChangeSub = this.operatingSystemForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
+      this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
     });
 
     this.providerDataChangedSub = this.addNodeService.nodeProviderDataChanges$.subscribe(data => {
@@ -83,45 +83,13 @@ export class AddNodeComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProviderSpec(): NodeCloudSpec {
-    if (this.providerData.spec.vsphere) {
-      if (this.providerData.spec.vsphere.template === '') {
-        switch (this.nodeForm.controls.operatingSystem.value) {
-          case 'ubuntu':
-            return {
-              vsphere: {
-                cpus: this.providerData.spec.vsphere.cpus,
-                memory: this.providerData.spec.vsphere.memory,
-                template: 'ubuntu-template',
-              },
-            };
-          case 'containerLinux':
-            return {
-              vsphere: {
-                cpus: this.providerData.spec.vsphere.cpus,
-                memory: this.providerData.spec.vsphere.memory,
-                template: 'coreos_production_vmware_ova',
-              },
-            };
-          default:
-            return this.providerData.spec;
-        }
-      } else {
-        return this.providerData.spec;
-      }
-    } else {
-      return this.providerData.spec;
-    }
-  }
-
   getAddNodeData(): NodeData {
-    const providerSpec = this.getProviderSpec();
     const osSpec = this.getOSSpec();
     return {
       node: {
         metadata: {},
         spec: {
-          cloud: providerSpec,
+          cloud: this.providerData.spec,
           operatingSystem: osSpec,
           versions: {
             containerRuntime: {

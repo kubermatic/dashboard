@@ -15,6 +15,7 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
   public vsphereNodeForm: FormGroup;
+  public defaultTemplate = 'ubuntu-template';
   private subscriptions: Subscription[] = [];
 
   constructor(private addNodeService: AddNodeService) { }
@@ -28,6 +29,22 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.vsphereNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    }));
+
+    this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe(data => {
+      if (data.ubuntu) {
+        if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova') {
+          this.vsphereNodeForm.setValue({cpu: this.vsphereNodeForm.controls.cpu.value, memory: this.vsphereNodeForm.controls.memory.value, template: 'ubuntu-template'});
+        }
+        this.defaultTemplate = 'ubuntu-template';
+      } else if (data.containerLinux) {
+        if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova') {
+          this.vsphereNodeForm.setValue({cpu: this.vsphereNodeForm.controls.cpu.value, memory: this.vsphereNodeForm.controls.memory.value, template: 'coreos_production_vmware_ova'});
+        }
+        this.defaultTemplate = 'coreos_production_vmware_ova';
+      } else {
+        this.defaultTemplate = 'ubuntu-template';
+      }
     }));
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());

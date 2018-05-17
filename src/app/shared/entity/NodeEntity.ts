@@ -109,7 +109,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       const vsSpec: VSphereNodeSpec = {
         cpus: 1,
         memory: 512,
-        template: ''
+        template: 'ubuntu-template'
       };
       return vsSpec;
     case NodeProvider.HETZNER:
