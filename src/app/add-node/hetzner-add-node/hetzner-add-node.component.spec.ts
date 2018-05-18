@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeHetznerCluster } from '../../testing/fake-data/cluster.fake';
 import { HetznerAddNodeComponent } from './hetzner-add-node.component';
+import { nodeDataFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -36,6 +37,7 @@ describe('HetznerAddNodeComponent', () => {
     fixture = TestBed.createComponent(HetznerAddNodeComponent);
     component = fixture.componentInstance;
     component.cloudSpec = fakeHetznerCluster.spec.cloud;
+    component.nodeData = nodeDataFake;
   });
 
   it('should create the add node cmp', () => {

@@ -3,8 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
 import { ApiService } from '../../core/services';
-import { NodeProviderData } from '../../shared/model/NodeSpecChange';
-import { DigitaloceanOptions } from '../../shared/entity/node/DigitaloceanNodeSpec';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 
@@ -16,28 +15,20 @@ import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/Dro
 
 export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
+  @Input() nodeData: NodeData;
   public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
   public loadingSizes = false;
-  public doNodeForm: FormGroup = new FormGroup({
-    size: new FormControl(0, Validators.required),
-  });
-  private doOptionsData: DigitaloceanOptions = {
-    backups: false,
-    ipv6: false,
-    monitoring: false,
-    tags: [],
-  };
+  public doNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService, private addNodeService: AddNodeService) { }
 
   ngOnInit(): void {
-    this.subscriptions.push(this.doNodeForm.valueChanges.subscribe(data => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    }));
+    this.doNodeForm = new FormGroup({
+      size: new FormControl(this.nodeData.node.spec.cloud.digitalocean.size, Validators.required),
+    });
 
-    this.subscriptions.push(this.addNodeService.doOptionsDataChanges$.subscribe(data => {
-      this.doOptionsData = data;
+    this.subscriptions.push(this.doNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
@@ -49,7 +40,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
     if (this.cloudSpec.digitalocean.token) {
       this.subscriptions.push(this.api.getDigitaloceanSizes(this.cloudSpec.digitalocean.token).subscribe(data => {
         this.sizes = data;
-        this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
+        this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
       }));
     }
   }
@@ -63,8 +54,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (!!!changes.cloudSpec.previousValue || (changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token)) {
-      this.reloadDigitaloceanSizes();
+    if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
+      if (!!!changes.cloudSpec.previousValue || (changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token)) {
+        this.reloadDigitaloceanSizes();
+      }
     }
   }
 
@@ -73,10 +66,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
       spec: {
         digitalocean: {
           size: this.doNodeForm.controls.size.value,
-          backups: this.doOptionsData.backups,
-          ipv6: this.doOptionsData.ipv6,
-          monitoring: this.doOptionsData.monitoring,
-          tags: this.doOptionsData.tags,
+          backups: this.nodeData.node.spec.cloud.digitalocean.backups,
+          ipv6: this.nodeData.node.spec.cloud.digitalocean.ipv6,
+          monitoring: this.nodeData.node.spec.cloud.digitalocean.monitoring,
+          tags: this.nodeData.node.spec.cloud.digitalocean.tags,
         },
       },
       valid: this.doNodeForm.valid,

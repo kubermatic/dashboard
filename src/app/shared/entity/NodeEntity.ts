@@ -4,6 +4,7 @@ import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
 import { HetznerNodeSpec } from './node/HetznerNodeSpec';
 import { VSphereNodeSpec } from './node/VSphereNodeSpec';
+import { NodeProvider } from '../model/NodeProviderConstants';
 
 export class NodeEntity {
   metadata: MetadataEntityV2;
@@ -75,4 +76,47 @@ export class NodeSystemInfo {
   kubeletVersion: string;
   operatingSystem: string;
   architecture: string;
+}
+
+
+export function getEmptyNodeProviderSpec(provider: string): object {
+  switch (provider) {
+    case NodeProvider.AWS:
+      const awsSpec: AWSNodeSpec = {
+        instanceType: 't2.small',
+        diskSize: 25,
+        volumeType: 'standard',
+        ami: '',
+        tags: ''
+      };
+      return awsSpec;
+    case NodeProvider.DIGITALOCEAN:
+      const doSpec: DigitaloceanNodeSpec = {
+        size: 's-1vcpu-1gb',
+        backups: false,
+        ipv6: false,
+        monitoring: false,
+        tags: []
+      };
+      return doSpec;
+    case NodeProvider.OPENSTACK:
+      const osSpec: OpenstackNodeSpec = {
+        flavor: 'm1.small',
+        image: ''
+      };
+      return osSpec;
+    case NodeProvider.VSPHERE:
+      const vsSpec: VSphereNodeSpec = {
+        cpus: 1,
+        memory: 512,
+        template: 'ubuntu-template'
+      };
+      return vsSpec;
+    case NodeProvider.HETZNER:
+      const hSpec: HetznerNodeSpec = {
+        type: 'cx31'
+      };
+      return hSpec;
+  }
+  return {};
 }

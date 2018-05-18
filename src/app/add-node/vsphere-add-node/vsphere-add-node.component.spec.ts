@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeVSphereCluster } from '../../testing/fake-data/cluster.fake';
 import { VSphereAddNodeComponent } from './vsphere-add-node.component';
+import { nodeDataFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -36,6 +37,7 @@ describe('VSphereAddNodeComponent', () => {
     fixture = TestBed.createComponent(VSphereAddNodeComponent);
     component = fixture.componentInstance;
     component.cloudSpec = fakeVSphereCluster.spec.cloud;
+    component.nodeData = nodeDataFake;
   });
 
   it('should create the add node cmp', () => {

@@ -26,6 +26,7 @@ import { VSphereClusterSettingsComponent } from './provider-settings/vsphere/vsp
 import Spy = jasmine.Spy;
 import { HetznerAddNodeComponent } from '../../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../../add-node/vsphere-add-node/vsphere-add-node.component';
+import { nodeDataFake } from '../../testing/fake-data/node.fake';
 
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
@@ -75,6 +76,7 @@ describe('SetSettingsComponent', () => {
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster;
     component.clusterSSHKeys = [];
+    component.nodeData = nodeDataFake;
     fixture.detectChanges();
   });
 

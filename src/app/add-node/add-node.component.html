@@ -3,15 +3,15 @@
     <input matInput formControlName="count" min="1" type="number" placeholder="Number of nodes*:" autocomplete="off">
   </mat-form-field>
 
-  <kubermatic-aws-add-node *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud"></kubermatic-aws-add-node>
+  <kubermatic-aws-add-node *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-aws-add-node>
 
-  <kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud"></kubermatic-digitalocean-add-node>
+  <kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-digitalocean-add-node>
 
-  <kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-add-node>
+  <kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-openstack-add-node>
 
-  <kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner" [cloudSpec]="cluster.spec.cloud"></kubermatic-hetzner-add-node>
+  <kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-hetzner-add-node>
 
-  <kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-add-node>
+  <kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-vsphere-add-node>
 
   <mat-form-field class="operating-system">
     <mat-select placeholder="Operating System*:" formControlName="operatingSystem">
@@ -25,7 +25,6 @@
 
 <form [formGroup]="operatingSystemForm" fxLayout="column">
   <div fxFlex="100%">
-
     <!-- Options for Ubuntu -->
     <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'" class="os-options" [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'with-margin' : ''">
       <label fxFlex="50%">Upgrade system on first boot</label>
@@ -37,7 +36,6 @@
       <label fxFlex="50%">Disable auto-update</label>
       <mat-checkbox fxFlex="50%" id="disableAutoUpdate" formControlName="disableAutoUpdate"></mat-checkbox>
     </div>
-
   </div>
 </form>
 
@@ -50,4 +48,5 @@
   </mat-form-field>
 </form>
 
-<kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-options>
+<kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean" [nodeData]="nodeData"></kubermatic-digitalocean-options>
+

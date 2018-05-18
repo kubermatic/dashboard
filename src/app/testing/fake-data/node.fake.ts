@@ -1,4 +1,6 @@
 import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { NodeData } from '../../shared/model/NodeSpecChange';
+
 
 export const fakeDigitaloceanCreateNode: NodeEntity = {
   metadata: {},
@@ -235,3 +237,54 @@ export const nodesFake: NodeEntity[] = [
     }
   }
 ];
+
+export const nodeDataFake: NodeData = {
+  node: {
+    metadata: {},
+    spec: {
+      cloud: {
+        digitalocean: {
+          size: 's-1vcpu-1gb',
+          backups: false,
+          ipv6: false,
+          monitoring: false,
+          tags: []
+        },
+        aws: {
+          instanceType: 't2.small',
+          diskSize: 25,
+          volumeType: 'standard',
+          ami: '',
+          tags: ''
+        },
+        openstack: {
+          flavor: 'm1.small',
+          image: ''
+        },
+        hetzner: {
+          type: 'cx31'
+        },
+        vsphere: {
+          cpus: 1,
+          memory: 512,
+          template: ''
+        },
+      },
+      operatingSystem: {
+        ubuntu: {
+          distUpgradeOnBoot: false
+        },
+        containerLinux: null
+      },
+      versions: {
+        kubelet: null,
+        containerRuntime: {
+          name: null,
+          version: null
+        }
+      }
+    }
+  },
+  count: 3,
+  valid: true,
+};
