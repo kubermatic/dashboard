@@ -120,3 +120,21 @@ export function getEmptyNodeProviderSpec(provider: string): object {
   }
   return {};
 }
+
+export function getEmptyOperatingSystemSpec(): object {
+  const osSpec: OperatingSystemSpec = {
+    ubuntu: {
+      distUpgradeOnBoot: false
+    }
+  };
+  return osSpec;
+}
+
+export function getEmptyNodeVersionSpec(): object {
+  const versionSpec: NodeVersionInfo = {
+    containerRuntime: {
+      name: 'docker'
+    }
+  };
+  return versionSpec;
+}
