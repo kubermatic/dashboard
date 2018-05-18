@@ -12,6 +12,7 @@ import { ApiService, InitialNodeDataService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
+import { NodeEntity, getEmptyNodeProviderSpec } from '../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -23,13 +24,14 @@ export class WizardComponent implements OnInit, OnDestroy {
   public currentStep: Step;
   public currentStepIndex: number;
   public cluster: ClusterEntity;
+  public node: NodeEntity;
   public clusterNameFormData: ClusterNameForm = { valid: false, name: '' };
   public clusterFormData: ClusterFormData = { valid: false };
   public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
   public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
   public clusterProviderSettingsFormData: ClusterProviderSettingsForm = { valid: false };
   public clusterSSHKeys: SSHKeyEntity[] = [];
-  public addNodeData: NodeData = {};
+  public addNodeData: NodeData;
   public creating = false;
   private subscriptions: Subscription[] = [];
 
@@ -50,6 +52,18 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
       },
     };
+
+    this.addNodeData = {
+      node: {
+        metadata: {},
+        spec: {
+          cloud: { },
+          operatingSystem: {}
+        },
+        status: {},
+      },
+      count: 3
+    };
   }
 
   ngOnInit(): void {
@@ -67,17 +81,30 @@ export class WizardComponent implements OnInit, OnDestroy {
     // Caveat: The DC stays set. When changing the provider we have a invalid dc stored in the cluster. But will be changed on the next step.
     this.subscriptions.push(this.wizardService.clusterProviderFormChanges$.subscribe(data => {
       this.clusterProviderFormData = data;
+
       if (!this.clusterProviderFormData.valid) {
         return;
       }
 
-      const oldProviderSpec = this.cluster.spec.cloud[this.clusterProviderFormData.provider];
-      const oldDC = this.cluster.spec.cloud.dc;
+      let oldProviderSpec = null;
+      let oldProviderNodeSpec = null;
+      let oldDC = '';
+
+      if (!!this.clusterDatacenterFormData.datacenter) {
+        oldProviderSpec = this.clusterDatacenterFormData.datacenter.spec[this.clusterDatacenterFormData.datacenter.spec.provider];
+        oldProviderNodeSpec = this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider];
+        oldDC = this.clusterDatacenterFormData.datacenter.spec.seed;
+      }
       this.cluster.spec.cloud = { dc: oldDC };
-      if (oldProviderSpec == null) {
+
+      if (oldProviderSpec == null || oldProviderSpec !== undefined) {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
+        this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
+        this.clusterDatacenterFormData.valid = false;
+        this.clusterProviderSettingsFormData.valid = false;
       } else {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = oldProviderSpec;
+        this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = oldProviderNodeSpec;
       }
       this.wizardService.changeCluster(this.cluster);
       if (this.clusterProviderFormData.valid) {

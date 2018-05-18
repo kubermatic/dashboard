@@ -19,11 +19,13 @@ import { DigitaloceanAddNodeComponent } from '../../../add-node/digitalocean-add
 import { DigitaloceanOptionsComponent } from '../../../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { AwsAddNodeComponent } from '../../../add-node/aws-add-node/aws-add-node.component';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
-import { fakeDigitaloceanCreateNode } from '../../../testing/fake-data/node.fake';
+import {fakeDigitaloceanCreateNode, nodeDataFake} from '../../../testing/fake-data/node.fake';
 import { fakeDigitaloceanSizes } from '../../../testing/fake-data/addNodeModal.fake';
 import Spy = jasmine.Spy;
 import { HetznerAddNodeComponent } from '../../../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../../../add-node/vsphere-add-node/vsphere-add-node.component';
+import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
+import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 
 describe('AddNodeModalComponent', () => {
   let fixture: ComponentFixture<AddNodeModalComponent>;
@@ -63,7 +65,8 @@ describe('AddNodeModalComponent', () => {
         { provide: MatDialogRef, useValue: {} },
         { provide: ApiService, useValue: apiMock },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-        AddNodeService,
+        { provide: DatacenterService, useClass: DatacenterMockService },
+        AddNodeService
       ],
     }).compileComponents();
   }));
@@ -73,6 +76,12 @@ describe('AddNodeModalComponent', () => {
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster;
     component.datacenter = fakeDigitaloceanDatacenter;
+    component.addNodeData = {
+      node: fakeDigitaloceanCreateNode,
+      count: 1,
+      valid: true
+    };
+    component.addNodeData = nodeDataFake;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = { clusterName: 'tbbfvttvs' };
@@ -85,13 +94,6 @@ describe('AddNodeModalComponent', () => {
   }));
 
   it('should call createClusterNode method from the api', fakeAsync(() => {
-    component.addNodeData = {
-      node: fakeDigitaloceanCreateNode,
-      count: 1,
-      valid: true
-    };
-    fixture.detectChanges();
-
     component.addNode();
     tick();
 

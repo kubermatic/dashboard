@@ -6,6 +6,7 @@ import { AwsAddNodeComponent } from './aws-add-node.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
+import { nodeDataFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -36,6 +37,7 @@ describe('AwsAddNodeComponent', () => {
     fixture = TestBed.createComponent(AwsAddNodeComponent);
     component = fixture.componentInstance;
     component.cloudSpec = fakeAWSCluster.spec.cloud;
+    component.nodeData = nodeDataFake;
   });
 
   it('should create the add node cmp', () => {

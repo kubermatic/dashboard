@@ -14,16 +14,10 @@ import { OperatingSystemSpec, NodeCloudSpec } from '../shared/entity/NodeEntity'
 
 export class AddNodeComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  @Input() initialNode: boolean;
-  public nodeForm: FormGroup = new FormGroup({
-    count: new FormControl(1, [Validators.required, Validators.min(1)]),
-    operatingSystem: new FormControl('ubuntu', Validators.required),
-    containerRuntime: new FormControl('docker'),
-  });
-  public operatingSystemForm: FormGroup = new FormGroup({
-    distUpgradeOnBoot: new FormControl(false),
-    disableAutoUpdate: new FormControl(false),
-  });
+  @Input() nodeData: NodeData;
+  public nodeForm: FormGroup;
+  public operatingSystemForm: FormGroup;
+
   private formOnChangeSub: Subscription;
   private operatingSystemDataChangeSub: Subscription;
   private providerDataChangedSub: Subscription;
@@ -33,9 +27,16 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (this.initialNode) {
-      this.nodeForm.setValue({count: 3, operatingSystem: 'ubuntu', containerRuntime: 'docker'});
-    }
+    this.nodeForm = new FormGroup({
+      count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1)]),
+      operatingSystem: new FormControl('ubuntu', Validators.required),
+      containerRuntime: new FormControl('docker'),
+    });
+
+    this.operatingSystemForm = new FormGroup({
+      distUpgradeOnBoot: new FormControl(false),
+      disableAutoUpdate: new FormControl(false),
+    });
 
     this.formOnChangeSub = this.nodeForm.valueChanges.subscribe(data => {
       this.operatingSystemForm.setValue({distUpgradeOnBoot: false, disableAutoUpdate: false});
