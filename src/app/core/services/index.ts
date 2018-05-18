@@ -5,6 +5,7 @@ import { Auth } from './auth/auth.service';
 import { DatacenterService } from './datacenter/datacenter.service';
 import { InitialNodeDataService } from './initial-node-data/initial-nodes-data.service';
 import { ClusterService } from './cluster/cluster.service';
+import { WizardService } from './wizard/wizard.service';
 
 export {
   InitialNodeDataService,
@@ -13,6 +14,7 @@ export {
   AuthGuard,
   AUTH_PROVIDERS,
   ApiService,
-  ClusterService
+  ClusterService,
+  WizardService
 };
 

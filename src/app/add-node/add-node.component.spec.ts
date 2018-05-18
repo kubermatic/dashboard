@@ -9,6 +9,7 @@ import { DigitaloceanOptionsComponent } from './digitalocean-add-node/digitaloce
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
 import { fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster } from '../testing/fake-data/cluster.fake';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
+import { WizardService } from '../core/services/wizard/wizard.service';
 import { ApiService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-data/addNodeModal.fake';
@@ -45,6 +46,7 @@ describe('AddNodeComponent', () => {
       ],
       providers: [
         AddNodeService,
+        WizardService,
         { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();

@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { WizardService } from '../../core/services/wizard/wizard.service';
 import { fakeVSphereCluster } from '../../testing/fake-data/cluster.fake';
 import { VSphereAddNodeComponent } from './vsphere-add-node.component';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
@@ -29,6 +30,7 @@ describe('VSphereAddNodeComponent', () => {
       ],
       providers: [
         AddNodeService,
+        WizardService,
       ],
     }).compileComponents();
   }));

@@ -23,17 +23,17 @@
       Password is <strong>required</strong>
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex>
+  <mat-form-field fxFlex *ngIf="!hideOptional">
     <input matInput formControlName="floatingIpPool" type="text" placeholder="Floating IP pool:" title="Floating IP pool" autocomplete="off">
     <mat-hint>When specified, all worker nodes will receive a public ip from this floating ip pool.</mat-hint>
   </mat-form-field>
-  <mat-form-field fxFlex>
+  <mat-form-field fxFlex *ngIf="!hideOptional">
     <input matInput formControlName="securityGroups" type="text" placeholder="Security group:" title="Security group" autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security
       group will be created.
     </mat-hint>
   </mat-form-field>
-  <mat-form-field fxFlex>
+  <mat-form-field fxFlex *ngIf="!hideOptional">
     <input matInput formControlName="network" type="text" placeholder="Network:" title="Network" autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this network. If not specified, a network, subnet &
       router will be created.

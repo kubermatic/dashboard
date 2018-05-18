@@ -1,6 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { ApiService } from '../../../core/services';
+import { ApiService, WizardService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
@@ -33,7 +34,11 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     valid: true
   };
 
-  constructor(private api: ApiService, private addNodeService: AddNodeService, private dcService: DatacenterService) {}
+  constructor(private api: ApiService,
+              private addNodeService: AddNodeService,
+              private wizardService: WizardService,
+              private dcService: DatacenterService,
+  ) {}
 
   ngOnInit(): void {
     this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
@@ -65,5 +70,16 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
       .subscribe((createdNodes: NodeEntity[]): void => {
         NotificationActions.success('Success', `Node(s) successfully created`);
       }));
+  }
+
+  public changeView(event: MatTabChangeEvent) {
+    switch (event.tab.textLabel) {
+      case 'Simple':
+        return this.wizardService.changeSettingsFormView({hideOptional: true});
+      case 'Extended':
+        return this.wizardService.changeSettingsFormView({hideOptional: false});
+      default:
+        return this.wizardService.changeSettingsFormView({hideOptional: true});
+    }
   }
 }

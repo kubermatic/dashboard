@@ -1,4 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatTabChangeEvent } from '@angular/material';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { WizardService } from '../../core/services/wizard/wizard.service';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
@@ -19,4 +20,15 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
   ngOnInit() { }
 
   ngOnDestroy() { }
+
+  public changeView(event: MatTabChangeEvent) {
+    switch (event.tab.textLabel) {
+      case 'Simple':
+        return this.wizardService.changeSettingsFormView({hideOptional: true});
+      case 'Extended':
+        return this.wizardService.changeSettingsFormView({hideOptional: false});
+      default:
+        return this.wizardService.changeSettingsFormView({hideOptional: true});
+    }
+  }
 }

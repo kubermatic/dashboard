@@ -1,4 +1,10 @@
 <ng-container>
+
+  <mat-tab-group (selectedTabChange)="changeView($event)" *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.bringyourown">
+    <mat-tab label="Simple"></mat-tab>
+    <mat-tab label="Extended"></mat-tab>
+  </mat-tab-group>
+
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"

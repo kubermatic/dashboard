@@ -9,7 +9,7 @@ import { RouterTestingModule } from '../testing/router-stubs';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterStub } from './../testing/router-stubs';
 import { asyncData } from '../testing/services/api-mock.service';
-import { MatButtonToggleModule, MatDialog } from '@angular/material';
+import { MatTabsModule, MatButtonToggleModule, MatDialog } from '@angular/material';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
 import { ProgressComponent } from './progress/progress.component';
@@ -59,6 +59,7 @@ describe('WizardComponent', () => {
         RouterTestingModule,
         SharedModule,
         MatButtonToggleModule,
+        MatTabsModule,
       ],
       declarations: [
         WizardComponent,

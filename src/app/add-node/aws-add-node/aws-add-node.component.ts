@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
+import { WizardService } from '../../core/services/wizard/wizard.service';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 
 @Component({
@@ -11,6 +12,7 @@ import { CloudSpec } from '../../shared/entity/ClusterEntity';
   templateUrl: './aws-add-node.component.html',
   styleUrls: ['./aws-add-node.component.scss']
 })
+
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
@@ -18,9 +20,10 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   public diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   public awsNodeForm: FormGroup;
   public tags: FormArray;
-  private formOnChangeSub: Subscription;
+  public hideOptional = true;
+  private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService) {
+  constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {
   }
 
   ngOnInit(): void {
@@ -37,9 +40,13 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
       ])
     });
 
-    this.formOnChangeSub = this.awsNodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    });
+    }));
+
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    }));
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -84,6 +91,10 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.formOnChangeSub.unsubscribe();
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 }
