@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { ClusterDatacenterForm, ClusterNameForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../../../shared/model/ClusterForm';
+import { ClusterDatacenterForm, ClusterNameForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView } from '../../../shared/model/ClusterForm';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 
@@ -24,6 +24,9 @@ export class WizardService {
   // Cluster ssh keys
   private _clusterSSHKeys = new Subject<SSHKeyEntity[]>();
   clusterSSHKeysChanges$ = this._clusterSSHKeys.asObservable();
+  // Cluster settings form view (hide optional fields or not)
+  private _clusterSettingsFormView = new Subject<ClusterSettingsFormView>();
+  clusterSettingsFormViewChanged$ = this._clusterSettingsFormView.asObservable();
 
   changeCluster(data: ClusterEntity) {
     this._cluster.next(data);
@@ -47,5 +50,9 @@ export class WizardService {
 
   changeClusterSSHKeys(keys: SSHKeyEntity[]) {
     this._clusterSSHKeys.next(keys);
+  }
+
+  changeSettingsFormView(data: ClusterSettingsFormView) {
+    this._clusterSettingsFormView.next(data);
   }
 }

@@ -96,3 +96,12 @@ mat-sidenav {
 footer {
   z-index: 1;
 }
+
+// Mat Tab Toggle
+/deep/.mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
+  background-color: transparent !important;
+}
+/deep/.mat-tab-label {
+  height: 36px !important;
+  min-width: 120px !important;
+}

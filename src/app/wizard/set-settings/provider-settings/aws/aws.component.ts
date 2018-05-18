@@ -12,7 +12,8 @@ import { Subscription } from 'rxjs/Subscription';
 export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   public awsSettingsForm: FormGroup;
-  private awsSettingsFormSub: Subscription;
+  public hideOptional = true;
+  private subscriptions: Subscription[] = [];
 
   constructor(private wizardService: WizardService) { }
 
@@ -26,7 +27,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       routeTableId: new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
     });
 
-    this.awsSettingsFormSub = this.awsSettingsForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.awsSettingsForm.valueChanges.subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           aws: {
@@ -41,10 +42,18 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         },
         valid: this.awsSettingsForm.valid,
       });
-    });
+    }));
+
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    }));
   }
 
   ngOnDestroy() {
-    this.awsSettingsFormSub.unsubscribe();
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 }

@@ -6,7 +6,7 @@
     <mat-form-field fxFlex>
       <input matInput formControlName="memory" min="512" type="number" placeholder="Memory in MB*:" autocomplete="off">
     </mat-form-field>
-    <mat-form-field fxFlex>
+    <mat-form-field fxFlex *ngIf="!hideOptional">
       <input matInput formControlName="template" type="text" placeholder="VM Template:" autocomplete="off">
       <mat-hint>Optional. If not set, a template called {{defaultTemplate}} will be used.</mat-hint>
     </mat-form-field>

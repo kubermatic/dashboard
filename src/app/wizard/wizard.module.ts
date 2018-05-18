@@ -8,7 +8,7 @@ import { SetSettingsComponent } from './set-settings/set-settings.component';
 import { SummaryComponent } from './summary/summary.component';
 import { SharedModule } from '../shared/shared.module';
 import { WizardRoutingModule } from './wizard-routing.module';
-import { MatButtonToggleModule } from '@angular/material';
+import { MatTabsModule, MatButtonToggleModule } from '@angular/material';
 import { OpenstackClusterSettingsComponent } from './set-settings/provider-settings/openstack/openstack.component';
 import { DigitaloceanClusterSettingsComponent } from './set-settings/provider-settings/digitalocean/digitalocean.component';
 import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aws/aws.component';
@@ -42,6 +42,7 @@ const components: any[] = [
     SharedModule,
     WizardRoutingModule,
     MatButtonToggleModule,
+    MatTabsModule,
     AddNodeModule,
   ],
   declarations: [

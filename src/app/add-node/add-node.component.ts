@@ -3,6 +3,7 @@ import { ClusterEntity } from '../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
+import { WizardService } from '../core/services/wizard/wizard.service';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
 import { OperatingSystemSpec, NodeCloudSpec } from '../shared/entity/NodeEntity';
 
@@ -14,16 +15,16 @@ import { OperatingSystemSpec, NodeCloudSpec } from '../shared/entity/NodeEntity'
 
 export class AddNodeComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+
   @Input() nodeData: NodeData;
   public nodeForm: FormGroup;
   public operatingSystemForm: FormGroup;
 
-  private formOnChangeSub: Subscription;
-  private operatingSystemDataChangeSub: Subscription;
-  private providerDataChangedSub: Subscription;
+  public hideOptional = true;
+  private subscriptions: Subscription[] = [];
   private providerData: NodeProviderData = { valid: false };
 
-  constructor(private addNodeService: AddNodeService) {
+  constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {
   }
 
   ngOnInit() {
@@ -38,26 +39,32 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(false),
     });
 
-    this.formOnChangeSub = this.nodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.nodeForm.valueChanges.subscribe(data => {
       this.operatingSystemForm.setValue({distUpgradeOnBoot: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
-    });
+    }));
 
-    this.operatingSystemDataChangeSub = this.operatingSystemForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
-    });
+    }));
 
-    this.providerDataChangedSub = this.addNodeService.nodeProviderDataChanges$.subscribe(data => {
+    this.subscriptions.push(this.addNodeService.nodeProviderDataChanges$.subscribe(data => {
       this.providerData = data;
       this.addNodeService.changeNodeData(this.getAddNodeData());
-    });
+    }));
+
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    }));
   }
 
   ngOnDestroy(): void {
-    this.formOnChangeSub.unsubscribe();
-    this.operatingSystemDataChangeSub.unsubscribe();
-    this.providerDataChangedSub.unsubscribe();
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 
   getOSSpec(): OperatingSystemSpec {
@@ -82,6 +89,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
         };
     }
   }
+
 
   getAddNodeData(): NodeData {
     const osSpec = this.getOSSpec();
