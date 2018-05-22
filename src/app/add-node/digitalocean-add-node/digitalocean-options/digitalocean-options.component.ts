@@ -19,11 +19,11 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
   constructor(private api: ApiService, private addNodeService: AddNodeService) { }
 
   ngOnInit(): void {
-  this.doOptionsForm = new FormGroup({
+    this.doOptionsForm = new FormGroup({
       backups: new FormControl(this.nodeData.node.spec.cloud.digitalocean.backups),
       ipv6: new FormControl(this.nodeData.node.spec.cloud.digitalocean.ipv6),
       monitoring: new FormControl(this.nodeData.node.spec.cloud.digitalocean.monitoring),
-      tags: new FormControl([]),
+      tags: new FormControl(this.nodeData.node.spec.cloud.digitalocean.tags.toString().replace(/\,/g, ', ')),
     });
     this.subscriptions.push(this.doOptionsForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getDoOptionsData());

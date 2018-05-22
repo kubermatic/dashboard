@@ -7,7 +7,7 @@ import { AddNodeService } from '../../../core/services/add-node/add-node.service
 import { Subscription } from 'rxjs/Subscription';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { getEmptyNodeProviderSpec, NodeEntity } from '../../../shared/entity/NodeEntity';
+import { getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec, NodeEntity } from '../../../shared/entity/NodeEntity';
 import { NodeData } from '../../../shared/model/NodeSpecChange';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 
@@ -26,7 +26,8 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
       metadata: {},
       spec: {
         cloud: {},
-        operatingSystem: {}
+        operatingSystem: {},
+        versions: {}
       },
       status: {},
     },
@@ -47,6 +48,8 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     );
 
     this.addNodeData.node.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
+    this.addNodeData.node.spec.operatingSystem = getEmptyOperatingSystemSpec();
+    this.addNodeData.node.spec.versions = getEmptyNodeVersionSpec();
 
     this.subscriptions.push(this.addNodeService.nodeDataChanges$.subscribe(async (data: NodeData) => {
       this.addNodeData = await data;

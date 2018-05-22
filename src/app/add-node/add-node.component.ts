@@ -30,13 +30,21 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.nodeForm = new FormGroup({
       count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1)]),
-      operatingSystem: new FormControl('ubuntu', Validators.required),
-      containerRuntime: new FormControl('docker'),
+      operatingSystem: new FormControl(Object.keys(this.nodeData.node.spec.operatingSystem)[0], Validators.required),
+      containerRuntime: new FormControl(this.nodeData.node.spec.versions.containerRuntime.name),
     });
 
+    let distUpgradeOnBoot = false;
+    let disableAutoUpdate = false;
+    if (!!this.nodeData.node.spec.operatingSystem.ubuntu) {
+      distUpgradeOnBoot = this.nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
+    } else if (!!this.nodeData.node.spec.operatingSystem.containerLinux) {
+      disableAutoUpdate = this.nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate;
+    }
+
     this.operatingSystemForm = new FormGroup({
-      distUpgradeOnBoot: new FormControl(false),
-      disableAutoUpdate: new FormControl(false),
+      distUpgradeOnBoot: new FormControl(distUpgradeOnBoot),
+      disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
     this.subscriptions.push(this.nodeForm.valueChanges.subscribe(data => {
