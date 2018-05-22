@@ -73,7 +73,7 @@ describe('ClusterItemComponent', () => {
     fixture.detectChanges();
     tick();
 
-    const de = fixture.debugElement.query(By.css('.cluster-image'));
+    const de = fixture.debugElement.query(By.css('.km-provider-logo'));
     expect(de.properties.src).toBe('/assets/images/clouds/digitalocean.png');
   }));
 });
