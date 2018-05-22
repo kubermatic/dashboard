@@ -3,7 +3,7 @@
   color: #333;
   font-size: 14px;
   font-weight: 400;
-  line-height: 37px;
+  line-height: 40px;
   padding-bottom: 10px;
   padding-top: 10px;
   cursor: pointer;
@@ -15,15 +15,9 @@
     outline: none;
   }
 
-  img {
-    max-height: 30px;
-    max-width: 140px;
-    float: left;
-  }
-
   p {
     margin: 0 0 0 5px;
-    line-height: 30px;
+    line-height: 40px;
     display: inline-block;
     float: left;
   }
@@ -66,4 +60,6 @@
 
 .health-state-container {
   float: left;
+  line-height: 40px;
+  padding-top: 5px;
 }

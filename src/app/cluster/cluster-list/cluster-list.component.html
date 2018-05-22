@@ -24,7 +24,7 @@
     </mat-card-header>
     <ng-container [ngSwitch]="!!clusters">
       <div *ngSwitchCase="true" fxLayout="column">
-        <kubermatic-cluster-item *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [health]="data.status.health" [index]="i" fxFlex></kubermatic-cluster-item>
+        <kubermatic-cluster-item class="km-cluster-item" *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [health]="data.status.health" [index]="i" fxFlex></kubermatic-cluster-item>
       </div>
       <div class="km-card-buttonbar" fxLayout>
         <a routerLink="/wizard" class="button white">
