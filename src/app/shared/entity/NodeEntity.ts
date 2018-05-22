@@ -87,7 +87,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         diskSize: 25,
         volumeType: 'standard',
         ami: '',
-        tags: ''
+        tags: {'': ''}
       };
       return awsSpec;
     case NodeProvider.DIGITALOCEAN:

@@ -38,7 +38,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
     let disableAutoUpdate = false;
     if (!!this.nodeData.node.spec.operatingSystem.ubuntu) {
       distUpgradeOnBoot = this.nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
-    } else if (this.nodeData.node.spec.operatingSystem.containerLinux) {
+    } else if (!!this.nodeData.node.spec.operatingSystem.containerLinux) {
       disableAutoUpdate = this.nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate;
     }
 
