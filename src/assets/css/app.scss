@@ -205,6 +205,14 @@ mat-card-header {
   }
 }
 
+// Provider Logo Size
+.km-provider-logo {
+  height: auto !important;
+  width: auto !important;
+  max-height: 40px !important;
+  max-width: 70px !important;
+}
+
 // List Header sorting arrow
 
 .mat-sort-header-arrow {
