@@ -12,7 +12,7 @@ import { ApiService, InitialNodeDataService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
-import { NodeEntity, getEmptyNodeProviderSpec } from '../shared/entity/NodeEntity';
+import { NodeEntity, getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec } from '../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -57,8 +57,9 @@ export class WizardComponent implements OnInit, OnDestroy {
       node: {
         metadata: {},
         spec: {
-          cloud: { },
-          operatingSystem: {}
+          cloud: {},
+          operatingSystem: {},
+          versions: {}
         },
         status: {},
       },
@@ -100,6 +101,8 @@ export class WizardComponent implements OnInit, OnDestroy {
       if (oldProviderSpec == null || oldProviderSpec !== undefined) {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
         this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
+        this.addNodeData.node.spec.operatingSystem = getEmptyOperatingSystemSpec();
+        this.addNodeData.node.spec.versions = getEmptyNodeVersionSpec();
         this.clusterDatacenterFormData.valid = false;
         this.clusterProviderSettingsFormData.valid = false;
       } else {
