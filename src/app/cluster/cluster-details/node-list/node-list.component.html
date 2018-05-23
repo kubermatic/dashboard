@@ -1,5 +1,5 @@
-<mat-card class="km-card-list" >
-  <mat-card-header class="km-card-list-header" >
+<mat-card class="km-card-list">
+  <mat-card-header class="km-card-list-header">
     <mat-card-title fxLayout>
       <div fxFlex="5%">
         <strong>#</strong>
@@ -27,7 +27,7 @@
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
 
-        <div class="km-node-row" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)">
+        <div class="km-node-row" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)" [ngClass]="getNodeHealthStatus(node,i).class">
           <div fxLayout class="km-single-node">
             <div fxFlex="5%">{{i + 1}}</div>
             <div fxFlex="36%" style="word-break: normal ;">
@@ -51,7 +51,7 @@
               <span *ngIf="!!node.metadata.creationTimestamp">{{node.metadata.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
             </div>
             <div fxFlex="5%" class="health-state">
-                <i [matTooltip]="getNodeHealth(node).status" [ngClass]="getNodeHealth(node).color"></i>
+                <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
             </div>
 
             <div fxFlex="5%" class="km-btn-remove-node-wrapper">

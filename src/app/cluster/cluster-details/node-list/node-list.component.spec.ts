@@ -66,13 +66,15 @@ describe('NodeComponent', () => {
 
     component.cluster = fakeDigitaloceanCluster;
 
-    expect(component.getNodeHealth(nodes[0])).toEqual({
+    expect(component.getNodeHealthStatus(nodes[0], 0)).toEqual({
       color: green,
-      status: 'Running'
+      status: 'Running',
+      class: 'statusRunning'
     }, 'should return classes for green icon');
-    expect(component.getNodeHealth(nodes[1])).toEqual({
+    expect(component.getNodeHealthStatus(nodes[1], 0)).toEqual({
       color: orange,
-      status: 'Pending'
+      status: 'Pending',
+      class: 'statusWaiting'
     }, 'should return classes for orange icon');
   });
 });

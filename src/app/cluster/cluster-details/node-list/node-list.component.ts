@@ -66,7 +66,7 @@ export class NodeListComponent implements OnChanges {
     });
   }
 
-  public getNodeHealth(node: NodeEntity): object {
+  public getNodeHealthStatus(node: NodeEntity, index: number): object {
     const green = 'fa fa-circle green';
     const red = 'fa fa-circle-o red';
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
@@ -76,16 +76,25 @@ export class NodeListComponent implements OnChanges {
     if (!!node.status.errorMessage && !node.metadata.deletionTimestamp) {
       nodeHealthStatus['color'] = red;
       nodeHealthStatus['status'] = 'Failed';
+      nodeHealthStatus['class'] = 'statusFailed';
     } else if (!!node.status.nodeInfo.kubeletVersion && !node.status.errorMessage && !node.metadata.deletionTimestamp) {
       nodeHealthStatus['color'] = green;
       nodeHealthStatus['status'] = 'Running';
+      nodeHealthStatus['class'] = 'statusRunning';
     } else if (!!node.metadata.deletionTimestamp) {
       nodeHealthStatus['color'] = orangeSpinner;
       nodeHealthStatus['status'] = 'Deleting';
+      nodeHealthStatus['class'] = 'statusDeleting';
     } else {
       nodeHealthStatus['color'] = orangeSpinner;
       nodeHealthStatus['status'] = 'Pending';
+      nodeHealthStatus['class'] = 'statusWaiting';
     }
+
+    if (index % 2 !== 0) {
+      nodeHealthStatus['class'] += ' odd';
+    }
+
     return nodeHealthStatus;
   }
 
