@@ -14,31 +14,42 @@
   }
 }
 
-.km-card-list .km-card-list-header {
+.km-card-list {
   margin-bottom: 20px;
-  border-bottom: none;
-  &.providerinfo {
-    border-bottom: 1px solid #E3E8EC;
+  &.providerWrapper {
+    padding: 0px;
 
+    .km-card-list-content {
+      padding: 10px 24px;
+      line-height: 40px;
+    }
+  }
+
+  .km-card-list-header {
+    border-bottom: none;
+    &.providerinfo {
+      border-bottom: 1px solid #E3E8EC;
+      padding: 15px 0 10px;
+      margin: 0 24px;
+
+      .mat-card-title {
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
+    .km-card-ssh-tooltip {
+      i {
+        color: #CCCCCC;
+        font-size: 18px;
+        margin-left: 5px;
+      }
+    }
     .mat-card-title {
-      font-size: 14px;
-      font-weight: 600;
-    }
+        font-size: 18px;
 
-
-  }
-  .km-card-ssh-tooltip {
-    i {
-      color: #CCCCCC;
-      font-size: 18px;
-      margin-left: 5px;
-    }
-  }
-  .mat-card-title {
-      font-size: 18px;
-
-    .cluster-name {
-      float: left;
+      .cluster-name {
+        float: left;
+      }
     }
   }
 }
@@ -85,14 +96,11 @@
 }
 
 .km-provider-region {
+  display: flex;
+  align-items: center;
   .flag-icon {
     font-size: 24px;
     margin-right: 10px;
-  }
-
-  .location {
-    line-height: 26px;
-    position: absolute;
   }
 }
 
