@@ -1,11 +1,43 @@
+.km-card-list {
+  padding: 0;
+}
+
+.km-card-list-header {
+  padding: 15px 24px 10px;
+}
+
 .km-node-row {
-  border-bottom: 1px solid #E3E8EC;
   cursor: pointer;
+  line-height: 60px;
+  padding: 10px 24px;
+
+  &.odd {
+    background-color: #F7FAFF;
+  }
+
+  &.statusRunning:hover {
+    background-color: #EEF5FF;
+  }
+
+  &.statusWaiting {
+    background-color: rgba(255, 213, 92, 0.1);
+
+    &:hover {
+      background-color: rgba(255, 213, 92, 0.2);
+    }
+  }
+
+  &.statusFailed, &.statusDeleting {
+    background-color: rgba(241, 92, 92, 0.15);
+
+    &:hover {
+      background-color: rgba(241, 92, 92, 0.25);
+    }
+  }
 }
 
 .km-single-node {
   line-height: 40px;
-  margin: 10px 0;
 }
 
 .km-conditionsMessage {
@@ -58,7 +90,7 @@ button {
   text-align: center;
   font-size: 14px;
   color: #BCC5D0;
-  padding-top: 10px;
+  padding: 20px 24px;
 }
 
 .node-list-spinner {
@@ -93,6 +125,7 @@ i.fa-info-circle {
 
 .node-details-content {
   background-color: #ffffff;
+  padding: 24px;
   
   .fa-check {
     color: #79c447;
