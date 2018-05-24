@@ -45,7 +45,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       metadata: {},
       spec: {
         humanReadableName: '',
-        masterVersion: '',
+        version: '',
         pause: false,
         cloud: {
           dc: '',

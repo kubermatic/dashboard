@@ -27,7 +27,7 @@ export class UpgradeClusterComponent implements OnInit {
   }
 
   upgrade(): void {
-    this.cluster.spec.masterVersion = this.selectedVersion;
+    this.cluster.spec.version = this.selectedVersion;
 
     this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(result => {
       NotificationActions.success('Success', `Cluster is being upgraded`);
