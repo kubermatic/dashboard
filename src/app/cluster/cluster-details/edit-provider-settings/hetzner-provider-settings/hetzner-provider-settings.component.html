@@ -1,0 +1,8 @@
+<form [formGroup]="hetznerProviderSettingsForm" fxLayout="column">
+  <mat-form-field fxFlex>
+    <input matInput formControlName="token" type="text" placeholder="API Token:" autocomplete="off">
+    <mat-error *ngIf="(hetznerProviderSettingsForm.controls.token.hasError('minlength') || hetznerProviderSettingsForm.controls.token.hasError('maxlength'))">
+      Tokens must be exactly <strong>64</strong> characters long.
+    </mat-error>
+  </mat-form-field>
+</form>

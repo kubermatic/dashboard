@@ -1,0 +1,29 @@
+<div style="max-width: 400px; min-width: 400px;">
+  <mat-toolbar>
+    Edit Provider Settings
+    <button mat-icon-button mat-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </mat-toolbar>
+  <mat-dialog-content>
+    <div class="mat-dialog-content km-edit-provider-settings">
+      <p>You are on the way to edit the provider settings for "{{ cluster.spec.humanReadableName }}".</p>
+
+      <kubermatic-aws-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.aws"></kubermatic-aws-provider-settings>
+      <kubermatic-digitalocean-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-provider-settings>
+      <kubermatic-hetzner-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.hetzner"></kubermatic-hetzner-provider-settings>
+      <kubermatic-openstack-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.openstack"></kubermatic-openstack-provider-settings>
+      <kubermatic-vsphere-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.vsphere"></kubermatic-vsphere-provider-settings>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-dialog-close mat-raised-button>
+      Close
+    </button>
+<!--     <button mat-raised-button mat-dialog-close color="primary" [disabled]="!addNodeData.valid" (click)="addNode()" class="btn btn-primary"> -->
+    <button mat-raised-button mat-dialog-close color="primary" class="btn btn-primary" (click)="saveProviderSettings()">
+      Save
+    </button>
+  </mat-dialog-actions>
+</div>

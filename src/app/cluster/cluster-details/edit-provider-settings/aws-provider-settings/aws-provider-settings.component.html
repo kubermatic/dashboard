@@ -1,0 +1,8 @@
+<form [formGroup]="awsProviderSettingsForm" fxLayout="column">
+  <mat-form-field fxFlex>
+    <input matInput formControlName="accessKeyId" type="text" placeholder="Access key ID:" autocomplete="off">
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <input matInput formControlName="secretAccessKey" type="text" placeholder="Secret access key:" autocomplete="off">
+  </mat-form-field>
+</form>
