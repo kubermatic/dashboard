@@ -30,7 +30,10 @@
     position: relative;  
     &.odd {
         background-color: #F7FAFF;        
-    }  
+    }
+    &:hover {
+        background-color: #EEF5FF;
+    }
 }
 
 .button-delete {
