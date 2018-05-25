@@ -18,7 +18,7 @@ import { ClusterProviderSettingsData } from '../../../shared/model/ClusterSpecCh
 export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  public providerSettingsData: ClusterProviderSettingsData;
+  public providerSettingsData: ClusterProviderSettingsData = { valid: false };
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService, private clusterService: ClusterService, private dialogRef: MatDialogRef<EditProviderSettingsComponent>) {}

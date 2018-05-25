@@ -1,4 +1,4 @@
-<div style="max-width: 400px; min-width: 400px;">
+<div style="max-width: 500px; min-width: 500px;">
   <mat-toolbar>
     Edit Provider Settings
     <button mat-icon-button mat-dialog-close>
@@ -21,8 +21,7 @@
     <button mat-dialog-close mat-raised-button>
       Close
     </button>
-<!--     <button mat-raised-button mat-dialog-close color="primary" [disabled]="!addNodeData.valid" (click)="addNode()" class="btn btn-primary"> -->
-    <button mat-raised-button mat-dialog-close color="primary" class="btn btn-primary" (click)="saveProviderSettings()">
+    <button mat-raised-button mat-dialog-close color="primary" class="btn btn-primary"  [disabled]="!providerSettingsData.valid" (click)="saveProviderSettings()">
       Save
     </button>
   </mat-dialog-actions>

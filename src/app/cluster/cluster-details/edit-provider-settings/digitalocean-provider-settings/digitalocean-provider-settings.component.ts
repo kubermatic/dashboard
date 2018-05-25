@@ -23,7 +23,7 @@ export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy 
 
   ngOnInit(): void {
     this.digitaloceanProviderSettingsForm = new FormGroup({
-      token: new FormControl('', [Validators.minLength(64), Validators.maxLength(64)]),
+      token: new FormControl('', [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
     this.subscriptions.push(this.digitaloceanProviderSettingsForm.valueChanges.subscribe(data => {
@@ -45,7 +45,8 @@ export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy 
     return {
       digitalocean: {
         token: this.digitaloceanProviderSettingsForm.controls.token.value,
-      }
+      },
+      valid: true
     };
   }
 }

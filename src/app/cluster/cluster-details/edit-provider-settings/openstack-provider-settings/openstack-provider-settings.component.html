@@ -1,8 +1,14 @@
 <form [formGroup]="openstackProviderSettingsForm" fxLayout="column">
   <mat-form-field fxFlex>
     <input matInput formControlName="username" type="text" placeholder="Username*:" title="Username" autocomplete="off">
+    <mat-error *ngIf="openstackProviderSettingsForm.controls.username.hasError('required')">
+      Username is <strong>required</strong>
+    </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
     <input matInput formControlName="password" type="password" placeholder="Password*:" title="Password" autocomplete="off">
+    <mat-error *ngIf="openstackProviderSettingsForm.controls.password.hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
   </mat-form-field>
 </form>

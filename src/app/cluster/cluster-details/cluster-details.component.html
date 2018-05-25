@@ -59,8 +59,8 @@
             <i class="fa fa-question-circle" aria-hidden="true"></i>
           </span>
         </div>
-        <div fxFlex="3%" class="button-delete">
-          <button mat-icon-button [matMenuTriggerFor]="menu">
+        <div fxFlex="3%" class="provider-menu">
+          <button mat-icon-button class="km-provider-menu-btn" [matMenuTriggerFor]="menu" *ngIf="!cluster.spec.cloud.bringyourown">
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">

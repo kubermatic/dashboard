@@ -4,6 +4,7 @@ export class ClusterProviderSettingsData {
   hetzner?: HetznerProviderSettings;
   openstack?: OpenstackProviderSettings;
   vsphere?: VSphereProviderSettings;
+  valid: boolean;
 }
 
 export class AWSProviderSettings {

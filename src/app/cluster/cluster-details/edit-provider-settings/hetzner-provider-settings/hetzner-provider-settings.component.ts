@@ -23,7 +23,7 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hetznerProviderSettingsForm = new FormGroup({
-      token: new FormControl('', [Validators.minLength(64), Validators.maxLength(64)]),
+      token: new FormControl('', [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
     this.subscriptions.push(this.hetznerProviderSettingsForm.valueChanges.subscribe(data => {
@@ -45,7 +45,8 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
     return {
       hetzner: {
         token: this.hetznerProviderSettingsForm.controls.token.value,
-      }
+      },
+      valid: true
     };
   }
 }

@@ -23,8 +23,8 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.openstackProviderSettingsForm = new FormGroup({
-      username: new FormControl(this.cluster.spec.cloud.openstack.username, [Validators.required]),
-      password: new FormControl(this.cluster.spec.cloud.openstack.password, [Validators.required]),
+      username: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
     });
 
     this.subscriptions.push(this.openstackProviderSettingsForm.valueChanges.subscribe(data => {
@@ -47,7 +47,8 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
       openstack: {
         password: this.openstackProviderSettingsForm.controls.password.value,
         username: this.openstackProviderSettingsForm.controls.username.value,
-      }
+      },
+      valid: true
     };
   }
 }

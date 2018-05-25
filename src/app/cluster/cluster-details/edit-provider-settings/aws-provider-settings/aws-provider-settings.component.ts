@@ -24,8 +24,8 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.awsProviderSettingsForm = new FormGroup({
-      accessKeyId: new FormControl(''),
-      secretAccessKey: new FormControl(''),
+      accessKeyId: new FormControl('', [Validators.required]),
+      secretAccessKey: new FormControl('', [Validators.required]),
     });
 
     this.subscriptions.push(this.awsProviderSettingsForm.valueChanges.subscribe(data => {
@@ -48,7 +48,8 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
       aws: {
         accessKeyId: this.awsProviderSettingsForm.controls.accessKeyId.value,
         secretAccessKey: this.awsProviderSettingsForm.controls.secretAccessKey.value,
-      }
+      },
+      valid: true
     };
   }
 
