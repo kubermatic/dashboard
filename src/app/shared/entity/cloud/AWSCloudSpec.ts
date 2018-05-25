@@ -1,8 +1,8 @@
 export class AWSCloudSpec {
-  accessKeyId: string;
-  secretAccessKey: string;
-  vpcId: string;
-  subnetId: string;
-  routeTableId: string;
-  securityGroup: string;
+  accessKeyId?: string;
+  secretAccessKey?: string;
+  vpcId?: string;
+  subnetId?: string;
+  routeTableId?: string;
+  securityGroup?: string;
 }

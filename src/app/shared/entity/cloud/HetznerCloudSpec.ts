@@ -1,3 +1,3 @@
 export class HetznerCloudSpec {
-  token: string;
+  token?: string;
 }
