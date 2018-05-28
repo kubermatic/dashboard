@@ -1,7 +1,7 @@
-<div class="km-upgrade-cluster">
+<div class="km-change-cluster-version">
 
   <mat-toolbar>
-    Upgrade Cluster
+    Change Version
     <button mat-icon-button mat-dialog-close>
       <i class="fa fa-times" aria-hidden="true"></i>
     </button>
@@ -9,14 +9,14 @@
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <mat-form-field>
-        <mat-select class="top-bottom-distance" [(ngModel)]="selectedVersion" placeholder="Upgradable version:">
+        <mat-select class="top-bottom-distance" [(ngModel)]="selectedVersion" placeholder="Versions:">
           <mat-option *ngFor="let version of possibleVersions" [value]="version">
             {{version}}
           </mat-option>
         </mat-select>
       </mat-form-field>
       <div class="top-bottom-distance">
-        <p>Please recreate your nodes, to upgrade them as well.</p>
+        <p>Please recreate your nodes, to update them as well.</p>
       </div>
     </div>
   </mat-dialog-content>
@@ -24,8 +24,8 @@
   <button mat-dialog-close mat-raised-button>
     Close
   </button>
-  <button mat-raised-button color="primary" (click)="upgrade()" [disabled]="!selectedVersion">
-    Upgrade
+  <button mat-raised-button color="primary" (click)="changeVersion()" [disabled]="!selectedVersion">
+    Change
   </button>
   </mat-dialog-actions>
 </div>

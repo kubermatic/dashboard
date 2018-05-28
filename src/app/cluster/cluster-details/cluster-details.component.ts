@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
-import { UpgradeClusterComponent } from './upgrade-cluster/upgrade-cluster.component';
+import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/combineLatest';
@@ -20,6 +20,7 @@ import { Subject } from 'rxjs/Subject';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { NotificationActions } from '../../redux/actions/notification.actions';
+import { lt, gt } from 'semver';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -36,7 +37,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public isClusterRunning: boolean;
   public clusterHealthClass: string;
   private clusterSubject: Subject<ClusterEntity>;
-  private upgradesList: string[] = [];
+  private versionsList: string[] = [];
+  private updatesAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
   private refreshInterval = 10000;
 
@@ -94,7 +96,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.api.getClusterUpgrades(cluster.metadata.name, seedDCName)
             .takeUntil(this.unsubscribe)
             .subscribe(upgrades => {
-              this.upgradesList = upgrades;
+              for (const i in upgrades) {
+                if (upgrades.hasOwnProperty(i)) {
+                  if (this.versionsList.indexOf(upgrades[i].version) < 0) {
+                    this.versionsList.push(upgrades[i].version);
+                  }
+                  if (lt(this.cluster.spec.version, upgrades[i].version)) {
+                    this.updatesAvailable = true;
+                  }
+                }
+              }
             });
         }
       });
@@ -210,11 +221,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.datacenter = this.datacenter;
   }
 
-  public upgradeClusterDialog(): void {
-    const modal = this.dialog.open(UpgradeClusterComponent);
+  public changeClusterVersionDialog(): void {
+    const modal = this.dialog.open(ChangeClusterVersionComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.possibleVersions = this.upgradesList;
+    modal.componentInstance.possibleVersions = this.versionsList;
     const sub = modal.afterClosed().subscribe(() => {
       this.reloadCluster(this.cluster.metadata.name, this.datacenter.metadata.name);
       sub.unsubscribe();

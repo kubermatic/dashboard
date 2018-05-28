@@ -6,18 +6,18 @@ import { ApiService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 
 @Component({
-  selector: 'kubermatic-upgrade-cluster',
-  templateUrl: './upgrade-cluster.component.html',
-  styleUrls: ['./upgrade-cluster.component.scss']
+  selector: 'kubermatic-change-cluster-version',
+  templateUrl: './change-cluster-version.component.html',
+  styleUrls: ['./change-cluster-version.component.scss']
 })
-export class UpgradeClusterComponent implements OnInit {
+export class ChangeClusterVersionComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   possibleVersions: string[];
   selectedVersion: string;
 
   constructor(private api: ApiService,
-              private dialogRef: MatDialogRef<UpgradeClusterComponent>) {
+              private dialogRef: MatDialogRef<ChangeClusterVersionComponent>) {
   }
 
   public ngOnInit() {
@@ -26,11 +26,11 @@ export class UpgradeClusterComponent implements OnInit {
     }
   }
 
-  upgrade(): void {
+  changeVersion(): void {
     this.cluster.spec.version = this.selectedVersion;
 
     this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(result => {
-      NotificationActions.success('Success', `Cluster is being upgraded`);
+      NotificationActions.success('Success', `Cluster Version is being changed`);
     });
 
     this.selectedVersion = null;
