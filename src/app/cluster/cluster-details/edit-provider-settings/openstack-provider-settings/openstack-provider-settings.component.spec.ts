@@ -53,6 +53,11 @@ describe('OpenstackProviderSettingsComponent', () => {
     component.cluster.spec.cloud.openstack = {
       password: '',
       username: '',
+      tenant: '',
+      domain: '',
+      network: '',
+      securityGroups: '',
+      floatingIpPool: '',
     };
     fixture.detectChanges();
   });

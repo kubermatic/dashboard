@@ -53,6 +53,10 @@ describe('AWSProviderSettingsComponent', () => {
     component.cluster.spec.cloud.aws = {
       accessKeyId: '',
       secretAccessKey: '',
+      vpcId: '',
+      subnetId: '',
+      routeTableId: '',
+      securityGroup: '',
     };
     fixture.detectChanges();
   });
