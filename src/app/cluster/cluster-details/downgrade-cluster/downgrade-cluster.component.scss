@@ -1,0 +1,20 @@
+.mat-toolbar {
+  border: none;
+  padding: 0;
+  position: relative;
+}
+
+.km-downgrade-cluster {
+    mat-select {
+        width: 100%;
+    }
+
+    .top-bottom-distance {
+        margin: 10px 0;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+    }
+}
+
+.mat-form-field {
+    width: 100%;
+}

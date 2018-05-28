@@ -1,0 +1,31 @@
+<div class="km-downgrade-cluster">
+
+  <mat-toolbar>
+    Downgrade Cluster
+    <button mat-icon-button mat-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </mat-toolbar>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+      <mat-form-field>
+        <mat-select class="top-bottom-distance" [(ngModel)]="selectedVersion" placeholder="Downgradable version:">
+          <mat-option *ngFor="let version of possibleVersions" [value]="version">
+            {{version}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div class="top-bottom-distance">
+        <p>Please recreate your nodes, to downgrade them as well.</p>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+  <button mat-dialog-close mat-raised-button>
+    Close
+  </button>
+  <button mat-raised-button color="primary" (click)="downgrade()" [disabled]="!selectedVersion">
+    Downgrade
+  </button>
+  </mat-dialog-actions>
+</div>

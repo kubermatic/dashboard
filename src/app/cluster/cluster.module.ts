@@ -5,6 +5,7 @@ import { ClusterItemComponent } from './cluster-list/cluster-item/cluster-item.c
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 import { AddNodeModalComponent } from './cluster-details/add-node-modal/add-node-modal.component';
 import { UpgradeClusterComponent } from './cluster-details/upgrade-cluster/upgrade-cluster.component';
+import { DowngradeClusterComponent } from './cluster-details/downgrade-cluster/downgrade-cluster.component';
 import { ClusterSecretsComponent } from './cluster-details/cluster-secrets/cluster-secrets.component';
 import { ClusterConnectComponent } from './cluster-details/cluster-connect/cluster-connect.component';
 import { ClusterDetailsComponent } from './cluster-details/cluster-details.component';
@@ -31,6 +32,7 @@ const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
   NodeDeleteConfirmationComponent,
   UpgradeClusterComponent,
+  DowngradeClusterComponent,
   AddNodeModalComponent,
   ClusterSecretsComponent,
   ClusterConnectComponent,
