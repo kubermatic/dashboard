@@ -7,10 +7,11 @@
   color: #0288d1;
 }
 
+// global
 .km-card-list-header {
   border: none;
   padding-bottom: 20px;
-  
+
   .mat-card-title {
     font-weight: 600;
     font-size: 18px;
@@ -24,6 +25,8 @@
   margin-top: 15px;
   margin-bottom: 50px;
 }
+
+// global cleanup
 
 .km-card-list-no-keys {
   padding-bottom: 20px;

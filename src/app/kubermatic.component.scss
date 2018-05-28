@@ -1,4 +1,6 @@
- kubermatic-root, mat-sidenav-container, .my-content {
+//  my-content? cleanup
+
+kubermatic-root, mat-sidenav-container, .my-content {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -8,9 +10,14 @@
   position: absolute;
 }
 
+
+
 mat-sidenav {
   padding-top: 45px;
 }
+
+
+
 
 .km-main .km-content{
   margin: 0 20px;
@@ -67,6 +74,8 @@ mat-sidenav {
     }
   }
 }
+
+// cleanup global
 
 /deep/.mat-checkbox-frame {
   border-color: #C1C9D4;

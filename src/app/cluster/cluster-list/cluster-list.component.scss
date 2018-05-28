@@ -1,5 +1,6 @@
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
+// global?
 .card {
   color: #333;
 
@@ -40,6 +41,7 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   height: 60px;
 }
 
+// global cleanup
 .km-no-cluster {
   text-align: center;
   font-size: 14px;
@@ -49,6 +51,7 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   }
 }
 
+// global dupicated
 .km-spinner {
   position: absolute;
   top: 0;
@@ -64,6 +67,7 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   width: auto;
 }
 
+// global mobile
 @media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
   .btn-text-default {
     display: none;

@@ -1,3 +1,4 @@
+// cleanup
 @import url('https://fonts.googleapis.com/css?family=Titillium+Web');
 
 .frontpage-bg {
@@ -10,11 +11,6 @@
   z-index: -1;
 }
 
-.mat-card {
-  max-width: 400px;
-  height: 120px;
-  z-index: 1;
-}
 
 .frontpage-content {
   margin-top: 15%;
@@ -45,4 +41,11 @@
       background-color: rgba(255, 255, 255, 0.9);
     }
   }
+}
+
+// global
+.mat-card {
+  max-width: 400px;
+  height: 120px;
+  z-index: 1;
 }

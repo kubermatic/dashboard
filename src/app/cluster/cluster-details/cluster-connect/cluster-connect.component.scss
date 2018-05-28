@@ -1,28 +1,36 @@
+
+// modal global cleanup
 button.close {
   position: absolute;
   right: 20px;
 }
 
+// cleanup
+
 .btn-right {
   float: right;
 }
 
+// modal global
 .mat-toolbar {
   border: none;
   padding: 0;
   position: relative;
 }
 
+// modal cleanup global
 .mat-dialog-content {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 
+// global=
 p {
   line-height: 22px;
 }
 
 
+// global
 .code-block {
   background-color: #F7FAFF;
   padding: 5px 15px;
@@ -31,6 +39,7 @@ p {
   font-family: "Menlo", monospace;
 }
 
+// cleanup
 .download {
   display: inline-block;
   margin: 0 5px 0 0;
@@ -40,10 +49,13 @@ p {
   background-repeat: no-repeat;
 }
 
+
+// cleanup global
 .km-button-link {
   margin-bottom: 20px;
 }
 
+// cleanup
 a.download-kubeconfig-btn {
   display: inline-block;
   vertical-align: middle;

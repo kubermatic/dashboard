@@ -1,3 +1,6 @@
+
+// global
+
 .card {
   color: #333;
   margin-bottom: 20px;
@@ -13,6 +16,8 @@
     }
   }
 }
+
+
 
 .km-card-list {
   margin-bottom: 20px;
@@ -104,6 +109,7 @@
   }
 }
 
+// cleanup
 .km-no-provider {
   text-align: center;
   font-size: 14px;
@@ -112,6 +118,23 @@
 
 .km-download-config {
   background-color: rgba(2, 136, 209, 0.12);
+}
+
+
+.connect-kubeconfig-btn {
+  a {
+    display: flex;
+    align-items: center;
+    width: auto;
+    height: 100%;
+    text-decoration: none;
+    color: white;
+    vertical-align: baseline !important;
+    padding: 0 16px;
+  }
+  a.disabled {
+    color: rgba(0, 0, 0, 0.38);
+  }
 }
 
 kubermatic-cluster-health-status {
@@ -183,6 +206,7 @@ kubermatic-cluster-health-status {
   background-repeat: no-repeat;
 }
 
+// global
 .statusRunning {
   background-color: #FFFFFF;
 }
@@ -195,22 +219,8 @@ kubermatic-cluster-health-status {
   background-color: #FFFBEB;
 }
 
-.connect-kubeconfig-btn {
-  a {
-    display: flex;
-    align-items: center;
-    width: auto;
-    height: 100%;
-    text-decoration: none;
-    color: white;
-    vertical-align: baseline !important;
-    padding: 0 16px;
-  }
-  a.disabled {
-    color: rgba(0, 0, 0, 0.38);
-  }
-}
 
+// cleanup
 a.download-kubeconfig-btn {
   display: inline-block;
   vertical-align: middle;
@@ -223,6 +233,7 @@ a.download-kubeconfig-btn {
   }
 }
 
+// global
 .iconArrowUp {
     display: inline-block;
     width: 12px;

@@ -1,3 +1,5 @@
+// global modal
+
 .dialog {
   width: 545px;
 }
@@ -29,6 +31,8 @@
   font-size: 20px;
 }
 
+// component
+
 .km-ssh-key-textarea {
   width: 100%;
 
@@ -40,9 +44,11 @@
   width: 100%;
 }
 
+
+// modal global?
 .mat-dialog-actions {
   justify-content: center;
-  
+
   button {
     font-size: 14px;
     font-weight: 600 !important;

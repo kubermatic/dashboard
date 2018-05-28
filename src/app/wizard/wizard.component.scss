@@ -1,3 +1,5 @@
+// cleanup global
+
 $wizard-box-size: 200px;
 $wizard-box-content-dc-logo-size: 125px;
 $wizard-box-content-location-flag-size: 48px;
@@ -115,6 +117,8 @@ $wizard-box-content-cloud-logo-size: 100px;
 
 
 // create cluster form fields
+
+// global?
 
 /deep/ .mat-input-wrapper {
     margin: 5px 0 0 0;

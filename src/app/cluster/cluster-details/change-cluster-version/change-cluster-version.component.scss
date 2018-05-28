@@ -1,20 +1,27 @@
+// only modal
 .mat-toolbar {
   border: none;
   padding: 0;
   position: relative;
 }
 
+
+
 .km-change-cluster-version {
+
+  // global
     mat-select {
         width: 100%;
     }
 
+  // cleanup
     .top-bottom-distance {
         margin: 10px 0;
         font-family: Roboto, "Helvetica Neue", sans-serif;
     }
 }
 
+// cleanup global
 .mat-form-field {
     width: 100%;
 }

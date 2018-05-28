@@ -1,3 +1,5 @@
+// global cleanup
+
 $wizard-box-content-dc-logo-size: 125px;
 $wizard-box-content-dc-margin-top: 0px;
 
@@ -32,6 +34,8 @@ $wizard-box-content-dc-margin-top: 0px;
   }
 }
 
+
+// local
 div.location {
   font-weight: 300;
   font-size: 12px;
@@ -43,11 +47,13 @@ div.location {
   text-align: center;
   margin-top: -8px;
 }
- 
+
 .flag-icon {
   font-size: 25px;
   margin-bottom: 5px;
 }
+
+
 
 /deep/ mat-button-toggle-group[group='datacenterGroup'] {
   background-color: transparent;
@@ -62,7 +68,7 @@ div.location {
     cursor: pointer;
     max-width: 90px;
     min-width: 90px;
-    margin-right: 15px; 
+    margin-right: 15px;
     margin-bottom: 15px;
 
     &:hover {

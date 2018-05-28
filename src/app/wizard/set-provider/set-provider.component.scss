@@ -1,3 +1,5 @@
+// global
+
 $wizard-box-content-cloud-margin-top: 50px;
 
 .mat-card-header {
@@ -33,11 +35,15 @@ $wizard-box-content-cloud-margin-top: 50px;
   }
 }
 
+
+
 .provider-fix {
   margin: 20px;
   display: inline-block !important;
 }
 
+
+// dupicated global
 /deep/ mat-button-toggle-group[group='providerGroup'] {
   background-color: transparent;
   box-shadow: none !important;
