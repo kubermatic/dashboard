@@ -24,8 +24,8 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.awsProviderSettingsForm = new FormGroup({
-      accessKeyId: new FormControl('', [Validators.required]),
-      secretAccessKey: new FormControl('', [Validators.required]),
+      accessKeyId: new FormControl(this.cluster.spec.cloud.aws.accessKeyId, [Validators.required]),
+      secretAccessKey: new FormControl(this.cluster.spec.cloud.aws.secretAccessKey, [Validators.required]),
     });
 
     this.subscriptions.push(this.awsProviderSettingsForm.valueChanges.subscribe(data => {
@@ -48,6 +48,10 @@ export class AWSProviderSettingsComponent implements OnInit, OnDestroy {
       aws: {
         accessKeyId: this.awsProviderSettingsForm.controls.accessKeyId.value,
         secretAccessKey: this.awsProviderSettingsForm.controls.secretAccessKey.value,
+        vpcId: this.cluster.spec.cloud.aws.vpcId,
+        subnetId: this.cluster.spec.cloud.aws.subnetId,
+        routeTableId: this.cluster.spec.cloud.aws.routeTableId,
+        securityGroup: this.cluster.spec.cloud.aws.securityGroup,
       },
       valid: true
     };

@@ -40,18 +40,15 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
 
   public saveProviderSettings() {
     if (!!this.cluster.spec.cloud.aws) {
-      this.cluster.spec.cloud.aws.accessKeyId = this.providerSettingsData.aws.accessKeyId;
-      this.cluster.spec.cloud.aws.secretAccessKey = this.providerSettingsData.aws.secretAccessKey;
+      this.cluster.spec.cloud.aws = this.providerSettingsData.aws;
     } else if (!!this.cluster.spec.cloud.digitalocean) {
-      this.cluster.spec.cloud.digitalocean.token = this.providerSettingsData.digitalocean.token;
+      this.cluster.spec.cloud.digitalocean = this.providerSettingsData.digitalocean;
     } else if (!!this.cluster.spec.cloud.hetzner) {
-      this.cluster.spec.cloud.hetzner.token = this.providerSettingsData.hetzner.token;
+      this.cluster.spec.cloud.hetzner = this.providerSettingsData.hetzner;
     } else if (!!this.cluster.spec.cloud.openstack) {
-      this.cluster.spec.cloud.openstack.password = this.providerSettingsData.openstack.password;
-      this.cluster.spec.cloud.openstack.username = this.providerSettingsData.openstack.username;
+      this.cluster.spec.cloud.openstack = this.providerSettingsData.openstack;
     } else if (!!this.cluster.spec.cloud.vsphere) {
-      this.cluster.spec.cloud.vsphere.password = this.providerSettingsData.vsphere.password;
-      this.cluster.spec.cloud.vsphere.username = this.providerSettingsData.vsphere.username;
+      this.cluster.spec.cloud.vsphere = this.providerSettingsData.vsphere;
     }
 
     this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(res => {

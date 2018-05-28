@@ -23,7 +23,7 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.hetznerProviderSettingsForm = new FormGroup({
-      token: new FormControl('', [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
+      token: new FormControl(this.cluster.spec.cloud.hetzner.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
     this.subscriptions.push(this.hetznerProviderSettingsForm.valueChanges.subscribe(data => {

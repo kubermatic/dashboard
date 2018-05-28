@@ -1,3 +1,3 @@
 export class DigitaloceanCloudSpec {
-  token?: string;
+  token: string;
 }

@@ -23,8 +23,8 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.vsphereProviderSettingsForm = new FormGroup({
-      username: new FormControl('', [Validators.required]),
-      password: new FormControl('', [Validators.required]),
+      username: new FormControl(this.cluster.spec.cloud.vsphere.username, [Validators.required]),
+      password: new FormControl(this.cluster.spec.cloud.vsphere.password, [Validators.required]),
     });
 
     this.subscriptions.push(this.vsphereProviderSettingsForm.valueChanges.subscribe(data => {
