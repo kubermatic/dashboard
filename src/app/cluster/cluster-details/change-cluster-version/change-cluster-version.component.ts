@@ -6,18 +6,18 @@ import { ApiService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 
 @Component({
-  selector: 'kubermatic-downgrade-cluster',
-  templateUrl: './downgrade-cluster.component.html',
-  styleUrls: ['./downgrade-cluster.component.scss']
+  selector: 'kubermatic-change-cluster-version',
+  templateUrl: './change-cluster-version.component.html',
+  styleUrls: ['./change-cluster-version.component.scss']
 })
-export class DowngradeClusterComponent implements OnInit {
+export class ChangeClusterVersionComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   possibleVersions: string[];
   selectedVersion: string;
 
   constructor(private api: ApiService,
-              private dialogRef: MatDialogRef<DowngradeClusterComponent>) {
+              private dialogRef: MatDialogRef<ChangeClusterVersionComponent>) {
   }
 
   public ngOnInit() {
@@ -26,11 +26,11 @@ export class DowngradeClusterComponent implements OnInit {
     }
   }
 
-  downgrade(): void {
+  changeVersion(): void {
     this.cluster.spec.version = this.selectedVersion;
 
     this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(result => {
-      NotificationActions.success('Success', `Cluster is being downgraded`);
+      NotificationActions.success('Success', `Cluster Version is being changed`);
     });
 
     this.selectedVersion = null;

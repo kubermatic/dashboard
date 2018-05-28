@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { DowngradeClusterComponent } from './downgrade-cluster.component';
+import { ChangeClusterVersionComponent } from './change-cluster-version.component';
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
 import { ApiService } from '../../../core/services/api/api.service';
 import { asyncData } from '../../../testing/services/api-mock.service';
@@ -20,9 +20,9 @@ const modules: any[] = [
   SharedModule
 ];
 
-describe('DowngradeClusterComponent', () => {
-  let fixture: ComponentFixture<DowngradeClusterComponent>;
-  let component: DowngradeClusterComponent;
+describe('ChangeClusterVersionComponent', () => {
+  let fixture: ComponentFixture<ChangeClusterVersionComponent>;
+  let component: ChangeClusterVersionComponent;
   let editClusterSpy: Spy;
 
   beforeEach(async(() => {
@@ -34,7 +34,7 @@ describe('DowngradeClusterComponent', () => {
         ...modules,
       ],
       declarations: [
-        DowngradeClusterComponent
+        ChangeClusterVersionComponent
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { clusterName: 'clustername' } },
@@ -45,11 +45,11 @@ describe('DowngradeClusterComponent', () => {
   }));
 
   beforeEach(async(() => {
-    fixture = TestBed.createComponent(DowngradeClusterComponent);
+    fixture = TestBed.createComponent(ChangeClusterVersionComponent);
     component = fixture.componentInstance;
   }));
 
-  it('should create the downgrade cluster component', async(() => {
+  it('should create the change cluster version component', async(() => {
     expect(component).toBeTruthy();
   }));
 
@@ -60,7 +60,7 @@ describe('DowngradeClusterComponent', () => {
     component.possibleVersions = ['1.9.5'];
 
     fixture.detectChanges();
-    component.downgrade();
+    component.changeVersion();
     tick();
     expect(editClusterSpy.and.callThrough()).toHaveBeenCalledTimes(1);
   }));
