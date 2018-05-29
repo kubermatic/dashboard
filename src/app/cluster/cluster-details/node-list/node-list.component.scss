@@ -45,10 +45,11 @@
 
 .km-conditionsMessage {
   border-top: 1px solid rgba(227,232,236, 0.3);
-  margin-top: 10px;
   margin-bottom: 10px;
+  margin-top: -20px;
+  line-height: 40px;
   p {
-    margin: 10px auto 0;
+    margin: 0 auto;
     color: #ff5454;
   }
 }
@@ -142,4 +143,8 @@ i.fa-info-circle {
   .fa-times {
     color: #ff5454;
   }
+}
+
+.km-mat-card-code-block {
+  margin-top: 20px;
 }
