@@ -14,6 +14,11 @@
         <div fxFlex="80%">{{ cluster.spec.humanReadableName }}</div>
       </div>
 
+      <div fxLayout class="km-card-list-content">
+        <div fxFlex="20%" class="km-card-list-key">Master Version</div>
+        <div fxFlex="80%">{{ cluster.spec.version }}</div>
+      </div>
+
       <div fxLayout class="km-card-list-content provider">
         <div fxFlex="20%" class="km-card-list-key">Provider</div>
         <div fxFlex="80%">

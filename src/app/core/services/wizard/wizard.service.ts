@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { ClusterDatacenterForm, ClusterNameForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView } from '../../../shared/model/ClusterForm';
+import { ClusterDatacenterForm, ClusterNameForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView, ClusterSpecForm } from '../../../shared/model/ClusterForm';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 
@@ -27,6 +27,9 @@ export class WizardService {
   // Cluster settings form view (hide optional fields or not)
   private _clusterSettingsFormView = new Subject<ClusterSettingsFormView>();
   clusterSettingsFormViewChanged$ = this._clusterSettingsFormView.asObservable();
+  // Cluster spec - form data
+  private _clusterSpecForm = new Subject<ClusterSpecForm>();
+  clusterSpecFormChanges$ = this._clusterSpecForm.asObservable();
 
   changeCluster(data: ClusterEntity) {
     this._cluster.next(data);
@@ -54,5 +57,9 @@ export class WizardService {
 
   changeSettingsFormView(data: ClusterSettingsFormView) {
     this._clusterSettingsFormView.next(data);
+  }
+
+  changeClusterSpec(data: ClusterSpecForm) {
+    this._clusterSpecForm.next(data);
   }
 }

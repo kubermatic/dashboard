@@ -29,3 +29,7 @@ export class ClusterProviderSettingsForm {
 export class ClusterSettingsFormView {
   hideOptional: boolean;
 }
+
+export class ClusterSpecForm {
+  version: string;
+}

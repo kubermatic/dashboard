@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WizardService } from '../core/services/wizard/wizard.service';
-import { ClusterDatacenterForm, ClusterFormData, ClusterNameForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
+import { ClusterDatacenterForm, ClusterFormData, ClusterNameForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSpecForm } from '../shared/model/ClusterForm';
 import { Subscription } from 'rxjs/Subscription';
 import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
@@ -26,6 +26,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   public cluster: ClusterEntity;
   public node: NodeEntity;
   public clusterNameFormData: ClusterNameForm = { valid: false, name: '' };
+  public clusterSpecFormData: ClusterSpecForm = { version: '' };
   public clusterFormData: ClusterFormData = { valid: false };
   public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
   public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
@@ -75,6 +76,13 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.cluster.spec.humanReadableName = this.clusterNameFormData.name;
         this.wizardService.changeCluster(this.cluster);
       }
+    }));
+
+    // When the version got changed, update the cluster
+    this.subscriptions.push(this.wizardService.clusterSpecFormChanges$.subscribe(data => {
+      this.clusterSpecFormData = data;
+      this.cluster.spec.version = this.clusterSpecFormData.version;
+      this.wizardService.changeCluster(this.cluster);
     }));
 
     // When the provider got changed, update the cluster
