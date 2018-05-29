@@ -51,7 +51,7 @@
   <mat-card class="km-card-list providerWrapper">
     <mat-card-header class="km-card-list-header providerinfo" >
       <mat-card-title fxLayout>
-        <div fxFlex="45%">Provider</div>
+        <div fxFlex="42%">Provider</div>
         <div fxFlex="30%">Node Region</div>
         <div fxFlex="25%">
           SSH keys
@@ -59,10 +59,21 @@
             <i class="fa fa-question-circle" aria-hidden="true"></i>
           </span>
         </div>
+        <div fxFlex="3%" class="provider-menu">
+          <button mat-icon-button class="km-provider-menu-btn" [matMenuTriggerFor]="menu" *ngIf="!cluster.spec.cloud.bringyourown">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editProviderSettings()">
+              <mat-icon>edit</mat-icon>
+              <span>Edit Settings</span>
+            </button>
+          </mat-menu>
+        </div>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content class="km-card-list-content" fxLayout>
-      <div fxFlex="45%" fxLayoutAlign="left center">
+      <div fxFlex="42%" fxLayoutAlign="left center">
         <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="km-provider-logo" alt="Cluster Icon" />
       </div>
       <div fxFlex="30%" class="km-provider-region" >
@@ -95,7 +106,7 @@
                 <span class="iconArrowUp"></span>
               </div>
             </div>
-
+            <div fxFlex="3%"></div>
           </ul>
           <ng-container *ngSwitchCase="false">no SSH key selected</ng-container>
         </ng-container>
