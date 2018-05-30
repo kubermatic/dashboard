@@ -94,22 +94,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.clusterSubject
       .takeUntil(this.unsubscribe)
       .subscribe(cluster => {
-        if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController) {
-          this.api.getClusterUpgrades(cluster.metadata.name, seedDCName)
-            .takeUntil(this.unsubscribe)
-            .subscribe(upgrades => {
-              for (const i in upgrades) {
-                if (upgrades.hasOwnProperty(i)) {
-                  if (this.versionsList.indexOf(upgrades[i].version) < 0) {
-                    this.versionsList.push(upgrades[i].version);
-                  }
-                  if (lt(this.cluster.spec.version, upgrades[i].version)) {
-                    this.updatesAvailable = true;
-                  }
-                }
-              }
-            });
-        }
+        this.reloadVersions();
       });
     // Nodes
     this.clusterSubject
@@ -180,6 +165,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.cluster = res;
         this.clusterSubject.next(res);
+        this.reloadVersions();
       });
   }
 
@@ -191,6 +177,27 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.nodes = nodes;
         });
     }
+  }
+
+  public reloadVersions() {
+    if (this.cluster && this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController) {
+      this.api.getClusterUpgrades(this.cluster.metadata.name, this.datacenter.metadata.name)
+        .takeUntil(this.unsubscribe)
+        .subscribe(upgrades => {
+          this.versionsList = [];
+          this.updatesAvailable = false;
+          for (const i in upgrades) {
+            if (upgrades.hasOwnProperty(i)) {
+              if (this.versionsList.indexOf(upgrades[i].version) < 0) {
+                this.versionsList.push(upgrades[i].version);
+              }
+              if (lt(this.cluster.spec.version, upgrades[i].version)) {
+                this.updatesAvailable = true;
+              }
+            }
+          }
+        });
+      }
   }
 
   public addNode(): void {
