@@ -7,8 +7,8 @@ import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity'
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',
-  templateUrl: 'set-cluster.component.html',
-  styleUrls: ['set-cluster.component.scss']
+  templateUrl: 'set-cluster-spec.component.html',
+  styleUrls: ['set-cluster-spec.component.scss']
 })
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;

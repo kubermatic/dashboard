@@ -3,7 +3,7 @@
        fxLayout.sm="column"
        fxLayout.xs="column"
        fxLayoutGap="20px">
-  <mat-card fxFlex>
+  <mat-card class="set-cluster-spec" fxFlex>
     <mat-card-header>
       <mat-card-title>
         <h4>Name your Cluster</h4>
@@ -24,10 +24,10 @@
       </form>
     </mat-card-content>
   </mat-card>
-  <mat-card fxFlex>
+  <mat-card class="set-cluster-spec" fxFlex>
     <mat-card-header>
       <mat-card-title>
-        <h4>Master Version</h4>
+        <h4>Cluster Specifications</h4>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
@@ -38,6 +38,7 @@
                 {{ version.version }}
               </mat-option>
           </mat-select>
+          <mat-hint>If not set, the default version will be used.</mat-hint>
         </mat-form-field>
       </form>
     </mat-card-content>

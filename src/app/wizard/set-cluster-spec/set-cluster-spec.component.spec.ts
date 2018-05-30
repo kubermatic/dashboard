@@ -2,7 +2,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SetClusterSpecComponent } from './set-cluster.component';
+import { SetClusterSpecComponent } from './set-cluster-spec.component';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClusterNameGeneratorMock } from '../../testing/services/name-generator-mock.service';
@@ -62,7 +62,7 @@ describe('SetClusterSpecComponent', () => {
     nameGenerator = fixture.debugElement.injector.get(ClusterNameGenerator);
   });
 
-  it('should create the set-cluster-name cmp', () => {
+  it('should create the set-cluster-spec cmp', () => {
     expect(component).toBeTruthy();
   });
 

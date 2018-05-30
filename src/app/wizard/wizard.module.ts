@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { WizardComponent } from './wizard.component';
 import { ProgressComponent } from './progress/progress.component';
-import { SetClusterSpecComponent } from './set-cluster/set-cluster.component';
+import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SetProviderComponent } from './set-provider/set-provider.component';
 import { SetSettingsComponent } from './set-settings/set-settings.component';

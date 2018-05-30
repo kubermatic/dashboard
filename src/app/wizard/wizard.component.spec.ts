@@ -26,7 +26,7 @@ import { BringyourownClusterSettingsComponent } from './set-settings/provider-se
 import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aws/aws.component';
 import { AwsAddNodeComponent } from '../add-node/aws-add-node/aws-add-node.component';
 import { OpenstackClusterSettingsComponent } from './set-settings/provider-settings/openstack/openstack.component';
-import { SetClusterSpecComponent } from './set-cluster/set-cluster.component';
+import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
 import { SetProviderComponent } from './set-provider/set-provider.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SummaryComponent } from './summary/summary.component';
