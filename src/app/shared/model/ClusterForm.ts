@@ -6,8 +6,9 @@ export class ClusterFormData {
   valid: boolean;
 }
 
-export class ClusterNameForm {
+export class ClusterSpecForm {
   name: string;
+  version: string;
   valid: boolean;
 }
 
@@ -28,8 +29,4 @@ export class ClusterProviderSettingsForm {
 
 export class ClusterSettingsFormView {
   hideOptional: boolean;
-}
-
-export class ClusterSpecForm {
-  version: string;
 }

@@ -11,10 +11,10 @@
     </mat-card-header>
     <mat-card-content>
       <p>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember</p>
-      <form [formGroup]="clusterNameForm" fxLayout="column">
+      <form [formGroup]="clusterSpecForm" fxLayout="column">
         <mat-form-field fxFlex>
           <input id="name" matInput formControlName="name" type="text" placeholder="Enter a cluster name" title="name" autocomplete="off">
-          <mat-error *ngIf="clusterNameForm.controls.name.hasError('required')">
+          <mat-error *ngIf="clusterSpecForm.controls.name.hasError('required')">
             Name is <strong>required</strong>
           </mat-error>
         </mat-form-field>
@@ -38,8 +38,7 @@
                 {{ version.version }}
               </mat-option>
           </mat-select>
-<!--           <input id="version" matInput formControlName="version" type="text" placeholder="Master Version" title="version" autocomplete="off">
- -->        </mat-form-field>
+        </mat-form-field>
       </form>
     </mat-card-content>
   </mat-card>

@@ -6,13 +6,12 @@ import { Subscription } from 'rxjs/Subscription';
 import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity';
 
 @Component({
-  selector: 'kubermatic-set-cluster-name',
-  templateUrl: 'set-cluster-name.component.html',
-  styleUrls: ['set-cluster-name.component.scss']
+  selector: 'kubermatic-set-cluster-spec',
+  templateUrl: 'set-cluster.component.html',
+  styleUrls: ['set-cluster.component.scss']
 })
-export class SetClusterNameComponent implements OnInit, OnDestroy {
+export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
-  public clusterNameForm: FormGroup;
   public clusterSpecForm: FormGroup;
   public masterVersions: MasterVersion[] = [];
   private subscriptions: Subscription[] = [];
@@ -20,24 +19,16 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
   constructor(private nameGenerator: ClusterNameGenerator, private api: ApiService, private wizardService: WizardService) { }
 
   ngOnInit() {
-    this.clusterNameForm = new FormGroup({
-      name: new FormControl(this.cluster.spec.humanReadableName, [Validators.required, Validators.minLength(5)]),
-    });
-
     this.clusterSpecForm = new FormGroup({
+      name: new FormControl(this.cluster.spec.humanReadableName, [Validators.required, Validators.minLength(5)]),
       version: new FormControl(this.cluster.spec.version),
     });
 
-    this.subscriptions.push(this.clusterNameForm.valueChanges.subscribe(data => {
-      this.wizardService.changeClusterName({
-        name: this.clusterNameForm.controls.name.value,
-        valid: this.clusterNameForm.valid,
-      });
-    }));
-
     this.subscriptions.push(this.clusterSpecForm.valueChanges.subscribe(data => {
       this.wizardService.changeClusterSpec({
+        name: this.clusterSpecForm.controls.name.value,
         version: this.clusterSpecForm.controls.version.value,
+        valid: this.clusterSpecForm.valid,
       });
     }));
 
@@ -53,7 +44,7 @@ export class SetClusterNameComponent implements OnInit, OnDestroy {
   }
 
   public generateName() {
-    this.clusterNameForm.patchValue({ name: this.nameGenerator.generateName() });
+    this.clusterSpecForm.patchValue({ name: this.nameGenerator.generateName() });
   }
 
   loadMasterVersions() {

@@ -12,6 +12,7 @@ import { asyncData } from '../testing/services/api-mock.service';
 import { MatTabsModule, MatButtonToggleModule, MatDialog } from '@angular/material';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
+import { masterVersionsFake } from '../testing/fake-data/cluster-spec.fake';
 import { ProgressComponent } from './progress/progress.component';
 import { SetSettingsComponent } from './set-settings/set-settings.component';
 import { AddNodeComponent } from '../add-node/add-node.component';
@@ -25,7 +26,7 @@ import { BringyourownClusterSettingsComponent } from './set-settings/provider-se
 import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aws/aws.component';
 import { AwsAddNodeComponent } from '../add-node/aws-add-node/aws-add-node.component';
 import { OpenstackClusterSettingsComponent } from './set-settings/provider-settings/openstack/openstack.component';
-import { SetClusterNameComponent } from './set-cluster-name/set-cluster-name.component';
+import { SetClusterSpecComponent } from './set-cluster/set-cluster.component';
 import { SetProviderComponent } from './set-provider/set-provider.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -45,11 +46,13 @@ describe('WizardComponent', () => {
   let router: Router;
   let createClusterSpy: Spy;
   let getClusterSpy: Spy;
+  let getMasterVersionsSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster', 'getMasterVersions']);
     createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
     getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake));
 
     TestBed.configureTestingModule({
       imports: [
@@ -80,7 +83,7 @@ describe('WizardComponent', () => {
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
-        SetClusterNameComponent,
+        SetClusterSpecComponent,
         SetProviderComponent,
         SetDatacenterComponent,
         SummaryComponent,

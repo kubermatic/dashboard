@@ -2,11 +2,14 @@ import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SetClusterNameComponent } from './set-cluster-name.component';
+import { SetClusterSpecComponent } from './set-cluster.component';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClusterNameGeneratorMock } from '../../testing/services/name-generator-mock.service';
-import { WizardService } from '../../core/services/wizard/wizard.service';
+import { asyncData } from '../../testing/services/api-mock.service';
+import { ApiService, WizardService } from '../../core/services';
+import { masterVersionsFake } from '../../testing/fake-data/cluster-spec.fake';
+import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -15,28 +18,33 @@ const modules: any[] = [
   SharedModule
 ];
 
-describe('SetClusterNameComponent', () => {
-  let fixture: ComponentFixture<SetClusterNameComponent>;
-  let component: SetClusterNameComponent;
+describe('SetClusterSpecComponent', () => {
+  let fixture: ComponentFixture<SetClusterSpecComponent>;
+  let component: SetClusterSpecComponent;
   let nameGenerator: ClusterNameGenerator;
+  let getMasterVersionsSpy: Spy;
 
   beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getMasterVersions']);
+    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake));
+
     TestBed.configureTestingModule({
       imports: [
         ...modules,
       ],
       declarations: [
-        SetClusterNameComponent
+        SetClusterSpecComponent
       ],
       providers: [
         WizardService,
+        { provide: ApiService, useValue: apiMock },
         { provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock },
       ],
     }).compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SetClusterNameComponent);
+    fixture = TestBed.createComponent(SetClusterSpecComponent);
     component = fixture.componentInstance;
     component.cluster = {
       metadata: {},
@@ -59,17 +67,17 @@ describe('SetClusterNameComponent', () => {
   });
 
   it('form invalid after creating', () => {
-    expect(component.clusterNameForm.valid).toBeFalsy();
+    expect(component.clusterSpecForm.valid).toBeFalsy();
   });
 
   it('name field validity', () => {
-    const name = component.clusterNameForm.controls.name;
+    const name = component.clusterSpecForm.controls.name;
     expect(name.hasError('required')).toBeTruthy('name field has required error');
 
     name.setValue('test-name');
     expect(name.hasError('required')).toBeFalsy('name field has no required error');
 
-    expect(component.clusterNameForm.valid).toBeTruthy('form is valid');
+    expect(component.clusterSpecForm.valid).toBeTruthy('form is valid');
   });
 
   it('should call generateName method', () => {
@@ -83,7 +91,7 @@ describe('SetClusterNameComponent', () => {
     const nameElement = fixture.debugElement.query(By.css('#name')).nativeElement;
 
     expect(spyGenerateName.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(component.clusterNameForm.controls['name'].value).toBe(generatedName, 'should patch value');
+    expect(component.clusterSpecForm.controls['name'].value).toBe(generatedName, 'should patch value');
     expect(nameElement.value).toBe(generatedName, 'should display value in template');
   });
 });
