@@ -152,3 +152,8 @@ export class SSHKeyPair {
   privateKey: string;
   publicKey: string;
 }
+
+export class MasterVersion {
+  version: string;
+  allowedNodeVersions: string[];
+}

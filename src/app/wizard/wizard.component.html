@@ -1,8 +1,8 @@
 <kubermatic-progress [steps]="steps" [currentStepIndex]="currentStepIndex" [currentStep]="currentStep"></kubermatic-progress>
 
 <mat-card>
-  <!-- Cluster Name -->
-  <kubermatic-set-cluster-name [cluster]="cluster" *ngIf="currentStep.name === 'set-name'"></kubermatic-set-cluster-name>
+  <!-- Cluster Cluster Spec -->
+  <kubermatic-set-cluster-spec [cluster]="cluster" *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
 
   <!-- Cluster Provider -->
   <kubermatic-set-provider [cluster]="cluster" *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
@@ -11,7 +11,7 @@
   <kubermatic-set-datacenter [cluster]="cluster" *ngIf="currentStep.name === 'set-datacenter'"></kubermatic-set-datacenter>
 
   <!-- Provider Settings -->
-  <kubermatic-set-settings [cluster]="cluster" [clusterSSHKeys]="clusterSSHKeys" [nodeData]="addNodeData " *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
+  <kubermatic-set-settings [cluster]="cluster" [clusterSSHKeys]="clusterSSHKeys" [nodeData]="addNodeData" *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
 
   <!-- Provider Summary -->
   <kubermatic-summary *ngIf="currentStep.name === 'summary'" [clusterSSHKeys]="clusterSSHKeys"

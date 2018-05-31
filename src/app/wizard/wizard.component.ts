@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WizardService } from '../core/services/wizard/wizard.service';
-import { ClusterDatacenterForm, ClusterFormData, ClusterNameForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
+import { ClusterDatacenterForm, ClusterFormData, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
 import { Subscription } from 'rxjs/Subscription';
 import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
@@ -25,7 +25,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   public currentStepIndex: number;
   public cluster: ClusterEntity;
   public node: NodeEntity;
-  public clusterNameFormData: ClusterNameForm = { valid: false, name: '' };
+  public clusterSpecFormData: ClusterSpecForm = { valid: false, name: '', version: '' };
   public clusterFormData: ClusterFormData = { valid: false };
   public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
   public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
@@ -68,11 +68,12 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // When the name got changed, update the cluster
-    this.subscriptions.push(this.wizardService.clusterNameFormChanges$.subscribe(data => {
-      this.clusterNameFormData = data;
-      if (this.clusterNameFormData.valid) {
-        this.cluster.spec.humanReadableName = this.clusterNameFormData.name;
+    // When the cluster spec got changed, update the cluster
+    this.subscriptions.push(this.wizardService.clusterSpecFormChanges$.subscribe(data => {
+      this.clusterSpecFormData = data;
+      if (this.clusterSpecFormData.valid) {
+        this.cluster.spec.humanReadableName = this.clusterSpecFormData.name;
+        this.cluster.spec.version = this.clusterSpecFormData.version;
         this.wizardService.changeCluster(this.cluster);
       }
     }));
@@ -179,7 +180,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   updateSteps(): void {
-    const setNameStep: Step = { name: 'set-name', description: 'Name', valid: () => this.clusterNameFormData.valid };
+    const setClusterSpecStep: Step = { name: 'set-cluster-spec', description: 'Cluster', valid: () => this.clusterSpecFormData.valid };
     const setProviderStep: Step = { name: 'set-provider', description: 'Provider', valid: () => this.clusterProviderFormData.valid };
     const setDatacenterStep: Step = { name: 'set-datacenter', description: 'Datacenter', valid: () => this.clusterDatacenterFormData.valid };
     const setProviderSettingsStep: Step = { name: 'set-provider-settings', description: 'Settings', valid: () => this.clusterProviderSettingsFormData.valid && this.addNodeData.valid };
@@ -188,14 +189,14 @@ export class WizardComponent implements OnInit, OnDestroy {
     const steps: Step[] = [];
     if (this.clusterProviderFormData.provider === NodeProvider.BRINGYOUROWN) {
       this.steps = [
-        setNameStep,
+        setClusterSpecStep,
         setProviderStep,
         setDatacenterStep,
         summary,
       ];
     } else {
       this.steps = [
-        setNameStep,
+        setClusterSpecStep,
         setProviderStep,
         setDatacenterStep,
         setProviderSettingsStep,

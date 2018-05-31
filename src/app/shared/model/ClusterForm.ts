@@ -6,8 +6,9 @@ export class ClusterFormData {
   valid: boolean;
 }
 
-export class ClusterNameForm {
+export class ClusterSpecForm {
   name: string;
+  version: string;
   valid: boolean;
 }
 
