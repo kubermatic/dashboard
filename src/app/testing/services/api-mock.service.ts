@@ -2,7 +2,8 @@ import { nodesFake } from './../fake-data/node.fake';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { fakeSSHKeys } from './../fake-data/sshkey.fake';
 import { fakeClusters, fakeDigitaloceanCluster } from './../fake-data/cluster.fake';
-import { ClusterEntity } from './../../shared/entity/ClusterEntity';
+import { masterVersionsFake } from './../fake-data/cluster-spec.fake';
+import { ClusterEntity, MasterVersion } from './../../shared/entity/ClusterEntity';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
@@ -15,6 +16,7 @@ export class ApiMockService {
   public clusters: ClusterEntity[] = fakeClusters;
   public sshKeys: SSHKeyEntity[] = fakeSSHKeys;
   public nodes: NodeEntity[] = nodesFake;
+  public masterVersions: MasterVersion[] = masterVersionsFake;
 
   constructor() {
   }
@@ -65,6 +67,10 @@ export class ApiMockService {
 
   public addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
     return Observable.of(null);
+  }
+
+  getMasterVersions(): Observable<MasterVersion[]> {
+    return Observable.of(this.masterVersions);
   }
 }
 

@@ -1,0 +1,36 @@
+ .mat-card-header {
+  margin-bottom: 10px;
+}
+
+.set-cluster-spec {
+  padding: 0 24px 24px 24px;
+}
+
+.mat-card-content {
+  .mat-input-placeholder-wrapper .mat-input-placeholder {
+    color: #BDC6D1;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  p {
+    color: #BDC6D1;
+    font-size: 12px;
+    margin: 0 0 10px;
+  }
+  .generate-name-btn {
+    margin-top: 30px;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    color: #0288D1;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+    &:hover {
+      color: #0288D1;
+    }
+  }
+}

@@ -5,7 +5,7 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { Auth } from '../../../core/services/auth/auth.service';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, MasterVersion } from '../../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
@@ -105,5 +105,10 @@ export class ApiService {
 
   getKubeconfigURL(dc: string, cluster: string): string {
     return `${environment.restRootV3}/dc/${dc}/cluster/${cluster}/kubeconfig?token=${this.token}`;
+  }
+
+  getMasterVersions(): Observable<MasterVersion[]> {
+    const url = `${this.restRoot}/versions`;
+    return this.http.get<MasterVersion[]>(url, { headers: this.headers });
   }
 }
