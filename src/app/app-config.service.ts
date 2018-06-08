@@ -3,6 +3,7 @@ import { HttpClient, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@
 import { Observable } from 'rxjs/Observable';
 import { Config } from './shared/model/Config';
 import { NotificationActions } from './redux/actions/notification.actions';
+import { environment } from '../environments/environment';
 
 @Injectable()
 export class AppConfigService {
@@ -16,11 +17,12 @@ export class AppConfigService {
   }
 
   loadAppConfig() {
+    const jsonfile = '../assets/config/appConfig.' + environment.name + '.json';
     setTimeout(() => {
-      return this.http.get('../assets/config/appConfig.json').toPromise().then(resp => {
+      return this.http.get(jsonfile).toPromise().then(resp => {
         this.appConfig = <Config>resp;
       }).catch(error => {
-          NotificationActions.error('Error', `Could not read configuration file`);
+        NotificationActions.error('Error', `Could not read configuration file`);
       });
     });
   }
