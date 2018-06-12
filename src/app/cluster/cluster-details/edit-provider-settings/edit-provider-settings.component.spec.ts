@@ -7,6 +7,7 @@ import { DigitaloceanProviderSettingsComponent } from './digitalocean-provider-s
 import { HetznerProviderSettingsComponent } from './hetzner-provider-settings/hetzner-provider-settings.component';
 import { OpenstackProviderSettingsComponent } from './openstack-provider-settings/openstack-provider-settings.component';
 import { VSphereProviderSettingsComponent } from './vsphere-provider-settings/vsphere-provider-settings.component';
+import { AzureProviderSettingsComponent } from './azure-provider-settings/azure-provider-settings.component';
 import { MatDialogRef } from '@angular/material';
 import { MatDialogRefMock } from '../../../testing/services/mat-dialog-ref-mock';
 import { SharedModule } from '../../../shared/shared.module';
@@ -37,6 +38,7 @@ describe('EditProviderSettingsComponent', () => {
         HetznerProviderSettingsComponent,
         OpenstackProviderSettingsComponent,
         VSphereProviderSettingsComponent,
+        AzureProviderSettingsComponent,
       ],
       providers: [
         ClusterService,

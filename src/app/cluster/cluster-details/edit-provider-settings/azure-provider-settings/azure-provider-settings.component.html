@@ -1,0 +1,15 @@
+<form [formGroup]="azureProviderSettingsForm" fxLayout="column">
+  <mat-form-field fxFlex>
+    <input matInput formControlName="clientID" type="password" placeholder="Client ID*:" autocomplete="off">
+    <mat-error *ngIf="azureProviderSettingsForm.controls.clientID.hasError('required')">
+      Client ID is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <input matInput formControlName="clientSecret" type="password" placeholder="Client Secret*:" autocomplete="off">
+    <mat-error *ngIf="azureProviderSettingsForm.controls.clientSecret.hasError('required')">
+      Client Secret is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+</form>

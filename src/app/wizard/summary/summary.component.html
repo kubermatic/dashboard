@@ -139,6 +139,25 @@
         </div>
       </ng-container>
 
+       <!-- Azure -->
+      <ng-container *ngIf="cluster.spec.cloud.azure">
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Azure API token</div>
+          <div fxFlex="80%">{{cluster.spec.cloud.azure.token}}</div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="!cluster.spec.cloud.bringyourown">
+        <div fxLayout class="km-card-list-content nodes">
+          <div fxFlex="20%" class="km-card-list-key">
+            Node Count
+          </div>
+          <div fxFlex="80%">
+          {{ nodeData.count }}
+          </div>
+        </div>
+      </ng-container>
+
       <!-- DO Nodes -->
       <ng-container *ngIf="cluster.spec.cloud.digitalocean">
         <div fxLayout class="km-card-list-content">
@@ -291,6 +310,26 @@
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.containerLinux">
           <div fxFlex="20%" class="km-card-list-key">Disable Auto Update</div>
           <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
+          <div fxFlex="20%" class="km-card-list-key">Container Runtime</div>
+          <div fxFlex="80%">{{nodeData.node.spec.versions.containerRuntime.name}}</div>
+        </div>
+      </ng-container>
+
+      <!-- Azure Nodes -->
+      <ng-container *ngIf="cluster.spec.cloud.azure">
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Node Size</div>
+          <div fxFlex="80%">{{ nodeData.node.spec.cloud.azure.type }}</div>
+        </div>
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Operating System</div>
+          <div fxFlex="80%">{{getOperatingSystem()}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.ubuntu">
+          <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot}}</div>
         </div>
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
           <div fxFlex="20%" class="km-card-list-key">Container Runtime</div>

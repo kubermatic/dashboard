@@ -37,8 +37,10 @@ import { ClusterNameGenerator } from '../core/util/name-generator.service';
 import Spy = jasmine.Spy;
 import { HetznerClusterSettingsComponent } from './set-settings/provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './set-settings/provider-settings/vsphere/vsphere.component';
+import { AzureClusterSettingsComponent } from './set-settings/provider-settings/azure/azure.component';
 import { HetznerAddNodeComponent } from '../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../add-node/vsphere-add-node/vsphere-add-node.component';
+import { AzureAddNodeComponent } from '../add-node/azure-add-node/azure-add-node.component';
 
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
@@ -76,6 +78,7 @@ describe('WizardComponent', () => {
         BringyourownClusterSettingsComponent,
         HetznerClusterSettingsComponent,
         VSphereClusterSettingsComponent,
+        AzureClusterSettingsComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
@@ -83,6 +86,7 @@ describe('WizardComponent', () => {
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
+        AzureAddNodeComponent,
         SetClusterSpecComponent,
         SetProviderComponent,
         SetDatacenterComponent,

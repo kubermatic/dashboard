@@ -14,7 +14,7 @@ import { SharedModule } from '../../../../shared/shared.module';
 import { ApiService } from '../../../../core/services/api/api.service';
 import { ClusterService } from '../../../../core/services';
 import { ApiMockService } from '../../../../testing/services/api-mock.service';
-import { fakeVSphereCluster } from '../../../../testing/fake-data/cluster.fake';
+import { fakeAzureCluster } from '../../../../testing/fake-data/cluster.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -22,9 +22,9 @@ const modules: any[] = [
   SharedModule
 ];
 
-describe('VSphereProviderSettingsComponent', () => {
-  let fixture: ComponentFixture<VSphereProviderSettingsComponent>;
-  let component: VSphereProviderSettingsComponent;
+describe('AzureProviderSettingsComponent', () => {
+  let fixture: ComponentFixture<AzureProviderSettingsComponent>;
+  let component: AzureProviderSettingsComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -49,34 +49,47 @@ describe('VSphereProviderSettingsComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VSphereProviderSettingsComponent);
+    fixture = TestBed.createComponent(AzureProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeVSphereCluster;
-    component.cluster.spec.cloud.vsphere = {
-      username: '',
-      password: '',
+    component.cluster = fakeAzureCluster;
+    component.cluster.spec.cloud.azure = {
+      clientID: '',
+      clientSecret: '',
+      resourceGroup: '',
+      routeTable: '',
+      securityGroup: '',
+      subnet: '',
+      subscriptionID: '',
+      tenantID: '',
+      vnet: ''
     };
     fixture.detectChanges();
   });
 
-  it('should create the vsphere provider settings cmp', () => {
+  it('should create the azure provider settings cmp', () => {
     expect(component).toBeTruthy();
   });
 
   it('form invalid after creating', () => {
-    expect(component.vsphereProviderSettingsForm.valid).toBeFalsy();
+    expect(component.azureProviderSettingsForm.valid).toBeFalsy();
   });
 
-  it('required fields', () => {
-    expect(component.vsphereProviderSettingsForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.username.valid).toBeFalsy('username field is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.username.hasError('required')).toBeTruthy('username field has initially required error');
-    expect(component.vsphereProviderSettingsForm.controls.password.valid).toBeFalsy('password field is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.password.hasError('required')).toBeTruthy('password field has initially required error');
+  it('form required values', () => {
+    component.azureProviderSettingsForm.reset();
+    fixture.detectChanges();
 
-    component.vsphereProviderSettingsForm.controls.username.patchValue('foo');
-    expect(component.vsphereProviderSettingsForm.controls.username.hasError('required')).toBeFalsy('username field has no required error after setting foo');
-    component.vsphereProviderSettingsForm.controls.password.patchValue('foo');
-    expect(component.vsphereProviderSettingsForm.controls.password.hasError('required')).toBeFalsy('password field has no required error after setting foo');
+    expect(component.azureProviderSettingsForm.valid).toBeFalsy('form is invalid with empty defaults');
+    expect(component.azureProviderSettingsForm.controls.clientID.hasError('required')).toBeTruthy('client ID field has required error');
+    expect(component.azureProviderSettingsForm.controls.clientSecret.hasError('required')).toBeTruthy('client secret field has required error');
+
+    component.azureProviderSettingsForm.controls.clientID.patchValue('foo');
+    fixture.detectChanges();
+    expect(component.azureProviderSettingsForm.controls.clientID.hasError('required')).toBeFalsy('client ID has no required error after setting value');
+    expect(component.azureProviderSettingsForm.valid).toBeFalsy('form is still invalid after setting only client ID');
+
+    component.azureProviderSettingsForm.controls.clientSecret.patchValue('bar');
+    fixture.detectChanges();
+    expect(component.azureProviderSettingsForm.controls.clientSecret.hasError('required')).toBeFalsy('client secret field has no required error after setting value');
+    expect(component.azureProviderSettingsForm.valid).toBeTruthy('form is valid after setting both client ID and client secret');
   });
 });
