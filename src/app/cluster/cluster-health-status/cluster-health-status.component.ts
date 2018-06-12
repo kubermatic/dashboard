@@ -29,8 +29,6 @@ export class ClusterHealthStatusComponent implements OnChanges {
         return this.green;
       } else if (this.healthStatus === ClusterHealth.DELETING) {
         return this.red;
-      } else if (this.healthStatus === ClusterHealth.ACTIONREQUIRED) {
-        return this.redAction;
       } else {
         return this.orange;
       }
@@ -42,7 +40,7 @@ export class ClusterHealthStatusComponent implements OnChanges {
   public getHealthTooltipText(): string {
     if (this.healthStatus === ClusterHealth.DELETING) {
       return 'Deleting might take up to 15 minutes';
-    } else if (this.healthStatus === ClusterHealth.ACTIONREQUIRED) {
+    } else if (!!this.cluster.spec.pause) {
       return 'Manual action required';
     } else {
       return '';

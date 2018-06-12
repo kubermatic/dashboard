@@ -9,7 +9,7 @@
           <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
           Add Node
       </button>
-      <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'statusRunning' && this.clusterHealthClass !== 'statusActionRequired'">
+      <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'statusRunning'">
         Connect
       </button>
       <a class="download-kubeconfig-btn" mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
