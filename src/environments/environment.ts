@@ -8,6 +8,7 @@ const oauth = 'https://dev.kubermatic.io/dex/auth';
 const scope: string[] = ['openid', 'email', 'profile', 'groups'];
 
 export const environment = {
+  name: 'dev',
   production: false,
   restRoot : 'api/v1',
   restRootV3 : 'api/v3',
