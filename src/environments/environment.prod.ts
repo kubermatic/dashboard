@@ -3,6 +3,7 @@ const oauth = window.location.protocol + '//' + window.location.host + '/dex/aut
 const scope: string[] = ['openid', 'email', 'profile', 'groups'];
 
 export const environment = {
+  name: 'prod',
   production: true,
   restRoot : '/api/v1',
   restRootV3 : '/api/v3',
