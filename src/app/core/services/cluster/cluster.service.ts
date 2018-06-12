@@ -18,13 +18,7 @@ export class ClusterService {
       if (cluster.metadata.deletionTimestamp) {
         return ClusterHealth.DELETING;
       } else if (cluster.status.health.apiserver && cluster.status.health.scheduler && cluster.status.health.controller && cluster.status.health.machineController && cluster.status.health.etcd) {
-        if (cluster.spec.pause) {
-          return ClusterHealth.ACTIONREQUIRED;
-        } else {
-          return ClusterHealth.RUNNING;
-        }
-      } else if (cluster.spec.pause) {
-        return ClusterHealth.ACTIONREQUIRED;
+        return ClusterHealth.RUNNING;
       }
     }
     return ClusterHealth.WAITING;
@@ -34,13 +28,7 @@ export class ClusterService {
     if (cluster.metadata.deletionTimestamp) {
       return false;
     } else if (!!cluster.status.health && cluster.status.health.apiserver) {
-      if (cluster.spec.pause) {
-        return false;
-      } else {
-        return true;
-      }
-    } else if (cluster.spec.pause) {
-      return false;
+      return true;
     }
     return false;
   }
