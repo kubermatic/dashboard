@@ -23,6 +23,7 @@ export const fakeDigitaloceanCreateNode: NodeEntity = {
       ubuntu: {
         distUpgradeOnBoot: false
       },
+      centos: null,
       containerLinux: null
     },
     versions: {
@@ -62,6 +63,7 @@ export const nodeFake: NodeEntity = {
       ubuntu: {
         distUpgradeOnBoot: false
       },
+      centos: null,
       containerLinux: null
     },
     versions: {
@@ -133,6 +135,7 @@ export const nodesFake: NodeEntity[] = [
         ubuntu: {
           distUpgradeOnBoot: false
         },
+        centos: null,
         containerLinux: null
       },
       versions: {
@@ -202,6 +205,7 @@ export const nodesFake: NodeEntity[] = [
         ubuntu: {
           distUpgradeOnBoot: false
         },
+        centos: null,
         containerLinux: null
       },
       versions: {
@@ -287,6 +291,7 @@ export const nodeDataFake: NodeData = {
         ubuntu: {
           distUpgradeOnBoot: false
         },
+        centos: null,
         containerLinux: null
       },
       versions: {

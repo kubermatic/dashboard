@@ -281,6 +281,10 @@
           <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
           <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot}}</div>
         </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.centos">
+          <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.centos.distUpgradeOnBoot}}</div>
+        </div>
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
           <div fxFlex="20%" class="km-card-list-key">Container Runtime</div>
           <div fxFlex="80%">{{nodeData.node.spec.versions.containerRuntime.name}}</div>
