@@ -15,7 +15,9 @@ export const fakeDigitaloceanCreateNode: NodeEntity = {
       },
       aws: null,
       openstack: null,
-      hetzner: null
+      vsphere: null,
+      hetzner: null,
+      azure: null
     },
     operatingSystem: {
       ubuntu: {
@@ -52,7 +54,9 @@ export const nodeFake: NodeEntity = {
       },
       aws: null,
       openstack: null,
-      hetzner: null
+      vsphere: null,
+      hetzner: null,
+      azure: null
     },
     operatingSystem: {
       ubuntu: {
@@ -121,7 +125,9 @@ export const nodesFake: NodeEntity[] = [
         },
         aws: null,
         openstack: null,
-        hetzner: null
+        vsphere: null,
+        hetzner: null,
+        azure: null
       },
       operatingSystem: {
         ubuntu: {
@@ -188,7 +194,9 @@ export const nodesFake: NodeEntity[] = [
         },
         aws: null,
         openstack: null,
-        hetzner: null
+        vsphere: null,
+        hetzner: null,
+        azure: null
       },
       operatingSystem: {
         ubuntu: {
@@ -268,6 +276,11 @@ export const nodeDataFake: NodeData = {
           cpus: 1,
           memory: 512,
           template: ''
+        },
+        azure: {
+          size: 'cx31',
+          assignPublicIP: false,
+          tags: ''
         },
       },
       operatingSystem: {

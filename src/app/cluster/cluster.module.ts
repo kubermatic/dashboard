@@ -23,6 +23,7 @@ import { DigitaloceanProviderSettingsComponent } from './cluster-details/edit-pr
 import { HetznerProviderSettingsComponent } from './cluster-details/edit-provider-settings/hetzner-provider-settings/hetzner-provider-settings.component';
 import { OpenstackProviderSettingsComponent } from './cluster-details/edit-provider-settings/openstack-provider-settings/openstack-provider-settings.component';
 import { VSphereProviderSettingsComponent } from './cluster-details/edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
+import { AzureProviderSettingsComponent } from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -47,6 +48,7 @@ const entryComponents: any[] = [
   HetznerProviderSettingsComponent,
   OpenstackProviderSettingsComponent,
   VSphereProviderSettingsComponent,
+  AzureProviderSettingsComponent,
 ];
 
 @NgModule({

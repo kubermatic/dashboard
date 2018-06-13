@@ -1,0 +1,56 @@
+/deep/ .mat-input-wrapper {
+  margin: 5px 0 0 0;
+}
+
+.mat-select {
+  width: 100%;
+}
+
+div.node-options {
+  margin-top: 15px;
+  width: 100%;
+  line-height: 30px;
+  font-size: 14px;
+  display: flex;
+
+  mat-checkbox, label {
+    flex: 1 1 100%;
+  }
+}
+
+div.km-form-group-tags-header {
+  margin: 30px 0 10px;
+  font-size: 14px;
+  border-bottom: 1px solid #E3E8EC;
+  padding-bottom: 15px;
+
+  i.fa-plus {
+    cursor: pointer;
+  }
+}
+
+div.km-form-group-tags {
+  display: flex;
+  flex-direction: column;
+
+  div.km-form-group-tags-inner {
+    display: flex;
+  }
+
+  span.seperator {
+    display: flex;
+    flex: 1 1 10%;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    padding-bottom: 6px;
+  }
+
+  i.fa-times {
+    display: flex;
+    flex: 1 1 6%;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+}
