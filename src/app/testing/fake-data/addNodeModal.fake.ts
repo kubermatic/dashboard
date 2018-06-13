@@ -2,6 +2,7 @@ import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import { fakeNodeDatacenters } from './datacenter.fake';
 import { fakeDigitaloceanCluster } from './cluster.fake';
 import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import { AzureSizes } from '../../shared/entity/provider/azure/AzureSizeEntity';
 import { OpenstackFlavor } from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 
 export const addNodeModalFake: AddNodeModalData = {
@@ -35,5 +36,16 @@ export const fakeOpenstackFlavors: OpenstackFlavor[] = [
     region: 'os1',
     slug: 'tiny-m1',
     swap: 0,
+  },
+];
+
+export const fakeAzureSizes: AzureSizes[] = [
+  {
+    name: 'Standard_A0',
+    maxDataDiskCount: 1,
+    memoryInMB: 768,
+    numberOfCores: 1,
+    osDiskSizeInMB: 1047552,
+    resourceDiskSizeInMB: 20480,
   },
 ];

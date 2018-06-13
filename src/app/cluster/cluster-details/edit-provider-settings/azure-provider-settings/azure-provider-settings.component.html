@@ -12,4 +12,18 @@
       Client Secret is <strong>required</strong>
     </mat-error>
   </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <input matInput formControlName="tenantID" type="password" placeholder="Tenant ID*:" autocomplete="off">
+    <mat-error *ngIf="azureProviderSettingsForm.controls.tenantID.hasError('required')">
+      Tenant ID is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <input matInput formControlName="subscriptionID" type="password" placeholder="Subscription ID*:" autocomplete="off">
+    <mat-error *ngIf="azureProviderSettingsForm.controls.subscriptionID.hasError('required')">
+      Subscription ID is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
 </form>

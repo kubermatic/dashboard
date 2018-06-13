@@ -81,6 +81,8 @@ describe('AzureProviderSettingsComponent', () => {
     expect(component.azureProviderSettingsForm.valid).toBeFalsy('form is invalid with empty defaults');
     expect(component.azureProviderSettingsForm.controls.clientID.hasError('required')).toBeTruthy('client ID field has required error');
     expect(component.azureProviderSettingsForm.controls.clientSecret.hasError('required')).toBeTruthy('client secret field has required error');
+    expect(component.azureProviderSettingsForm.controls.tenantID.hasError('required')).toBeTruthy('tenant ID field has required error');
+    expect(component.azureProviderSettingsForm.controls.subscriptionID.hasError('required')).toBeTruthy('subscription ID field has required error');
 
     component.azureProviderSettingsForm.controls.clientID.patchValue('foo');
     fixture.detectChanges();
@@ -90,6 +92,16 @@ describe('AzureProviderSettingsComponent', () => {
     component.azureProviderSettingsForm.controls.clientSecret.patchValue('bar');
     fixture.detectChanges();
     expect(component.azureProviderSettingsForm.controls.clientSecret.hasError('required')).toBeFalsy('client secret field has no required error after setting value');
-    expect(component.azureProviderSettingsForm.valid).toBeTruthy('form is valid after setting both client ID and client secret');
+    expect(component.azureProviderSettingsForm.valid).toBeFalsy('form is still invalid after setting both client ID and client secret');
+
+    component.azureProviderSettingsForm.controls.tenantID.patchValue('tenant');
+    fixture.detectChanges();
+    expect(component.azureProviderSettingsForm.controls.tenantID.hasError('required')).toBeFalsy('tenant ID field has no required error after setting value');
+    expect(component.azureProviderSettingsForm.valid).toBeFalsy('form is still invalid after setting client ID, client secret and tenant ID');
+
+    component.azureProviderSettingsForm.controls.subscriptionID.patchValue('subscription');
+    fixture.detectChanges();
+    expect(component.azureProviderSettingsForm.controls.subscriptionID.hasError('required')).toBeFalsy('subscription ID field has no required error after setting value');
+    expect(component.azureProviderSettingsForm.valid).toBeTruthy('form is still invalid after setting client ID, client secret, tenant ID and subscription ID');
   });
 });

@@ -38,7 +38,7 @@ describe('EditProviderSettingsComponent', () => {
         HetznerProviderSettingsComponent,
         OpenstackProviderSettingsComponent,
         VSphereProviderSettingsComponent,
-        AzureProviderSettingsComponent,
+        AzureProviderSettingsComponent
       ],
       providers: [
         ClusterService,
@@ -52,6 +52,7 @@ describe('EditProviderSettingsComponent', () => {
     fixture = TestBed.createComponent(EditProviderSettingsComponent);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster;
+    fixture.detectChanges();
   });
 
   it('should create the edit provider settings cmp', () => {

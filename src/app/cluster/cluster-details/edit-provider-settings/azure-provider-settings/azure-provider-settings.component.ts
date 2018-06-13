@@ -25,13 +25,8 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
     this.azureProviderSettingsForm = new FormGroup({
       clientID: new FormControl(this.cluster.spec.cloud.azure.clientID, [Validators.required]),
       clientSecret: new FormControl(this.cluster.spec.cloud.azure.clientSecret, [Validators.required]),
-      resourceGroup: new FormControl(this.cluster.spec.cloud.azure.resourceGroup),
-      routeTable: new FormControl(this.cluster.spec.cloud.azure.routeTable),
-      securityGroup: new FormControl(this.cluster.spec.cloud.azure.securityGroup),
-      subnet: new FormControl(this.cluster.spec.cloud.azure.subnet),
-      subscriptionID: new FormControl(this.cluster.spec.cloud.azure.subscriptionID),
-      tenantID: new FormControl(this.cluster.spec.cloud.azure.tenantID),
-      vnet: new FormControl(this.cluster.spec.cloud.azure.vnet),
+      subscriptionID: new FormControl(this.cluster.spec.cloud.azure.subscriptionID, [Validators.required]),
+      tenantID: new FormControl(this.cluster.spec.cloud.azure.tenantID, [Validators.required]),
     });
 
     this.subscriptions.push(this.azureProviderSettingsForm.valueChanges.subscribe(data => {
@@ -54,13 +49,13 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
       azure: {
         clientID: this.azureProviderSettingsForm.controls.clientID.value,
         clientSecret: this.azureProviderSettingsForm.controls.clientSecret.value,
-        resourceGroup: this.azureProviderSettingsForm.controls.resourceGroup.value,
-        routeTable: this.azureProviderSettingsForm.controls.routeTable.value,
-        securityGroup: this.azureProviderSettingsForm.controls.securityGroup.value,
-        subnet: this.azureProviderSettingsForm.controls.subnet.value,
         subscriptionID: this.azureProviderSettingsForm.controls.subscriptionID.value,
         tenantID: this.azureProviderSettingsForm.controls.tenantID.value,
-        vnet: this.azureProviderSettingsForm.controls.vnet.value,
+        resourceGroup: this.cluster.spec.cloud.azure.resourceGroup,
+        routeTable: this.cluster.spec.cloud.azure.routeTable,
+        securityGroup: this.cluster.spec.cloud.azure.securityGroup,
+        subnet: this.cluster.spec.cloud.azure.subnet,
+        vnet: this.cluster.spec.cloud.azure.vnet,
       },
       valid: true
     };
