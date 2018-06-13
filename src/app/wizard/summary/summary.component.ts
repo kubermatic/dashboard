@@ -25,6 +25,8 @@ export class SummaryComponent implements OnInit, OnDestroy {
   getOperatingSystem(): string {
     if (this.nodeData.node.spec.operatingSystem.ubuntu) {
       return 'Ubuntu';
+    } else if (this.nodeData.node.spec.operatingSystem.centos) {
+      return 'CentOS';
     } else if (this.nodeData.node.spec.operatingSystem.containerLinux) {
       return 'Container Linux';
     } else {

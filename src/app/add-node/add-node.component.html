@@ -18,6 +18,7 @@
   <mat-form-field class="operating-system">
     <mat-select placeholder="Operating System*:" formControlName="operatingSystem">
       <mat-option value="ubuntu">Ubuntu</mat-option>
+      <mat-option value="centos">CentOS</mat-option>
       <mat-option value="containerLinux" *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.openstack">Container Linux</mat-option>
     </mat-select>
     <mat-hint *ngIf="cluster.spec.cloud.openstack">Select the operating system of the entered image</mat-hint>
@@ -30,7 +31,13 @@
     <!-- Options for Ubuntu -->
     <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'" class="os-options" [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'with-margin' : ''">
       <label fxFlex="50%">Upgrade system on first boot</label>
-      <mat-checkbox fxFlex="50%" id="distUpgradeOnBoot" formControlName="distUpgradeOnBoot"></mat-checkbox>
+      <mat-checkbox fxFlex="50%" id="distUpgradeOnBootUbuntu" formControlName="distUpgradeOnBootUbuntu"></mat-checkbox>
+    </div>
+
+     <!-- Options for CentOS -->
+    <div *ngIf="nodeForm.controls.operatingSystem.value === 'centos'" class="os-options" [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'with-margin' : ''">
+      <label fxFlex="50%">Upgrade system on first boot</label>
+      <mat-checkbox fxFlex="50%" id="distUpgradeOnBootCentos" formControlName="distUpgradeOnBootCentos"></mat-checkbox>
     </div>
 
     <!-- Options for Container Linux -->

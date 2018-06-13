@@ -34,21 +34,25 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       containerRuntime: new FormControl(this.nodeData.node.spec.versions.containerRuntime.name),
     });
 
-    let distUpgradeOnBoot = false;
+    let distUpgradeOnBootUbuntu = false;
+    let distUpgradeOnBootCentos = false;
     let disableAutoUpdate = false;
     if (!!this.nodeData.node.spec.operatingSystem.ubuntu) {
-      distUpgradeOnBoot = this.nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
+      distUpgradeOnBootUbuntu = this.nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
+    } else if (!!this.nodeData.node.spec.operatingSystem.centos) {
+      distUpgradeOnBootCentos = this.nodeData.node.spec.operatingSystem.centos.distUpgradeOnBoot;
     } else if (!!this.nodeData.node.spec.operatingSystem.containerLinux) {
       disableAutoUpdate = this.nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate;
     }
 
     this.operatingSystemForm = new FormGroup({
-      distUpgradeOnBoot: new FormControl(distUpgradeOnBoot),
+      distUpgradeOnBootUbuntu: new FormControl(distUpgradeOnBootUbuntu),
+      distUpgradeOnBootCentos: new FormControl(distUpgradeOnBootCentos),
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
     this.subscriptions.push(this.nodeForm.valueChanges.subscribe(data => {
-      this.operatingSystemForm.setValue({distUpgradeOnBoot: false, disableAutoUpdate: false});
+      this.operatingSystemForm.setValue({distUpgradeOnBootUbuntu: false, distUpgradeOnBootCentos: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
 
@@ -80,7 +84,13 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       case 'ubuntu':
         return {
           ubuntu: {
-            distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBoot.value,
+            distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootUbuntu.value,
+          }
+        };
+      case 'centos':
+        return {
+          centos: {
+            distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootCentos.value,
           }
         };
       case 'containerLinux':
