@@ -83,6 +83,27 @@ export const fakeBringyourownSeedDatacenter: DataCenterEntity = {
   }
 };
 
+export const fakeAzureDatacenter: DataCenterEntity = {
+  metadata: {
+    name: 'azure-westeurope',
+    selfLink: '',
+    uid: '',
+    creationTimestamp: new Date(),
+    labels: new Map(),
+    annotations: new Map()
+  },
+  seed: false,
+  spec: {
+    azure: {
+      location: 'westeurope'
+    },
+    country: 'NL',
+    location: 'Azure West europe',
+    provider: 'azure',
+    seed: 'europe-west3-c'
+  }
+};
+
 export const fakeSeedDatacenters: DataCenterEntity[] = [fakeBringyourownSeedDatacenter];
 
 export const fakeNodeDatacenters: DataCenterEntity[] = [

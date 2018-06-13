@@ -3,6 +3,7 @@ import { DigitaloceanCloudSpec } from '../entity/cloud/DigitaloceanCloudSpec';
 import { HetznerCloudSpec } from '../entity/cloud/HetznerCloudSpec';
 import { OpenstackCloudSpec } from '../entity/cloud/OpenstackCloudSpec';
 import { VSphereCloudSpec } from '../entity/cloud/VSphereCloudSpec';
+import { AzureCloudSpec } from '../entity/cloud/AzureCloudSpec';
 
 export class ClusterProviderSettingsData {
   aws?: AWSCloudSpec;
@@ -10,5 +11,6 @@ export class ClusterProviderSettingsData {
   hetzner?: HetznerCloudSpec;
   openstack?: OpenstackCloudSpec;
   vsphere?: VSphereCloudSpec;
+  azure?: AzureCloudSpec;
   valid: boolean;
 }

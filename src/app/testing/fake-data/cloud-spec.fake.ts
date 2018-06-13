@@ -9,5 +9,8 @@ export const doCloudSpecFake: CloudSpec = {
   baremetal: null,
   bringyourown: null,
   openstack: null,
+  vsphere: null,
+  hetzner: null,
+  azure: null,
 };
 

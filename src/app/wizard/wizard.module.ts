@@ -18,6 +18,7 @@ import { ClusterSSHKeysComponent } from './set-settings/ssh-keys/cluster-ssh-key
 import { AddNodeModule } from '../add-node/add-node.module';
 import { HetznerClusterSettingsComponent } from './set-settings/provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './set-settings/provider-settings/vsphere/vsphere.component';
+import { AzureClusterSettingsComponent } from './set-settings/provider-settings/azure/azure.component';
 
 const components: any[] = [
   WizardComponent,
@@ -35,6 +36,7 @@ const components: any[] = [
   BringyourownClusterSettingsComponent,
   HetznerClusterSettingsComponent,
   VSphereClusterSettingsComponent,
+  AzureClusterSettingsComponent,
 ];
 
 @NgModule({

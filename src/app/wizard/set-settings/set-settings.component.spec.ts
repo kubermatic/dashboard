@@ -13,10 +13,12 @@ import { DigitaloceanClusterSettingsComponent } from './provider-settings/digita
 import { BringyourownClusterSettingsComponent } from './provider-settings/bringyourown/bringyourown.component';
 import { AWSClusterSettingsComponent } from './provider-settings/aws/aws.component';
 import { OpenstackClusterSettingsComponent } from './provider-settings/openstack/openstack.component';
+import { AzureClusterSettingsComponent } from './provider-settings/azure/azure.component';
 import { OpenstackAddNodeComponent } from '../../add-node/openstack-add-node/openstack-add-node.component';
 import { DigitaloceanAddNodeComponent } from '../../add-node/digitalocean-add-node/digitalocean-add-node.component';
 import { DigitaloceanOptionsComponent } from '../../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { AwsAddNodeComponent } from '../../add-node/aws-add-node/aws-add-node.component';
+import { AzureAddNodeComponent } from '../../add-node/azure-add-node/azure-add-node.component';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
@@ -57,6 +59,7 @@ describe('SetSettingsComponent', () => {
         BringyourownClusterSettingsComponent,
         HetznerClusterSettingsComponent,
         VSphereClusterSettingsComponent,
+        AzureClusterSettingsComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
@@ -64,6 +67,7 @@ describe('SetSettingsComponent', () => {
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
+        AzureAddNodeComponent,
       ],
       providers: [
         AddNodeService,

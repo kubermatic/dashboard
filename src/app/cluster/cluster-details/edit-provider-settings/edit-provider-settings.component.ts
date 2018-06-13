@@ -49,6 +49,8 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
       this.cluster.spec.cloud.openstack = this.providerSettingsData.openstack;
     } else if (!!this.cluster.spec.cloud.vsphere) {
       this.cluster.spec.cloud.vsphere = this.providerSettingsData.vsphere;
+    } else if (!!this.cluster.spec.cloud.azure) {
+      this.cluster.spec.cloud.azure = this.providerSettingsData.azure;
     }
 
     this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(res => {
