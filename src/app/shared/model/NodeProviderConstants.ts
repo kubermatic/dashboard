@@ -35,6 +35,5 @@ export namespace NodeInstanceFlavors {
     'm3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'];
   export const Openstack: string[] = ['m1.micro', 'm1.tiny', 'm1.small', 'm1.medium', 'm1.large'];
   export const Hetzner: string[] = ['cx11', 'cx21', 'cx31', 'cx41', 'cx51', 'cx11-ceph', 'cx21-ceph', 'cx31-ceph', 'cx41-ceph', 'cx51-ceph'];
-  export const Azure: string[] = [];
   export const VOID: string[] = [];
 }

@@ -280,7 +280,7 @@ export const nodeDataFake: NodeData = {
         azure: {
           size: 'cx31',
           assignPublicIP: false,
-          tags: {'': ''}
+          tags: ''
         },
       },
       operatingSystem: {

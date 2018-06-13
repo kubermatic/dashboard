@@ -1,27 +1,27 @@
 <form [formGroup]="azureSettingsForm" fxLayout="column">
   <mat-form-field fxFlex>
-    <input matInput formControlName="clientID" type="text" placeholder="Client ID*:" autocomplete="off">
+    <input matInput formControlName="clientID" type="password" placeholder="Client ID*:" autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.clientID.hasError('required')">
       Client ID is <strong>required</strong>
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <input matInput formControlName="clientSecret" type="text" placeholder="Client Secret*:" autocomplete="off">
+    <input matInput formControlName="clientSecret" type="password" placeholder="Client Secret*:" autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.clientSecret.hasError('required')">
       Client Secret is <strong>required</strong>
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <input matInput formControlName="tenantID" type="text" placeholder="Tenant ID*:" autocomplete="off">
+    <input matInput formControlName="tenantID" type="password" placeholder="Tenant ID*:" autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.tenantID.hasError('required')">
       Tenant ID is <strong>required</strong>
     </mat-error>
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <input matInput formControlName="subscriptionID" type="text" placeholder="Subscription ID*:" autocomplete="off">
+    <input matInput formControlName="subscriptionID" type="password" placeholder="Subscription ID*:" autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.subscriptionID.hasError('required')">
       Subscription ID is <strong>required</strong>
     </mat-error>

@@ -121,7 +121,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       return hSpec;
     case NodeProvider.AZURE:
       const azureSpec: AzureNodeSpec = {
-        size: '',
+        size: 'Standard_A0',
         assignPublicIP: false,
         tags: {'': ''}
       };

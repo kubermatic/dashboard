@@ -11,6 +11,7 @@ import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { OpenstackFlavor } from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
 
 @Injectable()
 export class ApiService {
@@ -110,5 +111,15 @@ export class ApiService {
   getMasterVersions(): Observable<MasterVersion[]> {
     const url = `${this.restRoot}/versions`;
     return this.http.get<MasterVersion[]>(url, { headers: this.headers });
+  }
+
+  getAzureSizes(clientID: string, clientSecret: string, subscriptionID: string, tenantID: string, location: string): Observable<AzureSizes> {
+    this.headers = this.headers.set('ClientID', clientID);
+    this.headers = this.headers.set('ClientSecret', clientSecret);
+    this.headers = this.headers.set('SubscriptionID', subscriptionID);
+    this.headers = this.headers.set('TenantID', tenantID);
+    this.headers = this.headers.set('Location', location);
+    const url = `${this.restRoot}/azure/sizes`;
+    return this.http.get<AzureSizes>(url, { headers: this.headers });
   }
 }

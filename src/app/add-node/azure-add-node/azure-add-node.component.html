@@ -2,8 +2,8 @@
   <div fxFlex class="mat-select-container">
     <mat-form-field>
       <mat-select placeholder="Node size*:" formControlName="size">
-        <mat-option *ngFor="let size of sizes" [value]="size">
-        {{ size }}
+        <mat-option *ngFor="let size of sizes" [value]="size.name">
+        {{ size.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
