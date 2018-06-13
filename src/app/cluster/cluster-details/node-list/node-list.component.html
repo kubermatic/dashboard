@@ -92,6 +92,14 @@
                       <i [ngClass]="node.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
                     </div>
                   </mat-card-content>
+                  <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.operatingSystem.centos">
+                    <div fxFlex="50%">
+                      <strong>Upgrade system on first boot:</strong>
+                    </div>
+                    <div fxFlex="50%">
+                      <i [ngClass]="node.spec.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+                    </div>
+                  </mat-card-content>
                   <mat-card-content class="km-card-list-content" fxLayout *ngIf="!!node.spec.operatingSystem.containerLinux">
                     <div fxFlex="50%">
                       <strong>Disable auto-update:</strong>

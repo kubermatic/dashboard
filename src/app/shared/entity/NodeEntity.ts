@@ -30,10 +30,15 @@ export class NodeCloudSpec {
 
 export class OperatingSystemSpec {
   ubuntu?: UbuntuSpec;
+  centos?: CentosSpec;
   containerLinux?: ContainerLinuxSpec;
 }
 
 export class UbuntuSpec {
+  distUpgradeOnBoot: boolean;
+}
+
+export class CentosSpec {
   distUpgradeOnBoot: boolean;
 }
 

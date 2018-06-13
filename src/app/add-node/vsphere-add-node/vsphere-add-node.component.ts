@@ -39,12 +39,17 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe(data => {
       if (data.ubuntu) {
-        if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova') {
+        if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova' || this.vsphereNodeForm.controls.template.value === 'centos-template') {
           this.vsphereNodeForm.setValue({cpu: this.vsphereNodeForm.controls.cpu.value, memory: this.vsphereNodeForm.controls.memory.value, template: 'ubuntu-template'});
         }
         this.defaultTemplate = 'ubuntu-template';
+      } else if (data.centos) {
+        if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova' || this.vsphereNodeForm.controls.template.value === 'centos-template') {
+          this.vsphereNodeForm.setValue({cpu: this.vsphereNodeForm.controls.cpu.value, memory: this.vsphereNodeForm.controls.memory.value, template: 'ubuntu-template'});
+        }
+        this.defaultTemplate = 'centos-template';
       } else if (data.containerLinux) {
-        if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova') {
+        if (this.vsphereNodeForm.controls.template.value === '' || this.vsphereNodeForm.controls.template.value === 'ubuntu-template' || this.vsphereNodeForm.controls.template.value === 'coreos_production_vmware_ova' || this.vsphereNodeForm.controls.template.value === 'centos-template') {
           this.vsphereNodeForm.setValue({cpu: this.vsphereNodeForm.controls.cpu.value, memory: this.vsphereNodeForm.controls.memory.value, template: 'coreos_production_vmware_ova'});
         }
         this.defaultTemplate = 'coreos_production_vmware_ova';
