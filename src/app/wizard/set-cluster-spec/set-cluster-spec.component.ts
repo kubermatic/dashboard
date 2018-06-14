@@ -14,6 +14,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
   public clusterSpecForm: FormGroup;
   public masterVersions: MasterVersion[] = [];
+  public defaultVersion: string;
   private subscriptions: Subscription[] = [];
 
   constructor(private nameGenerator: ClusterNameGenerator, private api: ApiService, private wizardService: WizardService) { }
@@ -50,6 +51,12 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   loadMasterVersions() {
     this.subscriptions.push(this.api.getMasterVersions().subscribe(versions => {
       this.masterVersions = versions;
+      for (const i in versions) {
+        if (versions[i].default) {
+          this.defaultVersion = versions[i].version;
+          this.clusterSpecForm.controls.version.setValue(versions[i].version);
+        }
+      }
     }));
   }
 
