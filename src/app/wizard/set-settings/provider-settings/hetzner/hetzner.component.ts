@@ -21,7 +21,7 @@ export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
       token: new FormControl(this.cluster.spec.cloud.hetzner.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.hetznerSettingsFormSub = this.hetznerSettingsForm.valueChanges.subscribe(data => {
+    this.hetznerSettingsFormSub = this.hetznerSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           hetzner: {
