@@ -30,7 +30,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       vnet: new FormControl(this.cluster.spec.cloud.azure.vnet),
     });
 
-    this.subscriptions.push(this.azureSettingsForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.azureSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           azure: {

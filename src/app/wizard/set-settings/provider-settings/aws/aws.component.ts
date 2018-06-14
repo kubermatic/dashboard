@@ -27,7 +27,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       routeTableId: new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
     });
 
-    this.subscriptions.push(this.awsSettingsForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.awsSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           aws: {
