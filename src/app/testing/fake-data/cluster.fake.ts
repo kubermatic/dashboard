@@ -14,7 +14,7 @@ export const clusterModelFake: CreateClusterModel = {
       baremetal: null
     },
     humanReadableName: 'adoring-franklin',
-    version: '',
+    masterVersion: '',
     pause: false,
   },
   sshKeys: [
@@ -43,7 +43,7 @@ export const fakeDigitaloceanCluster: ClusterEntity = {
       bringyourown: null
     },
     humanReadableName: 'nifty-haibt',
-    version: '1.8.5',
+    masterVersion: '1.8.5',
     pause: false,
   },
   address: {
@@ -110,7 +110,7 @@ export const fakeHetznerCluster: ClusterEntity = {
       },
     },
     humanReadableName: 'nifty-haibt',
-    version: '1.8.5',
+    masterVersion: '1.8.5',
     pause: false,
   },
   address: {
@@ -178,7 +178,7 @@ export const fakeVSphereCluster: ClusterEntity = {
       hetzner: null,
     },
     humanReadableName: 'nifty-haibt',
-    version: '1.8.5',
+    masterVersion: '1.8.5',
     pause: false,
   },
   address: {
@@ -248,7 +248,7 @@ export const fakeAWSCluster: ClusterEntity = {
       bringyourown: null
     },
     humanReadableName: 'foo-bar',
-    version: '1.9.6',
+    masterVersion: '1.9.6',
     pause: false,
   },
   address: {
@@ -318,7 +318,7 @@ export const fakeOpenstackCluster: ClusterEntity = {
       bringyourown: null
     },
     humanReadableName: 'foo-bar',
-    version: '1.9.6',
+    masterVersion: '1.9.6',
     pause: false,
   },
   address: {

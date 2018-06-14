@@ -103,7 +103,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                   if (this.versionsList.indexOf(upgrades[i].version) < 0) {
                     this.versionsList.push(upgrades[i].version);
                   }
-                  if (lt(this.cluster.spec.version, upgrades[i].version)) {
+                  if (lt(this.cluster.spec.masterVersion, upgrades[i].version)) {
                     this.updatesAvailable = true;
                   }
                 }
