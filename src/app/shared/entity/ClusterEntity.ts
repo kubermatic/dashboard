@@ -107,7 +107,7 @@ export class CloudSpec {
 export class ClusterSpec {
   cloud: CloudSpec;
   humanReadableName?: string;
-  version?: string;
+  masterVersion?: string;
   pause: boolean;
   pauseReason?: string;
 }
