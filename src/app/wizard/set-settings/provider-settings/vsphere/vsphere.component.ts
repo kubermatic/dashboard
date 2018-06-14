@@ -23,7 +23,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       password: new FormControl(this.cluster.spec.cloud.vsphere.password, Validators.required),
     });
 
-    this.vsphereSettingsFormSub = this.vsphereSettingsForm.valueChanges.subscribe(data => {
+    this.vsphereSettingsFormSub = this.vsphereSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           vsphere: {
