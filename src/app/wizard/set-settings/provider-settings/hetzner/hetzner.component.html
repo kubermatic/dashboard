@@ -4,7 +4,7 @@
     You can create one in your project access settings.
   </div>
   <mat-form-field fxFlex>
-    <input matInput formControlName="token" type="text" placeholder="API Token*:" autocomplete="off">
+    <input matInput formControlName="token" type="password" placeholder="API Token*:" autocomplete="off">
     <mat-error *ngIf="hetznerSettingsForm.controls.token.hasError('required')">
       Token is <strong>required</strong>
     </mat-error>
