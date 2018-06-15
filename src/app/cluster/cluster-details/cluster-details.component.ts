@@ -100,10 +100,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             .subscribe(upgrades => {
               for (const i in upgrades) {
                 if (upgrades.hasOwnProperty(i)) {
-                  if (this.versionsList.indexOf(upgrades[i].version) < 0) {
-                    this.versionsList.push(upgrades[i].version);
+                  if (this.versionsList.indexOf(upgrades[i]) < 0) {
+                    this.versionsList.push(upgrades[i]);
                   }
-                  if (lt(this.cluster.spec.masterVersion, upgrades[i].version)) {
+                  if (lt(this.cluster.spec.masterVersion, upgrades[i])) {
                     this.updatesAvailable = true;
                   }
                 }
