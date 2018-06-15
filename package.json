@@ -45,6 +45,7 @@
     "karma-spec-reporter": "0.0.32",
     "lodash": "^4.17.4",
     "moment": "^2.22.1",
+    "ng2-google-charts": "^3.4.0",
     "ng2-validation": "4.2.0",
     "ngx-clipboard": "9.0.0",
     "openstack-lib": "0.0.2",
