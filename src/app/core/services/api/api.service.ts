@@ -86,11 +86,11 @@ export class ApiService {
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
   }
 
-  getClusterUpgrades(cluster: string, dc: string): Observable<any[]> {
+  getClusterUpgrades(cluster: string, dc: string): Observable<MasterVersion[]> {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/upgrades`;
-    return this.http.get<string[]>(url, { headers: this.headers })
+    return this.http.get<MasterVersion[]>(url, { headers: this.headers })
       .catch(error => {
-        return Observable.of<string[]>([]);
+        return Observable.of<MasterVersion[]>([]);
       });
   }
 

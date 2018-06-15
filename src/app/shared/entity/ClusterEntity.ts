@@ -174,4 +174,5 @@ export class SSHKeyPair {
 export class MasterVersion {
   version: string;
   allowedNodeVersions: string[];
+  default?: boolean;
 }
