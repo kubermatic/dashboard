@@ -5,7 +5,7 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { Auth } from '../../../core/services/auth/auth.service';
-import { ClusterEntity, MasterVersion } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, MasterVersion, Metrics } from '../../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
@@ -63,6 +63,11 @@ export class ApiService {
   deleteClusterNode(cluster: string, node: NodeEntity, dc: string) {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/node/${node.metadata.name}`;
     return this.http.delete(url, { headers: this.headers });
+  }
+
+  getMetrics(cluster: string, dc: string): Observable<Metrics[]> {
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/metrics`;
+    return this.http.get<Metrics[]>(url, { headers: this.headers });
   }
 
   getSSHKeys(): Observable<SSHKeyEntity[]> {

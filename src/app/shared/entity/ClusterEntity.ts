@@ -176,3 +176,9 @@ export class MasterVersion {
   allowedNodeVersions: string[];
   default?: boolean;
 }
+
+export class Metrics {
+  name: string;
+  value?: number;
+  values?: number[];
+}

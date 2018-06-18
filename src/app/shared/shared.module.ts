@@ -8,6 +8,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import 'hammerjs';
 import { NgReduxFormModule } from '@angular-redux/form';
+import { Ng2GoogleChartsModule } from 'ng2-google-charts';
 import { AddSshKeyModalComponent } from './components/add-ssh-key-modal/add-ssh-key-modal.component';
 
 const modules: Array<any> = [
@@ -37,7 +38,8 @@ const modules: Array<any> = [
   MatExpansionModule,
   MatSortModule,
   ClipboardModule,
-  NgReduxFormModule
+  NgReduxFormModule,
+  Ng2GoogleChartsModule
 ];
 
 @NgModule({

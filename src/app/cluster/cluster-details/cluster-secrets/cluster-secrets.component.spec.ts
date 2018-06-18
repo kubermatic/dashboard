@@ -4,7 +4,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ClusterSecretsComponent } from './cluster-secrets.component';
-import { ClusterService } from '../../../core/services';
+import { ClusterService, ApiService } from '../../../core/services';
+import { asyncData } from '../../../testing/services/api-mock.service';
+import { fakeMetrics } from '../../../testing/fake-data/metrics.fake';
+import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -16,8 +19,12 @@ const modules: any[] = [
 describe('ClusterSecretsComponent', () => {
   let fixture: ComponentFixture<ClusterSecretsComponent>;
   let component: ClusterSecretsComponent;
+  let getMetricsSpy: Spy;
 
   beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getMetrics']);
+    getMetricsSpy = apiMock.getMetrics.and.returnValue(asyncData(fakeMetrics));
+
     TestBed.configureTestingModule({
       imports: [
         ...modules,
@@ -26,7 +33,8 @@ describe('ClusterSecretsComponent', () => {
         ClusterSecretsComponent
       ],
       providers: [
-        ClusterService
+        ClusterService,
+        { provide: ApiService, useValue: apiMock }
       ],
     }).compileComponents();
   }));

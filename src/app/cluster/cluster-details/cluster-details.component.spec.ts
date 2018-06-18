@@ -1,4 +1,5 @@
 import { fakeDigitaloceanCluster } from './../../testing/fake-data/cluster.fake';
+import { fakeMetrics } from '../../testing/fake-data/metrics.fake';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
@@ -36,14 +37,16 @@ describe('ClusterDetailsComponent', () => {
   let getSSHKeysSpy: Spy;
   let getDatacenterSpy: Spy;
   let getKubeconfigURL: Spy;
+  let getMetricsSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys', 'getKubeconfigURL']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys', 'getKubeconfigURL', 'getMetrics']);
     getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
     getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
     getClusterNodesSpy = apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake));
     getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys));
     getKubeconfigURL = apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
+    getMetricsSpy = apiMock.getMetrics.and.returnValue(asyncData(fakeMetrics));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
     getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter));

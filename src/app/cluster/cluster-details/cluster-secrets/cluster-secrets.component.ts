@@ -1,30 +1,92 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { ClusterEntity, Metrics } from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ClusterService } from '../../../core/services';
-
+import { ClusterService, ApiService } from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
   templateUrl: './cluster-secrets.component.html',
   styleUrls: ['./cluster-secrets.component.scss']
 })
-export class ClusterSecretsComponent implements OnChanges {
+export class ClusterSecretsComponent implements OnInit, OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   public expand = false;
   public dialogRef: any;
   public isClusterRunning: boolean;
   public healthStatus: string;
+  public metrics: Metrics[];
+  public currentMachinesValue: number;
+  public machinesChartData;
+  public validData = false;
 
   constructor(public dialog: MatDialog,
-              private clusterService: ClusterService) { }
+              private clusterService: ClusterService,
+              private api: ApiService) { }
+
+  ngOnInit() {
+    this.getMetrics();
+  }
+
+  drawMetrics() {
+    const machinesData = [['', '']];
+    for (const i in this.metrics) {
+      if (this.metrics.hasOwnProperty(i)) {
+        for (const j in this.metrics[i]) {
+          if (this.metrics[i].hasOwnProperty(j)) {
+            if (this.metrics[i][j].name === 'Machines') {
+              if (this.metrics[i][j].value) {
+                this.currentMachinesValue = this.metrics[i][j].value;
+              } else {
+                this.currentMachinesValue = 0;
+              }
+            }
+            if (this.metrics[i][j].name === 'Machines (1h)') {
+              for (const v in this.metrics[i][j].values) {
+                if (this.metrics[i][j].values.hasOwnProperty(v)) {
+                  this.validData = true;
+                  machinesData.push(['', this.metrics[i][j].values[v]]);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    this.machinesChartData = {
+      chartType: 'LineChart',
+      dataTable: machinesData,
+      options: {
+        title: 'Machines (1h)',
+        titleTextStyle: {
+          fontSize: 12,
+        },
+        legend: {
+          position: 'none',
+        },
+        chartArea: {
+          width: '90%',
+          height: '75%'
+        },
+        vAxis: {
+          viewWindow: {
+            min: 0,
+          },
+          format: '#',
+          gridlines: {
+            count: 4,
+          },
+        },
+      },
+    };
+  }
 
   ngOnChanges() {
     this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
     this.healthStatus = this.clusterService.getClusterHealthStatus(this.cluster);
+    this.getMetrics();
   }
 
   isExpand(expand: boolean) {
@@ -146,6 +208,13 @@ export class ClusterSecretsComponent implements OnChanges {
     this.dialogRef.componentInstance.datacenter = this.datacenter;
 
     this.dialogRef.afterClosed().subscribe(result => {});
+  }
+
+  getMetrics() {
+    this.api.getMetrics(this.cluster.metadata.name, this.datacenter.metadata.name).subscribe(res => {
+      this.metrics = res;
+      this.drawMetrics();
+    });
   }
 
 }
