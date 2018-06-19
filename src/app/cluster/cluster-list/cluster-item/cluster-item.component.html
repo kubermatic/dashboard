@@ -1,14 +1,14 @@
-<div class="km-card-list-content" [ngClass]="getClusterItemClass()">
-  <div fxLayout [routerLink]="['/clusters/', getDatacenter(), cluster.metadata.name]" class="km-card-list-content-item">
+<div class="row" [ngClass]="getClusterItemClass()">
+  <div fxLayout [routerLink]="['/clusters/', getDatacenter(), cluster.metadata.name]">
     <div fxFlex="40%" fxFlex.xs="40%">
         <span class="health-state-container"><kubermatic-cluster-health-status [cluster]="cluster"></kubermatic-cluster-health-status></span>
-        <p fxHide.gt-sm >{{getShortClusterName(cluster.spec.humanReadableName)}}</p>
-        <p fxHide.lt-md >{{this.cluster.spec.humanReadableName}}</p>
+        <p class="cluster-name" fxHide.gt-sm >{{getShortClusterName(cluster.spec.humanReadableName)}}</p>
+        <p class="cluster-name" fxHide.lt-md >{{this.cluster.spec.humanReadableName}}</p>
     </div>
     <div fxFlex="25%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
       <ng-container [ngSwitch]="!!cluster.spec.cloud">
         <ng-container *ngSwitchCase="true">
-          <img [src]="getClusterImagePath()" class="km-provider-logo" alt="Cluster Icon"/>
+          <img [src]="getClusterImagePath()" class="provider-logo" alt="Cluster Icon"/>
         </ng-container>
         <p *ngSwitchCase="false" class="text-muted">
           No provider

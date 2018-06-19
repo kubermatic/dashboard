@@ -1,6 +1,7 @@
+
 footer {
   background-color: #fff;
-  color: rgba(68, 77, 88, 0.7);
+  color: $text-color;
   border-top: 1px solid #F1F1F1;
   position: fixed;
   bottom: 0;
@@ -22,7 +23,7 @@ footer {
       line-height: 40px;
     }
     a {
-      color: rgba(68, 77, 88, 0.7);
+      color: $text-color;
       font-size: 14px;
       font-weight: 400;
       text-decoration: none;
@@ -44,10 +45,11 @@ footer {
           text-align: center;
 
           i {
-            color: rgba(68, 77, 88, 0.7);
+            color: $text-color;
           }
         }
       }
     }
   }
 }
+

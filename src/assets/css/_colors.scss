@@ -1,4 +1,63 @@
 
+
+
+
+// Styles for the docs app that are based on the current theme.
+@mixin material-docs-app-theme($theme) {
+
+  $primary: #0288d1;
+
+  $pending: rgba(255, 213, 92, 0.1);
+
+  $warning: #dd4b39;
+
+  $border: #E3E8EC;
+
+
+
+
+  //$primary: map-get($theme, primary);
+  //$accent: map-get($theme, accent);
+  //$warn: map-get($theme, warn);
+  //$background: map-get($theme, background);
+  //$foreground: map-get($theme, foreground);
+
+  /*
+  .docs-app-background {
+    background: mat-color($background, background);
+  }
+
+  .docs-primary-header {
+    background: mat-color($primary);
+
+    h1 {
+      color: mat-color($primary, default-contrast);
+    }
+  }
+
+  .docs-footer {
+    background: mat-color($primary);
+    color: mat-color($primary, default-contrast);
+  }
+
+  @include component-category-list-theme($theme);
+  @include component-list-theme($theme);
+  @include component-viewer-sidenav-theme($theme);
+  @include component-viewer-theme($theme);
+  @include docs-site-api-theme($theme);
+  @include docs-site-markdown-theme($theme);
+  @include docs-site-svg-theme($theme);
+  @include docs-site-tables-theme($theme);
+  @include example-viewer-theme($theme);
+  @include footer-theme($theme);
+  @include guide-list-theme($theme);
+  @include home-page-theme($theme);
+  @include nav-bar-theme($theme);
+  @include table-of-contents-theme($theme);*/
+
+}
+
+
 $primary: #0288d1;
 
 $pending: rgba(255, 213, 92, 0.1);
@@ -6,3 +65,390 @@ $pending: rgba(255, 213, 92, 0.1);
 $warning: #dd4b39;
 
 $border: #E3E8EC;
+
+$text-color: #444D58;
+
+// modal
+
+button.close {
+  position: absolute;
+  right: 20px;
+}
+
+.btn-right {
+  float: right;
+}
+
+.dialog {
+  width: 545px;
+}
+
+@media screen and (max-width: 745px) {
+  .dialog {
+    width: 100%;
+  }
+}
+
+.mat-dialog-content {
+  margin-top: 0;
+}
+
+.mat-toolbar {
+  border: none;
+  padding: 0;
+  color: $text-color;
+  font-size: 18px;
+  font-weight: 600;
+  position: relative;
+}
+
+
+// modal global?
+.mat-dialog-actions {
+  justify-content: center;
+
+  button {
+    font-size: 14px;
+    font-weight: 600 !important;
+    border-radius: 4px;
+    padding: 0px 22px;
+    line-height: 16px;
+    &.mat-raised-button {
+      color: $text-color;
+    }
+
+    &.mat-raised-button.mat-primary {
+      color: #fff;
+    }
+
+    &.mat-raised-button.mat-primary[disabled] {
+      color: #fff;
+      background-color: #BDC6D1;
+      box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    }
+  }
+}
+
+
+
+
+
+// input
+
+/deep/ .mat-input-wrapper {
+  margin: 5px 0 0 0;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-select {
+  width: 100%;
+}
+
+.mat-select-container {
+  padding: 0;
+}
+/deep/.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
+  margin: 0;
+}
+
+// add node
+/*
+/deep/.mat-dialog-content {
+  padding: 5px 24px;
+}
+
+/deep/.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
+  margin: 5px 0 0;
+}
+*/
+
+
+// spinner
+
+.km-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+// card
+
+.mat-card-header-text {
+  height: auto;
+  margin: 0;
+  width: auto;
+}
+
+
+// global
+.code-block {
+  background-color: #F7FAFF;
+  padding: 5px 15px;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: "Menlo", monospace;
+  p {
+    color: $text-color !important;
+    font-family: "Menlo", monospace;
+  }
+}
+
+
+// wizard
+.km-card-progress-bar.mat-card {
+  padding-top: 14px;
+  background-color: $primary;
+  border-radius: 0;
+
+  .mat-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 0;
+    margin-top: 0px;
+    padding-right: 15px;
+    text-align: center;
+
+    i {
+      color: #fff;
+      margin-left: 5px;
+
+      &.fa-check {
+        color: #78C347;
+      }
+    }
+  }
+
+  .wizard-step {
+    padding-top: 8px;
+    color: #fff;
+    font-weight: bold;
+
+    .title-unchecked {
+      color: #BDC6D1;
+    }
+  }
+}
+
+
+// wizard step 1
+
+// global
+
+.mat-card-header {
+  margin-bottom: 10px;
+  border: none;
+
+}
+
+.km-card-list {
+  margin-top: 20px !important;
+}
+
+.km-card-list-header {
+  background-color: $primary;
+  color: #fff;
+  margin: 0 !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+}
+
+.mat-card-header-text {
+  //margin: 0;
+}
+
+.mat-card-title {
+  margin: 0;
+  h4 {
+    font-weight: 600;
+    margin: 10px 0;
+    font-size: 18px;
+    color: $text-color;
+  }
+}
+
+.mat-card-content {
+  .mat-form-field {
+    //margin-top: 20px;
+    .mat-input-placeholder-wrapper .mat-input-placeholder {
+      color: #BDC6D1;
+      font-weight: 600;
+      font-size: 14px;
+    }
+  }
+  form {
+    //padding-top: 10px;
+  }
+  p {
+    color: #BDC6D1;
+    font-size: 12px;
+    margin: 0 0 15px;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    color: #0288D1;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+    &:hover {
+      color: #0288D1;
+    }
+  }
+}
+
+// Step Provider and Datacenter
+mat-button-toggle-group {
+  background-color: transparent;
+  box-shadow: none !important;
+
+  /deep/ mat-button-toggle {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    background-color: #FFFFFF;
+    border: 1px solid #e3e8ec;
+    cursor: pointer;
+    max-width: 90px;
+    min-width: 90px;
+    min-height: 90px;
+    max-height: 90px;
+
+    &:hover {
+      border: 1px solid $primary;
+    }
+  }
+
+  /deep/.mat-button-toggle-checked {
+    background-color: #FFFFFF;
+    border: 1px solid $primary;
+  }
+
+  /deep/ .mat-button-toggle-label {
+    width: 100%;
+    height: 100%;
+  }
+
+  /deep/ .mat-button-toggle-label-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+
+.mat-card.blue {
+  padding: 0px;
+  margin: 20px 0 0 0;
+
+  .mat-card-header {
+    padding: 10px 24px;
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
+    background-color: #0288d1;
+    color: #fff;
+    .mat-card-header-text {
+      width: 100%;
+      margin: 0px;
+      .mat-card-title {
+        font-weight: 500;
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+
+  &.small .mat-card-header {
+    height: 20px;
+    line-height: 20px;
+  }
+
+  .mat-card-content {
+    line-height: 40px;
+
+    &.row, .row {
+      line-height: 40px;
+      padding: 10px 24px;
+      &.small {
+        padding: 10px 24px;
+        margin: 0;
+        line-height: normal;
+      }
+
+      &.accordion {
+        padding-bottom: 0;
+        > div:first-child {
+          padding-bottom: 10px;
+        }
+      }
+
+      .cluster-name {
+        line-height: 40px;
+      }
+
+      &.odd {
+        background-color: #F7FAFF;
+      }
+
+      &.statusRunning:hover {
+        background-color: #EEF5FF;
+      }
+
+      &.statusWaiting {
+        background-color: rgba(255, 213, 92, 0.1);
+
+        &:hover {
+          background-color: rgba(255, 213, 92, 0.2);
+        }
+      }
+
+      &.statusFailed, &.statusDeleting {
+        background-color: rgba(241, 92, 92, 0.15);
+
+        &:hover {
+          background-color: rgba(241, 92, 92, 0.25);
+        }
+      }
+
+      &.no-item, .no-item {
+        text-align: center;
+        font-size: 14px;
+        color: $text-color;
+        //padding: 20px 24px;
+      }
+
+
+      p {
+        line-height: normal;
+        color: $text-color;
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .region {
+        display: flex;
+        align-items: center;
+        .flag-icon {
+          font-size: 24px;
+          margin-right: 10px;
+        }
+      }
+
+      .provider-logo {
+        height: auto !important;
+        width: auto !important;
+        max-height: 40px !important;
+        max-width: 70px !important;
+      }
+    }
+  }
+}
+

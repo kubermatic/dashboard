@@ -1,0 +1,15 @@
+@import '../../../../assets/css/colors';
+
+.provider-message {
+  height: 52px;
+  background-color: #F7FAFF;
+  margin: 5px 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: $text-color;
+  text-align: center;
+  a {
+    color: $primary;
+    text-decoration: none;
+  }
+}

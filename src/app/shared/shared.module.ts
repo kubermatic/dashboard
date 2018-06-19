@@ -9,6 +9,7 @@ import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, Mat
 import 'hammerjs';
 import { NgReduxFormModule } from '@angular-redux/form';
 import { AddSshKeyModalComponent } from './components/add-ssh-key-modal/add-ssh-key-modal.component';
+import { ThemePickerComponent } from './components/theme-picker/theme-picker.component';
 
 const modules: Array<any> = [
   CommonModule,
@@ -45,11 +46,13 @@ const modules: Array<any> = [
     ...modules
   ],
   declarations: [
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
+    ThemePickerComponent
   ],
   exports: [
     ...modules,
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
+    ThemePickerComponent,
   ],
   entryComponents: [AddSshKeyModalComponent]
 })

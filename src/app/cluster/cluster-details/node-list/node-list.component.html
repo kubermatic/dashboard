@@ -1,23 +1,23 @@
-<mat-card class="km-card-list">
-  <mat-card-header class="km-card-list-header">
+<mat-card class="blue">
+  <mat-card-header>
     <mat-card-title fxLayout>
       <div fxFlex="5%">
-        <strong>#</strong>
+        #
       </div>
       <div fxFlex="36%">
-        <strong>Name</strong>
+        Name
       </div>
       <div fxFlex="15%">
-        <strong>Kubelet Version</strong>
+        Kubelet Version
       </div>
       <div fxFlex="17%">
-        <strong>IP addresses</strong>
+        IP addresses
       </div>
       <div fxFlex="17%">
-        <strong>Created</strong>
+        Created
       </div>
       <div fxFlex="5%" align="center">
-        <strong>Status</strong>
+        Status
       </div>
       <div fxFlex="5%"></div>
     </mat-card-title>
@@ -27,8 +27,8 @@
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
 
-        <div class="km-node-row" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)" [ngClass]="getNodeHealthStatus(node,i).class">
-          <div fxLayout class="km-single-node">
+        <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)" [ngClass]="getNodeHealthStatus(node,i).class">
+          <div fxLayout>
             <div fxFlex="5%">{{i + 1}}</div>
             <div fxFlex="36%" style="word-break: normal ;">
               {{node.metadata.displayName}}
@@ -160,7 +160,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        <div class="km-no-node" *ngIf="isClusterRunning">No Node available. Please add a Node.</div>
+        <div class="row no-item" *ngIf="isClusterRunning">No Node available. Please add a Node.</div>
         <mat-spinner *ngIf="!isClusterRunning && !!!cluster.spec.cloud.bringyourown" color="accent" class="node-list-spinner" [diameter]="40"></mat-spinner>
       </ng-container>
     </ng-container>

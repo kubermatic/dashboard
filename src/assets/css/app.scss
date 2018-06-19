@@ -7,51 +7,17 @@ html, body {
   @include titillium-font;
 
   background-color: #F1F1F1;
-  color: #444D58;
+  color: $text-color;
 }
+
 h2 {
   font-weight: 300;
 }
 
-// Card Styling
-
-.km-card-list {
-  padding-top: 10px;
-  margin-bottom: 10px;
-
-  .km-card-list-header {
-    height: 30px;
-    padding-bottom: 0;
-    line-height: 30px;
-
-    .mat-card-title {
-      font-weight: 500;
-      margin-bottom: 0;
-      margin-left: 0;
-      margin-right: 0;
-    }
-  }
-}
 
 
-mat-card-header {
-  border-bottom: 1px solid #E3E8EC;
-  //padding-bottom: 10px;
 
-  &.km-card-list-header.mat-card-header {
-    //margin-bottom: 10px;
-  }
 
-  .mat-card-title {
-    padding-top: 0px;
-    font-size: 18px;
-  }
-
-  .mat-card-header-text {
-    width: 100%;
-    margin: 0;
-  }
-}
 
 // Input Fields
 
@@ -90,17 +56,6 @@ mat-card-header {
   font-size: 14px;
 }
 
-.mat-slider-horizontal {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-.dfjsdfijs {
-  border: 1px solid red;
-  float: left;
-}
-
-
 // dialog
 
 .mat-dialog-container {
@@ -127,11 +82,12 @@ mat-card-header {
       right: -20px;
       top: -20px;
       i {
-        color: #0288d1;
+        color: $primary;
       }
     }
   }
-  .mat-dialog-content {
+
+  /*.mat-dialog-content {
 
     p {
       font-size: 14px;
@@ -145,6 +101,7 @@ mat-card-header {
       font-size: 14px;
     }
   }
+  */
   .mat-dialog-actions {
 
     &:last-child {
@@ -158,11 +115,6 @@ mat-card-header {
 
 .mat-button-focus-overlay {
   background-color: transparent !important;
-}
-
-
-.mat-dialog-content {
-  margin-top: 20px;
 }
 
 .mat-raised-button {
@@ -253,3 +205,52 @@ mat-card-header {
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+
+
+/*
+
+.mat-slider-horizontal {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+*/
+
+
+
+// Card Styling
+
+.km-card-list {
+  padding-top: 10px;
+  margin-bottom: 10px;
+
+  .km-card-list-header {
+    height: 30px;
+    padding-bottom: 0;
+    line-height: 30px;
+
+    .mat-card-title {
+      font-weight: 500;
+      margin-bottom: 0;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}
+
+
+mat-card-header {
+  border-bottom: 1px solid #E3E8EC;
+
+  .mat-card-title {
+    padding-top: 0px;
+    font-size: 18px;
+  }
+
+  .mat-card-header-text {
+    width: 100%;
+    margin: 0;
+  }
+}
+

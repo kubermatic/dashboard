@@ -1,11 +1,9 @@
-
-// add node
 mat-form-field.operating-system {
-  margin-top: 20px;
+  //margin-top: 20px;
 }
 
 mat-form-field.container-runtime {
-  margin-top: 10px;
+  //margin-top: 10px;
 }
 
 div.os-options {
@@ -22,20 +20,4 @@ div.os-options {
   &.with-margin {
     margin: 5px 0 10px;
   }
-}
-
-// global?
-
-/deep/.mat-dialog-content {
-  padding: 5px 24px;
-}
-
-/deep/.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
-  margin: 5px 0 0;
-}
-
-// only DO add node
-
-/deep/.km-provider-specific-settings {
-  margin-bottom: 10px;
 }

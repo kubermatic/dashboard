@@ -1,27 +1,4 @@
 
-// modal global cleanup
-button.close {
-  position: absolute;
-  right: 20px;
-}
-
-// cleanup
-
-.btn-right {
-  float: right;
-}
-
-// modal global
-.mat-toolbar {
-  border: none;
-  padding: 0;
-  position: relative;
-}
-
-// modal cleanup global
-.mat-dialog-content {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
 
 
 // global=
@@ -30,14 +7,6 @@ p {
 }
 
 
-// global
-.code-block {
-  background-color: #F7FAFF;
-  padding: 5px 15px;
-  font-size: 14px;
-  line-height: 20px;
-  font-family: "Menlo", monospace;
-}
 
 // cleanup
 .download {

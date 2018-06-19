@@ -1,20 +1,5 @@
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
-// global?
-.card {
-  color: #333;
-
-  .card-header {
-    background: #f7f7f9;
-    color: #333;
-
-    a {
-      float: right;
-      margin-top: -7px;
-    }
-  }
-}
-
 .km-card-list {
   margin-top: 15px;
   padding-top: 10px;
@@ -30,9 +15,6 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
       font-weight: 500;
       margin-bottom: 0;
     }
-  }
-  .km-card-buttonbar {
-    margin: 19px 0 10px;
   }
 }
 
@@ -51,25 +33,17 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   }
 }
 
-// global dupicated
-.km-spinner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
 
-.mat-card-header-text {
-  height: auto;
-  margin: 0;
-  width: auto;
-}
 
 // global mobile
 @media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
   .btn-text-default {
     display: none;
   }
+}
+
+
+
+.cluster-row {
+  padding-left: 24px;
 }
