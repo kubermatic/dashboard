@@ -12,14 +12,14 @@
   <kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-hetzner-add-node>
 
   <kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-vsphere-add-node>
-  
+
   <kubermatic-azure-add-node *ngIf="cluster.spec.cloud.azure" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-azure-add-node>
 
   <mat-form-field class="operating-system">
     <mat-select placeholder="Operating System*:" formControlName="operatingSystem">
       <mat-option value="ubuntu">Ubuntu</mat-option>
       <mat-option value="centos">CentOS</mat-option>
-      <mat-option value="containerLinux" *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.openstack">Container Linux</mat-option>
+      <mat-option value="containerLinux" *ngIf="!cluster.spec.cloud.hetzner">Container Linux</mat-option>
     </mat-select>
     <mat-hint *ngIf="cluster.spec.cloud.openstack">Select the operating system of the entered image</mat-hint>
     <mat-hint *ngIf="cluster.spec.cloud.vsphere">Select the operating system of the entered template</mat-hint>
