@@ -52,7 +52,8 @@
   <mat-form-field class="container-runtime">
     <mat-select placeholder="Container Runtime:" formControlName="containerRuntime">
       <mat-option value="docker">Docker</mat-option>
-      <mat-option value="cri-o" *ngIf="nodeForm.controls.operatingSystem.value !== 'containerLinux'">CRI-O</mat-option>
+      <!-- CRI-O disabled atm, as it isn't working right now -->
+      <!-- <mat-option value="cri-o" *ngIf="nodeForm.controls.operatingSystem.value !== 'containerLinux'">CRI-O</mat-option> -->
     </mat-select>
   </mat-form-field>
 </form>
