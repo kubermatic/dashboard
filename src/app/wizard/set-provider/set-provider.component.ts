@@ -25,6 +25,11 @@ export class SetProviderComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.setProviderForm.valueChanges.subscribe(data => {
+
+      if (this.setProviderForm.controls.provider.value === 'baremetal') {
+        this.setProviderForm.controls.provider.setValue('');
+      }
+
       this.wizardService.changeClusterProvider({
         provider: this.setProviderForm.controls.provider.value,
         valid: this.setProviderForm.valid,
@@ -46,6 +51,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
           providers.push(provider);
         }
       }
+      providers.push('baremetal');
       this.providers = providers;
     }));
   }
