@@ -74,11 +74,12 @@ button {
   }
 }
 
-.km-delete-node {
-  float: right;
-  color: #0288d1;
-  border:1px solid #0288d1;
-  border-radius: 0;
+.km-delete-node, .km-duplicate-node {
+  color: #6A6A6A;
+
+  i {
+    font-size: 18px;
+  }
 }
 
 .km-spinner {

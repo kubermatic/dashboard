@@ -11,6 +11,7 @@ import { ClusterDetailsComponent } from './cluster-details/cluster-details.compo
 import { NodeListComponent } from './cluster-details/node-list/node-list.component';
 import { NodeGroupComponent } from './cluster-details/node-group/node-group.component';
 import { ClusterDeleteConfirmationComponent } from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
+import { NodeDuplicateComponent } from './cluster-details/node-duplicate/node-duplicate.component';
 import { NodeDeleteConfirmationComponent } from './cluster-details/node-delete-confirmation/node-delete-confirmation.component';
 import { SharedModule } from '../shared/shared.module';
 import { ClusterRoutingModule } from './cluster-routing.module';
@@ -37,6 +38,7 @@ const components: any[] = [
 const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
   NodeDeleteConfirmationComponent,
+  NodeDuplicateComponent,
   ChangeClusterVersionComponent,
   AddNodeModalComponent,
   ClusterSecretsComponent,
