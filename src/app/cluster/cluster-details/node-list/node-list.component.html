@@ -1,7 +1,7 @@
 <mat-card class="km-card-list">
   <mat-card-header class="km-card-list-header">
     <mat-card-title fxLayout>
-      <div fxFlex="5%">
+      <div fxFlex="3%">
         <strong>#</strong>
       </div>
       <div fxFlex="36%">
@@ -10,16 +10,16 @@
       <div fxFlex="15%">
         <strong>Kubelet Version</strong>
       </div>
-      <div fxFlex="17%">
+      <div fxFlex="16%">
         <strong>IP addresses</strong>
       </div>
-      <div fxFlex="17%">
+      <div fxFlex="16%">
         <strong>Created</strong>
       </div>
       <div fxFlex="5%" align="center">
         <strong>Status</strong>
       </div>
-      <div fxFlex="5%"></div>
+      <div fxFlex="10%"></div>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
@@ -29,7 +29,7 @@
 
         <div class="km-node-row" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)" [ngClass]="getNodeHealthStatus(node,i).class">
           <div fxLayout class="km-single-node">
-            <div fxFlex="5%">{{i + 1}}</div>
+            <div fxFlex="3%">{{i + 1}}</div>
             <div fxFlex="36%" style="word-break: normal ;">
               {{node.metadata.displayName}}
               <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
@@ -37,7 +37,7 @@
             <div fxFlex="15%">
               <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
             </div>
-            <div fxFlex="17%">
+            <div fxFlex="16%">
               <div *ngIf="!!node.status.addresses && !!getAddresses(node).InternalIP">
                 Int.IP:
                 <span class="copy" [cbContent]="getAddresses(node).InternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).InternalIP}}</span>
@@ -47,22 +47,25 @@
                 <span class="copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).ExternalIP}}</span>
               </div>
             </div>
-            <div fxFlex="17%">
+            <div fxFlex="16%">
               <span *ngIf="!!node.metadata.creationTimestamp">{{node.metadata.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
             </div>
             <div fxFlex="5%" class="health-state">
                 <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
             </div>
 
-            <div fxFlex="5%" class="km-btn-remove-node-wrapper">
+            <div fxFlex="10%" class="km-btn-remove-node-wrapper">
               <ng-container [ngSwitch]="!!node.metadata.deletionTimestamp">
                 <ng-container *ngSwitchCase="true">
                   <mat-spinner [diameter]="30" class="km-spinner" color="accent"></mat-spinner>
                 </ng-container>
 
                 <ng-container *ngSwitchCase="false">
-                  <button mat-icon-button class="km-delete-node" (click)="deleteNodeDialog(node)">
+                  <button mat-icon-button class="km-delete-node" matTooltip="delete Node" (click)="deleteNodeDialog(node)">
                     <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  </button>
+                  <button mat-icon-button class="km-duplicate-node" matTooltip="duplicate Node" (click)="duplicateNodeDialog(node)">
+                    <i class="fa fa-clone" aria-hidden="true"></i>
                   </button>
                 </ng-container>
               </ng-container>
