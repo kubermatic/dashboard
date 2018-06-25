@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { ApiService } from '../../../core/services';
+import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 
@@ -12,7 +13,6 @@ import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 })
 
 export class NodeDeleteConfirmationComponent implements OnInit {
-
   @Input() node: NodeEntity;
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
@@ -24,7 +24,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public btnOkText?: string;
   public btnCancelText?: string;
 
-  constructor(private api: ApiService) {
+  constructor(private api: ApiService, private dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>) {
   }
 
   ngOnInit() {
@@ -34,5 +34,6 @@ export class NodeDeleteConfirmationComponent implements OnInit {
     this.api.deleteClusterNode(this.cluster.metadata.name, this.node, this.datacenter.metadata.name).subscribe(result => {
       NotificationActions.success('Success', `Node removed successfully`);
     });
+    this.dialogRef.close(true);
   }
 }

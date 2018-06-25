@@ -25,6 +25,7 @@ import { fakeDigitaloceanSizes } from '../../../testing/fake-data/addNodeModal.f
 import Spy = jasmine.Spy;
 import { HetznerAddNodeComponent } from '../../../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../../../add-node/vsphere-add-node/vsphere-add-node.component';
+import { AzureAddNodeComponent } from '../../../add-node/azure-add-node/azure-add-node.component';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 
@@ -61,6 +62,7 @@ describe('AddNodeModalComponent', () => {
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
+        AzureAddNodeComponent,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { cluster: fakeDigitaloceanCluster } },

@@ -1,4 +1,5 @@
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
+import { EditProviderSettingsComponent } from './edit-provider-settings/edit-provider-settings.component';
 import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
@@ -7,6 +8,7 @@ import { ChangeClusterVersionComponent } from './change-cluster-version/change-c
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/combineLatest';
+import 'rxjs/add/observable/interval';
 import { environment } from '../../../environments/environment';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
@@ -15,7 +17,6 @@ import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { ApiService, DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
-import 'rxjs/add/observable/interval';
 import { Subject } from 'rxjs/Subject';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
@@ -27,6 +28,7 @@ import { lt, gt } from 'semver';
   templateUrl: './cluster-details.component.html',
   styleUrls: ['./cluster-details.component.scss']
 })
+
 export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public cluster: ClusterEntity;
   public nodeDc: DataCenterEntity;
@@ -92,22 +94,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.clusterSubject
       .takeUntil(this.unsubscribe)
       .subscribe(cluster => {
-        if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController) {
-          this.api.getClusterUpgrades(cluster.metadata.name, seedDCName)
-            .takeUntil(this.unsubscribe)
-            .subscribe(upgrades => {
-              for (const i in upgrades) {
-                if (upgrades.hasOwnProperty(i)) {
-                  if (this.versionsList.indexOf(upgrades[i].version) < 0) {
-                    this.versionsList.push(upgrades[i].version);
-                  }
-                  if (lt(this.cluster.spec.version, upgrades[i].version)) {
-                    this.updatesAvailable = true;
-                  }
-                }
-              }
-            });
-        }
+        this.reloadVersions();
       });
     // Nodes
     this.clusterSubject
@@ -178,6 +165,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         this.cluster = res;
         this.clusterSubject.next(res);
+        this.reloadVersions();
       });
   }
 
@@ -189,6 +177,27 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.nodes = nodes;
         });
     }
+  }
+
+  public reloadVersions() {
+    if (this.cluster && this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController) {
+      this.api.getClusterUpgrades(this.cluster.metadata.name, this.datacenter.metadata.name)
+        .takeUntil(this.unsubscribe)
+        .subscribe(upgrades => {
+          this.versionsList = [];
+          this.updatesAvailable = false;
+          for (const i in upgrades) {
+            if (upgrades.hasOwnProperty(i)) {
+              if (this.versionsList.indexOf(upgrades[i].version) < 0) {
+                this.versionsList.push(upgrades[i].version);
+              }
+              if (lt(this.cluster.spec.version, upgrades[i].version)) {
+                this.updatesAvailable = true;
+              }
+            }
+          }
+        });
+      }
   }
 
   public addNode(): void {
@@ -242,5 +251,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     } else if (this.cluster) {
       return !!this.nodeDc;
     }
+  }
+
+  public editProviderSettings(): void {
+    const modal = this.dialog.open(EditProviderSettingsComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
+
+    const sub = modal.afterClosed().subscribe(result => {
+      sub.unsubscribe();
+    });
   }
 }

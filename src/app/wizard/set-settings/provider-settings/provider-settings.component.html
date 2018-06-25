@@ -15,3 +15,6 @@
 
 <kubermatic-vsphere-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.vsphere">
 </kubermatic-vsphere-cluster-settings>
+
+<kubermatic-azure-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.azure">
+</kubermatic-azure-cluster-settings>

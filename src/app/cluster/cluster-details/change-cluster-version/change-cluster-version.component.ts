@@ -30,10 +30,10 @@ export class ChangeClusterVersionComponent implements OnInit {
     this.cluster.spec.version = this.selectedVersion;
 
     this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(result => {
+      this.dialogRef.close();
       NotificationActions.success('Success', `Cluster Version is being changed`);
+      this.selectedVersion = null;
     });
 
-    this.selectedVersion = null;
-    this.dialogRef.close();
   }
 }

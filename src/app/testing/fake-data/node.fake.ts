@@ -15,12 +15,15 @@ export const fakeDigitaloceanCreateNode: NodeEntity = {
       },
       aws: null,
       openstack: null,
-      hetzner: null
+      vsphere: null,
+      hetzner: null,
+      azure: null
     },
     operatingSystem: {
       ubuntu: {
         distUpgradeOnBoot: false
       },
+      centos: null,
       containerLinux: null
     },
     versions: {
@@ -52,12 +55,15 @@ export const nodeFake: NodeEntity = {
       },
       aws: null,
       openstack: null,
-      hetzner: null
+      vsphere: null,
+      hetzner: null,
+      azure: null
     },
     operatingSystem: {
       ubuntu: {
         distUpgradeOnBoot: false
       },
+      centos: null,
       containerLinux: null
     },
     versions: {
@@ -121,12 +127,15 @@ export const nodesFake: NodeEntity[] = [
         },
         aws: null,
         openstack: null,
-        hetzner: null
+        vsphere: null,
+        hetzner: null,
+        azure: null
       },
       operatingSystem: {
         ubuntu: {
           distUpgradeOnBoot: false
         },
+        centos: null,
         containerLinux: null
       },
       versions: {
@@ -188,12 +197,15 @@ export const nodesFake: NodeEntity[] = [
         },
         aws: null,
         openstack: null,
-        hetzner: null
+        vsphere: null,
+        hetzner: null,
+        azure: null
       },
       operatingSystem: {
         ubuntu: {
           distUpgradeOnBoot: false
         },
+        centos: null,
         containerLinux: null
       },
       versions: {
@@ -269,11 +281,17 @@ export const nodeDataFake: NodeData = {
           memory: 512,
           template: ''
         },
+        azure: {
+          size: 'cx31',
+          assignPublicIP: false,
+          tags: ''
+        },
       },
       operatingSystem: {
         ubuntu: {
           distUpgradeOnBoot: false
         },
+        centos: null,
         containerLinux: null
       },
       versions: {

@@ -21,7 +21,7 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
       token: new FormControl(this.cluster.spec.cloud.digitalocean.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.digitaloceanSettingsFormSub = this.digitaloceanSettingsForm.valueChanges.subscribe(data => {
+    this.digitaloceanSettingsFormSub = this.digitaloceanSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           digitalocean: {

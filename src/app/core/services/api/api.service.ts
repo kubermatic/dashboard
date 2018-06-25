@@ -5,12 +5,13 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { Auth } from '../../../core/services/auth/auth.service';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, MasterVersion } from '../../../shared/entity/ClusterEntity';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { OpenstackFlavor } from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
 
 @Injectable()
 export class ApiService {
@@ -85,11 +86,11 @@ export class ApiService {
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
   }
 
-  getClusterUpgrades(cluster: string, dc: string): Observable<any[]> {
+  getClusterUpgrades(cluster: string, dc: string): Observable<MasterVersion[]> {
     const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}/upgrades`;
-    return this.http.get<string[]>(url, { headers: this.headers })
+    return this.http.get<MasterVersion[]>(url, { headers: this.headers })
       .catch(error => {
-        return Observable.of<string[]>([]);
+        return Observable.of<MasterVersion[]>([]);
       });
   }
 
@@ -105,5 +106,20 @@ export class ApiService {
 
   getKubeconfigURL(dc: string, cluster: string): string {
     return `${environment.restRootV3}/dc/${dc}/cluster/${cluster}/kubeconfig?token=${this.token}`;
+  }
+
+  getMasterVersions(): Observable<MasterVersion[]> {
+    const url = `${this.restRoot}/versions`;
+    return this.http.get<MasterVersion[]>(url, { headers: this.headers });
+  }
+
+  getAzureSizes(clientID: string, clientSecret: string, subscriptionID: string, tenantID: string, location: string): Observable<AzureSizes> {
+    this.headers = this.headers.set('ClientID', clientID);
+    this.headers = this.headers.set('ClientSecret', clientSecret);
+    this.headers = this.headers.set('SubscriptionID', subscriptionID);
+    this.headers = this.headers.set('TenantID', tenantID);
+    this.headers = this.headers.set('Location', location);
+    const url = `${this.restRoot}/azure/sizes`;
+    return this.http.get<AzureSizes>(url, { headers: this.headers });
   }
 }

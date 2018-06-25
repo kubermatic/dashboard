@@ -11,12 +11,20 @@ import { ClusterDetailsComponent } from './cluster-details/cluster-details.compo
 import { NodeListComponent } from './cluster-details/node-list/node-list.component';
 import { NodeGroupComponent } from './cluster-details/node-group/node-group.component';
 import { ClusterDeleteConfirmationComponent } from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
+import { NodeDuplicateComponent } from './cluster-details/node-duplicate/node-duplicate.component';
 import { NodeDeleteConfirmationComponent } from './cluster-details/node-delete-confirmation/node-delete-confirmation.component';
 import { SharedModule } from '../shared/shared.module';
 import { ClusterRoutingModule } from './cluster-routing.module';
 import { NodeDeleteConfirmationService } from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
 import { RevokeAdminTokenComponent } from './cluster-details/cluster-secrets/revoke-admin-token/revoke-admin-token.component';
 import { AddNodeModule } from '../add-node/add-node.module';
+import { EditProviderSettingsComponent } from './cluster-details/edit-provider-settings/edit-provider-settings.component';
+import { AWSProviderSettingsComponent } from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
+import { DigitaloceanProviderSettingsComponent } from './cluster-details/edit-provider-settings/digitalocean-provider-settings/digitalocean-provider-settings.component';
+import { HetznerProviderSettingsComponent } from './cluster-details/edit-provider-settings/hetzner-provider-settings/hetzner-provider-settings.component';
+import { OpenstackProviderSettingsComponent } from './cluster-details/edit-provider-settings/openstack-provider-settings/openstack-provider-settings.component';
+import { VSphereProviderSettingsComponent } from './cluster-details/edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
+import { AzureProviderSettingsComponent } from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -30,11 +38,19 @@ const components: any[] = [
 const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
   NodeDeleteConfirmationComponent,
+  NodeDuplicateComponent,
   ChangeClusterVersionComponent,
   AddNodeModalComponent,
   ClusterSecretsComponent,
   ClusterConnectComponent,
   RevokeAdminTokenComponent,
+  EditProviderSettingsComponent,
+  AWSProviderSettingsComponent,
+  DigitaloceanProviderSettingsComponent,
+  HetznerProviderSettingsComponent,
+  OpenstackProviderSettingsComponent,
+  VSphereProviderSettingsComponent,
+  AzureProviderSettingsComponent,
 ];
 
 @NgModule({

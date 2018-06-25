@@ -12,6 +12,7 @@ import { asyncData } from '../testing/services/api-mock.service';
 import { MatTabsModule, MatButtonToggleModule, MatDialog } from '@angular/material';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
+import { masterVersionsFake } from '../testing/fake-data/cluster-spec.fake';
 import { ProgressComponent } from './progress/progress.component';
 import { SetSettingsComponent } from './set-settings/set-settings.component';
 import { AddNodeComponent } from '../add-node/add-node.component';
@@ -25,7 +26,7 @@ import { BringyourownClusterSettingsComponent } from './set-settings/provider-se
 import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aws/aws.component';
 import { AwsAddNodeComponent } from '../add-node/aws-add-node/aws-add-node.component';
 import { OpenstackClusterSettingsComponent } from './set-settings/provider-settings/openstack/openstack.component';
-import { SetClusterNameComponent } from './set-cluster-name/set-cluster-name.component';
+import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
 import { SetProviderComponent } from './set-provider/set-provider.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -36,8 +37,10 @@ import { ClusterNameGenerator } from '../core/util/name-generator.service';
 import Spy = jasmine.Spy;
 import { HetznerClusterSettingsComponent } from './set-settings/provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './set-settings/provider-settings/vsphere/vsphere.component';
+import { AzureClusterSettingsComponent } from './set-settings/provider-settings/azure/azure.component';
 import { HetznerAddNodeComponent } from '../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../add-node/vsphere-add-node/vsphere-add-node.component';
+import { AzureAddNodeComponent } from '../add-node/azure-add-node/azure-add-node.component';
 
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
@@ -45,11 +48,13 @@ describe('WizardComponent', () => {
   let router: Router;
   let createClusterSpy: Spy;
   let getClusterSpy: Spy;
+  let getMasterVersionsSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster', 'getMasterVersions']);
     createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
     getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake));
 
     TestBed.configureTestingModule({
       imports: [
@@ -73,6 +78,7 @@ describe('WizardComponent', () => {
         BringyourownClusterSettingsComponent,
         HetznerClusterSettingsComponent,
         VSphereClusterSettingsComponent,
+        AzureClusterSettingsComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
         AwsAddNodeComponent,
@@ -80,7 +86,8 @@ describe('WizardComponent', () => {
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
-        SetClusterNameComponent,
+        AzureAddNodeComponent,
+        SetClusterSpecComponent,
         SetProviderComponent,
         SetDatacenterComponent,
         SummaryComponent,

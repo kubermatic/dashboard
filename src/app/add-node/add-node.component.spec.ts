@@ -14,9 +14,10 @@ import { ApiService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-data/addNodeModal.fake';
 import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
-import Spy = jasmine.Spy;
 import { VSphereAddNodeComponent } from './vsphere-add-node/vsphere-add-node.component';
+import { AzureAddNodeComponent } from './azure-add-node/azure-add-node.component';
 import { nodeDataFake } from '../testing/fake-data/node.fake';
+import Spy = jasmine.Spy;
 
 describe('AddNodeComponent', () => {
   let fixture: ComponentFixture<AddNodeComponent>;
@@ -43,6 +44,7 @@ describe('AddNodeComponent', () => {
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
+        AzureAddNodeComponent,
       ],
       providers: [
         AddNodeService,

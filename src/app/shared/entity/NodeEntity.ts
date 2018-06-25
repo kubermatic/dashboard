@@ -4,6 +4,7 @@ import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
 import { HetznerNodeSpec } from './node/HetznerNodeSpec';
 import { VSphereNodeSpec } from './node/VSphereNodeSpec';
+import { AzureNodeSpec } from './node/AzureNodeSpec';
 import { NodeProvider } from '../model/NodeProviderConstants';
 
 export class NodeEntity {
@@ -24,14 +25,20 @@ export class NodeCloudSpec {
   openstack?: OpenstackNodeSpec;
   hetzner?: HetznerNodeSpec;
   vsphere?: VSphereNodeSpec;
+  azure?: AzureNodeSpec;
 }
 
 export class OperatingSystemSpec {
   ubuntu?: UbuntuSpec;
+  centos?: CentosSpec;
   containerLinux?: ContainerLinuxSpec;
 }
 
 export class UbuntuSpec {
+  distUpgradeOnBoot: boolean;
+}
+
+export class CentosSpec {
   distUpgradeOnBoot: boolean;
 }
 
@@ -117,6 +124,13 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         type: 'cx31'
       };
       return hSpec;
+    case NodeProvider.AZURE:
+      const azureSpec: AzureNodeSpec = {
+        size: 'Standard_A0',
+        assignPublicIP: false,
+        tags: {'': ''}
+      };
+      return azureSpec;
   }
   return {};
 }

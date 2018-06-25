@@ -112,6 +112,17 @@
   color: #BCC5D0;
 }
 
+/deep/.mat-menu-content {
+  padding: 0 !important;
+}
+
+.km-provider-menu-btn {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  color: #6A6A6A;
+}
+
 .km-download-config {
   background-color: rgba(2, 136, 209, 0.12);
 }
@@ -211,7 +222,6 @@ kubermatic-cluster-health-status {
 a.download-kubeconfig-btn {
   display: inline-block;
   vertical-align: middle;
-  top: -1px;
 
   /deep/span.mat-button-wrapper {
     display: flex;
@@ -236,4 +246,3 @@ a.download-kubeconfig-btn {
     background-image: url("../../../assets/images/Arrow_down.svg");
     background-repeat: no-repeat;
 }
-

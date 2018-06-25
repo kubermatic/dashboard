@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
+import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
@@ -20,6 +21,7 @@ export class NodeListComponent implements OnChanges {
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   public isClusterRunning: boolean;
   public clickedDeleteNode = {};
+  public clickedDuplicateNode = {};
   public isShowNodeDetails = {};
   public config: MatDialogConfig = {
     disableClose: false,
@@ -63,6 +65,19 @@ export class NodeListComponent implements OnChanges {
 
     dialogRef.afterClosed().subscribe(result => {
       this.deleteNode.emit(node);
+    });
+  }
+
+  public duplicateNodeDialog(node: NodeEntity): void {
+    this.clickedDuplicateNode[node.metadata.name] = true;
+    const dialogRef = this.dialog.open(NodeDuplicateComponent);
+    dialogRef.componentInstance.node = node;
+    dialogRef.componentInstance.cluster = this.cluster;
+    dialogRef.componentInstance.datacenter = this.datacenter;
+
+    const sub = dialogRef.afterClosed().subscribe(result => {
+    this.clickedDuplicateNode[node.metadata.name] = false;
+      sub.unsubscribe();
     });
   }
 
@@ -141,13 +156,11 @@ export class NodeListComponent implements OnChanges {
       path += 'containerlinux.png';
     } else if (node.spec.operatingSystem.ubuntu) {
       path += 'ubuntu.png';
+    } else if (node.spec.operatingSystem.centos) {
+      path += 'centos.png';
     } else {
       path = '';
     }
-    /* TODO: update operatingSystemSpec for centOS
-     else if (node.spec.operatingSystem.centOS) {
-      path += 'centos.png';
-    }*/
 
     return path;
   }
@@ -165,7 +178,9 @@ export class NodeListComponent implements OnChanges {
   }
 
   public toggleNode(nodeName: string): void {
-    if (!this.clickedDeleteNode[nodeName]) {
+    const element = event.target as HTMLElement;
+    const className = element.className;
+    if (!this.clickedDeleteNode[nodeName] && !this.clickedDuplicateNode[nodeName] && className !== 'copy') {
       if (this.isShowNodeDetails[nodeName]) {
         this.isShowNodeDetails[nodeName] = false;
       } else if (!this.isShowNodeDetails[nodeName]) {

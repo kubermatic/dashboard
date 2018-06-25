@@ -1,12 +1,13 @@
-import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
-import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
-import {AWSCloudSpec} from './cloud/AWSCloudSpec';
-import {MetadataEntity} from './MetadataEntity';
-import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
-import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
-import {NodeProvider} from '../model/NodeProviderConstants';
-import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
-import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
+import { DigitaloceanCloudSpec } from './cloud/DigitaloceanCloudSpec';
+import { BringYourOwnCloudSpec } from './cloud/BringYourOwnCloudSpec';
+import { AWSCloudSpec } from './cloud/AWSCloudSpec';
+import { MetadataEntity } from './MetadataEntity';
+import { OpenstackCloudSpec } from './cloud/OpenstackCloudSpec';
+import { BareMetalCloudSpec } from './cloud/BareMetalCloudSpec';
+import { NodeProvider } from '../model/NodeProviderConstants';
+import { VSphereCloudSpec } from './cloud/VSphereCloudSpec';
+import { HetznerCloudSpec } from './cloud/HetznerCloudSpec';
+import { AzureCloudSpec } from './cloud/AzureCloudSpec';
 
 export function getClusterProvider(cluster: ClusterEntity): string {
   switch (true) {
@@ -30,6 +31,9 @@ export function getClusterProvider(cluster: ClusterEntity): string {
     }
     case !!cluster.spec.cloud.vsphere: {
       return NodeProvider.VSPHERE;
+    }
+    case !!cluster.spec.cloud.azure: {
+      return NodeProvider.AZURE;
     }
   }
   return '';
@@ -89,6 +93,19 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         token: '',
       };
       return hSpec;
+    case NodeProvider.AZURE:
+      const azureSpec: AzureCloudSpec = {
+        clientID: '',
+        clientSecret: '',
+        resourceGroup: '',
+        routeTable: '',
+        securityGroup: '',
+        subnet: '',
+        subscriptionID: '',
+        tenantID: '',
+        vnet: '',
+      };
+      return azureSpec;
   }
   return {};
 }
@@ -102,6 +119,7 @@ export class CloudSpec {
   baremetal?: BareMetalCloudSpec;
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;
+  azure?: AzureCloudSpec;
 }
 
 export class ClusterSpec {
@@ -151,4 +169,10 @@ export class Health {
 export class SSHKeyPair {
   privateKey: string;
   publicKey: string;
+}
+
+export class MasterVersion {
+  version: string;
+  allowedNodeVersions: string[];
+  default?: boolean;
 }

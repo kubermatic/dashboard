@@ -6,6 +6,7 @@ export class NodeProvider {
   public static readonly OPENSTACK: string = 'openstack';
   public static readonly VSPHERE: string = 'vsphere';
   public static readonly HETZNER: string = 'hetzner';
+  public static readonly AZURE: string = 'azure';
 
   public static readonly Supported: string[] = [
     NodeProvider.AWS,
@@ -14,6 +15,7 @@ export class NodeProvider {
     NodeProvider.BRINGYOUROWN,
     NodeProvider.VSPHERE,
     NodeProvider.HETZNER,
+    NodeProvider.AZURE,
   ];
 
   public static readonly ProviderNames: Object = {
@@ -23,6 +25,7 @@ export class NodeProvider {
     [NodeProvider.BRINGYOUROWN]: 'Bring Your Own',
     [NodeProvider.VSPHERE]: 'VMware vSphere',
     [NodeProvider.HETZNER]: 'Hetzner cloud',
+    [NodeProvider.AZURE]: 'Azure',
   };
 }
 

@@ -12,6 +12,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
 import { HetznerClusterSettingsComponent } from './hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './vsphere/vsphere.component';
+import { AzureClusterSettingsComponent } from './azure/azure.component';
 
 describe('ClusterProviderSettingsComponent', () => {
   let fixture: ComponentFixture<ClusterProviderSettingsComponent>;
@@ -33,6 +34,7 @@ describe('ClusterProviderSettingsComponent', () => {
         BringyourownClusterSettingsComponent,
         HetznerClusterSettingsComponent,
         VSphereClusterSettingsComponent,
+        AzureClusterSettingsComponent,
       ],
       providers: [
         WizardService,

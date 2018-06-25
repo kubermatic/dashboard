@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { WizardComponent } from './wizard.component';
 import { ProgressComponent } from './progress/progress.component';
-import { SetClusterNameComponent } from './set-cluster-name/set-cluster-name.component';
+import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SetProviderComponent } from './set-provider/set-provider.component';
 import { SetSettingsComponent } from './set-settings/set-settings.component';
@@ -18,11 +18,12 @@ import { ClusterSSHKeysComponent } from './set-settings/ssh-keys/cluster-ssh-key
 import { AddNodeModule } from '../add-node/add-node.module';
 import { HetznerClusterSettingsComponent } from './set-settings/provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './set-settings/provider-settings/vsphere/vsphere.component';
+import { AzureClusterSettingsComponent } from './set-settings/provider-settings/azure/azure.component';
 
 const components: any[] = [
   WizardComponent,
   ProgressComponent,
-  SetClusterNameComponent,
+  SetClusterSpecComponent,
   SetDatacenterComponent,
   SetProviderComponent,
   SetSettingsComponent,
@@ -35,6 +36,7 @@ const components: any[] = [
   BringyourownClusterSettingsComponent,
   HetznerClusterSettingsComponent,
   VSphereClusterSettingsComponent,
+  AzureClusterSettingsComponent,
 ];
 
 @NgModule({
