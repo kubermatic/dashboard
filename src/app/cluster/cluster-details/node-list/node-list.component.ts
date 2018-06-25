@@ -180,7 +180,6 @@ export class NodeListComponent implements OnChanges {
   public toggleNode(nodeName: string): void {
     const element = event.target as HTMLElement;
     const className = element.className;
-    
     if (!this.clickedDeleteNode[nodeName] && !this.clickedDuplicateNode[nodeName] && className !== 'copy') {
       if (this.isShowNodeDetails[nodeName]) {
         this.isShowNodeDetails[nodeName] = false;
