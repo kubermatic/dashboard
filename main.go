@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
 	"os"
@@ -17,7 +18,8 @@ func main() {
 	flag.Parse()
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", handler)
+	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
+	mux.Handle("/", InstrumentHandler(http.HandlerFunc(handler)))
 
 	s := http.Server{
 		Addr:    *addr,
