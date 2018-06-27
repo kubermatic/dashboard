@@ -7,3 +7,8 @@ export interface OpenstackFlavor {
   swap: number;
   vcpus: number;
 }
+
+export interface OpenstackTenant {
+  id: string;
+  name: string;
+}
