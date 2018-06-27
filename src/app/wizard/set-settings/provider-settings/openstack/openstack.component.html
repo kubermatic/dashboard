@@ -6,6 +6,18 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <input matInput formControlName="username" type="text" placeholder="Username*:" title="Username" autocomplete="off">
+    <mat-error *ngIf="openstackSettingsForm.controls.username.hasError('required')">
+      Username is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <input matInput formControlName="password" type="password" placeholder="Password*:" title="Password" autocomplete="off">
+    <mat-error *ngIf="openstackSettingsForm.controls.password.hasError('required')">
+      Password is <strong>required</strong>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex>
     <mat-select placeholder="Tenant*:" formControlName="tenant">
       <mat-option *ngIf="!loadingTenants && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
       <mat-option *ngIf="loadingTenants" [value]="0">Loading tenants...</mat-option>
@@ -16,18 +28,6 @@
     </mat-select>
     <mat-error *ngIf="openstackSettingsForm.controls.tenant.hasError('required')">
       Tenant is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field fxFlex>
-    <input matInput formControlName="username" type="text" placeholder="Username*:" title="Username" autocomplete="off">
-    <mat-error *ngIf="openstackSettingsForm.controls.username.hasError('required')">
-      Username is <strong>required</strong>
-    </mat-error>
-  </mat-form-field>
-  <mat-form-field fxFlex>
-    <input matInput formControlName="password" type="password" placeholder="Password*:" title="Password" autocomplete="off">
-    <mat-error *ngIf="openstackSettingsForm.controls.password.hasError('required')">
-      Password is <strong>required</strong>
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex *ngIf="!hideOptional">
