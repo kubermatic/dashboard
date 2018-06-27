@@ -17,10 +17,11 @@ export class AppConfigService {
   }
 
   loadAppConfig() {
-    const jsonfile = '../assets/config/appConfig.' + environment.name + '.json';
+    const jsonfile = environment.configUrl;
     setTimeout(() => {
       return this.http.get(jsonfile).toPromise().then(resp => {
         this.appConfig = <Config>resp;
+        console.log('APPCONFIG', this.appConfig, ', FILE', jsonfile);
       }).catch(error => {
         NotificationActions.error('Error', `Could not read configuration file`);
       });
