@@ -1,3 +1,3 @@
 export interface Config {
-    isDemo: boolean;
+    show_demo_info: boolean;
 }
