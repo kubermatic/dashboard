@@ -10,6 +10,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService } from './core/services/index';
 import { SidenavService } from './core/components/sidenav/sidenav.service';
+import { AppConfigService } from './app-config.service';
 
 import { BreadcrumbsComponent } from './core/components/breadcrumbs/breadcrumbs.component';
 import { NotificationComponent } from './core/components/notification/notification.component';
@@ -59,7 +60,8 @@ describe('KubermaticComponent', () => {
         ApiService,
         { provide: DatacenterService, useClass: DatacenterMockService },
         AuthGuard,
-        SidenavService
+        SidenavService,
+        AppConfigService
       ],
     }).compileComponents();
   });
@@ -67,6 +69,9 @@ describe('KubermaticComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(KubermaticComponent);
     component = fixture.componentInstance;
+    component.config = {
+      'show_demo_info': false
+    };
     authService = fixture.debugElement.injector.get(Auth) as any;
   });
 
