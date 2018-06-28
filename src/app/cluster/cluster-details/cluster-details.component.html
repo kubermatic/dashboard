@@ -1,6 +1,6 @@
 <ng-container *ngIf="isLoaded()">
   <div fxLayout class="cluster-detail-actions">
-    <div fxFlex="100%" align="right" style="margin-top: 25px; margin-bottom: 12px;">
+    <div fxFlex="100%" align="right">
       <button class="add-node-btn"
               mat-raised-button color="primary"
               (click)="addNode()"
@@ -12,7 +12,7 @@
       <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'statusRunning'">
         Connect
       </button>
-      <a class="download-kubeconfig-btn" mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
+      <a class="download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
       <button mat-button (click)="deleteClusterDialog()" mat-raised-button >
         <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px; color: #0288d1;" color="primary"></i>
         Delete Cluster
@@ -20,29 +20,27 @@
     </div>
   </div>
 
-  <mat-card class="km-card-list km-card-list-info" [ngClass]="clusterHealthClass">
+  <mat-card class="white" [ngClass]="clusterHealthClass">
     <mat-card-header class="km-card-main-header">
       <mat-card-title>
         <span ngxClipboard [cbContent]="cluster.spec.humanReadableName" matTooltip="click to copy" class="copy cluster-name">{{cluster.spec.humanReadableName}}</span>
         <kubermatic-cluster-health-status [cluster]="cluster"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-subtitle class="km-card-list-subtitle" *ngIf="cluster.spec.pause" fxLayout >
-      <div fxFlex="100%" class="km-conditionsMessage">
-        <p class="km-pauseReason">{{cluster.spec.pauseReason}}</p>
+    <mat-card-subtitle *ngIf="cluster.spec.pause" fxLayout >
+      <div fxFlex>
+        <p class="pauseReason">{{cluster.spec.pauseReason}}</p>
       </div>
     </mat-card-subtitle>
-    <mat-card-content class="km-card-list-content" fxLayout>
+    <mat-card-content fxLayout class="row">
       <div fxFlex="20%">
         <strong>Master Version:</strong>
       </div>
-      <div fxFlex="35%">
-        <span (click)="changeClusterVersionDialog()" matTooltip="click to change version" class="copy change-version">{{cluster.spec.version}}
-        <small [hidden]="!isClusterRunning || !updatesAvailable">upgrade available</small></span>
+      <div fxFlex="35%" class="change-version">
+        <span (click)="changeClusterVersionDialog()" matTooltip="click to change version" class="copy">{{cluster.spec.version}}
+        <small [hidden]="!isClusterRunning || !updatesAvailable" >upgrade available</small></span>
       </div>
     </mat-card-content>
-
-
   </mat-card>
   <kubermatic-cluster-secrets [cluster]="cluster" [datacenter]="datacenter"></kubermatic-cluster-secrets>
 

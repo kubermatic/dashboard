@@ -5,15 +5,10 @@
 // Styles for the docs app that are based on the current theme.
 @mixin material-docs-app-theme($theme) {
 
-  $primary: #0288d1;
-
-  $pending: rgba(255, 213, 92, 0.1);
-
-  $warning: #dd4b39;
-
-  $border: #E3E8EC;
-
-
+  //$primary: #0288d1;
+  //$pending: rgba(255, 213, 92, 0.1);
+  //$warning: #dd4b39;
+  //$border: #E3E8EC;
 
 
   //$primary: map-get($theme, primary);
@@ -62,12 +57,27 @@ $primary: #0288d1;
 
 $pending: rgba(255, 213, 92, 0.1);
 
-$warning: #dd4b39;
+$warning: #ff5454;
 
 $border: #E3E8EC;
 
 $text-color: #444D58;
 
+$light-text-color: #BCC5D0;
+
+$light-background: #EEF5FF;
+
+$medium-background: #F7FAFF;
+
+$warning-background: #FFDAD9;
+
+$waiting-background: #FFD55C;
+
+$waiting-status-color: orange;
+
+$healthy-status-color: #79c447;
+
+$warning-status-color: $warning;
 // modal
 
 button.close {
@@ -452,3 +462,70 @@ mat-button-toggle-group {
   }
 }
 
+.mat-card.white {
+  padding: 0;
+  margin: 0;
+
+  &.statusWaiting {
+    background-color: rgba(255, 213, 92, 0.1);
+  }
+
+  &.statusFailed, &.statusDeleting {
+    background-color: rgba(241, 92, 92, 0.15);
+  }
+
+  .mat-card-header {
+    padding: 20px 24px 0px;
+    margin: 0;
+    .mat-card-header-text {
+      width: 100%;
+      margin: 0px;
+      .mat-card-title {
+        font-weight: 500;
+        padding: 0;
+        margin: 0;
+        font-size: 18px;
+        line-height: 28px;
+
+        .cluster-name {
+          float: left;
+        }
+      }
+    }
+  }
+
+  .mat-card-subtitle {
+    .pauseReason {
+      margin-top: 0;
+      color: $warning-status-color;
+    }
+  }
+
+  .mat-card-content {
+    line-height: 40px;
+    &.row, .row {
+      line-height: 40px;
+      padding: 10px 24px;
+    }
+  }
+
+
+}
+
+
+// modal close icon
+
+button.close {
+  position: absolute;
+  right: 20px;
+}
+
+.mat-toolbar {
+  border: none;
+  padding: 0;
+  position: relative;
+}
+
+mat-dialog-content {
+  margin-bottom: 15px;
+}

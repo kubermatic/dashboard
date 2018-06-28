@@ -9,8 +9,8 @@
     </mat-form-field>
   </div>
 
-  <div fxFlex="100%" *ngIf="!hideOptional">
-    <div class="node-options">
+  <div fxFlex *ngIf="!hideOptional">
+    <div fxLayout="row" class="azure-options">
       <label fxFlex="50%">Assign Public IP</label>
       <mat-checkbox fxFlex="50%" id="assignPublicIP" formControlName="assignPublicIP"></mat-checkbox>
     </div>

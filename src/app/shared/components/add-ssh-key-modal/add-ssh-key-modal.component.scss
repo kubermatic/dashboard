@@ -1,36 +1,3 @@
-// global modal
-
-
-
-.mat-dialog-content {
-  margin-top: 0;
-}
-
-.mat-toolbar {
-  border: none;
-  padding: 0;
-  color: #444D58;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-.mat-toolbar-single-row {
-  height: auto;
-}
-
-.mat-card-title {
-  font-size: 20px;
-}
-
-// component
-
-.km-ssh-key-textarea {
-  width: 100%;
-
-  textarea {
-    height: 170px;
-  }
-}
-.km-ssh-key-input {
-  width: 100%;
+textarea {
+  height: 170px;
 }

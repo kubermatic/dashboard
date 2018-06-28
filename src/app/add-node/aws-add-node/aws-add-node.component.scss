@@ -1,8 +1,9 @@
-// add tags
+@import "../../../assets/css/colors";
+
 div.km-form-group-tags-header {
   margin: 20px 0 10px;
   font-size: 14px;
-  border-bottom: 1px solid #E3E8EC;
+  border-bottom: 1px solid $border;
   padding-bottom: 15px;
 
   i.fa-plus {

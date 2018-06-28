@@ -61,11 +61,12 @@
                 </ng-container>
 
                 <ng-container *ngSwitchCase="false">
-                  <button mat-icon-button class="km-delete-node" matTooltip="delete Node" (click)="deleteNodeDialog(node)">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                  </button>
+
                   <button mat-icon-button class="km-duplicate-node" matTooltip="duplicate Node" (click)="duplicateNodeDialog(node)">
                     <i class="fa fa-clone" aria-hidden="true"></i>
+                  </button>
+                  <button mat-icon-button class="km-delete-node" matTooltip="delete Node" (click)="deleteNodeDialog(node)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
                   </button>
                 </ng-container>
               </ng-container>
@@ -167,12 +168,13 @@
             </div>
           </div>
         </div>
-
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        <div class="row no-item" *ngIf="isClusterRunning">No Node available. Please add a Node.</div>
-        <mat-spinner *ngIf="!isClusterRunning && !!!cluster.spec.cloud.bringyourown" color="accent" class="node-list-spinner" [diameter]="40"></mat-spinner>
+        <div class="row no-item" *ngIf="isClusterRunning || !isClusterRunning && cluster.spec.cloud.bringyourown ">No Node available. Please add a Node.</div>
+        <div class="row" *ngIf="!isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+          <mat-spinner color="accent" class="node-list-spinner" [diameter]="30"></mat-spinner>
+        </div>
       </ng-container>
     </ng-container>
   </mat-card-content>

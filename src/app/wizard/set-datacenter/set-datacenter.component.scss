@@ -1,3 +1,6 @@
+@import '../../../assets/css/colors';
+
+
 mat-button-toggle-group[group='datacenterGroup'] {
   /deep/ .mat-button-toggle-label-content {
     flex-direction: column;
@@ -10,7 +13,7 @@ mat-button-toggle-group[group='datacenterGroup'] {
     font-size: 12px;
     line-height: 14px;
     padding: 0 5px;
-    color: #000000;
+    color: $text-color;
     word-break: break-word;
     white-space: pre-line;
     text-align: center;

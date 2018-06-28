@@ -1,33 +1,6 @@
-
-
-
-// global=
-p {
-  line-height: 22px;
-}
-
-
-
-// cleanup
-.download {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("../../../../assets/images/Download_white.svg");
-  background-repeat: no-repeat;
-}
-
-
-// cleanup global
-.km-button-link {
-  margin-bottom: 20px;
-}
-
-// cleanup
 a.download-kubeconfig-btn {
   display: inline-block;
-  vertical-align: middle;
+  //vertical-align: middle;
   top: -1px;
 
   /deep/span.mat-button-wrapper {

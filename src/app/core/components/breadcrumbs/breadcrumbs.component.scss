@@ -1,9 +1,7 @@
-//@import "../../assets/css/ng2admin/conf/conf";
-//@import "../../assets/css/bootstrap/variables";
-
+@import "../../../../assets/css/colors";
 
 .sub-nav {
-  color: #BCC5D0;
+  color: $light-text-color;
   line-height: 40px;
 
   ul.breadcrumb {
@@ -21,16 +19,16 @@
       &:after {
         content: "/";
         padding: 0 5px;
-        color: #BCC5D0 !important;
+        color: $light-text-color !important;
       }
 
       a {
-        color: #BCC5D0;
+        color: $light-text-color;
         text-decoration: none;
       }
 
       &.breadcrumb-item.active, &:hover {
-        color: #0288d1;
+        color: $primary;
       }
 
       &:last-child {
