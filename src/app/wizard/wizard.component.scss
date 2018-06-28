@@ -1,74 +1,4 @@
-// cleanup global
-
-$wizard-box-size: 200px;
-$wizard-box-content-dc-logo-size: 125px;
-$wizard-box-content-location-flag-size: 48px;
-$wizard-box-content-dc-margin-top: 0px;
-$wizard-box-content-cloud-margin-top: 50px;
-$wizard-box-content-cloud-logo-size: 100px;
-
-.wizard-box-content {
-  text-align: center;
-  color: #000;
-  font-weight: 600;
-  padding: 11px 0;
-
-  img.dc-logo {
-    width: $wizard-box-content-dc-logo-size;
-    margin-top: $wizard-box-content-dc-margin-top;
-    margin-bottom: 10px;
-  }
-
-  img.cloud-logo {
-    width: $wizard-box-content-cloud-logo-size;
-    margin-top: $wizard-box-content-cloud-margin-top;
-    margin-bottom: 15px;
-    position: relative;
-    top: 20px;
-    bottom: 0;
-    margin-top: -25%;
-  }
-
-  div.name {
-    font-weight: 300;
-    font-size: 16px;
-    padding: 5px;
-  }
-
-  div.cluster-name {
-    font-weight: 600;
-    font-size: 2em;
-    line-height: 120%;
-    margin-top: 60px;
-    padding: 0 10px;
-  }
-
-  div.node-count {
-    font-weight: 600;
-    font-size: 7em;
-    margin-top: 15px;
-    line-height: 110px;
-  }
-
-  div.location {
-    font-weight: 300;
-    font-size: 12px;
-    padding: 0 5px;
-  }
-
-  image.location-flag {
-    margin-top: 10px;
-    width: $wizard-box-content-location-flag-size;
-    height: $wizard-box-content-location-flag-size;
-  }
-}
-
-.mat-card {
-  border-radius: 0;
-}
-
-
-// New Styling Create Cluster
+@import "../../assets/css/colors";
 
 .mat-card {
   margin-bottom: 50px;
@@ -87,7 +17,7 @@ $wizard-box-content-cloud-logo-size: 100px;
       font-weight: 400;
       margin: 10px 0;
       font-size: 18px;
-      color: #444D58;
+      color: $text-color;
     }
   }
 
@@ -96,38 +26,15 @@ $wizard-box-content-cloud-logo-size: 100px;
       padding-top: 10px;
     }
     p {
-      color: #444D58;
+      color: $text-color;
       margin: 0 8px 5px;
     }
   }
 }
 
-.wizard-box-title {
-  text-align: center;
-  padding-bottom: 5px;
-}
-
-.wizard-box-summary {
-  background: #fff;
-  border: 1px solid #E3E8EC;
-  cursor: pointer;
-  min-height: 205px;
-}
-
-
-
-// create cluster form fields
-
-// global?
-
-/deep/ .mat-input-wrapper {
-    margin: 5px 0 0 0;
-}
-
-
 // navigation buttons
 
-.km-buttom-navigation {
+.buttom-navigation {
   margin-top: 35px;
   text-align: left;
 
@@ -141,15 +48,15 @@ $wizard-box-content-cloud-logo-size: 100px;
     letter-spacing: 0.4px;
     border-radius: 4px;
     &.btn-back {
-      color: #444D58;
+      color: $text-color;
     }
     &.mat-raised-button.mat-primary {
       width: 110px;
     }
     &.mat-raised-button.mat-primary.nextGrey {
       color: #fff;
-      background-color: #BDC6D1;
-      box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+      background-color: $light-button-color;
+      box-shadow: 0 3px 1px -2px rgba($text-color,.2), 0 2px 2px 0 rgba($text-color,.14), 0 1px 5px 0 rgba($text-color,.12);
     }
   }
 
@@ -157,7 +64,7 @@ $wizard-box-content-cloud-logo-size: 100px;
     position: absolute;
     right: 30px;
     bottom: 25px;
-    color: #BDC6D1;
+    color: $light-text-color;
     text-decoration: none;
     font-size: 14px;
     font-weight: 600;

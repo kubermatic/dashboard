@@ -78,6 +78,8 @@ $waiting-status-color: orange;
 $healthy-status-color: #79c447;
 
 $warning-status-color: $warning;
+
+$light-button-color: #BDC6D1;
 // modal
 
 button.close {
@@ -528,4 +530,10 @@ button.close {
 
 mat-dialog-content {
   margin-bottom: 15px;
+}
+
+
+
+/deep/ .mat-input-wrapper {
+  margin: 5px 0 0 0;
 }
