@@ -1,49 +1,8 @@
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
-.km-card-list {
-  margin-top: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 50px;
-  .km-card-list-header {
-    height: 30px;
-    padding-bottom: 0;
-    line-height: 14px;
-    margin: 10px 0;
-
-    .mat-card-title {
-      font-weight: 500;
-      margin-bottom: 0;
-    }
-  }
-}
-
-.km-cluster-item {
-  min-height: 60px;
-  height: 60px;
-}
-
-// global cleanup
-.km-no-cluster {
-  text-align: center;
-  font-size: 14px;
-  color: #BCC5D0;
-  a {
-    color: #0288d1;
-  }
-}
-
-
-
 // global mobile
 @media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
   .btn-text-default {
     display: none;
   }
-}
-
-
-
-.cluster-row {
-  padding-left: 24px;
 }
