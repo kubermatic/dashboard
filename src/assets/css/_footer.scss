@@ -1,8 +1,8 @@
-
 footer {
+  z-index: 1;
   background-color: #fff;
   color: $text-color;
-  border-top: 1px solid #F1F1F1;
+  border-top: 1px solid $border;
   position: fixed;
   bottom: 0;
   left: 0;
@@ -11,7 +11,9 @@ footer {
   width: 100%;
 
 
-  .km-copy {
+  .copyright {
+    position: absolute;
+    left: 10px;
     text-align: left;
     font-size: 13px;
     font-weight: 400;
@@ -29,7 +31,7 @@ footer {
       text-decoration: none;
     }
   }
-  .km-footer-nav {
+  .footer-nav {
     ul {
       margin: 0;
       padding: 0;
@@ -48,6 +50,21 @@ footer {
             color: $text-color;
           }
         }
+      }
+    }
+  }
+
+  .social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+
+    li {
+      float: none;
+      a {
+        display: flex;
+        align-items: center;
       }
     }
   }

@@ -1,3 +1,5 @@
+@import "../../../assets/css/colors";
+
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
 // global mobile
@@ -5,4 +7,14 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   .btn-text-default {
     display: none;
   }
+}
+
+
+.button.white {
+  color: $primary;
+  height: 30px;
+  line-height: 30px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
 }

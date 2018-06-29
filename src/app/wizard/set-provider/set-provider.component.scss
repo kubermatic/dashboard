@@ -6,3 +6,10 @@ mat-button-toggle-group[group='providerGroup'] {
 
   }
 }
+// Provider Logo Size
+.provider-logo {
+  height: auto !important;
+  width: auto !important;
+  max-height: 40px !important;
+  max-width: 70px !important;
+}

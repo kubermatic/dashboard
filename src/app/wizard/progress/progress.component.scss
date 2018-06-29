@@ -1,0 +1,35 @@
+@import "../../../assets/css/colors";
+
+.km-card-progress-bar.mat-card {
+  padding-top: 14px;
+  background-color: $primary;
+  border-radius: 0;
+
+  .mat-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 0;
+    margin-top: 0px;
+    padding-right: 15px;
+    text-align: center;
+
+    i {
+      color: #fff;
+      margin-left: 5px;
+
+      &.fa-check {
+        color: $healthy-status-color;
+      }
+    }
+  }
+
+  .wizard-step {
+    padding-top: 8px;
+    color: #fff;
+    font-weight: bold;
+
+    .title-unchecked {
+      color: $light-button-color;
+    }
+  }
+}
