@@ -4,14 +4,21 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { OpenstackClusterSettingsComponent } from './openstack.component';
 import { SharedModule } from '../../../../shared/shared.module';
-import { WizardService } from '../../../../core/services/wizard/wizard.service';
+import { WizardService, ApiService } from '../../../../core/services';
+import { asyncData } from '../../../../testing/services/api-mock.service';
 import { fakeOpenstackCluster } from '../../../../testing/fake-data/cluster.fake';
+import { openstackTenantsFake } from '../../../../testing/fake-data/wizard.fake';
+import Spy = jasmine.Spy;
 
 describe('OpenstackClusterSettingsComponent', () => {
   let fixture: ComponentFixture<OpenstackClusterSettingsComponent>;
   let component: OpenstackClusterSettingsComponent;
+  let getOpenStackTenantsSpy: Spy;
 
   beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackTenants']);
+    getOpenStackTenantsSpy = apiMock.getOpenStackTenants.and.returnValue(asyncData(openstackTenantsFake));
+
     TestBed.configureTestingModule({
       imports: [
         BrowserModule,
@@ -23,7 +30,8 @@ describe('OpenstackClusterSettingsComponent', () => {
         OpenstackClusterSettingsComponent
       ],
       providers: [
-        WizardService
+        WizardService,
+        { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();
   }));
