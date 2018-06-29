@@ -73,6 +73,9 @@ i.fa-info-circle {
 
   .km-card-list, .km-card-list-content {
     margin: 0;
+      .mat-card-content {
+        line-height: 25px;
+      }
   }
 
   .fa-check {
