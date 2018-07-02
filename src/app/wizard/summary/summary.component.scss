@@ -1,3 +1,64 @@
+@import "../../../assets/css/colors";
+
+mat-card {
+  padding: 0;
+}
+
+.km-summary-container {
+  .km-summary-box {
+    border: 1px solid $border;
+    padding: 0px 0 5px 0;
+
+    h3 {
+      background-color: $medium-background;
+      border-bottom: 1px solid $border;
+      padding: 5px;
+      margin: 0 0 5px 0;
+      font-size: 12px;
+      font-weight: 400;
+      color: $medium-text-color;
+      text-transform: uppercase;
+    }
+  }
+
+  .km-summary-left, .km-summary-right, .km-summary-full {
+    margin: 10px 10px;
+
+    div.km-card-list-content {
+      padding: 0 10px;
+      height: auto;
+    }
+  }
+
+  .seperated {
+    margin-bottom: 20px;
+  }
+
+  .node-settings {
+    flex-flow: row wrap;
+  }
+
+  .km-card-list-key {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-color;
+  }
+}
+
+.fa-check {
+  color: $healthy-status-color !important;
+}
+
+.fa-times {
+  color: $warning !important;
+}
+
+input[type="password"].km-card-list-secret {
+  border: 0px solid white;
+  background-color: transparent;
+  width: 100%
+}
+
 .km-card-list-content {
   height: 26px;
   line-height: 26px;
@@ -5,10 +66,11 @@
   &.provider {
     height: auto;
     line-height: 50px;
-
-    .flag-icon {
-      font-size: 40px;
-      margin-right: 10px;
+    align-items: center;
+    
+    .provider-logo {
+      padding-top: 10px;
     }
   }
 }
+
