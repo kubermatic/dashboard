@@ -6,7 +6,7 @@
         <h4>Summary</h4>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content fxLayout="row">
+    <mat-card-content fxLayout="column">
 
       <div fxFlex="50%">
         <!-- General -->
@@ -21,7 +21,7 @@
 
             <div class="cloud">
               <div class="provider-icon">
-                <img src="/assets/images/clouds/{{providerFormData.provider}}.png" alt="{{providerFormData.provider}}" class="km-provider-logo">
+                <img src="/assets/images/clouds/{{providerFormData.provider}}.png" alt="{{providerFormData.provider}}" class="provider-logo">
               </div>
             </div>
           </div>
@@ -167,11 +167,15 @@
           <div fxFlex="80%">{{getOperatingSystem()}}</div>
         </div>
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.ubuntu">
-          <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
+          <div fxFlex="20%" class="km-card-list-key">Upgrade system on first boot</div>
           <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot}}</div>
         </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.centos">
+          <div fxFlex="20%" class="km-card-list-key">Upgrade system on first boot</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.centos.distUpgradeOnBoot}}</div>
+        </div>
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.containerLinux">
-          <div fxFlex="20%" class="km-card-list-key">Disable Auto Update</div>
+          <div fxFlex="20%" class="km-card-list-key">Disable auto-update</div>
           <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate}}</div>
         </div>
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">

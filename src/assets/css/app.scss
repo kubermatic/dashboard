@@ -176,6 +176,10 @@ mat-button-toggle-group {
         }
       }
 
+      div {
+        outline: none;
+      }
+
       .cluster-name {
         line-height: 40px;
       }
@@ -225,15 +229,15 @@ mat-button-toggle-group {
           margin-right: 10px;
         }
       }
-
-      .provider-logo {
-        height: auto !important;
-        width: auto !important;
-        max-height: 40px !important;
-        max-width: 70px !important;
-      }
     }
   }
+}
+
+.provider-logo {
+  height: auto !important;
+  width: auto !important;
+  max-height: 40px !important;
+  max-width: 70px !important;
 }
 
 .mat-card.white {
