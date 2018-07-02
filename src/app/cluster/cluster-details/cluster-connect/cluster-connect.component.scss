@@ -1,52 +1,6 @@
-button.close {
-  position: absolute;
-  right: 20px;
-}
-
-.btn-right {
-  float: right;
-}
-
-.mat-toolbar {
-  border: none;
-  padding: 0;
-  position: relative;
-}
-
-.mat-dialog-content {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-
-
-p {
-  line-height: 22px;
-}
-
-
-.code-block {
-  background-color: #F7FAFF;
-  padding: 5px 15px;
-  font-size: 14px;
-  line-height: 20px;
-  font-family: "Menlo", monospace;
-}
-
-.download {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("../../../../assets/images/Download_white.svg");
-  background-repeat: no-repeat;
-}
-
-.km-button-link {
-  margin-bottom: 20px;
-}
-
 a.download-kubeconfig-btn {
   display: inline-block;
-  vertical-align: middle;
+  //vertical-align: middle;
   top: -1px;
 
   /deep/span.mat-button-wrapper {

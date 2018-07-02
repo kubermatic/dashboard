@@ -1,23 +1,23 @@
-<mat-card class="km-card-list">
-  <mat-card-header class="km-card-list-header">
+<mat-card class="blue">
+  <mat-card-header>
     <mat-card-title fxLayout>
       <div fxFlex="3%">
-        <strong>#</strong>
+        #
       </div>
       <div fxFlex="36%">
-        <strong>Name</strong>
+        Name
       </div>
       <div fxFlex="15%">
-        <strong>Kubelet Version</strong>
+        Kubelet Version
       </div>
       <div fxFlex="16%">
-        <strong>IP addresses</strong>
+        IP addresses
       </div>
       <div fxFlex="16%">
-        <strong>Created</strong>
+        Created
       </div>
       <div fxFlex="5%" align="center">
-        <strong>Status</strong>
+        Status
       </div>
       <div fxFlex="10%"></div>
     </mat-card-title>
@@ -26,10 +26,10 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
-
-        <div class="km-node-row" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)" [ngClass]="getNodeHealthStatus(node,i).class">
-          <div fxLayout class="km-single-node">
+        <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)" [ngClass]="getNodeHealthStatus(node,i).class">
+          <div fxLayout>
             <div fxFlex="3%">{{i + 1}}</div>
+
             <div fxFlex="36%" style="word-break: normal ;">
               {{node.metadata.displayName}}
               <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
@@ -61,11 +61,12 @@
                 </ng-container>
 
                 <ng-container *ngSwitchCase="false">
-                  <button mat-icon-button class="km-delete-node" matTooltip="delete Node" (click)="deleteNodeDialog(node)">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
-                  </button>
+
                   <button mat-icon-button class="km-duplicate-node" matTooltip="duplicate Node" (click)="duplicateNodeDialog(node)">
                     <i class="fa fa-clone" aria-hidden="true"></i>
+                  </button>
+                  <button mat-icon-button class="km-delete-node" matTooltip="delete Node" (click)="deleteNodeDialog(node)">
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
                   </button>
                 </ng-container>
               </ng-container>
@@ -167,12 +168,13 @@
             </div>
           </div>
         </div>
-
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        <div class="km-no-node" *ngIf="isClusterRunning">No Node available. Please add a Node.</div>
-        <mat-spinner *ngIf="!isClusterRunning && !!!cluster.spec.cloud.bringyourown" color="accent" class="node-list-spinner" [diameter]="40"></mat-spinner>
+        <div class="row no-item" *ngIf="isClusterRunning || !isClusterRunning && cluster.spec.cloud.bringyourown ">No Node available. Please add a Node.</div>
+        <div class="row" *ngIf="!isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+          <mat-spinner color="accent" class="node-list-spinner" [diameter]="30"></mat-spinner>
+        </div>
       </ng-container>
     </ng-container>
   </mat-card-content>

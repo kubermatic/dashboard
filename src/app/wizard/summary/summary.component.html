@@ -6,122 +6,124 @@
         <h4>Summary</h4>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content fxLayout="column">
 
-      <!-- General -->
-      <div fxLayout class="km-card-list-content">
-        <div fxFlex="20%" class="km-card-list-key">Name</div>
-        <div fxFlex="80%">{{ cluster.spec.humanReadableName }}</div>
-      </div>
+      <div fxFlex="50%">
+        <!-- General -->
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Name</div>
+          <div fxFlex="80%">{{ cluster.spec.humanReadableName }}</div>
+        </div>
 
-      <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.version">
-        <div fxFlex="20%" class="km-card-list-key">Master Version</div>
-        <div fxFlex="80%">{{ cluster.spec.version }}</div>
-      </div>
+        <div fxLayout class="km-card-list-content provider">
+          <div fxFlex="20%" class="km-card-list-key">Provider</div>
+          <div fxFlex="80%">
 
-      <div fxLayout class="km-card-list-content provider">
-        <div fxFlex="20%" class="km-card-list-key">Provider</div>
-        <div fxFlex="80%">
-
-          <div class="cloud">
-            <div class="provider-icon">
-              <img src="/assets/images/clouds/{{providerFormData.provider}}.png" alt="{{providerFormData.provider}}" class="km-provider-logo">
+            <div class="cloud">
+              <div class="provider-icon">
+                <img src="/assets/images/clouds/{{providerFormData.provider}}.png" alt="{{providerFormData.provider}}" class="provider-logo">
+              </div>
             </div>
           </div>
         </div>
+
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Datacenter</div>
+          <div fxFlex="80%">
+            <div class="region">
+              <span class="region-name">{{ datacenterFormData.datacenter.spec.location }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DO -->
+        <div *ngIf="cluster.spec.cloud.digitalocean">
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Digitalocean API token</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.digitalocean.token}}</div>
+          </div>
+        </div>
+
+        <!-- AWS -->
+        <ng-container *ngIf="cluster.spec.cloud.aws">
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Access Key ID</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.aws.accessKeyId}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Secret Access Key</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.aws.secretAccessKey}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.securityGroup">
+            <div fxFlex="20%" class="km-card-list-key">Security Group ID (optional)</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.aws.securityGroup}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.vpcId">
+            <div fxFlex="20%" class="km-card-list-key">VPC ID (optional)</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.aws.vpcId}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.subnetId">
+            <div fxFlex="20%" class="km-card-list-key">Subnet ID (optional)</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.aws.subnetId}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.routeTableId">
+            <div fxFlex="20%" class="km-card-list-key">Route table ID (optional)</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.aws.routeTableId}}</div>
+          </div>
+        </ng-container>
+
+        <!-- Open Stack -->
+        <ng-container *ngIf="cluster.spec.cloud.openstack">
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Domain</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.openstack.domain}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Tenant/Project</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.openstack.tenant}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Username</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.openstack.username}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Password</div>
+            <div fxFlex="80%">***************</div>
+          </div>
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Network name</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.openstack.network}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Security groups</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.openstack.securityGroups}}</div>
+          </div>
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Floating IP pool</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.openstack.floatingIpPool}}</div>
+          </div>
+        </ng-container>
+
+        <!-- Hetzner -->
+        <ng-container *ngIf="cluster.spec.cloud.hetzner">
+          <div fxLayout class="km-card-list-content">
+            <div fxFlex="20%" class="km-card-list-key">Hetzner API token</div>
+            <div fxFlex="80%">{{cluster.spec.cloud.hetzner.token}}</div>
+          </div>
+        </ng-container>
+
+
       </div>
+      <div fxFlex="50%">
+    <!-- nodes -->
 
-      <div fxLayout class="km-card-list-content">
-        <div fxFlex="20%" class="km-card-list-key">Datacenter</div>
-        <div fxFlex="80%">
-          <div class="region">
-            <span class="region-name">{{ datacenterFormData.datacenter.spec.location }}</span>
+      <ng-container *ngIf="!cluster.spec.cloud.bringyourown">
+        <div fxLayout class="km-card-list-content nodes">
+          <div fxFlex="20%" class="km-card-list-key">
+            Node Count
           </div>
-        </div>
-      </div>
-
-      <!-- DO -->
-      <div class="provider-settings" *ngIf="cluster.spec.cloud.digitalocean">
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Digitalocean API token</div>
           <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.digitalocean.token }}" disabled/>
-          </div>
-        </div>
-      </div>
-
-      <!-- AWS -->
-      <ng-container *ngIf="cluster.spec.cloud.aws">
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Access Key ID</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.aws.accessKeyId }}" disabled/>
-          </div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Secret Access Key</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.aws.secretAccessKey }}" disabled/>
-          </div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.securityGroup">
-          <div fxFlex="20%" class="km-card-list-key">Security Group ID (optional)</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.aws.securityGroup }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.vpcId">
-          <div fxFlex="20%" class="km-card-list-key">VPC ID (optional)</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.aws.vpcId }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.subnetId">
-          <div fxFlex="20%" class="km-card-list-key">Subnet ID (optional)</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.aws.subnetId }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.aws.routeTableId">
-          <div fxFlex="20%" class="km-card-list-key">Route table ID (optional)</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.aws.routeTableId }}</div>
-        </div>
-      </ng-container>
-
-      <!-- Open Stack -->
-      <ng-container *ngIf="cluster.spec.cloud.openstack">
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Domain</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.openstack.domain }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Tenant/Project</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.openstack.tenant }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Username</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.openstack.username }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Password</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.openstack.password }}" disabled/>
-          </div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Network name</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.openstack.network }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Security groups</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.openstack.securityGroups }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Floating IP pool</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.openstack.floatingIpPool }}</div>
-        </div>
-      </ng-container>
-
-      <!-- Hetzner -->
-      <ng-container *ngIf="cluster.spec.cloud.hetzner">
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Hetzner API token</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.hetzner.token }}" disabled/>
+          {{ nodeData.count }}
           </div>
         </div>
       </ng-container>
@@ -134,73 +136,9 @@
         </div>
         <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">Password</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.vsphere.password }}" disabled/>
-          </div>
+          <div fxFlex="80%">***************</div>
         </div>
       </ng-container>
-
-       <!-- Azure -->
-      <ng-container *ngIf="cluster.spec.cloud.azure">
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Client ID</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.azure.clientID }}" disabled/>
-          </div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Client Secret</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.azure.clientSecret }}" disabled/>
-          </div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Tenant ID</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.azure.tenantID }}" disabled/>
-          </div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Subscription ID</div>
-          <div fxFlex="80%">
-            <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.azure.subscriptionID }}" disabled/>
-          </div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.azure.resourceGroup">
-          <div fxFlex="20%" class="km-card-list-key">Resource Group</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.azure.resourceGroup }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.azure.routeTable">
-          <div fxFlex="20%" class="km-card-list-key">Route Table</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.azure.routeTable }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.azure.securityGroup">
-          <div fxFlex="20%" class="km-card-list-key">Security Group</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.azure.securityGroup }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.azure.subnet">
-          <div fxFlex="20%" class="km-card-list-key">Subnet</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.azure.subnet }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.azure.vnet">
-          <div fxFlex="20%" class="km-card-list-key">VNet</div>
-          <div fxFlex="80%">{{ cluster.spec.cloud.azure.vnet }}</div>
-        </div>
-      </ng-container>
-
-
-      <!-- Node Count -->
-      <ng-container *ngIf="!cluster.spec.cloud.bringyourown">
-        <div fxLayout class="km-card-list-content nodes">
-          <div fxFlex="20%" class="km-card-list-key">
-            Node Count
-          </div>
-          <div fxFlex="80%">
-          {{ nodeData.count }}
-          </div>
-        </div>
-      </ng-container>
-
 
       <!-- DO Nodes -->
       <ng-container *ngIf="cluster.spec.cloud.digitalocean">
@@ -210,39 +148,75 @@
         </div>
         <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">Backups</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.digitalocean.backups }}</div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.digitalocean.backups}}</div>
         </div>
         <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">IPv6</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.digitalocean.ipv6 }}</div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.digitalocean.ipv6}}</div>
         </div>
         <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">Monitoring</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.digitalocean.monitoring }}</div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.digitalocean.monitoring}}</div>
         </div>
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.digitalocean.tags">
           <div fxFlex="20%" class="km-card-list-key">Tags</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.digitalocean.tags }}</div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.digitalocean.tags}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Operating System</div>
+          <div fxFlex="80%">{{getOperatingSystem()}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.ubuntu">
+          <div fxFlex="20%" class="km-card-list-key">Upgrade system on first boot</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.centos">
+          <div fxFlex="20%" class="km-card-list-key">Upgrade system on first boot</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.centos.distUpgradeOnBoot}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.containerLinux">
+          <div fxFlex="20%" class="km-card-list-key">Disable auto-update</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
+          <div fxFlex="20%" class="km-card-list-key">Container Runtime</div>
+          <div fxFlex="80%">{{nodeData.node.spec.versions.containerRuntime.name}}</div>
         </div>
       </ng-container>
 
       <!-- AWS Nodes -->
       <ng-container *ngIf="cluster.spec.cloud.aws">
-        <div fxLayout class="km-card-list-content">
+        <div fxLayout class="km-card-list-content" >
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.instanceType }}</div>
         </div>
-        <div fxLayout class="km-card-list-content">
+        <div fxLayout class="km-card-list-content" >
           <div fxFlex="20%" class="km-card-list-key">Disk Type</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.volumeType }}</div>
         </div>
-        <div fxLayout class="km-card-list-content">
+        <div fxLayout class="km-card-list-content" >
           <div fxFlex="20%" class="km-card-list-key">Disk Size in GB</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.diskSize }}</div>
         </div>
-        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.aws.ami">
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.aws.ami" >
           <div fxFlex="20%" class="km-card-list-key">AMI ID (optional)</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.aws.ami }}</div>
+        </div>
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Operating System</div>
+          <div fxFlex="80%">{{getOperatingSystem()}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.ubuntu">
+          <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.containerLinux">
+          <div fxFlex="20%" class="km-card-list-key">Disable Auto Update</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
+          <div fxFlex="20%" class="km-card-list-key">Container Runtime</div>
+          <div fxFlex="80%">{{nodeData.node.spec.versions.containerRuntime.name}}</div>
         </div>
       </ng-container>
 
@@ -252,6 +226,22 @@
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.openstack.flavor }}</div>
         </div>
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Operating System</div>
+          <div fxFlex="80%">{{getOperatingSystem()}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.ubuntu">
+          <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.containerLinux">
+          <div fxFlex="20%" class="km-card-list-key">Disable Auto Update</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
+          <div fxFlex="20%" class="km-card-list-key">Container Runtime</div>
+          <div fxFlex="80%">{{nodeData.node.spec.versions.containerRuntime.name}}</div>
+        </div>
       </ng-container>
 
       <!-- Hetzner Nodes -->
@@ -260,54 +250,56 @@
           <div fxFlex="20%" class="km-card-list-key">Node Size</div>
           <div fxFlex="80%">{{ nodeData.node.spec.cloud.hetzner.type }}</div>
         </div>
-      </ng-container>
-
-      <!-- vSphere Nodes -->
-      <ng-container *ngIf="cluster.spec.cloud.vsphere">
         <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Number of CPU's</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.vsphere.cpus }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Memory im MB</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.vsphere.memory }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.vsphere.template">
-          <div fxFlex="20%" class="km-card-list-key">VM Template</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.vsphere.template }}</div>
-        </div>
-      </ng-container>
-
-      <!-- Azure Nodes -->
-      <ng-container *ngIf="cluster.spec.cloud.azure">
-        <div fxLayout class="km-card-list-content">
-          <div fxFlex="20%" class="km-card-list-key">Node Size</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.azure.size }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.azure.assignPublicIP">
-          <div fxFlex="20%" class="km-card-list-key">Assign Public IP</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.cloud.azure.assignPublicIP }}</div>
-        </div>
-      </ng-container>
-
-
-      <!-- Operating System -->
-      <ng-container>
-      <div fxLayout class="km-card-list-content">
           <div fxFlex="20%" class="km-card-list-key">Operating System</div>
-          <div fxFlex="80%">{{ getOperatingSystem() }}</div>
+          <div fxFlex="80%">{{getOperatingSystem()}}</div>
         </div>
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.ubuntu">
           <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot }}</div>
-        </div>
-        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.centos">
-          <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.operatingSystem.centos.distUpgradeOnBoot }}</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot}}</div>
         </div>
         <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
           <div fxFlex="20%" class="km-card-list-key">Container Runtime</div>
-          <div fxFlex="80%">{{ nodeData.node.spec.versions.containerRuntime.name }}</div>
+          <div fxFlex="80%">{{nodeData.node.spec.versions.containerRuntime.name}}</div>
+        </div>
+      </ng-container>
+
+
+      <!-- vSphere -->
+      <ng-container *ngIf="cluster.spec.cloud.vsphere">
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">
+            Number of CPU's
+          </div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.vsphere.cpus}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">
+            Memory im MB
+          </div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.vsphere.memory}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.cloud.vsphere.template">
+          <div fxFlex="20%" class="km-card-list-key">
+            VM Template
+          </div>
+          <div fxFlex="80%">{{nodeData.node.spec.cloud.vsphere.template}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content">
+          <div fxFlex="20%" class="km-card-list-key">Operating System</div>
+          <div fxFlex="80%">{{getOperatingSystem()}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.ubuntu">
+          <div fxFlex="20%" class="km-card-list-key">Dist Upgrade On Boot</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.containerLinux">
+          <div fxFlex="20%" class="km-card-list-key">Disable Auto Update</div>
+          <div fxFlex="80%">{{nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate}}</div>
+        </div>
+        <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
+          <div fxFlex="20%" class="km-card-list-key">Container Runtime</div>
+          <div fxFlex="80%">{{nodeData.node.spec.versions.containerRuntime.name}}</div>
         </div>
       </ng-container>
 
@@ -318,11 +310,14 @@
           <div fxFlex="20%" class="km-card-list-key">SSH keys (optional)</div>
           <div fxFlex="80%">
             <ng-container *ngFor="let key of clusterSSHKeys">
-              <div>{{ key.spec.name }}</div>
+              <div>{{key.spec.name}}</div>
             </ng-container>
           </div>
         </div>
       </ng-container>
+
+
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

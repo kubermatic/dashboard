@@ -45,11 +45,11 @@ const modules: Array<any> = [
     ...modules
   ],
   declarations: [
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
   ],
   exports: [
     ...modules,
-    AddSshKeyModalComponent
+    AddSshKeyModalComponent,
   ],
   entryComponents: [AddSshKeyModalComponent]
 })

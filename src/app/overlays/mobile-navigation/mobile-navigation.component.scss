@@ -1,3 +1,5 @@
+@import "../../../assets/css/colors";
+
 .km-header-logo {
     background-image: url("../../../assets/images/logo/header-logo-kubermatic.png");
     height: 100%;
@@ -17,10 +19,10 @@
     .mat-list-item, a {
       font-size: 13px !important;
       font-weight: 400 !important;
-      color: #444D58;
+      color: $text-color;
       outline: none;
       i {
-        color: #0288d1;
+        color: $primary;
         width: 25px;
 
 
@@ -31,7 +33,7 @@
 
       &:hover, &.active {
         color: #fff;
-        background-color: #0288d1;
+        background-color: $primary;
         i {
           color: #fff;
         }

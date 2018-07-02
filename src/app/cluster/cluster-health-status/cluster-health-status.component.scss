@@ -1,10 +1,12 @@
+@import "../../../assets/css/colors";
+
 .health-state {
   position: relative;
   height: 30px;
   width: 30px;
 
   div.orange {
-    color: orange;
+    color: $waiting-status-color;
     position: absolute;
     left: 0px;
     top: 0px;
@@ -20,7 +22,7 @@
   }
 
   .green {
-    color: #79c447;
+    color: $healthy-status-color;
     position: absolute;
     left: 0px;
     top: 0px;
@@ -43,7 +45,7 @@
   }
 
   div.red {
-    color: #ff5454;
+    color: $warning;
     position: absolute;
     left: 0px;
     top: 0px;

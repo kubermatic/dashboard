@@ -1,25 +1,26 @@
-<mat-card class="km-card-list sshkey-list">
-  <mat-card-header class="km-card-list-header">
+<mat-card class="blue sshkey-list">
+  <mat-card-header>
     <mat-card-title fxLayout matSort (matSortChange)="sortData($event)" matSortActive="name" matSortDirection="asc">
       <div fxFlex="50%" fxFlex.sm="40%" mat-sort-header="name">SSH Keys</div>
       <div fxFlex="50%" fxFlex.sm="60%" mat-sort-header="fingerprint">Fingerprint</div>
     </mat-card-title>
   </mat-card-header>
-  
+
   <ng-container [ngSwitch]="!!sortedData && sortedData.length > 0">
     <ng-container *ngSwitchCase="true">
-      <kubermatic-ssh-key-item
-        *ngFor="let key of sortedData; let odd = odd"
-        [sshKey]="key"
-        [isOdd]="odd"
-        (deleteSshKey)="deleteSSHKey($event)">
-      </kubermatic-ssh-key-item>
+      <mat-card-content>
+        <kubermatic-ssh-key-item
+          *ngFor="let key of sortedData; let odd = odd"
+          [sshKey]="key"
+          [isOdd]="odd"
+          (deleteSshKey)="deleteSSHKey($event)">
+        </kubermatic-ssh-key-item>
+      </mat-card-content>
     </ng-container>
     <ng-container *ngSwitchCase="false">
-      <mat-card-content class="km-card-list-no-keys" style="margin-bottom: 20px;">
+      <mat-card-content class="row no-item">
         You have not added any SSH keys yet.
       </mat-card-content>
     </ng-container>
-
   </ng-container>
 </mat-card>

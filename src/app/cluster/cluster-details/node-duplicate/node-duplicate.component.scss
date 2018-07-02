@@ -1,25 +1,12 @@
-button.close {
-  position: absolute;
-  right: 20px;
-}
-
-.mat-toolbar {
-  border: none;
-  padding: 0;
-  position: relative;
-}
-
-mat-dialog-content {
-  margin-bottom: 15px;
-}
-
 p.km-duplicate-spec-title {
   font-weight: 600;
   margin-bottom: 3px;
+  font-size: 14px;
 
   span {
     font-weight: 400;
     margin-left: 3px;
+    font-size: 13px;
   }
 }
 
@@ -28,5 +15,6 @@ div.km-duplicate-spec-options {
 
   p {
     margin: 0;
+    font-size: 13px;
   }
 }

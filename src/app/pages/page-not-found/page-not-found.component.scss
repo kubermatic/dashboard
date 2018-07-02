@@ -1,3 +1,5 @@
+@import "../../../assets/css/colors";
+
 .page-404 {
     display: flex;
     flex-direction: column;
@@ -11,7 +13,7 @@
     }
 
     p {
-        color: #0288d1;
+        color: $primary;
         text-align: center;
         margin: 0;
         font-size: 60px;
