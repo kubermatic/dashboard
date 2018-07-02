@@ -9,6 +9,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
 import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatCheckboxModule, MatCardModule} from '@angular/material';
 import { VSphereAddNodeComponent } from './vsphere-add-node/vsphere-add-node.component';
+import { VSphereOptionsComponent } from './vsphere-add-node/vsphere-options/vsphere-options.component';
 import { AzureAddNodeComponent } from './azure-add-node/azure-add-node.component';
 
 @NgModule({
@@ -30,6 +31,7 @@ import { AzureAddNodeComponent } from './azure-add-node/azure-add-node.component
     OpenstackAddNodeComponent,
     HetznerAddNodeComponent,
     VSphereAddNodeComponent,
+    VSphereOptionsComponent,
     AzureAddNodeComponent,
   ],
   exports: [
