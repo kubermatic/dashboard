@@ -1,101 +1,14 @@
-.mat-card {
-  padding: 0;
-  .mat-card-header {
-    padding: 0;
-    margin-bottom: 10px;
-    border: none;
-  }
-
-  .mat-card-header-text {
-    margin: 0;
-  }
-
-  .mat-card-title {
-    margin: 0;
-    h4 {
-      font-weight: 600;
-      margin: 10px 0;
-      font-size: 18px;
-      color: #444D58;
-    }
-  }
-
-  .mat-card-content {
-    form {
-      padding-top: 10px;
-    }
-    p {
-      color: #444D58;
-      margin: 0 8px 5px;
-    }
-
-    i {
-      color: #0288d1;
-      cursor: pointer;
-    }
-  }
-}
-
 .km-card-list-content {
   height: 26px;
   line-height: 26px;
 
-  .km-card-list-key {
-    font-size: 14px;
-    font-weight: 600;
-    color: #444D58;
-  }
-
-  &.ssh-key {
-    height: auto;
-  }
   &.provider {
     height: auto;
     line-height: 50px;
 
-    .region-name {
-      line-height: 40px;
-      display: block;
-      float: right;
-    }
-
     .flag-icon {
       font-size: 40px;
       margin-right: 10px;
-    }
-
-    .location {
-      line-height: 24px;
-      position: absolute;
-    }
-  }
-
-  small {
-    color: #0288d1;
-    cursor: pointer;
-  }
-}
-
-.nodes, .provider-settings {
-  margin-top: 10px;
-}
-
-input[type="password"].km-card-list-secret {
-  border: 0px solid white;
-  background-color: transparent;
-  width: 100%
-}
-
-.km-ssh-keys-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  li {
-    margin-bottom: 3px;
-    i {
-      color: #0288d1;
-      margin-right: 5px;
-      cursor: default;
     }
   }
 }

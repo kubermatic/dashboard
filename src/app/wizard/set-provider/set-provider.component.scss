@@ -1,80 +1,15 @@
-$wizard-box-content-cloud-margin-top: 50px;
+@import '../../../assets/css/colors';
 
-.mat-card-header {
-  padding: 0;
-  margin-bottom: 10px;
-  border: none;
-}
-
-.mat-card-header-text {
-  margin: 0;
-}
-
-.mat-card-title {
-  margin: 0;
-  h4 {
-    font-weight: 600;
-    margin: 10px 0;
-    font-size: 18px;
-    color: #444D58;
-  }
-}
-
-.mat-card-content {
-  margin-bottom: 0;
-  form {
-    margin: 35px 0 0;
-  }
-  p {
-    color: #BDC6D1;
-    font-size: 12px;
-    max-width: 505px;
-    margin: 0;
-  }
-}
-
-.provider-fix {
-  margin: 20px;
-  display: inline-block !important;
-}
-
-/deep/ mat-button-toggle-group[group='providerGroup'] {
-  background-color: transparent;
-  box-shadow: none !important;
-
-  /deep/ mat-button-toggle {
-    display: flex;
-    align-items: center;
-    background-color: #FFFFFF;
-    border: 1px solid #e3e8ec;
-    cursor: pointer;
-    max-width: 90px;
-    min-width: 90px;
-    min-height: 90px;
-    max-height: 90px;
-    margin-right: 20px;
-    flex-wrap: wrap;
-
-    &:hover {
-      border: 1px solid #0288d1;
-    }
-  }
-
-  /deep/.mat-button-toggle-checked {
-    background-color: #FFFFFF;
-    border: 1px solid #0288d1;
-  }
-
-  /deep/ .mat-button-toggle-label {
-    width: 100%;
-    height: 100%;
-  }
-
+mat-button-toggle-group[group='providerGroup'] {
   /deep/ .mat-button-toggle-label-content {
-    display: flex;
-    align-items: center;
-    padding: 0 10px !important;
     height: 100%;
-    justify-content: center;
+
   }
+}
+// Provider Logo Size
+.provider-logo {
+  height: auto !important;
+  width: auto !important;
+  max-height: 40px !important;
+  max-width: 70px !important;
 }

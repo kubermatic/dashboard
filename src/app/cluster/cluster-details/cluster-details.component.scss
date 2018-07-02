@@ -1,142 +1,24 @@
-.card {
-  color: #333;
-  margin-bottom: 20px;
+@import "../../../assets/css/colors";
 
-  .card-header {
-    background: #f7f7f9;
-    color: #333;
-    float: left;
-
-    a {
-      float: right;
-      margin-top: -7px;
-    }
-  }
-}
-
-.km-card-list {
-  margin-bottom: 20px;
-  &.providerWrapper {
-    padding: 0px;
-
-    .km-card-list-content {
-      padding: 10px 24px;
-      line-height: 40px;
-    }
-  }
-
-  .km-card-list-header {
-    border-bottom: none;
-    &.providerinfo {
-      border-bottom: 1px solid #E3E8EC;
-      padding: 15px 0 10px;
-      margin: 0 24px;
-
-      .mat-card-title {
-        font-size: 14px;
-        font-weight: 600;
-      }
-    }
-    .km-card-ssh-tooltip {
-      i {
-        color: #CCCCCC;
-        font-size: 18px;
-        margin-left: 5px;
-      }
-    }
-    .mat-card-title {
-        font-size: 18px;
-
-      .cluster-name {
-        float: left;
-      }
-    }
-  }
-}
-
-.km-card-list-subtitle {
-  color: red;
-
-  .km-pauseReason {
-    margin-top: 0;
-  }
-}
-
-.km-card-list-info {
-  margin-bottom: 0px;
-}
-
-.km-card-list-content {
-  line-height: 16px;
-  font-size: 14px;
-  margin-bottom: 20px;
-  align-items: center;
-
-  &.seed  {
-    .flag-icon {
-      font-size: 24px;
-      margin-right: 10px;
-    }
-
-    .location {
-      line-height: 24px;
-      position: absolute;
-    }
-  }
-
-  .km-spinner-sm {
-    width: 15px;
-    height: 70%;
-  }
-
+.change-version {
   small {
-    color: #0288d1;
-    cursor: pointer;
+    margin-left: 10px;
+    color: $primary;
   }
 }
 
-.km-provider-region {
-  display: flex;
-  align-items: center;
-  .flag-icon {
-    font-size: 24px;
-    margin-right: 10px;
-  }
+.add-node-btn {
+  width: 120px;
 }
 
-.km-no-provider {
-  text-align: center;
-  font-size: 14px;
-  color: #BCC5D0;
-}
-
-/deep/.mat-menu-content {
-  padding: 0 !important;
-}
-
-.km-provider-menu-btn {
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
-  color: #6A6A6A;
-}
-
-.km-download-config {
-  background-color: rgba(2, 136, 209, 0.12);
-}
-
-kubermatic-cluster-health-status {
+a.download-kubeconfig-btn {
   display: inline-block;
-  margin-left: 7px;
-}
 
-.km-spinner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
+  /deep/span.mat-button-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
 }
 
 .km-ssh-keys-list {
@@ -146,93 +28,19 @@ kubermatic-cluster-health-status {
   li {
     margin-bottom: 3px;
     i {
-      color: #0288d1;
+      color: $primary;
       margin-right: 5px;
     }
   }
   .km-more-sshKeys-btn {
     font-size: 14px;
-    color: #0288d1;
+    color: $primary;
     cursor: pointer;
   }
 }
 
-.change-version {
-  margin-right: 10px;
-}
 
-.add-node-btn {
-  width: 120px;
-}
-
-.btn-spinner {
-  width: 100%;
-  height: 25px;
-  display: inline-block;
-}
-
-.node-list-spinner {
-  margin: 0 auto;
-  height: 70px;
-}
-
-.download {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("../../../assets/images/Download_white.svg");
-  background-repeat: no-repeat;
-}
-
-.downloadDisabled {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("../../../assets/images/Download_grey.svg");
-  background-repeat: no-repeat;
-}
-
-.statusRunning {
-  background-color: #FFFFFF;
-}
-
-.statusFailed, .statusDeleting {
-  background-color: #FFF0EC;
-}
-
-.statusWaiting {
-  background-color: #FFFBEB;
-}
-
-.connect-kubeconfig-btn {
-  a {
-    display: flex;
-    align-items: center;
-    width: auto;
-    height: 100%;
-    text-decoration: none;
-    color: white;
-    vertical-align: baseline !important;
-    padding: 0 16px;
-  }
-  a.disabled {
-    color: rgba(0, 0, 0, 0.38);
-  }
-}
-
-a.download-kubeconfig-btn {
-  display: inline-block;
-  vertical-align: middle;
-
-  /deep/span.mat-button-wrapper {
-    display: flex;
-    height: 100%;
-    align-items: center;
-  }
-}
-
+// sshkeys
 .iconArrowUp {
     display: inline-block;
     width: 12px;
@@ -247,4 +55,29 @@ a.download-kubeconfig-btn {
     height: 9px;
     background-image: url("../../../assets/images/Arrow_down.svg");
     background-repeat: no-repeat;
+}
+
+
+// health dot header
+kubermatic-cluster-health-status {
+  display: inline-block;
+  margin-left: 7px;
+}
+
+// setting menu
+/deep/.mat-menu-content {
+  padding: 0 !important;
+}
+
+
+.cluster-detail-actions {
+  padding-bottom: 15px;
+
+  mat-button {
+    margin-left: 5px;
+  }
+}
+
+.km-provider-menu-btn {
+  margin-top: -5px;
 }

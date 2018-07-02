@@ -13,18 +13,17 @@
         <kubermatic-sidenav></kubermatic-sidenav>
       </mat-sidenav>
 
-      <div class="km-main">
-        <div class="km-content">
+      <div class="main">
+        <div class="content">
           <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
           <router-outlet></router-outlet>
         </div>
       </div>
     </mat-sidenav-container>
     <footer fxlayout>
-      <div class="km-copy">powered by <a href="https://loodse.com" target="_blank">Loodse <sup>®</sup></a></div>
-      <div class="km-copy right" *ngIf="config.show_demo_info">This is a <strong>demo system</strong></div>
-      <div class="km-footer-nav">
-        <ul class="km-social">
+      <div class="copyright">powered by <a href="https://loodse.com" target="_blank">Loodse <sup>®</sup></a></div>
+      <div class="footer-nav">
+        <ul class="social">
           <li><a href="https://www.twitter.com/loodse" target="_blank"><i class="fa fa-twitter"></i></a>
           </li>
           <li><a href="https://github.com/kubermatic" target="_blank"><i class="fa fa-github"></i></a>

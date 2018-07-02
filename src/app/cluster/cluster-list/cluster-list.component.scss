@@ -1,71 +1,20 @@
+@import "../../../assets/css/colors";
+
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
-.card {
-  color: #333;
-
-  .card-header {
-    background: #f7f7f9;
-    color: #333;
-
-    a {
-      float: right;
-      margin-top: -7px;
-    }
-  }
-}
-
-.km-card-list {
-  margin-top: 15px;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  margin-bottom: 50px;
-  .km-card-list-header {
-    height: 30px;
-    padding-bottom: 0;
-    line-height: 14px;
-    margin: 10px 0;
-
-    .mat-card-title {
-      font-weight: 500;
-      margin-bottom: 0;
-    }
-  }
-  .km-card-buttonbar {
-    margin: 19px 0 10px;
-  }
-}
-
-.km-cluster-item {
-  min-height: 60px;
-  height: 60px;
-}
-
-.km-no-cluster {
-  text-align: center;
-  font-size: 14px;
-  color: #BCC5D0;
-  a {
-    color: #0288d1;
-  }
-}
-
-.km-spinner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.mat-card-header-text {
-  height: auto;
-  margin: 0;
-  width: auto;
-}
-
+// global mobile
 @media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
   .btn-text-default {
     display: none;
   }
+}
+
+
+.button.white {
+  color: $primary;
+  height: 30px;
+  line-height: 30px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
 }

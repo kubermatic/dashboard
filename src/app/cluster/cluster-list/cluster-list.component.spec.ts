@@ -79,7 +79,7 @@ describe('ClusterListComponent', () => {
     component.loading = false;
     fixture.detectChanges();
 
-    const de = fixture.debugElement.query(By.css('.km-card-list'));
+    const de = fixture.debugElement.query(By.css('.blue'));
 
     expect(de).not.toBeNull('list should be rendered');
     discardPeriodicTasks();
@@ -88,7 +88,7 @@ describe('ClusterListComponent', () => {
   it('should not render cluster list', fakeAsync(() => {
     fixture.detectChanges();
 
-    const de = fixture.debugElement.query(By.css('.km-card-list'));
+    const de = fixture.debugElement.query(By.css('.no-item'));
 
     expect(de).toBeNull('list should not be rendered');
     discardPeriodicTasks();
