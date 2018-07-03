@@ -10,7 +10,6 @@ html, body {
   color: $text-color;
 }
 
-
 // spinner
 
 .km-spinner {
@@ -90,12 +89,21 @@ html, body {
   }
 }
 
+// Sidenav
+
+.mat-nav-list {
+  .mat-list-item-content {
+    padding: 0 !important;
+  }
+}
+
 // Step Provider and Datacenter
+
 mat-button-toggle-group {
   background-color: transparent;
   box-shadow: none !important;
 
-  /deep/ mat-button-toggle {
+  mat-button-toggle {
     margin-right: 20px;
     display: flex;
     align-items: center;
@@ -112,23 +120,36 @@ mat-button-toggle-group {
     }
   }
 
-  /deep/.mat-button-toggle-checked {
+  .mat-button-toggle-checked {
     background-color: #FFFFFF;
     border: 1px solid $primary;
   }
 
-  /deep/ .mat-button-toggle-label {
+  .mat-button-toggle-label {
     width: 100%;
     height: 100%;
   }
 
-  /deep/ .mat-button-toggle-label-content {
+  .mat-button-toggle-label-content {
     display: flex;
     align-items: center;
     justify-content: center;
   }
 }
 
+mat-button-toggle-group[group='datacenterGroup'] {
+  .mat-button-toggle-label-content {
+    flex-direction: column;
+    padding: 20px 0;
+    width: 100%;
+  }
+}
+
+mat-button-toggle-group[group='providerGroup'] {
+  .mat-button-toggle-label-content {
+    height: 100%;
+  }
+}
 
 .mat-card.blue {
   padding: 0px;
@@ -421,15 +442,15 @@ mat-card-header {
   color: $warning-status-color !important;
 }
 
-/deep/.mat-checkbox-frame {
+.mat-checkbox-frame {
   border-color: #C1C9D4;
 }
 
-/deep/.mat-checkbox-background {
+.mat-checkbox-background {
   background-color: transparent;
 }
 
-/deep/.mat-checkbox-checked.mat-accent {
+.mat-checkbox-checked.mat-accent {
   .mat-checkbox-background {
     background-color: transparent;
   }
@@ -438,15 +459,15 @@ mat-card-header {
   }
 }
 
-/deep/.mat-checkbox-checkmark {
+.mat-checkbox-checkmark {
   fill: $text-color;
 }
 
-/deep/.mat-checkbox-checkmark-path {
+.mat-checkbox-checkmark-path {
   stroke: $text-color !important;
 }
 
-/deep/ .mat-input-wrapper {
+.mat-input-wrapper {
   margin: 5px 0 0 0;
 }
 
@@ -464,10 +485,10 @@ mat-card-header {
 
 
 // Mat Tab Toggle
-/deep/.mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
+.mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
   background-color: transparent !important;
 }
-/deep/.mat-tab-label {
+.mat-tab-label {
   height: 36px !important;
   min-width: 120px !important;
 }
@@ -626,7 +647,7 @@ button.close {
   }
 }
 
-/deep/.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
+.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
   margin: 0;
 }
 
@@ -644,5 +665,21 @@ button.close {
   a {
     color: $primary;
     text-decoration: none;
+  }
+}
+
+// download kubeconfig button
+.download-kubeconfig-btn {
+  span.mat-button-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
+}
+
+// cluster details: edit provider settings
+.km-provider-edit-settings {
+  .mat-menu-content {
+    padding: 0 !important;
   }
 }
