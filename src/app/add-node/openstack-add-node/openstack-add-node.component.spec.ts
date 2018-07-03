@@ -49,9 +49,4 @@ describe('OpenstackAddNodeComponent', () => {
     expect(component).toBeTruthy();
     fixture.detectChanges();
   });
-
-  it('form invalid after creating', () => {
-    fixture.detectChanges();
-    expect(component.osNodeForm.valid).toBeFalsy();
-  });
 });

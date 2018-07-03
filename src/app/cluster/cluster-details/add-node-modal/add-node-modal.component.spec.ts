@@ -15,6 +15,7 @@ import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { AddNodeComponent } from '../../../add-node/add-node.component';
 import { OpenstackAddNodeComponent } from '../../../add-node/openstack-add-node/openstack-add-node.component';
+import { OpenstackOptionsComponent } from '../../../add-node/openstack-add-node/openstack-options/openstack-options.component';
 import { DigitaloceanAddNodeComponent } from '../../../add-node/digitalocean-add-node/digitalocean-add-node.component';
 import { DigitaloceanOptionsComponent } from '../../../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { AwsAddNodeComponent } from '../../../add-node/aws-add-node/aws-add-node.component';
@@ -25,9 +26,10 @@ import { fakeDigitaloceanSizes } from '../../../testing/fake-data/addNodeModal.f
 import Spy = jasmine.Spy;
 import { HetznerAddNodeComponent } from '../../../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../../../add-node/vsphere-add-node/vsphere-add-node.component';
+import { VSphereOptionsComponent } from '../../../add-node/vsphere-add-node/vsphere-options/vsphere-options.component';
 import { AzureAddNodeComponent } from '../../../add-node/azure-add-node/azure-add-node.component';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
-import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
+import { DatacenterMockService } from '../../../testing/services/datacenter-mock.service';
 
 describe('AddNodeModalComponent', () => {
   let fixture: ComponentFixture<AddNodeModalComponent>;
@@ -57,11 +59,13 @@ describe('AddNodeModalComponent', () => {
         AddNodeModalComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
+        OpenstackOptionsComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
+        VSphereOptionsComponent,
         AzureAddNodeComponent,
       ],
       providers: [
