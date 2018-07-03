@@ -1,83 +1,56 @@
-.mat-card {
+@import "../../../assets/css/colors";
+
+mat-card {
   padding: 0;
-  .mat-card-header {
-    padding: 0;
-    margin-bottom: 10px;
-    border: none;
-  }
-
-  .mat-card-header-text {
-    margin: 0;
-  }
-
-  .mat-card-title {
-    margin: 0;
-    h4 {
-      font-weight: 600;
-      margin: 10px 0;
-      font-size: 18px;
-      color: #444D58;
-    }
-  }
-
-  .mat-card-content {
-    form {
-      padding-top: 10px;
-    }
-    p {
-      color: #444D58;
-      margin: 0 8px 5px;
-    }
-
-    i {
-      color: #0288d1;
-      cursor: pointer;
-    }
-  }
 }
 
-.km-card-list-content {
-  height: 26px;
-  line-height: 26px;
+.km-summary-container {
+  .km-summary-box {
+    border: 1px solid $border;
+    padding: 0px 0 5px 0;
+
+    h3 {
+      background-color: $medium-background;
+      border-bottom: 1px solid $border;
+      padding: 5px;
+      margin: 0 0 5px 0;
+      font-size: 12px;
+      font-weight: 400;
+      color: $medium-text-color;
+      text-transform: uppercase;
+    }
+  }
+
+  .km-summary-left, .km-summary-right, .km-summary-full {
+    margin: 10px 10px;
+
+    div.km-card-list-content {
+      padding: 0 10px;
+      height: auto;
+    }
+  }
+
+  .seperated {
+    margin-bottom: 20px;
+  }
+
+  .node-settings {
+    flex-flow: row wrap;
+  }
 
   .km-card-list-key {
     font-size: 14px;
     font-weight: 600;
-    color: #444D58;
-  }
-
-  &.ssh-key {
-    height: auto;
-  }
-  &.provider {
-    height: auto;
-    line-height: 50px;
-
-    .region-name {
-      line-height: 40px;
-      display: block;
-      float: right;
-    }
-
-    .flag-icon {
-      font-size: 40px;
-      margin-right: 10px;
-    }
-
-    .location {
-      line-height: 24px;
-      position: absolute;
-    }
-  }
-
-  small {
-    color: #0288d1;
-    cursor: pointer;
+    color: $text-color;
   }
 }
 
-.nodes, .provider-settings {
-  margin-top: 10px;
+.fa-check {
+  color: $healthy-status-color !important;
+}
+
+.fa-times {
+  color: $warning !important;
 }
 
 input[type="password"].km-card-list-secret {
@@ -86,16 +59,18 @@ input[type="password"].km-card-list-secret {
   width: 100%
 }
 
-.km-ssh-keys-list {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  li {
-    margin-bottom: 3px;
-    i {
-      color: #0288d1;
-      margin-right: 5px;
-      cursor: default;
+.km-card-list-content {
+  height: 26px;
+  line-height: 26px;
+
+  &.provider {
+    height: auto;
+    line-height: 50px;
+    align-items: center;
+    
+    .provider-logo {
+      padding-top: 10px;
     }
   }
 }
+

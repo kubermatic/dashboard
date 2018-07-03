@@ -5,6 +5,7 @@ const scope: string[] = ['openid', 'email', 'profile', 'groups'];
 export const environment = {
   name: 'prod',
   production: true,
+  configUrl: '/config/config.json',
   restRoot : '/api/v1',
   restRootV3 : '/api/v3',
   digitalOceanRestRoot : 'https://api.digitalocean.com/v2',

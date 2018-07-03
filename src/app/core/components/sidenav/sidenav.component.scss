@@ -1,21 +1,22 @@
+@import "../../../../assets/css/colors";
+
 .mat-nav-list {
   padding: 0 !important;
   .mat-list-item, a {
     font-size: 14px;
     font-weight: 400;
-    color: #444D58;
+    color: $text-color;
     height: 36px;
 
-
     i {
-      color: #444D58;
+      color: $text-color;
     }
   }
   a {
     padding: 10px 16px !important;
     &:hover, &.active {
       color: #fff;
-      background-color: #0288d1;
+      background-color: $primary;
 
       i {
         color: #fff;

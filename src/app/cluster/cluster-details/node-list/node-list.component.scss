@@ -1,81 +1,34 @@
-.km-card-list {
-  padding: 0;
-  margin: 0;
-}
-
-.km-card-list-header {
-  padding: 15px 0 10px;
-  margin: 0 24px;
-}
-
-.km-node-row {
-  cursor: pointer;
-  line-height: 60px;
-  padding: 10px 24px 0;
-
-  &.odd {
-    background-color: #F7FAFF;
-  }
-
-  &.statusRunning:hover {
-    background-color: #EEF5FF;
-  }
-
-  &.statusWaiting {
-    background-color: rgba(255, 213, 92, 0.1);
-
-    &:hover {
-      background-color: rgba(255, 213, 92, 0.2);
-    }
-  }
-
-  &.statusFailed, &.statusDeleting {
-    background-color: rgba(241, 92, 92, 0.15);
-
-    &:hover {
-      background-color: rgba(241, 92, 92, 0.25);
-    }
-  }
-}
-
-.km-single-node {
-  line-height: 40px;
-  padding: 0 0 10px;
-}
+@import "../../../../assets/css/colors";
 
 .km-conditionsMessage {
-  border-top: 1px solid rgba(227,232,236, 0.3);
+  border-top: 1px solid rgba($border, 0.3);
   margin-bottom: 10px;
   margin-top: -20px;
   line-height: 40px;
   p {
     margin: 0 auto;
-    color: #ff5454;
+    color: $warning-status-color;
   }
-}
-
-button {
-  float: right;
 }
 
 .health-state {
   text-align: center;
 
   i.red {
-    color: #ff5454;
+    color: $waiting-status-color;
   }
 
   i.green {
-    color: #79c447;
+    color: $healthy-status-color;
   }
 
   i.orange {
-    color: orange;
+    color: $waiting-status-color;
   }
 }
 
 .km-delete-node, .km-duplicate-node {
-  color: #6A6A6A;
+  color: $text-color !important;
 
   i {
     font-size: 18px;
@@ -91,23 +44,8 @@ button {
   position: relative;
 }
 
-.km-no-node {
-  text-align: center;
-  font-size: 14px;
-  color: #BCC5D0;
-  padding: 20px 24px;
-}
-
 .node-list-spinner {
-  margin: 20px auto 0;
-}
-
-.code-block {
-  background-color: #F7FAFF;
-  padding: 5px 15px;
-  font-size: 13px;
-  line-height: 18px;
-  font-family: "Menlo", monospace;
+  margin: 20px auto !important;
 }
 
 .os-image {
@@ -116,33 +54,36 @@ button {
 }
 
 i.fa-info-circle {
-  color: #CCCCCC;
+  color: $border;
   padding-left: 5px;
 }
 
 .node-details-wrapper {
-  background-color: #EEF5FF;
+  background-color: $light-background;
   margin-left: -24px;
   margin-right: -24px;
   padding: 23px 20px 15px;
-  box-shadow: inset 0px 4px 4px rgba(68, 77, 88, 0.1);
+  box-shadow: inset 0px 4px 4px rgba($text-color, 0.1);
 }
 
 .node-details-content {
   background-color: #ffffff;
   padding: 10px 24px;
   line-height: 40px;
-  
+
   .km-card-list, .km-card-list-content {
     margin: 0;
+      .mat-card-content {
+        line-height: 25px;
+      }
   }
 
   .fa-check {
-    color: #79c447;
+    color: $healthy-status-color;
   }
 
   .fa-times {
-    color: #ff5454;
+    color: $warning-status-color;
   }
 }
 

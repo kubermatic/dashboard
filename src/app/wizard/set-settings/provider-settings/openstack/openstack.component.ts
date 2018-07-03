@@ -1,8 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { WizardService } from '../../../../core/services/wizard/wizard.service';
+import { WizardService, ApiService } from '../../../../core/services';
 import { Subscription } from 'rxjs/Subscription';
+import { OpenstackTenant } from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 
 @Component({
   selector: 'kubermatic-openstack-cluster-settings',
@@ -11,11 +12,13 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+  public tenants: OpenstackTenant[] = [];
+  public loadingTenants = false;
   public openstackSettingsForm: FormGroup;
   public hideOptional = true;
   private subscriptions: Subscription[] = [];
 
-  constructor(private wizardService: WizardService) { }
+  constructor(private wizardService: WizardService, private api: ApiService) { }
 
   ngOnInit() {
     this.openstackSettingsForm = new FormGroup({
@@ -29,6 +32,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.openstackSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
+      this.loadTenants();
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           openstack: {
@@ -49,6 +53,29 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
       this.hideOptional = data.hideOptional;
     }));
+  }
+
+  public loadTenants() {
+    if (
+      this.openstackSettingsForm.controls.username.value === '' ||
+      this.openstackSettingsForm.controls.password.value === '' ||
+      this.openstackSettingsForm.controls.domain.value === '' ||
+      this.tenants.length > 0) {
+      return;
+    }
+
+    this.loadingTenants = true;
+    this.subscriptions.push(this.api.getOpenStackTenants(this.openstackSettingsForm.controls.username.value, this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
+      tenants => {
+        const sortedTenants = tenants.sort((a, b) => {
+          return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+        });
+        this.tenants = sortedTenants;
+        if (sortedTenants.length > 0 && this.openstackSettingsForm.controls.tenant.value !== '0') {
+          this.openstackSettingsForm.controls.tenant.setValue(this.cluster.spec.cloud.openstack.tenant);
+        }
+        this.loadingTenants = false;
+      }));
   }
 
   ngOnDestroy() {

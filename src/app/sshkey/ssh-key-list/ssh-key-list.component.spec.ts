@@ -50,8 +50,8 @@ describe('SshKeyListComponent', () => {
     tick();
     fixture.detectChanges();
 
-    const deItems = fixture.debugElement.queryAll(By.css('.sshkey-item'));
-    expect(deItems.length).toBe(component.sshKeys.length);
+    const deItems = fixture.debugElement.queryAll(By.css('.no-item'));
+    expect(deItems.length).not.toBe(component.sshKeys.length);
   }));
 
   it('should delete sshkey', () => {
@@ -72,14 +72,14 @@ describe('SshKeyListComponent', () => {
   it('should render sshkeys when they are', () => {
     component.sortedData = [];
     fixture.detectChanges();
-    let sshKeyListDe = fixture.debugElement.query(By.css('.km-card-list-no-keys'));
+    let sshKeyListDe = fixture.debugElement.query(By.css('.no-item'));
 
     expect(sshKeyListDe).toBeTruthy('should not render sshkey list if it is not obtained');
 
     component.sortedData = fakeSSHKeys;
     fixture.detectChanges();
-    sshKeyListDe = fixture.debugElement.query(By.css('.sshkey-list'));
+    sshKeyListDe = fixture.debugElement.query(By.css('.no-item'));
 
-    expect(sshKeyListDe).not.toBeNull('should render sshkey list if it is');
+    expect(sshKeyListDe).not.toBeTruthy('should render sshkey list if it is');
   });
 });

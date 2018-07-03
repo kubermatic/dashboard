@@ -1,4 +1,4 @@
- kubermatic-root, mat-sidenav-container, .my-content {
+kubermatic-root, mat-sidenav-container {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -11,12 +11,6 @@
 mat-sidenav {
   padding-top: 45px;
 }
-
-.km-main .km-content{
-  margin: 0 20px;
-}
-
- // ToDo: new file
 
 .mat-sidenav {
   width: 190px;
@@ -32,76 +26,6 @@ mat-sidenav {
   margin: 0px;
 }
 
-#km-top-progress-bar {
-  visibility: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 1;
-  width:100%;
-  z-index: 5000;
-}
-
-.km-progress-bar-container {
-  background-color: #E3E8EC;
-}
-
-
-.km-copy {
-  position: absolute;
-  line-height: 30px;
-  left: 10px;
-}
-
-.km-social {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100%;
-
-  li {
-    float: none;
-    a {
-      display: flex;
-      align-items: center;
-    }
-  }
-}
-
-/deep/.mat-checkbox-frame {
-  border-color: #C1C9D4;
-}
-
-/deep/.mat-checkbox-background {
-  background-color: transparent;
-}
-
-/deep/.mat-checkbox-checked.mat-accent {
-  .mat-checkbox-background {
-    background-color: transparent;
-  }
-  .mat-checkbox-frame {
-    border-color: #444D58;
-  }
-}
-
-/deep/.mat-checkbox-checkmark {
-  fill: #444D58;
-}
-
-/deep/.mat-checkbox-checkmark-path {
-  stroke: #444D58 !important;
-}
-
-footer {
-  z-index: 1;
-}
-
-// Mat Tab Toggle
-/deep/.mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
-  background-color: transparent !important;
-}
-/deep/.mat-tab-label {
-  height: 36px !important;
-  min-width: 120px !important;
+.main .content{
+  margin: 0 20px;
 }

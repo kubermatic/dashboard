@@ -9,7 +9,7 @@ import { ClusterEntity, MasterVersion } from '../../../shared/entity/ClusterEnti
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { OpenstackFlavor } from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import { OpenstackFlavor, OpenstackTenant } from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
 
@@ -102,6 +102,15 @@ export class ApiService {
     this.headers = this.headers.set('DatacenterName', datacenterName);
     const url = `${this.restRoot}/openstack/sizes`;
     return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackTenants(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackTenant[]> {
+    this.headers = this.headers.set('Username', username);
+    this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('Domain', domain);
+    this.headers = this.headers.set('DatacenterName', datacenterName);
+    const url = `${this.restRoot}/openstack/tenants`;
+    return this.http.get<OpenstackTenant[]>(url, { headers: this.headers });
   }
 
   getKubeconfigURL(dc: string, cluster: string): string {

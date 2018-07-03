@@ -1,6 +1,8 @@
-.km-card-progress-bar {
+@import "../../../assets/css/colors";
+
+.km-card-progress-bar.mat-card {
   padding-top: 14px;
-  background-color: #0288d1;
+  background-color: $primary;
   border-radius: 0;
 
   .mat-card-title {
@@ -16,18 +18,18 @@
       margin-left: 5px;
 
       &.fa-check {
-        color: #78C347;
+        color: $healthy-status-color;
       }
     }
   }
-}
 
-.wizard-step {
-  padding-top: 8px;
-  color: #fff;
-  font-weight: bold;
-}
+  .wizard-step {
+    padding-top: 8px;
+    color: #fff;
+    font-weight: bold;
 
-.title-unchecked {
-  color: #BDC6D1;
+    .title-unchecked {
+      color: $light-button-color;
+    }
+  }
 }

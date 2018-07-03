@@ -1,3 +1,5 @@
+@import "../../../../assets/css/colors";
+
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
 header {
@@ -16,7 +18,7 @@ ng2-slim-loading-bar {
   top:0;
   left:0;
   width: 100%;
-  box-shadow: 0px 4px 4px rgba(68, 77, 88, 0.1);
+  box-shadow: 0px 4px 4px rgba($text-color, 0.1);
 
   .logo {
     display: block;
@@ -63,7 +65,7 @@ ng2-slim-loading-bar {
 .button {
   cursor: pointer;
   display: inline-block;
-  color: #444D58;
+  color: $text-color;
   text-decoration: none;
   font-family: "Titillium Web", "Roboto", "Kaushan Script", Helvetica, Arial, cursive;
   font-weight: 600;

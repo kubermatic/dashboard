@@ -1,11 +1,11 @@
-<div class="km-card-list-content sshkey-item" [ngClass]="{odd: isOdd}">
+<div class="row sshkey-item" [ngClass]="{odd: isOdd}">
   <div fxLayout class="km-card-list-content-item" (click)="togglePublicKey()">
     <div fxFlex="50%" fxFlex.sm="40%">
       <div class="key-name">
         {{sshKey.spec.name}}
       </div>
       <div class="key-timestamp">
-        Created at {{sshKey.metadata.creationTimestamp | date:'dd/MM/yyyy'}}
+        Created at {{sshKey.metadata.creationTimestamp | date:'dd. MMMM yyyy'}}
       </div>
     </div>
     <div fxFlex="50%" fxFlex.sm="60%" class="key-fingerprint">
