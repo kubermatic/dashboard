@@ -44,6 +44,12 @@ export class DatacenterSpec {
   azure?: AzureDatacenterSpec;
 }
 
+export class DatacenterOperatingSystemOptions {
+  coreos: string;
+  centos: string;
+  ubuntu: string;
+}
+
 export function getDatacenterProvider(datacenter: DataCenterEntity): string {
   switch (true) {
     case !!datacenter.spec.digitalocean: {

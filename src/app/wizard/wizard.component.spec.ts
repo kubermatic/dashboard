@@ -18,6 +18,7 @@ import { SetSettingsComponent } from './set-settings/set-settings.component';
 import { AddNodeComponent } from '../add-node/add-node.component';
 import { DigitaloceanClusterSettingsComponent } from './set-settings/provider-settings/digitalocean/digitalocean.component';
 import { OpenstackAddNodeComponent } from '../add-node/openstack-add-node/openstack-add-node.component';
+import { OpenstackOptionsComponent } from '../add-node/openstack-add-node/openstack-options/openstack-options.component';
 import { ClusterSSHKeysComponent } from './set-settings/ssh-keys/cluster-ssh-keys.component';
 import { ClusterProviderSettingsComponent } from './set-settings/provider-settings/provider-settings.component';
 import { DigitaloceanAddNodeComponent } from '../add-node/digitalocean-add-node/digitalocean-add-node.component';
@@ -40,6 +41,7 @@ import { VSphereClusterSettingsComponent } from './set-settings/provider-setting
 import { AzureClusterSettingsComponent } from './set-settings/provider-settings/azure/azure.component';
 import { HetznerAddNodeComponent } from '../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../add-node/vsphere-add-node/vsphere-add-node.component';
+import { VSphereOptionsComponent } from '../add-node/vsphere-add-node/vsphere-options/vsphere-options.component';
 import { AzureAddNodeComponent } from '../add-node/azure-add-node/azure-add-node.component';
 
 describe('WizardComponent', () => {
@@ -81,11 +83,13 @@ describe('WizardComponent', () => {
         AzureClusterSettingsComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
+        OpenstackOptionsComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
+        VSphereOptionsComponent,
         AzureAddNodeComponent,
         SetClusterSpecComponent,
         SetProviderComponent,
