@@ -59,7 +59,7 @@
           <button mat-icon-button class="km-provider-menu-btn" [matMenuTriggerFor]="menu" *ngIf="!cluster.spec.cloud.bringyourown">
             <mat-icon>more_vert</mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
+          <mat-menu #menu="matMenu" class="km-provider-edit-settings">
             <button mat-menu-item (click)="editProviderSettings()">
               <mat-icon>edit</mat-icon>
               <span>Edit Settings</span>
