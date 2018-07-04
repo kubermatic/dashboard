@@ -1,11 +1,5 @@
 @import '../../../assets/css/colors';
 
-mat-button-toggle-group[group='providerGroup'] {
-  /deep/ .mat-button-toggle-label-content {
-    height: 100%;
-
-  }
-}
 // Provider Logo Size
 .provider-logo {
   height: auto !important;

@@ -2,13 +2,7 @@
 
 
 mat-button-toggle-group[group='datacenterGroup'] {
-  /deep/ .mat-button-toggle-label-content {
-    flex-direction: column;
-    padding: 20px 0;
-    width: 100%;
-  }
-
-  /deep/ div.location {
+  div.location {
     font-weight: 300;
     font-size: 12px;
     line-height: 14px;
@@ -20,7 +14,7 @@ mat-button-toggle-group[group='datacenterGroup'] {
     margin-top: -5px;
   }
 
-  /deep/ .flag-icon {
+  .flag-icon {
     font-size: 25px;
   }
 }
