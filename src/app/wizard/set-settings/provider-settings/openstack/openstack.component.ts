@@ -31,6 +31,8 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       network: new FormControl(this.cluster.spec.cloud.openstack.network, []),
     });
 
+    this.loadTenants();
+
     this.subscriptions.push(this.openstackSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
       this.loadTenants();
       this.wizardService.changeClusterProviderSettings({
