@@ -145,13 +145,17 @@
           <ng-container *ngIf="cluster.spec.cloud.vsphere">
             <div fxLayout class="km-card-list-content">
               <div fxFlex="50%" class="km-card-list-key">Username</div>
-              <div fxFlex="50%">{{cluster.spec.cloud.vsphere.username}}</div>
+              <div fxFlex="50%">{{ cluster.spec.cloud.vsphere.username }}</div>
             </div>
             <div fxLayout class="km-card-list-content">
               <div fxFlex="50%" class="km-card-list-key">Password</div>
               <div fxFlex="50%">
                 <input class="km-card-list-secret" type="password" value="{{ cluster.spec.cloud.vsphere.password }}" disabled/>
               </div>
+            </div>
+            <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.vsphere.vmNetName">
+              <div fxFlex="50%" class="km-card-list-key">Network</div>
+              <div fxFlex="50%">{{ cluster.spec.cloud.vsphere.vmNetName }}</div>
             </div>
           </ng-container>
 

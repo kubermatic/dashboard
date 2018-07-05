@@ -47,6 +47,7 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
       vsphere: {
         password: this.vsphereProviderSettingsForm.controls.password.value,
         username: this.vsphereProviderSettingsForm.controls.username.value,
+        vmNetName: this.cluster.spec.cloud.vsphere.vmNetName,
       },
       valid: true
     };

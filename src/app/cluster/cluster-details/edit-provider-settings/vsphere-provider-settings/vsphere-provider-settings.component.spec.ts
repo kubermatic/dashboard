@@ -55,6 +55,7 @@ describe('VSphereProviderSettingsComponent', () => {
     component.cluster.spec.cloud.vsphere = {
       username: '',
       password: '',
+      vmNetName: '',
     };
     fixture.detectChanges();
   });
