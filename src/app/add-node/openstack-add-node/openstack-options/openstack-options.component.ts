@@ -31,7 +31,7 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe(data => {
       this.setImage(data);
-      this.addNodeService.changeNodeData(this.getOsOptionsData());
+      this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
     }));
 
     this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
@@ -82,7 +82,7 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
           image: this.osOptionsForm.controls.image.value,
         },
       },
-      valid: this.nodeData.valid,
+      valid: this.osOptionsForm.valid,
     };
   }
 }
