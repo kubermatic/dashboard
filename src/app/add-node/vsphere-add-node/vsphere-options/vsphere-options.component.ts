@@ -33,7 +33,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe(data => {
       this.setImage(data);
-      this.addNodeService.changeNodeData(this.getVSphereOptionsData());
+      this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     }));
 
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
@@ -92,7 +92,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
           template: this.vsphereOptionsForm.controls.template.value,
         },
       },
-      valid: this.nodeData.valid,
+      valid: this.vsphereOptionsForm.valid,
     };
   }
 }
