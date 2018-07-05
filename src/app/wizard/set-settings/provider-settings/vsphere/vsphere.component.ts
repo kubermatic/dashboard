@@ -12,7 +12,8 @@ import { Subscription } from 'rxjs/Subscription';
 export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   public vsphereSettingsForm: FormGroup;
-  private vsphereSettingsFormSub: Subscription;
+  public hideOptional = true;
+  private subscriptions: Subscription[] = [];
 
   constructor(private wizardService: WizardService) {
   }
@@ -21,23 +22,33 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
     this.vsphereSettingsForm = new FormGroup({
       username: new FormControl(this.cluster.spec.cloud.vsphere.username, Validators.required),
       password: new FormControl(this.cluster.spec.cloud.vsphere.password, Validators.required),
+      vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
     });
 
-    this.vsphereSettingsFormSub = this.vsphereSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
+    this.subscriptions.push(this.vsphereSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           vsphere: {
             username: this.vsphereSettingsForm.controls.username.value,
             password: this.vsphereSettingsForm.controls.password.value,
+            vmNetName: this.vsphereSettingsForm.controls.vmNetName.value,
           },
           dc: this.cluster.spec.cloud.dc,
         },
         valid: this.vsphereSettingsForm.valid,
       });
-    });
+    }));
+
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+      this.hideOptional = data.hideOptional;
+    }));
   }
 
   ngOnDestroy() {
-    this.vsphereSettingsFormSub.unsubscribe();
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 }
