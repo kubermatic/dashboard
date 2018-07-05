@@ -181,6 +181,7 @@ export const fakeVSphereCluster: ClusterEntity = {
       vsphere: {
         username: 'foo',
         password: 'bar',
+        vmNetName: '',
       },
       hetzner: null,
       azure: null

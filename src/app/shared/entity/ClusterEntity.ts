@@ -86,6 +86,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
       const vsSpec: VSphereCloudSpec = {
         username: '',
         password: '',
+        vmNetName: '',
       };
       return vsSpec;
     case NodeProvider.HETZNER:
