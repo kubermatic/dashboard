@@ -4,10 +4,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { OpenstackClusterSettingsComponent } from './openstack.component';
 import { SharedModule } from '../../../../shared/shared.module';
-import { WizardService, ApiService } from '../../../../core/services';
+import { WizardService, ApiService, Auth } from '../../../../core/services';
 import { asyncData } from '../../../../testing/services/api-mock.service';
 import { fakeOpenstackCluster } from '../../../../testing/fake-data/cluster.fake';
 import { openstackTenantsFake } from '../../../../testing/fake-data/wizard.fake';
+import { AuthMockService } from '../../../../testing/services/auth-mock.service';
 import Spy = jasmine.Spy;
 
 describe('OpenstackClusterSettingsComponent', () => {
@@ -32,6 +33,7 @@ describe('OpenstackClusterSettingsComponent', () => {
       providers: [
         WizardService,
         { provide: ApiService, useValue: apiMock },
+        { provide: Auth, useClass: AuthMockService },
       ],
     }).compileComponents();
   }));
@@ -58,5 +60,9 @@ describe('OpenstackClusterSettingsComponent', () => {
 
   it('form invalid after creating', () => {
     expect(component.openstackSettingsForm.valid).toBeFalsy();
+  });
+
+  it('form has default username after creating', () => {
+    expect(component.openstackSettingsForm.get('username').value).toEqual('testUser');
   });
 });

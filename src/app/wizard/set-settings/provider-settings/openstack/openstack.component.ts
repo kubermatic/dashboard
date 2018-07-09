@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { WizardService, ApiService } from '../../../../core/services';
+import { WizardService, ApiService, Auth } from '../../../../core/services';
 import { Subscription } from 'rxjs/Subscription';
 import { OpenstackTenant } from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 
@@ -18,9 +18,12 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   public hideOptional = true;
   private subscriptions: Subscription[] = [];
 
-  constructor(private wizardService: WizardService, private api: ApiService) { }
+  constructor(private wizardService: WizardService, private api: ApiService, private auth: Auth) { }
 
   ngOnInit() {
+    if (!this.cluster.spec.cloud.openstack.username) {
+      this.cluster.spec.cloud.openstack.username = this.auth.getUsername();
+    }
     this.openstackSettingsForm = new FormGroup({
       domain: new FormControl(this.cluster.spec.cloud.openstack.domain, [Validators.required]),
       tenant: new FormControl(this.cluster.spec.cloud.openstack.tenant, [Validators.required]),
