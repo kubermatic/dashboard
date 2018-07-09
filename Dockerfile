@@ -30,6 +30,4 @@ RUN apk add -U ca-certificates && rm -rf /var/cache/apk/*
 COPY --from=build /usr/src/app/dashboard-v2 /
 COPY --from=dist /app/dist /dist
 
-RUN ls -la && ls -la /dist
-
 CMD ["/dashboard-v2"]
