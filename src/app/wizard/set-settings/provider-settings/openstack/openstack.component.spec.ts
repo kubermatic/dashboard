@@ -10,15 +10,21 @@ import { fakeOpenstackCluster } from '../../../../testing/fake-data/cluster.fake
 import { openstackTenantsFake } from '../../../../testing/fake-data/wizard.fake';
 import { AuthMockService } from '../../../../testing/services/auth-mock.service';
 import Spy = jasmine.Spy;
+import { AppConfigService } from '../../../../app-config.service';
+import { Config } from '../../../../shared/model/Config';
 
 describe('OpenstackClusterSettingsComponent', () => {
   let fixture: ComponentFixture<OpenstackClusterSettingsComponent>;
   let component: OpenstackClusterSettingsComponent;
   let getOpenStackTenantsSpy: Spy;
+  let config: Config;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackTenants']);
     getOpenStackTenantsSpy = apiMock.getOpenStackTenants.and.returnValue(asyncData(openstackTenantsFake));
+    const appConfigServiceMock = jasmine.createSpyObj('AppConfigService', ['getConfig']);
+    config = new class implements Config {};
+    appConfigServiceMock.getConfig.and.returnValue(config);
 
     TestBed.configureTestingModule({
       imports: [
@@ -34,35 +40,64 @@ describe('OpenstackClusterSettingsComponent', () => {
         WizardService,
         { provide: ApiService, useValue: apiMock },
         { provide: Auth, useClass: AuthMockService },
+        { provide: AppConfigService, useValue: appConfigServiceMock },
       ],
     }).compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
-    component = fixture.componentInstance;
-    component.cluster = fakeOpenstackCluster;
-    component.cluster.spec.cloud.openstack = {
-      tenant: '',
-      domain: '',
-      network: '',
-      securityGroups: '',
-      floatingIpPool: '',
-      password: '',
-      username: '',
-    };
-    fixture.detectChanges();
+  describe('Default config', () => {
+    beforeEach(() => {
+      fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
+      component = fixture.componentInstance;
+      component.cluster = fakeOpenstackCluster;
+      component.cluster.spec.cloud.openstack = {
+        tenant: '',
+        domain: '',
+        network: '',
+        securityGroups: '',
+        floatingIpPool: '',
+        password: '',
+        username: '',
+      };
+      fixture.detectChanges();
+    });
+
+    it('should create the openstack cluster cmp', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('form invalid after creating', () => {
+      expect(component.openstackSettingsForm.valid).toBeFalsy();
+    });
+
+    it('form has no default username after creating', () => {
+      expect(component.openstackSettingsForm.get('username').value).toEqual('');
+    });
   });
 
-  it('should create the openstack cluster cmp', () => {
-    expect(component).toBeTruthy();
-  });
+  describe('Config with DefaultUserName', () => {
+    beforeEach(() => {
+      config.openstack = {
+        wizard_use_default_user: true
+      };
 
-  it('form invalid after creating', () => {
-    expect(component.openstackSettingsForm.valid).toBeFalsy();
-  });
+      fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
+      component = fixture.componentInstance;
+      component.cluster = fakeOpenstackCluster;
+      component.cluster.spec.cloud.openstack = {
+        tenant: '',
+        domain: '',
+        network: '',
+        securityGroups: '',
+        floatingIpPool: '',
+        password: '',
+        username: '',
+      };
+      fixture.detectChanges();
+    });
 
-  it('form has default username after creating', () => {
-    expect(component.openstackSettingsForm.get('username').value).toEqual('testUser');
+    it('form has default username after creating if config is set', () => {
+      expect(component.openstackSettingsForm.get('username').value).toEqual('testUser');
+    });
   });
 });
