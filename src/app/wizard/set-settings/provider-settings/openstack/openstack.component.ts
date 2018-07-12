@@ -1,9 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { WizardService, ApiService } from '../../../../core/services';
+import { WizardService, ApiService, Auth } from '../../../../core/services';
 import { Subscription } from 'rxjs/Subscription';
 import { OpenstackTenant } from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import { AppConfigService } from '../../../../app-config.service';
+import { Config } from '../../../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-openstack-cluster-settings',
@@ -17,10 +19,17 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   public openstackSettingsForm: FormGroup;
   public hideOptional = true;
   private subscriptions: Subscription[] = [];
+  public config: Config;
 
-  constructor(private wizardService: WizardService, private api: ApiService) { }
+  constructor(private wizardService: WizardService, private api: ApiService, private auth: Auth, private appConfigService: AppConfigService) { }
 
   ngOnInit() {
+    this.config = this.appConfigService.getConfig();
+
+    if (this.config.openstack && this.config.openstack.wizard_use_default_user && !this.cluster.spec.cloud.openstack.username) {
+      this.cluster.spec.cloud.openstack.username = this.auth.getUsername();
+    }
+
     this.openstackSettingsForm = new FormGroup({
       domain: new FormControl(this.cluster.spec.cloud.openstack.domain, [Validators.required]),
       tenant: new FormControl(this.cluster.spec.cloud.openstack.tenant, [Validators.required]),

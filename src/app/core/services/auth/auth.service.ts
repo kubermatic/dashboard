@@ -25,6 +25,14 @@ export class Auth {
     }
   }
 
+  public getUsername(): string {
+    if (!!this.getBearerToken()) {
+      const tokenExp = this.decodeToken(this.getBearerToken());
+      return tokenExp.name;
+    }
+    return '';
+  }
+
   public logout() {
     localStorage.removeItem('token');
   }
