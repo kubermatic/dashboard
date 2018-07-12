@@ -1,3 +1,6 @@
 {
-  "show_demo_info": false
+  "show_demo_info": false,
+  "openstack": {
+    "wizard_use_default_user": false
+  }
 }

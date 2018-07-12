@@ -12,6 +12,10 @@ export class AuthMockService {
     return 'token';
   }
 
+  public getUsername(): string {
+    return 'testUser';
+  }
+
   public logout() {}
 
 }
