@@ -34,10 +34,14 @@ export class ClusterDeleteConfirmationComponent implements DoCheck {
   }
 
   deleteCluster() {
-    this.api.deleteCluster(this.cluster.metadata.name, this.datacenter.metadata.name).subscribe(result => {
-      this.initialNodeDataService.clearInitialNodeData(this.cluster);
-      NotificationActions.success('Success', `Cluster is being deleted`);
-    });
-    this.dialogRef.close(true);
+    if (!this.inputNameMatches()) {
+      return;
+    } else {
+      this.api.deleteCluster(this.cluster.metadata.name, this.datacenter.metadata.name).subscribe(result => {
+        this.initialNodeDataService.clearInitialNodeData(this.cluster);
+        NotificationActions.success('Success', `Cluster is being deleted`);
+      });
+      this.dialogRef.close(true);
+    }
   }
 }
