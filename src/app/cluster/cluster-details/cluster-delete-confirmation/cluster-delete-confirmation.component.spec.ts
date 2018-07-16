@@ -81,6 +81,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
   it('should call deleteCluster method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster;
     component.datacenter = fakeDigitaloceanDatacenter;
+    component.inputName = fakeDigitaloceanCluster.spec.humanReadableName;
 
     fixture.detectChanges();
     const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));
