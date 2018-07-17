@@ -1,8 +1,9 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {WizardService} from '../../../../core/services/wizard/wizard.service';
-import {Subscription} from 'rxjs/Subscription';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { WizardService } from '../../../../core/services/wizard/wizard.service';
+import { Subscription } from 'rxjs/Subscription';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'kubermatic-hetzner-cluster-settings',
@@ -21,7 +22,7 @@ export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
       token: new FormControl(this.cluster.spec.cloud.hetzner.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.hetznerSettingsFormSub = this.hetznerSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
+    this.hetznerSettingsFormSub = this.hetznerSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           hetzner: {
