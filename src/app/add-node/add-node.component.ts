@@ -125,7 +125,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
         },
       },
       count: this.nodeForm.controls.count.value,
-      valid: this.nodeForm.valid && this.providerData.valid,
+      valid: this.providerData.valid,
     };
   }
 

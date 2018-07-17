@@ -58,6 +58,13 @@ export const fakeOpenstackDatacenter: DataCenterEntity = {
     openstack: {
       auth_url: 'loodse.com',
       availability_zone: 'az1',
+      region: '',
+      images: {
+        coreos: '',
+        centos: '',
+        ubuntu: 'Ubuntu 16.04 LTS 2018.03.26',
+      },
+
     },
     location: 'Frankfurt',
     provider: 'openstack'

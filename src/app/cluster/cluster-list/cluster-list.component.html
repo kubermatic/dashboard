@@ -8,8 +8,8 @@
         </a>
       </div>
   </div>
-  <mat-card class="km-card-list">
-    <mat-card-header class="km-card-list-header">
+  <mat-card class="blue">
+    <mat-card-header>
       <mat-card-title fxLayout matSort (matSortChange)="sortData($event)" matSortActive="name" matSortDirection="asc">
         <div fxFlex="40%" fxFlex.xs="40%" mat-sort-header="name">
           <strong>Name</strong>
@@ -22,16 +22,21 @@
         </div>
       </mat-card-title>
     </mat-card-header>
-    <ng-container [ngSwitch]="!!clusters">
-      <div *ngSwitchCase="true" fxLayout="column">
-        <kubermatic-cluster-item class="km-cluster-item" *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [health]="data.status.health" [index]="i" fxFlex></kubermatic-cluster-item>
-      </div>
-      <div class="km-card-buttonbar" fxLayout>
-        <a routerLink="/wizard" class="button white">
+    <mat-card-content fxLayout="column" [ngSwitch]="!!clusters && clusters.length > 0 ">
+      <ng-container *ngSwitchCase="true">
+        <kubermatic-cluster-item *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [health]="data.status.health" [index]="i" fxFlex></kubermatic-cluster-item>
+      </ng-container>
+      <ng-container *ngSwitchCase="false">
+        <div fxFlex class="row odd no-item" >No Cluster available. Please add a Cluster.</div>
+      </ng-container>
+      <ng-container>
+        <div class="row">
+          <a routerLink="/wizard" class="button white">
             <strong>+ Add Cluster</strong>
-        </a>
-      </div>
-    </ng-container>
+          </a>
+        </div>
+      </ng-container>
+    </mat-card-content>
   </mat-card>
 </div>
 <div *ngIf="loading" >

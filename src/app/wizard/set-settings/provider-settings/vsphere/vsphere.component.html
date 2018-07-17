@@ -11,4 +11,7 @@
       Password is <strong>required</strong>
     </mat-error>
   </mat-form-field>
+  <mat-form-field fxFlex *ngIf="!hideOptional">
+    <input matInput formControlName="vmNetName" type="vmNetName" placeholder="Network:" autocomplete="off">
+  </mat-form-field>
 </form>

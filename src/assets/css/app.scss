@@ -7,41 +7,380 @@ html, body {
   @include titillium-font;
 
   background-color: #F1F1F1;
-  color: #444D58;
-}
-h2 {
-  font-weight: 300;
+  color: $text-color;
 }
 
-// Card Styling
+// spinner
 
-.km-card-list {
-  padding-top: 10px;
+.km-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+// card
+
+.mat-card-header-text {
+  height: auto;
+  margin: 0;
+  width: auto;
+}
+
+
+// global
+.code-block {
+  background-color: $medium-background;
+  padding: 5px 15px;
+  font-size: 14px;
+  line-height: 20px;
+  font-family: "Menlo", monospace;
+  p {
+    color: $text-color !important;
+    font-family: "Menlo", monospace;
+  }
+}
+
+// global
+
+.mat-card-header {
   margin-bottom: 10px;
+  border: none;
 
-  .km-card-list-header {
-    height: 30px;
-    padding-bottom: 0;
-    line-height: 30px;
+}
 
-    .mat-card-title {
-      font-weight: 500;
-      margin-bottom: 0;
-      margin-left: 0;
-      margin-right: 0;
+.mat-card-title {
+  margin: 0;
+  h4 {
+    font-weight: 600;
+    margin: 10px 0;
+    font-size: 18px;
+    color: $text-color;
+  }
+}
+
+.mat-card-content {
+  .mat-form-field {
+    .mat-input-placeholder-wrapper .mat-input-placeholder {
+      color: $light-button-color;
+      font-weight: 600;
+      font-size: 14px;
+    }
+  }
+  p {
+    color: $light-button-color;
+    font-size: 12px;
+    margin: 0 0 15px;
+  }
+  button {
+    background-color: transparent;
+    border: none;
+    color: $primary;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 0;
+    &:hover {
+      color: $primary;
     }
   }
 }
 
+// Sidenav
 
-mat-card-header {
-  border-bottom: 1px solid #E3E8EC;
-  //padding-bottom: 10px;
+.mat-nav-list {
+  .mat-list-item-content {
+    padding: 0 !important;
+  }
+}
 
-  &.km-card-list-header.mat-card-header {
-    //margin-bottom: 10px;
+// Step Provider and Datacenter
+
+mat-button-toggle-group {
+  background-color: transparent;
+  box-shadow: none !important;
+
+  mat-button-toggle {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+    background-color: #FFFFFF;
+    border: 1px solid $border;
+    cursor: pointer;
+    max-width: 90px;
+    min-width: 90px;
+    min-height: 90px;
+    max-height: 90px;
+
+    &:hover {
+      border: 1px solid $primary;
+    }
   }
 
+  .mat-button-toggle-checked {
+    background-color: #FFFFFF;
+    border: 1px solid $primary;
+  }
+
+  .mat-button-toggle-label {
+    width: 100%;
+    height: 100%;
+  }
+
+  .mat-button-toggle-label-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+mat-button-toggle-group[group='datacenterGroup'] {
+  .mat-button-toggle-label-content {
+    flex-direction: column;
+    padding: 20px 0;
+    width: 100%;
+  }
+}
+
+mat-button-toggle-group[group='providerGroup'] {
+  .mat-button-toggle-label-content {
+    height: 100%;
+  }
+}
+
+.mat-card.blue {
+  padding: 0px;
+  margin: 20px 0 0 0;
+
+  .mat-card-header {
+    padding: 10px 24px;
+    margin: 0;
+    height: 30px;
+    line-height: 30px;
+    background-color: $primary;
+    color: #fff;
+    .mat-card-header-text {
+      width: 100%;
+      margin: 0px;
+      .mat-card-title {
+        font-weight: 500;
+        padding: 0;
+        margin: 0;
+      }
+    }
+  }
+
+  &.small .mat-card-header {
+    height: 20px;
+    line-height: 20px;
+  }
+
+  .mat-card-content {
+    line-height: 40px;
+
+    &.row, .row {
+      line-height: 40px;
+      padding: 10px 24px;
+      &.small {
+        padding: 10px 24px;
+        margin: 0;
+        line-height: normal;
+      }
+
+      &.accordion {
+        padding-bottom: 0;
+        > div:first-child {
+          padding-bottom: 10px;
+        }
+      }
+
+      div {
+        outline: none;
+      }
+
+      .cluster-name {
+        line-height: 40px;
+      }
+
+      &.odd {
+        background-color: $medium-background;
+      }
+
+      &.statusRunning:hover {
+        background-color: $light-background;
+      }
+
+      &.statusWaiting {
+        background-color: rgba($waiting-background, 0.1);
+
+        &:hover {
+          background-color: rgba($waiting-background, 0.2);
+        }
+      }
+
+      &.statusFailed, &.statusDeleting {
+        background-color: rgba($warning-background, 0.15);
+
+        &:hover {
+          background-color: rgba($warning-background, 0.25);
+        }
+      }
+
+      &.no-item, .no-item {
+        text-align: center;
+        font-size: 14px;
+        color: $text-color;
+      }
+
+      p {
+        line-height: normal;
+        color: $text-color;
+        margin: 0;
+        font-size: 14px;
+      }
+
+      .region {
+        display: flex;
+        align-items: center;
+        .flag-icon {
+          font-size: 24px;
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+
+.provider-logo {
+  height: auto !important;
+  width: auto !important;
+  max-height: 40px !important;
+  max-width: 70px !important;
+}
+
+.mat-card.white {
+  padding: 0;
+  margin: 0;
+
+  &.statusWaiting {
+    background-color: rgba($waiting-background, 0.1);
+  }
+
+  &.statusFailed, &.statusDeleting {
+    background-color: rgba($warning-background, 0.15);
+  }
+
+  .mat-card-header {
+    padding: 20px 24px 0px;
+    margin: 0;
+    .mat-card-header-text {
+      width: 100%;
+      margin: 0px;
+      .mat-card-title {
+        font-weight: 500;
+        padding: 0;
+        margin: 0;
+        font-size: 18px;
+        line-height: 28px;
+
+        .cluster-name {
+          float: left;
+        }
+      }
+    }
+  }
+
+  .mat-card-subtitle {
+    .pauseReason {
+      margin-top: 0;
+      color: $warning-status-color;
+    }
+  }
+
+  .mat-card-content {
+    line-height: 40px;
+    &.row, .row {
+      line-height: 40px;
+      padding: 10px 24px;
+    }
+  }
+}
+
+// modal close icon
+
+button.close {
+  position: absolute;
+  right: 20px;
+}
+
+.mat-toolbar {
+  border: none;
+  padding: 0;
+  position: relative;
+}
+
+mat-dialog-content {
+  margin-bottom: 15px;
+}
+
+// Input Fields
+
+.mat-form-field-wrapper {
+  margin: 3px 0 !important;
+}
+
+.mat-input-wrapper {
+  margin: 0 8px;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.mat-select-value-text {
+  font-size: 14px;
+}
+
+
+// Scrollbar
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+::-webkit-scrollbar-thumb {
+  background: $light-text-color;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: $light-text-color;
+}
+::-webkit-scrollbar-thumb:active {
+  background: $light-text-color;
+}
+::-webkit-scrollbar-track {
+  background: $light-text-color;
+  border: 0px none #ffffff;
+  border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+  background: $light-text-color;
+}
+::-webkit-scrollbar-track:active {
+  background: $light-text-color;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+mat-card-header {
   .mat-card-title {
     padding-top: 0px;
     font-size: 18px;
@@ -53,15 +392,36 @@ mat-card-header {
   }
 }
 
-// Input Fields
+// copy text
+.copy {
+  cursor: pointer;
+
+  &:hover {
+    color: $primary;
+  }
+  &:active {
+    color: rgba($primary, 0.7);
+  }
+}
+
+// List Header sorting arrow
+.mat-sort-header-arrow {
+   margin: auto 0 auto 6px !important;
+}
+
+
+// mat card remove border
+
+.mat-card {
+  box-shadow: none !important;
+  border-radius: 0 !important;
+}
+
+// input styling
 
 .mat-input-wrapper {
   margin: 1.5em 0 1em;
   padding-bottom: 6px;
-}
-
-.km-card-list .mat-card-footer {
-  position: relative;
 }
 
 .mat-select-placeholder {
@@ -70,38 +430,167 @@ mat-card-header {
 
 .mat-input-placeholder, .mat-form-field-label {
   font-size: 14px !important;
-  color: #BDC6D1 !important;
+  color: $light-button-color !important;
   font-weight: 500 !important;
 }
 
 .mat-form-field-underline {
-  background-color: #E5E5E5 !important;
+  background-color: $border !important;
+}
+
+.mat-form-field-invalid .mat-form-field-label {
+  color: $warning-status-color !important;
+}
+
+.mat-checkbox-frame {
+  border-color: #C1C9D4;
+}
+
+.mat-checkbox-background {
+  background-color: transparent;
+}
+
+.mat-checkbox-checked.mat-accent {
+  .mat-checkbox-background {
+    background-color: transparent;
+  }
+  .mat-checkbox-frame {
+    border-color: $text-color;
+  }
+}
+
+.mat-checkbox-checkmark {
+  fill: $text-color;
+}
+
+.mat-checkbox-checkmark-path {
+  stroke: $text-color !important;
+}
+
+.mat-input-wrapper {
+  margin: 5px 0 0 0;
 }
 
 .mat-form-field {
   width: 100%;
 }
 
-.mat-form-field-invalid .mat-form-field-label {
-  color: #e91e63 !important;
+.mat-select {
+  width: 100%;
 }
 
-.mat-select-value-text {
-  font-size: 14px;
-}
-
-.mat-slider-horizontal {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-
-.dfjsdfijs {
-  border: 1px solid red;
-  float: left;
+.mat-select-container {
+  padding: 0;
 }
 
 
-// dialog
+// Mat Tab Toggle
+.mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
+  background-color: transparent !important;
+}
+.mat-tab-label {
+  height: 36px !important;
+  min-width: 120px !important;
+}
+
+
+// tooltip
+.mat-tooltip {
+  background-color: rgba($primary, 0.7) !important;
+  margin-top: 5px !important;
+}
+
+
+// button shadow
+
+.mat-raised-button {
+  height: 30px;
+  line-height: 16px !important;
+  font-weight: 500 !important;
+  box-shadow: 0px 1px 4px rgba($text-color, 0.5) !important;
+}
+
+
+// loading indicater
+#km-top-progress-bar {
+  visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  width:100%;
+  z-index: 5000;
+}
+
+.km-progress-bar-container {
+  background-color: $border;
+}
+
+// overlay background
+
+.mat-button-focus-overlay {
+  background-color: transparent !important;
+}
+// modal
+
+button.close {
+  position: absolute;
+  right: 20px;
+}
+
+.btn-right {
+  float: right;
+}
+
+.dialog {
+  width: 545px;
+}
+
+@media screen and (max-width: 745px) {
+  .dialog {
+    width: 100%;
+  }
+}
+
+.mat-dialog-content {
+  margin-top: 0;
+}
+
+.mat-toolbar {
+  border: none;
+  padding: 0;
+  color: $text-color;
+  font-size: 18px;
+  font-weight: 600;
+  position: relative;
+}
+
+
+// modal action
+.mat-dialog-actions {
+  justify-content: center;
+
+  button {
+    font-size: 14px;
+    font-weight: 600 !important;
+    border-radius: 4px;
+    padding: 0px 22px;
+    line-height: 16px;
+    &.mat-raised-button {
+      color: $text-color;
+    }
+
+    &.mat-raised-button.mat-primary {
+      color: #fff;
+    }
+
+    &.mat-raised-button.mat-primary[disabled] {
+      color: #fff;
+      background-color: $border;
+      box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+    }
+  }
+}
 
 .mat-dialog-container {
   .mat-toolbar-row {
@@ -110,9 +599,9 @@ mat-card-header {
 
   .mat-toolbar {
     background-color: #fff;
-    border-bottom: 1px solid #E3E8EC;
-    min-height: 30px;
+    height: 50px;
     padding: 0 8px;
+
     .mat-toolbar-row {
       height: 30px;
     }
@@ -127,10 +616,11 @@ mat-card-header {
       right: -20px;
       top: -20px;
       i {
-        color: #0288d1;
+        color: $primary;
       }
     }
   }
+
   .mat-dialog-content {
 
     p {
@@ -145,6 +635,7 @@ mat-card-header {
       font-size: 14px;
     }
   }
+
   .mat-dialog-actions {
 
     &:last-child {
@@ -156,100 +647,39 @@ mat-card-header {
   }
 }
 
-.mat-button-focus-overlay {
-  background-color: transparent !important;
+.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
+  margin: 0;
 }
 
 
-.mat-dialog-content {
-  margin-top: 20px;
-}
+// provider message
 
-.mat-raised-button {
-  height: 30px;
-  line-height: 16px !important;
-  font-weight: 500 !important;
-  box-shadow: 0px 1px 4px rgba(68, 77, 88, 0.5) !important;
-}
-
-.mat-card {
-  box-shadow: none !important;
-  border-radius: 0 !important;
-}
-
-.button.white {
-  color: #0288d1;
-  height: 30px;
-  line-height: 30px;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-}
-
-
-// tooltip
-.mat-tooltip {
-  background-color: rgba(2, 136, 209, 0.7) !important;
-  margin-top: 5px !important;
-}
-
-// copy text
-.copy {
-  cursor: pointer;
-
-  &:hover {
-    color: #0288d1;
-  }
-  &:active {
-    color: rgba(2, 136, 209, 0.7);
+.provider-message {
+  height: 52px;
+  background-color: $medium-background;
+  margin: 5px 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  color: $text-color;
+  text-align: center;
+  a {
+    color: $primary;
+    text-decoration: none;
   }
 }
 
-// Provider Logo Size
-.km-provider-logo {
-  height: auto !important;
-  width: auto !important;
-  max-height: 40px !important;
-  max-width: 70px !important;
+// download kubeconfig button
+.download-kubeconfig-btn {
+  span.mat-button-wrapper {
+    display: flex;
+    height: 100%;
+    align-items: center;
+  }
 }
 
-// List Header sorting arrow
-
-.mat-sort-header-arrow {
-  margin: auto 0 auto 6px !important;
-}
-
-// Scrollbar
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-button {
-  width: 0px;
-  height: 0px;
-}
-::-webkit-scrollbar-thumb {
-  background: #b4b4b4;
-  border: 0px none #ffffff;
-  border-radius: 50px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #b4b4b4;
-}
-::-webkit-scrollbar-thumb:active {
-  background: #b4b4b4;
-}
-::-webkit-scrollbar-track {
-  background: #d4d4d4;
-  border: 0px none #ffffff;
-  border-radius: 50px;
-}
-::-webkit-scrollbar-track:hover {
-  background: #d4d4d4;
-}
-::-webkit-scrollbar-track:active {
-  background: #d4d4d4;
-}
-::-webkit-scrollbar-corner {
-  background: transparent;
+// cluster details: edit provider settings
+.km-provider-edit-settings {
+  .mat-menu-content {
+    padding: 0 !important;
+  }
 }

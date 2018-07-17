@@ -15,6 +15,7 @@ import { AWSClusterSettingsComponent } from './provider-settings/aws/aws.compone
 import { OpenstackClusterSettingsComponent } from './provider-settings/openstack/openstack.component';
 import { AzureClusterSettingsComponent } from './provider-settings/azure/azure.component';
 import { OpenstackAddNodeComponent } from '../../add-node/openstack-add-node/openstack-add-node.component';
+import { OpenstackOptionsComponent } from '../../add-node/openstack-add-node/openstack-options/openstack-options.component';
 import { DigitaloceanAddNodeComponent } from '../../add-node/digitalocean-add-node/digitalocean-add-node.component';
 import { DigitaloceanOptionsComponent } from '../../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { AwsAddNodeComponent } from '../../add-node/aws-add-node/aws-add-node.component';
@@ -29,6 +30,7 @@ import { VSphereClusterSettingsComponent } from './provider-settings/vsphere/vsp
 import Spy = jasmine.Spy;
 import { HetznerAddNodeComponent } from '../../add-node/hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from '../../add-node/vsphere-add-node/vsphere-add-node.component';
+import { VSphereOptionsComponent } from '../../add-node/vsphere-add-node/vsphere-options/vsphere-options.component';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
 
 describe('SetSettingsComponent', () => {
@@ -62,11 +64,13 @@ describe('SetSettingsComponent', () => {
         AzureClusterSettingsComponent,
         AddNodeComponent,
         OpenstackAddNodeComponent,
+        OpenstackOptionsComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
+        VSphereOptionsComponent,
         AzureAddNodeComponent,
       ],
       providers: [

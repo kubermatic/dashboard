@@ -1,3 +1,6 @@
 export interface Config {
-    isDemo: boolean;
+    show_demo_info?: boolean;
+    openstack?: {
+        wizard_use_default_user?: boolean;
+    };
 }

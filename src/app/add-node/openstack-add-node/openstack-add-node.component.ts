@@ -26,7 +26,6 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit(): void {
     this.osNodeForm = new FormGroup({
       flavor: new FormControl(this.nodeData.node.spec.cloud.openstack.flavor, Validators.required),
-      image: new FormControl(this.nodeData.node.spec.cloud.openstack.image, Validators.required),
     });
     this.subscriptions.push(this.osNodeForm.valueChanges.subscribe(data => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
@@ -53,7 +52,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
       spec: {
         openstack: {
           flavor: this.osNodeForm.controls.flavor.value,
-          image: this.osNodeForm.controls.image.value,
+          image: this.nodeData.node.spec.cloud.openstack.image,
         },
       },
       valid: this.osNodeForm.valid,

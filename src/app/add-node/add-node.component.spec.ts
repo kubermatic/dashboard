@@ -7,6 +7,7 @@ import { AwsAddNodeComponent } from './aws-add-node/aws-add-node.component';
 import { DigitaloceanAddNodeComponent } from './digitalocean-add-node/digitalocean-add-node.component';
 import { DigitaloceanOptionsComponent } from './digitalocean-add-node/digitalocean-options/digitalocean-options.component';
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
+import { OpenstackOptionsComponent } from './openstack-add-node/openstack-options/openstack-options.component';
 import { fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster } from '../testing/fake-data/cluster.fake';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { WizardService } from '../core/services/wizard/wizard.service';
@@ -15,8 +16,11 @@ import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-data/addNodeModal.fake';
 import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
 import { VSphereAddNodeComponent } from './vsphere-add-node/vsphere-add-node.component';
+import { VSphereOptionsComponent } from './vsphere-add-node/vsphere-options/vsphere-options.component';
 import { AzureAddNodeComponent } from './azure-add-node/azure-add-node.component';
 import { nodeDataFake } from '../testing/fake-data/node.fake';
+import { DatacenterService } from '../core/services/datacenter/datacenter.service';
+import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import Spy = jasmine.Spy;
 
 describe('AddNodeComponent', () => {
@@ -39,17 +43,20 @@ describe('AddNodeComponent', () => {
       declarations: [
         AddNodeComponent,
         OpenstackAddNodeComponent,
+        OpenstackOptionsComponent,
         AwsAddNodeComponent,
         DigitaloceanAddNodeComponent,
         DigitaloceanOptionsComponent,
         HetznerAddNodeComponent,
         VSphereAddNodeComponent,
+        VSphereOptionsComponent,
         AzureAddNodeComponent,
       ],
       providers: [
         AddNodeService,
         WizardService,
         { provide: ApiService, useValue: apiMock },
+        { provide: DatacenterService, useClass: DatacenterMockService },
       ],
     }).compileComponents();
   }));

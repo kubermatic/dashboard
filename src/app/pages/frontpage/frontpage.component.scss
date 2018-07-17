@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Titillium+Web');
+@import "../../../assets/css/colors";
 
 .frontpage-bg {
-  background-color: #0288d1;
+  background-color: $primary;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -10,15 +10,8 @@
   z-index: -1;
 }
 
-.mat-card {
-  max-width: 400px;
-  height: 120px;
-  z-index: 1;
-}
-
 .frontpage-content {
   margin-top: 15%;
-
 
   .frontpage-inner-text {
     text-align: center;
@@ -32,7 +25,7 @@
 
   .mat-raised-button {
     line-height: 57px !important;
-    color: #0288d1;
+    color: $primary;
     font-size: 28px;
     font-family: 'Titillium Web', sans-serif;
     width: 470px;
@@ -45,4 +38,10 @@
       background-color: rgba(255, 255, 255, 0.9);
     }
   }
+}
+
+.mat-card {
+  max-width: 400px;
+  height: 120px;
+  z-index: 1;
 }
