@@ -1,0 +1,13 @@
+<div class="row" [ngClass]="getProjectItemClass()">
+  <div fxLayout>
+    <div fxFlex="50%" fxFlex.xs="40%">
+      <p class="project-name">{{ project.name }}</p>
+    </div>
+    <div fxFlex="30%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
+      <p class="project-status">{{ project.status }}</p>
+    </div>
+    <div fxFlex="20%" fxHide.sm fxHide.xs>
+      <p>Buttons</p>
+    </div>
+  </div>
+</div>
