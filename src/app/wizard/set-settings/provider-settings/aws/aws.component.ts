@@ -3,6 +3,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WizardService } from '../../../../core/services/wizard/wizard.service';
 import { Subscription } from 'rxjs/Subscription';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'kubermatic-aws-cluster-settings',
@@ -27,7 +28,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       routeTableId: new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
     });
 
-    this.subscriptions.push(this.awsSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
+    this.subscriptions.push(this.awsSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           aws: {

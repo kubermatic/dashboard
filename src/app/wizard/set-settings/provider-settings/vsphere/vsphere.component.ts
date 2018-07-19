@@ -3,6 +3,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WizardService } from '../../../../core/services/wizard/wizard.service';
 import { Subscription } from 'rxjs/Subscription';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'kubermatic-vsphere-cluster-settings',
@@ -25,7 +26,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
     });
 
-    this.subscriptions.push(this.vsphereSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
+    this.subscriptions.push(this.vsphereSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           vsphere: {
