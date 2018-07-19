@@ -27,7 +27,7 @@ describe('AddSshKeyModalComponent', () => {
   let fixture: ComponentFixture<AddSshKeyModalComponent>;
   let component: AddSshKeyModalComponent;
   let apiService: ApiService;
-  let dialogRef: MatDialogRef<AddSshKeyModalComponent>;
+  let dialogRef: MatDialogRef<AddSshKeyModalComponent, any>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -49,9 +49,8 @@ describe('AddSshKeyModalComponent', () => {
     fixture = TestBed.createComponent(AddSshKeyModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-
     apiService = fixture.debugElement.injector.get(ApiService);
-    dialogRef = fixture.debugElement.injector.get(MatDialogRef);
+    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyModalComponent, any>;
   });
 
   it('should create the add node modal cmp', async(() => {
