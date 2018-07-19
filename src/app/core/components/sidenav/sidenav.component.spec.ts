@@ -10,6 +10,10 @@ import { click } from './../../../testing/utils/click-handler';
 
 import { SidenavComponent } from './sidenav.component';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
+import { ApiService } from './../../../core/services/api/api.service';
+import { fakeProjects } from './../../../testing/fake-data/project.fake';
+import { asyncData } from './../../../testing/services/api-mock.service';
+import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -25,8 +29,12 @@ describe('SidenavComponent', () => {
   let component: SidenavComponent;
   let linkDes: DebugElement[];
   let links: RouterLinkStubDirective[];
+  let getProjectsSpy: Spy;
 
   beforeEach(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getProjects']);
+    getProjectsSpy = apiMock.getProjects.and.returnValue(asyncData(fakeProjects));
+
     TestBed.configureTestingModule({
       imports: [
         ...modules,
@@ -34,7 +42,9 @@ describe('SidenavComponent', () => {
       declarations: [
         SidenavComponent
       ],
-      providers: [],
+      providers: [
+        { provide: ApiService, useValue: apiMock },
+      ],
     }).compileComponents();
   });
 

@@ -6,6 +6,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { Auth } from '../../../core/services/auth/auth.service';
 import { ClusterEntity, MasterVersion } from '../../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
@@ -23,6 +25,16 @@ export class ApiService {
   constructor(private http: HttpClient, private auth: Auth) {
     this.token = auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
+  }
+
+  getProjects(): Observable<ProjectEntity[]> {
+    const url = `${this.restRoot}/projects`;
+    return this.http.get<ProjectEntity[]>(url, { headers: this.headers });
+  }
+
+  addProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
+    const url = `${this.restRoot}/projects`;
+    return this.http.post<ProjectEntity>(url, createProjectModel, { headers: this.headers });
   }
 
   getClusters(dc: string): Observable<ClusterEntity[]> {

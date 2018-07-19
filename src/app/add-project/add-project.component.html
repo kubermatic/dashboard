@@ -1,0 +1,28 @@
+<div>
+  <mat-toolbar>
+    Add Project
+    <button mat-icon-button mat-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </mat-toolbar>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+      <form [formGroup]="addProjectForm" fxLayout="column">
+        <mat-form-field fxFlex>
+          <input matInput formControlName="name" type="text" placeholder="Project Name*:" autocomplete="off">
+          <mat-error *ngIf="addProjectForm.controls.name.hasError('required')">
+            Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+  <button mat-dialog-close mat-raised-button>
+    Close
+  </button>
+  <button mat-raised-button color="primary" (click)="addProject()" [disabled]="!addProjectForm.valid">
+    Add
+  </button>
+  </mat-dialog-actions>
+</div>
