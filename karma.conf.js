@@ -4,7 +4,7 @@
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', '@angular/cli'],
+    frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
       require('karma-jasmine'),
       require('karma-mocha-reporter'),
@@ -12,29 +12,27 @@ module.exports = function (config) {
       require('karma-coverage-istanbul-reporter'),
       require('karma-chrome-launcher'),
       require('karma-phantomjs-launcher'),
-      require('@angular/cli/plugins/karma'),
+      require('@angular-devkit/build-angular/plugins/karma'),
       require('@angular/material')
     ],
     client:{
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
     files: [
-      { pattern: './src/test.ts', watched: false },
+      
       { pattern: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' }
     ],
     preprocessors: {
-      './src/test.ts': ['@angular/cli']
+      
     },
     mime: {
       'text/x-typescript': ['ts','tsx']
     },
     coverageIstanbulReporter: {
-      reports: [ 'html', 'lcovonly' ],
+      dir: require('path').join(__dirname, 'coverage'), reports: [ 'html', 'lcovonly' ],
       fixWebpackSourcePaths: true
     },
-    angularCli: {
-      environment: 'dev'
-    },
+    
     reporters: config.angularCli && config.angularCli.codeCoverage
       ? ['mocha', 'coverage-istanbul']
       : ['mocha', 'kjhtml'],

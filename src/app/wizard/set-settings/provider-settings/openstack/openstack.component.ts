@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { OpenstackTenant } from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { AppConfigService } from '../../../../app-config.service';
 import { Config } from '../../../../shared/model/Config';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'kubermatic-openstack-cluster-settings',
@@ -42,7 +43,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.loadTenants();
 
-    this.subscriptions.push(this.openstackSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
+    this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.loadTenants();
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {

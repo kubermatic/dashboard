@@ -12,17 +12,17 @@ export class SidenavService {
     this.sidenav = sidenav;
   }
 
-  public open(): Promise<void> {
+  public open() {
     return this.sidenav.open();
   }
 
-  public close(): Promise<void> {
+  public close() {
     if (this.sidenav) {
       return this.sidenav.close();
     }
   }
 
-  public toggle(isOpen?: boolean): Promise<void> {
+  public toggle(isOpen?: boolean) {
     return this.sidenav.toggle(isOpen);
   }
 

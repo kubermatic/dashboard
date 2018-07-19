@@ -3,6 +3,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WizardService } from '../../../../core/services/wizard/wizard.service';
 import { Subscription } from 'rxjs/Subscription';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'kubermatic-azure-cluster-settings',
@@ -30,7 +31,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       vnet: new FormControl(this.cluster.spec.cloud.azure.vnet),
     });
 
-    this.subscriptions.push(this.azureSettingsForm.valueChanges.debounceTime(1000).subscribe(data => {
+    this.subscriptions.push(this.azureSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           azure: {
