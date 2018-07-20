@@ -1,5 +1,7 @@
 import { ApiService, DatacenterService, InitialNodeDataService } from '../core/services';
+import { ApiMockService } from '../testing/services/api-mock.service';
 import { ProjectComponent } from './project.component';
+import { ProjectItemComponent } from './project-item/project-item.component';
 import { Router } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -29,9 +31,11 @@ describe('ProjectComponent', () => {
       ],
       declarations: [
         ProjectComponent,
+        ProjectItemComponent,
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
+        { provide: ApiService, useClass: ApiMockService },
         MatDialog,
       ],
     }).compileComponents();
