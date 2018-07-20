@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { environment } from '../../../../environments/environment';
 import { ApiService } from '../../../core/services';
@@ -10,12 +11,12 @@ import { AddProjectComponent } from '../../../add-project/add-project.component'
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss']
 })
-export class SidenavComponent implements OnInit {
 
+export class SidenavComponent implements OnInit {
   public environment: any = environment;
   public projects: ProjectEntity[];
 
-  constructor(private api: ApiService, public dialog: MatDialog) { }
+  constructor(private api: ApiService, public dialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
     this.getProjects();
@@ -45,4 +46,9 @@ export class SidenavComponent implements OnInit {
     this.getProjects();
   }
 
+  public setIconColor(url: string): boolean {
+    const state: RouterState = this.router.routerState;
+    const snapshot: RouterStateSnapshot = state.snapshot;
+    return (snapshot.url === url);
+  }
 }

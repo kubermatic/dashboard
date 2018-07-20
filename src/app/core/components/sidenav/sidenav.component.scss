@@ -6,7 +6,7 @@
     font-size: 14px;
     font-weight: 400;
     color: $text-color;
-    height: 36px;
+    height: 40px;
 
     &.km-projects {
       height: 85px;
@@ -38,6 +38,8 @@
   }
   a {
     padding: 10px 30px !important;
+    display: flex;
+    align-items: center;
     &:hover, &.active {
       color: #fff;
       background-color: $primary;
@@ -48,7 +50,8 @@
     }
 
     i {
-      width: 25px;
+      width: 20px;
+      margin-right: 10px;
     }
   }
   

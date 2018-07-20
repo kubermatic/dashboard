@@ -17,13 +17,13 @@
         <a mat-line routerLink="/wizard" [routerLinkActive]="['active']"><i class="fa fa-magic"></i> Create Cluster</a>
       </mat-list-item>
       <mat-list-item>
-        <a mat-line routerLink="/clusters" [routerLinkActive]="['active']"><i class="fa fa-cubes"></i> Manage Cluster</a>
+        <a mat-line routerLink="/clusters" [routerLinkActive]="['active']"><i class="iconCluster" [ngClass]="setIconColor('/clusters') ? 'white' : 'black'"></i> Manage Cluster</a>
       </mat-list-item>
       <mat-list-item>
-        <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']"><i class="fa fa-key"></i> Manage SSH keys</a>
+        <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']"><i class="iconKey" [ngClass]="setIconColor('/sshkeys') ? 'white' : 'black'"></i> Manage SSH keys</a>
       </mat-list-item>
       <mat-list-item>
-        <a mat-line routerLink="/projects" [routerLinkActive]="['active']"><i class="fa fa-magic"></i> Projects</a>
+        <a mat-line routerLink="/projects" [routerLinkActive]="['active']"><i class="iconProject" [ngClass]="setIconColor('/projects') ? 'white' : 'black'"></i> Projects</a>
       </mat-list-item>
     </div>
   </mat-nav-list>

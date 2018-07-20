@@ -1,7 +1,11 @@
 @import "../../../assets/css/colors";
 
-div, p {
-  height: 100%;
+.row {
+  height: 40px;
+
+  div, p {
+    height: 100%;
+  }
 }
 
 p {
@@ -13,3 +17,4 @@ p {
     padding-right: 20px;
   }
 }
+

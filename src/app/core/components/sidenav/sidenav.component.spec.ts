@@ -3,9 +3,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '../../../testing/router-stubs';
+import { RouterTestingModule, RouterLinkStubDirective, RouterStub, ActivatedRouteStub } from '../../../testing/router-stubs';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterLinkStubDirective } from './../../../testing/router-stubs';
+import { Router, ActivatedRoute } from '@angular/router';
 import { click } from './../../../testing/utils/click-handler';
 
 import { SidenavComponent } from './sidenav.component';
@@ -44,6 +44,13 @@ describe('SidenavComponent', () => {
       ],
       providers: [
         { provide: ApiService, useValue: apiMock },
+        { provide: Router, useValue: {
+          routerState: {
+            snapshot: {
+              url: [{ path: 1 }, { path: 2 }]}
+            }
+          }
+        }
       ],
     }).compileComponents();
   });

@@ -20,12 +20,10 @@ export class ProjectItemComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void { }
 
-  public getProjectItemClass() {
-    let itemClass: string;
+  public getProjectItemClass(): string {
     if (this.index % 2 !== 0) {
-      itemClass = 'odd';
+      return 'odd';
     }
-    return itemClass;
   }
 
   public deleteProject(): void {
