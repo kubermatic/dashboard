@@ -684,3 +684,79 @@ button.close {
     padding: 0 !important;
   }
 }
+
+// Icons
+.iconDelete {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size:contain;
+  cursor: pointer;
+  &.white {
+    background-image: url("/assets/images/icons/white/delete-white.png");
+  }
+  &.black {
+    background-image: url("/assets/images/icons/black/delete-black.png");
+  }
+}
+
+.iconEdit {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size:contain;
+  cursor: pointer;
+  &.white {
+    background-image: url("/assets/images/icons/white/edit-white.png");
+  }
+  &.black {
+    background-image: url("/assets/images/icons/black/edit-black.png");
+  }
+}
+
+.iconCluster {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size:contain;
+  cursor: pointer;
+  &.white {
+    background-image: url("/assets/images/icons/white/cluster-white.png");
+  }
+  &.black {
+    background-image: url("/assets/images/icons/black/cluster-black.png");
+  }
+}
+
+.iconKey {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size:contain;
+  cursor: pointer;
+  &.white {
+    background-image: url("/assets/images/icons/white/key-white.png");
+  }
+  &.black {
+    background-image: url("/assets/images/icons/black/key-black.png");
+  }
+}
+
+.iconProject {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size:contain;
+  cursor: pointer;
+  &.white {
+    background-image: url("/assets/images/icons/white/project-white.png");
+  }
+  &.black {
+    background-image: url("/assets/images/icons/black/project-black.png");
+  }
+}
