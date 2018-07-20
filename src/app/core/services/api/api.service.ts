@@ -32,9 +32,14 @@ export class ApiService {
     return this.http.get<ProjectEntity[]>(url, { headers: this.headers });
   }
 
-  addProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
+  createProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
     const url = `${this.restRoot}/projects`;
     return this.http.post<ProjectEntity>(url, createProjectModel, { headers: this.headers });
+  }
+
+  deleteProject(projectID: string) {
+    const url = `${this.restRoot}/projects/${projectID}`;
+    return this.http.delete(url, { headers: this.headers });
   }
 
   getClusters(dc: string): Observable<ClusterEntity[]> {

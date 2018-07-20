@@ -4,10 +4,12 @@ import { SharedModule } from '../shared/shared.module';
 import { MatTabsModule } from '@angular/material';
 import { ProjectRoutingModule } from './project-routing.module';
 import { ProjectItemComponent } from './project-item/project-item.component';
+import { ProjectDeleteConfirmationComponent } from './project-delete-confirmation/project-delete-confirmation.component';
 
 const components: any[] = [
   ProjectComponent,
   ProjectItemComponent,
+  ProjectDeleteConfirmationComponent
 ];
 
 @NgModule({
@@ -22,7 +24,7 @@ const components: any[] = [
   exports: [
     ...components
   ],
-  entryComponents: []
+  entryComponents: [ProjectDeleteConfirmationComponent]
 })
 export class ProjectModule {
 }

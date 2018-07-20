@@ -14,3 +14,10 @@ export const fakeProjects: ProjectEntity[] = [
     status: 'Active',
   }
 ];
+
+export const fakeProject: ProjectEntity = {
+  creationTimestamp: '2018-07-19T08:46:54Z',
+  id: '123ab4cd5e',
+  name: 'new-project-1',
+  status: 'Active',
+};

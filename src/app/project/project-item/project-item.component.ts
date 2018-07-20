@@ -1,6 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
 import { ApiService } from '../../core/services';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import { ProjectDeleteConfirmationComponent } from './../project-delete-confirmation/project-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-project-item',
@@ -11,7 +14,9 @@ export class ProjectItemComponent implements OnInit, OnDestroy {
   @Input() index: number;
   @Input() project: ProjectEntity;
 
-  constructor(private apiService: ApiService) {}
+  constructor(private apiService: ApiService,
+              public dialog: MatDialog,
+              private router: Router) {}
 
   public ngOnInit(): void { }
 
@@ -21,6 +26,17 @@ export class ProjectItemComponent implements OnInit, OnDestroy {
       itemClass = 'odd';
     }
     return itemClass;
+  }
+
+  public deleteProject(): void {
+    const modal = this.dialog.open(ProjectDeleteConfirmationComponent);
+    modal.componentInstance.project = this.project;
+    const sub = modal.afterClosed().subscribe(deleted => {
+      if (deleted) {
+        this.router.navigate(['/projects']);
+      }
+      sub.unsubscribe();
+    });
   }
 
   public ngOnDestroy(): void { }
