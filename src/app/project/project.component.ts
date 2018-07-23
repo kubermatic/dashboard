@@ -15,6 +15,7 @@ import { AddProjectComponent } from '../add-project/add-project.component';
   templateUrl: './project.component.html',
   styleUrls: ['./project.component.scss']
 })
+
 export class ProjectComponent implements OnInit, OnDestroy {
   public projects: ProjectEntity[];
   public loading = true;

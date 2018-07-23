@@ -97,6 +97,36 @@ html, body {
   }
 }
 
+ // Projects
+.km-project-toggle {
+  .mat-tab-header {
+    border-bottom: none;
+  }
+  .mat-ink-bar {
+    visibility: hidden !important;
+    height: 0;
+  }
+  .mat-tab-label {
+    background-color: $secondary !important;
+    opacity: 1;
+    margin-right: 3px;
+    padding: 0;
+    &.mat-tab-label-active {
+      opacity: 1;
+      .mat-tab-label-content {
+        width: 100%;
+        height: 100%;
+        background-color: $primary;
+        color: $white-text-color;
+      }
+    }
+    .mat-tab-label-content {
+      text-transform: uppercase;
+      font-size: 16px;
+    }
+  }
+}
+
 // Step Provider and Datacenter
 
 mat-button-toggle-group {
@@ -183,7 +213,6 @@ mat-button-toggle-group[group='providerGroup'] {
 
     &.row, .row {
       line-height: 40px;
-      height: 40px;
       padding: 10px 24px;
       &.small {
         padding: 10px 24px;
@@ -486,12 +515,14 @@ mat-card-header {
 
 
 // Mat Tab Toggle
-.mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
-  background-color: transparent !important;
-}
-.mat-tab-label {
-  height: 36px !important;
-  min-width: 120px !important;
+.km-change-view {
+  .mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
+    background-color: transparent !important;
+  }
+  .mat-tab-label {
+    height: 36px !important;
+    min-width: 120px !important;
+  }
 }
 
 
@@ -718,8 +749,8 @@ button.close {
 
 .iconCluster {
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   background-repeat: no-repeat;
   background-size:contain;
   cursor: pointer;
@@ -733,8 +764,8 @@ button.close {
 
 .iconKey {
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   background-repeat: no-repeat;
   background-size:contain;
   cursor: pointer;
@@ -748,8 +779,8 @@ button.close {
 
 .iconProject {
   display: inline-block;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   background-repeat: no-repeat;
   background-size:contain;
   cursor: pointer;
