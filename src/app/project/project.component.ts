@@ -53,8 +53,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   public addProject() {
     const modal = this.dialog.open(AddProjectComponent);
-    const sub = modal.afterClosed().subscribe(() => {
-      this.refreshProjects();
+    const sub = modal.afterClosed().subscribe(added => {
+      if (added) {
+        this.refreshProjects();
+        this.router.navigate(['/clusters']);
+      }
       sub.unsubscribe();
     });
   }

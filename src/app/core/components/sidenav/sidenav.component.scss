@@ -25,9 +25,6 @@
           font-weight: 600;
           line-height: 35px;
 
-          mat-option[value='addProject'] {
-            border-bottom: 1px solid $border;
-          }
         }
       }
     }
@@ -36,6 +33,7 @@
       color: $text-color;
     }
   }
+
   a {
     padding: 10px 30px !important;
     display: flex;
@@ -43,7 +41,6 @@
     &:hover, &.active {
       color: #fff;
       background-color: $primary;
-
       i {
         color: #fff;
       }
@@ -53,6 +50,18 @@
       width: 20px;
       margin-right: 10px;
     }
+  }  
+}
+
+mat-option[value='addProject'] {
+  border-bottom: 1px solid $border !important;
+  font-weight: 600;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  a {
+    color: $light-text-color !important;
   }
-  
 }

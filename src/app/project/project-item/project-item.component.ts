@@ -31,6 +31,7 @@ export class ProjectItemComponent implements OnInit {
   public selectProject() {
     if (!this.clickedDeleteProject[this.project.id]) {
       this.projectService.changeSelectedProject(this.project);
+      this.router.navigate(['/clusters']);
     }
   }
 
@@ -41,6 +42,13 @@ export class ProjectItemComponent implements OnInit {
     const sub = modal.afterClosed().subscribe(deleted => {
       if (deleted) {
         this.router.navigate(['/projects']);
+        this.projectService.changeSelectedProject({
+          id: '',
+          name: '',
+          creationTimestamp: '',
+          deletionTimestamp: '',
+          status: ''
+        });
       }
       delete this.clickedDeleteProject[this.project.id];
       sub.unsubscribe();

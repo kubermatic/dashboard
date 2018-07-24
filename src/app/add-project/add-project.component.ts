@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../redux/actions/notification.actions';
-import { ApiService } from '../core/services';
+import { ApiService, ProjectService } from '../core/services';
 import { CreateProjectModel } from '../shared/model/CreateProjectModel';
 
 @Component({
@@ -14,6 +14,7 @@ export class AddProjectComponent implements OnInit {
   public addProjectForm: FormGroup;
 
   constructor(private api: ApiService,
+              private projectService: ProjectService,
               private dialogRef: MatDialogRef<AddProjectComponent>) {
   }
 
@@ -26,7 +27,8 @@ export class AddProjectComponent implements OnInit {
   addProject(): void {
     const createProject: CreateProjectModel = { name: this.addProjectForm.controls.name.value };
     this.api.createProject(createProject).subscribe(res => {
-      this.dialogRef.close();
+      this.projectService.changeSelectedProject(res);
+      this.dialogRef.close(true);
       NotificationActions.success('Success', `Project is added successfully`);
     });
   }

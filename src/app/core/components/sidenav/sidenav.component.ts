@@ -17,6 +17,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public environment: any = environment;
   public projects: ProjectEntity[];
   public selectedProject: string;
+  public disableResource: boolean;
   private subscriptions: Subscription[] = [];
 
   constructor(public dialog: MatDialog,
@@ -28,8 +29,27 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.getProjects();
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(data => {
+      for (const i in this.projects) {
+        if (this.projects[i].id === data.id) {
+          this.selectedProject = data.id;
+          this.isProjectSelected();
+          return;
+        }
+      }
+      this.reloadProjects();
       this.selectedProject = data.id;
+      this.isProjectSelected();
     }));
+
+    this.isProjectSelected();
+  }
+
+  public isProjectSelected() {
+    if (this.selectedProject === undefined) {
+      this.disableResource = true;
+    } else {
+      this.disableResource = false;
+    }
   }
 
   public getProjects() {
@@ -45,7 +65,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       for (const i in this.projects) {
         if (this.projects[i].id === event.value) {
           this.projectService.changeSelectedProject(this.projects[i]);
-          return;
+          this.router.navigate(['/clusters']);
         }
       }
     }
@@ -53,8 +73,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   public addProject() {
     const modal = this.dialog.open(AddProjectComponent);
-    const sub = modal.afterClosed().subscribe(() => {
-      this.reloadProjects();
+    const sub = modal.afterClosed().subscribe(added => {
+      if (added) {
+        this.reloadProjects();
+        this.router.navigate(['/clusters']);
+      }
       sub.unsubscribe();
     });
   }

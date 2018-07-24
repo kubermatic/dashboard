@@ -6,7 +6,7 @@ import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core
 
 import { AddProjectComponent } from './add-project.component';
 import { MatDialogRefMock } from '../testing/services/mat-dialog-ref-mock';
-import { ApiService } from '../core/services/api/api.service';
+import { ApiService, ProjectService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
@@ -36,6 +36,7 @@ describe('AddProjectComponent', () => {
         AddProjectComponent
       ],
       providers: [
+        ProjectService,
         { provide: MAT_DIALOG_DATA, useValue: { clusterName: 'clustername' } },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useValue: apiMock },
@@ -51,16 +52,4 @@ describe('AddProjectComponent', () => {
   it('should create the change cluster version component', async(() => {
     expect(component).toBeTruthy();
   }));
-
-  /*it('should call editCluster method from api', fakeAsync(() => {
-    component.selectedVersion = 'new version';
-    component.cluster = fakeDigitaloceanCluster;
-    component.datacenter = fakeDigitaloceanDatacenter;
-    component.possibleVersions = ['1.9.5'];
-
-    fixture.detectChanges();
-    component.changeVersion();
-    tick();
-    expect(editClusterSpy.and.callThrough()).toHaveBeenCalledTimes(1);
-  }));*/
 });
