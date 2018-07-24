@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
 import { MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../../../environments/environment';
-import { ApiService } from '../../../core/services';
+import { ApiService, ProjectService } from '../../../core/services';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../../../add-project/add-project.component';
 
@@ -12,14 +13,23 @@ import { AddProjectComponent } from '../../../add-project/add-project.component'
   styleUrls: ['./sidenav.component.scss']
 })
 
-export class SidenavComponent implements OnInit {
+export class SidenavComponent implements OnInit, OnDestroy {
   public environment: any = environment;
   public projects: ProjectEntity[];
+  public selectedProject: string;
+  private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, public dialog: MatDialog, private router: Router) { }
+  constructor(public dialog: MatDialog,
+              private api: ApiService,
+              private router: Router,
+              private projectService: ProjectService) { }
 
   ngOnInit() {
     this.getProjects();
+
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(data => {
+      this.selectedProject = data.id;
+    }));
   }
 
   public getProjects() {
@@ -31,6 +41,13 @@ export class SidenavComponent implements OnInit {
   public selectionChange(event) {
     if (event.value === 'addProject') {
       this.addProject();
+    } else {
+      for (const i in this.projects) {
+        if (this.projects[i].id === event.value) {
+          this.projectService.changeSelectedProject(this.projects[i]);
+          return;
+        }
+      }
     }
   }
 
@@ -50,5 +67,13 @@ export class SidenavComponent implements OnInit {
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;
     return (snapshot.url === url);
+  }
+
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 }

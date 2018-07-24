@@ -5,7 +5,7 @@
       <mat-list-item class="km-projects">
         <div class="km-projects-container">
           <mat-label>Selected Project</mat-label>
-          <mat-select placeholder="Select Project" (selectionChange)="selectionChange($event)">
+          <mat-select placeholder="Select Project" (selectionChange)="selectionChange($event)" [ngModel]="selectedProject">
             <mat-option value="addProject">Add new Project</mat-option>
             <mat-option *ngFor="let project of projects" [value]="project.id">
               {{ project.name }}

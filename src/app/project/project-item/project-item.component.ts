@@ -1,7 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { ApiService } from '../../core/services';
+import { ApiService, ProjectService } from '../../core/services';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { ProjectDeleteConfirmationComponent } from './../project-delete-confirmation/project-delete-confirmation.component';
 
@@ -10,13 +10,15 @@ import { ProjectDeleteConfirmationComponent } from './../project-delete-confirma
   templateUrl: './project-item.component.html',
   styleUrls: ['./project-item.component.scss'],
 })
-export class ProjectItemComponent implements OnInit, OnDestroy {
+export class ProjectItemComponent implements OnInit {
   @Input() index: number;
   @Input() project: ProjectEntity;
+  public clickedDeleteProject = {};
 
   constructor(private apiService: ApiService,
               public dialog: MatDialog,
-              private router: Router) {}
+              private router: Router,
+              private projectService: ProjectService) {}
 
   public ngOnInit(): void { }
 
@@ -26,16 +28,22 @@ export class ProjectItemComponent implements OnInit, OnDestroy {
     }
   }
 
+  public selectProject() {
+    if (!this.clickedDeleteProject[this.project.id]) {
+      this.projectService.changeSelectedProject(this.project);
+    }
+  }
+
   public deleteProject(): void {
+    this.clickedDeleteProject[this.project.id] = true;
     const modal = this.dialog.open(ProjectDeleteConfirmationComponent);
     modal.componentInstance.project = this.project;
     const sub = modal.afterClosed().subscribe(deleted => {
       if (deleted) {
         this.router.navigate(['/projects']);
       }
+      delete this.clickedDeleteProject[this.project.id];
       sub.unsubscribe();
     });
   }
-
-  public ngOnDestroy(): void { }
 }

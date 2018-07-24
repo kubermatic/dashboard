@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '../../testing/router-stubs';
 import { ProjectItemComponent } from './project-item.component';
-import { Auth } from '../../core/services/auth/auth.service';
+import { Auth, ProjectService } from '../../core/services';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import { ApiService} from '../../core/services';
@@ -35,6 +35,7 @@ describe('ProjectItemComponent', () => {
         ProjectItemComponent,
       ],
       providers: [
+        ProjectService,
         { provide: Auth, useClass: AuthMockService },
       ],
     }).compileComponents();

@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { AppConfigService } from './app-config.service';
+import { ProjectService } from './core/services/project/project.service';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -40,7 +41,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       useFactory: appInitializerFn,
       multi: true,
       deps: [AppConfigService]
-    }
+    },
+    ProjectService
   ],
   entryComponents: [
     MobileNavigationComponent,

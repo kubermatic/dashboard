@@ -8,7 +8,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { SharedModule } from './shared/shared.module';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService } from './core/services/index';
+import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, ProjectService } from './core/services/index';
 import { SidenavService } from './core/components/sidenav/sidenav.service';
 import { AppConfigService } from './app-config.service';
 
@@ -58,6 +58,7 @@ describe('KubermaticComponent', () => {
         AUTH_PROVIDERS,
         { provide: Auth, useClass: AuthMockService },
         ApiService,
+        ProjectService,
         { provide: DatacenterService, useClass: DatacenterMockService },
         AuthGuard,
         SidenavService,

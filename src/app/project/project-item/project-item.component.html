@@ -1,4 +1,4 @@
-<div class="row" [ngClass]="getProjectItemClass()">
+<div class="row" [ngClass]="getProjectItemClass()" (click)="selectProject()">
   <div fxLayout>
     <div fxFlex="50%" fxFlex.xs="40%">
       <p class="project-name">{{ project.name }}</p>

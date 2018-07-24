@@ -10,7 +10,7 @@ import { click } from './../../../testing/utils/click-handler';
 
 import { SidenavComponent } from './sidenav.component';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
-import { ApiService } from './../../../core/services/api/api.service';
+import { ApiService, ProjectService } from './../../../core/services';
 import { fakeProjects } from './../../../testing/fake-data/project.fake';
 import { asyncData } from './../../../testing/services/api-mock.service';
 import Spy = jasmine.Spy;
@@ -43,6 +43,7 @@ describe('SidenavComponent', () => {
         SidenavComponent
       ],
       providers: [
+        ProjectService,
         { provide: ApiService, useValue: apiMock },
         { provide: Router, useValue: {
           routerState: {

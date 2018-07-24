@@ -2,6 +2,11 @@
 
 .row {
   height: 40px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $light-background !important;
+  }
 
   div, p {
     height: 100%;
