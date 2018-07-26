@@ -325,6 +325,7 @@ export const fakeOpenstackCluster: ClusterEntity = {
         network: 'test-network',
         domain: 'test-domain',
         tenant: 'test-tenant',
+        subnetID: 'test-subnet-id'
       },
       baremetal: null,
       bringyourown: null,

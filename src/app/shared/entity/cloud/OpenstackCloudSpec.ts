@@ -6,4 +6,5 @@ export class OpenstackCloudSpec {
   network: string;
   securityGroups: string;
   floatingIpPool: string;
+  subnetID: string;
 }

@@ -9,7 +9,10 @@ import { ClusterEntity, MasterVersion } from '../../../shared/entity/ClusterEnti
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { OpenstackFlavor, OpenstackTenant } from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {
+  OpenstackFlavor, OpenstackNetwork, OpenstackSubnet,
+  OpenstackTenant, OpenstackSecurityGroup
+} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
 
@@ -111,6 +114,34 @@ export class ApiService {
     this.headers = this.headers.set('DatacenterName', datacenterName);
     const url = `${this.restRoot}/openstack/tenants`;
     return this.http.get<OpenstackTenant[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackSecurityGroups(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackSecurityGroup[]> {
+    this.headers = this.headers.set('Username', username);
+    this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('Domain', domain);
+    this.headers = this.headers.set('DatacenterName', datacenterName);
+    const url = `${this.restRoot}/openstack/securitygroups`;
+    return this.http.get<OpenstackSecurityGroup[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackNetwork(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackNetwork[]> {
+    this.headers = this.headers.set('Username', username);
+    this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('Domain', domain);
+    this.headers = this.headers.set('DatacenterName', datacenterName);
+    const url = `${this.restRoot}/openstack/networks`;
+    return this.http.get<OpenstackNetwork[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackSubnetIds(username: string, password: string, domain: string, datacenterName: string, network: string): Observable<OpenstackSubnet[]> {
+    this.headers = this.headers.set('Username', username);
+    this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('Domain', domain);
+    this.headers = this.headers.set('DatacenterName', datacenterName);
+
+    const url = `${this.restRoot}/openstack/subnets?network_id=${network}`;
+    return this.http.get<OpenstackSubnet[]>(url, { headers: this.headers });
   }
 
   getKubeconfigURL(dc: string, cluster: string): string {
