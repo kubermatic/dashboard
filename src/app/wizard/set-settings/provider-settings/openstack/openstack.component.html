@@ -84,7 +84,7 @@
         <mat-option *ngIf="!loadingSubnetIds && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
         <mat-option *ngIf="loadingSubnetIds" [value]="0">Loading subnet IDs...</mat-option>
 
-        <mat-option *ngIf="!loadingSubnetIds && this.subnetIds.length === 0" [value]="">no subnet IDs avalibal</mat-option>
+        <mat-option *ngIf="!loadingSubnetIds && this.subnetIds.length === 0" [value]="">no subnet IDs available</mat-option>
         <mat-option *ngFor="let subnet of subnetIds" [value]="subnet.name">
           {{subnet.name}}
         </mat-option>
