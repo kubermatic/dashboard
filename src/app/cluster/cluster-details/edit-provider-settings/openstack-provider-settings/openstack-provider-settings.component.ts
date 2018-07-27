@@ -52,6 +52,7 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
         network: this.cluster.spec.cloud.openstack.network,
         securityGroups: this.cluster.spec.cloud.openstack.securityGroups,
         floatingIpPool: this.cluster.spec.cloud.openstack.floatingIpPool,
+        subnetID: this.cluster.spec.cloud.openstack.subnetID
       },
       valid: true
     };
