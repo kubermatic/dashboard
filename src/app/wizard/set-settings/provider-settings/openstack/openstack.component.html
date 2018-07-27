@@ -19,31 +19,76 @@
   </mat-form-field>
   <mat-form-field fxFlex>
     <mat-select placeholder="Tenant*:" formControlName="tenant">
-      <mat-option *ngIf="!loadingTenants && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
-      <mat-option *ngIf="loadingTenants" [value]="0">Loading tenants...</mat-option>
+      <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
+      <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading tenants...</mat-option>
 
-      <mat-option *ngFor="let tenant of tenants" [value]="tenant.name">
-      {{tenant.name}}
+      <mat-option *ngFor="let item of tenants" [value]="item.name">
+      {{item.name}}
       </mat-option>
     </mat-select>
     <mat-error *ngIf="openstackSettingsForm.controls.tenant.hasError('required')">
       Tenant is <strong>required</strong>
     </mat-error>
   </mat-form-field>
+
   <mat-form-field fxFlex *ngIf="!hideOptional">
-    <input matInput formControlName="floatingIpPool" type="text" placeholder="Floating IP pool:" title="Floating IP pool" autocomplete="off">
+    <mat-select placeholder="Floating IP pool:" formControlName="floatingIpPool">
+      <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
+      <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading security group...</mat-option>
+
+      <mat-option *ngIf="floatingIpPool.length">Select a security group </mat-option>
+      <mat-option *ngFor="let item of floatingIpPool" [value]="item.name">
+        {{item.name}}
+      </mat-option>
+    </mat-select>
     <mat-hint>When specified, all worker nodes will receive a public ip from this floating ip pool.</mat-hint>
   </mat-form-field>
+
+
   <mat-form-field fxFlex *ngIf="!hideOptional">
-    <input matInput formControlName="securityGroups" type="text" placeholder="Security group:" title="Security group" autocomplete="off">
+    <mat-select placeholder="Security group:" formControlName="securityGroups">
+      <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
+      <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading security group...</mat-option>
+
+      <mat-option *ngIf="securityGroup.length">Select a security group </mat-option>
+      <mat-option *ngFor="let item of securityGroup" [value]="item.name">
+        {{item.name}}
+      </mat-option>
+    </mat-select>
     <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security
       group will be created.
     </mat-hint>
   </mat-form-field>
-  <mat-form-field fxFlex *ngIf="!hideOptional">
-    <input matInput formControlName="network" type="text" placeholder="Network:" title="Network" autocomplete="off">
-    <mat-hint>When specified, all worker nodes will be attached to this network. If not specified, a network, subnet &
-      router will be created.
-    </mat-hint>
-  </mat-form-field>
+
+  <div fxFlex class="mat-select-container" *ngIf="!hideOptional">
+    <mat-form-field>
+      <mat-select placeholder="Network:" formControlName="network">
+        <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
+        <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading network...</mat-option>
+
+        <mat-option *ngIf="network.length">Select a network </mat-option>
+        <mat-option *ngFor="let item of network" [value]="item.name">
+          {{item.name}}
+        </mat-option>
+      </mat-select>
+
+      <mat-hint>When specified, all worker nodes will be attached to this network. If not specified, a network, subnet &
+        router will be created.
+      </mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex class="mat-select-container" *ngIf="!hideOptional">
+    <mat-form-field>
+      <mat-select placeholder="Subnet ID:" formControlName="subnetId">
+        <mat-option *ngIf="!loadingSubnetIds && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
+        <mat-option *ngIf="loadingSubnetIds" [value]="0">Loading subnet IDs...</mat-option>
+
+        <mat-option *ngIf="!loadingSubnetIds && this.subnetIds.length === 0" [value]="">no subnet IDs available</mat-option>
+        <mat-option *ngFor="let subnet of subnetIds" [value]="subnet.name">
+          {{subnet.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </form>

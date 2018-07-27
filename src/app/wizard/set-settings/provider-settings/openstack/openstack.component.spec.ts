@@ -58,6 +58,7 @@ describe('OpenstackClusterSettingsComponent', () => {
         floatingIpPool: '',
         password: '',
         username: '',
+        subnetID: '',
       };
       fixture.detectChanges();
     });
@@ -92,6 +93,7 @@ describe('OpenstackClusterSettingsComponent', () => {
         floatingIpPool: '',
         password: '',
         username: '',
+        subnetID: '',
       };
       fixture.detectChanges();
     });
