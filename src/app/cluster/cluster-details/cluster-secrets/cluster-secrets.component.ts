@@ -32,7 +32,7 @@ export class ClusterSecretsComponent implements OnChanges {
   }
 
   public decode(type: string): void {
-    let data;
+    /* let data;
     let name;
 
     switch (type) {
@@ -64,13 +64,13 @@ export class ClusterSecretsComponent implements OnChanges {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-    } else {
+    } else {*/
       return;
-    }
+    // }
   }
 
   public getIcon(name: string): string {
-    if (this.cluster.status.health) {
+    /* if (this.cluster.status.health) {
       switch (name) {
         case 'apiserver':
           return this.getIconClass(this.cluster.status.health.apiserver);
@@ -85,13 +85,13 @@ export class ClusterSecretsComponent implements OnChanges {
         default:
           return '';
       }
-    } else {
+    } else {*/
       return 'fa fa-spin fa-circle-o-notch';
-    }
+    // }
   }
 
   public getIconClass(isHealthy: boolean): string {
-    if (isHealthy) {
+    /* if (isHealthy) {
       return 'iconRunning';
     } else if (!(isHealthy)) {
       if (!this.cluster.status.health.apiserver) {
@@ -99,13 +99,13 @@ export class ClusterSecretsComponent implements OnChanges {
       } else {
         return 'fa fa-spin fa-circle-o-notch';
       }
-    } else {
+    } else {*/
       return '';
-    }
+    // }
   }
 
   public getStatus(name: string): string {
-    if (this.cluster.status.health) {
+    /* if (this.cluster.status.health) {
       switch (name) {
         case 'apiserver':
           return this.getHealthStatus(this.cluster.status.health.apiserver);
@@ -120,13 +120,13 @@ export class ClusterSecretsComponent implements OnChanges {
         default:
           return '';
       }
-    } else {
+    } else {*/
       return 'Pending';
-    }
+    // }
   }
 
   public getHealthStatus(isHealthy: boolean): string {
-    if (isHealthy) {
+    /* if (isHealthy) {
       return 'Running';
     } else if (!isHealthy) {
       if (!this.cluster.status.health.apiserver) {
@@ -134,9 +134,9 @@ export class ClusterSecretsComponent implements OnChanges {
       } else {
         return 'Pending';
       }
-    } else {
+    } else {*/
       return '';
-    }
+    // }
   }
 
   public revokeAdminTokenDialog(): void {

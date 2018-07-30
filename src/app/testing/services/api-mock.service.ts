@@ -37,11 +37,11 @@ export class ApiMockService {
     return Observable.of(null);
   }
 
-  public getCluster(clusterId: string, dc: string): Observable<ClusterEntity> {
+  public getCluster(clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
     return Observable.of(this.cluster);
   }
 
-  public getClusters(dc: string): Observable<ClusterEntity[]> {
+  public getClusters(dc: string, projectID: string): Observable<ClusterEntity[]> {
     return Observable.of(this.clusters);
   }
 
@@ -57,15 +57,15 @@ export class ApiMockService {
     return Observable.of(null);
   }
 
-  public createCluster(createClusterModel: CreateClusterModel, dc: string): Observable<ClusterEntity> {
+  public createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
     return Observable.of(this.cluster);
   }
 
-  public deleteCluster(clusterName: string, dc: string): Observable<any> {
+  public deleteCluster(clusterName: string, dc: string, projectID: string): Observable<any> {
     return Observable.of(null);
   }
 
-  public editCluster(cluster: ClusterEntity, dc: string): Observable<ClusterEntity> {
+  public editCluster(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
     return Observable.of(this.cluster);
   }
 

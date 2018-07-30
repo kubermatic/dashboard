@@ -1,6 +1,7 @@
 import { Component, DoCheck, Input } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ApiService, InitialNodeDataService } from '../../../core/services';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
@@ -13,6 +14,7 @@ import { NotificationActions } from '../../../redux/actions/notification.actions
 export class ClusterDeleteConfirmationComponent implements DoCheck {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() project: ProjectEntity;
 
   public inputName = '';
 
@@ -30,14 +32,14 @@ export class ClusterDeleteConfirmationComponent implements DoCheck {
   }
 
   inputNameMatches(): boolean {
-    return this.inputName === this.cluster.spec.humanReadableName;
+    return this.inputName === this.cluster.name;
   }
 
   deleteCluster() {
     if (!this.inputNameMatches()) {
       return;
     } else {
-      this.api.deleteCluster(this.cluster.metadata.name, this.datacenter.metadata.name).subscribe(result => {
+      this.api.deleteCluster(this.cluster.name, this.datacenter.metadata.name, this.project.id).subscribe(result => {
         this.initialNodeDataService.clearInitialNodeData(this.cluster);
         NotificationActions.success('Success', `Cluster is being deleted`);
       });

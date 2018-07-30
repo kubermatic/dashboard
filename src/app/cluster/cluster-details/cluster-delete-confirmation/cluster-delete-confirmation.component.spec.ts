@@ -72,7 +72,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
 
     const input = fixture.debugElement.query(By.css('#name'));
     const inputElement = input.nativeElement;
-    inputElement.value = fakeDigitaloceanCluster.spec.humanReadableName;
+    inputElement.value = fakeDigitaloceanCluster.name;
     inputElement.dispatchEvent(new Event('blur'));
 
     expect(component.inputNameMatches()).toBeTruthy();
@@ -81,7 +81,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
   it('should call deleteCluster method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster;
     component.datacenter = fakeDigitaloceanDatacenter;
-    component.inputName = fakeDigitaloceanCluster.spec.humanReadableName;
+    component.inputName = fakeDigitaloceanCluster.name;
 
     fixture.detectChanges();
     const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));

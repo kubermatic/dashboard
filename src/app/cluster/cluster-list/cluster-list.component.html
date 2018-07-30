@@ -24,7 +24,7 @@
     </mat-card-header>
     <mat-card-content fxLayout="column" [ngSwitch]="!!clusters && clusters.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <kubermatic-cluster-item *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [health]="data.status.health" [index]="i" fxFlex></kubermatic-cluster-item>
+        <kubermatic-cluster-item *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [index]="i" fxFlex></kubermatic-cluster-item>
       </ng-container>
       <ng-container *ngSwitchCase="false">
         <div fxFlex class="row odd no-item" >No Cluster available. Please add a Cluster.</div>

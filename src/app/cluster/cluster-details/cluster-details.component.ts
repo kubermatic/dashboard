@@ -12,9 +12,10 @@ import 'rxjs/add/observable/interval';
 import { environment } from '../../../environments/environment';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ApiService, DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService, ClusterService, ProjectService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import { Subject } from 'rxjs/Subject';
@@ -22,6 +23,7 @@ import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { NotificationActions } from '../../redux/actions/notification.actions';
 import { lt, gt } from 'semver';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -38,11 +40,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public stateOfTheAccordion: object[];
   public isClusterRunning: boolean;
   public clusterHealthClass: string;
+  public project: ProjectEntity;
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
   private updatesAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
   private refreshInterval = 10000;
+  private subscriptions: Subscription[] = [];
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -50,13 +54,22 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
               private dcService: DatacenterService,
-              private clusterService: ClusterService) {
+              private clusterService: ClusterService,
+              private projectService: ProjectService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
   public ngOnInit(): void {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
+
+    this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    });
+
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    }));
 
     // Node datacenter & ssh keys - both once
     const onceSub = this.clusterSubject
@@ -75,7 +88,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               if (key.spec.clusters == null) {
                 return false;
               }
-              return key.spec.clusters.indexOf(cluster.metadata.name) > -1;
+              return key.spec.clusters.indexOf(cluster.name) > -1;
             });
           });
 
@@ -115,7 +128,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           }
         }
 
-        if (cluster && cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController) {
+        if (cluster /*&& cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController*/) {
           const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
           for (let i = 0; i < data.nodeCount; i++) {
             createNodeObservables.push(this.api.createClusterNode(cluster, data.node, this.datacenter.metadata.name));
@@ -130,36 +143,41 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         }
       });
 
-    Observable.combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName))
-      .takeUntil(this.unsubscribe)
-      .retry(3)
-      .subscribe(
-        (data: any[]): void => {
-          this.datacenter = data[0];
-          this.cluster = data[1];
-          this.clusterSubject.next(data[1]);
+      Observable.combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName, this.project.id))
+        .takeUntil(this.unsubscribe)
+        .retry(3)
+        .subscribe(
+          (data: any[]): void => {
+            this.datacenter = data[0];
+            this.cluster = data[1];
+            this.clusterSubject.next(data[1]);
 
-          const timer = Observable.interval(this.refreshInterval);
-          timer
-            .takeUntil(this.unsubscribe)
-            .subscribe(tick => {
-              this.reloadCluster(clusterName, seedDCName);
-            });
-        },
-        error => {
-          if (error.status === 404) {
-            this.router.navigate(['404']);
-          }
-        });
+            const timer = Observable.interval(this.refreshInterval);
+            timer
+              .takeUntil(this.unsubscribe)
+              .subscribe(tick => {
+                this.reloadCluster(clusterName, seedDCName, this.project.id);
+              });
+          },
+          error => {
+            if (error.status === 404) {
+              this.router.navigate(['404']);
+            }
+          });
   }
 
   public ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 
-  public reloadCluster(clusterName: string, seedDCName: string): void {
-    this.api.getCluster(clusterName, seedDCName)
+  public reloadCluster(clusterName: string, seedDCName: string, projectID: string): void {
+    this.api.getCluster(clusterName, seedDCName, projectID)
       .takeUntil(this.unsubscribe)
       .retry(3)
       .subscribe(res => {
@@ -170,8 +188,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadClusterNodes() {
-    if (this.cluster && this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController) {
-      this.api.getClusterNodes(this.cluster.metadata.name, this.datacenter.metadata.name)
+    if (this.cluster /*&& this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController*/) {
+      this.api.getClusterNodes(this.cluster.name, this.datacenter.metadata.name)
         .takeUntil(this.unsubscribe)
         .subscribe(nodes => {
           this.nodes = nodes;
@@ -180,8 +198,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadVersions() {
-    if (this.cluster && this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController) {
-      this.api.getClusterUpgrades(this.cluster.metadata.name, this.datacenter.metadata.name)
+    if (this.cluster /*&& this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController*/) {
+      this.api.getClusterUpgrades(this.cluster.name, this.datacenter.metadata.name)
         .takeUntil(this.unsubscribe)
         .subscribe(upgrades => {
           this.versionsList = [];
@@ -216,6 +234,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this.dialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.project = this.project;
     const sub = modal.afterClosed().subscribe(deleted => {
       if (deleted) {
         this.router.navigate(['/clusters']);
@@ -236,13 +255,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.possibleVersions = this.versionsList;
     const sub = modal.afterClosed().subscribe(() => {
-      this.reloadCluster(this.cluster.metadata.name, this.datacenter.metadata.name);
+      this.reloadCluster(this.cluster.name, this.datacenter.metadata.name, this.project.id);
       sub.unsubscribe();
     });
   }
 
   public getDownloadURL(): string {
-    return this.api.getKubeconfigURL(this.datacenter.metadata.name, this.cluster.metadata.name);
+    return this.api.getKubeconfigURL(this.datacenter.metadata.name, this.cluster.name);
   }
 
   public isLoaded(): boolean {

@@ -42,28 +42,28 @@ export class ApiService {
     return this.http.delete(url, { headers: this.headers });
   }
 
-  getClusters(dc: string): Observable<ClusterEntity[]> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster`;
+  getClusters(dc: string, projectID: string): Observable<ClusterEntity[]> {
+    const url = `${this.restRootV3}/projects/${projectID}/dc/${dc}/cluster`;
     return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
   }
 
-  getCluster(cluster: string, dc: string): Observable<ClusterEntity> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}`;
+  getCluster(cluster: string, dc: string, projectID: string): Observable<ClusterEntity> {
+    const url = `${this.restRootV3}/projects/${projectID}/dc/${dc}/cluster/${cluster}`;
     return this.http.get<ClusterEntity>(url, { headers: this.headers });
   }
 
-  createCluster(createClusterModel: CreateClusterModel, dc: string): Observable<ClusterEntity> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster`;
+  createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
+    const url = `${this.restRootV3}/projects/${projectID}/dc/${dc}/cluster`;
     return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
   }
 
-  editCluster(cluster: ClusterEntity, dc: string): Observable<ClusterEntity> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.metadata.name}`;
+  editCluster(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
+    const url = `${this.restRootV3}/projects/${projectID}/dc/${dc}/cluster/${cluster.name}`;
     return this.http.put<ClusterEntity>(url, cluster, { headers: this.headers });
   }
 
-  deleteCluster(cluster: string, dc: string) {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}`;
+  deleteCluster(cluster: string, dc: string, projectID: string) {
+    const url = `${this.restRootV3}/projects/${projectID}/dc/${dc}/cluster/${cluster}`;
     return this.http.delete(url, { headers: this.headers });
   }
 
@@ -73,7 +73,7 @@ export class ApiService {
   }
 
   createClusterNode(cluster: ClusterEntity, node: NodeEntity, dc: string): Observable<NodeEntity> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.metadata.name}/node`;
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.name}/node`;
     return this.http.post<NodeEntity>(url, node, { headers: this.headers });
   }
 

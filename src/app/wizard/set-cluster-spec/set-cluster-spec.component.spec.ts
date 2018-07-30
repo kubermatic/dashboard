@@ -47,11 +47,9 @@ describe('SetClusterSpecComponent', () => {
     fixture = TestBed.createComponent(SetClusterSpecComponent);
     component = fixture.componentInstance;
     component.cluster = {
-      metadata: {},
+      name: '',
       spec: {
-        humanReadableName: '',
         version: '',
-        pause: false,
         cloud: {
           dc: '',
         },

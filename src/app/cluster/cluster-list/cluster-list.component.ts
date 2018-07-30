@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
-import { ApiService } from '../../core/services/api/api.service';
-import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
+import { ApiService, DatacenterService, ProjectService } from '../../core/services';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -23,7 +22,8 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService,
               private dcService: DatacenterService,
-              private clusterService: ClusterService) {
+              private clusterService: ClusterService,
+              private projectService: ProjectService) {
   }
 
   ngOnInit() {
@@ -46,24 +46,26 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.dcService.getSeedDataCenters().subscribe(datacenters => {
       const clusters: ClusterEntity[] = [];
       const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
-      for (const dc of datacenters) {
-        dcClustersObservables.push(this.api.getClusters(dc.metadata.name));
-      }
-      this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
-        .subscribe(dcClusters => {
-          for (const cs of dcClusters) {
-            clusters.push(...cs);
-          }
-          this.clusters = clusters;
-          this.sortData(this.sort);
-          this.loading = false;
-        }));
+      this.projectService.selectedProjectChanges$.subscribe(project => {
+        for (const dc of datacenters) {
+          dcClustersObservables.push(this.api.getClusters(dc.metadata.name, project.id));
+        }
+        this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
+          .subscribe(dcClusters => {
+            for (const cs of dcClusters) {
+              clusters.push(...cs);
+            }
+            this.clusters = clusters;
+            this.sortData(this.sort);
+            this.loading = false;
+          }));
+      });
     }));
   }
 
   public trackCluster(index: number, cluster: ClusterEntity): number {
     const prevCluster = find(this.clusters, item => {
-      return item.metadata.name === cluster.metadata.name;
+      return item.name === cluster.name;
     });
 
     return prevCluster && this.clusterService.isClusterRunning(prevCluster) === this.clusterService.isClusterRunning(cluster) ? index : undefined;
@@ -81,7 +83,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name':
-          return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
+          return this.compare(a.name, b.name, isAsc);
         case 'provider':
           return this.getProvider(a, b, isAsc);
         case 'region':
