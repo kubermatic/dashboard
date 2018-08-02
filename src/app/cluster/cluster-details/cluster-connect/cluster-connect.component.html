@@ -13,8 +13,8 @@
     <p class="code-block copy" ngxClipboard [cbContent]="copy('kubectlProxy')" matTooltip="click to copy">$ kubectl proxy</p>
     <p>Then open the Dashboard interface by navigating to the following location in your browser:</p>
     <p class="km-button-link">
-      <a href="http://localhost:8001/ui" target="_blank" class="button white">
-        http://localhost:8001/ui
+      <a href="http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/" target="_blank" class="button white">
+        http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
       </a>
     </p>
   </div>
