@@ -12,6 +12,8 @@ import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../add-project/add-project.component';
 import { AddMemberComponent } from '../member/add-member/add-member.component';
 import { UserGroupConfig } from '../shared/model/Config';
+import { AddSshKeyModalComponent } from '../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 
 @Component({
   selector: 'kubermatic-project',
@@ -23,7 +25,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public projects: ProjectEntity[];
   public currentProject: ProjectEntity;
   public loading = true;
-  public sortedProjects: ProjectEntity[] = [];
+  public loadingProjects = true;  public sortedProjects: ProjectEntity[] = [];
+  public sortedSshKeys: SSHKeyEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
   public selectedTab = 'projects';
   public userGroup: string;
@@ -51,6 +54,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const timer = Observable.interval(10000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshProjects();
+      this.refreshSSHKeys();
     }));
     this.refreshProjects();
 
@@ -67,8 +71,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
   refreshProjects() {
     this.subscriptions.push(this.api.getProjects().subscribe(res => {
       this.projects = res;
-      this.sortData(this.sort);
-      this.loading = false;
+      this.sortProjectData(this.sort);
+      this.loadingProjects = false;
+    }));
+  }
+
+  refreshSSHKeys() {
+    this.subscriptions.push(this.api.getSSHKeys(this.project.id).retry(3).subscribe(res => {
+      this.sshKeys = res;
+      this.sortSshKeyData(this.sort);
+      this.loadingSshKeys = false;
     }));
   }
 
@@ -91,6 +103,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  public addSshKey(): void {
+    const dialogRef = this.dialog.open(AddSshKeyModalComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      result && this.refreshSSHKeys();
+    });
+  }
   public trackProject(index: number, project: ProjectEntity): number {
     const prevProject = find(this.projects, item => {
       return item.name === project.name;
@@ -99,7 +118,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return prevProject && prevProject.status === project.status ? index : undefined;
   }
 
-  sortData(sort: Sort) {
+  public trackSshKey(index: number, shhKey: SSHKeyEntity): number {
+    const prevSSHKey = find(this.sshKeys, item => {
+      return item.spec.name === shhKey.spec.name;
+    });
+
+    return prevSSHKey === shhKey ? index : undefined;
+  }
+
+  sortProjectData(sort: Sort) {
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedProjects = this.projects;
       return;
@@ -114,6 +141,26 @@ export class ProjectComponent implements OnInit, OnDestroy {
           return this.compare(a.name, b.name, isAsc);
         case 'status':
           return this.compare(a.status, b.status, isAsc);
+        default:
+          return 0;
+      }
+    });
+  }
+  sortSshKeyData(sort: Sort) {
+    if (sort === null || !sort.active || sort.direction === '') {
+      this.sortedSshKeys = this.sshKeys;
+      return;
+    }
+
+    this.sort = sort;
+
+    this.sortedSshKeys = this.sshKeys.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      switch (sort.active) {
+        case 'name':
+          return this.compare(a.spec.name, b.spec.name, isAsc);
+        case 'status':
+          return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
         default:
           return 0;
       }

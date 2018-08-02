@@ -1,0 +1,52 @@
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material';
+import { ApiService, ProjectService } from '../../core/services';
+import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import { ProjectDeleteConfirmationComponent } from './../project-delete-confirmation/project-delete-confirmation.component';
+import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+
+@Component({
+  selector: 'kubermatic-sshkey-item',
+  templateUrl: './sshkey-item.component.html',
+  styleUrls: ['./sshkey-item.component.scss'],
+})
+export class  ProjectSshKeyItemComponent implements OnInit {
+  @Input() index: number;
+  @Input() sshKey: SSHKeyEntity;
+  @Input() isOdd: boolean;
+  //@Output() deleteSshKey: EventEmitter<SSHKeyEntity> = new EventEmitter();
+
+  public isShowPublicKey = false;
+  public publicKeyName: string;
+  public publicKey: string;
+
+  constructor(private apiService: ApiService,
+              public dialog: MatDialog,
+              private router: Router,
+              private projectService: ProjectService) {}
+
+  public ngOnInit(): void {
+    this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
+    this.publicKey = this.sshKey.spec.publicKey.slice(this.publicKeyName.length + 1, -1);
+  }
+
+  public getSshKeyItemClass(): string {
+    if (this.index % 2 !== 0) {
+      return 'odd';
+    }
+  }
+
+  public deleteSshKey() {
+    this.apiService.deleteSSHKey(this.sshKey.metadata.name).subscribe(() => {
+
+      //this.sortedData.splice(this.sortedData.indexOf(key), 1);
+      //NotificationActions.success('Success', `SSH key ${key.spec.name} deleted.`);
+    });
+  }
+
+  public togglePublicKey(): void {
+    this.isShowPublicKey = !this.isShowPublicKey;
+  }
+}

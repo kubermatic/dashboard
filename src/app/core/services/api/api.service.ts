@@ -86,8 +86,8 @@ export class ApiService {
     return this.http.delete(url, { headers: this.headers });
   }
 
-  getSSHKeys(): Observable<SSHKeyEntity[]> {
-    const url = `${this.restRoot}/ssh-keys`;
+  getSSHKeys(projectID: string): Observable<SSHKeyEntity[]> {
+    const url = `${this.restRoot}projects/${projectID}/ssh-keys`;
     return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 

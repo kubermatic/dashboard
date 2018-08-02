@@ -7,8 +7,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProjectComponent } from './project.component';
 import { ProjectItemComponent } from './project-item/project-item.component';
-
+import { Router } from '@angular/router';
 import { MemberModule } from '../member/member.module';
+import { Router } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { RouterStub, RouterTestingModule } from './../testing/router-stubs';
 
@@ -40,6 +41,7 @@ describe('ProjectComponent', () => {
       declarations: [
         ProjectComponent,
         ProjectItemComponent
+        ProjectSshKeyItemComponent,
       ],
       providers: [
         { provide: Router, useClass: RouterStub },

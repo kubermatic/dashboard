@@ -10,8 +10,7 @@ import { MemberModule } from '../member/member.module';
 const components: any[] = [
   ProjectComponent,
   ProjectItemComponent,
-  ProjectDeleteConfirmationComponent,
-];
+  ProjectDeleteConfirmationComponent];
 
 @NgModule({
   imports: [
