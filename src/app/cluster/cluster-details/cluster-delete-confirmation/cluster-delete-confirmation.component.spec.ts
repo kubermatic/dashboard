@@ -18,6 +18,7 @@ import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmatio
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { InitialNodeDataService } from '../../../core/services';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -48,6 +49,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
         { provide: ApiService, useClass: ApiMockService },
         { provide: DatacenterService, useClass: DatacenterMockService },
         { provide: Router, useClass: RouterStub },
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   });

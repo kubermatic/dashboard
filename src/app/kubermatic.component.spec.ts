@@ -20,6 +20,7 @@ import { NavigationComponent } from './core/components/navigation/navigation.com
 
 import { AuthMockService } from './testing/services/auth-mock.service';
 import { DatacenterMockService } from './testing/services/datacenter-mock.service';
+import { GoogleAnalyticsService } from './google-analytics.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -61,7 +62,8 @@ describe('KubermaticComponent', () => {
         { provide: DatacenterService, useClass: DatacenterMockService },
         AuthGuard,
         SidenavService,
-        AppConfigService
+        AppConfigService,
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   });

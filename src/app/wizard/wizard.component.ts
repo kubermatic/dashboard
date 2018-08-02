@@ -13,6 +13,7 @@ import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import { NodeEntity, getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec } from '../shared/entity/NodeEntity';
+import { GoogleAnalyticsService } from '../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -40,7 +41,8 @@ export class WizardComponent implements OnInit, OnDestroy {
               private stepsService: StepsService,
               private initialNodeDataService: InitialNodeDataService,
               private router: Router,
-              private api: ApiService) {
+              private api: ApiService,
+              public googleAnalyticsService: GoogleAnalyticsService) {
     this.cluster = {
       metadata: {},
       spec: {
@@ -68,6 +70,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterCreationWizardStarted');
     // When the cluster spec got changed, update the cluster
     this.subscriptions.push(this.wizardService.clusterSpecFormChanges$.subscribe(data => {
       this.clusterSpecFormData = data;
@@ -227,6 +230,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed).subscribe(cluster => {
         this.creating = false;
         NotificationActions.success('Success', `Cluster successfully created`);
+        this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterCreated');
 
         this.router.navigate(['/clusters/' + datacenter.spec.seed + '/' + cluster.metadata.name]);
 
@@ -236,6 +240,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
       error => {
         NotificationActions.error('Error', `Could not create cluster`);
+        this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterCreationFailed');
         this.creating = false;
       }));
   }

@@ -8,6 +8,7 @@ import { ClusterService } from '../../../core/services/cluster/cluster.service';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterProviderSettingsData } from '../../../shared/model/ClusterSpecChange';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-edit-provider-settings',
@@ -21,13 +22,15 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   public providerSettingsData: ClusterProviderSettingsData = { valid: false };
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private clusterService: ClusterService, private dialogRef: MatDialogRef<EditProviderSettingsComponent>) {}
+  constructor(private api: ApiService, private clusterService: ClusterService,
+              private dialogRef: MatDialogRef<EditProviderSettingsComponent>,
+              public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.subscriptions.push(this.clusterService.providerSettingsDataChanges$.subscribe(async (data: ClusterProviderSettingsData) => {
       this.providerSettingsData = await data;
     }));
-
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'providerSettingsDialogOpened');
   }
 
   ngOnDestroy() {
@@ -55,6 +58,7 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
 
     this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(res => {
       NotificationActions.success('Success', `Edit provider settings successfully`);
+      this.googleAnalyticsService.emitEvent('clusterOverview', 'providerSettingsSaved');
       this.dialogRef.close(res);
     });
   }

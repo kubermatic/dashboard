@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { ApiService } from '../../../core/services';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',
@@ -16,13 +17,15 @@ export class AddSshKeyModalComponent implements OnInit {
 
   constructor(private api: ApiService,
               private formBuilder: FormBuilder,
-              private dialogRef: MatDialogRef<AddSshKeyModalComponent>) {}
+              private dialogRef: MatDialogRef<AddSshKeyModalComponent>,
+              public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit() {
     this.addSSHKeyForm = this.formBuilder.group({
       name: ['', [<any>Validators.required]],
       key: ['', [<any>Validators.required]],
     });
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'addSshKeyDialogOpened');
   }
 
   public addSSHKey(): void {
@@ -33,6 +36,7 @@ export class AddSshKeyModalComponent implements OnInit {
       .subscribe(
         result => {
           NotificationActions.success('Success', `SSH key ${name} added successfully`);
+          this.googleAnalyticsService.emitEvent('clusterOverview', 'sshKeyAdded');
           this.dialogRef.close(result);
         });
   }
