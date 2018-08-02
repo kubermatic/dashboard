@@ -1,4 +1,10 @@
+@import "../../../../assets/css/colors";
+
 a.download-kubeconfig-btn {
   display: inline-block;
   top: -1px;
+}
+
+.button.white {
+  color: $primary;
 }
