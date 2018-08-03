@@ -25,7 +25,7 @@ export class AddSshKeyModalComponent implements OnInit {
       name: ['', [<any>Validators.required]],
       key: ['', [<any>Validators.required]],
     });
-    this.googleAnalyticsService.emitEvent('clusterOverview', 'addSshKeyDialogOpened');
+    this.googleAnalyticsService.emitEvent('addSshKey', 'addSshKeyDialogOpened');
   }
 
   public addSSHKey(): void {
@@ -36,7 +36,7 @@ export class AddSshKeyModalComponent implements OnInit {
       .subscribe(
         result => {
           NotificationActions.success('Success', `SSH key ${name} added successfully`);
-          this.googleAnalyticsService.emitEvent('clusterOverview', 'sshKeyAdded');
+          this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
           this.dialogRef.close(result);
         });
   }

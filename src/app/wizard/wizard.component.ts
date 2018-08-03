@@ -70,7 +70,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterCreationWizardStarted');
+    this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationWizardStarted');
     // When the cluster spec got changed, update the cluster
     this.subscriptions.push(this.wizardService.clusterSpecFormChanges$.subscribe(data => {
       this.clusterSpecFormData = data;
@@ -230,7 +230,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed).subscribe(cluster => {
         this.creating = false;
         NotificationActions.success('Success', `Cluster successfully created`);
-        this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterCreated');
+        this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
         this.router.navigate(['/clusters/' + datacenter.spec.seed + '/' + cluster.metadata.name]);
 
@@ -240,7 +240,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
       error => {
         NotificationActions.error('Error', `Could not create cluster`);
-        this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterCreationFailed');
+        this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
         this.creating = false;
       }));
   }
