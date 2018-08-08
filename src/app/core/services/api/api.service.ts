@@ -53,7 +53,7 @@ export class ApiService {
   }
 
   createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
-    const url = `${this.restRootV3}/projects/${projectID}/dc/${dc}/cluster`;
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters`;
     return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
   }
 
