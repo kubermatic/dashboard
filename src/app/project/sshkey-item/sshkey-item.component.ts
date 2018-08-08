@@ -39,10 +39,10 @@ export class  ProjectSshKeyItemComponent implements OnInit {
   }
 
   public deleteSshKey() {
-    this.apiService.deleteSSHKey(this.sshKey.metadata.name).subscribe(() => {
+    this.apiService.deleteSSHKey(this.sshKey.id, '7d4r7tqmww').subscribe(() => {
 
       //this.sortedData.splice(this.sortedData.indexOf(key), 1);
-      //NotificationActions.success('Success', `SSH key ${key.spec.name} deleted.`);
+      NotificationActions.success('Success', `SSH key ${this.sshKey.name} deleted.`);
     });
   }
 

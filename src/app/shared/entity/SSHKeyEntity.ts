@@ -1,23 +1,23 @@
-import { MetadataEntity } from './MetadataEntity';
 
 export class SSHKeySpec {
-  name: string;
   fingerprint: string;
   publicKey: string;
-  clusters: string[];
 
-  constructor(name: string, fingerprint: string, publicKey: string) {
-    this.name = name;
+  constructor(fingerprint: string, publicKey: string) {
     this.fingerprint = fingerprint;
     this.publicKey = publicKey;
   }
 }
 
 export class SSHKeyEntity {
-  metadata: MetadataEntity;
+  creationTimestamp: Date;
+  deletionTimestamp: Date;
+  id: number;
+  name: string;
   spec: SSHKeySpec;
 
   constructor(name: string, fingerprint: string, publicKey: string) {
-    this.spec = new SSHKeySpec(name, fingerprint, publicKey);
+    this.name =  name;
+    this.spec = new SSHKeySpec(fingerprint, publicKey);
   }
 }

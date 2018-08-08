@@ -77,7 +77,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys() {
-    this.subscriptions.push(this.api.getSSHKeys(this.project.id).retry(3).subscribe(res => {
+    this.subscriptions.push(this.api.getSSHKeys('7d4r7tqmww').retry(3).subscribe(res => {
       this.sshKeys = res;
       this.sortSshKeyData(this.sort);
       this.loadingSshKeys = false;

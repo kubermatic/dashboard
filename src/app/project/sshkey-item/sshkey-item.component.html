@@ -2,10 +2,10 @@
   <div fxLayout fxFlex (click)="togglePublicKey()">
     <div fxFlex="50%" fxFlex.sm="40%">
       <div class="key-name">
-        {{sshKey.spec.name}}
+        {{sshKey.name}}
       </div>
       <div class="key-timestamp">
-        Created at {{sshKey.metadata.creationTimestamp | date:'dd. MMMM yyyy'}}
+        Created at {{sshKey.creationTimestamp | date:'dd. MMMM yyyy'}}
       </div>
     </div>
     <div fxFlex="50%" fxFlex.sm="60%" class="key-fingerprint">

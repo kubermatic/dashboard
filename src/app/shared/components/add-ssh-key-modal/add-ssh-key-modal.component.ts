@@ -32,7 +32,7 @@ export class AddSshKeyModalComponent implements OnInit {
     const name = this.addSSHKeyForm.controls['name'].value;
     const key = this.addSSHKeyForm.controls['key'].value;
 
-    this.api.addSSHKey(new SSHKeyEntity(name, null, key))
+    this.api.addSSHKey(new SSHKeyEntity(name, null, key), '7d4r7tqmww')
       .subscribe(
         result => {
           NotificationActions.success('Success', `SSH key ${name} added successfully`);

@@ -87,17 +87,17 @@ export class ApiService {
   }
 
   getSSHKeys(projectID: string): Observable<SSHKeyEntity[]> {
-    const url = `${this.restRoot}projects/${projectID}/ssh-keys`;
+    const url = `${this.restRoot}/projects/${projectID}/sshkeys`;
     return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 
-  deleteSSHKey(fingerprint: string) {
-    const url = `${this.restRoot}/ssh-keys/${fingerprint}`;
+  deleteSSHKey(fingerprint: number, projectID: string) {
+    const url = `${this.restRoot}/projects/${projectID}/sshkeys/${fingerprint}`;
     return this.http.delete(url, { headers: this.headers });
   }
 
-  addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
-    const url = `${this.restRoot}/ssh-keys`;
+  addSSHKey(sshKey: SSHKeyEntity, projectID: string): Observable<SSHKeyEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/sshkeys`;
     return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.headers });
   }
 
