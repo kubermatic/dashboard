@@ -20,10 +20,10 @@ export class SshkeyComponent implements OnInit {
               public dialog: MatDialog) {}
 
   public ngOnInit(): void {
-    this.refreshSSHKeys();
+    //this.refreshSSHKeys();
   }
 
-  public addSshKeyDialog(): void {
+ /* public addSshKeyDialog(): void {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent, this.config);
 
     dialogRef.afterClosed().subscribe(result => {
@@ -40,5 +40,5 @@ export class SshkeyComponent implements OnInit {
         },
         error => this.loading = false
       );
-  }
+  }*/
 }

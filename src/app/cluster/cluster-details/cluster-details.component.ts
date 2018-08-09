@@ -96,14 +96,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             this.nodeDc = datacenter;
           });
 
-        this.api.getSSHKeys()
+        this.api.getSSHKeys('7d4r7tqmww')
           .takeUntil(this.unsubscribe)
           .subscribe(keys => {
+            // TODO: get cluster sshkeys
             this.sshKeys = keys.filter(key => {
               if (key.spec.clusters == null) {
                 return false;
               }
               return key.spec.clusters.indexOf(cluster.name) > -1;
+
             });
           });
 

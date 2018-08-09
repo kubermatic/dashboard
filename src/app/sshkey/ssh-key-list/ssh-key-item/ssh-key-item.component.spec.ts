@@ -51,7 +51,7 @@ describe('SshKeyItemComponent', () => {
     const spyDeleteSSH = spyOn(apiService, 'deleteSSHKey').and.returnValue(Observable.of(null));
     fixture.detectChanges();
 
-    component.deleteSSHKey();
+    //component.deleteSSHKey();
     tick();
     fixture.detectChanges();
 

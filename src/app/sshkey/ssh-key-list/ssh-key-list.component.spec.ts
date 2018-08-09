@@ -62,7 +62,7 @@ describe('SshKeyListComponent', () => {
     const deletedItem = component.sortedData[0];
 
     fixture.detectChanges();
-    component.deleteSSHKey(deletedItem);
+    //component.deleteSSHKey(deletedItem);
     const foundItem = component.sortedData.find(item => item === deletedItem);
 
     expect(component.sortedData.length).toBe(initialLength - 1, 'should delete item from the array');

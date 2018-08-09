@@ -234,7 +234,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     const datacenter = this.clusterDatacenterFormData.datacenter;
     const keyNames: string[] = [];
     for (const key of this.clusterSSHKeys) {
-      keyNames.push(key.metadata.name);
+      keyNames.push(key.name);
     }
     const createCluster: CreateClusterModel = { name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames };
 

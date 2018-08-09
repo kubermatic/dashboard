@@ -19,10 +19,11 @@ export class SshKeyItemComponent implements OnInit {
   constructor(private api: ApiService) { }
 
   public ngOnInit(): void {
-    this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
+    //this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
 
-    this.publicKey = this.sshKey.spec.publicKey.slice(this.publicKeyName.length + 1, -1);
+//    this.publicKey = this.sshKey.spec.publicKey.slice(this.publicKeyName.length + 1, -1);
   }
+  /*
 
   public deleteSSHKey(): void {
     this.api.deleteSSHKey(this.sshKey.metadata.name).subscribe(() => {
@@ -32,6 +33,6 @@ export class SshKeyItemComponent implements OnInit {
 
   public togglePublicKey(): void {
     this.isShowPublicKey = !this.isShowPublicKey;
-  }
+  }*/
 
 }

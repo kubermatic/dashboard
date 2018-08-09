@@ -30,7 +30,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const keyNames: string[] = [];
     for (const key of this.selectedKeys) {
-      keyNames.push(key.metadata.name);
+      keyNames.push(key.name);
     }
     this.keysForm.controls.keys.patchValue(keyNames);
 
@@ -38,7 +38,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
       const clusterKeys: SSHKeyEntity[] = [];
       for (const selectedKey of this.keysForm.controls.keys.value) {
         for (const key of this.keys) {
-          if (selectedKey === key.metadata.name) {
+          if (selectedKey === key.name) {
             clusterKeys.push(key);
           }
         }
@@ -55,9 +55,9 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   reloadKeys() {
-    this.keysSub = this.api.getSSHKeys().subscribe(sshKeys => {
+    this.keysSub = this.api.getSSHKeys('7d4r7tqmww').subscribe(sshKeys => {
       this.keys = sshKeys.sort((a, b) => {
-        return a.spec.name.localeCompare(b.spec.name);
+        return a.name.localeCompare(b.name);
       });
     });
   }

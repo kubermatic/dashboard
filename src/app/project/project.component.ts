@@ -120,7 +120,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   public trackSshKey(index: number, shhKey: SSHKeyEntity): number {
     const prevSSHKey = find(this.sshKeys, item => {
-      return item.spec.name === shhKey.spec.name;
+      return item.name === shhKey.name;
     });
 
     return prevSSHKey === shhKey ? index : undefined;
@@ -158,7 +158,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name':
-          return this.compare(a.spec.name, b.spec.name, isAsc);
+          return this.compare(a.name, b.name, isAsc);
         case 'status':
           return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
         default:
