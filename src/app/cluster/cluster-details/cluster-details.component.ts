@@ -129,7 +129,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         if (cluster /*&& cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController*/) {
           const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
           for (let i = 0; i < data.nodeCount; i++) {
-            createNodeObservables.push(this.api.createClusterNode(cluster, data.node, this.datacenter.metadata.name));
+            createNodeObservables.push(this.api.createClusterNode(cluster, data.node, this.datacenter.metadata.name, this.project.id));
           }
           Observable.combineLatest(createNodeObservables)
             .takeUntil(this.unsubscribe)
@@ -187,7 +187,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public reloadClusterNodes() {
     if (this.cluster /*&& this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController*/) {
-      this.api.getClusterNodes(this.cluster.name, this.datacenter.metadata.name)
+      this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.project.id)
         .takeUntil(this.unsubscribe)
         .subscribe(nodes => {
           this.nodes = nodes;

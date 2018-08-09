@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, OnInit, OnDestroy } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { ClusterService } from '../../../core/services';
-
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { ClusterService, ProjectService } from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -14,7 +15,7 @@ import { ClusterService } from '../../../core/services';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent implements OnChanges {
+export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
@@ -23,6 +24,7 @@ export class NodeListComponent implements OnChanges {
   public clickedDeleteNode = {};
   public clickedDuplicateNode = {};
   public isShowNodeDetails = {};
+  public project: ProjectEntity;
   public config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -39,9 +41,18 @@ export class NodeListComponent implements OnChanges {
       message: 'Jazzy jazz jazz'
     }
   };
+  private subscriptions: Subscription[] = [];
 
   constructor(public dialog: MatDialog,
-              private clusterService: ClusterService) {
+              private clusterService: ClusterService,
+              public projectService: ProjectService) {
+  }
+
+  ngOnInit() {
+    this.project = this.projectService.project;
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    }));
   }
 
   ngOnChanges() {
@@ -62,6 +73,7 @@ export class NodeListComponent implements OnChanges {
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
+    dialogRef.componentInstance.project = this.project;
 
     dialogRef.afterClosed().subscribe(result => {
       this.deleteNode.emit(node);
@@ -74,6 +86,7 @@ export class NodeListComponent implements OnChanges {
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
+    dialogRef.componentInstance.project = this.project;
 
     const sub = dialogRef.afterClosed().subscribe(result => {
     this.clickedDuplicateNode[node.metadata.name] = false;
@@ -185,6 +198,14 @@ export class NodeListComponent implements OnChanges {
         this.isShowNodeDetails[nodeName] = false;
       } else if (!this.isShowNodeDetails[nodeName]) {
         this.isShowNodeDetails[nodeName] = true;
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
       }
     }
   }

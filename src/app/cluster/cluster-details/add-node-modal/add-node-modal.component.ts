@@ -1,8 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { ApiService, WizardService } from '../../../core/services';
+import { ApiService, WizardService, ProjectService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable, ObservableInput } from 'rxjs/Observable';
@@ -21,6 +22,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
   @Input() datacenter: DataCenterEntity;
   private subscriptions: Subscription[] = [];
   public nodeDC: DataCenterEntity;
+  public project: ProjectEntity;
   public addNodeData: NodeData = {
     node: {
       metadata: {},
@@ -39,6 +41,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
               private addNodeService: AddNodeService,
               private wizardService: WizardService,
               private dcService: DatacenterService,
+              private projectService: ProjectService
   ) {}
 
   ngOnInit(): void {
@@ -46,6 +49,11 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
         this.nodeDC = result;
       }
     );
+
+    this.project = this.projectService.project;
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    }));
 
     this.addNodeData.node.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
     this.addNodeData.node.spec.operatingSystem = getEmptyOperatingSystemSpec();
@@ -67,7 +75,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
   public addNode(): void {
     const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
     for (let i = 0; i < this.addNodeData.count; i++) {
-      createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name));
+      createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name, this.project.id));
     }
     this.subscriptions.push(Observable.combineLatest(createNodeObservables)
       .subscribe((createdNodes: NodeEntity[]): void => {

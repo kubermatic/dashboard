@@ -5,6 +5,7 @@ import { ApiService } from '../../../core/services';
 import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-node-duplicate',
@@ -16,6 +17,7 @@ export class NodeDuplicateComponent implements OnInit {
   @Input() node: NodeEntity;
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() project: ProjectEntity;
 
   constructor(private api: ApiService, private dialogRef: MatDialogRef<NodeDuplicateComponent>) {
   }
@@ -38,7 +40,7 @@ export class NodeDuplicateComponent implements OnInit {
       status: {}
     };
 
-    this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name).subscribe(result => {
+    this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name, this.project.id).subscribe(result => {
       NotificationActions.success('Success', `Duplicate node successfully`);
     });
     this.dialogRef.close(true);

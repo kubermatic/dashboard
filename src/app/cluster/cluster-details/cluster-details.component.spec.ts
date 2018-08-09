@@ -111,7 +111,7 @@ describe('ClusterDetailsComponent', () => {
     tick();
     expect(component.sshKeys).toEqual(sshkeys, 'should get sshkeys by api');
     discardPeriodicTasks();
-  }));
+  }));*/
 
   it('should get nodes', fakeAsync(() => {
     fixture.detectChanges();
@@ -119,7 +119,7 @@ describe('ClusterDetailsComponent', () => {
     expect(component.nodes).toEqual(nodesFake, 'should get nodes by api');
 
     discardPeriodicTasks();
-  }));*/
+  }));
 
   it('should render template after requests', fakeAsync(() => {
     fixture.detectChanges();

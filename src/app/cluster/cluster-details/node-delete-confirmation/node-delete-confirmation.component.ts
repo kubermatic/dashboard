@@ -5,6 +5,7 @@ import { ApiService } from '../../../core/services';
 import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
@@ -16,6 +17,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   @Input() node: NodeEntity;
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() project: ProjectEntity;
 
   public title: string;
   public message: string;
@@ -31,7 +33,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   }
 
   public deleteNode(): void {
-    this.api.deleteClusterNode(this.cluster.name, this.node, this.datacenter.metadata.name).subscribe(result => {
+    this.api.deleteClusterNode(this.cluster.id, this.node, this.datacenter.metadata.name, this.project.id).subscribe(result => {
       NotificationActions.success('Success', `Node removed successfully`);
     });
     this.dialogRef.close(true);
