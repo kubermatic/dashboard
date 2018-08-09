@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ApiService, DatacenterService, ProjectService } from '../../core/services';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
@@ -18,6 +19,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public loading = true;
   public sortedData: ClusterEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
+  public project: ProjectEntity;
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
@@ -27,6 +29,12 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.project = this.projectService.project;
+
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    }));
+
     const timer = Observable.interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshClusters();
@@ -46,20 +54,18 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.dcService.getSeedDataCenters().subscribe(datacenters => {
       const clusters: ClusterEntity[] = [];
       const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
-      this.projectService.selectedProjectChanges$.subscribe(project => {
-        for (const dc of datacenters) {
-          dcClustersObservables.push(this.api.getClusters(dc.metadata.name, project.id));
-        }
-        this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
-          .subscribe(dcClusters => {
-            for (const cs of dcClusters) {
-              clusters.push(...cs);
-            }
-            this.clusters = clusters;
-            this.sortData(this.sort);
-            this.loading = false;
-          }));
-      });
+      for (const dc of datacenters) {
+        dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.project.id));
+      }
+      this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
+        .subscribe(dcClusters => {
+          for (const cs of dcClusters) {
+            clusters.push(...cs);
+          }
+          this.clusters = clusters;
+          this.sortData(this.sort);
+          this.loading = false;
+        }));
     }));
   }
 

@@ -3,7 +3,7 @@ import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 
 export const clusterModelFake: CreateClusterModel = {
   name: 'nifty-haibt',
-  cluster: {
+  spec: {
     cloud: {
       dc: 'do-fra1',
       digitalocean: {

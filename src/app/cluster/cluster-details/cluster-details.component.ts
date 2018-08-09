@@ -63,9 +63,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
 
-    this.projectService.selectedProjectChanges$.subscribe(project => {
-      this.project = project;
-    });
+    this.project = this.projectService.project;
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
@@ -199,7 +197,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public reloadVersions() {
     if (this.cluster /*&& this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController*/) {
-      this.api.getClusterUpgrades(this.cluster.name, this.datacenter.metadata.name)
+      /*this.api.getClusterUpgrades(this.cluster.name, this.datacenter.metadata.name)
         .takeUntil(this.unsubscribe)
         .subscribe(upgrades => {
           this.versionsList = [];
@@ -214,7 +212,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               }
             }
           }
-        });
+        });*/
       }
   }
 

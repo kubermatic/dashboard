@@ -32,10 +32,7 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
       this.providerSettingsData = await data;
     }));
 
-    this.projectService.selectedProjectChanges$.subscribe(project => {
-      this.project = project;
-    });
-
+    this.project = this.projectService.project;
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
     }));

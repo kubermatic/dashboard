@@ -3,7 +3,7 @@ import { OpenstackTenant } from '../../shared/entity/provider/openstack/Openstac
 
 export const doClusterModelFake: CreateClusterModel = {
   name: 'nifty-haibt',
-  cluster: {
+  spec: {
     cloud: {
       dc: 'do-fra1',
       digitalocean: {

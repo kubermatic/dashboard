@@ -30,10 +30,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       this.selectedVersion = this.possibleVersions[this.possibleVersions.length - 1];
     }
 
-    this.projectService.selectedProjectChanges$.subscribe(project => {
-      this.project = project;
-    });
-
+    this.project = this.projectService.project;
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
     }));

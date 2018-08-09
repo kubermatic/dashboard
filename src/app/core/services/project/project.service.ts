@@ -7,8 +7,10 @@ export class ProjectService {
   // Complete project object
   private _project = new Subject<ProjectEntity>();
   selectedProjectChanges$ = this._project.asObservable();
+  public project: ProjectEntity;
 
   changeSelectedProject(data: ProjectEntity) {
     this._project.next(data);
+    this.project = data;
   }
 }

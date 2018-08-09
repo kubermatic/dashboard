@@ -11,7 +11,7 @@ import { AzureProviderSettingsComponent } from './azure-provider-settings/azure-
 import { MatDialogRef } from '@angular/material';
 import { MatDialogRefMock } from '../../../testing/services/mat-dialog-ref-mock';
 import { SharedModule } from '../../../shared/shared.module';
-import { ApiService } from '../../../core/services/api/api.service';
+import { ApiService, ProjectService } from '../../../core/services';
 import { ClusterService } from '../../../core/services';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
@@ -43,7 +43,8 @@ describe('EditProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
+        ProjectService
       ],
     }).compileComponents();
   });

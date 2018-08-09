@@ -39,7 +39,7 @@ export class ClusterDeleteConfirmationComponent implements DoCheck {
     if (!this.inputNameMatches()) {
       return;
     } else {
-      this.api.deleteCluster(this.cluster.name, this.datacenter.metadata.name, this.project.id).subscribe(result => {
+      this.api.deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(result => {
         this.initialNodeDataService.clearInitialNodeData(this.cluster);
         NotificationActions.success('Success', `Cluster is being deleted`);
       });

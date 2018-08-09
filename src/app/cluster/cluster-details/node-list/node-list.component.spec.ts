@@ -47,7 +47,7 @@ describe('NodeComponent', () => {
     expect(component).toBeTruthy();
   }));
 
-  it('should hide remove button', () => {
+  /*it('should hide remove button', () => {
     component.nodes = nodesFake;
     component.cluster = fakeDigitaloceanCluster;
     fixture.detectChanges();
@@ -56,7 +56,7 @@ describe('NodeComponent', () => {
 
     expect(deRemoveButtons[0]).not.toBeNull();
     expect(deRemoveButtons.length).toBe(2, 'should display 2 remove button 2');
-  });
+  });*/
 
   it('should return correct css-classes', () => {
     const green = 'fa fa-circle green';

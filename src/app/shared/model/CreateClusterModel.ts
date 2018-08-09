@@ -5,9 +5,9 @@ export class CreateClusterModel {
   spec: ClusterSpec;
   sshKeys: string[];
 
-  constructor(name: string, cluster: ClusterSpec, sshKeys: string[]) {
+  constructor(name: string, spec: ClusterSpec, sshKeys: string[]) {
     this.name = name;
-    this.spec = cluster;
+    this.spec = spec;
     this.sshKeys = sshKeys;
   }
 }

@@ -26,10 +26,7 @@ export class RevokeAdminTokenComponent implements OnInit, OnDestroy {
               private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
 
   ngOnInit() {
-    this.projectService.selectedProjectChanges$.subscribe(project => {
-      this.project = project;
-    });
-
+    this.project = this.projectService.project;
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
     }));
