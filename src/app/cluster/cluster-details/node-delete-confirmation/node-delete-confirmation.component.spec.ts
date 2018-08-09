@@ -14,6 +14,7 @@ import { nodeFake } from '../../../testing/fake-data/node.fake';
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { fakeProject } from '../../../testing/fake-data/project.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -58,6 +59,7 @@ describe('NodeDeleteConfirmationComponent', () => {
     component.cluster = fakeDigitaloceanCluster;
     component.node = nodeFake;
     component.datacenter = fakeDigitaloceanDatacenter;
+    component.project = fakeProject;
     fixture.detectChanges();
     const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(Observable.of(null));
 

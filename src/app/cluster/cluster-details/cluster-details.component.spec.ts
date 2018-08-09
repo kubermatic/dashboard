@@ -10,7 +10,7 @@ import { ActivatedRouteStub, RouterStub, RouterTestingModule } from './../../tes
 import { ClusterDetailsComponent } from './cluster-details.component';
 import { Auth } from './../../core/services/auth/auth.service';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
-import { ProjectMockService } from '../..//testing/services/project-mock.service';
+import { ProjectMockService } from '../../testing/services/project-mock.service';
 import { ApiService, ProjectService } from '../../core/services';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';

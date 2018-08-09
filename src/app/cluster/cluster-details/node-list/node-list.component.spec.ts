@@ -2,15 +2,13 @@ import { SharedModule } from '../../../shared/shared.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MatDialog } from '@angular/material';
 import { nodesFake } from '../../../testing/fake-data/node.fake';
 import { NodeListComponent } from './node-list.component';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
-import { ClusterService } from '../../../core/services';
-
+import { ClusterService, ProjectService } from '../../../core/services';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -32,6 +30,7 @@ describe('NodeComponent', () => {
         NodeListComponent
       ],
       providers: [
+        { provide: ProjectService, useClass: ProjectMockService },
         MatDialog,
         ClusterService
       ],

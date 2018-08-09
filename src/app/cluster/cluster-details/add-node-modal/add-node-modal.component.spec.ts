@@ -7,8 +7,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRouteStub, RouterTestingModule } from './../../../testing/router-stubs';
-import { ApiService } from '../../../core/services/api/api.service';
+import { ApiService, ProjectService } from '../../../core/services';
 import { asyncData } from '../../../testing/services/api-mock.service';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
 import { MAT_DIALOG_DATA, MatDialogRef, MatTabsModule } from '@angular/material';
 import { AddNodeModalComponent } from './add-node-modal.component';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
@@ -74,6 +75,7 @@ describe('AddNodeModalComponent', () => {
         { provide: ApiService, useValue: apiMock },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: DatacenterService, useClass: DatacenterMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         AddNodeService,
         WizardService,
       ],
