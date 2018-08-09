@@ -6,10 +6,12 @@ import { NgReduxFormModule } from '@angular-redux/form';
 import { KubermaticComponent } from './kubermatic.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MobileNavigationComponent } from './overlays';
+import { AddProjectComponent } from './add-project/add-project.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { AppConfigService } from './app-config.service';
+import { ProjectService } from './core/services/project/project.service';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -39,10 +41,12 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       useFactory: appInitializerFn,
       multi: true,
       deps: [AppConfigService]
-    }
+    },
+    ProjectService
   ],
   entryComponents: [
-    MobileNavigationComponent
+    MobileNavigationComponent,
+    AddProjectComponent
   ],
   bootstrap: [KubermaticComponent]
 })

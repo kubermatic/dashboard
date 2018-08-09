@@ -6,6 +6,7 @@ import { DatacenterService } from './datacenter/datacenter.service';
 import { InitialNodeDataService } from './initial-node-data/initial-nodes-data.service';
 import { ClusterService } from './cluster/cluster.service';
 import { WizardService } from './wizard/wizard.service';
+import { ProjectService } from './project/project.service';
 
 export {
   InitialNodeDataService,
@@ -15,6 +16,7 @@ export {
   AUTH_PROVIDERS,
   ApiService,
   ClusterService,
-  WizardService
+  WizardService,
+  ProjectService
 };
 

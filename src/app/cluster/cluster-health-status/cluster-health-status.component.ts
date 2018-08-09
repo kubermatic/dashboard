@@ -24,7 +24,7 @@ export class ClusterHealthStatusComponent implements OnChanges {
   }
 
   public getHealthStatusColor(): string {
-    if (this.cluster.status.health) {
+    /* if (this.cluster.status.health) {
       if (this.healthStatus === ClusterHealth.RUNNING) {
         return this.green;
       } else if (this.healthStatus === ClusterHealth.DELETING) {
@@ -32,18 +32,18 @@ export class ClusterHealthStatusComponent implements OnChanges {
       } else {
         return this.orange;
       }
-    } else {
+    } else {*/
       return this.orange;
-    }
+    // }
   }
 
   public getHealthTooltipText(): string {
-    if (this.healthStatus === ClusterHealth.DELETING) {
+    /* if (this.healthStatus === ClusterHealth.DELETING) {
       return 'Deleting might take up to 15 minutes';
     } else if (!!this.cluster.spec.pause) {
       return 'Manual action required';
-    } else {
+    } else {*/
       return '';
-    }
+    // }
   }
 }

@@ -1,9 +1,9 @@
 <div class="row" [ngClass]="getClusterItemClass()">
-  <div fxLayout [routerLink]="['/clusters/', getDatacenter(), cluster.metadata.name]">
+  <div fxLayout [routerLink]="['/clusters/', getDatacenter(), cluster.id]">
     <div fxFlex="40%" fxFlex.xs="40%">
         <span class="health-state-container"><kubermatic-cluster-health-status [cluster]="cluster"></kubermatic-cluster-health-status></span>
-        <p class="cluster-name" fxHide.gt-sm >{{getShortClusterName(cluster.spec.humanReadableName)}}</p>
-        <p class="cluster-name" fxHide.lt-md >{{this.cluster.spec.humanReadableName}}</p>
+        <p class="cluster-name" fxHide.gt-sm >{{getShortClusterName(cluster.name)}}</p>
+        <p class="cluster-name" fxHide.lt-md >{{this.cluster.name}}</p>
     </div>
     <div fxFlex="25%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
       <ng-container [ngSwitch]="!!cluster.spec.cloud">

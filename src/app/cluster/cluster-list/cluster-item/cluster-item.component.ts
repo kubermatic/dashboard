@@ -1,7 +1,7 @@
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ClusterService } from '../../../core/services';
 
 @Component({
@@ -12,7 +12,7 @@ import { ClusterService } from '../../../core/services';
 export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() index: number;
-  @Input() health: Health;
+  /*@Input() health: Health;*/
   public nodeDC: DataCenterEntity;
 
   constructor(private dcService: DatacenterService,

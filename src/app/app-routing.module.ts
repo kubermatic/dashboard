@@ -9,6 +9,10 @@ const appRoutes: Routes = [
     component: DashboardComponent,
     children: [
       {
+        path: 'projects',
+        loadChildren: './project/project.module#ProjectModule',
+      },
+      {
         path: 'wizard',
         loadChildren: './wizard/wizard.module#WizardModule',
       },

@@ -3,9 +3,9 @@ import { MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { ApiService } from '../../../core/services';
-import { ClusterService } from '../../../core/services/cluster/cluster.service';
+import { ApiService, ProjectService, ClusterService } from '../../../core/services';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterProviderSettingsData } from '../../../shared/model/ClusterSpecChange';
 
@@ -19,13 +19,22 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   public providerSettingsData: ClusterProviderSettingsData = { valid: false };
+  public project: ProjectEntity;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private clusterService: ClusterService, private dialogRef: MatDialogRef<EditProviderSettingsComponent>) {}
+  constructor(private api: ApiService,
+              private clusterService: ClusterService,
+              private projectService: ProjectService,
+              private dialogRef: MatDialogRef<EditProviderSettingsComponent>) {}
 
   ngOnInit(): void {
     this.subscriptions.push(this.clusterService.providerSettingsDataChanges$.subscribe(async (data: ClusterProviderSettingsData) => {
       this.providerSettingsData = await data;
+    }));
+
+    this.project = this.projectService.project;
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
     }));
 
   }
@@ -53,7 +62,7 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
       this.cluster.spec.cloud.azure = this.providerSettingsData.azure;
     }
 
-    this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(res => {
+    this.api.editCluster(this.cluster, this.datacenter.metadata.name, this.project.id).subscribe(res => {
       NotificationActions.success('Success', `Edit provider settings successfully`);
       this.dialogRef.close(res);
     });

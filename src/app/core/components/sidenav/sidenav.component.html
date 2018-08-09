@@ -2,14 +2,28 @@
   <mat-nav-list>
     <!-- Menus for logged in users -->
     <div class="km-sidenav-top">
-      <mat-list-item>
+      <mat-list-item class="km-projects">
+        <div class="km-projects-container">
+          <mat-label>Selected Project</mat-label>
+          <mat-select placeholder="Select Project" (selectionChange)="selectionChange($event)" [ngModel]="selectedProject" disableOptionCentering>
+            <mat-option value="addProject">+ Add Project</mat-option>
+            <mat-option *ngFor="let project of projects" [value]="project.id">
+              {{ project.name }}
+            </mat-option>
+          </mat-select>
+        </div>
+      </mat-list-item>
+      <mat-list-item [ngClass]="disableResource ? 'disabled' : ''">
         <a mat-line routerLink="/wizard" [routerLinkActive]="['active']"><i class="fa fa-magic"></i> Create Cluster</a>
       </mat-list-item>
-      <mat-list-item>
-        <a mat-line routerLink="/clusters" [routerLinkActive]="['active']"><i class="fa fa-cubes"></i> Manage Cluster</a>
+      <mat-list-item [ngClass]="disableResource ? 'disabled' : ''">
+        <a mat-line routerLink="/clusters" [routerLinkActive]="['active']"><i class="iconCluster" [ngClass]="setIconColor('/clusters') ? 'white' : 'black'"></i> Manage Cluster</a>
+      </mat-list-item>
+      <mat-list-item [ngClass]="disableResource ? 'disabled' : ''">
+        <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']"><i class="iconKey" [ngClass]="setIconColor('/sshkeys') ? 'white' : 'black'"></i> Manage SSH keys</a>
       </mat-list-item>
       <mat-list-item>
-        <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']"><i class="fa fa-key"></i> Manage SSH keys</a>
+        <a mat-line routerLink="/projects" [routerLinkActive]="['active']"><i class="iconProject" [ngClass]="setIconColor('/projects') ? 'white' : 'black'"></i> Projects</a>
       </mat-list-item>
     </div>
   </mat-nav-list>

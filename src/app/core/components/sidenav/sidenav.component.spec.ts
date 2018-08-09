@@ -3,13 +3,17 @@ import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '../../../testing/router-stubs';
+import { RouterTestingModule, RouterLinkStubDirective, RouterStub, ActivatedRouteStub } from '../../../testing/router-stubs';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterLinkStubDirective } from './../../../testing/router-stubs';
+import { Router, ActivatedRoute } from '@angular/router';
 import { click } from './../../../testing/utils/click-handler';
 
 import { SidenavComponent } from './sidenav.component';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
+import { ApiService, ProjectService } from './../../../core/services';
+import { fakeProjects } from './../../../testing/fake-data/project.fake';
+import { asyncData } from './../../../testing/services/api-mock.service';
+import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -25,8 +29,12 @@ describe('SidenavComponent', () => {
   let component: SidenavComponent;
   let linkDes: DebugElement[];
   let links: RouterLinkStubDirective[];
+  let getProjectsSpy: Spy;
 
   beforeEach(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getProjects']);
+    getProjectsSpy = apiMock.getProjects.and.returnValue(asyncData(fakeProjects));
+
     TestBed.configureTestingModule({
       imports: [
         ...modules,
@@ -34,7 +42,17 @@ describe('SidenavComponent', () => {
       declarations: [
         SidenavComponent
       ],
-      providers: [],
+      providers: [
+        ProjectService,
+        { provide: ApiService, useValue: apiMock },
+        { provide: Router, useValue: {
+          routerState: {
+            snapshot: {
+              url: [{ path: 1 }, { path: 2 }]}
+            }
+          }
+        }
+      ],
     }).compileComponents();
   });
 
@@ -55,7 +73,7 @@ describe('SidenavComponent', () => {
   it('should get RouterLinks from template', () => {
     fixture.detectChanges();
 
-    expect(links.length).toBe(3, 'should have 3 links');
+    expect(links.length).toBe(4, 'should have 4 links');
     expect(links[0].linkParams).toBe('/wizard', '1st link should go to Wizard');
     expect(links[1].linkParams).toBe('/clusters', '2nd link should go to Cluster list');
   });

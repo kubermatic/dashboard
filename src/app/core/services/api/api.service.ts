@@ -6,6 +6,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { Auth } from '../../../core/services/auth/auth.service';
 import { ClusterEntity, MasterVersion } from '../../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
@@ -28,28 +30,43 @@ export class ApiService {
     this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
   }
 
-  getClusters(dc: string): Observable<ClusterEntity[]> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster`;
+  getProjects(): Observable<ProjectEntity[]> {
+    const url = `${this.restRoot}/projects`;
+    return this.http.get<ProjectEntity[]>(url, { headers: this.headers });
+  }
+
+  createProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
+    const url = `${this.restRoot}/projects`;
+    return this.http.post<ProjectEntity>(url, createProjectModel, { headers: this.headers });
+  }
+
+  deleteProject(projectID: string) {
+    const url = `${this.restRoot}/projects/${projectID}`;
+    return this.http.delete(url, { headers: this.headers });
+  }
+
+  getClusters(dc: string, projectID: string): Observable<ClusterEntity[]> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters`;
     return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
   }
 
-  getCluster(cluster: string, dc: string): Observable<ClusterEntity> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}`;
+  getCluster(cluster: string, dc: string, projectID: string): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}`;
     return this.http.get<ClusterEntity>(url, { headers: this.headers });
   }
 
-  createCluster(createClusterModel: CreateClusterModel, dc: string): Observable<ClusterEntity> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster`;
+  createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters`;
     return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
   }
 
-  editCluster(cluster: ClusterEntity, dc: string): Observable<ClusterEntity> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.metadata.name}`;
+  editCluster(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.name}`;
     return this.http.put<ClusterEntity>(url, cluster, { headers: this.headers });
   }
 
-  deleteCluster(cluster: string, dc: string) {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster}`;
+  deleteCluster(cluster: string, dc: string, projectID: string) {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}`;
     return this.http.delete(url, { headers: this.headers });
   }
 
@@ -59,7 +76,7 @@ export class ApiService {
   }
 
   createClusterNode(cluster: ClusterEntity, node: NodeEntity, dc: string): Observable<NodeEntity> {
-    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.metadata.name}/node`;
+    const url = `${this.restRootV3}/dc/${dc}/cluster/${cluster.name}/node`;
     return this.http.post<NodeEntity>(url, node, { headers: this.headers });
   }
 

@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
-import { ApiService } from '../../core/services/api/api.service';
-import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
+import { ApiService, DatacenterService, ProjectService } from '../../core/services';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
@@ -19,14 +19,22 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public loading = true;
   public sortedData: ClusterEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
+  public project: ProjectEntity;
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
               private dcService: DatacenterService,
-              private clusterService: ClusterService) {
+              private clusterService: ClusterService,
+              private projectService: ProjectService) {
   }
 
   ngOnInit() {
+    this.project = this.projectService.project;
+
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    }));
+
     const timer = Observable.interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshClusters();
@@ -47,7 +55,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       const clusters: ClusterEntity[] = [];
       const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
       for (const dc of datacenters) {
-        dcClustersObservables.push(this.api.getClusters(dc.metadata.name));
+        dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.project.id));
       }
       this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
         .subscribe(dcClusters => {
@@ -63,7 +71,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   public trackCluster(index: number, cluster: ClusterEntity): number {
     const prevCluster = find(this.clusters, item => {
-      return item.metadata.name === cluster.metadata.name;
+      return item.name === cluster.name;
     });
 
     return prevCluster && this.clusterService.isClusterRunning(prevCluster) === this.clusterService.isClusterRunning(cluster) ? index : undefined;
@@ -81,7 +89,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name':
-          return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
+          return this.compare(a.name, b.name, isAsc);
         case 'provider':
           return this.getProvider(a, b, isAsc);
         case 'region':

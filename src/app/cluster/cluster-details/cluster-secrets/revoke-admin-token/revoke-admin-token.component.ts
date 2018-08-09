@@ -1,9 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../../redux/actions/notification.actions';
-import { ApiService } from '../../../../core/services/api/api.service';
+import { ApiService, ProjectService } from '../../../../core/services';
 import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
+import { ProjectEntity } from '../../../../shared/entity/ProjectEntity';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-revoke-admin-token',
@@ -11,19 +13,28 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
   styleUrls: ['./revoke-admin-token.component.scss']
 })
 
-export class RevokeAdminTokenComponent implements OnInit {
+export class RevokeAdminTokenComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   public generatedToken: string;
   public adminToken = '';
+  public project: ProjectEntity;
+  private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
+  constructor(private api: ApiService,
+              private projectService: ProjectService,
+              private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
 
   ngOnInit() {
-    do {
+    this.project = this.projectService.project;
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    }));
+
+    /* do {
       this.generatedToken = this.generate(6) + '.' + this.generate(16);
     } while (this.generatedToken === this.cluster.address.adminToken);
-    this.adminToken = this.generatedToken;
+    this.adminToken = this.generatedToken;*/
   }
 
   public generate(length: number): string {
@@ -40,10 +51,18 @@ export class RevokeAdminTokenComponent implements OnInit {
   }
 
   public revokeAdminToken() {
-    this.cluster.address.adminToken = this.adminToken;
-    this.api.editCluster(this.cluster, this.datacenter.metadata.name).subscribe(res => {
+    // this.cluster.address.adminToken = this.adminToken;
+    this.api.editCluster(this.cluster, this.datacenter.metadata.name, this.project.id).subscribe(res => {
       NotificationActions.success('Success', `Revoke Admin Token successfully`);
       this.dialogRef.close(res);
     });
+  }
+
+  ngOnDestroy() {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 }

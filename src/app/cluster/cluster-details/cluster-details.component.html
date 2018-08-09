@@ -23,15 +23,15 @@
   <mat-card class="white" [ngClass]="clusterHealthClass">
     <mat-card-header class="km-card-main-header">
       <mat-card-title>
-        <span ngxClipboard [cbContent]="cluster.spec.humanReadableName" matTooltip="click to copy" class="copy cluster-name">{{cluster.spec.humanReadableName}}</span>
+        <span ngxClipboard [cbContent]="cluster.name" matTooltip="click to copy" class="copy cluster-name">{{cluster.name}}</span>
         <kubermatic-cluster-health-status [cluster]="cluster"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-subtitle *ngIf="cluster.spec.pause" fxLayout >
+    <!-- <mat-card-subtitle *ngIf="cluster.spec.pause" fxLayout >
       <div fxFlex>
         <p class="pauseReason">{{cluster.spec.pauseReason}}</p>
       </div>
-    </mat-card-subtitle>
+    </mat-card-subtitle> -->
     <mat-card-content fxLayout class="row">
       <div fxFlex="20%">
         <strong>Master Version:</strong>

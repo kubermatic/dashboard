@@ -8,6 +8,7 @@ import { NodeProvider } from '../model/NodeProviderConstants';
 import { VSphereCloudSpec } from './cloud/VSphereCloudSpec';
 import { HetznerCloudSpec } from './cloud/HetznerCloudSpec';
 import { AzureCloudSpec } from './cloud/AzureCloudSpec';
+import { FakeCloudSpec } from './cloud/FakeCloudSpec';
 
 export function getClusterProvider(cluster: ClusterEntity): string {
   switch (true) {
@@ -40,9 +41,11 @@ export function getClusterProvider(cluster: ClusterEntity): string {
 }
 
 export class ClusterEntity {
-  metadata: MetadataEntity;
+  creationTimestamp?: string;
+  deletionTimestamp?: string;
+  id?: string;
+  name: string;
   spec: ClusterSpec;
-  address?: Address;
   status?: Status;
 }
 
@@ -122,22 +125,12 @@ export class CloudSpec {
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;
   azure?: AzureCloudSpec;
+  fake?: FakeCloudSpec;
 }
 
 export class ClusterSpec {
   cloud: CloudSpec;
-  humanReadableName?: string;
   version?: string;
-  pause: boolean;
-  pauseReason?: string;
-}
-
-export class Address {
-  url: string;
-  externalName: string;
-  externalPort: number;
-  kubeletToken: string;
-  adminToken: string;
 }
 
 export class Certificate {
@@ -146,26 +139,8 @@ export class Certificate {
 }
 
 export class Status {
-  lastTransitionTime: Date;
-  phase: string;
-  lastDeployedMasterVersion: string;
-  masterUpdatePhase: string;
-  rootCA: Certificate;
-  apiserverCert: Certificate;
-  kubeletCert: Certificate;
-  apiserverSshKey: SSHKeyPair;
-  serviceAccountKey: string;
-  namespaceName: string;
-  health: Health;
-}
-
-export class Health {
-  apiserver: boolean;
-  controller: boolean;
-  etcd: boolean;
-  machineController: boolean;
-  scheduler: boolean;
-  lastTransitionTime: string;
+  url: string;
+  version: string;
 }
 
 export class SSHKeyPair {

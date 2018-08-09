@@ -17,6 +17,7 @@ import { MatDialogRef } from '@angular/material';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation.component';
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { fakeProject } from '../../../testing/fake-data/project.fake';
 import { InitialNodeDataService } from '../../../core/services';
 
 const modules: any[] = [
@@ -67,12 +68,13 @@ describe('ClusterDeleteConfirmationComponent', () => {
   it('should able add button', () => {
     component.cluster = fakeDigitaloceanCluster;
     component.datacenter = fakeDigitaloceanDatacenter;
+    component.project = fakeProject;
 
     fixture.detectChanges();
 
     const input = fixture.debugElement.query(By.css('#name'));
     const inputElement = input.nativeElement;
-    inputElement.value = fakeDigitaloceanCluster.spec.humanReadableName;
+    inputElement.value = fakeDigitaloceanCluster.name;
     inputElement.dispatchEvent(new Event('blur'));
 
     expect(component.inputNameMatches()).toBeTruthy();
@@ -81,7 +83,8 @@ describe('ClusterDeleteConfirmationComponent', () => {
   it('should call deleteCluster method', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster;
     component.datacenter = fakeDigitaloceanDatacenter;
-    component.inputName = fakeDigitaloceanCluster.spec.humanReadableName;
+    component.inputName = fakeDigitaloceanCluster.name;
+    component.project = fakeProject;
 
     fixture.detectChanges();
     const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));

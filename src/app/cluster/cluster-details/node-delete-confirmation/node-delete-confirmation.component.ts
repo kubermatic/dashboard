@@ -31,7 +31,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   }
 
   public deleteNode(): void {
-    this.api.deleteClusterNode(this.cluster.metadata.name, this.node, this.datacenter.metadata.name).subscribe(result => {
+    this.api.deleteClusterNode(this.cluster.name, this.node, this.datacenter.metadata.name).subscribe(result => {
       NotificationActions.success('Success', `Node removed successfully`);
     });
     this.dialogRef.close(true);

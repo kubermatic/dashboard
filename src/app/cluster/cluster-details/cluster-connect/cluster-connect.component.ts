@@ -15,12 +15,12 @@ export class ClusterConnectComponent {
   constructor(private api: ApiService) {}
 
   public getDownloadURL(): string {
-    return this.api.getKubeconfigURL(this.datacenter.metadata.name, this.cluster.metadata.name);
+    return this.api.getKubeconfigURL(this.datacenter.metadata.name, this.cluster.name);
   }
 
   copy(type: string): string {
     if (type === 'exportKubeconfig') {
-      return 'export KUBECONFIG=$PWD/kubeconfig-' + this.cluster.metadata.name;
+      return 'export KUBECONFIG=$PWD/kubeconfig-' + this.cluster.name;
     } else if (type === 'kubectlProxy') {
       return 'kubectl proxy';
     }

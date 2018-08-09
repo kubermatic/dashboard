@@ -11,7 +11,8 @@ import { ClusterListComponent } from './cluster-list.component';
 import { ClusterItemComponent } from './cluster-item/cluster-item.component';
 import { Auth } from './../../core/services/auth/auth.service';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
-import { ApiService } from '../../core/services/api/api.service';
+import { ProjectMockService } from '../../testing/services/project-mock.service';
+import { ApiService, ProjectService } from '../../core/services';
 import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { fakeSeedDatacenters } from '../../testing/fake-data/datacenter.fake';
@@ -50,6 +51,7 @@ describe('ClusterListComponent', () => {
         { provide: ApiService, useValue: apiMock },
         { provide: DatacenterService, useValue: dcMock },
         { provide: Auth, useClass: AuthMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         ClusterService
       ],
     }).compileComponents();
