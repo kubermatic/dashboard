@@ -41,10 +41,10 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       tenant: new FormControl(this.cluster.spec.cloud.openstack.tenant, [Validators.required]),
       username: new FormControl(this.cluster.spec.cloud.openstack.username, [Validators.required]),
       password: new FormControl(this.cluster.spec.cloud.openstack.password, [Validators.required]),
-      floatingIpPool: new FormControl(this.cluster.spec.cloud.openstack.floatingIpPool, []),
-      securityGroups: new FormControl(this.cluster.spec.cloud.openstack.securityGroups, []),
-      network: new FormControl(this.cluster.spec.cloud.openstack.network, []),
-      subnetId: new FormControl(this.cluster.spec.cloud.openstack.subnetID, []),
+      floatingIpPool: new FormControl(this.cluster.spec.cloud.openstack.floatingIpPool),
+      securityGroups: new FormControl(this.cluster.spec.cloud.openstack.securityGroups),
+      network: new FormControl(this.cluster.spec.cloud.openstack.network),
+      subnetId: new FormControl(this.cluster.spec.cloud.openstack.subnetID),
     });
 
     this.loadOptionalSettings();
@@ -76,9 +76,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.push(this.openstackSettingsForm.controls.network.valueChanges.subscribe(data => {
-
       this.loadSubnetIds();
-       this.hideOptional = data.hideOptional;
     }));
   }
 
@@ -116,11 +114,11 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         this.floatingIpPool = this.network.filter(floatingIpPool => floatingIpPool.external === true);
 
         if (this.network.length > 0 && this.openstackSettingsForm.controls.network.value !== '0') {
-          this.openstackSettingsForm.controls.network.setValue(this.network);
+          this.openstackSettingsForm.controls.network.setValue(this.cluster.spec.cloud.openstack.network);
         }
 
         if (this.floatingIpPool.length > 0 && this.openstackSettingsForm.controls.floatingIpPool.value !== '0') {
-          this.openstackSettingsForm.controls.floatingIpPool.setValue(this.floatingIpPool);
+          this.openstackSettingsForm.controls.floatingIpPool.setValue(this.cluster.spec.cloud.openstack.floatingIpPool);
         }
 
       }));
@@ -134,7 +132,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         this.securityGroup = sortedSecurityGroups;
 
         if (sortedSecurityGroups.length > 0 && this.openstackSettingsForm.controls.securityGroups.value !== '0') {
-          this.openstackSettingsForm.controls.securityGroups.setValue(this.network);
+          this.openstackSettingsForm.controls.securityGroups.setValue(this.cluster.spec.cloud.openstack.network);
         }
 
         this.loadingOptionalSettings = false;
@@ -158,7 +156,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
         this.subnetIds = sortedSubnetIds;
         if (sortedSubnetIds.length > 0 && this.openstackSettingsForm.controls.subnetId.value !== '0') {
-          this.openstackSettingsForm.controls.subnetId.setValue(this.subnetIds);
+          this.openstackSettingsForm.controls.subnetId.setValue(this.cluster.spec.cloud.openstack.subnetID);
         }
 
         this.loadingSubnetIds = false;

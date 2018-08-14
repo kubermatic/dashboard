@@ -33,8 +33,8 @@
 
   <mat-form-field fxFlex *ngIf="!hideOptional">
     <mat-select placeholder="Floating IP pool:" formControlName="floatingIpPool">
-      <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
-      <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading security group...</mat-option>
+      <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="">Please enter your credentials first!</mat-option>
+      <mat-option *ngIf="loadingOptionalSettings" [value]="">Loading security group...</mat-option>
 
       <mat-option *ngIf="floatingIpPool.length">Select a security group </mat-option>
       <mat-option *ngFor="let item of floatingIpPool" [value]="item.name">
@@ -47,8 +47,8 @@
 
   <mat-form-field fxFlex *ngIf="!hideOptional">
     <mat-select placeholder="Security group:" formControlName="securityGroups">
-      <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
-      <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading security group...</mat-option>
+      <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="">Please enter your credentials first!</mat-option>
+      <mat-option *ngIf="loadingOptionalSettings" [value]="">Loading security group...</mat-option>
 
       <mat-option *ngIf="securityGroup.length">Select a security group </mat-option>
       <mat-option *ngFor="let item of securityGroup" [value]="item.name">
@@ -63,8 +63,8 @@
   <div fxFlex class="mat-select-container" *ngIf="!hideOptional">
     <mat-form-field>
       <mat-select placeholder="Network:" formControlName="network">
-        <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
-        <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading network...</mat-option>
+        <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="">Please enter your credentials first!</mat-option>
+        <mat-option *ngIf="loadingOptionalSettings" [value]="">Loading network...</mat-option>
 
         <mat-option *ngIf="network.length">Select a network </mat-option>
         <mat-option *ngFor="let item of network" [value]="item.name">
@@ -81,8 +81,8 @@
   <div fxFlex class="mat-select-container" *ngIf="!hideOptional">
     <mat-form-field>
       <mat-select placeholder="Subnet ID:" formControlName="subnetId">
-        <mat-option *ngIf="!loadingSubnetIds && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
-        <mat-option *ngIf="loadingSubnetIds" [value]="0">Loading subnet IDs...</mat-option>
+        <mat-option *ngIf="!loadingSubnetIds && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="">Please enter your credentials first!</mat-option>
+        <mat-option *ngIf="loadingSubnetIds" [value]="">Loading subnet IDs...</mat-option>
 
         <mat-option *ngIf="!loadingSubnetIds && this.subnetIds.length === 0" [value]="">no subnet IDs available</mat-option>
         <mat-option *ngFor="let subnet of subnetIds" [value]="subnet.name">
