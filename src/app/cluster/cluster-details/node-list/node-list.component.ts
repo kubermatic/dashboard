@@ -68,7 +68,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public deleteNodeDialog(node: NodeEntity): void {
-    this.clickedDeleteNode[node.metadata.name] = true;
+    this.clickedDeleteNode[node.id] = true;
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
@@ -81,7 +81,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public duplicateNodeDialog(node: NodeEntity): void {
-    this.clickedDuplicateNode[node.metadata.name] = true;
+    this.clickedDuplicateNode[node.id] = true;
     const dialogRef = this.dialog.open(NodeDuplicateComponent);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
@@ -89,7 +89,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     dialogRef.componentInstance.project = this.project;
 
     const sub = dialogRef.afterClosed().subscribe(result => {
-    this.clickedDuplicateNode[node.metadata.name] = false;
+    this.clickedDuplicateNode[node.id] = false;
       sub.unsubscribe();
     });
   }
@@ -101,15 +101,15 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
 
     const nodeHealthStatus = {};
 
-    if (!!node.status.errorMessage && !node.metadata.deletionTimestamp) {
+    if (!!node.status.errorMessage && !node.deletionTimestamp) {
       nodeHealthStatus['color'] = red;
       nodeHealthStatus['status'] = 'Failed';
       nodeHealthStatus['class'] = 'statusFailed';
-    } else if (!!node.status.nodeInfo.kubeletVersion && !node.status.errorMessage && !node.metadata.deletionTimestamp) {
+    } else if (!!node.status.nodeInfo.kubeletVersion && !node.status.errorMessage && !node.deletionTimestamp) {
       nodeHealthStatus['color'] = green;
       nodeHealthStatus['status'] = 'Running';
       nodeHealthStatus['class'] = 'statusRunning';
-    } else if (!!node.metadata.deletionTimestamp) {
+    } else if (!!node.deletionTimestamp) {
       nodeHealthStatus['color'] = orangeSpinner;
       nodeHealthStatus['status'] = 'Deleting';
       nodeHealthStatus['class'] = 'statusDeleting';
@@ -179,7 +179,7 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public showInfo(node: NodeEntity): boolean {
-    if (node.metadata.displayName !== node.metadata.name.replace('machine-', '') && node.metadata.name !== '') {
+    if (node.name !== node.id.replace('machine-', '') && node.id !== '') {
       return true;
     } else {
       return false;
@@ -187,17 +187,17 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   public getInfo(node: NodeEntity): string {
-    return node.metadata.name.replace('machine-', '');
+    return node.id.replace('machine-', '');
   }
 
-  public toggleNode(nodeName: string): void {
+  public toggleNode(nodeID: string): void {
     const element = event.target as HTMLElement;
     const className = element.className;
-    if (!this.clickedDeleteNode[nodeName] && !this.clickedDuplicateNode[nodeName] && className !== 'copy') {
-      if (this.isShowNodeDetails[nodeName]) {
-        this.isShowNodeDetails[nodeName] = false;
-      } else if (!this.isShowNodeDetails[nodeName]) {
-        this.isShowNodeDetails[nodeName] = true;
+    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'copy') {
+      if (this.isShowNodeDetails[nodeID]) {
+        this.isShowNodeDetails[nodeID] = false;
+      } else if (!this.isShowNodeDetails[nodeID]) {
+        this.isShowNodeDetails[nodeID] = true;
       }
     }
   }

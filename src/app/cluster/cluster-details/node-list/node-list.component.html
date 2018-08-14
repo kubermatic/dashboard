@@ -26,12 +26,12 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <!-- <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.metadata.name)" [ngClass]="getNodeHealthStatus(node,i).class">
+        <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.name)" [ngClass]="getNodeHealthStatus(node,i).class">
           <div fxLayout>
             <div fxFlex="3%">{{i + 1}}</div>
 
             <div fxFlex="36%" style="word-break: normal ;">
-              {{node.metadata.displayName}}
+              {{node.name}}
               <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
             </div>
             <div fxFlex="15%">
@@ -48,14 +48,14 @@
               </div>
             </div>
             <div fxFlex="16%">
-              <span *ngIf="!!node.metadata.creationTimestamp">{{node.metadata.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
+              <span *ngIf="!!node.creationTimestamp">{{node.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
             </div>
             <div fxFlex="5%" class="health-state">
                 <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
             </div>
 
             <div fxFlex="10%" class="km-btn-remove-node-wrapper">
-              <ng-container [ngSwitch]="!!node.metadata.deletionTimestamp">
+              <ng-container [ngSwitch]="!!node.deletionTimestamp">
                 <ng-container *ngSwitchCase="true">
                   <mat-spinner [diameter]="30" class="km-spinner" color="accent"></mat-spinner>
                 </ng-container>
@@ -76,7 +76,7 @@
             <p color="accent">{{node.status.errorMessage}}</p>
           </div>
 
-          <div class="node-details-wrapper" *ngIf="isShowNodeDetails[node.metadata.name]">
+          <div class="node-details-wrapper" *ngIf="isShowNodeDetails[node.id]">
             <div class="node-details-content">
               <div fxLayout>
                 <mat-card class="km-card-list" fxFlex="50%">
@@ -167,7 +167,7 @@
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </ng-container>
 
       <ng-container *ngSwitchCase="false">

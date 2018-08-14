@@ -57,7 +57,6 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     this.addNodeData = {
       node: {
-        metadata: {},
         spec: {
           cloud: {},
           operatingSystem: {},

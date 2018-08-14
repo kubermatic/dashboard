@@ -25,7 +25,6 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
   public project: ProjectEntity;
   public addNodeData: NodeData = {
     node: {
-      metadata: {},
       spec: {
         cloud: {},
         operatingSystem: {},

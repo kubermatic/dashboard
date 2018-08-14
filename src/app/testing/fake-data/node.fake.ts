@@ -3,7 +3,6 @@ import { NodeData } from '../../shared/model/NodeSpecChange';
 
 
 export const fakeDigitaloceanCreateNode: NodeEntity = {
-  metadata: {},
   spec: {
     cloud: {
       digitalocean: {
@@ -37,13 +36,10 @@ export const fakeDigitaloceanCreateNode: NodeEntity = {
 };
 
 export const nodeFake: NodeEntity = {
-  metadata: {
-    name: 'machine-kubermatic-tbbfvttvs-v5hmk',
-    displayName: 'kubermatic-tbbfvttvs-v5hmk',
-    deletionTimestamp: new Date(),
-    annotations: new Map(),
-    labels: new Map()
-  },
+  id: 'machine-kubermatic-tbbfvttvs-v5hmk',
+  name: 'kubermatic-tbbfvttvs-v5hmk',
+  deletionTimestamp: new Date(),
+  creationTimestamp: new Date(),
   spec: {
     cloud: {
       digitalocean: {
@@ -109,13 +105,10 @@ export const nodeFake: NodeEntity = {
 
 export const nodesFake: NodeEntity[] = [
   {
-    metadata: {
-      name: 'machine-kubermatic-tbbfvttvs-v5hmk',
-      displayName: 'kubermatic-tbbfvttvs-v5hmk',
-      deletionTimestamp: undefined,
-      annotations: new Map(),
-      labels: new Map()
-    },
+    id: 'machine-kubermatic-tbbfvttvs-v5hmk',
+    name: 'kubermatic-tbbfvttvs-v5hmk',
+    deletionTimestamp: undefined,
+    creationTimestamp: new Date(),
     spec: {
       cloud: {
         digitalocean: {
@@ -179,13 +172,10 @@ export const nodesFake: NodeEntity[] = [
     }
   },
   {
-    metadata: {
-      name: 'machine-kubermatic-tbbfvttvs-v5hmk',
-      displayName: 'kubermatic-tbbfvttvs-v5hmk',
-      deletionTimestamp: undefined,
-      annotations: new Map(),
-      labels: new Map()
-    },
+    id: 'machine-kubermatic-tbbfvttvs-v5hmk',
+    name: 'kubermatic-tbbfvttvs-v5hmk',
+    deletionTimestamp: undefined,
+    creationTimestamp: new Date(),
     spec: {
       cloud: {
         digitalocean: {
@@ -252,7 +242,6 @@ export const nodesFake: NodeEntity[] = [
 
 export const nodeDataFake: NodeData = {
   node: {
-    metadata: {},
     spec: {
       cloud: {
         digitalocean: {

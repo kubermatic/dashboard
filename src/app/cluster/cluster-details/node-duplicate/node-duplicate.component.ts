@@ -27,7 +27,6 @@ export class NodeDuplicateComponent implements OnInit {
 
   public duplicateNode(): void {
     const nodeSpec: NodeEntity = {
-      metadata: {},
       spec: {
         cloud: this.node.spec.cloud,
         operatingSystem: this.node.spec.operatingSystem,
