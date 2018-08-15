@@ -15,6 +15,7 @@ import {NotificationActions} from '../../redux/actions/notification.actions';
 export class  ProjectSshKeyItemComponent implements OnInit {
   @Input() index: number;
   @Input() sshKey: SSHKeyEntity;
+  @Input() projectId: string;
   @Input() isOdd: boolean;
 
   public isShowPublicKey = false;
@@ -38,7 +39,7 @@ export class  ProjectSshKeyItemComponent implements OnInit {
   }
 
   public deleteSshKey() {
-    this.apiService.deleteSSHKey(this.sshKey.id, '7d4r7tqmww').subscribe(() => {
+    this.apiService.deleteSSHKey(this.sshKey.id, this.projectId).subscribe(() => {
       NotificationActions.success('Success', `SSH key ${this.sshKey.name} deleted.`);
     });
   }
