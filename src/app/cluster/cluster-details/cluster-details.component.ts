@@ -1,6 +1,8 @@
+
 import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
+
 import { lt, gt } from 'semver';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -19,12 +21,15 @@ import { ClusterConnectComponent } from './cluster-connect/cluster-connect.compo
 import { ApiService, DatacenterService, InitialNodeDataService, HealthService, UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
+
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+
 import { HealthEntity } from '../../shared/entity/HealthEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
+
 import { UserGroupConfig } from '../../shared/model/Config';
 
 @Component({
@@ -42,12 +47,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public stateOfTheAccordion: object[];
   public isClusterRunning: boolean;
   public clusterHealthClass: string;
+
   public health: HealthEntity;
   public projectID: string;
   public userGroup: string;
   public userGroupConfig: UserGroupConfig;
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
+
   public updatesAvailable = false;
   public downgradesAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
@@ -60,6 +67,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
               private dcService: DatacenterService,
+
               private healthService: HealthService,
               private userService: UserService,
               private appConfigService: AppConfigService) {
@@ -71,6 +79,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
+
 
 
     this.userService.currentUserGroup(this.projectID).subscribe(group => {
@@ -101,10 +110,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           .subscribe(keys => {
             // TODO: get cluster sshkeys
             this.sshKeys = keys.filter(key => {
-              if (key.spec.clusters == null) {
+
+              /*if (key.spec.clusters == null) {
                 return false;
               }
-              return key.spec.clusters.indexOf(cluster.name) > -1;
+
+              return key.spec.clusters.indexOf(cluster.name) > -1;*/
 
             });
           });
@@ -116,6 +127,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.clusterSubject
       .takeUntil(this.unsubscribe)
       .subscribe(cluster => {
+
         this.healthService.getClusterHealth(cluster.id, seedDCName, this.projectID).subscribe(health => {
           this.health = health;
           this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
@@ -138,14 +150,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       });
 
 
+
     Observable.combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName, this.projectID))
       .takeUntil(this.unsubscribe)
+
       .retry(3)
       .subscribe(
         (data: any[]): void => {
           this.datacenter = data[0];
           this.cluster = data[1];
           this.clusterSubject.next(data[1]);
+
 
           const timer = Observable.interval(this.refreshInterval);
           timer.takeUntil(this.unsubscribe).subscribe(tick => {
@@ -156,6 +171,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           if (error.status === 404) {
             this.router.navigate(['404']);
           }
+
         });
   }
 
@@ -212,6 +228,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadClusterNodes() {
+
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .takeUntil(this.unsubscribe)
@@ -222,6 +239,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadVersions() {
+
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterUpgrades(this.projectID, this.datacenter.metadata.name, this.cluster.id)
         .takeUntil(this.unsubscribe)
@@ -240,6 +258,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               }
             }
           }
+
         });
       }
   }
@@ -261,9 +280,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this.dialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
+
     modal.componentInstance.projectID = this.projectID;
     const sub = modal.afterClosed().subscribe(deleted => {
       if (deleted) {
+
         this.router.navigate(['/clusters/' + this.projectID]);
       }
       sub.unsubscribe();
@@ -282,12 +303,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.possibleVersions = this.versionsList;
     const sub = modal.afterClosed().subscribe(() => {
+
       this.reloadCluster(this.cluster.name, this.datacenter.metadata.name, this.projectID);
       sub.unsubscribe();
     });
   }
 
   public getDownloadURL(): string {
+
     return this.api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
 
