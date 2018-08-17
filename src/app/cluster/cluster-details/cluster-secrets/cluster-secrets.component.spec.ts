@@ -4,7 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ClusterSecretsComponent } from './cluster-secrets.component';
-import { ClusterService } from '../../../core/services';
+import { HealthService } from '../../../core/services';
+import { HealthMockService } from '../../../testing/services/health-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -26,7 +27,7 @@ describe('ClusterSecretsComponent', () => {
         ClusterSecretsComponent
       ],
       providers: [
-        ClusterService
+        { provide: HealthService, useClass: HealthMockService },
       ],
     }).compileComponents();
   }));

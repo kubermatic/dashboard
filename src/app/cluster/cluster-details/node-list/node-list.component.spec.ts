@@ -7,8 +7,9 @@ import { MatDialog } from '@angular/material';
 import { nodesFake } from '../../../testing/fake-data/node.fake';
 import { NodeListComponent } from './node-list.component';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
-import { ClusterService, ProjectService } from '../../../core/services';
+import { HealthService, ProjectService } from '../../../core/services';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
+import { HealthMockService } from '../../../testing/services/health-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -31,8 +32,8 @@ describe('NodeComponent', () => {
       ],
       providers: [
         { provide: ProjectService, useClass: ProjectMockService },
-        MatDialog,
-        ClusterService
+        { provide: HealthService, useClass: HealthMockService },
+        MatDialog
       ],
     }).compileComponents();
   }));

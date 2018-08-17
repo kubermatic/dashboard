@@ -78,7 +78,7 @@ export class ApiService {
   }
 
   deleteClusterNode(cluster: string, node: NodeEntity, dc: string, projectID: string) {
-    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes/${node.name}`;
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes/${node.id}`;
     return this.http.delete(url, { headers: this.headers });
   }
 

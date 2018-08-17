@@ -1,13 +1,12 @@
-import { Component, EventEmitter, Input, Output, OnChanges, OnInit, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
-import { ClusterService, ProjectService } from '../../../core/services';
+import { HealthService } from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -15,16 +14,17 @@ import { ClusterService, ProjectService } from '../../../core/services';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
+export class NodeListComponent implements OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
+  @Input() project: ProjectEntity;
   @Output() deleteNode = new EventEmitter<NodeEntity>();
+  public clusterHealthStatus: string;
   public isClusterRunning: boolean;
   public clickedDeleteNode = {};
   public clickedDuplicateNode = {};
   public isShowNodeDetails = {};
-  public project: ProjectEntity;
   public config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -41,22 +41,16 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
       message: 'Jazzy jazz jazz'
     }
   };
-  private subscriptions: Subscription[] = [];
 
   constructor(public dialog: MatDialog,
-              private clusterService: ClusterService,
-              public projectService: ProjectService) {
-  }
-
-  ngOnInit() {
-    this.project = this.projectService.project;
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
-      this.project = project;
-    }));
+              private healthService: HealthService) {
   }
 
   ngOnChanges() {
-    this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
+      this.clusterHealthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+      this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
+    });
   }
 
   public managedByProvider(node: NodeEntity): boolean {
@@ -202,11 +196,4 @@ export class NodeListComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  ngOnDestroy() {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
-  }
 }

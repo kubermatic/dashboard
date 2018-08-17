@@ -3,14 +3,14 @@ import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from './../../testing/router-stubs';
-
 import { ClusterHealthStatusComponent } from './cluster-health-status.component';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
-import { ClusterService } from '../../core/services';
+import { fakeBringyourownSeedDatacenter } from '../../testing/fake-data/datacenter.fake';
+import { HealthService } from '../../core/services';
 import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
+import { HealthMockService } from '../../testing/services/health-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -34,7 +34,7 @@ describe('ClusterHealthStatusComponent', () => {
         ClusterHealthStatusComponent
       ],
       providers: [
-        ClusterService
+        { provide: HealthService, useClass: HealthMockService }
       ],
     }).compileComponents();
   });
@@ -42,11 +42,14 @@ describe('ClusterHealthStatusComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterHealthStatusComponent);
     component = fixture.componentInstance;
-
+    component.datacenter = fakeBringyourownSeedDatacenter;
     component.cluster = fakeDigitaloceanCluster;
+    fixture.detectChanges();
   });
 
   it('should create the cluster health status cmp', async(() => {
+    component.datacenter = fakeBringyourownSeedDatacenter;
+    fixture.detectChanges();
     expect(component).toBeTruthy();
   }));
 

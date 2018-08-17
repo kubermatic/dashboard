@@ -7,6 +7,7 @@ import { InitialNodeDataService } from './initial-node-data/initial-nodes-data.s
 import { ClusterService } from './cluster/cluster.service';
 import { WizardService } from './wizard/wizard.service';
 import { ProjectService } from './project/project.service';
+import { HealthService } from './health/health.service';
 
 export {
   InitialNodeDataService,
@@ -17,6 +18,7 @@ export {
   ApiService,
   ClusterService,
   WizardService,
-  ProjectService
+  ProjectService,
+  HealthService
 };
 

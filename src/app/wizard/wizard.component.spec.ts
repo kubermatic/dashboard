@@ -1,4 +1,4 @@
-import { ApiService, DatacenterService, InitialNodeDataService, ProjectService } from '../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService, ProjectService, HealthService } from '../core/services';
 import { WizardComponent } from './wizard.component';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SharedModule } from '..//shared/shared.module';
@@ -11,6 +11,7 @@ import { RouterStub } from './../testing/router-stubs';
 import { asyncData } from '../testing/services/api-mock.service';
 import { MatTabsModule, MatButtonToggleModule, MatDialog } from '@angular/material';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
+import { HealthMockService } from '../testing/services/health-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
 import { masterVersionsFake } from '../testing/fake-data/cluster-spec.fake';
 import { ProgressComponent } from './progress/progress.component';
@@ -101,6 +102,7 @@ describe('WizardComponent', () => {
         { provide: ApiService, useValue: apiMock },
         { provide: DatacenterService, useClass: DatacenterMockService },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: HealthService, useClass: HealthMockService },
         MatDialog,
         InitialNodeDataService,
         WizardService,

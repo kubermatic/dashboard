@@ -6,7 +6,6 @@ import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
-import { ClusterService } from '../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-list',
@@ -24,7 +23,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService,
               private dcService: DatacenterService,
-              private clusterService: ClusterService,
               private projectService: ProjectService) {
   }
 
@@ -73,8 +71,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     const prevCluster = find(this.clusters, item => {
       return item.name === cluster.name;
     });
-
-    return prevCluster && this.clusterService.isClusterRunning(prevCluster) === this.clusterService.isClusterRunning(cluster) ? index : undefined;
+    return prevCluster ? index : undefined;
   }
 
   sortData(sort: Sort) {

@@ -18,7 +18,7 @@ import { asyncData } from '../../testing/services/api-mock.service';
 import { fakeSeedDatacenters } from '../../testing/fake-data/datacenter.fake';
 import Spy = jasmine.Spy;
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
-import { ClusterService } from '../../core/services';
+import { HealthService } from '../../core/services';
 
 
 describe('ClusterListComponent', () => {
@@ -52,7 +52,7 @@ describe('ClusterListComponent', () => {
         { provide: DatacenterService, useValue: dcMock },
         { provide: Auth, useClass: AuthMockService },
         { provide: ProjectService, useClass: ProjectMockService },
-        ClusterService
+        HealthService
       ],
     }).compileComponents();
   }));

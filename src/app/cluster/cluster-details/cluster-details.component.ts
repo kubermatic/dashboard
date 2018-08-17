@@ -15,7 +15,8 @@ import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEn
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ApiService, DatacenterService, InitialNodeDataService, ClusterService, ProjectService } from '../../core/services';
+import { HealthEntity } from '../../shared/entity/HealthEntity';
+import { ApiService, DatacenterService, InitialNodeDataService, ProjectService, HealthService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import { Subject } from 'rxjs/Subject';
@@ -40,6 +41,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public stateOfTheAccordion: object[];
   public isClusterRunning: boolean;
   public clusterHealthClass: string;
+  public health: HealthEntity;
   public project: ProjectEntity;
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -54,7 +56,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
               private dcService: DatacenterService,
-              private clusterService: ClusterService,
+              private healthService: HealthService,
               private projectService: ProjectService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
@@ -68,6 +70,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
     }));
+
+    this.subscriptions.push(this.healthService.getClusterHealth(clusterName, seedDCName, this.project.id).subscribe(health => {
+      this.health = health;
+    }));
+
+    this.initialNodeCreation();
 
     // Node datacenter & ssh keys - both once
     const onceSub = this.clusterSubject
@@ -97,8 +105,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.clusterSubject
       .takeUntil(this.unsubscribe)
       .subscribe(cluster => {
-        this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
-        this.clusterHealthClass = this.clusterService.getClusterHealthStatus(this.cluster);
+        this.healthService.getClusterHealth(cluster.id, seedDCName, this.project.id).subscribe(health => {
+          this.health = health;
+          this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
+          this.clusterHealthClass = this.healthService.getClusterHealthStatus(this.cluster, health);
+        });
       });
 
     // Upgrades
@@ -111,57 +122,32 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.clusterSubject
       .takeUntil(this.unsubscribe)
       .subscribe(cluster => {
+        this.initialNodeCreation();
         this.reloadClusterNodes();
       });
 
-    // Initial node creation
-    const initialNodeCreationSub = this.clusterSubject
+
+    Observable.combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName, this.project.id))
       .takeUntil(this.unsubscribe)
-      .subscribe(cluster => {
-        const data = this.initialNodeDataService.getInitialNodeData(cluster);
-        if (data == null) {
-          if (initialNodeCreationSub) {
-            initialNodeCreationSub.unsubscribe();
-            return;
-          }
-        }
+      .retry(3)
+      .subscribe(
+        (data: any[]): void => {
+          this.datacenter = data[0];
+          this.cluster = data[1];
+          this.clusterSubject.next(data[1]);
 
-        if (cluster /*&& cluster.status && cluster.status.health && cluster.status.health.apiserver && cluster.status.health.machineController*/) {
-          const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
-          for (let i = 0; i < data.nodeCount; i++) {
-            createNodeObservables.push(this.api.createClusterNode(cluster, data.node, this.datacenter.metadata.name, this.project.id));
-          }
-          Observable.combineLatest(createNodeObservables)
+          const timer = Observable.interval(this.refreshInterval);
+          timer
             .takeUntil(this.unsubscribe)
-            .subscribe((createdNodes: NodeEntity[]): void => {
-              NotificationActions.success('Success', `Node(s) successfully created`);
-              this.reloadClusterNodes();
+            .subscribe(tick => {
+              this.reloadCluster(clusterName, seedDCName, this.project.id);
             });
-          this.initialNodeDataService.clearInitialNodeData(cluster);
-        }
-      });
-
-      Observable.combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName, this.project.id))
-        .takeUntil(this.unsubscribe)
-        .retry(3)
-        .subscribe(
-          (data: any[]): void => {
-            this.datacenter = data[0];
-            this.cluster = data[1];
-            this.clusterSubject.next(data[1]);
-
-            const timer = Observable.interval(this.refreshInterval);
-            timer
-              .takeUntil(this.unsubscribe)
-              .subscribe(tick => {
-                this.reloadCluster(clusterName, seedDCName, this.project.id);
-              });
-          },
-          error => {
-            if (error.status === 404) {
-              this.router.navigate(['404']);
-            }
-          });
+        },
+        error => {
+          if (error.status === 404) {
+            this.router.navigate(['404']);
+          }
+        });
   }
 
   public ngOnDestroy(): void {
@@ -185,8 +171,39 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
+  public initialNodeCreation() {
+    if (this.health && this.health.apiserver && this.health.controller && this.health.etcd && this.health.machineController && this.health.scheduler) {
+      // Initial node creation
+      const initialNodeCreationSub = this.clusterSubject
+        .takeUntil(this.unsubscribe)
+        .subscribe(cluster => {
+          const data = this.initialNodeDataService.getInitialNodeData(cluster);
+          if (data == null) {
+            if (initialNodeCreationSub) {
+              initialNodeCreationSub.unsubscribe();
+              return;
+            }
+          }
+
+          if (cluster && this.health && this.health.apiserver && this.health.machineController) {
+            const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
+            for (let i = 0; i < data.nodeCount; i++) {
+              createNodeObservables.push(this.api.createClusterNode(cluster, data.node, this.datacenter.metadata.name, this.project.id));
+            }
+            Observable.combineLatest(createNodeObservables)
+              .takeUntil(this.unsubscribe)
+              .subscribe((createdNodes: NodeEntity[]): void => {
+                NotificationActions.success('Success', `Node(s) successfully created`);
+                this.reloadClusterNodes();
+              });
+            this.initialNodeDataService.clearInitialNodeData(cluster);
+          }
+        });
+    }
+  }
+
   public reloadClusterNodes() {
-    if (this.cluster /*&& this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController*/) {
+    if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.project.id)
         .takeUntil(this.unsubscribe)
         .subscribe(nodes => {
@@ -196,8 +213,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadVersions() {
-    if (this.cluster /*&& this.cluster.status && this.cluster.status.health && this.cluster.status.health.apiserver && this.cluster.status.health.machineController*/) {
-      /*this.api.getClusterUpgrades(this.cluster.name, this.datacenter.metadata.name)
+    if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
+      this.api.getClusterUpgrades(this.cluster.name, this.datacenter.metadata.name)
         .takeUntil(this.unsubscribe)
         .subscribe(upgrades => {
           this.versionsList = [];
@@ -212,7 +229,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               }
             }
           }
-        });*/
+        });
       }
   }
 

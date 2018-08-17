@@ -1,7 +1,7 @@
 <div class="row" [ngClass]="getClusterItemClass()">
   <div fxLayout [routerLink]="['/clusters/', getDatacenter(), cluster.id]">
     <div fxFlex="40%" fxFlex.xs="40%">
-        <span class="health-state-container"><kubermatic-cluster-health-status [cluster]="cluster"></kubermatic-cluster-health-status></span>
+        <span class="health-state-container"><kubermatic-cluster-health-status [cluster]="cluster" [datacenter]="seedDC" [project]="project"></kubermatic-cluster-health-status></span>
         <p class="cluster-name" fxHide.gt-sm >{{getShortClusterName(cluster.name)}}</p>
         <p class="cluster-name" fxHide.lt-md >{{this.cluster.name}}</p>
     </div>

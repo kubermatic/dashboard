@@ -1,7 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, ObservableInput } from 'rxjs/Observable';
 import { WizardService } from '../core/services/wizard/wizard.service';
 import { ClusterDatacenterForm, ClusterFormData, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
 import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
 import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
@@ -9,7 +11,7 @@ import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { NodeData } from '../shared/model/NodeSpecChange';
 import { NodeProvider } from '../shared/model/NodeProviderConstants';
 import { Step, StepsService } from '../core/services/wizard/steps.service';
-import { ApiService, InitialNodeDataService, ProjectService } from '../core/services';
+import { ApiService, InitialNodeDataService, ProjectService, HealthService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
@@ -44,6 +46,7 @@ export class WizardComponent implements OnInit, OnDestroy {
               private router: Router,
               private route: ActivatedRoute,
               private projectService: ProjectService,
+              private healthService: HealthService,
               private api: ApiService) {
     this.cluster = {
       name: '',
@@ -238,13 +241,23 @@ export class WizardComponent implements OnInit, OnDestroy {
 
         this.router.navigate(['/clusters/' + datacenter.spec.seed + '/' + cluster.id]);
 
-        if (this.clusterProviderFormData.provider !== 'bringyourown') {
-          this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
-        }
+        const isHealthy = new Subject<boolean>();
+          const timer = Observable.interval(10000).takeUntil(isHealthy);
+          timer.subscribe(tick => {
+            return this.healthService.getClusterHealth(cluster.id, datacenter.spec.seed, this.project.id).subscribe(health => {
+              if (health.apiserver && health.controller && health.etcd && health.machineController && health.scheduler) {
+                isHealthy.next(true);
+                if (this.clusterProviderFormData.provider !== 'bringyourown') {
+                  this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
+                }
+              }
+            });
+          });
       },
       error => {
         NotificationActions.error('Error', `Could not create cluster`);
         this.creating = false;
       }));
   }
+
 }

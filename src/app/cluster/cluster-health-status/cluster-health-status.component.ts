@@ -1,6 +1,9 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { ClusterService } from '../../core/services';
+import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
+import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import { HealthEntity } from '../../shared/entity/HealthEntity';
+import { HealthService } from '../../core/services';
 import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 
 @Component({
@@ -10,21 +13,27 @@ import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 })
 export class ClusterHealthStatusComponent implements OnChanges {
   @Input() public cluster: ClusterEntity;
+  @Input() public datacenter: DataCenterEntity;
+  @Input() public project: ProjectEntity;
 
   public green = 'fa fa-circle green';
   public red = 'fa fa-circle red';
   public orange = 'fa fa-spin fa-circle-o-notch orange';
   public redAction = 'fa fa-exclamation-triangle red';
   public healthStatus: string;
+  public health: HealthEntity;
 
-  constructor( private clusterService: ClusterService) {}
+  constructor(private healthService: HealthService) {}
 
   ngOnChanges() {
-    this.healthStatus = this.clusterService.getClusterHealthStatus(this.cluster);
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
+      this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+      this.health = health;
+    });
   }
 
   public getHealthStatusColor(): string {
-    /* if (this.cluster.status.health) {
+    if (this.health) {
       if (this.healthStatus === ClusterHealth.RUNNING) {
         return this.green;
       } else if (this.healthStatus === ClusterHealth.DELETING) {
@@ -32,18 +41,19 @@ export class ClusterHealthStatusComponent implements OnChanges {
       } else {
         return this.orange;
       }
-    } else {*/
+    } else {
       return this.orange;
-    // }
+    }
   }
 
   public getHealthTooltipText(): string {
-    /* if (this.healthStatus === ClusterHealth.DELETING) {
+    if (this.healthStatus === ClusterHealth.DELETING) {
       return 'Deleting might take up to 15 minutes';
-    } else if (!!this.cluster.spec.pause) {
+    } /*else if (!!this.cluster.spec.pause) {
       return 'Manual action required';
-    } else {*/
+    } else {
       return '';
-    // }
+    }*/
+    return '';
   }
 }
