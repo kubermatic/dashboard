@@ -1,4 +1,4 @@
-<div *ngIf="!loading">
+<div *ngIf="!loadingProjects">
   <div fxLayout>
     <div fxFlex align="right">
       <button *ngIf="selectedTab === 'projects'" mat-raised-button color="primary" type="button" (click)="addProject()">
@@ -87,6 +87,6 @@
 
   </mat-tab-group>
 </div>
-<div *ngIf="loading" >
+<div *ngIf="loadingProjects" >
   <mat-spinner color="accent" class="km-spinner"></mat-spinner>
 </div>
