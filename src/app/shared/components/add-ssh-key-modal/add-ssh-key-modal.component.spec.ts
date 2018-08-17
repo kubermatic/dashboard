@@ -10,7 +10,9 @@ import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { ApiService } from '../../../core/services/index';
 import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ProjectMockService } from './../../../testing/services/project-mock.service';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import { ProjectService } from '../../../core/services';
 
 const modules: any[] = [
   BrowserModule,
@@ -42,6 +44,7 @@ describe('AddSshKeyModalComponent', () => {
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useClass: ApiMockService },
         { provide: Router, useClass: RouterStub },
+        { provide: ProjectService, useClass: ProjectMockService }
         GoogleAnalyticsService
       ],
     }).compileComponents();
