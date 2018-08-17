@@ -9,7 +9,7 @@ import { BreadcrumbsComponent } from './breadcrumbs.component';
 import { ApiService, ProjectService } from './../../services';
 import { Auth } from '../../services/index';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
-import { ProjectMockService } from '../../../testing/services/Project-mock.service';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
 
 const modules: any[] = [
   BrowserModule,
