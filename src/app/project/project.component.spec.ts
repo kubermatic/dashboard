@@ -1,5 +1,6 @@
 import { ApiService, ProjectService } from '../core/services';
 import { ApiMockService } from '../testing/services/api-mock.service';
+import { ProjectMockService } from '../testing/services/project-mock.service';
 import { ProjectComponent } from './project.component';
 import { ProjectItemComponent } from './project-item/project-item.component';
 import { Router } from '@angular/router';
@@ -36,7 +37,7 @@ describe('ProjectComponent', () => {
       providers: [
         { provide: Router, useClass: RouterStub },
         { provide: ApiService, useClass: ApiMockService },
-        ProjectService,
+        { provide: ProjectService, useClass: ProjectMockService},
         MatDialog,
       ],
     }).compileComponents();

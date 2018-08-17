@@ -12,6 +12,7 @@ import { asyncData } from '../testing/services/api-mock.service';
 import { MatTabsModule, MatButtonToggleModule, MatDialog } from '@angular/material';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import { HealthMockService } from '../testing/services/health-mock.service';
+import { ProjectMockService } from '../testing/services/project-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
 import { masterVersionsFake } from '../testing/fake-data/cluster-spec.fake';
 import { ProgressComponent } from './progress/progress.component';
@@ -103,13 +104,13 @@ describe('WizardComponent', () => {
         { provide: DatacenterService, useClass: DatacenterMockService },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: HealthService, useClass: HealthMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         MatDialog,
         InitialNodeDataService,
         WizardService,
         AddNodeService,
         StepsService,
-        ClusterNameGenerator,
-        ProjectService
+        ClusterNameGenerator
       ],
     }).compileComponents();
   }));

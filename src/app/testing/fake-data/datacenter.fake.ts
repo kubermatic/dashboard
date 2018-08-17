@@ -117,4 +117,6 @@ export const fakeNodeDatacenters: DataCenterEntity[] = [
   fakeDigitaloceanDatacenter,
   fakeAWSDatacenter,
   fakeOpenstackDatacenter,
+  fakeAzureDatacenter,
+  fakeBringyourownSeedDatacenter
 ];

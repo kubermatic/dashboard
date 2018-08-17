@@ -8,9 +8,12 @@ import { RouterTestingModule } from './../../testing/router-stubs';
 import { ClusterHealthStatusComponent } from './cluster-health-status.component';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import { fakeBringyourownSeedDatacenter } from '../../testing/fake-data/datacenter.fake';
-import { HealthService } from '../../core/services';
+import { fakeHealth } from '../../testing/fake-data/health.fake';
+import { fakeProject } from '../../testing/fake-data/project.fake';
+import { HealthService, ProjectService } from '../../core/services';
 import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 import { HealthMockService } from '../../testing/services/health-mock.service';
+import { ProjectMockService } from '../../testing/services/project-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -34,7 +37,8 @@ describe('ClusterHealthStatusComponent', () => {
         ClusterHealthStatusComponent
       ],
       providers: [
-        { provide: HealthService, useClass: HealthMockService }
+        { provide: HealthService, useClass: HealthMockService },
+        { provide: ProjectService, useClass: ProjectMockService }
       ],
     }).compileComponents();
   });
@@ -44,16 +48,15 @@ describe('ClusterHealthStatusComponent', () => {
     component = fixture.componentInstance;
     component.datacenter = fakeBringyourownSeedDatacenter;
     component.cluster = fakeDigitaloceanCluster;
-    fixture.detectChanges();
+    component.health = fakeHealth;
+    component.project = fakeProject;
   });
 
   it('should create the cluster health status cmp', async(() => {
-    component.datacenter = fakeBringyourownSeedDatacenter;
-    fixture.detectChanges();
     expect(component).toBeTruthy();
   }));
 
-  /*it('should set class to circle', () => {
+  it('should set class to circle', () => {
     component.healthStatus = ClusterHealth.RUNNING;
     fixture.detectChanges();
     const de = fixture.debugElement.query(By.css('.green'));
@@ -72,6 +75,6 @@ describe('ClusterHealthStatusComponent', () => {
     component.healthStatus = ClusterHealth.WAITING;
     expect(component.getHealthStatusColor()).toBe(component.orange, 'should be orange color');
 
-  });*/
+  });
 
 });

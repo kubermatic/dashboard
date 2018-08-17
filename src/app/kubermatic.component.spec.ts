@@ -18,7 +18,9 @@ import { KubermaticComponent } from './kubermatic.component';
 import { SidenavComponent } from './core/components/sidenav/sidenav.component';
 import { NavigationComponent } from './core/components/navigation/navigation.component';
 
+import { ApiMockService } from './testing/services/api-mock.service';
 import { AuthMockService } from './testing/services/auth-mock.service';
+import { ProjectMockService } from './testing/services/project-mock.service';
 import { DatacenterMockService } from './testing/services/datacenter-mock.service';
 
 const modules: any[] = [
@@ -57,8 +59,8 @@ describe('KubermaticComponent', () => {
       providers: [
         AUTH_PROVIDERS,
         { provide: Auth, useClass: AuthMockService },
-        ApiService,
-        ProjectService,
+        { provide: ApiService, useClass: ApiMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         { provide: DatacenterService, useClass: DatacenterMockService },
         AuthGuard,
         SidenavService,
