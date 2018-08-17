@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
@@ -11,7 +11,7 @@ import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
   templateUrl: './cluster-health-status.component.html',
   styleUrls: ['./cluster-health-status.component.scss']
 })
-export class ClusterHealthStatusComponent implements OnChanges {
+export class ClusterHealthStatusComponent implements OnInit {
   @Input() public cluster: ClusterEntity;
   @Input() public datacenter: DataCenterEntity;
   @Input() public project: ProjectEntity;
@@ -25,7 +25,7 @@ export class ClusterHealthStatusComponent implements OnChanges {
 
   constructor(private healthService: HealthService) {}
 
-  ngOnChanges() {
+  ngOnInit() {
     this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
       this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
       this.health = health;

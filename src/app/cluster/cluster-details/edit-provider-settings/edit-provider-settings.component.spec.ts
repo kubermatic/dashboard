@@ -14,6 +14,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { ApiService, ProjectService } from '../../../core/services';
 import { ClusterService } from '../../../core/services';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 
 const modules: any[] = [
@@ -43,8 +44,8 @@ describe('EditProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock },
-        ProjectService
+        { provide: ProjectService, useClass: ProjectMockService },
+        { provide: MatDialogRef, useClass: MatDialogRefMock }
       ],
     }).compileComponents();
   });

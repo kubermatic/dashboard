@@ -3,9 +3,9 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-
 import { AddProjectComponent } from './add-project.component';
 import { MatDialogRefMock } from '../testing/services/mat-dialog-ref-mock';
+import { ProjectMockService } from '../testing/services/project-mock.service';
 import { ApiService, ProjectService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
@@ -22,11 +22,11 @@ const modules: any[] = [
 describe('AddProjectComponent', () => {
   let fixture: ComponentFixture<AddProjectComponent>;
   let component: AddProjectComponent;
-  let editClusterSpy: Spy;
+  let createProjectSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['editCluster']);
-    editClusterSpy = apiMock.editCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    const apiMock = jasmine.createSpyObj('ApiService', ['createProject']);
+    createProjectSpy = apiMock.createProject.and.returnValue(asyncData(fakeDigitaloceanCluster));
 
     TestBed.configureTestingModule({
       imports: [
@@ -36,10 +36,9 @@ describe('AddProjectComponent', () => {
         AddProjectComponent
       ],
       providers: [
-        ProjectService,
-        { provide: MAT_DIALOG_DATA, useValue: { clusterName: 'clustername' } },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useValue: apiMock },
+        { provide: ProjectService, useClass: ProjectMockService },
       ],
     }).compileComponents();
   }));
@@ -49,7 +48,7 @@ describe('AddProjectComponent', () => {
     component = fixture.componentInstance;
   }));
 
-  it('should create the change cluster version component', async(() => {
+  it('should create the add project component', async(() => {
     expect(component).toBeTruthy();
   }));
 });

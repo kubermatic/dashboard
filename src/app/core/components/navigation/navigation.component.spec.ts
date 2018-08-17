@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
 import { RouterStub } from './../../../testing/router-stubs';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
-
+import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { NavigationComponent } from './navigation.component';
 import { ApiService } from './../../services/api/api.service';
 import { Auth } from '../../services/index';
@@ -38,9 +38,9 @@ describe('NavigationComponent', () => {
         NavigationComponent
       ],
       providers: [
-        ApiService,
         SidenavService,
         MatDialog,
+        { provide: ApiService, useClass: ApiMockService },
         { provide: Router, useClass: RouterStub },
         { provide: Auth, useClass: AuthMockService }
       ],

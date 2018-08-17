@@ -27,7 +27,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
       this.nodeDC = result;
-      this.dcService.getDataCenter(result.spec.seed).subscribe(seedRes => {
+      this.dcService.getDataCenter(this.nodeDC.spec.seed).subscribe(seedRes => {
         this.seedDC = seedRes;
       });
     });
