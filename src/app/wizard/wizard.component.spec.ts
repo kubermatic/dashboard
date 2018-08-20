@@ -45,6 +45,7 @@ import { HetznerAddNodeComponent } from '../add-node/hetzner-add-node/hetzner-ad
 import { VSphereAddNodeComponent } from '../add-node/vsphere-add-node/vsphere-add-node.component';
 import { VSphereOptionsComponent } from '../add-node/vsphere-add-node/vsphere-options/vsphere-options.component';
 import { AzureAddNodeComponent } from '../add-node/azure-add-node/azure-add-node.component';
+import { GoogleAnalyticsService } from '../google-analytics.service';
 
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
@@ -110,7 +111,8 @@ describe('WizardComponent', () => {
         WizardService,
         AddNodeService,
         StepsService,
-        ClusterNameGenerator
+        ClusterNameGenerator,
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   }));

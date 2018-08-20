@@ -16,6 +16,7 @@ import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import { NodeEntity, getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec } from '../shared/entity/NodeEntity';
+import { GoogleAnalyticsService } from '../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -47,7 +48,9 @@ export class WizardComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private projectService: ProjectService,
               private healthService: HealthService,
-              private api: ApiService) {
+              private api: ApiService,
+              public googleAnalyticsService: GoogleAnalyticsService) {
+
     this.cluster = {
       name: '',
       spec: {
@@ -76,6 +79,8 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
     }));
+
+    this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationWizardStarted');
 
     // When the cluster spec got changed, update the cluster
     this.subscriptions.push(this.wizardService.clusterSpecFormChanges$.subscribe(data => {
@@ -238,6 +243,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id).subscribe(cluster => {
         this.creating = false;
         NotificationActions.success('Success', `Cluster successfully created`);
+        this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
         this.router.navigate(['/clusters/' + datacenter.spec.seed + '/' + cluster.id]);
 
@@ -256,6 +262,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       },
       error => {
         NotificationActions.error('Error', `Could not create cluster`);
+        this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
         this.creating = false;
       }));
   }

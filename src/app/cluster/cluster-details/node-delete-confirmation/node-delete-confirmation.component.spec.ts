@@ -15,6 +15,7 @@ import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacente
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { fakeProject } from '../../../testing/fake-data/project.fake';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -40,6 +41,7 @@ describe('NodeDeleteConfirmationComponent', () => {
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useClass: ApiMockService },
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   });

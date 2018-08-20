@@ -6,6 +6,7 @@ import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-node-duplicate',
@@ -19,10 +20,13 @@ export class NodeDuplicateComponent implements OnInit {
   @Input() datacenter: DataCenterEntity;
   @Input() project: ProjectEntity;
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<NodeDuplicateComponent>) {
+  constructor(private api: ApiService,
+              private dialogRef: MatDialogRef<NodeDuplicateComponent>,
+              public googleAnalyticsService: GoogleAnalyticsService) {
   }
 
   ngOnInit() {
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'duplicateNodeDialogOpened');
   }
 
   public duplicateNode(): void {
@@ -41,6 +45,7 @@ export class NodeDuplicateComponent implements OnInit {
 
     this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name, this.project.id).subscribe(result => {
       NotificationActions.success('Success', `Duplicate node successfully`);
+      this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDuplicated');
     });
     this.dialogRef.close(true);
   }

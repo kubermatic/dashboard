@@ -73,13 +73,14 @@ export function getEmptyCloudProviderSpec(provider: string): object {
       return bmSpec;
     case NodeProvider.OPENSTACK:
       const osSpec: OpenstackCloudSpec = {
-        tenant: '',
-        domain: 'Default',
         username: '',
         password: '',
-        network: '',
-        securityGroups: '',
         floatingIpPool: '',
+        securityGroups: '',
+        network: '',
+        domain: 'Default',
+        tenant: '',
+        subnetID: '',
       };
       return osSpec;
     case NodeProvider.BRINGYOUROWN:

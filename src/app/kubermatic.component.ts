@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { DevToolsExtension, NgRedux } from '@angular-redux/store';
 import { INITIAL_STATE, Store, StoreReducer } from './redux/store';
@@ -9,6 +10,7 @@ import { SidenavService } from './core/components/sidenav/sidenav.service';
 import { Auth } from './core/services';
 import { AppConfigService } from './app-config.service';
 import { Config } from './shared/model/Config';
+import { GoogleAnalyticsService } from './google-analytics.service';
 
 @Component({
   selector: 'kubermatic-root',
@@ -23,18 +25,34 @@ export class KubermaticComponent implements OnInit {
                      public auth: Auth,
                      private ngRedux: NgRedux<Store>,
                      private devTools: DevToolsExtension,
-                     private appConfigService: AppConfigService) {
+                     private appConfigService: AppConfigService,
+                     public router: Router,
+                     public googleAnalyticsService: GoogleAnalyticsService
+  ) {
     let enhancers = [];
 
     if (devTools.isEnabled()) {
       enhancers = [...enhancers, devTools.enhancer()];
     }
     this.ngRedux.configureStore(StoreReducer, INITIAL_STATE, null, enhancers);
+
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        this.googleAnalyticsService.sendPageView(event.urlAfterRedirects);
+      }
+    });
   }
 
   public ngOnInit(): void {
     setTimeout(() => {
       this.config = this.appConfigService.getConfig();
+      if (this.config.google_analytics_code) {
+        this.googleAnalyticsService.activate(
+          this.config.google_analytics_code,
+          this.config.google_analytics_config,
+          this.router.url
+        );
+      }
     }, 3000);
     this.sidenavService
       .setSidenav(this.sidenav);

@@ -60,6 +60,7 @@ describe('OpenstackProviderSettingsComponent', () => {
       network: '',
       securityGroups: '',
       floatingIpPool: '',
+      subnetID: ''
     };
     fixture.detectChanges();
   });

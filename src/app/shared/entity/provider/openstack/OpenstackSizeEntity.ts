@@ -8,7 +8,30 @@ export interface OpenstackFlavor {
   vcpus: number;
 }
 
-export interface OpenstackTenant {
+export class OpenstackTenant {
   id: string;
   name: string;
 }
+
+export class OpenstackNetwork {
+  id: string;
+  name: string;
+  external: boolean;
+}
+
+export class OpenstackFloatingIpPool {
+  id: string;
+  name: string;
+  external: boolean;
+}
+
+export class OpenstackSubnet {
+  id: string;
+  name: string;
+}
+
+export class OpenstackSecurityGroup {
+  id: string;
+  name: string;
+}
+

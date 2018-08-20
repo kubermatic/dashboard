@@ -6,6 +6,7 @@ import { ApiService, ProjectService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { Subscription } from 'rxjs/Subscription';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-change-cluster-version',
@@ -22,7 +23,8 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
 
   constructor(private api: ApiService,
               private projectService: ProjectService,
-              private dialogRef: MatDialogRef<ChangeClusterVersionComponent>) {
+              private dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
+              public googleAnalyticsService: GoogleAnalyticsService) {
   }
 
   public ngOnInit() {
@@ -34,6 +36,8 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
     }));
+
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChangeDialogOpened');
   }
 
   changeVersion(): void {
@@ -42,6 +46,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
     this.api.editCluster(this.cluster, this.datacenter.metadata.name, this.project.id).subscribe(result => {
       this.dialogRef.close();
       NotificationActions.success('Success', `Cluster Version is being changed`);
+      this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
       this.selectedVersion = null;
     });
 

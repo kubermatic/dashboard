@@ -12,6 +12,7 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { AppConfigService } from './app-config.service';
 import { ProjectService } from './core/services/project/project.service';
+import { GoogleAnalyticsService } from './google-analytics.service';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
@@ -42,7 +43,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       multi: true,
       deps: [AppConfigService]
     },
-    ProjectService
+    ProjectService,
+    GoogleAnalyticsService
   ],
   entryComponents: [
     MobileNavigationComponent,

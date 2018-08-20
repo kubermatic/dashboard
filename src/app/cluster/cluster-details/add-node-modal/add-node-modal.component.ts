@@ -11,6 +11,7 @@ import { NotificationActions } from '../../../redux/actions/notification.actions
 import { getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec, NodeEntity } from '../../../shared/entity/NodeEntity';
 import { NodeData } from '../../../shared/model/NodeSpecChange';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-add-node-modal',
@@ -40,8 +41,8 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
               private addNodeService: AddNodeService,
               private wizardService: WizardService,
               private dcService: DatacenterService,
-              private projectService: ProjectService
-  ) {}
+              private projectService: ProjectService,
+              public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
@@ -61,6 +62,8 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.addNodeService.nodeDataChanges$.subscribe(async (data: NodeData) => {
       this.addNodeData = await data;
     }));
+
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
   }
 
   ngOnDestroy() {
@@ -79,6 +82,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     this.subscriptions.push(Observable.combineLatest(createNodeObservables)
       .subscribe((createdNodes: NodeEntity[]): void => {
         NotificationActions.success('Success', `Node(s) successfully created`);
+        this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
       }));
   }
 

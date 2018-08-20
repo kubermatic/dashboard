@@ -31,6 +31,7 @@ import { VSphereOptionsComponent } from '../../../add-node/vsphere-add-node/vsph
 import { AzureAddNodeComponent } from '../../../add-node/azure-add-node/azure-add-node.component';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { DatacenterMockService } from '../../../testing/services/datacenter-mock.service';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 describe('AddNodeModalComponent', () => {
   let fixture: ComponentFixture<AddNodeModalComponent>;
@@ -78,6 +79,7 @@ describe('AddNodeModalComponent', () => {
         { provide: ProjectService, useClass: ProjectMockService },
         AddNodeService,
         WizardService,
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   }));

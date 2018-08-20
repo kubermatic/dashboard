@@ -6,6 +6,7 @@ import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
@@ -26,15 +27,19 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   public btnOkText?: string;
   public btnCancelText?: string;
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>) {
+  constructor(private api: ApiService,
+              private dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>,
+              public googleAnalyticsService: GoogleAnalyticsService) {
   }
 
   ngOnInit() {
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
   }
 
   public deleteNode(): void {
     this.api.deleteClusterNode(this.cluster.id, this.node, this.datacenter.metadata.name, this.project.id).subscribe(result => {
       NotificationActions.success('Success', `Node removed successfully`);
+      this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
     });
     this.dialogRef.close(true);
   }

@@ -6,6 +6,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProgressComponent } from './progress.component';
 import { StepsService } from '../../core/services/wizard/steps.service';
+import { GoogleAnalyticsService } from '../../google-analytics.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -27,7 +28,8 @@ describe('ProgressComponent', () => {
         ProgressComponent
       ],
       providers: [
-        StepsService
+        StepsService,
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   }));
