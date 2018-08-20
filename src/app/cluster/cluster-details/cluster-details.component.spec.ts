@@ -131,14 +131,12 @@ describe('ClusterDetailsComponent', () => {
     discardPeriodicTasks();
   }));
 
-
-  /* it('should get sshkeys', fakeAsync(() => {
-    const sshkeys = fakeSSHKeys().filter(key => {
-
-      //if (key.spec.clusters == null) {
-        //return false;
-      //}
-      //return key.spec.clusters.indexOf('4k6txp5sq') > -1;
+  it('should get sshkeys', fakeAsync(() => {
+    const sshkeys = fakeSSHKeys.filter(key => {
+      /*if (key.spec.clusters == null) {
+        return false;
+      }
+      return key.spec.clusters.indexOf('4k6txp5sq') > -1;*/
     });
     fixture.detectChanges();
     tick();
@@ -148,9 +146,7 @@ describe('ClusterDetailsComponent', () => {
 
     expect(component.sshKeys).toEqual(sshkeys, 'should get sshkeys by api');
     discardPeriodicTasks();
-
-  }));*/
-
+  }));
   it('should get nodes', fakeAsync(() => {
     fixture.detectChanges();
     tick();

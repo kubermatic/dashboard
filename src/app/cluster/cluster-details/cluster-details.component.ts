@@ -110,7 +110,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           .subscribe(keys => {
             // TODO: get cluster sshkeys
             this.sshKeys = keys.filter(key => {
-
+              /*if (key.spec.clusters == null) {
               /*if (key.spec.clusters == null) {
                 return false;
               }
