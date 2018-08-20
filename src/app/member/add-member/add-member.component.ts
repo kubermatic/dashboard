@@ -7,7 +7,7 @@ import { CreateMemberEntity, MemberProject } from '../../shared/entity/MemberEnt
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 
 @Component({
-  selector: 'kubermatic-add-Member',
+  selector: 'kubermatic-add-member',
   templateUrl: './add-Member.component.html',
   styleUrls: ['./add-Member.component.scss']
 })
@@ -29,7 +29,7 @@ export class AddMemberComponent implements OnInit {
   }
 
   addMember(): void {
-    const createMember: CreateMemberEntity = { 
+    const createMember: CreateMemberEntity = {
       name: this.addMemberForm.controls.name.value,
       email: this.addMemberForm.controls.email.value,
       projects: [

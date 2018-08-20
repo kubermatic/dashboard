@@ -1,5 +1,6 @@
-import { ApiService } from '../core/services';
+import { ApiService, ProjectService } from '../core/services';
 import { ApiMockService } from '../testing/services/api-mock.service';
+import { ProjectMockService } from '../testing/services/project-mock.service';
 import { MemberComponent } from './member.component';
 import { Router } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
@@ -34,6 +35,7 @@ describe('MemberComponent', () => {
       providers: [
         { provide: Router, useClass: RouterStub },
         { provide: ApiService, useClass: ApiMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         MatDialog,
       ],
     }).compileComponents();

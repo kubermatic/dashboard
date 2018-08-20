@@ -88,8 +88,6 @@ export class MemberComponent implements OnInit, OnDestroy {
           return this.compare(a.name, b.name, isAsc);
         case 'email':
           return this.compare(a.email, b.email, isAsc);
-        case 'role':
-          return this.compare(a.role, b.role, isAsc);
         default:
           return 0;
       }

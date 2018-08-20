@@ -3,6 +3,7 @@ import { ApiMockService } from '../testing/services/api-mock.service';
 import { ProjectMockService } from '../testing/services/project-mock.service';
 import { ProjectComponent } from './project.component';
 import { ProjectItemComponent } from './project-item/project-item.component';
+import { MemberComponent } from '../member/member.component';
 import { Router } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -13,7 +14,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterStub } from './../testing/router-stubs';
 import { asyncData } from '../testing/services/api-mock.service';
 import { MatTabsModule, MatDialog } from '@angular/material';
-
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
@@ -33,6 +33,7 @@ describe('ProjectComponent', () => {
       declarations: [
         ProjectComponent,
         ProjectItemComponent,
+        MemberComponent
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
