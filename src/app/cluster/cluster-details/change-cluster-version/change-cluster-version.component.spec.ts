@@ -12,6 +12,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import Spy = jasmine.Spy;
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -40,6 +41,7 @@ describe('ChangeClusterVersionComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: { clusterName: 'clustername' } },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useValue: apiMock },
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   }));
