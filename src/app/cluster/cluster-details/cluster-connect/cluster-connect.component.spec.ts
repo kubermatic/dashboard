@@ -54,7 +54,7 @@ describe('ClusterConnectComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create kubeconfig download url', () => {
+  it('hould create the cluster connect component', () => {
     expect(component).toBeTruthy();
   });
 });
