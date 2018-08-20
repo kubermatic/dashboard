@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Auth } from '../../core/services';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
@@ -17,6 +17,14 @@ export class FrontpageComponent implements OnInit {
   public isAuth = false;
 
   constructor(private auth: Auth, private router: Router) {
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    // keyCode = 13 is enter
+    if (event.keyCode === 13) {
+      this.goToLogin();
+    }
   }
 
   ngOnInit(): void {
@@ -49,5 +57,9 @@ export class FrontpageComponent implements OnInit {
         },
       }
     };
+  }
+
+  public goToLogin(): void {
+    document.getElementById('login-button').click();
   }
 }
