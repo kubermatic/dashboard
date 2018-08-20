@@ -1,10 +1,10 @@
 import { nodesFake } from './../fake-data/node.fake';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { fakeSSHKeys } from './../fake-data/sshkey.fake';
-import { fakeClusters, fakeDigitaloceanCluster } from './../fake-data/cluster.fake';
+import { fakeClusters, fakeDigitaloceanCluster, fakeToken } from './../fake-data/cluster.fake';
 import { fakeProject, fakeProjects } from './../fake-data/project.fake';
 import { masterVersionsFake } from './../fake-data/cluster-spec.fake';
-import { ClusterEntity, MasterVersion } from './../../shared/entity/ClusterEntity';
+import { ClusterEntity, MasterVersion, Token } from './../../shared/entity/ClusterEntity';
 import { ProjectEntity } from './../../shared/entity/ProjectEntity';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -21,6 +21,7 @@ export class ApiMockService {
   public sshKeys: SSHKeyEntity[] = fakeSSHKeys;
   public nodes: NodeEntity[] = nodesFake;
   public masterVersions: MasterVersion[] = masterVersionsFake;
+  public token: Token = fakeToken;
 
   constructor() {
   }
@@ -83,6 +84,14 @@ export class ApiMockService {
 
   public addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
     return Observable.of(null);
+  }
+
+  public getToken(cluster: ClusterEntity, dc: string, projectID: string): Observable<Token> {
+    return Observable.of(this.token);
+  }
+
+  public editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+    return Observable.of(this.token);
   }
 
   getMasterVersions(): Observable<MasterVersion[]> {

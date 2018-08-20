@@ -152,3 +152,7 @@ export class MasterVersion {
   allowedNodeVersions: string[];
   default?: boolean;
 }
+
+export class Token {
+  token: string;
+}

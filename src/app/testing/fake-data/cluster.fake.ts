@@ -1,5 +1,5 @@
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { ClusterEntity, Token } from '../../shared/entity/ClusterEntity';
 
 export const clusterModelFake: CreateClusterModel = {
   name: 'nifty-haibt',
@@ -208,3 +208,6 @@ export const fakeAzureCluster: ClusterEntity = {
 
 export const fakeClusters: ClusterEntity[] = [fakeDigitaloceanCluster, fakeAWSCluster, fakeOpenstackCluster, fakeHetznerCluster, fakeAzureCluster];
 
+export const fakeToken: Token = {
+  token: 'gsh9lr.mcpkns22j6s5sfk8'
+};

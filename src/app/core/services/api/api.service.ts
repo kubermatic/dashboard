@@ -5,7 +5,7 @@ import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/catch';
 import { Auth } from '../../../core/services/auth/auth.service';
-import { ClusterEntity, MasterVersion } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
@@ -109,6 +109,16 @@ export class ApiService {
       .catch(error => {
         return Observable.of<MasterVersion[]>([]);
       });
+  }
+
+  getToken(cluster: ClusterEntity, dc: string, projectID: string): Observable<Token> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
+    return this.http.get<Token>(url, { headers: this.headers });
+  }
+
+  editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
+    return this.http.put<Token>(url, token, { headers: this.headers });
   }
 
   getOpenStackFlavors(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackFlavor[]> {

@@ -5,9 +5,8 @@ import { RevokeAdminTokenComponent } from './revoke-admin-token.component';
 import { MatDialogRef } from '@angular/material';
 import { MatDialogRefMock } from '../../../../testing/services/mat-dialog-ref-mock';
 import { SharedModule } from '../../../../shared/shared.module';
-import { ApiService, ProjectService } from '../../../../core/services';
+import { ApiService } from '../../../../core/services';
 import { ApiMockService } from '../../../../testing/services/api-mock.service';
-import { ProjectMockService } from '../../../../testing/services/project-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -29,7 +28,6 @@ describe('RevokeAdminTokenComponent', () => {
       ],
       providers: [
         { provide: ApiService, useClass: ApiMockService },
-        { provide: ProjectService, useClass: ProjectMockService },
         { provide: MatDialogRef, useClass: MatDialogRefMock }
       ],
     }).compileComponents();
