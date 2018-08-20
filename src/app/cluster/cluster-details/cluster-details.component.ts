@@ -214,7 +214,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public reloadVersions() {
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
-      this.api.getClusterUpgrades(this.cluster.name, this.datacenter.metadata.name)
+      this.api.getClusterUpgrades(this.project.id, this.datacenter.metadata.name, this.cluster.id)
         .takeUntil(this.unsubscribe)
         .subscribe(upgrades => {
           this.versionsList = [];
