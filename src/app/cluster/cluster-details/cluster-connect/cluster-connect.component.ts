@@ -18,7 +18,6 @@ export class ClusterConnectComponent {
   constructor(private api: ApiService) {}
 
   public getDownloadURL(): string {
-    //     return this.api.getKubeconfigURL(this.project.id, this.datacenter.metadata.name, this.cluster.id);
     return this.api.getKubeconfigURL(this.project.id, this.datacenter.metadata.name, this.cluster.id);
   }
 
