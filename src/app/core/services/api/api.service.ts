@@ -171,8 +171,8 @@ export class ApiService {
     return this.http.get<OpenstackSubnet[]>(url, { headers: this.headers });
   }
 
-  getKubeconfigURL(dc: string, cluster: string): string {
-    return `${environment.restRootV3}/dc/${dc}/cluster/${cluster}/kubeconfig?token=${this.token}`;
+  getKubeconfigURL(projectID: string, dc: string, clusterID: string): string {
+    return `${environment.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/kubeconfig?token=${this.token}`;
   }
 
   getMasterVersions(): Observable<MasterVersion[]> {
