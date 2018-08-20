@@ -7,6 +7,7 @@ import { KubermaticComponent } from './kubermatic.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MobileNavigationComponent } from './overlays';
 import { AddProjectComponent } from './add-project/add-project.component';
+import { AddMemberComponent } from './member/add-member/add-member.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
@@ -48,7 +49,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
   ],
   entryComponents: [
     MobileNavigationComponent,
-    AddProjectComponent
+    AddProjectComponent,
+    AddMemberComponent
   ],
   bootstrap: [KubermaticComponent]
 })

@@ -3,14 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './../core/services/auth/auth.guard';
 
-import { ProjectComponent } from '../project/project.component';
+import { MemberComponent } from '../member/member.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: ProjectComponent,
+    component: MemberComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Manage Projects' }
+    data: { title: 'Manage Members' }
   }
 ];
 
@@ -18,5 +18,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ProjectRoutingModule {
+export class MemberRoutingModule {
 }

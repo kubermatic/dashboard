@@ -11,6 +11,7 @@ import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
+import { MemberEntity, CreateMemberEntity } from '../../../shared/entity/MemberEntity';
 import {
   OpenstackFlavor, OpenstackNetwork, OpenstackSubnet,
   OpenstackTenant, OpenstackSecurityGroup
@@ -188,5 +189,15 @@ export class ApiService {
     this.headers = this.headers.set('Location', location);
     const url = `${this.restRoot}/azure/sizes`;
     return this.http.get<AzureSizes>(url, { headers: this.headers });
+  }
+
+  getMembers(projectID: string): Observable<MemberEntity[]> {
+    const url = `${this.restRoot}/projects/${projectID}/users`;
+    return this.http.get<MemberEntity[]>(url, { headers: this.headers });
+  }
+
+  createMembers(projectID: string, member: CreateMemberEntity): Observable<MemberEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/users`;
+    return this.http.post<MemberEntity>(url, member, { headers: this.headers });
   }
 }

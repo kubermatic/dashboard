@@ -5,11 +5,13 @@ import { MatTabsModule } from '@angular/material';
 import { ProjectRoutingModule } from './project-routing.module';
 import { ProjectItemComponent } from './project-item/project-item.component';
 import { ProjectDeleteConfirmationComponent } from './project-delete-confirmation/project-delete-confirmation.component';
+import { MemberComponent } from '../member/member.component';
 
 const components: any[] = [
   ProjectComponent,
   ProjectItemComponent,
-  ProjectDeleteConfirmationComponent
+  ProjectDeleteConfirmationComponent,
+  MemberComponent
 ];
 
 @NgModule({

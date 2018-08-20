@@ -1,0 +1,38 @@
+<div *ngIf="!loading">
+
+      <mat-card class="blue km-member-view">
+        <mat-card-header>
+          <mat-card-title fxLayout matSort (matSortChange)="sortData($event)" matSortActive="name" matSortDirection="asc">
+            <div fxFlex="35%" fxFlex.xs="40%" mat-sort-header="name">
+              <strong>Name</strong>
+            </div>
+            <div fxFlex="35%" fxFlex.sm="20.66%" fxFlex.xs="25%" mat-sort-header="email">
+              <strong>Email</strong>
+            </div>
+            <div fxFlex="20%" fxFlex.sm="20.66%" fxFlex.xs="25%" mat-sort-header="group">
+              <strong>Group</strong>
+            </div>
+            <div fxFlex="10%" fxHide.sm fxHide.xs>
+              <strong></strong>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content fxLayout="column" [ngSwitch]="!!members && members.length > 0 ">
+          <ng-container *ngSwitchCase="true">
+            <!-- <kubermatic-project-item *ngFor="let project of sortedProjects; let i = index; trackBy: trackProject" [index]="i" [project]="project" fxFlex></kubermatic-project-item> -->
+          </ng-container>
+          <ng-container *ngSwitchCase="false">
+            <div fxFlex class="row odd no-item">No Member available. Please add a Member.</div>
+          </ng-container>
+          <ng-container>
+            <div class="row add-member-button">
+              <strong (click)="addMember()">+ Add Member</strong>
+            </div>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+
+</div>
+<div *ngIf="loading" >
+  <mat-spinner color="accent" class="km-spinner"></mat-spinner>
+</div>

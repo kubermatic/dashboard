@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Sort, MatDialog } from '@angular/material';
+import { Sort, MatDialog, MatTabChangeEvent } from '@angular/material';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { find } from 'lodash';
@@ -21,6 +21,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public loading = true;
   public sortedProjects: ProjectEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
+  public selectedTab = 'projects';
   private subscriptions: Subscription[] = [];
 
   constructor(private router: Router,
@@ -93,5 +94,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   compare(a, b, isAsc) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  public changeView(event: MatTabChangeEvent) {
+    switch (event.tab.textLabel) {
+      case 'Projects':
+        return this.selectedTab = 'projects';
+      case 'Members':
+        return this.selectedTab = 'members';
+      case 'SSHkeys':
+        return this.selectedTab = 'sshkeys';
+      default:
+        return this.selectedTab = 'projects';
+    }
   }
 }
