@@ -15,6 +15,7 @@ import { ApiService } from '../../../core/services/api/api.service';
 import { ClusterService } from '../../../core/services';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -43,7 +44,8 @@ describe('EditProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   });

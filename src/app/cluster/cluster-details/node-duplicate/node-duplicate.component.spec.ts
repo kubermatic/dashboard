@@ -14,6 +14,7 @@ import { nodeFake } from '../../../testing/fake-data/node.fake';
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { NodeDuplicateComponent } from './node-duplicate.component';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -39,6 +40,7 @@ describe('NodeDuplicateComponent', () => {
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useClass: ApiMockService },
+        GoogleAnalyticsService
       ],
     }).compileComponents();
   });
