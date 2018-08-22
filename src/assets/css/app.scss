@@ -795,3 +795,18 @@ button.close {
     background-image: url("/assets/images/icons/black/project-black.png");
   }
 }
+
+.iconMember {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size:contain;
+  cursor: pointer;
+  &.white {
+    background-image: url("/assets/images/icons/white/member-white.png");
+  }
+  &.black {
+    background-image: url("/assets/images/icons/black/member-black.png");
+  }
+}
