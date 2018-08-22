@@ -1,16 +1,18 @@
-import { nodesFake } from './../fake-data/node.fake';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { defer } from 'rxjs/observable/defer';
+import { ClusterEntity, MasterVersion, Token } from './../../shared/entity/ClusterEntity';
+import { ProjectEntity } from './../../shared/entity/ProjectEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { MemberEntity } from '../../shared/entity/MemberEntity';
+import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
+import { nodesFake } from './../fake-data/node.fake';
 import { fakeSSHKeys } from './../fake-data/sshkey.fake';
 import { fakeClusters, fakeDigitaloceanCluster, fakeToken } from './../fake-data/cluster.fake';
 import { fakeProject, fakeProjects } from './../fake-data/project.fake';
+import { fakeMember } from './../fake-data/member.fake';
 import { masterVersionsFake } from './../fake-data/cluster-spec.fake';
-import { ClusterEntity, MasterVersion, Token } from './../../shared/entity/ClusterEntity';
-import { ProjectEntity } from './../../shared/entity/ProjectEntity';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
-import { defer } from 'rxjs/observable/defer';
 
 @Injectable()
 export class ApiMockService {
@@ -22,8 +24,13 @@ export class ApiMockService {
   public nodes: NodeEntity[] = nodesFake;
   public masterVersions: MasterVersion[] = masterVersionsFake;
   public token: Token = fakeToken;
+  public member: MemberEntity = fakeMember;
 
   constructor() {
+  }
+
+  public getUser(): Observable<MemberEntity> {
+    return Observable.of(this.member);
   }
 
   public getProjects(): Observable<ProjectEntity[]> {
