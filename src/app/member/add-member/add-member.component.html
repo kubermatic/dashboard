@@ -10,13 +10,6 @@
       <form [formGroup]="addMemberForm" fxLayout="column">
 
         <mat-form-field fxFlex>
-          <input matInput formControlName="name" type="text" placeholder="Member Name*:" autocomplete="off">
-          <mat-error *ngIf="addMemberForm.controls.name.hasError('required')">
-            Name is <strong>required</strong>
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field fxFlex>
           <input matInput formControlName="email" type="email" placeholder="Email*:" autocomplete="off">
           <mat-error *ngIf="addMemberForm.controls.email.hasError('required')">
             Email is <strong>required</strong>

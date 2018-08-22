@@ -7,8 +7,8 @@
 <mat-dialog-content>
   <div class="mat-dialog-content">
     <a class="download-kubeconfig-btn" mat-raised-button color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
-    <p>Configure kubectl command line by running the following command in Directory where the kubeconfig-{{cluster.name}} is located:</p>
-    <p class="code-block copy" ngxClipboard [cbContent]="copy('exportKubeconfig')" matTooltip="click to copy">$ export KUBECONFIG=$PWD/kubeconfig-{{cluster.name}}</p>
+    <p>Configure kubectl command line by running the following command in Directory where the kubeconfig-{{cluster.id}} is located:</p>
+    <p class="code-block copy" ngxClipboard [cbContent]="copy('exportKubeconfig')" matTooltip="click to copy">$ export KUBECONFIG=$PWD/kubeconfig-{{cluster.id}}</p>
     <p>Then start a proxy to connect to the Kubernetes control plane:</p>
     <p class="code-block copy" ngxClipboard [cbContent]="copy('kubectlProxy')" matTooltip="click to copy">$ kubectl proxy</p>
     <p>Then open the Dashboard interface by navigating to the following location in your browser:</p>

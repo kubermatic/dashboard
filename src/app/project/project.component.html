@@ -4,12 +4,15 @@
       <button *ngIf="selectedTab === 'projects'" mat-raised-button color="primary" type="button" (click)="addProject()">
         <span class="btn-text-default">+ Add Project</span>
       </button>
-      <button *ngIf="selectedTab === 'members'" mat-raised-button color="primary" type="button" (click)="addMember()">
+      <button *ngIf="selectedTab === 'projects'" mat-raised-button color="primary" type="button" (click)="addMember()" [disabled]="!currentProject">
+        <span class="btn-text-default">+ Add Member</span>
+      </button>
+      <!-- <button *ngIf="selectedTab === 'members'" mat-raised-button color="primary" type="button" (click)="addMember()">
         <span class="btn-text-default">+ Add Member</span>
       </button>
       <button *ngIf="selectedTab === 'sshkeys'" mat-raised-button color="primary" type="button" (click)="addSSHkey()">
         <span class="btn-text-default">+ Add SSH key</span>
-      </button>
+      </button> -->
     </div>
   </div>
   <mat-tab-group class="km-project-toggle" [@.disabled]="true" (selectedTabChange)="changeView($event)">
@@ -44,11 +47,12 @@
       </mat-card>
     </mat-tab>
 
-    <mat-tab label="Members">
+    <!-- needs another endpoint that have to be implemented in backend first -->
+    <!-- <mat-tab label="Members" [disabled]="!currentProject">
       <kubermatic-member></kubermatic-member>
-    </mat-tab>
+    </mat-tab> -->
 
-    <mat-tab label="SSHkeys"></mat-tab>
+    <mat-tab label="SSHkeys" [disabled]="!currentProject"></mat-tab>
     
   </mat-tab-group>
 </div>

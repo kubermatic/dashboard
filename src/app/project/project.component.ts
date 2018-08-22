@@ -4,11 +4,12 @@ import { Observable, ObservableInput } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { find } from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
-import { ApiService } from '../core/services';
+import { ApiService, ProjectService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../add-project/add-project.component';
+import { AddMemberComponent } from '../member/add-member/add-member.component';
 
 @Component({
   selector: 'kubermatic-project',
@@ -18,6 +19,7 @@ import { AddProjectComponent } from '../add-project/add-project.component';
 
 export class ProjectComponent implements OnInit, OnDestroy {
   public projects: ProjectEntity[];
+  public currentProject: ProjectEntity;
   public loading = true;
   public sortedProjects: ProjectEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
@@ -26,9 +28,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   constructor(private router: Router,
               private api: ApiService,
+              private projectService: ProjectService,
               public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.currentProject = this.projectService.project;
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.currentProject = project;
+    }));
+
     const timer = Observable.interval(10000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshProjects();
@@ -57,8 +65,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const sub = modal.afterClosed().subscribe(added => {
       if (added) {
         this.refreshProjects();
-        this.router.navigate(['/clusters']);
       }
+      sub.unsubscribe();
+    });
+  }
+
+  public addMember() {
+    const modal = this.dialog.open(AddMemberComponent);
+    modal.componentInstance.project = this.currentProject;
+
+    const sub = modal.afterClosed().subscribe(added => {
       sub.unsubscribe();
     });
   }

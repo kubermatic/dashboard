@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
 import { MemberComponent } from './member.component';
+import { MemberItemComponent } from './member-item/member-item.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatTabsModule } from '@angular/material';
 import { MemberRoutingModule } from './member-routing.module';
 
 const components: any[] = [
-  MemberComponent
+  MemberComponent,
+  MemberItemComponent
 ];
 
 @NgModule({

@@ -2,6 +2,7 @@ import { ApiService, ProjectService } from '../core/services';
 import { ApiMockService } from '../testing/services/api-mock.service';
 import { ProjectMockService } from '../testing/services/project-mock.service';
 import { MemberComponent } from './member.component';
+import { MemberItemComponent } from './member-item/member-item.component';
 import { Router } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -30,7 +31,8 @@ describe('MemberComponent', () => {
         MatTabsModule,
       ],
       declarations: [
-        MemberComponent
+        MemberComponent,
+        MemberItemComponent
       ],
       providers: [
         { provide: Router, useClass: RouterStub },

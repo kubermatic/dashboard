@@ -14,6 +14,5 @@ export class MemberProject {
 
 export class CreateMemberEntity {
   email: string;
-  name: string;
   projects: MemberProject[];
 }

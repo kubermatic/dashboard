@@ -65,6 +65,7 @@ export class MemberComponent implements OnInit, OnDestroy {
 
   refreshMembers() {
     if (this.project) {
+      // endpoint needs to be implemented in backend first
       /*this.subscriptions.push(this.api.getMembers(this.project.id).subscribe(res => {
         this.members = res;*/
         this.sortData(this.sort);

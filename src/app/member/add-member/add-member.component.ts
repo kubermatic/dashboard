@@ -8,8 +8,8 @@ import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-add-member',
-  templateUrl: './add-Member.component.html',
-  styleUrls: ['./add-Member.component.scss']
+  templateUrl: './add-member.component.html',
+  styleUrls: ['./add-member.component.scss']
 })
 export class AddMemberComponent implements OnInit {
   @Input() project: ProjectEntity;
@@ -22,7 +22,6 @@ export class AddMemberComponent implements OnInit {
 
   public ngOnInit() {
     this.addMemberForm = new FormGroup({
-      name: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required]),
       group: new FormControl('', [Validators.required]),
     });
@@ -30,7 +29,6 @@ export class AddMemberComponent implements OnInit {
 
   addMember(): void {
     const createMember: CreateMemberEntity = {
-      name: this.addMemberForm.controls.name.value,
       email: this.addMemberForm.controls.email.value,
       projects: [
         {
