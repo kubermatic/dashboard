@@ -7,6 +7,7 @@
       <mat-option *ngFor="let key of keys" value="{{key.name}}">{{key.name}}</mat-option>
     </mat-select>
   </mat-form-field>
+  <button *ngIf="keys.length > 0" style="margin-top: 10px;" mat-button color="primary" (click)="addSshKeyDialog()" mat-raised-button>Add new SSH key</button>
   <div *ngIf="keys.length === 0">
     <p>You have no SSH keys</p>
     <button style="margin-top: 10px;" mat-button color="primary" (click)="addSshKeyDialog()" mat-raised-button>Add SSH key</button>
