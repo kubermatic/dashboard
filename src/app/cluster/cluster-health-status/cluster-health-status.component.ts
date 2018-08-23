@@ -1,4 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
@@ -22,14 +24,23 @@ export class ClusterHealthStatusComponent implements OnInit {
   public redAction = 'fa fa-exclamation-triangle red';
   public healthStatus: string;
   public health: HealthEntity;
+  private subscriptions: Subscription[] = [];
 
   constructor(private healthService: HealthService) {}
 
   ngOnInit() {
+    const timer = Observable.interval(5000);
+    this.subscriptions.push(timer.subscribe(tick => {
+      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
+        this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+        this.health = health;
+      });
+    }));
+
     this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
-      this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
-      this.health = health;
-    });
+        this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+        this.health = health;
+      });
   }
 
   public getHealthStatusColor(): string {
