@@ -18,9 +18,9 @@
 
         <mat-form-field fxFlex>
           <mat-select placeholder="Group*:" formControlName="group">
-            <mat-option value="owner">Owner</mat-option>
-            <mat-option value="admin">Admin</mat-option>
-            <mat-option value="viewer">Viewer</mat-option>
+            <mat-option value="owners">Owner</mat-option>
+            <mat-option value="editors">Editor</mat-option>
+            <mat-option value="viewers">Viewer</mat-option>
           </mat-select>
           <mat-error *ngIf="addMemberForm.controls.group.hasError('required')">
             Group is <strong>required</strong>
