@@ -36,9 +36,12 @@
       <div fxFlex="20%">
         <strong>Master Version:</strong>
       </div>
-      <div fxFlex="35%" class="change-version">
+      <div fxFlex="35%" class="change-version" [hidden]="!isClusterRunning || !updatesAvailable">
         <span (click)="changeClusterVersionDialog()" matTooltip="click to change version" class="copy">{{cluster.spec.version}}
-        <small [hidden]="!isClusterRunning || !updatesAvailable" >upgrade available</small></span>
+        <small>upgrade available</small></span>
+      </div>
+      <div fxFlex="35%" class="change-version" [hidden]="isClusterRunning && updatesAvailable">
+        {{cluster.spec.version}}
       </div>
     </mat-card-content>
   </mat-card>
