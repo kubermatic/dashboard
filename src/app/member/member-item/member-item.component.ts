@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ProjectService } from '../../core/services';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { MemberEntity, MemberProject } from '../../shared/entity/MemberEntity';
+import { EditMemberComponent } from '../edit-member/edit-member.component';
 
 @Component({
   selector: 'kubermatic-member-item',
@@ -15,7 +15,7 @@ export class MemberItemComponent implements OnInit {
   @Input() project: ProjectEntity;
   @Input() member: MemberEntity;
 
-  constructor(private projectService: ProjectService) {}
+  constructor(private projectService: ProjectService, private dialog: MatDialog) {}
 
   public ngOnInit(): void { }
 
@@ -32,5 +32,17 @@ export class MemberItemComponent implements OnInit {
       }
       return '';
     }
+  }
+
+  public editMember() {
+    const modal = this.dialog.open(EditMemberComponent);
+    modal.componentInstance.project = this.project;
+    modal.componentInstance.member = this.member;
+    const sub = modal.afterClosed().subscribe(edited => {
+      if (edited) {
+        // this.reloadMembers();
+      }
+      sub.unsubscribe();
+    });
   }
 }
