@@ -36,11 +36,11 @@
       <div fxFlex="20%">
         <strong>Master Version:</strong>
       </div>
-      <div fxFlex="35%" class="change-version" [hidden]="!isClusterRunning || versionsList.length === 0">
+      <div fxFlex="35%" class="change-version" *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)">
         <span (click)="changeClusterVersionDialog()" matTooltip="click to change version" class="copy">{{cluster.spec.version}}
         <small [hidden]="!updatesAvailable">upgrade available</small></span>
       </div>
-      <div fxFlex="35%" class="change-version" [hidden]="isClusterRunning && versionsList.length > 0">
+      <div fxFlex="35%" class="change-version" [hidden]="isClusterRunning && (updatesAvailable || downgradesAvailable)">
         {{cluster.spec.version}}
       </div>
     </mat-card-content>

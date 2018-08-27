@@ -61,7 +61,7 @@ export class ApiMockService {
     return Observable.of(this.nodes);
   }
 
-  public getClusterUpgrades(cluster: string): Observable<string[]> {
+  public getClusterUpgrades(cluster: string): Observable<MasterVersion[]> {
     return Observable.of([]);
   }
 

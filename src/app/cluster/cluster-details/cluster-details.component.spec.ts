@@ -37,8 +37,10 @@ describe('ClusterDetailsComponent', () => {
   let getDatacenterSpy: Spy;
   let getKubeconfigURL: Spy;
 
+  let apiMock;
+
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys', 'getKubeconfigURL']);
+    apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys', 'getKubeconfigURL']);
     getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
     getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
     getClusterNodesSpy = apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake));
@@ -133,6 +135,86 @@ describe('ClusterDetailsComponent', () => {
     de = fixture.debugElement.query(By.css('.cluster-detail-actions'));
     expect(de).not.toBeNull('element should be rendered after requests');
 
+    discardPeriodicTasks();
+  }));
+
+  it('should show upgrade link', fakeAsync(() => {
+    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([
+      {
+        version: '1.8.5',
+        allowedVersions: ['1.8.5'],
+        default: false
+      },
+      {
+        version: '1.8.6',
+        allowedVersions: ['1.8.6'],
+        default: false
+      }
+    ]));
+    fixture.detectChanges();
+    tick();
+    expect(component.updatesAvailable).toEqual(true, 'Updates should be available');
+    expect(component.downgradesAvailable).toEqual(false, 'Downgrades should not be available');
+    discardPeriodicTasks();
+  }));
+
+  it('should not show upgrade or downgrade link', fakeAsync(() => {
+    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([
+      {
+        version: '1.8.5',
+        allowedVersions: ['1.8.5'],
+        default: false
+      }
+    ]));
+    fixture.detectChanges();
+    tick();
+    expect(component.updatesAvailable).toEqual(false, 'Updates should not be available');
+    expect(component.downgradesAvailable).toEqual(false, 'Downgrades should not be available');
+    discardPeriodicTasks();
+  }));
+
+  it('should show downgrade link', fakeAsync(() => {
+    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([
+      {
+        version: '1.8.5',
+        allowedVersions: ['1.8.5'],
+        default: false
+      },
+      {
+        version: '1.8.4',
+        allowedVersions: ['1.8.4'],
+        default: false
+      }
+    ]));
+    fixture.detectChanges();
+    tick();
+    expect(component.updatesAvailable).toEqual(false, 'Updates should not be available');
+    expect(component.downgradesAvailable).toEqual(true, 'Downgrades should be available');
+    discardPeriodicTasks();
+  }));
+
+  it('should show downgrade and update link', fakeAsync(() => {
+    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([
+      {
+        version: '1.8.5',
+        allowedVersions: ['1.8.5'],
+        default: false
+      },
+      {
+        version: '1.8.4',
+        allowedVersions: ['1.8.4'],
+        default: false
+      },
+      {
+        version: '1.8.6',
+        allowedVersions: ['1.8.6'],
+        default: false
+      }
+    ]));
+    fixture.detectChanges();
+    tick();
+    expect(component.updatesAvailable).toEqual(true, 'Updates should be available');
+    expect(component.downgradesAvailable).toEqual(true, 'Downgrades should be available');
     discardPeriodicTasks();
   }));
 });
