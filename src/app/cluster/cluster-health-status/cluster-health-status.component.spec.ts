@@ -43,7 +43,7 @@ describe('ClusterHealthStatusComponent', () => {
     fixture = TestBed.createComponent(ClusterHealthStatusComponent);
     component = fixture.componentInstance;
 
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
   });
 
   it('should create the cluster health status cmp', async(() => {

@@ -51,7 +51,7 @@ describe('DigitaloceanProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DigitaloceanProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     component.cluster.spec.cloud.digitalocean.token = '';
     fixture.detectChanges();
   });

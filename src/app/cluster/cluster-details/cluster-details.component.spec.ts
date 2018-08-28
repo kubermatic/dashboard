@@ -41,14 +41,14 @@ describe('ClusterDetailsComponent', () => {
 
   beforeEach(async(() => {
     apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys', 'getKubeconfigURL']);
-    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
     getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
-    getClusterNodesSpy = apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake));
-    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys));
+    getClusterNodesSpy = apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake()));
+    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
     getKubeconfigURL = apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter));
+    getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -96,12 +96,19 @@ describe('ClusterDetailsComponent', () => {
   it('should get cluster', fakeAsync(() => {
     fixture.detectChanges();
     tick();
-    expect(component.cluster).toEqual(fakeDigitaloceanCluster, 'should get cluster by api');
+
+    const expectedCluster = fakeDigitaloceanCluster();
+    // @ts-ignore
+    expectedCluster.metadata.creationTimestamp = jasmine.any(Date);
+    // @ts-ignore
+    expectedCluster.status.lastTransitionTime = jasmine.any(Date);
+
+    expect(component.cluster).toEqual(expectedCluster, 'should get cluster by api');
     discardPeriodicTasks();
   }));
 
   it('should get sshkeys', fakeAsync(() => {
-    const sshkeys = fakeSSHKeys.filter(key => {
+    const sshkeys = fakeSSHKeys().filter(key => {
       if (key.spec.clusters == null) {
         return false;
       }
@@ -109,6 +116,10 @@ describe('ClusterDetailsComponent', () => {
     });
     fixture.detectChanges();
     tick();
+
+    // @ts-ignore
+    sshkeys[0].metadata.creationTimestamp = jasmine.any(Date);
+
     expect(component.sshKeys).toEqual(sshkeys, 'should get sshkeys by api');
     discardPeriodicTasks();
   }));
@@ -116,7 +127,7 @@ describe('ClusterDetailsComponent', () => {
   it('should get nodes', fakeAsync(() => {
     fixture.detectChanges();
     tick();
-    expect(component.nodes).toEqual(nodesFake, 'should get sshkeys by api');
+    expect(component.nodes).toEqual(nodesFake(), 'should get sshkeys by api');
 
     discardPeriodicTasks();
   }));

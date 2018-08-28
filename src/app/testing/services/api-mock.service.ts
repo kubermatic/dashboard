@@ -12,11 +12,11 @@ import { defer } from 'rxjs/observable/defer';
 
 @Injectable()
 export class ApiMockService {
-  public cluster: ClusterEntity = fakeDigitaloceanCluster;
-  public clusters: ClusterEntity[] = fakeClusters;
-  public sshKeys: SSHKeyEntity[] = fakeSSHKeys;
-  public nodes: NodeEntity[] = nodesFake;
-  public masterVersions: MasterVersion[] = masterVersionsFake;
+  public cluster: ClusterEntity = fakeDigitaloceanCluster();
+  public clusters: ClusterEntity[] = fakeClusters();
+  public sshKeys: SSHKeyEntity[] = fakeSSHKeys();
+  public nodes: NodeEntity[] = nodesFake();
+  public masterVersions: MasterVersion[] = masterVersionsFake();
 
   constructor() {
   }

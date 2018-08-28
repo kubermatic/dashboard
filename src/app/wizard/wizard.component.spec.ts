@@ -55,9 +55,9 @@ describe('WizardComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster', 'getMasterVersions']);
-    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
-    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
-    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake));
+    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
 
     TestBed.configureTestingModule({
       imports: [

@@ -31,7 +31,7 @@ describe('VSphereClusterSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VSphereClusterSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeVSphereCluster;
+    component.cluster = fakeVSphereCluster();
     component.cluster.spec.cloud.vsphere.username = '';
     component.cluster.spec.cloud.vsphere.password = '';
     fixture.detectChanges();

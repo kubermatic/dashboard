@@ -45,7 +45,7 @@ describe('ClusterProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     fixture.detectChanges();
   });
 
