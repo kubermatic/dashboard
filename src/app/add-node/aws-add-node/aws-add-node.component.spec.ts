@@ -38,8 +38,8 @@ describe('AwsAddNodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AwsAddNodeComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeAWSCluster.spec.cloud;
-    component.nodeData = nodeDataFake;
+    component.cloudSpec = fakeAWSCluster().spec.cloud;
+    component.nodeData = nodeDataFake();
   });
 
   it('should create the add node cmp', () => {

@@ -28,7 +28,7 @@ describe('ChangeClusterVersionComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['editCluster']);
-    editClusterSpy = apiMock.editCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    editClusterSpy = apiMock.editCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -57,8 +57,9 @@ describe('ChangeClusterVersionComponent', () => {
 
   it('should call editCluster method from api', fakeAsync(() => {
     component.selectedVersion = 'new version';
-    component.cluster = fakeDigitaloceanCluster;
-    component.datacenter = fakeDigitaloceanDatacenter;
+    // copy object here since this test modifies the global fake cluster object which impacts other tests otherwise
+    component.cluster = JSON.parse(JSON.stringify(fakeDigitaloceanCluster()));
+    component.datacenter = fakeDigitaloceanDatacenter();
     component.possibleVersions = ['1.9.5'];
 
     fixture.detectChanges();

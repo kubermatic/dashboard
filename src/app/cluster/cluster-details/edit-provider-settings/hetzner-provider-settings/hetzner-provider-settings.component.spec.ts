@@ -51,7 +51,7 @@ describe('HetznerProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HetznerProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeHetznerCluster;
+    component.cluster = fakeHetznerCluster();
     component.cluster.spec.cloud.hetzner.token = '';
     fixture.detectChanges();
   });

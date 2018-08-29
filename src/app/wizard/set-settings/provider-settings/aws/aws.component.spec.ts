@@ -31,7 +31,7 @@ describe('AWSClusterSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AWSClusterSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeAWSCluster;
+    component.cluster = fakeAWSCluster();
     component.cluster.spec.cloud.aws = {
       accessKeyId: '',
       secretAccessKey: '',

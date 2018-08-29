@@ -37,7 +37,7 @@ describe('SetDatacenterComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SetDatacenterComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     component.cluster.spec.cloud.dc = '';
 
     fixture.detectChanges();

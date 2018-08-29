@@ -41,8 +41,8 @@ describe('SetSettingsComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getSSHKeys']);
-    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
-    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys));
+    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -84,9 +84,9 @@ describe('SetSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SetSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     component.clusterSSHKeys = [];
-    component.nodeData = nodeDataFake;
+    component.nodeData = nodeDataFake();
     fixture.detectChanges();
   });
 

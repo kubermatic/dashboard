@@ -42,8 +42,8 @@ describe('AddNodeModalComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'createClusterNode']);
-    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
-    createClusterNodeSpy = apiMock.createClusterNode.and.returnValue(asyncData(fakeDigitaloceanCreateNode));
+    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    createClusterNodeSpy = apiMock.createClusterNode.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -70,7 +70,7 @@ describe('AddNodeModalComponent', () => {
         AzureAddNodeComponent,
       ],
       providers: [
-        { provide: MAT_DIALOG_DATA, useValue: { cluster: fakeDigitaloceanCluster } },
+        { provide: MAT_DIALOG_DATA, useValue: { cluster: fakeDigitaloceanCluster() } },
         { provide: MatDialogRef, useValue: {} },
         { provide: ApiService, useValue: apiMock },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
@@ -85,14 +85,14 @@ describe('AddNodeModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddNodeModalComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster;
-    component.datacenter = fakeDigitaloceanDatacenter;
+    component.cluster = fakeDigitaloceanCluster();
+    component.datacenter = fakeDigitaloceanDatacenter();
     component.addNodeData = {
-      node: fakeDigitaloceanCreateNode,
+      node: fakeDigitaloceanCreateNode(),
       count: 1,
       valid: true
     };
-    component.addNodeData = nodeDataFake;
+    component.addNodeData = nodeDataFake();
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = { clusterName: 'tbbfvttvs' };

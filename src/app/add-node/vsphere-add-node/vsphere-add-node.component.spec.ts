@@ -38,8 +38,8 @@ describe('VSphereAddNodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(VSphereAddNodeComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeVSphereCluster.spec.cloud;
-    component.nodeData = nodeDataFake;
+    component.cloudSpec = fakeVSphereCluster().spec.cloud;
+    component.nodeData = nodeDataFake();
   });
 
   it('should create the add node cmp', () => {

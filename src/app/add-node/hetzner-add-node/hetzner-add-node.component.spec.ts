@@ -36,8 +36,8 @@ describe('HetznerAddNodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(HetznerAddNodeComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeHetznerCluster.spec.cloud;
-    component.nodeData = nodeDataFake;
+    component.cloudSpec = fakeHetznerCluster().spec.cloud;
+    component.nodeData = nodeDataFake();
   });
 
   it('should create the add node cmp', () => {

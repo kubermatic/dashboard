@@ -40,7 +40,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public clusterHealthClass: string;
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
-  private updatesAvailable = false;
+  public updatesAvailable = false;
+  public downgradesAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
   private refreshInterval = 10000;
 
@@ -193,6 +194,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               }
               if (lt(this.cluster.spec.version, upgrades[i].version)) {
                 this.updatesAvailable = true;
+              } else if (gt(this.cluster.spec.version, upgrades[i].version)) {
+                this.downgradesAvailable = true;
               }
             }
           }
