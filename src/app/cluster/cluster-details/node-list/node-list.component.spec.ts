@@ -48,8 +48,8 @@ describe('NodeComponent', () => {
   }));
 
   it('should hide remove button', () => {
-    component.nodes = nodesFake;
-    component.cluster = fakeDigitaloceanCluster;
+    component.nodes = nodesFake();
+    component.cluster = fakeDigitaloceanCluster();
     fixture.detectChanges();
 
     const deRemoveButtons = fixture.debugElement.queryAll(By.css('.km-btn-remove-node-wrapper'));
@@ -62,9 +62,9 @@ describe('NodeComponent', () => {
     const green = 'fa fa-circle green';
     const orange = 'fa fa-spin fa-circle-o-notch orange';
 
-    const nodes = nodesFake;
+    const nodes = nodesFake();
 
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
 
     expect(component.getNodeHealthStatus(nodes[0], 0)).toEqual({
       color: green,

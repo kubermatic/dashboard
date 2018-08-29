@@ -18,7 +18,7 @@ describe('ClusterSSHKeys', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getSSHKeys']);
-    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys));
+    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -40,7 +40,7 @@ describe('ClusterSSHKeys', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterSSHKeysComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     component.selectedKeys = [];
     fixture.detectChanges();
   });

@@ -47,7 +47,7 @@ describe('SshKeyItemComponent', () => {
   });
 
   it('should call deleteSSHKey method from the api', fakeAsync(() => {
-    component.sshKey = fakeSSHKeys[0];
+    component.sshKey = fakeSSHKeys()[0];
     const spyDeleteSSH = spyOn(apiService, 'deleteSSHKey').and.returnValue(Observable.of(null));
     fixture.detectChanges();
 
@@ -60,7 +60,7 @@ describe('SshKeyItemComponent', () => {
 
   it('should have odd css class', () => {
     component.isOdd = true;
-    component.sshKey = fakeSSHKeys[0];
+    component.sshKey = fakeSSHKeys()[0];
     fixture.detectChanges();
 
     const de = fixture.debugElement.query(By.css('.odd'));
@@ -68,7 +68,7 @@ describe('SshKeyItemComponent', () => {
   });
 
   it('should show/hide publickey', () => {
-    component.sshKey = fakeSSHKeys[0];
+    component.sshKey = fakeSSHKeys()[0];
     fixture.detectChanges();
 
     let dePublicKey = fixture.debugElement.query(By.css('.publickey-content'));

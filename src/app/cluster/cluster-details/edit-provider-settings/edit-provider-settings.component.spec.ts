@@ -53,7 +53,7 @@ describe('EditProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(EditProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     fixture.detectChanges();
   });
 

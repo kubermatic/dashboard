@@ -51,7 +51,7 @@ describe('AWSProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AWSProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeAWSCluster;
+    component.cluster = fakeAWSCluster();
     component.cluster.spec.cloud.aws = {
       accessKeyId: '',
       secretAccessKey: '',

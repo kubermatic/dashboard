@@ -21,7 +21,7 @@ describe('OpenstackClusterSettingsComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackTenants']);
-    getOpenStackTenantsSpy = apiMock.getOpenStackTenants.and.returnValue(asyncData(openstackTenantsFake));
+    getOpenStackTenantsSpy = apiMock.getOpenStackTenants.and.returnValue(asyncData(openstackTenantsFake()));
     const appConfigServiceMock = jasmine.createSpyObj('AppConfigService', ['getConfig']);
     config = new class implements Config {};
     appConfigServiceMock.getConfig.and.returnValue(config);
@@ -49,7 +49,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
       component = fixture.componentInstance;
-      component.cluster = fakeOpenstackCluster;
+      component.cluster = fakeOpenstackCluster();
       component.cluster.spec.cloud.openstack = {
         tenant: '',
         domain: '',
@@ -84,7 +84,7 @@ describe('OpenstackClusterSettingsComponent', () => {
 
       fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
       component = fixture.componentInstance;
-      component.cluster = fakeOpenstackCluster;
+      component.cluster = fakeOpenstackCluster();
       component.cluster.spec.cloud.openstack = {
         tenant: '',
         domain: '',
