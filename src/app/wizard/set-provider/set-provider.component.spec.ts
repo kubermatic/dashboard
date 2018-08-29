@@ -19,7 +19,7 @@ describe('SetProviderComponent', () => {
 
   beforeEach(async(() => {
     const dcMock = jasmine.createSpyObj('DatacenterService', ['getDataCenters']);
-    getDataCentersSpy = dcMock.getDataCenters.and.returnValue(asyncData(fakeNodeDatacenters));
+    getDataCentersSpy = dcMock.getDataCenters.and.returnValue(asyncData(fakeNodeDatacenters()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -46,12 +46,12 @@ describe('SetProviderComponent', () => {
 
   it('should create the set-provider cmp', fakeAsync(() => {
     expect(component).toBeTruthy();
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     fixture.detectChanges();
   }));
 
   it('should get provider from cluster', fakeAsync(() => {
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     fixture.detectChanges();
     expect(component.setProviderForm.controls.provider.valid).toBeTruthy();
     expect(component.setProviderForm.controls.provider.value === 'digitalocean').toBeTruthy();

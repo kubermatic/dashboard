@@ -66,8 +66,9 @@ describe('ClusterItemComponent', () => {
     expect(component).toBeTruthy();
   }));
 
+
   it('should set statusRunning class odd', fakeAsync(() => {
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     component.index = 1;
     fixture.detectChanges();
     tick();
@@ -77,7 +78,8 @@ describe('ClusterItemComponent', () => {
   }));
 
   it('should set path of cluster image', fakeAsync(() => {
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
+
     fixture.detectChanges();
     tick();
     discardPeriodicTasks();

@@ -38,7 +38,7 @@ describe('ClusterConnectComponent', () => {
       declarations: [ClusterConnectComponent],
       providers: [
         { provide: ApiService, useValue: apiMock },
-        { provide: MAT_DIALOG_DATA, useValue: { cluster: fakeDigitaloceanCluster } },
+        { provide: MAT_DIALOG_DATA, useValue: { cluster: fakeDigitaloceanCluster() } },
         { provide: MatDialogRef, useValue: {} },
       ]
     })
@@ -49,8 +49,9 @@ describe('ClusterConnectComponent', () => {
     fixture = TestBed.createComponent(ClusterConnectComponent);
     component = fixture.componentInstance;
     component.project = fakeProject;
-    component.cluster = fakeDigitaloceanCluster;
-    component.datacenter = fakeDigitaloceanDatacenter;
+    component.cluster = fakeDigitaloceanCluster();
+    component.datacenter = fakeDigitaloceanDatacenter();
+
     fixture.detectChanges();
   });
 

@@ -29,9 +29,9 @@ describe('AzureAddNodeComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getAzureSizes']);
-    getAzureSizesSpy = apiMock.getAzureSizes.and.returnValue(asyncData(fakeAzureSizes));
+    getAzureSizesSpy = apiMock.getAzureSizes.and.returnValue(asyncData(fakeAzureSizes()));
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAzureDatacenter));
+    getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAzureDatacenter()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -52,9 +52,9 @@ describe('AzureAddNodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AzureAddNodeComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeAzureCluster.spec.cloud;
-    component.nodeData = nodeDataFake;
-    component.datacenter = fakeAzureDatacenter;
+    component.cloudSpec = fakeAzureCluster().spec.cloud;
+    component.nodeData = nodeDataFake();
+    component.datacenter = fakeAzureDatacenter();
   });
 
   it('should create the add node cmp', () => {

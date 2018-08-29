@@ -16,13 +16,13 @@ import { masterVersionsFake } from './../fake-data/cluster-spec.fake';
 
 @Injectable()
 export class ApiMockService {
-  public cluster: ClusterEntity = fakeDigitaloceanCluster;
-  public clusters: ClusterEntity[] = fakeClusters;
+  public cluster: ClusterEntity = fakeDigitaloceanCluster();
+  public clusters: ClusterEntity[] = fakeClusters();
   public project: ProjectEntity = fakeProject;
   public projects: ProjectEntity[] = fakeProjects;
-  public sshKeys: SSHKeyEntity[] = fakeSSHKeys;
-  public nodes: NodeEntity[] = nodesFake;
-  public masterVersions: MasterVersion[] = masterVersionsFake;
+  public sshKeys: SSHKeyEntity[] = fakeSSHKeys();
+  public nodes: NodeEntity[] = nodesFake();
+  public masterVersions: MasterVersion[] = masterVersionsFake();
   public token: Token = fakeToken;
   public member: MemberEntity = fakeMember;
 
@@ -85,7 +85,7 @@ export class ApiMockService {
     return Observable.of(this.nodes);
   }
 
-  public getClusterUpgrades(cluster: string): Observable<string[]> {
+  public getClusterUpgrades(cluster: string): Observable<MasterVersion[]> {
     return Observable.of([]);
   }
 

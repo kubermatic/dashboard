@@ -51,7 +51,7 @@ describe('OpenstackProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OpenstackProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeOpenstackCluster;
+    component.cluster = fakeOpenstackCluster();
     component.cluster.spec.cloud.openstack = {
       password: '',
       username: '',

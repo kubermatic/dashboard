@@ -29,9 +29,9 @@ describe('ClusterListComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getClusters']);
-    getClustersSpy = apiMock.getClusters.and.returnValue(asyncData([fakeAWSCluster]));
+    getClustersSpy = apiMock.getClusters.and.returnValue(asyncData([fakeAWSCluster()]));
     const dcMock = jasmine.createSpyObj('DatacenterService', ['getSeedDataCenters']);
-    getSeedDatacentersSpy = dcMock.getSeedDataCenters.and.returnValue(asyncData(fakeSeedDatacenters));
+    getSeedDatacentersSpy = dcMock.getSeedDataCenters.and.returnValue(asyncData(fakeSeedDatacenters()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -71,9 +71,16 @@ describe('ClusterListComponent', () => {
   it('should get cluster list', fakeAsync(() => {
     fixture.detectChanges();
     tick(1);
+
+    const expectedCluster = fakeAWSCluster();
+    // @ts-ignore
+    expectedCluster.metadata.creationTimestamp = jasmine.any(Date);
+    // @ts-ignore
+    expectedCluster.status.lastTransitionTime = jasmine.any(Date);
+
     expect(getSeedDatacentersSpy.and.callThrough()).toHaveBeenCalled();
     expect(getClustersSpy.and.callThrough()).toHaveBeenCalled();
-    expect(component.clusters).toEqual([fakeAWSCluster]);
+    expect(component.clusters).toEqual([expectedCluster]);
     discardPeriodicTasks();
   }));
 

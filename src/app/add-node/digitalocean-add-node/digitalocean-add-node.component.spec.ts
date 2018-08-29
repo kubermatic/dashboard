@@ -26,7 +26,7 @@ describe('DigitaloceanAddNodeComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes']);
-    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
+    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     TestBed.configureTestingModule({
       imports: [
         ...modules,
@@ -44,8 +44,8 @@ describe('DigitaloceanAddNodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DigitaloceanAddNodeComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeDigitaloceanCluster.spec.cloud;
-    component.nodeData = nodeDataFake;
+    component.cloudSpec = fakeDigitaloceanCluster().spec.cloud;
+    component.nodeData = nodeDataFake();
   });
 
   it('should create the add node cmp', () => {
