@@ -8,13 +8,7 @@ import { fakeMember } from './../fake-data/member.fake';
 
 @Injectable()
 export class UserMockService {
-  public member = fakeMember();
-
   private user: Observable<MemberEntity>;
-
-   // User group
-  private _currentUserGroup = new Subject<string>();
-  userGroupChanges$ = this._currentUserGroup.asObservable();
   private userGroup: string;
 
   constructor() {
@@ -25,7 +19,8 @@ export class UserMockService {
     return this.user;
   }
 
-  changeCurrentUserGroup(projectID: string) {
-    return this.userGroup = 'owner';
+  currentUserGroup(projectID: string): Observable<string> {
+    this.userGroup = fakeMember().projects[0].group;
+    return Observable.of(fakeMember().projects[0].group);
   }
 }

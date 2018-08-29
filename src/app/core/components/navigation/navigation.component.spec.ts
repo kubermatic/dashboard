@@ -10,8 +10,7 @@ import { RouterStub } from './../../../testing/router-stubs';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
 import { UserMockService } from '../../../testing/services/user-mock.service';
 import { NavigationComponent } from './navigation.component';
-import { UserService } from './../../services/user/user.service';
-import { Auth } from '../../services/index';
+import { Auth, UserService } from '../../services/index';
 import { SidenavService } from '../sidenav/sidenav.service';
 import { MatDialog } from '@angular/material';
 

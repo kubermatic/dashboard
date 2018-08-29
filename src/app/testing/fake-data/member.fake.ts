@@ -9,7 +9,7 @@ export function fakeMembers(): MemberEntity[] {
       email: 'john.doe@example.com',
       projects: [
         {
-          group: 'admin',
+          group: 'owners',
           id: '123ab4cd5e'
         }
       ]
@@ -21,7 +21,7 @@ export function fakeMembers(): MemberEntity[] {
       email: 'john.doe.jr@example.com',
       projects: [
         {
-          group: 'admin',
+          group: 'editors',
           id: '123ab4cd5e'
         }
       ]
@@ -37,7 +37,7 @@ export function fakeMember(): MemberEntity {
     email: 'john.doe@example.com',
     projects: [
       {
-        group: 'admin',
+        group: 'owners',
         id: '123ab4cd5e'
       }
     ]

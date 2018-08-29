@@ -1,18 +1,25 @@
-import { SharedModule } from '../../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule, RouterLinkStubDirective, RouterStub, ActivatedRouteStub } from '../../../testing/router-stubs';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, ActivatedRoute } from '@angular/router';
-import { click } from './../../../testing/utils/click-handler';
+import { DebugElement } from '@angular/core/src/debug/debug_node';
+import { MatDialog } from '@angular/material';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 
 import { SidenavComponent } from './sidenav.component';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
-import { ApiService, ProjectService } from './../../../core/services';
-import { fakeProjects } from './../../../testing/fake-data/project.fake';
+
+import { ApiService, ProjectService, UserService } from './../../../core/services';
+
+import { SharedModule } from '../../../shared/shared.module';
+import { RouterTestingModule, RouterLinkStubDirective, RouterStub, ActivatedRouteStub } from '../../../testing/router-stubs';
+import { click } from './../../../testing/utils/click-handler';
+
 import { asyncData } from './../../../testing/services/api-mock.service';
+import { ProjectMockService } from './../../../testing/services/project-mock.service';
+import { UserMockService } from './../../../testing/services/user-mock.service';
+
+import { fakeProjects } from './../../../testing/fake-data/project.fake';
 import Spy = jasmine.Spy;
 
 const modules: any[] = [
@@ -43,15 +50,17 @@ describe('SidenavComponent', () => {
         SidenavComponent
       ],
       providers: [
-        ProjectService,
         { provide: ApiService, useValue: apiMock },
+        { provide: ProjectService, useClass: ProjectMockService },
+        { provide: UserService, useClass: UserMockService },
         { provide: Router, useValue: {
           routerState: {
             snapshot: {
               url: [{ path: 1 }, { path: 2 }]}
             }
           }
-        }
+        },
+        MatDialog
       ],
     }).compileComponents();
   });
