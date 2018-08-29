@@ -31,11 +31,6 @@ export class ApiService {
     this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
   }
 
-  getUser(): Observable<MemberEntity> {
-    const url = `${this.restRoot}/me`;
-    return this.http.get<MemberEntity>(url, { headers: this.headers });
-  }
-
   getProjects(): Observable<ProjectEntity[]> {
     const url = `${this.restRoot}/projects`;
     return this.http.get<ProjectEntity[]>(url, { headers: this.headers });

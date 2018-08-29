@@ -13,7 +13,7 @@
         Connect
       </button>
       <a class="download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
-      <button mat-button (click)="deleteClusterDialog()" mat-raised-button >
+      <button mat-button (click)="deleteClusterDialog()" mat-raised-button [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
         <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px; color: #0288d1;" color="primary"></i>
         Delete Cluster
       </button>

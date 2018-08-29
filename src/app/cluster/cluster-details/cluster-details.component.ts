@@ -1,29 +1,32 @@
-import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
-import { EditProviderSettingsComponent } from './edit-provider-settings/edit-provider-settings.component';
 import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
-import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
+import { lt, gt } from 'semver';
+import { Observable, ObservableInput } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/observable/combineLatest';
 import 'rxjs/add/observable/interval';
+import { NotificationActions } from '../../redux/actions/notification.actions';
 import { environment } from '../../../environments/environment';
+import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
+import { EditProviderSettingsComponent } from './edit-provider-settings/edit-provider-settings.component';
+import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
+import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
+import { ApiService, DatacenterService, InitialNodeDataService, ProjectService, HealthService, UserService } from '../../core/services';
+import { AppConfigService } from '../../app-config.service';
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { HealthEntity } from '../../shared/entity/HealthEntity';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { ApiService, DatacenterService, InitialNodeDataService, HealthService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
-import { Subject } from 'rxjs/Subject';
-import { NodeEntity } from '../../shared/entity/NodeEntity';
-import { Observable, ObservableInput } from 'rxjs/Observable';
-import { NotificationActions } from '../../redux/actions/notification.actions';
-import { lt, gt } from 'semver';
-import { Subscription } from 'rxjs/Subscription';
+import { UserGroupConfig } from '../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -42,6 +45,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public clusterHealthClass: string;
   public health: HealthEntity;
   public projectID: string;
+  public userGroup: string;
+  public userGroupConfig: UserGroupConfig;
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
   public updatesAvailable = false;
@@ -56,14 +61,22 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               public dialog: MatDialog,
               private initialNodeDataService: InitialNodeDataService,
               private dcService: DatacenterService,
-              private healthService: HealthService) {
+              private healthService: HealthService,
+              private userService: UserService,
+              private appConfigService: AppConfigService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
   public ngOnInit(): void {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
+
+
+    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+        this.userGroup = group;
+      });
 
     this.subscriptions.push(this.healthService.getClusterHealth(clusterName, seedDCName, this.projectID).subscribe(health => {
       this.health = health;

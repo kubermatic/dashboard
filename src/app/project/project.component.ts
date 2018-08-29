@@ -4,12 +4,14 @@ import { Observable, ObservableInput } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { find } from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
-import { ApiService, ProjectService } from '../core/services';
+import { AppConfigService } from '../app-config.service';
+import { ApiService, ProjectService, UserService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../add-project/add-project.component';
 import { AddMemberComponent } from '../member/add-member/add-member.component';
+import { UserGroupConfig } from '../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-project',
@@ -24,17 +26,26 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public sortedProjects: ProjectEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
   public selectedTab = 'projects';
+  public userGroup: string;
+  public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
   constructor(private router: Router,
               private api: ApiService,
+              private appConfigService: AppConfigService,
               private projectService: ProjectService,
+              private userService: UserService,
               public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+
     this.currentProject = this.projectService.project;
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.currentProject = project;
+      this.userService.currentUserGroup(this.currentProject.id).subscribe(group => {
+        this.userGroup = group;
+      });
     }));
 
     const timer = Observable.interval(10000);
@@ -42,6 +53,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this.refreshProjects();
     }));
     this.refreshProjects();
+
   }
 
   ngOnDestroy() {

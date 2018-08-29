@@ -3,7 +3,7 @@ import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import { environment } from '../../../../environments/environment';
-import { ApiService, ProjectService } from '../../../core/services';
+import { ApiService, ProjectService, UserService } from '../../../core/services';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../../../add-project/add-project.component';
 
@@ -23,7 +23,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
   constructor(public dialog: MatDialog,
               private api: ApiService,
               private router: Router,
-              private projectService: ProjectService) { }
+              private projectService: ProjectService,
+              private userService: UserService) { }
 
   ngOnInit() {
     this.getProjects();

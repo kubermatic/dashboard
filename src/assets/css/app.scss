@@ -737,6 +737,12 @@ button.close {
 }
 
 // Icons
+mat-list-item.disabled {
+  i {
+    opacity: 0.3;
+  }
+}
+
 .iconDelete {
   display: inline-block;
   width: 25px;
@@ -749,6 +755,9 @@ button.close {
   }
   &.black {
     background-image: url("/assets/images/icons/black/delete-black.png");
+  }
+  &:disabled {
+    opacity: 0.3;
   }
 }
 
@@ -764,6 +773,9 @@ button.close {
   }
   &.black {
     background-image: url("/assets/images/icons/black/edit-black.png");
+  }
+  &:disabled {
+    opacity: 0.3;
   }
 }
 

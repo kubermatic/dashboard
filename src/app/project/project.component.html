@@ -48,7 +48,7 @@
     </mat-tab>
 
     <!-- needs another endpoint that have to be implemented in backend first -->
-    <!-- <mat-tab label="Members" [disabled]="!currentProject">
+    <!-- <mat-tab label="Members" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].members.view)">
       <kubermatic-member></kubermatic-member>
     </mat-tab> -->
 

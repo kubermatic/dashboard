@@ -8,6 +8,7 @@ import { ClusterService } from './cluster/cluster.service';
 import { WizardService } from './wizard/wizard.service';
 import { ProjectService } from './project/project.service';
 import { HealthService } from './health/health.service';
+import { UserService } from './user/user.service';
 
 export {
   InitialNodeDataService,
@@ -19,6 +20,7 @@ export {
   ClusterService,
   WizardService,
   ProjectService,
-  HealthService
+  HealthService,
+  UserService
 };
 

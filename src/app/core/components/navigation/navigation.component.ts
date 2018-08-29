@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 
-import { Auth, ApiService } from '../../services';
+import { Auth, UserService } from '../../services';
 import { SidenavService } from '../sidenav/sidenav.service';
 import { environment } from '../../../../environments/environment';
 import { AppConstants } from '../../../shared/constants/constants';
@@ -24,14 +24,14 @@ export class NavigationComponent implements OnInit {
               private sidenavService: SidenavService,
               private router: Router,
               private dialog: MatDialog,
-              private api: ApiService) {}
+              private userService: UserService) {}
 
   ngOnInit(): void {
     if (window.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
       this.sidenavService.close();
     }
 
-    this.api.getUser().subscribe(user => {
+    this.userService.getUser().subscribe(user => {
       this.currentUser = user;
     });
   }

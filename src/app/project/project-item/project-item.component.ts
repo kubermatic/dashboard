@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { ProjectService } from '../../core/services';
+import { Observable } from 'rxjs/Observable';
+import { ProjectService, UserService } from '../../core/services';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { ProjectDeleteConfirmationComponent } from './../project-delete-confirmation/project-delete-confirmation.component';
 
@@ -14,12 +15,18 @@ export class ProjectItemComponent implements OnInit {
   @Input() index: number;
   @Input() project: ProjectEntity;
   public clickedDeleteProject = {};
+  public userGroup: string;
 
   constructor(public dialog: MatDialog,
               private router: Router,
-              private projectService: ProjectService) {}
+              private projectService: ProjectService,
+              private userService: UserService) {}
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.userService.currentUserGroup(this.project.id).subscribe(group => {
+      this.userGroup = group;
+    });
+  }
 
   public getProjectItemClass(): string {
     if (this.index % 2 !== 0) {

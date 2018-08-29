@@ -29,10 +29,6 @@ export class ApiMockService {
   constructor() {
   }
 
-  public getUser(): Observable<MemberEntity> {
-    return Observable.of(this.member);
-  }
-
   public getProjects(): Observable<ProjectEntity[]> {
     return Observable.of(this.projects);
   }

@@ -1,12 +1,10 @@
 <div *ngIf="!loading">
   <div fxLayout>
-      <div fxFlex align="right">
-        <a routerLink="/wizard">
-          <button mat-raised-button color="primary" type="button">
-            <span class="btn-text-default">+ Add Cluster</span>
-          </button>
-        </a>
-      </div>
+    <div fxFlex align="right">
+      <button mat-raised-button color="primary" type="button" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.create" (click)="loadWizard()">
+        <span class="btn-text-default">+ Add Cluster</span>
+      </button>
+    </div>
   </div>
   <mat-card class="blue">
     <mat-card-header>
@@ -31,9 +29,9 @@
       </ng-container>
       <ng-container>
         <div class="row">
-          <a routerLink="/wizard" class="button white">
+          <button class="button white" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.create" (click)="loadWizard()">
             <strong>+ Add Cluster</strong>
-          </a>
+          </button>
         </div>
       </ng-container>
     </mat-card-content>

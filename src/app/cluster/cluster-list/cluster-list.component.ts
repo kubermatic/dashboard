@@ -1,8 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService, DatacenterService } from '../../core/services';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { ApiService, DatacenterService, UserService } from '../../core/services';
+import { AppConfigService } from '../../app-config.service';import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { UserGroupConfig } from '../../shared/model/Config';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
@@ -19,14 +20,20 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public sortedData: ClusterEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
   public projectID: string;
+  public userGroup: string;
+  public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
-  constructor(private route: ActivatedRoute,
-              private api: ApiService,
-              private dcService: DatacenterService) {
+  constructor(private api: ApiService,
+              private route: ActivatedRoute,
+              private appConfigService: AppConfigService,
+              private router: Router,
+              private dcService: DatacenterService,
+              private userService: UserService) {
   }
 
   ngOnInit() {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.subscriptions.push(
       this.route.paramMap.subscribe( m => {
         this.projectID = m.get('projectID');
@@ -34,6 +41,10 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       })
     );
 
+
+      this.userService.currentUserGroup(this.projectID).subscribe(group => {
+        this.userGroup = group;
+      });
     const timer = Observable.interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshClusters();
@@ -65,6 +76,9 @@ export class ClusterListComponent implements OnInit, OnDestroy {
           this.sortData(this.sort);
           this.loading = false;
         }));
+      this.userService.currentUserGroup(this.project.id).subscribe(group => {
+        this.userGroup = group;
+      });
     }));
   }
 
@@ -73,6 +87,10 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       return item.name === cluster.name;
     });
     return prevCluster ? index : undefined;
+  }
+
+  public loadWizard() {
+    this.router.navigate(['/wizard']);
   }
 
   sortData(sort: Sort) {

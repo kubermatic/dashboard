@@ -14,11 +14,13 @@ import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { AppConfigService } from './app-config.service';
 import { ProjectService } from './core/services/project/project.service';
+import { UserService } from './core/services/user/user.service';
 import { GoogleAnalyticsService } from './google-analytics.service';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
-    return appConfig.loadAppConfig();
+    appConfig.loadAppConfig();
+    appConfig.loadUserGroupConfig();
   };
 };
 
@@ -46,6 +48,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       deps: [AppConfigService]
     },
     ProjectService,
+    UserService,
     GoogleAnalyticsService
   ],
   entryComponents: [
