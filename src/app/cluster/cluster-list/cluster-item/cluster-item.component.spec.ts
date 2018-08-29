@@ -55,10 +55,10 @@ describe('ClusterItemComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterItemComponent);
     component = fixture.componentInstance;
-    component.nodeDC = fakeDigitaloceanDatacenter;
-    component.seedDC = fakeBringyourownSeedDatacenter;
-    component.project = fakeProject;
-    component.health = fakeHealth;
+    component.nodeDC = fakeDigitaloceanDatacenter();
+    component.seedDC = fakeBringyourownSeedDatacenter();
+    component.project = fakeProject();
+    component.health = fakeHealth();
     dcService = fixture.debugElement.injector.get(DatacenterService);
   });
 

@@ -8,10 +8,10 @@ export class ProjectMockService {
   // Complete project object
   private _project = new Subject<ProjectEntity>();
   selectedProjectChanges$ = this._project.asObservable();
-  public project = fakeProject;
+  public project = fakeProject();
 
   changeSelectedProject(data: ProjectEntity) {
-    this._project.next(fakeProject);
-    this.project = fakeProject;
+    this._project.next(fakeProject());
+    this.project = fakeProject();
   }
 }

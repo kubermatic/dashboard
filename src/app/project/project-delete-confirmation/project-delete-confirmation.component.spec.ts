@@ -59,21 +59,21 @@ describe('ProjectDeleteConfirmationComponent', () => {
   }));
 
   it('should able add button', () => {
-    component.project = fakeProject;
+    component.project = fakeProject();
 
     fixture.detectChanges();
 
     const input = fixture.debugElement.query(By.css('#name'));
     const inputElement = input.nativeElement;
-    inputElement.value = fakeProject.name;
+    inputElement.value = fakeProject().name;
     inputElement.dispatchEvent(new Event('blur'));
 
     expect(component.inputNameMatches()).toBeTruthy();
   });
 
   it('should call deleteProject method', fakeAsync(() => {
-    component.project = fakeProject;
-    component.inputName = fakeProject.name;
+    component.project = fakeProject();
+    component.inputName = fakeProject().name;
 
     fixture.detectChanges();
     const spyDeleteProject = spyOn(apiService, 'deleteProject').and.returnValue(Observable.of(null));

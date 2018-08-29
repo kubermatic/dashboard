@@ -43,8 +43,8 @@ export class ProjectItemComponent implements OnInit {
         this.projectService.changeSelectedProject({
           id: '',
           name: '',
-          creationTimestamp: '',
-          deletionTimestamp: '',
+          creationTimestamp: null,
+          deletionTimestamp: null,
           status: ''
         });
       }

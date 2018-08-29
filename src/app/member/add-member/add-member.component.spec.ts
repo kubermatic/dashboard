@@ -26,7 +26,7 @@ describe('AddProjectComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createMember']);
-    createMemberSpy = apiMock.createMember.and.returnValue(asyncData(fakeMember));
+    createMemberSpy = apiMock.createMember.and.returnValue(asyncData(fakeMember()));
 
     TestBed.configureTestingModule({
       imports: [

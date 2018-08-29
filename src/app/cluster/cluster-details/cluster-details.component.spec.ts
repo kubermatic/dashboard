@@ -102,15 +102,13 @@ describe('ClusterDetailsComponent', () => {
 
     const expectedCluster = fakeDigitaloceanCluster();
     // @ts-ignore
-    expectedCluster.metadata.creationTimestamp = jasmine.any(Date);
-    // @ts-ignore
-    expectedCluster.status.lastTransitionTime = jasmine.any(Date);
+    expectedCluster.creationTimestamp = jasmine.any(Date);
 
     expect(component.cluster).toEqual(expectedCluster, 'should get cluster by api');
     discardPeriodicTasks();
   }));
-  
-  /*it('should get sshkeys', fakeAsync(() => {
+
+  /* it('should get sshkeys', fakeAsync(() => {
     const sshkeys = fakeSSHKeys().filter(key => {
       if (key.spec.clusters == null) {
         return false;
@@ -121,7 +119,7 @@ describe('ClusterDetailsComponent', () => {
     tick();
 
     // @ts-ignore
-    sshkeys[0].metadata.creationTimestamp = jasmine.any(Date);
+    sshkeys[0].creationTimestamp = jasmine.any(Date);
 
     expect(component.sshKeys).toEqual(sshkeys, 'should get sshkeys by api');
     discardPeriodicTasks();
@@ -131,7 +129,13 @@ describe('ClusterDetailsComponent', () => {
     fixture.detectChanges();
     tick();
 
-    expect(component.nodes).toEqual(nodesFake(), 'should get nodes by api');
+    const expectedNodes = nodesFake();
+    // @ts-ignore
+    expectedNodes[0].creationTimestamp = jasmine.any(Date);
+    // @ts-ignore
+    expectedNodes[1].creationTimestamp = jasmine.any(Date);
+
+    expect(component.nodes).toEqual(expectedNodes, 'should get nodes by api');
 
     discardPeriodicTasks();
   }));

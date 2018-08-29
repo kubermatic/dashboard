@@ -61,7 +61,7 @@ describe('NodeDeleteConfirmationComponent', () => {
     component.cluster = fakeDigitaloceanCluster();
     component.node = nodeFake();
     component.datacenter = fakeDigitaloceanDatacenter();
-    component.project = fakeProject;
+    component.project = fakeProject();
 
     fixture.detectChanges();
     const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(Observable.of(null));

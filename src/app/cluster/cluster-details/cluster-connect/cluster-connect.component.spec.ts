@@ -48,7 +48,7 @@ describe('ClusterConnectComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterConnectComponent);
     component = fixture.componentInstance;
-    component.project = fakeProject;
+    component.project = fakeProject();
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
 

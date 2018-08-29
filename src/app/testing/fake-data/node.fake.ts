@@ -34,7 +34,7 @@ export function fakeDigitaloceanCreateNode(): NodeEntity {
       }
     }
   };
-};
+}
 
 export function nodeFake(): NodeEntity {
   return {
@@ -104,14 +104,13 @@ export function nodeFake(): NodeEntity {
       errorMessage: null
     }
   };
-};
+}
 
 export function nodesFake(): NodeEntity[] {
   return [
     {
       id: 'machine-kubermatic-tbbfvttvs-v5hmk',
       name: 'kubermatic-tbbfvttvs-v5hmk',
-      deletionTimestamp: undefined,
       creationTimestamp: new Date(),
       spec: {
         cloud: {
@@ -142,12 +141,42 @@ export function nodesFake(): NodeEntity[] {
             version: null
           }
         }
+      },
+      status: {
+        machineName: 'machine-kubermatic-tbbfvttvs-v5hmk',
+        capacity: {
+          cpu: '1',
+          memory: '2045940Ki'
+        },
+        allocatable: {
+          cpu: '950m',
+          memory: '1841140Ki'
+        },
+        addresses: [
+          {
+            type: 'InternalIP',
+            address: '46.101.127.190'
+          },
+          {
+            type: 'Hostname',
+            address: 'kubermatic-tbbfvttvs-v5hmk'
+          }
+        ],
+        nodeInfo: {
+          kernelVersion: '4.14.11-coreos',
+          containerRuntime: 'docker',
+          containerRuntimeVersion: 'docker://Unknown',
+          kubeletVersion: 'v1.8.5',
+          operatingSystem: 'linux',
+          architecture: 'amd64'
+        },
+        errorReason: null,
+        errorMessage: null
       }
     },
     {
       id: 'machine-kubermatic-tbbfvttvs-v5hmk',
       name: 'kubermatic-tbbfvttvs-v5hmk',
-      deletionTimestamp: undefined,
       creationTimestamp: new Date(),
       spec: {
         cloud: {
@@ -203,7 +232,7 @@ export function nodesFake(): NodeEntity[] {
           kernelVersion: '4.14.11-coreos',
           containerRuntime: 'docker',
           containerRuntimeVersion: 'docker://Unknown',
-          kubeletVersion: 'v1.8.5',
+          kubeletVersion: null,
           operatingSystem: 'linux',
           architecture: 'amd64'
         },

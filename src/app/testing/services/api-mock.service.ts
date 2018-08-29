@@ -18,13 +18,13 @@ import { masterVersionsFake } from './../fake-data/cluster-spec.fake';
 export class ApiMockService {
   public cluster: ClusterEntity = fakeDigitaloceanCluster();
   public clusters: ClusterEntity[] = fakeClusters();
-  public project: ProjectEntity = fakeProject;
-  public projects: ProjectEntity[] = fakeProjects;
+  public project: ProjectEntity = fakeProject();
+  public projects: ProjectEntity[] = fakeProjects();
   public sshKeys: SSHKeyEntity[] = fakeSSHKeys();
   public nodes: NodeEntity[] = nodesFake();
   public masterVersions: MasterVersion[] = masterVersionsFake();
-  public token: Token = fakeToken;
-  public member: MemberEntity = fakeMember;
+  public token: Token = fakeToken();
+  public member: MemberEntity = fakeMember();
 
   constructor() {
   }

@@ -74,9 +74,7 @@ describe('ClusterListComponent', () => {
 
     const expectedCluster = fakeAWSCluster();
     // @ts-ignore
-    expectedCluster.metadata.creationTimestamp = jasmine.any(Date);
-    // @ts-ignore
-    expectedCluster.status.lastTransitionTime = jasmine.any(Date);
+    expectedCluster.creationTimestamp = jasmine.any(Date);
 
     expect(getSeedDatacentersSpy.and.callThrough()).toHaveBeenCalled();
     expect(getClustersSpy.and.callThrough()).toHaveBeenCalled();

@@ -41,8 +41,8 @@ export function getClusterProvider(cluster: ClusterEntity): string {
 }
 
 export class ClusterEntity {
-  creationTimestamp?: string;
-  deletionTimestamp?: string;
+  creationTimestamp?: Date;
+  deletionTimestamp?: Date;
   id?: string;
   name: string;
   spec: ClusterSpec;
