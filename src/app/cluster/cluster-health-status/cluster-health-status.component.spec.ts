@@ -49,7 +49,7 @@ describe('ClusterHealthStatusComponent', () => {
     component.datacenter = fakeBringyourownSeedDatacenter();
     component.cluster = fakeDigitaloceanCluster();
     component.health = fakeHealth();
-    component.project = fakeProject();
+    component.projectID = fakeProject().id;
   });
 
   it('should create the cluster health status cmp', async(() => {

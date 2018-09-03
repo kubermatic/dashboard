@@ -3,7 +3,6 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { HealthEntity } from '../../shared/entity/HealthEntity';
 import { HealthService } from '../../core/services';
 import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
@@ -16,7 +15,7 @@ import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 export class ClusterHealthStatusComponent implements OnInit {
   @Input() public cluster: ClusterEntity;
   @Input() public datacenter: DataCenterEntity;
-  @Input() public project: ProjectEntity;
+  @Input() public projectID: string;
 
   public green = 'fa fa-circle green';
   public red = 'fa fa-circle red';
@@ -31,13 +30,13 @@ export class ClusterHealthStatusComponent implements OnInit {
   ngOnInit() {
     const timer = Observable.interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
-      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
+      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
         this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
         this.health = health;
       });
     }));
 
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
         this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
         this.health = health;
       });

@@ -24,7 +24,7 @@
     <mat-card-header class="km-card-main-header">
       <mat-card-title>
         <span ngxClipboard [cbContent]="cluster.name" matTooltip="click to copy" class="copy cluster-name">{{cluster.name}}</span>
-        <kubermatic-cluster-health-status [cluster]="cluster" [datacenter]="datacenter" [project]="project"></kubermatic-cluster-health-status>
+        <kubermatic-cluster-health-status [cluster]="cluster" [datacenter]="datacenter" [projectID]="project.id"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
     <!-- <mat-card-subtitle *ngIf="cluster.spec.pause" fxLayout >
