@@ -1,6 +1,6 @@
 export class ProjectEntity {
-  creationTimestamp: string;
-  deletionTimestamp?: string;
+  creationTimestamp: Date;
+  deletionTimestamp?: Date;
   id: string;
   name: string;
   status: string;

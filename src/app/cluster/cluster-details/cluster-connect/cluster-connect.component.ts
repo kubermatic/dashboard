@@ -23,7 +23,7 @@ export class ClusterConnectComponent {
 
   copy(type: string): string {
     if (type === 'exportKubeconfig') {
-      return 'export KUBECONFIG=$PWD/kubeconfig-' + this.cluster.name;
+      return 'export KUBECONFIG=$PWD/kubeconfig-' + this.cluster.id;
     } else if (type === 'kubectlProxy') {
       return 'kubectl proxy';
     }

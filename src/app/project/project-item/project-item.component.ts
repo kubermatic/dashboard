@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { ApiService, ProjectService } from '../../core/services';
+import { ProjectService } from '../../core/services';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { ProjectDeleteConfirmationComponent } from './../project-delete-confirmation/project-delete-confirmation.component';
 
@@ -15,8 +15,7 @@ export class ProjectItemComponent implements OnInit {
   @Input() project: ProjectEntity;
   public clickedDeleteProject = {};
 
-  constructor(private apiService: ApiService,
-              public dialog: MatDialog,
+  constructor(public dialog: MatDialog,
               private router: Router,
               private projectService: ProjectService) {}
 
@@ -31,7 +30,6 @@ export class ProjectItemComponent implements OnInit {
   public selectProject() {
     if (!this.clickedDeleteProject[this.project.id]) {
       this.projectService.changeSelectedProject(this.project);
-      this.router.navigate(['/clusters']);
     }
   }
 
@@ -45,8 +43,8 @@ export class ProjectItemComponent implements OnInit {
         this.projectService.changeSelectedProject({
           id: '',
           name: '',
-          creationTimestamp: '',
-          deletionTimestamp: '',
+          creationTimestamp: null,
+          deletionTimestamp: null,
           status: ''
         });
       }

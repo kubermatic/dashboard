@@ -33,7 +33,7 @@ describe('SidenavComponent', () => {
 
   beforeEach(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getProjects']);
-    getProjectsSpy = apiMock.getProjects.and.returnValue(asyncData(fakeProjects));
+    getProjectsSpy = apiMock.getProjects.and.returnValue(asyncData(fakeProjects()));
 
     TestBed.configureTestingModule({
       imports: [

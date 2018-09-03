@@ -51,7 +51,7 @@ describe('AzureProviderSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AzureProviderSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeAzureCluster;
+    component.cluster = fakeAzureCluster();
     component.cluster.spec.cloud.azure = {
       clientID: '',
       clientSecret: '',

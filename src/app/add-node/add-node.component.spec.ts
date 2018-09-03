@@ -31,8 +31,8 @@ describe('AddNodeComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getOpenStackFlavors']);
-    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
-    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors));
+    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -64,8 +64,8 @@ describe('AddNodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddNodeComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeAWSCluster;
-    component.nodeData = nodeDataFake;
+    component.cluster = fakeAWSCluster();
+    component.nodeData = nodeDataFake();
   });
 
   it('should create the add node cmp', () => {
@@ -81,13 +81,13 @@ describe('AddNodeComponent', () => {
     expect(addNodeElement.querySelector('kubermatic-openstack-add-node')).toBeNull();
     expect(addNodeElement.querySelector('kubermatic-digitalocean-add-node')).toBeNull();
 
-    component.cluster = fakeDigitaloceanCluster;
+    component.cluster = fakeDigitaloceanCluster();
     fixture.detectChanges();
     expect(addNodeElement.querySelector('kubermatic-digitalocean-add-node')).not.toBeNull();
     expect(addNodeElement.querySelector('kubermatic-aws-add-node')).toBeNull();
     expect(addNodeElement.querySelector('kubermatic-openstack-add-node')).toBeNull();
 
-    component.cluster = fakeOpenstackCluster;
+    component.cluster = fakeOpenstackCluster();
     fixture.detectChanges();
     expect(addNodeElement.querySelector('kubermatic-openstack-add-node')).not.toBeNull();
     expect(addNodeElement.querySelector('kubermatic-digitalocean-add-node')).toBeNull();

@@ -68,25 +68,26 @@ describe('ClusterDeleteConfirmationComponent', () => {
   }));
 
   it('should able add button', () => {
-    component.cluster = fakeDigitaloceanCluster;
-    component.datacenter = fakeDigitaloceanDatacenter;
-    component.project = fakeProject;
+    component.project = fakeProject();
+    component.cluster = fakeDigitaloceanCluster();
+    component.datacenter = fakeDigitaloceanDatacenter();
 
     fixture.detectChanges();
 
     const input = fixture.debugElement.query(By.css('#name'));
     const inputElement = input.nativeElement;
-    inputElement.value = fakeDigitaloceanCluster.name;
+    inputElement.value = fakeDigitaloceanCluster().name;
+
     inputElement.dispatchEvent(new Event('blur'));
 
     expect(component.inputNameMatches()).toBeTruthy();
   });
 
   it('should call deleteCluster method', fakeAsync(() => {
-    component.cluster = fakeDigitaloceanCluster;
-    component.datacenter = fakeDigitaloceanDatacenter;
-    component.inputName = fakeDigitaloceanCluster.name;
-    component.project = fakeProject;
+    component.cluster = fakeDigitaloceanCluster();
+    component.datacenter = fakeDigitaloceanDatacenter();
+    component.inputName = fakeDigitaloceanCluster().name;
+    component.project = fakeProject();
 
     fixture.detectChanges();
     const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));

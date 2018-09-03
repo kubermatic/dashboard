@@ -6,8 +6,8 @@ import { find } from 'lodash';
 
 @Injectable()
 export class DatacenterMockService {
-  private datacenters: DataCenterEntity[] = fakeNodeDatacenters;
-  private seedDatacenters: DataCenterEntity[] = [fakeBringyourownSeedDatacenter];
+  private datacenters: DataCenterEntity[] = fakeNodeDatacenters();
+  private seedDatacenters: DataCenterEntity[] = [fakeBringyourownSeedDatacenter()];
 
   public getDataCenters(cluster: string): Observable<DataCenterEntity[]> {
     return Observable.of(this.datacenters);

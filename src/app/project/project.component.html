@@ -1,12 +1,21 @@
 <div *ngIf="!loading">
   <div fxLayout>
     <div fxFlex align="right">
-      <button mat-raised-button color="primary" type="button" (click)="addProject()">
+      <button *ngIf="selectedTab === 'projects'" mat-raised-button color="primary" type="button" (click)="addProject()">
         <span class="btn-text-default">+ Add Project</span>
       </button>
+      <button *ngIf="selectedTab === 'projects'" mat-raised-button color="primary" type="button" (click)="addMember()" [disabled]="!currentProject">
+        <span class="btn-text-default">+ Add Member</span>
+      </button>
+      <!-- <button *ngIf="selectedTab === 'members'" mat-raised-button color="primary" type="button" (click)="addMember()">
+        <span class="btn-text-default">+ Add Member</span>
+      </button>
+      <button *ngIf="selectedTab === 'sshkeys'" mat-raised-button color="primary" type="button" (click)="addSSHkey()">
+        <span class="btn-text-default">+ Add SSH key</span>
+      </button> -->
     </div>
   </div>
-  <mat-tab-group class="km-project-toggle" [@.disabled]="true">
+  <mat-tab-group class="km-project-toggle" [@.disabled]="true" (selectedTabChange)="changeView($event)">
     <mat-tab [ngClass]="test" label="Projects">
       <mat-card class="blue km-project-view">
         <mat-card-header>
@@ -38,9 +47,12 @@
       </mat-card>
     </mat-tab>
 
-    <mat-tab label="Members"></mat-tab>
+    <!-- needs another endpoint that have to be implemented in backend first -->
+    <!-- <mat-tab label="Members" [disabled]="!currentProject">
+      <kubermatic-member></kubermatic-member>
+    </mat-tab> -->
 
-    <mat-tab label="SSH keys"></mat-tab>
+    <mat-tab label="SSHkeys" [disabled]="!currentProject"></mat-tab>
     
   </mat-tab-group>
 </div>

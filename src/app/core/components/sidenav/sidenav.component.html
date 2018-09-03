@@ -22,6 +22,9 @@
       <mat-list-item [ngClass]="disableResource ? 'disabled' : ''">
         <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']"><i class="iconKey" [ngClass]="setIconColor('/sshkeys') ? 'white' : 'black'"></i> Manage SSH keys</a>
       </mat-list-item>
+      <!-- <mat-list-item [ngClass]="disableResource ? 'disabled' : ''">
+        <a mat-line routerLink="/members" [routerLinkActive]="['active']"><i class="iconMember" [ngClass]="setIconColor('/members') ? 'white' : 'black'"></i> Members</a>
+      </mat-list-item> -->
       <mat-list-item>
         <a mat-line routerLink="/projects" [routerLinkActive]="['active']"><i class="iconProject" [ngClass]="setIconColor('/projects') ? 'white' : 'black'"></i> Projects</a>
       </mat-list-item>

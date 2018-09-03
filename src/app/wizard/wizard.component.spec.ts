@@ -1,7 +1,7 @@
 import { ApiService, DatacenterService, InitialNodeDataService, ProjectService, HealthService } from '../core/services';
 import { WizardComponent } from './wizard.component';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SharedModule } from '..//shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -57,9 +57,9 @@ describe('WizardComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster', 'getMasterVersions']);
-    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
-    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster));
-    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake));
+    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
 
     TestBed.configureTestingModule({
       imports: [

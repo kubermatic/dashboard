@@ -26,7 +26,7 @@ describe('SetClusterSpecComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getMasterVersions']);
-    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake));
+    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
 
     TestBed.configureTestingModule({
       imports: [

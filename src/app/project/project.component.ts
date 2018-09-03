@@ -1,14 +1,15 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Sort, MatDialog } from '@angular/material';
+import { Sort, MatDialog, MatTabChangeEvent } from '@angular/material';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { find } from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
-import { ApiService } from '../core/services';
+import { ApiService, ProjectService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../add-project/add-project.component';
+import { AddMemberComponent } from '../member/add-member/add-member.component';
 
 @Component({
   selector: 'kubermatic-project',
@@ -18,16 +19,24 @@ import { AddProjectComponent } from '../add-project/add-project.component';
 
 export class ProjectComponent implements OnInit, OnDestroy {
   public projects: ProjectEntity[];
+  public currentProject: ProjectEntity;
   public loading = true;
   public sortedProjects: ProjectEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
+  public selectedTab = 'projects';
   private subscriptions: Subscription[] = [];
 
   constructor(private router: Router,
               private api: ApiService,
+              private projectService: ProjectService,
               public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    this.currentProject = this.projectService.project;
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.currentProject = project;
+    }));
+
     const timer = Observable.interval(10000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshProjects();
@@ -56,8 +65,16 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const sub = modal.afterClosed().subscribe(added => {
       if (added) {
         this.refreshProjects();
-        this.router.navigate(['/clusters']);
       }
+      sub.unsubscribe();
+    });
+  }
+
+  public addMember() {
+    const modal = this.dialog.open(AddMemberComponent);
+    modal.componentInstance.project = this.currentProject;
+
+    const sub = modal.afterClosed().subscribe(added => {
       sub.unsubscribe();
     });
   }
@@ -93,5 +110,18 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   compare(a, b, isAsc) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  public changeView(event: MatTabChangeEvent) {
+    switch (event.tab.textLabel) {
+      case 'Projects':
+        return this.selectedTab = 'projects';
+      case 'Members':
+        return this.selectedTab = 'members';
+      case 'SSHkeys':
+        return this.selectedTab = 'sshkeys';
+      default:
+        return this.selectedTab = 'projects';
+    }
   }
 }

@@ -46,10 +46,10 @@ describe('ClusterHealthStatusComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterHealthStatusComponent);
     component = fixture.componentInstance;
-    component.datacenter = fakeBringyourownSeedDatacenter;
-    component.cluster = fakeDigitaloceanCluster;
-    component.health = fakeHealth;
-    component.project = fakeProject;
+    component.datacenter = fakeBringyourownSeedDatacenter();
+    component.cluster = fakeDigitaloceanCluster();
+    component.health = fakeHealth();
+    component.project = fakeProject();
   });
 
   it('should create the cluster health status cmp', async(() => {

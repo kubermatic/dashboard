@@ -1,0 +1,19 @@
+<div class="row" [ngClass]="getMemberItemClass()">
+  <div fxLayout>
+    <div fxFlex="35%" fxFlex.xs="40%">
+      <p class="member-name">{{ member.name }}</p>
+    </div>
+    <div fxFlex="35%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
+      <p class="member-email">{{ member.email }}</p>
+    </div>
+    <div fxFlex="20%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
+      <p class="member-group">{{ getGroup(member.projects) }}</p>
+    </div>
+    <div fxFlex="10%" fxHide.sm fxHide.xs>
+      <p class="km-icon">
+        <span class="iconEdit black" (click)="editMember()"></span>
+        <span class="iconDelete black"></span>
+      </p>
+    </div>
+  </div>
+</div>

@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './../core/services/auth/auth.guard';
 
-import { ClusterDetailsComponent } from '../cluster/cluster-details/cluster-details.component';
 import { ProjectComponent } from '../project/project.component';
 
 const routes: Routes = [

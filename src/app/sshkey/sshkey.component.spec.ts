@@ -54,9 +54,14 @@ describe('SshkeyComponent', () => {
   });
 
   it('should get sshkeys list', fakeAsync(() => {
-    const sshkeys = fakeSSHKeys;
+    const sshkeys = fakeSSHKeys();
     fixture.detectChanges();
     tick();
+
+    // @ts-ignore
+    sshkeys[0].metadata.creationTimestamp = jasmine.any(Date);
+    // @ts-ignore
+    sshkeys[1].metadata.creationTimestamp = jasmine.any(Date);
 
     expect(component.sshKeys).toEqual(sshkeys, 'should be obtained');
   }));

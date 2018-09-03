@@ -111,6 +111,9 @@ html, body {
     opacity: 1;
     margin-right: 3px;
     padding: 0;
+    &.mat-tab-disabled {
+      background-color: $disabled-button-color !important;
+    }
     &.mat-tab-label-active {
       opacity: 1;
       .mat-tab-label-content {
@@ -538,6 +541,7 @@ mat-card-header {
 .mat-raised-button {
   height: 30px;
   line-height: 16px !important;
+  margin-left: 5px !important;
   font-weight: 500 !important;
 }
 
@@ -794,5 +798,20 @@ button.close {
   }
   &.black {
     background-image: url("/assets/images/icons/black/project-black.png");
+  }
+}
+
+.iconMember {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size:contain;
+  cursor: pointer;
+  &.white {
+    background-image: url("/assets/images/icons/white/member-white.png");
+  }
+  &.black {
+    background-image: url("/assets/images/icons/black/member-black.png");
   }
 }

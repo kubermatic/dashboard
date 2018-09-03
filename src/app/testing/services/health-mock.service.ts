@@ -8,7 +8,7 @@ import { find } from 'lodash';
 
 @Injectable()
 export class HealthMockService {
-  private health: HealthEntity = fakeHealth;
+  private health: HealthEntity = fakeHealth();
 
   public getClusterHealth(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
     return Observable.of(this.health);

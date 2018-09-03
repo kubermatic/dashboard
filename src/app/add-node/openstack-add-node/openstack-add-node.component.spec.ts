@@ -19,7 +19,7 @@ describe('OpenstackAddNodeComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavors']);
-    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors));
+    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -41,8 +41,8 @@ describe('OpenstackAddNodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(OpenstackAddNodeComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeOpenstackCluster.spec.cloud;
-    component.nodeData = nodeDataFake;
+    component.cloudSpec = fakeOpenstackCluster().spec.cloud;
+    component.nodeData = nodeDataFake();
   });
 
   it('should create the add node cmp', () => {

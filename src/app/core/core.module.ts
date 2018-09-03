@@ -12,6 +12,8 @@ import { NavigationComponent } from './components/navigation/navigation.componen
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { NotificationComponent } from './components/notification/notification.component';
 import { AddProjectComponent } from '../add-project/add-project.component';
+import { AddMemberComponent } from '../member/add-member/add-member.component';
+import { EditMemberComponent } from '../member/edit-member/edit-member.component';
 /* Services */
 import { ClusterNameGenerator } from './util/name-generator.service';
 import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
@@ -36,7 +38,9 @@ const components: any[] = [
   NavigationComponent,
   BreadcrumbsComponent,
   NotificationComponent,
-  AddProjectComponent
+  AddProjectComponent,
+  AddMemberComponent,
+  EditMemberComponent
 ];
 
 const services: any[] = [
