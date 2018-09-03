@@ -177,14 +177,12 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.updateSteps();
     }));
 
-
     this.subscriptions.push(this.stepsService.stepsChanges$.subscribe(steps => {
       this.steps = steps;
     }));
 
     this.updateSteps();
     this.stepsService.changeCurrentStep(0, this.steps[0]);
-
   }
 
   ngOnDestroy() {
