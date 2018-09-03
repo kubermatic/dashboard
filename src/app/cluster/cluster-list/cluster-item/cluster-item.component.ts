@@ -2,7 +2,6 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
 import { DatacenterService, HealthService } from '../../../core/services';
 
@@ -14,7 +13,7 @@ import { DatacenterService, HealthService } from '../../../core/services';
 
 export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  @Input() project: ProjectEntity;
+  @Input() projectID: string;
   @Input() index: number;
   public nodeDC: DataCenterEntity;
   public seedDC: DataCenterEntity;
@@ -33,7 +32,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     });
 
     if (!!this.seedDC) {
-      this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.project.id).subscribe(health => {
+      this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.projectID).subscribe(health => {
         this.health = health;
       });
     }

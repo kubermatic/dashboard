@@ -57,7 +57,7 @@ describe('ClusterItemComponent', () => {
     component = fixture.componentInstance;
     component.nodeDC = fakeDigitaloceanDatacenter();
     component.seedDC = fakeBringyourownSeedDatacenter();
-    component.project = fakeProject();
+    component.projectID = fakeProject().id;
     component.health = fakeHealth();
     dcService = fixture.debugElement.injector.get(DatacenterService);
   });
