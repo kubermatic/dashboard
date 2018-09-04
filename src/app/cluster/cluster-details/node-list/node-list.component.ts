@@ -80,7 +80,7 @@ export class NodeListComponent implements OnChanges {
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
-    dialogRef.componentInstance.project = this.project;
+    dialogRef.componentInstance.projectID = this.project.id;
 
     const sub = dialogRef.afterClosed().subscribe(result => {
     this.clickedDuplicateNode[node.id] = false;
