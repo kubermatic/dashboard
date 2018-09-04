@@ -248,7 +248,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.projectID = this.projectID;
     const sub = modal.afterClosed().subscribe(deleted => {
       if (deleted) {
-        this.router.navigate(['/clusters']);
+        this.router.navigate(['/clusters/' + this.projectID]);
       }
       sub.unsubscribe();
     });

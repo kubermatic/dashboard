@@ -65,7 +65,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       for (const i in this.projects) {
         if (this.projects[i].id === event.value) {
           this.projectService.changeSelectedProject(this.projects[i]);
-          this.router.navigate(['/clusters']);
+          this.router.navigate(['/clusters/' + this.projects[i].id]);
         }
       }
     }
@@ -76,7 +76,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const sub = modal.afterClosed().subscribe(added => {
       if (added) {
         this.reloadProjects();
-        this.router.navigate(['/clusters']);
+        this.router.navigate(['/clusters/' + added.id]);
       }
       sub.unsubscribe();
     });
