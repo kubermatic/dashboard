@@ -50,9 +50,10 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.loadOptionalSettings();
 
-
     this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.loadTenants();
+      this.loadOptionalSettings();
+      this.loadSubnetIds();
 
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
@@ -74,14 +75,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
       this.hideOptional = data.hideOptional;
-    }));
-
-    this.subscriptions.push(this.openstackSettingsForm.controls.network.valueChanges.subscribe(data => {
-      this.loadSubnetIds();
-    }));
-
-    this.subscriptions.push(this.openstackSettingsForm.controls.tenant.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
-      this.loadOptionalSettings();
     }));
   }
 
