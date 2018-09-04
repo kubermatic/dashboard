@@ -42,6 +42,14 @@ export class ClusterHealthStatusComponent implements OnInit {
       });
   }
 
+  public ngOnDestroy(): void {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
+  }
+
   public getHealthStatusColor(): string {
     if (this.health) {
       if (this.healthStatus === ClusterHealth.RUNNING) {
