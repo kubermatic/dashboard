@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
@@ -12,7 +12,7 @@ import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
   templateUrl: './cluster-health-status.component.html',
   styleUrls: ['./cluster-health-status.component.scss']
 })
-export class ClusterHealthStatusComponent implements OnInit {
+export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
   @Input() public datacenter: DataCenterEntity;
   @Input() public projectID: string;
