@@ -13,12 +13,13 @@ import { SharedModule } from '../shared/shared.module';
 import { RouterStub, RouterTestingModule } from './../testing/router-stubs';
 
 import { ApiService, ProjectService, UserService } from '../core/services';
-import { asyncData } from '../testing/services/api-mock.service';
 import { AppConfigService } from '../app-config.service';
 
 import { ApiMockService } from '../testing/services/api-mock.service';
 import { ProjectMockService } from '../testing/services/project-mock.service';
 import { UserMockService } from '../testing/services/user-mock.service';
+import { AppConfigMockService } from '../testing/services/app-config-mock.service';
+import { asyncData } from '../testing/services/api-mock.service';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
@@ -45,8 +46,8 @@ describe('ProjectComponent', () => {
         { provide: ApiService, useClass: ApiMockService },
         { provide: ProjectService, useClass: ProjectMockService},
         { provide: UserService, useClass: UserMockService },
-        AppConfigService,
-        MatDialog,
+        { provide: AppConfigService, useClass: AppConfigMockService },
+        MatDialog
       ],
     }).compileComponents();
   }));

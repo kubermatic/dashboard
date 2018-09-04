@@ -1,19 +1,21 @@
-import { ApiService, ProjectService } from '../core/services';
-import { ApiMockService } from '../testing/services/api-mock.service';
-import { ProjectMockService } from '../testing/services/project-mock.service';
-import { MemberComponent } from './member.component';
-import { MemberItemComponent } from './member-item/member-item.component';
 import { Router } from '@angular/router';
-import { SharedModule } from '../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '../testing/router-stubs';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatTabsModule, MatDialog } from '@angular/material';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { MemberComponent } from './member.component';
+import { MemberItemComponent } from './member-item/member-item.component';
+import { ApiService, ProjectService, UserService } from '../core/services';
+import { AppConfigService } from '../app-config.service';
+import { ApiMockService } from '../testing/services/api-mock.service';
+import { ProjectMockService } from '../testing/services/project-mock.service';
+import { UserMockService } from '../testing/services/user-mock.service';
+import { AppConfigMockService } from '../testing/services/app-config-mock.service';
+import { SharedModule } from '../shared/shared.module';
+import { RouterTestingModule } from '../testing/router-stubs';
 import { RouterStub } from './../testing/router-stubs';
 import { asyncData } from '../testing/services/api-mock.service';
-import { MatTabsModule, MatDialog } from '@angular/material';
-
 
 describe('MemberComponent', () => {
   let fixture: ComponentFixture<MemberComponent>;
@@ -38,7 +40,9 @@ describe('MemberComponent', () => {
         { provide: Router, useClass: RouterStub },
         { provide: ApiService, useClass: ApiMockService },
         { provide: ProjectService, useClass: ProjectMockService },
-        MatDialog,
+        { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService},
+        MatDialog
       ],
     }).compileComponents();
   }));

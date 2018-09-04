@@ -9,6 +9,7 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { ProjectItemComponent } from './project-item.component';
 
 import { ProjectService, UserService } from '../../core/services';
+import { AppConfigService } from '../../app-config.service';
 
 import { SharedModule } from '../../shared/shared.module';
 import { RouterStub, RouterTestingModule } from '../../testing/router-stubs';
@@ -16,6 +17,7 @@ import { RouterStub, RouterTestingModule } from '../../testing/router-stubs';
 import { MatDialogRefMock } from '../../testing/services/mat-dialog-ref-mock';
 import { ProjectMockService } from '../../testing/services/project-mock.service';
 import { UserMockService } from '../../testing/services/user-mock.service';
+import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
 
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 
@@ -45,6 +47,7 @@ describe('ProjectItemComponent', () => {
         { provide: UserService, useClass: UserMockService },
         { provide: Router, useClass: RouterStub },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
+        { provide: AppConfigService, useClass: AppConfigMockService }
       ],
     }).compileComponents();
   });

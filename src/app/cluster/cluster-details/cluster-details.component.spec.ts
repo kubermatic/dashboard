@@ -24,6 +24,7 @@ import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { ProjectMockService } from '../../testing/services/project-mock.service';
 import { HealthMockService } from '../../testing/services/health-mock.service';
 import { UserMockService } from '../../testing/services/user-mock.service';
+import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
 import { asyncData } from '../../testing/services/api-mock.service';
 
 import { fakeDigitaloceanCluster } from './../../testing/fake-data/cluster.fake';
@@ -83,8 +84,8 @@ describe('ClusterDetailsComponent', () => {
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: HealthService, useClass: HealthMockService },
         { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService },
         MatDialog,
-        AppConfigService,
         InitialNodeDataService
       ],
     }).compileComponents();

@@ -24,7 +24,10 @@ import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { ApiService } from '../../core/services';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { HealthMockService } from '../../testing/services/health-mock.service';
-import { UserMockService } from '../../testing/services/user-mock.service';import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
+import { UserMockService } from '../../testing/services/user-mock.service';
+import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
+
+import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
 import { fakeSeedDatacenters } from '../../testing/fake-data/datacenter.fake';
 
 describe('ClusterListComponent', () => {
@@ -62,7 +65,7 @@ describe('ClusterListComponent', () => {
         { provide: HealthService, useClass: HealthMockService },
         { provide: UserService, useClass: UserMockService },
         { provide: Router, useClass: RouterStub },
-        AppConfigService
+        { provide: AppConfigService, useClass: AppConfigMockService }
       ],
     }).compileComponents();
   }));

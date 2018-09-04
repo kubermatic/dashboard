@@ -1,10 +1,8 @@
-
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
 import { UserGroupConfig } from '../../../shared/model/Config';
 import { HealthService } from '../../../core/services';
@@ -19,7 +17,6 @@ import { AppConfigService } from '../../../app-config.service';
 export class ClusterSecretsComponent implements OnInit, OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-
   @Input() projectID: string;
   @Input() userGroup: string;
   public expand = false;
@@ -30,7 +27,6 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
   public userGroupConfig: UserGroupConfig;
 
   constructor(public dialog: MatDialog,
-
               private healthService: HealthService,
               private appConfigService: AppConfigService) { }
 
@@ -164,7 +160,6 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
 
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
-
     this.dialogRef.componentInstance.projectID = this.projectID;
 
     this.dialogRef.afterClosed().subscribe(result => {});

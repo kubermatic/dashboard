@@ -10,6 +10,7 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { SidenavComponent } from './sidenav.component';
 
 import { ApiService, ProjectService, UserService } from './../../../core/services';
+import { AppConfigService } from '../../../app-config.service';
 
 import { SharedModule } from '../../../shared/shared.module';
 import { RouterTestingModule, RouterLinkStubDirective, RouterStub, ActivatedRouteStub } from '../../../testing/router-stubs';
@@ -18,6 +19,7 @@ import { click } from './../../../testing/utils/click-handler';
 import { asyncData } from './../../../testing/services/api-mock.service';
 import { ProjectMockService } from './../../../testing/services/project-mock.service';
 import { UserMockService } from './../../../testing/services/user-mock.service';
+import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
 
 import { fakeProjects } from './../../../testing/fake-data/project.fake';
 import Spy = jasmine.Spy;
@@ -53,6 +55,7 @@ describe('SidenavComponent', () => {
         { provide: ApiService, useValue: apiMock },
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService },
         { provide: Router, useValue: {
           routerState: {
             snapshot: {
@@ -60,7 +63,7 @@ describe('SidenavComponent', () => {
             }
           }
         },
-        MatDialog
+        MatDialog,
       ],
     }).compileComponents();
   });
@@ -82,7 +85,7 @@ describe('SidenavComponent', () => {
   it('should get RouterLinks from template', () => {
     fixture.detectChanges();
 
-    expect(links.length).toBe(4, 'should have 4 links');
+    expect(links.length).toBe(5, 'should have 5 links');
     expect(links[0].linkParams).toBe('/wizard', '1st link should go to Wizard');
     expect(links[1].linkParams).toBe('/clusters', '2nd link should go to Cluster list');
   });
