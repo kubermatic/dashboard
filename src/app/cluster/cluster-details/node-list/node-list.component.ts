@@ -67,7 +67,7 @@ export class NodeListComponent implements OnChanges {
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
-    dialogRef.componentInstance.project = this.project;
+    dialogRef.componentInstance.projectID = this.project.id;
 
     dialogRef.afterClosed().subscribe(result => {
       this.deleteNode.emit(node);
