@@ -594,12 +594,25 @@ button.close {
 .mat-toolbar {
   border: none;
   padding: 0;
-  color: $text-color;
   font-size: 18px;
   font-weight: 600;
   position: relative;
 }
 
+.mat-toolbar {
+  background-color: $primary !important;
+  color: white !important;
+  margin-bottom: 10px;
+
+  .mat-dialog-info {
+    margin-left: 10px;
+  }
+
+  .fa-pencil {
+    margin-left: 15px;
+    margin-right: 10px;
+  }
+}
 
 // modal action
 .mat-dialog-actions {
@@ -631,14 +644,13 @@ button.close {
 .mat-dialog-container {
   padding: 0 !important;
   max-width: 600px;
+  border-radius: 0;
   .mat-toolbar-row {
     position: relative;
   }
 
   .mat-toolbar {
-    background-color: #fff;
     height: 50px;
-    padding: 0 8px;
 
     .mat-toolbar-row {
       height: 30px;
@@ -663,7 +675,6 @@ button.close {
     padding: 0 10px;
     margin: 0px;
 
-
     p {
       font-size: 14px;
       font-weight: 400;
@@ -680,7 +691,7 @@ button.close {
   .mat-dialog-actions {
 
     &:last-child {
-      margin-bottom: -12px;
+      margin-bottom: 12px;
     }
     button {
       margin-right: 10px;
