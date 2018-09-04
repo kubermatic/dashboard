@@ -1,7 +1,6 @@
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ApiService, InitialNodeDataService } from '../../../core/services';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
@@ -15,7 +14,7 @@ import { GoogleAnalyticsService } from '../../../google-analytics.service';
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  @Input() project: ProjectEntity;
+  @Input() projectID: string;
 
   public inputName = '';
 
@@ -45,7 +44,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
     if (!this.inputNameMatches()) {
       return;
     } else {
-      this.api.deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(result => {
+      this.api.deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(result => {
         this.initialNodeDataService.clearInitialNodeData(this.cluster);
         NotificationActions.success('Success', `Cluster is being deleted`);
         this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');

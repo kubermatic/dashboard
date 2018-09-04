@@ -68,7 +68,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
   }));
 
   it('should able add button', () => {
-    component.project = fakeProject();
+    component.projectID = fakeProject().id;
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
 
@@ -87,7 +87,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
     component.inputName = fakeDigitaloceanCluster().name;
-    component.project = fakeProject();
+    component.projectID = fakeProject().id;
 
     fixture.detectChanges();
     const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));

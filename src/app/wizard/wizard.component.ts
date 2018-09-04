@@ -243,7 +243,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         NotificationActions.success('Success', `Cluster successfully created`);
         this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
-        this.router.navigate(['/clusters/' + datacenter.spec.seed + '/' + cluster.id]);
+        this.router.navigate([`/clusters/${this.project.id}/${datacenter.spec.seed}/${cluster.id}`]);
 
         const isHealthy = new Subject<boolean>();
           const timer = Observable.interval(10000).takeUntil(isHealthy);
