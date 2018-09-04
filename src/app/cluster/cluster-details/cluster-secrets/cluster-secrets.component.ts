@@ -3,7 +3,6 @@ import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
 import { HealthService } from '../../../core/services';
 
@@ -15,7 +14,7 @@ import { HealthService } from '../../../core/services';
 export class ClusterSecretsComponent implements OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  @Input() project: ProjectEntity;
+  @Input() projectID: string;
   public expand = false;
   public dialogRef: any;
   public isClusterRunning: boolean;
@@ -26,7 +25,7 @@ export class ClusterSecretsComponent implements OnChanges {
               private healthService: HealthService) { }
 
   ngOnChanges() {
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
       this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
       this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
       this.health = health;
@@ -150,7 +149,7 @@ export class ClusterSecretsComponent implements OnChanges {
 
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
-    this.dialogRef.componentInstance.projectID = this.project.id;
+    this.dialogRef.componentInstance.projectID = this.projectID;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }
