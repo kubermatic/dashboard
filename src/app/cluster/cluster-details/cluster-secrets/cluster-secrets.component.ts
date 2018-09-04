@@ -150,7 +150,7 @@ export class ClusterSecretsComponent implements OnChanges {
 
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
-    this.dialogRef.componentInstance.project = this.project;
+    this.dialogRef.componentInstance.projectID = this.project.id;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }

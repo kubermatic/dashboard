@@ -4,7 +4,6 @@ import { NotificationActions } from '../../../../redux/actions/notification.acti
 import { ApiService } from '../../../../core/services';
 import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
 import { ClusterEntity, Token } from '../../../../shared/entity/ClusterEntity';
-import { ProjectEntity } from '../../../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-revoke-admin-token',
@@ -15,7 +14,7 @@ import { ProjectEntity } from '../../../../shared/entity/ProjectEntity';
 export class RevokeAdminTokenComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  @Input() project: ProjectEntity;
+  @Input() projectID: string;
   public adminToken: Token = { token: '' };
 
   constructor(private api: ApiService,
@@ -24,7 +23,7 @@ export class RevokeAdminTokenComponent implements OnInit {
   ngOnInit() { }
 
   public revokeAdminToken() {
-    this.api.editToken(this.cluster, this.datacenter.metadata.name, this.project.id, this.adminToken).subscribe(res => {
+    this.api.editToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.adminToken).subscribe(res => {
       NotificationActions.success('Success', `Revoke Admin Token successfully`);
       this.dialogRef.close(res);
     });
