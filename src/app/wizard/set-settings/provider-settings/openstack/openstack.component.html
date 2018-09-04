@@ -20,8 +20,8 @@
   <mat-form-field fxFlex>
     <input matInput formControlName="tenant" placeholder="Tenant*:" [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
-      <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading tenants...</mat-option>
+      <mat-option *ngIf="!loadingOptionalTenants && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
+      <mat-option *ngIf="loadingOptionalTenants" [value]="0">Loading tenants...</mat-option>
 
       <mat-option *ngFor="let item of tenants" [value]="item.name">
       {{item.name}}
