@@ -8,7 +8,7 @@ import { ClusterListComponent } from './cluster-list/cluster-list.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: ':projectID',
     component: ClusterListComponent,
     canActivate: [AuthGuard],
     data: { title: 'Manage Clusters' }

@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
-import { ApiService, DatacenterService, ProjectService } from '../../core/services';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService, DatacenterService } from '../../core/services';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
@@ -18,20 +18,21 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public loading = true;
   public sortedData: ClusterEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
-  public project: ProjectEntity;
+  public projectID: string;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private dcService: DatacenterService,
-              private projectService: ProjectService) {
+  constructor(private route: ActivatedRoute,
+              private api: ApiService,
+              private dcService: DatacenterService) {
   }
 
   ngOnInit() {
-    this.project = this.projectService.project;
-
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
-      this.project = project;
-    }));
+    this.subscriptions.push(
+      this.route.paramMap.subscribe( m => {
+        this.projectID = m.get('projectID');
+        this.refreshClusters();
+      })
+    );
 
     const timer = Observable.interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
@@ -53,7 +54,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       const clusters: ClusterEntity[] = [];
       const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
       for (const dc of datacenters) {
-        dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.project.id));
+        dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.projectID));
       }
       this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
         .subscribe(dcClusters => {

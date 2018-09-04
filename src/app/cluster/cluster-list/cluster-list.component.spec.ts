@@ -5,14 +5,14 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { RouterLinkStubDirective, RouterTestingModule } from './../../testing/router-stubs';
+import { ActivatedRoute } from '@angular/router';
+import { ActivatedRouteStub, RouterLinkStubDirective, RouterTestingModule } from './../../testing/router-stubs';
 import { click } from './../../testing/utils/click-handler';
 import { ClusterListComponent } from './cluster-list.component';
 import { ClusterItemComponent } from './cluster-item/cluster-item.component';
 import { Auth } from './../../core/services/auth/auth.service';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
-import { ProjectMockService } from '../../testing/services/project-mock.service';
-import { ApiService, ProjectService } from '../../core/services';
+import { ApiService } from '../../core/services';
 import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { fakeSeedDatacenters } from '../../testing/fake-data/datacenter.fake';
@@ -26,6 +26,7 @@ describe('ClusterListComponent', () => {
   let component: ClusterListComponent;
   let getClustersSpy: Spy;
   let getSeedDatacentersSpy: Spy;
+  let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getClusters']);
@@ -51,7 +52,7 @@ describe('ClusterListComponent', () => {
         { provide: ApiService, useValue: apiMock },
         { provide: DatacenterService, useValue: dcMock },
         { provide: Auth, useClass: AuthMockService },
-        { provide: ProjectService, useClass: ProjectMockService },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         HealthService
       ],
     }).compileComponents();
@@ -60,6 +61,9 @@ describe('ClusterListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterListComponent);
     component = fixture.componentInstance;
+
+    activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
+    activatedRoute.testParamMap = { projectID: '4k6txp5sq' };
   });
 
   it('should create the cluster list cmp', fakeAsync(() => {
