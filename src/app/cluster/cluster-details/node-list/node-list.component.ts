@@ -5,7 +5,6 @@ import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.compone
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { HealthService } from '../../../core/services';
 
 @Component({
@@ -18,7 +17,7 @@ export class NodeListComponent implements OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
-  @Input() project: ProjectEntity;
+  @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   public clusterHealthStatus: string;
   public isClusterRunning: boolean;
@@ -47,7 +46,7 @@ export class NodeListComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(health => {
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
       this.clusterHealthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
       this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
     });
@@ -67,7 +66,7 @@ export class NodeListComponent implements OnChanges {
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
-    dialogRef.componentInstance.projectID = this.project.id;
+    dialogRef.componentInstance.projectID = this.projectID;
 
     dialogRef.afterClosed().subscribe(result => {
       this.deleteNode.emit(node);
@@ -80,7 +79,7 @@ export class NodeListComponent implements OnChanges {
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
-    dialogRef.componentInstance.projectID = this.project.id;
+    dialogRef.componentInstance.projectID = this.projectID;
 
     const sub = dialogRef.afterClosed().subscribe(result => {
     this.clickedDuplicateNode[node.id] = false;
