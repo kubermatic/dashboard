@@ -18,14 +18,15 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <mat-select placeholder="Tenant*:" formControlName="tenant">
+    <input matInput formControlName="tenant" placeholder="Tenant*:" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="0">Please enter your credentials first!</mat-option>
       <mat-option *ngIf="loadingOptionalSettings" [value]="0">Loading tenants...</mat-option>
 
       <mat-option *ngFor="let item of tenants" [value]="item.name">
       {{item.name}}
       </mat-option>
-    </mat-select>
+    </mat-autocomplete>
     <mat-error *ngIf="openstackSettingsForm.controls.tenant.hasError('required')">
       Tenant is <strong>required</strong>
     </mat-error>
