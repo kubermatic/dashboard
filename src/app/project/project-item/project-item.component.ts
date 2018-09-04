@@ -30,6 +30,7 @@ export class ProjectItemComponent implements OnInit {
   public selectProject() {
     if (!this.clickedDeleteProject[this.project.id]) {
       this.projectService.changeSelectedProject(this.project);
+      this.router.navigate(['/clusters/' + this.project.id]);
     }
   }
 

@@ -28,7 +28,7 @@ export class AddProjectComponent implements OnInit {
     const createProject: CreateProjectModel = { name: this.addProjectForm.controls.name.value };
     this.api.createProject(createProject).subscribe(res => {
       this.projectService.changeSelectedProject(res);
-      this.dialogRef.close(true);
+      this.dialogRef.close(res);
       NotificationActions.success('Success', `Project is added successfully`);
     });
   }
