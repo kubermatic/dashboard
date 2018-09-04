@@ -16,14 +16,13 @@ import { EditProviderSettingsComponent } from './edit-provider-settings/edit-pro
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
-import { ApiService, DatacenterService, InitialNodeDataService, ProjectService, HealthService, UserService } from '../../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService, HealthService, UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { HealthEntity } from '../../shared/entity/HealthEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
-import { ApiService, DatacenterService, InitialNodeDataService, HealthService } from '../../core/services';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 import { UserGroupConfig } from '../../shared/model/Config';

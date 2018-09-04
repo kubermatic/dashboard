@@ -4,13 +4,10 @@
       <button *ngIf="selectedTab === 'projects'" mat-raised-button color="primary" type="button" (click)="addProject()">
         <span class="btn-text-default">+ Add Project</span>
       </button>
-      <button *ngIf="selectedTab === 'projects'" mat-raised-button color="primary" type="button" (click)="addMember()" [disabled]="!currentProject">
+      <button *ngIf="selectedTab === 'members'" mat-raised-button color="primary" type="button" (click)="addMember()" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].members.invite)">
         <span class="btn-text-default">+ Add Member</span>
       </button>
-      <!-- <button *ngIf="selectedTab === 'members'" mat-raised-button color="primary" type="button" (click)="addMember()">
-        <span class="btn-text-default">+ Add Member</span>
-      </button>
-      <button *ngIf="selectedTab === 'sshkeys'" mat-raised-button color="primary" type="button" (click)="addSSHkey()">
+      <!-- <button *ngIf="selectedTab === 'sshkeys'" mat-raised-button color="primary" type="button" (click)="addSSHkey()" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].sshkeys.create)">
         <span class="btn-text-default">+ Add SSH key</span>
       </button> -->
     </div>
@@ -40,17 +37,16 @@
           </ng-container>
           <ng-container>
             <div class="row add-project-button">
-              <strong (click)="addProject()">+ Add Project</strong>
+              <button class="btn-in-box" (click)="addProject()">+ Add Project</button>
             </div>
           </ng-container>
         </mat-card-content>
       </mat-card>
     </mat-tab>
 
-    <!-- needs another endpoint that have to be implemented in backend first -->
-    <!-- <mat-tab label="Members" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].members.view)">
+    <mat-tab label="Members" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].members.view)">
       <kubermatic-member></kubermatic-member>
-    </mat-tab> -->
+    </mat-tab>
 
     <mat-tab label="SSHkeys" [disabled]="!currentProject"></mat-tab>
     

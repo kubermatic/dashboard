@@ -11,8 +11,8 @@
     </div>
     <div fxFlex="10%" fxHide.sm fxHide.xs>
       <p class="km-icon">
-        <span class="iconEdit black" (click)="editMember()"></span>
-        <span class="iconDelete black"></span>
+        <button class="iconEdit black" (click)="editMember()" [ngClass]="!!userGroup && !userGroupConfig[userGroup].members.edit"></button>
+        <button class="iconDelete black" [disabled]="!!userGroup && !userGroupConfig[userGroup].members.remove"></button>
       </p>
     </div>
   </div>

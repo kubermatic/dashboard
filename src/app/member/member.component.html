@@ -26,7 +26,7 @@
           </ng-container>
           <ng-container>
             <div class="row add-member-button">
-              <strong (click)="addMember()">+ Add Member</strong>
+              <button class="btn-in-box" (click)="addMember()" [disabled]="!!userGroup && !userGroupConfig[userGroup].members.invite">+ Add Member</button>
             </div>
           </ng-container>
         </mat-card-content>

@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { HealthService } from '../../../core/services';
+import { UserGroupConfig } from '../../../shared/model/Config';
+import { HealthService, UserService } from '../../../core/services';
+import { AppConfigService } from '../../../app-config.service';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -13,7 +15,7 @@ import { HealthService } from '../../../core/services';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent implements OnChanges {
+export class NodeListComponent implements OnInit, OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
@@ -24,6 +26,8 @@ export class NodeListComponent implements OnChanges {
   public clickedDeleteNode = {};
   public clickedDuplicateNode = {};
   public isShowNodeDetails = {};
+  public userGroupConfig: UserGroupConfig;
+  public userGroup: string;
   public config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -42,10 +46,21 @@ export class NodeListComponent implements OnChanges {
   };
 
   constructor(public dialog: MatDialog,
-              private healthService: HealthService) {
+
+              private healthService: HealthService,
+              private appConfigService: AppConfigService,
+              private userService: UserService) {
+  }
+
+  ngOnInit() {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+        this.userGroup = group;
+      });
   }
 
   ngOnChanges() {
+
     this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
       this.clusterHealthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
       this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
@@ -66,6 +81,7 @@ export class NodeListComponent implements OnChanges {
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
+
     dialogRef.componentInstance.projectID = this.projectID;
 
     dialogRef.afterClosed().subscribe(result => {
@@ -79,6 +95,7 @@ export class NodeListComponent implements OnChanges {
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
+
     dialogRef.componentInstance.projectID = this.projectID;
 
     const sub = dialogRef.afterClosed().subscribe(result => {

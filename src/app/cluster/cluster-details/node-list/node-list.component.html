@@ -65,8 +65,8 @@
                   <button mat-icon-button class="km-duplicate-node" matTooltip="duplicate Node" (click)="duplicateNodeDialog(node)">
                     <i class="fa fa-clone" aria-hidden="true"></i>
                   </button>
-                  <button mat-icon-button class="km-delete-node" matTooltip="delete Node" (click)="deleteNodeDialog(node)">
-                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                  <button mat-icon-button class="km-delete-node" matTooltip="delete Node" (click)="deleteNodeDialog(node)" [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
+                    <i class="fa fa-trash-o" aria-hidden="true" [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'disabled' : ''"></i>
                   </button>
                 </ng-container>
               </ng-container>

@@ -8,7 +8,7 @@
     </div>
     <div fxFlex="10%" fxHide.sm fxHide.xs>
       <p class="km-icon">
-        <button class="iconDelete black" (click)="deleteProject()" [disabled]="userGroup !== 'owners'"></button>
+        <button class="iconDelete black" (click)="deleteProject()" [disabled]="!!userGroup && !userGroupConfig[userGroup].projects.delete"></button>
       </p>
     </div>
   </div>

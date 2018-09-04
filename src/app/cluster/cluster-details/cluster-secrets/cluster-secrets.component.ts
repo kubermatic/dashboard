@@ -1,30 +1,45 @@
-import { Component, Input, OnChanges } from '@angular/core';
+
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
+import { UserGroupConfig } from '../../../shared/model/Config';
 import { HealthService } from '../../../core/services';
+import { AppConfigService } from '../../../app-config.service';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
   templateUrl: './cluster-secrets.component.html',
   styleUrls: ['./cluster-secrets.component.scss']
 })
-export class ClusterSecretsComponent implements OnChanges {
+
+export class ClusterSecretsComponent implements OnInit, OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+
   @Input() projectID: string;
+  @Input() userGroup: string;
   public expand = false;
   public dialogRef: any;
   public isClusterRunning: boolean;
   public healthStatus: string;
   public health: HealthEntity;
+  public userGroupConfig: UserGroupConfig;
 
   constructor(public dialog: MatDialog,
-              private healthService: HealthService) { }
+
+              private healthService: HealthService,
+              private appConfigService: AppConfigService) { }
+
+  ngOnInit() {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+  }
 
   ngOnChanges() {
+
     this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
       this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
       this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
@@ -149,6 +164,7 @@ export class ClusterSecretsComponent implements OnChanges {
 
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
+
     this.dialogRef.componentInstance.projectID = this.projectID;
 
     this.dialogRef.afterClosed().subscribe(result => {});

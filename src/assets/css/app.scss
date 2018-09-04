@@ -743,6 +743,10 @@ mat-list-item.disabled {
   }
 }
 
+.btn-in-box:disabled {
+  color: $disabled-button-color;
+}
+
 .iconDelete {
   display: inline-block;
   width: 25px;
