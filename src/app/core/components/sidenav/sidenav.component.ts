@@ -73,7 +73,17 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public getProjects() {
     this.api.getProjects().subscribe(res => {
       this.projects = res;
+      const projectFromStorage = this.projectService.getProjectFromStorage();
+      if (!!projectFromStorage) {
+        for (const i in this.projects) {
+          if (this.projects[i].id === projectFromStorage) {
+            this.projectService.changeSelectedProject(this.projects[i]);
+            this.selectedProject = projectFromStorage;
+          }
+        }
+      }
     });
+
   }
 
   public selectionChange(event) {
@@ -83,6 +93,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       for (const i in this.projects) {
         if (this.projects[i].id === event.value) {
           this.projectService.changeSelectedProject(this.projects[i]);
+          this.projectService.storeProject(this.projects[i].id);
           this.router.navigate(['/clusters/' + this.projects[i].id]);
         }
       }

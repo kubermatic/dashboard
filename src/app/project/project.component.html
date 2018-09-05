@@ -7,9 +7,9 @@
       <button *ngIf="selectedTab === 'members'" mat-raised-button color="primary" type="button" (click)="addMember()" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].members.invite)">
         <span class="btn-text-default">+ Add Member</span>
       </button>
-      <!-- <button *ngIf="selectedTab === 'sshkeys'" mat-raised-button color="primary" type="button" (click)="addSSHkey()" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].sshkeys.create)">
+      <button *ngIf="selectedTab === 'sshkeys'" mat-raised-button color="primary" type="button" (click)="addSSHKey()" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].sshKeys.create)">
         <span class="btn-text-default">+ Add SSH key</span>
-      </button> -->
+      </button>
     </div>
   </div>
   <mat-tab-group class="km-project-toggle" [@.disabled]="true" (selectedTabChange)="changeView($event)">
@@ -48,7 +48,7 @@
       <kubermatic-member></kubermatic-member>
     </mat-tab>
 
-    <mat-tab class="sshkeys" label="SSH keys">
+    <mat-tab label="SSH keys" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].sshKeys.view)">
       <kubermatic-sshkey></kubermatic-sshkey>
     </mat-tab>
 

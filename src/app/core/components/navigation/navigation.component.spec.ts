@@ -9,8 +9,9 @@ import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing'
 import { RouterStub } from './../../../testing/router-stubs';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
 import { UserMockService } from '../../../testing/services/user-mock.service';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
 import { NavigationComponent } from './navigation.component';
-import { Auth, UserService } from '../../services/index';
+import { Auth, UserService, ProjectService } from '../../services/index';
 import { SidenavService } from '../sidenav/sidenav.service';
 import { MatDialog } from '@angular/material';
 
@@ -40,6 +41,7 @@ describe('NavigationComponent', () => {
         SidenavService,
         MatDialog,
         { provide: UserService, useClass: UserMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         { provide: Router, useClass: RouterStub },
         { provide: Auth, useClass: AuthMockService }
       ],

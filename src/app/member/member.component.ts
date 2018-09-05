@@ -19,7 +19,6 @@ import { UserGroupConfig } from '../shared/model/Config';
 })
 
 export class MemberComponent implements OnInit, OnDestroy {
-  public loading = true;
   public project: ProjectEntity;
   public members: MemberEntity[] = [];
   public sortedMembers: MemberEntity[] = [];
@@ -79,7 +78,6 @@ export class MemberComponent implements OnInit, OnDestroy {
       /*this.subscriptions.push(this.api.getMembers(this.project.id).subscribe(res => {
         this.members = res;*/
         this.sortData(this.sort);
-        this.loading = false;
       /*}));*/
     }
   }

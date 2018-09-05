@@ -236,33 +236,41 @@ export class WizardComponent implements OnInit, OnDestroy {
     for (const key of this.clusterSSHKeys) {
       keyNames.push(key.name);
     }
+
     const createCluster: CreateClusterModel = { name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames };
 
     this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id).subscribe(cluster => {
-        this.creating = false;
-        NotificationActions.success('Success', `Cluster successfully created`);
-        this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
+      this.creating = false;
+      NotificationActions.success('Success', `Cluster successfully created`);
+      this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
-        this.router.navigate([`/clusters/${this.project.id}/${datacenter.spec.seed}/${cluster.id}`]);
+      this.router.navigate([`/clusters/${this.project.id}/${datacenter.spec.seed}/${cluster.id}`]);
 
-        const isHealthy = new Subject<boolean>();
-          const timer = Observable.interval(10000).takeUntil(isHealthy);
-          timer.subscribe(tick => {
-            return this.healthService.getClusterHealth(cluster.id, datacenter.spec.seed, this.project.id).subscribe(health => {
-              if (health.apiserver && health.controller && health.etcd && health.machineController && health.scheduler) {
-                isHealthy.next(true);
-                if (this.clusterProviderFormData.provider !== 'bringyourown') {
-                  this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
-                }
+      // SSH key endpoint to add to cluster is broken atm
+      /* if (this.clusterSSHKeys.length > 0) {
+        for (const key of this.clusterSSHKeys) {
+          this.api.addClusterSSHKey(key.name, cluster.id, datacenter.spec.seed, this.project.id);
+        }
+      }*/
+
+      const isHealthy = new Subject<boolean>();
+        const timer = Observable.interval(10000).takeUntil(isHealthy);
+        timer.subscribe(tick => {
+          return this.healthService.getClusterHealth(cluster.id, datacenter.spec.seed, this.project.id).subscribe(health => {
+            if (health.apiserver && health.controller && health.etcd && health.machineController && health.scheduler) {
+              isHealthy.next(true);
+              if (this.clusterProviderFormData.provider !== 'bringyourown') {
+                this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
               }
-            });
+            }
           });
-      },
-      error => {
-        NotificationActions.error('Error', `Could not create cluster`);
-        this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
-        this.creating = false;
-      }));
+        });
+    },
+    error => {
+      NotificationActions.error('Error', `Could not create cluster`);
+      this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
+      this.creating = false;
+    }));
   }
 
 }
