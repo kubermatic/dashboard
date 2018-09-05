@@ -2,13 +2,11 @@ import { Component, Input, OnInit } from '@angular/core';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import {ApiService, ProjectService} from '../../../core/services';
+import { ApiService, ProjectService } from '../../../core/services';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import {ProjectEntity} from '../../entity/ProjectEntity';
-import {Subscription} from 'rxjs/Subscription';
-
-
+import { ProjectEntity } from '../../entity/ProjectEntity';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',
@@ -16,25 +14,16 @@ import {Subscription} from 'rxjs/Subscription';
   styleUrls: ['./add-ssh-key-modal.component.scss']
 })
 export class AddSshKeyModalComponent implements OnInit {
-  @Input() sshKeys: Array<SSHKeyEntity> = [];
+  @Input() project: ProjectEntity;
   public addSSHKeyForm: FormGroup;
-  public project: ProjectEntity;
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
               private formBuilder: FormBuilder,
               private dialogRef: MatDialogRef<AddSshKeyModalComponent>,
-              public googleAnalyticsService: GoogleAnalyticsService,
-              private projectService: ProjectService) {}
+              public googleAnalyticsService: GoogleAnalyticsService ) {}
 
   ngOnInit() {
-    this.project = this.projectService.project;
-
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
-      this.project = project;
-    }));
-
-
     this.addSSHKeyForm = this.formBuilder.group({
       name: ['', [<any>Validators.required]],
       key: ['', [<any>Validators.required]],

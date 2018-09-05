@@ -3,13 +3,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '../../testing/router-stubs';
 import { Auth, ProjectService } from '../../core/services';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
-import {ProjectSshKeyItemComponent} from './sshkey-item.component';
-
+import { SSHKeyItemComponent } from './sshkey-item.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -20,9 +18,9 @@ const modules: any[] = [
   SharedModule
 ];
 
-describe('ProjectSshKeyItemComponent', () => {
-  let fixture: ComponentFixture<ProjectSshKeyItemComponent>;
-  let component: ProjectSshKeyItemComponent;
+describe('SSHKeyItemComponent', () => {
+  let fixture: ComponentFixture<SSHKeyItemComponent>;
+  let component: SSHKeyItemComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -30,7 +28,7 @@ describe('ProjectSshKeyItemComponent', () => {
         ...modules,
       ],
       declarations: [
-        ProjectSshKeyItemComponent,
+        SSHKeyItemComponent,
       ],
       providers: [
         ProjectService,
@@ -40,7 +38,7 @@ describe('ProjectSshKeyItemComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectSshKeyItemComponent);
+    fixture = TestBed.createComponent(SSHKeyItemComponent);
     component = fixture.componentInstance;
   });
 });

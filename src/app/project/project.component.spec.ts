@@ -7,9 +7,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProjectComponent } from './project.component';
 import { ProjectItemComponent } from './project-item/project-item.component';
-import { Router } from '@angular/router';
 import { MemberModule } from '../member/member.module';
-import { Router } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
 import { RouterStub, RouterTestingModule } from './../testing/router-stubs';
 
@@ -21,6 +19,7 @@ import { ProjectMockService } from '../testing/services/project-mock.service';
 import { UserMockService } from '../testing/services/user-mock.service';
 import { AppConfigMockService } from '../testing/services/app-config-mock.service';
 import { asyncData } from '../testing/services/api-mock.service';
+import { SSHKeyModule } from '../sshkey/sshkey.module';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
@@ -36,13 +35,12 @@ describe('ProjectComponent', () => {
         RouterTestingModule,
         SharedModule,
         MatTabsModule,
-        MemberModule
+        MemberModule,
+        SSHKeyModule
       ],
       declarations: [
         ProjectComponent,
-        ProjectItemComponent
-        ProjectSshKeyItemComponent,
-      ],
+        ProjectItemComponent      ],
       providers: [
         { provide: Router, useClass: RouterStub },
         { provide: ApiService, useClass: ApiMockService },

@@ -32,13 +32,10 @@ import { UserMockService } from '../../testing/services/user-mock.service';
 import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
 import { asyncData } from '../../testing/services/api-mock.service';
 
-
 import { fakeDigitaloceanCluster } from './../../testing/fake-data/cluster.fake';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { nodesFake } from '../../testing/fake-data/node.fake';
-
 import { fakeDigitaloceanDatacenter } from '../../testing/fake-data/datacenter.fake';
-
 import { fakeUserGroupConfig } from '../../testing/fake-data/userGroupConfig.fake';
 
 describe('ClusterDetailsComponent', () => {
@@ -122,7 +119,6 @@ describe('ClusterDetailsComponent', () => {
     fixture.detectChanges();
     tick();
 
-
     const expectedCluster = fakeDigitaloceanCluster();
     // @ts-ignore
     expectedCluster.creationTimestamp = jasmine.any(Date);
@@ -131,26 +127,9 @@ describe('ClusterDetailsComponent', () => {
     discardPeriodicTasks();
   }));
 
-  it('should get sshkeys', fakeAsync(() => {
-    const sshkeys = fakeSSHKeys.filter(key => {
-      /*if (key.spec.clusters == null) {
-        return false;
-      }
-      return key.spec.clusters.indexOf('4k6txp5sq') > -1;*/
-    });
-    fixture.detectChanges();
-    tick();
-
-    // @ts-ignore
-    sshkeys[0].creationTimestamp = jasmine.any(Date);
-
-    expect(component.sshKeys).toEqual(sshkeys, 'should get sshkeys by api');
-    discardPeriodicTasks();
-  }));
   it('should get nodes', fakeAsync(() => {
     fixture.detectChanges();
     tick();
-
 
     const expectedNodes = nodesFake();
     // @ts-ignore

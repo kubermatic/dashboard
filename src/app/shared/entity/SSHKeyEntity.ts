@@ -12,7 +12,7 @@ export class SSHKeySpec {
 export class SSHKeyEntity {
   creationTimestamp: Date;
   deletionTimestamp: Date;
-  id: number;
+  id: string;
   name: string;
   spec: SSHKeySpec;
 

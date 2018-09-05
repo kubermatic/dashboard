@@ -1,18 +1,17 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { ApiService, ProjectService } from '../../core/services';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
-import { ProjectDeleteConfirmationComponent } from './../project-delete-confirmation/project-delete-confirmation.component';
-import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {NotificationActions} from '../../redux/actions/notification.actions';
+import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { NotificationActions } from '../../redux/actions/notification.actions';
 
 @Component({
   selector: 'kubermatic-sshkey-item',
   templateUrl: './sshkey-item.component.html',
   styleUrls: ['./sshkey-item.component.scss'],
 })
-export class  ProjectSshKeyItemComponent implements OnInit {
+
+export class  SSHKeyItemComponent implements OnInit {
   @Input() index: number;
   @Input() sshKey: SSHKeyEntity;
   @Input() projectId: string;
@@ -39,7 +38,7 @@ export class  ProjectSshKeyItemComponent implements OnInit {
   }
 
   public deleteSshKey() {
-    this.apiService.deleteSSHKey(this.sshKey.id, this.projectId).subscribe(() => {
+    this.apiService.deleteSSHKey(this.sshKey.name, this.projectId).subscribe(() => {
       NotificationActions.success('Success', `SSH key ${this.sshKey.name} deleted.`);
     });
   }

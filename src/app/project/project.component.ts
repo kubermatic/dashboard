@@ -23,10 +23,10 @@ import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 
 export class ProjectComponent implements OnInit, OnDestroy {
   public projects: ProjectEntity[];
+  public sshKeys: Array<SSHKeyEntity> = [];
+  public loadingProjects = true;
   public currentProject: ProjectEntity;
-  public loading = true;
-  public loadingProjects = true;  public sortedProjects: ProjectEntity[] = [];
-  public sortedSshKeys: SSHKeyEntity[] = [];
+  public sortedProjects: ProjectEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
   public selectedTab = 'projects';
   public userGroup: string;
@@ -55,10 +55,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     const timer = Observable.interval(10000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshProjects();
-      this.refreshSSHKeys();
     }));
     this.refreshProjects();
-
   }
 
   ngOnDestroy() {
@@ -77,20 +75,20 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }));
   }
 
-  refreshSSHKeys() {
-    this.subscriptions.push(this.api.getSSHKeys(this.project.id).retry(3).subscribe(res => {
-      this.sshKeys = res;
-      this.sortSshKeyData(this.sort);
-      this.loadingSshKeys = false;
-    }));
-  }
-
   public addProject() {
     const modal = this.dialog.open(AddProjectComponent);
     const sub = modal.afterClosed().subscribe(added => {
       if (added) {
         this.refreshProjects();
       }
+      sub.unsubscribe();
+    });
+  }
+
+  public addSshKey(): void {
+    const modal = this.dialog.open(AddSshKeyModalComponent);
+
+    const sub = modal.afterClosed().subscribe(result => {
       sub.unsubscribe();
     });
   }
@@ -104,27 +102,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addSshKey(): void {
-    const dialogRef = this.dialog.open(AddSshKeyModalComponent);
-
-    dialogRef.afterClosed().subscribe(result => {
-      result && this.refreshSSHKeys();
-    });
-  }
   public trackProject(index: number, project: ProjectEntity): number {
     const prevProject = find(this.projects, item => {
       return item.name === project.name;
     });
 
     return prevProject && prevProject.status === project.status ? index : undefined;
-  }
-
-  public trackSshKey(index: number, shhKey: SSHKeyEntity): number {
-    const prevSSHKey = find(this.sshKeys, item => {
-      return item.name === shhKey.name;
-    });
-
-    return prevSSHKey === shhKey ? index : undefined;
   }
 
   sortProjectData(sort: Sort) {
@@ -142,26 +125,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
           return this.compare(a.name, b.name, isAsc);
         case 'status':
           return this.compare(a.status, b.status, isAsc);
-        default:
-          return 0;
-      }
-    });
-  }
-  sortSshKeyData(sort: Sort) {
-    if (sort === null || !sort.active || sort.direction === '') {
-      this.sortedSshKeys = this.sshKeys;
-      return;
-    }
-
-    this.sort = sort;
-
-    this.sortedSshKeys = this.sshKeys.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return this.compare(a.name, b.name, isAsc);
-        case 'status':
-          return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
         default:
           return 0;
       }

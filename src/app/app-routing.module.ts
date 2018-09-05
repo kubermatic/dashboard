@@ -17,11 +17,10 @@ const appRoutes: Routes = [
         loadChildren: './wizard/wizard.module#WizardModule',
       },
       {
-
-      path: 'sshkeys',
-        loadChildren: './sshkey/sshkey.module#SshkeyModule'
+        path: 'sshkeys',
+        loadChildren: './sshkey/sshkey.module#SSHKeyModule'
       },
-      {        
+      {
       path: 'members',
         loadChildren: './member/member.module#MemberModule'
       },

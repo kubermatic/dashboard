@@ -6,18 +6,21 @@ import { ProjectRoutingModule } from './project-routing.module';
 import { ProjectItemComponent } from './project-item/project-item.component';
 import { ProjectDeleteConfirmationComponent } from './project-delete-confirmation/project-delete-confirmation.component';
 import { MemberModule } from '../member/member.module';
+import { SSHKeyModule } from '../sshkey/sshkey.module';
 
 const components: any[] = [
   ProjectComponent,
   ProjectItemComponent,
-  ProjectDeleteConfirmationComponent];
+  ProjectDeleteConfirmationComponent,
+];
 
 @NgModule({
   imports: [
     SharedModule,
     MatTabsModule,
     ProjectRoutingModule,
-    MemberModule
+    MemberModule,
+    SSHKeyModule
   ],
   declarations: [
     ...components

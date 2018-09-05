@@ -91,8 +91,8 @@ export class ApiService {
     return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 
-  deleteSSHKey(fingerprint: number, projectID: string) {
-    const url = `${this.restRoot}/projects/${projectID}/sshkeys/${fingerprint}`;
+  deleteSSHKey(sshkeyname: string, projectID: string) {
+    const url = `${this.restRoot}/projects/${projectID}/sshkeys/${sshkeyname}`;
     return this.http.delete(url, { headers: this.headers });
   }
 

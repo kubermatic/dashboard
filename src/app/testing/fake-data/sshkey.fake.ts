@@ -4,7 +4,7 @@ import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 export function fakeSSHKeys(): SSHKeyEntity[] {
   return [
     {
-      id: 12121,
+      id: '12121',
       name: 'Eugene@DESKTOP-1LADC2V',
       creationTimestamp: new Date(),
       deletionTimestamp: new Date(),
@@ -14,7 +14,7 @@ export function fakeSSHKeys(): SSHKeyEntity[] {
       }
     },
     {
-      id: 3434,
+      id: '3434',
       name: 'ssh-rsa',
       creationTimestamp: new Date(),
       deletionTimestamp: new Date(),
