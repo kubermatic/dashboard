@@ -15,6 +15,7 @@
     </div>
     <div fxFlex.sm="60%"><a class="logo"></a></div>
     <div fxFlex.sm="20%" class="auth">
+      <span class="current-user" *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
       <span class="button logout" *ngIf="auth.authenticated()" (click)="logout()">
         Logout
       </span>

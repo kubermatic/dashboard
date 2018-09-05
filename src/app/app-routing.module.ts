@@ -9,12 +9,20 @@ const appRoutes: Routes = [
     component: DashboardComponent,
     children: [
       {
+        path: 'projects',
+        loadChildren: './project/project.module#ProjectModule',
+      },
+      {
         path: 'wizard',
         loadChildren: './wizard/wizard.module#WizardModule',
       },
       {
         path: 'sshkeys',
-        loadChildren: './sshkey/sshkey.module#SshkeyModule'
+        loadChildren: './sshkey/sshkey.module#SSHKeyModule'
+      },
+      {
+      path: 'members',
+        loadChildren: './member/member.module#MemberModule'
       },
       {
         path: 'clusters',

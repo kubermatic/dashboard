@@ -1,68 +1,55 @@
-import { fakeSSHKeys } from './../testing/fake-data/sshkey.fake';
-import { SshKeyItemComponent } from './ssh-key-list/ssh-key-item/ssh-key-item.component';
-import { SharedModule } from './../shared/shared.module';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { MockNgRedux } from '@angular-redux/store/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-
-import { ApiService } from '../core/services/index';
-import { SshkeyComponent } from './sshkey.component';
-import { MatDialog } from '@angular/material';
+import { ApiService, ProjectService } from '../core/services';
 import { ApiMockService } from '../testing/services/api-mock.service';
-import { SshKeyListComponent } from './ssh-key-list/ssh-key-list.component';
+import { ProjectMockService } from '../testing/services/project-mock.service';
+import { SSHKeyComponent } from './sshkey.component';
+import { SSHKeyItemComponent } from './sshkey-item/sshkey-item.component';
+import { Router } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterTestingModule } from '../testing/router-stubs';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterStub } from './../testing/router-stubs';
+import { asyncData } from '../testing/services/api-mock.service';
+import { MatTabsModule, MatDialog } from '@angular/material';
 
-const modules: any[] = [
-  BrowserModule,
-  HttpClientModule,
-  RouterTestingModule,
-  BrowserAnimationsModule,
-  SharedModule
-];
+describe('SSHKeyComponent', () => {
+  let fixture: ComponentFixture<SSHKeyComponent>;
+  let component: SSHKeyComponent;
+  let router: Router;
 
-describe('SshkeyComponent', () => {
-  let fixture: ComponentFixture<SshkeyComponent>;
-  let component: SshkeyComponent;
-
-  beforeEach(() => {
-    MockNgRedux.reset();
+  beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
-        ...modules,
+        BrowserModule,
+        BrowserAnimationsModule,
+        SlimLoadingBarModule.forRoot(),
+        RouterTestingModule,
+        SharedModule,
+        MatTabsModule,
       ],
       declarations: [
-        SshkeyComponent,
-        SshKeyListComponent,
-        SshKeyItemComponent
+        SSHKeyComponent,
+        SSHKeyItemComponent
       ],
       providers: [
-        MatDialog,
+        { provide: Router, useClass: RouterStub },
         { provide: ApiService, useClass: ApiMockService },
+        { provide: ProjectService, useClass: ProjectMockService},
+        MatDialog,
       ],
     }).compileComponents();
-  });
+  }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SshkeyComponent);
+    fixture = TestBed.createComponent(SSHKeyComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
+    router = fixture.debugElement.injector.get(Router);
   });
 
-  it('should create the sshkey cmp', () => {
+  it('should create sshkey cmp', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should get sshkeys list', fakeAsync(() => {
-    const sshkeys = fakeSSHKeys();
-    fixture.detectChanges();
-    tick();
-
-    // @ts-ignore
-    sshkeys[0].metadata.creationTimestamp = jasmine.any(Date);
-    // @ts-ignore
-    sshkeys[1].metadata.creationTimestamp = jasmine.any(Date);
-
-    expect(component.sshKeys).toEqual(sshkeys, 'should be obtained');
-  }));
 });

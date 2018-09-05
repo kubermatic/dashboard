@@ -13,7 +13,7 @@
             <h3>General</h3>
             <div fxLayout class="km-card-list-content">
               <div fxFlex="50%" class="km-card-list-key">Name</div>
-              <div fxFlex="50%">{{ cluster.spec.humanReadableName }}</div>
+              <div fxFlex="50%">{{ cluster.name }}</div>
             </div>
             <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.version">
               <div fxFlex="50%" class="km-card-list-key">Master Version</div>
@@ -381,9 +381,9 @@
           <ng-container *ngIf="clusterSSHKeys.length">
             <div fxLayout class="km-card-list-content">
               <div fxFlex="100%">
-                <ng-container *ngFor="let key of clusterSSHKeys">
-                  <div>{{ key.spec.name }}</div>
-                </ng-container>
+                <div *ngFor="let key of clusterSSHKeys">
+                  <div>{{ key.name }}</div>
+                </div>
               </div>
             </div>
           </ng-container>

@@ -1,0 +1,59 @@
+<div *ngIf="!loadingProjects">
+  <div fxLayout>
+    <div fxFlex align="right">
+      <button *ngIf="selectedTab === 'projects'" mat-raised-button color="primary" type="button" (click)="addProject()">
+        <span class="btn-text-default">+ Add Project</span>
+      </button>
+      <button *ngIf="selectedTab === 'members'" mat-raised-button color="primary" type="button" (click)="addMember()" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].members.invite)">
+        <span class="btn-text-default">+ Add Member</span>
+      </button>
+      <button *ngIf="selectedTab === 'sshkeys'" mat-raised-button color="primary" type="button" (click)="addSSHKey()" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].sshKeys.create)">
+        <span class="btn-text-default">+ Add SSH key</span>
+      </button>
+    </div>
+  </div>
+  <mat-tab-group class="km-project-toggle" [@.disabled]="true" (selectedTabChange)="changeView($event)">
+    <mat-tab [ngClass]="test" label="Projects">
+      <mat-card class="blue km-project-view">
+        <mat-card-header>
+          <mat-card-title fxLayout matSort (matSortChange)="sortProjectData($event)" matSortActive="name" matSortDirection="asc">
+            <div fxFlex="50%" fxFlex.xs="40%" mat-sort-header="name">
+              <strong>Name</strong>
+            </div>
+            <div fxFlex="40%" fxFlex.sm="20.66%" fxFlex.xs="25%" mat-sort-header="status">
+              <strong>Status</strong>
+            </div>
+            <div fxFlex="10%" fxHide.sm fxHide.xs>
+              <strong></strong>
+            </div>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content fxLayout="column" [ngSwitch]="!!projects && projects.length > 0 ">
+          <ng-container *ngSwitchCase="true">
+            <kubermatic-project-item *ngFor="let project of sortedProjects; let iProject = index; trackBy: trackProject" [index]="iProject" [project]="project" fxFlex></kubermatic-project-item>
+          </ng-container>
+          <ng-container *ngSwitchCase="false">
+            <div fxFlex class="row odd no-item">No Project available. Please add a Project.</div>
+          </ng-container>
+          <ng-container>
+            <div class="row add-project-button">
+              <button class="btn-in-box" (click)="addProject()">+ Add Project</button>
+            </div>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </mat-tab>
+
+    <mat-tab label="Members" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].members.view)">
+      <kubermatic-member></kubermatic-member>
+    </mat-tab>
+
+    <mat-tab label="SSH keys" [disabled]="!currentProject || (!!userGroup && !userGroupConfig[userGroup].sshKeys.view)">
+      <kubermatic-sshkey></kubermatic-sshkey>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+<div *ngIf="loadingProjects" >
+  <mat-spinner color="accent" class="km-spinner"></mat-spinner>
+</div>

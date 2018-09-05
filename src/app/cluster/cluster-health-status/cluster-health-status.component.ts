@@ -1,6 +1,10 @@
-import {Component, Input, OnChanges} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { ClusterService } from '../../core/services';
+import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
+import { HealthEntity } from '../../shared/entity/HealthEntity';
+import { HealthService } from '../../core/services';
 import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 
 @Component({
@@ -8,23 +12,46 @@ import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
   templateUrl: './cluster-health-status.component.html',
   styleUrls: ['./cluster-health-status.component.scss']
 })
-export class ClusterHealthStatusComponent implements OnChanges {
+export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
+  @Input() public datacenter: DataCenterEntity;
+  @Input() public projectID: string;
 
   public green = 'fa fa-circle green';
   public red = 'fa fa-circle red';
   public orange = 'fa fa-spin fa-circle-o-notch orange';
   public redAction = 'fa fa-exclamation-triangle red';
   public healthStatus: string;
+  public health: HealthEntity;
+  private subscriptions: Subscription[] = [];
 
-  constructor( private clusterService: ClusterService) {}
+  constructor(private healthService: HealthService) {}
 
-  ngOnChanges() {
-    this.healthStatus = this.clusterService.getClusterHealthStatus(this.cluster);
+  ngOnInit() {
+    const timer = Observable.interval(5000);
+    this.subscriptions.push(timer.subscribe(tick => {
+      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
+        this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+        this.health = health;
+      });
+    }));
+
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
+        this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+        this.health = health;
+      });
+  }
+
+  public ngOnDestroy(): void {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 
   public getHealthStatusColor(): string {
-    if (this.cluster.status.health) {
+    if (this.health) {
       if (this.healthStatus === ClusterHealth.RUNNING) {
         return this.green;
       } else if (this.healthStatus === ClusterHealth.DELETING) {
@@ -40,10 +67,11 @@ export class ClusterHealthStatusComponent implements OnChanges {
   public getHealthTooltipText(): string {
     if (this.healthStatus === ClusterHealth.DELETING) {
       return 'Deleting might take up to 15 minutes';
-    } else if (!!this.cluster.spec.pause) {
+    } /*else if (!!this.cluster.spec.pause) {
       return 'Manual action required';
     } else {
       return '';
-    }
+    }*/
+    return '';
   }
 }

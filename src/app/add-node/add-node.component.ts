@@ -113,7 +113,6 @@ export class AddNodeComponent implements OnInit, OnDestroy {
     const osSpec = this.getOSSpec();
     return {
       node: {
-        metadata: {},
         spec: {
           cloud: this.providerData.spec,
           operatingSystem: osSpec,

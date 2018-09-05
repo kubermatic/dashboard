@@ -17,6 +17,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   @Input() node: NodeEntity;
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() projectID: string;
 
   public title: string;
   public message: string;
@@ -35,7 +36,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   }
 
   public deleteNode(): void {
-    this.api.deleteClusterNode(this.cluster.metadata.name, this.node, this.datacenter.metadata.name).subscribe(result => {
+    this.api.deleteClusterNode(this.cluster.id, this.node, this.datacenter.metadata.name, this.projectID).subscribe(result => {
       NotificationActions.success('Success', `Node removed successfully`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
     });

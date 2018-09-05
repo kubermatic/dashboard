@@ -5,10 +5,11 @@ import { SimpleNotificationsModule } from 'angular2-notifications';
 import { NgReduxTestingModule } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { SharedModule } from './shared/shared.module';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService } from './core/services/index';
+import { SharedModule } from './shared/shared.module';
+
+import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, ProjectService, UserService } from './core/services/index';
 import { SidenavService } from './core/components/sidenav/sidenav.service';
 import { AppConfigService } from './app-config.service';
 
@@ -18,8 +19,11 @@ import { KubermaticComponent } from './kubermatic.component';
 import { SidenavComponent } from './core/components/sidenav/sidenav.component';
 import { NavigationComponent } from './core/components/navigation/navigation.component';
 
+import { ApiMockService } from './testing/services/api-mock.service';
 import { AuthMockService } from './testing/services/auth-mock.service';
+import { ProjectMockService } from './testing/services/project-mock.service';
 import { DatacenterMockService } from './testing/services/datacenter-mock.service';
+import { UserMockService } from './testing/services/user-mock.service';
 import { GoogleAnalyticsService } from './google-analytics.service';
 
 const modules: any[] = [
@@ -58,8 +62,10 @@ describe('KubermaticComponent', () => {
       providers: [
         AUTH_PROVIDERS,
         { provide: Auth, useClass: AuthMockService },
-        ApiService,
+        { provide: ApiService, useClass: ApiMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         { provide: DatacenterService, useClass: DatacenterMockService },
+        { provide: UserService, useClass: UserMockService },
         AuthGuard,
         SidenavService,
         AppConfigService,

@@ -10,7 +10,7 @@ import { ClusterDatacenterForm, ClusterProviderForm } from '../../shared/model/C
   styleUrls: ['./summary.component.scss']
 })
 export class SummaryComponent implements OnInit, OnDestroy {
-  @Input() clusterSSHKeys: SSHKeyEntity[] = [];
+  @Input() clusterSSHKeys: SSHKeyEntity[];
   @Input() nodeData: NodeData;
   @Input() cluster: ClusterEntity;
   @Input() providerFormData: ClusterProviderForm;
