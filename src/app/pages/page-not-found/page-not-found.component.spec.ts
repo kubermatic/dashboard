@@ -62,7 +62,7 @@ describe('PageNotFoundComponent', () => {
 
     const navArgs = spyNavigate.calls.first().args[0];
     expect(spyNavigate.and.callThrough()).toHaveBeenCalledTimes(1);
-    expect(navArgs[0]).toBe('clusters', 'should navigate to the clusters list');
+    expect(navArgs[0]).toBe('/projects', 'should navigate to the projects list');
   });
 
   it('should navigate to the front apge', () => {
