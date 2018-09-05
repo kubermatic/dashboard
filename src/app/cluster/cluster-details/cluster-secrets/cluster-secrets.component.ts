@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { MatDialog } from '@angular/material';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
@@ -35,7 +35,6 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-
     this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
       this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
       this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);

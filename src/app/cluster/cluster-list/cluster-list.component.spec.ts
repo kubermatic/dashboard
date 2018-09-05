@@ -4,8 +4,6 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
-import { ActivatedRouteStub, RouterLinkStubDirective, RouterTestingModule } from './../../testing/router-stubs';
-import { click } from './../../testing/utils/click-handler';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import Spy = jasmine.Spy;
 import { ClusterListComponent } from './cluster-list.component';
@@ -17,11 +15,10 @@ import { Auth } from './../../core/services/auth/auth.service';
 import { AppConfigService } from '../../app-config.service';
 
 import { SharedModule } from '../../shared/shared.module';
-import { RouterLinkStubDirective, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
+import { ActivatedRouteStub, RouterLinkStubDirective, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
 import { click } from './../../testing/utils/click-handler';
 
 import { AuthMockService } from '../../testing/services/auth-mock.service';
-import { ApiService } from '../../core/services';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { HealthMockService } from '../../testing/services/health-mock.service';
 import { UserMockService } from '../../testing/services/user-mock.service';

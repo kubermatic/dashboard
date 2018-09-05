@@ -2,7 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService, DatacenterService, UserService } from '../../core/services';
-import { AppConfigService } from '../../app-config.service';import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { AppConfigService } from '../../app-config.service';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { UserGroupConfig } from '../../shared/model/Config';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -76,7 +77,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
           this.sortData(this.sort);
           this.loading = false;
         }));
-      this.userService.currentUserGroup(this.project.id).subscribe(group => {
+      this.userService.currentUserGroup(this.projectID).subscribe(group => {
         this.userGroup = group;
       });
     }));

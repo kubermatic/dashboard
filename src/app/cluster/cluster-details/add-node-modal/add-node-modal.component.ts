@@ -21,9 +21,9 @@ import { GoogleAnalyticsService } from '../../../google-analytics.service';
 export class AddNodeModalComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() projectID: string;
   private subscriptions: Subscription[] = [];
   public nodeDC: DataCenterEntity;
-  public project: ProjectEntity;
   public addNodeData: NodeData = {
     node: {
       spec: {
@@ -50,11 +50,6 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
       }
     );
 
-    this.project = this.projectService.project;
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
-      this.project = project;
-    }));
-
     this.addNodeData.node.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
     this.addNodeData.node.spec.operatingSystem = getEmptyOperatingSystemSpec();
     this.addNodeData.node.spec.versions = getEmptyNodeVersionSpec();
@@ -77,7 +72,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
   public addNode(): void {
     const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
     for (let i = 0; i < this.addNodeData.count; i++) {
-      createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name, this.project.id));
+      createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name, this.projectID));
     }
     this.subscriptions.push(Observable.combineLatest(createNodeObservables)
       .subscribe((createdNodes: NodeEntity[]): void => {

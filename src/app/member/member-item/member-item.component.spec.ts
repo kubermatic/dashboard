@@ -5,9 +5,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { MemberItemComponent } from './member-item.component';
-import { ProjectService } from '../../core/services';
+import { ProjectService, UserService } from '../../core/services';
+import { AppConfigService } from '../../app-config.service';
 import { SharedModule } from '../../shared/shared.module';
 import { RouterTestingModule } from '../../testing/router-stubs';
+import { UserMockService } from '../../testing/services/user-mock.service';
+import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
 import { ProjectMockService } from '../../testing/services/project-mock.service';
 import { MatDialogRefMock } from '../../testing/services/mat-dialog-ref-mock';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
@@ -36,7 +39,9 @@ describe('MemberItemComponent', () => {
       ],
       providers: [
         { provide: ProjectService, useClass: ProjectMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
+        { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService}
       ],
     }).compileComponents();
   });

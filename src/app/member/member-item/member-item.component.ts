@@ -1,8 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { ProjectService } from '../../core/services';
+import { ProjectService, UserService } from '../../core/services';
+import { AppConfigService } from '../../app-config.service';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { MemberEntity, MemberProject } from '../../shared/entity/MemberEntity';
+import { UserGroupConfig } from '../../shared/model/Config';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
 
 @Component({
@@ -14,10 +16,20 @@ export class MemberItemComponent implements OnInit {
   @Input() index: number;
   @Input() project: ProjectEntity;
   @Input() member: MemberEntity;
+  public userGroupConfig: UserGroupConfig;
+  public userGroup: string;
 
-  constructor(private projectService: ProjectService, private dialog: MatDialog) {}
+  constructor(private projectService: ProjectService,
+              private dialog: MatDialog,
+              private appConfigService: AppConfigService,
+              private userService: UserService) {}
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    this.userService.currentUserGroup(this.project.id).subscribe(group => {
+      this.userGroup = group;
+    });
+  }
 
   public getMemberItemClass(): string {
     if (this.index % 2 !== 0) {

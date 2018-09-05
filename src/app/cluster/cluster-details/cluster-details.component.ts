@@ -77,8 +77,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         this.userGroup = group;
       });
 
-    this.subscriptions.push(this.healthService.getClusterHealth(clusterName, seedDCName, this.projectID).subscribe(health => {
-      this.health = health;
+    const HealthTimer = Observable.interval(this.refreshInterval);
+    this.subscriptions.push(HealthTimer.takeUntil(this.unsubscribe).subscribe(tick => {
+      this.healthService.getClusterHealth(clusterName, seedDCName, this.projectID).subscribe(health => {
+        this.health = health;
+      });
     }));
 
     this.initialNodeCreation();
@@ -143,9 +146,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.clusterSubject.next(data[1]);
 
           const timer = Observable.interval(this.refreshInterval);
-          timer
-            .takeUntil(this.unsubscribe)
-            .subscribe(tick => {
+          timer.takeUntil(this.unsubscribe).subscribe(tick => {
               this.reloadCluster(clusterName, seedDCName, this.projectID);
             });
         },
@@ -246,6 +247,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this.dialog.open(AddNodeModalComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.projectID = this.projectID;
 
     const sub = modal.afterClosed().subscribe(result => {
       this.reloadClusterNodes();
