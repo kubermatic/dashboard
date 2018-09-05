@@ -14,4 +14,16 @@ export class ProjectMockService {
     this._project.next(fakeProject());
     this.project = fakeProject();
   }
+
+  public storeProject(projectID: string): void {
+    localStorage.setItem(`project`, fakeProject().id);
+  }
+
+  public removeProject() {
+    localStorage.removeItem('project');
+  }
+
+  public getProjectFromStorage(): string {
+    return localStorage.getItem('project');
+  }
 }

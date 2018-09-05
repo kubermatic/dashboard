@@ -13,12 +13,12 @@ import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 export class ClusterConnectComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  @Input() project: ProjectEntity;
+  @Input() projectID: string;
 
   constructor(private api: ApiService) {}
 
   public getDownloadURL(): string {
-    return this.api.getKubeconfigURL(this.project.id, this.datacenter.metadata.name, this.cluster.id);
+    return this.api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
 
   copy(type: string): string {

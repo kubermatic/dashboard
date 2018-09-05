@@ -42,7 +42,7 @@ export class ProjectItemComponent implements OnInit {
   public selectProject() {
     if (!this.clickedDeleteProject[this.project.id]) {
       this.projectService.changeSelectedProject(this.project);
-      this.router.navigate(['/clusters/' + this.project.id]);
+      this.projectService.storeProject(this.project.id);
     }
   }
 
@@ -61,6 +61,7 @@ export class ProjectItemComponent implements OnInit {
           status: ''
         });
       }
+      this.projectService.removeProject();
       delete this.clickedDeleteProject[this.project.id];
       sub.unsubscribe();
     });

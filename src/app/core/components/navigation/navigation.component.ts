@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-
-import { Auth, UserService } from '../../services';
+import { Auth, UserService, ProjectService } from '../../services';
 import { SidenavService } from '../sidenav/sidenav.service';
 import { environment } from '../../../../environments/environment';
 import { AppConstants } from '../../../shared/constants/constants';
@@ -24,7 +23,8 @@ export class NavigationComponent implements OnInit {
               private sidenavService: SidenavService,
               private router: Router,
               private dialog: MatDialog,
-              private userService: UserService) {}
+              private userService: UserService,
+              private projectService: ProjectService) {}
 
   ngOnInit(): void {
     if (window.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
@@ -39,6 +39,7 @@ export class NavigationComponent implements OnInit {
   public logout() {
     this.router.navigate(['']);
     this.auth.logout();
+    this.projectService.removeProject();
   }
 
   public scrolledChanged(isScrolled) {

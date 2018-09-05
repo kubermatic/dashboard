@@ -1,4 +1,3 @@
-
 import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
@@ -47,17 +46,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public stateOfTheAccordion: object[];
   public isClusterRunning: boolean;
   public clusterHealthClass: string;
-
   public health: HealthEntity;
   public projectID: string;
   public userGroup: string;
   public userGroupConfig: UserGroupConfig;
-  private clusterSubject: Subject<ClusterEntity>;
-  private versionsList: string[] = [];
-
   public updatesAvailable = false;
   public downgradesAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
+  private clusterSubject: Subject<ClusterEntity>;
+  private versionsList: string[] = [];
   private refreshInterval = 10000;
   private subscriptions: Subscription[] = [];
 
@@ -105,12 +102,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             this.nodeDc = datacenter;
           });
 
-        this.api.getSSHKeys('7d4r7tqmww')
+        this.api.getSSHKeys(this.projectID)
           .takeUntil(this.unsubscribe)
           .subscribe(keys => {
             // TODO: get cluster sshkeys
             this.sshKeys = keys.filter(key => {
-              /*if (key.spec.clusters == null) {
               /*if (key.spec.clusters == null) {
                 return false;
               }
@@ -160,7 +156,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.datacenter = data[0];
           this.cluster = data[1];
           this.clusterSubject.next(data[1]);
-
 
           const timer = Observable.interval(this.refreshInterval);
           timer.takeUntil(this.unsubscribe).subscribe(tick => {
@@ -284,7 +279,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.projectID = this.projectID;
     const sub = modal.afterClosed().subscribe(deleted => {
       if (deleted) {
-
         this.router.navigate(['/clusters/' + this.projectID]);
       }
       sub.unsubscribe();
@@ -295,6 +289,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this.dialog.open(ClusterConnectComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.projectID = this.projectID;
   }
 
   public changeClusterVersionDialog(): void {

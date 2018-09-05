@@ -13,4 +13,16 @@ export class ProjectService {
     this._project.next(data);
     this.project = data;
   }
+
+  public storeProject(projectID: string): void {
+    localStorage.setItem(`project`, projectID);
+  }
+
+  public removeProject() {
+    localStorage.removeItem('project');
+  }
+
+  public getProjectFromStorage(): string {
+    return localStorage.getItem('project');
+  }
 }

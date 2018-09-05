@@ -32,7 +32,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public userGroup: string;
   public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
-  public project: ProjectEntity;
 
   constructor(private router: Router,
               private api: ApiService,
@@ -85,7 +84,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addSshKey(): void {
+  public addSSSHKey(): void {
     const modal = this.dialog.open(AddSshKeyModalComponent);
 
     const sub = modal.afterClosed().subscribe(result => {
@@ -141,7 +140,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         return this.selectedTab = 'projects';
       case 'Members':
         return this.selectedTab = 'members';
-      case 'SSHkeys':
+      case 'SSH keys':
         return this.selectedTab = 'sshkeys';
       default:
         return this.selectedTab = 'projects';
