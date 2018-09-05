@@ -5,11 +5,11 @@ import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { BreadcrumbsComponent } from './breadcrumbs.component';
-import { ApiService } from './../../services/api/api.service';
+import { ApiService, ProjectService } from './../../services';
 import { Auth } from '../../services/index';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -40,6 +40,7 @@ describe('BreadcrumbsComponent', () => {
       ],
       providers: [
         { provide: ApiService, useClass: ApiMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         { provide: Auth, useClass: AuthMockService }
       ],
     }).compileComponents();

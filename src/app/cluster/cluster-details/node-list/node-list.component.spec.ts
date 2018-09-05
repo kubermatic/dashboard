@@ -1,16 +1,18 @@
-import { SharedModule } from '../../../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MatDialog } from '@angular/material';
-import { nodesFake } from '../../../testing/fake-data/node.fake';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { NodeListComponent } from './node-list.component';
+import { HealthService, ProjectService, UserService } from '../../../core/services';
+import { AppConfigService } from '../../../app-config.service';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
+import { HealthMockService } from '../../../testing/services/health-mock.service';
+import { UserMockService } from '../../../testing/services/user-mock.service';
+import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
+import { SharedModule } from '../../../shared/shared.module';
+import { nodesFake } from '../../../testing/fake-data/node.fake';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
-import { ClusterService } from '../../../core/services';
-
 
 const modules: any[] = [
   BrowserModule,
@@ -32,8 +34,11 @@ describe('NodeComponent', () => {
         NodeListComponent
       ],
       providers: [
-        MatDialog,
-        ClusterService
+        { provide: ProjectService, useClass: ProjectMockService },
+        { provide: HealthService, useClass: HealthMockService },
+        { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService },
+        MatDialog
       ],
     }).compileComponents();
   }));

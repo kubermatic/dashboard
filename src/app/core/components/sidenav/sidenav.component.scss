@@ -6,25 +6,62 @@
     font-size: 14px;
     font-weight: 400;
     color: $text-color;
-    height: 36px;
+    height: 40px;
+
+    &.km-projects {
+      height: 85px;
+      border-bottom: 1px solid $border;
+
+      .km-projects-container {
+        display: flex;
+        flex-direction: column;
+        padding: 0 15px;
+
+        mat-label {
+          margin: 5px 0;
+        }
+
+        mat-select {
+          font-weight: 600;
+          line-height: 35px;
+
+        }
+      }
+    }
 
     i {
       color: $text-color;
     }
   }
+
   a {
-    padding: 10px 16px !important;
+    padding: 10px 30px !important;
+    display: flex;
+    align-items: center;
     &:hover, &.active {
       color: #fff;
       background-color: $primary;
-
       i {
         color: #fff;
       }
     }
 
     i {
-      width: 25px;
+      width: 20px;
+      margin-right: 10px;
     }
+  }  
+}
+
+mat-option[value='addProject'] {
+  border-bottom: 1px solid $border !important;
+  font-weight: 600;
+}
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+  a {
+    color: $light-text-color !important;
   }
 }

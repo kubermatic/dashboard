@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ApiService } from '../../../core/services/api/api.service';
+import { ApiService, ProjectService } from '../../../core/services';
 import { select } from '@angular-redux/store';
 
 @Component({
@@ -17,6 +17,7 @@ export class BreadcrumbsComponent implements OnInit {
   @select(['breadcrumb', 'crumb']) breadcrumb$: Observable<string>;
 
   constructor(private api: ApiService,
+              private projectService: ProjectService,
               private router: Router) {
     this.breadcrumb$.subscribe(crumb => {
       this.activePageTitle = crumb;
@@ -30,8 +31,10 @@ export class BreadcrumbsComponent implements OnInit {
         this.clusterName = '...';
         const clusterId = matchResCluster[1];
         const datacenter = matchResDatacenter[1];
-        this.api.getCluster(clusterId, datacenter)
-          .subscribe(cluster => this.clusterName = cluster.spec.humanReadableName);
+        this.projectService.selectedProjectChanges$.subscribe(project => {
+          this.api.getCluster(clusterId, datacenter, project.id)
+            .subscribe(cluster => this.clusterName = cluster.name);
+        });
       } else {
         this.clusterName = '';
       }

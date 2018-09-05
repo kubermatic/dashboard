@@ -1,0 +1,30 @@
+<div class="row sshkey-item" [ngClass]="getSshKeyItemClass()">
+  <div fxLayout fxFlex (click)="togglePublicKey()">
+    <div fxFlex="50%" fxFlex.sm="40%">
+      <div class="key-name">
+        {{sshKey.name}}
+      </div>
+      <div class="key-timestamp">
+        Created at {{sshKey.creationTimestamp | date:'dd. MMMM yyyy'}}
+      </div>
+    </div>
+    <div fxFlex="50%" fxFlex.sm="60%" class="key-fingerprint">
+      {{sshKey.spec.fingerprint}}
+    </div>
+  </div>
+  <div fxFlex="10%" fxHide.sm fxHide.xs>
+    <p class="km-icon">
+      <span class="iconDelete black" (click)="deleteSshKey()"></span>
+    </p>
+  </div>
+</div>
+<div class="publickey-wrapper" *ngIf="isShowPublicKey">
+  <div class="publickey-content">
+    <div class="publickey-name">
+      {{publicKeyName}}
+    </div>
+    <div class="publickey">
+      {{publicKey}}
+    </div>
+  </div>
+</div>

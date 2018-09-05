@@ -1,16 +1,19 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, ObservableInput } from 'rxjs/Observable';
 import { WizardService } from '../core/services/wizard/wizard.service';
 import { ClusterDatacenterForm, ClusterFormData, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
 import { Subscription } from 'rxjs/Subscription';
+import { Subject } from 'rxjs/Subject';
 import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
+import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { NodeData } from '../shared/model/NodeSpecChange';
 import { NodeProvider } from '../shared/model/NodeProviderConstants';
 import { Step, StepsService } from '../core/services/wizard/steps.service';
-import { ApiService, InitialNodeDataService } from '../core/services';
+import { ApiService, InitialNodeDataService, ProjectService, HealthService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import { NodeEntity, getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec } from '../shared/entity/NodeEntity';
 import { GoogleAnalyticsService } from '../google-analytics.service';
@@ -34,6 +37,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   public clusterSSHKeys: SSHKeyEntity[] = [];
   public addNodeData: NodeData;
   public creating = false;
+  public project: ProjectEntity;
   private subscriptions: Subscription[] = [];
 
   constructor(private wizardService: WizardService,
@@ -41,14 +45,16 @@ export class WizardComponent implements OnInit, OnDestroy {
               private stepsService: StepsService,
               private initialNodeDataService: InitialNodeDataService,
               private router: Router,
+              private route: ActivatedRoute,
+              private projectService: ProjectService,
+              private healthService: HealthService,
               private api: ApiService,
               public googleAnalyticsService: GoogleAnalyticsService) {
+
     this.cluster = {
-      metadata: {},
+      name: '',
       spec: {
-        humanReadableName: '',
         version: '',
-        pause: false,
         cloud: {
           dc: '',
         },
@@ -57,7 +63,6 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     this.addNodeData = {
       node: {
-        metadata: {},
         spec: {
           cloud: {},
           operatingSystem: {},
@@ -70,12 +75,18 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.project = this.projectService.project;
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    }));
+
     this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationWizardStarted');
+
     // When the cluster spec got changed, update the cluster
     this.subscriptions.push(this.wizardService.clusterSpecFormChanges$.subscribe(data => {
       this.clusterSpecFormData = data;
       if (this.clusterSpecFormData.valid) {
-        this.cluster.spec.humanReadableName = this.clusterSpecFormData.name;
+        this.cluster.name = this.clusterSpecFormData.name;
         this.cluster.spec.version = this.clusterSpecFormData.version;
         this.wizardService.changeCluster(this.cluster);
       }
@@ -220,28 +231,46 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   createCluster(): void {
     this.creating = true;
-
     const datacenter = this.clusterDatacenterFormData.datacenter;
     const keyNames: string[] = [];
     for (const key of this.clusterSSHKeys) {
-      keyNames.push(key.metadata.name);
+      keyNames.push(key.name);
     }
-    const createCluster: CreateClusterModel = { cluster: this.cluster.spec, sshKeys: keyNames };
-    this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed).subscribe(cluster => {
-        this.creating = false;
-        NotificationActions.success('Success', `Cluster successfully created`);
-        this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
-        this.router.navigate(['/clusters/' + datacenter.spec.seed + '/' + cluster.metadata.name]);
+    const createCluster: CreateClusterModel = { name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames };
 
-        if (this.clusterProviderFormData.provider !== 'bringyourown') {
-          this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
+    this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id).subscribe(cluster => {
+      this.creating = false;
+      NotificationActions.success('Success', `Cluster successfully created`);
+      this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
+
+      this.router.navigate([`/clusters/${this.project.id}/${datacenter.spec.seed}/${cluster.id}`]);
+
+      // SSH key endpoint to add to cluster is broken atm
+      /* if (this.clusterSSHKeys.length > 0) {
+        for (const key of this.clusterSSHKeys) {
+          this.api.addClusterSSHKey(key.name, cluster.id, datacenter.spec.seed, this.project.id);
         }
-      },
-      error => {
-        NotificationActions.error('Error', `Could not create cluster`);
-        this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
-        this.creating = false;
-      }));
+      }*/
+
+      const isHealthy = new Subject<boolean>();
+        const timer = Observable.interval(10000).takeUntil(isHealthy);
+        timer.subscribe(tick => {
+          return this.healthService.getClusterHealth(cluster.id, datacenter.spec.seed, this.project.id).subscribe(health => {
+            if (health.apiserver && health.controller && health.etcd && health.machineController && health.scheduler) {
+              isHealthy.next(true);
+              if (this.clusterProviderFormData.provider !== 'bringyourown') {
+                this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
+              }
+            }
+          });
+        });
+    },
+    error => {
+      NotificationActions.error('Error', `Could not create cluster`);
+      this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
+      this.creating = false;
+    }));
   }
+
 }

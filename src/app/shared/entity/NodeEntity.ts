@@ -1,4 +1,3 @@
-import { MetadataEntityV2 } from './MetadataEntity';
 import { DigitaloceanNodeSpec } from './node/DigitaloceanNodeSpec';
 import { AWSNodeSpec } from './node/AWSNodeSpec';
 import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
@@ -8,7 +7,10 @@ import { AzureNodeSpec } from './node/AzureNodeSpec';
 import { NodeProvider } from '../model/NodeProviderConstants';
 
 export class NodeEntity {
-  metadata: MetadataEntityV2;
+  creationTimestamp?: Date;
+  deletionTimestamp?: Date;
+  id?: string;
+  name?: string;
   spec: NodeSpec;
   status?: NodeStatus;
 }

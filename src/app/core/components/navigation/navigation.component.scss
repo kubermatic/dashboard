@@ -33,9 +33,13 @@ ng2-slim-loading-bar {
   .auth {
     font-size: 14px;
     line-height: 45px;
-    font-family: "Titillium";
+    font-family: "Titillium Web", "Roboto", "Kaushan Script", Helvetica, Arial, cursive;
     font-weight: 400;
     text-align: right;
+
+    .current-user {
+      margin-right: 20px;
+    }
 
     .login {
       background-image: url("../../../../assets/images/login.svg");
@@ -52,7 +56,6 @@ ng2-slim-loading-bar {
       background-image: url("../../../../assets/images/logout.svg");
       background-size: auto 10px;
       background-repeat: no-repeat;
-
       background-position: center left;
       padding-left: 15px;
       margin-right: 25px;

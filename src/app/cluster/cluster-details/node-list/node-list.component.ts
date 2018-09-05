@@ -1,12 +1,13 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnChanges, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
 import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { ClusterService } from '../../../core/services';
-
+import { UserGroupConfig } from '../../../shared/model/Config';
+import { HealthService, UserService } from '../../../core/services';
+import { AppConfigService } from '../../../app-config.service';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -14,15 +15,19 @@ import { ClusterService } from '../../../core/services';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent implements OnChanges {
+export class NodeListComponent implements OnInit, OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
+  @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<NodeEntity>();
+  public clusterHealthStatus: string;
   public isClusterRunning: boolean;
   public clickedDeleteNode = {};
   public clickedDuplicateNode = {};
   public isShowNodeDetails = {};
+  public userGroupConfig: UserGroupConfig;
+  public userGroup: string;
   public config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
@@ -41,11 +46,25 @@ export class NodeListComponent implements OnChanges {
   };
 
   constructor(public dialog: MatDialog,
-              private clusterService: ClusterService) {
+
+              private healthService: HealthService,
+              private appConfigService: AppConfigService,
+              private userService: UserService) {
+  }
+
+  ngOnInit() {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+        this.userGroup = group;
+      });
   }
 
   ngOnChanges() {
-    this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
+
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
+      this.clusterHealthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+      this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
+    });
   }
 
   public managedByProvider(node: NodeEntity): boolean {
@@ -57,11 +76,13 @@ export class NodeListComponent implements OnChanges {
   }
 
   public deleteNodeDialog(node: NodeEntity): void {
-    this.clickedDeleteNode[node.metadata.name] = true;
+    this.clickedDeleteNode[node.id] = true;
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
+
+    dialogRef.componentInstance.projectID = this.projectID;
 
     dialogRef.afterClosed().subscribe(result => {
       this.deleteNode.emit(node);
@@ -69,14 +90,16 @@ export class NodeListComponent implements OnChanges {
   }
 
   public duplicateNodeDialog(node: NodeEntity): void {
-    this.clickedDuplicateNode[node.metadata.name] = true;
+    this.clickedDuplicateNode[node.id] = true;
     const dialogRef = this.dialog.open(NodeDuplicateComponent);
     dialogRef.componentInstance.node = node;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
 
+    dialogRef.componentInstance.projectID = this.projectID;
+
     const sub = dialogRef.afterClosed().subscribe(result => {
-    this.clickedDuplicateNode[node.metadata.name] = false;
+    this.clickedDuplicateNode[node.id] = false;
       sub.unsubscribe();
     });
   }
@@ -88,15 +111,15 @@ export class NodeListComponent implements OnChanges {
 
     const nodeHealthStatus = {};
 
-    if (!!node.status.errorMessage && !node.metadata.deletionTimestamp) {
+    if (!!node.status.errorMessage && !node.deletionTimestamp) {
       nodeHealthStatus['color'] = red;
       nodeHealthStatus['status'] = 'Failed';
       nodeHealthStatus['class'] = 'statusFailed';
-    } else if (!!node.status.nodeInfo.kubeletVersion && !node.status.errorMessage && !node.metadata.deletionTimestamp) {
+    } else if (!!node.status.nodeInfo.kubeletVersion && !node.status.errorMessage && !node.deletionTimestamp) {
       nodeHealthStatus['color'] = green;
       nodeHealthStatus['status'] = 'Running';
       nodeHealthStatus['class'] = 'statusRunning';
-    } else if (!!node.metadata.deletionTimestamp) {
+    } else if (!!node.deletionTimestamp) {
       nodeHealthStatus['color'] = orangeSpinner;
       nodeHealthStatus['status'] = 'Deleting';
       nodeHealthStatus['class'] = 'statusDeleting';
@@ -166,7 +189,7 @@ export class NodeListComponent implements OnChanges {
   }
 
   public showInfo(node: NodeEntity): boolean {
-    if (node.metadata.displayName !== node.metadata.name.replace('machine-', '') && node.metadata.name !== '') {
+    if (node.name !== node.id.replace('machine-', '') && node.id !== '') {
       return true;
     } else {
       return false;
@@ -174,18 +197,19 @@ export class NodeListComponent implements OnChanges {
   }
 
   public getInfo(node: NodeEntity): string {
-    return node.metadata.name.replace('machine-', '');
+    return node.id.replace('machine-', '');
   }
 
-  public toggleNode(nodeName: string): void {
+  public toggleNode(nodeID: string): void {
     const element = event.target as HTMLElement;
     const className = element.className;
-    if (!this.clickedDeleteNode[nodeName] && !this.clickedDuplicateNode[nodeName] && className !== 'copy') {
-      if (this.isShowNodeDetails[nodeName]) {
-        this.isShowNodeDetails[nodeName] = false;
-      } else if (!this.isShowNodeDetails[nodeName]) {
-        this.isShowNodeDetails[nodeName] = true;
+    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'copy') {
+      if (this.isShowNodeDetails[nodeID]) {
+        this.isShowNodeDetails[nodeID] = false;
+      } else if (!this.isShowNodeDetails[nodeID]) {
+        this.isShowNodeDetails[nodeID] = true;
       }
     }
   }
+
 }

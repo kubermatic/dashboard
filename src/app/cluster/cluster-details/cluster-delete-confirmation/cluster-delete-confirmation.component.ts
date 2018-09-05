@@ -14,6 +14,7 @@ import { GoogleAnalyticsService } from '../../../google-analytics.service';
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() projectID: string;
 
   public inputName = '';
 
@@ -36,14 +37,14 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   }
 
   inputNameMatches(): boolean {
-    return this.inputName === this.cluster.spec.humanReadableName;
+    return this.inputName === this.cluster.name;
   }
 
   deleteCluster() {
     if (!this.inputNameMatches()) {
       return;
     } else {
-      this.api.deleteCluster(this.cluster.metadata.name, this.datacenter.metadata.name).subscribe(result => {
+      this.api.deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(result => {
         this.initialNodeDataService.clearInitialNodeData(this.cluster);
         NotificationActions.success('Success', `Cluster is being deleted`);
         this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');

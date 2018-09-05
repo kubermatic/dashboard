@@ -1,27 +1,42 @@
-import { fakeDigitaloceanCluster } from './../../testing/fake-data/cluster.fake';
+
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { SharedModule } from '../../shared/shared.module';
+
+import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { HttpClientModule } from '@angular/common/http';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ActivatedRouteStub, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
+
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import Spy = jasmine.Spy;
+
 import { ClusterDetailsComponent } from './cluster-details.component';
-import { Auth } from './../../core/services/auth/auth.service';
-import { AuthMockService } from '../../testing/services/auth-mock.service';
-import { ApiService } from '../../core/services/api/api.service';
-import { asyncData } from '../../testing/services/api-mock.service';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
 import { ClusterSecretsComponent } from './cluster-secrets/cluster-secrets.component';
-import { MatDialog } from '@angular/material';
-import { DatacenterService, InitialNodeDataService, ClusterService } from '../../core/services/index';
+import { NodeListComponent } from './node-list/node-list.component';
+
+import { ApiService, ProjectService, DatacenterService, InitialNodeDataService, HealthService, UserService } from '../../core/services';
+import { AppConfigService } from '../../app-config.service';
+import { Auth } from './../../core/services/auth/auth.service';
+
+import { SharedModule } from '../../shared/shared.module';
+import { ActivatedRouteStub, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
+
+import { AuthMockService } from '../../testing/services/auth-mock.service';
+
+import { ProjectMockService } from '../../testing/services/project-mock.service';
+import { HealthMockService } from '../../testing/services/health-mock.service';
+import { UserMockService } from '../../testing/services/user-mock.service';
+import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
+import { asyncData } from '../../testing/services/api-mock.service';
+
+import { fakeDigitaloceanCluster } from './../../testing/fake-data/cluster.fake';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { nodesFake } from '../../testing/fake-data/node.fake';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { fakeDigitaloceanDatacenter } from '../../testing/fake-data/datacenter.fake';
-import { NodeListComponent } from './node-list/node-list.component';
-import Spy = jasmine.Spy;
+import { fakeUserGroupConfig } from '../../testing/fake-data/userGroupConfig.fake';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
@@ -40,14 +55,17 @@ describe('ClusterDetailsComponent', () => {
   let apiMock;
 
   beforeEach(async(() => {
+
     apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getSSHKeys', 'getKubeconfigURL']);
     getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
     getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
+
     getClusterNodesSpy = apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake()));
     getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
     getKubeconfigURL = apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
+
     getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
 
     TestBed.configureTestingModule({
@@ -71,9 +89,13 @@ describe('ClusterDetailsComponent', () => {
         { provide: Auth, useClass: AuthMockService },
         { provide: Router, useClass: RouterStub },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: ProjectService, useClass: ProjectMockService },
+        { provide: HealthService, useClass: HealthMockService },
+        { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService },
         MatDialog,
-        InitialNodeDataService,
-        ClusterService
+
+        InitialNodeDataService
       ],
     }).compileComponents();
   }));
@@ -99,35 +121,23 @@ describe('ClusterDetailsComponent', () => {
 
     const expectedCluster = fakeDigitaloceanCluster();
     // @ts-ignore
-    expectedCluster.metadata.creationTimestamp = jasmine.any(Date);
-    // @ts-ignore
-    expectedCluster.status.lastTransitionTime = jasmine.any(Date);
+    expectedCluster.creationTimestamp = jasmine.any(Date);
 
     expect(component.cluster).toEqual(expectedCluster, 'should get cluster by api');
-    discardPeriodicTasks();
-  }));
-
-  it('should get sshkeys', fakeAsync(() => {
-    const sshkeys = fakeSSHKeys().filter(key => {
-      if (key.spec.clusters == null) {
-        return false;
-      }
-      return key.spec.clusters.indexOf('4k6txp5sq') > -1;
-    });
-    fixture.detectChanges();
-    tick();
-
-    // @ts-ignore
-    sshkeys[0].metadata.creationTimestamp = jasmine.any(Date);
-
-    expect(component.sshKeys).toEqual(sshkeys, 'should get sshkeys by api');
     discardPeriodicTasks();
   }));
 
   it('should get nodes', fakeAsync(() => {
     fixture.detectChanges();
     tick();
-    expect(component.nodes).toEqual(nodesFake(), 'should get sshkeys by api');
+
+    const expectedNodes = nodesFake();
+    // @ts-ignore
+    expectedNodes[0].creationTimestamp = jasmine.any(Date);
+    // @ts-ignore
+    expectedNodes[1].creationTimestamp = jasmine.any(Date);
+
+    expect(component.nodes).toEqual(expectedNodes, 'should get nodes by api');
 
     discardPeriodicTasks();
   }));
@@ -140,6 +150,8 @@ describe('ClusterDetailsComponent', () => {
     expect(de).toBeNull('element should not be rendered before requests');
     expect(spinnerDe).not.toBeNull('spinner should be rendered before requests');
 
+    component.userGroupConfig = fakeUserGroupConfig();
+    component.userGroup = 'owners';
     tick();
     fixture.detectChanges();
 

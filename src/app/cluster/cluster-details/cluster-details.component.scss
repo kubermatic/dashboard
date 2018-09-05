@@ -33,6 +33,16 @@ a.download-kubeconfig-btn {
   }
 }
 
+.fa-trash-o {
+    color: $primary;
+  }
+
+button:disabled {
+  .fa-trash-o {
+    color: $disabled-text-color;
+  }
+}
+
 
 // sshkeys
 .iconArrowUp {

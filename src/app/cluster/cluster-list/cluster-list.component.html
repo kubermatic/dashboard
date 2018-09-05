@@ -1,12 +1,10 @@
 <div *ngIf="!loading">
   <div fxLayout>
-      <div fxFlex align="right">
-        <a routerLink="/wizard">
-          <button mat-raised-button color="primary" type="button">
-            <span class="btn-text-default">+ Add Cluster</span>
-          </button>
-        </a>
-      </div>
+    <div fxFlex align="right">
+      <button mat-raised-button color="primary" type="button" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.create" (click)="loadWizard()">
+        <span class="btn-text-default">+ Add Cluster</span>
+      </button>
+    </div>
   </div>
   <mat-card class="blue">
     <mat-card-header>
@@ -24,16 +22,16 @@
     </mat-card-header>
     <mat-card-content fxLayout="column" [ngSwitch]="!!clusters && clusters.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <kubermatic-cluster-item *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [health]="data.status.health" [index]="i" fxFlex></kubermatic-cluster-item>
+        <kubermatic-cluster-item *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [projectID]="projectID" [index]="i" fxFlex></kubermatic-cluster-item>
       </ng-container>
       <ng-container *ngSwitchCase="false">
         <div fxFlex class="row odd no-item" >No Cluster available. Please add a Cluster.</div>
       </ng-container>
       <ng-container>
         <div class="row">
-          <a routerLink="/wizard" class="button white">
+          <button class="button white" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.create" (click)="loadWizard()">
             <strong>+ Add Cluster</strong>
-          </a>
+          </button>
         </div>
       </ng-container>
     </mat-card-content>
