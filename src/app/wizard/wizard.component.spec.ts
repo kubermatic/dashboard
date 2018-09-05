@@ -1,16 +1,18 @@
-import { ApiService, DatacenterService, InitialNodeDataService } from '../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService, ProjectService, HealthService } from '../core/services';
 import { WizardComponent } from './wizard.component';
-import { Router } from '@angular/router';
-import { SharedModule } from '..//shared/shared.module';
+import { Router, ActivatedRoute } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '../testing/router-stubs';
+import { RouterTestingModule, ActivatedRouteStub } from '../testing/router-stubs';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterStub } from './../testing/router-stubs';
 import { asyncData } from '../testing/services/api-mock.service';
 import { MatTabsModule, MatButtonToggleModule, MatDialog } from '@angular/material';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
+import { HealthMockService } from '../testing/services/health-mock.service';
+import { ProjectMockService } from '../testing/services/project-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
 import { masterVersionsFake } from '../testing/fake-data/cluster-spec.fake';
 import { ProgressComponent } from './progress/progress.component';
@@ -101,6 +103,9 @@ describe('WizardComponent', () => {
         { provide: Router, useClass: RouterStub },
         { provide: ApiService, useValue: apiMock },
         { provide: DatacenterService, useClass: DatacenterMockService },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: HealthService, useClass: HealthMockService },
+        { provide: ProjectService, useClass: ProjectMockService },
         MatDialog,
         InitialNodeDataService,
         WizardService,

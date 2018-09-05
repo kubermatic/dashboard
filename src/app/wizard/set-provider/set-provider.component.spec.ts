@@ -59,13 +59,13 @@ describe('SetProviderComponent', () => {
 
   it('should be initially invalid', fakeAsync(() => {
     component.cluster = {
-      metadata: {},
+      name: '',
       spec: {
         cloud: {
           dc: '',
         },
-        pause: false,
-      },
+        version: '',
+      }
     };
     fixture.detectChanges();
     expect(component.setProviderForm.controls.provider.valid).toBeFalsy();

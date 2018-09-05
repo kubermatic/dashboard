@@ -1,29 +1,28 @@
 import { NgModule } from '@angular/core';
-
-import { SshkeyRoutingModule } from '../sshkey/sshkey-routing.module';
+import { SSHKeyComponent } from './sshkey.component';
+import { SSHKeyItemComponent } from './sshkey-item/sshkey-item.component';
 import { SharedModule } from '../shared/shared.module';
-
-import { SshKeyListComponent } from '../sshkey/ssh-key-list/ssh-key-list.component';
-import { SshkeyComponent } from './sshkey.component';
-import { SshKeyItemComponent } from './ssh-key-list/ssh-key-item/ssh-key-item.component';
+import { MatTabsModule } from '@angular/material';
+import { SSHKeyRoutingModule } from './sshkey-routing.module';
 
 const components: any[] = [
-  SshkeyComponent,
-  SshKeyListComponent,
-  SshKeyItemComponent
+  SSHKeyComponent,
+  SSHKeyItemComponent
 ];
 
 @NgModule({
   imports: [
     SharedModule,
-    SshkeyRoutingModule
+    MatTabsModule,
+    SSHKeyRoutingModule
   ],
   declarations: [
     ...components
   ],
   exports: [
     ...components
-  ]
+  ],
+  entryComponents: []
 })
-export class SshkeyModule {
+export class SSHKeyModule {
 }

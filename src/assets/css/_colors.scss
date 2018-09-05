@@ -1,5 +1,7 @@
 $primary: #0288d1;
 
+$secondary: #75B7DD;
+
 $warning: #ff5454;
 
 $border: #E3E8EC;
@@ -9,6 +11,8 @@ $text-color: #444D58;
 $medium-text-color: #777777;
 
 $light-text-color: #BCC5D0;
+
+$white-text-color: #FFFFFF;
 
 $light-background: #EEF5FF;
 
@@ -25,5 +29,9 @@ $healthy-status-color: #79c447;
 $warning-status-color: $warning;
 
 $light-button-color: #BDC6D1;
+
+$disabled-button-color: #D4D4D4;
+
+$disabled-text-color: rgba(0, 0, 0, 0.26);
 
 $pending: rgba($waiting-background, 0.1);

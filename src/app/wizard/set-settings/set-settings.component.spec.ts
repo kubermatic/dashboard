@@ -23,7 +23,7 @@ import { AzureAddNodeComponent } from '../../add-node/azure-add-node/azure-add-n
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
-import { ApiService } from '../../core/services';
+import {ApiService, ProjectService} from '../../core/services';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { HetznerClusterSettingsComponent } from './provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './provider-settings/vsphere/vsphere.component';
@@ -32,6 +32,7 @@ import { HetznerAddNodeComponent } from '../../add-node/hetzner-add-node/hetzner
 import { VSphereAddNodeComponent } from '../../add-node/vsphere-add-node/vsphere-add-node.component';
 import { VSphereOptionsComponent } from '../../add-node/vsphere-add-node/vsphere-options/vsphere-options.component';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
+import {ProjectMockService} from '../../testing/services/project-mock.service';
 
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
@@ -76,7 +77,8 @@ describe('SetSettingsComponent', () => {
       providers: [
         AddNodeService,
         WizardService,
-        {provide: ApiService, useValue: apiMock},
+        { provide: ApiService, useValue: apiMock },
+        { provide: ProjectService, useClass: ProjectMockService },
       ],
     }).compileComponents();
   }));

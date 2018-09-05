@@ -16,17 +16,17 @@ export class InitialNodeDataService {
     const data: InitialNodeData = {
       nodeCount: nodeCount,
       node: node,
-      cluster: cluster.metadata.name
+      cluster: cluster.id
     };
-    localStorage.setItem(`${cluster.metadata.name}_initialNodeData`, JSON.stringify(data));
+    localStorage.setItem(`${cluster.id}_initialNodeData`, JSON.stringify(data));
   }
 
   public clearInitialNodeData(cluster: ClusterEntity): void {
-    localStorage.removeItem(`${cluster.metadata.name}_initialNodeData`);
+    localStorage.removeItem(`${cluster.id}_initialNodeData`);
   }
 
   public getInitialNodeData(cluster: ClusterEntity): InitialNodeData | null {
-    const sdata = localStorage.getItem(`${cluster.metadata.name}_initialNodeData`);
+    const sdata = localStorage.getItem(`${cluster.id}_initialNodeData`);
     if (sdata == null) {
       return null;
     }

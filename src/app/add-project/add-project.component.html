@@ -1,0 +1,45 @@
+<div>
+  <mat-toolbar>
+    <span mat-dialog-info>
+      <i class="fa fa-pencil" aria-hidden="true"></i>
+    </span>
+    Add Project
+    <button mat-icon-button mat-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </mat-toolbar>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+      <form [formGroup]="addProjectForm" fxLayout="column">
+        <mat-form-field fxFlex>
+          <input matInput formControlName="name" type="text" placeholder="Project Name*:" autocomplete="off">
+          <mat-error *ngIf="addProjectForm.controls.name.hasError('required')">
+            Name is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+      </form>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+  <button mat-dialog-close mat-raised-button>
+    Cancel
+  </button>
+  <button mat-raised-button color="primary" (click)="addProject()" [disabled]="!addProjectForm.valid">
+    Save
+  </button>
+  </mat-dialog-actions>
+  <div class="how-to-project" fxLayout="row">
+    <div class="first" fxFlex="33%">
+      <div class="header">1 Add Project</div>
+      <div class="content">Add a project to manage your Clusters</div>
+    </div>
+    <div class="second" fxFlex="33%">
+      <div class="header">2 Add Member</div>
+      <div class="content">Add Members to give access to your Cluster</div>
+    </div>
+    <div class="third" fxFlex="34%">
+      <div class="header">3 Create Cluster</div>
+      <div class="content">Create and add Clusters to your Project</div>
+    </div>
+  </div>
+</div>

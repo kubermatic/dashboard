@@ -1,10 +1,14 @@
-import { SharedModule } from '../../../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
+import { MatDialog } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { ClusterSecretsComponent } from './cluster-secrets.component';
-import { ClusterService } from '../../../core/services';
+import { HealthService } from '../../../core/services';
+import { AppConfigService } from '../../../app-config.service';
+import { SharedModule } from '../../../shared/shared.module';
+import { HealthMockService } from '../../../testing/services/health-mock.service';
+import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
 
 const modules: any[] = [
   BrowserModule,
@@ -26,7 +30,9 @@ describe('ClusterSecretsComponent', () => {
         ClusterSecretsComponent
       ],
       providers: [
-        ClusterService
+        { provide: HealthService, useClass: HealthMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService },
+        MatDialog
       ],
     }).compileComponents();
   }));

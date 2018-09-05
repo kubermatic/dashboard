@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
+import { fakeProject } from '../../../testing/fake-data/project.fake';
 import { ApiService } from '../../../core/services/api/api.service';
 
 
@@ -30,7 +31,6 @@ describe('ClusterConnectComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getKubeconfigURL']);
-
     TestBed.configureTestingModule({
       imports: [
         ...modules,
@@ -48,12 +48,14 @@ describe('ClusterConnectComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterConnectComponent);
     component = fixture.componentInstance;
+    component.projectID = fakeProject().id;
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
+
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('hould create the cluster connect component', () => {
     expect(component).toBeTruthy();
   });
 });

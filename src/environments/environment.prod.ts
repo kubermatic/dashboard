@@ -1,4 +1,4 @@
-const redirect_uri = window.location.protocol + '//' + window.location.host + '/clusters';
+const redirect_uri = window.location.protocol + '//' + window.location.host + '/projects';
 const oauth = window.location.protocol + '//' + window.location.host + '/dex/auth';
 const scope: string[] = ['openid', 'email', 'profile', 'groups'];
 

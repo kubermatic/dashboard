@@ -130,5 +130,7 @@ export function fakeNodeDatacenters(): DataCenterEntity[] {
     fakeDigitaloceanDatacenter(),
     fakeAWSDatacenter(),
     fakeOpenstackDatacenter(),
+    fakeAzureDatacenter(),
+    fakeBringyourownSeedDatacenter()
   ];
 }

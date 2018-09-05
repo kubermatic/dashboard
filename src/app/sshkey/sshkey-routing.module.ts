@@ -3,12 +3,12 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { AuthGuard } from './../core/services/auth/auth.guard';
 
-import { SshkeyComponent } from './sshkey.component';
+import { SSHKeyComponent } from '../sshkey/sshkey.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: SshkeyComponent,
+    component: SSHKeyComponent,
     canActivate: [AuthGuard],
     data: { title: 'Manage SSH keys' }
   }
@@ -18,5 +18,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SshkeyRoutingModule {
+export class SSHKeyRoutingModule {
 }

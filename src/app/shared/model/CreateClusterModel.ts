@@ -1,11 +1,13 @@
 import { ClusterSpec } from '../entity/ClusterEntity';
 
 export class CreateClusterModel {
-  cluster: ClusterSpec;
+  name: string;
+  spec: ClusterSpec;
   sshKeys: string[];
 
-  constructor(cluster: ClusterSpec, sshKeys: string[]) {
-    this.cluster = cluster;
+  constructor(name: string, spec: ClusterSpec, sshKeys: string[]) {
+    this.name = name;
+    this.spec = spec;
     this.sshKeys = sshKeys;
   }
 }
