@@ -223,8 +223,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadClusterNodes() {
-
-    if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
+    // FIXME: We're also trying to reload when the health info is missing. Otherwise
+    // the node list will be empty until the first health check arrives.
+    if (this.cluster && (!this.health || (this.health.apiserver && this.health.machineController))) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .takeUntil(this.unsubscribe)
         .subscribe(nodes => {
