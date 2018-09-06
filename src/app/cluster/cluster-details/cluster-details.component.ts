@@ -77,11 +77,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
 
-
-
-    this.userService.currentUserGroup(this.projectID).subscribe(group => {
-        this.userGroup = group;
-      });
+    this.userService.currentUserGroup(this.projectID).takeUntil(this.unsubscribe).subscribe(group => {
+      this.userGroup = group;
+    });
 
     this.healthService.getClusterHealth(clusterName, seedDCName, this.projectID).takeUntil(this.unsubscribe).subscribe(health => {
       this.health = health;
