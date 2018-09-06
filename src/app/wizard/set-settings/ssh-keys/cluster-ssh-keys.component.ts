@@ -2,11 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { WizardService } from '../../../core/services/wizard/wizard.service';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { ApiService } from '../../../core/services';
+import {ApiService, ProjectService} from '../../../core/services';
 import { Subscription } from 'rxjs/Subscription';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { AddSshKeyModalComponent } from '../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-cluster-ssh-keys',
@@ -22,15 +23,24 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   });
   private keysSub: Subscription;
   private keysFormSub: Subscription;
+  public project: ProjectEntity;
+  private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
               private wizardService: WizardService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private projectService: ProjectService) { }
 
   ngOnInit() {
+    this.project = this.projectService.project;
+
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+      this.project = project;
+    }));
+
     const keyNames: string[] = [];
     for (const key of this.selectedKeys) {
-      keyNames.push(key.metadata.name);
+      keyNames.push(key.name);
     }
     this.keysForm.controls.keys.patchValue(keyNames);
 
@@ -38,7 +48,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
       const clusterKeys: SSHKeyEntity[] = [];
       for (const selectedKey of this.keysForm.controls.keys.value) {
         for (const key of this.keys) {
-          if (selectedKey === key.metadata.name) {
+          if (selectedKey === key.name) {
             clusterKeys.push(key);
           }
         }
@@ -55,9 +65,9 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   reloadKeys() {
-    this.keysSub = this.api.getSSHKeys().subscribe(sshKeys => {
+    this.keysSub = this.api.getSSHKeys(this.project.id).subscribe(sshKeys => {
       this.keys = sshKeys.sort((a, b) => {
-        return a.spec.name.localeCompare(b.spec.name);
+        return a.name.localeCompare(b.name);
       });
     });
   }

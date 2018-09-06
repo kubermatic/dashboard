@@ -35,7 +35,7 @@ describe('SummaryComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the set-settings cmp', () => {
+  it('should create summary cmp', () => {
     expect(component).toBeTruthy();
   });
 });

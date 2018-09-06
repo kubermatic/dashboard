@@ -1,30 +1,45 @@
-import { Component, Input, OnChanges } from '@angular/core';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ClusterService } from '../../../core/services';
-
+import { HealthEntity } from '../../../shared/entity/HealthEntity';
+import { UserGroupConfig } from '../../../shared/model/Config';
+import { HealthService } from '../../../core/services';
+import { AppConfigService } from '../../../app-config.service';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
   templateUrl: './cluster-secrets.component.html',
   styleUrls: ['./cluster-secrets.component.scss']
 })
-export class ClusterSecretsComponent implements OnChanges {
+
+export class ClusterSecretsComponent implements OnInit, OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() projectID: string;
+  @Input() userGroup: string;
   public expand = false;
   public dialogRef: any;
   public isClusterRunning: boolean;
   public healthStatus: string;
+  public health: HealthEntity;
+  public userGroupConfig: UserGroupConfig;
 
   constructor(public dialog: MatDialog,
-              private clusterService: ClusterService) { }
+              private healthService: HealthService,
+              private appConfigService: AppConfigService) { }
+
+  ngOnInit() {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+  }
 
   ngOnChanges() {
-    this.isClusterRunning = this.clusterService.isClusterRunning(this.cluster);
-    this.healthStatus = this.clusterService.getClusterHealthStatus(this.cluster);
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
+      this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
+      this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+      this.health = health;
+    });
   }
 
   isExpand(expand: boolean) {
@@ -32,7 +47,7 @@ export class ClusterSecretsComponent implements OnChanges {
   }
 
   public decode(type: string): void {
-    let data;
+    /* let data;
     let name;
 
     switch (type) {
@@ -64,24 +79,24 @@ export class ClusterSecretsComponent implements OnChanges {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-    } else {
+    } else {*/
       return;
-    }
+    // }
   }
 
   public getIcon(name: string): string {
-    if (this.cluster.status.health) {
+    if (this.health) {
       switch (name) {
         case 'apiserver':
-          return this.getIconClass(this.cluster.status.health.apiserver);
+          return this.getIconClass(this.health.apiserver);
         case 'controller':
-          return this.getIconClass(this.cluster.status.health.controller);
+          return this.getIconClass(this.health.controller);
         case 'etcd':
-          return this.getIconClass(this.cluster.status.health.etcd);
+          return this.getIconClass(this.health.etcd);
         case 'scheduler':
-          return this.getIconClass(this.cluster.status.health.scheduler);
+          return this.getIconClass(this.health.scheduler);
         case 'machineController':
-          return this.getIconClass(this.cluster.status.health.machineController);
+          return this.getIconClass(this.health.machineController);
         default:
           return '';
       }
@@ -94,7 +109,7 @@ export class ClusterSecretsComponent implements OnChanges {
     if (isHealthy) {
       return 'iconRunning';
     } else if (!(isHealthy)) {
-      if (!this.cluster.status.health.apiserver) {
+      if (!this.health.apiserver) {
         return 'iconFailed';
       } else {
         return 'fa fa-spin fa-circle-o-notch';
@@ -105,18 +120,18 @@ export class ClusterSecretsComponent implements OnChanges {
   }
 
   public getStatus(name: string): string {
-    if (this.cluster.status.health) {
+    if (this.health) {
       switch (name) {
         case 'apiserver':
-          return this.getHealthStatus(this.cluster.status.health.apiserver);
+          return this.getHealthStatus(this.health.apiserver);
         case 'controller':
-          return this.getHealthStatus(this.cluster.status.health.controller);
+          return this.getHealthStatus(this.health.controller);
         case 'etcd':
-          return this.getHealthStatus(this.cluster.status.health.etcd);
+          return this.getHealthStatus(this.health.etcd);
         case 'scheduler':
-          return this.getHealthStatus(this.cluster.status.health.scheduler);
+          return this.getHealthStatus(this.health.scheduler);
         case 'machineController':
-          return this.getHealthStatus(this.cluster.status.health.machineController);
+          return this.getHealthStatus(this.health.machineController);
         default:
           return '';
       }
@@ -129,7 +144,7 @@ export class ClusterSecretsComponent implements OnChanges {
     if (isHealthy) {
       return 'Running';
     } else if (!isHealthy) {
-      if (!this.cluster.status.health.apiserver) {
+      if (!this.health.apiserver) {
         return 'Failed';
       } else {
         return 'Pending';
@@ -144,6 +159,7 @@ export class ClusterSecretsComponent implements OnChanges {
 
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
+    this.dialogRef.componentInstance.projectID = this.projectID;
 
     this.dialogRef.afterClosed().subscribe(result => {});
   }

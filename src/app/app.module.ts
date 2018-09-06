@@ -6,15 +6,21 @@ import { NgReduxFormModule } from '@angular-redux/form';
 import { KubermaticComponent } from './kubermatic.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MobileNavigationComponent } from './overlays';
+import { AddProjectComponent } from './add-project/add-project.component';
+import { AddMemberComponent } from './member/add-member/add-member.component';
+import { EditMemberComponent } from './member/edit-member/edit-member.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core/core.module';
 import { AppConfigService } from './app-config.service';
+import { ProjectService } from './core/services/project/project.service';
+import { UserService } from './core/services/user/user.service';
 import { GoogleAnalyticsService } from './google-analytics.service';
 
 const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
-    return appConfig.loadAppConfig();
+    appConfig.loadAppConfig();
+    appConfig.loadUserGroupConfig();
   };
 };
 
@@ -41,10 +47,15 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       multi: true,
       deps: [AppConfigService]
     },
+    ProjectService,
+    UserService,
     GoogleAnalyticsService
   ],
   entryComponents: [
-    MobileNavigationComponent
+    MobileNavigationComponent,
+    AddProjectComponent,
+    AddMemberComponent,
+    EditMemberComponent
   ],
   bootstrap: [KubermaticComponent]
 })

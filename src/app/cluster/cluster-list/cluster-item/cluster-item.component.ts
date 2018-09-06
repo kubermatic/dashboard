@@ -1,29 +1,48 @@
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClusterEntity, Health } from '../../../shared/entity/ClusterEntity';
-import { ClusterService } from '../../../core/services';
+import { Subscription } from 'rxjs/Subscription';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { HealthEntity } from '../../../shared/entity/HealthEntity';
+import { DatacenterService, HealthService } from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-item',
   templateUrl: './cluster-item.component.html',
   styleUrls: ['./cluster-item.component.scss'],
 })
+
 export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+  @Input() projectID: string;
   @Input() index: number;
-  @Input() health: Health;
   public nodeDC: DataCenterEntity;
+  public seedDC: DataCenterEntity;
+  public health: HealthEntity;
+  private subscriptions: Subscription[] = [];
 
   constructor(private dcService: DatacenterService,
-              private clusterService: ClusterService) {}
+              private healthService: HealthService) {}
 
   public ngOnInit(): void {
-    if (this.cluster.spec.cloud.bringyourown === undefined) {
-      this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
-          this.nodeDC = result;
-        }
-      );
+    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
+      this.nodeDC = result;
+      this.dcService.getDataCenter(this.nodeDC.spec.seed).subscribe(seedRes => {
+        this.seedDC = seedRes;
+      });
+    });
+
+    if (!!this.seedDC) {
+      this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.projectID).subscribe(health => {
+        this.health = health;
+      });
+    }
+  }
+
+  public ngOnDestroy(): void {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
     }
   }
 
@@ -54,7 +73,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   }
 
   public getClusterItemClass() {
-    let itemClass = this.clusterService.getClusterHealthStatus(this.cluster);
+    let itemClass = this.healthService.getClusterHealthStatus(this.cluster, this.health);
     if (this.index % 2 !== 0) {
       itemClass = itemClass  + ' odd';
     }
@@ -69,5 +88,4 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     return datacenter;
   }
 
-  public ngOnDestroy(): void { }
 }

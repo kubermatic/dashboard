@@ -11,6 +11,7 @@ import { ApiService } from '../../../core/services/index';
 import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import { fakeProject } from '../../../testing/fake-data/project.fake';
 
 const modules: any[] = [
   BrowserModule,
@@ -50,6 +51,7 @@ describe('AddSshKeyModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddSshKeyModalComponent);
     component = fixture.componentInstance;
+    component.project = fakeProject();
     fixture.detectChanges();
     apiService = fixture.debugElement.injector.get(ApiService);
     dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyModalComponent, any>;

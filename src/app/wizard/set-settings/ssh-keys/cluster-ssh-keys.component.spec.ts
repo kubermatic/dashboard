@@ -10,6 +10,8 @@ import { WizardService } from '../../../core/services/wizard/wizard.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { fakeSSHKeys } from '../../../testing/fake-data/sshkey.fake';
 import Spy = jasmine.Spy;
+import { ProjectService } from '../../../core/services';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
 
 describe('ClusterSSHKeys', () => {
   let fixture: ComponentFixture<ClusterSSHKeysComponent>;
@@ -32,7 +34,8 @@ describe('ClusterSSHKeys', () => {
       ],
       providers: [
         WizardService,
-        { provide: ApiService, useValue: apiMock }
+        { provide: ApiService, useValue: apiMock },
+        { provide: ProjectService, useClass: ProjectMockService },
       ],
     }).compileComponents();
   }));

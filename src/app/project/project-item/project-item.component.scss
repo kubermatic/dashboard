@@ -1,0 +1,25 @@
+@import "../../../assets/css/colors";
+
+.row {
+  height: 40px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $light-background !important;
+  }
+
+  div, p {
+    height: 100%;
+  }
+}
+
+p {
+  display: flex;
+  align-items: center;
+
+  &.km-icon {
+    justify-content: flex-end;
+    padding-right: 20px;
+  }
+}
+

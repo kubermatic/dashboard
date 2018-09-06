@@ -1,30 +1,38 @@
-import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
-import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { Router } from '@angular/router';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { RouterLinkStubDirective, RouterTestingModule } from './../../testing/router-stubs';
-import { click } from './../../testing/utils/click-handler';
+import { ActivatedRoute } from '@angular/router';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import Spy = jasmine.Spy;
 import { ClusterListComponent } from './cluster-list.component';
 import { ClusterItemComponent } from './cluster-item/cluster-item.component';
-import { Auth } from './../../core/services/auth/auth.service';
-import { AuthMockService } from '../../testing/services/auth-mock.service';
-import { ApiService } from '../../core/services/api/api.service';
-import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
-import { asyncData } from '../../testing/services/api-mock.service';
-import { fakeSeedDatacenters } from '../../testing/fake-data/datacenter.fake';
-import Spy = jasmine.Spy;
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
-import { ClusterService } from '../../core/services';
 
+import { ApiService, ProjectService, DatacenterService, HealthService, UserService } from '../../core/services';
+import { Auth } from './../../core/services/auth/auth.service';
+import { AppConfigService } from '../../app-config.service';
+
+import { SharedModule } from '../../shared/shared.module';
+import { ActivatedRouteStub, RouterLinkStubDirective, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
+import { click } from './../../testing/utils/click-handler';
+
+import { AuthMockService } from '../../testing/services/auth-mock.service';
+import { asyncData } from '../../testing/services/api-mock.service';
+import { HealthMockService } from '../../testing/services/health-mock.service';
+import { UserMockService } from '../../testing/services/user-mock.service';
+import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
+
+import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
+import { fakeSeedDatacenters } from '../../testing/fake-data/datacenter.fake';
 
 describe('ClusterListComponent', () => {
   let fixture: ComponentFixture<ClusterListComponent>;
   let component: ClusterListComponent;
   let getClustersSpy: Spy;
   let getSeedDatacentersSpy: Spy;
+  let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getClusters']);
@@ -50,7 +58,11 @@ describe('ClusterListComponent', () => {
         { provide: ApiService, useValue: apiMock },
         { provide: DatacenterService, useValue: dcMock },
         { provide: Auth, useClass: AuthMockService },
-        ClusterService
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
+        { provide: HealthService, useClass: HealthMockService },
+        { provide: UserService, useClass: UserMockService },
+        { provide: Router, useClass: RouterStub },
+        { provide: AppConfigService, useClass: AppConfigMockService }
       ],
     }).compileComponents();
   }));
@@ -58,6 +70,9 @@ describe('ClusterListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterListComponent);
     component = fixture.componentInstance;
+
+    activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
+    activatedRoute.testParamMap = { projectID: '4k6txp5sq' };
   });
 
   it('should create the cluster list cmp', fakeAsync(() => {
@@ -72,9 +87,7 @@ describe('ClusterListComponent', () => {
 
     const expectedCluster = fakeAWSCluster();
     // @ts-ignore
-    expectedCluster.metadata.creationTimestamp = jasmine.any(Date);
-    // @ts-ignore
-    expectedCluster.status.lastTransitionTime = jasmine.any(Date);
+    expectedCluster.creationTimestamp = jasmine.any(Date);
 
     expect(getSeedDatacentersSpy.and.callThrough()).toHaveBeenCalled();
     expect(getClustersSpy.and.callThrough()).toHaveBeenCalled();
@@ -98,38 +111,6 @@ describe('ClusterListComponent', () => {
     const de = fixture.debugElement.query(By.css('.no-item'));
 
     expect(de).toBeNull('list should not be rendered');
-    discardPeriodicTasks();
-  }));
-
-  it('should get RouterLinks from template', fakeAsync(() => {
-    component.loading = false;
-    fixture.detectChanges();
-
-    const linkDes = fixture.debugElement
-      .queryAll(By.directive(RouterLinkStubDirective));
-
-    const links = linkDes
-      .map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
-    expect(links.length).toBe(2, 'should have 2 links');
-    discardPeriodicTasks();
-  }));
-
-  it('can click Wizard link in template', fakeAsync(() => {
-    component.loading = false;
-    fixture.detectChanges();
-
-    const linkDes = fixture.debugElement
-      .queryAll(By.directive(RouterLinkStubDirective));
-
-    const links = linkDes
-      .map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
-
-    expect(links[0].navigatedTo).toBeNull('link should not have navigated yet');
-
-    click(linkDes[0]);
-    fixture.detectChanges();
-
-    expect(links[0].navigatedTo).toBe('/wizard');
     discardPeriodicTasks();
   }));
 });

@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
-import { ApiService } from '../../core/services/api/api.service';
-import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiService, DatacenterService, UserService } from '../../core/services';
+import { AppConfigService } from '../../app-config.service';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { UserGroupConfig } from '../../shared/model/Config';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { find } from 'lodash';
-import { ClusterService } from '../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-list',
@@ -19,14 +20,32 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   public loading = true;
   public sortedData: ClusterEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
+  public projectID: string;
+  public userGroup: string;
+  public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
+              private route: ActivatedRoute,
+              private appConfigService: AppConfigService,
+              private router: Router,
               private dcService: DatacenterService,
-              private clusterService: ClusterService) {
+              private userService: UserService) {
   }
 
   ngOnInit() {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    this.subscriptions.push(
+      this.route.paramMap.subscribe( m => {
+        this.projectID = m.get('projectID');
+        this.refreshClusters();
+      })
+    );
+
+
+      this.userService.currentUserGroup(this.projectID).subscribe(group => {
+        this.userGroup = group;
+      });
     const timer = Observable.interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshClusters();
@@ -47,7 +66,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       const clusters: ClusterEntity[] = [];
       const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
       for (const dc of datacenters) {
-        dcClustersObservables.push(this.api.getClusters(dc.metadata.name));
+        dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.projectID));
       }
       this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
         .subscribe(dcClusters => {
@@ -58,15 +77,21 @@ export class ClusterListComponent implements OnInit, OnDestroy {
           this.sortData(this.sort);
           this.loading = false;
         }));
+      this.userService.currentUserGroup(this.projectID).subscribe(group => {
+        this.userGroup = group;
+      });
     }));
   }
 
   public trackCluster(index: number, cluster: ClusterEntity): number {
     const prevCluster = find(this.clusters, item => {
-      return item.metadata.name === cluster.metadata.name;
+      return item.name === cluster.name;
     });
+    return prevCluster ? index : undefined;
+  }
 
-    return prevCluster && this.clusterService.isClusterRunning(prevCluster) === this.clusterService.isClusterRunning(cluster) ? index : undefined;
+  public loadWizard() {
+    this.router.navigate(['/wizard']);
   }
 
   sortData(sort: Sort) {
@@ -81,7 +106,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       const isAsc = sort.direction === 'asc';
       switch (sort.active) {
         case 'name':
-          return this.compare(a.spec.humanReadableName, b.spec.humanReadableName, isAsc);
+          return this.compare(a.name, b.name, isAsc);
         case 'provider':
           return this.getProvider(a, b, isAsc);
         case 'region':

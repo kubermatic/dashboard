@@ -11,11 +11,14 @@ import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.compo
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { NotificationComponent } from './components/notification/notification.component';
+import { AddProjectComponent } from '../add-project/add-project.component';
+import { AddMemberComponent } from '../member/add-member/add-member.component';
+import { EditMemberComponent } from '../member/edit-member/edit-member.component';
 /* Services */
 import { ClusterNameGenerator } from './util/name-generator.service';
 import { ProgressBrowserXhr } from './util/ProgressBrowserXhr';
 import { SidenavService } from './components/sidenav/sidenav.service';
-import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, InitialNodeDataService, ClusterService } from './services';
+import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, InitialNodeDataService, ClusterService, HealthService } from './services';
 /* Interceptors */
 import { CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor } from './interceptors';
 import { AddNodeService } from './services/add-node/add-node.service';
@@ -34,7 +37,10 @@ const components: any[] = [
   SidenavComponent,
   NavigationComponent,
   BreadcrumbsComponent,
-  NotificationComponent
+  NotificationComponent,
+  AddProjectComponent,
+  AddMemberComponent,
+  EditMemberComponent
 ];
 
 const services: any[] = [
@@ -49,7 +55,8 @@ const services: any[] = [
   SidenavService,
   ApiService,
   InitialNodeDataService,
-  ClusterService
+  ClusterService,
+  HealthService
 ];
 
 const interceptors: any[] = [

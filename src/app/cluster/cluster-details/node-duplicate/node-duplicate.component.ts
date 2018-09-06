@@ -17,6 +17,7 @@ export class NodeDuplicateComponent implements OnInit {
   @Input() node: NodeEntity;
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() projectID: string;
 
   constructor(private api: ApiService,
               private dialogRef: MatDialogRef<NodeDuplicateComponent>,
@@ -29,7 +30,6 @@ export class NodeDuplicateComponent implements OnInit {
 
   public duplicateNode(): void {
     const nodeSpec: NodeEntity = {
-      metadata: {},
       spec: {
         cloud: this.node.spec.cloud,
         operatingSystem: this.node.spec.operatingSystem,
@@ -42,7 +42,7 @@ export class NodeDuplicateComponent implements OnInit {
       status: {}
     };
 
-    this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name).subscribe(result => {
+    this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name, this.projectID).subscribe(result => {
       NotificationActions.success('Success', `Duplicate node successfully`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDuplicated');
     });

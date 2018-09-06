@@ -1,8 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { ApiService, WizardService } from '../../../core/services';
+import { ApiService, WizardService, ProjectService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable, ObservableInput } from 'rxjs/Observable';
@@ -20,11 +21,11 @@ import { GoogleAnalyticsService } from '../../../google-analytics.service';
 export class AddNodeModalComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() projectID: string;
   private subscriptions: Subscription[] = [];
   public nodeDC: DataCenterEntity;
   public addNodeData: NodeData = {
     node: {
-      metadata: {},
       spec: {
         cloud: {},
         operatingSystem: {},
@@ -40,8 +41,8 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
               private addNodeService: AddNodeService,
               private wizardService: WizardService,
               private dcService: DatacenterService,
-              public googleAnalyticsService: GoogleAnalyticsService
-  ) {}
+              private projectService: ProjectService,
+              public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
@@ -71,7 +72,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
   public addNode(): void {
     const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
     for (let i = 0; i < this.addNodeData.count; i++) {
-      createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name));
+      createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name, this.projectID));
     }
     this.subscriptions.push(Observable.combineLatest(createNodeObservables)
       .subscribe((createdNodes: NodeEntity[]): void => {

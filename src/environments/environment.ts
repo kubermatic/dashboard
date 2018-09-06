@@ -3,7 +3,7 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
-const redirect_uri = window.location.protocol + '//' + window.location.host + '/clusters';
+const redirect_uri = window.location.protocol + '//' + window.location.host + '/projects';
 const oauth = 'https://dev.kubermatic.io/dex/auth';
 const scope: string[] = ['openid', 'email', 'profile', 'groups'];
 

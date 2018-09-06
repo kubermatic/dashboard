@@ -1,0 +1,35 @@
+@import "../../assets/css/colors";
+
+
+.mat-dialog-container {
+  width: 200px;
+  padding: 0px;
+}
+
+.how-to-project {
+  margin-top: 40px;
+  background-color: $light-background;
+  .header {
+    text-transform: uppercase;
+    color: #ffffff;
+    background-color: $secondary;
+    border-bottom: 1px solid #ffffff;
+
+    padding-left: 15px;
+    height: 40px;
+    line-height: 40px;
+  }
+  .content {
+    font-size: 15px;
+    color: #444D58;
+    padding: 20px 15px;
+    margin: 10px 0;
+    line-height: 20px;
+  }
+
+  .first, .second {
+    .content {
+      border-right: 1px solid #ffffff;
+    }
+  }
+}
