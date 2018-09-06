@@ -26,7 +26,7 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.name)" [ngClass]="getNodeHealthStatus(node,i).class">
+        <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
           <div fxLayout>
             <div fxFlex="3%">{{i + 1}}</div>
 
@@ -51,7 +51,7 @@
               <span *ngIf="!!node.creationTimestamp">{{node.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
             </div>
             <div fxFlex="5%" class="health-state">
-                <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
+              <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
             </div>
 
             <div fxFlex="10%" class="km-btn-remove-node-wrapper">
@@ -61,7 +61,6 @@
                 </ng-container>
 
                 <ng-container *ngSwitchCase="false">
-
                   <button mat-icon-button class="km-duplicate-node" matTooltip="duplicate Node" (click)="duplicateNodeDialog(node)">
                     <i class="fa fa-clone" aria-hidden="true"></i>
                   </button>
@@ -76,7 +75,7 @@
             <p color="accent">{{node.status.errorMessage}}</p>
           </div>
 
-          <div class="node-details-wrapper" *ngIf="isShowNodeDetails[node.id]">
+          <div class="node-details-wrapper" *ngIf="!!isShowNodeDetails[node.id]">
             <div class="node-details-content">
               <div fxLayout>
                 <mat-card class="km-card-list" fxFlex="50%">
