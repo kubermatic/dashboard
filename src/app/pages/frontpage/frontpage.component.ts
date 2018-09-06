@@ -29,7 +29,7 @@ export class FrontpageComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.auth.authenticated()) {
-      this.router.navigate(['clusters']);
+      this.router.navigate(['/projects']);
       this.isAuth = true;
     }
 

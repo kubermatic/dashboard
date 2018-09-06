@@ -13,7 +13,7 @@ export class PageNotFoundComponent {
 
   backToApp(): void {
     if (this.auth.authenticated()) {
-      this.router.navigate(['clusters']);
+      this.router.navigate(['/projects']);
     } else {
       this.router.navigate(['']);
     }
