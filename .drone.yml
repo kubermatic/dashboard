@@ -105,14 +105,23 @@ pipeline:
         ${DRONE_BUILD_LINK}
     author_recipient_mapping:
       - alvaroaleman=alvaro
+      - cbrgm=christian
+      - glower=igor.komlew
       - guusvw=guus
       - j3ank=eugenia
-      - kgroschoff=kristin
-      - metalmatze=matthias
+      - kdomanski=kamil
+      - kgroschoff=kristin.groschoff
+      - kron4eg=artiom
       - mrIncompetent=henrik
       - p0lyn0mial=lukasz
-      - realfake=luk
+      - pkavajin=patrick
       - scheeles=sebastian
+      - thz=tobias.hintze
+      - toschneck=tobias.schneck
+      - xrstf=christoph
+      - xmudrii=marko
+      - maciaszczykm=marcin
+      - floreks=sebastian.florek
     when:
       status: [ failure ]
 
