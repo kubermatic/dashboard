@@ -6,7 +6,7 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { UserGroupConfig } from '../../../shared/model/Config';
-import { HealthService, UserService } from '../../../core/services';
+import { UserService } from '../../../core/services';
 import { AppConfigService } from '../../../app-config.service';
 
 @Component({
@@ -15,14 +15,14 @@ import { AppConfigService } from '../../../app-config.service';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent implements OnInit, OnChanges {
+export class NodeListComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
   @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<NodeEntity>();
-  public clusterHealthStatus: string;
-  public isClusterRunning: boolean;
+  @Input() clusterHealthStatus: string;
+  @Input() isClusterRunning: boolean;
   public clickedDeleteNode = {};
   public clickedDuplicateNode = {};
   public isShowNodeDetails = {};
@@ -46,24 +46,14 @@ export class NodeListComponent implements OnInit, OnChanges {
   };
 
   constructor(public dialog: MatDialog,
-
-              private healthService: HealthService,
-              private appConfigService: AppConfigService,
-              private userService: UserService) {
+    private appConfigService: AppConfigService,
+    private userService: UserService) {
   }
 
   ngOnInit() {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe(group => {
-        this.userGroup = group;
-      });
-  }
-
-  ngOnChanges() {
-
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
-      this.clusterHealthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
-      this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
+      this.userGroup = group;
     });
   }
 
@@ -99,7 +89,7 @@ export class NodeListComponent implements OnInit, OnChanges {
     dialogRef.componentInstance.projectID = this.projectID;
 
     const sub = dialogRef.afterClosed().subscribe(result => {
-    this.clickedDuplicateNode[node.id] = false;
+      this.clickedDuplicateNode[node.id] = false;
       sub.unsubscribe();
     });
   }
