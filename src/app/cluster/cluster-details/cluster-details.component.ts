@@ -83,12 +83,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         this.userGroup = group;
       });
 
-    const HealthTimer = Observable.interval(this.refreshInterval);
-    this.subscriptions.push(HealthTimer.takeUntil(this.unsubscribe).subscribe(tick => {
-      this.healthService.getClusterHealth(clusterName, seedDCName, this.projectID).subscribe(health => {
-        this.health = health;
-      });
-    }));
+    this.healthService.getClusterHealth(clusterName, seedDCName, this.projectID).takeUntil(this.unsubscribe).subscribe(health => {
+      this.health = health;
+    });
 
     this.initialNodeCreation();
 
