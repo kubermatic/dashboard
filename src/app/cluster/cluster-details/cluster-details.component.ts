@@ -59,15 +59,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private api: ApiService,
-              public dialog: MatDialog,
-              private initialNodeDataService: InitialNodeDataService,
-              private dcService: DatacenterService,
+    private router: Router,
+    private api: ApiService,
+    public dialog: MatDialog,
+    private initialNodeDataService: InitialNodeDataService,
+    private dcService: DatacenterService,
 
-              private healthService: HealthService,
-              private userService: UserService,
-              private appConfigService: AppConfigService) {
+    private healthService: HealthService,
+    private userService: UserService,
+    private appConfigService: AppConfigService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
@@ -77,18 +77,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
 
-
-
-    this.userService.currentUserGroup(this.projectID).subscribe(group => {
-        this.userGroup = group;
-      });
-
-    const HealthTimer = Observable.interval(this.refreshInterval);
-    this.subscriptions.push(HealthTimer.takeUntil(this.unsubscribe).subscribe(tick => {
-      this.healthService.getClusterHealth(clusterName, seedDCName, this.projectID).subscribe(health => {
-        this.health = health;
-      });
-    }));
+    this.userService.currentUserGroup(this.projectID).takeUntil(this.unsubscribe).subscribe(group => {
+      this.userGroup = group;
+    });
 
     this.initialNodeCreation();
 
@@ -128,6 +119,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.health = health;
           this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
           this.clusterHealthClass = this.healthService.getClusterHealthStatus(this.cluster, health);
+          this.reloadClusterNodes();
         });
       });
 
@@ -159,8 +151,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
           const timer = Observable.interval(this.refreshInterval);
           timer.takeUntil(this.unsubscribe).subscribe(tick => {
-              this.reloadCluster(clusterName, seedDCName, this.projectID);
-            });
+            this.reloadCluster(clusterName, seedDCName, this.projectID);
+          });
         },
         error => {
           if (error.status === 404) {
@@ -255,7 +247,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           }
 
         });
-      }
+    }
   }
 
   public addNode(): void {
