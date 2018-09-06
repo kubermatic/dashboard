@@ -4,7 +4,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { NodeListComponent } from './node-list.component';
-import { HealthService, ProjectService, UserService } from '../../../core/services';
+import { UserService } from '../../../core/services';
 import { AppConfigService } from '../../../app-config.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
 import { HealthMockService } from '../../../testing/services/health-mock.service';
@@ -34,8 +34,6 @@ describe('NodeComponent', () => {
         NodeListComponent
       ],
       providers: [
-        { provide: ProjectService, useClass: ProjectMockService },
-        { provide: HealthService, useClass: HealthMockService },
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService },
         MatDialog

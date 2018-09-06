@@ -6,7 +6,7 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { UserGroupConfig } from '../../../shared/model/Config';
-import { HealthService, UserService } from '../../../core/services';
+import { UserService } from '../../../core/services';
 import { AppConfigService } from '../../../app-config.service';
 
 @Component({
@@ -21,8 +21,8 @@ export class NodeListComponent implements OnInit, OnChanges {
   @Input() nodes: NodeEntity[] = [];
   @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<NodeEntity>();
-  public clusterHealthStatus: string;
-  public isClusterRunning: boolean;
+  @Input() clusterHealthStatus: string;
+  @Input() isClusterRunning: boolean;
   public clickedDeleteNode = {};
   public clickedDuplicateNode = {};
   public isShowNodeDetails = {};
@@ -46,8 +46,6 @@ export class NodeListComponent implements OnInit, OnChanges {
   };
 
   constructor(public dialog: MatDialog,
-
-              private healthService: HealthService,
               private appConfigService: AppConfigService,
               private userService: UserService) {
   }
@@ -57,14 +55,6 @@ export class NodeListComponent implements OnInit, OnChanges {
     this.userService.currentUserGroup(this.projectID).subscribe(group => {
         this.userGroup = group;
       });
-  }
-
-  ngOnChanges() {
-
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
-      this.clusterHealthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
-      this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
-    });
   }
 
   public managedByProvider(node: NodeEntity): boolean {
