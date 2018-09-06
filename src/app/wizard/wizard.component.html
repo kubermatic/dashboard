@@ -31,11 +31,12 @@
         Next
       </ng-container>
     </button>
-    <button *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating" type="button" mat-raised-button color="primary" (click)="createCluster()">
+    <button *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating || project.status !== 'Active'" type="button" mat-raised-button color="primary" (click)="createCluster()">
       <ng-container>
         Create
       </ng-container>
     </button>
+    <span class="project-status-info" *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
     <a type="button" class="cancel-button" routerLink="/clusters">Cancel</a>
   </div>
 

@@ -219,6 +219,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     }
 
     this.stepsService.changeSteps(this.steps);
+
   }
 
   stepForward(): void {
