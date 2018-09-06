@@ -59,15 +59,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(private route: ActivatedRoute,
-              private router: Router,
-              private api: ApiService,
-              public dialog: MatDialog,
-              private initialNodeDataService: InitialNodeDataService,
-              private dcService: DatacenterService,
+    private router: Router,
+    private api: ApiService,
+    public dialog: MatDialog,
+    private initialNodeDataService: InitialNodeDataService,
+    private dcService: DatacenterService,
 
-              private healthService: HealthService,
-              private userService: UserService,
-              private appConfigService: AppConfigService) {
+    private healthService: HealthService,
+    private userService: UserService,
+    private appConfigService: AppConfigService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
@@ -154,8 +154,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
           const timer = Observable.interval(this.refreshInterval);
           timer.takeUntil(this.unsubscribe).subscribe(tick => {
-              this.reloadCluster(clusterName, seedDCName, this.projectID);
-            });
+            this.reloadCluster(clusterName, seedDCName, this.projectID);
+          });
         },
         error => {
           if (error.status === 404) {
@@ -250,7 +250,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           }
 
         });
-      }
+    }
   }
 
   public addNode(): void {

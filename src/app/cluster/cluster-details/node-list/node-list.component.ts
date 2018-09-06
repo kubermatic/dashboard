@@ -46,15 +46,15 @@ export class NodeListComponent implements OnInit {
   };
 
   constructor(public dialog: MatDialog,
-              private appConfigService: AppConfigService,
-              private userService: UserService) {
+    private appConfigService: AppConfigService,
+    private userService: UserService) {
   }
 
   ngOnInit() {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe(group => {
-        this.userGroup = group;
-      });
+      this.userGroup = group;
+    });
   }
 
   public managedByProvider(node: NodeEntity): boolean {
@@ -89,7 +89,7 @@ export class NodeListComponent implements OnInit {
     dialogRef.componentInstance.projectID = this.projectID;
 
     const sub = dialogRef.afterClosed().subscribe(result => {
-    this.clickedDuplicateNode[node.id] = false;
+      this.clickedDuplicateNode[node.id] = false;
       sub.unsubscribe();
     });
   }
