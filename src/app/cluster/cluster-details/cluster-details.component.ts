@@ -81,10 +81,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       this.userGroup = group;
     });
 
-    this.healthService.getClusterHealth(clusterName, seedDCName, this.projectID).takeUntil(this.unsubscribe).subscribe(health => {
-      this.health = health;
-    });
-
     this.initialNodeCreation();
 
     // Node datacenter & ssh keys - both once
@@ -123,6 +119,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.health = health;
           this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
           this.clusterHealthClass = this.healthService.getClusterHealthStatus(this.cluster, health);
+          this.reloadClusterNodes();
         });
       });
 
