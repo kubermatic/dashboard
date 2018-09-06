@@ -17,7 +17,8 @@
     "test": "ng test",
     "test-headless": "ng test --browsers=ChromeHeadless --watch=false",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "tsfmt": "tsfmt --verify"
   },
   "dependencies": {
     "@angular-redux/form": "^9.0.1",
@@ -84,6 +85,7 @@
     "ts-node": "7.0.0",
     "tslint": "^5.8.0",
     "typescript": "2.7.2",
+    "typescript-formatter": "7.2.2",
     "webdriver-manager": "12.0.6",
     "@angular-devkit/build-angular": "~0.6.8"
   }
