@@ -15,7 +15,7 @@ import { AppConfigService } from '../../../app-config.service';
   styleUrls: ['node-list.component.scss']
 })
 
-export class NodeListComponent implements OnInit, OnChanges {
+export class NodeListComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodes: NodeEntity[] = [];
