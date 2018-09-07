@@ -12,6 +12,13 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex *ngIf="!hideOptional">
-    <input matInput formControlName="vmNetName" type="vmNetName" placeholder="Network:" autocomplete="off">
+    <mat-select placeholder="Network:" formControlName="vmNetName">
+      <mat-option *ngIf="!loadingNetwork && (vsphereSettingsForm.controls.username.value === '' || vsphereSettingsForm.controls.password.value === '')" [value]="0">Please enter your credentials first!</mat-option>
+      <mat-option *ngIf="loadingNetwork" [value]="0">Loading networks...</mat-option>
+      <mat-option *ngFor="let item of networks" [value]="item.name">
+      {{item.name}}
+      </mat-option>
+    </mat-select>
   </mat-form-field>
+
 </form>

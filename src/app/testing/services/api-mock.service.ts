@@ -6,12 +6,14 @@ import { ProjectEntity } from './../../shared/entity/ProjectEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { MemberEntity, CreateMemberEntity } from '../../shared/entity/MemberEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { VSphereNetwork } from '../../shared/entity/provider/vsphere/VSphereEntity';
 import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { nodesFake } from './../fake-data/node.fake';
 import { fakeSSHKeys } from './../fake-data/sshkey.fake';
 import { fakeClusters, fakeDigitaloceanCluster, fakeToken } from './../fake-data/cluster.fake';
 import { fakeProject, fakeProjects } from './../fake-data/project.fake';
 import { fakeMember, fakeMembers } from './../fake-data/member.fake';
+import { fakeVSphereNetworks } from './../fake-data/vsphere.fake';
 import { masterVersionsFake } from './../fake-data/cluster-spec.fake';
 
 @Injectable()
@@ -26,6 +28,7 @@ export class ApiMockService {
   public token: Token = fakeToken();
   public member: MemberEntity = fakeMember();
   public members: MemberEntity[] = fakeMembers();
+  public vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
 
   constructor() {
   }
@@ -108,6 +111,10 @@ export class ApiMockService {
 
   createMembers(projectID: string, member: CreateMemberEntity): Observable<MemberEntity> {
     return Observable.of(this.member);
+  }
+
+  getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
+    return Observable.of(this.vsphereNetworks);
   }
 }
 

@@ -4,7 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SharedModule } from '../../../../shared/shared.module';
 import { fakeVSphereCluster } from '../../../../testing/fake-data/cluster.fake';
-import { WizardService } from '../../../../core/services/wizard/wizard.service';
+import { ApiMockService } from '../../../../testing/services/api-mock.service';
+import { WizardService, ApiService } from '../../../../core/services';
 import { VSphereClusterSettingsComponent } from './vsphere.component';
 
 describe('VSphereClusterSettingsComponent', () => {
@@ -23,7 +24,8 @@ describe('VSphereClusterSettingsComponent', () => {
         VSphereClusterSettingsComponent
       ],
       providers: [
-        WizardService
+        { provide: ApiService, useClass: ApiMockService },
+        WizardService,
       ],
     }).compileComponents();
   }));
