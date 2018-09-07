@@ -118,7 +118,7 @@ export class ApiService {
 
   getDigitaloceanSizes(token: string): Observable<DigitaloceanSizes> {
     this.headers = this.headers.set('DoToken', token);
-    const url = `${this.restRoot}/digitalocean/sizes`;
+    const url = `${this.restRoot}/providers/digitalocean/sizes`;
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
   }
 
@@ -146,7 +146,7 @@ export class ApiService {
     this.headers = this.headers.set('Tenant', tenant);
     this.headers = this.headers.set('Domain', domain);
     this.headers = this.headers.set('DatacenterName', datacenterName);
-    const url = `${this.restRoot}/openstack/sizes`;
+    const url = `${this.restRoot}/providers/openstack/sizes`;
     return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
   }
 
@@ -155,7 +155,7 @@ export class ApiService {
     this.headers = this.headers.set('Password', password);
     this.headers = this.headers.set('Domain', domain);
     this.headers = this.headers.set('DatacenterName', datacenterName);
-    const url = `${this.restRoot}/openstack/tenants`;
+    const url = `${this.restRoot}/providers/openstack/tenants`;
     return this.http.get<OpenstackTenant[]>(url, { headers: this.headers });
   }
 
@@ -164,7 +164,7 @@ export class ApiService {
     this.headers = this.headers.set('Password', password);
     this.headers = this.headers.set('Domain', domain);
     this.headers = this.headers.set('DatacenterName', datacenterName);
-    const url = `${this.restRoot}/openstack/securitygroups`;
+    const url = `${this.restRoot}/providers/openstack/securitygroups`;
     return this.http.get<OpenstackSecurityGroup[]>(url, { headers: this.headers });
   }
 
@@ -173,7 +173,7 @@ export class ApiService {
     this.headers = this.headers.set('Password', password);
     this.headers = this.headers.set('Domain', domain);
     this.headers = this.headers.set('DatacenterName', datacenterName);
-    const url = `${this.restRoot}/openstack/networks`;
+    const url = `${this.restRoot}/providers/openstack/networks`;
     return this.http.get<OpenstackNetwork[]>(url, { headers: this.headers });
   }
 
@@ -183,7 +183,7 @@ export class ApiService {
     this.headers = this.headers.set('Domain', domain);
     this.headers = this.headers.set('DatacenterName', datacenterName);
 
-    const url = `${this.restRoot}/openstack/subnets?network_id=${network}`;
+    const url = `${this.restRoot}/providers/openstack/subnets?network_id=${network}`;
     return this.http.get<OpenstackSubnet[]>(url, { headers: this.headers });
   }
 
@@ -202,7 +202,7 @@ export class ApiService {
     this.headers = this.headers.set('SubscriptionID', subscriptionID);
     this.headers = this.headers.set('TenantID', tenantID);
     this.headers = this.headers.set('Location', location);
-    const url = `${this.restRoot}/azure/sizes`;
+    const url = `${this.restRoot}/providers/azure/sizes`;
     return this.http.get<AzureSizes>(url, { headers: this.headers });
   }
 
