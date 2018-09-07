@@ -74,11 +74,10 @@ export class MemberComponent implements OnInit, OnDestroy {
 
   refreshMembers() {
     if (this.project) {
-      // endpoint needs to be implemented in backend first
-      /*this.subscriptions.push(this.api.getMembers(this.project.id).subscribe(res => {
-        this.members = res;*/
+      this.subscriptions.push(this.api.getMembers(this.project.id).subscribe(res => {
+        this.members = res;
         this.sortData(this.sort);
-      /*}));*/
+      }));
     }
   }
 
@@ -97,6 +96,8 @@ export class MemberComponent implements OnInit, OnDestroy {
           return this.compare(a.name, b.name, isAsc);
         case 'email':
           return this.compare(a.email, b.email, isAsc);
+        case 'group':
+          return this.compare(a.email, b.email, isAsc);
         default:
           return 0;
       }
@@ -105,6 +106,56 @@ export class MemberComponent implements OnInit, OnDestroy {
 
   compare(a, b, isAsc) {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+
+  getGroup(projectsA, projectsB, isAsc) {
+    let groupA: string;
+    let groupB: string;
+
+    for (const i of Object.keys(projectsA)) {
+      if (projectsA[i].id === this.project.id) {
+        const group = projectsA[i].group.replace(/(\-[\w\d]+)$/, '');
+        switch (group) {
+          case 'owners':
+            groupA = 'Owner';
+            break;
+          case 'editors':
+            groupA = 'Editor';
+            break;
+          case 'viewers':
+            groupA = 'Viewer';
+            break;
+          default:
+            groupA = '';
+            break;
+        }
+      }
+      groupA = '';
+    }
+
+    for (const i of Object.keys(projectsB)) {
+      if (projectsB[i].id === this.project.id) {
+        const group = projectsB[i].group.replace(/(\-[\w\d]+)$/, '');
+        switch (group) {
+          case 'owners':
+            groupB = 'Owner';
+            break;
+          case 'editors':
+            groupB = 'Editor';
+            break;
+          case 'viewers':
+            groupB = 'Viewer';
+            break;
+          default:
+            groupB = '';
+            break;
+        }
+      }
+      groupB = '';
+    }
+
+    return this.compare(groupA, groupB, isAsc);
+
   }
 
 }
