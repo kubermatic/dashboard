@@ -94,3 +94,11 @@ i.fa-info-circle {
 .disabled {
   color: $disabled-button-color
 }
+
+.accordion {
+  cursor: pointer;
+
+  .node-details-wrapper {
+    cursor: default;
+  } 
+}
