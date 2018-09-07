@@ -11,6 +11,7 @@ import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
+import { VSphereNetwork } from '../../../shared/entity/provider/vsphere/VSphereEntity';
 import { MemberEntity, CreateMemberEntity } from '../../../shared/entity/MemberEntity';
 import {
   OpenstackFlavor, OpenstackNetwork, OpenstackSubnet,
@@ -204,6 +205,14 @@ export class ApiService {
     this.headers = this.headers.set('Location', location);
     const url = `${this.restRoot}/providers/azure/sizes`;
     return this.http.get<AzureSizes>(url, { headers: this.headers });
+  }
+
+  getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
+    this.headers = this.headers.set('Username', username);
+    this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('DatacenterName', datacenterName);
+    const url = `${this.restRoot}/providers/vsphere/networks`;
+    return this.http.get<VSphereNetwork[]>(url, { headers: this.headers });
   }
 
   getMembers(projectID: string): Observable<MemberEntity[]> {

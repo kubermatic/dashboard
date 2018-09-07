@@ -1,7 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
+import { VSphereNetwork } from '../../../../shared/entity/provider/vsphere/VSphereEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { WizardService } from '../../../../core/services/wizard/wizard.service';
+import { WizardService, ApiService } from '../../../../core/services';
 import { Subscription } from 'rxjs/Subscription';
 import { debounceTime } from 'rxjs/operators';
 
@@ -14,10 +15,11 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   public vsphereSettingsForm: FormGroup;
   public hideOptional = true;
+  public loadingNetworks = false;
+  public networks: VSphereNetwork[] = [];
   private subscriptions: Subscription[] = [];
 
-  constructor(private wizardService: WizardService) {
-  }
+  constructor(private wizardService: WizardService, private api: ApiService) { }
 
   ngOnInit() {
     this.vsphereSettingsForm = new FormGroup({
@@ -27,6 +29,8 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.vsphereSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+      this.loadNetworks();
+
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           vsphere: {
@@ -52,4 +56,30 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  public loadNetworks() {
+    if (
+      this.vsphereSettingsForm.controls.username.value === '' ||
+      this.vsphereSettingsForm.controls.password.value === '' ||
+      this.networks.length > 0) {
+        return;
+    }
+
+    this.loadingNetworks = true;
+    this.subscriptions.push(this.api.getVSphereNetworks(this.vsphereSettingsForm.controls.username.value, this.vsphereSettingsForm.controls.password.value, this.cluster.spec.cloud.dc).subscribe(networks => {
+        if (networks.length > 0) {
+          const sortedNetworks = networks.sort((a, b) => {
+            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+          });
+
+          this.networks = sortedNetworks;
+          if (sortedNetworks.length > 0 && this.vsphereSettingsForm.controls.vmNetName.value !== '0') {
+            this.vsphereSettingsForm.controls.vmNetName.setValue(this.cluster.spec.cloud.vsphere.vmNetName);
+          }
+        } else {
+          this.networks = [];
+        }
+    }));
+  }
+
 }
