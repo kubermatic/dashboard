@@ -399,15 +399,15 @@ mat-dialog-content {
   background: $light-text-color;
 }
 ::-webkit-scrollbar-track {
-  background: $light-text-color;
+  background: $medium-background;
   border: 0px none #ffffff;
   border-radius: 50px;
 }
 ::-webkit-scrollbar-track:hover {
-  background: $light-text-color;
+  background: $medium-background;
 }
 ::-webkit-scrollbar-track:active {
-  background: $light-text-color;
+  background: $medium-background;
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
