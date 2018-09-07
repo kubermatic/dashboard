@@ -16,12 +16,24 @@ export function fakeMembers(): MemberEntity[] {
     },
     {
       creationTimestamp: new Date(),
-      id: '123456',
+      id: '345678',
       name: 'John Doe Jr',
       email: 'john.doe.jr@example.com',
       projects: [
         {
           group: 'editors',
+          id: '123ab4cd5e'
+        }
+      ]
+    },
+    {
+      creationTimestamp: new Date(),
+      id: '567890',
+      name: 'John Doe Sr',
+      email: 'john.doe.sr@example.com',
+      projects: [
+        {
+          group: 'viewers',
           id: '123ab4cd5e'
         }
       ]
