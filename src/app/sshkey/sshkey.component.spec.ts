@@ -1,18 +1,21 @@
-import { ApiService, ProjectService } from '../core/services';
-import { ApiMockService } from '../testing/services/api-mock.service';
-import { ProjectMockService } from '../testing/services/project-mock.service';
+import { Router } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+import { MatTabsModule, MatDialog } from '@angular/material';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { SSHKeyComponent } from './sshkey.component';
 import { SSHKeyItemComponent } from './sshkey-item/sshkey-item.component';
-import { Router } from '@angular/router';
-import { SharedModule } from '../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '../testing/router-stubs';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterStub } from './../testing/router-stubs';
+import { ApiService, ProjectService, UserService } from '../core/services';
+import { AppConfigService } from '../app-config.service';
+import { ApiMockService } from '../testing/services/api-mock.service';
+import { ProjectMockService } from '../testing/services/project-mock.service';
+import { UserMockService } from '../testing/services/user-mock.service';
+import { AppConfigMockService } from '../testing/services/app-config-mock.service';
 import { asyncData } from '../testing/services/api-mock.service';
-import { MatTabsModule, MatDialog } from '@angular/material';
+import { SharedModule } from '../shared/shared.module';
+import { RouterTestingModule } from '../testing/router-stubs';
+import { RouterStub } from './../testing/router-stubs';
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;
@@ -37,6 +40,8 @@ describe('SSHKeyComponent', () => {
         { provide: Router, useClass: RouterStub },
         { provide: ApiService, useClass: ApiMockService },
         { provide: ProjectService, useClass: ProjectMockService},
+        { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService},
         MatDialog,
       ],
     }).compileComponents();

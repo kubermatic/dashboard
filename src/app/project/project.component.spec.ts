@@ -1,4 +1,4 @@
-import { MatTabsModule, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { Router } from '@angular/router';
@@ -7,7 +7,6 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ProjectComponent } from './project.component';
 import { ProjectItemComponent } from './project-item/project-item.component';
-import { MemberModule } from '../member/member.module';
 import { SharedModule } from '../shared/shared.module';
 import { RouterStub, RouterTestingModule } from './../testing/router-stubs';
 
@@ -19,7 +18,6 @@ import { ProjectMockService } from '../testing/services/project-mock.service';
 import { UserMockService } from '../testing/services/user-mock.service';
 import { AppConfigMockService } from '../testing/services/app-config-mock.service';
 import { asyncData } from '../testing/services/api-mock.service';
-import { SSHKeyModule } from '../sshkey/sshkey.module';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
@@ -33,10 +31,7 @@ describe('ProjectComponent', () => {
         BrowserAnimationsModule,
         SlimLoadingBarModule.forRoot(),
         RouterTestingModule,
-        SharedModule,
-        MatTabsModule,
-        MemberModule,
-        SSHKeyModule
+        SharedModule
       ],
       declarations: [
         ProjectComponent,
