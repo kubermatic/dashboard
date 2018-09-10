@@ -21,6 +21,7 @@ import { UserGroupConfig } from '../shared/model/Config';
 export class MemberComponent implements OnInit, OnDestroy {
   public project: ProjectEntity;
   public members: MemberEntity[] = [];
+  public loading = true;
   public sortedMembers: MemberEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
   public userGroup: string;
@@ -35,17 +36,17 @@ export class MemberComponent implements OnInit, OnDestroy {
               private appConfigService: AppConfigService) { }
 
   ngOnInit(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.project = this.projectService.project;
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
+      this.userGroupConfig = this.appConfigService.getUserGroupConfig();
       this.userService.currentUserGroup(this.project.id).subscribe(group => {
         this.userGroup = group;
       });
     }));
 
-    const timer = Observable.interval(10000);
+    const timer = Observable.interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshMembers();
     }));
@@ -77,6 +78,7 @@ export class MemberComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.api.getMembers(this.project.id).subscribe(res => {
         this.members = res;
         this.sortData(this.sort);
+        this.loading = false;
       }));
     }
   }
@@ -97,7 +99,7 @@ export class MemberComponent implements OnInit, OnDestroy {
         case 'email':
           return this.compare(a.email, b.email, isAsc);
         case 'group':
-          return this.compare(a.email, b.email, isAsc);
+          return this.getGroup(a.projects, b.projects, isAsc);
         default:
           return 0;
       }

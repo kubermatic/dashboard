@@ -22,7 +22,7 @@
         <a mat-line routerLink="/clusters/{{selectedProject}}" [routerLinkActive]="['active']"><i class="iconCluster" [ngClass]="setIconColor('/clusters') ? 'white' : 'black'"></i> Manage Clusters</a>
       </mat-list-item>
 
-      <mat-list-item [ngClass]="isProjectSelected('sshkeys')">
+      <mat-list-item [ngClass]="isProjectSelected('sshKeys')">
         <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']"><i class="iconKey" [ngClass]="setIconColor('/sshkeys') ? 'white' : 'black'"></i> Manage SSH keys</a>
       </mat-list-item>
 
