@@ -51,7 +51,7 @@ describe('AddSshKeyModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AddSshKeyModalComponent);
     component = fixture.componentInstance;
-    component.project = fakeProject();
+    component.projectID = fakeProject().id;
     fixture.detectChanges();
     apiService = fixture.debugElement.injector.get(ApiService);
     dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyModalComponent, any>;

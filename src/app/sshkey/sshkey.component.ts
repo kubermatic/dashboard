@@ -74,7 +74,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
 
   public addSshKey(): void {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent);
-    dialogRef.componentInstance.project = this.project;
+    dialogRef.componentInstance.projectID = this.project.id;
 
     dialogRef.afterClosed().subscribe(result => {
       result && this.refreshSSHKeys();
