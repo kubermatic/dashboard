@@ -30,8 +30,12 @@
           <div fxLayout>
             <div fxFlex="3%">{{i + 1}}</div>
 
-            <div fxFlex="36%" style="word-break: normal ;">
+            <div fxFlex="36%" style="word-break: normal ;" *ngIf="!node.spec.cloud.aws">
               {{node.name}}
+              <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
+            </div>
+            <div fxFlex="36%" style="word-break: normal ;" *ngIf="node.spec.cloud.aws">
+              {{getNodeName(node)}}
               <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
             </div>
             <div fxFlex="15%">
