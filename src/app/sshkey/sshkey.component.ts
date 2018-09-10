@@ -1,15 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort, MatDialog, MatTabChangeEvent } from '@angular/material';
+import { Router } from '@angular/router';
 import { Observable, ObservableInput } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import { find } from 'lodash';
 import { Subscription } from 'rxjs/Subscription';
-import { ApiService, ProjectService } from '../core/services';
+import { ApiService, ProjectService, UserService } from '../core/services';
+import { AppConfigService } from '../app-config.service';
 import { NotificationActions } from '../redux/actions/notification.actions';
-import { Router } from '@angular/router';
 import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { AddSshKeyModalComponent } from '../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
+import { UserGroupConfig } from '../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-sshkey',
@@ -19,14 +21,19 @@ import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 
 export class SSHKeyComponent implements OnInit, OnDestroy {
   public project: ProjectEntity;
+  public loading = true;
   public sshKeys: Array<SSHKeyEntity> = [];
   public sortedSshKeys: SSHKeyEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
+  public userGroup: string;
+  public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
   constructor(private router: Router,
               private api: ApiService,
               private projectService: ProjectService,
+              private userService: UserService,
+              private appConfigService: AppConfigService,
               public dialog: MatDialog) { }
 
   ngOnInit(): void {
@@ -34,9 +41,13 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
+      this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+      this.userService.currentUserGroup(this.project.id).subscribe(group => {
+        this.userGroup = group;
+      });
     }));
 
-    const timer = Observable.interval(10000);
+    const timer = Observable.interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshSSHKeys();
     }));
@@ -56,6 +67,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.api.getSSHKeys(this.project.id).retry(3).subscribe(res => {
         this.sshKeys = res;
         this.sortSshKeyData(this.sort);
+        this.loading = false;
       }));
     }
   }
