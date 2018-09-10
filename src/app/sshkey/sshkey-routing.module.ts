@@ -7,7 +7,7 @@ import { SSHKeyComponent } from '../sshkey/sshkey.component';
 
 const routes: Routes = [
   {
-    path: ':projectID',
+    path: '',
     component: SSHKeyComponent,
     canActivate: [AuthGuard],
     data: { title: 'Manage SSH keys' }

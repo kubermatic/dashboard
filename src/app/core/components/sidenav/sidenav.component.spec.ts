@@ -26,10 +26,10 @@ import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
+  RouterTestingModule,
   HttpClientModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  RouterTestingModule,
   SharedModule
 ];
 
@@ -56,6 +56,7 @@ describe('SidenavComponent', () => {
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: Router, useValue: {
           routerState: {
             snapshot: {

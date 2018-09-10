@@ -9,7 +9,7 @@
     <a mat-line routerLink="/wizard" [routerLinkActive]="['active']" (click)="closeModal()"><i class="fa fa-magic"></i> Create Cluster</a>
   </mat-list-item>
   <mat-list-item>
-    <a mat-line routerLink="/projects/{{selectedProject}}/clusters" [routerLinkActive]="['active']" (click)="closeModal()"><i class="fa fa-cubes"></i> Manage Cluster</a>
+    <a mat-line routerLink="/clusters" [routerLinkActive]="['active']" (click)="closeModal()"><i class="fa fa-cubes"></i> Manage Cluster</a>
   </mat-list-item>
   <mat-list-item>
     <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']" (click)="closeModal()"><i class="fa fa-key"></i> Manage SSH keys</a>
