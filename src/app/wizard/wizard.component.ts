@@ -244,7 +244,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       NotificationActions.success('Success', `Cluster successfully created`);
       this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
-      this.router.navigate([`/clusters/${this.project.id}/${datacenter.spec.seed}/${cluster.id}`]);
+      this.router.navigate([`/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${cluster.id}`]);
 
       // SSH key endpoint to add to cluster is broken atm
       /* if (this.clusterSSHKeys.length > 0) {

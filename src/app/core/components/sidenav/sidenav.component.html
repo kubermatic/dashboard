@@ -19,7 +19,7 @@
       </mat-list-item>
 
       <mat-list-item [ngClass]="isProjectSelected('clusters')">
-        <a mat-line routerLink="/clusters/{{selectedProject}}" [routerLinkActive]="['active']"><i class="iconCluster" [ngClass]="setIconColor('/clusters') ? 'white' : 'black'"></i> Manage Clusters</a>
+        <a mat-line routerLink="/projects/{{selectedProject}}/clusters" [routerLinkActive]="['active']"><i class="iconCluster" [ngClass]="setIconColor('/clusters') ? 'white' : 'black'"></i> Manage Clusters</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="isProjectSelected('sshkeys')">
@@ -31,7 +31,7 @@
       </mat-list-item>
 
       <mat-list-item>
-        <a mat-line routerLink="/projects" [routerLinkActive]="['active']"><i class="iconProject" [ngClass]="setIconColor('/projects') ? 'white' : 'black'"></i> Projects</a>
+        <a mat-line routerLink="/projects" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><i class="iconProject" [ngClass]="setIconColor('/projects') ? 'white' : 'black'"></i> Projects</a>
       </mat-list-item>
     </div>
   </mat-nav-list>

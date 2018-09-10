@@ -25,7 +25,11 @@ const appRoutes: Routes = [
         loadChildren: './member/member.module#MemberModule'
       },
       {
-        path: 'clusters',
+        path: 'projects/:projectID/clusters',
+        loadChildren: './cluster/cluster.module#ClusterModule'
+      },
+      {
+        path: 'projects/:projectID/dc/:seedDc/clusters',
         loadChildren: './cluster/cluster.module#ClusterModule'
       },
       {

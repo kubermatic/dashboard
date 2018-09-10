@@ -74,11 +74,11 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.addNodeData.count; i++) {
       createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name, this.projectID));
     }
-    this.subscriptions.push(combineLatest(createNodeObservables)
-      .subscribe((createdNodes: NodeEntity[]): void => {
-        NotificationActions.success('Success', `Node(s) successfully created`);
-        this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
-      }));
+
+    this.subscriptions.push(Observable.combineLatest(createNodeObservables).subscribe((createdNodes: NodeEntity[]): void => {
+      NotificationActions.success('Success', `Node(s) successfully created`);
+      this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
+    }));
   }
 
   public changeView(event: MatTabChangeEvent) {

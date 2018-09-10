@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
 import { DatacenterService, HealthService } from '../../../core/services';
@@ -21,6 +21,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(private dcService: DatacenterService,
+              private router: Router,
               private healthService: HealthService) {}
 
   public ngOnInit(): void {
@@ -86,6 +87,11 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
       datacenter = res.spec.seed;
     });
     return datacenter;
+  }
+
+  navigateToCluster() {
+    const dc = this.getDatacenter();
+    this.router.navigate([`/projects/${this.projectID}/dc/${dc}/clusters/${this.cluster.id}`]);
   }
 
 }
