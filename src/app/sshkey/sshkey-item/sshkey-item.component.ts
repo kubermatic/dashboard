@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { ApiService, ProjectService } from '../../core/services';
+import { ApiService } from '../../core/services';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { NotificationActions } from '../../redux/actions/notification.actions';
 
@@ -11,7 +11,7 @@ import { NotificationActions } from '../../redux/actions/notification.actions';
   styleUrls: ['./sshkey-item.component.scss'],
 })
 
-export class  SSHKeyItemComponent implements OnInit {
+export class SSHKeyItemComponent implements OnInit {
   @Input() index: number;
   @Input() sshKey: SSHKeyEntity;
   @Input() projectId: string;
@@ -22,9 +22,8 @@ export class  SSHKeyItemComponent implements OnInit {
   public publicKey: string;
 
   constructor(private apiService: ApiService,
-              public dialog: MatDialog,
-              private router: Router,
-              private projectService: ProjectService) {}
+    public dialog: MatDialog,
+    private router: Router) { }
 
   public ngOnInit(): void {
     this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];

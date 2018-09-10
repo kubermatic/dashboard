@@ -17,7 +17,7 @@ import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-h
 import { ClusterSecretsComponent } from './cluster-secrets/cluster-secrets.component';
 import { NodeListComponent } from './node-list/node-list.component';
 
-import { ApiService, ProjectService, DatacenterService, InitialNodeDataService, HealthService, UserService } from '../../core/services';
+import { ApiService, DatacenterService, InitialNodeDataService, HealthService, UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
 import { Auth } from './../../core/services/auth/auth.service';
 
@@ -25,8 +25,6 @@ import { SharedModule } from '../../shared/shared.module';
 import { ActivatedRouteStub, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
 
 import { AuthMockService } from '../../testing/services/auth-mock.service';
-
-import { ProjectMockService } from '../../testing/services/project-mock.service';
 import { HealthMockService } from '../../testing/services/health-mock.service';
 import { UserMockService } from '../../testing/services/user-mock.service';
 import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
@@ -89,7 +87,6 @@ describe('ClusterDetailsComponent', () => {
         { provide: Auth, useClass: AuthMockService },
         { provide: Router, useClass: RouterStub },
         { provide: ActivatedRoute, useClass: ActivatedRouteStub },
-        { provide: ProjectService, useClass: ProjectMockService },
         { provide: HealthService, useClass: HealthMockService },
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService },

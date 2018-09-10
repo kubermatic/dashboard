@@ -5,7 +5,7 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterTestingModule } from '../../testing/router-stubs';
-import { Auth, ProjectService } from '../../core/services';
+import { Auth } from '../../core/services';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { SSHKeyItemComponent } from './sshkey-item.component';
 
@@ -31,7 +31,6 @@ describe('SSHKeyItemComponent', () => {
         SSHKeyItemComponent,
       ],
       providers: [
-        ProjectService,
         { provide: Auth, useClass: AuthMockService },
       ],
     }).compileComponents();
