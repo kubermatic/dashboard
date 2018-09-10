@@ -187,6 +187,13 @@ export class NodeListComponent implements OnInit {
   }
 
   public getInfo(node: NodeEntity): string {
+    if (node.spec.cloud.aws) {
+      return node.name;
+    }
+    return node.id.replace('machine-', '');
+  }
+
+  public getNodeName(node: NodeEntity): string {
     return node.id.replace('machine-', '');
   }
 
