@@ -13,7 +13,7 @@ const appRoutes: Routes = [
         loadChildren: './project/project.module#ProjectModule',
       },
       {
-        path: 'wizard',
+        path: 'projects/:projectID/wizard',
         loadChildren: './wizard/wizard.module#WizardModule',
       },
       {

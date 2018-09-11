@@ -23,6 +23,7 @@ import { UserMockService } from './../../../testing/services/user-mock.service';
 import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
 
 import { fakeProjects } from './../../../testing/fake-data/project.fake';
+import { fakeUserGroupConfig } from './../../../testing/fake-data/userGroupConfig.fake';
 import Spy = jasmine.Spy;
 
 const modules: any[] = [
@@ -91,7 +92,7 @@ describe('SidenavComponent', () => {
     fixture.detectChanges();
 
     expect(links.length).toBe(5, 'should have 5 links');
-    expect(links[0].linkParams).toBe('/wizard', '1st link should go to Wizard');
+    expect(links[0].linkParams).toBe('/projects//wizard', '1st link should go to Wizard');
   });
 
   it('can click Wizard link in template', () => {
@@ -105,7 +106,7 @@ describe('SidenavComponent', () => {
     click(wizardLinkDe);
     fixture.detectChanges();
 
-    expect(wizardLink.navigatedTo).toBe('/wizard');
+    expect(wizardLink.navigatedTo).toBe('/projects//wizard');
   });
 
 });

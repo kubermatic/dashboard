@@ -51,23 +51,28 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   public isProjectSelected(viewName: string): string {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+
     if (this.selectedProject === undefined) {
       return 'disabled';
     } else {
-      if (viewName === 'create-cluster') {
-        if (!!this.userGroupConfig && !this.userGroupConfig[this.userGroup].clusters.create) {
-          return 'disabled';
+      if (!!this.userGroupConfig && this.userGroup) {
+        if (viewName === 'create-cluster') {
+          if (!!this.userGroupConfig && !this.userGroupConfig[this.userGroup].clusters.create) {
+            return 'disabled';
+          } else {
+            return '';
+          }
         } else {
-          return '';
-        }
-      } else {
-        if (!!this.userGroupConfig && !this.userGroupConfig[this.userGroup][viewName].view) {
-          return 'disabled';
-        } else {
-          return '';
+          if (!!this.userGroupConfig && !this.userGroupConfig[this.userGroup][viewName].view) {
+            return 'disabled';
+          } else {
+            return '';
+          }
         }
       }
     }
+
   }
 
   public getProjects() {
@@ -79,6 +84,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
           if (this.projects[i].id === projectFromStorage) {
             this.projectService.changeSelectedProject(this.projects[i]);
             this.selectedProject = projectFromStorage;
+            this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+            this.userService.currentUserGroup(this.projects[i].id).subscribe(group => {
+              this.userGroup = group;
+            });
           }
         }
       }
