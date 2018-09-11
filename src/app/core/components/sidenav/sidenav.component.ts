@@ -86,7 +86,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   }
 
-  public selectionChange(event, previousValue, select){
+  public selectionChange(event, previousValue, select) {
     // The only option with undefined value is "Select Project". If it gets
     // selected, we revert both the model and the control to the old value.
     if (event.value === undefined) {
