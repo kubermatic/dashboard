@@ -6,7 +6,7 @@
         <div class="km-projects-container">
           <mat-label>Selected Project</mat-label>
           <mat-select placeholder="Select Project" (selectionChange)="selectionChange($event)" [ngModel]="selectedProject" disableOptionCentering>
-            <mat-option value="addProject">+ Add Project</mat-option>
+            <mat-option (click)="addProject()">+ Add Project</mat-option>
             <mat-option *ngFor="let project of projects" [value]="project.id">
               {{ project.name }}
             </mat-option>
