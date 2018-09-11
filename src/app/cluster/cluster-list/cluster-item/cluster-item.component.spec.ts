@@ -7,7 +7,7 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { ClusterItemComponent } from './cluster-item.component';
 import { ClusterHealthStatusComponent } from '../../cluster-health-status/cluster-health-status.component';
 import { SharedModule } from '../../../shared/shared.module';
-import { RouterTestingModule, RouterStub } from './../../../testing/router-stubs';
+import { RouterTestingModule, RouterStub, ActivatedRouteStub } from './../../../testing/router-stubs';
 import { DatacenterService, HealthService, ProjectService } from '../../../core/services';
 import { Auth } from './../../../core/services/auth/auth.service';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
@@ -50,6 +50,7 @@ describe('ClusterItemComponent', () => {
         { provide: HealthService, useClass: HealthMockService },
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: Router, useClass: RouterStub },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
       ],
     }).compileComponents();
   });

@@ -2,10 +2,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { MatDialog } from '@angular/material';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { MockComponent } from 'ng2-mock-component';
 
 import { SidenavComponent } from './sidenav.component';
 
@@ -13,7 +14,7 @@ import { ApiService, ProjectService, UserService } from './../../../core/service
 import { AppConfigService } from '../../../app-config.service';
 
 import { SharedModule } from '../../../shared/shared.module';
-import { RouterTestingModule, RouterLinkStubDirective, RouterStub, ActivatedRouteStub } from '../../../testing/router-stubs';
+import { RouterTestingModule, RouterLinkStubDirective, RouterStub } from '../../../testing/router-stubs';
 import { click } from './../../../testing/utils/click-handler';
 
 import { asyncData } from './../../../testing/services/api-mock.service';
@@ -49,14 +50,17 @@ describe('SidenavComponent', () => {
         ...modules,
       ],
       declarations: [
-        SidenavComponent
+        SidenavComponent,
+        MockComponent({
+          selector: 'a',
+          inputs: [ 'routerLink', 'routerLinkActiveOptions' ]
+        }),
       ],
       providers: [
         { provide: ApiService, useValue: apiMock },
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService },
-        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
         { provide: Router, useValue: {
           routerState: {
             snapshot: {
