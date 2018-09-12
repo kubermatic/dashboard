@@ -29,7 +29,7 @@ const modules: any[] = [
   BrowserModule,
   HttpClientModule,
   RouterTestingModule,
-  SimpleNotificationsModule,
+  SimpleNotificationsModule.forRoot(),
   RouterTestingModule,
   NgReduxTestingModule,
   BrowserAnimationsModule,
