@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import { Auth } from '../auth/auth.service';
 import { environment } from './../../../../environments/environment';
 import { MemberEntity } from '../../../shared/entity/MemberEntity';
+import { MasterVersion } from '../../../shared/entity/ClusterEntity';
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,9 @@ export class UserService {
   getUser(): Observable<MemberEntity> {
     const url = `${this.restRoot}/me`;
     if (!this.user) {
-      this.user = this.http.get<MemberEntity>(url, { headers: this.headers });
+      this.user = this.http.get<MemberEntity>(url, { headers: this.headers }).pipe(catchError(error => {
+        return of<MemberEntity>();
+      }));
     }
     return this.user;
   }
