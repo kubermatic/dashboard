@@ -160,27 +160,30 @@ export class ApiService {
     return this.http.get<OpenstackTenant[]>(url, { headers: this.headers });
   }
 
-  getOpenStackSecurityGroups(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackSecurityGroup[]> {
+  getOpenStackSecurityGroups(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackSecurityGroup[]> {
     this.headers = this.headers.set('Username', username);
     this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('Tenant', tenant);
     this.headers = this.headers.set('Domain', domain);
     this.headers = this.headers.set('DatacenterName', datacenterName);
     const url = `${this.restRoot}/providers/openstack/securitygroups`;
     return this.http.get<OpenstackSecurityGroup[]>(url, { headers: this.headers });
   }
 
-  getOpenStackNetwork(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackNetwork[]> {
+  getOpenStackNetwork(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackNetwork[]> {
     this.headers = this.headers.set('Username', username);
     this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('Tenant', tenant);
     this.headers = this.headers.set('Domain', domain);
     this.headers = this.headers.set('DatacenterName', datacenterName);
     const url = `${this.restRoot}/providers/openstack/networks`;
     return this.http.get<OpenstackNetwork[]>(url, { headers: this.headers });
   }
 
-  getOpenStackSubnetIds(username: string, password: string, domain: string, datacenterName: string, network: string): Observable<OpenstackSubnet[]> {
+  getOpenStackSubnetIds(username: string, password: string, tenant: string, domain: string, datacenterName: string, network: string): Observable<OpenstackSubnet[]> {
     this.headers = this.headers.set('Username', username);
     this.headers = this.headers.set('Password', password);
+    this.headers = this.headers.set('Tenant', tenant);
     this.headers = this.headers.set('Domain', domain);
     this.headers = this.headers.set('DatacenterName', datacenterName);
 

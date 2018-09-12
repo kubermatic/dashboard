@@ -8,7 +8,7 @@ import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-no
 import { OpenstackOptionsComponent } from './openstack-add-node/openstack-options/openstack-options.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HetznerAddNodeComponent } from './hetzner-add-node/hetzner-add-node.component';
-import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatCheckboxModule, MatCardModule} from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatCheckboxModule, MatCardModule, MatAutocompleteModule } from '@angular/material';
 import { VSphereAddNodeComponent } from './vsphere-add-node/vsphere-add-node.component';
 import { VSphereOptionsComponent } from './vsphere-add-node/vsphere-options/vsphere-options.component';
 import { AzureAddNodeComponent } from './azure-add-node/azure-add-node.component';
@@ -22,7 +22,8 @@ import { AzureAddNodeComponent } from './azure-add-node/azure-add-node.component
     MatSelectModule,
     MatInputModule,
     MatCheckboxModule,
-    MatCardModule
+    MatCardModule,
+    MatAutocompleteModule
   ],
   declarations: [
     AddNodeComponent,
