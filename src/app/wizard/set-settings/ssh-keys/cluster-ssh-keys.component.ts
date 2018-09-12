@@ -74,6 +74,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
 
   public addSshKeyDialog(): void {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent);
+    dialogRef.componentInstance.projectID = this.project.id;
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -84,7 +85,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
         this.reloadKeys();
 
         this.keysForm.setValue({
-          keys: [result.metadata.name]
+          keys: [result.name]
         });
       }
     });
