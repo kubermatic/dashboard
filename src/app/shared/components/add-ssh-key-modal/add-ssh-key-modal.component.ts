@@ -5,7 +5,7 @@ import { MatDialogRef } from '@angular/material';
 import { ApiService } from '../../../core/services';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',

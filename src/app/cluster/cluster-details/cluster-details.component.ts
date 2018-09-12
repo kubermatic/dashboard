@@ -3,13 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { lt, gt } from 'semver';
-import { Observable, ObservableInput } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/retry';
-import 'rxjs/add/operator/takeUntil';
-import 'rxjs/add/observable/combineLatest';
-import 'rxjs/add/observable/interval';
+import { Subscription, ObservableInput, Subject, interval, combineLatest} from 'rxjs';
+import { retry, takeUntil } from 'rxjs/operators';
+
 import { NotificationActions } from '../../redux/actions/notification.actions';
 import { environment } from '../../../environments/environment';
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
@@ -77,7 +73,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
 
-    this.userService.currentUserGroup(this.projectID).takeUntil(this.unsubscribe).subscribe(group => {
+    this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this.unsubscribe)).subscribe(group => {
       this.userGroup = group;
     });
 
@@ -88,13 +84,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       .subscribe(cluster => {
 
         this.dcService.getDataCenter(cluster.spec.cloud.dc)
-          .takeUntil(this.unsubscribe)
+          .pipe(takeUntil(this.unsubscribe))
           .subscribe(datacenter => {
             this.nodeDc = datacenter;
           });
 
         this.api.getSSHKeys(this.projectID)
-          .takeUntil(this.unsubscribe)
+          .pipe(takeUntil(this.unsubscribe))
           .subscribe(keys => {
             // TODO: get cluster sshkeys
             this.sshKeys = keys.filter(key => {
@@ -112,7 +108,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     // Health
     this.clusterSubject
-      .takeUntil(this.unsubscribe)
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(cluster => {
 
         this.healthService.getClusterHealth(cluster.id, seedDCName, this.projectID).subscribe(health => {
@@ -125,13 +121,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     // Upgrades
     this.clusterSubject
-      .takeUntil(this.unsubscribe)
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(cluster => {
         this.reloadVersions();
       });
     // Nodes
     this.clusterSubject
-      .takeUntil(this.unsubscribe)
+      .pipe(takeUntil(this.unsubscribe))
       .subscribe(cluster => {
         this.initialNodeCreation();
         this.reloadClusterNodes();
@@ -139,18 +135,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
 
 
-    Observable.combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName, this.projectID))
-      .takeUntil(this.unsubscribe)
-
-      .retry(3)
+    combineLatest(this.dcService.getDataCenter(seedDCName), this.api.getCluster(clusterName, seedDCName, this.projectID))
+      .pipe(takeUntil(this.unsubscribe), retry(3))
       .subscribe(
         (data: any[]): void => {
           this.datacenter = data[0];
           this.cluster = data[1];
           this.clusterSubject.next(data[1]);
 
-          const timer = Observable.interval(this.refreshInterval);
-          timer.takeUntil(this.unsubscribe).subscribe(tick => {
+          const timer = interval(this.refreshInterval);
+          timer.pipe(takeUntil(this.unsubscribe)).subscribe(tick => {
             this.reloadCluster(clusterName, seedDCName, this.projectID);
           });
         },
@@ -173,9 +167,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadCluster(clusterName: string, seedDCName: string, projectID: string): void {
-    this.api.getCluster(clusterName, seedDCName, projectID)
-      .takeUntil(this.unsubscribe)
-      .retry(3)
+    this.api.getCluster(clusterName, seedDCName, projectID).pipe(takeUntil(this.unsubscribe), retry(3))
       .subscribe(res => {
         this.cluster = res;
         this.clusterSubject.next(res);
@@ -187,7 +179,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     if (this.health && this.health.apiserver && this.health.controller && this.health.etcd && this.health.machineController && this.health.scheduler) {
       // Initial node creation
       const initialNodeCreationSub = this.clusterSubject
-        .takeUntil(this.unsubscribe)
+        .pipe(takeUntil(this.unsubscribe))
         .subscribe(cluster => {
           const data = this.initialNodeDataService.getInitialNodeData(cluster);
           if (data == null) {
@@ -202,8 +194,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             for (let i = 0; i < data.nodeCount; i++) {
               createNodeObservables.push(this.api.createClusterNode(cluster, data.node, this.datacenter.metadata.name, this.projectID));
             }
-            Observable.combineLatest(createNodeObservables)
-              .takeUntil(this.unsubscribe)
+            combineLatest(createNodeObservables)
+              .pipe(takeUntil(this.unsubscribe))
               .subscribe((createdNodes: NodeEntity[]): void => {
                 NotificationActions.success('Success', `Node(s) successfully created`);
                 this.reloadClusterNodes();
@@ -218,7 +210,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-        .takeUntil(this.unsubscribe)
+        .pipe(takeUntil(this.unsubscribe))
         .subscribe(nodes => {
           this.nodes = nodes;
         });
@@ -229,7 +221,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterUpgrades(this.projectID, this.datacenter.metadata.name, this.cluster.id)
-        .takeUntil(this.unsubscribe)
+        .pipe(takeUntil(this.unsubscribe))
         .subscribe(upgrades => {
           this.versionsList = [];
           this.updatesAvailable = false;

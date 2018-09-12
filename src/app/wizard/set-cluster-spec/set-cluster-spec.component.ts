@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ApiService, WizardService } from '../../core/services';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity';
 
 @Component({

@@ -5,7 +5,7 @@ import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ApiService, ProjectService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 @Component({

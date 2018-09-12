@@ -1,6 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
 import { Config, UserGroupConfig } from './shared/model/Config';
 import { NotificationActions } from './redux/actions/notification.actions';
 import { environment } from '../environments/environment';

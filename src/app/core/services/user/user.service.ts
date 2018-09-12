@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Auth } from '../auth/auth.service';
 import { environment } from './../../../../environments/environment';
 import { MemberEntity } from '../../../shared/entity/MemberEntity';
@@ -29,7 +29,7 @@ export class UserService {
   }
 
   currentUserGroup(projectID: string): Observable<string> {
-    return this.getUser().map(res => {
+    return this.getUser().pipe(map(res => {
       for (let i = 0; i < res.projects.length; i++) {
         if (res.projects[i].id === projectID) {
           const group = res.projects[i].group.replace(/(\-[\w\d]+$)/, '');
@@ -37,7 +37,7 @@ export class UserService {
         }
       }
       return this.userGroup = '';
-    });
+    }));
   }
 
 }

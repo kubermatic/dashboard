@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Sort, MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
-import 'rxjs/add/observable/interval';
+import { Subscription, interval } from 'rxjs';
 import { NotificationActions } from '../redux/actions/notification.actions';
 import { ApiService, ProjectService, UserService } from '../core/services';
 import { AppConfigService } from '../app-config.service';
@@ -46,7 +44,7 @@ export class MemberComponent implements OnInit, OnDestroy {
       });
     }));
 
-    const timer = Observable.interval(5000);
+    const timer = interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshMembers();
     }));

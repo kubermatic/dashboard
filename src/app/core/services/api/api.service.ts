@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import 'rxjs/add/operator/map';
-import { Observable } from 'rxjs/Observable';
+import { catchError , map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import 'rxjs/add/operator/catch';
 import { Auth } from '../../../core/services/auth/auth.service';
 import { ClusterEntity, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
@@ -126,9 +125,9 @@ export class ApiService {
   getClusterUpgrades(projectID: string, dc: string, clusterID: string): Observable<MasterVersion[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/upgrades`;
     return this.http.get<MasterVersion[]>(url, { headers: this.headers })
-      .catch(error => {
-        return Observable.of<MasterVersion[]>([]);
-      });
+      .pipe(catchError(error => {
+        return of<MasterVersion[]>([]);
+      }));
   }
 
   getToken(cluster: ClusterEntity, dc: string, projectID: string): Observable<Token> {

@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable, ObservableInput } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
 import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ApiService } from '../../../../core/services';
 import { ClusterService } from '../../../../core/services/cluster/cluster.service';

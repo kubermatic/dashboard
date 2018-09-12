@@ -2,12 +2,12 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { WizardService } from '../../../core/services/wizard/wizard.service';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import {ApiService, ProjectService} from '../../../core/services';
-import { Subscription } from 'rxjs/Subscription';
+import { ApiService, ProjectService } from '../../../core/services';
+import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { AddSshKeyModalComponent } from '../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-cluster-ssh-keys',

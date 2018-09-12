@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WizardService, ApiService, Auth } from '../../../../core/services';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { OpenstackNetwork, OpenstackSubnet, OpenstackTenant, OpenstackSecurityGroup, OpenstackFloatingIpPool } from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { AppConfigService } from '../../../../app-config.service';
 import { Config } from '../../../../shared/model/Config';

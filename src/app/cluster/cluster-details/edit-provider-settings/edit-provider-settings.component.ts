@@ -1,7 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
-import { Observable, ObservableInput } from 'rxjs/Observable';
+import { Subscription } from 'rxjs';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ApiService, ProjectService, ClusterService } from '../../../core/services';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';

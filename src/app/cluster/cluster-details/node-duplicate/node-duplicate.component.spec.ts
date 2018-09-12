@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs/Observable';
 import { SharedModule } from '../../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
