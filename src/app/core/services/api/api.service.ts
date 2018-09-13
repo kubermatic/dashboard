@@ -226,4 +226,14 @@ export class ApiService {
     const url = `${this.restRoot}/projects/${projectID}/users`;
     return this.http.post<MemberEntity>(url, member, { headers: this.headers });
   }
+
+  editMembers(projectID: string, member: MemberEntity): Observable<MemberEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/users/${member.id}`;
+    return this.http.put<MemberEntity>(url, member, { headers: this.headers });
+  }
+
+  deleteMembers(projectID: string, member: MemberEntity) {
+    const url = `${this.restRoot}/projects/${projectID}/users/${member.id}`;
+    return this.http.delete(url, { headers: this.headers });
+  }
 }

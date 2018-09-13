@@ -29,8 +29,12 @@ export class EditMemberComponent implements OnInit {
   }
 
   editMember(): void {
-    const createMember: CreateMemberEntity = {
+    const editMember: MemberEntity = {
+      id: this.member.id,
+      name: this.member.name,
       email: this.member.email,
+      creationTimestamp: this.member.creationTimestamp,
+      deletionTimestamp: this.member.deletionTimestamp,
       projects: [
         {
           group: this.editMemberForm.controls.group.value,
@@ -39,7 +43,7 @@ export class EditMemberComponent implements OnInit {
       ]
     };
 
-    this.api.createMembers(this.project.id, createMember).subscribe(res => {
+    this.api.editMembers(this.project.id, editMember).subscribe(res => {
       this.dialogRef.close(true);
       NotificationActions.success('Success', `Member is edited successfully`);
     });

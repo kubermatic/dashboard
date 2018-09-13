@@ -6,6 +6,7 @@ import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { MemberEntity, MemberProject } from '../../shared/entity/MemberEntity';
 import { UserGroupConfig } from '../../shared/model/Config';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
+import { MemberDeleteConfirmationComponent } from '../member-delete-confirmation/member-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-member-item',
@@ -61,9 +62,15 @@ export class MemberItemComponent implements OnInit {
     modal.componentInstance.project = this.project;
     modal.componentInstance.member = this.member;
     const sub = modal.afterClosed().subscribe(edited => {
-      if (edited) {
-        // this.reloadMembers();
-      }
+      sub.unsubscribe();
+    });
+  }
+
+  public deleteMember(): void {
+    const modal = this.dialog.open(MemberDeleteConfirmationComponent);
+    modal.componentInstance.project = this.project;
+    modal.componentInstance.member = this.member;
+    const sub = modal.afterClosed().subscribe(deleted => {
       sub.unsubscribe();
     });
   }
