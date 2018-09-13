@@ -112,6 +112,14 @@ export class ApiMockService {
     return of(this.member);
   }
 
+  editMembers(projectID: string, member: MemberEntity): Observable<MemberEntity> {
+    return of(this.member);
+  }
+
+  deleteMembers(projectID: string, member: MemberEntity) {
+    return of(null);
+  }
+
   getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
     return of(this.vsphereNetworks);
   }
