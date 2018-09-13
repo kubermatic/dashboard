@@ -2,8 +2,7 @@ import { BreadcrumbActions } from './../redux/actions/breadcrumb.actions';
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '../core/services';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/mergeMap';
+import { filter, mergeMap, map} from 'rxjs/operators';
 import { ApiService } from '../core/services/api/api.service';
 import { DatacenterService } from '../core/services/datacenter/datacenter.service';
 
@@ -20,17 +19,19 @@ export class DashboardComponent implements OnInit {
               private api: ApiService,
               private dcService: DatacenterService) {
     this.router.events
-      .filter(event => event instanceof NavigationEnd)
-      .map(() => this.activatedRoute)
-      .map(route => {
-        while (route.firstChild) {
-          route = route.firstChild;
-        }
+      .pipe(
+        filter(event => event instanceof NavigationEnd),
+        map(() => this.activatedRoute),
+        map(route => {
+          while (route.firstChild) {
+            route = route.firstChild;
+          }
 
-        return route;
-      })
-      .filter(route => route.outlet === 'primary')
-      .mergeMap(route => route.data)
+          return route;
+        }),
+        filter(route => route.outlet === 'primary'),
+        mergeMap(route => route.data)
+      )
       .subscribe((event) => {
         BreadcrumbActions.putBreadcrumb(event['title']);
       });

@@ -1,17 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort, MatDialog } from '@angular/material';
-import { Observable, ObservableInput } from 'rxjs/Observable';
-import 'rxjs/add/observable/interval';
+import { Subscription, interval } from 'rxjs';
 import { find } from 'lodash';
-import { Subscription } from 'rxjs/Subscription';
 import { AppConfigService } from '../app-config.service';
 import { ApiService, ProjectService, UserService } from '../core/services';
-import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
 import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../add-project/add-project.component';
 import { UserGroupConfig } from '../shared/model/Config';
-import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 
 @Component({
   selector: 'kubermatic-project',
@@ -48,7 +44,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       });
     }));
 
-    const timer = Observable.interval(10000);
+    const timer = interval(10000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshProjects();
     }));

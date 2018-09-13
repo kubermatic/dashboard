@@ -16,7 +16,7 @@ const modules: any[] = [
   RouterTestingModule,
   NgReduxTestingModule,
   BrowserAnimationsModule,
-  SimpleNotificationsModule
+  SimpleNotificationsModule.forRoot()
 ];
 
 function setMockNgRedux<T>(fixture: ComponentFixture<T>, toast: NotificationToast): void {

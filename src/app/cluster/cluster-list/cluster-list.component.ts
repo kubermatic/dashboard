@@ -5,8 +5,7 @@ import { ApiService, DatacenterService, UserService } from '../../core/services'
 import { AppConfigService } from '../../app-config.service';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { UserGroupConfig } from '../../shared/model/Config';
-import { Observable, ObservableInput } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, ObservableInput, interval, combineLatest } from 'rxjs';
 import { find } from 'lodash';
 
 @Component({
@@ -46,7 +45,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       this.userService.currentUserGroup(this.projectID).subscribe(group => {
         this.userGroup = group;
       });
-    const timer = Observable.interval(5000);
+    const timer = interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshClusters();
     }));
@@ -68,7 +67,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       for (const dc of datacenters) {
         dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.projectID));
       }
-      this.subscriptions.push(Observable.combineLatest(dcClustersObservables)
+      this.subscriptions.push(combineLatest(dcClustersObservables)
         .subscribe(dcClusters => {
           for (const cs of dcClusters) {
             clusters.push(...cs);

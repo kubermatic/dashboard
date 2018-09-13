@@ -3,7 +3,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { VSphereNetwork } from '../../../../shared/entity/provider/vsphere/VSphereEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { WizardService, ApiService } from '../../../../core/services';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 
 @Component({

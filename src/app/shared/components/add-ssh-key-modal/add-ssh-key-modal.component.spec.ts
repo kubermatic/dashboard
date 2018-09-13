@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -83,7 +83,7 @@ describe('AddSshKeyModalComponent', () => {
     expect(component.addSSHKeyForm.valid).toBeTruthy();
 
     const spyDialogRefClose = spyOn(dialogRef, 'close');
-    const spyAddShhKey = spyOn(apiService, 'addSSHKey').and.returnValue(Observable.of(null));
+    const spyAddShhKey = spyOn(apiService, 'addSSHKey').and.returnValue(of(null));
     component.addSSHKey();
     tick();
     fixture.detectChanges();

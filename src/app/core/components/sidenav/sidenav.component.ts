@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ApiService, ProjectService, UserService } from '../../../core/services';
 import { AppConfigService } from '../../../app-config.service';

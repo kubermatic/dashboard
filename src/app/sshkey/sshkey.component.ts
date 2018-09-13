@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort, MatDialog, MatTabChangeEvent } from '@angular/material';
-import { Observable, ObservableInput } from 'rxjs/Observable';
-import 'rxjs/add/observable/interval';
+import { Subscription, interval } from 'rxjs';
+import { retry } from 'rxjs/operators';
 import { find } from 'lodash';
-import { Subscription } from 'rxjs/Subscription';
 import { ApiService, UserService } from '../core/services';
 import { AppConfigService } from '../app-config.service';
 import { NotificationActions } from '../redux/actions/notification.actions';
@@ -43,7 +42,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
       this.userGroup = group;
     });
 
-    const timer = Observable.interval(5000);
+    const timer = interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.refreshSSHKeys();
     }));
@@ -59,7 +58,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys() {
-    this.subscriptions.push(this.api.getSSHKeys(this.projectID).retry(3).subscribe(res => {
+    this.subscriptions.push(this.api.getSSHKeys(this.projectID).pipe(retry(3)).subscribe(res => {
       this.sshKeys = res;
       this.sortSshKeyData(this.sort);
       this.loading = false;

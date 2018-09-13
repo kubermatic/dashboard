@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription, interval } from 'rxjs';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../shared/entity/HealthEntity';
@@ -28,7 +27,7 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
   constructor(private healthService: HealthService) {}
 
   ngOnInit() {
-    const timer = Observable.interval(5000);
+    const timer = interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
         this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
