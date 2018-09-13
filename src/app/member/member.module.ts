@@ -4,10 +4,12 @@ import { MemberItemComponent } from './member-item/member-item.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatTabsModule } from '@angular/material';
 import { MemberRoutingModule } from './member-routing.module';
+import { MemberDeleteConfirmationComponent } from './member-delete-confirmation/member-delete-confirmation.component';
 
 const components: any[] = [
   MemberComponent,
-  MemberItemComponent
+  MemberItemComponent,
+  MemberDeleteConfirmationComponent
 ];
 
 @NgModule({
@@ -22,7 +24,7 @@ const components: any[] = [
   exports: [
     ...components
   ],
-  entryComponents: []
+  entryComponents: [MemberDeleteConfirmationComponent]
 })
 export class MemberModule {
 }
