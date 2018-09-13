@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { SharedModule } from '../../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -90,7 +90,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     component.projectID = fakeProject().id;
 
     fixture.detectChanges();
-    const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(Observable.of(null));
+    const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(of(null));
 
     component.deleteCluster();
     tick();

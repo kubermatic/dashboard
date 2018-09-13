@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { WizardService } from '../../core/services/wizard/wizard.service';
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { DataCenterEntity, getDatacenterProvider } from '../../shared/entity/DatacenterEntity';
 
 @Component({

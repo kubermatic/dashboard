@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/do';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+
 
 @Injectable()
 export class LoaderInterceptor implements HttpInterceptor {
@@ -16,12 +17,12 @@ export class LoaderInterceptor implements HttpInterceptor {
 
     return next
       .handle(req)
-      .do((event) => {
+      .pipe(tap((event) => {
           if (event instanceof HttpResponse) {
             this.setProgressBarVisibility('hidden');
           }
         },
-        error => this.setProgressBarVisibility('hidden'));
+        error => this.setProgressBarVisibility('hidden')));
   }
 
   private setProgressBarVisibility(visibility: string): void {

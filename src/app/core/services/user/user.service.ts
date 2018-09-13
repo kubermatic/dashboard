@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
+import { Observable, of } from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
 import { Auth } from '../auth/auth.service';
 import { environment } from './../../../../environments/environment';
 import { MemberEntity } from '../../../shared/entity/MemberEntity';
+import { MasterVersion } from '../../../shared/entity/ClusterEntity';
 
 @Injectable()
 export class UserService {
@@ -23,13 +24,15 @@ export class UserService {
   getUser(): Observable<MemberEntity> {
     const url = `${this.restRoot}/me`;
     if (!this.user) {
-      this.user = this.http.get<MemberEntity>(url, { headers: this.headers });
+      this.user = this.http.get<MemberEntity>(url, { headers: this.headers }).pipe(catchError(error => {
+        return of<MemberEntity>();
+      }));
     }
     return this.user;
   }
 
   currentUserGroup(projectID: string): Observable<string> {
-    return this.getUser().map(res => {
+    return this.getUser().pipe(map(res => {
       for (let i = 0; i < res.projects.length; i++) {
         if (res.projects[i].id === projectID) {
           const group = res.projects[i].group.replace(/(\-[\w\d]+$)/, '');
@@ -37,7 +40,7 @@ export class UserService {
         }
       }
       return this.userGroup = '';
-    });
+    }));
   }
 
 }

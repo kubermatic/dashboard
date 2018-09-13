@@ -2,7 +2,7 @@ import { DatacenterService } from './../../core/services/datacenter/datacenter.s
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { getDatacenterProvider } from '../../shared/entity/DatacenterEntity';
 import { WizardService } from '../../core/services/wizard/wizard.service';
 

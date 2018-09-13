@@ -7,6 +7,8 @@ import { environment } from '../../../../environments/environment';
 import { AppConstants } from '../../../shared/constants/constants';
 import { MobileNavigationComponent } from '../../../overlays';
 import { MemberEntity } from '../../../shared/entity/MemberEntity';
+import {Subscription} from 'rxjs/index';
+
 
 @Component({
   selector: 'kubermatic-navigation',
@@ -31,9 +33,11 @@ export class NavigationComponent implements OnInit {
       this.sidenavService.close();
     }
 
-    this.userService.getUser().subscribe(user => {
-      this.currentUser = user;
-    });
+    if (this.auth.authenticated()) {
+      this.userService.getUser().subscribe(user => {
+        this.currentUser = user;
+      });
+    }
   }
 
   public logout() {

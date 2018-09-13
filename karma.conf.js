@@ -11,6 +11,7 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('karma-chrome-launcher'),
+      require('karma-firefox-launcher'),
       require('karma-phantomjs-launcher'),
       require('@angular-devkit/build-angular/plugins/karma'),
       require('@angular/material')
@@ -19,11 +20,10 @@ module.exports = function (config) {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
     files: [
-      
       { pattern: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' }
     ],
     preprocessors: {
-      
+
     },
     mime: {
       'text/x-typescript': ['ts','tsx']
@@ -32,14 +32,14 @@ module.exports = function (config) {
       dir: require('path').join(__dirname, 'coverage'), reports: [ 'html', 'lcovonly' ],
       fixWebpackSourcePaths: true
     },
-    
+
     reporters: config.angularCli && config.angularCli.codeCoverage
       ? ['mocha', 'coverage-istanbul']
       : ['mocha', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ['ChromeHeadless', 'PhantomJS', 'Chrome'],
+    browsers: ['ChromeHeadless', 'PhantomJS', 'Chrome', 'FirefoxAutoAllowGUM'],
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',
@@ -50,6 +50,12 @@ module.exports = function (config) {
           // Without a remote debugging port, Google Chrome exits immediately.
           '--remote-debugging-port=9222',
         ],
+      },
+      FirefoxAutoAllowGUM: {
+        base: 'Firefox',
+        prefs: {
+          'media.navigator.permission.disabled': true
+        }
       }
     },
     captureTimeout: 210000,

@@ -3,7 +3,7 @@ import { HealthEntity } from './../../shared/entity/HealthEntity';
 import { ClusterEntity } from './../../shared/entity/ClusterEntity';
 import { ClusterHealth } from './../../shared/model/ClusterHealthConstants';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable, of } from 'rxjs';
 import { find } from 'lodash';
 
 @Injectable()
@@ -11,7 +11,7 @@ export class HealthMockService {
   private health: HealthEntity = fakeHealth();
 
   public getClusterHealth(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
-    return Observable.of(this.health);
+    return of(this.health);
   }
 
   getClusterHealthStatus(cluster: ClusterEntity, health: HealthEntity): string {

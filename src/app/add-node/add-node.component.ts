@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { WizardService } from '../core/services/wizard/wizard.service';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';

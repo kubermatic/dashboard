@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../../shared/entity/HealthEntity';

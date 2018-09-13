@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 import { SharedModule } from './../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -76,7 +76,7 @@ describe('ProjectDeleteConfirmationComponent', () => {
     component.inputName = fakeProject().name;
 
     fixture.detectChanges();
-    const spyDeleteProject = spyOn(apiService, 'deleteProject').and.returnValue(Observable.of(null));
+    const spyDeleteProject = spyOn(apiService, 'deleteProject').and.returnValue(of(null));
 
     component.deleteProject();
     tick();

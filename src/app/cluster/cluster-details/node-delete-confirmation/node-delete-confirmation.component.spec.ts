@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { of } from 'rxjs';
 import { SharedModule } from '../../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -64,7 +64,7 @@ describe('NodeDeleteConfirmationComponent', () => {
     component.projectID = fakeProject().id;
 
     fixture.detectChanges();
-    const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(Observable.of(null));
+    const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(of(null));
 
     component.deleteNode();
     tick();

@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';

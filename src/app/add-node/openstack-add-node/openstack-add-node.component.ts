@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
+import { Subscription } from 'rxjs';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { ApiService } from '../../core/services';

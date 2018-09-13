@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ObservableInput } from 'rxjs/Observable';
-import 'rxjs/add/operator/takeUntil';
+import { Subscription, Subject, interval } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { WizardService } from '../core/services/wizard/wizard.service';
 import { ClusterDatacenterForm, ClusterFormData, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
-import { Subscription } from 'rxjs/Subscription';
-import { Subject } from 'rxjs/Subject';
 import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
@@ -256,7 +254,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       }*/
 
       const isHealthy = new Subject<boolean>();
-        const timer = Observable.interval(10000).takeUntil(isHealthy);
+        const timer = interval(10000).pipe(takeUntil(isHealthy));
         timer.subscribe(tick => {
           return this.healthService.getClusterHealth(cluster.id, datacenter.spec.seed, this.project.id).subscribe(health => {
             if (health.apiserver && health.controller && health.etcd && health.machineController && health.scheduler) {

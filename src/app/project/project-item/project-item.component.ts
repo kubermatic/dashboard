@@ -1,7 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { Observable } from 'rxjs/Observable';
 import { ProjectService, UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';

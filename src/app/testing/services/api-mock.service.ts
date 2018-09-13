@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import { defer } from 'rxjs/observable/defer';
+import { Observable, of, defer } from 'rxjs';
 import { ClusterEntity, MasterVersion, Token } from './../../shared/entity/ClusterEntity';
 import { ProjectEntity } from './../../shared/entity/ProjectEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
@@ -34,87 +33,87 @@ export class ApiMockService {
   }
 
   public getProjects(): Observable<ProjectEntity[]> {
-    return Observable.of(this.projects);
+    return of(this.projects);
   }
 
   public createProject(): Observable<ProjectEntity> {
-    return Observable.of(this.project);
+    return of(this.project);
   }
 
   public deleteProject(projectID: string): Observable<any> {
-    return Observable.of(null);
+    return of(null);
   }
 
   public getCluster(clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
-    return Observable.of(this.cluster);
+    return of(this.cluster);
   }
 
   public getClusters(dc: string, projectID: string): Observable<ClusterEntity[]> {
-    return Observable.of(this.clusters);
+    return of(this.clusters);
   }
 
   public getSSHKeys(): Observable<SSHKeyEntity[]> {
-    return Observable.of(this.sshKeys);
+    return of(this.sshKeys);
   }
 
   public deleteSSHKey(fingerprint: string): Observable<any> {
-    return Observable.of(null);
+    return of(null);
   }
 
   public createClusterNode(cluster: ClusterEntity, nodeModel: NodeEntity, dc: string, projectID: string): Observable<any> {
-    return Observable.of(null);
+    return of(null);
   }
 
   public createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
-    return Observable.of(this.cluster);
+    return of(this.cluster);
   }
 
   public deleteCluster(clusterName: string, dc: string, projectID: string): Observable<any> {
-    return Observable.of(null);
+    return of(null);
   }
 
   public editCluster(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
-    return Observable.of(this.cluster);
+    return of(this.cluster);
   }
 
   public deleteClusterNode(clusterName: string, nodeName: string, dc: string, projectID: string): Observable<any> {
-    return Observable.of(null);
+    return of(null);
   }
 
   public getClusterNodes(cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
-    return Observable.of(this.nodes);
+    return of(this.nodes);
   }
 
   public getClusterUpgrades(cluster: string): Observable<MasterVersion[]> {
-    return Observable.of([]);
+    return of([]);
   }
 
   public addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
-    return Observable.of(null);
+    return of(null);
   }
 
   public getToken(cluster: ClusterEntity, dc: string, projectID: string): Observable<Token> {
-    return Observable.of(this.token);
+    return of(this.token);
   }
 
   public editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
-    return Observable.of(this.token);
+    return of(this.token);
   }
 
   getMasterVersions(): Observable<MasterVersion[]> {
-    return Observable.of(this.masterVersions);
+    return of(this.masterVersions);
   }
 
   getMembers(projectID: string): Observable<MemberEntity[]> {
-    return Observable.of(this.members);
+    return of(this.members);
   }
 
   createMembers(projectID: string, member: CreateMemberEntity): Observable<MemberEntity> {
-    return Observable.of(this.member);
+    return of(this.member);
   }
 
   getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
-    return Observable.of(this.vsphereNetworks);
+    return of(this.vsphereNetworks);
   }
 }
 
