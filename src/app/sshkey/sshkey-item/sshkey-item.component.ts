@@ -38,7 +38,7 @@ export class SSHKeyItemComponent implements OnInit {
 
   public deleteSshKey() {
     this.apiService.deleteSSHKey(this.sshKey.name, this.projectId).subscribe(() => {
-      NotificationActions.success('Success', `SSH key ${this.sshKey.name} deleted.`);
+      NotificationActions.success('Success', `SSH key ${this.sshKey.id} deleted.`);
     });
   }
 

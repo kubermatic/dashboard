@@ -90,7 +90,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   public loadWizard() {
-    this.router.navigate(['/wizard']);
+    this.router.navigate(['/projects/' + this.projectID + '/wizard']);
   }
 
   sortData(sort: Sort) {

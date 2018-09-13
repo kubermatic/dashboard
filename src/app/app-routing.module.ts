@@ -13,19 +13,23 @@ const appRoutes: Routes = [
         loadChildren: './project/project.module#ProjectModule',
       },
       {
-        path: 'wizard',
+        path: 'projects/:projectID/wizard',
         loadChildren: './wizard/wizard.module#WizardModule',
       },
       {
-        path: 'sshkeys',
+        path: 'projects/:projectID/sshkeys',
         loadChildren: './sshkey/sshkey.module#SSHKeyModule'
       },
       {
-      path: 'members',
+      path: 'projects/:projectID/members',
         loadChildren: './member/member.module#MemberModule'
       },
       {
-        path: 'clusters',
+        path: 'projects/:projectID/clusters',
+        loadChildren: './cluster/cluster.module#ClusterModule'
+      },
+      {
+        path: 'projects/:projectID/dc/:seedDc/clusters',
         loadChildren: './cluster/cluster.module#ClusterModule'
       },
       {

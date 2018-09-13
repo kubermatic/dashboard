@@ -80,6 +80,7 @@
     "karma-mocha-reporter": "2.2.5",
     "karma-phantomjs-launcher": "1.0.4",
     "karma-remap-istanbul": "0.6.0",
+    "ng2-mock-component": "^0.1.1",
     "ng2-slim-loading-bar": "4.0.0",
     "ngrx-store-freeze": "0.2.4",
     "ngrx-store-logger": "0.2.2",

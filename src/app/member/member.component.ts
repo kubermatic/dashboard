@@ -114,7 +114,7 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     for (const i of Object.keys(projectsA)) {
       if (projectsA[i].id === this.project.id) {
-        const group = projectsA[i].group.replace(/(\-[\w\d]+)$/, '');
+        const group = projectsA[i].group.split('-')[0];
         switch (group) {
           case 'owners':
             groupA = 'Owner';
@@ -135,7 +135,7 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     for (const i of Object.keys(projectsB)) {
       if (projectsB[i].id === this.project.id) {
-        const group = projectsB[i].group.replace(/(\-[\w\d]+)$/, '');
+        const group = projectsB[i].group.split('-')[0];
         switch (group) {
           case 'owners':
             groupB = 'Owner';

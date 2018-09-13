@@ -35,7 +35,7 @@ export class UserService {
     return this.getUser().pipe(map(res => {
       for (let i = 0; i < res.projects.length; i++) {
         if (res.projects[i].id === projectID) {
-          const group = res.projects[i].group.replace(/(\-[\w\d]+$)/, '');
+          const group = res.projects[i].group.split('-')[0];
           return this.userGroup = group;
         }
       }
