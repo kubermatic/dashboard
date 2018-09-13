@@ -41,7 +41,7 @@ export class MemberItemComponent implements OnInit {
   public getGroup(memberProjects: MemberProject[]): string {
     for (const i of Object.keys(memberProjects)) {
       if (memberProjects[i].id === this.project.id) {
-        const group = memberProjects[i].group.replace(/(\-[\w\d]+)$/, '');
+        const group = memberProjects[i].group.split('-')[0];
         switch (group) {
           case 'owners':
             return 'Owner';

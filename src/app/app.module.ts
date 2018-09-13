@@ -1,4 +1,5 @@
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgReduxModule } from '@angular-redux/store';
@@ -32,7 +33,8 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     BrowserAnimationsModule,
     AppRoutingModule,
     NgReduxFormModule,
-    NgReduxModule
+    NgReduxModule,
+    RouterModule
   ],
   declarations: [
     KubermaticComponent,

@@ -1,14 +1,16 @@
-import { SharedModule } from '../../../shared/shared.module';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, fakeAsync, TestBed, tick, discardPeriodicTasks } from '@angular/core/testing';
-import { RouterTestingModule } from './../../../testing/router-stubs';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { ClusterItemComponent } from './cluster-item.component';
+import { ClusterHealthStatusComponent } from '../../cluster-health-status/cluster-health-status.component';
+import { SharedModule } from '../../../shared/shared.module';
+import { RouterTestingModule, RouterStub, ActivatedRouteStub } from './../../../testing/router-stubs';
+import { DatacenterService, HealthService, ProjectService } from '../../../core/services';
 import { Auth } from './../../../core/services/auth/auth.service';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
-import { DatacenterService, HealthService, ProjectService } from '../../../core/services';
 import { DatacenterMockService } from './../../../testing/services/datacenter-mock.service';
 import { HealthMockService } from '../../../testing/services/health-mock.service';
 import { ProjectMockService } from './../../../testing/services/project-mock.service';
@@ -17,7 +19,6 @@ import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacente
 import { fakeBringyourownSeedDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { fakeHealth } from '../../../testing/fake-data/health.fake';
 import { fakeProject } from '../../../testing/fake-data/project.fake';
-import { ClusterHealthStatusComponent } from '../../cluster-health-status/cluster-health-status.component';
 import { ClusterHealth } from '../../../shared/model/ClusterHealthConstants';
 
 const modules: any[] = [
@@ -47,7 +48,9 @@ describe('ClusterItemComponent', () => {
         { provide: DatacenterService, useClass: DatacenterMockService },
         { provide: Auth, useClass: AuthMockService },
         { provide: HealthService, useClass: HealthMockService },
-        { provide: ProjectService, useClass: ProjectMockService }
+        { provide: ProjectService, useClass: ProjectMockService },
+        { provide: Router, useClass: RouterStub },
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
       ],
     }).compileComponents();
   });

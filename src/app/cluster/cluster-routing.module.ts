@@ -8,13 +8,13 @@ import { ClusterListComponent } from './cluster-list/cluster-list.component';
 
 const routes: Routes = [
   {
-    path: ':projectID',
+    path: '',
     component: ClusterListComponent,
     canActivate: [AuthGuard],
     data: { title: 'Manage Clusters' }
   },
   {
-    path: ':projectID/:seedDc/:clusterName',
+    path: ':clusterName',
     component: ClusterDetailsComponent,
     canActivate: [AuthGuard],
     data: { title: 'Cluster details' }

@@ -2,10 +2,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { MatDialog } from '@angular/material';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { MockComponent } from 'ng2-mock-component';
 
 import { SidenavComponent } from './sidenav.component';
 
@@ -13,7 +14,7 @@ import { ApiService, ProjectService, UserService } from './../../../core/service
 import { AppConfigService } from '../../../app-config.service';
 
 import { SharedModule } from '../../../shared/shared.module';
-import { RouterTestingModule, RouterLinkStubDirective, RouterStub, ActivatedRouteStub } from '../../../testing/router-stubs';
+import { RouterTestingModule, RouterLinkStubDirective, RouterStub } from '../../../testing/router-stubs';
 import { click } from './../../../testing/utils/click-handler';
 
 import { asyncData } from './../../../testing/services/api-mock.service';
@@ -22,14 +23,15 @@ import { UserMockService } from './../../../testing/services/user-mock.service';
 import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
 
 import { fakeProjects } from './../../../testing/fake-data/project.fake';
+import { fakeUserGroupConfig } from './../../../testing/fake-data/userGroupConfig.fake';
 import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
+  RouterTestingModule,
   HttpClientModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  RouterTestingModule,
   SharedModule
 ];
 
@@ -49,7 +51,11 @@ describe('SidenavComponent', () => {
         ...modules,
       ],
       declarations: [
-        SidenavComponent
+        SidenavComponent,
+        MockComponent({
+          selector: 'a',
+          inputs: [ 'routerLink', 'routerLinkActiveOptions' ]
+        }),
       ],
       providers: [
         { provide: ApiService, useValue: apiMock },
@@ -86,7 +92,7 @@ describe('SidenavComponent', () => {
     fixture.detectChanges();
 
     expect(links.length).toBe(5, 'should have 5 links');
-    expect(links[0].linkParams).toBe('/wizard', '1st link should go to Wizard');
+    expect(links[0].linkParams).toBe('/projects//wizard', '1st link should go to Wizard');
   });
 
   it('can click Wizard link in template', () => {
@@ -100,7 +106,7 @@ describe('SidenavComponent', () => {
     click(wizardLinkDe);
     fixture.detectChanges();
 
-    expect(wizardLink.navigatedTo).toBe('/wizard');
+    expect(wizardLink.navigatedTo).toBe('/projects//wizard');
   });
 
 });

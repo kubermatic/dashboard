@@ -37,7 +37,7 @@
       </ng-container>
     </button>
     <span class="project-status-info" *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
-    <a type="button" class="cancel-button" routerLink="/clusters">Cancel</a>
+    <a type="button" class="cancel-button" routerLink="/projects/{{project.id}}/clusters">Cancel</a>
   </div>
 
 </mat-card>
