@@ -6,6 +6,8 @@ export class Auth {
   constructor() {
     const token = this.getTokenFromQuery();
     if (token) {
+      // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
+      this.removeFragment();
       localStorage.setItem('token', token);
     }
   }
@@ -40,6 +42,11 @@ export class Auth {
   private getTokenFromQuery(): string {
     const results = new RegExp('[\?&]id_token=([^&#]*)').exec(window.location.href);
     return results == null ? null : results[1] || '';
+  }
+
+  private removeFragment() {
+    const currentHref = window.location.href;
+    history.replaceState({}, '', currentHref.slice(0, currentHref.indexOf('#')));
   }
 
   // Helper Functions for decoding JWT token:
