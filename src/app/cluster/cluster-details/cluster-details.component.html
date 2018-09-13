@@ -89,7 +89,7 @@
             <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
               <li *ngFor="let key of sshKeys.slice(0, 3)">
                 <i class="fa fa-key"></i>
-                {{key.spec.name}}
+                {{key.name}}
               </li>
               <div class="km-ssh-keys-list-more" *ngIf="sshKeys.length > 3">
                 <div class="km-more-sshKeys-btn" (click)="loadMoreSshKeys(true)" *ngIf="!moreSshKeys">
@@ -99,7 +99,7 @@
                 <div class="km-more-sshKeys" *ngIf="moreSshKeys">
                   <li *ngFor="let key of sshKeys.slice(3, sshKeys.length+1)">
                     <i class="fa fa-key"></i>
-                    {{key.spec.name}}
+                    {{key.name}}
                   </li>
                 </div>
                 <div class="km-more-sshKeys-btn" (click)="loadMoreSshKeys(false)" *ngIf="moreSshKeys">
