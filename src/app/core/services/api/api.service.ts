@@ -91,14 +91,14 @@ export class ApiService {
     return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 
-  deleteClusterSSHKey(sshkeyname: string, cluster: string, dc: string, projectID: string) {
-    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyname}`;
+  deleteClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string) {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyID}`;
     return this.http.delete(url, { headers: this.headers });
   }
 
-  addClusterSSHKey(sshKey: string, cluster: string, dc: string, projectID: string): Observable<SSHKeyEntity> {
-    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys`;
-    return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.headers });
+  addClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string) {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyID}`;
+    return this.http.put(url, null, { headers: this.headers });
   }
 
   getSSHKeys(projectID: string): Observable<SSHKeyEntity[]> {
@@ -106,8 +106,8 @@ export class ApiService {
     return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 
-  deleteSSHKey(sshkeyname: string, projectID: string) {
-    const url = `${this.restRoot}/projects/${projectID}/sshkeys/${sshkeyname}`;
+  deleteSSHKey(sshkeyID: string, projectID: string) {
+    const url = `${this.restRoot}/projects/${projectID}/sshkeys/${sshkeyID}`;
     return this.http.delete(url, { headers: this.headers });
   }
 

@@ -246,12 +246,13 @@ export class WizardComponent implements OnInit, OnDestroy {
 
       this.router.navigate(['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
 
-      // SSH key endpoint to add to cluster is broken atm
-      /* if (this.clusterSSHKeys.length > 0) {
+      if (this.clusterSSHKeys.length > 0) {
         for (const key of this.clusterSSHKeys) {
-          this.api.addClusterSSHKey(key.name, cluster.id, datacenter.spec.seed, this.project.id);
+          this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id).subscribe(sshkey => {
+            NotificationActions.success('Success', `SSH key ${key.name} was successfully added`);
+          });
         }
-      }*/
+      }
 
       const isHealthy = new Subject<boolean>();
         const timer = interval(10000).pipe(takeUntil(isHealthy));
