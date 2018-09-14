@@ -4,10 +4,12 @@ import { SSHKeyItemComponent } from './sshkey-item/sshkey-item.component';
 import { SharedModule } from '../shared/shared.module';
 import { MatTabsModule } from '@angular/material';
 import { SSHKeyRoutingModule } from './sshkey-routing.module';
+import { SSHKeyDeleteConfirmationComponent } from './sshkey-delete-confirmation/sshkey-delete-confirmation.component';
 
 const components: any[] = [
   SSHKeyComponent,
-  SSHKeyItemComponent
+  SSHKeyItemComponent,
+  SSHKeyDeleteConfirmationComponent
 ];
 
 @NgModule({
@@ -22,7 +24,7 @@ const components: any[] = [
   exports: [
     ...components
   ],
-  entryComponents: []
+  entryComponents: [SSHKeyDeleteConfirmationComponent]
 })
 export class SSHKeyModule {
 }

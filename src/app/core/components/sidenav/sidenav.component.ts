@@ -130,7 +130,12 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public setIconColor(url: string): boolean {
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;
-    return (snapshot.url === url);
+    if (url === '/projects') {
+      return (snapshot.url === url);
+    } else {
+      const newUrl = '/projects/' + this.selectedProject + url;
+      return (snapshot.url === newUrl);
+    }
   }
 
   ngOnDestroy() {

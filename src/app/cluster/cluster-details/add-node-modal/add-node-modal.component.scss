@@ -1,3 +1,13 @@
 .mat-tab-group {
   margin-bottom: 20px;
 }
+
+.km-add-node-outer {
+  overflow-y: hidden;
+}
+
+.km-add-node-inner {
+  overflow-y: auto;
+  max-height: 370px;
+  margin-bottom: 15px;
+}

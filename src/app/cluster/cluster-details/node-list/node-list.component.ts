@@ -209,4 +209,28 @@ export class NodeListComponent implements OnInit {
     }
   }
 
+  displayTags(tags: object): boolean {
+    if (Object.keys(tags).length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  getTagsFromObject(tags: object): string {
+    let tagsValue = '';
+    let counter = 0;
+    for (const i in tags) {
+      if (tags.hasOwnProperty(i)) {
+        counter++;
+        if (counter === 1) {
+          tagsValue += (i + ': ' + tags[i]);
+        } else {
+          tagsValue += (', ' + i + ': ' + tags[i]);
+        }
+      }
+    }
+    return tagsValue;
+  }
+
 }

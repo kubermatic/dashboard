@@ -69,7 +69,7 @@ i.fa-info-circle {
 .node-details-content {
   background-color: #ffffff;
   padding: 10px 24px;
-  line-height: 40px;
+  line-height: 30px;
 
   .km-card-list, .km-card-list-content {
     margin: 0;
@@ -84,6 +84,16 @@ i.fa-info-circle {
 
   .fa-times {
     color: $warning-status-color;
+  }
+
+  .node-details {
+    flex-flow: row wrap;
+  }
+
+  .km-card-list-key {
+    font-size: 14px;
+    font-weight: 600;
+    color: $text-color;
   }
 }
 
