@@ -283,7 +283,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.possibleVersions = this.versionsList;
     const sub = modal.afterClosed().subscribe(() => {
 
-      this.reloadCluster(this.cluster.name, this.datacenter.metadata.name, this.projectID);
+      this.reloadCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID);
       sub.unsubscribe();
     });
   }
