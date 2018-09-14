@@ -53,7 +53,7 @@
           </div>
         </div>
 
-        <div fxFlex="50%" class="km-summary-right km-summary-box">
+        <div fxFlex="50%" class="km-summary-right km-summary-box" *ngIf="!cluster.spec.cloud.bringyourown">
           <h3>Provider Settings</h3>
           <!-- DO -->
           <ng-container *ngIf="cluster.spec.cloud.digitalocean">
@@ -211,7 +211,7 @@
       </div>
     </div>
 
-    <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+    <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" *ngIf="!cluster.spec.cloud.bringyourown">
       <div fxFlex="100%" class="km-summary-container">
         <div class="km-summary-full km-summary-box">
           <h3>Node Settings</h3>
@@ -376,7 +376,7 @@
           </ng-container>
         </div>
 
-        <div fxFlex="50%" class="km-summary-right km-summary-box">
+        <div fxFlex="50%" class="km-summary-right km-summary-box" *ngIf="!cluster.spec.cloud.bringyourown">
           <h3>SSH keys</h3>
           <ng-container *ngIf="clusterSSHKeys.length">
             <div fxLayout class="km-card-list-content">
