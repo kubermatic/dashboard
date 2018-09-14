@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material';
 import { ApiService } from '../../core/services';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { NotificationActions } from '../../redux/actions/notification.actions';
+import { SSHKeyDeleteConfirmationComponent } from '../sshkey-delete-confirmation/sshkey-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-sshkey-item',
@@ -37,8 +38,11 @@ export class SSHKeyItemComponent implements OnInit {
   }
 
   public deleteSshKey() {
-    this.apiService.deleteSSHKey(this.sshKey.id, this.projectId).subscribe(() => {
-      NotificationActions.success('Success', `SSH key ${this.sshKey.id} deleted.`);
+    const modal = this.dialog.open(SSHKeyDeleteConfirmationComponent);
+    modal.componentInstance.projectId = this.projectId;
+    modal.componentInstance.sshKey = this.sshKey;
+    const sub = modal.afterClosed().subscribe(deleted => {
+      sub.unsubscribe();
     });
   }
 
