@@ -75,7 +75,7 @@
 
     <mat-card-content>
       <div class="row" fxLayout>
-        <div fxFlex="42%" fxLayoutAlign="left center">
+        <div fxFlex="42%">
           <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="provider-logo" alt="Cluster Icon" />
         </div>
         <div fxFlex="30%" class="region">
@@ -84,7 +84,7 @@
             <span class="location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
           </ng-container>
         </div>
-        <ul fxFlex="25%">
+        <div fxFlex="25%">
           <ng-container [ngSwitch]="sshKeys.length > 0">
             <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
               <li *ngFor="let key of sshKeys.slice(0, 3)">
@@ -110,7 +110,7 @@
               <!-- <div fxFlex="3%"></div>-->
             </ul>
           </ng-container>
-        </ul>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

@@ -48,6 +48,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public userGroupConfig: UserGroupConfig;
   public updatesAvailable = false;
   public downgradesAvailable = false;
+  public moreSshKeys = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -198,7 +199,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadClusterNodes() {
-
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this.unsubscribe))
@@ -209,7 +209,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadVersions() {
-
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterUpgrades(this.projectID, this.datacenter.metadata.name, this.cluster.id)
         .pipe(takeUntil(this.unsubscribe))
@@ -280,7 +279,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public getDownloadURL(): string {
-
     return this.api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
 
@@ -300,5 +298,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const sub = modal.afterClosed().subscribe(result => {
       sub.unsubscribe();
     });
+  }
+
+  public loadMoreSshKeys(moreSshKeys: boolean) {
+    this.moreSshKeys = moreSshKeys;
   }
 }
