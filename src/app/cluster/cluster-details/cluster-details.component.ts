@@ -13,13 +13,14 @@ import { EditProviderSettingsComponent } from './edit-provider-settings/edit-pro
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
+import { EditSSHKeysComponent } from './edit-sshkeys/edit-sshkeys.component';
+
 import { ApiService, DatacenterService, InitialNodeDataService, HealthService, UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
-import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 
+import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-
 import { HealthEntity } from '../../shared/entity/HealthEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
@@ -61,7 +62,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private initialNodeDataService: InitialNodeDataService,
     private dcService: DatacenterService,
-
     private healthService: HealthService,
     private userService: UserService,
     private appConfigService: AppConfigService) {
@@ -297,6 +297,22 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     const sub = modal.afterClosed().subscribe(result => {
       sub.unsubscribe();
+    });
+  }
+
+  public editSSHKeys() {
+    const modal = this.dialog.open(EditSSHKeysComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.projectID = this.projectID;
+
+    const sub = modal.afterClosed().subscribe(result => {
+      sub.unsubscribe();
+      this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(keys => {
+          this.sshKeys = keys;
+        });
     });
   }
 

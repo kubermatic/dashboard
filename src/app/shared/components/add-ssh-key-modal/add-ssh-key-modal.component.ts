@@ -37,7 +37,7 @@ export class AddSshKeyModalComponent implements OnInit {
     this.api.addSSHKey(new SSHKeyEntity(name, null, key), this.projectID)
       .subscribe(
         result => {
-          NotificationActions.success('Success', `SSH key ${name} added successfully`);
+          NotificationActions.success('Success', `SSH key ${name} added successfully to project`);
           this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
           this.dialogRef.close(result);
         });

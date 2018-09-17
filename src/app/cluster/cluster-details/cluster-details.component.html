@@ -65,8 +65,12 @@
           </button>
           <mat-menu #menu="matMenu" class="km-provider-edit-settings">
             <button mat-menu-item (click)="editProviderSettings()" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.edit">
-              <mat-icon>edit</mat-icon>
+              <mat-icon class="iconEdit black"></mat-icon>
               <span>Edit Settings</span>
+            </button>
+            <button mat-menu-item (click)="editSSHKeys()" [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.edit">
+              <mat-icon class="iconEdit black"></mat-icon>
+              <span>Manage SSH keys</span>
             </button>
           </mat-menu>
         </div>
