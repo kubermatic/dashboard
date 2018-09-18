@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { ApiService } from '../../../../core/services';
 import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
 import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { EditSSHKeyDeleteConfirmationComponent } from './../edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
@@ -20,8 +19,7 @@ export class EditSSHKeysItemComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
 
-  constructor(private apiService: ApiService,
-              public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) { }
 
   public getSshKeyItemClass(): string {
     if (this.index % 2 !== 0) {
