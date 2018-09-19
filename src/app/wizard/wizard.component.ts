@@ -262,7 +262,7 @@ export class WizardComponent implements OnInit, OnDestroy {
               });
             }
           }
-          isReady.next(false);
+          isReady.next(true);
         },
         error => {
           return;
