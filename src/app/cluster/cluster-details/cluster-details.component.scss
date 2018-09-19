@@ -17,10 +17,11 @@ a.download-kubeconfig-btn {
 
 .km-ssh-keys-list {
   list-style-type: none;
-  margin: 0;
+  margin: 8px 0 0 0;
   padding: 0;
   li {
     margin-bottom: 3px;
+    line-height: 25px;
     i {
       color: $primary;
       margin-right: 5px;
@@ -30,6 +31,9 @@ a.download-kubeconfig-btn {
     font-size: 14px;
     color: $primary;
     cursor: pointer;
+    span {
+      margin-left: 5px;
+    }
   }
 }
 
@@ -42,7 +46,6 @@ button:disabled {
     color: $disabled-text-color;
   }
 }
-
 
 // sshkeys
 .iconArrowUp {
@@ -60,7 +63,6 @@ button:disabled {
     background-image: url("../../../assets/images/Arrow_down.svg");
     background-repeat: no-repeat;
 }
-
 
 // health dot header
 kubermatic-cluster-health-status {

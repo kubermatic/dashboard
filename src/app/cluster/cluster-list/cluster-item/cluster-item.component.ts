@@ -33,7 +33,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
       });
     });
 
-    if (!!this.seedDC && this.getClusterItemClass() !== 'statusDeleting') {
+    if (!!this.seedDC && this.getClusterItemClass() !== 'statusDeleting' && !this.cluster.deletionTimestamp) {
       this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.projectID).subscribe(health => {
         this.health = health;
       });

@@ -13,13 +13,14 @@ import { EditProviderSettingsComponent } from './edit-provider-settings/edit-pro
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
+import { EditSSHKeysComponent } from './edit-sshkeys/edit-sshkeys.component';
+
 import { ApiService, DatacenterService, InitialNodeDataService, HealthService, UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
-import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 
+import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-
 import { HealthEntity } from '../../shared/entity/HealthEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
@@ -48,6 +49,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public userGroupConfig: UserGroupConfig;
   public updatesAvailable = false;
   public downgradesAvailable = false;
+  public moreSshKeys = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -60,7 +62,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private initialNodeDataService: InitialNodeDataService,
     private dcService: DatacenterService,
-
     private healthService: HealthService,
     private userService: UserService,
     private appConfigService: AppConfigService) {
@@ -198,7 +199,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadClusterNodes() {
-
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this.unsubscribe))
@@ -209,7 +209,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public reloadVersions() {
-
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterUpgrades(this.projectID, this.datacenter.metadata.name, this.cluster.id)
         .pipe(takeUntil(this.unsubscribe))
@@ -280,7 +279,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public getDownloadURL(): string {
-
     return this.api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
 
@@ -300,5 +298,25 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const sub = modal.afterClosed().subscribe(result => {
       sub.unsubscribe();
     });
+  }
+
+  public editSSHKeys() {
+    const modal = this.dialog.open(EditSSHKeysComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.projectID = this.projectID;
+
+    const sub = modal.afterClosed().subscribe(result => {
+      sub.unsubscribe();
+      this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe(keys => {
+          this.sshKeys = keys;
+        });
+    });
+  }
+
+  public loadMoreSshKeys(moreSshKeys: boolean) {
+    this.moreSshKeys = moreSshKeys;
   }
 }

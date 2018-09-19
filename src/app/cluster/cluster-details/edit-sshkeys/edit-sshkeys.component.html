@@ -1,0 +1,61 @@
+<div class="km-dialog-box" style="max-width: 500px; min-width: 500px;">
+  <mat-toolbar>
+    Manage SSH keys for cluster
+    <button mat-icon-button mat-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </mat-toolbar>
+  <mat-dialog-content class="km-content-edit-sshkeys">
+    <div class="mat-dialog-content">
+
+      <div *ngIf="!loading">
+        <div fxLayout>
+          <div fxFlex align="right">
+            <button mat-raised-button color="primary" type="button" (click)="addSshKey()" [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">
+              <span class="btn-text-default">+ Add SSH key</span>
+            </button>
+          </div>
+        </div>
+
+        <mat-card class="blue km-sshkey-view">
+          <mat-card-header>
+            <mat-card-title fxLayout matSort (matSortChange)="sortSshKeyData($event)" matSortActive="name" matSortDirection="asc">
+              <div fxFlex="90%" fxFlex.xs="40%" mat-sort-header="name">
+                <strong>SSH Keys</strong>
+              </div>
+              <div fxFlex="10%" fxHide.sm fxHide.xs>
+                <strong></strong>
+              </div>
+            </mat-card-title>
+          </mat-card-header>
+
+          <mat-card-content fxLayout="column" [ngSwitch]="!!sshKeys && sshKeys.length > 0 ">
+            <ng-container *ngSwitchCase="true">
+              <kubermatic-edit-sshkeys-item *ngFor="let sshKey of sortedSshKeys; let iSSHKey = index; trackBy: trackSshKey" [index]="iSSHKey" [sshKey]="sshKey" [projectID]="projectID" [cluster]="cluster" [datacenter]="datacenter" fxFlex></kubermatic-edit-sshkeys-item>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="false">
+              <div fxFlex class="row odd no-item">No SSHKey available. Please add a SSHKey.</div>
+            </ng-container>
+
+            <ng-container>
+              <div class="row add-sshkey-button">
+                <button (click)="addSshKey()" [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">+ Add SSH key</button>
+              </div>
+            </ng-container>
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <div *ngIf="loading" >
+        <mat-spinner color="accent" class="km-spinner"></mat-spinner>
+      </div>
+
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-dialog-close mat-raised-button>
+      Close
+    </button>
+  </mat-dialog-actions>
+</div>

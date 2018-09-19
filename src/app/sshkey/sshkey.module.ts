@@ -9,7 +9,7 @@ import { SSHKeyDeleteConfirmationComponent } from './sshkey-delete-confirmation/
 const components: any[] = [
   SSHKeyComponent,
   SSHKeyItemComponent,
-  SSHKeyDeleteConfirmationComponent
+  SSHKeyDeleteConfirmationComponent,
 ];
 
 @NgModule({
