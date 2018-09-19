@@ -5,6 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { EditSSHKeysItemComponent } from './edit-sshkeys-item.component';
 import { SharedModule } from './../../../../shared/shared.module';
+import { ApiService, UserService } from './../../../../core/services';
+import { AppConfigService } from './../../../../app-config.service';
+import { UserMockService } from './../../../../testing/services/user-mock.service';
+import { AppConfigMockService } from './../../../../testing/services/app-config-mock.service';
 import Spy = jasmine.Spy;
 
 const modules: any[] = [
@@ -27,7 +31,9 @@ describe('EditSSHKeysItemComponent', () => {
         EditSSHKeysItemComponent
       ],
       providers: [
-        MatDialog
+        MatDialog,
+        { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService},
       ],
     }).compileComponents();
   }));

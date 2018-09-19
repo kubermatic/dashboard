@@ -8,7 +8,7 @@
   </div>
   <div fxFlex="10%" fxHide.sm fxHide.xs>
     <p class="km-icon">
-      <span class="iconDelete black" (click)="deleteSshKey()"></span>
+      <button class="iconDelete black" (click)="deleteSshKey()" [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.delete"></button>
     </p>
   </div>
 </div>

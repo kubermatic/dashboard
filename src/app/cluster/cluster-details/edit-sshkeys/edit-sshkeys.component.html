@@ -31,7 +31,7 @@
 
           <mat-card-content fxLayout="column" [ngSwitch]="!!sshKeys && sshKeys.length > 0 ">
             <ng-container *ngSwitchCase="true">
-              <kubermatic-edit-sshkeys-item *ngFor="let sshKey of sortedSshKeys; let iSSHKey = index; trackBy: trackSshKey" [index]="iSSHKey" [sshKey]="sshKey" [projectId]="projectID" [cluster]="cluster" [datacenter]="datacenter" fxFlex></kubermatic-edit-sshkeys-item>
+              <kubermatic-edit-sshkeys-item *ngFor="let sshKey of sortedSshKeys; let iSSHKey = index; trackBy: trackSshKey" [index]="iSSHKey" [sshKey]="sshKey" [projectID]="projectID" [cluster]="cluster" [datacenter]="datacenter" fxFlex></kubermatic-edit-sshkeys-item>
             </ng-container>
 
             <ng-container *ngSwitchCase="false">

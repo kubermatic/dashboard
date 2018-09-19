@@ -1,10 +1,13 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { UserService } from '../../../../core/services';
+import { AppConfigService } from '../../../../app-config.service';
 import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
 import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { EditSSHKeyDeleteConfirmationComponent } from './../edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
+import { UserGroupConfig } from '../../../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-edit-sshkeys-item',
@@ -12,14 +15,25 @@ import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
   styleUrls: ['./edit-sshkeys-item.component.scss'],
 })
 
-export class EditSSHKeysItemComponent {
+export class EditSSHKeysItemComponent implements OnInit {
   @Input() index: number;
   @Input() sshKey: SSHKeyEntity;
-  @Input() projectId: string;
+  @Input() projectID: string;
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  public userGroup: string;
+  public userGroupConfig: UserGroupConfig;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog,
+              private userService: UserService,
+              private appConfigService: AppConfigService) { }
+
+  ngOnInit() {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+      this.userGroup = group;
+    });
+  }
 
   public getSshKeyItemClass(): string {
     if (this.index % 2 !== 0) {
@@ -29,7 +43,7 @@ export class EditSSHKeysItemComponent {
 
   public deleteSshKey() {
     const modal = this.dialog.open(EditSSHKeyDeleteConfirmationComponent);
-    modal.componentInstance.projectId = this.projectId;
+    modal.componentInstance.projectID = this.projectID;
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.sshKey = this.sshKey;

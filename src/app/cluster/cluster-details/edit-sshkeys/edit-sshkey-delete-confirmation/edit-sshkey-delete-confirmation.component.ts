@@ -13,7 +13,7 @@ import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
 })
 
 export class EditSSHKeyDeleteConfirmationComponent {
-  @Input() projectId: string;
+  @Input() projectID: string;
   @Input() sshKey: SSHKeyEntity;
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
@@ -23,7 +23,7 @@ export class EditSSHKeyDeleteConfirmationComponent {
   }
 
   deleteClusterSSHKey() {
-    this.api.deleteClusterSSHKey(this.sshKey.id, this.cluster.id, this.datacenter.metadata.name, this.projectId).subscribe(result => {
+    this.api.deleteClusterSSHKey(this.sshKey.id, this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(result => {
       NotificationActions.success('Success', `SSH key has been removed from cluster`);
     });
     this.dialogRef.close(true);
