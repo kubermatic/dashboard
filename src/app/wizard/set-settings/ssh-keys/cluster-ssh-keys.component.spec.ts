@@ -1,17 +1,18 @@
-import { ApiService } from './../../../core/services/api/api.service';
-import { SharedModule } from '../../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { asyncData } from '../../../testing/services/api-mock.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import Spy = jasmine.Spy;
 import { ClusterSSHKeysComponent } from './cluster-ssh-keys.component';
-import { WizardService } from '../../../core/services/wizard/wizard.service';
+import { ApiService, ProjectService, WizardService, UserService } from '../../../core/services';
+import { AppConfigService } from './../../../app-config.service';
+import { SharedModule } from '../../../shared/shared.module';
+import { asyncData } from '../../../testing/services/api-mock.service';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
+import { UserMockService } from './../../../testing/services/user-mock.service';
+import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { fakeSSHKeys } from '../../../testing/fake-data/sshkey.fake';
-import Spy = jasmine.Spy;
-import { ProjectService } from '../../../core/services';
-import { ProjectMockService } from '../../../testing/services/project-mock.service';
 
 describe('ClusterSSHKeys', () => {
   let fixture: ComponentFixture<ClusterSSHKeysComponent>;
@@ -36,6 +37,8 @@ describe('ClusterSSHKeys', () => {
         WizardService,
         { provide: ApiService, useValue: apiMock },
         { provide: ProjectService, useClass: ProjectMockService },
+        { provide: UserService, useClass: UserMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService}
       ],
     }).compileComponents();
   }));

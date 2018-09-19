@@ -2,12 +2,14 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { WizardService } from '../../../core/services/wizard/wizard.service';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { ApiService, ProjectService } from '../../../core/services';
+import { ApiService, ProjectService, UserService } from '../../../core/services';
+import { AppConfigService } from '../../../app-config.service';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { AddSshKeyModalComponent } from '../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { UserGroupConfig } from '../../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-cluster-ssh-keys',
@@ -24,18 +26,26 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   private keysSub: Subscription;
   private keysFormSub: Subscription;
   public project: ProjectEntity;
+  public userGroup: string;
+  public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
               private wizardService: WizardService,
               private dialog: MatDialog,
-              private projectService: ProjectService) { }
+              private projectService: ProjectService,
+              private userService: UserService,
+              private appConfigService: AppConfigService) { }
 
   ngOnInit() {
     this.project = this.projectService.project;
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
       this.project = project;
+      this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+      this.userService.currentUserGroup(this.project.id).subscribe(group => {
+        this.userGroup = group;
+      });
     }));
 
     const keyNames: string[] = [];

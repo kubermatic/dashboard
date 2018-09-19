@@ -24,13 +24,17 @@ import { HetznerProviderSettingsComponent } from './cluster-details/edit-provide
 import { OpenstackProviderSettingsComponent } from './cluster-details/edit-provider-settings/openstack-provider-settings/openstack-provider-settings.component';
 import { VSphereProviderSettingsComponent } from './cluster-details/edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
 import { AzureProviderSettingsComponent } from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
+import { EditSSHKeysComponent } from './cluster-details/edit-sshkeys/edit-sshkeys.component';
+import { EditSSHKeysItemComponent } from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
+import { EditSSHKeyDeleteConfirmationComponent } from './cluster-details/edit-sshkeys/edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
+import { AddClusterSSHKeysComponent } from './cluster-details/edit-sshkeys/add-cluster-sshkeys/add-cluster-sshkeys.component';
 
 const components: any[] = [
   ClusterDetailsComponent,
   NodeListComponent,
   ClusterListComponent,
   ClusterItemComponent,
-  ClusterHealthStatusComponent,
+  ClusterHealthStatusComponent
 ];
 
 const entryComponents: any[] = [
@@ -49,6 +53,10 @@ const entryComponents: any[] = [
   OpenstackProviderSettingsComponent,
   VSphereProviderSettingsComponent,
   AzureProviderSettingsComponent,
+  EditSSHKeysComponent,
+  EditSSHKeysItemComponent,
+  EditSSHKeyDeleteConfirmationComponent,
+  AddClusterSSHKeysComponent
 ];
 
 @NgModule({
@@ -56,7 +64,7 @@ const entryComponents: any[] = [
     SharedModule,
     ClusterRoutingModule,
     AddNodeModule,
-    MatTabsModule,
+    MatTabsModule
   ],
   declarations: [
     ...components,

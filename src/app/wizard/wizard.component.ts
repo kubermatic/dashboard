@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, Subject, interval } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subscription, Subject, interval, of } from 'rxjs';
+import { takeUntil, catchError } from 'rxjs/operators';
 import { WizardService } from '../core/services/wizard/wizard.service';
 import { ClusterDatacenterForm, ClusterFormData, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
 import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
@@ -239,33 +239,48 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     const createCluster: CreateClusterModel = { name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames };
 
-    this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id).subscribe(cluster => {
+    this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
+/*      .pipe(catchError(error => {
+        console.log("NOOOOPE")
+        return of(null);
+    }))*/
+    .subscribe(cluster => {
       this.creating = false;
       NotificationActions.success('Success', `Cluster successfully created`);
       this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
-      this.router.navigate(['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
+      const isReady = new Subject<boolean>();
+      const timer = interval(5000).pipe(takeUntil(isReady));
+      timer.subscribe(tick => {
+        this.api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe(clusterRes => {
+          this.router.navigate(['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
 
-      if (this.clusterSSHKeys.length > 0) {
-        for (const key of this.clusterSSHKeys) {
-          this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id).subscribe(sshkey => {
-            NotificationActions.success('Success', `SSH key ${key.name} was successfully added`);
-          });
-        }
-      }
+          if (this.clusterSSHKeys.length > 0) {
+            for (const key of this.clusterSSHKeys) {
+              this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id).subscribe(sshkey => {
+                NotificationActions.success('Success', `SSH key ${key.name} was successfully added`);
+              });
+            }
+          }
+          isReady.next(true);
+        },
+        error => {
+          return;
+        });
+      });
 
       const isHealthy = new Subject<boolean>();
-        const timer = interval(10000).pipe(takeUntil(isHealthy));
-        timer.subscribe(tick => {
-          return this.healthService.getClusterHealth(cluster.id, datacenter.spec.seed, this.project.id).subscribe(health => {
-            if (health.apiserver && health.controller && health.etcd && health.machineController && health.scheduler) {
-              isHealthy.next(true);
-              if (this.clusterProviderFormData.provider !== 'bringyourown') {
-                this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
-              }
+      const timerHealth = interval(10000).pipe(takeUntil(isHealthy));
+      timerHealth.subscribe(tick => {
+        return this.healthService.getClusterHealth(cluster.id, datacenter.spec.seed, this.project.id).subscribe(health => {
+          if (health.apiserver && health.controller && health.etcd && health.machineController && health.scheduler) {
+            isHealthy.next(true);
+            if (this.clusterProviderFormData.provider !== 'bringyourown') {
+              this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
             }
-          });
+          }
         });
+      });
     },
     error => {
       NotificationActions.error('Error', `Could not create cluster`);
