@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+
 import { Subscription, Subject, interval } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WizardService } from '../core/services';
@@ -28,7 +29,9 @@ export class WizardComponent implements OnInit, OnDestroy {
   public currentStepIndex: number;
   public cluster: ClusterEntity;
   public node: NodeEntity;
-  public clusterSpecFormData: ClusterSpecForm = { valid: false, name: '', version: '' };
+
+  public clusterSpecFormData: ClusterSpecForm = { valid: false, name: '', machineNetworks: [], version: '' };
+
   public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
   public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
   public clusterProviderSettingsFormData: ClusterProviderSettingsForm = { valid: false };
@@ -56,6 +59,13 @@ export class WizardComponent implements OnInit, OnDestroy {
         cloud: {
           dc: '',
         },
+        machineNetworks: [
+          {
+            cidr: '',
+            dnsServers: [''],
+            gateway: ''
+          }
+        ],
       },
     };
 
