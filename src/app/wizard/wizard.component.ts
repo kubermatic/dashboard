@@ -240,10 +240,6 @@ export class WizardComponent implements OnInit, OnDestroy {
     const createCluster: CreateClusterModel = { name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames };
 
     this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
-/*      .pipe(catchError(error => {
-        console.log("NOOOOPE")
-        return of(null);
-    }))*/
     .subscribe(cluster => {
       this.creating = false;
       NotificationActions.success('Success', `Cluster successfully created`);
@@ -258,7 +254,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           if (this.clusterSSHKeys.length > 0) {
             for (const key of this.clusterSSHKeys) {
               this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id).subscribe(sshkey => {
-                NotificationActions.success('Success', `SSH key ${key.name} was successfully added`);
+                NotificationActions.success('Success', `SSH key ${key.name} was added successfully`);
               });
             }
           }
@@ -269,18 +265,9 @@ export class WizardComponent implements OnInit, OnDestroy {
         });
       });
 
-      const isHealthy = new Subject<boolean>();
-      const timerHealth = interval(10000).pipe(takeUntil(isHealthy));
-      timerHealth.subscribe(tick => {
-        return this.healthService.getClusterHealth(cluster.id, datacenter.spec.seed, this.project.id).subscribe(health => {
-          if (health.apiserver && health.controller && health.etcd && health.machineController && health.scheduler) {
-            isHealthy.next(true);
-            if (this.clusterProviderFormData.provider !== 'bringyourown') {
-              this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
-            }
-          }
-        });
-      });
+      if (this.clusterProviderFormData.provider !== 'bringyourown') {
+        this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
+      }
     },
     error => {
       NotificationActions.error('Error', `Could not create cluster`);
