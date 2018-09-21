@@ -23,6 +23,7 @@ export class NodeListComponent implements OnInit {
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   @Input() clusterHealthStatus: string;
   @Input() isClusterRunning: boolean;
+  @Input() hasInitialNodes: boolean;
   public clickedDeleteNode = {};
   public clickedDuplicateNode = {};
   public isShowNodeDetails = {};

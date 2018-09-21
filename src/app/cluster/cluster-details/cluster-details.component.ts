@@ -50,6 +50,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public updatesAvailable = false;
   public downgradesAvailable = false;
   public moreSshKeys = false;
+  public hasInitialNodes = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -168,6 +169,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public initialNodeCreation() {
+    if (!!this.cluster && !!this.initialNodeDataService.getInitialNodeData(this.cluster)) {
+      this.hasInitialNodes = true;
+    }
+
     if (this.health && this.health.apiserver && this.health.controller && this.health.etcd && this.health.machineController && this.health.scheduler) {
       // Initial node creation
       const initialNodeCreationSub = this.clusterSubject
@@ -177,6 +182,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           if (data == null) {
             if (initialNodeCreationSub) {
               initialNodeCreationSub.unsubscribe();
+              this.hasInitialNodes = false;
               return;
             }
           }
