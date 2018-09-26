@@ -1,0 +1,51 @@
+<div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+  <div fxFlex="100%">
+
+      <form [formGroup]="machineNetworksForm" fxLayout class="km-machine-networks-form">
+        <div fxFlex="50%" *ngFor="let tag of getMachineNetworksForm(machineNetworksForm); let i=index" formArrayName="machineNetworks" class="km-machine-networks-firm-inner">
+          <div class="km-form-group-tags-inner" [formGroupName]="i">
+            <span class="km-single-machine-network">
+              Machine Network #{{i+1}}
+              <i class="fa fa-times" style="float: right" aria-hidden="true" (click)="deleteMachineNetwork(i)"></i>
+            </span>
+
+            <mat-form-field class="km-machine-networks-form-field">
+              <input matInput formControlName="cidr" placeholder="CIDR Range *" autocomplete="off">
+              <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.value[i].cidr === ''">
+                CIDR is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+            <mat-form-field class="km-machine-networks-form-field">
+              <mat-chip-list #chipList>
+                <mat-chip *ngFor="let dnsServer of machineNetworksForm.controls.machineNetworks.value[i].dnsServers" [removable]="true" (removed)="removeDnsServer(dnsServer, i)">
+                  {{ dnsServer }}
+                  <mat-icon matChipRemove>cancel</mat-icon>
+                </mat-chip>
+                <input placeholder="DNS Server *"
+                       [matChipInputFor]="chipList"
+                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                       (matChipInputTokenEnd)="addDnsServer($event, i)">
+              </mat-chip-list>
+              <mat-hint>hit enter, space or comma after entering your data to add a new dns server</mat-hint>
+              <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.value[i].dnsServers.length === 0">
+                DNS Server is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="invalidDnsServer">DNS Server has invalid input</mat-error>
+            </mat-form-field>
+            <mat-form-field class="km-machine-networks-form-field">
+              <input matInput formControlName="gateway" placeholder="Gateway *" autocomplete="off">
+              <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.value[i].gateway === ''">
+                Gateway is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <mat-divider></mat-divider>
+        </div>
+      </form>
+
+    <span class="km-add-machine-network" (click)="addMachineNetwork()">
+      <i class="fa fa-plus" aria-hidden="true"></i>
+      Add new Machine Network
+    </span>
+  </div>
+</div>

@@ -5,7 +5,7 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { CustomFormsModule } from 'ng2-validation';
 import { ClipboardModule } from 'ngx-clipboard';
-import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatToolbarModule, MatTooltipModule, MatAutocompleteModule, MatDividerModule } from '@angular/material';
+import { MatButtonModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatExpansionModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatToolbarModule, MatTooltipModule, MatAutocompleteModule, MatDividerModule, MatChipsModule } from '@angular/material';
 import 'hammerjs';
 import { NgReduxFormModule } from '@angular-redux/form';
 import { AddSshKeyModalComponent } from './components/add-ssh-key-modal/add-ssh-key-modal.component';
@@ -38,6 +38,7 @@ const modules: Array<any> = [
   MatExpansionModule,
   MatSortModule,
   MatDividerModule,
+  MatChipsModule,
   ClipboardModule,
   NgReduxFormModule
 ];

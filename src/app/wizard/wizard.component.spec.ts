@@ -30,6 +30,7 @@ import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aw
 import { AwsAddNodeComponent } from '../add-node/aws-add-node/aws-add-node.component';
 import { OpenstackClusterSettingsComponent } from './set-settings/provider-settings/openstack/openstack.component';
 import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
+import { MachineNetworksComponent } from './set-cluster-spec/machine-networks/machine-networks.component';
 import { SetProviderComponent } from './set-provider/set-provider.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -95,6 +96,7 @@ describe('WizardComponent', () => {
         VSphereOptionsComponent,
         AzureAddNodeComponent,
         SetClusterSpecComponent,
+        MachineNetworksComponent,
         SetProviderComponent,
         SetDatacenterComponent,
         SummaryComponent,

@@ -3,6 +3,7 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { SetClusterSpecComponent } from './set-cluster-spec.component';
+import { MachineNetworksComponent } from './machine-networks/machine-networks.component';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ClusterNameGeneratorMock } from '../../testing/services/name-generator-mock.service';
@@ -33,7 +34,8 @@ describe('SetClusterSpecComponent', () => {
         ...modules,
       ],
       declarations: [
-        SetClusterSpecComponent
+        SetClusterSpecComponent,
+        MachineNetworksComponent
       ],
       providers: [
         WizardService,

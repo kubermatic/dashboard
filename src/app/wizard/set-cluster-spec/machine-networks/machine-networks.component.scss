@@ -1,0 +1,39 @@
+.km-machine-networks {
+  margin-top: 55px;
+}
+
+.km-add-machine-network {
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.km-single-machine-network {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.km-machine-networks-form {
+  flex-wrap: wrap;
+}
+
+.km-machine-networks-firm-inner {
+  padding-right: 30px;
+  &:nth-child(2n+2) {
+    padding-right: 0px;
+    padding-left: 20px;
+  }
+}
+
+.km-machine-networks-form-field {
+  margin-left: 15px;
+  width: 94% !important;
+}
+
+mat-divider {
+  margin: 10px 0 20px 0;
+  position: relative !important;
+}
+
+.fa-times {
+  cursor: pointer;
+}

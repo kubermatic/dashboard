@@ -1,10 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ApiService, WizardService } from '../../core/services';
-import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity';
+import { ClusterEntity, MasterVersion, MachineNetwork } from '../../shared/entity/ClusterEntity';
+import { MachineNetworksComponent } from './machine-networks/machine-networks.component';
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',
@@ -14,33 +15,31 @@ import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity'
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
   public clusterSpecForm: FormGroup;
+  public machineNetworkData: MachineNetwork[] = [];
   public masterVersions: MasterVersion[] = [];
   public defaultVersion: string;
-  public machineNetwork: FormArray;
+  public inhalt = [];
   private subscriptions: Subscription[] = [];
+  @ViewChild('machineNetworksComponent', { read: ViewContainerRef }) container: ViewContainerRef;
 
-  constructor(private nameGenerator: ClusterNameGenerator, private api: ApiService, private wizardService: WizardService) { }
+  constructor(private nameGenerator: ClusterNameGenerator,
+              private api: ApiService,
+              private wizardService: WizardService,
+              private _cfr: ComponentFactoryResolver) { }
 
   ngOnInit() {
-    const machineNetworks = new FormArray([]);
-    for (const i in this.cluster.spec.machineNetworks) {
-      if (this.cluster.spec.machineNetworks.hasOwnProperty(i)) {
-        machineNetworks.push(new FormGroup({
-          cidr: new FormControl(this.cluster.spec.machineNetworks[i].cidr, [Validators.required, Validators.pattern(/^(\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\/\d{1,2})$/)]),
-          dnsServers: new FormControl(this.cluster.spec.machineNetworks[i].dnsServers, [Validators.required, Validators.pattern(/^(\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3})$/)]),
-          gateway: new FormControl(this.cluster.spec.machineNetworks[i].gateway, [Validators.required, Validators.pattern(/^(\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3})$/)])
-        }));
-      }
-    }
-
     this.clusterSpecForm = new FormGroup({
       name: new FormControl(this.cluster.name, [Validators.required, Validators.minLength(5)]),
       version: new FormControl(this.cluster.spec.version),
       checkMachineNetworks: new FormControl(),
-      machineNetworks: machineNetworks
     });
 
     this.subscriptions.push(this.clusterSpecForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+      this.setClusterSpec();
+    }));
+
+    this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe(res => {
+      this.machineNetworkData = res;
       this.setClusterSpec();
     }));
 
@@ -71,47 +70,31 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }));
   }
 
-  getMachineNetworkForm(form) {
-    return form.get('machineNetworks').controls;
-  }
-
-  addMachineNetwork() {
-    this.machineNetwork = <FormArray>this.clusterSpecForm.get('machineNetworks');
-    this.machineNetwork.push(new FormGroup({
-      cidr: new FormControl('', [Validators.required]),
-      dnsServers: new FormControl('', [Validators.required]),
-      gateway: new FormControl('', [Validators.required])
-    }));
-  }
-
-  deleteMachineNetwork(index: number): void {
-    const arrayControl = <FormArray>this.clusterSpecForm.get('machineNetworks');
-    arrayControl.removeAt(index);
-  }
-
   setClusterSpec() {
-    const machineNetworkList = [];
-    for (const i in this.clusterSpecForm.controls.machineNetworks.value) {
-      if (
-        this.clusterSpecForm.controls.machineNetworks.value.hasOwnProperty(i) &&
-        this.clusterSpecForm.controls.machineNetworks.value[i].cidr !== '' &&
-        this.clusterSpecForm.controls.machineNetworks.value[i].dnsServers !== '' &&
-        this.clusterSpecForm.controls.machineNetworks.value[i].gateway !== ''
-      ) {
-        machineNetworkList.push({
-          cidr: this.clusterSpecForm.controls.machineNetworks.value[i].cidr,
-          dnsServers: this.clusterSpecForm.controls.machineNetworks.value[i].dnsServers.split(/\s*\,+\s*/),
-          gateway: this.clusterSpecForm.controls.machineNetworks.value[i].gateway
+    if (!!this.clusterSpecForm.controls.checkMachineNetworks.value) {
+      if (this.machineNetworkData.length > 0) {
+        this.wizardService.changeClusterSpec({
+          name: this.clusterSpecForm.controls.name.value,
+          version: this.clusterSpecForm.controls.version.value,
+          machineNetworks: this.machineNetworkData,
+          valid: this.clusterSpecForm.valid,
+        });
+      } else {
+        this.wizardService.changeClusterSpec({
+          name: this.clusterSpecForm.controls.name.value,
+          version: this.clusterSpecForm.controls.version.value,
+          machineNetworks: this.machineNetworkData,
+          valid: false,
         });
       }
+    } else {
+      this.wizardService.changeClusterSpec({
+        name: this.clusterSpecForm.controls.name.value,
+        version: this.clusterSpecForm.controls.version.value,
+        machineNetworks: this.machineNetworkData,
+        valid: this.clusterSpecForm.valid,
+      });
     }
-
-    this.wizardService.changeClusterSpec({
-      name: this.clusterSpecForm.controls.name.value,
-      version: this.clusterSpecForm.controls.version.value,
-      machineNetworks: machineNetworkList,
-      valid: this.clusterSpecForm.valid,
-    });
   }
 
 }

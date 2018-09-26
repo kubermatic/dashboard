@@ -23,51 +23,6 @@
         </div>
       </form>
     </mat-card-content>
-
-    <mat-card-header class="km-machine-networks">
-      <mat-card-title>
-        <form [formGroup]="clusterSpecForm">
-          <h4>
-            <mat-checkbox fxFlex="50%" id="configure-machine-networks" formControlName="checkMachineNetworks">Configure Machine Networks</mat-checkbox>
-          </h4>
-        </form>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content *ngIf="!!clusterSpecForm.controls.checkMachineNetworks.value">
-      <form [formGroup]="clusterSpecForm" fxLayout="column">
-        <div fxFlex="100%" *ngFor="let network of getMachineNetworkForm(clusterSpecForm); let i=index" formArrayName="machineNetworks">
-          <div [formGroupName]="i" fxLayout="column">
-            <span class="km-single-machine-network">
-              Machine Network #{{i+1}}
-              <i class="fa fa-times" style="float: right" aria-hidden="true" (click)="deleteMachineNetwork(i)"></i>
-            </span>
-            <mat-form-field class="km-machine-networks-form-field">
-              <input matInput formControlName="cidr" placeholder="CIDR Range" autocomplete="off">
-              <mat-error *ngIf="clusterSpecForm.controls.name.hasError('required')">
-                CIDR is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field class="km-machine-networks-form-field">
-              <input matInput formControlName="dnsServers" placeholder="DNS Servers" autocomplete="off">
-              <mat-error *ngIf="clusterSpecForm.controls.name.hasError('required')">
-                DNS Server is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-            <mat-form-field class="km-machine-networks-form-field">
-              <input matInput formControlName="gateway" placeholder="Gateway" autocomplete="off">
-              <mat-error *ngIf="clusterSpecForm.controls.name.hasError('required')">
-                Gateway is <strong>required</strong>
-              </mat-error>
-            </mat-form-field>
-            <mat-divider></mat-divider>
-          </div>
-        </div>
-        <span class="km-add-machine-network" (click)="addMachineNetwork()">
-          <i class="fa fa-plus" aria-hidden="true"></i>
-          Add new Machine Network
-        </span>
-      </form>
-    </mat-card-content>
   </mat-card>
 
   <mat-card class="set-cluster-spec" fxFlex>
@@ -87,6 +42,23 @@
           <mat-hint>Select the version that should be used for cluster creation. Unless otherwise specified, the default version {{defaultVersion}} will be used.</mat-hint>
         </mat-form-field>
       </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+  <mat-card class="set-machine-networks" fxFlex="100%">
+    <mat-card-header class="km-machine-networks">
+      <mat-card-title>
+        <form [formGroup]="clusterSpecForm">
+          <h4>
+            <mat-checkbox fxFlex="calc(50% - 20px)" id="configure-machine-networks" formControlName="checkMachineNetworks">Configure Machine Networks</mat-checkbox>
+          </h4>
+        </form>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content *ngIf="!!clusterSpecForm.controls.checkMachineNetworks.value">
+      <kubermatic-machine-networks [cluster]="cluster"></kubermatic-machine-networks>
     </mat-card-content>
   </mat-card>
 </div>

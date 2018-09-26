@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { ClusterDatacenterForm, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView } from '../../../shared/model/ClusterForm';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, MachineNetwork } from '../../../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 
 @Injectable()
@@ -12,6 +12,9 @@ export class WizardService {
   // Cluster spec - form data
   private _clusterSpecForm = new Subject<ClusterSpecForm>();
   clusterSpecFormChanges$ = this._clusterSpecForm.asObservable();
+  // Machine Networks - form data
+  private _machineNetworksForm = new Subject<MachineNetwork[]>();
+  machineNetworksFormChanges$ = this._machineNetworksForm.asObservable();
   // Cluster provider - form data
   private _clusterProviderForm = new Subject<ClusterProviderForm>();
   clusterProviderFormChanges$ = this._clusterProviderForm.asObservable();
@@ -34,6 +37,10 @@ export class WizardService {
 
   changeClusterSpec(data: ClusterSpecForm) {
     this._clusterSpecForm.next(data);
+  }
+
+  changeMachineNetwork(data: MachineNetwork[]) {
+    this._machineNetworksForm.next(data);
   }
 
   changeClusterProvider(data: ClusterProviderForm) {
