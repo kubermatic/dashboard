@@ -64,4 +64,11 @@ describe('NotificationComponent', () => {
 
     expect(spyNotification).toHaveBeenCalled();
   }));
+
+  it('should call execCommand on document during saving to clipboard', () => {
+    const spyDocument = spyOn(document, 'execCommand');
+    fixture.detectChanges();
+    component.copyToClipboard('text');
+    expect(spyDocument).toHaveBeenCalled();
+  });
 });
