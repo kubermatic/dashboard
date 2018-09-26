@@ -13,7 +13,7 @@ import { select } from '@angular-redux/store';
 export class NotificationComponent {
 
   public options = {
-    timeOut: 5000,
+    timeOut: 10000,
     theClass: 'custom-simple-notification',
     lastOnBottom: true,
     clickToClose: true,
