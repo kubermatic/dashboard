@@ -68,8 +68,8 @@ export class NotificationComponent {
     }
   }
 
-  copyToClipboard(text: string){
-    let textarea = document.createElement('textarea');
+  copyToClipboard(text: string) {
+    const textarea = document.createElement('textarea');
     textarea.style.position = 'fixed';
     textarea.style.left = '0';
     textarea.style.top = '0';
