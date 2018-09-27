@@ -55,6 +55,24 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     }
   }
 
+  hasDnsServerError(i): boolean {
+    const group = this.machineNetworksForm as FormGroup;
+    const array = group.controls['machineNetworks'] as FormArray;
+    const controlGroup = group.controls[i] as FormGroup;
+
+    if (!!this.chipList) {
+      if (controlGroup.controls.dnsServers.hasError('required') && controlGroup.controls.gateway.touched && controlGroup.controls.cidr.touched) {
+        this.chipList.errorState = true;
+        return true;
+      } else {
+        this.chipList.errorState = false;
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
   getMachineNetworksForm(form) {
     return form.get('machineNetworks').controls;
   }
@@ -109,9 +127,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   setMachineNetworkSpec() {
     const machineNetworksMap = [];
     for (const i in this.machineNetworksForm.controls.machineNetworks.value) {
-      if (this.machineNetworksForm.controls.machineNetworks.value[i].dnsServers.length === 0) {
-        this.chipList.errorState = true;
-      } else if (this.machineNetworksForm.controls.machineNetworks.value[i].cidr !== '' &&
+      if (this.machineNetworksForm.controls.machineNetworks.value[i].cidr !== '' &&
         this.machineNetworksForm.controls.machineNetworks.value[i].dnsServers !== '' &&
         this.machineNetworksForm.controls.machineNetworks.value[i].gateway !== '') {
         machineNetworksMap.push(this.machineNetworksForm.controls.machineNetworks.value[i]);

@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef, Compo
 import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { gt } from 'semver';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ApiService, WizardService } from '../../core/services';
 import { ClusterEntity, MasterVersion, MachineNetwork } from '../../shared/entity/ClusterEntity';
@@ -18,6 +19,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   public machineNetworkData: MachineNetwork[] = [];
   public masterVersions: MasterVersion[] = [];
   public defaultVersion: string;
+  public checkMachineNetworksTooltip = '';
   public inhalt = [];
   private subscriptions: Subscription[] = [];
   @ViewChild('machineNetworksComponent', { read: ViewContainerRef }) container: ViewContainerRef;
@@ -31,7 +33,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this.clusterSpecForm = new FormGroup({
       name: new FormControl(this.cluster.name, [Validators.required, Validators.minLength(5)]),
       version: new FormControl(this.cluster.spec.version),
-      checkMachineNetworks: new FormControl(),
+      checkMachineNetworks: new FormControl({value: false, disabled: true}),
     });
 
     this.subscriptions.push(this.clusterSpecForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
@@ -54,8 +56,28 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }
   }
 
+
   public generateName() {
     this.clusterSpecForm.patchValue({ name: this.nameGenerator.generateName() });
+  }
+
+  versionChanged() {
+    const shouldDisable = this.disableMachineNetworkConfiguration(this.clusterSpecForm.controls.version.value);
+    const checkMachineNetworks = this.clusterSpecForm.get('checkMachineNetworks');
+    if (!!shouldDisable) {
+      checkMachineNetworks.disable();
+      this.checkMachineNetworksTooltip = 'Option "Configure Machine Networks" is only allowed if Master Version >= 1.9.0';
+    } else {
+      checkMachineNetworks.enable();
+    }
+  }
+
+  disableMachineNetworkConfiguration(version: string): boolean {
+    if (!!version && gt(version, '1.8.9')) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   loadMasterVersions() {
@@ -65,6 +87,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
         if (versions[i].default) {
           this.defaultVersion = versions[i].version;
           this.clusterSpecForm.controls.version.setValue(versions[i].version);
+          this.versionChanged();
         }
       }
     }));
