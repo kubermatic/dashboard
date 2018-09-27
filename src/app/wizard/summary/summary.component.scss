@@ -63,6 +63,10 @@ input[type="password"].km-card-list-secret {
   height: 26px;
   line-height: 26px;
 
+  &.machine-networks {
+    padding-bottom: 15px;
+  }
+
   &.provider {
     height: auto;
     line-height: 50px;
@@ -71,6 +75,10 @@ input[type="password"].km-card-list-secret {
     .provider-logo {
       padding-top: 10px;
     }
+  }
+
+  .machine-networks-dns-server {
+    word-break: break-all;
   }
 }
 

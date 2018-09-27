@@ -71,30 +71,30 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   setClusterSpec() {
+    let isValid = false;
+
     if (!!this.clusterSpecForm.controls.checkMachineNetworks.value) {
       if (this.machineNetworkData.length > 0) {
-        this.wizardService.changeClusterSpec({
-          name: this.clusterSpecForm.controls.name.value,
-          version: this.clusterSpecForm.controls.version.value,
-          machineNetworks: this.machineNetworkData,
-          valid: this.clusterSpecForm.valid,
-        });
+        for (const i in this.machineNetworkData) {
+          if (this.machineNetworkData[i].cidr !== '' && this.machineNetworkData[i].dnsServers.length > 0 && this.machineNetworkData[i].gateway !== '') {
+            isValid = true;
+          } else {
+            isValid = false;
+          }
+        }
       } else {
-        this.wizardService.changeClusterSpec({
-          name: this.clusterSpecForm.controls.name.value,
-          version: this.clusterSpecForm.controls.version.value,
-          machineNetworks: this.machineNetworkData,
-          valid: false,
-        });
+        isValid = false;
       }
     } else {
-      this.wizardService.changeClusterSpec({
-        name: this.clusterSpecForm.controls.name.value,
-        version: this.clusterSpecForm.controls.version.value,
-        machineNetworks: this.machineNetworkData,
-        valid: this.clusterSpecForm.valid,
-      });
+      isValid = this.clusterSpecForm.valid;
     }
+
+    this.wizardService.changeClusterSpec({
+      name: this.clusterSpecForm.controls.name.value,
+      version: this.clusterSpecForm.controls.version.value,
+      machineNetworks: this.machineNetworkData,
+      valid: isValid,
+    });
   }
 
 }

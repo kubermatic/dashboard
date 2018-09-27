@@ -211,6 +211,48 @@
       </div>
     </div>
 
+    <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" *ngIf="cluster.spec.machineNetworks.length > 0">
+      <div fxFlex="100%" class="km-summary-container">
+        <div class="km-summary-full km-summary-box">
+          <h3>Machine Networks</h3>
+          <div class="node-settings" fxLayout>
+
+              <div class="km-card-list-content machine-networks" fxFlex="50%" *ngFor="let network of cluster.spec.machineNetworks; let i=index">
+                <div fxLayout="column">
+                  <strong>Machine Network #{{i+1}}</strong>
+                  <div fxLayout="row">
+                    <div fxFlex="50%" class="km-card-list-key">
+                      CIDR Range
+                    </div>
+                    <div fxFlex="50%">
+                    {{ network.cidr }}
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="50%" class="km-card-list-key">
+                      DNS Server
+                    </div>
+                    <div fxFlex="50%" class="machine-networks-dns-server">
+                    {{ network.dnsServers }}
+                    </div>
+                  </div>
+                  <div fxLayout="row">
+                    <div fxFlex="50%" class="km-card-list-key">
+                      Gateway
+                    </div>
+                    <div fxFlex="50%">
+                    {{ network.gateway }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
     <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" *ngIf="!cluster.spec.cloud.bringyourown">
       <div fxFlex="100%" class="km-summary-container">
         <div class="km-summary-full km-summary-box">
