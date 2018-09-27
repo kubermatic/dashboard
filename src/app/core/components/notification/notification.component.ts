@@ -55,14 +55,15 @@ export class NotificationComponent {
 
   registerClickHandler(notification: Notification) {
     if (notification) {
+      const message = `${notification.title}: ${notification.content}`;
       notification.click.subscribe(() => {
         // TODO: Use navigator.clipboard instead of navigator['clipboard'] once TypeScript will support it.
         if (navigator['clipboard']) {
-          navigator['clipboard'].writeText(notification.content);
+          navigator['clipboard'].writeText(message);
         } else {
           // TODO: This fallback should be removed once Clipboard API will be widely adopted:
           // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard#Browser_compatibility
-          this.copyToClipboard(notification.content);
+          this.copyToClipboard(message);
         }
       });
     }
