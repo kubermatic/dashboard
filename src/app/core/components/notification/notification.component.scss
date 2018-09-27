@@ -1,3 +1,3 @@
-simple-notifications {
-    z-index: 9999;
+simple-notifications /deep/ *  {
+    z-index: 2000;
 }
