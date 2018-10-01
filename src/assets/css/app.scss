@@ -86,8 +86,13 @@ html, body {
   }
 }
 
-// Sidenav
+// Notifications
+simple-notifications *  {
+  cursor: auto;
+  z-index: 2000;
+}
 
+// Sidenav
 .mat-nav-list {
   .mat-list-item-content {
     padding: 0 !important;

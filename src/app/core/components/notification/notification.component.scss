@@ -1,3 +1,18 @@
-simple-notifications {
-    z-index: 9999;
+simple-notifications > *  {
+    cursor: auto;
+    z-index: 2000 !important;
+}
+
+simple-notifications .sn-close-button {
+    cursor: pointer;
+}
+
+simple-notifications .sn-copy-button {
+    cursor: pointer;
+    margin-left: 12px;
+}
+
+simple-notifications .sn-controls {
+    font-size: 12px;
+    margin-top: 4px;
 }
