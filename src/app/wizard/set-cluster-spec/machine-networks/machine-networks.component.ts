@@ -31,9 +31,9 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     for (const i in this.cluster.spec.machineNetworks) {
       if (this.cluster.spec.machineNetworks.hasOwnProperty(i)) {
         machineNetworksList.push(new FormGroup({
-          cidr: new FormControl('', [Validators.required, Validators.pattern(/^(\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\/\d{1,2})$/)]),
+          cidr: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)]),
           dnsServers: new FormControl([], [Validators.required]),
-          gateway: new FormControl('', [Validators.required, Validators.pattern(/^(\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3})$/)])
+          gateway: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)])
         }));
       }
     }
@@ -41,6 +41,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     this.machineNetworksForm = new FormGroup({
       machineNetworks: machineNetworksList
     });
+
 
     this.subscriptions.push(this.machineNetworksForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.setMachineNetworkSpec();
@@ -55,13 +56,13 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     }
   }
 
-  hasDnsServerError(i): boolean {
+  hasDnsServerError(i: number): boolean {
     const group = this.machineNetworksForm as FormGroup;
     const array = group.controls['machineNetworks'] as FormArray;
-    const controlGroup = group.controls[i] as FormGroup;
+    const control = array.controls[i] as FormGroup;
 
     if (!!this.chipList) {
-      if (controlGroup.controls.dnsServers.hasError('required') && controlGroup.controls.gateway.touched && controlGroup.controls.cidr.touched) {
+      if (control.controls.dnsServers.hasError('required') && control.controls.gateway.touched && control.controls.cidr.touched) {
         this.chipList.errorState = true;
         return true;
       } else {
@@ -80,9 +81,9 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   addMachineNetwork() {
     this.machineNetworks = <FormArray>this.machineNetworksForm.get('machineNetworks');
     this.machineNetworks.push(new FormGroup({
-      cidr: new FormControl('', [Validators.required, Validators.pattern(/^(\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\/\d{1,2})$/)]),
+      cidr: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)]),
       dnsServers: new FormControl([], [Validators.required]),
-      gateway: new FormControl('', [Validators.required, Validators.pattern(/^(\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3})$/)])
+      gateway: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)])
     }));
   }
 
@@ -95,7 +96,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   addDnsServer(event: MatChipInputEvent, index: number): void {
     const input = event.input;
     const value = event.value;
-    if ((value.trim()).match(/^(\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3}\.{1}\d{1,3})$/) === null) {
+    if ((value.trim()).match(/^((\d{1,3}\.){3}\d{1,3})$/) === null) {
       this.chipList.errorState = true;
       this.invalidDnsServer = true;
       return;

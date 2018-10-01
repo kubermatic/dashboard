@@ -1,12 +1,37 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../shared/entity/ClusterEntity';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import {WizardService, DatacenterService, ProjectService} from '../core/services';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
 import { OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import { ActivatedRoute } from '@angular/router';
+
+export function ipsMissing(cluster: ClusterEntity): ValidatorFn {
+  return (control: AbstractControl): {[key: string]: any} | null => {
+    if (!!cluster.spec.machineNetworks) {
+      let ipCount = 0;
+
+      for (const i in cluster.spec.machineNetworks) {
+        if (cluster.spec.machineNetworks.hasOwnProperty(i)) {
+          const cidr = +cluster.spec.machineNetworks[i].cidr.split('/')[1];
+          ipCount += ( 2 ** ( 32 - cidr )) - 2;
+        }
+      }
+
+      if (!!ipCount && ipCount > 0) {
+        if ((ipCount - control.value) >= 0) {
+          return null;
+        } else {
+          return {'ipsMissing': true};
+        }
+      }
+    } else {
+      return null;
+    }
+  };
+}
 
 @Component({
   selector: 'kubermatic-add-node',
@@ -34,9 +59,11 @@ export class AddNodeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.nodeForm = new FormGroup({
-      count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1)]),
+      count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1), ipsMissing(this.cluster)]),
       operatingSystem: new FormControl(Object.keys(this.nodeData.node.spec.operatingSystem)[0], Validators.required),
     });
+
+    this.nodeForm.controls.count.markAsTouched();
 
     let distUpgradeOnBootUbuntu = false;
     let distUpgradeOnBootCentos = false;

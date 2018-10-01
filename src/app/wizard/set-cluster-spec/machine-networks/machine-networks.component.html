@@ -14,6 +14,9 @@
               <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.cidr.hasError('required')">
                 CIDR is <strong>required</strong>
               </mat-error>
+              <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.cidr.hasError('pattern')">
+                Pattern is not valid
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="km-machine-networks-form-field">
               <mat-chip-list #chipList>
@@ -36,6 +39,9 @@
               <input matInput formControlName="gateway" placeholder="Gateway *" autocomplete="off">
               <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.gateway.hasError('required')">
                 Gateway is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.gateway.hasError('pattern')">
+                Pattern is not valid
               </mat-error>
             </mat-form-field>
           </div>
