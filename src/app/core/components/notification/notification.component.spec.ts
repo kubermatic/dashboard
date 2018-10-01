@@ -9,6 +9,7 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 
 import { NotificationComponent } from './notification.component';
 import { NotificationsService, SimpleNotificationsModule } from 'angular2-notifications';
+import { ClipboardModule } from 'ngx-clipboard';
 
 const modules: any[] = [
   BrowserModule,
@@ -16,6 +17,7 @@ const modules: any[] = [
   RouterTestingModule,
   NgReduxTestingModule,
   BrowserAnimationsModule,
+  ClipboardModule,
   SimpleNotificationsModule.forRoot()
 ];
 
