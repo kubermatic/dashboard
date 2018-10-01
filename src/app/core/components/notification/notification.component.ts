@@ -1,5 +1,6 @@
 import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
+import { ClipboardService } from 'ngx-clipboard';
 import { NotificationsService, Notification } from 'angular2-notifications';
 import { NotificationToast, NotificationToastType } from '../../../shared/interfaces/notification-toast.interface';
 import { select } from '@angular-redux/store';
@@ -26,7 +27,7 @@ export class NotificationComponent {
 
   @select(['notification', 'toast']) notification$: Observable<NotificationToast>;
 
-  constructor(private _service: NotificationsService) {
+  constructor(private _service: NotificationsService, private _clipboard: ClipboardService) {
     this.notification$.subscribe(toast => {
       if (toast) {
         this.createToast(toast);
@@ -61,26 +62,11 @@ export class NotificationComponent {
         if (navigator['clipboard']) {
           navigator['clipboard'].writeText(message);
         } else {
-          // TODO: This fallback should be removed once Clipboard API will be widely adopted:
+          // TODO: This fallback can be removed once Clipboard API will be widely adopted:
           // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard#Browser_compatibility
-          this.copyToClipboard(message);
+          this._clipboard.copyFromContent(message);
         }
       });
     }
   }
-
-  copyToClipboard(text: string) {
-    const textarea = document.createElement('textarea');
-    textarea.style.position = 'fixed';
-    textarea.style.left = '0';
-    textarea.style.top = '0';
-    textarea.style.opacity = '0';
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.focus();
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-  }
-
 }
