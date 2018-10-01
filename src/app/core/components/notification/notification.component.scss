@@ -1,18 +1,18 @@
-simple-notifications /deep/ *  {
+simple-notifications > *  {
     cursor: auto;
-    z-index: 2000;
+    z-index: 2000 !important;
 }
 
-:host /deep/ simple-notifications .sn-close-button {
+simple-notifications .sn-close-button {
     cursor: pointer;
 }
 
-:host /deep/ simple-notifications .sn-copy-button {
+simple-notifications .sn-copy-button {
     cursor: pointer;
     margin-left: 12px;
 }
 
-:host /deep/ simple-notifications .sn-controls {
+simple-notifications .sn-controls {
     font-size: 12px;
     margin-top: 4px;
 }
