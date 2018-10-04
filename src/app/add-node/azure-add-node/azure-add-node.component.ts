@@ -18,6 +18,7 @@ import { AzureSizes } from '../../shared/entity/provider/azure/AzureSizeEntity';
 export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
+  @Input() public clusterName: string;
 
   public sizes: AzureSizes;
   public azureNodeForm: FormGroup;
@@ -71,11 +72,21 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
 
   reloadAzureSizes() {
     if (this.cloudSpec.dc) {
-      if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
-        this.subscriptions.push(this.api.getAzureSizes(this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret, this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe(data => {
-          this.sizes = data;
-          this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
-        }));
+      if (!!this.clusterName && this.clusterName.length > 0) {
+        if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
+          this.subscriptions.push(this.api.getAzureSizes(this.cloudSpec.dc, this.clusterName).subscribe(data => {
+            this.sizes = data;
+            this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
+          }));
+        }
+      } else {
+        // Cluster name is not yet available in create wizard and token has to be used here.
+        if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
+          this.subscriptions.push(this.api.getAzureSizesInWizard(this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret, this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe(data => {
+            this.sizes = data;
+            this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
+          }));
+        }
       }
     } else {
       this.getDatacenter();

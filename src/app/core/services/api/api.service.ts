@@ -149,13 +149,18 @@ export class ApiService {
     return this.http.get<MasterVersion[]>(url, { headers: this.headers });
   }
 
-  getAzureSizes(clientID: string, clientSecret: string, subscriptionID: string, tenantID: string, location: string): Observable<AzureSizes> {
+  getAzureSizesInWizard(clientID: string, clientSecret: string, subscriptionID: string, tenantID: string, location: string): Observable<AzureSizes> {
     this.headers = this.headers.set('ClientID', clientID);
     this.headers = this.headers.set('ClientSecret', clientSecret);
     this.headers = this.headers.set('SubscriptionID', subscriptionID);
     this.headers = this.headers.set('TenantID', tenantID);
     this.headers = this.headers.set('Location', location);
     const url = `${this.restRoot}/azure/sizes`;
+    return this.http.get<AzureSizes>(url, { headers: this.headers });
+  }
+
+  getAzureSizes(dc: string, cluster: string): Observable<AzureSizes> {
+    const url = `${this.restRoot}/dc/${dc}/cluster/${cluster}/azure/sizes`;
     return this.http.get<AzureSizes>(url, { headers: this.headers });
   }
 }

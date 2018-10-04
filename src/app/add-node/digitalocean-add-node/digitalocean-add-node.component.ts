@@ -17,6 +17,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   @Input() public cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() public clusterName: string;
+  
   public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
   public loadingSizes = false;
   public doNodeForm: FormGroup;

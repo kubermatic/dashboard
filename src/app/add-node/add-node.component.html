@@ -13,7 +13,7 @@
 
   <kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-vsphere-add-node>
   
-  <kubermatic-azure-add-node *ngIf="cluster.spec.cloud.azure" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-azure-add-node>
+  <kubermatic-azure-add-node *ngIf="cluster.spec.cloud.azure" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData" [clusterName]="cluster.metadata.name"></kubermatic-azure-add-node>
 
   <mat-form-field class="operating-system">
     <mat-select placeholder="Operating System*:" formControlName="operatingSystem">
