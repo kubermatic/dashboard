@@ -83,9 +83,14 @@ export class ApiService {
     return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.headers });
   }
 
-  getDigitaloceanSizes(token: string): Observable<DigitaloceanSizes> {
+  getDigitaloceanSizesInWizard(token: string): Observable<DigitaloceanSizes> {
     this.headers = this.headers.set('DoToken', token);
     const url = `${this.restRoot}/digitalocean/sizes`;
+    return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
+  }
+
+  getDigitaloceanSizes(dc: string, cluster: string): Observable<DigitaloceanSizes> {
+    const url = `${this.restRoot}/dc/${dc}/cluster/${cluster}/digitalocean/sizes`;
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
   }
 

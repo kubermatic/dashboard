@@ -5,7 +5,7 @@
 
   <kubermatic-aws-add-node *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-aws-add-node>
 
-  <kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-digitalocean-add-node>
+  <kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData" [clusterName]="cluster.metadata.name"></kubermatic-digitalocean-add-node>
 
   <kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-openstack-add-node>
 
