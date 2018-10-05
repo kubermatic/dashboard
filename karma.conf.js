@@ -11,7 +11,6 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('karma-chrome-launcher'),
-      require('karma-phantomjs-launcher'),
       require('@angular-devkit/build-angular/plugins/karma'),
       require('@angular/material')
     ],
@@ -39,7 +38,7 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ['ChromeHeadless', 'PhantomJS', 'Chrome'],
+    browsers: ['ChromeHeadless', 'Chrome'],
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',
