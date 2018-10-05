@@ -17,7 +17,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   @Input() public cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() public clusterName: string;
-  
+
   public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
   public loadingSizes = false;
   public doNodeForm: FormGroup;
@@ -47,7 +47,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
     } else {
       // Cluster name is not yet available in create wizard and token has to be used here.
       if (this.cloudSpec.digitalocean.token) {
-        this.subscriptions.push(this.api.getDigitaloceanSizesInWizard(this.cloudSpec.digitalocean.token).subscribe(data => {
+        this.subscriptions.push(this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe(data => {
           this.sizes = data;
           this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
         }));

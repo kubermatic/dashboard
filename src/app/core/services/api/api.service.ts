@@ -83,7 +83,7 @@ export class ApiService {
     return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.headers });
   }
 
-  getDigitaloceanSizesInWizard(token: string): Observable<DigitaloceanSizes> {
+  getDigitaloceanSizesForWizard(token: string): Observable<DigitaloceanSizes> {
     this.headers = this.headers.set('DoToken', token);
     const url = `${this.restRoot}/digitalocean/sizes`;
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
@@ -109,34 +109,59 @@ export class ApiService {
     this.headers = this.headers.set('DatacenterName', datacenterName);
   }
 
-  getOpenStackFlavors(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackFlavor[]> {
+  getOpenStackFlavorsForWizard(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackFlavor[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     this.headers = this.headers.set('Tenant', tenant);
     const url = `${this.restRoot}/openstack/sizes`;
     return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
   }
 
-  getOpenStackTenants(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackTenant[]> {
+  getOpenStackFlavors(dc: string, cluster: string): Observable<OpenstackFlavor[]> {
+    const url = `${this.restRoot}/dc/${dc}/cluster/${cluster}/openstack/sizes`;
+    return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackTenantsForWizard(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackTenant[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     const url = `${this.restRoot}/openstack/tenants`;
     return this.http.get<OpenstackTenant[]>(url, { headers: this.headers });
   }
 
-  getOpenStackSecurityGroups(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackSecurityGroup[]> {
+  getOpenStackTenants(dc: string, cluster: string): Observable<OpenstackTenant[]> {
+    const url = `${this.restRoot}/dc/${dc}/cluster/${cluster}/openstack/tenants`;
+    return this.http.get<OpenstackTenant[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackSecurityGroupsForWizard(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackSecurityGroup[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     const url = `${this.restRoot}/openstack/securitygroups`;
     return this.http.get<OpenstackSecurityGroup[]>(url, { headers: this.headers });
   }
 
-  getOpenStackNetwork(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackNetwork[]> {
+  getOpenStackSecurityGroups(dc: string, cluster: string): Observable<OpenstackSecurityGroup[]> {
+    const url = `${this.restRoot}/dc/${dc}/cluster/${cluster}/openstack/securitygroups`;
+    return this.http.get<OpenstackSecurityGroup[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackNetworkForWizard(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackNetwork[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     const url = `${this.restRoot}/openstack/networks`;
     return this.http.get<OpenstackNetwork[]>(url, { headers: this.headers });
   }
 
-  getOpenStackSubnetIds(username: string, password: string, domain: string, datacenterName: string, network: string): Observable<OpenstackSubnet[]> {
+  getOpenStackNetwork(dc: string, cluster: string): Observable<OpenstackNetwork[]> {
+    const url = `${this.restRoot}/dc/${dc}/cluster/${cluster}/openstack/networks`;
+    return this.http.get<OpenstackNetwork[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackSubnetIdsForWizard(username: string, password: string, domain: string, datacenterName: string, network: string): Observable<OpenstackSubnet[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     const url = `${this.restRoot}/openstack/subnets?network_id=${network}`;
+    return this.http.get<OpenstackSubnet[]>(url, { headers: this.headers });
+  }
+
+  getOpenStackSubnetIds(dc: string, cluster: string, network: string): Observable<OpenstackSubnet[]> {
+    const url = `${this.restRoot}/dc/${dc}/cluster/${cluster}/openstack/subnets?network_id=${network}`;
     return this.http.get<OpenstackSubnet[]>(url, { headers: this.headers });
   }
 
@@ -149,7 +174,7 @@ export class ApiService {
     return this.http.get<MasterVersion[]>(url, { headers: this.headers });
   }
 
-  getAzureSizesInWizard(clientID: string, clientSecret: string, subscriptionID: string, tenantID: string, location: string): Observable<AzureSizes> {
+  getAzureSizesForWizard(clientID: string, clientSecret: string, subscriptionID: string, tenantID: string, location: string): Observable<AzureSizes> {
     this.headers = this.headers.set('ClientID', clientID);
     this.headers = this.headers.set('ClientSecret', clientSecret);
     this.headers = this.headers.set('SubscriptionID', subscriptionID);
