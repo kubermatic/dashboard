@@ -17,6 +17,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   @Input() public cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() public clusterName: string;
+  @Input() public seedDCName: string;
 
   public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
   public loadingSizes = false;
@@ -40,7 +41,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
 
   reloadDigitaloceanSizes() {
     if (!!this.clusterName && this.clusterName.length > 0) {
-      this.subscriptions.push(this.api.getDigitaloceanSizes(this.cloudSpec.dc, this.clusterName).subscribe(data => {
+      this.subscriptions.push(this.api.getDigitaloceanSizes(this.seedDCName, this.clusterName).subscribe(data => {
         this.sizes = data;
         this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
       }));

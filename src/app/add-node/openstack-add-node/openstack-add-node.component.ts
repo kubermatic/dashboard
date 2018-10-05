@@ -16,6 +16,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
   @Input() public clusterName: string;
+  @Input() public seedDCName: string;
 
   public flavors: OpenstackFlavor[] = [];
   public loadingFlavors = false;
@@ -75,7 +76,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     if (this.flavors.length === 0) {
       if (!!this.clusterName && this.clusterName.length > 0) {
         this.loadingFlavors = true;
-        this.subscriptions.push(this.api.getOpenStackFlavors(this.cloudSpec.dc, this.clusterName).subscribe(flavors => this.handleFlavours(flavors)));
+        this.subscriptions.push(this.api.getOpenStackFlavors(this.seedDCName, this.clusterName).subscribe(flavors => this.handleFlavours(flavors)));
       } else {
         // Cluster name is not yet available in create wizard and credentials have to be used here.
         if (this.cloudSpec.openstack.username === '' || this.cloudSpec.openstack.password === '' ||
