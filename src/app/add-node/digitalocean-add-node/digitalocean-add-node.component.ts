@@ -40,22 +40,22 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   }
 
   isInWizard(): boolean {
-    return !!this.clusterName && this.clusterName.length > 0;
+    return !this.clusterName || this.clusterName.length === 0;
   }
 
   reloadDigitaloceanSizes() {
     if (this.isInWizard()) {
-      this.subscriptions.push(this.api.getDigitaloceanSizes(this.seedDCName, this.clusterName).subscribe(data => {
-        this.sizes = data;
-        this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
-      }));
-    } else {
       if (this.cloudSpec.digitalocean.token) {
         this.subscriptions.push(this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe(data => {
           this.sizes = data;
           this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
         }));
       }
+    } else {
+      this.subscriptions.push(this.api.getDigitaloceanSizes(this.seedDCName, this.clusterName).subscribe(data => {
+        this.sizes = data;
+        this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
+      }));
     }
   }
 

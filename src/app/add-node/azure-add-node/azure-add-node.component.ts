@@ -71,19 +71,22 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  isInWizard(): boolean {
+    return !this.clusterName || this.clusterName.length === 0;
+  }
+
   reloadAzureSizes() {
     if (this.cloudSpec.dc) {
-      if (!!this.clusterName && this.clusterName.length > 0) {
+      if (this.isInWizard()) {
         if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
-          this.subscriptions.push(this.api.getAzureSizes(this.seedDCName, this.clusterName).subscribe(data => {
+          this.subscriptions.push(this.api.getAzureSizesForWizard(this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret, this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe(data => {
             this.sizes = data;
             this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
           }));
         }
       } else {
-        // Cluster name is not yet available in create wizard and token has to be used here.
         if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
-          this.subscriptions.push(this.api.getAzureSizesForWizard(this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret, this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe(data => {
+          this.subscriptions.push(this.api.getAzureSizes(this.seedDCName, this.clusterName).subscribe(data => {
             this.sizes = data;
             this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
           }));
