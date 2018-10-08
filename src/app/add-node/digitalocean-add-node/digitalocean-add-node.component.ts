@@ -16,6 +16,9 @@ import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/Dro
 export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
+  @Input() public clusterName: string;
+  @Input() public seedDCName: string;
+
   public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
   public loadingSizes = false;
   public doNodeForm: FormGroup;
@@ -36,9 +39,20 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
+  isInWizard(): boolean {
+    return !this.clusterName || this.clusterName.length === 0;
+  }
+
   reloadDigitaloceanSizes() {
-    if (this.cloudSpec.digitalocean.token) {
-      this.subscriptions.push(this.api.getDigitaloceanSizes(this.cloudSpec.digitalocean.token).subscribe(data => {
+    if (this.isInWizard()) {
+      if (this.cloudSpec.digitalocean.token) {
+        this.subscriptions.push(this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe(data => {
+          this.sizes = data;
+          this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
+        }));
+      }
+    } else {
+      this.subscriptions.push(this.api.getDigitaloceanSizes(this.seedDCName, this.clusterName).subscribe(data => {
         this.sizes = data;
         this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
       }));

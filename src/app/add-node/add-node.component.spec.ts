@@ -27,12 +27,16 @@ describe('AddNodeComponent', () => {
   let fixture: ComponentFixture<AddNodeComponent>;
   let component: AddNodeComponent;
   let getDigitaloceanSizesSpy: Spy;
+  let getDigitaloceanSizesForWizardSpy: Spy;
   let getOpenStackFlavorsSpy: Spy;
+  let getOpenStackFlavorsSpyForWizard: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getOpenStackFlavors']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard']);
     getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
+    getDigitaloceanSizesForWizardSpy = apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes));
     getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors));
+    getOpenStackFlavorsSpyForWizard = apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors));
 
     TestBed.configureTestingModule({
       imports: [

@@ -23,7 +23,7 @@ import { AzureAddNodeComponent } from '../../add-node/azure-add-node/azure-add-n
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
-import { ApiService } from '../../core/services';
+import { ApiService, DatacenterService } from '../../core/services';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { HetznerClusterSettingsComponent } from './provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './provider-settings/vsphere/vsphere.component';
@@ -32,16 +32,19 @@ import { HetznerAddNodeComponent } from '../../add-node/hetzner-add-node/hetzner
 import { VSphereAddNodeComponent } from '../../add-node/vsphere-add-node/vsphere-add-node.component';
 import { VSphereOptionsComponent } from '../../add-node/vsphere-add-node/vsphere-options/vsphere-options.component';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
+import { DatacenterMockService } from '../../testing/services/datacenter-mock.service';
 
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
   let component: SetSettingsComponent;
   let getDigitaloceanSizesSpy: Spy;
+  let getDigitaloceanSizesForWizardSpy: Spy;
   let getSSHKeysSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getSSHKeys']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys']);
     getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
+    getDigitaloceanSizesForWizardSpy = apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes));
     getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys));
 
     TestBed.configureTestingModule({
@@ -76,7 +79,8 @@ describe('SetSettingsComponent', () => {
       providers: [
         AddNodeService,
         WizardService,
-        {provide: ApiService, useValue: apiMock},
+        { provide: DatacenterService, useClass: DatacenterMockService },
+        { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();
   }));

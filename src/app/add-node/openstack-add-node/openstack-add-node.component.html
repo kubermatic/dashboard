@@ -2,9 +2,8 @@
   <div fxFlex class="mat-select-container">
     <mat-form-field>
       <mat-select placeholder="Flavor*:" formControlName="flavor">
-        <mat-option *ngIf="!loadingFlavors && (cloudSpec.openstack.username === '' || cloudSpec.openstack.password === '' || cloudSpec.openstack.tenant === '' || cloudSpec.openstack.domain === '')" [value]="0">Please enter your credentials first!</mat-option>
+        <mat-option *ngIf="!loadingFlavors && isInWizard() && !hasCredentials()" [value]="0">Please enter your credentials first!</mat-option>
         <mat-option *ngIf="loadingFlavors" [value]="0">Loading sizes...</mat-option>
-
         <mat-option *ngFor="let flavor of flavors" [value]="flavor.slug">
         {{flavor.slug}} - {{ flavor.memory / 1024 }} GB RAM, {{ flavor.vcpus }} CPU{{ (flavor.vcpus!=1) ? 's' : '' }}, {{ flavor.disk }} GB Disk
         </mat-option>

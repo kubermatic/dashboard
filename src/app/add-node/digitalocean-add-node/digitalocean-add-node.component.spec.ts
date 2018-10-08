@@ -25,8 +25,8 @@ describe('DigitaloceanAddNodeComponent', () => {
   let getDigitaloceanSizesSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes']);
-    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes));
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizesForWizard']);
+    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes));
     TestBed.configureTestingModule({
       imports: [
         ...modules,

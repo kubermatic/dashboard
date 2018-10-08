@@ -28,8 +28,8 @@ describe('AzureAddNodeComponent', () => {
   let getDatacenterSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getAzureSizes']);
-    getAzureSizesSpy = apiMock.getAzureSizes.and.returnValue(asyncData(fakeAzureSizes));
+    const apiMock = jasmine.createSpyObj('ApiService', ['getAzureSizesForWizard']);
+    getAzureSizesSpy = apiMock.getAzureSizesForWizard.and.returnValue(asyncData(fakeAzureSizes));
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
     getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAzureDatacenter));
 

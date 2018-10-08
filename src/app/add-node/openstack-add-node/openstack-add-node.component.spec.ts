@@ -18,8 +18,8 @@ describe('OpenstackAddNodeComponent', () => {
   let getOpenStackFlavorsSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavors']);
-    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors));
+    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavorsForWizard']);
+    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors));
 
     TestBed.configureTestingModule({
       imports: [
