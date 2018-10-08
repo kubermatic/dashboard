@@ -38,10 +38,10 @@ export class ProjectItemComponent implements OnInit {
     }
   }
 
-  public selectProject() {
+  public selectProject(): void {
     if (!this.clickedDeleteProject[this.project.id]) {
       this.projectService.changeSelectedProject(this.project);
-      this.projectService.storeProject(this.project.id);
+      this.projectService.storeProject(this.project);
     }
   }
 

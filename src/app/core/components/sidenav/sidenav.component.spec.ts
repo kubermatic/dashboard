@@ -10,20 +10,19 @@ import { MockComponent } from 'ng2-mock-component';
 
 import { SidenavComponent } from './sidenav.component';
 
-import { ApiService, ProjectService, UserService } from './../../../core/services';
+import { ApiService, ProjectService, UserService } from '../../services';
 import { AppConfigService } from '../../../app-config.service';
 
 import { SharedModule } from '../../../shared/shared.module';
-import { RouterTestingModule, RouterLinkStubDirective, RouterStub } from '../../../testing/router-stubs';
-import { click } from './../../../testing/utils/click-handler';
+import { RouterTestingModule, RouterLinkStubDirective } from '../../../testing/router-stubs';
+import { click } from '../../../testing/utils/click-handler';
 
-import { asyncData } from './../../../testing/services/api-mock.service';
-import { ProjectMockService } from './../../../testing/services/project-mock.service';
-import { UserMockService } from './../../../testing/services/user-mock.service';
-import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
+import { asyncData } from '../../../testing/services/api-mock.service';
+import { ProjectMockService } from '../../../testing/services/project-mock.service';
+import { UserMockService } from '../../../testing/services/user-mock.service';
+import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
 
-import { fakeProjects } from './../../../testing/fake-data/project.fake';
-import { fakeUserGroupConfig } from './../../../testing/fake-data/userGroupConfig.fake';
+import { fakeProjects } from '../../../testing/fake-data/project.fake';
 import Spy = jasmine.Spy;
 
 const modules: any[] = [

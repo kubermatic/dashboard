@@ -18,7 +18,7 @@ export class AddProjectComponent implements OnInit {
               private dialogRef: MatDialogRef<AddProjectComponent>) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.addProjectForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
     });
@@ -28,7 +28,7 @@ export class AddProjectComponent implements OnInit {
     const createProject: CreateProjectModel = { name: this.addProjectForm.controls.name.value };
     this.api.createProject(createProject).subscribe(res => {
       this.projectService.changeSelectedProject(res);
-      this.projectService.storeProject(res.id);
+      this.projectService.storeProject(res);
       this.dialogRef.close(res);
       NotificationActions.success('Success', `Project is added successfully`);
     });

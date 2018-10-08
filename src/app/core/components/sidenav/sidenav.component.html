@@ -5,9 +5,9 @@
       <mat-list-item class="km-projects">
         <div class="km-projects-container">
           <mat-label>Selected Project</mat-label>
-          <mat-select #select placeholder="Select Project" (selectionChange)="selectionChange($event, selectedProject, select)" [ngModel]="selectedProject" disableOptionCentering>
+          <mat-select #select placeholder="Select Project" (selectionChange)="selectionChange($event, selectedProject, select)" [ngModel]="selectedProject" [compareWith]="compareProjectsEquality" disableOptionCentering>
             <mat-option (click)="addProject()">+ Add Project</mat-option>
-            <mat-option *ngFor="let project of projects" [value]="project.id">
+            <mat-option *ngFor="let project of projects" [value]="project">
               {{ project.name }}
             </mat-option>
           </mat-select>
@@ -15,19 +15,19 @@
       </mat-list-item>
 
       <mat-list-item [ngClass]="isProjectSelected('create-cluster')">
-        <a mat-line routerLink="/projects/{{selectedProject}}/wizard" [routerLinkActive]="['active']"><i class="fa fa-magic"></i> Create Cluster</a>
+        <a mat-line [routerLink]="getRouterLink('wizard')" [routerLinkActive]="['active']"><i class="fa fa-magic"></i> Create Cluster</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="isProjectSelected('clusters')">
-        <a mat-line routerLink="/projects/{{selectedProject}}/clusters" [routerLinkActive]="['active']"><i class="iconCluster" [ngClass]="setIconColor('/clusters') ? 'white' : 'black'"></i> Manage Clusters</a>
+        <a mat-line [routerLink]="getRouterLink('clusters')" [routerLinkActive]="['active']"><i class="iconCluster" [ngClass]="setIconColor('/clusters') ? 'white' : 'black'"></i> Manage Clusters</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="isProjectSelected('sshKeys')">
-        <a mat-line routerLink="/projects/{{selectedProject}}/sshkeys" [routerLinkActive]="['active']"><i class="iconKey" [ngClass]="setIconColor('/sshkeys') ? 'white' : 'black'"></i> Manage SSH keys</a>
+        <a mat-line [routerLink]="getRouterLink('sshkeys')" [routerLinkActive]="['active']"><i class="iconKey" [ngClass]="setIconColor('/sshkeys') ? 'white' : 'black'"></i> Manage SSH keys</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="isProjectSelected('members')">
-        <a mat-line routerLink="/projects/{{selectedProject}}/members" [routerLinkActive]="['active']"><i class="iconMember" [ngClass]="setIconColor('/members') ? 'white' : 'black'"></i> Members</a>
+        <a mat-line [routerLink]="getRouterLink('members')" [routerLinkActive]="['active']"><i class="iconMember" [ngClass]="setIconColor('/members') ? 'white' : 'black'"></i> Members</a>
       </mat-list-item>
 
       <mat-list-item>
