@@ -110,7 +110,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if (!!event && !!event.value) {
       for (const i in this.projects) {
         if (this.compareProjectsEquality(this.projects[i], event.value)) {
-          this.changeSelectedProject(this.projects[i])
+          this.changeSelectedProject(this.projects[i]);
           this.router.navigate(['/projects']);
         }
       }
