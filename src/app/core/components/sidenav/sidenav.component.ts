@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
 import { MatDialog, MatSelectChange } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { ApiService, ProjectService, UserService } from '../../services';
 import { AppConfigService } from '../../../app-config.service';
@@ -16,6 +16,8 @@ import { AddProjectComponent } from '../../../add-project/add-project.component'
 })
 
 export class SidenavComponent implements OnInit, OnDestroy {
+  private static readonly notActiveProjectRefreshInterval = 1500;
+
   public environment: any = environment;
   public projects: ProjectEntity[];
   public selectedProject: ProjectEntity;
@@ -47,26 +49,28 @@ export class SidenavComponent implements OnInit, OnDestroy {
       this.loadProjects();
       this.selectedProject = data;
     }));
+
+    this.registerProjectRefreshInterval();
+  }
+
+  private registerProjectRefreshInterval() {
+    this.subscriptions.push(interval(SidenavComponent.notActiveProjectRefreshInterval).subscribe(() => {
+      if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
+        this.api.getProjects().toPromise().then(res => {
+          this.projects = res;
+          for (const i in this.projects) {
+            if (this.compareProjectsEquality(this.projects[i], this.selectedProject)) {
+              this.selectedProject = this.projects[i];
+            }
+          }
+        });
+      }
+    }));
   }
 
   public isProjectSelected(viewName: string): string {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    if (this.selectedProject === undefined) {
-      return 'disabled';
-    } else if (this.selectedProject.status !== 'Active') {
-
-      // TODO Redirect from disabled pages?
-      // TODO Move subscribe to interval to load it until project will be active.
-      this.api.getProjects().subscribe(res => {
-        this.projects = res;
-        for (const i in this.projects) {
-          if (this.compareProjectsEquality(this.projects[i], this.selectedProject)) {
-            if (this.projects[i].status === 'Active') {
-            }
-          }
-        }
-      }).unsubscribe();
-
+    if (this.selectedProject === undefined || this.selectedProject.status !== 'Active') {
       return 'disabled';
     } else {
       if (!!this.userGroupConfig && this.userGroup) {
