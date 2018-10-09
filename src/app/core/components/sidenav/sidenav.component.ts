@@ -154,6 +154,24 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return `/projects/${selectedProjectId}/${target}`;
   }
 
+  public getSelectedProjectStateIconClass(): string {
+    let iconClass = '';
+    if (!!this.selectedProject) {
+      switch (this.selectedProject.status) {
+        case 'Active':
+          iconClass = 'fa fa-circle green';
+          break;
+        case 'Inactive':
+          iconClass = 'fa fa-spin fa-circle-o-notch orange';
+          break;
+        case 'Terminating':
+          iconClass = 'fa fa-circle-o red';
+          break;
+      }
+    }
+    return iconClass;
+  }
+
   ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
