@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -7,7 +7,6 @@ import { Subscription, ObservableInput, Subject, interval, combineLatest} from '
 import { retry, takeUntil } from 'rxjs/operators';
 
 import { NotificationActions } from '../../redux/actions/notification.actions';
-import { environment } from '../../../environments/environment';
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
 import { EditProviderSettingsComponent } from './edit-provider-settings/edit-provider-settings.component';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -40,7 +39,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public datacenter: DataCenterEntity;
   public sshKeys: SSHKeyEntity[] = [];
   public nodes: NodeEntity[] = [];
-  public stateOfTheAccordion: object[];
   public isClusterRunning: boolean;
   public clusterHealthClass: string;
   public health: HealthEntity;
@@ -239,7 +237,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public addNode(): void {
-    const data = new AddNodeModalData(this.cluster, this.nodeDc);
+    new AddNodeModalData(this.cluster, this.nodeDc);
     const modal = this.dialog.open(AddNodeModalComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;

@@ -16,14 +16,13 @@ import { AddProjectComponent } from '../../../add-project/add-project.component'
 })
 
 export class SidenavComponent implements OnInit, OnDestroy {
-  private static readonly notActiveProjectRefreshInterval = 1500;
-
   public environment: any = environment;
   public projects: ProjectEntity[];
   public selectedProject: ProjectEntity;
   public userGroup: string;
   public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
+  private readonly notActiveProjectRefreshInterval = 1500;
 
   constructor(public dialog: MatDialog,
               private api: ApiService,
@@ -53,14 +52,20 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.registerProjectRefreshInterval();
   }
 
-  private registerProjectRefreshInterval() {
-    this.subscriptions.push(interval(SidenavComponent.notActiveProjectRefreshInterval).subscribe(() => {
+  private changeSelectedProject(project: ProjectEntity): void {
+    this.projectService.changeSelectedProject(project);
+    this.projectService.storeProject(project);
+    this.selectedProject = project;
+  }
+
+  private registerProjectRefreshInterval(): void {
+    this.subscriptions.push(interval(this.notActiveProjectRefreshInterval).subscribe(() => {
       if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
         this.api.getProjects().toPromise().then(res => {
           this.projects = res;
           for (const i in this.projects) {
             if (this.compareProjectsEquality(this.projects[i], this.selectedProject)) {
-              this.selectedProject = this.projects[i];
+              this.changeSelectedProject(this.projects[i]);
             }
           }
         });
@@ -90,8 +95,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       if (!!projectFromStorage) {
         for (const i in this.projects) {
           if (this.compareProjectsEquality(this.projects[i], projectFromStorage)) {
-            this.projectService.changeSelectedProject(this.projects[i]);
-            this.selectedProject = this.projects[i];
+            this.changeSelectedProject(this.projects[i]);
             this.userGroupConfig = this.appConfigService.getUserGroupConfig();
             this.userService.currentUserGroup(this.projects[i].id).subscribe(group => {
               this.userGroup = group;
@@ -100,23 +104,14 @@ export class SidenavComponent implements OnInit, OnDestroy {
         }
       }
     });
-
   }
 
-  public selectionChange(event: MatSelectChange, previousValue: ProjectEntity, select): void {
-    const eventValue: ProjectEntity = event.value;
-
-    // The only option with undefined value is "Select Project". If it gets
-    // selected, we revert both the model and the control to the old value.
-    if (eventValue === undefined) {
-      this.selectedProject = previousValue;
-      select.value = previousValue;
-    } else {
+  public selectionChange(event: MatSelectChange): void {
+    if (!!event && !!event.value) {
       for (const i in this.projects) {
-        if (this.compareProjectsEquality(this.projects[i], eventValue)) {
-          this.projectService.changeSelectedProject(this.projects[i]);
-          this.projectService.storeProject(this.projects[i]);
-          this.router.navigate(['/projects/' + this.projects[i].id + '/clusters']);
+        if (this.compareProjectsEquality(this.projects[i], event.value)) {
+          this.changeSelectedProject(this.projects[i])
+          this.router.navigate(['/projects']);
         }
       }
     }
@@ -127,7 +122,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const sub = modal.afterClosed().subscribe(added => {
       if (added) {
         this.loadProjects();
-        this.router.navigate(['/projects/' + added.id + '/clusters']);
+        this.router.navigate(['/projects']);
       }
       sub.unsubscribe();
     });

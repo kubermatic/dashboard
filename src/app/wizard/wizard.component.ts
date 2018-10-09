@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, Subject, interval, of } from 'rxjs';
-import { takeUntil, catchError } from 'rxjs/operators';
-import { WizardService } from '../core/services/wizard/wizard.service';
-import { ClusterDatacenterForm, ClusterFormData, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
+import { Subscription, Subject, interval } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { WizardService } from '../core/services';
+import { ClusterDatacenterForm, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
 import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
@@ -29,7 +29,6 @@ export class WizardComponent implements OnInit, OnDestroy {
   public cluster: ClusterEntity;
   public node: NodeEntity;
   public clusterSpecFormData: ClusterSpecForm = { valid: false, name: '', version: '' };
-  public clusterFormData: ClusterFormData = { valid: false };
   public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
   public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
   public clusterProviderSettingsFormData: ClusterProviderSettingsForm = { valid: false };
