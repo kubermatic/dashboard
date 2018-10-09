@@ -102,9 +102,9 @@ describe('AddNodeModalComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the add node modal cmp', async(() => {
+  it('should create the add node modal cmp', () => {
     expect(component).toBeTruthy();
-  }));
+  });
 
   it('should call createClusterNode method from the api', fakeAsync(() => {
     component.addNode();
