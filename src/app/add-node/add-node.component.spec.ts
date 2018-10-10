@@ -10,7 +10,7 @@ import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-no
 import { OpenstackOptionsComponent } from './openstack-add-node/openstack-options/openstack-options.component';
 import { fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster } from '../testing/fake-data/cluster.fake';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
-import { WizardService } from '../core/services/wizard/wizard.service';
+import { WizardService } from '../core/services';
 import { ApiService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-data/addNodeModal.fake';
@@ -19,7 +19,7 @@ import { VSphereAddNodeComponent } from './vsphere-add-node/vsphere-add-node.com
 import { VSphereOptionsComponent } from './vsphere-add-node/vsphere-options/vsphere-options.component';
 import { AzureAddNodeComponent } from './azure-add-node/azure-add-node.component';
 import { nodeDataFake } from '../testing/fake-data/node.fake';
-import { DatacenterService } from '../core/services/datacenter/datacenter.service';
+import { DatacenterService } from '../core/services';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import Spy = jasmine.Spy;
 
@@ -27,12 +27,17 @@ describe('AddNodeComponent', () => {
   let fixture: ComponentFixture<AddNodeComponent>;
   let component: AddNodeComponent;
   let getDigitaloceanSizesSpy: Spy;
+  let getDigitaloceanSizesForWizardSpy: Spy;
   let getOpenStackFlavorsSpy: Spy;
+  let getOpenStackFlavorsForWizardSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getOpenStackFlavors']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes',
+      'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard']);
     getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    getDigitaloceanSizesForWizardSpy = apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
+    getOpenStackFlavorsForWizardSpy = apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors()));
 
     TestBed.configureTestingModule({
       imports: [

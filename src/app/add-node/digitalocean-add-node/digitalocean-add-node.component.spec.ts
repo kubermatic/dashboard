@@ -22,11 +22,11 @@ const modules: any[] = [
 describe('DigitaloceanAddNodeComponent', () => {
   let fixture: ComponentFixture<DigitaloceanAddNodeComponent>;
   let component: DigitaloceanAddNodeComponent;
-  let getDigitaloceanSizesSpy: Spy;
+  let getDigitaloceanSizesForWizardSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes']);
-    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizesForWizard']);
+    getDigitaloceanSizesForWizardSpy = apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     TestBed.configureTestingModule({
       imports: [
         ...modules,

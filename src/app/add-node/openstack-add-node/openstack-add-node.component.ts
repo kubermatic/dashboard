@@ -15,6 +15,9 @@ import { OpenstackFlavor } from '../../shared/entity/provider/openstack/Openstac
 export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
+  @Input() public projectId: string;
+  @Input() public clusterName: string;
+  @Input() public seedDCName: string;
 
   public flavors: OpenstackFlavor[] = [];
   public loadingFlavors = false;
@@ -59,27 +62,39 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     };
   }
 
-  public loadFlavors() {
-    if (
-      this.cloudSpec.openstack.username === '' ||
-      this.cloudSpec.openstack.password === '' ||
-      this.cloudSpec.openstack.tenant === '' ||
-      this.cloudSpec.openstack.domain === '' ||
-      this.flavors.length > 0) {
-      return;
-    }
+  isInWizard(): boolean {
+    return !this.clusterName || this.clusterName.length === 0;
+  }
 
-    this.loadingFlavors = true;
-    this.subscriptions.push(this.api.getOpenStackFlavors(this.cloudSpec.openstack.username, this.cloudSpec.openstack.password, this.cloudSpec.openstack.tenant, this.cloudSpec.openstack.domain, this.cloudSpec.dc).subscribe(
-      flavors => {
-        const sortedFlavors = flavors.sort((a, b) => {
-          return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
-        });
-        this.flavors = sortedFlavors;
-        if (sortedFlavors.length > 0 && this.osNodeForm.controls.flavor.value !== '0') {
-          this.osNodeForm.controls.flavor.setValue(this.nodeData.node.spec.cloud.openstack.flavor);
-        }
-        this.loadingFlavors = false;
-      }));
+  public hasCredentials(): boolean {
+    return this.cloudSpec.openstack.username.length > 0 && this.cloudSpec.openstack.password.length > 0 &&
+      this.cloudSpec.openstack.tenant.length > 0 && this.cloudSpec.openstack.domain.length > 0;
+  }
+
+  private handleFlavours(flavors: OpenstackFlavor[]): void {
+    const sortedFlavors = flavors.sort((a, b) => {
+      return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
+    });
+    this.flavors = sortedFlavors;
+    if (sortedFlavors.length > 0 && this.osNodeForm.controls.flavor.value !== '0') {
+      this.osNodeForm.controls.flavor.setValue(this.nodeData.node.spec.cloud.openstack.flavor);
+    }
+    this.loadingFlavors = false;
+  }
+
+  public loadFlavors() {
+    if (this.isInWizard()) {
+      if (!this.hasCredentials()) {
+        return;
+      }
+      this.loadingFlavors = true;
+      this.subscriptions.push(this.api.getOpenStackFlavorsForWizard(this.cloudSpec.openstack.username,
+        this.cloudSpec.openstack.password, this.cloudSpec.openstack.tenant, this.cloudSpec.openstack.domain,
+        this.cloudSpec.dc).subscribe(flavors => this.handleFlavours(flavors)));
+    } else {
+      this.loadingFlavors = true;
+      this.subscriptions.push(this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterName)
+        .subscribe(flavors => this.handleFlavours(flavors)));
+    }
   }
 }

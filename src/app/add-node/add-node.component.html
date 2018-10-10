@@ -3,17 +3,38 @@
     <input matInput formControlName="count" min="1" type="number" placeholder="Number of nodes*:" autocomplete="off">
   </mat-form-field>
 
-  <kubermatic-aws-add-node *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-aws-add-node>
+  <kubermatic-aws-add-node *ngIf="cluster.spec.cloud.aws"
+                           [cloudSpec]="cluster.spec.cloud"
+                           [nodeData]="nodeData"></kubermatic-aws-add-node>
 
-  <kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-digitalocean-add-node>
+  <kubermatic-digitalocean-add-node *ngIf="cluster.spec.cloud.digitalocean"
+                                    [cloudSpec]="cluster.spec.cloud"
+                                    [nodeData]="nodeData"
+                                    [projectId]="projectId"
+                                    [clusterName]="cluster.name"
+                                    [seedDCName]="seedDCName"></kubermatic-digitalocean-add-node>
 
-  <kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-openstack-add-node>
+  <kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack"
+                                 [cloudSpec]="cluster.spec.cloud"
+                                 [nodeData]="nodeData"
+                                 [projectId]="projectId"
+                                 [clusterName]="cluster.name"
+                                 [seedDCName]="seedDCName"></kubermatic-openstack-add-node>
 
-  <kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-hetzner-add-node>
+  <kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner"
+                               [cloudSpec]="cluster.spec.cloud"
+                               [nodeData]="nodeData"></kubermatic-hetzner-add-node>
 
-  <kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-vsphere-add-node>
-  
-  <kubermatic-azure-add-node *ngIf="cluster.spec.cloud.azure" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-azure-add-node>
+  <kubermatic-vsphere-add-node *ngIf="cluster.spec.cloud.vsphere"
+                               [cloudSpec]="cluster.spec.cloud"
+                               [nodeData]="nodeData"></kubermatic-vsphere-add-node>
+
+  <kubermatic-azure-add-node *ngIf="cluster.spec.cloud.azure"
+                             [cloudSpec]="cluster.spec.cloud"
+                             [nodeData]="nodeData"
+                             [projectId]="projectId"
+                             [clusterName]="cluster.name"
+                             [seedDCName]="seedDCName"></kubermatic-azure-add-node>
 
   <mat-form-field class="operating-system">
     <mat-select placeholder="Operating System*:" formControlName="operatingSystem">
