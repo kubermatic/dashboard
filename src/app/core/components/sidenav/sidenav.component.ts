@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
-import { MatDialog } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { MatDialog, MatSelectChange } from '@angular/material';
+import { interval, Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { ApiService, ProjectService, UserService } from '../../../core/services';
+import { ApiService, ProjectService, UserService } from '../../services';
 import { AppConfigService } from '../../../app-config.service';
 import { UserGroupConfig } from '../../../shared/model/Config';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
@@ -18,11 +18,11 @@ import { AddProjectComponent } from '../../../add-project/add-project.component'
 export class SidenavComponent implements OnInit, OnDestroy {
   public environment: any = environment;
   public projects: ProjectEntity[];
-  public selectedProject: string;
-  public disableResource: boolean;
+  public selectedProject: ProjectEntity;
   public userGroup: string;
   public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
+  private readonly notActiveProjectRefreshInterval = 1500;
 
   constructor(public dialog: MatDialog,
               private api: ApiService,
@@ -31,59 +31,71 @@ export class SidenavComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private appConfigService: AppConfigService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.getProjects();
+    this.loadProjects();
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(data => {
       for (const i in this.projects) {
-        if (this.projects[i].id === data.id) {
-          this.selectedProject = data.id;
+        if (this.compareProjectsEquality(this.projects[i], data)) {
+          this.selectedProject = data;
           this.userService.currentUserGroup(this.projects[i].id).subscribe(group => {
             this.userGroup = group;
           });
           return;
         }
       }
-      this.reloadProjects();
-      this.selectedProject = data.id;
+      this.loadProjects();
+      this.selectedProject = data;
+    }));
+
+    this.registerProjectRefreshInterval();
+  }
+
+  private changeSelectedProject(project: ProjectEntity): void {
+    this.projectService.changeSelectedProject(project);
+    this.projectService.storeProject(project);
+    this.selectedProject = project;
+  }
+
+  private registerProjectRefreshInterval(): void {
+    this.subscriptions.push(interval(this.notActiveProjectRefreshInterval).subscribe(() => {
+      if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
+        this.api.getProjects().toPromise().then(res => {
+          this.projects = res;
+          for (const i in this.projects) {
+            if (this.compareProjectsEquality(this.projects[i], this.selectedProject)) {
+              this.changeSelectedProject(this.projects[i]);
+            }
+          }
+        });
+      }
     }));
   }
 
   public isProjectSelected(viewName: string): string {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-
-    if (this.selectedProject === undefined) {
+    if (this.selectedProject === undefined || this.selectedProject.status !== 'Active') {
       return 'disabled';
     } else {
       if (!!this.userGroupConfig && this.userGroup) {
         if (viewName === 'create-cluster') {
-          if (!!this.userGroupConfig && !this.userGroupConfig[this.userGroup].clusters.create) {
-            return 'disabled';
-          } else {
-            return '';
-          }
+          return !this.userGroupConfig[this.userGroup].clusters.create ? 'disabled' : '';
         } else {
-          if (!!this.userGroupConfig && !this.userGroupConfig[this.userGroup][viewName].view) {
-            return 'disabled';
-          } else {
-            return '';
-          }
+          return !this.userGroupConfig[this.userGroup][viewName].view ? 'disabled' : '';
         }
       }
     }
-
   }
 
-  public getProjects() {
+  public loadProjects(): void {
     this.api.getProjects().subscribe(res => {
       this.projects = res;
       const projectFromStorage = this.projectService.getProjectFromStorage();
       if (!!projectFromStorage) {
         for (const i in this.projects) {
-          if (this.projects[i].id === projectFromStorage) {
-            this.projectService.changeSelectedProject(this.projects[i]);
-            this.selectedProject = projectFromStorage;
+          if (this.compareProjectsEquality(this.projects[i], projectFromStorage)) {
+            this.changeSelectedProject(this.projects[i]);
             this.userGroupConfig = this.appConfigService.getUserGroupConfig();
             this.userService.currentUserGroup(this.projects[i].id).subscribe(group => {
               this.userGroup = group;
@@ -92,39 +104,28 @@ export class SidenavComponent implements OnInit, OnDestroy {
         }
       }
     });
-
   }
 
-  public selectionChange(event, previousValue, select) {
-    // The only option with undefined value is "Select Project". If it gets
-    // selected, we revert both the model and the control to the old value.
-    if (event.value === undefined) {
-      this.selectedProject = previousValue;
-      select.value = previousValue;
-    } else {
+  public selectionChange(event: MatSelectChange): void {
+    if (!!event && !!event.value) {
       for (const i in this.projects) {
-        if (this.projects[i].id === event.value) {
-          this.projectService.changeSelectedProject(this.projects[i]);
-          this.projectService.storeProject(this.projects[i].id);
-          this.router.navigate(['/projects/' + this.projects[i].id + '/clusters']);
+        if (this.compareProjectsEquality(this.projects[i], event.value)) {
+          this.changeSelectedProject(this.projects[i]);
+          this.router.navigate(['/projects']);
         }
       }
     }
   }
 
-  public addProject() {
+  public addProject(): void {
     const modal = this.dialog.open(AddProjectComponent);
     const sub = modal.afterClosed().subscribe(added => {
       if (added) {
-        this.reloadProjects();
-        this.router.navigate(['/projects/' + added.id + '/clusters']);
+        this.loadProjects();
+        this.router.navigate(['/projects']);
       }
       sub.unsubscribe();
     });
-  }
-
-  public reloadProjects() {
-    this.getProjects();
   }
 
   public setIconColor(url: string): boolean {
@@ -133,12 +134,40 @@ export class SidenavComponent implements OnInit, OnDestroy {
     if (url === '/projects') {
       return (snapshot.url === url);
     } else {
-      const newUrl = '/projects/' + this.selectedProject + url;
+      const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
+      const newUrl = '/projects/' + selectedProjectId + url;
       return (snapshot.url === newUrl);
     }
   }
 
-  ngOnDestroy() {
+  compareProjectsEquality(a: ProjectEntity, b: ProjectEntity): boolean {
+    return !!a && !!b && a.id === b.id;
+  }
+
+  getRouterLink(target: string): string {
+    const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
+    return `/projects/${selectedProjectId}/${target}`;
+  }
+
+  public getSelectedProjectStateIconClass(): string {
+    let iconClass = '';
+    if (!!this.selectedProject) {
+      switch (this.selectedProject.status) {
+        case 'Active':
+          iconClass = 'fa fa-circle green';
+          break;
+        case 'Inactive':
+          iconClass = 'fa fa-spin fa-circle-o-notch orange';
+          break;
+        case 'Terminating':
+          iconClass = 'fa fa-circle-o red';
+          break;
+      }
+    }
+    return iconClass;
+  }
+
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

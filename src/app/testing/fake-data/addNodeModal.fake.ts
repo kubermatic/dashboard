@@ -1,16 +1,6 @@
-import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
-import { fakeNodeDatacenters } from './datacenter.fake';
-import { fakeDigitaloceanCluster } from './cluster.fake';
 import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import { AzureSizes } from '../../shared/entity/provider/azure/AzureSizeEntity';
 import { OpenstackFlavor } from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
-
-export function addNodeModalFake(): AddNodeModalData {
-  return {
-    cluster: fakeDigitaloceanCluster(),
-    dc: fakeNodeDatacenters()[0]
-  };
-}
 
 export function fakeDigitaloceanSizes(): DigitaloceanSizes {
   return {

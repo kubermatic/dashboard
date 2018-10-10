@@ -4,6 +4,7 @@
       <p class="project-name">{{ project.name }}</p>
     </div>
     <div fxFlex="40%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
+      <div class="health-state"><i [matTooltip]="project.status" [ngClass]="getProjectStateIconClass()"></i></div>
       <p class="project-status">{{ project.status }}</p>
     </div>
     <div fxFlex="10%" fxHide.sm fxHide.xs>

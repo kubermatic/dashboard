@@ -40,7 +40,6 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
               private addNodeService: AddNodeService,
               private wizardService: WizardService,
               private dcService: DatacenterService,
-              private projectService: ProjectService,
               public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
@@ -74,7 +73,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
       createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name, this.projectID));
     }
 
-    this.subscriptions.push(combineLatest(createNodeObservables).subscribe((createdNodes: NodeEntity[]): void => {
+    this.subscriptions.push(combineLatest(createNodeObservables).subscribe(() => {
       NotificationActions.success('Success', `Node(s) successfully created`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
     }));

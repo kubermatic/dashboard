@@ -27,6 +27,23 @@
           line-height: 35px;
 
         }
+
+        .health-state {
+          margin-left: 6px;
+          text-align: center;
+
+          i.red {
+            color: $warning-status-color;
+          }
+
+          i.green {
+            color: $healthy-status-color;
+          }
+
+          i.orange {
+            color: $waiting-status-color;
+          }
+        }
       }
     }
 
