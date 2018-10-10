@@ -58,14 +58,6 @@ export class NodeListComponent implements OnInit {
     });
   }
 
-  public managedByProvider(node: NodeEntity): boolean {
-    if (!!node.status.machineName) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   public deleteNodeDialog(node: NodeEntity): void {
     this.clickedDeleteNode[node.id] = true;
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
@@ -180,11 +172,7 @@ export class NodeListComponent implements OnInit {
   }
 
   public showInfo(node: NodeEntity): boolean {
-    if (node.name !== node.id.replace('machine-', '') && node.id !== '') {
-      return true;
-    } else {
-      return false;
-    }
+    return node.name !== node.id.replace('machine-', '') && node.id !== '';
   }
 
   public getInfo(node: NodeEntity): string {
@@ -211,11 +199,7 @@ export class NodeListComponent implements OnInit {
   }
 
   displayTags(tags: object): boolean {
-    if (Object.keys(tags).length > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return Object.keys(tags).length > 0;
   }
 
   getTagsFromObject(tags: object): string {

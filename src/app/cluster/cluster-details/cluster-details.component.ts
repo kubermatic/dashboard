@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, OnChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
@@ -7,7 +7,6 @@ import { Subscription, ObservableInput, Subject, interval, combineLatest} from '
 import { retry, takeUntil } from 'rxjs/operators';
 
 import { NotificationActions } from '../../redux/actions/notification.actions';
-import { environment } from '../../../environments/environment';
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
 import { EditProviderSettingsComponent } from './edit-provider-settings/edit-provider-settings.component';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -24,7 +23,6 @@ import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { HealthEntity } from '../../shared/entity/HealthEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
-import { AddNodeModalData } from '../../shared/model/add-node-modal-data';
 
 import { UserGroupConfig } from '../../shared/model/Config';
 
@@ -40,7 +38,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public datacenter: DataCenterEntity;
   public sshKeys: SSHKeyEntity[] = [];
   public nodes: NodeEntity[] = [];
-  public stateOfTheAccordion: object[];
   public isClusterRunning: boolean;
   public clusterHealthClass: string;
   public health: HealthEntity;
@@ -115,13 +112,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     // Upgrades
     this.clusterSubject
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(cluster => {
+      .subscribe(() => {
         this.reloadVersions();
       });
     // Nodes
     this.clusterSubject
       .pipe(takeUntil(this.unsubscribe))
-      .subscribe(cluster => {
+      .subscribe(() => {
         this.initialNodeCreation();
         this.reloadClusterNodes();
       });
@@ -137,7 +134,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.clusterSubject.next(data[1]);
 
           const timer = interval(this.refreshInterval);
-          timer.pipe(takeUntil(this.unsubscribe)).subscribe(tick => {
+          timer.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
             this.reloadCluster(clusterName, seedDCName, this.projectID);
           });
         },
@@ -194,7 +191,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             }
             combineLatest(createNodeObservables)
               .pipe(takeUntil(this.unsubscribe))
-              .subscribe((createdNodes: NodeEntity[]): void => {
+              .subscribe(() => {
                 NotificationActions.success('Success', `Node(s) successfully created`);
                 this.reloadClusterNodes();
               });
@@ -239,13 +236,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public addNode(): void {
-    const data = new AddNodeModalData(this.cluster, this.nodeDc);
     const modal = this.dialog.open(AddNodeModalComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
 
-    const sub = modal.afterClosed().subscribe(result => {
+    const sub = modal.afterClosed().subscribe(() => {
       this.reloadClusterNodes();
       sub.unsubscribe();
     });
@@ -301,7 +297,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
 
-    const sub = modal.afterClosed().subscribe(result => {
+    const sub = modal.afterClosed().subscribe(() => {
       sub.unsubscribe();
     });
   }
@@ -312,7 +308,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
 
-    const sub = modal.afterClosed().subscribe(result => {
+    const sub = modal.afterClosed().subscribe(() => {
       sub.unsubscribe();
       this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this.unsubscribe))

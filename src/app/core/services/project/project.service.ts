@@ -4,25 +4,25 @@ import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 
 @Injectable()
 export class ProjectService {
-  // Complete project object
   private _project = new Subject<ProjectEntity>();
   selectedProjectChanges$ = this._project.asObservable();
   public project: ProjectEntity;
 
-  changeSelectedProject(data: ProjectEntity) {
+  changeSelectedProject(data: ProjectEntity): void {
     this._project.next(data);
     this.project = data;
   }
 
-  public storeProject(projectID: string): void {
-    localStorage.setItem(`project`, projectID);
+  public storeProject(project: ProjectEntity): void {
+    localStorage.setItem(`project`, JSON.stringify(project));
   }
 
-  public removeProject() {
+  public removeProject(): void {
     localStorage.removeItem('project');
   }
 
-  public getProjectFromStorage(): string {
-    return localStorage.getItem('project');
+  public getProjectFromStorage(): ProjectEntity {
+    const project = localStorage.getItem('project');
+    return project && JSON.parse(project);
   }
 }
