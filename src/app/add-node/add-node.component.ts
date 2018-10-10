@@ -29,7 +29,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   constructor(private addNodeService: AddNodeService,
               private wizardService: WizardService,
               private _dc: DatacenterService,
-              private route: ActivatedRoute) {
+              private _route: ActivatedRoute) {
   }
 
   ngOnInit() {
@@ -79,7 +79,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       this.seedDCName = dc.spec.seed;
     }));
 
-    this.subscriptions.push(this.route.paramMap.subscribe(m => {
+    this.subscriptions.push(this._route.paramMap.subscribe(m => {
       this.projectId = m.get('projectID');
     }));
   }
