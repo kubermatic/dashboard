@@ -106,8 +106,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
     });
   }
 
-  public selectionChange(event: MatSelectChange): void {
-    if (!!event && !!event.value) {
+  public selectionChange(event: MatSelectChange, previous: ProjectEntity, select: any): void {
+    if (event.value === undefined) {
+      // The only option with undefined value is "+ Add Project". If it gets
+      // selected, we revert both the model and the control to the old value.
+      this.selectedProject = previous;
+      select.value = previous;
+    } else {
       for (const i in this.projects) {
         if (this.compareProjectsEquality(this.projects[i], event.value)) {
           this.changeSelectedProject(this.projects[i]);
