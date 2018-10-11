@@ -10,7 +10,7 @@
               <i [matTooltip]="selectedProject.status" [ngClass]="getSelectedProjectStateIconClass()"></i>
             </div>
           </mat-label>
-          <mat-select #select placeholder="Select Project" (selectionChange)="selectionChange($event)" [ngModel]="selectedProject" [compareWith]="compareProjectsEquality" disableOptionCentering>
+          <mat-select #select placeholder="Select Project" (selectionChange)="selectionChange($event, selectedProject, select)" [ngModel]="selectedProject" [compareWith]="compareProjectsEquality" disableOptionCentering>
             <mat-option (click)="addProject()">+ Add Project</mat-option>
             <mat-option *ngFor="let project of projects" [value]="project">
               {{ project.name }}
