@@ -38,10 +38,28 @@ export class ProjectItemComponent implements OnInit {
     }
   }
 
-  public selectProject() {
+  public getProjectStateIconClass(): string {
+    let iconClass = '';
+    if (!!this.project) {
+      switch (this.project.status) {
+        case 'Active':
+          iconClass = 'fa fa-circle green';
+          break;
+        case 'Inactive':
+          iconClass = 'fa fa-spin fa-circle-o-notch orange';
+          break;
+        case 'Terminating':
+          iconClass = 'fa fa-circle-o red';
+          break;
+      }
+    }
+    return iconClass;
+  }
+
+  public selectProject(): void {
     if (!this.clickedDeleteProject[this.project.id]) {
       this.projectService.changeSelectedProject(this.project);
-      this.projectService.storeProject(this.project.id);
+      this.projectService.storeProject(this.project);
     }
   }
 

@@ -23,3 +23,20 @@ p {
   }
 }
 
+.health-state {
+  margin-right: 6px;
+  text-align: center;
+
+  i.red {
+    color: $warning-status-color;
+  }
+
+  i.green {
+    color: $healthy-status-color;
+  }
+
+  i.orange {
+    color: $waiting-status-color;
+  }
+}
+

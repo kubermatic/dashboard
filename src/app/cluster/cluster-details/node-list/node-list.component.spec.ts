@@ -6,8 +6,6 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { NodeListComponent } from './node-list.component';
 import { UserService } from '../../../core/services';
 import { AppConfigService } from '../../../app-config.service';
-import { ProjectMockService } from '../../../testing/services/project-mock.service';
-import { HealthMockService } from '../../../testing/services/health-mock.service';
 import { UserMockService } from '../../../testing/services/user-mock.service';
 import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
 import { SharedModule } from '../../../shared/shared.module';
