@@ -10,7 +10,7 @@ import {OpenstackAddNodeComponent} from './openstack-add-node/openstack-add-node
 import {OpenstackOptionsComponent} from './openstack-add-node/openstack-options/openstack-options.component';
 import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
 import {AddNodeService} from '../core/services/add-node/add-node.service';
-import {WizardService} from '../core/services';
+import {ProjectService, WizardService} from '../core/services';
 import {ApiService} from '../core/services';
 import {asyncData} from '../testing/services/api-mock.service';
 import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
@@ -22,8 +22,7 @@ import {nodeDataFake} from '../testing/fake-data/node.fake';
 import {DatacenterService} from '../core/services';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import Spy = jasmine.Spy;
-import {ActivatedRouteStub} from '../testing/router-stubs';
-import {ActivatedRoute} from '@angular/router';
+import {ProjectMockService} from '../testing/services/project-mock.service';
 
 describe('AddNodeComponent', () => {
   let fixture: ComponentFixture<AddNodeComponent>;
@@ -32,7 +31,6 @@ describe('AddNodeComponent', () => {
   let getDigitaloceanSizesForWizardSpy: Spy;
   let getOpenStackFlavorsSpy: Spy;
   let getOpenStackFlavorsForWizardSpy: Spy;
-  let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes',
@@ -65,7 +63,7 @@ describe('AddNodeComponent', () => {
         WizardService,
         {provide: ApiService, useValue: apiMock},
         {provide: DatacenterService, useClass: DatacenterMockService},
-        {provide: ActivatedRoute, useClass: ActivatedRouteStub}
+        {provide: ProjectService, useClass: ProjectMockService},
       ],
     }).compileComponents();
   }));
@@ -75,8 +73,6 @@ describe('AddNodeComponent', () => {
     component = fixture.componentInstance;
     component.cluster = fakeAWSCluster();
     component.nodeData = nodeDataFake();
-    activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-    activatedRoute.testParamMap = {projectID: '4k6txp5sq'};
   });
 
   it('should create the add node cmp', () => {
