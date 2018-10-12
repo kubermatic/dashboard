@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { catchError , map } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -22,7 +22,6 @@ import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntit
 @Injectable()
 export class ApiService {
   private restRoot: string = environment.restRoot;
-  private restRootV3: string = environment.restRootV3;
   private headers: HttpHeaders = new HttpHeaders();
   private token: string;
 
@@ -122,18 +121,15 @@ export class ApiService {
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
   }
 
-  getDigitaloceanSizes(projectId: string, dc: string, cluster: string): Observable<DigitaloceanSizes> {
-    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${cluster}/digitalocean/sizes`;
-
-    console.log(url);
-
+  getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
+    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${clusterId}/providers/digitalocean/sizes`;
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
   }
 
   getClusterUpgrades(projectID: string, dc: string, clusterID: string): Observable<MasterVersion[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/upgrades`;
     return this.http.get<MasterVersion[]>(url, { headers: this.headers })
-      .pipe(catchError(error => {
+      .pipe(catchError(() => {
         return of<MasterVersion[]>([]);
       }));
   }
@@ -163,7 +159,7 @@ export class ApiService {
   }
 
   getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
-    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${cluster}/openstack/sizes`;
+    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${cluster}/providers/openstack/sizes`;
     return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
   }
 
@@ -214,7 +210,7 @@ export class ApiService {
   }
 
   getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes> {
-    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${cluster}/azure/sizes`;
+    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${cluster}/providers/azure/sizes`;
     return this.http.get<AzureSizes>(url, { headers: this.headers });
   }
 

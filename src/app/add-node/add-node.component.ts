@@ -3,7 +3,7 @@ import { ClusterEntity } from '../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
-import { WizardService, DatacenterService } from '../core/services';
+import {WizardService, DatacenterService, ProjectService} from '../core/services';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
 import { OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import { ActivatedRoute } from '@angular/router';
@@ -29,7 +29,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   constructor(private addNodeService: AddNodeService,
               private wizardService: WizardService,
               private _dc: DatacenterService,
-              private _route: ActivatedRoute) {
+              private _project: ProjectService) {
   }
 
   ngOnInit() {
@@ -79,9 +79,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       this.seedDCName = dc.spec.seed;
     }));
 
-    this.subscriptions.push(this._route.paramMap.subscribe(m => {
-      this.projectId = m.get('projectID');
-    }));
+    this.projectId = this._project.project.id;
   }
 
   ngOnDestroy(): void {
