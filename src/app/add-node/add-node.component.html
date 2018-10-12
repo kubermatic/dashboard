@@ -11,14 +11,14 @@
                                     [cloudSpec]="cluster.spec.cloud"
                                     [nodeData]="nodeData"
                                     [projectId]="projectId"
-                                    [clusterName]="cluster.name"
+                                    [clusterId]="cluster.id"
                                     [seedDCName]="seedDCName"></kubermatic-digitalocean-add-node>
 
   <kubermatic-openstack-add-node *ngIf="cluster.spec.cloud.openstack"
                                  [cloudSpec]="cluster.spec.cloud"
                                  [nodeData]="nodeData"
                                  [projectId]="projectId"
-                                 [clusterName]="cluster.name"
+                                 [clusterId]="cluster.id"
                                  [seedDCName]="seedDCName"></kubermatic-openstack-add-node>
 
   <kubermatic-hetzner-add-node *ngIf="cluster.spec.cloud.hetzner"
@@ -33,7 +33,7 @@
                              [cloudSpec]="cluster.spec.cloud"
                              [nodeData]="nodeData"
                              [projectId]="projectId"
-                             [clusterName]="cluster.name"
+                             [clusterId]="cluster.id"
                              [seedDCName]="seedDCName"></kubermatic-azure-add-node>
 
   <mat-form-field class="operating-system">

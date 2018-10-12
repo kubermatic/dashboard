@@ -18,7 +18,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
   @Input() public projectId: string;
-  @Input() public clusterName: string;
+  @Input() public clusterId: string;
   @Input() public seedDCName: string;
 
   public sizes: AzureSizes;
@@ -72,7 +72,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isInWizard(): boolean {
-    return !this.clusterName || this.clusterName.length === 0;
+    return !this.clusterId || this.clusterId.length === 0;
   }
 
   reloadAzureSizes() {
@@ -87,7 +87,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
         }
       } else {
         if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
-          this.subscriptions.push(this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterName).subscribe(data => {
+          this.subscriptions.push(this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
             this.sizes = data;
             this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
           }));

@@ -16,7 +16,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
   @Input() public projectId: string;
-  @Input() public clusterName: string;
+  @Input() public clusterId: string;
   @Input() public seedDCName: string;
 
   public flavors: OpenstackFlavor[] = [];
@@ -63,7 +63,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   isInWizard(): boolean {
-    return !this.clusterName || this.clusterName.length === 0;
+    return !this.clusterId || this.clusterId.length === 0;
   }
 
   public hasCredentials(): boolean {
@@ -93,7 +93,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
         this.cloudSpec.dc).subscribe(flavors => this.handleFlavours(flavors)));
     } else {
       this.loadingFlavors = true;
-      this.subscriptions.push(this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterName)
+      this.subscriptions.push(this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId)
         .subscribe(flavors => this.handleFlavours(flavors)));
     }
   }

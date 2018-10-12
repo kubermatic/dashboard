@@ -17,7 +17,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   @Input() public cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() public projectId: string;
-  @Input() public clusterName: string;
+  @Input() public clusterId: string;
   @Input() public seedDCName: string;
 
   public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
@@ -40,7 +40,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   }
 
   isInWizard(): boolean {
-    return !this.clusterName || this.clusterName.length === 0;
+    return !this.clusterId || this.clusterId.length === 0;
   }
 
   reloadDigitaloceanSizes() {
@@ -53,7 +53,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
       }
     } else {
       if (this.cloudSpec.digitalocean.token) {
-        this.subscriptions.push(this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterName).subscribe(data => {
+        this.subscriptions.push(this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
           this.sizes = data;
           this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
         }));
