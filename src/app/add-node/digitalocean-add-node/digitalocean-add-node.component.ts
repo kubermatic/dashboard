@@ -52,12 +52,10 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
         }));
       }
     } else {
-      if (this.cloudSpec.digitalocean.token) {
-        this.subscriptions.push(this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
-          this.sizes = data;
-          this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
-        }));
-      }
+      this.subscriptions.push(this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
+        this.sizes = data;
+        this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
+      }));
     }
   }
 

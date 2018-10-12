@@ -124,6 +124,9 @@ export class ApiService {
 
   getDigitaloceanSizes(projectId: string, dc: string, cluster: string): Observable<DigitaloceanSizes> {
     const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${cluster}/digitalocean/sizes`;
+
+    console.log(url);
+
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
   }
 

@@ -86,12 +86,10 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
           }));
         }
       } else {
-        if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
-          this.subscriptions.push(this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
-            this.sizes = data;
-            this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
-          }));
-        }
+        this.subscriptions.push(this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
+          this.sizes = data;
+          this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
+        }));
       }
     } else {
       this.getDatacenter();
