@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-
 import { Subscription, Subject, interval } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WizardService } from '../core/services';

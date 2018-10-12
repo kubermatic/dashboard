@@ -6,7 +6,7 @@ import { gt } from 'semver';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ApiService, WizardService } from '../../core/services';
 import { ClusterEntity, MasterVersion, MachineNetwork } from '../../shared/entity/ClusterEntity';
-import { MachineNetworksComponent } from './machine-networks/machine-networks.component';
+import { MachineNetworksComponent } from '../../machine-networks/machine-networks.component';
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',
@@ -35,6 +35,10 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: new FormControl(this.cluster.spec.version),
       checkMachineNetworks: new FormControl({value: false, disabled: true}),
     });
+
+    if (!!this.cluster.spec.machineNetworks && this.cluster.spec.machineNetworks.length > 0 && this.cluster.spec.machineNetworks[0].cidr !== '') {
+      this.clusterSpecForm.controls.checkMachineNetworks.setValue(true);
+    }
 
     this.subscriptions.push(this.clusterSpecForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.setClusterSpec();

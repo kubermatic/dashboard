@@ -34,12 +34,12 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     AppRoutingModule,
     NgReduxFormModule,
     NgReduxModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [
     KubermaticComponent,
     DashboardComponent,
-    MobileNavigationComponent
+    MobileNavigationComponent,
   ],
   providers: [
     AppConfigService,

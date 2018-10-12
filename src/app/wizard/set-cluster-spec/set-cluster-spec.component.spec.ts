@@ -1,14 +1,14 @@
-import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SetClusterSpecComponent } from './set-cluster-spec.component';
-import { MachineNetworksComponent } from './machine-networks/machine-networks.component';
-import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
+import { MachineNetworksModule } from '../../machine-networks/machine-networks.module';
+import { SetClusterSpecComponent } from './set-cluster-spec.component';
+import { ApiService, WizardService } from '../../core/services';
+import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ClusterNameGeneratorMock } from '../../testing/services/name-generator-mock.service';
 import { asyncData } from '../../testing/services/api-mock.service';
-import { ApiService, WizardService } from '../../core/services';
 import { masterVersionsFake } from '../../testing/fake-data/cluster-spec.fake';
 import Spy = jasmine.Spy;
 
@@ -16,7 +16,8 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   ReactiveFormsModule,
-  SharedModule
+  SharedModule,
+  MachineNetworksModule
 ];
 
 describe('SetClusterSpecComponent', () => {
@@ -34,8 +35,7 @@ describe('SetClusterSpecComponent', () => {
         ...modules,
       ],
       declarations: [
-        SetClusterSpecComponent,
-        MachineNetworksComponent
+        SetClusterSpecComponent
       ],
       providers: [
         WizardService,
@@ -55,6 +55,11 @@ describe('SetClusterSpecComponent', () => {
         cloud: {
           dc: '',
         },
+        machineNetworks: [{
+          cidr: '',
+          dnsServers: [],
+          gateway: ''
+        }]
       },
 
     };

@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
+import { AddMachineNetworkComponent } from './add-machine-network/add-machine-network.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
 import { UserGroupConfig } from '../../../shared/model/Config';
@@ -156,6 +157,16 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
 
   public revokeAdminTokenDialog(): void {
     this.dialogRef = this.dialog.open(RevokeAdminTokenComponent);
+
+    this.dialogRef.componentInstance.cluster = this.cluster;
+    this.dialogRef.componentInstance.datacenter = this.datacenter;
+    this.dialogRef.componentInstance.projectID = this.projectID;
+
+    this.dialogRef.afterClosed().subscribe(result => {});
+  }
+
+  public addMachineNetwork(): void {
+    this.dialogRef = this.dialog.open(AddMachineNetworkComponent);
 
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;

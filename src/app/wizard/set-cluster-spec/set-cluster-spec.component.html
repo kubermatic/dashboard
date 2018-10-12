@@ -58,7 +58,7 @@
       </mat-card-title>
     </mat-card-header>
     <mat-card-content *ngIf="!!clusterSpecForm.controls.checkMachineNetworks.value">
-      <kubermatic-machine-networks [cluster]="cluster"></kubermatic-machine-networks>
+      <kubermatic-machine-networks [cluster]="cluster" [width]="50" [isWizard]="true"></kubermatic-machine-networks>
     </mat-card-content>
   </mat-card>
 </div>

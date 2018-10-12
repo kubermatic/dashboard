@@ -2,7 +2,7 @@
   <div fxFlex="100%">
 
       <form [formGroup]="machineNetworksForm" fxLayout class="km-machine-networks-form">
-        <div fxFlex="50%" *ngFor="let tag of getMachineNetworksForm(machineNetworksForm); let i=index" formArrayName="machineNetworks" class="km-machine-networks-firm-inner">
+        <div fxFlex="{{width}}%" *ngFor="let tag of getMachineNetworksForm(machineNetworksForm); let i=index" formArrayName="machineNetworks" class="km-machine-networks-firm-inner" [ngClass]="width === 100 ? '' : 'withPadding'">
           <div class="km-form-group-tags-inner" [formGroupName]="i">
             <span class="km-single-machine-network">
               Machine Network #{{i+1}}

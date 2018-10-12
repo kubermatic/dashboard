@@ -12,11 +12,8 @@ import { NodeListComponent } from './cluster-details/node-list/node-list.compone
 import { ClusterDeleteConfirmationComponent } from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { NodeDuplicateComponent } from './cluster-details/node-duplicate/node-duplicate.component';
 import { NodeDeleteConfirmationComponent } from './cluster-details/node-delete-confirmation/node-delete-confirmation.component';
-import { SharedModule } from '../shared/shared.module';
-import { ClusterRoutingModule } from './cluster-routing.module';
-import { NodeDeleteConfirmationService } from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
 import { RevokeAdminTokenComponent } from './cluster-details/cluster-secrets/revoke-admin-token/revoke-admin-token.component';
-import { AddNodeModule } from '../add-node/add-node.module';
+import { AddMachineNetworkComponent } from './cluster-details/cluster-secrets/add-machine-network/add-machine-network.component';
 import { EditProviderSettingsComponent } from './cluster-details/edit-provider-settings/edit-provider-settings.component';
 import { AWSProviderSettingsComponent } from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import { DigitaloceanProviderSettingsComponent } from './cluster-details/edit-provider-settings/digitalocean-provider-settings/digitalocean-provider-settings.component';
@@ -28,6 +25,12 @@ import { EditSSHKeysComponent } from './cluster-details/edit-sshkeys/edit-sshkey
 import { EditSSHKeysItemComponent } from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
 import { EditSSHKeyDeleteConfirmationComponent } from './cluster-details/edit-sshkeys/edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
 import { AddClusterSSHKeysComponent } from './cluster-details/edit-sshkeys/add-cluster-sshkeys/add-cluster-sshkeys.component';
+import { SharedModule } from '../shared/shared.module';
+import { ClusterRoutingModule } from './cluster-routing.module';
+import { AddNodeModule } from '../add-node/add-node.module';
+import { MachineNetworksModule } from '../machine-networks/machine-networks.module';
+import { NodeDeleteConfirmationService } from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
+
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -46,6 +49,7 @@ const entryComponents: any[] = [
   ClusterSecretsComponent,
   ClusterConnectComponent,
   RevokeAdminTokenComponent,
+  AddMachineNetworkComponent,
   EditProviderSettingsComponent,
   AWSProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
@@ -64,7 +68,8 @@ const entryComponents: any[] = [
     SharedModule,
     ClusterRoutingModule,
     AddNodeModule,
-    MatTabsModule
+    MatTabsModule,
+    MachineNetworksModule
   ],
   declarations: [
     ...components,
