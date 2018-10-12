@@ -40,8 +40,6 @@ import {fakeDigitaloceanSizes} from '../../testing/fake-data/addNodeModal.fake';
 import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
-import {ActivatedRouteStub} from '../../testing/router-stubs';
-import {ActivatedRoute} from '@angular/router';
 
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
@@ -49,7 +47,6 @@ describe('SetSettingsComponent', () => {
   let getDigitaloceanSizesSpy: Spy;
   let getDigitaloceanSizesForWizardSpy: Spy;
   let getSSHKeysSpy: Spy;
-  let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys']);
@@ -95,7 +92,6 @@ describe('SetSettingsComponent', () => {
         {provide: UserService, useClass: UserMockService},
         {provide: DatacenterService, useClass: DatacenterMockService},
         {provide: AppConfigService, useClass: AppConfigMockService},
-        {provide: ActivatedRoute, useClass: ActivatedRouteStub}
       ],
     }).compileComponents();
   }));
@@ -107,8 +103,6 @@ describe('SetSettingsComponent', () => {
     component.clusterSSHKeys = [];
     component.nodeData = nodeDataFake();
     fixture.detectChanges();
-    activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
-    activatedRoute.testParamMap = {projectID: '4k6txp5sq'};
   });
 
   it('should create the set-settings cmp', () => {
