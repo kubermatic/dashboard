@@ -129,12 +129,13 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.loadingOptionalSettings = true;
     this.subscriptions.push(this.api.getOpenStackNetworkForWizard(this.openstackSettingsForm.controls.username.value,
       this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value,
-      this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
-      network => {
-        this.network = network.sort((a, b) => {
+      this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(networks => {
+        networks = networks.sort((a, b) => {
           return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
         });
-        this.floatingIpPool = this.network.filter(floatingIpPool => floatingIpPool.external === true);
+
+        this.network = networks.filter(network => network.external !== true);
+        this.floatingIpPool = networks.filter(floatingIpPool => floatingIpPool.external === true);
 
         if (this.network.length > 0 && this.openstackSettingsForm.controls.network.value !== '0') {
           this.openstackSettingsForm.controls.network.setValue(this.cluster.spec.cloud.openstack.network);
