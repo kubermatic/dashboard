@@ -122,7 +122,7 @@ export class ApiService {
   }
 
   getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
-    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${clusterId}/providers/digitalocean/sizes`;
+    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/digitalocean/sizes`;
     return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
   }
 
@@ -159,7 +159,7 @@ export class ApiService {
   }
 
   getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
-    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${cluster}/providers/openstack/sizes`;
+    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/openstack/sizes`;
     return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
   }
 
@@ -210,7 +210,7 @@ export class ApiService {
   }
 
   getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes> {
-    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/cluster/${cluster}/providers/azure/sizes`;
+    const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/sizes`;
     return this.http.get<AzureSizes>(url, { headers: this.headers });
   }
 
