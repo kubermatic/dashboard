@@ -1,8 +1,8 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {ApiService, Auth, WizardService} from '../../../../core/services';
-import {Subscription} from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ApiService, Auth, WizardService } from '../../../../core/services';
+import { Subscription } from 'rxjs';
 import {
   OpenstackFloatingIpPool,
   OpenstackNetwork,
@@ -10,9 +10,9 @@ import {
   OpenstackSubnet,
   OpenstackTenant
 } from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {AppConfigService} from '../../../../app-config.service';
-import {Config} from '../../../../shared/model/Config';
-import {debounceTime} from 'rxjs/operators';
+import { AppConfigService } from '../../../../app-config.service';
+import { Config } from '../../../../shared/model/Config';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'kubermatic-openstack-cluster-settings',
