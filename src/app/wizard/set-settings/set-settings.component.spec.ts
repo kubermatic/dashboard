@@ -26,7 +26,7 @@ import { VSphereAddNodeComponent } from '../../add-node/vsphere-add-node/vsphere
 import { VSphereOptionsComponent } from '../../add-node/vsphere-add-node/vsphere-options/vsphere-options.component';
 
 import { SharedModule } from '../../shared/shared.module';
-import { ApiService, ProjectService, UserService, WizardService } from '../../core/services';
+import { ApiService, DatacenterService, ProjectService, UserService, WizardService } from '../../core/services';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { AppConfigService } from '../../app-config.service';
 
@@ -39,16 +39,19 @@ import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
+import { DatacenterMockService } from '../../testing/services/datacenter-mock.service';
 
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
   let component: SetSettingsComponent;
   let getDigitaloceanSizesSpy: Spy;
+  let getDigitaloceanSizesForWizardSpy: Spy;
   let getSSHKeysSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getSSHKeys']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys']);
     getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    getDigitaloceanSizesForWizardSpy = apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
 
     TestBed.configureTestingModule({
@@ -84,9 +87,11 @@ describe('SetSettingsComponent', () => {
         AddNodeService,
         WizardService,
         { provide: ApiService, useValue: apiMock },
+        { provide: DatacenterService, useValue: DatacenterMockService },
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: UserService, useClass: UserMockService },
-        { provide: AppConfigService, useClass: AppConfigMockService}
+        { provide: DatacenterService, useClass: DatacenterMockService },
+        { provide: AppConfigService, useClass: AppConfigMockService },
       ],
     }).compileComponents();
   }));

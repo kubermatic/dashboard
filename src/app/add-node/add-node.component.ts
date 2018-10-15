@@ -3,9 +3,10 @@ import { ClusterEntity } from '../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
-import { WizardService } from '../core/services/wizard/wizard.service';
+import {WizardService, DatacenterService, ProjectService} from '../core/services';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
-import { OperatingSystemSpec, NodeCloudSpec } from '../shared/entity/NodeEntity';
+import { OperatingSystemSpec} from '../shared/entity/NodeEntity';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'kubermatic-add-node',
@@ -15,16 +16,20 @@ import { OperatingSystemSpec, NodeCloudSpec } from '../shared/entity/NodeEntity'
 
 export class AddNodeComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-
   @Input() nodeData: NodeData;
+
+  public projectId: string;
+  public seedDCName: string;
   public nodeForm: FormGroup;
   public operatingSystemForm: FormGroup;
-
   public hideOptional = true;
   private subscriptions: Subscription[] = [];
   private providerData: NodeProviderData = { valid: false };
 
-  constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {
+  constructor(private addNodeService: AddNodeService,
+              private wizardService: WizardService,
+              private _dc: DatacenterService,
+              private _project: ProjectService) {
   }
 
   ngOnInit() {
@@ -69,6 +74,12 @@ export class AddNodeComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
       this.hideOptional = data.hideOptional;
     }));
+
+    this.subscriptions.push(this._dc.getDataCenter(this.cluster.spec.cloud.dc).subscribe(dc => {
+      this.seedDCName = dc.spec.seed;
+    }));
+
+    this.projectId = this._project.project.id;
   }
 
   ngOnDestroy(): void {
