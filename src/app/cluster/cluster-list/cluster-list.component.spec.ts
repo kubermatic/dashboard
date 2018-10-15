@@ -10,13 +10,12 @@ import { ClusterListComponent } from './cluster-list.component';
 import { ClusterItemComponent } from './cluster-item/cluster-item.component';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
 
-import { ApiService, ProjectService, DatacenterService, HealthService, UserService } from '../../core/services';
-import { Auth } from './../../core/services/auth/auth.service';
+import { ApiService, DatacenterService, HealthService, UserService } from '../../core/services';
+import { Auth } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
 
 import { SharedModule } from '../../shared/shared.module';
-import { ActivatedRouteStub, RouterLinkStubDirective, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
-import { click } from './../../testing/utils/click-handler';
+import { ActivatedRouteStub, RouterStub, RouterTestingModule } from '../../testing/router-stubs';
 
 import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { asyncData } from '../../testing/services/api-mock.service';

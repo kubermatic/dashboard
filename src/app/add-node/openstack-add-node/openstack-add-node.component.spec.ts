@@ -15,11 +15,11 @@ import { nodeDataFake } from '../../testing/fake-data/node.fake';
 describe('OpenstackAddNodeComponent', () => {
   let fixture: ComponentFixture<OpenstackAddNodeComponent>;
   let component: OpenstackAddNodeComponent;
-  let getOpenStackFlavorsSpy: Spy;
+  let getOpenStackFlavorsForWizardSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavors']);
-    getOpenStackFlavorsSpy = apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
+    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavorsForWizard']);
+    getOpenStackFlavorsForWizardSpy = apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors()));
 
     TestBed.configureTestingModule({
       imports: [

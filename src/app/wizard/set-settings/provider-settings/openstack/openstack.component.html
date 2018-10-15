@@ -35,9 +35,9 @@
   <mat-form-field fxFlex *ngIf="!hideOptional">
     <mat-select placeholder="Floating IP pool:" formControlName="floatingIpPool">
       <mat-option *ngIf="!loadingOptionalSettings && (openstackSettingsForm.controls.username.value === '' || openstackSettingsForm.controls.password.value === '' || openstackSettingsForm.controls.domain.value === '')" [value]="">Please enter your credentials first!</mat-option>
-      <mat-option *ngIf="loadingOptionalSettings" [value]="">Loading floating ip pools...</mat-option>
+      <mat-option *ngIf="loadingOptionalSettings" [value]="">Loading floating IP pools...</mat-option>
 
-      <mat-option *ngIf="floatingIpPool.length">Select a floating ip pool </mat-option>
+      <mat-option *ngIf="floatingIpPool.length">Select a floating IP pool </mat-option>
       <mat-option *ngFor="let item of floatingIpPool" [value]="item.name">
         {{item.name}}
       </mat-option>

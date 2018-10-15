@@ -1,9 +1,15 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { WizardService, ApiService, Auth } from '../../../../core/services';
+import { ApiService, Auth, WizardService } from '../../../../core/services';
 import { Subscription } from 'rxjs';
-import { OpenstackNetwork, OpenstackSubnet, OpenstackTenant, OpenstackSecurityGroup, OpenstackFloatingIpPool } from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {
+  OpenstackFloatingIpPool,
+  OpenstackNetwork,
+  OpenstackSecurityGroup,
+  OpenstackSubnet,
+  OpenstackTenant
+} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { AppConfigService } from '../../../../app-config.service';
 import { Config } from '../../../../shared/model/Config';
 import { debounceTime } from 'rxjs/operators';
@@ -50,7 +56,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.loadOptionalSettings();
 
-    this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+    this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
       this.loadTenants();
       this.loadOptionalSettings();
       this.loadSubnetIds();
@@ -79,18 +85,17 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   public loadTenants() {
-    if (
-      this.openstackSettingsForm.controls.username.value === '' ||
-      this.openstackSettingsForm.controls.password.value === '' ||
-      this.openstackSettingsForm.controls.domain.value === '' ||
-      this.tenants.length > 0 ||
-      this.network.length > 0 ||
-      this.securityGroup.length > 0 ) {
+    if (this.openstackSettingsForm.controls.username.value === ''
+      || this.openstackSettingsForm.controls.password.value === ''
+      || this.openstackSettingsForm.controls.domain.value === ''
+      || this.tenants.length > 0 || this.network.length > 0
+      || this.securityGroup.length > 0 ) {
         return;
     }
 
     this.loadingOptionalTenants = true;
-    this.subscriptions.push(this.api.getOpenStackTenants(this.openstackSettingsForm.controls.username.value, this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
+    this.subscriptions.push(this.api.getOpenStackTenantsForWizard(this.openstackSettingsForm.controls.username.value,
+      this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
       tenants => {
         if (!!tenants && tenants.length > 0) {
           const sortedTenants = tenants.sort((a, b) => {
@@ -105,32 +110,32 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
           this.tenants = [];
         }
         this.loadingOptionalTenants = false;
-      }, error => {
+      }, () => {
         this.tenants = [];
         this.loadingOptionalTenants = false;
       }));
   }
 
   public loadOptionalSettings() {
-    if (
-      this.openstackSettingsForm.controls.username.value === '' ||
-      this.openstackSettingsForm.controls.password.value === '' ||
-      this.openstackSettingsForm.controls.domain.value === '' ||
-      this.openstackSettingsForm.controls.tenant.value === '' ||
-      this.network.length > 0 ||
-      this.securityGroup.length > 0 ) {
+    if (this.openstackSettingsForm.controls.username.value === ''
+      || this.openstackSettingsForm.controls.password.value === ''
+      || this.openstackSettingsForm.controls.domain.value === ''
+      || this.openstackSettingsForm.controls.tenant.value === ''
+      || this.network.length > 0
+      || this.securityGroup.length > 0 ) {
         return;
     }
 
     this.loadingOptionalSettings = true;
-    this.subscriptions.push(this.api.getOpenStackNetwork(this.openstackSettingsForm.controls.username.value, this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value, this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
-      network => {
-        const sortedNetwork = network.sort((a, b) => {
+    this.subscriptions.push(this.api.getOpenStackNetworkForWizard(this.openstackSettingsForm.controls.username.value,
+      this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value,
+      this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(networks => {
+        networks = networks.sort((a, b) => {
           return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
         });
 
-        this.network = sortedNetwork;
-        this.floatingIpPool = this.network.filter(floatingIpPool => floatingIpPool.external === true);
+        this.network = networks.filter(network => network.external !== true);
+        this.floatingIpPool = networks.filter(floatingIpPool => floatingIpPool.external === true);
 
         if (this.network.length > 0 && this.openstackSettingsForm.controls.network.value !== '0') {
           this.openstackSettingsForm.controls.network.setValue(this.cluster.spec.cloud.openstack.network);
@@ -142,7 +147,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
       }));
 
-    this.subscriptions.push(this.api.getOpenStackSecurityGroups(this.openstackSettingsForm.controls.username.value, this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value, this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
+    this.subscriptions.push(this.api.getOpenStackSecurityGroupsForWizard(this.openstackSettingsForm.controls.username.value,
+      this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value,
+      this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
       securityGroups => {
         const sortedSecurityGroups = securityGroups.sort((a, b) => {
           return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
@@ -159,15 +166,15 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   public loadSubnetIds() {
-    if (
-      this.openstackSettingsForm.controls.network.value === '' ||
-      this.subnetIds.length > 0) {
+    if (this.openstackSettingsForm.controls.network.value === '' || this.subnetIds.length > 0) {
       return;
     }
 
     this.loadingSubnetIds = true;
 
-    this.subscriptions.push(this.api.getOpenStackSubnetIds(this.openstackSettingsForm.controls.username.value, this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value, this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc, this.openstackSettingsForm.controls.network.value).subscribe(
+    this.subscriptions.push(this.api.getOpenStackSubnetIdsForWizard(this.openstackSettingsForm.controls.username.value,
+      this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value,
+      this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc, this.openstackSettingsForm.controls.network.value).subscribe(
       subnets => {
         const sortedSubnetIds = subnets.sort((a, b) => {
           return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
