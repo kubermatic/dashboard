@@ -34,21 +34,20 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.subscriptions.push(
-      this.route.paramMap.subscribe( m => {
-        this.projectID = m.get('projectID');
-        this.refreshClusters();
-      })
-    );
 
-
-      this.userService.currentUserGroup(this.projectID).subscribe(group => {
-        this.userGroup = group;
-      });
-    const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe(tick => {
+    this.subscriptions.push(this.route.paramMap.subscribe(m => {
+      this.projectID = m.get('projectID');
       this.refreshClusters();
     }));
+
+    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+      this.userGroup = group;
+    });
+
+    this.subscriptions.push(interval(5000).subscribe(() => {
+      this.refreshClusters();
+    }));
+
     this.refreshClusters();
   }
 
@@ -107,7 +106,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
         case 'name':
           return this.compare(a.name, b.name, isAsc);
         case 'provider':
-          return this.getProvider(a, b, isAsc);
+          return this.compare(this.getProviderName(a), this.getProviderName(b), isAsc);
         case 'region':
           return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
         default:
@@ -116,35 +115,17 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     });
   }
 
-  getProvider(a, b, isAsc) {
-    let aProvider: string;
-    let bProvider: string;
-
-    if (a.spec.cloud.digitalocean) {
-      aProvider = 'digitalocean';
-    } else if (a.spec.cloud.bringyourown) {
-      aProvider = 'bringyourown';
-    } else if (a.spec.cloud.aws) {
-      aProvider = 'aws';
-    } else if (a.spec.cloud.openstack) {
-      aProvider = 'openstack';
-    } else {
-      aProvider = '';
+  private getProviderName(cluster: ClusterEntity): string {
+    if (cluster.spec.cloud.digitalocean) {
+      return 'digitalocean';
+    } else if (cluster.spec.cloud.bringyourown) {
+      return 'bringyourown';
+    } else if (cluster.spec.cloud.aws) {
+      return 'aws';
+    } else if (cluster.spec.cloud.openstack) {
+      return 'openstack';
     }
-
-    if (b.spec.cloud.digitalocean) {
-      bProvider = 'digitalocean';
-    } else if (b.spec.cloud.bringyourown) {
-      bProvider = 'bringyourown';
-    } else if (b.spec.cloud.aws) {
-      bProvider = 'aws';
-    } else if (b.spec.cloud.openstack) {
-      bProvider = 'openstack';
-    } else {
-      bProvider = '';
-    }
-
-    return this.compare(aProvider, bProvider, isAsc);
+    return '';
   }
 
   compare(a, b, isAsc) {

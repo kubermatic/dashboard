@@ -4,7 +4,6 @@ import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs';
 import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
-import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { ApiService, DatacenterService, WizardService } from '../../core/services';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { AzureSizes } from '../../shared/entity/provider/azure/AzureSizeEntity';
@@ -18,6 +17,9 @@ import { AzureSizes } from '../../shared/entity/provider/azure/AzureSizeEntity';
 export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
+  @Input() public projectId: string;
+  @Input() public clusterId: string;
+  @Input() public seedDCName: string;
 
   public sizes: AzureSizes;
   public azureNodeForm: FormGroup;
@@ -69,10 +71,22 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  isInWizard(): boolean {
+    return !this.clusterId || this.clusterId.length === 0;
+  }
+
   reloadAzureSizes() {
     if (this.cloudSpec.dc) {
-      if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
-        this.subscriptions.push(this.api.getAzureSizes(this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret, this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe(data => {
+      if (this.isInWizard()) {
+        if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
+          this.subscriptions.push(this.api.getAzureSizesForWizard(this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret,
+            this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe(data => {
+            this.sizes = data;
+            this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
+          }));
+        }
+      } else {
+        this.subscriptions.push(this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
           this.sizes = data;
           this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
         }));
@@ -84,7 +98,11 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
-      if (!!!changes.cloudSpec.previousValue || (changes.cloudSpec.currentValue.azure.clientID !== changes.cloudSpec.previousValue.azure.clientID) || (changes.cloudSpec.currentValue.azure.clientSecret !== changes.cloudSpec.previousValue.azure.clientSecret) || (changes.cloudSpec.currentValue.azure.subscriptionID !== changes.cloudSpec.previousValue.azure.subscriptionID) || (changes.cloudSpec.currentValue.azure.tenantID !== changes.cloudSpec.previousValue.azure.tenantID)) {
+      if (!!!changes.cloudSpec.previousValue
+        || (changes.cloudSpec.currentValue.azure.clientID !== changes.cloudSpec.previousValue.azure.clientID)
+        || (changes.cloudSpec.currentValue.azure.clientSecret !== changes.cloudSpec.previousValue.azure.clientSecret)
+        || (changes.cloudSpec.currentValue.azure.subscriptionID !== changes.cloudSpec.previousValue.azure.subscriptionID)
+        || (changes.cloudSpec.currentValue.azure.tenantID !== changes.cloudSpec.previousValue.azure.tenantID)) {
         this.reloadAzureSizes();
       }
     }
