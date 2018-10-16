@@ -1,7 +1,5 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
-import { MatChipInputEvent, MatChip } from '@angular/material';
-import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ApiService, WizardService } from '../core/services';
@@ -18,12 +16,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   public machineNetworksForm: FormGroup;
   public machineNetworksList: FormArray;
   public machineNetworks: FormArray;
-  public dnsServers: string[] = [];
-  readonly separatorKeysCodes: number[] = [ENTER, COMMA, SPACE];
-  public invalidDnsServer = false;
   private subscriptions: Subscription[] = [];
-  @ViewChild('chipList') chipList;
-  _ref: any;
 
   constructor(private api: ApiService,
               private wizardService: WizardService) { }
@@ -36,7 +29,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
         if (this.cluster.spec.machineNetworks.hasOwnProperty(i)) {
           machineNetworksList.push(new FormGroup({
             cidr: new FormControl(this.cluster.spec.machineNetworks[i].cidr, [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)]),
-            dnsServers: new FormControl([], [Validators.required]),
+            dnsServers: new FormControl(this.cluster.spec.machineNetworks[i].dnsServers, [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*\,*\s*)+)$/)]),
             gateway: new FormControl(this.cluster.spec.machineNetworks[i].gateway, [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)])
           }));
         }
@@ -44,7 +37,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     } else {
       machineNetworksList.push(new FormGroup({
         cidr: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)]),
-        dnsServers: new FormControl([], [Validators.required]),
+        dnsServers: new FormControl([], [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*\,*\s*)+)$/)]),
         gateway: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)])
       }));
     }
@@ -52,7 +45,6 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     this.machineNetworksForm = new FormGroup({
       machineNetworks: machineNetworksList
     });
-
 
     this.subscriptions.push(this.machineNetworksForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.setMachineNetworkSpec();
@@ -67,24 +59,6 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     }
   }
 
-  hasDnsServerError(i: number): boolean {
-    const group = this.machineNetworksForm as FormGroup;
-    const array = group.controls['machineNetworks'] as FormArray;
-    const control = array.controls[i] as FormGroup;
-
-    if (!!this.chipList) {
-      if (control.controls.dnsServers.hasError('required') && control.controls.gateway.touched && control.controls.cidr.touched) {
-        this.chipList.errorState = true;
-        return true;
-      } else {
-        this.chipList.errorState = false;
-        return false;
-      }
-    } else {
-      return false;
-    }
-  }
-
   getMachineNetworksForm(form) {
     return form.get('machineNetworks').controls;
   }
@@ -93,7 +67,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     this.machineNetworks = <FormArray>this.machineNetworksForm.get('machineNetworks');
     this.machineNetworks.push(new FormGroup({
       cidr: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)]),
-      dnsServers: new FormControl([], [Validators.required]),
+      dnsServers: new FormControl([], [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*\,*\s*)+)$/)]),
       gateway: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3})$/)])
     }));
   }
@@ -104,45 +78,18 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     this.setMachineNetworkSpec();
   }
 
-  addDnsServer(event: MatChipInputEvent, index: number): void {
-    const input = event.input;
-    const value = event.value;
-    if ((value.trim()).match(/^((\d{1,3}\.){3}\d{1,3})$/) === null) {
-      this.chipList.errorState = true;
-      this.invalidDnsServer = true;
-      return;
-    }
-
-    // Add DNS Server
-    if ((value || '').trim()) {
-      this.machineNetworksForm.controls.machineNetworks.value[index].dnsServers.push(value.trim());
-      this.setMachineNetworkSpec();
-    }
-    // Reset the input value
-    if (input) {
-      input.value = '';
-      this.chipList.errorState = false;
-      this.invalidDnsServer = false;
-    }
-  }
-
-  removeDnsServer(dnsServer: string, i: number): void {
-    const dnsServerArray = this.machineNetworksForm.controls.machineNetworks.value[i].dnsServers;
-    const index = dnsServerArray.indexOf(dnsServer);
-
-    if (index >= 0) {
-      this.machineNetworksForm.controls.machineNetworks.value[i].dnsServers.splice(index, 1);
-      this.setMachineNetworkSpec();
-    }
-  }
-
   setMachineNetworkSpec() {
     const machineNetworksMap = [];
     for (const i in this.machineNetworksForm.controls.machineNetworks.value) {
       if (this.machineNetworksForm.controls.machineNetworks.value[i].cidr !== '' &&
         this.machineNetworksForm.controls.machineNetworks.value[i].dnsServers !== '' &&
         this.machineNetworksForm.controls.machineNetworks.value[i].gateway !== '') {
-        machineNetworksMap.push(this.machineNetworksForm.controls.machineNetworks.value[i]);
+        machineNetworksMap.push({
+          cidr: this.machineNetworksForm.controls.machineNetworks.value[i].cidr,
+          gateway: this.machineNetworksForm.controls.machineNetworks.value[i].gateway,
+          dnsServers: this.machineNetworksForm.controls.machineNetworks.value[i].dnsServers.replace(/\s/g,'').split(','),
+          valid: this.machineNetworksForm.controls.machineNetworks.controls[i].valid
+        });
       }
     }
 

@@ -5,6 +5,7 @@ import { NotificationActions } from '../../../../redux/actions/notification.acti
 import { ApiService, WizardService } from '../../../../core/services';
 import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
 import { ClusterEntity, MachineNetwork } from '../../../../shared/entity/ClusterEntity';
+import { MachineNetworkForm } from '../../../../shared/model/ClusterForm';
 
 @Component({
   selector: 'kubermatic-add-machine-network',
@@ -16,7 +17,7 @@ export class AddMachineNetworkComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
-  public machineNetworkData: MachineNetwork[] = [];
+  public machineNetworkFormData: MachineNetworkForm[] = [];
   private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
@@ -25,37 +26,33 @@ export class AddMachineNetworkComponent implements OnInit {
 
   ngOnInit() {
     this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe(res => {
-      this.machineNetworkData = res;
+      this.machineNetworkFormData = res;
     }));
   }
 
   isValid(): boolean {
-    if (this.machineNetworkData.length > 0) {
-      let valid = false;
-      for (const i in this.machineNetworkData) {
-        if (this.machineNetworkData[i].cidr === '' ||
-            this.machineNetworkData[i].dnsServers.length === 0 ||
-            this.machineNetworkData[i].gateway === '') {
-          valid = false;
-        } else {
-          valid = true;
-        }
+    if (this.machineNetworkFormData.length > 0) {
+      for (const i in this.machineNetworkFormData) {
+        return this.machineNetworkFormData.valid;
       }
-      return valid;
     } else {
       return false;
     }
   }
 
   addMachineNetworks(): void {
-    if (this.machineNetworkData.length > 0) {
-      for (const i in this.machineNetworkData) {
-        if (this.machineNetworkData[i].cidr === '' ||
-            this.machineNetworkData[i].dnsServers.length === 0 ||
-            this.machineNetworkData[i].gateway === '') {
+    if (this.machineNetworkFormData.length > 0) {
+      for (const i in this.machineNetworkFormData) {
+        if (this.machineNetworkFormData[i].cidr === '' ||
+            this.machineNetworkFormData[i].dnsServers.length === 0 ||
+            this.machineNetworkFormData[i].gateway === '') {
           return;
         } else {
-          this.cluster.spec.machineNetworks.push(this.machineNetworkData[i]);
+          this.cluster.spec.machineNetworks.push({
+            cidr: this.machineNetworkFormData[i].cidr,
+            dnsServers: this.machineNetworkFormData[i].dnsServers,
+            gateway: this.machineNetworkFormData[i].gateway
+          }
         }
       }
     }

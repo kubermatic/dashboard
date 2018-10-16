@@ -1,11 +1,12 @@
-import { Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { gt } from 'semver';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ApiService, WizardService } from '../../core/services';
-import { ClusterEntity, MasterVersion, MachineNetwork } from '../../shared/entity/ClusterEntity';
+import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity';
+import { MachineNetworkForm } from '../../shared/model/ClusterForm';
 import { MachineNetworksComponent } from '../../machine-networks/machine-networks.component';
 
 @Component({
@@ -16,18 +17,15 @@ import { MachineNetworksComponent } from '../../machine-networks/machine-network
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
   public clusterSpecForm: FormGroup;
-  public machineNetworkData: MachineNetwork[] = [];
+  public machineNetworkFormData: MachineNetworkForm[] = [];
   public masterVersions: MasterVersion[] = [];
   public defaultVersion: string;
   public checkMachineNetworksTooltip = '';
-  public inhalt = [];
   private subscriptions: Subscription[] = [];
-  @ViewChild('machineNetworksComponent', { read: ViewContainerRef }) container: ViewContainerRef;
 
   constructor(private nameGenerator: ClusterNameGenerator,
               private api: ApiService,
-              private wizardService: WizardService,
-              private _cfr: ComponentFactoryResolver) { }
+              private wizardService: WizardService) { }
 
   ngOnInit() {
     this.clusterSpecForm = new FormGroup({
@@ -45,7 +43,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe(res => {
-      this.machineNetworkData = res;
+      this.machineNetworkFormData = res;
       this.setClusterSpec();
     }));
 
@@ -66,22 +64,18 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   versionChanged() {
-    const shouldDisable = this.disableMachineNetworkConfiguration(this.clusterSpecForm.controls.version.value);
+    const shouldEnable = this.enableMachineNetworkConfiguration(this.clusterSpecForm.controls.version.value);
     const checkMachineNetworks = this.clusterSpecForm.get('checkMachineNetworks');
-    if (!!shouldDisable) {
+    if (!!shouldEnable) {
+      checkMachineNetworks.enable();
+    } else {
       checkMachineNetworks.disable();
       this.checkMachineNetworksTooltip = 'Option "Configure Machine Networks" is only allowed if Master Version >= 1.9.0';
-    } else {
-      checkMachineNetworks.enable();
     }
   }
 
-  disableMachineNetworkConfiguration(version: string): boolean {
-    if (!!version && gt(version, '1.8.9')) {
-      return false;
-    } else {
-      return true;
-    }
+  enableMachineNetworkConfiguration(version: string): boolean {
+    return (!!version && gt(version, '1.8.9'));
   }
 
   loadMasterVersions() {
@@ -101,9 +95,9 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     let isValid = false;
 
     if (!!this.clusterSpecForm.controls.checkMachineNetworks.value) {
-      if (this.machineNetworkData.length > 0) {
-        for (const i in this.machineNetworkData) {
-          if (this.machineNetworkData[i].cidr !== '' && this.machineNetworkData[i].dnsServers.length > 0 && this.machineNetworkData[i].gateway !== '') {
+      if (this.machineNetworkFormData.length > 0) {
+        for (const i in this.machineNetworkFormData) {
+          if (this.machineNetworkFormData[i].valid) {
             isValid = true;
           } else {
             isValid = false;
@@ -119,7 +113,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this.wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       version: this.clusterSpecForm.controls.version.value,
-      machineNetworks: this.machineNetworkData,
+      machineNetworks: this.machineNetworkFormData,
       valid: isValid,
     });
   }

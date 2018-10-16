@@ -19,21 +19,14 @@
               </mat-error>
             </mat-form-field>
             <mat-form-field class="km-machine-networks-form-field">
-              <mat-chip-list #chipList>
-                <mat-chip *ngFor="let dnsServer of machineNetworksForm.controls.machineNetworks.value[i].dnsServers" [removable]="true" (removed)="removeDnsServer(dnsServer, i)">
-                  {{ dnsServer }}
-                  <mat-icon matChipRemove>cancel</mat-icon>
-                </mat-chip>
-                <input placeholder="DNS Server *"
-                       [matChipInputFor]="chipList"
-                       [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                       (matChipInputTokenEnd)="addDnsServer($event, i)">
-              </mat-chip-list>
-              <mat-hint>hit enter, space or comma after entering your data to add a new dns server</mat-hint>
-              <mat-error *ngIf="hasDnsServerError(i)">
+              <input matInput formControlName="dnsServers" placeholder="DNS Servers *" autocomplete="off">
+              <mat-hint>seperate DNS Servers with comma</mat-hint>
+              <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.dnsServers.hasError('required')">
                 DNS Server is <strong>required</strong>
               </mat-error>
-              <mat-error *ngIf="invalidDnsServer">DNS Server has invalid input</mat-error>
+              <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.dnsServers.hasError('pattern')">
+                Pattern is not valid
+              </mat-error>
             </mat-form-field>
             <mat-form-field class="km-machine-networks-form-field">
               <input matInput formControlName="gateway" placeholder="Gateway *" autocomplete="off">

@@ -9,14 +9,15 @@ export class ClusterFormData {
 export class ClusterSpecForm {
   name: string;
   version: string;
-  machineNetworks: MachineNetwork[];
+  machineNetworks: MachineNetworkForm[];
   valid: boolean;
 }
 
-export class MachineNetwork {
+export class MachineNetworkForm {
   cidr: string;
   dnsServers: string[];
   gateway: string;
+  valid: boolean;
 }
 
 export class ClusterProviderForm {
