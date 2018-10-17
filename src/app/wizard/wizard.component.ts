@@ -240,7 +240,6 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
     .subscribe(cluster => {
-      this.creating = false;
       NotificationActions.success('Success', `Cluster successfully created`);
       this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
@@ -258,9 +257,7 @@ export class WizardComponent implements OnInit, OnDestroy {
             }
           }
           isReady.next(true);
-        },
-        error => {
-          return;
+          this.creating = false;
         });
       });
 
