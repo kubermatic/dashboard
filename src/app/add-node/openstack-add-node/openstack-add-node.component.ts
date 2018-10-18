@@ -47,7 +47,9 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.loadFlavors();
+    if (!!changes.cloudSpec) {
+      this.loadFlavors();
+    }
   }
 
   getNodeProviderData(): NodeProviderData {
