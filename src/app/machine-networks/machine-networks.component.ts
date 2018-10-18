@@ -49,6 +49,8 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.machineNetworksForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.setMachineNetworkSpec();
     }));
+
+    this.setMachineNetworkSpec();
   }
 
   public ngOnDestroy(): void {
@@ -79,16 +81,15 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   }
 
   setMachineNetworkSpec() {
+    const machineNetworks = <FormArray>this.machineNetworksForm.get('machineNetworks');
     const machineNetworksMap = [];
-    for (const i in this.machineNetworksForm.controls.machineNetworks.value) {
-      if (this.machineNetworksForm.controls.machineNetworks.value[i].cidr !== '' &&
-        this.machineNetworksForm.controls.machineNetworks.value[i].dnsServers !== '' &&
-        this.machineNetworksForm.controls.machineNetworks.value[i].gateway !== '') {
+    for (const i in machineNetworks.controls) {
+      if (machineNetworks.controls.hasOwnProperty(i)) {
         machineNetworksMap.push({
-          cidr: this.machineNetworksForm.controls.machineNetworks.value[i].cidr,
-          gateway: this.machineNetworksForm.controls.machineNetworks.value[i].gateway,
-          dnsServers: this.machineNetworksForm.controls.machineNetworks.value[i].dnsServers.replace(/\s/g,'').split(','),
-          valid: this.machineNetworksForm.controls.machineNetworks.controls[i].valid
+          cidr: machineNetworks.value[i].cidr,
+          gateway: machineNetworks.value[i].gateway,
+          dnsServers: machineNetworks.value[i].dnsServers.toString().replace(/\s/g, '').split(','),
+          valid: machineNetworks.controls[i].valid
         });
       }
     }

@@ -93,14 +93,13 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   setClusterSpec() {
     let isValid = false;
-
     if (!!this.clusterSpecForm.controls.checkMachineNetworks.value) {
       if (this.machineNetworkFormData.length > 0) {
         for (const i in this.machineNetworkFormData) {
-          if (this.machineNetworkFormData[i].valid) {
-            isValid = true;
+          if (i === '0') {
+            isValid = this.machineNetworkFormData[i].valid;
           } else {
-            isValid = false;
+            isValid = isValid && this.machineNetworkFormData[i].valid;
           }
         }
       } else {
@@ -114,7 +113,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       name: this.clusterSpecForm.controls.name.value,
       version: this.clusterSpecForm.controls.version.value,
       machineNetworks: this.machineNetworkFormData,
-      valid: isValid,
+      valid: this.clusterSpecForm.valid && isValid,
     });
   }
 

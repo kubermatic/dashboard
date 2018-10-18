@@ -31,13 +31,17 @@ export class AddMachineNetworkComponent implements OnInit {
   }
 
   isValid(): boolean {
+    let isValid = false;
     if (this.machineNetworkFormData.length > 0) {
       for (const i in this.machineNetworkFormData) {
-        return this.machineNetworkFormData.valid;
+        if (i === '0') {
+          isValid = this.machineNetworkFormData[i].valid;
+        } else {
+          isValid = isValid && this.machineNetworkFormData[i].valid;
+        }
       }
-    } else {
-      return false;
     }
+    return isValid;
   }
 
   addMachineNetworks(): void {
@@ -52,7 +56,7 @@ export class AddMachineNetworkComponent implements OnInit {
             cidr: this.machineNetworkFormData[i].cidr,
             dnsServers: this.machineNetworkFormData[i].dnsServers,
             gateway: this.machineNetworkFormData[i].gateway
-          }
+          });
         }
       }
     }
