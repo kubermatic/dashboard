@@ -91,6 +91,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }));
   }
 
+
   setClusterSpec() {
     let isValid = false;
     if (!!this.clusterSpecForm.controls.checkMachineNetworks.value) {
