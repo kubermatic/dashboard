@@ -2,9 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { ClusterEntity } from '../shared/entity/ClusterEntity';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { WizardService, DatacenterService, ProjectService } from '../core/services';
+import { ClusterEntity } from '../shared/entity/ClusterEntity';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
 import { OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import { NoIpsLeftValidator } from '../shared/validators/no-ips-left.validator';
@@ -18,7 +18,7 @@ import { NoIpsLeftValidator } from '../shared/validators/no-ips-left.validator';
 export class AddNodeComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() nodeData: NodeData;
-
+  @Input() existingNodesCount: number;
   public projectId: string;
   public seedDCName: string;
   public nodeForm: FormGroup;
@@ -35,7 +35,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.nodeForm = new FormGroup({
-      count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster)]),
+      count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
       operatingSystem: new FormControl(Object.keys(this.nodeData.node.spec.operatingSystem)[0], Validators.required),
     });
 
@@ -120,7 +120,6 @@ export class AddNodeComponent implements OnInit, OnDestroy {
         };
     }
   }
-
 
   getAddNodeData(): NodeData {
     const osSpec = this.getOSSpec();

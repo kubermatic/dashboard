@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { ApiService, WizardService } from '../core/services';
+import { WizardService } from '../core/services';
 
 @Component({
   selector: 'kubermatic-machine-networks',
@@ -18,8 +18,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   public machineNetworks: FormArray;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private wizardService: WizardService) { }
+  constructor(private wizardService: WizardService) { }
 
   ngOnInit() {
     const machineNetworksList = new FormArray([]);
