@@ -51,7 +51,7 @@
       </div>
 
       <!-- Operating System -->
-      <p class="km-duplicate-spec-title">Operating System: 
+      <p class="km-duplicate-spec-title">Operating System:
         <span *ngIf="node.spec.operatingSystem.ubuntu">Ubuntu</span>
         <span *ngIf="!!node.spec.operatingSystem.containerLinux">Container Linux</span>
         <span *ngIf="!!node.spec.operatingSystem.centos">CentOS</span>
@@ -68,10 +68,6 @@
       <div class="km-duplicate-spec-options" *ngIf="node.spec.operatingSystem.centos">
         <p>Upgrade system on first boot: {{ node.spec.operatingSystem.centos.distUpgradeOnBoot }}</p>
       </div>
-
-      <p class="km-duplicate-spec-title">Container Runtime: 
-        <span>{{ node.spec.versions.containerRuntime.name }}</span>
-      </p>
 
     </div>
   </mat-dialog-content>
