@@ -369,10 +369,6 @@
                 <i [ngClass]="nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
               </div>
             </div>
-            <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.versions.containerRuntime.name">
-              <div fxFlex="50%" class="km-card-list-key">Container Runtime</div>
-              <div fxFlex="50%">{{ nodeData.node.spec.versions.containerRuntime.name }}</div>
-            </div>
           </ng-container>
         </div>
 

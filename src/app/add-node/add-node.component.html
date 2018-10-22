@@ -51,15 +51,4 @@
 
 <kubermatic-openstack-options *ngIf="cluster.spec.cloud.openstack" [nodeData]="nodeData" [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-options>
 <kubermatic-vsphere-options *ngIf="cluster.spec.cloud.vsphere" [nodeData]="nodeData" [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-options>
-
-<form [formGroup]="nodeForm" fxLayout="column">
-  <mat-form-field class="container-runtime">
-    <mat-select placeholder="Container Runtime:" formControlName="containerRuntime">
-      <mat-option value="docker">Docker</mat-option>
-      <!-- CRI-O disabled atm, as it isn't working right now -->
-      <!-- <mat-option value="cri-o" *ngIf="nodeForm.controls.operatingSystem.value !== 'containerLinux'">CRI-O</mat-option> -->
-    </mat-select>
-  </mat-form-field>
-</form>
-
 <kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean && !hideOptional" [nodeData]="nodeData"></kubermatic-digitalocean-options>
