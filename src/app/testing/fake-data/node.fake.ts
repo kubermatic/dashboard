@@ -26,11 +26,7 @@ export function fakeDigitaloceanCreateNode(): NodeEntity {
         containerLinux: null
       },
       versions: {
-        kubelet: null,
-        containerRuntime: {
-          name: null,
-          version: null
-        }
+        kubelet: null
       }
     }
   };
@@ -65,11 +61,7 @@ export function nodeFake(): NodeEntity {
         containerLinux: null
       },
       versions: {
-        kubelet: 'v1.8.5',
-        containerRuntime: {
-          name: 'docker',
-          version: '17.03.2',
-        }
+        kubelet: 'v1.8.5'
       }
     },
     status: {
@@ -94,8 +86,6 @@ export function nodeFake(): NodeEntity {
       ],
       nodeInfo: {
         kernelVersion: '4.14.11-coreos',
-        containerRuntime: 'docker',
-        containerRuntimeVersion: 'docker://Unknown',
         kubeletVersion: 'v1.8.5',
         operatingSystem: 'linux',
         architecture: 'amd64'
@@ -135,11 +125,7 @@ export function nodesFake(): NodeEntity[] {
           containerLinux: null
         },
         versions: {
-          kubelet: null,
-          containerRuntime: {
-            name: null,
-            version: null
-          }
+          kubelet: null
         }
       },
       status: {
@@ -164,8 +150,6 @@ export function nodesFake(): NodeEntity[] {
         ],
         nodeInfo: {
           kernelVersion: '4.14.11-coreos',
-          containerRuntime: 'docker',
-          containerRuntimeVersion: 'docker://Unknown',
           kubeletVersion: 'v1.8.5',
           operatingSystem: 'linux',
           architecture: 'amd64'
@@ -201,11 +185,7 @@ export function nodesFake(): NodeEntity[] {
           containerLinux: null
         },
         versions: {
-          kubelet: 'v1.8.5',
-          containerRuntime: {
-            name: 'docker',
-            version: '17.03.2',
-          }
+          kubelet: 'v1.8.5'
         }
       },
       status: {
@@ -230,8 +210,6 @@ export function nodesFake(): NodeEntity[] {
         ],
         nodeInfo: {
           kernelVersion: '4.14.11-coreos',
-          containerRuntime: 'docker',
-          containerRuntimeVersion: 'docker://Unknown',
           kubeletVersion: null,
           operatingSystem: 'linux',
           architecture: 'amd64'
@@ -288,11 +266,7 @@ export function nodeDataFake(): NodeData {
           containerLinux: null
         },
         versions: {
-          kubelet: null,
-          containerRuntime: {
-            name: null,
-            version: null
-          }
+          kubelet: null
         }
       }
     },

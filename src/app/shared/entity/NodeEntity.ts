@@ -50,12 +50,6 @@ export class ContainerLinuxSpec {
 
 export class NodeVersionInfo {
   kubelet?: string;
-  containerRuntime?: NodeContainerRuntimeInfo;
-}
-
-export class NodeContainerRuntimeInfo {
-  name?: string;
-  version?: string;
 }
 
 export class NodeStatus {
@@ -80,8 +74,6 @@ export class NodeAddress {
 
 export class NodeSystemInfo {
   kernelVersion: string;
-  containerRuntime: string;
-  containerRuntimeVersion: string;
   kubeletVersion: string;
   operatingSystem: string;
   architecture: string;
@@ -148,9 +140,6 @@ export function getEmptyOperatingSystemSpec(): object {
 
 export function getEmptyNodeVersionSpec(): object {
   const versionSpec: NodeVersionInfo = {
-    containerRuntime: {
-      name: 'docker'
-    }
   };
   return versionSpec;
 }

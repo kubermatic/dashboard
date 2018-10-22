@@ -34,9 +34,6 @@ export class NodeDuplicateComponent implements OnInit {
         cloud: this.node.spec.cloud,
         operatingSystem: this.node.spec.operatingSystem,
         versions: {
-          containerRuntime: {
-            name: this.node.spec.versions.containerRuntime.name,
-          },
         },
       },
       status: {}

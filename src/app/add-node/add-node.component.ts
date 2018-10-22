@@ -36,7 +36,6 @@ export class AddNodeComponent implements OnInit, OnDestroy {
     this.nodeForm = new FormGroup({
       count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1)]),
       operatingSystem: new FormControl(Object.keys(this.nodeData.node.spec.operatingSystem)[0], Validators.required),
-      containerRuntime: new FormControl(this.nodeData.node.spec.versions.containerRuntime.name),
     });
 
     let distUpgradeOnBootUbuntu = false;
@@ -128,9 +127,6 @@ export class AddNodeComponent implements OnInit, OnDestroy {
           cloud: this.providerData.spec,
           operatingSystem: osSpec,
           versions: {
-            containerRuntime: {
-              name: this.nodeForm.controls.containerRuntime.value,
-            }
           }
         },
       },
