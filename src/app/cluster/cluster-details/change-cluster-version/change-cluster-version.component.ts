@@ -41,7 +41,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   }
 
   changeVersion(): void {
-    let patch: ClusterEntityPatch = {
+    const patch: ClusterEntityPatch = {
       spec: {
         version: this.selectedVersion,
       }
