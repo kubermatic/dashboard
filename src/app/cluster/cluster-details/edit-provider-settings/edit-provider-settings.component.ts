@@ -3,7 +3,7 @@ import { MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ApiService, ProjectService, ClusterService } from '../../../core/services';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity, ClusterEntityPatch} from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterProviderSettingsData } from '../../../shared/model/ClusterSpecChange';
@@ -50,24 +50,29 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   public saveProviderSettings() {
-    if (!!this.cluster.spec.cloud.aws) {
-      this.cluster.spec.cloud.aws = this.providerSettingsData.aws;
-    } else if (!!this.cluster.spec.cloud.digitalocean) {
-      this.cluster.spec.cloud.digitalocean = this.providerSettingsData.digitalocean;
-    } else if (!!this.cluster.spec.cloud.hetzner) {
-      this.cluster.spec.cloud.hetzner = this.providerSettingsData.hetzner;
-    } else if (!!this.cluster.spec.cloud.openstack) {
-      this.cluster.spec.cloud.openstack = this.providerSettingsData.openstack;
-    } else if (!!this.cluster.spec.cloud.vsphere) {
-      this.cluster.spec.cloud.vsphere = this.providerSettingsData.vsphere;
-    } else if (!!this.cluster.spec.cloud.azure) {
-      this.cluster.spec.cloud.azure = this.providerSettingsData.azure;
-    }
-
-    this.api.editCluster(this.cluster, this.datacenter.metadata.name, this.project.id).subscribe(res => {
+    this.api.patchCluster(this.getProviderSettingsPatch(), this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(r => {
+      this.cluster = r;
       NotificationActions.success('Success', `Edit provider settings successfully`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'providerSettingsSaved');
-      this.dialogRef.close(res);
+      this.dialogRef.close(r);
     });
+  }
+
+  private getProviderSettingsPatch(): ClusterEntityPatch {
+    let patch: ClusterEntityPatch = {};
+    if (!!this.cluster.spec.cloud.aws) {
+      patch.spec.cloud.aws = this.providerSettingsData.aws;
+    } else if (!!this.cluster.spec.cloud.digitalocean) {
+      patch.spec.cloud.digitalocean = this.providerSettingsData.digitalocean;
+    } else if (!!this.cluster.spec.cloud.hetzner) {
+      patch.spec.cloud.hetzner = this.providerSettingsData.hetzner;
+    } else if (!!this.cluster.spec.cloud.openstack) {
+      patch.spec.cloud.openstack = this.providerSettingsData.openstack;
+    } else if (!!this.cluster.spec.cloud.vsphere) {
+      patch.spec.cloud.vsphere = this.providerSettingsData.vsphere;
+    } else if (!!this.cluster.spec.cloud.azure) {
+      patch.spec.cloud.azure = this.providerSettingsData.azure;
+    }
+    return patch;
   }
 }

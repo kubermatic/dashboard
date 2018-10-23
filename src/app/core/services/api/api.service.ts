@@ -3,7 +3,7 @@ import { catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Auth } from '../../../core/services/auth/auth.service';
+import { Auth } from '../auth/auth.service';
 import { ClusterEntity, ClusterEntityPatch, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
