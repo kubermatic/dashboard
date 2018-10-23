@@ -157,3 +157,28 @@ export class MasterVersion {
 export class Token {
   token: string;
 }
+
+// Patch object definitions.
+// Please note that these objects do not have to contain all the fields of equivalent classes.
+export class ClusterEntityPatch {
+  id?: string;
+  name?: string;
+  spec?: ClusterSpecPatch;
+}
+
+export class ClusterSpecPatch {
+  cloud?: CloudSpecPatch;
+  version?: string;
+}
+
+export class CloudSpecPatch {
+  digitalocean?: DigitaloceanCloudSpec;
+  aws?: AWSCloudSpec;
+  bringyourown?: BringYourOwnCloudSpec;
+  openstack?: OpenstackCloudSpec;
+  baremetal?: BareMetalCloudSpec;
+  vsphere?: VSphereCloudSpec;
+  hetzner?: HetznerCloudSpec;
+  azure?: AzureCloudSpec;
+  fake?: FakeCloudSpec;
+}

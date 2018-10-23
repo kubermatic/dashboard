@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Auth } from '../../../core/services/auth/auth.service';
-import { ClusterEntity, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, ClusterEntityPatch, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
@@ -63,6 +63,11 @@ export class ApiService {
   editCluster(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}`;
     return this.http.put<ClusterEntity>(url, cluster, { headers: this.headers });
+  }
+
+  patchCluster(patch: ClusterEntityPatch, clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}`;
+    return this.http.patch<ClusterEntity>(url, patch, { headers: this.headers });
   }
 
   deleteCluster(cluster: string, dc: string, projectID: string) {

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, ClusterEntityPatch } from '../../../shared/entity/ClusterEntity';
 import { ApiService, ProjectService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
@@ -41,9 +41,14 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   }
 
   changeVersion(): void {
-    this.cluster.spec.version = this.selectedVersion;
+    let patch: ClusterEntityPatch = {
+      spec: {
+        version: this.selectedVersion,
+      }
+    };
 
-    this.api.editCluster(this.cluster, this.datacenter.metadata.name, this.project.id).subscribe(result => {
+    this.api.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(r => {
+      this.cluster.spec.version = r.spec.version;
       this.dialogRef.close();
       NotificationActions.success('Success', `Cluster Version is being changed`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
