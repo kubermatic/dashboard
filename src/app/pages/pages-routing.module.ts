@@ -14,6 +14,7 @@ const routes: Routes = [
   {
     path: 'terms-of-service',
     component: TermsOfServiceComponent,
+    data: { title: 'Terms of Service' }
   },
   {
     path: '404',

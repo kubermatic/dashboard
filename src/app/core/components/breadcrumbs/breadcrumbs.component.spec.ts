@@ -68,6 +68,6 @@ describe('BreadcrumbsComponent', () => {
     fixture.detectChanges();
 
     const de = fixture.debugElement.queryAll(By.css('.breadcrumb-item'));
-    expect(de.length).toBe(3);
+    expect(de.length).toBe(2);
   });
 });

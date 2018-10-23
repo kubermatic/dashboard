@@ -7,7 +7,6 @@
      >
   <ul class="breadcrumb" fxFlex fxFlexOffset.xs="0">
     <li class="breadcrumb-item"><a routerLink="/projects">Home</a></li>
-    <li class="breadcrumb-item"><a routerLink="/terms-of-service">Terms of Service</a></li>
     <li *ngIf="!clusterName.length" class="breadcrumb-item" [ngClass]="{'active': !clusterName}" >{{ activePageTitle }}</li>
 
     <ng-container  *ngIf="clusterName.length">
