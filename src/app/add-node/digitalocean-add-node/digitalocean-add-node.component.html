@@ -2,7 +2,7 @@
   <div fxFlex class="mat-select-container">
     <mat-form-field>
       <mat-select placeholder="Node Size*:" formControlName="size">
-        <mat-option *ngIf="cloudSpec.digitalocean.token.length == 0 && isInWizard()" [value]="0">Please enter a valid DigitalOcean token first!</mat-option>
+        <mat-option *ngIf="(!cloudSpec.digitalocean.token || cloudSpec.digitalocean.token.length == 0) && isInWizard()" [value]="0">Please enter a valid DigitalOcean token first!</mat-option>
         <mat-option *ngIf="sizes.standard.length == 0 && sizes.optimized.length == 0" [value]="0">Loading sizes...</mat-option>
         <mat-optgroup *ngIf="sizes.standard.length > 0" label="Standard Droplets">
           <mat-option *ngFor="let size of sizes.standard" [value]="size.slug">
