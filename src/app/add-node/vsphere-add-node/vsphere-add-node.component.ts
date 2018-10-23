@@ -15,7 +15,6 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
   @Input() public cloudSpec: CloudSpec;
   @Input() public nodeData: NodeData;
   public vsphereNodeForm: FormGroup;
-  public defaultTemplate = 'ubuntu-template';
   private subscriptions: Subscription[] = [];
 
   constructor(private addNodeService: AddNodeService) { }
@@ -26,7 +25,7 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
       memory: new FormControl(this.nodeData.node.spec.cloud.vsphere.memory, [Validators.required, Validators.min(512)]),
     });
 
-    this.subscriptions.push(this.vsphereNodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.vsphereNodeForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
