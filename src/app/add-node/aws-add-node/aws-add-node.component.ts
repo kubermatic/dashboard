@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
-import { WizardService } from '../../core/services/wizard/wizard.service';
+import { WizardService } from '../../core/services';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 
 @Component({
@@ -45,7 +45,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
       tags: tagList
     });
 
-    this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
