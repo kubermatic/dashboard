@@ -22,6 +22,11 @@
     </mat-sidenav-container>
     <footer fxlayout>
       <div class="copyright">powered by <a href="https://loodse.com" target="_blank">Loodse <sup>®</sup></a></div>
+      <div class="info right">
+        <p class="info-item" *ngIf="config.show_demo_info">This is a <strong>demo system</strong></p>
+        <p class="info-item seperator" *ngIf="config.show_demo_info && config.show_terms_of_service"> | </p>
+        <p class="info-item clickable" *ngIf="config.show_terms_of_service" (click)="showTermsOfService()">Terms of Service</p>
+      </div>
       <div class="footer-nav">
         <ul class="social">
           <li><a href="https://www.twitter.com/loodse" target="_blank"><i class="fa fa-twitter"></i></a>

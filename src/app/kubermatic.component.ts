@@ -19,7 +19,7 @@ import { GoogleAnalyticsService } from './google-analytics.service';
 })
 export class KubermaticComponent implements OnInit {
   @ViewChild('sidenav') public sidenav: MatSidenav;
-  public config: Config = {'show_demo_info': false};
+  public config: Config = {'show_demo_info': false, 'show_terms_of_service': false};
 
   public constructor(private sidenavService: SidenavService,
                      public auth: Auth,
@@ -56,5 +56,9 @@ export class KubermaticComponent implements OnInit {
     }, 3000);
     this.sidenavService
       .setSidenav(this.sidenav);
+  }
+
+  showTermsOfService() {
+    this.router.navigate(['/terms-of-service']);
   }
 }
