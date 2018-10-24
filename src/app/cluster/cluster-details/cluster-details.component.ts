@@ -106,6 +106,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
           this.clusterHealthClass = this.healthService.getClusterHealthStatus(this.cluster, health);
           this.reloadClusterNodes();
+          this.reloadVersions();
         });
       });
 
