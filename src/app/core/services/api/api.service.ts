@@ -61,11 +61,6 @@ export class ApiService {
     return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
   }
 
-  editCluster(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
-    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}`;
-    return this.http.put<ClusterEntity>(url, cluster, { headers: this.headers });
-  }
-
   patchCluster(patch: ClusterEntityPatch, clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}`;
     return this.http.patch<ClusterEntity>(url, patch, { headers: this.headers });
@@ -138,11 +133,6 @@ export class ApiService {
       .pipe(catchError(() => {
         return of<MasterVersion[]>([]);
       }));
-  }
-
-  getToken(cluster: ClusterEntity, dc: string, projectID: string): Observable<Token> {
-    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
-    return this.http.get<Token>(url, { headers: this.headers });
   }
 
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
