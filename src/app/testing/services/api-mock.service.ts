@@ -116,7 +116,7 @@ export class ApiMockService {
     return of(this.member);
   }
 
-  deleteMembers(projectID: string, member: MemberEntity) {
+  deleteMembers(projectID: string, member: MemberEntity): Observable<any> {
     return of(null);
   }
 
@@ -125,6 +125,6 @@ export class ApiMockService {
   }
 }
 
-export function asyncData<T>(data: T) {
+export function asyncData<T>(data: T): Observable<T> {
   return defer(() => Promise.resolve(data));
 }

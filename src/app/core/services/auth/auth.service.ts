@@ -16,7 +16,7 @@ export class Auth {
     return localStorage.getItem('token');
   }
 
-  public authenticated() {
+  public authenticated(): boolean {
     // Check if there's an unexpired JWT
     // This searches for an item in localStorage with key == 'token'
     if (!!this.getBearerToken()) {
@@ -35,7 +35,7 @@ export class Auth {
     return '';
   }
 
-  public logout() {
+  public logout(): void {
     localStorage.removeItem('token');
   }
 
@@ -44,13 +44,13 @@ export class Auth {
     return results == null ? null : results[1] || '';
   }
 
-  private removeFragment() {
+  private removeFragment(): void {
     const currentHref = window.location.href;
     history.replaceState({}, '', currentHref.slice(0, currentHref.indexOf('#')));
   }
 
   // Helper Functions for decoding JWT token:
-  public decodeToken(token: string) {
+  public decodeToken(token: string): any {
     if (!!token) {
       const parts = token.split('.');
       if (parts.length !== 3) {
@@ -64,7 +64,7 @@ export class Auth {
     }
   }
 
-  private urlBase64Decode(str: string) {
+  private urlBase64Decode(str: string): string {
     let output = str.replace(/-/g, '+').replace(/_/g, '/');
     switch (output.length % 4) {
       case 0: { break; }

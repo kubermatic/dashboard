@@ -23,7 +23,7 @@ export class NotificationActions extends ActionBase {
   }
 
   @dispatch()
-  static alert(title: string, content: string) {
+  static alert(title: string, content: string): Action {
     return {
       type: NotificationActions.PUSH_NOTIFICATION, payload: {
         toast: <NotificationToast>{
@@ -36,7 +36,7 @@ export class NotificationActions extends ActionBase {
   }
 
   @dispatch()
-  static info(title: string, content: string) {
+  static info(title: string, content: string): Action {
     return {
       type: NotificationActions.PUSH_NOTIFICATION, payload: {
         toast: <NotificationToast>{
@@ -49,7 +49,7 @@ export class NotificationActions extends ActionBase {
   }
 
   @dispatch()
-  static error(title: string, content: string) {
+  static error(title: string, content: string): Action {
     return {
       type: NotificationActions.PUSH_NOTIFICATION, payload: {
         toast: <NotificationToast>{

@@ -26,7 +26,7 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
 
   constructor(private healthService: HealthService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     const timer = interval(5000);
     this.subscriptions.push(timer.subscribe(tick => {
       this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {

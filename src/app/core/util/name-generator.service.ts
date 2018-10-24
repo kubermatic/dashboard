@@ -703,7 +703,7 @@ export class ClusterNameGenerator {
       this.suffix[this.randomNumberInsideInterval(0, this.suffix.length)];
   }
 
-  private randomNumberInsideInterval(min: number, max: number) {
+  private randomNumberInsideInterval(min: number, max: number): number {
     return Math.floor(Math.random() * (max - min + 1) + min);
   }
 }

@@ -45,7 +45,7 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
     this.googleAnalyticsService.emitEvent('clusterOverview', 'providerSettingsDialogOpened');
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -53,7 +53,7 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public saveProviderSettings() {
+  public saveProviderSettings(): void {
     const patch: ClusterEntityPatch = {
       spec: {
         cloud: this.providerSettingsPatch.cloudSpecPatch,

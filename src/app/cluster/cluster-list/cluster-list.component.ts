@@ -32,7 +32,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
               private userService: UserService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
 
     this.subscriptions.push(this.route.paramMap.subscribe(m => {
@@ -51,7 +51,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.refreshClusters();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -59,7 +59,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     }
   }
 
-  refreshClusters() {
+  refreshClusters(): void {
     this.subscriptions.push(this.dcService.getSeedDataCenters().subscribe(datacenters => {
       const clusters: ClusterEntity[] = [];
       const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
@@ -88,11 +88,11 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     return prevCluster ? index : undefined;
   }
 
-  public loadWizard() {
+  public loadWizard(): void {
     this.router.navigate(['/projects/' + this.projectID + '/wizard']);
   }
 
-  sortData(sort: Sort) {
+  sortData(sort: Sort): void {
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedData = this.clusters;
       return;
@@ -128,7 +128,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  compare(a, b, isAsc) {
+  compare(a, b, isAsc): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }

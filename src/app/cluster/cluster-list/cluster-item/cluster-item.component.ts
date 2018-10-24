@@ -74,7 +74,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     return name.length > 12 ? name.slice(0, 12) + '...' : name;
   }
 
-  public getClusterItemClass() {
+  public getClusterItemClass(): string {
     let itemClass = this.healthService.getClusterHealthStatus(this.cluster, this.health);
     if (this.index % 2 !== 0) {
       itemClass = itemClass  + ' odd';
@@ -90,7 +90,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     return datacenter;
   }
 
-  navigateToCluster() {
+  navigateToCluster(): void {
     const dc = this.getDatacenter();
     this.router.navigate(['/projects/' + this.projectID + '/dc/' + dc + '/clusters/' + this.cluster.id]);
   }

@@ -16,7 +16,7 @@ export class AppConfigService {
     });
   }
 
-  loadAppConfig() {
+  loadAppConfig(): void {
     const jsonfile = environment.configUrl;
     setTimeout(() => {
       return this.http.get(jsonfile).toPromise().then(resp => {
@@ -27,11 +27,11 @@ export class AppConfigService {
     });
   }
 
-  getConfig() {
+  getConfig(): Config {
     return this.appConfig;
   }
 
-  loadUserGroupConfig() {
+  loadUserGroupConfig(): void {
     const jsonfile = '../assets/config/userGroupConfig.json';
     setTimeout(() => {
       return this.http.get(jsonfile).toPromise().then(resp => {
@@ -42,7 +42,7 @@ export class AppConfigService {
     });
   }
 
-  getUserGroupConfig() {
+  getUserGroupConfig(): UserGroupConfig {
     return this.userGroupConfig;
   }
 }

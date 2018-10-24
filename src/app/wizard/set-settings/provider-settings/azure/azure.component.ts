@@ -18,7 +18,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
 
   constructor(private wizardService: WizardService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.azureSettingsForm = new FormGroup({
       clientID: new FormControl(this.cluster.spec.cloud.azure.clientID, [Validators.required]),
       clientSecret: new FormControl(this.cluster.spec.cloud.azure.clientSecret, [Validators.required]),
@@ -56,7 +56,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

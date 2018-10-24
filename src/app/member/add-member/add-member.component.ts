@@ -20,7 +20,7 @@ export class AddMemberComponent implements OnInit {
               private dialogRef: MatDialogRef<AddMemberComponent>) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.addMemberForm = new FormGroup({
       email: new FormControl('', [Validators.required]),
       group: new FormControl('', [Validators.required]),

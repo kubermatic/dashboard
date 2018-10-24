@@ -18,7 +18,7 @@ export class SSHKeyDeleteConfirmationComponent {
               private dialogRef: MatDialogRef<SSHKeyDeleteConfirmationComponent>) {
   }
 
-  deleteSSHKey() {
+  deleteSSHKey(): void {
     this.api.deleteSSHKey(this.sshKey.id, this.projectId).subscribe(result => {
       NotificationActions.success('Success', `SSH key has been removed from project`);
     });

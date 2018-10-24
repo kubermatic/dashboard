@@ -28,7 +28,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
               public googleAnalyticsService: GoogleAnalyticsService) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     if (this.possibleVersions.length > 0) {
       this.selectedVersion = this.possibleVersions[this.possibleVersions.length - 1];
     }
@@ -58,7 +58,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

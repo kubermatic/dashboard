@@ -18,9 +18,9 @@ export class SummaryComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit(): void { }
 
-  ngOnDestroy() { }
+  ngOnDestroy(): void { }
 
   getOperatingSystem(): string {
     if (this.nodeData.node.spec.operatingSystem.ubuntu) {

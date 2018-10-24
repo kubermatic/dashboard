@@ -32,7 +32,7 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

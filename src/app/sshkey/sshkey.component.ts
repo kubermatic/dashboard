@@ -49,7 +49,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     this.refreshSSHKeys();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -57,7 +57,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     }
   }
 
-  refreshSSHKeys() {
+  refreshSSHKeys(): void {
     this.subscriptions.push(this.api.getSSHKeys(this.projectID).pipe(retry(3)).subscribe(res => {
       this.sshKeys = res;
       this.sortSshKeyData(this.sort);
@@ -82,7 +82,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     return prevSSHKey === shhKey ? index : undefined;
   }
 
-  sortSshKeyData(sort: Sort) {
+  sortSshKeyData(sort: Sort): void {
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedSshKeys = this.sshKeys;
       return;
@@ -103,7 +103,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     });
   }
 
-  compare(a, b, isAsc) {
+  compare(a, b, isAsc): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }

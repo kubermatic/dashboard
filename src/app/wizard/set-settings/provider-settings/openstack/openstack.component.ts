@@ -36,7 +36,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   constructor(private wizardService: WizardService, private api: ApiService, private auth: Auth, private appConfigService: AppConfigService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.config = this.appConfigService.getConfig();
 
     if (this.config.openstack && this.config.openstack.wizard_use_default_user && !this.cluster.spec.cloud.openstack.username) {
@@ -84,7 +84,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public loadTenants() {
+  public loadTenants(): void {
     if (this.openstackSettingsForm.controls.username.value === ''
       || this.openstackSettingsForm.controls.password.value === ''
       || this.openstackSettingsForm.controls.domain.value === ''
@@ -116,7 +116,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public loadOptionalSettings() {
+  public loadOptionalSettings(): void {
     if (this.openstackSettingsForm.controls.username.value === ''
       || this.openstackSettingsForm.controls.password.value === ''
       || this.openstackSettingsForm.controls.domain.value === ''
@@ -165,7 +165,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  public loadSubnetIds() {
+  public loadSubnetIds(): void {
     if (this.openstackSettingsForm.controls.network.value === '' || this.subnetIds.length > 0) {
       return;
     }
@@ -189,7 +189,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

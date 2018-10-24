@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ProjectEntity } from './../../shared/entity/ProjectEntity';
 import { MemberEntity } from '../../shared/entity/MemberEntity';
-import { fakeProject, fakeProjects } from './../fake-data/project.fake';
-import { fakeMember } from './../fake-data/member.fake';
+import { fakeMember } from '../fake-data/member.fake';
 
 @Injectable()
 export class UserMockService {
   private user: Observable<MemberEntity>;
   private userGroup: string;
 
-  constructor() {
-  }
+  constructor() {}
 
   public getUser(): Observable<MemberEntity> {
     this.user = of(fakeMember());
