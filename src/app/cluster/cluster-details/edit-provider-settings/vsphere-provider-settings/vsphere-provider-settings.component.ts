@@ -19,8 +19,11 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.vsphereProviderSettingsForm = new FormGroup({
-      username: new FormControl(this.cluster.spec.cloud.vsphere.username, [Validators.required]),
-      password: new FormControl(this.cluster.spec.cloud.vsphere.password, [Validators.required]),
+      infraManagementUsername: new FormControl(this.cluster.spec.cloud.vsphere.infraManagementUser.username, Validators.required),
+      infraManagementPassword: new FormControl(this.cluster.spec.cloud.vsphere.infraManagementUser.password, Validators.required),
+      username: new FormControl(this.cluster.spec.cloud.vsphere.username),
+      password: new FormControl(this.cluster.spec.cloud.vsphere.password),
+      vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
     });
 
     this.subscriptions.push(this.vsphereProviderSettingsForm.valueChanges.subscribe(() => {
@@ -42,7 +45,11 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
         vsphere: {
           password: this.vsphereProviderSettingsForm.controls.password.value,
           username: this.vsphereProviderSettingsForm.controls.username.value,
-        },
+          infraManagementUser: {
+            username: this.vsphereProviderSettingsForm.controls.infraManagementUsername.value,
+            password: this.vsphereProviderSettingsForm.controls.infraManagementPassword.value
+          }
+        }
       },
       isValid: this.vsphereProviderSettingsForm.valid,
     };
