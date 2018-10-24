@@ -7,6 +7,7 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { Subscription } from 'rxjs';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
 
 @Component({
   selector: 'kubermatic-change-cluster-version',
@@ -41,9 +42,14 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   }
 
   changeVersion(): void {
-    this.cluster.spec.version = this.selectedVersion;
+    const patch: ClusterEntityPatch = {
+      spec: {
+        version: this.selectedVersion,
+      }
+    };
 
-    this.api.editCluster(this.cluster, this.datacenter.metadata.name, this.project.id).subscribe(result => {
+    this.api.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(r => {
+      this.cluster = r;
       this.dialogRef.close();
       NotificationActions.success('Success', `Cluster Version is being changed`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');

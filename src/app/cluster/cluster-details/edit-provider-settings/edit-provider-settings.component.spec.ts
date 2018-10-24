@@ -11,8 +11,7 @@ import { AzureProviderSettingsComponent } from './azure-provider-settings/azure-
 import { MatDialogRef } from '@angular/material';
 import { MatDialogRefMock } from '../../../testing/services/mat-dialog-ref-mock';
 import { SharedModule } from '../../../shared/shared.module';
-import { ApiService, ProjectService } from '../../../core/services';
-import { ClusterService } from '../../../core/services';
+import { ApiService, ProjectService, ClusterService } from '../../../core/services';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';

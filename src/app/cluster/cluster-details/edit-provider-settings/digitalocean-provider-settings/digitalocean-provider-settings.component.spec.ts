@@ -3,7 +3,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditProviderSettingsComponent } from '../edit-provider-settings.component';
 import { AWSProviderSettingsComponent } from '../aws-provider-settings/aws-provider-settings.component';
-import { DigitaloceanProviderSettingsComponent } from '../digitalocean-provider-settings/digitalocean-provider-settings.component';
+import { DigitaloceanProviderSettingsComponent } from './digitalocean-provider-settings.component';
 import { HetznerProviderSettingsComponent } from '../hetzner-provider-settings/hetzner-provider-settings.component';
 import { OpenstackProviderSettingsComponent } from '../openstack-provider-settings/openstack-provider-settings.component';
 import { VSphereProviderSettingsComponent } from '../vsphere-provider-settings/vsphere-provider-settings.component';
@@ -11,8 +11,7 @@ import { AzureProviderSettingsComponent } from '../azure-provider-settings/azure
 import { MatDialogRef } from '@angular/material';
 import { MatDialogRefMock } from '../../../../testing/services/mat-dialog-ref-mock';
 import { SharedModule } from '../../../../shared/shared.module';
-import { ApiService } from '../../../../core/services/api/api.service';
-import { ClusterService } from '../../../../core/services';
+import { ApiService, ClusterService } from '../../../../core/services';
 import { ApiMockService } from '../../../../testing/services/api-mock.service';
 import { fakeDigitaloceanCluster } from '../../../../testing/fake-data/cluster.fake';
 

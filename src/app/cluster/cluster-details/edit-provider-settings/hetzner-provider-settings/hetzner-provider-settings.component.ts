@@ -1,16 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
-import { ApiService } from '../../../../core/services';
-import { ClusterService } from '../../../../core/services/cluster/cluster.service';
-import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
-import { ClusterProviderSettingsData } from '../../../../shared/model/ClusterSpecChange';
+import { ClusterService } from '../../../../core/services';
+import { ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import { ProviderSettingsPatch } from '../../../../core/services/cluster/cluster.service';
 
 @Component({
   selector: 'kubermatic-hetzner-provider-settings',
   templateUrl: './hetzner-provider-settings.component.html',
-  styleUrls: ['./hetzner-provider-settings.component.scss']
 })
 
 export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
@@ -18,17 +15,15 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
   public hetznerProviderSettingsForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private clusterService: ClusterService) {}
+  constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
     this.hetznerProviderSettingsForm = new FormGroup({
       token: new FormControl(this.cluster.spec.cloud.hetzner.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.subscriptions.push(this.hetznerProviderSettingsForm.valueChanges.subscribe(data => {
-      if (this.hetznerProviderSettingsForm.valid) {
-        this.clusterService.changeProviderSettingsData(this.getProviderSettingsData());
-      }
+    this.subscriptions.push(this.hetznerProviderSettingsForm.valueChanges.subscribe(() => {
+      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
     }));
   }
 
@@ -40,12 +35,14 @@ export class HetznerProviderSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProviderSettingsData(): ClusterProviderSettingsData {
+  getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
-      hetzner: {
-        token: this.hetznerProviderSettingsForm.controls.token.value,
+      cloudSpecPatch: {
+        hetzner: {
+          token: this.hetznerProviderSettingsForm.controls.token.value,
+        },
       },
-      valid: true
+      isValid: this.hetznerProviderSettingsForm.valid,
     };
   }
 }
