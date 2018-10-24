@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { CloudSpecPatch } from '../../../shared/entity/ClusterEntity';
+import { CloudSpecPatch } from '../../../shared/entity/ClusterEntityPatch';
 
 export class ProviderSettingsPatch {
   cloudSpecPatch: CloudSpecPatch;

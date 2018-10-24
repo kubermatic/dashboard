@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Auth } from '../auth/auth.service';
-import { ClusterEntity, ClusterEntityPatch, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntity, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
 import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
@@ -18,6 +18,7 @@ import {
 } from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
 
 @Injectable()
 export class ApiService {
