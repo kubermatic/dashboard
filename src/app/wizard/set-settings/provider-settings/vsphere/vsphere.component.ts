@@ -23,20 +23,35 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.vsphereSettingsForm = new FormGroup({
-      username: new FormControl(this.cluster.spec.cloud.vsphere.username, Validators.required),
-      password: new FormControl(this.cluster.spec.cloud.vsphere.password, Validators.required),
+      infraManagementUsername: new FormControl(this.cluster.spec.cloud.vsphere.infraManagementUser.username, Validators.required),
+      infraManagementPassword: new FormControl(this.cluster.spec.cloud.vsphere.infraManagementUser.password, Validators.required),
+      username: new FormControl(this.cluster.spec.cloud.vsphere.username),
+      password: new FormControl(this.cluster.spec.cloud.vsphere.password),
       vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
     });
 
     this.subscriptions.push(this.vsphereSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
       this.loadNetworks();
 
+      let cloudUser = this.vsphereSettingsForm.controls.infraManagementUsername.value;
+      let cloudPassword = this.vsphereSettingsForm.controls.infraManagementPassword.value;
+
+      if (this.vsphereSettingsForm.controls.username.value !== '' &&
+        this.vsphereSettingsForm.controls.password.value !== '') {
+        cloudUser = this.vsphereSettingsForm.controls.username.value;
+        cloudPassword = this.vsphereSettingsForm.controls.password.value;
+      }
+
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           vsphere: {
-            username: this.vsphereSettingsForm.controls.username.value,
-            password: this.vsphereSettingsForm.controls.password.value,
+            username: cloudUser,
+            password: cloudPassword,
             vmNetName: this.vsphereSettingsForm.controls.vmNetName.value,
+            infraManagementUser: {
+              username: this.vsphereSettingsForm.controls.infraManagementUsername.value,
+              password: this.vsphereSettingsForm.controls.infraManagementPassword.value
+            }
           },
           dc: this.cluster.spec.cloud.dc,
         },

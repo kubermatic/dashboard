@@ -90,6 +90,10 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         username: '',
         password: '',
         vmNetName: '',
+        infraManagementUser: {
+          username: '',
+          password: '',
+        }
       };
       return vsSpec;
     case NodeProvider.HETZNER:
