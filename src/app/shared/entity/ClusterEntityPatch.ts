@@ -49,4 +49,10 @@ export class AzureCloudSpecPatch {
 export class VSphereCloudSpecPatch {
   username?: string;
   password?: string;
+  infraManagementUser?: VSphereInfraManagementUser;
+}
+
+export class VSphereInfraManagementUser {
+  username?: string;
+  password?: string;
 }
