@@ -25,7 +25,7 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
       monitoring: new FormControl(this.nodeData.node.spec.cloud.digitalocean.monitoring),
       tags: new FormControl(this.nodeData.node.spec.cloud.digitalocean.tags.toString().replace(/\,/g, ', ')),
     });
-    this.subscriptions.push(this.doOptionsForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.doOptionsForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
     }));
 
