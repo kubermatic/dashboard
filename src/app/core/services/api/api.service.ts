@@ -3,7 +3,7 @@ import { catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Auth } from '../../../core/services/auth/auth.service';
+import { Auth } from '../auth/auth.service';
 import { ClusterEntity, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
@@ -18,6 +18,7 @@ import {
 } from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
 
 @Injectable()
 export class ApiService {
@@ -60,9 +61,9 @@ export class ApiService {
     return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
   }
 
-  editCluster(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
-    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}`;
-    return this.http.put<ClusterEntity>(url, cluster, { headers: this.headers });
+  patchCluster(patch: ClusterEntityPatch, clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}`;
+    return this.http.patch<ClusterEntity>(url, patch, { headers: this.headers });
   }
 
   deleteCluster(cluster: string, dc: string, projectID: string) {
@@ -132,11 +133,6 @@ export class ApiService {
       .pipe(catchError(() => {
         return of<MasterVersion[]>([]);
       }));
-  }
-
-  getToken(cluster: ClusterEntity, dc: string, projectID: string): Observable<Token> {
-    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
-    return this.http.get<Token>(url, { headers: this.headers });
   }
 
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
