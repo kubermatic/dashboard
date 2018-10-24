@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpClient, HttpRequest, HttpHandler, HttpEvent, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Config, UserGroupConfig } from './shared/model/Config';
 import { NotificationActions } from './redux/actions/notification.actions';
 import { environment } from '../environments/environment';
@@ -21,7 +21,7 @@ export class AppConfigService {
     setTimeout(() => {
       return this.http.get(jsonfile).toPromise().then(resp => {
         this.appConfig = <Config>resp;
-      }).catch(error => {
+      }).catch(() => {
         NotificationActions.error('Error', `Could not read configuration file`);
       });
     });
@@ -36,7 +36,7 @@ export class AppConfigService {
     setTimeout(() => {
       return this.http.get(jsonfile).toPromise().then(resp => {
         this.userGroupConfig = <UserGroupConfig>resp;
-      }).catch(error => {
+      }).catch(() => {
         NotificationActions.error('Error', `Could not read user group configuration file`);
       });
     });
