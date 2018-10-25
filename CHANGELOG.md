@@ -1,4 +1,33 @@
 
+### [v1.0.2]()
+
+
+- Removed Container Runtime selection, which is no longer supported. [#828](https://github.com/kubermatic/dashboard-v2/issues/828) ([bashofmann](https://github.com/bashofmann))
+- Various minor visual improvements
+
+
+
+
+### [v1.0.1]()
+
+
+**Bugfix:**
+
+- Menu entries will be disabled as long as selected project is not in active state.
+- Selected project state icon was added in the project selector and in the list view.
+- Input field inside add project dialog will be automatically focused after opening dialog.
+- After adding new project user will be redirected to project list [#808](https://github.com/kubermatic/dashboard-v2/issues/808) ([maciaszczykm](https://github.com/maciaszczykm))
+
+
+**Misc:**
+
+- Notifications timeout is now 10s.
+- Close and copy to clipboard actions are available on notifications. [#798](https://github.com/kubermatic/dashboard-v2/issues/798) ([maciaszczykm](https://github.com/maciaszczykm))
+- Provider-specific data will now be fetched without re-sending credentials. [#814](https://github.com/kubermatic/dashboard-v2/issues/814) ([maciaszczykm](https://github.com/maciaszczykm))
+
+
+
+
 ### [v1.0.0]()
 
 
