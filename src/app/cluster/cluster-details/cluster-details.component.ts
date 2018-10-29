@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 
 import { lt, gt } from 'semver';
-import { Subscription, ObservableInput, Subject, interval, combineLatest} from 'rxjs';
+import { Subscription, ObservableInput, Subject, interval, combineLatest } from 'rxjs';
 import { retry, takeUntil } from 'rxjs/operators';
 
 import { NotificationActions } from '../../redux/actions/notification.actions';
