@@ -1,12 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { ClusterNameGenerator } from '../../core/util/name-generator.service';
 import { ApiService, WizardService } from '../../core/services';
 import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity';
-import { MachineNetworkForm } from '../../shared/model/ClusterForm';
-import { MachineNetworksComponent } from '../../machine-networks/machine-networks.component';
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',

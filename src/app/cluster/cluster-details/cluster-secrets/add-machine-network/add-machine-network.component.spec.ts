@@ -1,6 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormArray } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

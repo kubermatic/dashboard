@@ -1,12 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Sort, MatDialog, MatTabChangeEvent } from '@angular/material';
+import { Sort, MatDialog } from '@angular/material';
 import { Subscription, interval } from 'rxjs';
 import { retry } from 'rxjs/operators';
 import { find } from 'lodash';
 import { ApiService, UserService } from '../core/services';
 import { AppConfigService } from '../app-config.service';
-import { NotificationActions } from '../redux/actions/notification.actions';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { AddSshKeyModalComponent } from '../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 import { UserGroupConfig } from '../shared/model/Config';
@@ -28,7 +27,6 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   public projectID: string;
 
   constructor(private route: ActivatedRoute,
-    private router: Router,
     private api: ApiService,
     private userService: UserService,
     private appConfigService: AppConfigService,

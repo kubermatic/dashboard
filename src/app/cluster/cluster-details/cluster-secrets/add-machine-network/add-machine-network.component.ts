@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ApiService, WizardService } from '../../../../core/services';
 import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
-import { ClusterEntity, MachineNetwork } from '../../../../shared/entity/ClusterEntity';
+import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { MachineNetworkForm } from '../../../../shared/model/ClusterForm';
 
 @Component({

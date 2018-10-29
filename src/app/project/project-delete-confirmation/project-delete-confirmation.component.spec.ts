@@ -28,7 +28,6 @@ describe('ProjectDeleteConfirmationComponent', () => {
   let fixture: ComponentFixture<ProjectDeleteConfirmationComponent>;
   let component: ProjectDeleteConfirmationComponent;
   let apiService: ApiService;
-  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -51,7 +50,7 @@ describe('ProjectDeleteConfirmationComponent', () => {
     component = fixture.componentInstance;
 
     apiService = fixture.debugElement.injector.get(ApiService);
-    router = fixture.debugElement.injector.get(Router);
+    fixture.debugElement.injector.get(Router);
   });
 
   it('should create the add node modal cmp', async(() => {

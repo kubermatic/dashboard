@@ -36,14 +36,12 @@ import { GoogleAnalyticsService } from '../../../google-analytics.service';
 describe('AddNodeModalComponent', () => {
   let fixture: ComponentFixture<AddNodeModalComponent>;
   let component: AddNodeModalComponent;
-  let apiService: ApiService;
   let activatedRoute: ActivatedRouteStub;
-  let getDigitaloceanSizesSpy: Spy;
   let createClusterNodeSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'createClusterNode']);
-    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     createClusterNodeSpy = apiMock.createClusterNode.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
 
     TestBed.configureTestingModule({
@@ -98,7 +96,7 @@ describe('AddNodeModalComponent', () => {
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = { clusterName: 'tbbfvttvs' };
-    apiService = fixture.debugElement.injector.get(ApiService);
+    fixture.debugElement.injector.get(ApiService);
     fixture.detectChanges();
   });
 

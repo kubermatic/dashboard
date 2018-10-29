@@ -1,12 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, AbstractControl, ValidatorFn } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { WizardService, DatacenterService, ProjectService } from '../core/services';
 import { ClusterEntity } from '../shared/entity/ClusterEntity';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
-import { OperatingSystemSpec} from '../shared/entity/NodeEntity';
+import { OperatingSystemSpec } from '../shared/entity/NodeEntity';
 import { NoIpsLeftValidator } from '../shared/validators/no-ips-left.validator';
 
 @Component({

@@ -23,6 +23,7 @@ export class RouterLinkStubDirective {
   selector: '[routerLinkActive]', // tslint:disable-line
 })
 export class RouterLinkActiveStubDirective {
+  // @ts-ignore
   private classes: string[] = [];
 
   @Input()

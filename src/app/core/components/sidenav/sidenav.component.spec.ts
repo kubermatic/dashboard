@@ -23,7 +23,6 @@ import { UserMockService } from '../../../testing/services/user-mock.service';
 import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
 
 import { fakeProjects } from '../../../testing/fake-data/project.fake';
-import Spy = jasmine.Spy;
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 
 const modules: any[] = [
@@ -40,11 +39,10 @@ describe('SidenavComponent', () => {
   let component: SidenavComponent;
   let linkDes: DebugElement[];
   let links: RouterLinkStubDirective[];
-  let getProjectsSpy: Spy;
 
   beforeEach(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getProjects']);
-    getProjectsSpy = apiMock.getProjects.and.returnValue(asyncData(fakeProjects()));
+    apiMock.getProjects.and.returnValue(asyncData(fakeProjects()));
 
     TestBed.configureTestingModule({
       imports: [

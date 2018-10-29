@@ -3,16 +3,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
 import { ApiService } from '../../../core/services/api/api.service';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { MatDialogRef } from '@angular/material';
-import { nodeFake } from '../../../testing/fake-data/node.fake';
-import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { NodeDuplicateComponent } from './node-duplicate.component';
-import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 const modules: any[] = [
@@ -26,7 +23,6 @@ const modules: any[] = [
 describe('NodeDuplicateComponent', () => {
   let fixture: ComponentFixture<NodeDuplicateComponent>;
   let component: NodeDuplicateComponent;
-  let apiService: ApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -47,8 +43,6 @@ describe('NodeDuplicateComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NodeDuplicateComponent);
     component = fixture.componentInstance;
-
-    apiService = fixture.debugElement.injector.get(ApiService);
   });
 
   it('should create the duplicate node cmp', async(() => {

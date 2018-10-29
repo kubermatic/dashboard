@@ -1,11 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { ApiService, WizardService } from '../../core/services';
+import { WizardService } from '../../core/services';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { MachineNetworkForm } from '../../shared/model/ClusterForm';
-import { MachineNetworksComponent } from '../../machine-networks/machine-networks.component';
 
 @Component({
   selector: 'kubermatic-set-machine-networks',
@@ -18,8 +17,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
   public machineNetworkFormData: MachineNetworkForm[] = [];
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private wizardService: WizardService) { }
+  constructor(private wizardService: WizardService) { }
 
   ngOnInit(): void {
     this.setMachineNetworkForm = new FormGroup({

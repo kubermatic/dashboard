@@ -1,11 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { ApiService, WizardService, ProjectService } from '../../../core/services';
+import { ApiService, WizardService } from '../../../core/services';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
-import { Subscription, Observable, ObservableInput, combineLatest } from 'rxjs';
+import { Subscription, ObservableInput, combineLatest } from 'rxjs';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec, NodeEntity } from '../../../shared/entity/NodeEntity';
 import { NodeData } from '../../../shared/model/NodeSpecChange';

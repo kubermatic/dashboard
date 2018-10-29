@@ -4,7 +4,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatTabsModule, MatButtonToggleModule, MatDialog } from '@angular/material';
-import Spy = jasmine.Spy;
 import { ApiService, DatacenterService, InitialNodeDataService, ProjectService, HealthService, WizardService } from '../core/services';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { StepsService } from '../core/services/wizard/steps.service';
@@ -26,6 +25,7 @@ import { AWSClusterSettingsComponent } from './set-settings/provider-settings/aw
 import { AwsAddNodeComponent } from '../add-node/aws-add-node/aws-add-node.component';
 import { OpenstackClusterSettingsComponent } from './set-settings/provider-settings/openstack/openstack.component';
 import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
+import { SetMachineNetworksComponent } from './set-machine-networks/set-machine-networks.component';
 import { SetProviderComponent } from './set-provider/set-provider.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SummaryComponent } from './summary/summary.component';
@@ -49,16 +49,12 @@ import { masterVersionsFake } from '../testing/fake-data/cluster-spec.fake';
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
   let component: WizardComponent;
-  let router: Router;
-  let createClusterSpy: Spy;
-  let getClusterSpy: Spy;
-  let getMasterVersionsSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster', 'getMasterVersions']);
-    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
+    apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -95,6 +91,7 @@ describe('WizardComponent', () => {
         VSphereOptionsComponent,
         AzureAddNodeComponent,
         SetClusterSpecComponent,
+        SetMachineNetworksComponent,
         SetProviderComponent,
         SetDatacenterComponent,
         SummaryComponent,
@@ -121,7 +118,7 @@ describe('WizardComponent', () => {
     fixture = TestBed.createComponent(WizardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    router = fixture.debugElement.injector.get(Router);
+    fixture.debugElement.injector.get(Router);
   });
 
   it('should create wizard cmp', () => {
