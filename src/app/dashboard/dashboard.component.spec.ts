@@ -26,9 +26,6 @@ const modules: any[] = [
 describe('DashboardComponent', () => {
   let fixture: ComponentFixture<DashboardComponent>;
   let component: DashboardComponent;
-  let authService: AuthMockService;
-  let router: Router;
-  let apiService: ApiService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -51,10 +48,6 @@ describe('DashboardComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
-
-    authService = fixture.debugElement.injector.get(Auth) as any;
-    router = fixture.debugElement.injector.get(Router);
-    apiService = fixture.debugElement.injector.get(ApiService);
   });
 
   it('should create the cmp', async(() => {

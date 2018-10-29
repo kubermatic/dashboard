@@ -10,9 +10,9 @@ import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { NodeData } from '../shared/model/NodeSpecChange';
 import { NodeProvider } from '../shared/model/NodeProviderConstants';
 import { Step, StepsService } from '../core/services/wizard/steps.service';
-import { ApiService, InitialNodeDataService, ProjectService, HealthService } from '../core/services';
+import { ApiService, InitialNodeDataService, ProjectService } from '../core/services';
 import { NotificationActions } from '../redux/actions/notification.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { CreateClusterModel } from '../shared/model/CreateClusterModel';
 import { NodeEntity, getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec } from '../shared/entity/NodeEntity';
 import { GoogleAnalyticsService } from '../google-analytics.service';
@@ -43,9 +43,7 @@ export class WizardComponent implements OnInit, OnDestroy {
               private stepsService: StepsService,
               private initialNodeDataService: InitialNodeDataService,
               private router: Router,
-              private route: ActivatedRoute,
               private projectService: ProjectService,
-              private healthService: HealthService,
               private api: ApiService,
               public googleAnalyticsService: GoogleAnalyticsService) {
 
@@ -198,7 +196,6 @@ export class WizardComponent implements OnInit, OnDestroy {
     const setProviderSettingsStep: Step = { name: 'set-provider-settings', description: 'Settings', valid: () => this.clusterProviderSettingsFormData.valid && this.addNodeData.valid };
     const summary: Step = { name: 'summary', description: 'Summary', valid: () => true };
 
-    const steps: Step[] = [];
     if (this.clusterProviderFormData.provider === NodeProvider.BRINGYOUROWN) {
       this.steps = [
         setClusterSpecStep,

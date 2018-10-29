@@ -4,7 +4,6 @@ import { Subscription, interval } from 'rxjs';
 import { find } from 'lodash';
 import { AppConfigService } from '../app-config.service';
 import { ApiService, ProjectService, UserService } from '../core/services';
-import { Router } from '@angular/router';
 import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../add-project/add-project.component';
 import { UserGroupConfig } from '../shared/model/Config';
@@ -25,8 +24,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
-  constructor(private router: Router,
-              private api: ApiService,
+  constructor(private api: ApiService,
               private appConfigService: AppConfigService,
               private projectService: ProjectService,
               private userService: UserService,

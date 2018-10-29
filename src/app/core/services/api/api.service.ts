@@ -27,7 +27,7 @@ export class ApiService {
   private token: string;
 
   constructor(private http: HttpClient, private auth: Auth) {
-    this.token = auth.getBearerToken();
+    this.token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
   }
 

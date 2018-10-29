@@ -9,19 +9,17 @@ import { asyncData } from '../../../../testing/services/api-mock.service';
 import { fakeOpenstackCluster } from '../../../../testing/fake-data/cluster.fake';
 import { openstackTenantsFake } from '../../../../testing/fake-data/wizard.fake';
 import { AuthMockService } from '../../../../testing/services/auth-mock.service';
-import Spy = jasmine.Spy;
 import { AppConfigService } from '../../../../app-config.service';
 import { Config } from '../../../../shared/model/Config';
 
 describe('OpenstackClusterSettingsComponent', () => {
   let fixture: ComponentFixture<OpenstackClusterSettingsComponent>;
   let component: OpenstackClusterSettingsComponent;
-  let getOpenStackTenantsSpy: Spy;
   let config: Config;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackTenants']);
-    getOpenStackTenantsSpy = apiMock.getOpenStackTenants.and.returnValue(asyncData(openstackTenantsFake()));
+    apiMock.getOpenStackTenants.and.returnValue(asyncData(openstackTenantsFake()));
     const appConfigServiceMock = jasmine.createSpyObj('AppConfigService', ['getConfig']);
     config = new class implements Config {};
     appConfigServiceMock.getConfig.and.returnValue(config);

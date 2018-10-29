@@ -9,7 +9,6 @@ import { ApiService } from '../../core/services';
 import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
-import Spy = jasmine.Spy;
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
@@ -22,11 +21,10 @@ const modules: any[] = [
 describe('DigitaloceanAddNodeComponent', () => {
   let fixture: ComponentFixture<DigitaloceanAddNodeComponent>;
   let component: DigitaloceanAddNodeComponent;
-  let getDigitaloceanSizesForWizardSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizesForWizard']);
-    getDigitaloceanSizesForWizardSpy = apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     TestBed.configureTestingModule({
       imports: [
         ...modules,

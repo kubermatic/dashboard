@@ -2,8 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../redux/actions/notification.actions';
-import { ApiService, ProjectService } from '../../core/services';
-import { CreateMemberEntity, MemberProject } from '../../shared/entity/MemberEntity';
+import { ApiService } from '../../core/services';
+import { CreateMemberEntity } from '../../shared/entity/MemberEntity';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 
 @Component({
@@ -16,7 +16,6 @@ export class AddMemberComponent implements OnInit {
   public addMemberForm: FormGroup;
 
   constructor(private api: ApiService,
-              private projectService: ProjectService,
               private dialogRef: MatDialogRef<AddMemberComponent>) {
   }
 

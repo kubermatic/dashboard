@@ -17,12 +17,10 @@ import { ApiMockService } from '../testing/services/api-mock.service';
 import { ProjectMockService } from '../testing/services/project-mock.service';
 import { UserMockService } from '../testing/services/user-mock.service';
 import { AppConfigMockService } from '../testing/services/app-config-mock.service';
-import { asyncData } from '../testing/services/api-mock.service';
 
 describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
   let component: ProjectComponent;
-  let router: Router;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -51,7 +49,7 @@ describe('ProjectComponent', () => {
     fixture = TestBed.createComponent(ProjectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    router = fixture.debugElement.injector.get(Router);
+    fixture.debugElement.injector.get(Router);
   });
 
   it('should create project cmp', () => {

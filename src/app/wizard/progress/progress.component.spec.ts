@@ -17,7 +17,6 @@ const modules: any[] = [
 describe('ProgressComponent', () => {
   let fixture: ComponentFixture<ProgressComponent>;
   let component: ProgressComponent;
-  let stepsService: StepsService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -58,8 +57,6 @@ describe('ProgressComponent', () => {
     component.currentStepIndex = 1;
 
     fixture.detectChanges();
-
-    stepsService = fixture.debugElement.injector.get(StepsService);
   });
 
   it('should create the progress cmp', () => {

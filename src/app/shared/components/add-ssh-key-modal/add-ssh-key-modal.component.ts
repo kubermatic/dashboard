@@ -5,7 +5,6 @@ import { MatDialogRef } from '@angular/material';
 import { ApiService } from '../../../core/services';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',
@@ -15,7 +14,6 @@ import { Subscription } from 'rxjs';
 export class AddSshKeyModalComponent implements OnInit {
   @Input() projectID: string;
   public addSSHKeyForm: FormGroup;
-  private subscriptions: Subscription[] = [];
 
   constructor(private api: ApiService,
     private formBuilder: FormBuilder,

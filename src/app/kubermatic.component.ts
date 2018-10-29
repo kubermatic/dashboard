@@ -31,8 +31,8 @@ export class KubermaticComponent implements OnInit {
   ) {
     let enhancers = [];
 
-    if (devTools.isEnabled()) {
-      enhancers = [...enhancers, devTools.enhancer()];
+    if (this.devTools.isEnabled()) {
+      enhancers = [...enhancers, this.devTools.enhancer()];
     }
     this.ngRedux.configureStore(StoreReducer, INITIAL_STATE, null, enhancers);
 

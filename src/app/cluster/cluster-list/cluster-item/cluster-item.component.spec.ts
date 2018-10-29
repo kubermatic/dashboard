@@ -33,7 +33,6 @@ const modules: any[] = [
 describe('ClusterItemComponent', () => {
   let fixture: ComponentFixture<ClusterItemComponent>;
   let component: ClusterItemComponent;
-  let dcService: DatacenterService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -62,7 +61,7 @@ describe('ClusterItemComponent', () => {
     component.seedDC = fakeBringyourownSeedDatacenter();
     component.projectID = fakeProject().id;
     component.health = fakeHealth();
-    dcService = fixture.debugElement.injector.get(DatacenterService);
+    fixture.debugElement.injector.get(DatacenterService);
   });
 
   it('should create the cluster item cmp', async(() => {

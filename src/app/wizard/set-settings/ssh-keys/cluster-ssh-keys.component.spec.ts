@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import Spy = jasmine.Spy;
 import { ClusterSSHKeysComponent } from './cluster-ssh-keys.component';
 import { ApiService, ProjectService, WizardService, UserService } from '../../../core/services';
 import { AppConfigService } from './../../../app-config.service';
@@ -17,11 +16,10 @@ import { fakeSSHKeys } from '../../../testing/fake-data/sshkey.fake';
 describe('ClusterSSHKeys', () => {
   let fixture: ComponentFixture<ClusterSSHKeysComponent>;
   let component: ClusterSSHKeysComponent;
-  let getSSHKeysSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getSSHKeys']);
-    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
+    apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
 
     TestBed.configureTestingModule({
       imports: [

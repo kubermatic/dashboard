@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { ProjectService, UserService } from '../../core/services';
+import { UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { MemberEntity, MemberProject } from '../../shared/entity/MemberEntity';
@@ -20,8 +20,7 @@ export class MemberItemComponent implements OnInit {
   public userGroupConfig: UserGroupConfig;
   public userGroup: string;
 
-  constructor(private projectService: ProjectService,
-              private dialog: MatDialog,
+  constructor(private dialog: MatDialog,
               private appConfigService: AppConfigService,
               private userService: UserService) {}
 

@@ -11,7 +11,6 @@ import { nodeDataFake } from '../../testing/fake-data/node.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { fakeAzureSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { fakeAzureDatacenter } from '../../testing/fake-data/datacenter.fake';
-import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -23,16 +22,13 @@ const modules: any[] = [
 describe('AzureAddNodeComponent', () => {
   let fixture: ComponentFixture<AzureAddNodeComponent>;
   let component: AzureAddNodeComponent;
-  let getAzureSizesSpy: Spy;
-  let getAzureSizesForWizardSpy: Spy;
-  let getDatacenterSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getAzureSizes', 'getAzureSizesForWizard']);
-    getAzureSizesSpy = apiMock.getAzureSizes.and.returnValue(asyncData(fakeAzureSizes()));
-    getAzureSizesForWizardSpy = apiMock.getAzureSizesForWizard.and.returnValue(asyncData(fakeAzureSizes()));
+    apiMock.getAzureSizes.and.returnValue(asyncData(fakeAzureSizes()));
+    apiMock.getAzureSizesForWizard.and.returnValue(asyncData(fakeAzureSizes()));
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAzureDatacenter()));
+    datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAzureDatacenter()));
 
     TestBed.configureTestingModule({
       imports: [

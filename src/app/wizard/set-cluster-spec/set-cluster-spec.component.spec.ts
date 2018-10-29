@@ -9,7 +9,6 @@ import { ClusterNameGeneratorMock } from '../../testing/services/name-generator-
 import { asyncData } from '../../testing/services/api-mock.service';
 import { ApiService, WizardService } from '../../core/services';
 import { masterVersionsFake } from '../../testing/fake-data/cluster-spec.fake';
-import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -22,11 +21,10 @@ describe('SetClusterSpecComponent', () => {
   let fixture: ComponentFixture<SetClusterSpecComponent>;
   let component: SetClusterSpecComponent;
   let nameGenerator: ClusterNameGenerator;
-  let getMasterVersionsSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getMasterVersions']);
-    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
+    apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
 
     TestBed.configureTestingModule({
       imports: [

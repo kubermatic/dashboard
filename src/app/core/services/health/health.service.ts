@@ -15,7 +15,7 @@ export class HealthService {
 
   constructor(private http: HttpClient,
               private auth: Auth) {
-    const token = auth.getBearerToken();
+    const token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + token);
   }
 

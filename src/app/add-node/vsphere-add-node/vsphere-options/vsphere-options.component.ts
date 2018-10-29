@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs';
-import { ApiService, DatacenterService, WizardService } from '../../../core/services';
+import { DatacenterService, WizardService } from '../../../core/services';
 import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
 import { CloudSpec } from '../../../shared/entity/ClusterEntity';
 import { OperatingSystemSpec } from '../../../shared/entity/NodeEntity';
@@ -21,7 +21,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
   public defaultTemplate = 'ubuntu-template';
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private addNodeService: AddNodeService, private dcService: DatacenterService, private wizardService: WizardService) { }
+  constructor(private addNodeService: AddNodeService, private dcService: DatacenterService, private wizardService: WizardService) { }
 
   ngOnInit(): void {
     this.vsphereOptionsForm = new FormGroup({

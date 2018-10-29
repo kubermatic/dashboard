@@ -1,10 +1,8 @@
-import { ActivatedRoute, Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
-import { Sort, MatDialog, MatTabChangeEvent } from '@angular/material';
+import { Sort, MatDialog } from '@angular/material';
 import { Subscription, interval } from 'rxjs';
 import { retry } from 'rxjs/operators';
 import { find } from 'lodash';
-import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ApiService, UserService } from '../../../core/services';
 import { AppConfigService } from '../../../app-config.service';
 import { AddClusterSSHKeysComponent } from './add-cluster-sshkeys/add-cluster-sshkeys.component';
