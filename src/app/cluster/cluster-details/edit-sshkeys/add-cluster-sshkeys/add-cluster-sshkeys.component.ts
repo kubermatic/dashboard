@@ -38,7 +38,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private dialogRef: MatDialogRef<AddClusterSSHKeysComponent>) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe(group => {
       this.userGroup = group;
@@ -47,11 +47,11 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
     this.reloadKeys();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.keysSub.unsubscribe();
   }
 
-  reloadKeys() {
+  reloadKeys(): void {
     this.keysSub = this.api.getSSHKeys(this.projectID).subscribe(sshKeysRes => {
       const newKeys: SSHKeyEntity[] = [];
       for (const i in sshKeysRes) {
@@ -65,7 +65,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addClusterSSHKeys() {
+  public addClusterSSHKeys(): void {
     this.api.addClusterSSHKey(this.keysForm.controls.keys.value, this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(res => {
       NotificationActions.success('Success', `SSH key ${this.keysForm.controls.keys.value} was successfully added to cluster`);
       this.dialogRef.close(res);

@@ -21,7 +21,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   public currentProject: ProjectEntity;
   public sortedProjects: ProjectEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
-  public selectedTab = 'projects';
   public userGroup: string;
   public userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
@@ -51,7 +50,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.refreshProjects();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -59,7 +58,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
   }
 
-  refreshProjects() {
+  refreshProjects(): void {
     this.subscriptions.push(this.api.getProjects().subscribe(res => {
       this.projects = res;
       this.sortProjectData(this.sort);
@@ -67,7 +66,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public addProject() {
+  public addProject(): void {
     const modal = this.dialog.open(AddProjectComponent);
     const sub = modal.afterClosed().subscribe(added => {
       if (added) {
@@ -85,7 +84,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     return prevProject && prevProject.status === project.status ? index : undefined;
   }
 
-  sortProjectData(sort: Sort) {
+  sortProjectData(sort: Sort): void {
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedProjects = this.projects;
       return;
@@ -106,7 +105,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  compare(a, b, isAsc) {
+  compare(a, b, isAsc): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 

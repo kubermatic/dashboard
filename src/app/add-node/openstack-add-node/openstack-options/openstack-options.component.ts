@@ -40,7 +40,7 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  setImage(operatingSystem: OperatingSystemSpec) {
+  setImage(operatingSystem: OperatingSystemSpec): void {
     this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
       let coreosImage = '';
       let centosImage = '';
@@ -66,7 +66,7 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

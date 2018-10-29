@@ -46,7 +46,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  setImage(operatingSystem: OperatingSystemSpec) {
+  setImage(operatingSystem: OperatingSystemSpec): void {
     this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
       let coreosTemplate = '';
       let centosTemplate = '';
@@ -75,7 +75,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

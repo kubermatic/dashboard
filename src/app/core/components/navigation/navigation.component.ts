@@ -40,20 +40,14 @@ export class NavigationComponent implements OnInit {
     }
   }
 
-  public logout() {
+  public logout(): void {
     this.router.navigate(['']);
     this.auth.logout();
     this.projectService.removeProject();
   }
 
-  public scrolledChanged(isScrolled) {
+  public scrolledChanged(isScrolled): void {
     this.isScrolled = isScrolled;
-  }
-
-  public toggleSidenav() {
-    this.sidenavService
-      .toggle()
-      .then(() => { });
   }
 
   public onResize(event): void {

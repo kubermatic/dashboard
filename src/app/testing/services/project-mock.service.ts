@@ -10,7 +10,7 @@ export class ProjectMockService {
   selectedProjectChanges$ = this._project.asObservable();
   public project = fakeProject();
 
-  changeSelectedProject(data: ProjectEntity) {
+  changeSelectedProject(data: ProjectEntity): void {
     this._project.next(fakeProject());
     this.project = fakeProject();
   }
@@ -19,7 +19,7 @@ export class ProjectMockService {
     localStorage.setItem(`project`, fakeProject().id);
   }
 
-  public removeProject() {
+  public removeProject(): void {
     localStorage.removeItem('project');
   }
 

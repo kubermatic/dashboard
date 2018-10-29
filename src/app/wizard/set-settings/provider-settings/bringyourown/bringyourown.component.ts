@@ -11,7 +11,7 @@ export class BringyourownClusterSettingsComponent implements OnInit, OnDestroy {
 
   constructor() { }
 
-  ngOnInit() { }
+  ngOnInit(): void { }
 
-  ngOnDestroy() { }
+  ngOnDestroy(): void { }
 }

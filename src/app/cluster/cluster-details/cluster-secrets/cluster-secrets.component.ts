@@ -31,11 +31,11 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
               private healthService: HealthService,
               private appConfigService: AppConfigService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
   }
 
-  ngOnChanges() {
+  ngOnChanges(): void {
     this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
       this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
       this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
@@ -43,7 +43,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
     });
   }
 
-  isExpand(expand: boolean) {
+  isExpand(expand: boolean): void {
     this.expand = expand;
   }
 

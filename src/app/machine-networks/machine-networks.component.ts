@@ -20,7 +20,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
 
   constructor(private wizardService: WizardService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     const machineNetworksList = new FormArray([]);
 
     if (!!this.isWizard) {
@@ -60,11 +60,11 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     }
   }
 
-  getMachineNetworksForm(form) {
+  getMachineNetworksForm(form): void {
     return form.get('machineNetworks').controls;
   }
 
-  addMachineNetwork() {
+  addMachineNetwork(): void {
     this.machineNetworks = <FormArray>this.machineNetworksForm.get('machineNetworks');
     this.machineNetworks.push(new FormGroup({
       cidr: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)]),
@@ -79,7 +79,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
     this.setMachineNetworkSpec();
   }
 
-  setMachineNetworkSpec() {
+  setMachineNetworkSpec(): void {
     const machineNetworks = <FormArray>this.machineNetworksForm.get('machineNetworks');
     const machineNetworksMap = [];
     for (const i in machineNetworks.controls) {

@@ -63,7 +63,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
-  getDatacenter() {
+  getDatacenter(): void {
     if (this.cloudSpec.dc) {
       this.subscriptions.push(this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(data => {
         this.datacenter = data;
@@ -75,7 +75,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     return !this.clusterId || this.clusterId.length === 0;
   }
 
-  reloadAzureSizes() {
+  reloadAzureSizes(): void {
     if (this.cloudSpec.dc) {
       if (this.isInWizard()) {
         if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
@@ -96,7 +96,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
       if (!!!changes.cloudSpec.previousValue
         || (changes.cloudSpec.currentValue.azure.clientID !== changes.cloudSpec.previousValue.azure.clientID)
@@ -108,7 +108,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -116,11 +116,11 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  getTagForm(form) {
+  getTagForm(form): any {
     return form.get('tags').controls;
   }
 
-  addTag() {
+  addTag(): void {
     this.tags = <FormArray>this.azureNodeForm.get('tags');
     this.tags.push(new FormGroup({
       key: new FormControl(''),

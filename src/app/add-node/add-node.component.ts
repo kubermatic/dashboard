@@ -33,7 +33,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
               private _project: ProjectService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.nodeForm = new FormGroup({
       count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
       operatingSystem: new FormControl(Object.keys(this.nodeData.node.spec.operatingSystem)[0], Validators.required),

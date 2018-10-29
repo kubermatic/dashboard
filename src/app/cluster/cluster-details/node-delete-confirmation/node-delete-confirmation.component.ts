@@ -31,7 +31,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
               public googleAnalyticsService: GoogleAnalyticsService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
   }
 

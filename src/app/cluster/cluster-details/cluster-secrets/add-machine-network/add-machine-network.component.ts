@@ -24,7 +24,7 @@ export class AddMachineNetworkComponent implements OnInit {
               private wizardService: WizardService,
               private dialogRef: MatDialogRef<AddMachineNetworkComponent>) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe(res => {
       this.machineNetworkFormData = res;
     }));

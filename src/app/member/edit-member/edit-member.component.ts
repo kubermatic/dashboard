@@ -22,7 +22,7 @@ export class EditMemberComponent implements OnInit {
               private dialogRef: MatDialogRef<EditMemberComponent>) {
   }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.editMemberForm = new FormGroup({
       group: new FormControl('', [Validators.required]),
     });

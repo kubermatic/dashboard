@@ -32,7 +32,7 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
     this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

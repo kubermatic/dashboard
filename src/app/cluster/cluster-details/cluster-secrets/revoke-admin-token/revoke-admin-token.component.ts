@@ -20,9 +20,9 @@ export class RevokeAdminTokenComponent implements OnInit {
   constructor(private api: ApiService,
               private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
 
-  ngOnInit() { }
+  ngOnInit(): void { }
 
-  public revokeAdminToken() {
+  public revokeAdminToken(): void {
     this.api.editToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.adminToken).subscribe(res => {
       NotificationActions.success('Success', `Revoke Admin Token successfully`);
       this.dialogRef.close(res);

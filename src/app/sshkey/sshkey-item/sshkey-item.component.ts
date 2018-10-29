@@ -1,9 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { ApiService } from '../../core/services';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { NotificationActions } from '../../redux/actions/notification.actions';
 import { SSHKeyDeleteConfirmationComponent } from '../sshkey-delete-confirmation/sshkey-delete-confirmation.component';
 
 @Component({
@@ -22,9 +19,7 @@ export class SSHKeyItemComponent implements OnInit {
   public publicKeyName: string;
   public publicKey: string;
 
-  constructor(private apiService: ApiService,
-    public dialog: MatDialog,
-    private router: Router) { }
+  constructor(public dialog: MatDialog) { }
 
   public ngOnInit(): void {
     this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
@@ -37,11 +32,11 @@ export class SSHKeyItemComponent implements OnInit {
     }
   }
 
-  public deleteSshKey() {
+  public deleteSshKey(): void {
     const modal = this.dialog.open(SSHKeyDeleteConfirmationComponent);
     modal.componentInstance.projectId = this.projectId;
     modal.componentInstance.sshKey = this.sshKey;
-    const sub = modal.afterClosed().subscribe(deleted => {
+    const sub = modal.afterClosed().subscribe(() => {
       sub.unsubscribe();
     });
   }

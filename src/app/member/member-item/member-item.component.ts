@@ -57,7 +57,7 @@ export class MemberItemComponent implements OnInit {
     }
   }
 
-  public editMember() {
+  public editMember(): void {
     const modal = this.dialog.open(EditMemberComponent);
     modal.componentInstance.project = this.project;
     modal.componentInstance.member = this.member;

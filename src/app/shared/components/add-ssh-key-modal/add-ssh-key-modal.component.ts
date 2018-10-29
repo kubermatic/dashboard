@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
+import { SSHKeyEntity } from '../../entity/SSHKeyEntity';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { ApiService } from '../../../core/services';
@@ -22,7 +22,7 @@ export class AddSshKeyModalComponent implements OnInit {
     private dialogRef: MatDialogRef<AddSshKeyModalComponent>,
     public googleAnalyticsService: GoogleAnalyticsService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.addSSHKeyForm = this.formBuilder.group({
       name: ['', [<any>Validators.required]],
       key: ['', [<any>Validators.required]],
@@ -43,7 +43,7 @@ export class AddSshKeyModalComponent implements OnInit {
         });
   }
 
-  public onNewKeyTextChanged() {
+  public onNewKeyTextChanged(): void {
     const name = this.addSSHKeyForm.controls['name'].value;
     const key = this.addSSHKeyForm.controls['key'].value;
     const keyName = key.match(/^\S+ \S+ (.+)\n?$/);

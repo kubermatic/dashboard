@@ -27,7 +27,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
               private api: ApiService,
               private wizardService: WizardService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
       name: new FormControl(this.cluster.name, [Validators.required, Validators.minLength(5)]),
       version: new FormControl(this.cluster.spec.version),
@@ -58,12 +58,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  public generateName() {
-    this.clusterSpecForm.patchValue({ name: this.nameGenerator.generateName() });
-  }
-
-  versionChanged() {
+  versionChanged(): void {
     const shouldEnable = this.enableMachineNetworkConfiguration(this.clusterSpecForm.controls.version.value);
     const checkMachineNetworks = this.clusterSpecForm.get('checkMachineNetworks');
     if (!!shouldEnable) {
@@ -78,7 +73,11 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     return (!!version && gt(version, '1.8.9'));
   }
 
-  loadMasterVersions() {
+  public generateName(): void {
+    this.clusterSpecForm.patchValue({ name: this.nameGenerator.generateName() });
+  }
+
+  loadMasterVersions(): void {
     this.subscriptions.push(this.api.getMasterVersions().subscribe(versions => {
       this.masterVersions = versions;
       for (const i in versions) {
@@ -91,8 +90,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }));
   }
 
-
-  setClusterSpec() {
+  setClusterSpec(): void {
     let isValid = false;
     if (!!this.clusterSpecForm.controls.checkMachineNetworks.value) {
       if (this.machineNetworkFormData.length > 0) {

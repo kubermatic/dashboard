@@ -14,7 +14,7 @@ export class RouterLinkStubDirective {
   @Input('routerLink') linkParams: any; // tslint:disable-line
   navigatedTo: any = null;
 
-  @HostListener('click') onClick() {
+  @HostListener('click') onClick(): void {
     this.navigatedTo = this.linkParams;
   }
 }
@@ -26,7 +26,7 @@ export class RouterLinkActiveStubDirective {
   private classes: string[] = [];
 
   @Input()
-  set routerLinkActive(data: string[] | string) {
+  set routerLinkActive(data: string[] | string) { // tslint:disable-line
     const classes = Array.isArray(data) ? data : data.split(' ');
     this.classes = classes.filter(c => !!c);
   }
@@ -43,7 +43,7 @@ export class RouterOutletStubComponent {
 export class RouterStub {
   public events = new Subject();
 
-  navigate(commands: any[], extras?: NavigationExtras) { }
+  navigate(commands: any[], extras?: NavigationExtras): void { }
 }
 
 @Injectable()
@@ -53,14 +53,15 @@ export class ActivatedRouteStub {
   paramMap = this.subject.asObservable();
 
   private _testParamMap: ParamMap;
-  get testParamMap() { return this._testParamMap; }
 
-  set testParamMap(params: {}) {
+  get testParamMap() { return this._testParamMap; } // tslint:disable-line
+
+  set testParamMap(params: {}) { // tslint:disable-line
     this._testParamMap = convertToParamMap(params);
     this.subject.next(this._testParamMap);
   }
 
-  get snapshot() {
+  get snapshot() { // tslint:disable-line
     return { paramMap: this.testParamMap };
   }
 }

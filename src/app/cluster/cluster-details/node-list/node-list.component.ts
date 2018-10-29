@@ -51,7 +51,7 @@ export class NodeListComponent implements OnInit {
     private userService: UserService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe(group => {
       this.userGroup = group;

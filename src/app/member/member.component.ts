@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Sort, MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription, interval } from 'rxjs';
-import { NotificationActions } from '../redux/actions/notification.actions';
 import { ApiService, ProjectService, UserService } from '../core/services';
 import { AppConfigService } from '../app-config.service';
 import { AddMemberComponent } from './add-member/add-member.component';
@@ -51,7 +50,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     this.refreshMembers();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -59,7 +58,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addMember() {
+  public addMember(): void {
     const modal = this.dialog.open(AddMemberComponent);
     modal.componentInstance.project = this.project;
 
@@ -71,7 +70,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     });
   }
 
-  refreshMembers() {
+  refreshMembers(): void {
     if (this.project) {
       this.subscriptions.push(this.api.getMembers(this.project.id).subscribe(res => {
         this.members = res;
@@ -81,7 +80,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     }
   }
 
-  sortData(sort: Sort) {
+  sortData(sort: Sort): void {
     if (sort === null || !sort.active || sort.direction === '') {
       this.sortedMembers = this.members;
       return;
@@ -104,11 +103,11 @@ export class MemberComponent implements OnInit, OnDestroy {
     });
   }
 
-  compare(a, b, isAsc) {
+  compare(a, b, isAsc): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  getGroup(projectsA, projectsB, isAsc) {
+  getGroup(projectsA, projectsB, isAsc): number {
     let groupA: string;
     let groupB: string;
 
@@ -155,7 +154,6 @@ export class MemberComponent implements OnInit, OnDestroy {
     }
 
     return this.compare(groupA, groupB, isAsc);
-
   }
 
 }
