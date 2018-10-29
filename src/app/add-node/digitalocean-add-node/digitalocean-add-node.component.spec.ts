@@ -10,7 +10,7 @@ import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import Spy = jasmine.Spy;
-import {nodeDataFake} from '../../testing/fake-data/node.fake';
+import { nodeDataFake } from '../../testing/fake-data/node.fake';
 
 const modules: any[] = [
   BrowserModule,

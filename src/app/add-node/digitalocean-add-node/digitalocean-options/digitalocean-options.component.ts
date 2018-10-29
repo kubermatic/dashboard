@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../../core/services';
-import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
+import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-digitalocean-options',
