@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ApiService } from '../../../core/services';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-cluster-connect',

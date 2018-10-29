@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { BrowserModule, By } from '@angular/platform-browser';
-import { SimpleNotificationsModule} from 'angular2-notifications';
+import { SimpleNotificationsModule } from 'angular2-notifications';
 import { NgReduxTestingModule } from '@angular-redux/store/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';

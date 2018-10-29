@@ -24,7 +24,7 @@ import { AppConfigMockService } from '../../../testing/services/app-config-mock.
 
 import { fakeProjects } from '../../../testing/fake-data/project.fake';
 import Spy = jasmine.Spy;
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 
 const modules: any[] = [
   BrowserModule,
