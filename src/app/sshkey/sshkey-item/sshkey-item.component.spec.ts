@@ -1,9 +1,9 @@
 import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '../../testing/router-stubs';
 import { Auth } from '../../core/services';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
@@ -19,8 +19,6 @@ const modules: any[] = [
 ];
 
 describe('SSHKeyItemComponent', () => {
-  let fixture: ComponentFixture<SSHKeyItemComponent>;
-  let component: SSHKeyItemComponent;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,7 +35,6 @@ describe('SSHKeyItemComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SSHKeyItemComponent);
-    component = fixture.componentInstance;
+    TestBed.createComponent(SSHKeyItemComponent);
   });
 });

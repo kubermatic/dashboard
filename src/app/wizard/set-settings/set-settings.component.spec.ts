@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTabsModule } from '@angular/material';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import Spy = jasmine.Spy;
 
 import { SetSettingsComponent } from './set-settings.component';
 import { ClusterProviderSettingsComponent } from './provider-settings/provider-settings.component';
@@ -44,15 +43,12 @@ import { DatacenterMockService } from '../../testing/services/datacenter-mock.se
 describe('SetSettingsComponent', () => {
   let fixture: ComponentFixture<SetSettingsComponent>;
   let component: SetSettingsComponent;
-  let getDigitaloceanSizesSpy: Spy;
-  let getDigitaloceanSizesForWizardSpy: Spy;
-  let getSSHKeysSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys']);
-    getDigitaloceanSizesSpy = apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    getDigitaloceanSizesForWizardSpy = apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    getSSHKeysSpy = apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
+    apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
 
     TestBed.configureTestingModule({
       imports: [

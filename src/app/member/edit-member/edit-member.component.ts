@@ -2,8 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { NotificationActions } from '../../redux/actions/notification.actions';
-import { ApiService, ProjectService } from '../../core/services';
-import { CreateMemberEntity, MemberProject } from '../../shared/entity/MemberEntity';
+import { ApiService } from '../../core/services';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { MemberEntity } from '../../shared/entity/MemberEntity';
 
@@ -18,7 +17,6 @@ export class EditMemberComponent implements OnInit {
   public editMemberForm: FormGroup;
 
   constructor(private api: ApiService,
-              private projectService: ProjectService,
               private dialogRef: MatDialogRef<EditMemberComponent>) {
   }
 

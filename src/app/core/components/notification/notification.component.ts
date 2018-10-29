@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { ClipboardService } from 'ngx-clipboard';
-import { NotificationsService, Notification, NotificationType } from 'angular2-notifications';
+import { NotificationsService, Notification } from 'angular2-notifications';
 import { NotificationToast, NotificationToastType } from '../../../shared/interfaces/notification-toast.interface';
 import { select } from '@angular-redux/store';
 
