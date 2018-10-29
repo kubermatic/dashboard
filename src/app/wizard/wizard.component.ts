@@ -183,7 +183,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     this.stepsService.changeCurrentStep(0, this.steps[0]);
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

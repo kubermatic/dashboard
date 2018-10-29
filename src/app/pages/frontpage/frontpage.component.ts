@@ -20,7 +20,7 @@ export class FrontpageComponent implements OnInit {
   }
 
   @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
+  keyEvent(event: KeyboardEvent): void {
     // keyCode = 13 is enter
     if (event.keyCode === 13) {
       this.goToLogin();

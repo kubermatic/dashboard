@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Auth } from './auth.service';
 
-export function authFactory() {
+export function authFactory(): Auth {
   return new Auth();
 }
 

@@ -22,8 +22,8 @@ export class EditSSHKeyDeleteConfirmationComponent {
               private dialogRef: MatDialogRef<EditSSHKeyDeleteConfirmationComponent>) {
   }
 
-  deleteClusterSSHKey() {
-    this.api.deleteClusterSSHKey(this.sshKey.id, this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(result => {
+  deleteClusterSSHKey(): void {
+    this.api.deleteClusterSSHKey(this.sshKey.id, this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(() => {
       NotificationActions.success('Success', `SSH key has been removed from cluster`);
     });
     this.dialogRef.close(true);

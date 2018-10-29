@@ -166,7 +166,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       });
   }
 
-  public initialNodeCreation() {
+  public initialNodeCreation(): void {
     if (!!this.cluster && !!this.initialNodeDataService.getInitialNodeData(this.cluster)) {
       this.hasInitialNodes = true;
     }
@@ -202,7 +202,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public reloadClusterNodes() {
+  public reloadClusterNodes(): void {
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(takeUntil(this.unsubscribe))
@@ -212,7 +212,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public reloadVersions() {
+  public reloadVersions(): void {
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
       this.api.getClusterUpgrades(this.projectID, this.datacenter.metadata.name, this.cluster.id)
         .pipe(takeUntil(this.unsubscribe))
@@ -231,7 +231,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               }
             }
           }
-
         });
     }
   }
@@ -303,7 +302,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public editSSHKeys() {
+  public editSSHKeys(): void {
     const modal = this.dialog.open(EditSSHKeysComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
@@ -319,7 +318,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  public loadMoreSshKeys(moreSshKeys: boolean) {
+  public loadMoreSshKeys(moreSshKeys: boolean): void {
     this.moreSshKeys = moreSshKeys;
   }
 }

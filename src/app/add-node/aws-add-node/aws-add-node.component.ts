@@ -78,11 +78,11 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
     };
   }
 
-  getTagForm(form) {
+  getTagForm(form): any  {
     return form.get('tags').controls;
   }
 
-  addTag() {
+  addTag(): void {
     this.tags = <FormArray>this.awsNodeForm.get('tags');
     this.tags.push(new FormGroup({
       key: new FormControl(''),

@@ -17,7 +17,7 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
 
   constructor(private wizardService: WizardService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.digitaloceanSettingsForm = new FormGroup({
       token: new FormControl(this.cluster.spec.cloud.digitalocean.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
@@ -35,7 +35,7 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.digitaloceanSettingsFormSub.unsubscribe();
   }
 }

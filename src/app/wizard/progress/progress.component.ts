@@ -13,9 +13,9 @@ export class ProgressComponent implements OnInit, OnDestroy {
 
   constructor(private stepsService: StepsService) { }
 
-  ngOnInit() {}
+  ngOnInit(): void {}
 
-  ngOnDestroy() { }
+  ngOnDestroy(): void { }
 
   getIconClass(step: number): string {
     let iconClass = 'fa fa-circle-o-notch fa-spin';
@@ -48,7 +48,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
     return cursor;
   }
 
-  gotoStep(i: number, step: Step) {
+  gotoStep(i: number, step: Step): void {
     if (this.currentStepIndex > i) {
       this.stepsService.changeCurrentStep(i, step);
     }

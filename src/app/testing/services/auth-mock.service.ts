@@ -16,6 +16,6 @@ export class AuthMockService {
     return 'testUser';
   }
 
-  public logout() {}
+  public logout(): void {}
 
 }

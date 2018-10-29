@@ -21,7 +21,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
 
   constructor(private wizardService: WizardService, private api: ApiService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.vsphereSettingsForm = new FormGroup({
       infraManagementUsername: new FormControl(this.cluster.spec.cloud.vsphere.infraManagementUser.username, Validators.required),
       infraManagementPassword: new FormControl(this.cluster.spec.cloud.vsphere.infraManagementUser.password, Validators.required),
@@ -64,7 +64,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -72,7 +72,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public loadNetworks() {
+  public loadNetworks(): void {
     if (
       this.vsphereSettingsForm.controls.username.value === '' ||
       this.vsphereSettingsForm.controls.password.value === '' ||
