@@ -120,7 +120,11 @@
       "check-module",
       "check-operator",
       "check-separator",
-      "check-type"
+      "check-rest-spread",
+      "check-type",
+      "check-typecast",
+      "check-type-operator",
+      "check-preblock"
     ],
     "directive-selector": [
       true,

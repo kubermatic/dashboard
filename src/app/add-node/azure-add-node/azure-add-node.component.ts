@@ -121,7 +121,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   addTag(): void {
-    this.tags = <FormArray>this.azureNodeForm.get('tags');
+    this.tags = <FormArray> this.azureNodeForm.get('tags');
     this.tags.push(new FormGroup({
       key: new FormControl(''),
       value: new FormControl('')
@@ -129,7 +129,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   deleteTag(index: number): void {
-    const arrayControl = <FormArray>this.azureNodeForm.get('tags');
+    const arrayControl = <FormArray> this.azureNodeForm.get('tags');
     arrayControl.removeAt(index);
   }
 

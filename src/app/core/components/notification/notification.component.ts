@@ -67,7 +67,7 @@ export class NotificationComponent {
   registerClickHandler(notification: Notification, plainMessage: string): void {
     if (notification) {
       notification.click.subscribe((e: MouseEvent) => {
-        const targetId = (<HTMLElement>e.target).className;
+        const targetId = (<HTMLElement> e.target).className;
         if (targetId.indexOf( NotificationComponent.closeButtonClass) > -1) {
           this._service.remove(notification.id);
         }

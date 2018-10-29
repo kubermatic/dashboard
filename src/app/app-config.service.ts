@@ -20,7 +20,7 @@ export class AppConfigService {
     const jsonfile = environment.configUrl;
     setTimeout(() => {
       return this.http.get(jsonfile).toPromise().then(resp => {
-        this.appConfig = <Config>resp;
+        this.appConfig = <Config> resp;
       }).catch(() => {
         NotificationActions.error('Error', `Could not read configuration file`);
       });
@@ -35,7 +35,7 @@ export class AppConfigService {
     const jsonfile = '../assets/config/userGroupConfig.json';
     setTimeout(() => {
       return this.http.get(jsonfile).toPromise().then(resp => {
-        this.userGroupConfig = <UserGroupConfig>resp;
+        this.userGroupConfig = <UserGroupConfig> resp;
       }).catch(() => {
         NotificationActions.error('Error', `Could not read user group configuration file`);
       });
