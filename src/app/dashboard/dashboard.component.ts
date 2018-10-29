@@ -2,7 +2,7 @@ import { BreadcrumbActions } from './../redux/actions/breadcrumb.actions';
 import { Component, OnInit } from '@angular/core';
 import { Auth } from '../core/services';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { filter, mergeMap, map} from 'rxjs/operators';
+import { filter, mergeMap, map } from 'rxjs/operators';
 import { ApiService } from '../core/services/api/api.service';
 import { DatacenterService } from '../core/services/datacenter/datacenter.service';
 

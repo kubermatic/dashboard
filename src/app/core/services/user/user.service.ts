@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { Auth } from '../auth/auth.service';
 import { environment } from './../../../../environments/environment';
 import { MemberEntity } from '../../../shared/entity/MemberEntity';
-import { MasterVersion } from '../../../shared/entity/ClusterEntity';
 
 @Injectable()
 export class UserService {

@@ -3,10 +3,9 @@ import { ClusterEntity } from '../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
-import {WizardService, DatacenterService, ProjectService} from '../core/services';
+import { WizardService, DatacenterService, ProjectService } from '../core/services';
 import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
-import { OperatingSystemSpec} from '../shared/entity/NodeEntity';
-import { ActivatedRoute } from '@angular/router';
+import { OperatingSystemSpec } from '../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-add-node',

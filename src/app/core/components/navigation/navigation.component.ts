@@ -7,8 +7,6 @@ import { environment } from '../../../../environments/environment';
 import { AppConstants } from '../../../shared/constants/constants';
 import { MobileNavigationComponent } from '../../../overlays';
 import { MemberEntity } from '../../../shared/entity/MemberEntity';
-import {Subscription} from 'rxjs/index';
-
 
 @Component({
   selector: 'kubermatic-navigation',

@@ -9,7 +9,7 @@ import { DigitaloceanOptionsComponent } from './digitalocean-add-node/digitaloce
 import { OpenstackAddNodeComponent } from './openstack-add-node/openstack-add-node.component';
 import { OpenstackOptionsComponent } from './openstack-add-node/openstack-options/openstack-options.component';
 import { fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster } from '../testing/fake-data/cluster.fake';
-import { AddNodeService} from '../core/services/add-node/add-node.service';
+import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { ProjectService, WizardService, ApiService, DatacenterService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanSizes, fakeOpenstackFlavors } from '../testing/fake-data/addNodeModal.fake';
