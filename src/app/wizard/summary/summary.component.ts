@@ -59,19 +59,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   }
 
   getDnsServers(dnsServers: string[]): string {
-    let dnsServerString = '';
-    let counter = 0;
-    for (const i in dnsServers) {
-      if (dnsServers.hasOwnProperty(i)) {
-        counter++;
-        if (counter === 1) {
-          dnsServerString += (dnsServers[i]);
-        } else {
-          dnsServerString += (', ' + dnsServers[i]);
-        }
-      }
-    }
-    return dnsServerString;
+    return dnsServers.join(', ');
   }
 
 }
