@@ -35,6 +35,6 @@ export class ProgressBrowserXhr extends BrowserXhr {
       }
     };
 
-    return <any>(xhr);
+    return <any> xhr;
   }
 }

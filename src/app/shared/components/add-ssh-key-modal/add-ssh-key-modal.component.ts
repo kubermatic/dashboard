@@ -22,8 +22,8 @@ export class AddSshKeyModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.addSSHKeyForm = this.formBuilder.group({
-      name: ['', [<any>Validators.required]],
-      key: ['', [<any>Validators.required]],
+      name: ['', [<any> Validators.required]],
+      key: ['', [<any> Validators.required]],
     });
     this.googleAnalyticsService.emitEvent('addSshKey', 'addSshKeyDialogOpened');
   }

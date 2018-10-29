@@ -83,7 +83,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   addTag(): void {
-    this.tags = <FormArray>this.awsNodeForm.get('tags');
+    this.tags = <FormArray> this.awsNodeForm.get('tags');
     this.tags.push(new FormGroup({
       key: new FormControl(''),
       value: new FormControl('')
@@ -91,7 +91,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   deleteTag(index: number): void {
-    const arrayControl = <FormArray>this.awsNodeForm.get('tags');
+    const arrayControl = <FormArray> this.awsNodeForm.get('tags');
     arrayControl.removeAt(index);
   }
 
