@@ -6,12 +6,12 @@ import { AWSProviderSettingsComponent } from '../aws-provider-settings/aws-provi
 import { DigitaloceanProviderSettingsComponent } from '../digitalocean-provider-settings/digitalocean-provider-settings.component';
 import { HetznerProviderSettingsComponent } from '../hetzner-provider-settings/hetzner-provider-settings.component';
 import { OpenstackProviderSettingsComponent } from '../openstack-provider-settings/openstack-provider-settings.component';
-import { VSphereProviderSettingsComponent } from '../vsphere-provider-settings/vsphere-provider-settings.component';
+import { VSphereProviderSettingsComponent } from './vsphere-provider-settings.component';
 import { AzureProviderSettingsComponent } from '../azure-provider-settings/azure-provider-settings.component';
 import { MatDialogRef } from '@angular/material';
 import { MatDialogRefMock } from '../../../../testing/services/mat-dialog-ref-mock';
 import { SharedModule } from '../../../../shared/shared.module';
-import { ApiService } from '../../../../core/services/api/api.service';
+import { ApiService } from '../../../../core/services';
 import { ClusterService } from '../../../../core/services';
 import { ApiMockService } from '../../../../testing/services/api-mock.service';
 import { fakeVSphereCluster } from '../../../../testing/fake-data/cluster.fake';
@@ -56,6 +56,10 @@ describe('VSphereProviderSettingsComponent', () => {
       username: '',
       password: '',
       vmNetName: '',
+      infraManagementUser: {
+        username: '',
+        password: ''
+      }
     };
     fixture.detectChanges();
   });
@@ -70,14 +74,14 @@ describe('VSphereProviderSettingsComponent', () => {
 
   it('required fields', () => {
     expect(component.vsphereProviderSettingsForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.username.valid).toBeFalsy('username field is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.username.hasError('required')).toBeTruthy('username field has initially required error');
-    expect(component.vsphereProviderSettingsForm.controls.password.valid).toBeFalsy('password field is initially not valid');
-    expect(component.vsphereProviderSettingsForm.controls.password.hasError('required')).toBeTruthy('password field has initially required error');
+    expect(component.vsphereProviderSettingsForm.controls.infraManagementUsername.valid).toBeFalsy('username field is initially not valid');
+    expect(component.vsphereProviderSettingsForm.controls.infraManagementUsername.hasError('required')).toBeTruthy('username field has initially required error');
+    expect(component.vsphereProviderSettingsForm.controls.infraManagementPassword.valid).toBeFalsy('password field is initially not valid');
+    expect(component.vsphereProviderSettingsForm.controls.infraManagementPassword.hasError('required')).toBeTruthy('password field has initially required error');
 
-    component.vsphereProviderSettingsForm.controls.username.patchValue('foo');
-    expect(component.vsphereProviderSettingsForm.controls.username.hasError('required')).toBeFalsy('username field has no required error after setting foo');
-    component.vsphereProviderSettingsForm.controls.password.patchValue('foo');
-    expect(component.vsphereProviderSettingsForm.controls.password.hasError('required')).toBeFalsy('password field has no required error after setting foo');
+    component.vsphereProviderSettingsForm.controls.infraManagementUsername.patchValue('foo');
+    expect(component.vsphereProviderSettingsForm.controls.infraManagementUsername.hasError('required')).toBeFalsy('username field has no required error after setting foo');
+    component.vsphereProviderSettingsForm.controls.infraManagementPassword.patchValue('foo');
+    expect(component.vsphereProviderSettingsForm.controls.infraManagementPassword.hasError('required')).toBeFalsy('password field has no required error after setting foo');
   });
 });

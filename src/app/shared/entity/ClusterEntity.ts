@@ -1,7 +1,6 @@
 import { DigitaloceanCloudSpec } from './cloud/DigitaloceanCloudSpec';
 import { BringYourOwnCloudSpec } from './cloud/BringYourOwnCloudSpec';
 import { AWSCloudSpec } from './cloud/AWSCloudSpec';
-import { MetadataEntity } from './MetadataEntity';
 import { OpenstackCloudSpec } from './cloud/OpenstackCloudSpec';
 import { BareMetalCloudSpec } from './cloud/BareMetalCloudSpec';
 import { NodeProvider } from '../model/NodeProviderConstants';
@@ -91,6 +90,10 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         username: '',
         password: '',
         vmNetName: '',
+        infraManagementUser: {
+          username: '',
+          password: '',
+        }
       };
       return vsSpec;
     case NodeProvider.HETZNER:

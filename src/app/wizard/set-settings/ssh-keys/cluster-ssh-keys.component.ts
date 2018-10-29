@@ -37,7 +37,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
               private userService: UserService,
               private appConfigService: AppConfigService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.project = this.projectService.project;
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
@@ -55,30 +55,23 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     this.keysForm.controls.keys.patchValue(keyNames);
 
     this.keysFormSub = this.keysForm.valueChanges.subscribe(data => {
-      const clusterKeys: SSHKeyEntity[] = [];
-      for (const selectedKey of this.keysForm.controls.keys.value) {
-        for (const key of this.keys) {
-          if (selectedKey === key.name) {
-            clusterKeys.push(key);
-          }
-        }
-      }
-      this.wizardService.changeClusterSSHKeys(clusterKeys);
+      this.setClusterSSHKeysSpec();
     });
 
     this.reloadKeys();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.keysSub.unsubscribe();
     this.keysFormSub.unsubscribe();
   }
 
-  reloadKeys() {
+  reloadKeys(): void {
     this.keysSub = this.api.getSSHKeys(this.project.id).subscribe(sshKeys => {
       this.keys = sshKeys.sort((a, b) => {
         return a.name.localeCompare(b.name);
       });
+      this.setClusterSSHKeysSpec();
     });
   }
 
@@ -91,13 +84,21 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
         if (this.keysSub) {
           this.keysSub.unsubscribe();
         }
-
         this.reloadKeys();
-
-        this.keysForm.setValue({
-          keys: [result.name]
-        });
+        this.keysForm.controls.keys.patchValue([result.name]);
       }
     });
+  }
+
+  public setClusterSSHKeysSpec(): void {
+    const clusterKeys: SSHKeyEntity[] = [];
+    for (const selectedKey of this.keysForm.controls.keys.value) {
+      for (const key of this.keys) {
+        if (selectedKey === key.name) {
+          clusterKeys.push(key);
+        }
+      }
+    }
+    this.wizardService.changeClusterSSHKeys(clusterKeys);
   }
 }

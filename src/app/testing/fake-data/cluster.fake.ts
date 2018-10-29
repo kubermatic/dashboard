@@ -98,7 +98,11 @@ export function fakeVSphereCluster(): ClusterEntity {
         vsphere: {
           username: 'foo',
           password: 'bar',
-          vmNetName: ''
+          vmNetName: '',
+          infraManagementUser: {
+            username: 'foo',
+            password: 'bar',
+          }
         },
         hetzner: null,
         azure: null

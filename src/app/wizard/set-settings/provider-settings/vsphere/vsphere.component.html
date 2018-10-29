@@ -1,15 +1,21 @@
 <form [formGroup]="vsphereSettingsForm" fxLayout="column">
   <mat-form-field fxFlex>
-    <input matInput formControlName="username" type="text" placeholder="Username*:" autocomplete="off">
-    <mat-error *ngIf="vsphereSettingsForm.controls.username.hasError('required')">
+    <input matInput formControlName="infraManagementUsername" type="text" placeholder="Username*:" autocomplete="off">
+    <mat-error *ngIf="vsphereSettingsForm.controls.infraManagementUsername.hasError('required')">
       Username is <strong>required</strong>
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <input matInput formControlName="password" type="password" placeholder="Password*:" autocomplete="off">
-    <mat-error *ngIf="vsphereSettingsForm.controls.password.hasError('required')">
+    <input matInput formControlName="infraManagementPassword" type="password" placeholder="Password*:" autocomplete="off">
+    <mat-error *ngIf="vsphereSettingsForm.controls.infraManagementPassword.hasError('required')">
       Password is <strong>required</strong>
     </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex *ngIf="!hideOptional">
+    <input matInput formControlName="username" type="text" placeholder="VSphere Cloud Provider Username:" autocomplete="off">
+  </mat-form-field>
+  <mat-form-field fxFlex *ngIf="!hideOptional">
+    <input matInput formControlName="password" type="password" placeholder="VSphere Cloud Provider Password:" autocomplete="off">
   </mat-form-field>
   <mat-form-field fxFlex *ngIf="!hideOptional">
     <mat-select placeholder="Network:" formControlName="vmNetName">

@@ -1,16 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
-import { ApiService } from '../../../../core/services';
-import { ClusterService } from '../../../../core/services/cluster/cluster.service';
+import { ClusterService } from '../../../../core/services';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
-import { ClusterProviderSettingsData } from '../../../../shared/model/ClusterSpecChange';
+import { ProviderSettingsPatch } from '../../../../core/services/cluster/cluster.service';
 
 @Component({
   selector: 'kubermatic-digitalocean-provider-settings',
   templateUrl: './digitalocean-provider-settings.component.html',
-  styleUrls: ['./digitalocean-provider-settings.component.scss']
 })
 
 export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy {
@@ -18,17 +15,15 @@ export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy 
   public digitaloceanProviderSettingsForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private clusterService: ClusterService) {}
+  constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
     this.digitaloceanProviderSettingsForm = new FormGroup({
       token: new FormControl(this.cluster.spec.cloud.digitalocean.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.subscriptions.push(this.digitaloceanProviderSettingsForm.valueChanges.subscribe(data => {
-      if (this.digitaloceanProviderSettingsForm.valid) {
-        this.clusterService.changeProviderSettingsData(this.getProviderSettingsData());
-      }
+    this.subscriptions.push(this.digitaloceanProviderSettingsForm.valueChanges.subscribe(() => {
+      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
     }));
   }
 
@@ -40,12 +35,14 @@ export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy 
     }
   }
 
-  getProviderSettingsData(): ClusterProviderSettingsData {
+  getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
-      digitalocean: {
-        token: this.digitaloceanProviderSettingsForm.controls.token.value,
+      cloudSpecPatch: {
+        digitalocean: {
+          token: this.digitaloceanProviderSettingsForm.controls.token.value,
+        },
       },
-      valid: true
+      isValid: this.digitaloceanProviderSettingsForm.valid,
     };
   }
 }

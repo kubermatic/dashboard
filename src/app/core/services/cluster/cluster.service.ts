@@ -1,13 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { ClusterProviderSettingsData } from '../../../shared/model/ClusterSpecChange';
+import { CloudSpecPatch } from '../../../shared/entity/ClusterEntityPatch';
+
+export class ProviderSettingsPatch {
+  cloudSpecPatch: CloudSpecPatch;
+  isValid: boolean;
+}
 
 @Injectable()
 export class ClusterService {
-  private _providerSettingsData = new Subject<ClusterProviderSettingsData>();
-  providerSettingsDataChanges$ = this._providerSettingsData.asObservable();
+  private _providerSettingsPatch = new Subject<ProviderSettingsPatch>();
+  providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
 
-  changeProviderSettingsData(data: ClusterProviderSettingsData) {
-    this._providerSettingsData.next(data);
+  changeProviderSettingsPatch(patch: ProviderSettingsPatch) {
+    this._providerSettingsPatch.next(patch);
   }
 }

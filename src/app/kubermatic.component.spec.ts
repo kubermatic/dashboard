@@ -77,7 +77,8 @@ describe('KubermaticComponent', () => {
     fixture = TestBed.createComponent(KubermaticComponent);
     component = fixture.componentInstance;
     component.config = {
-      'show_demo_info': false
+      'show_demo_info': false,
+      'show_terms_of_service': false
     };
     authService = fixture.debugElement.injector.get(Auth) as any;
   });

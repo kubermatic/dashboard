@@ -4,10 +4,11 @@ import { Subscription } from 'rxjs';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ApiService, ProjectService, ClusterService } from '../../../core/services';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ClusterProviderSettingsData } from '../../../shared/model/ClusterSpecChange';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import { ProviderSettingsPatch } from '../../../core/services/cluster/cluster.service';
 
 @Component({
   selector: 'kubermatic-edit-provider-settings',
@@ -18,9 +19,12 @@ import { GoogleAnalyticsService } from '../../../google-analytics.service';
 export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  public providerSettingsData: ClusterProviderSettingsData = { valid: false };
   public project: ProjectEntity;
   private subscriptions: Subscription[] = [];
+  public providerSettingsPatch: ProviderSettingsPatch = {
+    isValid: false,
+    cloudSpecPatch: {}
+  };
 
   constructor(private api: ApiService,
               private clusterService: ClusterService,
@@ -29,8 +33,8 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
               public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.clusterService.providerSettingsDataChanges$.subscribe(async (data: ClusterProviderSettingsData) => {
-      this.providerSettingsData = await data;
+    this.subscriptions.push(this.clusterService.providerSettingsPatchChanges$.subscribe(async (patch: ProviderSettingsPatch) => {
+      this.providerSettingsPatch = await patch;
     }));
 
     this.project = this.projectService.project;
@@ -50,24 +54,17 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   }
 
   public saveProviderSettings() {
-    if (!!this.cluster.spec.cloud.aws) {
-      this.cluster.spec.cloud.aws = this.providerSettingsData.aws;
-    } else if (!!this.cluster.spec.cloud.digitalocean) {
-      this.cluster.spec.cloud.digitalocean = this.providerSettingsData.digitalocean;
-    } else if (!!this.cluster.spec.cloud.hetzner) {
-      this.cluster.spec.cloud.hetzner = this.providerSettingsData.hetzner;
-    } else if (!!this.cluster.spec.cloud.openstack) {
-      this.cluster.spec.cloud.openstack = this.providerSettingsData.openstack;
-    } else if (!!this.cluster.spec.cloud.vsphere) {
-      this.cluster.spec.cloud.vsphere = this.providerSettingsData.vsphere;
-    } else if (!!this.cluster.spec.cloud.azure) {
-      this.cluster.spec.cloud.azure = this.providerSettingsData.azure;
-    }
+    const patch: ClusterEntityPatch = {
+      spec: {
+        cloud: this.providerSettingsPatch.cloudSpecPatch,
+      }
+    };
 
-    this.api.editCluster(this.cluster, this.datacenter.metadata.name, this.project.id).subscribe(res => {
+    this.api.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(r => {
+      this.cluster = r;
       NotificationActions.success('Success', `Edit provider settings successfully`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'providerSettingsSaved');
-      this.dialogRef.close(res);
+      this.dialogRef.close(r);
     });
   }
 }

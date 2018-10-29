@@ -1,16 +1,13 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
-import { ApiService } from '../../../../core/services';
-import { ClusterService } from '../../../../core/services/cluster/cluster.service';
+import { ClusterService } from '../../../../core/services';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
-import { ClusterProviderSettingsData } from '../../../../shared/model/ClusterSpecChange';
+import { ProviderSettingsPatch } from '../../../../core/services/cluster/cluster.service';
 
 @Component({
   selector: 'kubermatic-azure-provider-settings',
   templateUrl: './azure-provider-settings.component.html',
-  styleUrls: ['./azure-provider-settings.component.scss']
 })
 
 export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
@@ -18,7 +15,7 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
   public azureProviderSettingsForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private clusterService: ClusterService) {}
+  constructor(private clusterService: ClusterService) {}
 
   ngOnInit(): void {
     this.azureProviderSettingsForm = new FormGroup({
@@ -28,10 +25,8 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
       tenantID: new FormControl(this.cluster.spec.cloud.azure.tenantID, [Validators.required]),
     });
 
-    this.subscriptions.push(this.azureProviderSettingsForm.valueChanges.subscribe(data => {
-      if (this.azureProviderSettingsForm.valid) {
-        this.clusterService.changeProviderSettingsData(this.getProviderSettingsData());
-      }
+    this.subscriptions.push(this.azureProviderSettingsForm.valueChanges.subscribe(() => {
+      this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
     }));
   }
 
@@ -43,20 +38,17 @@ export class AzureProviderSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProviderSettingsData(): ClusterProviderSettingsData {
+  getProviderSettingsPatch(): ProviderSettingsPatch {
     return {
-      azure: {
-        clientID: this.azureProviderSettingsForm.controls.clientID.value,
-        clientSecret: this.azureProviderSettingsForm.controls.clientSecret.value,
-        subscriptionID: this.azureProviderSettingsForm.controls.subscriptionID.value,
-        tenantID: this.azureProviderSettingsForm.controls.tenantID.value,
-        resourceGroup: this.cluster.spec.cloud.azure.resourceGroup,
-        routeTable: this.cluster.spec.cloud.azure.routeTable,
-        securityGroup: this.cluster.spec.cloud.azure.securityGroup,
-        subnet: this.cluster.spec.cloud.azure.subnet,
-        vnet: this.cluster.spec.cloud.azure.vnet,
+      cloudSpecPatch: {
+        azure: {
+          clientID: this.azureProviderSettingsForm.controls.clientID.value,
+          clientSecret: this.azureProviderSettingsForm.controls.clientSecret.value,
+          subscriptionID: this.azureProviderSettingsForm.controls.subscriptionID.value,
+          tenantID: this.azureProviderSettingsForm.controls.tenantID.value,
+        },
       },
-      valid: true
+      isValid: this.azureProviderSettingsForm.valid,
     };
   }
 }

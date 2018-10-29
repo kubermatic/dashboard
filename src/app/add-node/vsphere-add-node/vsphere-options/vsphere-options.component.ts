@@ -27,7 +27,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
     this.vsphereOptionsForm = new FormGroup({
       template: new FormControl(this.nodeData.node.spec.cloud.vsphere.template),
     });
-    this.subscriptions.push(this.vsphereOptionsForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.vsphereOptionsForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     }));
 

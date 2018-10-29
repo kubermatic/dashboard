@@ -30,7 +30,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     this.osNodeForm = new FormGroup({
       flavor: new FormControl(this.nodeData.node.spec.cloud.openstack.flavor, Validators.required),
     });
-    this.subscriptions.push(this.osNodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.osNodeForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
@@ -69,8 +69,10 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public hasCredentials(): boolean {
-    return this.cloudSpec.openstack.username.length > 0 && this.cloudSpec.openstack.password.length > 0 &&
-      this.cloudSpec.openstack.tenant.length > 0 && this.cloudSpec.openstack.domain.length > 0;
+    return !!this.cloudSpec.openstack.username && this.cloudSpec.openstack.username.length > 0 &&
+      !!this.cloudSpec.openstack.password && this.cloudSpec.openstack.password.length > 0 &&
+      !!this.cloudSpec.openstack.tenant && this.cloudSpec.openstack.tenant.length > 0 &&
+      !!this.cloudSpec.openstack.domain && this.cloudSpec.openstack.domain.length > 0;
   }
 
   private handleFlavours(flavors: OpenstackFlavor[]): void {
