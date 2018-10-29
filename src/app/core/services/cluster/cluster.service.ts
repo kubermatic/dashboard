@@ -12,7 +12,7 @@ export class ClusterService {
   private _providerSettingsPatch = new Subject<ProviderSettingsPatch>();
   providerSettingsPatchChanges$ = this._providerSettingsPatch.asObservable();
 
-  changeProviderSettingsPatch(patch: ProviderSettingsPatch) {
+  changeProviderSettingsPatch(patch: ProviderSettingsPatch): void {
     this._providerSettingsPatch.next(patch);
   }
 }

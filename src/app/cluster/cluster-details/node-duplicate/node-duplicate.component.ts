@@ -24,7 +24,7 @@ export class NodeDuplicateComponent implements OnInit {
               public googleAnalyticsService: GoogleAnalyticsService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.googleAnalyticsService.emitEvent('clusterOverview', 'duplicateNodeDialogOpened');
   }
 

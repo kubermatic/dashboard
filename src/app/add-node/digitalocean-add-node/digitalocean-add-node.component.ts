@@ -43,7 +43,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
     return !this.clusterId || this.clusterId.length === 0;
   }
 
-  reloadDigitaloceanSizes() {
+  reloadDigitaloceanSizes(): void {
     if (this.isInWizard()) {
       if (this.cloudSpec.digitalocean.token) {
         this.subscriptions.push(this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe(data => {
@@ -59,7 +59,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -67,7 +67,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
       if (!!!changes.cloudSpec.previousValue || (changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token)) {
         this.reloadDigitaloceanSizes();

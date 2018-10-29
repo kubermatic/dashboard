@@ -13,15 +13,15 @@ export class AddNodeService {
   private _nodeOperatingSystemData = new Subject<NodeOperatingSystemData>();
   nodeOperatingSystemDataChanges$ = this._nodeOperatingSystemData.asObservable();
 
-  changeNodeProviderData(data: NodeProviderData) {
+  changeNodeProviderData(data: NodeProviderData): void {
     this._nodeProviderData.next(data);
   }
 
-  changeNodeData(data: NodeData) {
+  changeNodeData(data: NodeData): void {
     this._nodeData.next(data);
   }
 
-  changeNodeOperatingSystemData(data: NodeOperatingSystemData) {
+  changeNodeOperatingSystemData(data: NodeOperatingSystemData): void {
     this._nodeOperatingSystemData.next(data);
   }
 }

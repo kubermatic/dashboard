@@ -19,7 +19,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
 
   constructor(private dcService: DatacenterService, private wizardService: WizardService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.setDatacenterForm = new FormGroup({
       datacenter: new FormControl(this.cluster.spec.cloud.dc, [Validators.required]),
     });
@@ -54,7 +54,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

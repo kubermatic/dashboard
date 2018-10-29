@@ -32,7 +32,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
     document.getElementById('name').focus();
   }
 
-  onChange(event: any) {
+  onChange(event: any): void {
     this.inputName = event.target.value;
   }
 
@@ -40,11 +40,11 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
     return this.inputName === this.cluster.name;
   }
 
-  deleteCluster() {
+  deleteCluster(): void {
     if (!this.inputNameMatches()) {
       return;
     } else {
-      this.api.deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(result => {
+      this.api.deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(() => {
         this.initialNodeDataService.clearInitialNodeData(this.cluster);
         NotificationActions.success('Success', `Cluster is being deleted`);
         this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');

@@ -12,7 +12,7 @@ export class ClusterProviderSettingsComponent implements OnInit, OnDestroy {
 
   constructor(private wizardService: WizardService) { }
 
-  ngOnInit() { }
+  ngOnInit(): void { }
 
-  ngOnDestroy() { }
+  ngOnDestroy(): void { }
 }

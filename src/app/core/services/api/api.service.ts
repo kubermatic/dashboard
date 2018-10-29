@@ -41,7 +41,7 @@ export class ApiService {
     return this.http.post<ProjectEntity>(url, createProjectModel, { headers: this.headers });
   }
 
-  deleteProject(projectID: string) {
+  deleteProject(projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}`;
     return this.http.delete(url, { headers: this.headers });
   }
@@ -66,7 +66,7 @@ export class ApiService {
     return this.http.patch<ClusterEntity>(url, patch, { headers: this.headers });
   }
 
-  deleteCluster(cluster: string, dc: string, projectID: string) {
+  deleteCluster(cluster: string, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}`;
     return this.http.delete(url, { headers: this.headers });
   }
@@ -81,7 +81,7 @@ export class ApiService {
     return this.http.post<NodeEntity>(url, node, { headers: this.headers });
   }
 
-  deleteClusterNode(cluster: string, node: NodeEntity, dc: string, projectID: string) {
+  deleteClusterNode(cluster: string, node: NodeEntity, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes/${node.id}`;
     return this.http.delete(url, { headers: this.headers });
   }
@@ -91,12 +91,12 @@ export class ApiService {
     return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 
-  deleteClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string) {
+  deleteClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyID}`;
     return this.http.delete(url, { headers: this.headers });
   }
 
-  addClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string) {
+  addClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyID}`;
     return this.http.put(url, null, { headers: this.headers });
   }
@@ -106,7 +106,7 @@ export class ApiService {
     return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
   }
 
-  deleteSSHKey(sshkeyID: string, projectID: string) {
+  deleteSSHKey(sshkeyID: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/sshkeys/${sshkeyID}`;
     return this.http.delete(url, { headers: this.headers });
   }
@@ -140,7 +140,7 @@ export class ApiService {
     return this.http.put<Token>(url, token, { headers: this.headers });
   }
 
-  private setOpenStackHeaders(username: string, password: string, domain: string, datacenterName: string) {
+  private setOpenStackHeaders(username: string, password: string, domain: string, datacenterName: string): void {
     this.headers = this.headers.set('Username', username);
     this.headers = this.headers.set('Password', password);
     this.headers = this.headers.set('Domain', domain);
@@ -233,7 +233,7 @@ export class ApiService {
     return this.http.put<MemberEntity>(url, member, { headers: this.headers });
   }
 
-  deleteMembers(projectID: string, member: MemberEntity) {
+  deleteMembers(projectID: string, member: MemberEntity): any {
     const url = `${this.restRoot}/projects/${projectID}/users/${member.id}`;
     return this.http.delete(url, { headers: this.headers });
   }

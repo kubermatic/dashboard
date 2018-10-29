@@ -17,18 +17,20 @@ export class SetSettingsComponent implements OnInit, OnDestroy {
 
   constructor(private wizardService: WizardService) { }
 
-  ngOnInit() { }
+  ngOnInit(): void { }
 
-  ngOnDestroy() { }
+  ngOnDestroy(): void { }
 
-  public changeView(event: MatTabChangeEvent) {
+  public changeView(event: MatTabChangeEvent): void {
     switch (event.tab.textLabel) {
       case 'Simple':
-        return this.wizardService.changeSettingsFormView({hideOptional: true});
+        this.wizardService.changeSettingsFormView({hideOptional: true});
+        break;
       case 'Extended':
-        return this.wizardService.changeSettingsFormView({hideOptional: false});
+        this.wizardService.changeSettingsFormView({hideOptional: false});
+        break;
       default:
-        return this.wizardService.changeSettingsFormView({hideOptional: true});
+        this.wizardService.changeSettingsFormView({hideOptional: true});
     }
   }
 }

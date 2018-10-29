@@ -58,7 +58,7 @@ export class KubermaticComponent implements OnInit {
       .setSidenav(this.sidenav);
   }
 
-  showTermsOfService() {
+  showTermsOfService(): void {
     this.router.navigate(['/terms-of-service']);
   }
 }

@@ -28,31 +28,31 @@ export class WizardService {
   private _clusterSettingsFormView = new Subject<ClusterSettingsFormView>();
   clusterSettingsFormViewChanged$ = this._clusterSettingsFormView.asObservable();
 
-  changeCluster(data: ClusterEntity) {
+  changeCluster(data: ClusterEntity): void {
     this._cluster.next(data);
   }
 
-  changeClusterSpec(data: ClusterSpecForm) {
+  changeClusterSpec(data: ClusterSpecForm): void {
     this._clusterSpecForm.next(data);
   }
 
-  changeClusterProvider(data: ClusterProviderForm) {
+  changeClusterProvider(data: ClusterProviderForm): void {
     this._clusterProviderForm.next(data);
   }
 
-  changeClusterDatacenter(data: ClusterDatacenterForm) {
+  changeClusterDatacenter(data: ClusterDatacenterForm): void {
     this._clusterDatacenterForm.next(data);
   }
 
-  changeClusterProviderSettings(data: ClusterProviderSettingsForm) {
+  changeClusterProviderSettings(data: ClusterProviderSettingsForm): void {
     this._clusterProviderSettingsForm.next(data);
   }
 
-  changeClusterSSHKeys(keys: SSHKeyEntity[]) {
+  changeClusterSSHKeys(keys: SSHKeyEntity[]): void {
     this._clusterSSHKeys.next(keys);
   }
 
-  changeSettingsFormView(data: ClusterSettingsFormView) {
+  changeSettingsFormView(data: ClusterSettingsFormView): void {
     this._clusterSettingsFormView.next(data);
   }
 }

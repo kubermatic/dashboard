@@ -8,7 +8,7 @@ export class GoogleAnalyticsService {
   public emitEvent(eventCategory: string,
                    eventAction: string,
                    eventLabel: string = null,
-                   eventValue: number = null) {
+                   eventValue: number = null): void {
     if (!this.active) {
       return;
     }
@@ -20,9 +20,9 @@ export class GoogleAnalyticsService {
     });
   }
 
-  public activate(googleAnalyticsCode: string, googleAnalyticsConfig: object | null, currentUrl: string) {
-    (function(i, s, o, g, r, a, m) {i['GoogleAnalyticsObject'] = r;
-      i[r] = i[r] || function() {
+  public activate(googleAnalyticsCode: string, googleAnalyticsConfig: object | null, currentUrl: string): void {
+    (function(i, s, o, g, r, a, m) {i['GoogleAnalyticsObject'] = r; // tslint:disable-line
+      i[r] = i[r] || function() { // tslint:disable-line
         (i[r].q = i[r].q || []).push(arguments); }, i[r].l = new Date().getTime(); a = s.createElement(o),
         m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m);
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
@@ -38,7 +38,7 @@ export class GoogleAnalyticsService {
     this.sendPageView(currentUrl);
   }
 
-  public sendPageView(urlAfterRedirects: string) {
+  public sendPageView(urlAfterRedirects: string): void {
     if (!this.active) {
       return;
     }

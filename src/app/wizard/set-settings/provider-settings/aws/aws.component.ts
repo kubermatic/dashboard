@@ -18,7 +18,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
   constructor(private wizardService: WizardService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.awsSettingsForm = new FormGroup({
       accessKeyId: new FormControl(this.cluster.spec.cloud.aws.accessKeyId, Validators.required),
       secretAccessKey: new FormControl(this.cluster.spec.cloud.aws.secretAccessKey, Validators.required),
@@ -50,7 +50,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     }));
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

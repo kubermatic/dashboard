@@ -59,7 +59,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -79,7 +79,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public changeView(event: MatTabChangeEvent) {
+  public changeView(event: MatTabChangeEvent): void {
     switch (event.tab.textLabel) {
       case 'Simple':
         return this.wizardService.changeSettingsFormView({hideOptional: true});

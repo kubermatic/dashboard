@@ -23,7 +23,7 @@ export class ProjectDeleteConfirmationComponent implements DoCheck {
     document.getElementById('name').focus();
   }
 
-  onChange(event: any) {
+  onChange(event: any): void {
     this.inputName = event.target.value;
   }
 
@@ -31,7 +31,7 @@ export class ProjectDeleteConfirmationComponent implements DoCheck {
     return this.inputName === this.project.name;
   }
 
-  deleteProject() {
+  deleteProject(): void {
     if (!this.inputNameMatches()) {
       return;
     } else {

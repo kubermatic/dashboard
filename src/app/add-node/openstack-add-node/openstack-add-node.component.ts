@@ -38,7 +38,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     this.loadFlavors();
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -46,7 +46,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnChanges(changes: SimpleChanges): void {
     if (!!changes.cloudSpec) {
       this.loadFlavors();
     }
@@ -86,7 +86,7 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     this.loadingFlavors = false;
   }
 
-  public loadFlavors() {
+  public loadFlavors(): void {
     if (this.isInWizard()) {
       if (!this.hasCredentials()) {
         return;

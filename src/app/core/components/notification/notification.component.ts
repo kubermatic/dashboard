@@ -38,7 +38,7 @@ export class NotificationComponent {
     });
   }
 
-  createToast(toast: NotificationToast) {
+  createToast(toast: NotificationToast): void {
     let notification: Notification;
     const plainMessage = `${toast.title}: ${toast.content}`;
     const htmlMessage = this.createHtmlMessage(toast);
@@ -64,7 +64,7 @@ export class NotificationComponent {
     <span class="${NotificationComponent.copyButtonClass}">Copy to clipboard</button></div>`;
   }
 
-  registerClickHandler(notification: Notification, plainMessage: string) {
+  registerClickHandler(notification: Notification, plainMessage: string): void {
     if (notification) {
       notification.click.subscribe((e: MouseEvent) => {
         const targetId = (<HTMLElement>e.target).className;
@@ -78,7 +78,7 @@ export class NotificationComponent {
     }
   }
 
-  copyToClipboard(text: string) {
+  copyToClipboard(text: string): void {
         // TODO: Use navigator.clipboard instead of navigator['clipboard'] once TypeScript will support it.
         if (navigator['clipboard']) {
       navigator['clipboard'].writeText(text);

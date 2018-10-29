@@ -19,7 +19,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   constructor(private nameGenerator: ClusterNameGenerator, private api: ApiService, private wizardService: WizardService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
       name: new FormControl(this.cluster.name, [Validators.required, Validators.minLength(5)]),
       version: new FormControl(this.cluster.spec.version),
@@ -44,11 +44,11 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }
   }
 
-  public generateName() {
+  public generateName(): void {
     this.clusterSpecForm.patchValue({ name: this.nameGenerator.generateName() });
   }
 
-  loadMasterVersions() {
+  loadMasterVersions(): void {
     this.subscriptions.push(this.api.getMasterVersions().subscribe(versions => {
       this.masterVersions = versions;
       for (const i in versions) {
