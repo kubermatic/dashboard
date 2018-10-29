@@ -16,7 +16,7 @@ export class SidenavService {
     return this.sidenav.open();
   }
 
-  public close(): Promise<MatDrawerToggleResult>|void {
+  public close(): Promise<MatDrawerToggleResult> | void {
     if (this.sidenav) {
       return this.sidenav.close();
     }
