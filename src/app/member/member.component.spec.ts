@@ -15,12 +15,10 @@ import { AppConfigMockService } from '../testing/services/app-config-mock.servic
 import { SharedModule } from '../shared/shared.module';
 import { RouterTestingModule } from '../testing/router-stubs';
 import { RouterStub } from './../testing/router-stubs';
-import { asyncData } from '../testing/services/api-mock.service';
 
 describe('MemberComponent', () => {
   let fixture: ComponentFixture<MemberComponent>;
   let component: MemberComponent;
-  let router: Router;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -51,7 +49,7 @@ describe('MemberComponent', () => {
     fixture = TestBed.createComponent(MemberComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    router = fixture.debugElement.injector.get(Router);
+    fixture.debugElement.injector.get(Router);
   });
 
   it('should create members cmp', () => {

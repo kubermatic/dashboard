@@ -10,7 +10,6 @@ import { ApiService, ProjectService } from '../core/services';
 import { asyncData } from '../testing/services/api-mock.service';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
 import { MatDialogRef } from '@angular/material';
-import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -22,11 +21,10 @@ const modules: any[] = [
 describe('AddProjectComponent', () => {
   let fixture: ComponentFixture<AddProjectComponent>;
   let component: AddProjectComponent;
-  let createProjectSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createProject']);
-    createProjectSpy = apiMock.createProject.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    apiMock.createProject.and.returnValue(asyncData(fakeDigitaloceanCluster));
 
     TestBed.configureTestingModule({
       imports: [

@@ -1,8 +1,6 @@
-
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { DebugElement } from '@angular/core/src/debug/debug_node';
 import { HttpClientModule } from '@angular/common/http';
 
 import { BrowserModule, By } from '@angular/platform-browser';
@@ -10,7 +8,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import Spy = jasmine.Spy;
 
 import { ClusterDetailsComponent } from './cluster-details.component';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
@@ -40,31 +37,22 @@ describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
   let component: ClusterDetailsComponent;
   let activatedRoute: ActivatedRouteStub;
-  let spinner: DebugElement;
-  let clusterDetailActions: DebugElement;
-
-  let getClusterSpy: Spy;
-  let getClusterUpgradesSpy: Spy;
-  let getClusterNodesSpy: Spy;
-  let getSSHKeysSpy: Spy;
-  let getDatacenterSpy: Spy;
-  let getKubeconfigURL: Spy;
 
   let apiMock;
 
   beforeEach(async(() => {
 
     apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL']);
-    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
+    apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
 
-    getClusterNodesSpy = apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake()));
-    getSSHKeysSpy = apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
-    getKubeconfigURL = apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
+    apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake()));
+    apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
+    apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
 
-    getDatacenterSpy = datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
+    datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -104,8 +92,8 @@ describe('ClusterDetailsComponent', () => {
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = { clusterName: '4k6txp5sq', seedDc: 'europe-west3-c' };
 
-    spinner = fixture.debugElement.query(By.css('.km-spinner'));
-    clusterDetailActions = fixture.debugElement.query(By.css('.cluster-detail-actions'));
+    fixture.debugElement.query(By.css('.km-spinner'));
+    fixture.debugElement.query(By.css('.cluster-detail-actions'));
   });
 
   it('should create the cluster details cmp', async(() => {
@@ -159,7 +147,7 @@ describe('ClusterDetailsComponent', () => {
   }));
 
   it('should show upgrade link', fakeAsync(() => {
-    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([
+    apiMock.getClusterUpgrades.and.returnValue(asyncData([
       {
         version: '1.8.5',
         allowedVersions: ['1.8.5'],
@@ -179,7 +167,7 @@ describe('ClusterDetailsComponent', () => {
   }));
 
   it('should not show upgrade or downgrade link', fakeAsync(() => {
-    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([
+    apiMock.getClusterUpgrades.and.returnValue(asyncData([
       {
         version: '1.8.5',
         allowedVersions: ['1.8.5'],
@@ -194,7 +182,7 @@ describe('ClusterDetailsComponent', () => {
   }));
 
   it('should show downgrade link', fakeAsync(() => {
-    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([
+    apiMock.getClusterUpgrades.and.returnValue(asyncData([
       {
         version: '1.8.5',
         allowedVersions: ['1.8.5'],
@@ -214,7 +202,7 @@ describe('ClusterDetailsComponent', () => {
   }));
 
   it('should show downgrade and update link', fakeAsync(() => {
-    getClusterUpgradesSpy = apiMock.getClusterUpgrades.and.returnValue(asyncData([
+    apiMock.getClusterUpgrades.and.returnValue(asyncData([
       {
         version: '1.8.5',
         allowedVersions: ['1.8.5'],

@@ -3,7 +3,7 @@ import { of } from 'rxjs';
 import { SharedModule } from './../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { RouterStub, RouterTestingModule } from './../../testing/router-stubs';
@@ -28,7 +28,6 @@ describe('SSHKeyDeleteConfirmationComponent', () => {
   let fixture: ComponentFixture<SSHKeyDeleteConfirmationComponent>;
   let component: SSHKeyDeleteConfirmationComponent;
   let apiService: ApiService;
-  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -51,7 +50,7 @@ describe('SSHKeyDeleteConfirmationComponent', () => {
     component = fixture.componentInstance;
 
     apiService = fixture.debugElement.injector.get(ApiService);
-    router = fixture.debugElement.injector.get(Router);
+    fixture.debugElement.injector.get(Router);
   });
 
   it('should create the delete SSH key confirmation cmp', async(() => {

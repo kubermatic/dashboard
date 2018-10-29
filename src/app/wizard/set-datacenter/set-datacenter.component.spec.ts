@@ -13,7 +13,6 @@ import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 describe('SetDatacenterComponent', () => {
   let fixture: ComponentFixture<SetDatacenterComponent>;
   let component: SetDatacenterComponent;
-  let dcService: DatacenterService;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -42,7 +41,7 @@ describe('SetDatacenterComponent', () => {
 
     fixture.detectChanges();
 
-    dcService = fixture.debugElement.injector.get(DatacenterService);
+    fixture.debugElement.injector.get(DatacenterService);
   });
 
   it('should create the set-datacenter cmp', () => {

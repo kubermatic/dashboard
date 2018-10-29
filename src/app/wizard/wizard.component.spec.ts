@@ -37,7 +37,6 @@ import { WizardService } from '../core/services/wizard/wizard.service';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { StepsService } from '../core/services/wizard/steps.service';
 import { ClusterNameGenerator } from '../core/util/name-generator.service';
-import Spy = jasmine.Spy;
 import { HetznerClusterSettingsComponent } from './set-settings/provider-settings/hetzner/hetzner.component';
 import { VSphereClusterSettingsComponent } from './set-settings/provider-settings/vsphere/vsphere.component';
 import { AzureClusterSettingsComponent } from './set-settings/provider-settings/azure/azure.component';
@@ -50,16 +49,12 @@ import { GoogleAnalyticsService } from '../google-analytics.service';
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
   let component: WizardComponent;
-  let router: Router;
-  let createClusterSpy: Spy;
-  let getClusterSpy: Spy;
-  let getMasterVersionsSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createCluster', 'getCluster', 'getMasterVersions']);
-    createClusterSpy = apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    getClusterSpy = apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    getMasterVersionsSpy = apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
+    apiMock.createCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+    apiMock.getMasterVersions.and.returnValue(asyncData(masterVersionsFake()));
 
     TestBed.configureTestingModule({
       imports: [
@@ -121,7 +116,7 @@ describe('WizardComponent', () => {
     fixture = TestBed.createComponent(WizardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    router = fixture.debugElement.injector.get(Router);
+    fixture.debugElement.injector.get(Router);
   });
 
   it('should create wizard cmp', () => {

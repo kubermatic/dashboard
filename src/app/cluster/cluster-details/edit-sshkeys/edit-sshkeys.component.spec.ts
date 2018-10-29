@@ -1,8 +1,8 @@
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { MatDialog, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { EditSSHKeysComponent } from './edit-sshkeys.component';
 import { EditSSHKeysItemComponent } from './edit-sshkeys-item/edit-sshkeys-item.component';
 import { ApiService, UserService } from './../../../core/services';
@@ -12,7 +12,6 @@ import { UserMockService } from './../../../testing/services/user-mock.service';
 import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
 import { asyncData } from './../../../testing/services/api-mock.service';
 import { fakeSSHKeys } from './../../../testing/fake-data/sshkey.fake';
-import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -24,11 +23,10 @@ const modules: any[] = [
 describe('EditSSHKeysComponent', () => {
   let fixture: ComponentFixture<EditSSHKeysComponent>;
   let component: EditSSHKeysComponent;
-  let getClusterSSHKeys: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getClusterSSHKeys']);
-    getClusterSSHKeys = apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
+    apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
 
     TestBed.configureTestingModule({
       imports: [

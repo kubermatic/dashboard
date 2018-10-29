@@ -11,7 +11,6 @@ import { AppConfigService } from '../app-config.service';
 import { ApiMockService } from '../testing/services/api-mock.service';
 import { UserMockService } from '../testing/services/user-mock.service';
 import { AppConfigMockService } from '../testing/services/app-config-mock.service';
-import { asyncData } from '../testing/services/api-mock.service';
 import { SharedModule } from '../shared/shared.module';
 import { RouterTestingModule } from '../testing/router-stubs';
 import { ActivatedRouteStub, RouterStub } from './../testing/router-stubs';
@@ -19,7 +18,6 @@ import { ActivatedRouteStub, RouterStub } from './../testing/router-stubs';
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;
   let component: SSHKeyComponent;
-  let router: Router;
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
@@ -55,7 +53,7 @@ describe('SSHKeyComponent', () => {
     activatedRoute.testParamMap = { projectID: '4k6txp5sq' };
 
     fixture.detectChanges();
-    router = fixture.debugElement.injector.get(Router);
+    fixture.debugElement.injector.get(Router);
   });
 
   it('should create sshkey cmp', () => {

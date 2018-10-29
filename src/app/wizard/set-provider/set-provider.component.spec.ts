@@ -10,16 +10,14 @@ import { WizardService } from '../../core/services/wizard/wizard.service';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
 import { fakeNodeDatacenters } from '../../testing/fake-data/datacenter.fake';
-import Spy = jasmine.Spy;
 
 describe('SetProviderComponent', () => {
   let fixture: ComponentFixture<SetProviderComponent>;
   let component: SetProviderComponent;
-  let getDataCentersSpy: Spy;
 
   beforeEach(async(() => {
     const dcMock = jasmine.createSpyObj('DatacenterService', ['getDataCenters']);
-    getDataCentersSpy = dcMock.getDataCenters.and.returnValue(asyncData(fakeNodeDatacenters()));
+    dcMock.getDataCenters.and.returnValue(asyncData(fakeNodeDatacenters()));
 
     TestBed.configureTestingModule({
       imports: [

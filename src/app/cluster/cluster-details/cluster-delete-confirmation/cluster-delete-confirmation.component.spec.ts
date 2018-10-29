@@ -1,5 +1,5 @@
 import { Router } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { of } from 'rxjs';
 import { SharedModule } from '../../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
@@ -34,7 +34,6 @@ describe('ClusterDeleteConfirmationComponent', () => {
   let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;
   let component: ClusterDeleteConfirmationComponent;
   let apiService: ApiService;
-  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -60,7 +59,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     component = fixture.componentInstance;
 
     apiService = fixture.debugElement.injector.get(ApiService);
-    router = fixture.debugElement.injector.get(Router);
+    fixture.debugElement.injector.get(Router);
   });
 
   it('should create the add node modal cmp', async(() => {
