@@ -1,0 +1,68 @@
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { ApiService, WizardService } from '../../core/services';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { MachineNetworkForm } from '../../shared/model/ClusterForm';
+import { MachineNetworksComponent } from '../../machine-networks/machine-networks.component';
+
+@Component({
+  selector: 'kubermatic-set-machine-networks',
+  templateUrl: 'set-machine-networks.component.html',
+  styleUrls: ['set-machine-networks.component.scss']
+})
+export class SetMachineNetworksComponent implements OnInit, OnDestroy {
+  @Input() public cluster: ClusterEntity;
+  public setMachineNetworkForm: FormGroup;
+  public machineNetworkFormData: MachineNetworkForm[] = [];
+  private subscriptions: Subscription[] = [];
+
+  constructor(private api: ApiService,
+              private wizardService: WizardService) { }
+
+  ngOnInit(): void {
+    this.setMachineNetworkForm = new FormGroup({
+      checkMachineNetworks: new FormControl(false),
+    });
+
+    this.subscriptions.push(this.setMachineNetworkForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+      this.setMachineNetworks();
+    }));
+
+    this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe(res => {
+      this.machineNetworkFormData = res;
+      this.setMachineNetworks();
+    }));
+  }
+
+  public ngOnDestroy(): void {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
+  }
+
+  setMachineNetworks(): void {
+    let isValid = false;
+    if (!!this.setMachineNetworkForm.controls.checkMachineNetworks.value) {
+      if (this.machineNetworkFormData.length > 0) {
+        for (const i in this.machineNetworkFormData) {
+          if (i === '0') {
+            isValid = this.machineNetworkFormData[i].valid;
+          } else {
+            isValid = isValid && this.machineNetworkFormData[i].valid;
+          }
+        }
+      } else {
+        isValid = false;
+      }
+    }
+
+    this.wizardService.changeSetMachineNetworks({
+      machineNetworks: this.machineNetworkFormData,
+      valid: isValid,
+    });
+  }
+}

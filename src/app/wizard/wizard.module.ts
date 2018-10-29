@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { WizardComponent } from './wizard.component';
 import { ProgressComponent } from './progress/progress.component';
 import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
+import { SetMachineNetworksComponent } from './set-machine-networks/set-machine-networks.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
 import { SetProviderComponent } from './set-provider/set-provider.component';
 import { SetSettingsComponent } from './set-settings/set-settings.component';
@@ -24,6 +25,7 @@ const components: any[] = [
   WizardComponent,
   ProgressComponent,
   SetClusterSpecComponent,
+  SetMachineNetworksComponent,
   SetDatacenterComponent,
   SetProviderComponent,
   SetSettingsComponent,

@@ -1,8 +1,11 @@
 <kubermatic-progress [steps]="steps" [currentStepIndex]="currentStepIndex" [currentStep]="currentStep"></kubermatic-progress>
 
 <mat-card>
-  <!-- Cluster Cluster Spec -->
+  <!-- Cluster Spec -->
   <kubermatic-set-cluster-spec [cluster]="cluster" *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
+
+  <!-- Machine Networks -->
+  <kubermatic-set-machine-networks [cluster]="cluster" *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
 
   <!-- Cluster Provider -->
   <kubermatic-set-provider [cluster]="cluster" *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
@@ -29,6 +32,11 @@
     <button *ngIf="currentStepIndex < steps.length - 1" type="button" [disabled]="!currentStep.valid()" mat-raised-button color="primary" (click)="stepForward()">
       <ng-container>
         Next
+      </ng-container>
+    </button>
+    <button *ngIf="currentStep.name === 'set-machine-networks'" type="button" mat-raised-button color="primary" (click)="stepForward()">
+      <ng-container>
+        Skip
       </ng-container>
     </button>
     <button *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating || project.status !== 'Active'" type="button" mat-raised-button color="primary" (click)="createCluster()">

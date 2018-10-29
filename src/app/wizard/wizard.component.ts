@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, Subject, interval } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { WizardService } from '../core/services';
-import { ClusterDatacenterForm, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
+import { ClusterDatacenterForm, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm, SetMachineNetworksForm, MachineNetworkForm } from '../shared/model/ClusterForm';
 import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
@@ -28,9 +28,9 @@ export class WizardComponent implements OnInit, OnDestroy {
   public currentStepIndex: number;
   public cluster: ClusterEntity;
   public node: NodeEntity;
-
-  public clusterSpecFormData: ClusterSpecForm = { valid: false, name: '', machineNetworks: [], version: '' };
-
+  public clusterSpecFormData: ClusterSpecForm = { valid: false, name: '', version: '' };
+  public machineNetworksFormData: MachineNetworkForm[] = [{ valid: false, cidr: '', dnsServers: [''], gateway: '' }];
+  public setMachineNetworksFormData: SetMachineNetworksForm = { valid: false, machineNetworks: this.machineNetworksFormData };
   public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
   public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
   public clusterProviderSettingsFormData: ClusterProviderSettingsForm = { valid: false };
@@ -95,7 +95,16 @@ export class WizardComponent implements OnInit, OnDestroy {
       if (this.clusterSpecFormData.valid) {
         this.cluster.name = this.clusterSpecFormData.name;
         this.cluster.spec.version = this.clusterSpecFormData.version;
-        this.cluster.spec.machineNetworks = this.clusterSpecFormData.machineNetworks;
+        this.wizardService.changeCluster(this.cluster);
+      }
+    }));
+
+    // When the cluster settings got changed, update the cluster
+    this.subscriptions.push(this.wizardService.setMachineNetworksFormChanges$.subscribe(data => {
+      this.setMachineNetworksFormData = data;
+      if (this.setMachineNetworksFormData.valid) {
+        this.setMachineNetworksFormData = data;
+        this.cluster.spec.machineNetworks = this.setMachineNetworksFormData.machineNetworks;
         this.wizardService.changeCluster(this.cluster);
       }
     }));
@@ -203,6 +212,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   updateSteps(): void {
     const setClusterSpecStep: Step = { name: 'set-cluster-spec', description: 'Cluster', valid: () => this.clusterSpecFormData.valid };
+    const setMachinenNetworksStep: Step = { name: 'set-machine-networks', description: 'Machine Networks', valid: () => this.setMachineNetworksFormData.valid };
     const setProviderStep: Step = { name: 'set-provider', description: 'Provider', valid: () => this.clusterProviderFormData.valid };
     const setDatacenterStep: Step = { name: 'set-datacenter', description: 'Datacenter', valid: () => this.clusterDatacenterFormData.valid };
     const setProviderSettingsStep: Step = { name: 'set-provider-settings', description: 'Settings', valid: () => this.clusterProviderSettingsFormData.valid && this.addNodeData.valid };
@@ -212,6 +222,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     if (this.clusterProviderFormData.provider === NodeProvider.BRINGYOUROWN) {
       this.steps = [
         setClusterSpecStep,
+        setMachinenNetworksStep,
         setProviderStep,
         setDatacenterStep,
         summary,
@@ -219,6 +230,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     } else {
       this.steps = [
         setClusterSpecStep,
+        setMachinenNetworksStep,
         setProviderStep,
         setDatacenterStep,
         setProviderSettingsStep,

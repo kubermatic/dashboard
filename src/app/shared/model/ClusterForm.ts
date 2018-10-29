@@ -9,6 +9,10 @@ export class ClusterFormData {
 export class ClusterSpecForm {
   name: string;
   version: string;
+  valid: boolean;
+}
+
+export class SetMachineNetworksForm {
   machineNetworks: MachineNetworkForm[];
   valid: boolean;
 }
