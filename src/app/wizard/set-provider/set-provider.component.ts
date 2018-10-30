@@ -1,10 +1,10 @@
-import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
 import { Subscription } from 'rxjs';
-import { getDatacenterProvider } from '../../shared/entity/DatacenterEntity';
 import { WizardService } from '../../core/services/wizard/wizard.service';
+import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
+import { getDatacenterProvider } from '../../shared/entity/DatacenterEntity';
+import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 
 @Component({
   selector: 'kubermatic-set-provider',

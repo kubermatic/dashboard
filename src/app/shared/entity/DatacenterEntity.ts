@@ -1,12 +1,12 @@
-import { MetadataEntity } from './MetadataEntity';
-import { DigitaloceanDatacenterSpec } from './datacenter/DigitaloceanDatacenterSpec';
-import { BringYourOwnDatacenterSpec } from './datacenter/BringYourOwnDatacenterSpec';
+import { NodeProvider } from '../model/NodeProviderConstants';
 import { AWSDatacenterSpec } from './datacenter/AWSDatacenterSpec';
+import { AzureDatacenterSpec } from './datacenter/AzureDatacenterSpec';
+import { BringYourOwnDatacenterSpec } from './datacenter/BringYourOwnDatacenterSpec';
+import { DigitaloceanDatacenterSpec } from './datacenter/DigitaloceanDatacenterSpec';
+import { HetznerDatacenterSpec } from './datacenter/HetznerDatacenterSpec';
 import { OpenStackDatacenterSpec } from './datacenter/OpenStackDatacenterSpec';
 import { VSphereDatacenterSpec } from './datacenter/VSphereDatacenterSpec';
-import { NodeProvider } from '../model/NodeProviderConstants';
-import { HetznerDatacenterSpec } from './datacenter/HetznerDatacenterSpec';
-import { AzureDatacenterSpec } from './datacenter/AzureDatacenterSpec';
+import { MetadataEntity } from './MetadataEntity';
 
 export class DataCenterEntity {
   metadata: MetadataEntity;

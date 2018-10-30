@@ -1,14 +1,14 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { MatDialog } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { ClusterSecretsComponent } from './cluster-secrets.component';
-import { HealthService } from '../../../core/services';
 import { AppConfigService } from '../../../app-config.service';
+import { HealthService } from '../../../core/services';
 import { SharedModule } from '../../../shared/shared.module';
-import { HealthMockService } from '../../../testing/services/health-mock.service';
 import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
+import { HealthMockService } from '../../../testing/services/health-mock.service';
+import { ClusterSecretsComponent } from './cluster-secrets.component';
 
 const modules: any[] = [
   BrowserModule,

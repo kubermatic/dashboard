@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { UserService } from '../../../../core/services';
 import { AppConfigService } from '../../../../app-config.service';
-import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
-import { EditSSHKeyDeleteConfirmationComponent } from '../edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
+import { UserService } from '../../../../core/services';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
+import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
 import { UserGroupConfig } from '../../../../shared/model/Config';
+import { EditSSHKeyDeleteConfirmationComponent } from '../edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-edit-sshkeys-item',

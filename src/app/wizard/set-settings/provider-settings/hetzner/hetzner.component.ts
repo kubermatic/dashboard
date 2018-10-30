@@ -1,9 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { WizardService } from '../../../../core/services/wizard/wizard.service';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { WizardService } from '../../../../core/services/wizard/wizard.service';
+import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-hetzner-cluster-settings',

@@ -1,5 +1,5 @@
-import { ActionBase } from './action.base';
 import { Action } from '../../shared/interfaces/action.interface';
+import { ActionBase } from './action.base';
 
 import { dispatch } from '@angular-redux/store';
 

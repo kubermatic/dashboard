@@ -1,18 +1,18 @@
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
-import { MatDialogRef } from '@angular/material';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { MemberItemComponent } from './member-item.component';
-import { ProjectService, UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
+import { ProjectService, UserService } from '../../core/services';
 import { SharedModule } from '../../shared/shared.module';
 import { RouterTestingModule } from '../../testing/router-stubs';
-import { UserMockService } from '../../testing/services/user-mock.service';
 import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
-import { ProjectMockService } from '../../testing/services/project-mock.service';
 import { MatDialogRefMock } from '../../testing/services/mat-dialog-ref-mock';
+import { ProjectMockService } from '../../testing/services/project-mock.service';
+import { UserMockService } from '../../testing/services/user-mock.service';
+import { MemberItemComponent } from './member-item.component';
 
 const modules: any[] = [
   BrowserModule,

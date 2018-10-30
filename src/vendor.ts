@@ -1,5 +1,5 @@
 // @ts-ignore
-import { of,  timer, throwError } from 'rxjs';
+import { of,  throwError, timer } from 'rxjs';
 // @ts-ignore
-import { retry, combineLatest, publishReplay } from 'rxjs/operators';
+import { combineLatest, publishReplay, retry } from 'rxjs/operators';
 

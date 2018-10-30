@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map, publishReplay, refCount } from 'rxjs/operators';
-import { environment } from './../../../../environments/environment';
-import { Auth } from '../auth/auth.service';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { Auth } from '../auth/auth.service';
+import { environment } from './../../../../environments/environment';
 
 @Injectable()
 export class DatacenterService {

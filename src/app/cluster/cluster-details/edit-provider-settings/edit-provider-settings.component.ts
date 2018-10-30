@@ -1,14 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
+import { ApiService, ClusterService, ProjectService } from '../../../core/services';
+import { ProviderSettingsPatch } from '../../../core/services/cluster/cluster.service';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { ApiService, ProjectService, ClusterService } from '../../../core/services';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import { ProviderSettingsPatch } from '../../../core/services/cluster/cluster.service';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-edit-provider-settings',

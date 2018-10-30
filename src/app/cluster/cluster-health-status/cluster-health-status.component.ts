@@ -1,9 +1,9 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
-import { Subscription, interval } from 'rxjs';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { interval, Subscription } from 'rxjs';
+import { HealthService } from '../../core/services';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../shared/entity/HealthEntity';
-import { HealthService } from '../../core/services';
 import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 
 @Component({

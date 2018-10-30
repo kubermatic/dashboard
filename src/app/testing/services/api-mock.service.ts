@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, defer } from 'rxjs';
+import { defer, Observable, of } from 'rxjs';
+import { CreateMemberEntity, MemberEntity } from '../../shared/entity/MemberEntity';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { VSphereNetwork } from '../../shared/entity/provider/vsphere/VSphereEntity';
+import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { ClusterEntity, MasterVersion, Token } from './../../shared/entity/ClusterEntity';
 import { ProjectEntity } from './../../shared/entity/ProjectEntity';
-import { NodeEntity } from '../../shared/entity/NodeEntity';
-import { MemberEntity, CreateMemberEntity } from '../../shared/entity/MemberEntity';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { VSphereNetwork } from '../../shared/entity/provider/vsphere/VSphereEntity';
-import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
-import { nodesFake } from './../fake-data/node.fake';
-import { fakeSSHKeys } from './../fake-data/sshkey.fake';
-import { fakeClusters, fakeDigitaloceanCluster, fakeToken } from './../fake-data/cluster.fake';
-import { fakeProject, fakeProjects } from './../fake-data/project.fake';
-import { fakeMember, fakeMembers } from './../fake-data/member.fake';
-import { fakeVSphereNetworks } from './../fake-data/vsphere.fake';
 import { masterVersionsFake } from './../fake-data/cluster-spec.fake';
+import { fakeClusters, fakeDigitaloceanCluster, fakeToken } from './../fake-data/cluster.fake';
+import { fakeMember, fakeMembers } from './../fake-data/member.fake';
+import { nodesFake } from './../fake-data/node.fake';
+import { fakeProject, fakeProjects } from './../fake-data/project.fake';
+import { fakeSSHKeys } from './../fake-data/sshkey.fake';
+import { fakeVSphereNetworks } from './../fake-data/vsphere.fake';
 
 @Injectable()
 export class ApiMockService {

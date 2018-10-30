@@ -1,5 +1,5 @@
-import { Action } from '../../shared/interfaces/action.interface';
 import { Reducer } from 'redux';
+import { Action } from '../../shared/interfaces/action.interface';
 import { BreadcrumbActions } from '../actions/breadcrumb.actions';
 
 export interface Breadcrumb {

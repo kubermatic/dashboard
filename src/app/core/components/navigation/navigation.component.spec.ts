@@ -1,19 +1,19 @@
-import { SharedModule } from '../../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
-import { RouterStub } from './../../../testing/router-stubs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { SharedModule } from '../../../shared/shared.module';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
-import { UserMockService } from '../../../testing/services/user-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
-import { NavigationComponent } from './navigation.component';
-import { Auth, UserService, ProjectService } from '../../services/index';
+import { UserMockService } from '../../../testing/services/user-mock.service';
+import { Auth, ProjectService, UserService } from '../../services/index';
 import { SidenavService } from '../sidenav/sidenav.service';
-import { MatDialog } from '@angular/material';
+import { RouterStub } from './../../../testing/router-stubs';
+import { NavigationComponent } from './navigation.component';
 
 const modules: any[] = [
   BrowserModule,

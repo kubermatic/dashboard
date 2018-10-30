@@ -1,11 +1,11 @@
-import { SharedModule } from '../../shared/shared.module';
 import { HttpClientModule } from '@angular/common/http';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '../../testing/router-stubs';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { Auth } from '../../core/services';
+import { SharedModule } from '../../shared/shared.module';
+import { RouterTestingModule } from '../../testing/router-stubs';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { SSHKeyItemComponent } from './sshkey-item.component';
 

@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Sort, MatDialog } from '@angular/material';
-import { Subscription, interval } from 'rxjs';
-import { retry } from 'rxjs/operators';
-import { find } from 'lodash';
-import { ApiService, UserService } from '../core/services';
-import { AppConfigService } from '../app-config.service';
+import { MatDialog, Sort } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
+import { find } from 'lodash';
+import { interval, Subscription } from 'rxjs';
+import { retry } from 'rxjs/operators';
+import { AppConfigService } from '../app-config.service';
+import { ApiService, UserService } from '../core/services';
 import { AddSshKeyModalComponent } from '../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
 import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
 import { UserGroupConfig } from '../shared/model/Config';

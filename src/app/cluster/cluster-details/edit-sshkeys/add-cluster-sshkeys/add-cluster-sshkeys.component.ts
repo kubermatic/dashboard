@@ -2,13 +2,13 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
-import { ApiService, UserService } from '../../../../core/services';
 import { AppConfigService } from '../../../../app-config.service';
+import { ApiService, UserService } from '../../../../core/services';
+import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { AddSshKeyModalComponent } from '../../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
-import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
+import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
 import { UserGroupConfig } from '../../../../shared/model/Config';
 
 @Component({

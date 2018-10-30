@@ -1,15 +1,15 @@
-import { SharedModule } from '../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AddProjectComponent } from './add-project.component';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { ApiService, ProjectService } from '../core/services';
+import { SharedModule } from '../shared/shared.module';
+import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
+import { asyncData } from '../testing/services/api-mock.service';
 import { MatDialogRefMock } from '../testing/services/mat-dialog-ref-mock';
 import { ProjectMockService } from '../testing/services/project-mock.service';
-import { ApiService, ProjectService } from '../core/services';
-import { asyncData } from '../testing/services/api-mock.service';
-import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
-import { MatDialogRef } from '@angular/material';
+import { AddProjectComponent } from './add-project.component';
 
 const modules: any[] = [
   BrowserModule,
