@@ -1,8 +1,8 @@
-import { fakeBringyourownSeedDatacenter, fakeNodeDatacenters } from '../fake-data/datacenter.fake';
-import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
 import { find } from 'lodash';
+import { Observable, of } from 'rxjs';
+import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
+import { fakeBringyourownSeedDatacenter, fakeNodeDatacenters } from '../fake-data/datacenter.fake';
 
 @Injectable()
 export class DatacenterMockService {

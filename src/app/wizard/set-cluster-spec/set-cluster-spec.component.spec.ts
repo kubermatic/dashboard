@@ -1,14 +1,14 @@
-import { SharedModule } from '../../shared/shared.module';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SetClusterSpecComponent } from './set-cluster-spec.component';
-import { ClusterNameGenerator } from '../../core/util/name-generator.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ClusterNameGeneratorMock } from '../../testing/services/name-generator-mock.service';
-import { asyncData } from '../../testing/services/api-mock.service';
 import { ApiService, WizardService } from '../../core/services';
+import { ClusterNameGenerator } from '../../core/util/name-generator.service';
+import { SharedModule } from '../../shared/shared.module';
 import { masterVersionsFake } from '../../testing/fake-data/cluster-spec.fake';
+import { asyncData } from '../../testing/services/api-mock.service';
+import { ClusterNameGeneratorMock } from '../../testing/services/name-generator-mock.service';
+import { SetClusterSpecComponent } from './set-cluster-spec.component';
 
 const modules: any[] = [
   BrowserModule,

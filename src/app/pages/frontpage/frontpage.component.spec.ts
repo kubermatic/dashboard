@@ -1,13 +1,13 @@
-import { SharedModule } from '../../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ParticlesModule } from 'angular-particle';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterStub } from './../../testing/router-stubs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ParticlesModule } from 'angular-particle';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { SharedModule } from '../../shared/shared.module';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
+import { RouterStub } from './../../testing/router-stubs';
 
 import { Auth } from './../../core/services/index';
 import { FrontpageComponent } from './frontpage.component';

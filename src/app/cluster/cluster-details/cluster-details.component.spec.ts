@@ -3,35 +3,35 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { HttpClientModule } from '@angular/common/http';
 
+import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 
-import { ClusterDetailsComponent } from './cluster-details.component';
 import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
+import { ClusterDetailsComponent } from './cluster-details.component';
 import { ClusterSecretsComponent } from './cluster-secrets/cluster-secrets.component';
 import { NodeListComponent } from './node-list/node-list.component';
 
-import { ApiService, DatacenterService, InitialNodeDataService, HealthService, UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
+import { ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService } from '../../core/services';
 import { Auth } from './../../core/services/auth/auth.service';
 
 import { SharedModule } from '../../shared/shared.module';
 import { ActivatedRouteStub, RouterStub, RouterTestingModule } from './../../testing/router-stubs';
 
+import { asyncData } from '../../testing/services/api-mock.service';
+import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { HealthMockService } from '../../testing/services/health-mock.service';
 import { UserMockService } from '../../testing/services/user-mock.service';
-import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
-import { asyncData } from '../../testing/services/api-mock.service';
 
-import { fakeDigitaloceanCluster } from './../../testing/fake-data/cluster.fake';
-import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
-import { nodesFake } from '../../testing/fake-data/node.fake';
 import { fakeDigitaloceanDatacenter } from '../../testing/fake-data/datacenter.fake';
+import { nodesFake } from '../../testing/fake-data/node.fake';
+import { fakeSSHKeys } from '../../testing/fake-data/sshkey.fake';
 import { fakeUserGroupConfig } from '../../testing/fake-data/userGroupConfig.fake';
+import { fakeDigitaloceanCluster } from './../../testing/fake-data/cluster.fake';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;

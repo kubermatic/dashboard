@@ -1,8 +1,8 @@
-import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Config, UserGroupConfig } from './shared/model/Config';
-import { NotificationActions } from './redux/actions/notification.actions';
+import { Injectable, Injector } from '@angular/core';
 import { environment } from '../environments/environment';
+import { NotificationActions } from './redux/actions/notification.actions';
+import { Config, UserGroupConfig } from './shared/model/Config';
 
 @Injectable()
 export class AppConfigService {

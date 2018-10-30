@@ -1,15 +1,15 @@
-import { SharedModule } from '../../shared/shared.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { DigitaloceanAddNodeComponent } from './digitalocean-add-node.component';
-import { asyncData } from '../../testing/services/api-mock.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from '../../core/services';
-import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { SharedModule } from '../../shared/shared.module';
+import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
+import { asyncData } from '../../testing/services/api-mock.service';
+import { DigitaloceanAddNodeComponent } from './digitalocean-add-node.component';
 
 const modules: any[] = [
   BrowserModule,

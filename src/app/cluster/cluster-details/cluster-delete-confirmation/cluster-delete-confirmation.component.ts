@@ -1,10 +1,10 @@
 import { Component, DoCheck, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
+import { ApiService, InitialNodeDataService } from '../../../core/services';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ApiService, InitialNodeDataService } from '../../../core/services';
-import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
 
 @Component({
   selector: 'kubermatic-cluster-delete-confirmation',

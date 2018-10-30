@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { Auth } from '../../core/services';
 import { Router } from '@angular/router';
+import { Auth } from '../../core/services';
 
 @Component({
   selector: 'kubermatic-page-not-found',

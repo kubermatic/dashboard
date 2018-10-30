@@ -1,9 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
-import { MemberEntity } from '../../shared/entity/MemberEntity';
 import { ApiService } from '../../core/services';
 import { NotificationActions } from '../../redux/actions/notification.actions';
+import { MemberEntity } from '../../shared/entity/MemberEntity';
+import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-member-delete-confirmation',

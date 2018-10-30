@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from './../../../../environments/environment';
-import { Auth } from '../auth/auth.service';
-import { HealthEntity } from '../../../shared/entity/HealthEntity';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { HealthEntity } from '../../../shared/entity/HealthEntity';
 import { ClusterHealth } from '../../../shared/model/ClusterHealthConstants';
+import { Auth } from '../auth/auth.service';
+import { environment } from './../../../../environments/environment';
 
 @Injectable()
 export class HealthService {

@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { ApiService } from '../../../core/services';
 import { MatDialogRef } from '@angular/material';
+import { ApiService } from '../../../core/services';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-node-duplicate',

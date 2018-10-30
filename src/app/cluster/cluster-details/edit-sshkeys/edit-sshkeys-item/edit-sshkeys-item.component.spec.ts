@@ -1,14 +1,14 @@
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { EditSSHKeysItemComponent } from './edit-sshkeys-item.component';
-import { SharedModule } from './../../../../shared/shared.module';
-import { UserService } from './../../../../core/services';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AppConfigService } from './../../../../app-config.service';
-import { UserMockService } from './../../../../testing/services/user-mock.service';
+import { UserService } from './../../../../core/services';
+import { SharedModule } from './../../../../shared/shared.module';
 import { AppConfigMockService } from './../../../../testing/services/app-config-mock.service';
+import { UserMockService } from './../../../../testing/services/user-mock.service';
+import { EditSSHKeysItemComponent } from './edit-sshkeys-item.component';
 
 const modules: any[] = [
   BrowserModule,

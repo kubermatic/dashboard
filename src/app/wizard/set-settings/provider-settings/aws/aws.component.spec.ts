@@ -1,11 +1,11 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AWSClusterSettingsComponent } from './aws.component';
-import { SharedModule } from '../../../../shared/shared.module';
 import { WizardService } from '../../../../core/services/wizard/wizard.service';
+import { SharedModule } from '../../../../shared/shared.module';
 import { fakeAWSCluster } from '../../../../testing/fake-data/cluster.fake';
+import { AWSClusterSettingsComponent } from './aws.component';
 
 describe('AWSClusterSettingsComponent', () => {
   let fixture: ComponentFixture<AWSClusterSettingsComponent>;

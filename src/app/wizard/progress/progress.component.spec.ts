@@ -1,12 +1,12 @@
-import { SharedModule } from '../../shared/shared.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from '../../shared/shared.module';
 
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProgressComponent } from './progress.component';
 import { StepsService } from '../../core/services/wizard/steps.service';
 import { GoogleAnalyticsService } from '../../google-analytics.service';
+import { ProgressComponent } from './progress.component';
 
 const modules: any[] = [
   BrowserModule,

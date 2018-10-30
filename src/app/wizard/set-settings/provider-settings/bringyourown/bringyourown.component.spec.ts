@@ -1,8 +1,8 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BringyourownClusterSettingsComponent } from './bringyourown.component';
 import { SharedModule } from '../../../../shared/shared.module';
+import { BringyourownClusterSettingsComponent } from './bringyourown.component';
 
 describe('BringyourownClusterSettingsComponent', () => {
   let fixture: ComponentFixture<BringyourownClusterSettingsComponent>;

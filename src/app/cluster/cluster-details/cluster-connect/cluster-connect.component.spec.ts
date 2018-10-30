@@ -1,18 +1,18 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ClusterConnectComponent } from './cluster-connect.component';
+import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
+import { HttpClientModule } from '@angular/common/http';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SharedModule } from '../../../shared/shared.module';
-import { RouterTestingModule } from '../../../testing/router-stubs';
-import { HttpClientModule } from '@angular/common/http';
-import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { ApiService } from '../../../core/services/api/api.service';
+import { SharedModule } from '../../../shared/shared.module';
+import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { fakeProject } from '../../../testing/fake-data/project.fake';
-import { ApiService } from '../../../core/services/api/api.service';
+import { RouterTestingModule } from '../../../testing/router-stubs';
+import { ClusterConnectComponent } from './cluster-connect.component';
 
 
 const modules: any[] = [

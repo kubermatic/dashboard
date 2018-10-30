@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { MemberEntity } from '../../../shared/entity/MemberEntity';
 import { Auth } from '../auth/auth.service';
 import { environment } from './../../../../environments/environment';
-import { MemberEntity } from '../../../shared/entity/MemberEntity';
 
 @Injectable()
 export class UserService {

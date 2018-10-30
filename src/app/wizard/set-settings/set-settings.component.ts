@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { WizardService } from '../../core/services/wizard/wizard.service';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { NodeData } from '../../shared/model/NodeSpecChange';
 

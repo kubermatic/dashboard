@@ -1,10 +1,10 @@
 /* tslint:disable:no-unused-variable */
 
-import { inject, TestBed } from '@angular/core/testing';
-import { Auth } from './auth.service';
 import { HttpClientModule } from '@angular/common/http';
+import { inject, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Auth } from './auth.service';
 
 describe('Auth', () => {
   beforeEach(() => {

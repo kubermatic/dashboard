@@ -1,24 +1,24 @@
-import { Injectable } from '@angular/core';
-import { catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import { environment } from '../../../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Auth } from '../auth/auth.service';
+import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { environment } from '../../../../environments/environment';
 import { ClusterEntity, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
-import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
-import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
-import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { VSphereNetwork } from '../../../shared/entity/provider/vsphere/VSphereEntity';
-import { MemberEntity, CreateMemberEntity } from '../../../shared/entity/MemberEntity';
-import {
-  OpenstackFlavor, OpenstackNetwork, OpenstackSubnet,
-  OpenstackTenant, OpenstackSecurityGroup
-} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
+import { CreateMemberEntity, MemberEntity } from '../../../shared/entity/MemberEntity';
+import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import {
+  OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup,
+  OpenstackSubnet, OpenstackTenant
+} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import { VSphereNetwork } from '../../../shared/entity/provider/vsphere/VSphereEntity';
+import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
+import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
+import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
+import { Auth } from '../auth/auth.service';
 
 @Injectable()
 export class ApiService {

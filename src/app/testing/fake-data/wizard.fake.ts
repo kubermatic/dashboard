@@ -1,5 +1,5 @@
-import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 import { OpenstackTenant } from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
 
 export function doClusterModelFake(): CreateClusterModel {
   return {

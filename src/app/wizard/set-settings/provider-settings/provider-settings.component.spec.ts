@@ -1,18 +1,18 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ClusterProviderSettingsComponent } from './provider-settings.component';
 import { WizardService } from '../../../core/services/wizard/wizard.service';
-import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
-import { DigitaloceanClusterSettingsComponent } from './digitalocean/digitalocean.component';
-import { AWSClusterSettingsComponent } from './aws/aws.component';
-import { OpenstackClusterSettingsComponent } from './openstack/openstack.component';
-import { BringyourownClusterSettingsComponent } from './bringyourown/bringyourown.component';
-import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../../shared/shared.module';
-import { HetznerClusterSettingsComponent } from './hetzner/hetzner.component';
-import { VSphereClusterSettingsComponent } from './vsphere/vsphere.component';
+import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { AWSClusterSettingsComponent } from './aws/aws.component';
 import { AzureClusterSettingsComponent } from './azure/azure.component';
+import { BringyourownClusterSettingsComponent } from './bringyourown/bringyourown.component';
+import { DigitaloceanClusterSettingsComponent } from './digitalocean/digitalocean.component';
+import { HetznerClusterSettingsComponent } from './hetzner/hetzner.component';
+import { OpenstackClusterSettingsComponent } from './openstack/openstack.component';
+import { ClusterProviderSettingsComponent } from './provider-settings.component';
+import { VSphereClusterSettingsComponent } from './vsphere/vsphere.component';
 
 describe('ClusterProviderSettingsComponent', () => {
   let fixture: ComponentFixture<ClusterProviderSettingsComponent>;

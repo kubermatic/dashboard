@@ -1,27 +1,25 @@
 import { HttpClientModule } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
+import { ClusterItemComponent } from './cluster-item/cluster-item.component';
 import Spy = jasmine.Spy;
 import { ClusterListComponent } from './cluster-list.component';
-import { ClusterItemComponent } from './cluster-item/cluster-item.component';
-import { ClusterHealthStatusComponent } from '../cluster-health-status/cluster-health-status.component';
 
-import { ApiService, DatacenterService, HealthService, UserService } from '../../core/services';
-import { Auth } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
+import { ApiService, Auth, DatacenterService, HealthService, UserService } from '../../core/services';
 
 import { SharedModule } from '../../shared/shared.module';
 import { ActivatedRouteStub, RouterStub, RouterTestingModule } from '../../testing/router-stubs';
 
-import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { asyncData } from '../../testing/services/api-mock.service';
+import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
+import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { HealthMockService } from '../../testing/services/health-mock.service';
 import { UserMockService } from '../../testing/services/user-mock.service';
-import { AppConfigMockService } from '../../testing/services/app-config-mock.service';
 
 import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
 import { fakeSeedDatacenters } from '../../testing/fake-data/datacenter.fake';

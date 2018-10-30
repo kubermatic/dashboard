@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
-import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.component';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { AppConfigService } from '../../../app-config.service';
+import { UserService } from '../../../core/services';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { NodeEntity } from '../../../shared/entity/NodeEntity';
 import { UserGroupConfig } from '../../../shared/model/Config';
-import { UserService } from '../../../core/services';
-import { AppConfigService } from '../../../app-config.service';
+import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
+import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.component';
 
 @Component({
   selector: 'kubermatic-node-list',

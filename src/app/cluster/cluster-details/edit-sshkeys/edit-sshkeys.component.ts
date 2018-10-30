@@ -1,15 +1,15 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
-import { Sort, MatDialog } from '@angular/material';
-import { Subscription, interval } from 'rxjs';
-import { retry } from 'rxjs/operators';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog, Sort } from '@angular/material';
 import { find } from 'lodash';
-import { ApiService, UserService } from '../../../core/services';
+import { interval, Subscription } from 'rxjs';
+import { retry } from 'rxjs/operators';
 import { AppConfigService } from '../../../app-config.service';
-import { AddClusterSSHKeysComponent } from './add-cluster-sshkeys/add-cluster-sshkeys.component';
-import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
+import { ApiService, UserService } from '../../../core/services';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { UserGroupConfig } from '../../../shared/model/Config';
+import { AddClusterSSHKeysComponent } from './add-cluster-sshkeys/add-cluster-sshkeys.component';
 
 @Component({
   selector: 'kubermatic-edit-sshkeys',

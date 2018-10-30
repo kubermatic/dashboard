@@ -1,21 +1,20 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription, Subject, interval } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { WizardService } from '../core/services';
-import { ClusterDatacenterForm, ClusterSpecForm, ClusterProviderForm, ClusterProviderSettingsForm } from '../shared/model/ClusterForm';
-import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
-import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
-import { AddNodeService } from '../core/services/add-node/add-node.service';
-import { ProjectEntity } from '../shared/entity/ProjectEntity';
-import { NodeData } from '../shared/model/NodeSpecChange';
-import { NodeProvider } from '../shared/model/NodeProviderConstants';
-import { Step, StepsService } from '../core/services/wizard/steps.service';
-import { ApiService, InitialNodeDataService, ProjectService } from '../core/services';
-import { NotificationActions } from '../redux/actions/notification.actions';
 import { Router } from '@angular/router';
-import { CreateClusterModel } from '../shared/model/CreateClusterModel';
-import { NodeEntity, getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec } from '../shared/entity/NodeEntity';
+import { interval, Subject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ApiService, InitialNodeDataService, ProjectService, WizardService } from '../core/services';
+import { AddNodeService } from '../core/services/add-node/add-node.service';
+import { Step, StepsService } from '../core/services/wizard/steps.service';
 import { GoogleAnalyticsService } from '../google-analytics.service';
+import { NotificationActions } from '../redux/actions/notification.actions';
+import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
+import { getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeEntity } from '../shared/entity/NodeEntity';
+import { ProjectEntity } from '../shared/entity/ProjectEntity';
+import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
+import { ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSpecForm } from '../shared/model/ClusterForm';
+import { CreateClusterModel } from '../shared/model/CreateClusterModel';
+import { NodeProvider } from '../shared/model/NodeProviderConstants';
+import { NodeData } from '../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-wizard',
