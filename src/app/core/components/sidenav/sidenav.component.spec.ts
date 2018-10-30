@@ -1,29 +1,29 @@
 import { HttpClientModule } from '@angular/common/http';
+import { DebugElement } from '@angular/core/src/debug/debug_node';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog } from '@angular/material';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { DebugElement } from '@angular/core/src/debug/debug_node';
-import { MatDialog } from '@angular/material';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { MockComponent } from 'ng2-mock-component';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 
 import { SidenavComponent } from './sidenav.component';
 
-import { ApiService, ProjectService, UserService } from '../../services';
 import { AppConfigService } from '../../../app-config.service';
+import { ApiService, ProjectService, UserService } from '../../services';
 
 import { SharedModule } from '../../../shared/shared.module';
-import { RouterTestingModule, RouterLinkStubDirective } from '../../../testing/router-stubs';
+import { RouterLinkStubDirective, RouterTestingModule } from '../../../testing/router-stubs';
 import { click } from '../../../testing/utils/click-handler';
 
 import { asyncData } from '../../../testing/services/api-mock.service';
+import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
 import { UserMockService } from '../../../testing/services/user-mock.service';
-import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
 
-import { fakeProjects } from '../../../testing/fake-data/project.fake';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { fakeProjects } from '../../../testing/fake-data/project.fake';
 
 const modules: any[] = [
   BrowserModule,

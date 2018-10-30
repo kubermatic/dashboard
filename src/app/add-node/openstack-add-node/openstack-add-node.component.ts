@@ -1,11 +1,11 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { ApiService } from '../../core/services';
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { OpenstackFlavor } from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-openstack-add-node',

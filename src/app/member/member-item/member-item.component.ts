@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
-import { UserService } from '../../core/services';
 import { AppConfigService } from '../../app-config.service';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import { UserService } from '../../core/services';
 import { MemberEntity, MemberProject } from '../../shared/entity/MemberEntity';
+import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { UserGroupConfig } from '../../shared/model/Config';
 import { EditMemberComponent } from '../edit-member/edit-member.component';
 import { MemberDeleteConfirmationComponent } from '../member-delete-confirmation/member-delete-confirmation.component';

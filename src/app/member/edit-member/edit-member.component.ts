@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
-import { NotificationActions } from '../../redux/actions/notification.actions';
 import { ApiService } from '../../core/services';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import { NotificationActions } from '../../redux/actions/notification.actions';
 import { MemberEntity } from '../../shared/entity/MemberEntity';
+import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-edit-member',

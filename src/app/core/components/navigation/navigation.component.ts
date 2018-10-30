@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { Auth, UserService, ProjectService } from '../../services';
-import { SidenavService } from '../sidenav/sidenav.service';
 import { environment } from '../../../../environments/environment';
-import { AppConstants } from '../../../shared/constants/constants';
 import { MobileNavigationComponent } from '../../../overlays';
+import { AppConstants } from '../../../shared/constants/constants';
 import { MemberEntity } from '../../../shared/entity/MemberEntity';
+import { Auth, ProjectService, UserService } from '../../services';
+import { SidenavService } from '../sidenav/sidenav.service';
 
 @Component({
   selector: 'kubermatic-navigation',

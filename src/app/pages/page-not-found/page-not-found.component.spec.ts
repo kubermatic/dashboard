@@ -1,15 +1,15 @@
-import { SharedModule } from '../../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterStub } from './../../testing/router-stubs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { SharedModule } from '../../shared/shared.module';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
-import { Auth } from './../../core/services/index';
-import { PageNotFoundComponent } from './page-not-found.component';
 import { click } from '../../testing/utils/click-handler';
+import { Auth } from './../../core/services/index';
+import { RouterStub } from './../../testing/router-stubs';
+import { PageNotFoundComponent } from './page-not-found.component';
 
 const modules: any[] = [
   BrowserModule,

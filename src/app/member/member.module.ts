@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
-import { MemberComponent } from './member.component';
-import { MemberItemComponent } from './member-item/member-item.component';
-import { SharedModule } from '../shared/shared.module';
 import { MatTabsModule } from '@angular/material';
-import { MemberRoutingModule } from './member-routing.module';
+import { SharedModule } from '../shared/shared.module';
 import { MemberDeleteConfirmationComponent } from './member-delete-confirmation/member-delete-confirmation.component';
+import { MemberItemComponent } from './member-item/member-item.component';
+import { MemberRoutingModule } from './member-routing.module';
+import { MemberComponent } from './member.component';
 
 const components: any[] = [
   MemberComponent,

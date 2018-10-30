@@ -1,10 +1,10 @@
-import { DigitaloceanNodeSpec } from './node/DigitaloceanNodeSpec';
-import { AWSNodeSpec } from './node/AWSNodeSpec';
-import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
-import { HetznerNodeSpec } from './node/HetznerNodeSpec';
-import { VSphereNodeSpec } from './node/VSphereNodeSpec';
-import { AzureNodeSpec } from './node/AzureNodeSpec';
 import { NodeProvider } from '../model/NodeProviderConstants';
+import { AWSNodeSpec } from './node/AWSNodeSpec';
+import { AzureNodeSpec } from './node/AzureNodeSpec';
+import { DigitaloceanNodeSpec } from './node/DigitaloceanNodeSpec';
+import { HetznerNodeSpec } from './node/HetznerNodeSpec';
+import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
+import { VSphereNodeSpec } from './node/VSphereNodeSpec';
 
 export class NodeEntity {
   creationTimestamp?: Date;

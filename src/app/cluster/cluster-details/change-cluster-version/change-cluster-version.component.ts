@@ -1,13 +1,13 @@
-import { Component, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs';
+import { ApiService, ProjectService } from '../../../core/services';
+import { GoogleAnalyticsService } from '../../../google-analytics.service';
 import { NotificationActions } from '../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { ApiService, ProjectService } from '../../../core/services';
+import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
-import { Subscription } from 'rxjs';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
 
 @Component({
   selector: 'kubermatic-change-cluster-version',

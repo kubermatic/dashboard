@@ -1,16 +1,16 @@
-import { SharedModule } from '../../shared/shared.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService, DatacenterService, WizardService } from '../../core/services';
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { SharedModule } from '../../shared/shared.module';
+import { fakeAzureSizes } from '../../testing/fake-data/addNodeModal.fake';
 import { fakeAzureCluster } from '../../testing/fake-data/cluster.fake';
-import { AzureAddNodeComponent } from './azure-add-node.component';
+import { fakeAzureDatacenter } from '../../testing/fake-data/datacenter.fake';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
-import { fakeAzureSizes } from '../../testing/fake-data/addNodeModal.fake';
-import { fakeAzureDatacenter } from '../../testing/fake-data/datacenter.fake';
+import { AzureAddNodeComponent } from './azure-add-node.component';
 
 const modules: any[] = [
   BrowserModule,

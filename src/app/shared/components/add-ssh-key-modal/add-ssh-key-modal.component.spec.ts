@@ -1,17 +1,17 @@
-import { of } from 'rxjs';
-import { Router } from '@angular/router';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatDialogModule, MatDialogRef, MatFormFieldModule, MatInputModule, MatToolbarModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatDialogModule, MatDialogRef, MatFormFieldModule, MatInputModule, MatToolbarModule } from '@angular/material';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { RouterStub, RouterTestingModule } from './../../../testing/router-stubs';
-import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
-import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { Router } from '@angular/router';
+import { of } from 'rxjs';
 import { ApiService } from '../../../core/services/index';
-import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
 import { fakeProject } from '../../../testing/fake-data/project.fake';
+import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { RouterStub, RouterTestingModule } from './../../../testing/router-stubs';
+import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
+import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
 
 const modules: any[] = [
   BrowserModule,

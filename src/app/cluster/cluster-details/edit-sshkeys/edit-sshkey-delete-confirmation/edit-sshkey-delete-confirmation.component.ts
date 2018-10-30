@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ApiService } from '../../../../core/services';
-import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
+import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
+import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
 
 @Component({
   selector: 'kubermatic-edit-sshkey-delete-confirmation',

@@ -1,13 +1,13 @@
-import { SharedModule } from '../../shared/shared.module';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AwsAddNodeComponent } from './aws-add-node.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { WizardService } from '../../core/services';
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { SharedModule } from '../../shared/shared.module';
 import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
+import { AwsAddNodeComponent } from './aws-add-node.component';
 
 const modules: any[] = [
   BrowserModule,

@@ -1,19 +1,19 @@
-import { ActivatedRoute, Router } from '@angular/router';
-import { BrowserModule } from '@angular/platform-browser';
-import { MatTabsModule, MatDialog } from '@angular/material';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MatTabsModule } from '@angular/material';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { SSHKeyComponent } from './sshkey.component';
-import { SSHKeyItemComponent } from './sshkey-item/sshkey-item.component';
-import { ApiService, UserService } from '../core/services';
 import { AppConfigService } from '../app-config.service';
-import { ApiMockService } from '../testing/services/api-mock.service';
-import { UserMockService } from '../testing/services/user-mock.service';
-import { AppConfigMockService } from '../testing/services/app-config-mock.service';
+import { ApiService, UserService } from '../core/services';
 import { SharedModule } from '../shared/shared.module';
 import { RouterTestingModule } from '../testing/router-stubs';
+import { ApiMockService } from '../testing/services/api-mock.service';
+import { AppConfigMockService } from '../testing/services/app-config-mock.service';
+import { UserMockService } from '../testing/services/user-mock.service';
 import { ActivatedRouteStub, RouterStub } from './../testing/router-stubs';
+import { SSHKeyItemComponent } from './sshkey-item/sshkey-item.component';
+import { SSHKeyComponent } from './sshkey.component';
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;

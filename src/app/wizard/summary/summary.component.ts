@@ -1,8 +1,8 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { NodeData } from '../../shared/model/NodeSpecChange';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
 import { ClusterDatacenterForm, ClusterProviderForm } from '../../shared/model/ClusterForm';
+import { NodeData } from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-summary',

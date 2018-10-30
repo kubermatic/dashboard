@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ApiService } from '../../../../core/services';
-import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
+import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ClusterEntity, Token } from '../../../../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-revoke-admin-token',

@@ -1,13 +1,13 @@
-import { SharedModule } from '../../shared/shared.module';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { WizardService } from '../../core/services/wizard/wizard.service';
+import { SharedModule } from '../../shared/shared.module';
 import { fakeVSphereCluster } from '../../testing/fake-data/cluster.fake';
-import { VSphereAddNodeComponent } from './vsphere-add-node.component';
 import { nodeDataFake } from '../../testing/fake-data/node.fake';
+import { VSphereAddNodeComponent } from './vsphere-add-node.component';
 
 const modules: any[] = [
   BrowserModule,

@@ -1,17 +1,17 @@
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { EditSSHKeysComponent } from './edit-sshkeys.component';
-import { EditSSHKeysItemComponent } from './edit-sshkeys-item/edit-sshkeys-item.component';
-import { ApiService, UserService } from './../../../core/services';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AppConfigService } from './../../../app-config.service';
+import { ApiService, UserService } from './../../../core/services';
 import { SharedModule } from './../../../shared/shared.module';
-import { UserMockService } from './../../../testing/services/user-mock.service';
-import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
-import { asyncData } from './../../../testing/services/api-mock.service';
 import { fakeSSHKeys } from './../../../testing/fake-data/sshkey.fake';
+import { asyncData } from './../../../testing/services/api-mock.service';
+import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
+import { UserMockService } from './../../../testing/services/user-mock.service';
+import { EditSSHKeysItemComponent } from './edit-sshkeys-item/edit-sshkeys-item.component';
+import { EditSSHKeysComponent } from './edit-sshkeys.component';
 
 const modules: any[] = [
   BrowserModule,

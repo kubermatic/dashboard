@@ -1,11 +1,11 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs';
 import { ApiService } from '../../core/services';
-import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-digitalocean-add-node',

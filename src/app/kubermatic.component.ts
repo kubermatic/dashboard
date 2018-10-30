@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, NavigationEnd } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 import { DevToolsExtension, NgRedux } from '@angular-redux/store';
 import { INITIAL_STATE, Store, StoreReducer } from './redux/store';
@@ -7,10 +7,10 @@ import { INITIAL_STATE, Store, StoreReducer } from './redux/store';
 import { MatSidenav } from '@angular/material';
 import { SidenavService } from './core/components/sidenav/sidenav.service';
 
-import { Auth } from './core/services';
 import { AppConfigService } from './app-config.service';
-import { Config } from './shared/model/Config';
+import { Auth } from './core/services';
 import { GoogleAnalyticsService } from './google-analytics.service';
+import { Config } from './shared/model/Config';
 
 @Component({
   selector: 'kubermatic-root',

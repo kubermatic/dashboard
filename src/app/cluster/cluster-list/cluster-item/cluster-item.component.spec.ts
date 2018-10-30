@@ -1,25 +1,23 @@
-import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, fakeAsync, TestBed, tick, discardPeriodicTasks } from '@angular/core/testing';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { ClusterItemComponent } from './cluster-item.component';
-import { ClusterHealthStatusComponent } from '../../cluster-health-status/cluster-health-status.component';
+import { Auth, DatacenterService, HealthService, ProjectService } from '../../../core/services';
+import { ClusterHealth } from '../../../shared/model/ClusterHealthConstants';
 import { SharedModule } from '../../../shared/shared.module';
-import { RouterTestingModule, RouterStub, ActivatedRouteStub } from '../../../testing/router-stubs';
-import { DatacenterService, HealthService, ProjectService } from '../../../core/services';
-import { Auth } from '../../../core/services';
+import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { fakeBringyourownSeedDatacenter, fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
+import { fakeHealth } from '../../../testing/fake-data/health.fake';
+import { fakeProject } from '../../../testing/fake-data/project.fake';
+import { ActivatedRouteStub, RouterStub, RouterTestingModule } from '../../../testing/router-stubs';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
 import { DatacenterMockService } from '../../../testing/services/datacenter-mock.service';
 import { HealthMockService } from '../../../testing/services/health-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
-import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
-import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
-import { fakeBringyourownSeedDatacenter } from '../../../testing/fake-data/datacenter.fake';
-import { fakeHealth } from '../../../testing/fake-data/health.fake';
-import { fakeProject } from '../../../testing/fake-data/project.fake';
-import { ClusterHealth } from '../../../shared/model/ClusterHealthConstants';
+import { ClusterHealthStatusComponent } from '../../cluster-health-status/cluster-health-status.component';
+import { ClusterItemComponent } from './cluster-item.component';
 
 const modules: any[] = [
   BrowserModule,

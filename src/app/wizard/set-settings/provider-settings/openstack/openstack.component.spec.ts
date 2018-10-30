@@ -1,16 +1,16 @@
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from '@angular/forms';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { OpenstackClusterSettingsComponent } from './openstack.component';
+import { AppConfigService } from '../../../../app-config.service';
+import { ApiService, Auth, WizardService } from '../../../../core/services';
+import { Config } from '../../../../shared/model/Config';
 import { SharedModule } from '../../../../shared/shared.module';
-import { WizardService, ApiService, Auth } from '../../../../core/services';
-import { asyncData } from '../../../../testing/services/api-mock.service';
 import { fakeOpenstackCluster } from '../../../../testing/fake-data/cluster.fake';
 import { openstackTenantsFake } from '../../../../testing/fake-data/wizard.fake';
+import { asyncData } from '../../../../testing/services/api-mock.service';
 import { AuthMockService } from '../../../../testing/services/auth-mock.service';
-import { AppConfigService } from '../../../../app-config.service';
-import { Config } from '../../../../shared/model/Config';
+import { OpenstackClusterSettingsComponent } from './openstack.component';
 
 describe('OpenstackClusterSettingsComponent', () => {
   let fixture: ComponentFixture<OpenstackClusterSettingsComponent>;

@@ -1,6 +1,6 @@
-import { AuthActions } from './../actions/auth.actions';
-import { Action } from '../../shared/interfaces/action.interface';
 import { Reducer } from 'redux';
+import { Action } from '../../shared/interfaces/action.interface';
+import { AuthActions } from './../actions/auth.actions';
 
 export enum AuthStatus {
   LoggedIn = 0,

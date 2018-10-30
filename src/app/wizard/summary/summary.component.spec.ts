@@ -1,10 +1,10 @@
-import { SharedModule } from '../../shared/shared.module';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { SummaryComponent } from './summary.component';
-import { ApiMockService } from '../../testing/services/api-mock.service';
 import { ApiService } from '../../core/services';
+import { SharedModule } from '../../shared/shared.module';
+import { ApiMockService } from '../../testing/services/api-mock.service';
+import { SummaryComponent } from './summary.component';
 
 const modules: any[] = [
   BrowserModule,

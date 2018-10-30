@@ -1,14 +1,14 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { WizardService } from '../../../core/services/wizard/wizard.service';
-import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { ApiService, ProjectService, UserService } from '../../../core/services';
-import { AppConfigService } from '../../../app-config.service';
-import { Subscription } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs';
+import { AppConfigService } from '../../../app-config.service';
+import { ApiService, ProjectService, UserService } from '../../../core/services';
+import { WizardService } from '../../../core/services/wizard/wizard.service';
 import { AddSshKeyModalComponent } from '../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
 import { UserGroupConfig } from '../../../shared/model/Config';
 
 @Component({

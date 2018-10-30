@@ -1,13 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatSelectChange } from '@angular/material';
+import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import { environment } from '../../../../environments/environment';
-import { ApiService, ProjectService, UserService } from '../../services';
-import { AppConfigService } from '../../../app-config.service';
-import { UserGroupConfig } from '../../../shared/model/Config';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { AddProjectComponent } from '../../../add-project/add-project.component';
+import { AppConfigService } from '../../../app-config.service';
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import { UserGroupConfig } from '../../../shared/model/Config';
+import { ApiService, ProjectService, UserService } from '../../services';
 
 @Component({
   selector: 'kubermatic-sidenav',

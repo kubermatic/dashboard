@@ -1,16 +1,16 @@
-import { BrowserModule, By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material';
+import { BrowserModule, By } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { NodeListComponent } from './node-list.component';
-import { UserService } from '../../../core/services';
 import { AppConfigService } from '../../../app-config.service';
-import { UserMockService } from '../../../testing/services/user-mock.service';
-import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
+import { UserService } from '../../../core/services';
 import { SharedModule } from '../../../shared/shared.module';
-import { nodesFake } from '../../../testing/fake-data/node.fake';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
+import { nodesFake } from '../../../testing/fake-data/node.fake';
+import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
+import { UserMockService } from '../../../testing/services/user-mock.service';
+import { NodeListComponent } from './node-list.component';
 
 const modules: any[] = [
   BrowserModule,
