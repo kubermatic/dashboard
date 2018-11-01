@@ -59,6 +59,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
     }
 
     this.wizardService.changeSetMachineNetworks({
+      setMachineNetworks: this.setMachineNetworkForm.controls.checkMachineNetworks.value;
       machineNetworks: this.machineNetworkFormData,
       valid: isValid,
     });

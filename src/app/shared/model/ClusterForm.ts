@@ -13,6 +13,7 @@ export class ClusterSpecForm {
 }
 
 export class SetMachineNetworksForm {
+  setMachineNetworks: boolean;
   machineNetworks: MachineNetworkForm[];
   valid: boolean;
 }

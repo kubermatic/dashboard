@@ -56,13 +56,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         cloud: {
           dc: '',
         },
-        machineNetworks: [
-          {
-            cidr: '',
-            dnsServers: [''],
-            gateway: ''
-          }
-        ],
+        machineNetworks: [],
       },
     };
 
@@ -100,10 +94,14 @@ export class WizardComponent implements OnInit, OnDestroy {
     // When the cluster settings got changed, update the cluster
     this.subscriptions.push(this.wizardService.setMachineNetworksFormChanges$.subscribe(data => {
       this.setMachineNetworksFormData = data;
-      if (this.setMachineNetworksFormData.valid) {
-        this.setMachineNetworksFormData = data;
-        this.cluster.spec.machineNetworks = this.setMachineNetworksFormData.machineNetworks;
-        this.wizardService.changeCluster(this.cluster);
+      if (!!this.setMachineNetworksFormData.setMachineNetworks) {
+        if (this.setMachineNetworksFormData.valid) {
+          this.setMachineNetworksFormData = data;
+          this.cluster.spec.machineNetworks = this.setMachineNetworksFormData.machineNetworks;
+          this.wizardService.changeCluster(this.cluster);
+        }
+      } else {
+        this.cluster.spec.machineNetworks = null;
       }
     }));
 
