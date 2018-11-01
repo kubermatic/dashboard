@@ -1,5 +1,5 @@
-import { BrowserXhr } from '@angular/http';
 import { Injectable } from '@angular/core';
+import { BrowserXhr } from '@angular/http';
 import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
 
 @Injectable()
@@ -35,6 +35,6 @@ export class ProgressBrowserXhr extends BrowserXhr {
       }
     };
 
-    return <any>(xhr);
+    return <any> xhr;
   }
 }

@@ -1,11 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../../shared/shared.module';
-import { MachineNetworksModule } from '../../machine-networks/machine-networks.module';
-import { SetMachineNetworksComponent } from './set-machine-networks.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WizardService } from '../../core/services';
+import { MachineNetworksModule } from '../../machine-networks/machine-networks.module';
+import { SharedModule } from '../../shared/shared.module';
+import { SetMachineNetworksComponent } from './set-machine-networks.component';
 
 const modules: any[] = [
   BrowserModule,

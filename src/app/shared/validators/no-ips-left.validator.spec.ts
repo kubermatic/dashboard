@@ -1,6 +1,6 @@
 import { AbstractControl } from '@angular/forms';
-import { NoIpsLeftValidator } from './no-ips-left.validator';
 import { fakeClusterWithMachineNetwork, fakeGatewayInCidr, fakeGatewayNotInCidr } from '../../testing/fake-data/clusterWithMachineNetworks.fake';
+import { NoIpsLeftValidator } from './no-ips-left.validator';
 
 describe('NoIPsLeftwValidator', () => {
 

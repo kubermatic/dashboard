@@ -1,15 +1,15 @@
-import { SharedModule } from '../../shared/shared.module';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { AddMemberComponent } from './add-member.component';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { ApiService, ProjectService } from '../../core/services';
+import { SharedModule } from '../../shared/shared.module';
+import { fakeMember } from '../../testing/fake-data/member.fake';
+import { asyncData } from '../../testing/services/api-mock.service';
 import { MatDialogRefMock } from '../../testing/services/mat-dialog-ref-mock';
 import { ProjectMockService } from '../../testing/services/project-mock.service';
-import { ApiService, ProjectService } from '../../core/services';
-import { asyncData } from '../../testing/services/api-mock.service';
-import { fakeMember } from '../../testing/fake-data/member.fake';
-import { MatDialogRef } from '@angular/material';
+import { AddMemberComponent } from './add-member.component';
 
 const modules: any[] = [
   BrowserModule,

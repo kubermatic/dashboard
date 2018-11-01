@@ -1,19 +1,19 @@
-import { ApiService } from './../core/services/api/api.service';
-import { DatacenterService } from './../core/services/datacenter/datacenter.service';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ParticlesModule } from 'angular-particle';
-import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Router } from '@angular/router';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRouteStub, RouterStub } from './../testing/router-stubs';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ParticlesModule } from 'angular-particle';
+import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AuthMockService } from '../testing/services/auth-mock.service';
+import { ApiService } from './../core/services/api/api.service';
+import { DatacenterService } from './../core/services/datacenter/datacenter.service';
+import { ActivatedRouteStub, RouterStub } from './../testing/router-stubs';
 
-import { Auth } from './../core/services/index';
-import { DashboardComponent } from './dashboard.component';
 import { ApiMockService } from '../testing/services/api-mock.service';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
+import { Auth } from './../core/services/index';
+import { DashboardComponent } from './dashboard.component';
 
 const modules: any[] = [
   BrowserModule,

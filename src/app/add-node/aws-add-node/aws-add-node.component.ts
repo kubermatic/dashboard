@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
-import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 import { WizardService } from '../../core/services';
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { CloudSpec } from '../../shared/entity/ClusterEntity';
+import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-aws-add-node',
@@ -83,7 +83,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   addTag(): void {
-    this.tags = <FormArray>this.awsNodeForm.get('tags');
+    this.tags = <FormArray> this.awsNodeForm.get('tags');
     this.tags.push(new FormGroup({
       key: new FormControl(''),
       value: new FormControl('')
@@ -91,7 +91,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
   }
 
   deleteTag(index: number): void {
-    const arrayControl = <FormArray>this.awsNodeForm.get('tags');
+    const arrayControl = <FormArray> this.awsNodeForm.get('tags');
     arrayControl.removeAt(index);
   }
 

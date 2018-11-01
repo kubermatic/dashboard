@@ -1,10 +1,10 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { DatacenterService, HealthService } from '../../../core/services';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
-import { DatacenterService, HealthService } from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-cluster-item',

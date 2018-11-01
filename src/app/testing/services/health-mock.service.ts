@@ -1,9 +1,9 @@
-import { fakeHealth } from '../fake-data/health.fake';
-import { HealthEntity } from '../../shared/entity/HealthEntity';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
+import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import { HealthEntity } from '../../shared/entity/HealthEntity';
+import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
+import { fakeHealth } from '../fake-data/health.fake';
 
 @Injectable()
 export class HealthMockService {

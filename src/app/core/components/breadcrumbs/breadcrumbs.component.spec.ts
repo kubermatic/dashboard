@@ -1,15 +1,15 @@
-import { AuthMockService } from './../../../testing/services/auth-mock.service';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule, By } from '@angular/platform-browser';
 import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BreadcrumbsComponent } from './breadcrumbs.component';
-import { ApiService, ProjectService } from './../../services';
-import { Auth } from '../../services/index';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
+import { Auth } from '../../services/index';
+import { AuthMockService } from './../../../testing/services/auth-mock.service';
+import { ApiService, ProjectService } from './../../services';
+import { BreadcrumbsComponent } from './breadcrumbs.component';
 
 const modules: any[] = [
   BrowserModule,

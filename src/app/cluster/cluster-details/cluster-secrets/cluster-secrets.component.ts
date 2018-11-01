@@ -1,13 +1,13 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
+import { AppConfigService } from '../../../app-config.service';
+import { HealthService } from '../../../core/services';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
-import { AddMachineNetworkComponent } from './add-machine-network/add-machine-network.component';
 import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../../shared/entity/HealthEntity';
 import { UserGroupConfig } from '../../../shared/model/Config';
-import { HealthService } from '../../../core/services';
-import { AppConfigService } from '../../../app-config.service';
+import { AddMachineNetworkComponent } from './add-machine-network/add-machine-network.component';
+import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',

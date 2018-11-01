@@ -1,15 +1,15 @@
-import { NotificationToast, NotificationToastType } from './../../../shared/interfaces/notification-toast.interface';
-import { NotificationMockService } from './../../../testing/services/notification-mock.service';
-import { HttpClientModule } from '@angular/common/http';
-import { BrowserModule } from '@angular/platform-browser';
 import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { NotificationToast, NotificationToastType } from './../../../shared/interfaces/notification-toast.interface';
+import { NotificationMockService } from './../../../testing/services/notification-mock.service';
 
-import { NotificationComponent } from './notification.component';
 import { NotificationsService, SimpleNotificationsModule } from 'angular2-notifications';
 import { ClipboardModule } from 'ngx-clipboard';
+import { NotificationComponent } from './notification.component';
 
 const modules: any[] = [
   BrowserModule,

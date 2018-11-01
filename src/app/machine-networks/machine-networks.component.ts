@@ -1,5 +1,5 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { WizardService } from '../core/services';
@@ -65,7 +65,7 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   }
 
   addMachineNetwork(): void {
-    this.machineNetworks = <FormArray>this.machineNetworksForm.get('machineNetworks');
+    this.machineNetworks = <FormArray> this.machineNetworksForm.get('machineNetworks');
     this.machineNetworks.push(new FormGroup({
       cidr: new FormControl('', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)]),
       dnsServers: new FormControl([], [Validators.required, Validators.pattern(/^((((\d{1,3}\.){3}\d{1,3})\s*\,*\s*)+)$/)]),
@@ -74,13 +74,13 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   }
 
   deleteMachineNetwork(index: number): void {
-    const arrayControl = <FormArray>this.machineNetworksForm.get('machineNetworks');
+    const arrayControl = <FormArray> this.machineNetworksForm.get('machineNetworks');
     arrayControl.removeAt(index);
     this.setMachineNetworkSpec();
   }
 
   setMachineNetworkSpec(): void {
-    const machineNetworks = <FormArray>this.machineNetworksForm.get('machineNetworks');
+    const machineNetworks = <FormArray> this.machineNetworksForm.get('machineNetworks');
     const machineNetworksMap = [];
     for (const i in machineNetworks.controls) {
       if (machineNetworks.controls.hasOwnProperty(i)) {

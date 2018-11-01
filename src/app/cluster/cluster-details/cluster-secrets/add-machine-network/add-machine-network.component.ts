@@ -1,10 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ApiService, WizardService } from '../../../../core/services';
-import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
+import { NotificationActions } from '../../../../redux/actions/notification.actions';
 import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
 import { MachineNetworkForm } from '../../../../shared/model/ClusterForm';
 
 @Component({

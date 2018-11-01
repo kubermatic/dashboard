@@ -1,8 +1,8 @@
-import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { Injectable } from '@angular/core';
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
 
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor {

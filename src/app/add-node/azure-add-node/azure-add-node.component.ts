@@ -1,12 +1,12 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs';
-import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
-import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { ApiService, DatacenterService, WizardService } from '../../core/services';
+import { AddNodeService } from '../../core/services/add-node/add-node.service';
+import { CloudSpec } from '../../shared/entity/ClusterEntity';
 import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { AzureSizes } from '../../shared/entity/provider/azure/AzureSizeEntity';
+import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-azure-add-node',
@@ -121,7 +121,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   addTag(): void {
-    this.tags = <FormArray>this.azureNodeForm.get('tags');
+    this.tags = <FormArray> this.azureNodeForm.get('tags');
     this.tags.push(new FormGroup({
       key: new FormControl(''),
       value: new FormControl('')
@@ -129,7 +129,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   deleteTag(index: number): void {
-    const arrayControl = <FormArray>this.azureNodeForm.get('tags');
+    const arrayControl = <FormArray> this.azureNodeForm.get('tags');
     arrayControl.removeAt(index);
   }
 

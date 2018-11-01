@@ -1,11 +1,11 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { AddNodeService } from '../../../core/services/add-node/add-node.service';
 import { Subscription } from 'rxjs';
 import { DatacenterService } from '../../../core/services';
-import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
+import { AddNodeService } from '../../../core/services/add-node/add-node.service';
 import { CloudSpec } from '../../../shared/entity/ClusterEntity';
 import { OperatingSystemSpec } from '../../../shared/entity/NodeEntity';
+import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-openstack-options',

@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
-import { ProjectService, UserService } from '../../core/services';
+import { Router } from '@angular/router';
 import { AppConfigService } from '../../app-config.service';
+import { ProjectService, UserService } from '../../core/services';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { UserGroupConfig } from '../../shared/model/Config';
 import { ProjectDeleteConfirmationComponent } from './../project-delete-confirmation/project-delete-confirmation.component';

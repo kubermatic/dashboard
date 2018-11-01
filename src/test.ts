@@ -2,6 +2,8 @@
 
 import './vendor';
 
+// ordering of the imports is important, otherwise the tests will fail
+/* tslint:disable */
 import 'zone.js/dist/long-stack-trace-zone';
 import 'zone.js/dist/proxy.js';
 import 'zone.js/dist/sync-test';
@@ -13,6 +15,7 @@ import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
+/* tslint:enable */
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
 declare var __karma__: any;

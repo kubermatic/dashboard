@@ -1,12 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Sort, MatDialog } from '@angular/material';
-import { Subscription, interval } from 'rxjs';
-import { ApiService, ProjectService, UserService } from '../core/services';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog, Sort } from '@angular/material';
+import { interval, Subscription } from 'rxjs';
 import { AppConfigService } from '../app-config.service';
-import { AddMemberComponent } from './add-member/add-member.component';
+import { ApiService, ProjectService, UserService } from '../core/services';
 import { MemberEntity } from '../shared/entity/MemberEntity';
 import { ProjectEntity } from '../shared/entity/ProjectEntity';
 import { UserGroupConfig } from '../shared/model/Config';
+import { AddMemberComponent } from './add-member/add-member.component';
 
 @Component({
   selector: 'kubermatic-member',

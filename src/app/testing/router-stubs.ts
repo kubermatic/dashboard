@@ -1,7 +1,7 @@
-import { Component, Directive, HostListener, Injectable, Input, NgModule } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
 import { CommonModule } from '@angular/common';
+import { Component, Directive, HostListener, Injectable, Input, NgModule } from '@angular/core';
 import { convertToParamMap, NavigationExtras, ParamMap } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 

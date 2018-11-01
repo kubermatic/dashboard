@@ -1,12 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Sort } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiService, DatacenterService, UserService } from '../../core/services';
+import { find } from 'lodash';
+import { combineLatest, interval, ObservableInput, Subscription } from 'rxjs';
 import { AppConfigService } from '../../app-config.service';
+import { ApiService, DatacenterService, UserService } from '../../core/services';
 import { ClusterEntity } from '../../shared/entity/ClusterEntity';
 import { UserGroupConfig } from '../../shared/model/Config';
-import { Subscription, ObservableInput, interval, combineLatest } from 'rxjs';
-import { find } from 'lodash';
 
 @Component({
   selector: 'kubermatic-cluster-list',

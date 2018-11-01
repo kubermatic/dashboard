@@ -1,15 +1,15 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { combineLatest, ObservableInput, Subscription } from 'rxjs';
 import { ApiService, WizardService } from '../../../core/services';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 import { AddNodeService } from '../../../core/services/add-node/add-node.service';
-import { Subscription, ObservableInput, combineLatest } from 'rxjs';
-import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { getEmptyNodeProviderSpec, getEmptyOperatingSystemSpec, getEmptyNodeVersionSpec, NodeEntity } from '../../../shared/entity/NodeEntity';
-import { NodeData } from '../../../shared/model/NodeSpecChange';
 import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import { NotificationActions } from '../../../redux/actions/notification.actions';
+import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import { getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeEntity } from '../../../shared/entity/NodeEntity';
+import { NodeData } from '../../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-add-node-modal',

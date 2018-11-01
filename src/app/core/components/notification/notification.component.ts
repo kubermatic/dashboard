@@ -1,9 +1,9 @@
-import { Observable } from 'rxjs';
-import { Component, ViewEncapsulation } from '@angular/core';
-import { ClipboardService } from 'ngx-clipboard';
-import { NotificationsService, Notification } from 'angular2-notifications';
-import { NotificationToast, NotificationToastType } from '../../../shared/interfaces/notification-toast.interface';
 import { select } from '@angular-redux/store';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { Notification, NotificationsService } from 'angular2-notifications';
+import { ClipboardService } from 'ngx-clipboard';
+import { Observable } from 'rxjs';
+import { NotificationToast, NotificationToastType } from '../../../shared/interfaces/notification-toast.interface';
 
 @Component({
   selector: 'kubermatic-notification',
@@ -67,7 +67,7 @@ export class NotificationComponent {
   registerClickHandler(notification: Notification, plainMessage: string): void {
     if (notification) {
       notification.click.subscribe((e: MouseEvent) => {
-        const targetId = (<HTMLElement>e.target).className;
+        const targetId = (<HTMLElement> e.target).className;
         if (targetId.indexOf( NotificationComponent.closeButtonClass) > -1) {
           this._service.remove(notification.id);
         }

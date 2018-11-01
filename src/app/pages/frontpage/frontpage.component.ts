@@ -1,7 +1,7 @@
-import { Component, OnInit, HostListener } from '@angular/core';
-import { Auth } from '../../core/services';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { Auth } from '../../core/services';
 
 @Component({
   selector: 'kubermatic-frontpage',

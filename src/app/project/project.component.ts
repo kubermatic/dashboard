@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Sort, MatDialog } from '@angular/material';
-import { Subscription, interval } from 'rxjs';
+import { MatDialog, Sort } from '@angular/material';
 import { find } from 'lodash';
+import { interval, Subscription } from 'rxjs';
+import { AddProjectComponent } from '../add-project/add-project.component';
 import { AppConfigService } from '../app-config.service';
 import { ApiService, ProjectService, UserService } from '../core/services';
 import { ProjectEntity } from '../shared/entity/ProjectEntity';
-import { AddProjectComponent } from '../add-project/add-project.component';
 import { UserGroupConfig } from '../shared/model/Config';
 
 @Component({
