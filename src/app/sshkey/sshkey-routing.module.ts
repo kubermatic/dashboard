@@ -10,8 +10,8 @@ const routes: Routes = [
     path: '',
     component: SSHKeyComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Manage SSH keys' }
-  }
+    data: { title: 'Manage SSH keys' },
+  },
 ];
 
 @NgModule({

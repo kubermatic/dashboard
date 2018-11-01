@@ -8,7 +8,7 @@ import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity'
 @Component({
   selector: 'kubermatic-set-cluster-spec',
   templateUrl: 'set-cluster-spec.component.html',
-  styleUrls: ['set-cluster-spec.component.scss']
+  styleUrls: ['set-cluster-spec.component.scss'],
 })
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
@@ -25,7 +25,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: new FormControl(this.cluster.spec.version),
     });
 
-    this.subscriptions.push(this.clusterSpecForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.clusterSpecForm.valueChanges.subscribe((data) => {
       this.wizardService.changeClusterSpec({
         name: this.clusterSpecForm.controls.name.value,
         version: this.clusterSpecForm.controls.version.value,
@@ -49,7 +49,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   loadMasterVersions(): void {
-    this.subscriptions.push(this.api.getMasterVersions().subscribe(versions => {
+    this.subscriptions.push(this.api.getMasterVersions().subscribe((versions) => {
       this.masterVersions = versions;
       for (const i in versions) {
         if (versions[i].default) {

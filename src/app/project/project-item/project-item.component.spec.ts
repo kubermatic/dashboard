@@ -25,7 +25,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('ProjectItemComponent', () => {
@@ -45,7 +45,7 @@ describe('ProjectItemComponent', () => {
         { provide: UserService, useClass: UserMockService },
         { provide: Router, useClass: RouterStub },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
-        { provide: AppConfigService, useClass: AppConfigMockService }
+        { provide: AppConfigService, useClass: AppConfigMockService },
       ],
     }).compileComponents();
   });

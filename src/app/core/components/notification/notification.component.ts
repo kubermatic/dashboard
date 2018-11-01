@@ -10,7 +10,7 @@ import { NotificationToast, NotificationToastType } from '../../../shared/interf
   templateUrl: './notification.component.html',
   styleUrls: ['./notification.component.scss'],
   providers: [NotificationsService],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class NotificationComponent {
   private static readonly closeButtonClass = 'sn-close-button';
@@ -25,13 +25,13 @@ export class NotificationComponent {
     pauseOnHover: true,
     preventDuplicates: false,
     preventLastDuplicates: 'visible',
-    position: ['right', 'top']
+    position: ['right', 'top'],
   };
 
   @select(['notification', 'toast']) notification$: Observable<NotificationToast>;
 
   constructor(private _service: NotificationsService, private _clipboard: ClipboardService) {
-    this.notification$.subscribe(toast => {
+    this.notification$.subscribe((toast) => {
       if (toast) {
         this.createToast(toast);
       }

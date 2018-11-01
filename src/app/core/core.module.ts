@@ -30,7 +30,7 @@ const modules: any[] = [
   HttpClientModule,
   RouterModule,
   SharedModule,
-  SimpleNotificationsModule.forRoot()
+  SimpleNotificationsModule.forRoot(),
 ];
 
 const components: any[] = [
@@ -40,7 +40,7 @@ const components: any[] = [
   NotificationComponent,
   AddProjectComponent,
   AddMemberComponent,
-  EditMemberComponent
+  EditMemberComponent,
 ];
 
 const services: any[] = [
@@ -56,45 +56,45 @@ const services: any[] = [
   ApiService,
   InitialNodeDataService,
   ClusterService,
-  HealthService
+  HealthService,
 ];
 
 const interceptors: any[] = [
   {
     provide: HTTP_INTERCEPTORS,
     useClass: ErrorNotificationsInterceptor,
-    multi: true
+    multi: true,
   },
   {
     provide: HTTP_INTERCEPTORS,
     useClass: CheckTokenInterceptor,
-    multi: true
+    multi: true,
   },
   {
     provide: HTTP_INTERCEPTORS,
     useClass: LoaderInterceptor,
-    multi: true
-  }
+    multi: true,
+  },
 ];
 
 @NgModule({
   imports: [
-    ...modules
+    ...modules,
   ],
   declarations: [
-    ...components
+    ...components,
   ],
   providers: [
     ...services,
     ...interceptors,
     {
       provide: BrowserXhr,
-      useClass: ProgressBrowserXhr
-    }
+      useClass: ProgressBrowserXhr,
+    },
   ],
   exports: [
-    ...components
-  ]
+    ...components,
+  ],
 })
 
 export class CoreModule {

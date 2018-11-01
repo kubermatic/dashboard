@@ -10,7 +10,7 @@ import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange
 @Component({
   selector: 'kubermatic-openstack-options',
   templateUrl: './openstack-options.component.html',
-  styleUrls: ['./openstack-options.component.scss']
+  styleUrls: ['./openstack-options.component.scss'],
 })
 
 export class OpenstackOptionsComponent implements OnInit, OnDestroy {
@@ -25,11 +25,11 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
     this.osOptionsForm = new FormGroup({
       image: new FormControl(this.nodeData.node.spec.cloud.openstack.image),
     });
-    this.subscriptions.push(this.osOptionsForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.osOptionsForm.valueChanges.subscribe((data) => {
       this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
     }));
 
-    this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe(data => {
+    this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe((data) => {
       this.setImage(data);
       this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
     }));
@@ -41,7 +41,7 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
-    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
+    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((res) => {
       let coreosImage = '';
       let centosImage = '';
       let ubuntuImage = '';

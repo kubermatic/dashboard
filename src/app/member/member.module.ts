@@ -9,22 +9,22 @@ import { MemberComponent } from './member.component';
 const components: any[] = [
   MemberComponent,
   MemberItemComponent,
-  MemberDeleteConfirmationComponent
+  MemberDeleteConfirmationComponent,
 ];
 
 @NgModule({
   imports: [
     SharedModule,
     MatTabsModule,
-    MemberRoutingModule
+    MemberRoutingModule,
   ],
   declarations: [
-    ...components
+    ...components,
   ],
   exports: [
-    ...components
+    ...components,
   ],
-  entryComponents: [MemberDeleteConfirmationComponent]
+  entryComponents: [MemberDeleteConfirmationComponent],
 })
 export class MemberModule {
 }

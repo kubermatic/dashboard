@@ -12,7 +12,7 @@ describe('Auth', () => {
       imports: [
         BrowserModule,
         HttpClientModule,
-        RouterTestingModule
+        RouterTestingModule,
       ],
       declarations: [],
       providers: [

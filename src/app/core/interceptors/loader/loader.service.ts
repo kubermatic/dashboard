@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
-
 @Injectable()
 export class LoaderInterceptor implements HttpInterceptor {
   private progressBarElement: HTMLElement;
@@ -22,7 +21,7 @@ export class LoaderInterceptor implements HttpInterceptor {
             this.setProgressBarVisibility('hidden');
           }
         },
-        error => this.setProgressBarVisibility('hidden')));
+        (error) => this.setProgressBarVisibility('hidden')));
   }
 
   private setProgressBarVisibility(visibility: string): void {

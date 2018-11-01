@@ -7,7 +7,7 @@ import { ApiService, ProjectService } from '../../../core/services';
 @Component({
   selector: 'kubermatic-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
-  styleUrls: ['./breadcrumbs.component.scss']
+  styleUrls: ['./breadcrumbs.component.scss'],
 })
 export class BreadcrumbsComponent implements OnInit {
 
@@ -19,7 +19,7 @@ export class BreadcrumbsComponent implements OnInit {
   constructor(private api: ApiService,
               private projectService: ProjectService,
               private router: Router) {
-    this.breadcrumb$.subscribe(crumb => {
+    this.breadcrumb$.subscribe((crumb) => {
       this.activePageTitle = crumb;
 
       const regExpDatacenter = /\/cluster\/(.*)\/.*$/;
@@ -31,9 +31,9 @@ export class BreadcrumbsComponent implements OnInit {
         this.clusterName = '...';
         const clusterId = matchResCluster[1];
         const datacenter = matchResDatacenter[1];
-        this.projectService.selectedProjectChanges$.subscribe(project => {
+        this.projectService.selectedProjectChanges$.subscribe((project) => {
           this.api.getCluster(clusterId, datacenter, project.id)
-            .subscribe(cluster => this.clusterName = cluster.name);
+            .subscribe((cluster) => this.clusterName = cluster.name);
         });
       } else {
         this.clusterName = '';

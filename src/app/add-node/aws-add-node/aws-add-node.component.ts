@@ -10,7 +10,7 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-aws-add-node',
   templateUrl: './aws-add-node.component.html',
-  styleUrls: ['./aws-add-node.component.scss']
+  styleUrls: ['./aws-add-node.component.scss'],
 })
 
 export class AwsAddNodeComponent implements OnInit, OnDestroy {
@@ -32,7 +32,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
       if (this.nodeData.node.spec.cloud.aws.tags.hasOwnProperty(i)) {
         tagList.push(new FormGroup({
           key: new FormControl(i),
-          value: new FormControl(this.nodeData.node.spec.cloud.aws.tags[i])
+          value: new FormControl(this.nodeData.node.spec.cloud.aws.tags[i]),
         }));
       }
     }
@@ -42,14 +42,14 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
       disk_size: new FormControl(this.nodeData.node.spec.cloud.aws.diskSize, Validators.required),
       disk_type: new FormControl(this.nodeData.node.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.node.spec.cloud.aws.ami),
-      tags: tagList
+      tags: tagList,
     });
 
     this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
 
@@ -86,7 +86,7 @@ export class AwsAddNodeComponent implements OnInit, OnDestroy {
     this.tags = <FormArray> this.awsNodeForm.get('tags');
     this.tags.push(new FormGroup({
       key: new FormControl(''),
-      value: new FormControl('')
+      value: new FormControl(''),
     }));
   }
 

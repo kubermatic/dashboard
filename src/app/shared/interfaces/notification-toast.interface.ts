@@ -2,7 +2,7 @@ export enum NotificationToastType {
   success,
   alert,
   error,
-  info
+  info,
 }
 
 export interface NotificationToast {

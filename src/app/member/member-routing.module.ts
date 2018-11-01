@@ -10,8 +10,8 @@ const routes: Routes = [
     path: '',
     component: MemberComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Manage Members' }
-  }
+    data: { title: 'Manage Members' },
+  },
 ];
 
 @NgModule({

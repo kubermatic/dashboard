@@ -20,7 +20,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('MemberItemComponent', () => {
@@ -39,7 +39,7 @@ describe('MemberItemComponent', () => {
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: UserService, useClass: UserMockService },
-        { provide: AppConfigService, useClass: AppConfigMockService}
+        { provide: AppConfigService, useClass: AppConfigMockService},
       ],
     }).compileComponents();
   });

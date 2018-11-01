@@ -15,11 +15,11 @@ import { Config } from './shared/model/Config';
 @Component({
   selector: 'kubermatic-root',
   templateUrl: './kubermatic.component.html',
-  styleUrls: ['./kubermatic.component.scss']
+  styleUrls: ['./kubermatic.component.scss'],
 })
 export class KubermaticComponent implements OnInit {
   @ViewChild('sidenav') public sidenav: MatSidenav;
-  public config: Config = {'show_demo_info': false, 'show_terms_of_service': false};
+  public config: Config = {show_demo_info: false, show_terms_of_service: false};
 
   public constructor(private sidenavService: SidenavService,
                      public auth: Auth,
@@ -27,7 +27,7 @@ export class KubermaticComponent implements OnInit {
                      private devTools: DevToolsExtension,
                      private appConfigService: AppConfigService,
                      public router: Router,
-                     public googleAnalyticsService: GoogleAnalyticsService
+                     public googleAnalyticsService: GoogleAnalyticsService,
   ) {
     let enhancers = [];
 
@@ -36,7 +36,7 @@ export class KubermaticComponent implements OnInit {
     }
     this.ngRedux.configureStore(StoreReducer, INITIAL_STATE, null, enhancers);
 
-    this.router.events.subscribe(event => {
+    this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.googleAnalyticsService.sendPageView(event.urlAfterRedirects);
       }
@@ -50,7 +50,7 @@ export class KubermaticComponent implements OnInit {
         this.googleAnalyticsService.activate(
           this.config.google_analytics_code,
           this.config.google_analytics_config,
-          this.router.url
+          this.router.url,
         );
       }
     }, 3000);

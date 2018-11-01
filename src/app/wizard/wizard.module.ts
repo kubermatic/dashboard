@@ -48,12 +48,12 @@ const components: any[] = [
     AddNodeModule,
   ],
   declarations: [
-    ...components
+    ...components,
   ],
   exports: [
-    ...components
+    ...components,
   ],
-  entryComponents: []
+  entryComponents: [],
 })
 export class WizardModule {
 }

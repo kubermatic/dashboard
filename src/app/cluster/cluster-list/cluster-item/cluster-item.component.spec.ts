@@ -25,7 +25,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('ClusterItemComponent', () => {
@@ -39,7 +39,7 @@ describe('ClusterItemComponent', () => {
       ],
       declarations: [
         ClusterItemComponent,
-        ClusterHealthStatusComponent
+        ClusterHealthStatusComponent,
       ],
       providers: [
         { provide: DatacenterService, useClass: DatacenterMockService },
@@ -65,7 +65,6 @@ describe('ClusterItemComponent', () => {
   it('should create the cluster item cmp', async(() => {
     expect(component).toBeTruthy();
   }));
-
 
   it('should set statusRunning class odd', fakeAsync(() => {
     component.cluster = fakeDigitaloceanCluster();

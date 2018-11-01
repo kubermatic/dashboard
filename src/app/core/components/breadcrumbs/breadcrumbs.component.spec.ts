@@ -16,7 +16,7 @@ const modules: any[] = [
   HttpClientModule,
   RouterTestingModule,
   NgReduxTestingModule,
-  BrowserAnimationsModule
+  BrowserAnimationsModule,
 ];
 
 function setMockNgRedux<T>(fixture: ComponentFixture<T>, crumb: string): void {
@@ -36,12 +36,12 @@ describe('BreadcrumbsComponent', () => {
         ...modules,
       ],
       declarations: [
-        BreadcrumbsComponent
+        BreadcrumbsComponent,
       ],
       providers: [
         { provide: ApiService, useClass: ApiMockService },
         { provide: ProjectService, useClass: ProjectMockService },
-        { provide: Auth, useClass: AuthMockService }
+        { provide: Auth, useClass: AuthMockService },
       ],
     }).compileComponents();
   });

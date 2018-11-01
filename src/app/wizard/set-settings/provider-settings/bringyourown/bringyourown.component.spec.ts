@@ -13,10 +13,10 @@ describe('BringyourownClusterSettingsComponent', () => {
       imports: [
         BrowserModule,
         BrowserAnimationsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
-        BringyourownClusterSettingsComponent
+        BringyourownClusterSettingsComponent,
       ],
       providers: [],
     }).compileComponents();

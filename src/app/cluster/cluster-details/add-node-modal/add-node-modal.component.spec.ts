@@ -77,7 +77,7 @@ describe('AddNodeModalComponent', () => {
         { provide: ProjectService, useClass: ProjectMockService },
         AddNodeService,
         WizardService,
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   }));
@@ -90,7 +90,7 @@ describe('AddNodeModalComponent', () => {
     component.addNodeData = {
       node: fakeDigitaloceanCreateNode(),
       count: 1,
-      valid: true
+      valid: true,
     };
     component.addNodeData = nodeDataFake();
 

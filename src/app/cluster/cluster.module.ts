@@ -34,7 +34,7 @@ const components: any[] = [
   NodeListComponent,
   ClusterListComponent,
   ClusterItemComponent,
-  ClusterHealthStatusComponent
+  ClusterHealthStatusComponent,
 ];
 
 const entryComponents: any[] = [
@@ -56,7 +56,7 @@ const entryComponents: any[] = [
   EditSSHKeysComponent,
   EditSSHKeysItemComponent,
   EditSSHKeyDeleteConfirmationComponent,
-  AddClusterSSHKeysComponent
+  AddClusterSSHKeysComponent,
 ];
 
 @NgModule({
@@ -64,20 +64,20 @@ const entryComponents: any[] = [
     SharedModule,
     ClusterRoutingModule,
     AddNodeModule,
-    MatTabsModule
+    MatTabsModule,
   ],
   declarations: [
     ...components,
-    ...entryComponents
+    ...entryComponents,
   ],
   exports: [
-    ...components
+    ...components,
   ],
   entryComponents: [
-    ...entryComponents
+    ...entryComponents,
   ],
   providers: [
-    NodeDeleteConfirmationService
+    NodeDeleteConfirmationService,
   ],
 })
 export class ClusterModule {

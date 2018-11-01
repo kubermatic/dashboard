@@ -17,13 +17,13 @@ describe('DigitaloceanClusterSettingsComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
-        DigitaloceanClusterSettingsComponent
+        DigitaloceanClusterSettingsComponent,
       ],
       providers: [
-        WizardService
+        WizardService,
       ],
     }).compileComponents();
   }));

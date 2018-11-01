@@ -21,7 +21,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('ClusterHealthStatusComponent', () => {
@@ -34,11 +34,11 @@ describe('ClusterHealthStatusComponent', () => {
         ...modules,
       ],
       declarations: [
-        ClusterHealthStatusComponent
+        ClusterHealthStatusComponent,
       ],
       providers: [
         { provide: HealthService, useClass: HealthMockService },
-        { provide: ProjectService, useClass: ProjectMockService }
+        { provide: ProjectService, useClass: ProjectMockService },
       ],
     }).compileComponents();
   });

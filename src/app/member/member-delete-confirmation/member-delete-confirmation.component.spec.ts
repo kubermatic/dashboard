@@ -21,7 +21,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('MemberDeleteConfirmationComponent', () => {
@@ -35,7 +35,7 @@ describe('MemberDeleteConfirmationComponent', () => {
         ...modules,
       ],
       declarations: [
-        MemberDeleteConfirmationComponent
+        MemberDeleteConfirmationComponent,
       ],
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },

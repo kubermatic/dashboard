@@ -8,7 +8,7 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-vsphere-add-node',
   templateUrl: './vsphere-add-node.component.html',
-  styleUrls: ['./vsphere-add-node.component.scss']
+  styleUrls: ['./vsphere-add-node.component.scss'],
 })
 
 export class VSphereAddNodeComponent implements OnInit, OnDestroy {

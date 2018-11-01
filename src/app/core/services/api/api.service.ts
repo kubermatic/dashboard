@@ -12,7 +12,7 @@ import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntit
 import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {
   OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup,
-  OpenstackSubnet, OpenstackTenant
+  OpenstackSubnet, OpenstackTenant,
 } from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { VSphereNetwork } from '../../../shared/entity/provider/vsphere/VSphereEntity';
 import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';

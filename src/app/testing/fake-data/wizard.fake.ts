@@ -8,18 +8,18 @@ export function doClusterModelFake(): CreateClusterModel {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-          token: 'token'
+          token: 'token',
         },
         bringyourown: null,
         aws: null,
         openstack: null,
-        baremetal: null
+        baremetal: null,
       },
       version: '',
     },
     sshKeys: [
-      'key1'
-    ]
+      'key1',
+    ],
   };
 }
 
@@ -27,11 +27,11 @@ export function openstackTenantsFake(): OpenstackTenant[] {
   return [
     {
       id: 'id123',
-      name: 'loodse-poc'
+      name: 'loodse-poc',
     },
     {
       id: 'id456',
-      name: 'loodse-poc2'
-    }
+      name: 'loodse-poc2',
+    },
   ];
 }

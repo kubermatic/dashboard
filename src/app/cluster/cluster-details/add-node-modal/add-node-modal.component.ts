@@ -14,7 +14,7 @@ import { NodeData } from '../../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-add-node-modal',
   templateUrl: './add-node-modal.component.html',
-  styleUrls: ['./add-node-modal.component.scss']
+  styleUrls: ['./add-node-modal.component.scss'],
 })
 export class AddNodeModalComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -27,12 +27,12 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
       spec: {
         cloud: {},
         operatingSystem: {},
-        versions: {}
+        versions: {},
       },
       status: {},
     },
     count: 1,
-    valid: true
+    valid: true,
   };
 
   constructor(private api: ApiService,
@@ -42,9 +42,9 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
               public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
+    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((result) => {
         this.nodeDC = result;
-      }
+      },
     );
 
     this.addNodeData.node.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);

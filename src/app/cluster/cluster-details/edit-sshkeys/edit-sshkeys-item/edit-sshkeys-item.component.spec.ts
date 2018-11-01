@@ -14,7 +14,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('EditSSHKeysItemComponent', () => {
@@ -27,7 +27,7 @@ describe('EditSSHKeysItemComponent', () => {
         ...modules,
       ],
       declarations: [
-        EditSSHKeysItemComponent
+        EditSSHKeysItemComponent,
       ],
       providers: [
         MatDialog,

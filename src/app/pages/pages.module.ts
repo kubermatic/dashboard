@@ -11,14 +11,14 @@ import { PagesRoutingModule } from './pages-routing.module';
   imports: [
     PagesRoutingModule,
     ParticlesModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [
     PageNotFoundComponent,
     FrontpageComponent,
-    TermsOfServiceComponent
+    TermsOfServiceComponent,
   ],
-  exports: []
+  exports: [],
 })
 
 export class PagesModule {

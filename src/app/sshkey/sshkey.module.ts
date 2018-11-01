@@ -16,15 +16,15 @@ const components: any[] = [
   imports: [
     SharedModule,
     MatTabsModule,
-    SSHKeyRoutingModule
+    SSHKeyRoutingModule,
   ],
   declarations: [
-    ...components
+    ...components,
   ],
   exports: [
-    ...components
+    ...components,
   ],
-  entryComponents: [SSHKeyDeleteConfirmationComponent]
+  entryComponents: [SSHKeyDeleteConfirmationComponent],
 })
 export class SSHKeyModule {
 }
