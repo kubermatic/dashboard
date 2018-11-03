@@ -24,7 +24,7 @@ describe('OpenstackAddNodeComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         SharedModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
       ],
       declarations: [
         OpenstackAddNodeComponent,

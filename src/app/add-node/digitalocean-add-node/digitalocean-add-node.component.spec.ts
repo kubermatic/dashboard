@@ -15,7 +15,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 ];
 
 describe('DigitaloceanAddNodeComponent', () => {
@@ -34,7 +34,7 @@ describe('DigitaloceanAddNodeComponent', () => {
       ],
       providers: [
         AddNodeService,
-        { provide: ApiService, useValue: apiMock }
+        { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();
   }));

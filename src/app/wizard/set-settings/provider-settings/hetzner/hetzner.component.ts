@@ -8,7 +8,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 @Component({
   selector: 'kubermatic-hetzner-cluster-settings',
   templateUrl: './hetzner.component.html',
-  styleUrls: ['./hetzner.component.scss']
+  styleUrls: ['./hetzner.component.scss'],
 })
 export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -22,7 +22,7 @@ export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
       token: new FormControl(this.cluster.spec.cloud.hetzner.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.hetznerSettingsFormSub = this.hetznerSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+    this.hetznerSettingsFormSub = this.hetznerSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           hetzner: {

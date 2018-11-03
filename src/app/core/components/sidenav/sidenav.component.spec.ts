@@ -31,7 +31,7 @@ const modules: any[] = [
   HttpClientModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('SidenavComponent', () => {
@@ -52,7 +52,7 @@ describe('SidenavComponent', () => {
         SidenavComponent,
         MockComponent({
           selector: 'a',
-          inputs: [ 'routerLink', 'routerLinkActiveOptions' ]
+          inputs: [ 'routerLink', 'routerLinkActiveOptions' ],
         }),
       ],
       providers: [
@@ -63,9 +63,9 @@ describe('SidenavComponent', () => {
         { provide: Router, useValue: {
           routerState: {
             snapshot: {
-              url: [{ path: 1 }, { path: 2 }]}
-            }
-          }
+              url: [{ path: 1 }, { path: 2 }]},
+            },
+          },
         },
         MatDialog,
       ],
@@ -79,7 +79,7 @@ describe('SidenavComponent', () => {
       .queryAll(By.directive(RouterLinkStubDirective));
 
     links = linkDes
-      .map(de => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
+      .map((de) => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
   });
 
   it('should create the sidenav cmp', async(() => {
@@ -113,21 +113,21 @@ describe('SidenavComponent', () => {
       name: 'first',
       creationTimestamp: undefined,
       deletionTimestamp: undefined,
-      status: ''
+      status: '',
     };
-    const b: ProjectEntity =  {
+     const b: ProjectEntity =  {
       id: '2',
       name: 'second',
       creationTimestamp: undefined,
       deletionTimestamp: undefined,
-      status: ''
+      status: '',
     };
-    expect(component.compareProjectsEquality(a, b)).toBeFalsy();
-    expect(component.compareProjectsEquality(b, a)).toBeFalsy();
+     expect(component.compareProjectsEquality(a, b)).toBeFalsy();
+     expect(component.compareProjectsEquality(b, a)).toBeFalsy();
 
-    b.id = a.id;
-    expect(component.compareProjectsEquality(a, b)).toBeTruthy();
-    expect(component.compareProjectsEquality(b, a)).toBeTruthy();
+     b.id = a.id;
+     expect(component.compareProjectsEquality(a, b)).toBeTruthy();
+     expect(component.compareProjectsEquality(b, a)).toBeTruthy();
   });
 
   it('should correctly create router links', () => {
@@ -136,7 +136,7 @@ describe('SidenavComponent', () => {
       name: 'first',
       creationTimestamp: undefined,
       deletionTimestamp: undefined,
-      status: ''
+      status: '',
     };
     expect(component.getRouterLink('clusters')).toBe('/projects/1/clusters');
     expect(component.getRouterLink('members')).toBe('/projects/1/members');

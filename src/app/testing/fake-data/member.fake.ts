@@ -10,9 +10,9 @@ export function fakeMembers(): MemberEntity[] {
       projects: [
         {
           group: 'owners',
-          id: '123ab4cd5e'
-        }
-      ]
+          id: '123ab4cd5e',
+        },
+      ],
     },
     {
       creationTimestamp: new Date(),
@@ -22,9 +22,9 @@ export function fakeMembers(): MemberEntity[] {
       projects: [
         {
           group: 'editors',
-          id: '123ab4cd5e'
-        }
-      ]
+          id: '123ab4cd5e',
+        },
+      ],
     },
     {
       creationTimestamp: new Date(),
@@ -34,10 +34,10 @@ export function fakeMembers(): MemberEntity[] {
       projects: [
         {
           group: 'viewers',
-          id: '123ab4cd5e'
-        }
-      ]
-    }
+          id: '123ab4cd5e',
+        },
+      ],
+    },
   ];
 }
 
@@ -50,8 +50,8 @@ export function fakeMember(): MemberEntity {
     projects: [
       {
         group: 'owners',
-        id: '123ab4cd5e'
-      }
-    ]
+        id: '123ab4cd5e',
+      },
+    ],
   };
 }

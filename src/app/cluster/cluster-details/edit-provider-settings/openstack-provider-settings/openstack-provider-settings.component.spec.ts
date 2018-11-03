@@ -19,7 +19,7 @@ import { VSphereProviderSettingsComponent } from '../vsphere-provider-settings/v
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('OpenstackProviderSettingsComponent', () => {
@@ -43,7 +43,7 @@ describe('OpenstackProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
       ],
     }).compileComponents();
   });
@@ -60,7 +60,7 @@ describe('OpenstackProviderSettingsComponent', () => {
       network: '',
       securityGroups: '',
       floatingIpPool: '',
-      subnetID: ''
+      subnetID: '',
     };
     fixture.detectChanges();
   });

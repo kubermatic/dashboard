@@ -4,7 +4,7 @@ export function doCloudSpecFake(): CloudSpec {
   return {
     dc: 'datacenter1',
     digitalocean: {
-      token: 'foo-bar'
+      token: 'foo-bar',
     },
     aws: null,
     baremetal: null,
@@ -15,4 +15,3 @@ export function doCloudSpecFake(): CloudSpec {
     azure: null,
   };
 }
-

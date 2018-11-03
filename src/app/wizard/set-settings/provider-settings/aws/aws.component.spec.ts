@@ -17,10 +17,10 @@ describe('AWSClusterSettingsComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
-        AWSClusterSettingsComponent
+        AWSClusterSettingsComponent,
       ],
       providers: [
         WizardService,

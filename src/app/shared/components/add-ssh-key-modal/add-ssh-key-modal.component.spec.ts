@@ -22,7 +22,7 @@ const modules: any[] = [
   MatDialogModule,
   MatFormFieldModule,
   MatToolbarModule,
-  MatInputModule
+  MatInputModule,
 ];
 
 describe('AddSshKeyModalComponent', () => {
@@ -37,13 +37,13 @@ describe('AddSshKeyModalComponent', () => {
         ...modules,
       ],
       declarations: [
-        AddSshKeyModalComponent
+        AddSshKeyModalComponent,
       ],
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useClass: ApiMockService },
         { provide: Router, useClass: RouterStub },
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   });

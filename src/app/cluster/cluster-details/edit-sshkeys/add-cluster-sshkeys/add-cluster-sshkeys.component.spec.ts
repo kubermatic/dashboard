@@ -18,7 +18,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('AddClusterSSHKeysComponent', () => {
@@ -35,7 +35,7 @@ describe('AddClusterSSHKeysComponent', () => {
         ...modules,
       ],
       declarations: [
-        AddClusterSSHKeysComponent
+        AddClusterSSHKeysComponent,
       ],
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },
@@ -43,7 +43,7 @@ describe('AddClusterSSHKeysComponent', () => {
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService},
-        MatDialog
+        MatDialog,
       ],
     }).compileComponents();
   }));

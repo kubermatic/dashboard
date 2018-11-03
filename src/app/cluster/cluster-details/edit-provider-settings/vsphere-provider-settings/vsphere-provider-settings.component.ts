@@ -47,9 +47,9 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
           username: this.vsphereProviderSettingsForm.controls.username.value,
           infraManagementUser: {
             username: this.vsphereProviderSettingsForm.controls.infraManagementUsername.value,
-            password: this.vsphereProviderSettingsForm.controls.infraManagementPassword.value
-          }
-        }
+            password: this.vsphereProviderSettingsForm.controls.infraManagementPassword.value,
+          },
+        },
       },
       isValid: this.vsphereProviderSettingsForm.valid,
     };

@@ -8,7 +8,7 @@ import { CreateProjectModel } from '../shared/model/CreateProjectModel';
 @Component({
   selector: 'kubermatic-add-project',
   templateUrl: './add-project.component.html',
-  styleUrls: ['./add-project.component.scss']
+  styleUrls: ['./add-project.component.scss'],
 })
 export class AddProjectComponent implements OnInit {
   public addProjectForm: FormGroup;
@@ -26,7 +26,7 @@ export class AddProjectComponent implements OnInit {
 
   addProject(): void {
     const createProject: CreateProjectModel = { name: this.addProjectForm.controls.name.value };
-    this.api.createProject(createProject).subscribe(res => {
+    this.api.createProject(createProject).subscribe((res) => {
       this.projectService.changeSelectedProject(res);
       this.projectService.storeProject(res);
       this.dialogRef.close(res);

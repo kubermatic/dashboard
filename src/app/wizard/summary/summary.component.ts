@@ -7,7 +7,7 @@ import { NodeData } from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-summary',
   templateUrl: './summary.component.html',
-  styleUrls: ['./summary.component.scss']
+  styleUrls: ['./summary.component.scss'],
 })
 export class SummaryComponent implements OnInit, OnDestroy {
   @Input() clusterSSHKeys: SSHKeyEntity[];

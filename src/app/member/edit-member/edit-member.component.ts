@@ -9,7 +9,7 @@ import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 @Component({
   selector: 'kubermatic-edit-member',
   templateUrl: './edit-member.component.html',
-  styleUrls: ['./edit-member.component.scss']
+  styleUrls: ['./edit-member.component.scss'],
 })
 export class EditMemberComponent implements OnInit {
   @Input() project: ProjectEntity;
@@ -37,11 +37,11 @@ export class EditMemberComponent implements OnInit {
         {
           group: this.editMemberForm.controls.group.value,
           id: this.project.id,
-        }
-      ]
+        },
+      ],
     };
 
-    this.api.editMembers(this.project.id, editMember).subscribe(res => {
+    this.api.editMembers(this.project.id, editMember).subscribe((res) => {
       this.dialogRef.close(true);
       NotificationActions.success('Success', `Member is edited successfully`);
     });

@@ -9,16 +9,16 @@ import { SSHKeyEntity } from '../../entity/SSHKeyEntity';
 @Component({
   selector: 'kubermatic-add-ssh-key-modal',
   templateUrl: './add-ssh-key-modal.component.html',
-  styleUrls: ['./add-ssh-key-modal.component.scss']
+  styleUrls: ['./add-ssh-key-modal.component.scss'],
 })
 export class AddSshKeyModalComponent implements OnInit {
   @Input() projectID: string;
   public addSSHKeyForm: FormGroup;
 
   constructor(private api: ApiService,
-    private formBuilder: FormBuilder,
-    private dialogRef: MatDialogRef<AddSshKeyModalComponent>,
-    public googleAnalyticsService: GoogleAnalyticsService) { }
+              private formBuilder: FormBuilder,
+              private dialogRef: MatDialogRef<AddSshKeyModalComponent>,
+              public googleAnalyticsService: GoogleAnalyticsService) { }
 
   ngOnInit(): void {
     this.addSSHKeyForm = this.formBuilder.group({
@@ -34,7 +34,7 @@ export class AddSshKeyModalComponent implements OnInit {
 
     this.api.addSSHKey(new SSHKeyEntity(name, null, key), this.projectID)
       .subscribe(
-        result => {
+        (result) => {
           NotificationActions.success('Success', `SSH key ${name} added successfully to project`);
           this.googleAnalyticsService.emitEvent('addSshKey', 'sshKeyAdded');
           this.dialogRef.close(result);

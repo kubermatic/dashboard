@@ -13,23 +13,23 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
       .handle(req)
       .pipe(
         tap(
-          event => {},
-          errorInstance => {
+          (event) => {},
+          (errorInstance) => {
             if (errorInstance) {
               if (!!errorInstance.error.error) {
                 NotificationActions.error(
                   `Error ${errorInstance.status}`,
-                  `${errorInstance.error.error.message || errorInstance.message || errorInstance.statusText}`
+                  `${errorInstance.error.error.message || errorInstance.message || errorInstance.statusText}`,
                 );
               } else {
                 NotificationActions.error(
                   `An Error occurred`,
-                  `${errorInstance.status}: ${errorInstance.statusText}`
+                  `${errorInstance.status}: ${errorInstance.statusText}`,
                 );
               }
             }
-          }
-        )
+          },
+        ),
       );
   }
 }

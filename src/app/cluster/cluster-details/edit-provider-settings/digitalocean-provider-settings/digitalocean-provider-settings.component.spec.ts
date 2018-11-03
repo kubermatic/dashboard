@@ -18,7 +18,7 @@ import { DigitaloceanProviderSettingsComponent } from './digitalocean-provider-s
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('DigitaloceanProviderSettingsComponent', () => {
@@ -42,7 +42,7 @@ describe('DigitaloceanProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
       ],
     }).compileComponents();
   });

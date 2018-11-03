@@ -11,7 +11,7 @@ import { SidenavService } from '../sidenav/sidenav.service';
 @Component({
   selector: 'kubermatic-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
 
@@ -32,7 +32,7 @@ export class NavigationComponent implements OnInit {
     }
 
     if (this.auth.authenticated()) {
-      this.userService.getUser().subscribe(user => {
+      this.userService.getUser().subscribe((user) => {
         this.currentUser = user;
       });
     }

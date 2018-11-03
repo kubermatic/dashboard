@@ -107,7 +107,7 @@ describe('WizardComponent', () => {
         AddNodeService,
         StepsService,
         ClusterNameGenerator,
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   }));

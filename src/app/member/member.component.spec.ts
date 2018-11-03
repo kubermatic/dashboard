@@ -32,7 +32,7 @@ describe('MemberComponent', () => {
       ],
       declarations: [
         MemberComponent,
-        MemberItemComponent
+        MemberItemComponent,
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
@@ -40,7 +40,7 @@ describe('MemberComponent', () => {
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService},
-        MatDialog
+        MatDialog,
       ],
     }).compileComponents();
   }));

@@ -11,7 +11,7 @@ import { RevokeAdminTokenComponent } from './revoke-admin-token.component';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('RevokeAdminTokenComponent', () => {
@@ -24,11 +24,11 @@ describe('RevokeAdminTokenComponent', () => {
         ...modules,
       ],
       declarations: [
-        RevokeAdminTokenComponent
+        RevokeAdminTokenComponent,
       ],
       providers: [
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
       ],
     }).compileComponents();
   });

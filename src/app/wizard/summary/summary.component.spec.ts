@@ -9,7 +9,7 @@ import { SummaryComponent } from './summary.component';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('SummaryComponent', () => {
@@ -22,10 +22,10 @@ describe('SummaryComponent', () => {
         ...modules,
       ],
       declarations: [
-        SummaryComponent
+        SummaryComponent,
       ],
       providers: [
-        { provide: ApiService, useClass: ApiMockService }
+        { provide: ApiService, useClass: ApiMockService },
       ],
     }).compileComponents();
   }));
@@ -39,4 +39,3 @@ describe('SummaryComponent', () => {
     expect(component).toBeTruthy();
   });
 });
-

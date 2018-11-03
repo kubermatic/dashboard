@@ -9,7 +9,7 @@ import { DatacenterService } from './../../core/services/datacenter/datacenter.s
 @Component({
   selector: 'kubermatic-set-datacenter',
   templateUrl: 'set-datacenter.component.html',
-  styleUrls: ['set-datacenter.component.scss']
+  styleUrls: ['set-datacenter.component.scss'],
 })
 export class SetDatacenterComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -25,7 +25,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     });
 
     // Get all datacenters for the cluster cloud provider
-    this.subscriptions.push(this.dcService.getDataCenters().subscribe(datacenters => {
+    this.subscriptions.push(this.dcService.getDataCenters().subscribe((datacenters) => {
       const providerDatacenters: DataCenterEntity[] = [];
       for (const datacenter of datacenters) {
         if (datacenter.seed) {
@@ -40,7 +40,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
       this.datacenters = providerDatacenters;
     }));
 
-    this.subscriptions.push(this.setDatacenterForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.setDatacenterForm.valueChanges.subscribe((data) => {
       let dc: DataCenterEntity = null;
       for (const datacenter of this.datacenters) {
         if (this.setDatacenterForm.controls.datacenter.value === datacenter.metadata.name) {

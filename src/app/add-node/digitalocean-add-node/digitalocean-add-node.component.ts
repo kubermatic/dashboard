@@ -10,7 +10,7 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-digitalocean-add-node',
   templateUrl: './digitalocean-add-node.component.html',
-  styleUrls: ['./digitalocean-add-node.component.scss']
+  styleUrls: ['./digitalocean-add-node.component.scss'],
 })
 
 export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChanges {
@@ -31,7 +31,7 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
       size: new FormControl(this.nodeData.node.spec.cloud.digitalocean.size, Validators.required),
     });
 
-    this.subscriptions.push(this.doNodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.doNodeForm.valueChanges.subscribe((data) => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
@@ -46,13 +46,13 @@ export class DigitaloceanAddNodeComponent implements OnInit, OnDestroy, OnChange
   reloadDigitaloceanSizes(): void {
     if (this.isInWizard()) {
       if (this.cloudSpec.digitalocean.token) {
-        this.subscriptions.push(this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe(data => {
+        this.subscriptions.push(this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe((data) => {
           this.sizes = data;
           this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
         }));
       }
     } else {
-      this.subscriptions.push(this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
+      this.subscriptions.push(this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
         this.sizes = data;
         this.doNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.digitalocean.size);
       }));

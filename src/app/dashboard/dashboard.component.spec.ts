@@ -33,14 +33,14 @@ describe('DashboardComponent', () => {
         ...modules,
       ],
       declarations: [
-        DashboardComponent
+        DashboardComponent,
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
         { provide: Auth, useClass: AuthMockService },
         { provide: ApiService, useClass: ApiMockService },
         { provide: DatacenterService, useClass: DatacenterMockService },
-        { provide: ActivatedRoute, useClass: ActivatedRouteStub }
+        { provide: ActivatedRoute, useClass: ActivatedRouteStub },
       ],
     }).compileComponents();
   });

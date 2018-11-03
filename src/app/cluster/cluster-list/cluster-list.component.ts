@@ -11,7 +11,7 @@ import { UserGroupConfig } from '../../shared/model/Config';
 @Component({
   selector: 'kubermatic-cluster-list',
   templateUrl: './cluster-list.component.html',
-  styleUrls: ['./cluster-list.component.scss']
+  styleUrls: ['./cluster-list.component.scss'],
 })
 export class ClusterListComponent implements OnInit, OnDestroy {
 
@@ -35,12 +35,12 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
 
-    this.subscriptions.push(this.route.paramMap.subscribe(m => {
+    this.subscriptions.push(this.route.paramMap.subscribe((m) => {
       this.projectID = m.get('projectID');
       this.refreshClusters();
     }));
 
-    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
@@ -60,14 +60,14 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   refreshClusters(): void {
-    this.subscriptions.push(this.dcService.getSeedDataCenters().subscribe(datacenters => {
+    this.subscriptions.push(this.dcService.getSeedDataCenters().subscribe((datacenters) => {
       const clusters: ClusterEntity[] = [];
       const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
       for (const dc of datacenters) {
         dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.projectID));
       }
       this.subscriptions.push(combineLatest(dcClustersObservables)
-        .subscribe(dcClusters => {
+        .subscribe((dcClusters) => {
           for (const cs of dcClusters) {
             clusters.push(...cs);
           }
@@ -75,14 +75,14 @@ export class ClusterListComponent implements OnInit, OnDestroy {
           this.sortData(this.sort);
           this.loading = false;
         }));
-      this.userService.currentUserGroup(this.projectID).subscribe(group => {
+      this.userService.currentUserGroup(this.projectID).subscribe((group) => {
         this.userGroup = group;
       });
     }));
   }
 
   public trackCluster(index: number, cluster: ClusterEntity): number {
-    const prevCluster = find(this.clusters, item => {
+    const prevCluster = find(this.clusters, (item) => {
       return item.name === cluster.name;
     });
     return prevCluster ? index : undefined;

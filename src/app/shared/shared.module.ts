@@ -10,7 +10,7 @@ import { CustomFormsModule } from 'ng2-validation';
 import { ClipboardModule } from 'ngx-clipboard';
 import { AddSshKeyModalComponent } from './components/add-ssh-key-modal/add-ssh-key-modal.component';
 
-const modules: Array<any> = [
+const modules: any[] = [
   CommonModule,
   FormsModule,
   ReactiveFormsModule,
@@ -38,12 +38,12 @@ const modules: Array<any> = [
   MatExpansionModule,
   MatSortModule,
   ClipboardModule,
-  NgReduxFormModule
+  NgReduxFormModule,
 ];
 
 @NgModule({
   imports: [
-    ...modules
+    ...modules,
   ],
   declarations: [
     AddSshKeyModalComponent,
@@ -52,7 +52,7 @@ const modules: Array<any> = [
     ...modules,
     AddSshKeyModalComponent,
   ],
-  entryComponents: [AddSshKeyModalComponent]
+  entryComponents: [AddSshKeyModalComponent],
 })
 
 export class SharedModule {

@@ -18,7 +18,7 @@ import { AWSProviderSettingsComponent } from './aws-provider-settings.component'
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('AWSProviderSettingsComponent', () => {
@@ -42,7 +42,7 @@ describe('AWSProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
       ],
     }).compileComponents();
   });

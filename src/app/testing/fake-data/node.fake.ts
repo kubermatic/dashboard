@@ -10,25 +10,25 @@ export function fakeDigitaloceanCreateNode(): NodeEntity {
           backups: null,
           ipv6: null,
           monitoring: null,
-          tags: null
+          tags: null,
         },
         aws: null,
         openstack: null,
         vsphere: null,
         hetzner: null,
-        azure: null
+        azure: null,
       },
       operatingSystem: {
         ubuntu: {
-          distUpgradeOnBoot: false
+          distUpgradeOnBoot: false,
         },
         centos: null,
-        containerLinux: null
+        containerLinux: null,
       },
       versions: {
-        kubelet: null
-      }
-    }
+        kubelet: null,
+      },
+    },
   };
 }
 
@@ -45,54 +45,54 @@ export function nodeFake(): NodeEntity {
           backups: false,
           ipv6: false,
           monitoring: false,
-          tags: []
+          tags: [],
         },
         aws: null,
         openstack: null,
         vsphere: null,
         hetzner: null,
-        azure: null
+        azure: null,
       },
       operatingSystem: {
         ubuntu: {
-          distUpgradeOnBoot: false
+          distUpgradeOnBoot: false,
         },
         centos: null,
-        containerLinux: null
+        containerLinux: null,
       },
       versions: {
-        kubelet: 'v1.8.5'
-      }
+        kubelet: 'v1.8.5',
+      },
     },
     status: {
       machineName: 'machine-kubermatic-tbbfvttvs-v5hmk',
       capacity: {
         cpu: '1',
-        memory: '2045940Ki'
+        memory: '2045940Ki',
       },
       allocatable: {
         cpu: '950m',
-        memory: '1841140Ki'
+        memory: '1841140Ki',
       },
       addresses: [
         {
           type: 'InternalIP',
-          address: '46.101.127.190'
+          address: '46.101.127.190',
         },
         {
           type: 'Hostname',
-          address: 'kubermatic-tbbfvttvs-v5hmk'
-        }
+          address: 'kubermatic-tbbfvttvs-v5hmk',
+        },
       ],
       nodeInfo: {
         kernelVersion: '4.14.11-coreos',
         kubeletVersion: 'v1.8.5',
         operatingSystem: 'linux',
-        architecture: 'amd64'
+        architecture: 'amd64',
       },
       errorReason: null,
-      errorMessage: null
-    }
+      errorMessage: null,
+    },
   };
 }
 
@@ -109,54 +109,54 @@ export function nodesFake(): NodeEntity[] {
             backups: null,
             ipv6: null,
             monitoring: null,
-            tags: null
+            tags: null,
           },
           aws: null,
           openstack: null,
           vsphere: null,
           hetzner: null,
-          azure: null
+          azure: null,
         },
         operatingSystem: {
           ubuntu: {
-            distUpgradeOnBoot: false
+            distUpgradeOnBoot: false,
           },
           centos: null,
-          containerLinux: null
+          containerLinux: null,
         },
         versions: {
-          kubelet: null
-        }
+          kubelet: null,
+        },
       },
       status: {
         machineName: 'machine-kubermatic-tbbfvttvs-v5hmk',
         capacity: {
           cpu: '1',
-          memory: '2045940Ki'
+          memory: '2045940Ki',
         },
         allocatable: {
           cpu: '950m',
-          memory: '1841140Ki'
+          memory: '1841140Ki',
         },
         addresses: [
           {
             type: 'InternalIP',
-            address: '46.101.127.190'
+            address: '46.101.127.190',
           },
           {
             type: 'Hostname',
-            address: 'kubermatic-tbbfvttvs-v5hmk'
-          }
+            address: 'kubermatic-tbbfvttvs-v5hmk',
+          },
         ],
         nodeInfo: {
           kernelVersion: '4.14.11-coreos',
           kubeletVersion: 'v1.8.5',
           operatingSystem: 'linux',
-          architecture: 'amd64'
+          architecture: 'amd64',
         },
         errorReason: null,
-        errorMessage: null
-      }
+        errorMessage: null,
+      },
     },
     {
       id: 'machine-kubermatic-tbbfvttvs-v5hmk',
@@ -169,55 +169,55 @@ export function nodesFake(): NodeEntity[] {
             backups: false,
             ipv6: false,
             monitoring: false,
-            tags: []
+            tags: [],
           },
           aws: null,
           openstack: null,
           vsphere: null,
           hetzner: null,
-          azure: null
+          azure: null,
         },
         operatingSystem: {
           ubuntu: {
-            distUpgradeOnBoot: false
+            distUpgradeOnBoot: false,
           },
           centos: null,
-          containerLinux: null
+          containerLinux: null,
         },
         versions: {
-          kubelet: 'v1.8.5'
-        }
+          kubelet: 'v1.8.5',
+        },
       },
       status: {
         machineName: 'machine-kubermatic-tbbfvttvs-v5hmk',
         capacity: {
           cpu: '1',
-          memory: '2045940Ki'
+          memory: '2045940Ki',
         },
         allocatable: {
           cpu: '950m',
-          memory: '1841140Ki'
+          memory: '1841140Ki',
         },
         addresses: [
           {
             type: 'InternalIP',
-            address: '46.101.127.190'
+            address: '46.101.127.190',
           },
           {
             type: 'Hostname',
-            address: 'kubermatic-tbbfvttvs-v5hmk'
-          }
+            address: 'kubermatic-tbbfvttvs-v5hmk',
+          },
         ],
         nodeInfo: {
           kernelVersion: '4.14.11-coreos',
           kubeletVersion: null,
           operatingSystem: 'linux',
-          architecture: 'amd64'
+          architecture: 'amd64',
         },
         errorReason: null,
-        errorMessage: null
-      }
-    }
+        errorMessage: null,
+      },
+    },
   ];
 }
 
@@ -231,44 +231,44 @@ export function nodeDataFake(): NodeData {
             backups: false,
             ipv6: false,
             monitoring: false,
-            tags: []
+            tags: [],
           },
           aws: {
             instanceType: 't2.small',
             diskSize: 25,
             volumeType: 'standard',
             ami: '',
-            tags: ''
+            tags: {},
           },
           openstack: {
             flavor: 'm1.small',
-            image: ''
+            image: '',
           },
           hetzner: {
-            type: 'cx31'
+            type: 'cx31',
           },
           vsphere: {
             cpus: 1,
             memory: 512,
-            template: ''
+            template: '',
           },
           azure: {
             size: 'cx31',
             assignPublicIP: false,
-            tags: ''
+            tags: {},
           },
         },
         operatingSystem: {
           ubuntu: {
-            distUpgradeOnBoot: false
+            distUpgradeOnBoot: false,
           },
           centos: null,
-          containerLinux: null
+          containerLinux: null,
         },
         versions: {
-          kubelet: null
-        }
-      }
+          kubelet: null,
+        },
+      },
     },
     count: 3,
     valid: true,

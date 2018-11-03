@@ -12,7 +12,7 @@ import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.compone
 @Component({
   selector: 'kubermatic-node-list',
   templateUrl: 'node-list.component.html',
-  styleUrls: ['node-list.component.scss']
+  styleUrls: ['node-list.component.scss'],
 })
 
 export class NodeListComponent implements OnInit {
@@ -39,21 +39,21 @@ export class NodeListComponent implements OnInit {
       top: '',
       bottom: '',
       left: '',
-      right: ''
+      right: '',
     },
     data: {
-      message: 'Jazzy jazz jazz'
-    }
+      message: 'Jazzy jazz jazz',
+    },
   };
 
   constructor(public dialog: MatDialog,
-    private appConfigService: AppConfigService,
-    private userService: UserService) {
+              private appConfigService: AppConfigService,
+              private userService: UserService) {
   }
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
   }
@@ -67,7 +67,7 @@ export class NodeListComponent implements OnInit {
 
     dialogRef.componentInstance.projectID = this.projectID;
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       this.deleteNode.emit(node);
     });
   }
@@ -81,7 +81,7 @@ export class NodeListComponent implements OnInit {
 
     dialogRef.componentInstance.projectID = this.projectID;
 
-    const sub = dialogRef.afterClosed().subscribe(result => {
+    const sub = dialogRef.afterClosed().subscribe((result) => {
       this.clickedDuplicateNode[node.id] = false;
       sub.unsubscribe();
     });

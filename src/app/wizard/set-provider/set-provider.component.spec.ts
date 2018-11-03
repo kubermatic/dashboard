@@ -25,10 +25,10 @@ describe('SetProviderComponent', () => {
         BrowserAnimationsModule,
         ReactiveFormsModule,
         SharedModule,
-        MatButtonToggleModule
+        MatButtonToggleModule,
       ],
       declarations: [
-        SetProviderComponent
+        SetProviderComponent,
       ],
       providers: [
         { provide: DatacenterService, useValue: dcMock },
@@ -63,7 +63,7 @@ describe('SetProviderComponent', () => {
           dc: '',
         },
         version: '',
-      }
+      },
     };
     fixture.detectChanges();
     expect(component.setProviderForm.controls.provider.valid).toBeFalsy();

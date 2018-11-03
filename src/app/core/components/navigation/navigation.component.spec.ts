@@ -21,7 +21,7 @@ const modules: any[] = [
   RouterTestingModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('NavigationComponent', () => {
@@ -35,7 +35,7 @@ describe('NavigationComponent', () => {
         ...modules,
       ],
       declarations: [
-        NavigationComponent
+        NavigationComponent,
       ],
       providers: [
         SidenavService,
@@ -43,7 +43,7 @@ describe('NavigationComponent', () => {
         { provide: UserService, useClass: UserMockService },
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: Router, useClass: RouterStub },
-        { provide: Auth, useClass: AuthMockService }
+        { provide: Auth, useClass: AuthMockService },
       ],
     }).compileComponents();
   });

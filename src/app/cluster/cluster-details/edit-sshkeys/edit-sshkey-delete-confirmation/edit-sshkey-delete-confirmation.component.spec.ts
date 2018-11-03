@@ -13,7 +13,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('EditSSHKeyDeleteConfirmationComponent', () => {
@@ -29,11 +29,11 @@ describe('EditSSHKeyDeleteConfirmationComponent', () => {
         ...modules,
       ],
       declarations: [
-        EditSSHKeyDeleteConfirmationComponent
+        EditSSHKeyDeleteConfirmationComponent,
       ],
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },
-        { provide: ApiService, useValue: apiMock }
+        { provide: ApiService, useValue: apiMock },
       ],
     }).compileComponents();
   }));

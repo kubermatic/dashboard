@@ -18,37 +18,35 @@ const appRoutes: Routes = [
       },
       {
         path: 'projects/:projectID/sshkeys',
-        loadChildren: './sshkey/sshkey.module#SSHKeyModule'
+        loadChildren: './sshkey/sshkey.module#SSHKeyModule',
       },
       {
       path: 'projects/:projectID/members',
-        loadChildren: './member/member.module#MemberModule'
+        loadChildren: './member/member.module#MemberModule',
       },
       {
         path: 'projects/:projectID/clusters',
-        loadChildren: './cluster/cluster.module#ClusterModule'
+        loadChildren: './cluster/cluster.module#ClusterModule',
       },
       {
         path: 'projects/:projectID/dc/:seedDc/clusters',
-        loadChildren: './cluster/cluster.module#ClusterModule'
+        loadChildren: './cluster/cluster.module#ClusterModule',
       },
       {
         path: '',
-        loadChildren: './pages/pages.module#PagesModule'
+        loadChildren: './pages/pages.module#PagesModule',
       },
-    ]
+    ],
   },
   {
     path: '**',
-    redirectTo: '404'
+    redirectTo: '404',
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(appRoutes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class AppRoutingModule {
 }
-
-

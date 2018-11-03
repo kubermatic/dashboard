@@ -13,7 +13,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 ];
 
 describe('AwsAddNodeComponent', () => {

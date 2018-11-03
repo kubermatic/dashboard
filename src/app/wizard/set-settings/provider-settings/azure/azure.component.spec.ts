@@ -17,13 +17,13 @@ describe('AzureClusterSettingsComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
-        AzureClusterSettingsComponent
+        AzureClusterSettingsComponent,
       ],
       providers: [
-        WizardService
+        WizardService,
       ],
     }).compileComponents();
   }));
@@ -41,7 +41,7 @@ describe('AzureClusterSettingsComponent', () => {
       subnet: '',
       subscriptionID: '',
       tenantID: '',
-      vnet: ''
+      vnet: '',
     };
     fixture.detectChanges();
   });

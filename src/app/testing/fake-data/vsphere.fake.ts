@@ -3,10 +3,10 @@ import { VSphereNetwork } from '../../shared/entity/provider/vsphere/VSphereEnti
 export function fakeVSphereNetworks(): VSphereNetwork[] {
   return [
     {
-      name: 'fake vsphere network'
+      name: 'fake vsphere network',
     },
     {
-      name: 'another fake vsphere network'
-    }
+      name: 'another fake vsphere network',
+    },
   ];
 }
