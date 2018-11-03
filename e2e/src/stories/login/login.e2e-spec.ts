@@ -14,7 +14,7 @@ describe('login story', () => {
   });
 
   it('should choose static credentials button', async () => {
-    await element(by.xpath('/html/body/div[2]/div/div/div[3]/a')).click(); // TODO
+    await element(by.xpath('//span[contains(text(),"Static Credentials")]')).click(); // TODO
   });
 
   it('should fill user credentials and login', async () => {
