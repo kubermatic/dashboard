@@ -21,7 +21,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('SSHKeyDeleteConfirmationComponent', () => {
@@ -35,7 +35,7 @@ describe('SSHKeyDeleteConfirmationComponent', () => {
         ...modules,
       ],
       declarations: [
-        SSHKeyDeleteConfirmationComponent
+        SSHKeyDeleteConfirmationComponent,
       ],
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },

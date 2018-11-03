@@ -11,7 +11,7 @@ import { UserGroupConfig } from '../shared/model/Config';
 @Component({
   selector: 'kubermatic-project',
   templateUrl: './project.component.html',
-  styleUrls: ['./project.component.scss']
+  styleUrls: ['./project.component.scss'],
 })
 
 export class ProjectComponent implements OnInit, OnDestroy {
@@ -34,15 +34,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
 
     this.currentProject = this.projectService.project;
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
       this.currentProject = project;
-      this.userService.currentUserGroup(this.currentProject.id).subscribe(group => {
+      this.userService.currentUserGroup(this.currentProject.id).subscribe((group) => {
         this.userGroup = group;
       });
     }));
 
     const timer = interval(10000);
-    this.subscriptions.push(timer.subscribe(tick => {
+    this.subscriptions.push(timer.subscribe((tick) => {
       this.refreshProjects();
     }));
     this.refreshProjects();
@@ -57,7 +57,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   refreshProjects(): void {
-    this.subscriptions.push(this.api.getProjects().subscribe(res => {
+    this.subscriptions.push(this.api.getProjects().subscribe((res) => {
       this.projects = res;
       this.sortProjectData(this.sort);
       this.loading = false;
@@ -66,7 +66,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   public addProject(): void {
     const modal = this.dialog.open(AddProjectComponent);
-    const sub = modal.afterClosed().subscribe(added => {
+    const sub = modal.afterClosed().subscribe((added) => {
       if (added) {
         this.refreshProjects();
       }
@@ -75,7 +75,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   public trackProject(index: number, project: ProjectEntity): number {
-    const prevProject = find(this.projects, item => {
+    const prevProject = find(this.projects, (item) => {
       return item.name === project.name;
     });
 

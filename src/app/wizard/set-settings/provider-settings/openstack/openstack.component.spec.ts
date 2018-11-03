@@ -21,7 +21,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackTenants']);
     apiMock.getOpenStackTenants.and.returnValue(asyncData(openstackTenantsFake()));
     const appConfigServiceMock = jasmine.createSpyObj('AppConfigService', ['getConfig']);
-    config = new class implements Config {};
+    config = <Config> {};
     appConfigServiceMock.getConfig.and.returnValue(config);
 
     TestBed.configureTestingModule({
@@ -29,10 +29,10 @@ describe('OpenstackClusterSettingsComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
-        OpenstackClusterSettingsComponent
+        OpenstackClusterSettingsComponent,
       ],
       providers: [
         WizardService,
@@ -77,7 +77,7 @@ describe('OpenstackClusterSettingsComponent', () => {
   describe('Config with DefaultUserName', () => {
     beforeEach(() => {
       config.openstack = {
-        wizard_use_default_user: true
+        wizard_use_default_user: true,
       };
 
       fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);

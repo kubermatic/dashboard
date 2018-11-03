@@ -11,7 +11,7 @@ import { ProgressComponent } from './progress.component';
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('ProgressComponent', () => {
@@ -24,11 +24,11 @@ describe('ProgressComponent', () => {
         ...modules,
       ],
       declarations: [
-        ProgressComponent
+        ProgressComponent,
       ],
       providers: [
         StepsService,
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   }));

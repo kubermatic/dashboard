@@ -10,7 +10,7 @@ import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-add-node',
   templateUrl: './add-node.component.html',
-  styleUrls: ['./add-node.component.scss']
+  styleUrls: ['./add-node.component.scss'],
 })
 
 export class AddNodeComponent implements OnInit, OnDestroy {
@@ -54,26 +54,26 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
-    this.subscriptions.push(this.nodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.nodeForm.valueChanges.subscribe((data) => {
       this.operatingSystemForm.setValue({distUpgradeOnBootUbuntu: false, distUpgradeOnBootCentos: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
 
-    this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe((data) => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
     }));
 
-    this.subscriptions.push(this.addNodeService.nodeProviderDataChanges$.subscribe(data => {
+    this.subscriptions.push(this.addNodeService.nodeProviderDataChanges$.subscribe((data) => {
       this.providerData = data;
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
 
-    this.subscriptions.push(this._dc.getDataCenter(this.cluster.spec.cloud.dc).subscribe(dc => {
+    this.subscriptions.push(this._dc.getDataCenter(this.cluster.spec.cloud.dc).subscribe((dc) => {
       this.seedDCName = dc.spec.seed;
     }));
 
@@ -94,29 +94,28 @@ export class AddNodeComponent implements OnInit, OnDestroy {
         return {
           ubuntu: {
             distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootUbuntu.value,
-          }
+          },
         };
       case 'centos':
         return {
           centos: {
             distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootCentos.value,
-          }
+          },
         };
       case 'containerLinux':
         return {
           containerLinux: {
             disableAutoUpdate: this.operatingSystemForm.controls.disableAutoUpdate.value,
-          }
+          },
         };
       default:
         return {
           ubuntu: {
             distUpgradeOnBoot: false,
-          }
+          },
         };
     }
   }
-
 
   getAddNodeData(): NodeData {
     const osSpec = this.getOSSpec();
@@ -126,7 +125,7 @@ export class AddNodeComponent implements OnInit, OnDestroy {
           cloud: this.providerData.spec,
           operatingSystem: osSpec,
           versions: {
-          }
+          },
         },
       },
       count: this.nodeForm.controls.count.value,

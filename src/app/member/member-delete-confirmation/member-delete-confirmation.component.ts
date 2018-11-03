@@ -8,7 +8,7 @@ import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 @Component({
   selector: 'kubermatic-member-delete-confirmation',
   templateUrl: './member-delete-confirmation.component.html',
-  styleUrls: ['./member-delete-confirmation.component.scss']
+  styleUrls: ['./member-delete-confirmation.component.scss'],
 })
 
 export class MemberDeleteConfirmationComponent {

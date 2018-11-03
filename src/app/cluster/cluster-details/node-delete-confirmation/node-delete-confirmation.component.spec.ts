@@ -22,7 +22,7 @@ const modules: any[] = [
   HttpClientModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('NodeDeleteConfirmationComponent', () => {
@@ -36,12 +36,12 @@ describe('NodeDeleteConfirmationComponent', () => {
         ...modules,
       ],
       declarations: [
-        NodeDeleteConfirmationComponent
+        NodeDeleteConfirmationComponent,
       ],
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useClass: ApiMockService },
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   });

@@ -11,7 +11,7 @@ import { AddMemberComponent } from './add-member/add-member.component';
 @Component({
   selector: 'kubermatic-member',
   templateUrl: './member.component.html',
-  styleUrls: ['./member.component.scss']
+  styleUrls: ['./member.component.scss'],
 })
 
 export class MemberComponent implements OnInit, OnDestroy {
@@ -33,16 +33,16 @@ export class MemberComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.project = this.projectService.project;
 
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
       this.project = project;
       this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-      this.userService.currentUserGroup(this.project.id).subscribe(group => {
+      this.userService.currentUserGroup(this.project.id).subscribe((group) => {
         this.userGroup = group;
       });
     }));
 
     const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe(tick => {
+    this.subscriptions.push(timer.subscribe((tick) => {
       this.refreshMembers();
     }));
     this.refreshMembers();
@@ -60,7 +60,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     const modal = this.dialog.open(AddMemberComponent);
     modal.componentInstance.project = this.project;
 
-    const sub = modal.afterClosed().subscribe(added => {
+    const sub = modal.afterClosed().subscribe((added) => {
       if (added) {
         this.refreshMembers();
       }
@@ -70,7 +70,7 @@ export class MemberComponent implements OnInit, OnDestroy {
 
   refreshMembers(): void {
     if (this.project) {
-      this.subscriptions.push(this.api.getMembers(this.project.id).subscribe(res => {
+      this.subscriptions.push(this.api.getMembers(this.project.id).subscribe((res) => {
         this.members = res;
         this.sortData(this.sort);
         this.loading = false;

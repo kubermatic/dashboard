@@ -5,7 +5,7 @@ export function fakeAppConfig(): Config {
     show_demo_info: false,
     show_terms_of_service: false,
     openstack: {
-      wizard_use_default_user: false
-    }
+      wizard_use_default_user: false,
+    },
   };
 }

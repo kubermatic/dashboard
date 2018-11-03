@@ -18,7 +18,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   ParticlesModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('FrontpageComponent', () => {
@@ -33,11 +33,11 @@ describe('FrontpageComponent', () => {
         ...modules,
       ],
       declarations: [
-        FrontpageComponent
+        FrontpageComponent,
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
-        { provide: Auth, useClass: AuthMockService }
+        { provide: Auth, useClass: AuthMockService },
       ],
     }).compileComponents();
   });

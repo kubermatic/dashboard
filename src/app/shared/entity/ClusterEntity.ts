@@ -62,7 +62,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
       return awsSpec;
     case NodeProvider.DIGITALOCEAN:
       const doSpec: DigitaloceanCloudSpec = {
-        token: ''
+        token: '',
       };
       return doSpec;
     case NodeProvider.BAREMETAL:
@@ -93,7 +93,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         infraManagementUser: {
           username: '',
           password: '',
-        }
+        },
       };
       return vsSpec;
     case NodeProvider.HETZNER:

@@ -14,7 +14,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   ReactiveFormsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('SetClusterSpecComponent', () => {
@@ -31,7 +31,7 @@ describe('SetClusterSpecComponent', () => {
         ...modules,
       ],
       declarations: [
-        SetClusterSpecComponent
+        SetClusterSpecComponent,
       ],
       providers: [
         WizardService,

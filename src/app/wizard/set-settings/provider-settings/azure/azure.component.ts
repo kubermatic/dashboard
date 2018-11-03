@@ -8,7 +8,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 @Component({
   selector: 'kubermatic-azure-cluster-settings',
   templateUrl: './azure.component.html',
-  styleUrls: ['./azure.component.scss']
+  styleUrls: ['./azure.component.scss'],
 })
 export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -31,7 +31,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       vnet: new FormControl(this.cluster.spec.cloud.azure.vnet),
     });
 
-    this.subscriptions.push(this.azureSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+    this.subscriptions.push(this.azureSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           azure: {
@@ -51,7 +51,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       });
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
   }

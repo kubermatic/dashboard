@@ -21,4 +21,3 @@ export const NotificationReducer: Reducer<Notification> = (state: Notification =
       return state;
   }
 };
-

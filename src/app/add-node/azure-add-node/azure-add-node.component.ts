@@ -11,7 +11,7 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-azure-add-node',
   templateUrl: './azure-add-node.component.html',
-  styleUrls: ['./azure-add-node.component.scss']
+  styleUrls: ['./azure-add-node.component.scss'],
 })
 
 export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
@@ -39,7 +39,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
       if (this.nodeData.node.spec.cloud.azure.tags.hasOwnProperty(i)) {
         tagList.push(new FormGroup({
           key: new FormControl(i),
-          value: new FormControl(this.nodeData.node.spec.cloud.azure.tags[i])
+          value: new FormControl(this.nodeData.node.spec.cloud.azure.tags[i]),
         }));
       }
     }
@@ -47,14 +47,14 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     this.azureNodeForm = new FormGroup({
       size: new FormControl(this.nodeData.node.spec.cloud.azure.size, Validators.required),
       assignPublicIP: new FormControl(this.nodeData.node.spec.cloud.azure.assignPublicIP),
-      tags: tagList
+      tags: tagList,
     });
 
-    this.subscriptions.push(this.azureNodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.azureNodeForm.valueChanges.subscribe((data) => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
 
@@ -65,7 +65,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
 
   getDatacenter(): void {
     if (this.cloudSpec.dc) {
-      this.subscriptions.push(this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(data => {
+      this.subscriptions.push(this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((data) => {
         this.datacenter = data;
       }));
     }
@@ -80,13 +80,13 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
       if (this.isInWizard()) {
         if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
           this.subscriptions.push(this.api.getAzureSizesForWizard(this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret,
-            this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe(data => {
+            this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe((data) => {
             this.sizes = data;
             this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
           }));
         }
       } else {
-        this.subscriptions.push(this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe(data => {
+        this.subscriptions.push(this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
           this.sizes = data;
           this.azureNodeForm.controls.size.setValue(this.nodeData.node.spec.cloud.azure.size);
         }));
@@ -124,7 +124,7 @@ export class AzureAddNodeComponent implements OnInit, OnDestroy, OnChanges {
     this.tags = <FormArray> this.azureNodeForm.get('tags');
     this.tags.push(new FormGroup({
       key: new FormControl(''),
-      value: new FormControl('')
+      value: new FormControl(''),
     }));
   }
 

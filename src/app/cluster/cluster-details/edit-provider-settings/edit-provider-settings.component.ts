@@ -13,7 +13,7 @@ import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 @Component({
   selector: 'kubermatic-edit-provider-settings',
   templateUrl: './edit-provider-settings.component.html',
-  styleUrls: ['./edit-provider-settings.component.scss']
+  styleUrls: ['./edit-provider-settings.component.scss'],
 })
 
 export class EditProviderSettingsComponent implements OnInit, OnDestroy {
@@ -23,7 +23,7 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public providerSettingsPatch: ProviderSettingsPatch = {
     isValid: false,
-    cloudSpecPatch: {}
+    cloudSpecPatch: {},
   };
 
   constructor(private api: ApiService,
@@ -38,7 +38,7 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
     }));
 
     this.project = this.projectService.project;
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
       this.project = project;
     }));
 
@@ -57,10 +57,10 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
     const patch: ClusterEntityPatch = {
       spec: {
         cloud: this.providerSettingsPatch.cloudSpecPatch,
-      }
+      },
     };
 
-    this.api.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(r => {
+    this.api.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe((r) => {
       this.cluster = r;
       NotificationActions.success('Success', `Edit provider settings successfully`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'providerSettingsSaved');

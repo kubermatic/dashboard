@@ -13,12 +13,12 @@ import { UserGroupConfig } from '../shared/model/Config';
 @Component({
   selector: 'kubermatic-sshkey',
   templateUrl: './sshkey.component.html',
-  styleUrls: ['./sshkey.component.scss']
+  styleUrls: ['./sshkey.component.scss'],
 })
 
 export class SSHKeyComponent implements OnInit, OnDestroy {
   public loading = true;
-  public sshKeys: Array<SSHKeyEntity> = [];
+  public sshKeys: SSHKeyEntity[] = [];
   public sortedSshKeys: SSHKeyEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
   public userGroup: string;
@@ -27,21 +27,21 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   public projectID: string;
 
   constructor(private route: ActivatedRoute,
-    private api: ApiService,
-    private userService: UserService,
-    private appConfigService: AppConfigService,
-    public dialog: MatDialog) { }
+              private api: ApiService,
+              private userService: UserService,
+              private appConfigService: AppConfigService,
+              public dialog: MatDialog) { }
 
   public ngOnInit(): void {
     this.projectID = this.route.snapshot.paramMap.get('projectID');
 
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
     const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe(tick => {
+    this.subscriptions.push(timer.subscribe((tick) => {
       this.refreshSSHKeys();
     }));
     this.refreshSSHKeys();
@@ -56,7 +56,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys(): void {
-    this.subscriptions.push(this.api.getSSHKeys(this.projectID).pipe(retry(3)).subscribe(res => {
+    this.subscriptions.push(this.api.getSSHKeys(this.projectID).pipe(retry(3)).subscribe((res) => {
       this.sshKeys = res;
       this.sortSshKeyData(this.sort);
       this.loading = false;
@@ -67,13 +67,13 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent);
     dialogRef.componentInstance.projectID = this.projectID;
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       result && this.refreshSSHKeys();
     });
   }
 
   public trackSshKey(index: number, shhKey: SSHKeyEntity): number {
-    const prevSSHKey = find(this.sshKeys, item => {
+    const prevSSHKey = find(this.sshKeys, (item) => {
       return item.name === shhKey.name;
     });
 

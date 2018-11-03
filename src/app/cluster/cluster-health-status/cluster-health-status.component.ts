@@ -9,7 +9,7 @@ import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
 @Component({
   selector: 'kubermatic-cluster-health-status',
   templateUrl: './cluster-health-status.component.html',
-  styleUrls: ['./cluster-health-status.component.scss']
+  styleUrls: ['./cluster-health-status.component.scss'],
 })
 export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
@@ -28,14 +28,14 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe(tick => {
-      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
+    this.subscriptions.push(timer.subscribe((tick) => {
+      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((health) => {
         this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
         this.health = health;
       });
     }));
 
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((health) => {
         this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
         this.health = health;
       });

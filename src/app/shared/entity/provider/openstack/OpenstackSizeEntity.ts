@@ -34,4 +34,3 @@ export class OpenstackSecurityGroup {
   id: string;
   name: string;
 }
-

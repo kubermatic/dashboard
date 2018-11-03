@@ -18,7 +18,7 @@ import { AzureProviderSettingsComponent } from './azure-provider-settings.compon
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('AzureProviderSettingsComponent', () => {
@@ -42,7 +42,7 @@ describe('AzureProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
       ],
     }).compileComponents();
   });
@@ -60,7 +60,7 @@ describe('AzureProviderSettingsComponent', () => {
       subnet: '',
       subscriptionID: '',
       tenantID: '',
-      vnet: ''
+      vnet: '',
     };
     fixture.detectChanges();
   });

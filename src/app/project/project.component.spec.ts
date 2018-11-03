@@ -29,7 +29,7 @@ describe('ProjectComponent', () => {
         BrowserAnimationsModule,
         SlimLoadingBarModule.forRoot(),
         RouterTestingModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
         ProjectComponent,
@@ -40,7 +40,7 @@ describe('ProjectComponent', () => {
         { provide: ProjectService, useClass: ProjectMockService},
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService },
-        MatDialog
+        MatDialog,
       ],
     }).compileComponents();
   }));

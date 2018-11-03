@@ -23,7 +23,7 @@ export class UserService {
   getUser(): Observable<MemberEntity> {
     const url = `${this.restRoot}/me`;
     if (!this.user) {
-      this.user = this.http.get<MemberEntity>(url, { headers: this.headers }).pipe(catchError(error => {
+      this.user = this.http.get<MemberEntity>(url, { headers: this.headers }).pipe(catchError((error) => {
         return of<MemberEntity>();
       }));
     }
@@ -31,10 +31,10 @@ export class UserService {
   }
 
   currentUserGroup(projectID: string): Observable<string> {
-    return this.getUser().pipe(map(res => {
-      for (let i = 0; i < res.projects.length; i++) {
-        if (res.projects[i].id === projectID) {
-          const group = res.projects[i].group.split('-')[0];
+    return this.getUser().pipe(map((res) => {
+      for (const project of res.projects) {
+        if (project.id === projectID) {
+          const group = project.group.split('-')[0];
           return this.userGroup = group;
         }
       }

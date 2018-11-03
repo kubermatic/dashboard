@@ -23,7 +23,7 @@ import { VSphereOptionsComponent } from './vsphere-add-node/vsphere-options/vsph
     MatInputModule,
     MatCheckboxModule,
     MatCardModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
   ],
   declarations: [
     AddNodeComponent,
@@ -38,8 +38,8 @@ import { VSphereOptionsComponent } from './vsphere-add-node/vsphere-options/vsph
     AzureAddNodeComponent,
   ],
   exports: [
-    AddNodeComponent
-  ]
+    AddNodeComponent,
+  ],
 })
 export class AddNodeModule {
 }

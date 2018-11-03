@@ -18,10 +18,10 @@ describe('VSphereClusterSettingsComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
-        VSphereClusterSettingsComponent
+        VSphereClusterSettingsComponent,
       ],
       providers: [
         { provide: ApiService, useClass: ApiMockService },

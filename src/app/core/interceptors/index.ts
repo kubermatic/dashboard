@@ -5,5 +5,5 @@ import { LoaderInterceptor } from './loader/loader.service';
 export {
   CheckTokenInterceptor,
   LoaderInterceptor,
-  ErrorNotificationsInterceptor
+  ErrorNotificationsInterceptor,
 };

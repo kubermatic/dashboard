@@ -18,7 +18,7 @@ export class NodeProvider {
     NodeProvider.AZURE,
   ];
 
-  public static readonly ProviderNames: Object = {
+  public static readonly ProviderNames: object = {
     [NodeProvider.AWS]: 'Amazon Web Services',
     [NodeProvider.DIGITALOCEAN]: 'Digital Ocean',
     [NodeProvider.OPENSTACK]: 'Openstack',

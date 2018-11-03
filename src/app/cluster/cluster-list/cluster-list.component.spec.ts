@@ -49,7 +49,7 @@ describe('ClusterListComponent', () => {
       declarations: [
         ClusterListComponent,
         ClusterItemComponent,
-        ClusterHealthStatusComponent
+        ClusterHealthStatusComponent,
       ],
       providers: [
         { provide: ApiService, useValue: apiMock },
@@ -59,7 +59,7 @@ describe('ClusterListComponent', () => {
         { provide: HealthService, useClass: HealthMockService },
         { provide: UserService, useClass: UserMockService },
         { provide: Router, useClass: RouterStub },
-        { provide: AppConfigService, useClass: AppConfigMockService }
+        { provide: AppConfigService, useClass: AppConfigMockService },
       ],
     }).compileComponents();
   }));

@@ -7,7 +7,7 @@ import { SSHKeyEntity } from './../../shared/entity/SSHKeyEntity';
 @Component({
   selector: 'kubermatic-sshkey-delete-confirmation',
   templateUrl: './sshkey-delete-confirmation.component.html',
-  styleUrls: ['./sshkey-delete-confirmation.component.scss']
+  styleUrls: ['./sshkey-delete-confirmation.component.scss'],
 })
 
 export class SSHKeyDeleteConfirmationComponent {
@@ -19,7 +19,7 @@ export class SSHKeyDeleteConfirmationComponent {
   }
 
   deleteSSHKey(): void {
-    this.api.deleteSSHKey(this.sshKey.id, this.projectId).subscribe(result => {
+    this.api.deleteSSHKey(this.sshKey.id, this.projectId).subscribe((result) => {
       NotificationActions.success('Success', `SSH key has been removed from project`);
     });
     this.dialogRef.close(true);

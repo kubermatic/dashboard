@@ -4,7 +4,7 @@ import { MatDialogRef } from '@angular/material';
 @Component({
   selector: 'kubermatic-mobile-navigation',
   templateUrl: './mobile-navigation.component.html',
-  styleUrls: ['./mobile-navigation.component.scss']
+  styleUrls: ['./mobile-navigation.component.scss'],
 })
 export class MobileNavigationComponent {
 
