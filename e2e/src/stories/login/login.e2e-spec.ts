@@ -1,25 +1,34 @@
-import { browser, by, element } from 'protractor';
+import { browser, element } from 'protractor';
 import { LoginPage } from '../../login/login.po';
+import { DexPage } from '../../dex/dex.po';
 
 describe('login story', () => {
-  const page = new LoginPage();
+  const loginPage = new LoginPage();
+  const dexPage = new DexPage();
 
   beforeAll(() => {
     browser.waitForAngularEnabled(false); // TODO
-    page.navigateTo();
+    loginPage.navigateTo();
   });
 
   it('should click on login button', async () => {
-    await page.getLoginButton().click();
+    expect(loginPage.getLoginButton().isPresent()).toBeTruthy();
+    await loginPage.getLoginButton().click();
   });
 
   it('should choose static credentials button', async () => {
-    await element(by.xpath('//span[contains(text(),"Static Credentials")]')).click(); // TODO
+    expect(dexPage.getStaticLoginButton().isPresent()).toBeTruthy();
+    await element(dexPage.getStaticLoginButton()).click();
   });
 
   it('should fill user credentials and login', async () => {
-    await element(by.xpath('//input[@id="login"]')).sendKeys('roxy');
-    await element(by.xpath('//input[@id="password"]')).sendKeys(''); // TODO
-    await element(by.id('submit-login')).click();
+    expect(dexPage.getStaticLoginInput().isPresent()).toBeTruthy();
+    await dexPage.getStaticLoginInput().sendKeys('roxy');
+
+    expect(dexPage.getStaticPasswordInput().isPresent()).toBeTruthy();
+    await dexPage.getStaticPasswordInput().sendKeys(''); // TODO
+
+    expect(dexPage.getStaticLoginSubmitButton().isPresent()).toBeTruthy();
+    await dexPage.getStaticLoginSubmitButton().click();
   });
 });
