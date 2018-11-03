@@ -1,4 +1,3 @@
-import { browser, element } from 'protractor';
 import { LoginPage } from '../../login/login.po';
 import { DexPage } from '../../dex/dex.po';
 
@@ -7,7 +6,6 @@ describe('login story', () => {
   const dexPage = new DexPage();
 
   beforeAll(() => {
-    browser.waitForAngularEnabled(false); // TODO
     loginPage.navigateTo();
   });
 
@@ -18,7 +16,7 @@ describe('login story', () => {
 
   it('should choose static credentials button', async () => {
     expect(dexPage.getStaticLoginButton().isPresent()).toBeTruthy();
-    await element(dexPage.getStaticLoginButton()).click();
+    await dexPage.getStaticLoginButton().click();
   });
 
   it('should fill user credentials and login', async () => {
@@ -26,7 +24,7 @@ describe('login story', () => {
     await dexPage.getStaticLoginInput().sendKeys('roxy');
 
     expect(dexPage.getStaticPasswordInput().isPresent()).toBeTruthy();
-    await dexPage.getStaticPasswordInput().sendKeys(''); // TODO
+    await dexPage.getStaticPasswordInput().sendKeys(''); // TODO Missing password.
 
     expect(dexPage.getStaticLoginSubmitButton().isPresent()).toBeTruthy();
     await dexPage.getStaticLoginSubmitButton().click();

@@ -5,7 +5,7 @@ describe('login page', () => {
   const page = new LoginPage();
 
   beforeAll(() => {
-    browser.waitForAngularEnabled(false); // TODO
+    browser.waitForAngularEnabled(false); // TODO It should be enabled. Now it is disabled for all tests.
     page.navigateTo();
   });
 
