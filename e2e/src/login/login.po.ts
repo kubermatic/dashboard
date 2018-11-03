@@ -5,7 +5,7 @@ export class LoginPage {
     return browser.get('/');
   }
 
-  getPageTitle() {
+  getPageTitle(): any {
     return browser.getTitle();
   }
 

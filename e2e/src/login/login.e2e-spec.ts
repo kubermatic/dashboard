@@ -9,7 +9,7 @@ describe('login page', () => {
     page.navigateTo();
   });
 
-  it('should have proper title', function () {
+  it('should have proper title', () => {
     page.getPageTitle().then((title: string) => {
       expect(title).toEqual('Kubermatic');
     });
