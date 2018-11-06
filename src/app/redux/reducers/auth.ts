@@ -16,7 +16,7 @@ export interface Auth {
 export const INITIAL_STATE: Auth = {
   profile: [],
   token: '',
-  state: AuthStatus.LoggedOut
+  state: AuthStatus.LoggedOut,
 };
 
 export const AuthReducer: Reducer<Auth> = (state: Auth = INITIAL_STATE, action: Action): Auth => {
@@ -25,22 +25,21 @@ export const AuthReducer: Reducer<Auth> = (state: Auth = INITIAL_STATE, action: 
       return Object.assign({}, state, {
         profile: action.payload.profile,
         token: action.payload.token,
-        state: AuthStatus.LoggedIn
+        state: AuthStatus.LoggedIn,
       });
     case AuthActions.LOGGED_OUT:
       return Object.assign({}, state, {
         profile: null,
         token: null,
-        state: AuthStatus.LoggedOut
+        state: AuthStatus.LoggedOut,
       });
     case AuthActions.FETCH_PROFILE:
       return Object.assign({}, state, {
         profile: action.payload.profile,
         token: state.token,
-        state: state.state
+        state: state.state,
       });
     default:
       return state;
   }
 };
-

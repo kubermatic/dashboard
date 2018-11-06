@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatTabsModule } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
 import { MemberDeleteConfirmationComponent } from './member-delete-confirmation/member-delete-confirmation.component';
 import { MemberItemComponent } from './member-item/member-item.component';
@@ -9,22 +8,21 @@ import { MemberComponent } from './member.component';
 const components: any[] = [
   MemberComponent,
   MemberItemComponent,
-  MemberDeleteConfirmationComponent
+  MemberDeleteConfirmationComponent,
 ];
 
 @NgModule({
   imports: [
     SharedModule,
-    MatTabsModule,
-    MemberRoutingModule
+    MemberRoutingModule,
   ],
   declarations: [
-    ...components
+    ...components,
   ],
   exports: [
-    ...components
+    ...components,
   ],
-  entryComponents: [MemberDeleteConfirmationComponent]
+  entryComponents: [MemberDeleteConfirmationComponent],
 })
 export class MemberModule {
 }

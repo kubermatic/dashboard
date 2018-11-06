@@ -26,11 +26,11 @@ export class NodeDeleteConfirmationService {
         top: '',
         bottom: '',
         left: '',
-        right: ''
+        right: '',
       },
       data: {
-        message: 'Jazzy jazz jazz'
-      }
+        message: 'Jazzy jazz jazz',
+      },
     };
 
     config.viewContainerRef = viewContainerRef;

@@ -14,7 +14,7 @@ import { AddClusterSSHKeysComponent } from './add-cluster-sshkeys/add-cluster-ss
 @Component({
   selector: 'kubermatic-edit-sshkeys',
   templateUrl: './edit-sshkeys.component.html',
-  styleUrls: ['./edit-sshkeys.component.scss']
+  styleUrls: ['./edit-sshkeys.component.scss'],
 })
 
 export class EditSSHKeysComponent implements OnInit, OnDestroy {
@@ -23,7 +23,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   @Input() projectID: string;
 
   public loading = true;
-  public sshKeys: Array<SSHKeyEntity> = [];
+  public sshKeys: SSHKeyEntity[] = [];
   public sortedSshKeys: SSHKeyEntity[] = [];
   public sort: Sort = { active: 'name', direction: 'asc' };
   public userGroup: string;
@@ -37,12 +37,12 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
     const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe(tick => {
+    this.subscriptions.push(timer.subscribe((tick) => {
       this.refreshSSHKeys();
     }));
     this.refreshSSHKeys();
@@ -57,7 +57,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys(): void {
-    this.subscriptions.push(this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID).pipe(retry(3)).subscribe(res => {
+    this.subscriptions.push(this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID).pipe(retry(3)).subscribe((res) => {
       this.sshKeys = res;
       this.sortSshKeyData(this.sort);
       this.loading = false;
@@ -71,13 +71,13 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.sshKeys = this.sshKeys;
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       result && this.refreshSSHKeys();
     });
   }
 
   public trackSshKey(index: number, shhKey: SSHKeyEntity): number {
-    const prevSSHKey = find(this.sshKeys, item => {
+    const prevSSHKey = find(this.sshKeys, (item) => {
       return item.name === shhKey.name;
     });
 

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatButtonToggleModule, MatTabsModule } from '@angular/material';
 import { AddNodeModule } from '../add-node/add-node.module';
 import { MachineNetworksModule } from '../machine-networks/machine-networks.module';
 import { SharedModule } from '../shared/shared.module';
@@ -39,7 +38,7 @@ const components: any[] = [
   BringyourownClusterSettingsComponent,
   HetznerClusterSettingsComponent,
   VSphereClusterSettingsComponent,
-  AzureClusterSettingsComponent
+  AzureClusterSettingsComponent,
 ];
 
 @NgModule({
@@ -47,15 +46,15 @@ const components: any[] = [
     SharedModule,
     WizardRoutingModule,
     AddNodeModule,
-    MachineNetworksModule
+    MachineNetworksModule,
   ],
   declarations: [
-    ...components
+    ...components,
   ],
   exports: [
-    ...components
+    ...components,
   ],
-  entryComponents: []
+  entryComponents: [],
 })
 export class WizardModule {
 }

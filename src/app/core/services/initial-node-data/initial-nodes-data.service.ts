@@ -14,9 +14,9 @@ export class InitialNodeDataService {
 
   public storeInitialNodeData(nodeCount: number, cluster: ClusterEntity, node: NodeEntity): void {
     const data: InitialNodeData = {
-      nodeCount: nodeCount,
-      node: node,
-      cluster: cluster.id
+      nodeCount,
+      node,
+      cluster: cluster.id,
     };
     localStorage.setItem(`${cluster.id}_initialNodeData`, JSON.stringify(data));
   }

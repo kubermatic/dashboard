@@ -32,7 +32,7 @@ describe('SSHKeyComponent', () => {
       ],
       declarations: [
         SSHKeyComponent,
-        SSHKeyItemComponent
+        SSHKeyItemComponent,
       ],
       providers: [
         { provide: Router, useClass: RouterStub },

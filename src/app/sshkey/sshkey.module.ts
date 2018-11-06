@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatTabsModule } from '@angular/material';
 import { SharedModule } from '../shared/shared.module';
 import { SSHKeyDeleteConfirmationComponent } from './sshkey-delete-confirmation/sshkey-delete-confirmation.component';
 import { SSHKeyItemComponent } from './sshkey-item/sshkey-item.component';
@@ -15,16 +14,15 @@ const components: any[] = [
 @NgModule({
   imports: [
     SharedModule,
-    MatTabsModule,
-    SSHKeyRoutingModule
+    SSHKeyRoutingModule,
   ],
   declarations: [
-    ...components
+    ...components,
   ],
   exports: [
-    ...components
+    ...components,
   ],
-  entryComponents: [SSHKeyDeleteConfirmationComponent]
+  entryComponents: [SSHKeyDeleteConfirmationComponent],
 })
 export class SSHKeyModule {
 }

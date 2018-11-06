@@ -9,7 +9,7 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 @Component({
   selector: 'kubermatic-cluster-delete-confirmation',
   templateUrl: './cluster-delete-confirmation.component.html',
-  styleUrls: ['./cluster-delete-confirmation.component.scss']
+  styleUrls: ['./cluster-delete-confirmation.component.scss'],
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() cluster: ClusterEntity;

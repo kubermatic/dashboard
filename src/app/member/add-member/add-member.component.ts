@@ -9,7 +9,7 @@ import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 @Component({
   selector: 'kubermatic-add-member',
   templateUrl: './add-member.component.html',
-  styleUrls: ['./add-member.component.scss']
+  styleUrls: ['./add-member.component.scss'],
 })
 export class AddMemberComponent implements OnInit {
   @Input() project: ProjectEntity;
@@ -33,11 +33,11 @@ export class AddMemberComponent implements OnInit {
         {
           group: this.addMemberForm.controls.group.value,
           id: this.project.id,
-        }
-      ]
+        },
+      ],
     };
 
-    this.api.createMembers(this.project.id, createMember).subscribe(res => {
+    this.api.createMembers(this.project.id, createMember).subscribe((res) => {
       this.dialogRef.close(true);
       NotificationActions.success('Success', `Member is added successfully`);
     });

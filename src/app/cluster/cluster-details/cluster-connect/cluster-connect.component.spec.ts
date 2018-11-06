@@ -14,7 +14,6 @@ import { fakeProject } from '../../../testing/fake-data/project.fake';
 import { RouterTestingModule } from '../../../testing/router-stubs';
 import { ClusterConnectComponent } from './cluster-connect.component';
 
-
 const modules: any[] = [
   BrowserModule,
   HttpClientModule,
@@ -22,7 +21,7 @@ const modules: any[] = [
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
   NgReduxTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('ClusterConnectComponent', () => {
@@ -40,7 +39,7 @@ describe('ClusterConnectComponent', () => {
         { provide: ApiService, useValue: apiMock },
         { provide: MAT_DIALOG_DATA, useValue: { cluster: fakeDigitaloceanCluster() } },
         { provide: MatDialogRef, useValue: {} },
-      ]
+      ],
     })
       .compileComponents();
   }));

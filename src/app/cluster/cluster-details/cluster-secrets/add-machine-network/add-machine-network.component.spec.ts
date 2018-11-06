@@ -1,19 +1,19 @@
+import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogRef } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { ApiService, WizardService,  } from '../../../../core/services';
+import { ApiService, WizardService } from '../../../../core/services';
 import { MachineNetworksComponent } from '../../../../machine-networks/machine-networks.component';
+import { SharedModule } from '../../../../shared/shared.module';
 import { fakeClusterWithMachineNetwork } from '../../../../testing/fake-data/clusterWithMachineNetworks.fake';
 import { fakeDigitaloceanDatacenter } from '../../../../testing/fake-data/datacenter.fake';
 import { fakeProject } from '../../../../testing/fake-data/project.fake';
 import { RouterTestingModule } from '../../../../testing/router-stubs';
 import { ApiMockService } from '../../../../testing/services/api-mock.service';
 import { MatDialogRefMock } from '../../../../testing/services/mat-dialog-ref-mock';
-import { SharedModule } from '../../../../shared/shared.module';
 import { AddMachineNetworkComponent } from './add-machine-network.component';
 
 const modules: any[] = [
@@ -23,7 +23,7 @@ const modules: any[] = [
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
   NgReduxTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('AddMachineNetworkComponent', () => {
@@ -37,13 +37,13 @@ describe('AddMachineNetworkComponent', () => {
       ],
       declarations: [
         AddMachineNetworkComponent,
-        MachineNetworksComponent
+        MachineNetworksComponent,
       ],
       providers: [
         WizardService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
-      ]
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
+      ],
     })
     .compileComponents();
   }));

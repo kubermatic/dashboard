@@ -19,7 +19,7 @@ import { NodeData } from '../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-wizard',
   templateUrl: './wizard.component.html',
-  styleUrls: ['./wizard.component.scss']
+  styleUrls: ['./wizard.component.scss'],
 })
 export class WizardComponent implements OnInit, OnDestroy {
   public steps: Step[] = [];
@@ -29,7 +29,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   public node: NodeEntity;
   public clusterSpecFormData: ClusterSpecForm = { valid: false, name: '', version: '' };
   public machineNetworksFormData: MachineNetworkForm[] = [{ valid: false, cidr: '', dnsServers: [''], gateway: '' }];
-  public setMachineNetworksFormData: SetMachineNetworksForm = { valid: false, machineNetworks: this.machineNetworksFormData };
+  public setMachineNetworksFormData: SetMachineNetworksForm = { valid: false, machineNetworks: this.machineNetworksFormData, setMachineNetworks: false };
   public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
   public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
   public clusterProviderSettingsFormData: ClusterProviderSettingsForm = { valid: false };
@@ -64,24 +64,24 @@ export class WizardComponent implements OnInit, OnDestroy {
         spec: {
           cloud: {},
           operatingSystem: {},
-          versions: {}
+          versions: {},
         },
         status: {},
       },
-      count: 3
+      count: 3,
     };
   }
 
   ngOnInit(): void {
     this.project = this.projectService.project;
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
       this.project = project;
     }));
 
     this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationWizardStarted');
 
     // When the cluster spec got changed, update the cluster
-    this.subscriptions.push(this.wizardService.clusterSpecFormChanges$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterSpecFormChanges$.subscribe((data) => {
       this.clusterSpecFormData = data;
       if (this.clusterSpecFormData.valid) {
         this.cluster.name = this.clusterSpecFormData.name;
@@ -91,7 +91,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     }));
 
     // When the cluster settings got changed, update the cluster
-    this.subscriptions.push(this.wizardService.setMachineNetworksFormChanges$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.setMachineNetworksFormChanges$.subscribe((data) => {
       this.setMachineNetworksFormData = data;
       if (!!this.setMachineNetworksFormData.setMachineNetworks) {
         if (this.setMachineNetworksFormData.valid) {
@@ -100,14 +100,14 @@ export class WizardComponent implements OnInit, OnDestroy {
           this.wizardService.changeCluster(this.cluster);
         }
       } else {
-        this.cluster.spec.machineNetworks = null;
+        this.cluster.spec.machineNetworks = [];
       }
     }));
 
     // When the provider got changed, update the cluster
     // Caveat: We must not delete existing provider settings.
     // Caveat: The DC stays set. When changing the provider we have a invalid dc stored in the cluster. But will be changed on the next step.
-    this.subscriptions.push(this.wizardService.clusterProviderFormChanges$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterProviderFormChanges$.subscribe((data) => {
       this.clusterProviderFormData = data;
 
       if (!this.clusterProviderFormData.valid) {
@@ -143,7 +143,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     }));
 
     // When the datacenter got changed, update the cluster
-    this.subscriptions.push(this.wizardService.clusterDatacenterFormChanges$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterDatacenterFormChanges$.subscribe((data) => {
       this.clusterDatacenterFormData = data;
       if (!this.clusterProviderFormData.valid) {
         return;
@@ -157,7 +157,7 @@ export class WizardComponent implements OnInit, OnDestroy {
     }));
 
     // When the provider settings got changed, update the cluster
-    this.subscriptions.push(this.wizardService.clusterProviderSettingsFormChanges$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterProviderSettingsFormChanges$.subscribe((data) => {
       this.clusterProviderSettingsFormData = data;
       if (!this.clusterProviderSettingsFormData.valid) {
         return;
@@ -166,7 +166,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.wizardService.changeCluster(this.cluster);
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSSHKeysChanges$.subscribe(keys => {
+    this.subscriptions.push(this.wizardService.clusterSSHKeysChanges$.subscribe((keys) => {
       this.clusterSSHKeys = keys;
     }));
 
@@ -175,21 +175,21 @@ export class WizardComponent implements OnInit, OnDestroy {
     }));
 
     // Keep local cluster up to date
-    this.subscriptions.push(this.wizardService.clusterChanges$.subscribe(cluster => {
+    this.subscriptions.push(this.wizardService.clusterChanges$.subscribe((cluster) => {
       this.cluster = cluster;
     }));
 
-    this.subscriptions.push(this.stepsService.currentStepChanges$.subscribe(step => {
+    this.subscriptions.push(this.stepsService.currentStepChanges$.subscribe((step) => {
       this.currentStep = step;
       this.updateSteps();
     }));
 
-    this.subscriptions.push(this.stepsService.currentStepIndexChanges$.subscribe(index => {
+    this.subscriptions.push(this.stepsService.currentStepIndexChanges$.subscribe((index) => {
       this.currentStepIndex = index;
       this.updateSteps();
     }));
 
-    this.subscriptions.push(this.stepsService.stepsChanges$.subscribe(steps => {
+    this.subscriptions.push(this.stepsService.stepsChanges$.subscribe((steps) => {
       this.steps = steps;
     }));
 
@@ -255,19 +255,19 @@ export class WizardComponent implements OnInit, OnDestroy {
     const createCluster: CreateClusterModel = { name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames };
 
     this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
-    .subscribe(cluster => {
+    .subscribe((cluster) => {
       NotificationActions.success('Success', `Cluster successfully created`);
       this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
       const isReady = new Subject<boolean>();
       const timer = interval(5000).pipe(takeUntil(isReady));
-      timer.subscribe(tick => {
-        this.api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe(clusterRes => {
+      timer.subscribe((tick) => {
+        this.api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe((clusterRes) => {
           this.router.navigate(['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
 
           if (this.clusterSSHKeys.length > 0) {
             for (const key of this.clusterSSHKeys) {
-              this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id).subscribe(sshkey => {
+              this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id).subscribe((sshkey) => {
                 NotificationActions.success('Success', `SSH key ${key.name} was added successfully`);
               });
             }
@@ -281,7 +281,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
       }
     },
-    error => {
+    (error) => {
       NotificationActions.error('Error', `Could not create cluster`);
       this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
       this.creating = false;

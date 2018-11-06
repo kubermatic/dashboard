@@ -12,7 +12,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   ReactiveFormsModule,
   SharedModule,
-  MachineNetworksModule
+  MachineNetworksModule,
 ];
 
 describe('SetMachineNetworksComponent', () => {
@@ -25,7 +25,7 @@ describe('SetMachineNetworksComponent', () => {
         ...modules,
       ],
       declarations: [
-        SetMachineNetworksComponent
+        SetMachineNetworksComponent,
       ],
       providers: [
         WizardService,
@@ -46,8 +46,8 @@ describe('SetMachineNetworksComponent', () => {
         machineNetworks: [{
           cidr: '',
           dnsServers: [],
-          gateway: ''
-        }]
+          gateway: '',
+        }],
       },
 
     };

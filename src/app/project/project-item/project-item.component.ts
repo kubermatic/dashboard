@@ -27,7 +27,7 @@ export class ProjectItemComponent implements OnInit {
 
   public ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.project.id).subscribe(group => {
+    this.userService.currentUserGroup(this.project.id).subscribe((group) => {
       this.userGroup = group;
     });
   }
@@ -67,7 +67,7 @@ export class ProjectItemComponent implements OnInit {
     this.clickedDeleteProject[this.project.id] = true;
     const modal = this.dialog.open(ProjectDeleteConfirmationComponent);
     modal.componentInstance.project = this.project;
-    const sub = modal.afterClosed().subscribe(deleted => {
+    const sub = modal.afterClosed().subscribe((deleted) => {
       if (deleted) {
         this.router.navigate(['/projects']);
         this.projectService.changeSelectedProject({
@@ -75,7 +75,7 @@ export class ProjectItemComponent implements OnInit {
           name: '',
           creationTimestamp: null,
           deletionTimestamp: null,
-          status: ''
+          status: '',
         });
       }
       this.projectService.removeProject();

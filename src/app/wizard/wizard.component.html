@@ -34,7 +34,7 @@
         Next
       </ng-container>
     </button>
-    <button *ngIf="currentStep.name === 'set-machine-networks'" type="button" mat-raised-button color="primary" (click)="stepForward()">
+    <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0" type="button" mat-raised-button color="primary" (click)="stepForward()">
       <ng-container>
         Skip
       </ng-container>

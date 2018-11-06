@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { MatTabsModule } from '@angular/material';
 import { AddNodeModule } from '../add-node/add-node.module';
 import { MachineNetworksModule } from '../machine-networks/machine-networks.module';
 import { SharedModule } from '../shared/shared.module';
@@ -36,7 +35,7 @@ const components: any[] = [
   NodeListComponent,
   ClusterListComponent,
   ClusterItemComponent,
-  ClusterHealthStatusComponent
+  ClusterHealthStatusComponent,
 ];
 
 const entryComponents: any[] = [
@@ -59,7 +58,7 @@ const entryComponents: any[] = [
   EditSSHKeysComponent,
   EditSSHKeysItemComponent,
   EditSSHKeyDeleteConfirmationComponent,
-  AddClusterSSHKeysComponent
+  AddClusterSSHKeysComponent,
 ];
 
 @NgModule({
@@ -67,21 +66,20 @@ const entryComponents: any[] = [
     SharedModule,
     ClusterRoutingModule,
     AddNodeModule,
-    MatTabsModule,
-    MachineNetworksModule
+    MachineNetworksModule,
   ],
   declarations: [
     ...components,
-    ...entryComponents
+    ...entryComponents,
   ],
   exports: [
-    ...components
+    ...components,
   ],
   entryComponents: [
-    ...entryComponents
+    ...entryComponents,
   ],
   providers: [
-    NodeDeleteConfirmationService
+    NodeDeleteConfirmationService,
   ],
 })
 export class ClusterModule {

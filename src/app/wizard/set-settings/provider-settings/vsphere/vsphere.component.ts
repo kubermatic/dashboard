@@ -9,7 +9,7 @@ import { VSphereNetwork } from '../../../../shared/entity/provider/vsphere/VSphe
 @Component({
   selector: 'kubermatic-vsphere-cluster-settings',
   templateUrl: './vsphere.component.html',
-  styleUrls: ['./vsphere.component.scss']
+  styleUrls: ['./vsphere.component.scss'],
 })
 export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -30,7 +30,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
     });
 
-    this.subscriptions.push(this.vsphereSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+    this.subscriptions.push(this.vsphereSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
       this.loadNetworks();
 
       let cloudUser = this.vsphereSettingsForm.controls.infraManagementUsername.value;
@@ -50,8 +50,8 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
             vmNetName: this.vsphereSettingsForm.controls.vmNetName.value,
             infraManagementUser: {
               username: this.vsphereSettingsForm.controls.infraManagementUsername.value,
-              password: this.vsphereSettingsForm.controls.infraManagementPassword.value
-            }
+              password: this.vsphereSettingsForm.controls.infraManagementPassword.value,
+            },
           },
           dc: this.cluster.spec.cloud.dc,
         },
@@ -59,7 +59,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       });
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
   }
@@ -81,7 +81,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
     }
 
     this.loadingNetworks = true;
-    this.subscriptions.push(this.api.getVSphereNetworks(this.vsphereSettingsForm.controls.username.value, this.vsphereSettingsForm.controls.password.value, this.cluster.spec.cloud.dc).subscribe(networks => {
+    this.subscriptions.push(this.api.getVSphereNetworks(this.vsphereSettingsForm.controls.username.value, this.vsphereSettingsForm.controls.password.value, this.cluster.spec.cloud.dc).subscribe((networks) => {
         if (networks.length > 0) {
           const sortedNetworks = networks.sort((a, b) => {
             return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);

@@ -27,7 +27,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('ClusterDeleteConfirmationComponent', () => {
@@ -41,7 +41,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
         ...modules,
       ],
       declarations: [
-        ClusterDeleteConfirmationComponent
+        ClusterDeleteConfirmationComponent,
       ],
       providers: [
         InitialNodeDataService,
@@ -49,7 +49,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
         { provide: ApiService, useClass: ApiMockService },
         { provide: DatacenterService, useClass: DatacenterMockService },
         { provide: Router, useClass: RouterStub },
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   });

@@ -10,8 +10,8 @@ const routes: Routes = [
     path: '',
     component: ProjectComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Manage Projects' }
-  }
+    data: { title: 'Manage Projects' },
+  },
 ];
 
 @NgModule({

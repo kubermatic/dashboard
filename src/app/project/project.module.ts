@@ -14,15 +14,15 @@ const components: any[] = [
 @NgModule({
   imports: [
     SharedModule,
-    ProjectRoutingModule
+    ProjectRoutingModule,
   ],
   declarations: [
-    ...components
+    ...components,
   ],
   exports: [
-    ...components
+    ...components,
   ],
-  entryComponents: [ProjectDeleteConfirmationComponent]
+  entryComponents: [ProjectDeleteConfirmationComponent],
 })
 export class ProjectModule {
 }

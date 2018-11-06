@@ -8,7 +8,7 @@ export function clusterModelFake(): CreateClusterModel {
       cloud: {
         dc: 'do-fra1',
           digitalocean: {
-          token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d'
+          token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
         },
         bringyourown: null,
         aws: null,
@@ -16,13 +16,13 @@ export function clusterModelFake(): CreateClusterModel {
         baremetal: null,
         hetzner: null,
         vsphere: null,
-        azure: null
+        azure: null,
       },
-      version: ''
+      version: '',
     },
     sshKeys: [
-      'key-ssh1'
-    ]
+      'key-ssh1',
+    ],
   };
 }
 
@@ -35,7 +35,7 @@ export function fakeDigitaloceanCluster(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-            token: 'token'
+            token: 'token',
         },
         aws: null,
         openstack: null,
@@ -43,14 +43,14 @@ export function fakeDigitaloceanCluster(): ClusterEntity {
         bringyourown: null,
         hetzner: null,
         vsphere: null,
-        azure: null
+        azure: null,
       },
-      version: '1.8.5'
+      version: '1.8.5',
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5'
-    }
+      version: '1.8.5',
+    },
   };
 }
 
@@ -69,16 +69,16 @@ export function fakeHetznerCluster(): ClusterEntity {
         bringyourown: null,
         vsphere: null,
         hetzner: {
-          token: 'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ'
+          token: 'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
         },
-        azure: null
+        azure: null,
       },
-      version: '1.8.5'
+      version: '1.8.5',
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5'
-    }
+      version: '1.8.5',
+    },
   };
 }
 
@@ -102,17 +102,17 @@ export function fakeVSphereCluster(): ClusterEntity {
           infraManagementUser: {
             username: 'foo',
             password: 'bar',
-          }
+          },
         },
         hetzner: null,
-        azure: null
+        azure: null,
       },
-      version: '1.8.5'
+      version: '1.8.5',
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5'
-    }
+      version: '1.8.5',
+    },
   };
 }
 
@@ -138,14 +138,14 @@ export function fakeAWSCluster(): ClusterEntity {
         bringyourown: null,
         hetzner: null,
         vsphere: null,
-        azure: null
+        azure: null,
       },
-      version: '1.9.6'
+      version: '1.9.6',
     },
     status: {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
-      version: '1.9.6'
-    }
+      version: '1.9.6',
+    },
   };
 }
 
@@ -167,20 +167,20 @@ export function fakeOpenstackCluster(): ClusterEntity {
           network: 'test-network',
           domain: 'test-domain',
           tenant: 'test-tenant',
-          subnetID: 'test-subnet-id'
+          subnetID: 'test-subnet-id',
         },
         baremetal: null,
         bringyourown: null,
         hetzner: null,
         vsphere: null,
-        azure: null
+        azure: null,
       },
-      version: '1.9.6'
+      version: '1.9.6',
     },
     status: {
       url: 'https://vr4m6wpqv6.europe-west3-c.dev.kubermatic.io:30003',
-      version: '1.9.6'
-    }
+      version: '1.9.6',
+    },
   };
 }
 
@@ -208,21 +208,21 @@ export function fakeAzureCluster(): ClusterEntity {
           subnet: 'azure-subnet',
           subscriptionID: 'azure-subscription-id',
           tenantID: 'azure-tenant-id',
-          vnet: 'azure-vnet'
-        }
+          vnet: 'azure-vnet',
+        },
       },
-      version: '1.8.5'
+      version: '1.8.5',
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5'
-    }
+      version: '1.8.5',
+    },
   };
 }
 
 export function fakeToken(): Token {
   return {
-    token: 'test-token'
+    token: 'test-token',
   };
 }
 

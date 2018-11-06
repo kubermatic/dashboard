@@ -10,7 +10,7 @@ import { NodeEntity } from '../../../shared/entity/NodeEntity';
 @Component({
   selector: 'kubermatic-node-duplicate',
   templateUrl: './node-duplicate.component.html',
-  styleUrls: ['./node-duplicate.component.scss']
+  styleUrls: ['./node-duplicate.component.scss'],
 })
 
 export class NodeDuplicateComponent implements OnInit {
@@ -36,10 +36,10 @@ export class NodeDuplicateComponent implements OnInit {
         versions: {
         },
       },
-      status: {}
+      status: {},
     };
 
-    this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name, this.projectID).subscribe(result => {
+    this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name, this.projectID).subscribe((result) => {
       NotificationActions.success('Success', `Duplicate node successfully`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDuplicated');
     });

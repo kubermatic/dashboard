@@ -18,7 +18,7 @@ import { VSphereProviderSettingsComponent } from './vsphere-provider-settings.co
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('VSphereProviderSettingsComponent', () => {
@@ -42,7 +42,7 @@ describe('VSphereProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
       ],
     }).compileComponents();
   });
@@ -57,8 +57,8 @@ describe('VSphereProviderSettingsComponent', () => {
       vmNetName: '',
       infraManagementUser: {
         username: '',
-        password: ''
-      }
+        password: '',
+      },
     };
     fixture.detectChanges();
   });

@@ -10,7 +10,7 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-            token: 'token'
+            token: 'token',
         },
         aws: null,
         openstack: null,
@@ -18,21 +18,21 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
         bringyourown: null,
         hetzner: null,
         vsphere: null,
-        azure: null
+        azure: null,
       },
       version: '1.8.5',
       machineNetworks: [
         {
           cidr: '192.182.0.0/29',
           dnsServers: ['8.8.8.8'],
-          gateway: '190.128.0.2'
-        }
+          gateway: '190.128.0.2',
+        },
       ],
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5'
-    }
+      version: '1.8.5',
+    },
   };
 }
 
@@ -46,7 +46,7 @@ export function fakeGatewayInCidr(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-            token: 'token'
+            token: 'token',
         },
         aws: null,
         openstack: null,
@@ -54,21 +54,21 @@ export function fakeGatewayInCidr(): ClusterEntity {
         bringyourown: null,
         hetzner: null,
         vsphere: null,
-        azure: null
+        azure: null,
       },
       version: '1.8.5',
       machineNetworks: [
         {
           cidr: '192.182.0.0/29',
           dnsServers: ['8.8.8.8'],
-          gateway: '192.182.0.2'
-        }
+          gateway: '192.182.0.2',
+        },
       ],
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5'
-    }
+      version: '1.8.5',
+    },
   };
 }
 
@@ -82,7 +82,7 @@ export function fakeGatewayNotInCidr(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-            token: 'token'
+            token: 'token',
         },
         aws: null,
         openstack: null,
@@ -90,20 +90,20 @@ export function fakeGatewayNotInCidr(): ClusterEntity {
         bringyourown: null,
         hetzner: null,
         vsphere: null,
-        azure: null
+        azure: null,
       },
       version: '1.8.5',
       machineNetworks: [
         {
           cidr: '192.182.0.0/29',
           dnsServers: ['8.8.8.8'],
-          gateway: '192.180.0.2'
-        }
+          gateway: '192.180.0.2',
+        },
       ],
     },
     status: {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
-      version: '1.8.5'
-    }
+      version: '1.8.5',
+    },
   };
 }

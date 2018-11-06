@@ -6,7 +6,7 @@ import { BreadcrumbActions } from './../redux/actions/breadcrumb.actions';
 @Component({
   selector: 'kubermatic-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
 
@@ -14,17 +14,17 @@ export class DashboardComponent implements OnInit {
               private activatedRoute: ActivatedRoute) {
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         map(() => this.activatedRoute),
-        map(route => {
+        map((route) => {
           while (route.firstChild) {
             route = route.firstChild;
           }
 
           return route;
         }),
-        filter(route => route.outlet === 'primary'),
-        mergeMap(route => route.data)
+        filter((route) => route.outlet === 'primary'),
+        mergeMap((route) => route.data),
       )
       .subscribe((event) => {
         BreadcrumbActions.putBreadcrumb(event['title']);

@@ -17,7 +17,7 @@ const modules: any[] = [
   HttpClientModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('NodeDuplicateComponent', () => {
@@ -30,12 +30,12 @@ describe('NodeDuplicateComponent', () => {
         ...modules,
       ],
       declarations: [
-        NodeDuplicateComponent
+        NodeDuplicateComponent,
       ],
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useClass: ApiMockService },
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   });

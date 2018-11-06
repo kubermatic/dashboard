@@ -14,7 +14,7 @@ import { UserGroupConfig } from '../../../../shared/model/Config';
 @Component({
   selector: 'kubermatic-add-cluster-sshkeys',
   templateUrl: './add-cluster-sshkeys.component.html',
-  styleUrls: ['./add-cluster-sshkeys.component.scss']
+  styleUrls: ['./add-cluster-sshkeys.component.scss'],
 })
 export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -38,7 +38,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe(group => {
+    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
@@ -52,10 +52,10 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   reloadKeys(): void {
-    this.keysSub = this.api.getSSHKeys(this.projectID).subscribe(sshKeysRes => {
+    this.keysSub = this.api.getSSHKeys(this.projectID).subscribe((sshKeysRes) => {
       const newKeys: SSHKeyEntity[] = [];
       for (const i in sshKeysRes) {
-        if (!this.sshKeys.find(x => x.name === sshKeysRes[i].name)) {
+        if (!this.sshKeys.find((x) => x.name === sshKeysRes[i].name)) {
           newKeys.push(sshKeysRes[i]);
         }
       }
@@ -66,7 +66,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   public addClusterSSHKeys(): void {
-    this.api.addClusterSSHKey(this.keysForm.controls.keys.value, this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(res => {
+    this.api.addClusterSSHKey(this.keysForm.controls.keys.value, this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((res) => {
       NotificationActions.success('Success', `SSH key ${this.keysForm.controls.keys.value} was successfully added to cluster`);
       this.dialogRef.close(res);
     });
@@ -76,7 +76,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent);
     dialogRef.componentInstance.projectID = this.projectID;
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         if (this.keysSub) {
           this.keysSub.unsubscribe();

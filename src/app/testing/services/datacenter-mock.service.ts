@@ -22,4 +22,3 @@ export class DatacenterMockService {
     return of(this.seedDatacenters);
   }
 }
-

@@ -20,5 +20,3 @@ export const BreadcrumbReducer: Reducer<Breadcrumb> = (state: Breadcrumb = INITI
       return state;
   }
 };
-
-

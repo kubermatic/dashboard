@@ -24,7 +24,7 @@ describe('ClusterProviderSettingsComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
         ClusterProviderSettingsComponent,

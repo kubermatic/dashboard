@@ -10,7 +10,7 @@ import { MachineNetworkForm } from '../../../../shared/model/ClusterForm';
 @Component({
   selector: 'kubermatic-add-machine-network',
   templateUrl: './add-machine-network.component.html',
-  styleUrls: ['./add-machine-network.component.scss']
+  styleUrls: ['./add-machine-network.component.scss'],
 })
 
 export class AddMachineNetworkComponent implements OnInit {
@@ -25,7 +25,7 @@ export class AddMachineNetworkComponent implements OnInit {
               private dialogRef: MatDialogRef<AddMachineNetworkComponent>) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe(res => {
+    this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe((res: MachineNetworkForm[]) => {
       this.machineNetworkFormData = res;
     }));
   }
@@ -55,12 +55,12 @@ export class AddMachineNetworkComponent implements OnInit {
           this.cluster.spec.machineNetworks.push({
             cidr: this.machineNetworkFormData[i].cidr,
             dnsServers: this.machineNetworkFormData[i].dnsServers,
-            gateway: this.machineNetworkFormData[i].gateway
+            gateway: this.machineNetworkFormData[i].gateway,
           });
         }
       }
     }
-    this.api.getCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(res => {
+    this.api.getCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((res) => {
       NotificationActions.success('Success', `Machine Network(s) successfully added`);
       this.dialogRef.close(res);
     });

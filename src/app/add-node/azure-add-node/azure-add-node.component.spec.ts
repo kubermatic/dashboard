@@ -16,7 +16,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SharedModule,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 ];
 
 describe('AzureAddNodeComponent', () => {
@@ -41,7 +41,7 @@ describe('AzureAddNodeComponent', () => {
         AddNodeService,
         WizardService,
         { provide: ApiService, useValue: apiMock },
-        { provide: DatacenterService, useValue: datacenterMock }
+        { provide: DatacenterService, useValue: datacenterMock },
       ],
     }).compileComponents();
   }));

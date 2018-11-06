@@ -15,10 +15,10 @@ export class NotificationActions extends ActionBase {
       type: NotificationActions.PUSH_NOTIFICATION, payload: {
         toast: <NotificationToast> {
           type: NotificationToastType.success,
-          title: title,
-          content: content
-        }
-      }
+          title,
+          content,
+        },
+      },
     };
   }
 
@@ -28,10 +28,10 @@ export class NotificationActions extends ActionBase {
       type: NotificationActions.PUSH_NOTIFICATION, payload: {
         toast: <NotificationToast> {
           type: NotificationToastType.alert,
-          title: title,
-          content: content
-        }
-      }
+          title,
+          content,
+        },
+      },
     };
   }
 
@@ -41,10 +41,10 @@ export class NotificationActions extends ActionBase {
       type: NotificationActions.PUSH_NOTIFICATION, payload: {
         toast: <NotificationToast> {
           type: NotificationToastType.info,
-          title: title,
-          content: content
-        }
-      }
+          title,
+          content,
+        },
+      },
     };
   }
 
@@ -54,10 +54,10 @@ export class NotificationActions extends ActionBase {
       type: NotificationActions.PUSH_NOTIFICATION, payload: {
         toast: <NotificationToast> {
           type: NotificationToastType.error,
-          title: title,
-          content: content
-        }
-      }
+          title,
+          content,
+        },
+      },
     };
   }
 }

@@ -16,7 +16,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   ReactiveFormsModule,
   SharedModule,
-  MachineNetworksModule
+  MachineNetworksModule,
 ];
 
 describe('SetClusterSpecComponent', () => {
@@ -33,7 +33,7 @@ describe('SetClusterSpecComponent', () => {
         ...modules,
       ],
       declarations: [
-        SetClusterSpecComponent
+        SetClusterSpecComponent,
       ],
       providers: [
         WizardService,
@@ -56,8 +56,8 @@ describe('SetClusterSpecComponent', () => {
         machineNetworks: [{
           cidr: '',
           dnsServers: [],
-          gateway: ''
-        }]
+          gateway: '',
+        }],
       },
 
     };

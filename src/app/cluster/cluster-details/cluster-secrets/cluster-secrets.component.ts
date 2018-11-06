@@ -12,7 +12,7 @@ import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-tok
 @Component({
   selector: 'kubermatic-cluster-secrets',
   templateUrl: './cluster-secrets.component.html',
-  styleUrls: ['./cluster-secrets.component.scss']
+  styleUrls: ['./cluster-secrets.component.scss'],
 })
 
 export class ClusterSecretsComponent implements OnInit, OnChanges {
@@ -36,7 +36,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(): void {
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(health => {
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((health) => {
       this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
       this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
       this.health = health;
@@ -162,7 +162,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
     this.dialogRef.componentInstance.datacenter = this.datacenter;
     this.dialogRef.componentInstance.projectID = this.projectID;
 
-    this.dialogRef.afterClosed().subscribe(result => {});
+    this.dialogRef.afterClosed().subscribe((result) => {});
   }
 
   public addMachineNetwork(): void {
@@ -172,7 +172,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
     this.dialogRef.componentInstance.datacenter = this.datacenter;
     this.dialogRef.componentInstance.projectID = this.projectID;
 
-    this.dialogRef.afterClosed().subscribe(result => {});
+    this.dialogRef.afterClosed().subscribe((result) => {});
   }
 
 }

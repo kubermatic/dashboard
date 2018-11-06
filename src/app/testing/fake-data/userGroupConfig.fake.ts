@@ -7,93 +7,93 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         view: true,
         edit: true,
         create: true,
-        delete: true
+        delete: true,
       },
       members: {
         view: true,
         edit: true,
         remove: true,
-        invite: true
+        invite: true,
       },
       sshKeys: {
         view: true,
         edit: true,
         create: true,
-        delete: true
+        delete: true,
       },
       clusters: {
         view: true,
         edit: true,
         create: true,
-        delete: true
+        delete: true,
       },
       nodes: {
         view: true,
         create: true,
-        delete: true
-      }
+        delete: true,
+      },
     },
     editors: {
       projects: {
         view: true,
         edit: true,
         create: true,
-        delete: false
+        delete: false,
       },
       members: {
         view: false,
         edit: false,
         remove: false,
-        invite: false
+        invite: false,
       },
       sshKeys: {
         view: true,
         edit: true,
         create: true,
-        delete: true
+        delete: true,
       },
       clusters: {
         view: true,
         edit: true,
         create: true,
-        delete: true
+        delete: true,
       },
       nodes: {
         view: true,
         create: true,
-        delete: true
-      }
+        delete: true,
+      },
     },
     viewers: {
       projects: {
         view: true,
         edit: false,
         create: true,
-        delete: false
+        delete: false,
       },
       members: {
         view: false,
         edit: false,
         remove: false,
-        invite: false
+        invite: false,
       },
       sshKeys: {
         view: true,
         edit: false,
         create: false,
-        delete: false
+        delete: false,
       },
       clusters: {
         view: true,
         edit: false,
         create: false,
-        delete: false
+        delete: false,
       },
       nodes: {
         view: true,
         create: true,
-        delete: true
-      }
-    }
+        delete: true,
+      },
+    },
   };
 }

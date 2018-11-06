@@ -24,11 +24,11 @@ describe('SetDatacenterComponent', () => {
         MatButtonToggleModule,
       ],
       declarations: [
-        SetDatacenterComponent
+        SetDatacenterComponent,
       ],
       providers: [
         WizardService,
-        { provide: DatacenterService, useClass: DatacenterMockService }
+        { provide: DatacenterService, useClass: DatacenterMockService },
       ],
     }).compileComponents();
   }));

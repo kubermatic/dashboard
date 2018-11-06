@@ -79,7 +79,6 @@ export class NodeSystemInfo {
   architecture: string;
 }
 
-
 export function getEmptyNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
@@ -88,7 +87,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         diskSize: 25,
         volumeType: 'standard',
         ami: '',
-        tags: {'': ''}
+        tags: {'': ''},
       };
       return awsSpec;
     case NodeProvider.DIGITALOCEAN:
@@ -97,32 +96,32 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         backups: false,
         ipv6: false,
         monitoring: false,
-        tags: []
+        tags: [],
       };
       return doSpec;
     case NodeProvider.OPENSTACK:
       const osSpec: OpenstackNodeSpec = {
         flavor: 'm1.small',
-        image: ''
+        image: '',
       };
       return osSpec;
     case NodeProvider.VSPHERE:
       const vsSpec: VSphereNodeSpec = {
         cpus: 1,
         memory: 512,
-        template: 'ubuntu-template'
+        template: 'ubuntu-template',
       };
       return vsSpec;
     case NodeProvider.HETZNER:
       const hSpec: HetznerNodeSpec = {
-        type: 'cx31'
+        type: 'cx31',
       };
       return hSpec;
     case NodeProvider.AZURE:
       const azureSpec: AzureNodeSpec = {
         size: 'Standard_A0',
         assignPublicIP: false,
-        tags: {'': ''}
+        tags: {'': ''},
       };
       return azureSpec;
   }
@@ -132,8 +131,8 @@ export function getEmptyNodeProviderSpec(provider: string): object {
 export function getEmptyOperatingSystemSpec(): object {
   const osSpec: OperatingSystemSpec = {
     ubuntu: {
-      distUpgradeOnBoot: false
-    }
+      distUpgradeOnBoot: false,
+    },
   };
   return osSpec;
 }

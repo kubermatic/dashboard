@@ -18,7 +18,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('ChangeClusterVersionComponent', () => {
@@ -35,14 +35,14 @@ describe('ChangeClusterVersionComponent', () => {
         ...modules,
       ],
       declarations: [
-        ChangeClusterVersionComponent
+        ChangeClusterVersionComponent,
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: { clusterName: 'clustername' } },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
         { provide: ApiService, useValue: apiMock },
         { provide: ProjectService, useClass: ProjectMockService },
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   }));

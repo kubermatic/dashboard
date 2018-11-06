@@ -7,7 +7,7 @@ import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange
 @Component({
   selector: 'kubermatic-digitalocean-options',
   templateUrl: './digitalocean-options.component.html',
-  styleUrls: ['./digitalocean-options.component.scss']
+  styleUrls: ['./digitalocean-options.component.scss'],
 })
 
 export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {

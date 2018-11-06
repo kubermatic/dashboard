@@ -34,7 +34,7 @@ const modules: any[] = [
   NgReduxTestingModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 const components: any[] = [
@@ -56,7 +56,7 @@ describe('KubermaticComponent', () => {
         ...modules,
       ],
       declarations: [
-        ...components
+        ...components,
       ],
       providers: [
         AUTH_PROVIDERS,
@@ -68,7 +68,7 @@ describe('KubermaticComponent', () => {
         AuthGuard,
         SidenavService,
         AppConfigService,
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   });
@@ -77,8 +77,8 @@ describe('KubermaticComponent', () => {
     fixture = TestBed.createComponent(KubermaticComponent);
     component = fixture.componentInstance;
     component.config = {
-      'show_demo_info': false,
-      'show_terms_of_service': false
+      show_demo_info: false,
+      show_terms_of_service: false,
     };
     authService = fixture.debugElement.injector.get(Auth) as any;
   });

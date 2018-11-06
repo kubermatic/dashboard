@@ -10,7 +10,7 @@ import { NodeEntity } from '../../../shared/entity/NodeEntity';
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
   templateUrl: './node-delete-confirmation.component.html',
-  styleUrls: ['./node-delete-confirmation.component.scss']
+  styleUrls: ['./node-delete-confirmation.component.scss'],
 })
 
 export class NodeDeleteConfirmationComponent implements OnInit {
@@ -36,7 +36,7 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   }
 
   public deleteNode(): void {
-    this.api.deleteClusterNode(this.cluster.id, this.node, this.datacenter.metadata.name, this.projectID).subscribe(result => {
+    this.api.deleteClusterNode(this.cluster.id, this.node, this.datacenter.metadata.name, this.projectID).subscribe((result) => {
       NotificationActions.success('Success', `Node removed successfully`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
     });

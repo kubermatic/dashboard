@@ -9,7 +9,7 @@ import { DatacenterService } from './../../core/services/datacenter/datacenter.s
 @Component({
   selector: 'kubermatic-set-provider',
   templateUrl: 'set-provider.component.html',
-  styleUrls: ['set-provider.component.scss']
+  styleUrls: ['set-provider.component.scss'],
 })
 export class SetProviderComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -24,14 +24,14 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       provider: new FormControl(getClusterProvider(this.cluster), [Validators.required]),
     });
 
-    this.subscriptions.push(this.setProviderForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.setProviderForm.valueChanges.subscribe((data) => {
       this.wizardService.changeClusterProvider({
         provider: this.setProviderForm.controls.provider.value,
         valid: this.setProviderForm.valid,
       });
     }));
 
-    this.subscriptions.push(this.dcService.getDataCenters().subscribe(datacenters => {
+    this.subscriptions.push(this.dcService.getDataCenters().subscribe((datacenters) => {
       const providers: string[] = [];
       for (const datacenter of datacenters) {
         if (datacenter.seed) {

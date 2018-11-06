@@ -15,7 +15,7 @@ export function fakeDigitaloceanSizes(): DigitaloceanSizes {
         regions: ['sfo'],
         slug: 'test1',
         transfer: 1,
-      }
+      },
     ],
     optimized: [],
   };

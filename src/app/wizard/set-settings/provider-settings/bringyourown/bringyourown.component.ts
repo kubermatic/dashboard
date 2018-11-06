@@ -4,7 +4,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 @Component({
   selector: 'kubermatic-bringyourown-cluster-settings',
   templateUrl: './bringyourown.component.html',
-  styleUrls: ['./bringyourown.component.scss']
+  styleUrls: ['./bringyourown.component.scss'],
 })
 export class BringyourownClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;

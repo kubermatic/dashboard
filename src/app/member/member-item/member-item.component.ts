@@ -26,7 +26,7 @@ export class MemberItemComponent implements OnInit {
 
   public ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.project.id).subscribe(group => {
+    this.userService.currentUserGroup(this.project.id).subscribe((group) => {
       this.userGroup = group;
     });
   }
@@ -60,7 +60,7 @@ export class MemberItemComponent implements OnInit {
     const modal = this.dialog.open(EditMemberComponent);
     modal.componentInstance.project = this.project;
     modal.componentInstance.member = this.member;
-    const sub = modal.afterClosed().subscribe(edited => {
+    const sub = modal.afterClosed().subscribe((edited) => {
       sub.unsubscribe();
     });
   }
@@ -69,7 +69,7 @@ export class MemberItemComponent implements OnInit {
     const modal = this.dialog.open(MemberDeleteConfirmationComponent);
     modal.componentInstance.project = this.project;
     modal.componentInstance.member = this.member;
-    const sub = modal.afterClosed().subscribe(deleted => {
+    const sub = modal.afterClosed().subscribe((deleted) => {
       sub.unsubscribe();
     });
   }

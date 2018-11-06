@@ -9,8 +9,9 @@ import { MachineNetworkForm } from '../../shared/model/ClusterForm';
 @Component({
   selector: 'kubermatic-set-machine-networks',
   templateUrl: 'set-machine-networks.component.html',
-  styleUrls: ['set-machine-networks.component.scss']
+  styleUrls: ['set-machine-networks.component.scss'],
 })
+
 export class SetMachineNetworksComponent implements OnInit, OnDestroy {
   @Input() public cluster: ClusterEntity;
   public setMachineNetworkForm: FormGroup;
@@ -24,11 +25,15 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
       checkMachineNetworks: new FormControl(false),
     });
 
-    this.subscriptions.push(this.setMachineNetworkForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+    if (!!this.cluster.spec.machineNetworks && this.cluster.spec.machineNetworks.length > 0) {
+      this.setMachineNetworkForm.controls.checkMachineNetworks.setValue(true);
+    }
+
+    this.subscriptions.push(this.setMachineNetworkForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
       this.setMachineNetworks();
     }));
 
-    this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe(res => {
+    this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe((res: MachineNetworkForm[]) => {
       this.machineNetworkFormData = res;
       this.setMachineNetworks();
     }));
@@ -59,7 +64,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
     }
 
     this.wizardService.changeSetMachineNetworks({
-      setMachineNetworks: this.setMachineNetworkForm.controls.checkMachineNetworks.value;
+      setMachineNetworks: this.setMachineNetworkForm.controls.checkMachineNetworks.value,
       machineNetworks: this.machineNetworkFormData,
       valid: isValid,
     });

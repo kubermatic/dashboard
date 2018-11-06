@@ -20,7 +20,7 @@ import { VSphereProviderSettingsComponent } from './vsphere-provider-settings/vs
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('EditProviderSettingsComponent', () => {
@@ -39,14 +39,14 @@ describe('EditProviderSettingsComponent', () => {
         HetznerProviderSettingsComponent,
         OpenstackProviderSettingsComponent,
         VSphereProviderSettingsComponent,
-        AzureProviderSettingsComponent
+        AzureProviderSettingsComponent,
       ],
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: MatDialogRef, useClass: MatDialogRefMock },
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   });

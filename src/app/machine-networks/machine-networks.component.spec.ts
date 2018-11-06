@@ -1,9 +1,9 @@
+import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgReduxTestingModule } from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { WizardService } from '../core/services';
 import { SharedModule } from '../shared/shared.module';
@@ -18,7 +18,7 @@ const modules: any[] = [
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
   NgReduxTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('MachineNetworksComponent', () => {
@@ -33,7 +33,7 @@ describe('MachineNetworksComponent', () => {
       declarations: [MachineNetworksComponent],
       providers: [
         WizardService,
-      ]
+      ],
     })
     .compileComponents();
   }));

@@ -29,13 +29,13 @@ export class RouterLinkActiveStubDirective {
   @Input()
   set routerLinkActive(data: string[] | string) { // tslint:disable-line
     const classes = Array.isArray(data) ? data : data.split(' ');
-    this.classes = classes.filter(c => !!c);
+    this.classes = classes.filter((c) => !!c);
   }
 }
 
 @Component({
   selector: 'router-outlet', // tslint:disable-line
-  template: ''
+  template: '',
 })
 export class RouterOutletStubComponent {
 }
@@ -69,19 +69,18 @@ export class ActivatedRouteStub {
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
   ],
   declarations: [
     RouterOutletStubComponent,
     RouterLinkActiveStubDirective,
-    RouterLinkStubDirective
+    RouterLinkStubDirective,
   ],
   exports: [
     RouterOutletStubComponent,
     RouterLinkActiveStubDirective,
-    RouterLinkStubDirective
-  ]
+    RouterLinkStubDirective,
+  ],
 })
 export class RouterTestingModule {
 }
-

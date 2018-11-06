@@ -67,7 +67,7 @@ describe('WizardComponent', () => {
         SharedModule,
         MatButtonToggleModule,
         MatTabsModule,
-        MachineNetworksModule
+        MachineNetworksModule,
       ],
       declarations: [
         WizardComponent,
@@ -111,7 +111,7 @@ describe('WizardComponent', () => {
         AddNodeService,
         StepsService,
         ClusterNameGenerator,
-        GoogleAnalyticsService
+        GoogleAnalyticsService,
       ],
     }).compileComponents();
   }));

@@ -26,17 +26,17 @@ describe('ClusterSSHKeys', () => {
         BrowserModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
-        ClusterSSHKeysComponent
+        ClusterSSHKeysComponent,
       ],
       providers: [
         WizardService,
         { provide: ApiService, useValue: apiMock },
         { provide: ProjectService, useClass: ProjectMockService },
         { provide: UserService, useClass: UserMockService },
-        { provide: AppConfigService, useClass: AppConfigMockService}
+        { provide: AppConfigService, useClass: AppConfigMockService},
       ],
     }).compileComponents();
   }));

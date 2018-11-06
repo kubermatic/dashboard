@@ -17,13 +17,13 @@ describe('HetznerClusterSettingsComponent', () => {
         BrowserModule,
         BrowserAnimationsModule,
         ReactiveFormsModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
-        HetznerClusterSettingsComponent
+        HetznerClusterSettingsComponent,
       ],
       providers: [
-        WizardService
+        WizardService,
       ],
     }).compileComponents();
   }));

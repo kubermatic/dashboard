@@ -6,7 +6,7 @@ import { ClusterEntity } from '../entity/ClusterEntity';
 // if gateway ip is in ip range we have to substract it from ipCount
 export function NoIpsLeftValidator(cluster: ClusterEntity, existingNodes: number): ValidatorFn {
   // tslint:disable:no-bitwise
-  const ip4ToInt = ip => ip.split('.').reduce((int, oct) => (int << 8) + parseInt(oct, 10), 0) >>> 0;
+  const ip4ToInt = (ip) => ip.split('.').reduce((int, oct) => (int << 8) + parseInt(oct, 10), 0) >>> 0;
 
   const isIp4InCidr = (ip, cidr) => {
     const [range, bits = 32] = cidr.split('/');
@@ -34,7 +34,7 @@ export function NoIpsLeftValidator(cluster: ClusterEntity, existingNodes: number
         if ((ipCount - existingNodes - control.value) >= 0) {
           return null;
         } else {
-          return {'ipsMissing': true};
+          return {ipsMissing: true};
         }
       }
     } else {
