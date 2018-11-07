@@ -12,7 +12,7 @@ import { ApiService, ProjectService, UserService } from '../../services';
 @Component({
   selector: 'kubermatic-sidenav',
   templateUrl: './sidenav.component.html',
-  styleUrls: ['./sidenav.component.scss']
+  styleUrls: ['./sidenav.component.scss'],
 })
 
 export class SidenavComponent implements OnInit, OnDestroy {
@@ -35,11 +35,11 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.loadProjects();
 
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(data => {
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((data) => {
       for (const i in this.projects) {
         if (this.compareProjectsEquality(this.projects[i], data)) {
           this.selectedProject = data;
-          this.userService.currentUserGroup(this.projects[i].id).subscribe(group => {
+          this.userService.currentUserGroup(this.projects[i].id).subscribe((group) => {
             this.userGroup = group;
           });
           return;
@@ -61,7 +61,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   private registerProjectRefreshInterval(): void {
     this.subscriptions.push(interval(this.notActiveProjectRefreshInterval).subscribe(() => {
       if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
-        this.api.getProjects().toPromise().then(res => {
+        this.api.getProjects().toPromise().then((res) => {
           this.projects = res;
           for (const i in this.projects) {
             if (this.compareProjectsEquality(this.projects[i], this.selectedProject)) {
@@ -89,7 +89,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   public loadProjects(): void {
-    this.api.getProjects().subscribe(res => {
+    this.api.getProjects().subscribe((res) => {
       this.projects = res;
       const projectFromStorage = this.projectService.getProjectFromStorage();
       if (!!projectFromStorage) {
@@ -97,7 +97,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
           if (this.compareProjectsEquality(this.projects[i], projectFromStorage)) {
             this.changeSelectedProject(this.projects[i]);
             this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-            this.userService.currentUserGroup(this.projects[i].id).subscribe(group => {
+            this.userService.currentUserGroup(this.projects[i].id).subscribe((group) => {
               this.userGroup = group;
             });
           }
@@ -124,7 +124,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   public addProject(): void {
     const modal = this.dialog.open(AddProjectComponent);
-    const sub = modal.afterClosed().subscribe(added => {
+    const sub = modal.afterClosed().subscribe((added) => {
       if (added) {
         this.loadProjects();
         this.router.navigate(['/projects']);

@@ -13,7 +13,7 @@ export function fakeProjects(): ProjectEntity[] {
       id: '234ab5cd6e',
       name: 'new-project-2',
       status: 'Active',
-    }
+    },
   ];
 }
 

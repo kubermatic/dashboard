@@ -9,7 +9,7 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-hetzner-add-node',
   templateUrl: './hetzner-add-node.component.html',
-  styleUrls: ['./hetzner-add-node.component.scss']
+  styleUrls: ['./hetzner-add-node.component.scss'],
 })
 
 export class HetznerAddNodeComponent implements OnInit, OnDestroy {
@@ -26,7 +26,7 @@ export class HetznerAddNodeComponent implements OnInit, OnDestroy {
     this.hetznerNodeForm = new FormGroup({
       type: new FormControl(this.nodeData.node.spec.cloud.hetzner.type, Validators.required),
     });
-    this.subscriptions.push(this.hetznerNodeForm.valueChanges.subscribe(data => {
+    this.subscriptions.push(this.hetznerNodeForm.valueChanges.subscribe((data) => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 

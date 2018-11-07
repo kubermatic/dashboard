@@ -17,7 +17,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('EditSSHKeysComponent', () => {
@@ -34,13 +34,13 @@ describe('EditSSHKeysComponent', () => {
       ],
       declarations: [
         EditSSHKeysComponent,
-        EditSSHKeysItemComponent
+        EditSSHKeysItemComponent,
       ],
       providers: [
         { provide: ApiService, useValue: apiMock },
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService},
-        MatDialog
+        MatDialog,
       ],
     }).compileComponents();
   }));

@@ -18,7 +18,7 @@ const modules: any[] = [
   NgReduxTestingModule,
   BrowserAnimationsModule,
   ClipboardModule,
-  SimpleNotificationsModule.forRoot()
+  SimpleNotificationsModule.forRoot(),
 ];
 
 function setMockNgRedux<T>(fixture: ComponentFixture<T>, toast: NotificationToast): void {
@@ -38,7 +38,7 @@ describe('NotificationComponent', () => {
         ...modules,
       ],
       declarations: [
-        NotificationComponent
+        NotificationComponent,
       ],
       providers: [
         { provide: NotificationsService, useClass: NotificationMockService },

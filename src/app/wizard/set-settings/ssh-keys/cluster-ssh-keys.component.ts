@@ -14,7 +14,7 @@ import { UserGroupConfig } from '../../../shared/model/Config';
 @Component({
   selector: 'kubermatic-cluster-ssh-keys',
   templateUrl: './cluster-ssh-keys.component.html',
-  styleUrls: ['./cluster-ssh-keys.component.scss']
+  styleUrls: ['./cluster-ssh-keys.component.scss'],
 })
 export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -40,10 +40,10 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.project = this.projectService.project;
 
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
       this.project = project;
       this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-      this.userService.currentUserGroup(this.project.id).subscribe(group => {
+      this.userService.currentUserGroup(this.project.id).subscribe((group) => {
         this.userGroup = group;
       });
     }));
@@ -54,7 +54,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     }
     this.keysForm.controls.keys.patchValue(keyNames);
 
-    this.keysFormSub = this.keysForm.valueChanges.subscribe(data => {
+    this.keysFormSub = this.keysForm.valueChanges.subscribe((data) => {
       this.setClusterSSHKeysSpec();
     });
 
@@ -67,7 +67,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   reloadKeys(): void {
-    this.keysSub = this.api.getSSHKeys(this.project.id).subscribe(sshKeys => {
+    this.keysSub = this.api.getSSHKeys(this.project.id).subscribe((sshKeys) => {
       this.keys = sshKeys.sort((a, b) => {
         return a.name.localeCompare(b.name);
       });
@@ -79,7 +79,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent);
     dialogRef.componentInstance.projectID = this.project.id;
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         if (this.keysSub) {
           this.keysSub.unsubscribe();

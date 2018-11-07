@@ -8,7 +8,7 @@ import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
 @Component({
   selector: 'kubermatic-revoke-admin-token',
   templateUrl: './revoke-admin-token.component.html',
-  styleUrls: ['./revoke-admin-token.component.scss']
+  styleUrls: ['./revoke-admin-token.component.scss'],
 })
 
 export class RevokeAdminTokenComponent implements OnInit {
@@ -23,7 +23,7 @@ export class RevokeAdminTokenComponent implements OnInit {
   ngOnInit(): void { }
 
   public revokeAdminToken(): void {
-    this.api.editToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.adminToken).subscribe(res => {
+    this.api.editToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.adminToken).subscribe((res) => {
       NotificationActions.success('Success', `Revoke Admin Token successfully`);
       this.dialogRef.close(res);
     });

@@ -10,14 +10,14 @@ import {
   OpenstackNetwork,
   OpenstackSecurityGroup,
   OpenstackSubnet,
-  OpenstackTenant
+  OpenstackTenant,
 } from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import { Config } from '../../../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-openstack-cluster-settings',
   templateUrl: './openstack.component.html',
-  styleUrls: ['./openstack.component.scss']
+  styleUrls: ['./openstack.component.scss'],
 })
 export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -71,7 +71,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             floatingIpPool: this.openstackSettingsForm.controls.floatingIpPool.value,
             securityGroups: this.openstackSettingsForm.controls.securityGroups.value,
             network: this.openstackSettingsForm.controls.network.value,
-            subnetID: this.openstackSettingsForm.controls.subnetId.value
+            subnetID: this.openstackSettingsForm.controls.subnetId.value,
           },
           dc: this.cluster.spec.cloud.dc,
         },
@@ -79,7 +79,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       });
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
   }
@@ -96,7 +96,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.loadingOptionalTenants = true;
     this.subscriptions.push(this.api.getOpenStackTenantsForWizard(this.openstackSettingsForm.controls.username.value,
       this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
-      tenants => {
+      (tenants) => {
         if (!!tenants && tenants.length > 0) {
           const sortedTenants = tenants.sort((a, b) => {
             return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
@@ -129,13 +129,13 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.loadingOptionalSettings = true;
     this.subscriptions.push(this.api.getOpenStackNetworkForWizard(this.openstackSettingsForm.controls.username.value,
       this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value,
-      this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(networks => {
+      this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe((networks) => {
         networks = networks.sort((a, b) => {
           return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
         });
 
-        this.network = networks.filter(network => network.external !== true);
-        this.floatingIpPool = networks.filter(floatingIpPool => floatingIpPool.external === true);
+        this.network = networks.filter((network) => network.external !== true);
+        this.floatingIpPool = networks.filter((floatingIpPool) => floatingIpPool.external === true);
 
         if (this.network.length > 0 && this.openstackSettingsForm.controls.network.value !== '0') {
           this.openstackSettingsForm.controls.network.setValue(this.cluster.spec.cloud.openstack.network);
@@ -150,7 +150,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.api.getOpenStackSecurityGroupsForWizard(this.openstackSettingsForm.controls.username.value,
       this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value,
       this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc).subscribe(
-      securityGroups => {
+      (securityGroups) => {
         const sortedSecurityGroups = securityGroups.sort((a, b) => {
           return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
         });
@@ -175,7 +175,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.api.getOpenStackSubnetIdsForWizard(this.openstackSettingsForm.controls.username.value,
       this.openstackSettingsForm.controls.password.value, this.openstackSettingsForm.controls.tenant.value,
       this.openstackSettingsForm.controls.domain.value, this.cluster.spec.cloud.dc, this.openstackSettingsForm.controls.network.value).subscribe(
-      subnets => {
+      (subnets) => {
         const sortedSubnetIds = subnets.sort((a, b) => {
           return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
         });

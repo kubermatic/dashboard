@@ -14,7 +14,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('ClusterSecretsComponent', () => {
@@ -27,12 +27,12 @@ describe('ClusterSecretsComponent', () => {
         ...modules,
       ],
       declarations: [
-        ClusterSecretsComponent
+        ClusterSecretsComponent,
       ],
       providers: [
         { provide: HealthService, useClass: HealthMockService },
         { provide: AppConfigService, useClass: AppConfigMockService },
-        MatDialog
+        MatDialog,
       ],
     }).compileComponents();
   }));

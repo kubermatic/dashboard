@@ -15,7 +15,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   RouterTestingModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('SSHKeyItemComponent', () => {

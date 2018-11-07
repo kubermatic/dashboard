@@ -8,7 +8,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 @Component({
   selector: 'kubermatic-digitalocean-cluster-settings',
   templateUrl: './digitalocean.component.html',
-  styleUrls: ['./digitalocean.component.scss']
+  styleUrls: ['./digitalocean.component.scss'],
 })
 export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -22,7 +22,7 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
       token: new FormControl(this.cluster.spec.cloud.digitalocean.token, [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.digitaloceanSettingsFormSub = this.digitaloceanSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(data => {
+    this.digitaloceanSettingsFormSub = this.digitaloceanSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           digitalocean: {

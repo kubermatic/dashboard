@@ -10,7 +10,7 @@ import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange
 @Component({
   selector: 'kubermatic-vsphere-options',
   templateUrl: './vsphere-options.component.html',
-  styleUrls: ['./vsphere-options.component.scss']
+  styleUrls: ['./vsphere-options.component.scss'],
 })
 
 export class VSphereOptionsComponent implements OnInit, OnDestroy {
@@ -31,12 +31,12 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     }));
 
-    this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe(data => {
+    this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe((data) => {
       this.setImage(data);
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe(data => {
+    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
 
@@ -47,7 +47,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
-    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe(res => {
+    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((res) => {
       let coreosTemplate = '';
       let centosTemplate = '';
       let ubuntuTemplate = '';

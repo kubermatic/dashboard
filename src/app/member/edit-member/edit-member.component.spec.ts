@@ -15,7 +15,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('EditProjectComponent', () => {
@@ -31,7 +31,7 @@ describe('EditProjectComponent', () => {
         ...modules,
       ],
       declarations: [
-        EditMemberComponent
+        EditMemberComponent,
       ],
       providers: [
         { provide: MatDialogRef, useClass: MatDialogRefMock },

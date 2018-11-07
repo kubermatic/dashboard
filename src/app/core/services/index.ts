@@ -21,6 +21,5 @@ export {
   WizardService,
   ProjectService,
   HealthService,
-  UserService
+  UserService,
 };
-

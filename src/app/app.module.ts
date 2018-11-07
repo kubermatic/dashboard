@@ -34,12 +34,12 @@ const appInitializerFn = (appConfig: AppConfigService) => {
     AppRoutingModule,
     NgReduxFormModule,
     NgReduxModule,
-    RouterModule
+    RouterModule,
   ],
   declarations: [
     KubermaticComponent,
     DashboardComponent,
-    MobileNavigationComponent
+    MobileNavigationComponent,
   ],
   providers: [
     AppConfigService,
@@ -47,19 +47,19 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       provide: APP_INITIALIZER,
       useFactory: appInitializerFn,
       multi: true,
-      deps: [AppConfigService]
+      deps: [AppConfigService],
     },
     ProjectService,
     UserService,
-    GoogleAnalyticsService
+    GoogleAnalyticsService,
   ],
   entryComponents: [
     MobileNavigationComponent,
     AddProjectComponent,
     AddMemberComponent,
-    EditMemberComponent
+    EditMemberComponent,
   ],
-  bootstrap: [KubermaticComponent]
+  bootstrap: [KubermaticComponent],
 })
 
 export class AppModule {

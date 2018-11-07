@@ -26,15 +26,15 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
               private healthService: HealthService) {}
 
   public ngOnInit(): void {
-    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(result => {
+    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((result) => {
       this.nodeDC = result;
-      this.dcService.getDataCenter(this.nodeDC.spec.seed).subscribe(seedRes => {
+      this.dcService.getDataCenter(this.nodeDC.spec.seed).subscribe((seedRes) => {
         this.seedDC = seedRes;
       });
     });
 
     if (!!this.seedDC && this.getClusterItemClass() !== 'statusDeleting' && !this.cluster.deletionTimestamp) {
-      this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.projectID).subscribe(health => {
+      this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.projectID).subscribe((health) => {
         this.health = health;
       });
     }
@@ -84,7 +84,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
 
   public getDatacenter(): string {
     let datacenter: string;
-    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe(res => {
+    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((res) => {
       datacenter = res.spec.seed;
     });
     return datacenter;

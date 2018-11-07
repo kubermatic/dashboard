@@ -18,7 +18,7 @@ import { HetznerProviderSettingsComponent } from './hetzner-provider-settings.co
 const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
-  SharedModule
+  SharedModule,
 ];
 
 describe('HetznerProviderSettingsComponent', () => {
@@ -42,7 +42,7 @@ describe('HetznerProviderSettingsComponent', () => {
       providers: [
         ClusterService,
         { provide: ApiService, useClass: ApiMockService },
-        { provide: MatDialogRef, useClass: MatDialogRefMock }
+        { provide: MatDialogRef, useClass: MatDialogRefMock },
       ],
     }).compileComponents();
   });

@@ -10,7 +10,7 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-openstack-add-node',
   templateUrl: './openstack-add-node.component.html',
-  styleUrls: ['./openstack-add-node.component.scss']
+  styleUrls: ['./openstack-add-node.component.scss'],
 })
 export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public cloudSpec: CloudSpec;
@@ -94,11 +94,11 @@ export class OpenstackAddNodeComponent implements OnInit, OnDestroy, OnChanges {
       this.loadingFlavors = true;
       this.subscriptions.push(this.api.getOpenStackFlavorsForWizard(this.cloudSpec.openstack.username,
         this.cloudSpec.openstack.password, this.cloudSpec.openstack.tenant, this.cloudSpec.openstack.domain,
-        this.cloudSpec.dc).subscribe(flavors => this.handleFlavours(flavors)));
+        this.cloudSpec.dc).subscribe((flavors) => this.handleFlavours(flavors)));
     } else {
       this.loadingFlavors = true;
       this.subscriptions.push(this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId)
-        .subscribe(flavors => this.handleFlavours(flavors)));
+        .subscribe((flavors) => this.handleFlavours(flavors)));
     }
   }
 }

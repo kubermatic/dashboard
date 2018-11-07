@@ -9,26 +9,26 @@ const routes: Routes = [
   {
     path: '',
     component: FrontpageComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'terms-of-service',
     component: TermsOfServiceComponent,
-    data: { title: 'Terms of Service' }
+    data: { title: 'Terms of Service' },
   },
   {
     path: '404',
-    component: PageNotFoundComponent
+    component: PageNotFoundComponent,
   },
   {
     path: '**',
-    redirectTo: '404'
+    redirectTo: '404',
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
 export class PagesRoutingModule {
 }

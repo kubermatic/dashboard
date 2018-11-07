@@ -26,5 +26,5 @@ export const StoreReducer = composeReducers(
     auth: AuthReducer,
     breadcrumb: BreadcrumbReducer,
     notification: NotificationReducer,
-  })
+  }),
 );

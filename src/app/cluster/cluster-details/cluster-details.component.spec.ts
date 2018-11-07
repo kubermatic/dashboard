@@ -61,13 +61,13 @@ describe('ClusterDetailsComponent', () => {
         BrowserAnimationsModule,
         SlimLoadingBarModule.forRoot(),
         RouterTestingModule,
-        SharedModule
+        SharedModule,
       ],
       declarations: [
         ClusterDetailsComponent,
         ClusterHealthStatusComponent,
         ClusterSecretsComponent,
-        NodeListComponent
+        NodeListComponent,
       ],
       providers: [
         { provide: ApiService, useValue: apiMock },
@@ -80,7 +80,7 @@ describe('ClusterDetailsComponent', () => {
         { provide: AppConfigService, useClass: AppConfigMockService },
         MatDialog,
 
-        InitialNodeDataService
+        InitialNodeDataService,
       ],
     }).compileComponents();
   }));
@@ -151,13 +151,13 @@ describe('ClusterDetailsComponent', () => {
       {
         version: '1.8.5',
         allowedVersions: ['1.8.5'],
-        default: false
+        default: false,
       },
       {
         version: '1.8.6',
         allowedVersions: ['1.8.6'],
-        default: false
-      }
+        default: false,
+      },
     ]));
     fixture.detectChanges();
     tick();
@@ -171,8 +171,8 @@ describe('ClusterDetailsComponent', () => {
       {
         version: '1.8.5',
         allowedVersions: ['1.8.5'],
-        default: false
-      }
+        default: false,
+      },
     ]));
     fixture.detectChanges();
     tick();
@@ -186,13 +186,13 @@ describe('ClusterDetailsComponent', () => {
       {
         version: '1.8.5',
         allowedVersions: ['1.8.5'],
-        default: false
+        default: false,
       },
       {
         version: '1.8.4',
         allowedVersions: ['1.8.4'],
-        default: false
-      }
+        default: false,
+      },
     ]));
     fixture.detectChanges();
     tick();
@@ -206,18 +206,18 @@ describe('ClusterDetailsComponent', () => {
       {
         version: '1.8.5',
         allowedVersions: ['1.8.5'],
-        default: false
+        default: false,
       },
       {
         version: '1.8.4',
         allowedVersions: ['1.8.4'],
-        default: false
+        default: false,
       },
       {
         version: '1.8.6',
         allowedVersions: ['1.8.6'],
-        default: false
-      }
+        default: false,
+      },
     ]));
     fixture.detectChanges();
     tick();

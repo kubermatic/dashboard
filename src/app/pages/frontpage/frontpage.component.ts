@@ -6,7 +6,7 @@ import { Auth } from '../../core/services';
 @Component({
   selector: 'kubermatic-frontpage',
   templateUrl: './frontpage.component.html',
-  styleUrls: ['./frontpage.component.scss']
+  styleUrls: ['./frontpage.component.scss'],
 })
 export class FrontpageComponent implements OnInit {
   public myStyle: object = {};
@@ -50,12 +50,12 @@ export class FrontpageComponent implements OnInit {
           value: 100,
         },
         color: {
-          value: '#fff'
+          value: '#fff',
         },
         shape: {
           type: 'circle',
         },
-      }
+      },
     };
   }
 

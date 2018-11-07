@@ -5,7 +5,7 @@ import { ErrorNotificationsInterceptor } from './error-notifications.service';
 describe('ErrorNotificationsInterceptorService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ErrorNotificationsInterceptor]
+      providers: [ErrorNotificationsInterceptor],
     });
   });
 

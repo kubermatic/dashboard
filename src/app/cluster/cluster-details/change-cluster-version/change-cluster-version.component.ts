@@ -12,7 +12,7 @@ import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 @Component({
   selector: 'kubermatic-change-cluster-version',
   templateUrl: './change-cluster-version.component.html',
-  styleUrls: ['./change-cluster-version.component.scss']
+  styleUrls: ['./change-cluster-version.component.scss'],
 })
 export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
@@ -34,7 +34,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
     }
 
     this.project = this.projectService.project;
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe(project => {
+    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
       this.project = project;
     }));
 
@@ -45,10 +45,10 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
     const patch: ClusterEntityPatch = {
       spec: {
         version: this.selectedVersion,
-      }
+      },
     };
 
-    this.api.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe(r => {
+    this.api.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe((r) => {
       this.cluster = r;
       this.dialogRef.close();
       NotificationActions.success('Success', `Cluster Version is being changed`);

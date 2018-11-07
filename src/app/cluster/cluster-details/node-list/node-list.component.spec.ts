@@ -16,7 +16,7 @@ const modules: any[] = [
   BrowserModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('NodeComponent', () => {
@@ -29,12 +29,12 @@ describe('NodeComponent', () => {
         ...modules,
       ],
       declarations: [
-        NodeListComponent
+        NodeListComponent,
       ],
       providers: [
         { provide: UserService, useClass: UserMockService },
         { provide: AppConfigService, useClass: AppConfigMockService },
-        MatDialog
+        MatDialog,
       ],
     }).compileComponents();
   }));
@@ -70,12 +70,12 @@ describe('NodeComponent', () => {
     expect(component.getNodeHealthStatus(nodes[0], 0)).toEqual({
       color: green,
       status: 'Running',
-      class: 'statusRunning'
+      class: 'statusRunning',
     }, 'should return classes for green icon');
     expect(component.getNodeHealthStatus(nodes[1], 0)).toEqual({
       color: orange,
       status: 'Pending',
-      class: 'statusWaiting'
+      class: 'statusWaiting',
     }, 'should return classes for orange icon');
   });
 });

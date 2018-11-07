@@ -13,14 +13,14 @@ export class AuthActions extends ActionBase {
   static login(profile: any[], token: string): Action {
     return {
       type: AuthActions.LOGGED_IN,
-      payload: { profile, token }
+      payload: { profile, token },
     };
   }
 
   @dispatch()
   static logout(): Action {
     return {
-      type: AuthActions.LOGGED_OUT
+      type: AuthActions.LOGGED_OUT,
     };
   }
 
@@ -28,7 +28,7 @@ export class AuthActions extends ActionBase {
   static fetchProfile(profile: any[]): Action {
     return {
       type: AuthActions.FETCH_PROFILE,
-      payload: { profile }
+      payload: { profile },
     };
   }
 }

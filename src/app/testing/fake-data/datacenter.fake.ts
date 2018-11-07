@@ -8,18 +8,18 @@ export function fakeDigitaloceanDatacenter(): DataCenterEntity {
       uid: '',
       creationTimestamp: new Date(),
       labels: new Map(),
-      annotations: new Map()
+      annotations: new Map(),
     },
     seed: false,
     spec: {
       seed: 'europe-west3-c',
       country: 'DE',
       digitalocean: {
-        region: 'fra1'
+        region: 'fra1',
       },
       location: 'Frankfurt',
-      provider: 'digitalocean'
-    }
+      provider: 'digitalocean',
+    },
   };
 }
 
@@ -31,18 +31,18 @@ export function fakeAWSDatacenter(): DataCenterEntity {
       uid: '',
       creationTimestamp: new Date(),
       labels: new Map(),
-      annotations: new Map()
+      annotations: new Map(),
     },
     seed: false,
     spec: {
       seed: 'europe-west3-c',
       country: 'DE',
       aws: {
-        region: 'fra1'
+        region: 'fra1',
       },
       location: 'Frankfurt',
-      provider: 'aws'
-    }
+      provider: 'aws',
+    },
   };
 }
 
@@ -54,7 +54,7 @@ export function fakeOpenstackDatacenter(): DataCenterEntity {
       uid: '',
       creationTimestamp: new Date(),
       labels: new Map(),
-      annotations: new Map()
+      annotations: new Map(),
     },
     seed: false,
     spec: {
@@ -72,8 +72,8 @@ export function fakeOpenstackDatacenter(): DataCenterEntity {
 
       },
       location: 'Frankfurt',
-      provider: 'openstack'
-    }
+      provider: 'openstack',
+    },
   };
 }
 
@@ -85,7 +85,7 @@ export function fakeBringyourownSeedDatacenter(): DataCenterEntity {
       uid: '',
       creationTimestamp: new Date(),
       labels: new Map(),
-      annotations: new Map()
+      annotations: new Map(),
     },
     seed: true,
     spec: {
@@ -93,8 +93,8 @@ export function fakeBringyourownSeedDatacenter(): DataCenterEntity {
       country: 'DE',
       bringyourown: {},
       location: 'Frankfurt',
-      provider: 'bringyourown'
-    }
+      provider: 'bringyourown',
+    },
   };
 }
 
@@ -106,18 +106,18 @@ export function fakeAzureDatacenter(): DataCenterEntity {
       uid: '',
       creationTimestamp: new Date(),
       labels: new Map(),
-      annotations: new Map()
+      annotations: new Map(),
     },
     seed: false,
     spec: {
       azure: {
-        location: 'westeurope'
+        location: 'westeurope',
       },
       country: 'NL',
       location: 'Azure West europe',
       provider: 'azure',
-      seed: 'europe-west3-c'
-    }
+      seed: 'europe-west3-c',
+    },
   };
 }
 
@@ -131,6 +131,6 @@ export function fakeNodeDatacenters(): DataCenterEntity[] {
     fakeAWSDatacenter(),
     fakeOpenstackDatacenter(),
     fakeAzureDatacenter(),
-    fakeBringyourownSeedDatacenter()
+    fakeBringyourownSeedDatacenter(),
   ];
 }

@@ -16,7 +16,7 @@ const modules: any[] = [
   RouterTestingModule,
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
-  SharedModule
+  SharedModule,
 ];
 
 describe('PageNotFoundComponent', () => {
@@ -31,11 +31,11 @@ describe('PageNotFoundComponent', () => {
         ...modules,
       ],
       declarations: [
-        PageNotFoundComponent
+        PageNotFoundComponent,
       ],
       providers: [
         { provide: Router, useClass: RouterStub },
-        { provide: Auth, useClass: AuthMockService }
+        { provide: Auth, useClass: AuthMockService },
       ],
     }).compileComponents();
   });
