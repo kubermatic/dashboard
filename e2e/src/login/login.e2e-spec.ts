@@ -1,5 +1,5 @@
-import { LoginPage } from './login.po';
 import { browser } from 'protractor';
+import { LoginPage } from './login.po';
 
 describe('login page', () => {
   const page = new LoginPage();

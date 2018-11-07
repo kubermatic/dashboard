@@ -1,5 +1,5 @@
-import { LoginPage } from '../../login/login.po';
 import { DexPage } from '../../dex/dex.po';
+import { LoginPage } from '../../login/login.po';
 
 describe('login story', () => {
   const loginPage = new LoginPage();
