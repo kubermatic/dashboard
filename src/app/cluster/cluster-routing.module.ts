@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
-import { AuthGuard } from './../core/services/auth/auth.guard';
-
 import { ClusterDetailsComponent } from '../cluster/cluster-details/cluster-details.component';
+import { AuthGuard } from './../core/services/auth/auth.guard';
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
 
 const routes: Routes = [

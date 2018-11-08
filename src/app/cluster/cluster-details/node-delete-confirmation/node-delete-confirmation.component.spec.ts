@@ -1,14 +1,13 @@
 import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { of } from 'rxjs';
-import { SharedModule } from '../../../shared/shared.module';
-
-import { MatDialogRef } from '@angular/material';
 import { ApiService } from '../../../core/services/api/api.service';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import { SharedModule } from '../../../shared/shared.module';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { nodeFake } from '../../../testing/fake-data/node.fake';

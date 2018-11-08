@@ -7,9 +7,8 @@ import { ParticlesModule } from 'angular-particle';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { SharedModule } from '../../shared/shared.module';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
-import { RouterStub } from './../../testing/router-stubs';
-
 import { Auth } from './../../core/services/index';
+import { RouterStub } from './../../testing/router-stubs';
 import { FrontpageComponent } from './frontpage.component';
 
 const modules: any[] = [

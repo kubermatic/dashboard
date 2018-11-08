@@ -1,17 +1,16 @@
 import { HttpClientModule } from '@angular/common/http';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { MatDialogRef } from '@angular/material';
 import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { of } from 'rxjs';
-import { SharedModule } from './../../shared/shared.module';
-import { RouterStub, RouterTestingModule } from './../../testing/router-stubs';
-
-import { MatDialogRef } from '@angular/material';
 import { ApiService } from '../../core/services/api/api.service';
 import { fakeProject } from '../../testing/fake-data/project.fake';
 import { ApiMockService } from '../../testing/services/api-mock.service';
+import { SharedModule } from './../../shared/shared.module';
+import { RouterStub, RouterTestingModule } from './../../testing/router-stubs';
 import { MatDialogRefMock } from './../../testing/services/mat-dialog-ref-mock';
 import { ProjectDeleteConfirmationComponent } from './project-delete-confirmation.component';
 
