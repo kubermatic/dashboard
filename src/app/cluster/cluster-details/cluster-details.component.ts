@@ -12,7 +12,7 @@ import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../shared/entity/HealthEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { UserGroupConfig } from '../../shared/model/Config';
+import { Config, UserGroupConfig } from '../../shared/model/Config';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
 import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
@@ -40,6 +40,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public projectID: string;
   public userGroup: string;
   public userGroupConfig: UserGroupConfig;
+  public config: Config = {share_kubeconfig: false};
   public updatesAvailable = false;
   public downgradesAvailable = false;
   public moreSshKeys = false;
@@ -63,6 +64,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    this.config = this.appConfigService.getConfig();
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
