@@ -1,30 +1,26 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { combineLatest, interval, ObservableInput, Subject, Subscription } from 'rxjs';
 import { retry, takeUntil } from 'rxjs/operators';
 import { gt, lt } from 'semver';
-
+import { AppConfigService } from '../../app-config.service';
+import { ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService } from '../../core/services';
 import { NotificationActions } from '../../redux/actions/notification.actions';
+import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
+import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
+import { HealthEntity } from '../../shared/entity/HealthEntity';
+import { NodeEntity } from '../../shared/entity/NodeEntity';
+import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import { UserGroupConfig } from '../../shared/model/Config';
+import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
 import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
 import { ClusterConnectComponent } from './cluster-connect/cluster-connect.component';
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { EditProviderSettingsComponent } from './edit-provider-settings/edit-provider-settings.component';
 import { EditSSHKeysComponent } from './edit-sshkeys/edit-sshkeys.component';
-
-import { AppConfigService } from '../../app-config.service';
-import { ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService } from '../../core/services';
-
-import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
-import { HealthEntity } from '../../shared/entity/HealthEntity';
-import { NodeEntity } from '../../shared/entity/NodeEntity';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { NodeProvider } from '../../shared/model/NodeProviderConstants';
-
-import { UserGroupConfig } from '../../shared/model/Config';
+import { ShareKubeconfigComponent } from './share-kubeconfig/share-kubeconfig.component';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -261,6 +257,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public connectClusterDialog(): void {
     const modal = this.dialog.open(ClusterConnectComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.projectID = this.projectID;
+  }
+
+  public shareConfigDialog(): void {
+    const modal = this.dialog.open(ShareKubeconfigComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
