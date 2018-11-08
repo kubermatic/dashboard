@@ -21,7 +21,7 @@ export class VSphereAddNodeComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.vsphereNodeForm = new FormGroup({
-      cpu: new FormControl(this.nodeData.node.spec.cloud.vsphere.cpus, [Validators.required, Validators.min(1)]),
+      cpu: new FormControl(this.nodeData.node.spec.cloud.vsphere.cpus, [Validators.required, Validators.min(1), Validators.max(8)]),
       memory: new FormControl(this.nodeData.node.spec.cloud.vsphere.memory, [Validators.required, Validators.min(512)]),
     });
 
