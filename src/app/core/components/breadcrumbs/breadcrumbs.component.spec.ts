@@ -5,10 +5,10 @@ import { BrowserModule, By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
+import { AuthMockService } from '../../../testing/services/auth-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
+import { ApiService, ProjectService } from '../../services';
 import { Auth } from '../../services/index';
-import { AuthMockService } from './../../../testing/services/auth-mock.service';
-import { ApiService, ProjectService } from './../../services';
 import { BreadcrumbsComponent } from './breadcrumbs.component';
 
 const modules: any[] = [

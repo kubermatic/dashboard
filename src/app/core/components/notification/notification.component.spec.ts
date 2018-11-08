@@ -6,8 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { NotificationsService, SimpleNotificationsModule } from 'angular2-notifications';
 import { ClipboardModule } from 'ngx-clipboard';
-import { NotificationToast, NotificationToastType } from './../../../shared/interfaces/notification-toast.interface';
-import { NotificationMockService } from './../../../testing/services/notification-mock.service';
+import { NotificationToast, NotificationToastType } from '../../../shared/interfaces/notification-toast.interface';
+import { NotificationMockService } from '../../../testing/services/notification-mock.service';
 import { NotificationComponent } from './notification.component';
 
 const modules: any[] = [

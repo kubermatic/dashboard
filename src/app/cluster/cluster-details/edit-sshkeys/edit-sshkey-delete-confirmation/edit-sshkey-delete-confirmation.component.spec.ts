@@ -3,10 +3,10 @@ import { MatDialogRef } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { ApiService } from './../../../../core/services';
-import { SharedModule } from './../../../../shared/shared.module';
-import { asyncData } from './../../../../testing/services/api-mock.service';
-import { MatDialogRefMock } from './../../../../testing/services/mat-dialog-ref-mock';
+import { ApiService } from '../../../../core/services';
+import { SharedModule } from '../../../../shared/shared.module';
+import { asyncData } from '../../../../testing/services/api-mock.service';
+import { MatDialogRefMock } from '../../../../testing/services/mat-dialog-ref-mock';
 import { EditSSHKeyDeleteConfirmationComponent } from './edit-sshkey-delete-confirmation.component';
 
 const modules: any[] = [

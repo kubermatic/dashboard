@@ -8,7 +8,7 @@ import { ApiService } from '../../../core/services/api/api.service';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
 import { SharedModule } from '../../../shared/shared.module';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
-import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
+import { MatDialogRefMock } from '../../../testing/services/mat-dialog-ref-mock';
 import { NodeDuplicateComponent } from './node-duplicate.component';
 
 const modules: any[] = [

@@ -5,13 +5,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ParticlesModule } from 'angular-particle';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { ApiService } from '../core/services/api/api.service';
+import { DatacenterService } from '../core/services/datacenter/datacenter.service';
+import { Auth } from '../core/services/index';
+import { ActivatedRouteStub, RouterStub } from '../testing/router-stubs';
 import { ApiMockService } from '../testing/services/api-mock.service';
 import { AuthMockService } from '../testing/services/auth-mock.service';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
-import { ApiService } from './../core/services/api/api.service';
-import { DatacenterService } from './../core/services/datacenter/datacenter.service';
-import { Auth } from './../core/services/index';
-import { ActivatedRouteStub, RouterStub } from './../testing/router-stubs';
 import { DashboardComponent } from './dashboard.component';
 
 const modules: any[] = [

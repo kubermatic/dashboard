@@ -4,11 +4,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
+import { Auth } from '../../core/services/index';
 import { SharedModule } from '../../shared/shared.module';
+import { RouterStub } from '../../testing/router-stubs';
 import { AuthMockService } from '../../testing/services/auth-mock.service';
 import { click } from '../../testing/utils/click-handler';
-import { Auth } from './../../core/services/index';
-import { RouterStub } from './../../testing/router-stubs';
 import { PageNotFoundComponent } from './page-not-found.component';
 
 const modules: any[] = [

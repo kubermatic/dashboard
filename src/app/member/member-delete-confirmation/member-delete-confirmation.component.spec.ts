@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { of } from 'rxjs';
 import { ApiService } from '../../core/services/api/api.service';
+import { SharedModule } from '../../shared/shared.module';
 import { fakeMember } from '../../testing/fake-data/member.fake';
 import { fakeProject } from '../../testing/fake-data/project.fake';
+import { RouterStub, RouterTestingModule } from '../../testing/router-stubs';
 import { ApiMockService } from '../../testing/services/api-mock.service';
-import { SharedModule } from './../../shared/shared.module';
-import { RouterStub, RouterTestingModule } from './../../testing/router-stubs';
-import { MatDialogRefMock } from './../../testing/services/mat-dialog-ref-mock';
+import { MatDialogRefMock } from '../../testing/services/mat-dialog-ref-mock';
 import { MemberDeleteConfirmationComponent } from './member-delete-confirmation.component';
 
 const modules: any[] = [

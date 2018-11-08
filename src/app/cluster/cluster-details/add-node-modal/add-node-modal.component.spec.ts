@@ -27,10 +27,10 @@ import { fakeDigitaloceanSizes } from '../../../testing/fake-data/addNodeModal.f
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacenter.fake';
 import { fakeDigitaloceanCreateNode, nodeDataFake } from '../../../testing/fake-data/node.fake';
+import { ActivatedRouteStub, RouterTestingModule } from '../../../testing/router-stubs';
 import { asyncData } from '../../../testing/services/api-mock.service';
 import { DatacenterMockService } from '../../../testing/services/datacenter-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
-import { ActivatedRouteStub, RouterTestingModule } from './../../../testing/router-stubs';
 import { AddNodeModalComponent } from './add-node-modal.component';
 
 describe('AddNodeModalComponent', () => {

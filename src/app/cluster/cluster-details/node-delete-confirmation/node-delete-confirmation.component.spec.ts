@@ -13,7 +13,7 @@ import { fakeDigitaloceanDatacenter } from '../../../testing/fake-data/datacente
 import { nodeFake } from '../../../testing/fake-data/node.fake';
 import { fakeProject } from '../../../testing/fake-data/project.fake';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
-import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
+import { MatDialogRefMock } from '../../../testing/services/mat-dialog-ref-mock';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 
 const modules: any[] = [
