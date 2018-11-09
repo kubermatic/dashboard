@@ -1,9 +1,7 @@
-import { Action } from '../../shared/interfaces/action.interface';
-import { ActionBase } from './action.base';
-
 import { dispatch } from '@angular-redux/store';
-
+import { Action } from '../../shared/interfaces/action.interface';
 import { NotificationToast, NotificationToastType } from '../../shared/interfaces/notification-toast.interface';
+import { ActionBase } from './action.base';
 
 export class NotificationActions extends ActionBase {
   static readonly className: string = 'NotificationActions';

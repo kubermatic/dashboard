@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
 import { FrontpageComponent } from './frontpage/frontpage.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component';

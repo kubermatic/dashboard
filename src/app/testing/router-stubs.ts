@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Directive, HostListener, Injectable, Input, NgModule } from '@angular/core';
 import { convertToParamMap, NavigationExtras, ParamMap } from '@angular/router';
-import { Subject } from 'rxjs/Subject';
-
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
 export { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Subject } from 'rxjs/Subject';
 
 @Directive({
   selector: '[routerLink]', // tslint:disable-line
