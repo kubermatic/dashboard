@@ -7,12 +7,12 @@ import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { SharedModule } from '../../../shared/shared.module';
+import { RouterStub } from '../../../testing/router-stubs';
 import { AuthMockService } from '../../../testing/services/auth-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
 import { UserMockService } from '../../../testing/services/user-mock.service';
 import { Auth, ProjectService, UserService } from '../../services/index';
 import { SidenavService } from '../sidenav/sidenav.service';
-import { RouterStub } from './../../../testing/router-stubs';
 import { NavigationComponent } from './navigation.component';
 
 const modules: any[] = [

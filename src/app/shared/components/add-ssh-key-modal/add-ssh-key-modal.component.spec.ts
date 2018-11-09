@@ -8,9 +8,9 @@ import { of } from 'rxjs';
 import { ApiService } from '../../../core/services/index';
 import { GoogleAnalyticsService } from '../../../google-analytics.service';
 import { fakeProject } from '../../../testing/fake-data/project.fake';
+import { RouterStub, RouterTestingModule } from '../../../testing/router-stubs';
 import { ApiMockService } from '../../../testing/services/api-mock.service';
-import { RouterStub, RouterTestingModule } from './../../../testing/router-stubs';
-import { MatDialogRefMock } from './../../../testing/services/mat-dialog-ref-mock';
+import { MatDialogRefMock } from '../../../testing/services/mat-dialog-ref-mock';
 import { AddSshKeyModalComponent } from './add-ssh-key-modal.component';
 
 const modules: any[] = [

@@ -5,7 +5,7 @@ import { AppConfigService } from '../../app-config.service';
 import { ProjectService, UserService } from '../../core/services';
 import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 import { UserGroupConfig } from '../../shared/model/Config';
-import { ProjectDeleteConfirmationComponent } from './../project-delete-confirmation/project-delete-confirmation.component';
+import { ProjectDeleteConfirmationComponent } from '../project-delete-confirmation/project-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-project-item',

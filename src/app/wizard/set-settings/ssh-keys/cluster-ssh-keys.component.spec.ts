@@ -2,15 +2,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AppConfigService } from '../../../app-config.service';
 import { ApiService, ProjectService, UserService, WizardService } from '../../../core/services';
 import { SharedModule } from '../../../shared/shared.module';
 import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
 import { fakeSSHKeys } from '../../../testing/fake-data/sshkey.fake';
 import { asyncData } from '../../../testing/services/api-mock.service';
+import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
-import { AppConfigService } from './../../../app-config.service';
-import { AppConfigMockService } from './../../../testing/services/app-config-mock.service';
-import { UserMockService } from './../../../testing/services/user-mock.service';
+import { UserMockService } from '../../../testing/services/user-mock.service';
 import { ClusterSSHKeysComponent } from './cluster-ssh-keys.component';
 
 describe('ClusterSSHKeys', () => {

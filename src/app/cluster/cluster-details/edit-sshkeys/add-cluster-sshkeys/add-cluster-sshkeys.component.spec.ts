@@ -3,15 +3,15 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { AppConfigService } from './../../../../app-config.service';
-import { ApiService, ProjectService, UserService } from './../../../../core/services';
-import { SharedModule } from './../../../../shared/shared.module';
-import { fakeSSHKeys } from './../../../../testing/fake-data/sshkey.fake';
-import { asyncData } from './../../../../testing/services/api-mock.service';
-import { AppConfigMockService } from './../../../../testing/services/app-config-mock.service';
-import { MatDialogRefMock } from './../../../../testing/services/mat-dialog-ref-mock';
-import { ProjectMockService } from './../../../../testing/services/project-mock.service';
-import { UserMockService } from './../../../../testing/services/user-mock.service';
+import { AppConfigService } from '../../../../app-config.service';
+import { ApiService, ProjectService, UserService } from '../../../../core/services';
+import { SharedModule } from '../../../../shared/shared.module';
+import { fakeSSHKeys } from '../../../../testing/fake-data/sshkey.fake';
+import { asyncData } from '../../../../testing/services/api-mock.service';
+import { AppConfigMockService } from '../../../../testing/services/app-config-mock.service';
+import { MatDialogRefMock } from '../../../../testing/services/mat-dialog-ref-mock';
+import { ProjectMockService } from '../../../../testing/services/project-mock.service';
+import { UserMockService } from '../../../../testing/services/user-mock.service';
 import { AddClusterSSHKeysComponent } from './add-cluster-sshkeys.component';
 
 const modules: any[] = [

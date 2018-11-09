@@ -7,23 +7,18 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
 import { MockComponent } from 'ng2-mock-component';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-
-import { SidenavComponent } from './sidenav.component';
-
 import { AppConfigService } from '../../../app-config.service';
-import { ApiService, ProjectService, UserService } from '../../services';
-
+import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 import { SharedModule } from '../../../shared/shared.module';
+import { fakeProjects } from '../../../testing/fake-data/project.fake';
 import { RouterLinkStubDirective, RouterTestingModule } from '../../../testing/router-stubs';
-import { click } from '../../../testing/utils/click-handler';
-
 import { asyncData } from '../../../testing/services/api-mock.service';
 import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
 import { ProjectMockService } from '../../../testing/services/project-mock.service';
 import { UserMockService } from '../../../testing/services/user-mock.service';
-
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
-import { fakeProjects } from '../../../testing/fake-data/project.fake';
+import { click } from '../../../testing/utils/click-handler';
+import { ApiService, ProjectService, UserService } from '../../services';
+import { SidenavComponent } from './sidenav.component';
 
 const modules: any[] = [
   BrowserModule,

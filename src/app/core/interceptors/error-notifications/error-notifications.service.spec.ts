@@ -1,5 +1,4 @@
 import { inject, TestBed } from '@angular/core/testing';
-
 import { ErrorNotificationsInterceptor } from './error-notifications.service';
 
 describe('ErrorNotificationsInterceptorService', () => {

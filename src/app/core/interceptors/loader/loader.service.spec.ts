@@ -1,5 +1,4 @@
 import { inject, TestBed } from '@angular/core/testing';
-
 import { LoaderInterceptor } from './loader.service';
 
 describe('LoaderInterceptorService', () => {

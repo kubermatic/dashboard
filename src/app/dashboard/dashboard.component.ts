@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
-import { BreadcrumbActions } from './../redux/actions/breadcrumb.actions';
+import { BreadcrumbActions } from '../redux/actions/breadcrumb.actions';
 
 @Component({
   selector: 'kubermatic-dashboard',
