@@ -6,19 +6,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { SharedModule } from './shared/shared.module';
-
 import { AppConfigService } from './app-config.service';
-import { SidenavService } from './core/components/sidenav/sidenav.service';
-import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, ProjectService, UserService } from './core/services/index';
-
 import { BreadcrumbsComponent } from './core/components/breadcrumbs/breadcrumbs.component';
 import { NavigationComponent } from './core/components/navigation/navigation.component';
 import { NotificationComponent } from './core/components/notification/notification.component';
 import { SidenavComponent } from './core/components/sidenav/sidenav.component';
-import { KubermaticComponent } from './kubermatic.component';
-
+import { SidenavService } from './core/components/sidenav/sidenav.service';
+import { ApiService, Auth, AUTH_PROVIDERS, AuthGuard, DatacenterService, ProjectService, UserService } from './core/services/index';
 import { GoogleAnalyticsService } from './google-analytics.service';
+import { KubermaticComponent } from './kubermatic.component';
+import { SharedModule } from './shared/shared.module';
 import { ApiMockService } from './testing/services/api-mock.service';
 import { AuthMockService } from './testing/services/auth-mock.service';
 import { DatacenterMockService } from './testing/services/datacenter-mock.service';

@@ -1,4 +1,4 @@
-import { CloudSpec } from './../../shared/entity/ClusterEntity';
+import { CloudSpec } from '../../shared/entity/ClusterEntity';
 
 export function doCloudSpecFake(): CloudSpec {
   return {
