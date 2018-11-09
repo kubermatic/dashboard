@@ -7,11 +7,10 @@ import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
 import { AppConfigService } from '../app-config.service';
 import { ApiService, UserService } from '../core/services';
 import { SharedModule } from '../shared/shared.module';
-import { RouterTestingModule } from '../testing/router-stubs';
+import { ActivatedRouteStub, RouterStub, RouterTestingModule } from '../testing/router-stubs';
 import { ApiMockService } from '../testing/services/api-mock.service';
 import { AppConfigMockService } from '../testing/services/app-config-mock.service';
 import { UserMockService } from '../testing/services/user-mock.service';
-import { ActivatedRouteStub, RouterStub } from './../testing/router-stubs';
 import { SSHKeyItemComponent } from './sshkey-item/sshkey-item.component';
 import { SSHKeyComponent } from './sshkey.component';
 

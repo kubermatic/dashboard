@@ -1,7 +1,6 @@
+import { dispatch } from '@angular-redux/store';
 import { Action } from '../../shared/interfaces/action.interface';
 import { ActionBase } from './action.base';
-
-import { dispatch } from '@angular-redux/store';
 
 export class BreadcrumbActions extends ActionBase {
   static readonly className: string = 'BreadcrumbActions';

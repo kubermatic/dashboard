@@ -1,15 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-
 import { DevToolsExtension, NgRedux } from '@angular-redux/store';
-import { INITIAL_STATE, Store, StoreReducer } from './redux/store';
-
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material';
-import { SidenavService } from './core/components/sidenav/sidenav.service';
-
+import { NavigationEnd, Router } from '@angular/router';
 import { AppConfigService } from './app-config.service';
+import { SidenavService } from './core/components/sidenav/sidenav.service';
 import { Auth } from './core/services';
 import { GoogleAnalyticsService } from './google-analytics.service';
+import { INITIAL_STATE, Store, StoreReducer } from './redux/store';
 import { Config } from './shared/model/Config';
 
 @Component({

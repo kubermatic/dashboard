@@ -10,9 +10,9 @@ import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import { fakeBringyourownSeedDatacenter } from '../../testing/fake-data/datacenter.fake';
 import { fakeHealth } from '../../testing/fake-data/health.fake';
 import { fakeProject } from '../../testing/fake-data/project.fake';
+import { RouterTestingModule } from '../../testing/router-stubs';
 import { HealthMockService } from '../../testing/services/health-mock.service';
 import { ProjectMockService } from '../../testing/services/project-mock.service';
-import { RouterTestingModule } from './../../testing/router-stubs';
 import { ClusterHealthStatusComponent } from './cluster-health-status.component';
 
 const modules: any[] = [

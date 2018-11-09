@@ -91,6 +91,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
   public loadProjects(): void {
     this.api.getProjects().subscribe((res) => {
       this.projects = res;
+
+      if (this.projects.length === 1) {
+        this.changeSelectedProject(this.projects[0]);
+        this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+        this.userService.currentUserGroup(this.projects[0].id).subscribe((group) => {
+          this.userGroup = group;
+        });
+        return;
+      }
+
       const projectFromStorage = this.projectService.getProjectFromStorage();
       if (!!projectFromStorage) {
         for (const i in this.projects) {

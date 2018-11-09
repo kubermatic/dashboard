@@ -1,7 +1,6 @@
-import { Observable } from 'rxjs';
-
 import { Injectable, ViewContainerRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
+import { Observable } from 'rxjs';
 import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
 
 @Injectable()

@@ -3,12 +3,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonToggleModule } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
 import { WizardService } from '../../core/services/wizard/wizard.service';
 import { SharedModule } from '../../shared/shared.module';
 import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
 import { fakeNodeDatacenters } from '../../testing/fake-data/datacenter.fake';
 import { asyncData } from '../../testing/services/api-mock.service';
-import { DatacenterService } from './../../core/services/datacenter/datacenter.service';
 import { SetProviderComponent } from './set-provider.component';
 
 describe('SetProviderComponent', () => {

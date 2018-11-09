@@ -24,12 +24,11 @@ import { MachineNetworksModule } from '../machine-networks/machine-networks.modu
 import { SharedModule } from '../shared/shared.module';
 import { masterVersionsFake } from '../testing/fake-data/cluster-spec.fake';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
-import { ActivatedRouteStub, RouterTestingModule } from '../testing/router-stubs';
+import { ActivatedRouteStub, RouterStub, RouterTestingModule } from '../testing/router-stubs';
 import { asyncData } from '../testing/services/api-mock.service';
 import { DatacenterMockService } from '../testing/services/datacenter-mock.service';
 import { HealthMockService } from '../testing/services/health-mock.service';
 import { ProjectMockService } from '../testing/services/project-mock.service';
-import { RouterStub } from './../testing/router-stubs';
 import { ProgressComponent } from './progress/progress.component';
 import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
 import { SetDatacenterComponent } from './set-datacenter/set-datacenter.component';
