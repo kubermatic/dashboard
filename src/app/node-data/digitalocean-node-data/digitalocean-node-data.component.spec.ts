@@ -1,15 +1,15 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ApiService } from '../../core/services';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { SharedModule } from '../../shared/shared.module';
-import { fakeDigitaloceanSizes } from '../../testing/fake-data/addNodeModal.fake';
-import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
-import { nodeDataFake } from '../../testing/fake-data/node.fake';
-import { asyncData } from '../../testing/services/api-mock.service';
-import { DigitaloceanNodeDataComponent } from './digitalocean-node-data.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ApiService} from '../../core/services';
+import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {SharedModule} from '../../shared/shared.module';
+import {fakeDigitaloceanSizes} from '../../testing/fake-data/addNodeModal.fake';
+import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
+import {nodeDataFake} from '../../testing/fake-data/node.fake';
+import {asyncData} from '../../testing/services/api-mock.service';
+import {DigitaloceanNodeDataComponent} from './digitalocean-node-data.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -25,18 +25,20 @@ describe('DigitaloceanNodeDataComponent', () => {
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizesForWizard']);
     apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        DigitaloceanNodeDataComponent,
-      ],
-      providers: [
-        AddNodeService,
-        { provide: ApiService, useValue: apiMock },
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            DigitaloceanNodeDataComponent,
+          ],
+          providers: [
+            AddNodeService,
+            {provide: ApiService, useValue: apiMock},
+          ],
+        })
+        .compileComponents();
   }));
 
   beforeEach(() => {

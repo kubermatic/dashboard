@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { CloudSpec } from '../../shared/entity/ClusterEntity';
-import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
-import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-hetzner-node-data',
@@ -12,14 +12,14 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 })
 
 export class HetznerNodeDataComponent implements OnInit, OnDestroy {
-  @Input() public cloudSpec: CloudSpec;
-  @Input() public nodeData: NodeData;
+  @Input() cloudSpec: CloudSpec;
+  @Input() nodeData: NodeData;
 
-  public types: string[] = NodeInstanceFlavors.Hetzner;
-  public hetznerNodeForm: FormGroup;
+  types: string[] = NodeInstanceFlavors.Hetzner;
+  hetznerNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService) { }
+  constructor(private addNodeService: AddNodeService) {}
 
   ngOnInit(): void {
     this.hetznerNodeForm = new FormGroup({

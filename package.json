@@ -9,16 +9,17 @@
   "scripts": {
     "start": "ng serve --hmr",
     "start:local": "ng serve --hmr --proxy-config proxy-local.conf.json",
-    "serve:mock": "concurrently --kill-others --prefix \"[{name}]\" --names \"mock-server,ng-serve\" \"node mock-server.js\" \"ng serve --port 8000 --hmr --proxy-config proxy-mock.conf.json\"",
+    "start:mock": "concurrently --kill-others --prefix \"[{name}]\" --names \"mock-server,ng-serve\" \"node mock-server.js\" \"ng serve --hmr --proxy-config proxy-mock.conf.json\"",
     "build": "ng build --prod",
-    "lint": "ng lint --type-check",
-    "tsfmt": "tsfmt --verify",
     "test": "ng test",
-    "test-headless": "ng test --browsers=ChromeHeadless --watch=false",
-    "test-firefox": "ng test --browsers=FirefoxAutoAllowGUM --watch=false",
+    "test:headless": "ng test --browsers=ChromeHeadless --watch=false",
+    "test:firefox": "ng test --browsers=FirefoxAutoAllowGUM --watch=false",
     "e2e": "ng e2e",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
-    "protractor": "protractor e2e/protractor.conf.js"
+    "protractor": "protractor e2e/protractor.conf.js",
+    "check": "gts check",
+    "fix": "gts fix",
+    "clean": "gts clean"
   },
   "dependencies": {
     "@angular-redux/form": "^9.0.1",
@@ -87,7 +88,7 @@
     "ts-node": "7.0.1",
     "tslint": "^5.8.0",
     "typescript": "^2.9.2",
-    "typescript-formatter": "7.2.2",
-    "webdriver-manager": "12.1.0"
+    "webdriver-manager": "12.1.0",
+    "gts": "^0.9.0"
   }
 }

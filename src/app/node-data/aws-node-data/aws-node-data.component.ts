@@ -1,11 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { WizardService } from '../../core/services';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { CloudSpec } from '../../shared/entity/ClusterEntity';
-import { NodeInstanceFlavors } from '../../shared/model/NodeProviderConstants';
-import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {WizardService} from '../../core/services';
+import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-aws-node-data',
@@ -14,17 +14,16 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 })
 
 export class AWSNodeDataComponent implements OnInit, OnDestroy {
-  @Input() public cloudSpec: CloudSpec;
-  @Input() public nodeData: NodeData;
-  public instanceTypes: string[] = NodeInstanceFlavors.AWS;
-  public diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
-  public awsNodeForm: FormGroup;
-  public tags: FormArray;
-  public hideOptional = true;
+  @Input() cloudSpec: CloudSpec;
+  @Input() nodeData: NodeData;
+  instanceTypes: string[] = NodeInstanceFlavors.AWS;
+  diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
+  awsNodeForm: FormGroup;
+  tags: FormArray;
+  hideOptional = true;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {
-  }
+  constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -78,12 +77,12 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     };
   }
 
-  getTagForm(form): any  {
+  getTagForm(form): any {
     return form.get('tags').controls;
   }
 
   addTag(): void {
-    this.tags = <FormArray> this.awsNodeForm.get('tags');
+    this.tags = this.awsNodeForm.get('tags') as FormArray;
     this.tags.push(new FormGroup({
       key: new FormControl(''),
       value: new FormControl(''),
@@ -91,7 +90,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   deleteTag(index: number): void {
-    const arrayControl = <FormArray> this.awsNodeForm.get('tags');
+    const arrayControl = this.awsNodeForm.get('tags') as FormArray;
     arrayControl.removeAt(index);
   }
 

@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { WizardService } from '../../../../core/services/wizard/wizard.service';
-import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {WizardService} from '../../../../core/services/wizard/wizard.service';
+import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-aws-cluster-settings',
@@ -12,20 +12,22 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 })
 export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  public awsSettingsForm: FormGroup;
-  public hideOptional = true;
+  awsSettingsForm: FormGroup;
+  hideOptional = true;
   private subscriptions: Subscription[] = [];
 
-  constructor(private wizardService: WizardService) { }
+  constructor(private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.awsSettingsForm = new FormGroup({
       accessKeyId: new FormControl(this.cluster.spec.cloud.aws.accessKeyId, Validators.required),
       secretAccessKey: new FormControl(this.cluster.spec.cloud.aws.secretAccessKey, Validators.required),
-      securityGroup: new FormControl(this.cluster.spec.cloud.aws.securityGroup, Validators.pattern('sg-(\\w{8}|\\w{17})')),
+      securityGroup:
+          new FormControl(this.cluster.spec.cloud.aws.securityGroup, Validators.pattern('sg-(\\w{8}|\\w{17})')),
       vpcId: new FormControl(this.cluster.spec.cloud.aws.vpcId, Validators.pattern('vpc-(\\w{8}|\\w{17})')),
       subnetId: new FormControl(this.cluster.spec.cloud.aws.subnetId, Validators.pattern('subnet-(\\w{8}|\\w{17})')),
-      routeTableId: new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
+      routeTableId:
+          new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
     });
 
     this.subscriptions.push(this.awsSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {

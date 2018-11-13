@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { WizardService } from '../../../../core/services/wizard/wizard.service';
-import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {WizardService} from '../../../../core/services/wizard/wizard.service';
+import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-azure-cluster-settings',
@@ -12,11 +12,11 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 })
 export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  public azureSettingsForm: FormGroup;
-  public hideOptional = true;
+  azureSettingsForm: FormGroup;
+  hideOptional = true;
   private subscriptions: Subscription[] = [];
 
-  constructor(private wizardService: WizardService) { }
+  constructor(private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.azureSettingsForm = new FormGroup({

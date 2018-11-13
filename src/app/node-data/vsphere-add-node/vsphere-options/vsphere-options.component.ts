@@ -1,11 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { DatacenterService, WizardService } from '../../../core/services';
-import { AddNodeService } from '../../../core/services/add-node/add-node.service';
-import { CloudSpec } from '../../../shared/entity/ClusterEntity';
-import { OperatingSystemSpec } from '../../../shared/entity/NodeEntity';
-import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {DatacenterService, WizardService} from '../../../core/services';
+import {AddNodeService} from '../../../core/services/add-node/add-node.service';
+import {CloudSpec} from '../../../shared/entity/ClusterEntity';
+import {OperatingSystemSpec} from '../../../shared/entity/NodeEntity';
+import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-vsphere-options',
@@ -16,12 +16,14 @@ import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange
 export class VSphereOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
-  public vsphereOptionsForm: FormGroup;
-  public hideOptional = true;
-  public defaultTemplate = 'ubuntu-template';
+  vsphereOptionsForm: FormGroup;
+  hideOptional = true;
+  defaultTemplate = 'ubuntu-template';
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService, private dcService: DatacenterService, private wizardService: WizardService) { }
+  constructor(
+      private addNodeService: AddNodeService, private dcService: DatacenterService,
+      private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.vsphereOptionsForm = new FormGroup({

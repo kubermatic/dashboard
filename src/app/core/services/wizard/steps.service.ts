@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs/Subject';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
 
 @Injectable()
 export class StepsService {
-
   private _currentStepIndex = new Subject<number>();
   currentStepIndexChanges$ = this._currentStepIndex.asObservable();
   private _currentStep = new Subject<Step>();
@@ -12,8 +11,7 @@ export class StepsService {
   private _steps = new Subject<Step[]>();
   stepsChanges$ = this._steps.asObservable();
 
-  constructor(public googleAnalyticsService: GoogleAnalyticsService) {
-  }
+  constructor(public googleAnalyticsService: GoogleAnalyticsService) {}
 
   changeCurrentStep(index: number, step: Step): void {
     this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationWizardStepChangedTo' + step.name);

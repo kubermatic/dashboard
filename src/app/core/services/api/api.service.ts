@@ -1,24 +1,21 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { environment } from '../../../../environments/environment';
-import { ClusterEntity, MasterVersion, Token } from '../../../shared/entity/ClusterEntity';
-import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
-import { CreateMemberEntity, MemberEntity } from '../../../shared/entity/MemberEntity';
-import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
-import { AzureSizes } from '../../../shared/entity/provider/azure/AzureSizeEntity';
-import { DigitaloceanSizes } from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {
-  OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup,
-  OpenstackSubnet, OpenstackTenant,
-} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import { VSphereNetwork } from '../../../shared/entity/provider/vsphere/VSphereEntity';
-import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { CreateClusterModel } from '../../../shared/model/CreateClusterModel';
-import { CreateProjectModel } from '../../../shared/model/CreateProjectModel';
-import { Auth } from '../auth/auth.service';
+import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {environment} from '../../../../environments/environment';
+import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
+import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
+import {NodeEntity} from '../../../shared/entity/NodeEntity';
+import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
+import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
+import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
+import {Auth} from '../auth/auth.service';
 
 @Injectable()
 export class ApiService {
@@ -36,17 +33,20 @@ export class ApiService {
   init(): Promise<any> {
     const dummy = '__dummy__';
     const url = `${this.restRoot}/projects/${dummy}/dc/${dummy}/clusters/${dummy}/nodedeployments`;
-    const headers = new HttpHeaders(); // It is important to skip authorization header here.
+    const headers = new HttpHeaders();  // It is important to skip authorization header here.
 
-    return this.http.get<any[]>(url, {headers}).toPromise().then((response) => {
-      this.isNodeDeploymentAPIAvailable_ = true;
-      return response;
-    }).catch((error: HttpErrorResponse) => {
-      // 404 and 405 are the status codes returned if endpoint path and method are not implemented.
-      // That's why if we encounter them we can assume that this functionality is not implemented on API side.
-      this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
-      return error;
-    });
+    return this.http.get<any[]>(url, {headers})
+        .toPromise()
+        .then((response) => {
+          this.isNodeDeploymentAPIAvailable_ = true;
+          return response;
+        })
+        .catch((error: HttpErrorResponse) => {
+          // 404 and 405 are the status codes returned if endpoint path and method are not implemented.
+          // That's why if we encounter them we can assume that this functionality is not implemented on API side.
+          this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
+          return error;
+        });
   }
 
   isNodeDeploymentAPIAvailable(): boolean {
@@ -55,116 +55,115 @@ export class ApiService {
 
   getClusterNodeDeployments(cluster: string, dc: string, projectID: string): Observable<any[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
-    return this.http.get<any[]>(url, { headers: this.headers });
+    return this.http.get<any[]>(url, {headers: this.headers});
   }
 
   getProjects(): Observable<ProjectEntity[]> {
     const url = `${this.restRoot}/projects`;
-    return this.http.get<ProjectEntity[]>(url, { headers: this.headers });
+    return this.http.get<ProjectEntity[]>(url, {headers: this.headers});
   }
 
   createProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
     const url = `${this.restRoot}/projects`;
-    return this.http.post<ProjectEntity>(url, createProjectModel, { headers: this.headers });
+    return this.http.post<ProjectEntity>(url, createProjectModel, {headers: this.headers});
   }
 
   deleteProject(projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, {headers: this.headers});
   }
 
   getClusters(dc: string, projectID: string): Observable<ClusterEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters`;
-    return this.http.get<ClusterEntity[]>(url, { headers: this.headers });
+    return this.http.get<ClusterEntity[]>(url, {headers: this.headers});
   }
 
   getCluster(cluster: string, dc: string, projectID: string): Observable<ClusterEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}`;
-    return this.http.get<ClusterEntity>(url, { headers: this.headers });
+    return this.http.get<ClusterEntity>(url, {headers: this.headers});
   }
 
   createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters`;
-    return this.http.post<ClusterEntity>(url, createClusterModel, { headers: this.headers });
+    return this.http.post<ClusterEntity>(url, createClusterModel, {headers: this.headers});
   }
 
   patchCluster(patch: ClusterEntityPatch, clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}`;
-    return this.http.patch<ClusterEntity>(url, patch, { headers: this.headers });
+    return this.http.patch<ClusterEntity>(url, patch, {headers: this.headers});
   }
 
   deleteCluster(cluster: string, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, {headers: this.headers});
   }
 
   getClusterNodes(cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes?hideInitialConditions=true`;
-    return this.http.get<NodeEntity[]>(url, { headers: this.headers });
+    return this.http.get<NodeEntity[]>(url, {headers: this.headers});
   }
 
   createClusterNode(cluster: ClusterEntity, node: NodeEntity, dc: string, projectID: string): Observable<NodeEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodes`;
-    return this.http.post<NodeEntity>(url, node, { headers: this.headers });
+    return this.http.post<NodeEntity>(url, node, {headers: this.headers});
   }
 
   deleteClusterNode(cluster: string, node: NodeEntity, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes/${node.id}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, {headers: this.headers});
   }
 
   getClusterSSHKeys(cluster: string, dc: string, projectID: string): Observable<SSHKeyEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys`;
-    return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
+    return this.http.get<SSHKeyEntity[]>(url, {headers: this.headers});
   }
 
   deleteClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyID}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, {headers: this.headers});
   }
 
   addClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyID}`;
-    return this.http.put(url, null, { headers: this.headers });
+    return this.http.put(url, null, {headers: this.headers});
   }
 
   getSSHKeys(projectID: string): Observable<SSHKeyEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/sshkeys`;
-    return this.http.get<SSHKeyEntity[]>(url, { headers: this.headers });
+    return this.http.get<SSHKeyEntity[]>(url, {headers: this.headers});
   }
 
   deleteSSHKey(sshkeyID: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/sshkeys/${sshkeyID}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, {headers: this.headers});
   }
 
   addSSHKey(sshKey: SSHKeyEntity, projectID: string): Observable<SSHKeyEntity> {
     const url = `${this.restRoot}/projects/${projectID}/sshkeys`;
-    return this.http.post<SSHKeyEntity>(url, sshKey, { headers: this.headers });
+    return this.http.post<SSHKeyEntity>(url, sshKey, {headers: this.headers});
   }
 
   getDigitaloceanSizesForWizard(token: string): Observable<DigitaloceanSizes> {
     this.headers = this.headers.set('DoToken', token);
     const url = `${this.restRoot}/providers/digitalocean/sizes`;
-    return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
+    return this.http.get<DigitaloceanSizes>(url, {headers: this.headers});
   }
 
   getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
     const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/digitalocean/sizes`;
-    return this.http.get<DigitaloceanSizes>(url, { headers: this.headers });
+    return this.http.get<DigitaloceanSizes>(url, {headers: this.headers});
   }
 
   getClusterUpgrades(projectID: string, dc: string, clusterID: string): Observable<MasterVersion[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/upgrades`;
-    return this.http.get<MasterVersion[]>(url, { headers: this.headers })
-      .pipe(catchError(() => {
-        return of<MasterVersion[]>([]);
-      }));
+    return this.http.get<MasterVersion[]>(url, {headers: this.headers}).pipe(catchError(() => {
+      return of<MasterVersion[]>([]);
+    }));
   }
 
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
-    return this.http.put<Token>(url, token, { headers: this.headers });
+    return this.http.put<Token>(url, token, {headers: this.headers});
   }
 
   private setOpenStackHeaders(username: string, password: string, domain: string, datacenterName: string): void {
@@ -174,43 +173,52 @@ export class ApiService {
     this.headers = this.headers.set('DatacenterName', datacenterName);
   }
 
-  getOpenStackFlavorsForWizard(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackFlavor[]> {
+  getOpenStackFlavorsForWizard(
+      username: string, password: string, tenant: string, domain: string,
+      datacenterName: string): Observable<OpenstackFlavor[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     this.headers = this.headers.set('Tenant', tenant);
     const url = `${this.restRoot}/providers/openstack/sizes`;
-    return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
+    return this.http.get<OpenstackFlavor[]>(url, {headers: this.headers});
   }
 
   getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
     const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/openstack/sizes`;
-    return this.http.get<OpenstackFlavor[]>(url, { headers: this.headers });
+    return this.http.get<OpenstackFlavor[]>(url, {headers: this.headers});
   }
 
-  getOpenStackTenantsForWizard(username: string, password: string, domain: string, datacenterName: string): Observable<OpenstackTenant[]> {
+  getOpenStackTenantsForWizard(username: string, password: string, domain: string, datacenterName: string):
+      Observable<OpenstackTenant[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     const url = `${this.restRoot}/providers/openstack/tenants`;
-    return this.http.get<OpenstackTenant[]>(url, { headers: this.headers });
+    return this.http.get<OpenstackTenant[]>(url, {headers: this.headers});
   }
 
-  getOpenStackSecurityGroupsForWizard(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackSecurityGroup[]> {
+  getOpenStackSecurityGroupsForWizard(
+      username: string, password: string, tenant: string, domain: string,
+      datacenterName: string): Observable<OpenstackSecurityGroup[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     this.headers = this.headers.set('Tenant', tenant);
     const url = `${this.restRoot}/providers/openstack/securitygroups`;
-    return this.http.get<OpenstackSecurityGroup[]>(url, { headers: this.headers });
+    return this.http.get<OpenstackSecurityGroup[]>(url, {headers: this.headers});
   }
 
-  getOpenStackNetworkForWizard(username: string, password: string, tenant: string, domain: string, datacenterName: string): Observable<OpenstackNetwork[]> {
+  getOpenStackNetworkForWizard(
+      username: string, password: string, tenant: string, domain: string,
+      datacenterName: string): Observable<OpenstackNetwork[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     this.headers = this.headers.set('Tenant', tenant);
     const url = `${this.restRoot}/providers/openstack/networks`;
-    return this.http.get<OpenstackNetwork[]>(url, { headers: this.headers });
+    return this.http.get<OpenstackNetwork[]>(url, {headers: this.headers});
   }
 
-  getOpenStackSubnetIdsForWizard(username: string, password: string, tenant: string, domain: string, datacenterName: string, network: string): Observable<OpenstackSubnet[]> {
+  getOpenStackSubnetIdsForWizard(
+      username: string, password: string, tenant: string, domain: string, datacenterName: string,
+      network: string): Observable<OpenstackSubnet[]> {
     this.setOpenStackHeaders(username, password, domain, datacenterName);
     this.headers = this.headers.set('Tenant', tenant);
     const url = `${this.restRoot}/providers/openstack/subnets?network_id=${network}`;
-    return this.http.get<OpenstackSubnet[]>(url, { headers: this.headers });
+    return this.http.get<OpenstackSubnet[]>(url, {headers: this.headers});
   }
 
   getKubeconfigURL(projectID: string, dc: string, clusterID: string): string {
@@ -218,27 +226,30 @@ export class ApiService {
   }
 
   getShareKubeconfigURL(projectID: string, dc: string, clusterID: string, userID: string): string {
-    return `${this.location}/${this.restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${clusterID}&user_id=${userID}`;
+    return `${this.location}/${this.restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${
+        clusterID}&user_id=${userID}`;
   }
 
   getMasterVersions(): Observable<MasterVersion[]> {
     const url = `${this.restRoot}/versions`;
-    return this.http.get<MasterVersion[]>(url, { headers: this.headers });
+    return this.http.get<MasterVersion[]>(url, {headers: this.headers});
   }
 
-  getAzureSizesForWizard(clientID: string, clientSecret: string, subscriptionID: string, tenantID: string, location: string): Observable<AzureSizes> {
+  getAzureSizesForWizard(
+      clientID: string, clientSecret: string, subscriptionID: string, tenantID: string,
+      location: string): Observable<AzureSizes> {
     this.headers = this.headers.set('ClientID', clientID);
     this.headers = this.headers.set('ClientSecret', clientSecret);
     this.headers = this.headers.set('SubscriptionID', subscriptionID);
     this.headers = this.headers.set('TenantID', tenantID);
     this.headers = this.headers.set('Location', location);
     const url = `${this.restRoot}/providers/azure/sizes`;
-    return this.http.get<AzureSizes>(url, { headers: this.headers });
+    return this.http.get<AzureSizes>(url, {headers: this.headers});
   }
 
   getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes> {
     const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/sizes`;
-    return this.http.get<AzureSizes>(url, { headers: this.headers });
+    return this.http.get<AzureSizes>(url, {headers: this.headers});
   }
 
   getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
@@ -246,26 +257,26 @@ export class ApiService {
     this.headers = this.headers.set('Password', password);
     this.headers = this.headers.set('DatacenterName', datacenterName);
     const url = `${this.restRoot}/providers/vsphere/networks`;
-    return this.http.get<VSphereNetwork[]>(url, { headers: this.headers });
+    return this.http.get<VSphereNetwork[]>(url, {headers: this.headers});
   }
 
   getMembers(projectID: string): Observable<MemberEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/users`;
-    return this.http.get<MemberEntity[]>(url, { headers: this.headers });
+    return this.http.get<MemberEntity[]>(url, {headers: this.headers});
   }
 
   createMembers(projectID: string, member: CreateMemberEntity): Observable<MemberEntity> {
     const url = `${this.restRoot}/projects/${projectID}/users`;
-    return this.http.post<MemberEntity>(url, member, { headers: this.headers });
+    return this.http.post<MemberEntity>(url, member, {headers: this.headers});
   }
 
   editMembers(projectID: string, member: MemberEntity): Observable<MemberEntity> {
     const url = `${this.restRoot}/projects/${projectID}/users/${member.id}`;
-    return this.http.put<MemberEntity>(url, member, { headers: this.headers });
+    return this.http.put<MemberEntity>(url, member, {headers: this.headers});
   }
 
   deleteMembers(projectID: string, member: MemberEntity): any {
     const url = `${this.restRoot}/projects/${projectID}/users/${member.id}`;
-    return this.http.delete(url, { headers: this.headers });
+    return this.http.delete(url, {headers: this.headers});
   }
 }

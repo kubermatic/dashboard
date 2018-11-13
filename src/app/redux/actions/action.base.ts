@@ -8,7 +8,7 @@ export class ActionBase {
    * @param  {string} name - action name
    * @return {string}
    */
-  public static getActType(name: string): string {
+  static getActType(name: string): string {
     return `${this.className}:${name}`;
   }
 }

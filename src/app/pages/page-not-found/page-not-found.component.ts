@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { Auth } from '../../core/services';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
+import {Auth} from '../../core/services';
 
 @Component({
   selector: 'kubermatic-page-not-found',
@@ -8,8 +8,7 @@ import { Auth } from '../../core/services';
   styleUrls: ['./page-not-found.component.scss'],
 })
 export class PageNotFoundComponent {
-  constructor(private auth: Auth,
-              private router: Router) { }
+  constructor(private auth: Auth, private router: Router) {}
 
   backToApp(): void {
     if (this.auth.authenticated()) {

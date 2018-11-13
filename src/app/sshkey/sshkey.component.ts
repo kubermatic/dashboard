@@ -1,14 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, Sort } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
-import { find } from 'lodash';
-import { interval, Subscription } from 'rxjs';
-import { retry } from 'rxjs/operators';
-import { AppConfigService } from '../app-config.service';
-import { ApiService, UserService } from '../core/services';
-import { AddSshKeyModalComponent } from '../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
-import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
-import { UserGroupConfig } from '../shared/model/Config';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, Sort} from '@angular/material';
+import {ActivatedRoute} from '@angular/router';
+import {find} from 'lodash';
+import {interval, Subscription} from 'rxjs';
+import {retry} from 'rxjs/operators';
+import {AppConfigService} from '../app-config.service';
+import {ApiService, UserService} from '../core/services';
+import {AddSshKeyModalComponent} from '../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
+import {UserGroupConfig} from '../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-sshkey',
@@ -17,22 +17,20 @@ import { UserGroupConfig } from '../shared/model/Config';
 })
 
 export class SSHKeyComponent implements OnInit, OnDestroy {
-  public loading = true;
-  public sshKeys: SSHKeyEntity[] = [];
-  public sortedSshKeys: SSHKeyEntity[] = [];
-  public sort: Sort = { active: 'name', direction: 'asc' };
-  public userGroup: string;
-  public userGroupConfig: UserGroupConfig;
+  loading = true;
+  sshKeys: SSHKeyEntity[] = [];
+  sortedSshKeys: SSHKeyEntity[] = [];
+  sort: Sort = {active: 'name', direction: 'asc'};
+  userGroup: string;
+  userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
-  public projectID: string;
+  projectID: string;
 
-  constructor(private route: ActivatedRoute,
-              private api: ApiService,
-              private userService: UserService,
-              private appConfigService: AppConfigService,
-              public dialog: MatDialog) { }
+  constructor(
+      private route: ActivatedRoute, private api: ApiService, private userService: UserService,
+      private appConfigService: AppConfigService, public dialog: MatDialog) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.projectID = this.route.snapshot.paramMap.get('projectID');
 
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -63,16 +61,16 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public addSshKey(): void {
+  addSshKey(): void {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent);
     dialogRef.componentInstance.projectID = this.projectID;
 
     dialogRef.afterClosed().subscribe((result) => {
-      result && this.refreshSSHKeys();
+      result && this.refreshSSHKeys();  // tslint:disable-line
     });
   }
 
-  public trackSshKey(index: number, shhKey: SSHKeyEntity): number {
+  trackSshKey(index: number, shhKey: SSHKeyEntity): number {
     const prevSSHKey = find(this.sshKeys, (item) => {
       return item.name === shhKey.name;
     });

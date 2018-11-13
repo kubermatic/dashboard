@@ -1,5 +1,5 @@
-import { inject, TestBed } from '@angular/core/testing';
-import { LoaderInterceptor } from './loader.service';
+import {inject, TestBed} from '@angular/core/testing';
+import {LoaderInterceptor} from './loader.service';
 
 describe('LoaderInterceptorService', () => {
   beforeEach(() => {
@@ -9,6 +9,6 @@ describe('LoaderInterceptorService', () => {
   });
 
   it('should be created', inject([LoaderInterceptor], (service: LoaderInterceptor) => {
-    expect(service).toBeTruthy();
-  }));
+       expect(service).toBeTruthy();
+     }));
 });

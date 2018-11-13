@@ -1,5 +1,5 @@
-import { NodeEntity } from '../../shared/entity/NodeEntity';
-import { NodeData } from '../../shared/model/NodeSpecChange';
+import {NodeEntity} from '../../shared/entity/NodeEntity';
+import {NodeData} from '../../shared/model/NodeSpecChange';
 
 export function fakeDigitaloceanCreateNode(): NodeEntity {
   return {
@@ -223,50 +223,50 @@ export function nodesFake(): NodeEntity[] {
 
 export function nodeDataFake(): NodeData {
   return {
-      spec: {
-        cloud: {
-          digitalocean: {
-            size: 's-1vcpu-1gb',
-            backups: false,
-            ipv6: false,
-            monitoring: false,
-            tags: [],
-          },
-          aws: {
-            instanceType: 't2.small',
-            diskSize: 25,
-            volumeType: 'standard',
-            ami: '',
-            tags: {},
-          },
-          openstack: {
-            flavor: 'm1.small',
-            image: '',
-          },
-          hetzner: {
-            type: 'cx31',
-          },
-          vsphere: {
-            cpus: 1,
-            memory: 512,
-            template: '',
-          },
-          azure: {
-            size: 'cx31',
-            assignPublicIP: false,
-            tags: {},
-          },
+    spec: {
+      cloud: {
+        digitalocean: {
+          size: 's-1vcpu-1gb',
+          backups: false,
+          ipv6: false,
+          monitoring: false,
+          tags: [],
         },
-        operatingSystem: {
-          ubuntu: {
-            distUpgradeOnBoot: false,
-          },
-          centos: null,
-          containerLinux: null,
+        aws: {
+          instanceType: 't2.small',
+          diskSize: 25,
+          volumeType: 'standard',
+          ami: '',
+          tags: {},
         },
-        versions: {
-          kubelet: null,
+        openstack: {
+          flavor: 'm1.small',
+          image: '',
         },
+        hetzner: {
+          type: 'cx31',
+        },
+        vsphere: {
+          cpus: 1,
+          memory: 512,
+          template: '',
+        },
+        azure: {
+          size: 'cx31',
+          assignPublicIP: false,
+          tags: {},
+        },
+      },
+      operatingSystem: {
+        ubuntu: {
+          distUpgradeOnBoot: false,
+        },
+        centos: null,
+        containerLinux: null,
+      },
+      versions: {
+        kubelet: null,
+      },
     },
     count: 3,
     valid: true,

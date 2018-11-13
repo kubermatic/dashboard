@@ -1,6 +1,6 @@
-import { dispatch } from '@angular-redux/store';
-import { Action } from '../../shared/interfaces/action.interface';
-import { ActionBase } from './action.base';
+import {dispatch} from '@angular-redux/store';
+import {Action} from '../../shared/interfaces/action.interface';
+import {ActionBase} from './action.base';
 
 export class AuthActions extends ActionBase {
   static readonly className: string = 'AuthActions';
@@ -12,7 +12,7 @@ export class AuthActions extends ActionBase {
   static login(profile: any[], token: string): Action {
     return {
       type: AuthActions.LOGGED_IN,
-      payload: { profile, token },
+      payload: {profile, token},
     };
   }
 
@@ -27,7 +27,7 @@ export class AuthActions extends ActionBase {
   static fetchProfile(profile: any[]): Action {
     return {
       type: AuthActions.FETCH_PROFILE,
-      payload: { profile },
+      payload: {profile},
     };
   }
 }

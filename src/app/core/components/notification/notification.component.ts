@@ -1,8 +1,8 @@
-import { select } from '@angular-redux/store';
-import { Component, ViewEncapsulation } from '@angular/core';
-import { Notification, NotificationsService } from 'angular2-notifications';
-import { Observable } from 'rxjs';
-import { NotificationToast, NotificationToastType } from '../../../shared/interfaces/notification-toast.interface';
+import {select} from '@angular-redux/store';
+import {Component, ViewEncapsulation} from '@angular/core';
+import {Notification, NotificationsService} from 'angular2-notifications';
+import {Observable} from 'rxjs';
+import {NotificationToast, NotificationToastType} from '../../../shared/interfaces/notification-toast.interface';
 
 @Component({
   selector: 'kubermatic-notification',
@@ -15,7 +15,7 @@ export class NotificationComponent {
   private static readonly closeButtonClass = 'sn-close-button';
   private static readonly copyButtonClass = 'sn-copy-button';
 
-  public options = {
+  options = {
     timeOut: 10000,
     theClass: 'custom-simple-notification',
     lastOnBottom: true,
@@ -59,14 +59,15 @@ export class NotificationComponent {
   }
 
   createHtmlMessage(toast: NotificationToast): string {
-    return `${toast.content}<div class="sn-controls"><span class="${NotificationComponent.closeButtonClass}">Close</button>
+    return `${toast.content}<div class="sn-controls"><span class="${
+        NotificationComponent.closeButtonClass}">Close</button>
     <span class="${NotificationComponent.copyButtonClass}">Copy to clipboard</button></div>`;
   }
 
   registerClickHandler(notification: Notification, plainMessage: string): void {
     if (notification) {
       notification.click.subscribe((e: MouseEvent) => {
-        const targetId = (<HTMLElement> e.target).className;
+        const targetId = (e.target as HTMLElement).className;
         if (targetId.indexOf(NotificationComponent.closeButtonClass) > -1) {
           this._service.remove(notification.id);
         }

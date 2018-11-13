@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class NotificationMockService {
+  success(...restOfData: string[]): void {}
 
-  public success(...restOfData: string[]): void {}
-
-  public error(...restOfData: string[]): void {}
+  error(...restOfData: string[]): void {}
 }

@@ -1,19 +1,19 @@
-import { HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { MatDialogRef } from '@angular/material';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Router } from '@angular/router';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { of } from 'rxjs';
-import { ApiService } from '../../core/services/api/api.service';
-import { SharedModule } from '../../shared/shared.module';
-import { fakeMember } from '../../testing/fake-data/member.fake';
-import { fakeProject } from '../../testing/fake-data/project.fake';
-import { RouterStub, RouterTestingModule } from '../../testing/router-stubs';
-import { ApiMockService } from '../../testing/services/api-mock.service';
-import { MatDialogRefMock } from '../../testing/services/mat-dialog-ref-mock';
-import { MemberDeleteConfirmationComponent } from './member-delete-confirmation.component';
+import {HttpClientModule} from '@angular/common/http';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {MatDialogRef} from '@angular/material';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
+import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {of} from 'rxjs';
+import {ApiService} from '../../core/services/api/api.service';
+import {SharedModule} from '../../shared/shared.module';
+import {fakeMember} from '../../testing/fake-data/member.fake';
+import {fakeProject} from '../../testing/fake-data/project.fake';
+import {RouterStub, RouterTestingModule} from '../../testing/router-stubs';
+import {ApiMockService} from '../../testing/services/api-mock.service';
+import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
+import {MemberDeleteConfirmationComponent} from './member-delete-confirmation.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -30,19 +30,21 @@ describe('MemberDeleteConfirmationComponent', () => {
   let apiService: ApiService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        MemberDeleteConfirmationComponent,
-      ],
-      providers: [
-        { provide: MatDialogRef, useClass: MatDialogRefMock },
-        { provide: ApiService, useClass: ApiMockService },
-        { provide: Router, useClass: RouterStub },
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            MemberDeleteConfirmationComponent,
+          ],
+          providers: [
+            {provide: MatDialogRef, useClass: MatDialogRefMock},
+            {provide: ApiService, useClass: ApiMockService},
+            {provide: Router, useClass: RouterStub},
+          ],
+        })
+        .compileComponents();
   });
 
   beforeEach(() => {
@@ -54,19 +56,19 @@ describe('MemberDeleteConfirmationComponent', () => {
   });
 
   it('should create the delete member confirmation cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+       expect(component).toBeTruthy();
+     }));
 
   it('should call deleteMembers method', fakeAsync(() => {
-    component.project = fakeProject();
-    component.member = fakeMember();
+       component.project = fakeProject();
+       component.member = fakeMember();
 
-    fixture.detectChanges();
-    const spyDeleteProject = spyOn(apiService, 'deleteMembers').and.returnValue(of(null));
+       fixture.detectChanges();
+       const spyDeleteProject = spyOn(apiService, 'deleteMembers').and.returnValue(of(null));
 
-    component.deleteMember();
-    tick();
+       component.deleteMember();
+       tick();
 
-    expect(spyDeleteProject.and.callThrough()).toHaveBeenCalled();
-  }));
+       expect(spyDeleteProject.and.callThrough()).toHaveBeenCalled();
+     }));
 });

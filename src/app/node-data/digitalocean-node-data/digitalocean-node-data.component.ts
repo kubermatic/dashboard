@@ -1,11 +1,11 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { ApiService } from '../../core/services';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { CloudSpec } from '../../shared/entity/ClusterEntity';
-import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {ApiService} from '../../core/services';
+import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-digitalocean-node-data',
@@ -14,17 +14,17 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 })
 
 export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() public cloudSpec: CloudSpec;
+  @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
-  @Input() public projectId: string;
-  @Input() public clusterId: string;
-  @Input() public seedDCName: string;
+  @Input() projectId: string;
+  @Input() clusterId: string;
+  @Input() seedDCName: string;
 
-  public sizes: DigitaloceanSizes = { optimized: [], standard: [] };
-  public doNodeForm: FormGroup;
+  sizes: DigitaloceanSizes = {optimized: [], standard: []};
+  doNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private addNodeService: AddNodeService) { }
+  constructor(private api: ApiService, private addNodeService: AddNodeService) {}
 
   ngOnInit(): void {
     this.doNodeForm = new FormGroup({
@@ -46,16 +46,18 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   reloadDigitaloceanSizes(): void {
     if (this.isInWizard()) {
       if (this.cloudSpec.digitalocean.token) {
-        this.subscriptions.push(this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe((data) => {
-          this.sizes = data;
-          this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
-        }));
+        this.subscriptions.push(
+            this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe((data) => {
+              this.sizes = data;
+              this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
+            }));
       }
     } else {
-      this.subscriptions.push(this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
-        this.sizes = data;
-        this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
-      }));
+      this.subscriptions.push(
+          this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
+            this.sizes = data;
+            this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
+          }));
     }
   }
 
@@ -69,7 +71,8 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
-      if (!!!changes.cloudSpec.previousValue || (changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token)) {
+      if (!!!changes.cloudSpec.previousValue ||
+          (changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token)) {
         this.reloadDigitaloceanSizes();
       }
     }

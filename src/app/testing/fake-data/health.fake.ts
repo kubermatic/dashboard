@@ -1,4 +1,4 @@
-import { HealthEntity } from '../../shared/entity/HealthEntity';
+import {HealthEntity} from '../../shared/entity/HealthEntity';
 
 export function fakeHealth(): HealthEntity {
   return {

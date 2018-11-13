@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { ClusterService } from '../../../../core/services';
-import { ProviderSettingsPatch } from '../../../../core/services/cluster/cluster.service';
-import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {ClusterService} from '../../../../core/services';
+import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
+import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-openstack-provider-settings',
@@ -13,7 +13,7 @@ import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
 export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
 
-  public openstackProviderSettingsForm: FormGroup;
+  openstackProviderSettingsForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
   constructor(private clusterService: ClusterService) {}

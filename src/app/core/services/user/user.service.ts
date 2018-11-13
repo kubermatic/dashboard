@@ -1,21 +1,20 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
-import { environment } from '../../../../environments/environment';
-import { MemberEntity } from '../../../shared/entity/MemberEntity';
-import { Auth } from '../auth/auth.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {catchError, map} from 'rxjs/operators';
+import {environment} from '../../../../environments/environment';
+import {MemberEntity} from '../../../shared/entity/MemberEntity';
+import {Auth} from '../auth/auth.service';
 
 @Injectable()
 export class UserService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
-  public user: Observable<MemberEntity>;
-  public userGroup: string;
+  user: Observable<MemberEntity>;
+  userGroup: string;
 
-  constructor(private http: HttpClient,
-              private auth: Auth) {
+  constructor(private http: HttpClient, private auth: Auth) {
     const token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + token);
   }
@@ -23,7 +22,7 @@ export class UserService {
   getUser(): Observable<MemberEntity> {
     const url = `${this.restRoot}/me`;
     if (!this.user) {
-      this.user = this.http.get<MemberEntity>(url, { headers: this.headers }).pipe(catchError((error) => {
+      this.user = this.http.get<MemberEntity>(url, {headers: this.headers}).pipe(catchError((error) => {
         return of<MemberEntity>();
       }));
     }
@@ -41,5 +40,4 @@ export class UserService {
       return this.userGroup = '';
     }));
   }
-
 }

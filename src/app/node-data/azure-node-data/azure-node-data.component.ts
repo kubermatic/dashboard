@@ -1,12 +1,12 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
-import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { ApiService, DatacenterService, WizardService } from '../../core/services';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { CloudSpec } from '../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
-import { AzureSizes } from '../../shared/entity/provider/azure/AzureSizeEntity';
-import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
+import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
+import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
+import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-azure-node-data',
@@ -15,23 +15,22 @@ import { NodeData, NodeProviderData } from '../../shared/model/NodeSpecChange';
 })
 
 export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
-  @Input() public cloudSpec: CloudSpec;
-  @Input() public nodeData: NodeData;
-  @Input() public projectId: string;
-  @Input() public clusterId: string;
-  @Input() public seedDCName: string;
+  @Input() cloudSpec: CloudSpec;
+  @Input() nodeData: NodeData;
+  @Input() projectId: string;
+  @Input() clusterId: string;
+  @Input() seedDCName: string;
 
-  public sizes: AzureSizes;
-  public azureNodeForm: FormGroup;
-  public tags: FormArray;
-  public datacenter: DataCenterEntity;
-  public hideOptional = true;
+  sizes: AzureSizes;
+  azureNodeForm: FormGroup;
+  tags: FormArray;
+  datacenter: DataCenterEntity;
+  hideOptional = true;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService,
-              private wizardService: WizardService,
-              private api: ApiService,
-              private dcService: DatacenterService) { }
+  constructor(
+      private addNodeService: AddNodeService, private wizardService: WizardService, private api: ApiService,
+      private dcService: DatacenterService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -78,18 +77,24 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   reloadAzureSizes(): void {
     if (this.cloudSpec.dc) {
       if (this.isInWizard()) {
-        if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID && this.cloudSpec.azure.tenantID) {
-          this.subscriptions.push(this.api.getAzureSizesForWizard(this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret,
-            this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID, this.datacenter.spec.azure.location).subscribe((data) => {
-            this.sizes = data;
-            this.azureNodeForm.controls.size.setValue(this.nodeData.spec.cloud.azure.size);
-          }));
+        if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID &&
+            this.cloudSpec.azure.tenantID) {
+          this.subscriptions.push(this.api
+                                      .getAzureSizesForWizard(
+                                          this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret,
+                                          this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID,
+                                          this.datacenter.spec.azure.location)
+                                      .subscribe((data) => {
+                                        this.sizes = data;
+                                        this.azureNodeForm.controls.size.setValue(this.nodeData.spec.cloud.azure.size);
+                                      }));
         }
       } else {
-        this.subscriptions.push(this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
-          this.sizes = data;
-          this.azureNodeForm.controls.size.setValue(this.nodeData.spec.cloud.azure.size);
-        }));
+        this.subscriptions.push(
+            this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
+              this.sizes = data;
+              this.azureNodeForm.controls.size.setValue(this.nodeData.spec.cloud.azure.size);
+            }));
       }
     } else {
       this.getDatacenter();
@@ -98,11 +103,12 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
-      if (!!!changes.cloudSpec.previousValue
-        || (changes.cloudSpec.currentValue.azure.clientID !== changes.cloudSpec.previousValue.azure.clientID)
-        || (changes.cloudSpec.currentValue.azure.clientSecret !== changes.cloudSpec.previousValue.azure.clientSecret)
-        || (changes.cloudSpec.currentValue.azure.subscriptionID !== changes.cloudSpec.previousValue.azure.subscriptionID)
-        || (changes.cloudSpec.currentValue.azure.tenantID !== changes.cloudSpec.previousValue.azure.tenantID)) {
+      if (!!!changes.cloudSpec.previousValue ||
+          (changes.cloudSpec.currentValue.azure.clientID !== changes.cloudSpec.previousValue.azure.clientID) ||
+          (changes.cloudSpec.currentValue.azure.clientSecret !== changes.cloudSpec.previousValue.azure.clientSecret) ||
+          (changes.cloudSpec.currentValue.azure.subscriptionID !==
+           changes.cloudSpec.previousValue.azure.subscriptionID) ||
+          (changes.cloudSpec.currentValue.azure.tenantID !== changes.cloudSpec.previousValue.azure.tenantID)) {
         this.reloadAzureSizes();
       }
     }
@@ -121,7 +127,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   addTag(): void {
-    this.tags = <FormArray> this.azureNodeForm.get('tags');
+    this.tags = this.azureNodeForm.get('tags') as FormArray;
     this.tags.push(new FormGroup({
       key: new FormControl(''),
       value: new FormControl(''),
@@ -129,14 +135,15 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   deleteTag(index: number): void {
-    const arrayControl = <FormArray> this.azureNodeForm.get('tags');
+    const arrayControl = this.azureNodeForm.get('tags') as FormArray;
     arrayControl.removeAt(index);
   }
 
   getNodeProviderData(): NodeProviderData {
     const tagMap = {};
     for (const i in this.azureNodeForm.controls.tags.value) {
-      if (this.azureNodeForm.controls.tags.value[i].key !== '' && this.azureNodeForm.controls.tags.value[i].value !== '') {
+      if (this.azureNodeForm.controls.tags.value[i].key !== '' &&
+          this.azureNodeForm.controls.tags.value[i].value !== '') {
         tagMap[this.azureNodeForm.controls.tags.value[i].key] = this.azureNodeForm.controls.tags.value[i].value;
       }
     }
