@@ -54,12 +54,12 @@ export class AddNodeComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
-    this.subscriptions.push(this.nodeForm.valueChanges.subscribe((data) => {
+    this.subscriptions.push(this.nodeForm.valueChanges.subscribe(() => {
       this.operatingSystemForm.setValue({distUpgradeOnBootUbuntu: false, distUpgradeOnBootCentos: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
 
-    this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe((data) => {
+    this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
     }));
@@ -118,12 +118,11 @@ export class AddNodeComponent implements OnInit, OnDestroy {
   }
 
   getAddNodeData(): NodeData {
-    const osSpec = this.getOSSpec();
     return {
       node: {
         spec: {
           cloud: this.providerData.spec,
-          operatingSystem: osSpec,
+          operatingSystem: this.getOSSpec(),
           versions: {
           },
         },

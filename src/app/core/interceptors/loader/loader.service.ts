@@ -21,10 +21,12 @@ export class LoaderInterceptor implements HttpInterceptor {
             this.setProgressBarVisibility('hidden');
           }
         },
-        (error) => this.setProgressBarVisibility('hidden')));
+        () => this.setProgressBarVisibility('hidden')));
   }
 
   private setProgressBarVisibility(visibility: string): void {
-    this.progressBarElement.style.visibility = visibility;
+    if (this.progressBarElement) {
+      this.progressBarElement.style.visibility = visibility;
+    }
   }
 }
