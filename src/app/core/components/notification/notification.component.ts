@@ -1,7 +1,6 @@
 import { select } from '@angular-redux/store';
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Notification, NotificationsService } from 'angular2-notifications';
-import { ClipboardService } from 'ngx-clipboard';
 import { Observable } from 'rxjs';
 import { NotificationToast, NotificationToastType } from '../../../shared/interfaces/notification-toast.interface';
 
@@ -30,7 +29,7 @@ export class NotificationComponent {
 
   @select(['notification', 'toast']) notification$: Observable<NotificationToast>;
 
-  constructor(private _service: NotificationsService, private _clipboard: ClipboardService) {
+  constructor(private _service: NotificationsService) {
     this.notification$.subscribe((toast) => {
       if (toast) {
         this.createToast(toast);
@@ -68,7 +67,7 @@ export class NotificationComponent {
     if (notification) {
       notification.click.subscribe((e: MouseEvent) => {
         const targetId = (<HTMLElement> e.target).className;
-        if (targetId.indexOf( NotificationComponent.closeButtonClass) > -1) {
+        if (targetId.indexOf(NotificationComponent.closeButtonClass) > -1) {
           this._service.remove(notification.id);
         }
         if (targetId.indexOf(NotificationComponent.copyButtonClass) > -1) {
@@ -79,13 +78,7 @@ export class NotificationComponent {
   }
 
   copyToClipboard(text: string): void {
-        // TODO: Use navigator.clipboard instead of navigator['clipboard'] once TypeScript will support it.
-        if (navigator['clipboard']) {
-      navigator['clipboard'].writeText(text);
-        } else {
-          // TODO: This fallback can be removed once Clipboard API will be widely adopted:
-          // https://developer.mozilla.org/en-US/docs/Web/API/Clipboard#Browser_compatibility
-      this._clipboard.copyFromContent(text);
-    }
+    // TODO: Use navigator.clipboard instead of navigator['clipboard'] once TypeScript will support it.
+    navigator['clipboard'].writeText(text);
   }
 }
