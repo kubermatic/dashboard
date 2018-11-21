@@ -13,7 +13,7 @@ lint:
 	@$(CC) run lint
 
 run:
-	@$(CC) run serve:proxy
+	@$(CC) start
 
 test-full: test e2e
 
