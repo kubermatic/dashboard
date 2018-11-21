@@ -7,10 +7,8 @@
   "license": "propietary",
   "angular-cli": {},
   "scripts": {
-    "ng:version": "ng v",
-    "ng:init": "ng init",
-    "serve": "ng serve --port 8000 --hmr",
-    "serve:proxy": "ng serve --port 8000 --hmr --proxy-config proxy.conf.json",
+    "start": "ng serve --hmr",
+    "start:local": "ng serve --hmr --proxy-config proxy-local.conf.json",
     "serve:mock": "concurrently --kill-others --prefix \"[{name}]\" --names \"mock-server,ng-serve\" \"node mock-server.js\" \"ng serve --port 8000 --hmr --proxy-config proxy-mock.conf.json\"",
     "build": "ng build --prod",
     "lint": "ng lint --type-check",
@@ -20,7 +18,7 @@
     "test-firefox": "ng test --browsers=FirefoxAutoAllowGUM --watch=false",
     "e2e": "ng e2e",
     "pree2e": "webdriver-manager update --standalone false --gecko false",
-    "protractor": "./node_modules/.bin/protractor e2e/protractor.conf.js"
+    "protractor": "protractor e2e/protractor.conf.js"
   },
   "dependencies": {
     "@angular-redux/form": "^9.0.1",
