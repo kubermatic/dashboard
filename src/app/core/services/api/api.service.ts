@@ -191,9 +191,8 @@ export class ApiService {
     return `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/kubeconfig?token=${this.token}`;
   }
 
-  getShareKubeconfigURL(projectID: string, dc: string, clusterID: string): string {
-    // TODO: Set user id && check if query is correct
-    return `${this.location}/${this.restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${clusterID}&user_id=${this.token}`;
+  getShareKubeconfigURL(projectID: string, dc: string, clusterID: string, userID: string): string {
+    return `${this.location}/${this.restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${clusterID}&user_id=${userID}`;
   }
 
   getMasterVersions(): Observable<MasterVersion[]> {

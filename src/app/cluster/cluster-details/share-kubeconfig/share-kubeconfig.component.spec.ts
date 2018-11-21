@@ -53,7 +53,7 @@ describe('ShareKubeconfigComponent', () => {
     fixture.detectChanges();
   });
 
-  it('hould create the share kubeconfig component', () => {
+  it('should create the share kubeconfig component', () => {
     expect(component).toBeTruthy();
   });
 });
