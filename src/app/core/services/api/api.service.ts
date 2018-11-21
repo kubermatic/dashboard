@@ -22,6 +22,7 @@ import { Auth } from '../auth/auth.service';
 
 @Injectable()
 export class ApiService {
+  private location: string = window.location.protocol + '//' + window.location.host;
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
   private token: string;
@@ -187,7 +188,11 @@ export class ApiService {
   }
 
   getKubeconfigURL(projectID: string, dc: string, clusterID: string): string {
-    return `${environment.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/kubeconfig?token=${this.token}`;
+    return `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/kubeconfig?token=${this.token}`;
+  }
+
+  getShareKubeconfigURL(projectID: string, dc: string, clusterID: string, userID: string): string {
+    return `${this.location}/${this.restRoot}/kubeconfig?project_id=${projectID}&datacenter=${dc}&cluster_id=${clusterID}&user_id=${userID}`;
   }
 
   getMasterVersions(): Observable<MasterVersion[]> {

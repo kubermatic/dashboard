@@ -12,7 +12,7 @@ import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
 import { HealthEntity } from '../../shared/entity/HealthEntity';
 import { NodeEntity } from '../../shared/entity/NodeEntity';
 import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { UserGroupConfig } from '../../shared/model/Config';
+import { Config, UserGroupConfig } from '../../shared/model/Config';
 import { NodeProvider } from '../../shared/model/NodeProviderConstants';
 import { AddNodeModalComponent } from './add-node-modal/add-node-modal.component';
 import { ChangeClusterVersionComponent } from './change-cluster-version/change-cluster-version.component';
@@ -20,6 +20,7 @@ import { ClusterConnectComponent } from './cluster-connect/cluster-connect.compo
 import { ClusterDeleteConfirmationComponent } from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import { EditProviderSettingsComponent } from './edit-provider-settings/edit-provider-settings.component';
 import { EditSSHKeysComponent } from './edit-sshkeys/edit-sshkeys.component';
+import { ShareKubeconfigComponent } from './share-kubeconfig/share-kubeconfig.component';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -39,6 +40,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   public projectID: string;
   public userGroup: string;
   public userGroupConfig: UserGroupConfig;
+  public config: Config = {share_kubeconfig: false};
   public updatesAvailable = false;
   public downgradesAvailable = false;
   public moreSshKeys = false;
@@ -62,6 +64,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit(): void {
+    this.config = this.appConfigService.getConfig();
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
@@ -256,6 +259,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   public connectClusterDialog(): void {
     const modal = this.dialog.open(ClusterConnectComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.projectID = this.projectID;
+  }
+
+  public shareConfigDialog(): void {
+    const modal = this.dialog.open(ShareKubeconfigComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;

@@ -24,6 +24,7 @@ import { NodeDeleteConfirmationComponent } from './cluster-details/node-delete-c
 import { NodeDeleteConfirmationService } from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
 import { NodeDuplicateComponent } from './cluster-details/node-duplicate/node-duplicate.component';
 import { NodeListComponent } from './cluster-details/node-list/node-list.component';
+import { ShareKubeconfigComponent } from './cluster-details/share-kubeconfig/share-kubeconfig.component';
 import { ClusterHealthStatusComponent } from './cluster-health-status/cluster-health-status.component';
 import { ClusterItemComponent } from './cluster-list/cluster-item/cluster-item.component';
 import { ClusterListComponent } from './cluster-list/cluster-list.component';
@@ -57,6 +58,7 @@ const entryComponents: any[] = [
   EditSSHKeysItemComponent,
   EditSSHKeyDeleteConfirmationComponent,
   AddClusterSSHKeysComponent,
+  ShareKubeconfigComponent,
 ];
 
 @NgModule({
