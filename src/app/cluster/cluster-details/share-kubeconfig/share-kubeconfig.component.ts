@@ -6,7 +6,6 @@ import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
 @Component({
   selector: 'kubermatic-share-kubeconfig',
   templateUrl: './share-kubeconfig.component.html',
-  styleUrls: ['./share-kubeconfig.component.scss'],
 })
 
 export class ShareKubeconfigComponent implements OnInit {
@@ -14,7 +13,7 @@ export class ShareKubeconfigComponent implements OnInit {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   private userID: string;
-  public isInitialized = false;
+  kubeconfigLink: string;
 
   constructor(private api: ApiService, private auth: Auth, private userService: UserService) {}
 
@@ -22,12 +21,8 @@ export class ShareKubeconfigComponent implements OnInit {
     if (this.auth.authenticated()) {
       this.userService.getUser().toPromise().then((user) => {
         this.userID = user.id;
-        this.isInitialized = true;
+        this.kubeconfigLink = this.api.getShareKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id, this.userID);
       });
     }
-  }
-
-  shareKubeconfig(): string {
-    return this.api.getShareKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id, this.userID);
   }
 }
