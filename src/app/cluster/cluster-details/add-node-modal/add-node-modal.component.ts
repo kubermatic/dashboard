@@ -23,14 +23,11 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
   public nodeDC: DataCenterEntity;
   public addNodeData: NodeData = {
-    node: {
       spec: {
         cloud: {},
         operatingSystem: {},
         versions: {},
       },
-      status: {},
-    },
     count: 1,
     valid: true,
   };
@@ -47,9 +44,9 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
       },
     );
 
-    this.addNodeData.node.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
-    this.addNodeData.node.spec.operatingSystem = getEmptyOperatingSystemSpec();
-    this.addNodeData.node.spec.versions = getEmptyNodeVersionSpec();
+    this.addNodeData.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
+    this.addNodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
+    this.addNodeData.spec.versions = getEmptyNodeVersionSpec();
 
     this.subscriptions.push(this.addNodeService.nodeDataChanges$.subscribe(async (data: NodeData) => {
       this.addNodeData = await data;
@@ -69,7 +66,10 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
   public addNode(): void {
     const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
     for (let i = 0; i < this.addNodeData.count; i++) {
-      createNodeObservables.push(this.api.createClusterNode(this.cluster, this.addNodeData.node, this.datacenter.metadata.name, this.projectID));
+      const node = {
+        spec: this.addNodeData.spec,
+      } as NodeEntity;
+      createNodeObservables.push(this.api.createClusterNode(this.cluster, node, this.datacenter.metadata.name, this.projectID));
     }
 
     this.subscriptions.push(combineLatest(createNodeObservables).subscribe(() => {
