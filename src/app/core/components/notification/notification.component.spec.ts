@@ -1,14 +1,14 @@
-import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing';
-import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { NotificationsService, SimpleNotificationsModule } from 'angular2-notifications';
-import { ClipboardModule } from 'ngx-clipboard';
-import { NotificationToast, NotificationToastType } from '../../../shared/interfaces/notification-toast.interface';
-import { NotificationMockService } from '../../../testing/services/notification-mock.service';
-import { NotificationComponent } from './notification.component';
+import {MockNgRedux, NgReduxTestingModule} from '@angular-redux/store/testing';
+import {HttpClientModule} from '@angular/common/http';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RouterTestingModule} from '@angular/router/testing';
+import {NotificationsService, SimpleNotificationsModule} from 'angular2-notifications';
+import {ClipboardModule} from 'ngx-clipboard';
+import {NotificationToast, NotificationToastType} from '../../../shared/interfaces/notification-toast.interface';
+import {NotificationMockService} from '../../../testing/services/notification-mock.service';
+import {NotificationComponent} from './notification.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -32,17 +32,19 @@ describe('NotificationComponent', () => {
 
   beforeEach(() => {
     MockNgRedux.reset();
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        NotificationComponent,
-      ],
-      providers: [
-        { provide: NotificationsService, useClass: NotificationMockService },
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            NotificationComponent,
+          ],
+          providers: [
+            {provide: NotificationsService, useClass: NotificationMockService},
+          ],
+        })
+        .compileComponents();
   });
 
   beforeEach(() => {
@@ -55,14 +57,15 @@ describe('NotificationComponent', () => {
   });
 
   it('should call success notification', fakeAsync(() => {
-    const notificationService: NotificationMockService = fixture.debugElement.injector.get(NotificationsService) as any;
-    const spyNotification = spyOn(notificationService, 'success');
+       const notificationService: NotificationMockService =
+           fixture.debugElement.injector.get(NotificationsService) as any;
+       const spyNotification = spyOn(notificationService, 'success');
 
-    setMockNgRedux(fixture, { type: NotificationToastType.success, title: 'Success', content: 'Success' });
+       setMockNgRedux(fixture, {type: NotificationToastType.success, title: 'Success', content: 'Success'});
 
-    tick();
-    fixture.detectChanges();
+       tick();
+       fixture.detectChanges();
 
-    expect(spyNotification).toHaveBeenCalled();
-  }));
+       expect(spyNotification).toHaveBeenCalled();
+     }));
 });

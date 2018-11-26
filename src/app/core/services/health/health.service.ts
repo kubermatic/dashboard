@@ -1,27 +1,25 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { HealthEntity } from '../../../shared/entity/HealthEntity';
-import { ClusterHealth } from '../../../shared/model/ClusterHealthConstants';
-import { Auth } from '../auth/auth.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from '../../../../environments/environment';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {HealthEntity} from '../../../shared/entity/HealthEntity';
+import {ClusterHealth} from '../../../shared/model/ClusterHealthConstants';
+import {Auth} from '../auth/auth.service';
 
 @Injectable()
 export class HealthService {
-
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
-  constructor(private http: HttpClient,
-              private auth: Auth) {
+  constructor(private http: HttpClient, private auth: Auth) {
     const token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + token);
   }
 
   getClusterHealth(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/health`;
-    return this.http.get<HealthEntity>(url, { headers: this.headers });
+    return this.http.get<HealthEntity>(url, {headers: this.headers});
   }
 
   getClusterHealthStatus(cluster: ClusterEntity, health: HealthEntity): string {
@@ -43,5 +41,4 @@ export class HealthService {
     }
     return false;
   }
-
 }

@@ -1,31 +1,33 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { WizardService } from '../../../../core/services/wizard/wizard.service';
-import { SharedModule } from '../../../../shared/shared.module';
-import { fakeAzureCluster } from '../../../../testing/fake-data/cluster.fake';
-import { AzureClusterSettingsComponent } from './azure.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {WizardService} from '../../../../core/services/wizard/wizard.service';
+import {SharedModule} from '../../../../shared/shared.module';
+import {fakeAzureCluster} from '../../../../testing/fake-data/cluster.fake';
+import {AzureClusterSettingsComponent} from './azure.component';
 
 describe('AzureClusterSettingsComponent', () => {
   let fixture: ComponentFixture<AzureClusterSettingsComponent>;
   let component: AzureClusterSettingsComponent;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        BrowserModule,
-        BrowserAnimationsModule,
-        ReactiveFormsModule,
-        SharedModule,
-      ],
-      declarations: [
-        AzureClusterSettingsComponent,
-      ],
-      providers: [
-        WizardService,
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            BrowserModule,
+            BrowserAnimationsModule,
+            ReactiveFormsModule,
+            SharedModule,
+          ],
+          declarations: [
+            AzureClusterSettingsComponent,
+          ],
+          providers: [
+            WizardService,
+          ],
+        })
+        .compileComponents();
   }));
 
   beforeEach(() => {
@@ -60,29 +62,40 @@ describe('AzureClusterSettingsComponent', () => {
     fixture.detectChanges();
 
     expect(component.azureSettingsForm.valid).toBeFalsy('form is invalid with empty defaults');
-    expect(component.azureSettingsForm.controls.clientID.hasError('required')).toBeTruthy('client ID field has required error');
-    expect(component.azureSettingsForm.controls.clientSecret.hasError('required')).toBeTruthy('client secret field has required error');
-    expect(component.azureSettingsForm.controls.tenantID.hasError('required')).toBeTruthy('tenant ID field has required error');
-    expect(component.azureSettingsForm.controls.subscriptionID.hasError('required')).toBeTruthy('subscription ID field has required error');
+    expect(component.azureSettingsForm.controls.clientID.hasError('required'))
+        .toBeTruthy('client ID field has required error');
+    expect(component.azureSettingsForm.controls.clientSecret.hasError('required'))
+        .toBeTruthy('client secret field has required error');
+    expect(component.azureSettingsForm.controls.tenantID.hasError('required'))
+        .toBeTruthy('tenant ID field has required error');
+    expect(component.azureSettingsForm.controls.subscriptionID.hasError('required'))
+        .toBeTruthy('subscription ID field has required error');
 
     component.azureSettingsForm.controls.clientID.patchValue('foo');
     fixture.detectChanges();
-    expect(component.azureSettingsForm.controls.clientID.hasError('required')).toBeFalsy('client ID has no required error after setting value');
+    expect(component.azureSettingsForm.controls.clientID.hasError('required'))
+        .toBeFalsy('client ID has no required error after setting value');
     expect(component.azureSettingsForm.valid).toBeFalsy('form is still invalid after setting only client ID');
 
     component.azureSettingsForm.controls.clientSecret.patchValue('bar');
     fixture.detectChanges();
-    expect(component.azureSettingsForm.controls.clientSecret.hasError('required')).toBeFalsy('client secret field has no required error after setting value');
-    expect(component.azureSettingsForm.valid).toBeFalsy('form is still invalid after setting both client ID and client secret');
+    expect(component.azureSettingsForm.controls.clientSecret.hasError('required'))
+        .toBeFalsy('client secret field has no required error after setting value');
+    expect(component.azureSettingsForm.valid)
+        .toBeFalsy('form is still invalid after setting both client ID and client secret');
 
     component.azureSettingsForm.controls.tenantID.patchValue('tenant');
     fixture.detectChanges();
-    expect(component.azureSettingsForm.controls.tenantID.hasError('required')).toBeFalsy('tenant ID field has no required error after setting value');
-    expect(component.azureSettingsForm.valid).toBeFalsy('form is still invalid after setting client ID, client secret and tenant ID');
+    expect(component.azureSettingsForm.controls.tenantID.hasError('required'))
+        .toBeFalsy('tenant ID field has no required error after setting value');
+    expect(component.azureSettingsForm.valid)
+        .toBeFalsy('form is still invalid after setting client ID, client secret and tenant ID');
 
     component.azureSettingsForm.controls.subscriptionID.patchValue('subscription');
     fixture.detectChanges();
-    expect(component.azureSettingsForm.controls.subscriptionID.hasError('required')).toBeFalsy('subscription ID field has no required error after setting value');
-    expect(component.azureSettingsForm.valid).toBeTruthy('form is still invalid after setting client ID, client secret, tenant ID and subscription ID');
+    expect(component.azureSettingsForm.controls.subscriptionID.hasError('required'))
+        .toBeFalsy('subscription ID field has no required error after setting value');
+    expect(component.azureSettingsForm.valid)
+        .toBeTruthy('form is still invalid after setting client ID, client secret, tenant ID and subscription ID');
   });
 });

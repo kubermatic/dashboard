@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
-import { NodeData, NodeOperatingSystemData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
+import {Injectable} from '@angular/core';
+import {Subject} from 'rxjs/Subject';
+import {NodeData, NodeOperatingSystemData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Injectable()
 export class AddNodeService {
-
   private _nodeProviderData = new Subject<NodeProviderData>();
   nodeProviderDataChanges$ = this._nodeProviderData.asObservable();
   private _nodeData = new Subject<NodeData>();

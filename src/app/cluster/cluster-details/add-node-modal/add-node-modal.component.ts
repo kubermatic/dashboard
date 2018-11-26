@@ -1,15 +1,15 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material';
-import { combineLatest, ObservableInput, Subscription } from 'rxjs';
-import { ApiService, WizardService } from '../../../core/services';
-import { AddNodeService } from '../../../core/services/add-node/add-node.service';
-import { DatacenterService } from '../../../core/services/datacenter/datacenter.service';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeEntity } from '../../../shared/entity/NodeEntity';
-import { NodeData } from '../../../shared/model/NodeSpecChange';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatTabChangeEvent} from '@angular/material';
+import {combineLatest, ObservableInput, Subscription} from 'rxjs';
+import {ApiService, WizardService} from '../../../core/services';
+import {AddNodeService} from '../../../core/services/add-node/add-node.service';
+import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeEntity} from '../../../shared/entity/NodeEntity';
+import {NodeData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-add-node-modal',
@@ -21,28 +21,28 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   private subscriptions: Subscription[] = [];
-  public nodeDC: DataCenterEntity;
-  public addNodeData: NodeData = {
-      spec: {
-        cloud: {},
-        operatingSystem: {},
-        versions: {},
-      },
+  nodeDC: DataCenterEntity;
+  addNodeData: NodeData = {
+    spec: {
+      cloud: {},
+      operatingSystem: {},
+      versions: {},
+    },
     count: 1,
     valid: true,
   };
 
-  constructor(private api: ApiService,
-              private addNodeService: AddNodeService,
-              private wizardService: WizardService,
-              private dcService: DatacenterService,
-              public googleAnalyticsService: GoogleAnalyticsService) {}
+  constructor(
+      private api: ApiService, private addNodeService: AddNodeService, private wizardService: WizardService,
+      private dcService: DatacenterService, public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((result) => {
-        this.nodeDC = result;
-      },
-    );
+    this.dcService.getDataCenter(this.cluster.spec.cloud.dc)
+        .subscribe(
+            (result) => {
+              this.nodeDC = result;
+            },
+        );
 
     this.addNodeData.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
     this.addNodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
@@ -63,13 +63,14 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addNode(): void {
+  addNode(): void {
     const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
     for (let i = 0; i < this.addNodeData.count; i++) {
       const node = {
         spec: this.addNodeData.spec,
       } as NodeEntity;
-      createNodeObservables.push(this.api.createClusterNode(this.cluster, node, this.datacenter.metadata.name, this.projectID));
+      createNodeObservables.push(
+          this.api.createClusterNode(this.cluster, node, this.datacenter.metadata.name, this.projectID));
     }
 
     this.subscriptions.push(combineLatest(createNodeObservables).subscribe(() => {
@@ -78,7 +79,7 @@ export class AddNodeModalComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public changeView(event: MatTabChangeEvent): void {
+  changeView(event: MatTabChangeEvent): void {
     switch (event.tab.textLabel) {
       case 'Simple':
         return this.wizardService.changeSettingsFormView({hideOptional: true});

@@ -9,8 +9,8 @@ all: install run
 install:
 	@$(CC) install
 
-lint:
-	@$(CC) run lint
+check:
+	@$(CC) run check
 
 run:
 	@$(CC) start
@@ -21,7 +21,7 @@ test:
 	@$(CC) run test
 
 test-headless:
-	@$(CC) run test-headless
+	@$(CC) run test:headless
 
 e2e:
 	@$(CC) run e2e

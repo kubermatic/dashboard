@@ -1,15 +1,15 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, Sort } from '@angular/material';
-import { find } from 'lodash';
-import { interval, Subscription } from 'rxjs';
-import { retry } from 'rxjs/operators';
-import { AppConfigService } from '../../../app-config.service';
-import { ApiService, UserService } from '../../../core/services';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { UserGroupConfig } from '../../../shared/model/Config';
-import { AddClusterSSHKeysComponent } from './add-cluster-sshkeys/add-cluster-sshkeys.component';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, Sort} from '@angular/material';
+import {find} from 'lodash';
+import {interval, Subscription} from 'rxjs';
+import {retry} from 'rxjs/operators';
+import {AppConfigService} from '../../../app-config.service';
+import {ApiService, UserService} from '../../../core/services';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {UserGroupConfig} from '../../../shared/model/Config';
+import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshkeys.component';
 
 @Component({
   selector: 'kubermatic-edit-sshkeys',
@@ -22,20 +22,19 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
 
-  public loading = true;
-  public sshKeys: SSHKeyEntity[] = [];
-  public sortedSshKeys: SSHKeyEntity[] = [];
-  public sort: Sort = { active: 'name', direction: 'asc' };
-  public userGroup: string;
-  public userGroupConfig: UserGroupConfig;
+  loading = true;
+  sshKeys: SSHKeyEntity[] = [];
+  sortedSshKeys: SSHKeyEntity[] = [];
+  sort: Sort = {active: 'name', direction: 'asc'};
+  userGroup: string;
+  userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private userService: UserService,
-              private appConfigService: AppConfigService,
-              public dialog: MatDialog) { }
+  constructor(
+      private api: ApiService, private userService: UserService, private appConfigService: AppConfigService,
+      public dialog: MatDialog) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
@@ -57,14 +56,16 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys(): void {
-    this.subscriptions.push(this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID).pipe(retry(3)).subscribe((res) => {
-      this.sshKeys = res;
-      this.sortSshKeyData(this.sort);
-      this.loading = false;
-    }));
+    this.subscriptions.push(this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+                                .pipe(retry(3))
+                                .subscribe((res) => {
+                                  this.sshKeys = res;
+                                  this.sortSshKeyData(this.sort);
+                                  this.loading = false;
+                                }));
   }
 
-  public addSshKey(): void {
+  addSshKey(): void {
     const dialogRef = this.dialog.open(AddClusterSSHKeysComponent);
     dialogRef.componentInstance.projectID = this.projectID;
     dialogRef.componentInstance.cluster = this.cluster;
@@ -72,11 +73,11 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.sshKeys = this.sshKeys;
 
     dialogRef.afterClosed().subscribe((result) => {
-      result && this.refreshSSHKeys();
+      result && this.refreshSSHKeys();  // tslint:disable-line
     });
   }
 
-  public trackSshKey(index: number, shhKey: SSHKeyEntity): number {
+  trackSshKey(index: number, shhKey: SSHKeyEntity): number {
     const prevSSHKey = find(this.sshKeys, (item) => {
       return item.name === shhKey.name;
     });

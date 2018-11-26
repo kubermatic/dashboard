@@ -1,100 +1,23 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class ClusterNameGenerator {
-  private prefix: string[] = ['admiring',
-    'adoring',
-    'affectionate',
-    'agitated',
-    'amazing',
-    'angry',
-    'awesome',
-    'blissful',
-    'boring',
-    'brave',
-    'clever',
-    'cocky',
-    'compassionate',
-    'competent',
-    'condescending',
-    'confident',
-    'cranky',
-    'dazzling',
-    'determined',
-    'distracted',
-    'dreamy',
-    'eager',
-    'ecstatic',
-    'elastic',
-    'elated',
-    'elegant',
-    'eloquent',
-    'epic',
-    'fervent',
-    'festive',
-    'flamboyant',
-    'focused',
-    'friendly',
-    'frosty',
-    'gallant',
-    'gifted',
-    'goofy',
-    'gracious',
-    'happy',
-    'hardcore',
-    'heuristic',
-    'hopeful',
-    'hungry',
-    'infallible',
-    'inspiring',
-    'jolly',
-    'jovial',
-    'keen',
-    'kickass',
-    'kind',
-    'laughing',
-    'loving',
-    'lucid',
-    'mystifying',
-    'modest',
-    'musing',
-    'naughty',
-    'nervous',
-    'nifty',
-    'nostalgic',
-    'objective',
-    'optimistic',
-    'peaceful',
-    'pedantic',
-    'pensive',
-    'practical',
-    'priceless',
-    'quirky',
-    'quizzical',
-    'relaxed',
-    'reverent',
-    'romantic',
-    'sad',
-    'serene',
-    'sharp',
-    'silly',
-    'sleepy',
-    'stoic',
-    'stupefied',
-    'suspicious',
-    'tender',
-    'thirsty',
-    'trusting',
-    'unruffled',
-    'upbeat',
-    'vibrant',
-    'vigilant',
-    'wizardly',
-    'wonderful',
-    'xenodochial',
-    'youthful',
-    'zealous',
-    'zen'];
+  private prefix: string[] = [
+    'admiring',      'adoring',    'affectionate', 'agitated',  'amazing',    'angry',         'awesome',
+    'blissful',      'boring',     'brave',        'clever',    'cocky',      'compassionate', 'competent',
+    'condescending', 'confident',  'cranky',       'dazzling',  'determined', 'distracted',    'dreamy',
+    'eager',         'ecstatic',   'elastic',      'elated',    'elegant',    'eloquent',      'epic',
+    'fervent',       'festive',    'flamboyant',   'focused',   'friendly',   'frosty',        'gallant',
+    'gifted',        'goofy',      'gracious',     'happy',     'hardcore',   'heuristic',     'hopeful',
+    'hungry',        'infallible', 'inspiring',    'jolly',     'jovial',     'keen',          'kickass',
+    'kind',          'laughing',   'loving',       'lucid',     'mystifying', 'modest',        'musing',
+    'naughty',       'nervous',    'nifty',        'nostalgic', 'objective',  'optimistic',    'peaceful',
+    'pedantic',      'pensive',    'practical',    'priceless', 'quirky',     'quizzical',     'relaxed',
+    'reverent',      'romantic',   'sad',          'serene',    'sharp',      'silly',         'sleepy',
+    'stoic',         'stupefied',  'suspicious',   'tender',    'thirsty',    'trusting',      'unruffled',
+    'upbeat',        'vibrant',    'vigilant',     'wizardly',  'wonderful',  'xenodochial',   'youthful',
+    'zealous',       'zen'
+  ];
 
   private suffix: string[] = [
     /* Muhammad ibn Jābir al-Ḥarrānī al-Battānī was a founding father of astronomy.
@@ -111,7 +34,8 @@ export class ClusterNameGenerator {
 
     /* Maria Gaetana Agnesi - Italian mathematician, philosopher, theologian and
     humanitarian. She was the first woman to write a mathematics handbook and the
-    first woman appointed as a Mathematics Professor at a University. https://en.wikipedia.org/wiki/Maria_Gaetana_Agnesi */
+    first woman appointed as a Mathematics Professor at a University. https://en.wikipedia.org/wiki/Maria_Gaetana_Agnesi
+  */
     'agnesi',
 
     /* Archimedes was a physicist, engineer and mathematician who invented too many
@@ -146,11 +70,13 @@ export class ClusterNameGenerator {
     // Laura Bassi, the world's first female professor https://en.wikipedia.org/wiki/Laura_Bassi
     'bassi',
 
-    // Hugh Beaver, British engineer, founder of the Guinness Book of World Records https://en.wikipedia.org/wiki/Hugh_Beaver
+    // Hugh Beaver, British engineer, founder of the Guinness Book of World Records
+    // https://en.wikipedia.org/wiki/Hugh_Beaver
     'beaver',
 
     /* Alexander Graham Bell - an eminent Scottish-born scientist, inventor, engineer and
-    innovator who is credited with inventing the first practical telephone - https://en.wikipedia.org/wiki/Alexander_Graham_Bell */
+    innovator who is credited with inventing the first practical telephone -
+    https://en.wikipedia.org/wiki/Alexander_Graham_Bell */
     'bell',
 
     /* Homi J Bhabha - was an Indian nuclear physicist, founding director, and professor
@@ -170,7 +96,8 @@ export class ClusterNameGenerator {
     // Niels Bohr is the father of quantum theory. https://en.wikipedia.org/wiki/Niels_Bohr.
     'bohr',
 
-    // Kathleen Booth, she's credited with writing the first assembly language. https://en.wikipedia.org/wiki/Kathleen_Booth
+    // Kathleen Booth, she's credited with writing the first assembly language.
+    // https://en.wikipedia.org/wiki/Kathleen_Booth
     'booth',
 
     /* Anita Borg - Anita Borg was the founding director of the Institute for Women and
@@ -215,12 +142,14 @@ export class ClusterNameGenerator {
     // numismatist https://en.wikipedia.org/wiki/Joan_Clarke
     'clarke',
 
-    // Jane Colden - American botanist widely considered the first female American botanist - https://en.wikipedia.org/wiki/Jane_Colden
+    // Jane Colden - American botanist widely considered the first female American botanist -
+    // https://en.wikipedia.org/wiki/Jane_Colden
     'colden',
 
     // Gerty Theresa Cori - American biochemist who became the third woman—and
     // first American woman—to win a Nobel Prize in science, and the first woman
-    // to be awarded the Nobel Prize in Physiology or Medicine. Cori was born in Prague. https://en.wikipedia.org/wiki/Gerty_Cori
+    // to be awarded the Nobel Prize in Physiology or Medicine. Cori was born in Prague.
+    // https://en.wikipedia.org/wiki/Gerty_Cori
     'cori',
 
     // Seymour Roger Cray was an American electrical engineer and supercomputer
@@ -244,15 +173,18 @@ export class ClusterNameGenerator {
     // Leonardo Da Vinci invented too many things to list here. https://en.wikipedia.org/wiki/Leonardo_da_Vinci.
     'davinci',
 
-    // Edsger Wybe Dijkstra was a Dutch computer scientist and mathematical scientist. https://en.wikipedia.org/wiki/Edsger_W._Dijkstra.
+    // Edsger Wybe Dijkstra was a Dutch computer scientist and mathematical scientist.
+    // https://en.wikipedia.org/wiki/Edsger_W._Dijkstra.
     'dijkstra',
 
     // Donna Dubinsky - played an integral role in the development of personal digital
-    // assistants (PDAs) serving as CEO of Palm, Inc. and co-founding Handspring. https://en.wikipedia.org/wiki/Donna_Dubinsky
+    // assistants (PDAs) serving as CEO of Palm, Inc. and co-founding Handspring.
+    // https://en.wikipedia.org/wiki/Donna_Dubinsky
     'dubinsky',
 
     // Annie Easley - She was a leading member of the team which developed software
-    // for the Centaur rocket stage and one of the first African-Americans in her field. https://en.wikipedia.org/wiki/Annie_Easley
+    // for the Centaur rocket stage and one of the first African-Americans in her field.
+    // https://en.wikipedia.org/wiki/Annie_Easley
     'easley',
 
     // Thomas Alva Edison, prolific inventor https://en.wikipedia.org/wiki/Thomas_Edison
@@ -280,7 +212,8 @@ export class ClusterNameGenerator {
     // Enrico Fermi invented the first nuclear reactor. https://en.wikipedia.org/wiki/Enrico_Fermi.
     'fermi',
 
-    // Richard Feynman was a key contributor to quantum mechanics and particle physics. https://en.wikipedia.org/wiki/Richard_Feynman
+    // Richard Feynman was a key contributor to quantum mechanics and particle physics.
+    // https://en.wikipedia.org/wiki/Richard_Feynman
     'feynman',
 
     // Benjamin Franklin is famous for his experiments in electricity and the invention of the lightning rod.
@@ -313,7 +246,8 @@ export class ClusterNameGenerator {
     // considered to be the world's foremost expert on chimpanzees - https://en.wikipedia.org/wiki/Jane_Goodall
     'goodall',
 
-    // Lois Haibt - American computer scientist, part of the team at IBM that developed FORTRAN - https://en.wikipedia.org/wiki/Lois_Haibt
+    // Lois Haibt - American computer scientist, part of the team at IBM that developed FORTRAN -
+    // https://en.wikipedia.org/wiki/Lois_Haibt
     'haibt',
 
     // Margaret Hamilton - Director of the Software Engineering Division of the MIT
@@ -334,7 +268,8 @@ export class ClusterNameGenerator {
     'heyrovsky',
 
     // Dorothy Hodgkin was a British biochemist, credited with the development of protein
-    // crystallography. She was awarded the Nobel Prize in Chemistry in 1964. https://en.wikipedia.org/wiki/Dorothy_Hodgkin
+    // crystallography. She was awarded the Nobel Prize in Chemistry in 1964.
+    // https://en.wikipedia.org/wiki/Dorothy_Hodgkin
     'hodgkin',
 
     // Erna Schneider Hoover revolutionized modern communication by inventing a computerized
@@ -342,7 +277,8 @@ export class ClusterNameGenerator {
     'hoover',
 
     // Grace Hopper developed the first compiler for a computer programming language and
-    // is credited with popularizing the term "debugging" for fixing computer glitches. https://en.wikipedia.org/wiki/Grace_Hopper
+    // is credited with popularizing the term "debugging" for fixing computer glitches.
+    // https://en.wikipedia.org/wiki/Grace_Hopper
     'hopper',
 
     // Frances Hugle, she was an American scientist, engineer, and inventor who contributed
@@ -375,7 +311,8 @@ export class ClusterNameGenerator {
     'jones',
 
     // A. P. J. Abdul Kalam - is an Indian scientist aka Missile Man of India for his work
-    // on the development of ballistic missile and launch vehicle technology - https://en.wikipedia.org/wiki/A._P._J._Abdul_Kalam
+    // on the development of ballistic missile and launch vehicle technology -
+    // https://en.wikipedia.org/wiki/A._P._J._Abdul_Kalam
     'kalam',
 
     // Susan Kare, created the icons and many of the interface elements for the original Apple
@@ -391,10 +328,12 @@ export class ClusterNameGenerator {
     // Physiology - https://en.wikipedia.org/wiki/Har_Gobind_Khorana
     'khorana',
 
-    // Jack Kilby invented silicone integrated circuits and gave Silicon Valley its name. - https://en.wikipedia.org/wiki/Jack_Kilby
+    // Jack Kilby invented silicone integrated circuits and gave Silicon Valley its name. -
+    // https://en.wikipedia.org/wiki/Jack_Kilby
     'kilby',
 
-    // Maria Kirch - German astronomer and first woman to discover a comet - https://en.wikipedia.org/wiki/Maria_Margarethe_Kirch
+    // Maria Kirch - German astronomer and first woman to discover a comet -
+    // https://en.wikipedia.org/wiki/Maria_Margarethe_Kirch
     'kirch',
 
     // Donald Knuth - American computer scientist, author of "The Art of Computer Programming" and
@@ -414,7 +353,8 @@ export class ClusterNameGenerator {
     'lamarr',
 
     // Leslie B. Lamport - American computer scientist. Lamport is best known for his
-    // seminal work in distributed systems and was the winner of the 2013 Turing Award. https://en.wikipedia.org/wiki/Leslie_Lamport
+    // seminal work in distributed systems and was the winner of the 2013 Turing Award.
+    // https://en.wikipedia.org/wiki/Leslie_Lamport
     'lamport',
 
     // Mary Leakey - British paleoanthropologist who discovered the first fossilized
@@ -422,7 +362,8 @@ export class ClusterNameGenerator {
     'leakey',
 
     // Henrietta Swan Leavitt - she was an American astronomer who discovered the relation
-    // between the luminosity and the period of Cepheid variable stars. https://en.wikipedia.org/wiki/Henrietta_Swan_Leavitt
+    // between the luminosity and the period of Cepheid variable stars.
+    // https://en.wikipedia.org/wiki/Henrietta_Swan_Leavitt
     'leavitt',
 
     // Daniel Lewin -  Mathematician, Akamai co-founder, soldier, 9/11 victim-- Developed
@@ -441,7 +382,8 @@ export class ClusterNameGenerator {
     // Ada Lovelace invented the first algorithm. https://en.wikipedia.org/wiki/Ada_Lovelace (thanks James Turnbull)
     'lovelace',
 
-    // Auguste and Louis Lumière - the first filmmakers in history - https://en.wikipedia.org/wiki/Auguste_and_Louis_Lumi%C3%A8re
+    // Auguste and Louis Lumière - the first filmmakers in history -
+    // https://en.wikipedia.org/wiki/Auguste_and_Louis_Lumi%C3%A8re
     'lumiere',
 
     // Mahavira - Ancient Indian mathematician during 9th century AD who discovered basic
@@ -505,24 +447,28 @@ export class ClusterNameGenerator {
     // (inventor of dynamite) - https://en.wikipedia.org/wiki/Alfred_Nobel
     'nobel',
 
-    // Emmy Noether, German mathematician. Noether's Theorem is named after her. https://en.wikipedia.org/wiki/Emmy_Noether
+    // Emmy Noether, German mathematician. Noether's Theorem is named after her.
+    // https://en.wikipedia.org/wiki/Emmy_Noether
     'noether',
 
     // Poppy Northcutt. Poppy Northcutt was the first woman to work as part of NASA’s
     // Mission Control. http://www.businessinsider.com/poppy-northcutt-helped-apollo-astronauts-2014-12?op=1
     'northcutt',
 
-    // Robert Noyce invented silicone integrated circuits and gave Silicon Valley its name. - https://en.wikipedia.org/wiki/Robert_Noyce
+    // Robert Noyce invented silicone integrated circuits and gave Silicon Valley its name. -
+    // https://en.wikipedia.org/wiki/Robert_Noyce
     'noyce',
 
     // Panini - Ancient Indian linguist and grammarian from 4th century CE who worked on
-    // the world's first formal system - https://en.wikipedia.org/wiki/P%C4%81%E1%B9%87ini#Comparison_with_modern_formal_systems
+    // the world's first formal system -
+    // https://en.wikipedia.org/wiki/P%C4%81%E1%B9%87ini#Comparison_with_modern_formal_systems
     'panini',
 
     // Ambroise Pare invented modern surgery. https://en.wikipedia.org/wiki/Ambroise_Par%C3%A9
     'pare',
 
-    // Louis Pasteur discovered vaccination, fermentation and pasteurization. https://en.wikipedia.org/wiki/Louis_Pasteur.
+    // Louis Pasteur discovered vaccination, fermentation and pasteurization.
+    // https://en.wikipedia.org/wiki/Louis_Pasteur.
     'pasteur',
 
     // Cecilia Payne-Gaposchkin was an astronomer and astrophysicist who, in 1925,
@@ -538,7 +484,8 @@ export class ClusterNameGenerator {
     // Go programming language. https://en.wikipedia.org/wiki/Rob_Pike
     'pike',
 
-    // Henri Poincaré made fundamental contributions in several fields of mathematics. https://en.wikipedia.org/wiki/Henri_Poincar%C3%A9
+    // Henri Poincaré made fundamental contributions in several fields of mathematics.
+    // https://en.wikipedia.org/wiki/Henri_Poincar%C3%A9
     'poincare',
 
     // Laura Poitras is a director and producer whose work, made possible by open source
@@ -547,7 +494,8 @@ export class ClusterNameGenerator {
     'poitras',
 
     // Claudius Ptolemy - a Greco-Egyptian writer of Alexandria, known as a mathematician,
-    // astronomer, geographer, astrologer, and poet of a single epigram in the Greek Anthology - https://en.wikipedia.org/wiki/Ptolemy
+    // astronomer, geographer, astrologer, and poet of a single epigram in the Greek Anthology -
+    // https://en.wikipedia.org/wiki/Ptolemy
     'ptolemy',
 
     // C. V. Raman - Indian physicist who won the Nobel Prize in 1930 for proposing the
@@ -564,14 +512,17 @@ export class ClusterNameGenerator {
     'ride',
 
     // Rita Levi-Montalcini - Won Nobel Prize in Physiology or Medicine jointly with
-    // colleague Stanley Cohen for the discovery of nerve growth factor (https://en.wikipedia.org/wiki/Rita_Levi-Montalcini)
+    // colleague Stanley Cohen for the discovery of nerve growth factor
+    // (https://en.wikipedia.org/wiki/Rita_Levi-Montalcini)
     'montalcini',
 
-    // Dennis Ritchie - co-creator of UNIX and the C programming language. - https://en.wikipedia.org/wiki/Dennis_Ritchie
+    // Dennis Ritchie - co-creator of UNIX and the C programming language. -
+    // https://en.wikipedia.org/wiki/Dennis_Ritchie
     'ritchie',
 
     // Wilhelm Conrad Röntgen - German physicist who was awarded the first Nobel
-    // Prize in Physics in 1901 for the discovery of X-rays (Röntgen rays). https://en.wikipedia.org/wiki/Wilhelm_R%C3%B6ntgen
+    // Prize in Physics in 1901 for the discovery of X-rays (Röntgen rays).
+    // https://en.wikipedia.org/wiki/Wilhelm_R%C3%B6ntgen
     'roentgen',
 
     // Rosalind Franklin - British biophysicist and X-ray crystallographer whose
@@ -579,7 +530,8 @@ export class ClusterNameGenerator {
     'rosalind',
 
     // Meghnad Saha - Indian astrophysicist best known for his development of the
-    // Saha equation, used to describe chemical and physical conditions in stars - https://en.wikipedia.org/wiki/Meghnad_Saha
+    // Saha equation, used to describe chemical and physical conditions in stars -
+    // https://en.wikipedia.org/wiki/Meghnad_Saha
     'saha',
 
     // Jean E. Sammet developed FORMAC, the first widely used computer language for
@@ -698,9 +650,9 @@ export class ClusterNameGenerator {
     'yonath',
   ];
 
-  public generateName(): string {
+  generateName(): string {
     return this.prefix[this.randomNumberInsideInterval(0, this.prefix.length)] + '-' +
-      this.suffix[this.randomNumberInsideInterval(0, this.suffix.length)];
+        this.suffix[this.randomNumberInsideInterval(0, this.suffix.length)];
   }
 
   private randomNumberInsideInterval(min: number, max: number): number {

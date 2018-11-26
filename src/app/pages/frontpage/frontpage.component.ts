@@ -1,7 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
-import { Auth } from '../../core/services';
+import {Component, HostListener, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
+import {Auth} from '../../core/services';
 
 @Component({
   selector: 'kubermatic-frontpage',
@@ -9,15 +9,14 @@ import { Auth } from '../../core/services';
   styleUrls: ['./frontpage.component.scss'],
 })
 export class FrontpageComponent implements OnInit {
-  public myStyle: object = {};
-  public myParams: object = {};
-  public width = 100;
-  public height = 100;
-  public environment: any = environment;
-  public isAuth = false;
+  myStyle: object = {};
+  myParams: object = {};
+  width = 100;
+  height = 100;
+  environment: any = environment;
+  isAuth = false;
 
-  constructor(private auth: Auth, private router: Router) {
-  }
+  constructor(private auth: Auth, private router: Router) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {
@@ -59,7 +58,7 @@ export class FrontpageComponent implements OnInit {
     };
   }
 
-  public goToLogin(): void {
+  goToLogin(): void {
     document.getElementById('login-button').click();
   }
 }

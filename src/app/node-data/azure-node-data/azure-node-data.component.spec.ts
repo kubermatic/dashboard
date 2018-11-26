@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ApiService, DatacenterService, WizardService } from '../../core/services';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { SharedModule } from '../../shared/shared.module';
-import { fakeAzureSizes } from '../../testing/fake-data/addNodeModal.fake';
-import { fakeAzureCluster } from '../../testing/fake-data/cluster.fake';
-import { fakeAzureDatacenter } from '../../testing/fake-data/datacenter.fake';
-import { nodeDataFake } from '../../testing/fake-data/node.fake';
-import { asyncData } from '../../testing/services/api-mock.service';
-import { AzureNodeDataComponent } from './azure-node-data.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
+import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {SharedModule} from '../../shared/shared.module';
+import {fakeAzureSizes} from '../../testing/fake-data/addNodeModal.fake';
+import {fakeAzureCluster} from '../../testing/fake-data/cluster.fake';
+import {fakeAzureDatacenter} from '../../testing/fake-data/datacenter.fake';
+import {nodeDataFake} from '../../testing/fake-data/node.fake';
+import {asyncData} from '../../testing/services/api-mock.service';
+import {AzureNodeDataComponent} from './azure-node-data.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -30,20 +30,22 @@ describe('AzureNodeDataComponent', () => {
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
     datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAzureDatacenter()));
 
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        AzureNodeDataComponent,
-      ],
-      providers: [
-        AddNodeService,
-        WizardService,
-        { provide: ApiService, useValue: apiMock },
-        { provide: DatacenterService, useValue: datacenterMock },
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            AzureNodeDataComponent,
+          ],
+          providers: [
+            AddNodeService,
+            WizardService,
+            {provide: ApiService, useValue: apiMock},
+            {provide: DatacenterService, useValue: datacenterMock},
+          ],
+        })
+        .compileComponents();
   }));
 
   beforeEach(() => {

@@ -1,13 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
-import { AppConfigService } from '../../../app-config.service';
-import { UserService } from '../../../core/services';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { NodeEntity } from '../../../shared/entity/NodeEntity';
-import { UserGroupConfig } from '../../../shared/model/Config';
-import { NodeDeleteConfirmationComponent } from '../node-delete-confirmation/node-delete-confirmation.component';
-import { NodeDuplicateComponent } from '../node-duplicate/node-duplicate.component';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material';
+import {AppConfigService} from '../../../app-config.service';
+import {UserService} from '../../../core/services';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {NodeEntity} from '../../../shared/entity/NodeEntity';
+import {UserGroupConfig} from '../../../shared/model/Config';
+import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
+import {NodeDuplicateComponent} from '../node-duplicate/node-duplicate.component';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -24,12 +24,12 @@ export class NodeListComponent implements OnInit {
   @Input() clusterHealthStatus: string;
   @Input() isClusterRunning: boolean;
   @Input() hasInitialNodes: boolean;
-  public clickedDeleteNode = {};
-  public clickedDuplicateNode = {};
-  public isShowNodeDetails = {};
-  public userGroupConfig: UserGroupConfig;
-  public userGroup: string;
-  public config: MatDialogConfig = {
+  clickedDeleteNode = {};
+  clickedDuplicateNode = {};
+  isShowNodeDetails = {};
+  userGroupConfig: UserGroupConfig;
+  userGroup: string;
+  config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
     backdropClass: '',
@@ -46,10 +46,7 @@ export class NodeListComponent implements OnInit {
     },
   };
 
-  constructor(public dialog: MatDialog,
-              private appConfigService: AppConfigService,
-              private userService: UserService) {
-  }
+  constructor(public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -58,7 +55,7 @@ export class NodeListComponent implements OnInit {
     });
   }
 
-  public deleteNodeDialog(node: NodeEntity): void {
+  deleteNodeDialog(node: NodeEntity): void {
     this.clickedDeleteNode[node.id] = true;
     const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
     dialogRef.componentInstance.node = node;
@@ -72,7 +69,7 @@ export class NodeListComponent implements OnInit {
     });
   }
 
-  public duplicateNodeDialog(node: NodeEntity): void {
+  duplicateNodeDialog(node: NodeEntity): void {
     this.clickedDuplicateNode[node.id] = true;
     const dialogRef = this.dialog.open(NodeDuplicateComponent);
     dialogRef.componentInstance.node = node;
@@ -87,7 +84,7 @@ export class NodeListComponent implements OnInit {
     });
   }
 
-  public getNodeHealthStatus(node: NodeEntity, index: number): object {
+  getNodeHealthStatus(node: NodeEntity, index: number): object {
     const green = 'fa fa-circle green';
     const red = 'fa fa-circle-o red';
     const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
@@ -119,7 +116,7 @@ export class NodeListComponent implements OnInit {
     return nodeHealthStatus;
   }
 
-  public getFormattedNodeMemory(memory: string): string {
+  getFormattedNodeMemory(memory: string): string {
     const memRE = /([0-9]+)([a-zA-Z])i/;
     const nodeAllocatable = memory;
 
@@ -130,20 +127,19 @@ export class NodeListComponent implements OnInit {
     let i = 0;
 
     if (resRE) {
-      let ki = parseInt(resRE[1], 10);
+      let ki = parseInt(resRE[1], 10);  // tslint:disable-line
 
       do {
         ki /= 1024;
         i++;
-      }
-      while (ki > 1);
+      } while (ki > 1);
       nodeCapacity = (ki * 1024).toFixed(2);
     }
 
     return nodeCapacity ? `${nodeCapacity} ${prefixes[i - 1]}` : 'unknown';
   }
 
-  public getAddresses(node: NodeEntity): object {
+  getAddresses(node: NodeEntity): object {
     const addresses = {};
     for (const i in node.status.addresses) {
       if (node.status.addresses[i].type === 'InternalIP') {
@@ -155,7 +151,7 @@ export class NodeListComponent implements OnInit {
     return addresses;
   }
 
-  public getOsImagePath(node: NodeEntity): string {
+  getOsImagePath(node: NodeEntity): string {
     let path = '/assets/images/operating-system/';
 
     if (node.spec.operatingSystem.containerLinux) {
@@ -171,22 +167,22 @@ export class NodeListComponent implements OnInit {
     return path;
   }
 
-  public showInfo(node: NodeEntity): boolean {
+  showInfo(node: NodeEntity): boolean {
     return node.name !== node.id.replace('machine-', '') && node.id !== '';
   }
 
-  public getInfo(node: NodeEntity): string {
+  getInfo(node: NodeEntity): string {
     if (node.spec.cloud.aws) {
       return node.name;
     }
     return node.id.replace('machine-', '');
   }
 
-  public getNodeName(node: NodeEntity): string {
+  getNodeName(node: NodeEntity): string {
     return node.id.replace('machine-', '');
   }
 
-  public toggleNode(nodeID: string): void {
+  toggleNode(nodeID: string): void {
     const element = event.target as HTMLElement;
     const className = element.className;
     if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'copy') {
@@ -217,5 +213,4 @@ export class NodeListComponent implements OnInit {
     }
     return tagsValue;
   }
-
 }

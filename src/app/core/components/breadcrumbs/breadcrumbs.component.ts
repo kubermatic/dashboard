@@ -1,8 +1,8 @@
-import { select } from '@angular-redux/store';
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { ApiService, ProjectService } from '../../../core/services';
+import {select} from '@angular-redux/store';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {ApiService, ProjectService} from '../../../core/services';
 
 @Component({
   selector: 'kubermatic-breadcrumbs',
@@ -10,15 +10,12 @@ import { ApiService, ProjectService } from '../../../core/services';
   styleUrls: ['./breadcrumbs.component.scss'],
 })
 export class BreadcrumbsComponent implements OnInit {
-
-  public activePageTitle = '';
-  public clusterName = '';
+  activePageTitle = '';
+  clusterName = '';
 
   @select(['breadcrumb', 'crumb']) breadcrumb$: Observable<string>;
 
-  constructor(private api: ApiService,
-              private projectService: ProjectService,
-              private router: Router) {
+  constructor(private api: ApiService, private projectService: ProjectService, private router: Router) {
     this.breadcrumb$.subscribe((crumb) => {
       this.activePageTitle = crumb;
 
@@ -33,7 +30,7 @@ export class BreadcrumbsComponent implements OnInit {
         const datacenter = matchResDatacenter[1];
         this.projectService.selectedProjectChanges$.subscribe((project) => {
           this.api.getCluster(clusterId, datacenter, project.id)
-            .subscribe((cluster) => this.clusterName = cluster.name);
+              .subscribe((cluster) => this.clusterName = cluster.name);
         });
       } else {
         this.clusterName = '';
@@ -41,7 +38,5 @@ export class BreadcrumbsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

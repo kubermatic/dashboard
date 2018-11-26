@@ -1,5 +1,5 @@
-import { ClusterEntity, Token } from '../../shared/entity/ClusterEntity';
-import { CreateClusterModel } from '../../shared/model/CreateClusterModel';
+import {ClusterEntity, Token} from '../../shared/entity/ClusterEntity';
+import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 
 export function clusterModelFake(): CreateClusterModel {
   return {
@@ -7,7 +7,7 @@ export function clusterModelFake(): CreateClusterModel {
     spec: {
       cloud: {
         dc: 'do-fra1',
-          digitalocean: {
+        digitalocean: {
           token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
         },
         bringyourown: null,
@@ -35,7 +35,7 @@ export function fakeDigitaloceanCluster(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-            token: 'token',
+          token: 'token',
         },
         aws: null,
         openstack: null,
@@ -227,5 +227,7 @@ export function fakeToken(): Token {
 }
 
 export function fakeClusters(): ClusterEntity[] {
-  return [fakeDigitaloceanCluster(), fakeAWSCluster(), fakeOpenstackCluster(), fakeHetznerCluster(), fakeAzureCluster()];
+  return [
+    fakeDigitaloceanCluster(), fakeAWSCluster(), fakeOpenstackCluster(), fakeHetznerCluster(), fakeAzureCluster()
+  ];
 }

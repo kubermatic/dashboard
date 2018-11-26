@@ -1,13 +1,13 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { ApiService, ProjectService } from '../../../core/services';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { ClusterEntityPatch } from '../../../shared/entity/ClusterEntityPatch';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
+import {Subscription} from 'rxjs';
+import {ApiService, ProjectService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-change-cluster-version',
@@ -17,18 +17,17 @@ import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
 export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  public possibleVersions: string[];
-  public selectedVersion: string;
-  public project: ProjectEntity;
+  possibleVersions: string[];
+  selectedVersion: string;
+  project: ProjectEntity;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private projectService: ProjectService,
-              private dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
-              public googleAnalyticsService: GoogleAnalyticsService) {
-  }
+  constructor(
+      private api: ApiService, private projectService: ProjectService,
+      private dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
+      public googleAnalyticsService: GoogleAnalyticsService) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     if (this.possibleVersions.length > 0) {
       this.selectedVersion = this.possibleVersions[this.possibleVersions.length - 1];
     }
@@ -55,7 +54,6 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
       this.selectedVersion = null;
     });
-
   }
 
   ngOnDestroy(): void {

@@ -1,21 +1,19 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map, publishReplay, refCount } from 'rxjs/operators';
-import { environment } from '../../../../environments/environment';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { Auth } from '../auth/auth.service';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {map, publishReplay, refCount} from 'rxjs/operators';
+import {environment} from '../../../../environments/environment';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {Auth} from '../auth/auth.service';
 
 @Injectable()
 export class DatacenterService {
-
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
 
   private dataCenterCache: Observable<DataCenterEntity[]>;
 
-  constructor(private http: HttpClient,
-              private auth: Auth) {
+  constructor(private http: HttpClient, private auth: Auth) {
     const token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + token);
   }
@@ -23,9 +21,8 @@ export class DatacenterService {
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
     if (!this.dataCenterCache) {
-      this.dataCenterCache = this.http.get<DataCenterEntity[]>(url, { headers: this.headers }).pipe(
-        publishReplay(1),
-        refCount());
+      this.dataCenterCache =
+          this.http.get<DataCenterEntity[]>(url, {headers: this.headers}).pipe(publishReplay(1), refCount());
     }
     return this.dataCenterCache;
   }

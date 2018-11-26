@@ -1,19 +1,19 @@
-import { NodeProvider } from '../model/NodeProviderConstants';
-import { AWSDatacenterSpec } from './datacenter/AWSDatacenterSpec';
-import { AzureDatacenterSpec } from './datacenter/AzureDatacenterSpec';
-import { BringYourOwnDatacenterSpec } from './datacenter/BringYourOwnDatacenterSpec';
-import { DigitaloceanDatacenterSpec } from './datacenter/DigitaloceanDatacenterSpec';
-import { HetznerDatacenterSpec } from './datacenter/HetznerDatacenterSpec';
-import { OpenStackDatacenterSpec } from './datacenter/OpenStackDatacenterSpec';
-import { VSphereDatacenterSpec } from './datacenter/VSphereDatacenterSpec';
-import { MetadataEntity } from './MetadataEntity';
+import {NodeProvider} from '../model/NodeProviderConstants';
+import {AWSDatacenterSpec} from './datacenter/AWSDatacenterSpec';
+import {AzureDatacenterSpec} from './datacenter/AzureDatacenterSpec';
+import {BringYourOwnDatacenterSpec} from './datacenter/BringYourOwnDatacenterSpec';
+import {DigitaloceanDatacenterSpec} from './datacenter/DigitaloceanDatacenterSpec';
+import {HetznerDatacenterSpec} from './datacenter/HetznerDatacenterSpec';
+import {OpenStackDatacenterSpec} from './datacenter/OpenStackDatacenterSpec';
+import {VSphereDatacenterSpec} from './datacenter/VSphereDatacenterSpec';
+import {MetadataEntity} from './MetadataEntity';
 
 export class DataCenterEntity {
   metadata: MetadataEntity;
   spec: DatacenterSpec;
   seed: boolean;
 
-  public static sortByName(a: DataCenterEntity, b: DataCenterEntity): number {
+  static sortByName(a: DataCenterEntity, b: DataCenterEntity): number {
     const nameA = a.metadata.name.toLowerCase;
     const nameB = b.metadata.name.toLowerCase;
 

@@ -1,15 +1,15 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { AppConfigService } from '../../../app-config.service';
-import { ApiService, ProjectService, UserService } from '../../../core/services';
-import { WizardService } from '../../../core/services/wizard/wizard.service';
-import { AddSshKeyModalComponent } from '../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
-import { SSHKeyEntity } from '../../../shared/entity/SSHKeyEntity';
-import { UserGroupConfig } from '../../../shared/model/Config';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {MatDialog} from '@angular/material';
+import {Subscription} from 'rxjs';
+import {AppConfigService} from '../../../app-config.service';
+import {ApiService, ProjectService, UserService} from '../../../core/services';
+import {WizardService} from '../../../core/services/wizard/wizard.service';
+import {AddSshKeyModalComponent} from '../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
+import {UserGroupConfig} from '../../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-cluster-ssh-keys',
@@ -19,23 +19,21 @@ import { UserGroupConfig } from '../../../shared/model/Config';
 export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() selectedKeys: SSHKeyEntity[] = [];
-  public keys: SSHKeyEntity[] = [];
-  public keysForm: FormGroup = new FormGroup({
+  keys: SSHKeyEntity[] = [];
+  keysForm: FormGroup = new FormGroup({
     keys: new FormControl([], []),
   });
   private keysSub: Subscription;
   private keysFormSub: Subscription;
-  public project: ProjectEntity;
-  public userGroup: string;
-  public userGroupConfig: UserGroupConfig;
+  project: ProjectEntity;
+  userGroup: string;
+  userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private wizardService: WizardService,
-              private dialog: MatDialog,
-              private projectService: ProjectService,
-              private userService: UserService,
-              private appConfigService: AppConfigService) { }
+  constructor(
+      private api: ApiService, private wizardService: WizardService, private dialog: MatDialog,
+      private projectService: ProjectService, private userService: UserService,
+      private appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
     this.project = this.projectService.project;
@@ -75,7 +73,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addSshKeyDialog(): void {
+  addSshKeyDialog(): void {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent);
     dialogRef.componentInstance.projectID = this.project.id;
 
@@ -90,7 +88,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     });
   }
 
-  public setClusterSSHKeysSpec(): void {
+  setClusterSSHKeysSpec(): void {
     const clusterKeys: SSHKeyEntity[] = [];
     for (const selectedKey of this.keysForm.controls.keys.value) {
       for (const key of this.keys) {

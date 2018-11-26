@@ -1,15 +1,15 @@
-import { MockNgRedux, NgReduxTestingModule } from '@angular-redux/store/testing';
-import { HttpClientModule } from '@angular/common/http';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserModule, By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterTestingModule } from '@angular/router/testing';
-import { ApiMockService } from '../../../testing/services/api-mock.service';
-import { AuthMockService } from '../../../testing/services/auth-mock.service';
-import { ProjectMockService } from '../../../testing/services/project-mock.service';
-import { ApiService, ProjectService } from '../../services';
-import { Auth } from '../../services/index';
-import { BreadcrumbsComponent } from './breadcrumbs.component';
+import {MockNgRedux, NgReduxTestingModule} from '@angular-redux/store/testing';
+import {HttpClientModule} from '@angular/common/http';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule, By} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {RouterTestingModule} from '@angular/router/testing';
+import {ApiMockService} from '../../../testing/services/api-mock.service';
+import {AuthMockService} from '../../../testing/services/auth-mock.service';
+import {ProjectMockService} from '../../../testing/services/project-mock.service';
+import {ApiService, ProjectService} from '../../services';
+import {Auth} from '../../services/index';
+import {BreadcrumbsComponent} from './breadcrumbs.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -31,19 +31,21 @@ describe('BreadcrumbsComponent', () => {
 
   beforeEach(() => {
     MockNgRedux.reset();
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        BreadcrumbsComponent,
-      ],
-      providers: [
-        { provide: ApiService, useClass: ApiMockService },
-        { provide: ProjectService, useClass: ProjectMockService },
-        { provide: Auth, useClass: AuthMockService },
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            BreadcrumbsComponent,
+          ],
+          providers: [
+            {provide: ApiService, useClass: ApiMockService},
+            {provide: ProjectService, useClass: ProjectMockService},
+            {provide: Auth, useClass: AuthMockService},
+          ],
+        })
+        .compileComponents();
   });
 
   beforeEach(() => {

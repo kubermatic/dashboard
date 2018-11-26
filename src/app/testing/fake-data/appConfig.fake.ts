@@ -1,4 +1,4 @@
-import { Config } from '../../shared/model/Config';
+import {Config} from '../../shared/model/Config';
 
 export function fakeAppConfig(): Config {
   return {

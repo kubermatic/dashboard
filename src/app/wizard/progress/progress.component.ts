@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Step, StepsService } from '../../core/services/wizard/steps.service';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Step, StepsService} from '../../core/services/wizard/steps.service';
 
 @Component({
   selector: 'kubermatic-progress',
@@ -11,11 +11,11 @@ export class ProgressComponent implements OnInit, OnDestroy {
   @Input() currentStepIndex = 0;
   @Input() currentStep: Step;
 
-  constructor(private stepsService: StepsService) { }
+  constructor(private stepsService: StepsService) {}
 
   ngOnInit(): void {}
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   getIconClass(step: number): string {
     let iconClass = 'fa fa-circle-o-notch fa-spin';

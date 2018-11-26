@@ -1,12 +1,12 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { SharedModule } from '../../shared/shared.module';
-import { fakeHetznerCluster } from '../../testing/fake-data/cluster.fake';
-import { nodeDataFake } from '../../testing/fake-data/node.fake';
-import { HetznerNodeDataComponent } from './hetzner-node-data.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {SharedModule} from '../../shared/shared.module';
+import {fakeHetznerCluster} from '../../testing/fake-data/cluster.fake';
+import {nodeDataFake} from '../../testing/fake-data/node.fake';
+import {HetznerNodeDataComponent} from './hetzner-node-data.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -20,17 +20,19 @@ describe('HetznerNodeDataComponent', () => {
   let component: HetznerNodeDataComponent;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        HetznerNodeDataComponent,
-      ],
-      providers: [
-        AddNodeService,
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            HetznerNodeDataComponent,
+          ],
+          providers: [
+            AddNodeService,
+          ],
+        })
+        .compileComponents();
   }));
 
   beforeEach(() => {

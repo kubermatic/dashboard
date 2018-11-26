@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { ApiService, Auth, UserService } from '../../../core/services';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import {Component, Input, OnInit} from '@angular/core';
+import {ApiService, Auth, UserService} from '../../../core/services';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-share-kubeconfig',
@@ -21,7 +21,8 @@ export class ShareKubeconfigComponent implements OnInit {
     if (this.auth.authenticated()) {
       this.userService.getUser().toPromise().then((user) => {
         this.userID = user.id;
-        this.kubeconfigLink = this.api.getShareKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id, this.userID);
+        this.kubeconfigLink =
+            this.api.getShareKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id, this.userID);
       });
     }
   }

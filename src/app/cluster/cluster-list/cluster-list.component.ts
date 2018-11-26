@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Sort } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
-import { find } from 'lodash';
-import { combineLatest, interval, ObservableInput, Subscription } from 'rxjs';
-import { AppConfigService } from '../../app-config.service';
-import { ApiService, DatacenterService, UserService } from '../../core/services';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { UserGroupConfig } from '../../shared/model/Config';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Sort} from '@angular/material';
+import {ActivatedRoute, Router} from '@angular/router';
+import {find} from 'lodash';
+import {combineLatest, interval, ObservableInput, Subscription} from 'rxjs';
+import {AppConfigService} from '../../app-config.service';
+import {ApiService, DatacenterService, UserService} from '../../core/services';
+import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {UserGroupConfig} from '../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-cluster-list',
@@ -14,23 +14,18 @@ import { UserGroupConfig } from '../../shared/model/Config';
   styleUrls: ['./cluster-list.component.scss'],
 })
 export class ClusterListComponent implements OnInit, OnDestroy {
-
-  public clusters: ClusterEntity[] = [];
-  public loading = true;
-  public sortedData: ClusterEntity[] = [];
-  public sort: Sort = { active: 'name', direction: 'asc' };
-  public projectID: string;
-  public userGroup: string;
-  public userGroupConfig: UserGroupConfig;
+  clusters: ClusterEntity[] = [];
+  loading = true;
+  sortedData: ClusterEntity[] = [];
+  sort: Sort = {active: 'name', direction: 'asc'};
+  projectID: string;
+  userGroup: string;
+  userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private route: ActivatedRoute,
-              private appConfigService: AppConfigService,
-              private router: Router,
-              private dcService: DatacenterService,
-              private userService: UserService) {
-  }
+  constructor(
+      private api: ApiService, private route: ActivatedRoute, private appConfigService: AppConfigService,
+      private router: Router, private dcService: DatacenterService, private userService: UserService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -66,29 +61,28 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       for (const dc of datacenters) {
         dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.projectID));
       }
-      this.subscriptions.push(combineLatest(dcClustersObservables)
-        .subscribe((dcClusters) => {
-          for (const cs of dcClusters) {
-            clusters.push(...cs);
-          }
-          this.clusters = clusters;
-          this.sortData(this.sort);
-          this.loading = false;
-        }));
+      this.subscriptions.push(combineLatest(dcClustersObservables).subscribe((dcClusters) => {
+        for (const cs of dcClusters) {
+          clusters.push(...cs);
+        }
+        this.clusters = clusters;
+        this.sortData(this.sort);
+        this.loading = false;
+      }));
       this.userService.currentUserGroup(this.projectID).subscribe((group) => {
         this.userGroup = group;
       });
     }));
   }
 
-  public trackCluster(index: number, cluster: ClusterEntity): number {
+  trackCluster(index: number, cluster: ClusterEntity): number {
     const prevCluster = find(this.clusters, (item) => {
       return item.name === cluster.name;
     });
     return prevCluster ? index : undefined;
   }
 
-  public loadWizard(): void {
+  loadWizard(): void {
     this.router.navigate(['/projects/' + this.projectID + '/wizard']);
   }
 

@@ -1,15 +1,15 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { AppConfigService } from '../../../../app-config.service';
-import { ApiService, UserService } from '../../../../core/services';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
-import { AddSshKeyModalComponent } from '../../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
-import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
-import { SSHKeyEntity } from '../../../../shared/entity/SSHKeyEntity';
-import { UserGroupConfig } from '../../../../shared/model/Config';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialog, MatDialogRef} from '@angular/material';
+import {Subscription} from 'rxjs';
+import {AppConfigService} from '../../../../app-config.service';
+import {ApiService, UserService} from '../../../../core/services';
+import {NotificationActions} from '../../../../redux/actions/notification.actions';
+import {AddSshKeyModalComponent} from '../../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
+import {UserGroupConfig} from '../../../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-add-cluster-sshkeys',
@@ -22,19 +22,17 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   @Input() datacenter: DataCenterEntity;
   @Input() sshKeys: SSHKeyEntity[] = [];
 
-  public keys: SSHKeyEntity[] = [];
-  public keysForm: FormGroup = new FormGroup({
+  keys: SSHKeyEntity[] = [];
+  keysForm: FormGroup = new FormGroup({
     keys: new FormControl('', [Validators.required]),
   });
   private keysSub: Subscription;
-  public userGroup: string;
-  public userGroupConfig: UserGroupConfig;
+  userGroup: string;
+  userGroupConfig: UserGroupConfig;
 
-  constructor(private api: ApiService,
-              private dialog: MatDialog,
-              private appConfigService: AppConfigService,
-              private userService: UserService,
-              private dialogRef: MatDialogRef<AddClusterSSHKeysComponent>) { }
+  constructor(
+      private api: ApiService, private dialog: MatDialog, private appConfigService: AppConfigService,
+      private userService: UserService, private dialogRef: MatDialogRef<AddClusterSSHKeysComponent>) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -63,14 +61,18 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addClusterSSHKeys(): void {
-    this.api.addClusterSSHKey(this.keysForm.controls.keys.value, this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((res) => {
-      NotificationActions.success('Success', `SSH key ${this.keysForm.controls.keys.value} was successfully added to cluster`);
-      this.dialogRef.close(res);
-    });
+  addClusterSSHKeys(): void {
+    this.api
+        .addClusterSSHKey(
+            this.keysForm.controls.keys.value, this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .subscribe((res) => {
+          NotificationActions.success(
+              'Success', `SSH key ${this.keysForm.controls.keys.value} was successfully added to cluster`);
+          this.dialogRef.close(res);
+        });
   }
 
-  public addProjectSSHKeys(): void {
+  addProjectSSHKeys(): void {
     const dialogRef = this.dialog.open(AddSshKeyModalComponent);
     dialogRef.componentInstance.projectID = this.projectID;
 

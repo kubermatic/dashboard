@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { StepsService } from '../../core/services/wizard/steps.service';
-import { GoogleAnalyticsService } from '../../google-analytics.service';
-import { SharedModule } from '../../shared/shared.module';
-import { ProgressComponent } from './progress.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {StepsService} from '../../core/services/wizard/steps.service';
+import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {SharedModule} from '../../shared/shared.module';
+import {ProgressComponent} from './progress.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -17,18 +17,20 @@ describe('ProgressComponent', () => {
   let component: ProgressComponent;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        ProgressComponent,
-      ],
-      providers: [
-        StepsService,
-        GoogleAnalyticsService,
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            ProgressComponent,
+          ],
+          providers: [
+            StepsService,
+            GoogleAnalyticsService,
+          ],
+        })
+        .compileComponents();
   }));
 
   beforeEach(() => {
@@ -78,5 +80,4 @@ describe('ProgressComponent', () => {
     expect(component.getCursor(1)).toBe('default');
     expect(component.getCursor(0)).toBe('pointer');
   });
-
 });

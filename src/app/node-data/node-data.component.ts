@@ -1,11 +1,11 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { DatacenterService, ProjectService, WizardService } from '../core/services';
-import { AddNodeService } from '../core/services/add-node/add-node.service';
-import { ClusterEntity } from '../shared/entity/ClusterEntity';
-import { OperatingSystemSpec } from '../shared/entity/NodeEntity';
-import { NodeData, NodeProviderData } from '../shared/model/NodeSpecChange';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {DatacenterService, ProjectService, WizardService} from '../core/services';
+import {AddNodeService} from '../core/services/add-node/add-node.service';
+import {ClusterEntity} from '../shared/entity/ClusterEntity';
+import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
+import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-node-data',
@@ -17,19 +17,17 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() nodeData: NodeData;
 
-  public projectId: string;
-  public seedDCName: string;
-  public nodeForm: FormGroup;
-  public operatingSystemForm: FormGroup;
-  public hideOptional = true;
+  projectId: string;
+  seedDCName: string;
+  nodeForm: FormGroup;
+  operatingSystemForm: FormGroup;
+  hideOptional = true;
   private subscriptions: Subscription[] = [];
-  private providerData: NodeProviderData = { valid: false };
+  private providerData: NodeProviderData = {valid: false};
 
-  constructor(private addNodeService: AddNodeService,
-              private wizardService: WizardService,
-              private _dc: DatacenterService,
-              private _project: ProjectService) {
-  }
+  constructor(
+      private addNodeService: AddNodeService, private wizardService: WizardService, private _dc: DatacenterService,
+      private _project: ProjectService) {}
 
   ngOnInit(): void {
     this.nodeForm = new FormGroup({
@@ -55,7 +53,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.nodeForm.valueChanges.subscribe(() => {
-      this.operatingSystemForm.setValue({distUpgradeOnBootUbuntu: false, distUpgradeOnBootCentos: false, disableAutoUpdate: false});
+      this.operatingSystemForm.setValue(
+          {distUpgradeOnBootUbuntu: false, distUpgradeOnBootCentos: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
 
@@ -119,15 +118,13 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   getAddNodeData(): NodeData {
     return {
-        spec: {
-          cloud: this.providerData.spec,
-          operatingSystem: this.getOSSpec(),
-          versions: {
-        },
+      spec: {
+        cloud: this.providerData.spec,
+        operatingSystem: this.getOSSpec(),
+        versions: {},
       },
       count: this.nodeForm.controls.count.value,
       valid: this.providerData.valid,
     };
   }
-
 }

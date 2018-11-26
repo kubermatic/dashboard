@@ -10,11 +10,8 @@ import 'zone.js/dist/sync-test';
 import 'zone.js/dist/jasmine-patch';
 import 'zone.js/dist/async-test';
 import 'zone.js/dist/fake-async-test';
-import { getTestBed } from '@angular/core/testing';
-import {
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting,
-} from '@angular/platform-browser-dynamic/testing';
+import {getTestBed} from '@angular/core/testing';
+import {BrowserDynamicTestingModule, platformBrowserDynamicTesting,} from '@angular/platform-browser-dynamic/testing';
 /* tslint:enable */
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
@@ -26,8 +23,8 @@ __karma__.loaded = (): void => {};
 
 // First, initialize the Angular testing environment.
 getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
-  platformBrowserDynamicTesting(),
+    BrowserDynamicTestingModule,
+    platformBrowserDynamicTesting(),
 );
 // Then we find all the tests.
 const context = require.context('./', true, /\.spec\.ts$/);

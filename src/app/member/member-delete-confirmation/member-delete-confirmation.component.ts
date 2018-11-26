@@ -1,9 +1,9 @@
-import { Component, Input } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
-import { ApiService } from '../../core/services';
-import { NotificationActions } from '../../redux/actions/notification.actions';
-import { MemberEntity } from '../../shared/entity/MemberEntity';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import {Component, Input} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
+import {ApiService} from '../../core/services';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+import {MemberEntity} from '../../shared/entity/MemberEntity';
+import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-member-delete-confirmation',
@@ -15,9 +15,7 @@ export class MemberDeleteConfirmationComponent {
   @Input() project: ProjectEntity;
   @Input() member: MemberEntity;
 
-  constructor(private api: ApiService,
-              private dialogRef: MatDialogRef<MemberDeleteConfirmationComponent>) {
-  }
+  constructor(private api: ApiService, private dialogRef: MatDialogRef<MemberDeleteConfirmationComponent>) {}
 
   deleteMember(): void {
     this.api.deleteMembers(this.project.id, this.member).subscribe(() => {
