@@ -44,7 +44,9 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.keysSub.unsubscribe();
+    if (this.keysSub) {
+      this.keysSub.unsubscribe();
+    }
   }
 
   reloadKeys(): void {
