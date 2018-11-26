@@ -223,7 +223,6 @@ export function nodesFake(): NodeEntity[] {
 
 export function nodeDataFake(): NodeData {
   return {
-    node: {
       spec: {
         cloud: {
           digitalocean: {
@@ -268,7 +267,6 @@ export function nodeDataFake(): NodeData {
         versions: {
           kubelet: null,
         },
-      },
     },
     count: 3,
     valid: true,

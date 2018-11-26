@@ -23,11 +23,11 @@ export class SummaryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void { }
 
   getOperatingSystem(): string {
-    if (this.nodeData.node.spec.operatingSystem.ubuntu) {
+    if (this.nodeData.spec.operatingSystem.ubuntu) {
       return 'Ubuntu';
-    } else if (this.nodeData.node.spec.operatingSystem.centos) {
+    } else if (this.nodeData.spec.operatingSystem.centos) {
       return 'CentOS';
-    } else if (this.nodeData.node.spec.operatingSystem.containerLinux) {
+    } else if (this.nodeData.spec.operatingSystem.containerLinux) {
       return 'Container Linux';
     } else {
       return '';

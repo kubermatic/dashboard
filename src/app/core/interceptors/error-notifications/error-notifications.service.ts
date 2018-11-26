@@ -13,10 +13,10 @@ export class ErrorNotificationsInterceptor implements HttpInterceptor {
       .handle(req)
       .pipe(
         tap(
-          (event) => {},
+          () => {},
           (errorInstance) => {
             if (errorInstance) {
-              if (!!errorInstance.error.error) {
+              if (!!errorInstance.error && !!errorInstance.error.error) {
                 NotificationActions.error(
                   `Error ${errorInstance.status}`,
                   `${errorInstance.error.error.message || errorInstance.message || errorInstance.statusText}`,

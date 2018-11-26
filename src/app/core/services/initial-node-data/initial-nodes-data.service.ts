@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import { NodeSpec } from '../../../shared/entity/NodeEntity';
 
 class InitialNodeData {
   cluster: string;
   nodeCount: number;
-  node: NodeEntity;
+  nodeSpec: NodeSpec;
 }
 
 @Injectable()
 export class InitialNodeDataService {
   constructor() {}
 
-  public storeInitialNodeData(nodeCount: number, cluster: ClusterEntity, node: NodeEntity): void {
+  public storeInitialNodeData(nodeCount: number, cluster: ClusterEntity, nodeSpec: NodeSpec): void {
     const data: InitialNodeData = {
       nodeCount,
-      node,
+      nodeSpec,
       cluster: cluster.id,
     };
     localStorage.setItem(`${cluster.id}_initialNodeData`, JSON.stringify(data));

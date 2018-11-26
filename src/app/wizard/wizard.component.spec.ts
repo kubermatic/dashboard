@@ -4,22 +4,22 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { AddNodeComponent } from '../add-node/add-node.component';
-import { AwsAddNodeComponent } from '../add-node/aws-add-node/aws-add-node.component';
-import { AzureAddNodeComponent } from '../add-node/azure-add-node/azure-add-node.component';
-import { DigitaloceanAddNodeComponent } from '../add-node/digitalocean-add-node/digitalocean-add-node.component';
-import { DigitaloceanOptionsComponent } from '../add-node/digitalocean-add-node/digitalocean-options/digitalocean-options.component';
-import { HetznerAddNodeComponent } from '../add-node/hetzner-add-node/hetzner-add-node.component';
-import { OpenstackAddNodeComponent } from '../add-node/openstack-add-node/openstack-add-node.component';
-import { OpenstackOptionsComponent } from '../add-node/openstack-add-node/openstack-options/openstack-options.component';
-import { VSphereAddNodeComponent } from '../add-node/vsphere-add-node/vsphere-add-node.component';
-import { VSphereOptionsComponent } from '../add-node/vsphere-add-node/vsphere-options/vsphere-options.component';
 import { ApiService, DatacenterService, HealthService, InitialNodeDataService, ProjectService } from '../core/services';
 import { AddNodeService } from '../core/services/add-node/add-node.service';
 import { StepsService } from '../core/services/wizard/steps.service';
 import { WizardService } from '../core/services/wizard/wizard.service';
 import { ClusterNameGenerator } from '../core/util/name-generator.service';
 import { GoogleAnalyticsService } from '../google-analytics.service';
+import { AWSNodeDataComponent } from '../node-data/aws-node-data/aws-node-data.component';
+import { AzureNodeDataComponent } from '../node-data/azure-node-data/azure-node-data.component';
+import { DigitaloceanNodeDataComponent } from '../node-data/digitalocean-node-data/digitalocean-node-data.component';
+import { DigitaloceanOptionsComponent } from '../node-data/digitalocean-node-data/digitalocean-options/digitalocean-options.component';
+import { HetznerNodeDataComponent } from '../node-data/hetzner-node-data/hetzner-node-data.component';
+import { NodeDataComponent } from '../node-data/node-data.component';
+import { OpenstackNodeDataComponent } from '../node-data/openstack-node-data/openstack-node-data.component';
+import { OpenstackOptionsComponent } from '../node-data/openstack-node-data/openstack-options/openstack-options.component';
+import { VSphereNodeDataComponent } from '../node-data/vsphere-add-node/vsphere-node-data.component';
+import { VSphereOptionsComponent } from '../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
 import { SharedModule } from '../shared/shared.module';
 import { masterVersionsFake } from '../testing/fake-data/cluster-spec.fake';
 import { fakeDigitaloceanCluster } from '../testing/fake-data/cluster.fake';
@@ -78,16 +78,16 @@ describe('WizardComponent', () => {
         HetznerClusterSettingsComponent,
         VSphereClusterSettingsComponent,
         AzureClusterSettingsComponent,
-        AddNodeComponent,
-        OpenstackAddNodeComponent,
+        NodeDataComponent,
+        OpenstackNodeDataComponent,
         OpenstackOptionsComponent,
-        AwsAddNodeComponent,
-        DigitaloceanAddNodeComponent,
+        AWSNodeDataComponent,
+        DigitaloceanNodeDataComponent,
         DigitaloceanOptionsComponent,
-        HetznerAddNodeComponent,
-        VSphereAddNodeComponent,
+        HetznerNodeDataComponent,
+        VSphereNodeDataComponent,
         VSphereOptionsComponent,
-        AzureAddNodeComponent,
+        AzureNodeDataComponent,
         SetClusterSpecComponent,
         SetProviderComponent,
         SetDatacenterComponent,

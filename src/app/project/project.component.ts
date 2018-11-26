@@ -42,7 +42,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }));
 
     const timer = interval(10000);
-    this.subscriptions.push(timer.subscribe((tick) => {
+    this.subscriptions.push(timer.subscribe(() => {
       this.refreshProjects();
     }));
     this.refreshProjects();

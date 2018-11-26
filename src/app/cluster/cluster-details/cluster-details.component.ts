@@ -184,7 +184,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           if (cluster && this.health && this.health.apiserver && this.health.machineController) {
             const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
             for (let i = 0; i < data.nodeCount; i++) {
-              createNodeObservables.push(this.api.createClusterNode(cluster, data.node, this.datacenter.metadata.name, this.projectID));
+              const node = {
+                spec: data.nodeSpec,
+              } as NodeEntity;
+              createNodeObservables.push(this.api.createClusterNode(cluster, node, this.datacenter.metadata.name, this.projectID));
             }
             combineLatest(createNodeObservables)
               .pipe(takeUntil(this.unsubscribe))
