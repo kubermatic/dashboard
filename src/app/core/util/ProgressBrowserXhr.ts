@@ -1,10 +1,9 @@
-import { Injectable } from '@angular/core';
-import { BrowserXhr } from '@angular/http';
-import { SlimLoadingBarService } from 'ng2-slim-loading-bar';
+import {Injectable} from '@angular/core';
+import {BrowserXhr} from '@angular/http';
+import {SlimLoadingBarService} from 'ng2-slim-loading-bar';
 
 @Injectable()
 export class ProgressBrowserXhr extends BrowserXhr {
-
   constructor(private progressService: SlimLoadingBarService) {
     super();
   }
@@ -35,6 +34,6 @@ export class ProgressBrowserXhr extends BrowserXhr {
       }
     };
 
-    return <any> xhr;
+    return xhr as any;
   }
 }

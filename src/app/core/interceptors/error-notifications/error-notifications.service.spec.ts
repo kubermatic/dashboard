@@ -1,5 +1,5 @@
-import { inject, TestBed } from '@angular/core/testing';
-import { ErrorNotificationsInterceptor } from './error-notifications.service';
+import {inject, TestBed} from '@angular/core/testing';
+import {ErrorNotificationsInterceptor} from './error-notifications.service';
 
 describe('ErrorNotificationsInterceptorService', () => {
   beforeEach(() => {
@@ -9,6 +9,6 @@ describe('ErrorNotificationsInterceptorService', () => {
   });
 
   it('should be created', inject([ErrorNotificationsInterceptor], (service: ErrorNotificationsInterceptor) => {
-    expect(service).toBeTruthy();
-  }));
+       expect(service).toBeTruthy();
+     }));
 });

@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { WizardService } from '../../core/services';
-import { AddNodeService } from '../../core/services/add-node/add-node.service';
-import { SharedModule } from '../../shared/shared.module';
-import { fakeAWSCluster } from '../../testing/fake-data/cluster.fake';
-import { nodeDataFake } from '../../testing/fake-data/node.fake';
-import { AWSNodeDataComponent } from './aws-node-data.component';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {WizardService} from '../../core/services';
+import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {SharedModule} from '../../shared/shared.module';
+import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
+import {nodeDataFake} from '../../testing/fake-data/node.fake';
+import {AWSNodeDataComponent} from './aws-node-data.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -21,18 +21,20 @@ describe('AWSNodeDataComponent', () => {
   let component: AWSNodeDataComponent;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        AWSNodeDataComponent,
-      ],
-      providers: [
-        AddNodeService,
-        WizardService,
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            AWSNodeDataComponent,
+          ],
+          providers: [
+            AddNodeService,
+            WizardService,
+          ],
+        })
+        .compileComponents();
   });
 
   beforeEach(() => {

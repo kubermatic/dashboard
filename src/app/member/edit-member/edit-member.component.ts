@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
-import { ApiService } from '../../core/services';
-import { NotificationActions } from '../../redux/actions/notification.actions';
-import { MemberEntity } from '../../shared/entity/MemberEntity';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import {Component, Input, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material';
+import {ApiService} from '../../core/services';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+import {MemberEntity} from '../../shared/entity/MemberEntity';
+import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-edit-member',
@@ -14,13 +14,11 @@ import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 export class EditMemberComponent implements OnInit {
   @Input() project: ProjectEntity;
   @Input() member: MemberEntity;
-  public editMemberForm: FormGroup;
+  editMemberForm: FormGroup;
 
-  constructor(private api: ApiService,
-              private dialogRef: MatDialogRef<EditMemberComponent>) {
-  }
+  constructor(private api: ApiService, private dialogRef: MatDialogRef<EditMemberComponent>) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.editMemberForm = new FormGroup({
       group: new FormControl('', [Validators.required]),
     });

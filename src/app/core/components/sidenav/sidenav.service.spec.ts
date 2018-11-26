@@ -1,6 +1,6 @@
-import { inject, TestBed } from '@angular/core/testing';
+import {inject, TestBed} from '@angular/core/testing';
 
-import { SidenavService } from './sidenav.service';
+import {SidenavService} from './sidenav.service';
 
 describe('SidenavService', () => {
   beforeEach(() => {
@@ -10,6 +10,6 @@ describe('SidenavService', () => {
   });
 
   it('should ...', inject([SidenavService], (service: SidenavService) => {
-    expect(service).toBeTruthy();
-  }));
+       expect(service).toBeTruthy();
+     }));
 });

@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
-import { ApiService } from '../../../core/services';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { NodeEntity } from '../../../shared/entity/NodeEntity';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
+import {ApiService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {NodeEntity} from '../../../shared/entity/NodeEntity';
 
 @Component({
   selector: 'kubermatic-node-delete-confirmation',
@@ -19,27 +19,27 @@ export class NodeDeleteConfirmationComponent implements OnInit {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
 
-  public title: string;
-  public message: string;
-  public titleAlign?: string;
-  public messageAlign?: string;
-  public btnOkText?: string;
-  public btnCancelText?: string;
+  title: string;
+  message: string;
+  titleAlign?: string;
+  messageAlign?: string;
+  btnOkText?: string;
+  btnCancelText?: string;
 
-  constructor(private api: ApiService,
-              private dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>,
-              public googleAnalyticsService: GoogleAnalyticsService) {
-  }
+  constructor(
+      private api: ApiService, private dialogRef: MatDialogRef<NodeDeleteConfirmationComponent>,
+      public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
   }
 
-  public deleteNode(): void {
-    this.api.deleteClusterNode(this.cluster.id, this.node, this.datacenter.metadata.name, this.projectID).subscribe((result) => {
-      NotificationActions.success('Success', `Node removed successfully`);
-      this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
-    });
+  deleteNode(): void {
+    this.api.deleteClusterNode(this.cluster.id, this.node, this.datacenter.metadata.name, this.projectID)
+        .subscribe((result) => {
+          NotificationActions.success('Success', `Node removed successfully`);
+          this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
+        });
     this.dialogRef.close(true);
   }
 }

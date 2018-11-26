@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { SSHKeyDeleteConfirmationComponent } from '../sshkey-delete-confirmation/sshkey-delete-confirmation.component';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material';
+import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {SSHKeyDeleteConfirmationComponent} from '../sshkey-delete-confirmation/sshkey-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-sshkey-item',
@@ -15,24 +15,24 @@ export class SSHKeyItemComponent implements OnInit {
   @Input() projectId: string;
   @Input() isOdd: boolean;
 
-  public isShowPublicKey = false;
-  public publicKeyName: string;
-  public publicKey: string;
+  isShowPublicKey = false;
+  publicKeyName: string;
+  publicKey: string;
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
     this.publicKey = this.sshKey.spec.publicKey.slice(this.publicKeyName.length + 1, -1);
   }
 
-  public getSshKeyItemClass(): string {
+  getSshKeyItemClass(): string {
     if (this.index % 2 !== 0) {
       return 'odd';
     }
   }
 
-  public deleteSshKey(): void {
+  deleteSshKey(): void {
     const modal = this.dialog.open(SSHKeyDeleteConfirmationComponent);
     modal.componentInstance.projectId = this.projectId;
     modal.componentInstance.sshKey = this.sshKey;
@@ -41,7 +41,7 @@ export class SSHKeyItemComponent implements OnInit {
     });
   }
 
-  public togglePublicKey(): void {
+  togglePublicKey(): void {
     this.isShowPublicKey = !this.isShowPublicKey;
   }
 }

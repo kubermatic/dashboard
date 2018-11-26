@@ -1,9 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { ApiService, WizardService } from '../../core/services';
-import { ClusterNameGenerator } from '../../core/util/name-generator.service';
-import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {ApiService, WizardService} from '../../core/services';
+import {ClusterNameGenerator} from '../../core/util/name-generator.service';
+import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',
@@ -11,13 +11,14 @@ import { ClusterEntity, MasterVersion } from '../../shared/entity/ClusterEntity'
   styleUrls: ['set-cluster-spec.component.scss'],
 })
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
-  @Input() public cluster: ClusterEntity;
-  public clusterSpecForm: FormGroup;
-  public masterVersions: MasterVersion[] = [];
-  public defaultVersion: string;
+  @Input() cluster: ClusterEntity;
+  clusterSpecForm: FormGroup;
+  masterVersions: MasterVersion[] = [];
+  defaultVersion: string;
   private subscriptions: Subscription[] = [];
 
-  constructor(private nameGenerator: ClusterNameGenerator, private api: ApiService, private wizardService: WizardService) { }
+  constructor(
+      private nameGenerator: ClusterNameGenerator, private api: ApiService, private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
@@ -36,7 +37,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this.loadMasterVersions();
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -44,8 +45,8 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }
   }
 
-  public generateName(): void {
-    this.clusterSpecForm.patchValue({ name: this.nameGenerator.generateName() });
+  generateName(): void {
+    this.clusterSpecForm.patchValue({name: this.nameGenerator.generateName()});
   }
 
   loadMasterVersions(): void {
@@ -59,5 +60,4 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       }
     }));
   }
-
 }

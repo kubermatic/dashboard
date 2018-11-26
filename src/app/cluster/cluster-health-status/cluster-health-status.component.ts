@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { interval, Subscription } from 'rxjs';
-import { HealthService } from '../../core/services';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../shared/entity/DatacenterEntity';
-import { HealthEntity } from '../../shared/entity/HealthEntity';
-import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {interval, Subscription} from 'rxjs';
+import {HealthService} from '../../core/services';
+import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {HealthEntity} from '../../shared/entity/HealthEntity';
+import {ClusterHealth} from '../../shared/model/ClusterHealthConstants';
 
 @Component({
   selector: 'kubermatic-cluster-health-status',
@@ -12,16 +12,16 @@ import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
   styleUrls: ['./cluster-health-status.component.scss'],
 })
 export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
-  @Input() public cluster: ClusterEntity;
-  @Input() public datacenter: DataCenterEntity;
-  @Input() public projectID: string;
+  @Input() cluster: ClusterEntity;
+  @Input() datacenter: DataCenterEntity;
+  @Input() projectID: string;
 
-  public green = 'fa fa-circle green';
-  public red = 'fa fa-circle red';
-  public orange = 'fa fa-spin fa-circle-o-notch orange';
-  public redAction = 'fa fa-exclamation-triangle red';
-  public healthStatus: string;
-  public health: HealthEntity;
+  green = 'fa fa-circle green';
+  red = 'fa fa-circle red';
+  orange = 'fa fa-spin fa-circle-o-notch orange';
+  redAction = 'fa fa-exclamation-triangle red';
+  healthStatus: string;
+  health: HealthEntity;
   private subscriptions: Subscription[] = [];
 
   constructor(private healthService: HealthService) {}
@@ -29,19 +29,21 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const timer = interval(5000);
     this.subscriptions.push(timer.subscribe((tick) => {
-      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((health) => {
-        this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
-        this.health = health;
-      });
+      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+          .subscribe((health) => {
+            this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+            this.health = health;
+          });
     }));
 
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((health) => {
-        this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
-        this.health = health;
-      });
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .subscribe((health) => {
+          this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+          this.health = health;
+        });
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -49,7 +51,7 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getHealthStatusColor(): string {
+  getHealthStatusColor(): string {
     if (this.health) {
       if (this.healthStatus === ClusterHealth.RUNNING) {
         return this.green;
@@ -63,7 +65,7 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getHealthTooltipText(): string {
+  getHealthTooltipText(): string {
     if (this.healthStatus === ClusterHealth.DELETING) {
       return 'Deleting might take up to 15 minutes';
     } /*else if (!!this.cluster.spec.pause) {

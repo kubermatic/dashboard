@@ -1,2 +1,1 @@
-export class BareMetalNodeSpec {
-}
+export class BareMetalNodeSpec {}

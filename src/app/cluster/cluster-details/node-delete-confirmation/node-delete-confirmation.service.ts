@@ -1,20 +1,15 @@
-import { Injectable, ViewContainerRef } from '@angular/core';
-import { MatDialog, MatDialogConfig } from '@angular/material';
-import { Observable } from 'rxjs';
-import { NodeDeleteConfirmationComponent } from './node-delete-confirmation.component';
+import {Injectable, ViewContainerRef} from '@angular/core';
+import {MatDialog, MatDialogConfig} from '@angular/material';
+import {Observable} from 'rxjs';
+import {NodeDeleteConfirmationComponent} from './node-delete-confirmation.component';
 
 @Injectable()
 export class NodeDeleteConfirmationService {
+  constructor(private dialog: MatDialog) {}
 
-  constructor(private dialog: MatDialog) {
-  }
-
-  public confirm(title: string,
-                 message: string,
-                 viewContainerRef: ViewContainerRef,
-                 btnOkText: string = 'Ok',
-                 btnCancelText: string = 'Cancel'): Observable<boolean> {
-
+  confirm(
+      title: string, message: string, viewContainerRef: ViewContainerRef, btnOkText = 'Ok',
+      btnCancelText = 'Cancel'): Observable<boolean> {
     const config: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -44,13 +39,9 @@ export class NodeDeleteConfirmationService {
     return dialogRef.afterClosed();
   }
 
-  public confirmWithoutContainer(title: string,
-                                 message: string,
-                                 titleAlign: string = 'center',
-                                 messageAlign: string = 'center',
-                                 btnOkText: string = 'Ok',
-                                 btnCancelText: string = 'Cancel'): Observable<boolean> {
-
+  confirmWithoutContainer(
+      title: string, message: string, titleAlign = 'center', messageAlign = 'center', btnOkText = 'Ok',
+      btnCancelText = 'Cancel'): Observable<boolean> {
     const config = new MatDialogConfig();
     // config.viewContainerRef = viewContainerRef;
 

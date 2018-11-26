@@ -11,9 +11,9 @@ export const environment = {
   name: 'dev',
   production: false,
   configUrl: '../../assets/config/config.json',
-  restRoot : 'api/v1',
-  restRootV3 : 'api/v3',
-  digitalOceanRestRoot : 'https://api.digitalocean.com/v2',
-  coreOSdexAuth : oauth + '?response_type=id_token&client_id=kubermatic&redirect_uri='
-  + redirect_uri + '&scope=' + scope.join(' ') + '&nonce=random',
+  restRoot: 'api/v1',
+  restRootV3: 'api/v3',
+  digitalOceanRestRoot: 'https://api.digitalocean.com/v2',
+  coreOSdexAuth: oauth + '?response_type=id_token&client_id=kubermatic&redirect_uri=' + redirect_uri +
+      '&scope=' + scope.join(' ') + '&nonce=random',
 };

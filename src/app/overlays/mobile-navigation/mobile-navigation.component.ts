@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
+import {Component} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
 
 @Component({
   selector: 'kubermatic-mobile-navigation',
@@ -7,10 +7,9 @@ import { MatDialogRef } from '@angular/material';
   styleUrls: ['./mobile-navigation.component.scss'],
 })
 export class MobileNavigationComponent {
-
   constructor(private dialogRef: MatDialogRef<MobileNavigationComponent>) {}
 
-  public closeModal(): void {
+  closeModal(): void {
     this.dialogRef.close();
   }
 }

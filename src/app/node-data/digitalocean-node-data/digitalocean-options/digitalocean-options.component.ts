@@ -1,8 +1,8 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { AddNodeService } from '../../../core/services/add-node/add-node.service';
-import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {AddNodeService} from '../../../core/services/add-node/add-node.service';
+import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-digitalocean-options',
@@ -12,10 +12,10 @@ import { NodeData, NodeProviderData } from '../../../shared/model/NodeSpecChange
 
 export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
-  public doOptionsForm: FormGroup;
+  doOptionsForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService) { }
+  constructor(private addNodeService: AddNodeService) {}
 
   ngOnInit(): void {
     this.doOptionsForm = new FormGroup({

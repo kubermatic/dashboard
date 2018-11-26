@@ -1,7 +1,7 @@
-import { Component, Input } from '@angular/core';
-import { ApiService } from '../../../core/services';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import {Component, Input} from '@angular/core';
+import {ApiService} from '../../../core/services';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-connect',
@@ -16,7 +16,7 @@ export class ClusterConnectComponent {
 
   constructor(private api: ApiService) {}
 
-  public getDownloadURL(): string {
+  getDownloadURL(): string {
     return this.api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
 

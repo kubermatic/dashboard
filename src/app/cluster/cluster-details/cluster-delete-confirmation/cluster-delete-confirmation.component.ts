@@ -1,10 +1,10 @@
-import { Component, DoCheck, Input, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
-import { ApiService, InitialNodeDataService } from '../../../core/services';
-import { GoogleAnalyticsService } from '../../../google-analytics.service';
-import { NotificationActions } from '../../../redux/actions/notification.actions';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
+import {Component, DoCheck, Input, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
+import {ApiService, InitialNodeDataService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-delete-confirmation',
@@ -16,13 +16,11 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
 
-  public inputName = '';
+  inputName = '';
 
-  constructor(private api: ApiService,
-              private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
-              private initialNodeDataService: InitialNodeDataService,
-              public googleAnalyticsService: GoogleAnalyticsService) {
-  }
+  constructor(
+      private api: ApiService, private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
+      private initialNodeDataService: InitialNodeDataService, public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');

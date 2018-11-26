@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material';
-import { ApiService, ProjectService } from '../core/services';
-import { NotificationActions } from '../redux/actions/notification.actions';
-import { CreateProjectModel } from '../shared/model/CreateProjectModel';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {MatDialogRef} from '@angular/material';
+import {ApiService, ProjectService} from '../core/services';
+import {NotificationActions} from '../redux/actions/notification.actions';
+import {CreateProjectModel} from '../shared/model/CreateProjectModel';
 
 @Component({
   selector: 'kubermatic-add-project',
@@ -11,21 +11,20 @@ import { CreateProjectModel } from '../shared/model/CreateProjectModel';
   styleUrls: ['./add-project.component.scss'],
 })
 export class AddProjectComponent implements OnInit {
-  public addProjectForm: FormGroup;
+  addProjectForm: FormGroup;
 
-  constructor(private api: ApiService,
-              private projectService: ProjectService,
-              private dialogRef: MatDialogRef<AddProjectComponent>) {
-  }
+  constructor(
+      private api: ApiService, private projectService: ProjectService,
+      private dialogRef: MatDialogRef<AddProjectComponent>) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.addProjectForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
     });
   }
 
   addProject(): void {
-    const createProject: CreateProjectModel = { name: this.addProjectForm.controls.name.value };
+    const createProject: CreateProjectModel = {name: this.addProjectForm.controls.name.value};
     this.api.createProject(createProject).subscribe((res) => {
       this.projectService.changeSelectedProject(res);
       this.projectService.storeProject(res);

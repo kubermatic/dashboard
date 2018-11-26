@@ -17,7 +17,7 @@ export class SSHKeyEntity {
   spec: SSHKeySpec;
 
   constructor(name: string, fingerprint: string, publicKey: string) {
-    this.name =  name;
+    this.name = name;
     this.spec = new SSHKeySpec(fingerprint, publicKey);
   }
 }

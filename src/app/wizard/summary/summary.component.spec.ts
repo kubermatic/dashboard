@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ApiService } from '../../core/services';
-import { SharedModule } from '../../shared/shared.module';
-import { ApiMockService } from '../../testing/services/api-mock.service';
-import { SummaryComponent } from './summary.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ApiService} from '../../core/services';
+import {SharedModule} from '../../shared/shared.module';
+import {ApiMockService} from '../../testing/services/api-mock.service';
+import {SummaryComponent} from './summary.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -17,17 +17,19 @@ describe('SummaryComponent', () => {
   let component: SummaryComponent;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        SummaryComponent,
-      ],
-      providers: [
-        { provide: ApiService, useClass: ApiMockService },
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            SummaryComponent,
+          ],
+          providers: [
+            {provide: ApiService, useClass: ApiMockService},
+          ],
+        })
+        .compileComponents();
   }));
 
   beforeEach(() => {

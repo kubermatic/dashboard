@@ -1,4 +1,4 @@
-import { VSphereNetwork } from '../../shared/entity/provider/vsphere/VSphereEntity';
+import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 
 export function fakeVSphereNetworks(): VSphereNetwork[] {
   return [

@@ -1,7 +1,5 @@
 export class MatDialogRefMock {
+  close(dialogResult?: any): void {}
 
-  public close(dialogResult?: any): void { }
-
-  public open(cmp: any, config: any): void { }
-
+  open(cmp: any, config: any): void {}
 }

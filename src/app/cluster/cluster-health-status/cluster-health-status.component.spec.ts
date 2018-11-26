@@ -1,19 +1,19 @@
-import { HttpClientModule } from '@angular/common/http';
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserModule, By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { HealthService, ProjectService } from '../../core/services';
-import { ClusterHealth } from '../../shared/model/ClusterHealthConstants';
-import { SharedModule } from '../../shared/shared.module';
-import { fakeDigitaloceanCluster } from '../../testing/fake-data/cluster.fake';
-import { fakeBringyourownSeedDatacenter } from '../../testing/fake-data/datacenter.fake';
-import { fakeHealth } from '../../testing/fake-data/health.fake';
-import { fakeProject } from '../../testing/fake-data/project.fake';
-import { RouterTestingModule } from '../../testing/router-stubs';
-import { HealthMockService } from '../../testing/services/health-mock.service';
-import { ProjectMockService } from '../../testing/services/project-mock.service';
-import { ClusterHealthStatusComponent } from './cluster-health-status.component';
+import {HttpClientModule} from '@angular/common/http';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {BrowserModule, By} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {HealthService, ProjectService} from '../../core/services';
+import {ClusterHealth} from '../../shared/model/ClusterHealthConstants';
+import {SharedModule} from '../../shared/shared.module';
+import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
+import {fakeBringyourownSeedDatacenter} from '../../testing/fake-data/datacenter.fake';
+import {fakeHealth} from '../../testing/fake-data/health.fake';
+import {fakeProject} from '../../testing/fake-data/project.fake';
+import {RouterTestingModule} from '../../testing/router-stubs';
+import {HealthMockService} from '../../testing/services/health-mock.service';
+import {ProjectMockService} from '../../testing/services/project-mock.service';
+import {ClusterHealthStatusComponent} from './cluster-health-status.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -29,18 +29,20 @@ describe('ClusterHealthStatusComponent', () => {
   let component: ClusterHealthStatusComponent;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        ClusterHealthStatusComponent,
-      ],
-      providers: [
-        { provide: HealthService, useClass: HealthMockService },
-        { provide: ProjectService, useClass: ProjectMockService },
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            ClusterHealthStatusComponent,
+          ],
+          providers: [
+            {provide: HealthService, useClass: HealthMockService},
+            {provide: ProjectService, useClass: ProjectMockService},
+          ],
+        })
+        .compileComponents();
   });
 
   beforeEach(() => {
@@ -53,8 +55,8 @@ describe('ClusterHealthStatusComponent', () => {
   });
 
   it('should create the cluster health status cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+       expect(component).toBeTruthy();
+     }));
 
   it('should set class to circle', () => {
     component.healthStatus = ClusterHealth.RUNNING;
@@ -74,7 +76,5 @@ describe('ClusterHealthStatusComponent', () => {
 
     component.healthStatus = ClusterHealth.WAITING;
     expect(component.getHealthStatusColor()).toBe(component.orange, 'should be orange color');
-
   });
-
 });

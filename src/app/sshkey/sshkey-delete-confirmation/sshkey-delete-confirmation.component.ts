@@ -1,8 +1,8 @@
-import { Component, Input } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
-import { ApiService } from '../../core/services';
-import { NotificationActions } from '../../redux/actions/notification.actions';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
+import {Component, Input} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
+import {ApiService} from '../../core/services';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 
 @Component({
   selector: 'kubermatic-sshkey-delete-confirmation',
@@ -14,9 +14,7 @@ export class SSHKeyDeleteConfirmationComponent {
   @Input() projectId: string;
   @Input() sshKey: SSHKeyEntity;
 
-  constructor(private api: ApiService,
-              private dialogRef: MatDialogRef<SSHKeyDeleteConfirmationComponent>) {
-  }
+  constructor(private api: ApiService, private dialogRef: MatDialogRef<SSHKeyDeleteConfirmationComponent>) {}
 
   deleteSSHKey(): void {
     this.api.deleteSSHKey(this.sshKey.id, this.projectId).subscribe((result) => {

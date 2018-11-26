@@ -1,2 +1,1 @@
-export class BringYourOwnDatacenterSpec {
-}
+export class BringYourOwnDatacenterSpec {}

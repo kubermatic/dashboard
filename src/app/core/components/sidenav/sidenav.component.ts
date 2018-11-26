@@ -1,13 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, MatSelectChange } from '@angular/material';
-import { Router, RouterState, RouterStateSnapshot } from '@angular/router';
-import { interval, Subscription } from 'rxjs';
-import { environment } from '../../../../environments/environment';
-import { AddProjectComponent } from '../../../add-project/add-project.component';
-import { AppConfigService } from '../../../app-config.service';
-import { ProjectEntity } from '../../../shared/entity/ProjectEntity';
-import { UserGroupConfig } from '../../../shared/model/Config';
-import { ApiService, ProjectService, UserService } from '../../services';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, MatSelectChange} from '@angular/material';
+import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
+import {interval, Subscription} from 'rxjs';
+import {environment} from '../../../../environments/environment';
+import {AddProjectComponent} from '../../../add-project/add-project.component';
+import {AppConfigService} from '../../../app-config.service';
+import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {UserGroupConfig} from '../../../shared/model/Config';
+import {ApiService, ProjectService, UserService} from '../../services';
 
 @Component({
   selector: 'kubermatic-sidenav',
@@ -16,20 +16,17 @@ import { ApiService, ProjectService, UserService } from '../../services';
 })
 
 export class SidenavComponent implements OnInit, OnDestroy {
-  public environment: any = environment;
-  public projects: ProjectEntity[];
-  public selectedProject: ProjectEntity;
-  public userGroup: string;
-  public userGroupConfig: UserGroupConfig;
+  environment: any = environment;
+  projects: ProjectEntity[];
+  selectedProject: ProjectEntity;
+  userGroup: string;
+  userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
   private readonly notActiveProjectRefreshInterval = 1500;
 
-  constructor(public dialog: MatDialog,
-              private api: ApiService,
-              private router: Router,
-              private projectService: ProjectService,
-              private userService: UserService,
-              private appConfigService: AppConfigService) { }
+  constructor(
+      public dialog: MatDialog, private api: ApiService, private router: Router, private projectService: ProjectService,
+      private userService: UserService, private appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -73,7 +70,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public isProjectSelected(viewName: string): string {
+  isProjectSelected(viewName: string): string {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     if (this.selectedProject === undefined || this.selectedProject.status !== 'Active') {
       return 'disabled';
@@ -88,7 +85,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     }
   }
 
-  public loadProjects(): void {
+  loadProjects(): void {
     this.api.getProjects().subscribe((res) => {
       this.projects = res;
 
@@ -116,7 +113,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     });
   }
 
-  public selectionChange(event: MatSelectChange, previous: ProjectEntity, select: any): void {
+  selectionChange(event: MatSelectChange, previous: ProjectEntity, select: any): void {
     if (event.value === undefined) {
       // The only option with undefined value is "+ Add Project". If it gets
       // selected, we revert both the model and the control to the old value.
@@ -132,7 +129,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addProject(): void {
+  addProject(): void {
     const modal = this.dialog.open(AddProjectComponent);
     const sub = modal.afterClosed().subscribe((added) => {
       if (added) {
@@ -143,7 +140,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     });
   }
 
-  public setIconColor(url: string): boolean {
+  setIconColor(url: string): boolean {
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;
     if (url === '/projects') {
@@ -164,7 +161,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return `/projects/${selectedProjectId}/${target}`;
   }
 
-  public getSelectedProjectStateIconClass(): string {
+  getSelectedProjectStateIconClass(): string {
     let iconClass = '';
     if (!!this.selectedProject) {
       switch (this.selectedProject.status) {
