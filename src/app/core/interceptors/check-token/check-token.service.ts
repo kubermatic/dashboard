@@ -13,7 +13,6 @@ export class CheckTokenInterceptor implements HttpInterceptor {
       this.router.navigate(['']);
     }
 
-    return next
-      .handle(req);
+    return next.handle(req);
   }
 }

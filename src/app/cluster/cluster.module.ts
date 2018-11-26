@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MatTabsModule } from '@angular/material';
-import { AddNodeModule } from '../add-node/add-node.module';
+import { NodeDataModule } from '../node-data/node-data.module';
 import { SharedModule } from '../shared/shared.module';
 import { AddNodeModalComponent } from './cluster-details/add-node-modal/add-node-modal.component';
 import { ChangeClusterVersionComponent } from './cluster-details/change-cluster-version/change-cluster-version.component';
@@ -65,8 +65,8 @@ const entryComponents: any[] = [
   imports: [
     SharedModule,
     ClusterRoutingModule,
-    AddNodeModule,
     MatTabsModule,
+    NodeDataModule,
   ],
   declarations: [
     ...components,

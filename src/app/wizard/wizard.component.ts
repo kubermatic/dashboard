@@ -57,14 +57,11 @@ export class WizardComponent implements OnInit, OnDestroy {
     };
 
     this.addNodeData = {
-      node: {
         spec: {
           cloud: {},
           operatingSystem: {},
           versions: {},
         },
-        status: {},
-      },
       count: 3,
     };
   }
@@ -103,21 +100,21 @@ export class WizardComponent implements OnInit, OnDestroy {
 
       if (!!this.clusterDatacenterFormData.datacenter) {
         oldProviderSpec = this.clusterDatacenterFormData.datacenter.spec[this.clusterDatacenterFormData.datacenter.spec.provider];
-        oldProviderNodeSpec = this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider];
+        oldProviderNodeSpec = this.addNodeData.spec.cloud[this.clusterProviderFormData.provider];
         oldDC = this.clusterDatacenterFormData.datacenter.spec.seed;
       }
       this.cluster.spec.cloud = { dc: oldDC };
 
       if (oldProviderSpec == null || oldProviderSpec !== undefined) {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
-        this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
-        this.addNodeData.node.spec.operatingSystem = getEmptyOperatingSystemSpec();
-        this.addNodeData.node.spec.versions = getEmptyNodeVersionSpec();
+        this.addNodeData.spec.cloud[this.clusterProviderFormData.provider] = getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
+        this.addNodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
+        this.addNodeData.spec.versions = getEmptyNodeVersionSpec();
         this.clusterDatacenterFormData.valid = false;
         this.clusterProviderSettingsFormData.valid = false;
       } else {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = oldProviderSpec;
-        this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = oldProviderNodeSpec;
+        this.addNodeData.spec.cloud[this.clusterProviderFormData.provider] = oldProviderNodeSpec;
       }
       this.wizardService.changeCluster(this.cluster);
       if (this.clusterProviderFormData.valid) {
@@ -258,10 +255,10 @@ export class WizardComponent implements OnInit, OnDestroy {
       });
 
       if (this.clusterProviderFormData.provider !== 'bringyourown') {
-        this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
+        this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.spec);
       }
     },
-    (error) => {
+    () => {
       NotificationActions.error('Error', `Could not create cluster`);
       this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
       this.creating = false;

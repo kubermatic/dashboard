@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -26,10 +26,36 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
   private token: string;
+  private isNodeDeploymentAPIAvailable_ = false;
 
   constructor(private http: HttpClient, private auth: Auth) {
     this.token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
+  }
+
+  init(): Promise<any> {
+    const dummy = '__dummy__';
+    const url = `${this.restRoot}/projects/${dummy}/dc/${dummy}/clusters/${dummy}/nodedeployments`;
+    const headers = new HttpHeaders(); // It is important to skip authorization header here.
+
+    return this.http.get<any[]>(url, {headers}).toPromise().then((response) => {
+      this.isNodeDeploymentAPIAvailable_ = true;
+      return response;
+    }).catch((error: HttpErrorResponse) => {
+      // 404 and 405 are the status codes returned if endpoint path and method are not implemented.
+      // That's why if we encounter them we can assume that this functionality is not implemented on API side.
+      this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
+      return error;
+    });
+  }
+
+  isNodeDeploymentAPIAvailable(): boolean {
+    return this.isNodeDeploymentAPIAvailable_;
+  }
+
+  getClusterNodeDeployments(cluster: string, dc: string, projectID: string): Observable<any[]> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
+    return this.http.get<any[]>(url, { headers: this.headers });
   }
 
   getProjects(): Observable<ProjectEntity[]> {

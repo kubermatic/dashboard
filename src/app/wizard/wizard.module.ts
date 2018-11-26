@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { MatButtonToggleModule, MatTabsModule } from '@angular/material';
-import { AddNodeModule } from '../add-node/add-node.module';
+import { NodeDataModule } from '../node-data/node-data.module';
 import { SharedModule } from '../shared/shared.module';
 import { ProgressComponent } from './progress/progress.component';
 import { SetClusterSpecComponent } from './set-cluster-spec/set-cluster-spec.component';
@@ -45,7 +45,7 @@ const components: any[] = [
     WizardRoutingModule,
     MatButtonToggleModule,
     MatTabsModule,
-    AddNodeModule,
+    NodeDataModule,
   ],
   declarations: [
     ...components,
