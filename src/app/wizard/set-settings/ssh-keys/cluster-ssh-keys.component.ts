@@ -46,11 +46,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
       });
     }));
 
-    const keyNames: string[] = [];
-    for (const key of this.selectedKeys) {
-      keyNames.push(key.name);
-    }
-    this.keysForm.controls.keys.patchValue(keyNames);
+    this.keysForm.controls.keys.patchValue(this.selectedKeys);
 
     this.keysFormSub = this.keysForm.valueChanges.subscribe((data) => {
       this.setClusterSSHKeysSpec();
@@ -83,7 +79,9 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
           this.keysSub.unsubscribe();
         }
         this.reloadKeys();
-        this.keysForm.controls.keys.patchValue([result.name]);
+        const newValue = this.keysForm.controls.keys.value;
+        newValue.push(result);
+        this.keysForm.controls.keys.patchValue(newValue);
       }
     });
   }
@@ -92,11 +90,15 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     const clusterKeys: SSHKeyEntity[] = [];
     for (const selectedKey of this.keysForm.controls.keys.value) {
       for (const key of this.keys) {
-        if (selectedKey === key.name) {
+        if (selectedKey.id === key.id) {
           clusterKeys.push(key);
         }
       }
     }
     this.wizardService.changeClusterSSHKeys(clusterKeys);
+  }
+
+  compareValues(value1: SSHKeyEntity, value2: SSHKeyEntity): boolean {
+    return value1 && value2 ? value1.id === value2.id : value1 === value2;
   }
 }
