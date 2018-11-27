@@ -23,7 +23,7 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
   myParams: object = {
     particles: {
       number: {
-        value: 100,
+        value: 80,
       },
       color: {
         value: '#fff',
