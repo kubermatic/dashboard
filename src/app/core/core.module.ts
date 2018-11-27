@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {APP_INITIALIZER, Injector, NgModule, Optional, SkipSelf} from '@angular/core';
+import {APP_INITIALIZER, NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserXhr} from '@angular/http';
 import {RouterModule} from '@angular/router';
 import {SimpleNotificationsModule} from 'angular2-notifications';
@@ -103,10 +103,7 @@ export function init(api: ApiService): () => Promise<any> {
   ],
 })
 export class CoreModule {
-  static injector: Injector;
-
-  constructor(@Optional() @SkipSelf() parentModule: CoreModule, injector: Injector) {
-    CoreModule.injector = injector;
+  constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     if (parentModule) {
       throw new Error('CoreModule is already loaded. Import it in the AppModule only');
     }

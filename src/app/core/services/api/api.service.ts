@@ -1,4 +1,4 @@
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -25,17 +25,18 @@ export class ApiService {
   private token: string;
   private isNodeDeploymentAPIAvailable_ = false;
 
-  constructor(private http: HttpClient, private auth: Auth) {
+  constructor(private http: HttpClient, private auth: Auth, private backend: HttpBackend) {
     this.token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
   }
 
   init(): Promise<any> {
+    const client = new HttpClient(this.backend);  // Skips interceptor chain.
     const dummy = '__dummy__';
     const url = `${this.restRoot}/projects/${dummy}/dc/${dummy}/clusters/${dummy}/nodedeployments`;
     const headers = new HttpHeaders();  // It is important to skip authorization header here.
 
-    return this.http.get<any[]>(url, {headers})
+    return client.get<any[]>(url, {headers})
         .toPromise()
         .then((response) => {
           this.isNodeDeploymentAPIAvailable_ = true;
