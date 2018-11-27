@@ -6,15 +6,16 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
 import {ApiService, ProjectService} from '../../../core/services';
+import {DatacenterService, WizardService} from '../../../core/services';
 import {AddNodeService} from '../../../core/services/add-node/add-node.service';
-import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
-import {WizardService} from '../../../core/services/wizard/wizard.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {AWSNodeDataComponent} from '../../../node-data/aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from '../../../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../../../node-data/digitalocean-node-data/digitalocean-node-data.component';
 import {DigitaloceanOptionsComponent} from '../../../node-data/digitalocean-node-data/digitalocean-options/digitalocean-options.component';
+
 import Spy = jasmine.Spy;
 import {HetznerNodeDataComponent} from '../../../node-data/hetzner-node-data/hetzner-node-data.component';
 import {NodeDataComponent} from '../../../node-data/node-data.component';
@@ -31,11 +32,11 @@ import {ActivatedRouteStub, RouterTestingModule} from '../../../testing/router-s
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {AddNodeModalComponent} from './add-node-modal.component';
+import {AddNodesModalComponent} from './add-nodes-modal.component';
 
-describe('AddNodeModalComponent', () => {
-  let fixture: ComponentFixture<AddNodeModalComponent>;
-  let component: AddNodeModalComponent;
+describe('AddNodesModalComponent', () => {
+  let fixture: ComponentFixture<AddNodesModalComponent>;
+  let component: AddNodesModalComponent;
   let activatedRoute: ActivatedRouteStub;
   let createClusterNodeSpy: Spy;
 
@@ -57,7 +58,7 @@ describe('AddNodeModalComponent', () => {
             MatTabsModule,
           ],
           declarations: [
-            AddNodeModalComponent,
+            AddNodesModalComponent,
             NodeDataComponent,
             OpenstackNodeDataComponent,
             OpenstackOptionsComponent,
@@ -85,16 +86,16 @@ describe('AddNodeModalComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddNodeModalComponent);
+    fixture = TestBed.createComponent(AddNodesModalComponent);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
-    component.addNodeData = {
+    component.addNodesData = {
       spec: fakeDigitaloceanCreateNode().spec,
       count: 1,
       valid: true,
     };
-    component.addNodeData = nodeDataFake();
+    component.addNodesData = nodeDataFake();
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {clusterName: 'tbbfvttvs'};
@@ -107,7 +108,7 @@ describe('AddNodeModalComponent', () => {
   });
 
   it('should call createClusterNode method from the api', fakeAsync(() => {
-       component.addNode();
+       component.addNodes();
        tick();
 
        expect(createClusterNodeSpy.and.callThrough()).toHaveBeenCalled();

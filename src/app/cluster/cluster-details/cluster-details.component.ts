@@ -14,7 +14,7 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, UserGroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {AddNodeModalComponent} from './add-node-modal/add-node-modal.component';
+import {AddNodesModalComponent} from './add-nodes-modal/add-nodes-modal.component';
 import {ChangeClusterVersionComponent} from './change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -45,6 +45,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   downgradesAvailable = false;
   moreSshKeys = false;
   hasInitialNodes = false;
+  private isNodeDeploymentAPIAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -60,6 +61,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
     this.config = this.appConfigService.getConfig();
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
@@ -220,7 +222,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   addNode(): void {
-    const modal = this.dialog.open(AddNodeModalComponent);
+    const modal = this.dialog.open(AddNodesModalComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
@@ -310,5 +312,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   loadMoreSshKeys(moreSshKeys: boolean): void {
     this.moreSshKeys = moreSshKeys;
+  }
+
+  getAddNodesLabel() {
+    return this.isNodeDeploymentAPIAvailable ? 'Add Node Deployment' : 'Add Nodes';
   }
 }

@@ -2,10 +2,12 @@ import {HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+
 import {environment} from '../../../../environments/environment';
 import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
+import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
@@ -54,9 +56,15 @@ export class ApiService {
     return this.isNodeDeploymentAPIAvailable_;
   }
 
-  getClusterNodeDeployments(cluster: string, dc: string, projectID: string): Observable<any[]> {
+  createClusterNodeDeployment(cluster: ClusterEntity, node: NodeDeploymentEntity, dc: string, projectID: string):
+      Observable<NodeDeploymentEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
+    return this.http.post<NodeDeploymentEntity>(url, node, {headers: this.headers});
+  }
+
+  getClusterNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
-    return this.http.get<any[]>(url, {headers: this.headers});
+    return this.http.get<NodeDeploymentEntity[]>(url, {headers: this.headers});
   }
 
   getProjects(): Observable<ProjectEntity[]> {

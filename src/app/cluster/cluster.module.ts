@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {MatTabsModule} from '@angular/material';
 import {NodeDataModule} from '../node-data/node-data.module';
 import {SharedModule} from '../shared/shared.module';
-import {AddNodeModalComponent} from './cluster-details/add-node-modal/add-node-modal.component';
+import {AddNodesModalComponent} from './cluster-details/add-nodes-modal/add-nodes-modal.component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -43,7 +43,7 @@ const entryComponents: any[] = [
   NodeDeleteConfirmationComponent,
   NodeDuplicateComponent,
   ChangeClusterVersionComponent,
-  AddNodeModalComponent,
+  AddNodesModalComponent,
   ClusterSecretsComponent,
   ClusterConnectComponent,
   RevokeAdminTokenComponent,
