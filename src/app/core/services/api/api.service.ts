@@ -1,4 +1,4 @@
-import { HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import {HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
@@ -31,7 +31,7 @@ export class ApiService {
   }
 
   init(): Promise<any> {
-    const client = new HttpClient(this.backend); // Skips interceptor chain.
+    const client = new HttpClient(this.backend);  // Skips interceptor chain.
     const dummy = '__dummy__';
     const url = `${this.restRoot}/projects/${dummy}/dc/${dummy}/clusters/${dummy}/nodedeployments`;
     const headers = new HttpHeaders();  // It is important to skip authorization header here.
