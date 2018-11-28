@@ -83,7 +83,7 @@ export class AddNodesModalComponent implements OnInit, OnDestroy {
   }
 
   private createNodeDeployment(): void {
-    const createObservables: Array<ObservableInput<any>> = [];
+    const createObservables: ObservableInput<any>[] = [];
     createObservables.push(this.api.createClusterNodeDeployment(
         this.cluster, this.getNodeDeploymentEntity(), this.datacenter.metadata.name, this.projectID));
     this.observeCreation(createObservables, 'Node Deployment successfully created');
@@ -99,7 +99,7 @@ export class AddNodesModalComponent implements OnInit, OnDestroy {
   }
 
   private createNodes(): void {
-    const createObservables: Array<ObservableInput<any>> = [];
+    const createObservables: ObservableInput<any>[] = [];
     for (let i = 0; i < this.addNodesData.count; i++) {
       createObservables.push(this.api.createClusterNode(
           this.cluster, this.getNodeEntity(), this.datacenter.metadata.name, this.projectID));
