@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
-import {AddNodeService} from '../core/services/add-node/add-node.service';
+import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {SharedModule} from '../shared/shared.module';
 import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
 import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
@@ -54,7 +54,7 @@ describe('NodeDataComponent', () => {
             AzureNodeDataComponent,
           ],
           providers: [
-            AddNodeService,
+            NodeDataService,
             WizardService,
             {provide: ApiService, useValue: apiMock},
             {provide: DatacenterService, useClass: DatacenterMockService},

@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, ProjectService, UserService, WizardService} from '../../core/services';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {AWSNodeDataComponent} from '../../node-data/aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from '../../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../../node-data/digitalocean-node-data/digitalocean-node-data.component';
@@ -78,7 +78,7 @@ describe('SetSettingsComponent', () => {
             AzureNodeDataComponent,
           ],
           providers: [
-            AddNodeService,
+            NodeDataService,
             WizardService,
             {provide: ApiService, useValue: apiMock},
             {provide: DatacenterService, useValue: DatacenterMockService},

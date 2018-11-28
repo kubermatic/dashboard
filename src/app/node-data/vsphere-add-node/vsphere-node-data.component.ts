@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
@@ -16,7 +16,7 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
   vsphereNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService) {}
+  constructor(private addNodeService: NodeDataService) {}
 
   ngOnInit(): void {
     this.vsphereNodeForm = new FormGroup({

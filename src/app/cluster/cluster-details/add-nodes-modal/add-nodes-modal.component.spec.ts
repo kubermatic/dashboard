@@ -9,7 +9,7 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {ApiService, ProjectService} from '../../../core/services';
 import {DatacenterService, WizardService} from '../../../core/services';
-import {AddNodeService} from '../../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {AWSNodeDataComponent} from '../../../node-data/aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from '../../../node-data/azure-node-data/azure-node-data.component';
@@ -77,7 +77,7 @@ describe('AddNodesModalComponent', () => {
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
-            AddNodeService,
+            NodeDataService,
             WizardService,
             GoogleAnalyticsService,
           ],

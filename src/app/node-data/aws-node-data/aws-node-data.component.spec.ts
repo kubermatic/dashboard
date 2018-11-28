@@ -3,7 +3,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {WizardService} from '../../core/services';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
@@ -30,7 +30,7 @@ describe('AWSNodeDataComponent', () => {
             AWSNodeDataComponent,
           ],
           providers: [
-            AddNodeService,
+            NodeDataService,
             WizardService,
           ],
         })

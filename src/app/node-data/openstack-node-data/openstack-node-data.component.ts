@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@an
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {ApiService} from '../../core/services';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
@@ -23,7 +23,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
   osNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService, private api: ApiService) {}
+  constructor(private addNodeService: NodeDataService, private api: ApiService) {}
 
   ngOnInit(): void {
     this.osNodeForm = new FormGroup({

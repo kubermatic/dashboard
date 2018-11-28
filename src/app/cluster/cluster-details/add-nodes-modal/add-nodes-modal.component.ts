@@ -1,14 +1,14 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material';
-import {combineLatest, ObservableInput, Subscription} from 'rxjs';
+import {Subscription} from 'rxjs';
+
 import {ApiService, DatacenterService, WizardService} from '../../../core/services';
-import {AddNodeService} from '../../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../../core/services/node-data/node-data.service';
+import {NodeService} from '../../../core/services/node/node.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
-import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeEntity} from '../../../shared/entity/NodeEntity';
+import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
@@ -26,8 +26,9 @@ export class AddNodesModalComponent implements OnInit, OnDestroy {
   private isNodeDeploymentAPIAvailable = false;
 
   constructor(
-      private api: ApiService, private addNodeService: AddNodeService, private wizardService: WizardService,
-      private dcService: DatacenterService, public googleAnalyticsService: GoogleAnalyticsService) {}
+      private api: ApiService, private nodeDataService: NodeDataService, private nodeService: NodeService,
+      private wizardService: WizardService, private dcService: DatacenterService,
+      public googleAnalyticsService: GoogleAnalyticsService) {}
 
   private getInitialNodeData(): NodeData {
     return {
@@ -50,7 +51,7 @@ export class AddNodesModalComponent implements OnInit, OnDestroy {
     this.addNodesData.spec.operatingSystem = getEmptyOperatingSystemSpec();
     this.addNodesData.spec.versions = getEmptyNodeVersionSpec();
 
-    this.subscriptions.push(this.addNodeService.nodeDataChanges$.subscribe(async (data: NodeData) => {
+    this.subscriptions.push(this.nodeDataService.nodeDataChanges$.subscribe(async (data: NodeData) => {
       this.addNodesData = await data;
     }));
 
@@ -75,48 +76,6 @@ export class AddNodesModalComponent implements OnInit, OnDestroy {
   }
 
   addNodes(): void {
-    if (this.isNodeDeploymentAPIAvailable) {
-      this.createNodeDeployment();
-    } else {
-      this.createNodes();
-    }
-  }
-
-  private createNodeDeployment(): void {
-    const createObservables: ObservableInput<any>[] = [];
-    createObservables.push(this.api.createClusterNodeDeployment(
-        this.cluster, this.getNodeDeploymentEntity(), this.datacenter.metadata.name, this.projectID));
-    this.observeCreation(createObservables, 'Node Deployment successfully created');
-  }
-
-  private getNodeDeploymentEntity(): NodeDeploymentEntity {
-    return {
-      spec: {
-        template: this.addNodesData.spec,
-        replicas: this.addNodesData.count,
-      },
-    };
-  }
-
-  private createNodes(): void {
-    const createObservables: ObservableInput<any>[] = [];
-    for (let i = 0; i < this.addNodesData.count; i++) {
-      createObservables.push(this.api.createClusterNode(
-          this.cluster, this.getNodeEntity(), this.datacenter.metadata.name, this.projectID));
-    }
-    this.observeCreation(createObservables, 'Node successfully created');
-  }
-
-  private getNodeEntity(): NodeEntity {
-    return {
-      spec: this.addNodesData.spec,
-    };
-  }
-
-  private observeCreation(createObservables: Array<ObservableInput<any>>, successMessage: string): void {
-    this.subscriptions.push(combineLatest(createObservables).subscribe((x) => {
-      NotificationActions.success('Success', successMessage);
-      this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
-    }));
+    this.nodeService.createNodes(this.addNodesData, this.datacenter, this.cluster, this.projectID);
   }
 }

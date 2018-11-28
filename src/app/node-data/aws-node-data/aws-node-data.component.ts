@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {WizardService} from '../../core/services';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
@@ -23,7 +23,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   hideOptional = true;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService, private wizardService: WizardService) {}
+  constructor(private addNodeService: NodeDataService, private wizardService: WizardService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);

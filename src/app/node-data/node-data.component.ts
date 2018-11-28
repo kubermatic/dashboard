@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
-import {AddNodeService} from '../core/services/add-node/add-node.service';
+import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
@@ -27,7 +27,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   private providerData: NodeProviderData = {valid: false};
 
   constructor(
-      private addNodeService: AddNodeService, private wizardService: WizardService, private _dc: DatacenterService,
+      private addNodeService: NodeDataService, private wizardService: WizardService, private _dc: DatacenterService,
       private _project: ProjectService, private api: ApiService) {}
 
   ngOnInit(): void {
