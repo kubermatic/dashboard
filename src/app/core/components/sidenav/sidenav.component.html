@@ -7,10 +7,10 @@
           <mat-label fxLayout="row">
             <span>Selected Project</span>
             <div class="health-state" *ngIf="!!selectedProject">
-              <i [matTooltip]="selectedProject.status" [ngClass]="getSelectedProjectStateIconClass()"></i>
+              <i [matTooltip]="selectedProject.status" [ngClass]="projectService.getProjectStateIconClass()"></i>
             </div>
           </mat-label>
-          <mat-select #select placeholder="Select Project" (selectionChange)="selectionChange($event, selectedProject, select)" [ngModel]="selectedProject" [compareWith]="compareProjectsEquality" disableOptionCentering>
+          <mat-select #select placeholder="Select Project" (selectionChange)="selectionChange($event, selectedProject, select)" [ngModel]="selectedProject" [compareWith]="projectService.compareProjectsEquality" disableOptionCentering>
             <mat-option (click)="addProject()">+ Add Project</mat-option>
             <mat-option *ngFor="let project of projects" [value]="project">
               {{ project.name }}
@@ -19,24 +19,24 @@
         </div>
       </mat-list-item>
 
-      <mat-list-item [ngClass]="isProjectSelected('create-cluster')">
-        <a mat-line [routerLink]="getRouterLink('wizard')" [routerLinkActive]="['active']"><i class="fa fa-magic fa-lg"></i> Create Cluster</a>
+      <mat-list-item [ngClass]="projectService.isProjectSelected('create-cluster')">
+        <a mat-line [routerLink]="getRouterLink('wizard')"  [ngClass]="checkUrl('/wizard') ? 'active' : ''"><i class="fa fa-magic fa-lg"></i> Create Cluster</a>
       </mat-list-item>
 
-      <mat-list-item [ngClass]="isProjectSelected('clusters')">
-        <a mat-line [routerLink]="getRouterLink('clusters')" [routerLinkActive]="['active']"><i class="iconCluster" [ngClass]="setIconColor('/clusters') ? 'white' : 'black'"></i> Manage Clusters</a>
+      <mat-list-item [ngClass]="projectService.isProjectSelected('clusters')">
+        <a mat-line [routerLink]="getRouterLink('clusters')" [ngClass]="checkUrl('/clusters') ? 'active' : ''"><i class="iconCluster" [ngClass]="checkUrl('/clusters') ? 'white' : 'black'"></i> Manage Clusters</a>
       </mat-list-item>
 
-      <mat-list-item [ngClass]="isProjectSelected('sshKeys')">
-        <a mat-line [routerLink]="getRouterLink('sshkeys')" [routerLinkActive]="['active']"><i class="iconKey" [ngClass]="setIconColor('/sshkeys') ? 'white' : 'black'"></i> Manage SSH keys</a>
+      <mat-list-item [ngClass]="projectService.isProjectSelected('sshKeys')">
+        <a mat-line [routerLink]="getRouterLink('sshkeys')" [ngClass]="checkUrl('/sshkeys') ? 'active' : ''"><i class="iconKey" [ngClass]="checkUrl('/sshkeys') ? 'white' : 'black'"></i> Manage SSH keys</a>
       </mat-list-item>
 
-      <mat-list-item [ngClass]="isProjectSelected('members')">
-        <a mat-line [routerLink]="getRouterLink('members')" [routerLinkActive]="['active']"><i class="iconMember" [ngClass]="setIconColor('/members') ? 'white' : 'black'"></i> Members</a>
+      <mat-list-item [ngClass]="projectService.isProjectSelected('members')">
+        <a mat-line [routerLink]="getRouterLink('members')" [ngClass]="checkUrl('/members') ? 'active' : ''"><i class="iconMember" [ngClass]="checkUrl('/members') ? 'white' : 'black'"></i> Members</a>
       </mat-list-item>
 
       <mat-list-item>
-        <a mat-line routerLink="/projects" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><i class="iconProject" [ngClass]="setIconColor('/projects') ? 'white' : 'black'"></i> Projects</a>
+        <a mat-line routerLink="/projects" [ngClass]="checkUrl('/projects') ? 'active' : ''"><i class="iconProject" [ngClass]="checkUrl('/projects') ? 'white' : 'black'"></i> Projects</a>
       </mat-list-item>
     </div>
   </mat-nav-list>
