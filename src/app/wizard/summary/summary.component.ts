@@ -1,8 +1,9 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { SSHKeyEntity } from '../../shared/entity/SSHKeyEntity';
-import { ClusterDatacenterForm, ClusterProviderForm } from '../../shared/model/ClusterForm';
-import { NodeData } from '../../shared/model/NodeSpecChange';
+
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
+import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-summary',
@@ -16,18 +17,20 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @Input() providerFormData: ClusterProviderForm;
   @Input() datacenterFormData: ClusterDatacenterForm;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 
   getOperatingSystem(): string {
-    if (this.nodeData.node.spec.operatingSystem.ubuntu) {
+    if (this.nodeData.spec.operatingSystem.ubuntu) {
       return 'Ubuntu';
-    } else if (this.nodeData.node.spec.operatingSystem.centos) {
+
+    } else if (this.nodeData.spec.operatingSystem.centos) {
       return 'CentOS';
-    } else if (this.nodeData.node.spec.operatingSystem.containerLinux) {
+
+    } else if (this.nodeData.spec.operatingSystem.containerLinux) {
       return 'Container Linux';
     } else {
       return '';
@@ -57,9 +60,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
     }
     return tagsValue;
   }
-
   getDnsServers(dnsServers: string[]): string {
     return dnsServers.join(', ');
   }
-
 }

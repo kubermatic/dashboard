@@ -1,5 +1,5 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-provider-settings',
@@ -9,9 +9,9 @@ import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
 export class ClusterProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void { }
+  ngOnInit(): void {}
 
-  ngOnDestroy(): void { }
+  ngOnDestroy(): void {}
 }

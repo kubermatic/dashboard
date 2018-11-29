@@ -1,5 +1,5 @@
-import { CloudSpec, ClusterEntity } from '../entity/ClusterEntity';
-import { DataCenterEntity } from '../entity/DatacenterEntity';
+import {CloudSpec, ClusterEntity} from '../entity/ClusterEntity';
+import {DataCenterEntity} from '../entity/DatacenterEntity';
 
 export class ClusterFormData {
   cluster?: ClusterEntity;

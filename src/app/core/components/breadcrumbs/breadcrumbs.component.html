@@ -3,8 +3,7 @@
      fxLayout.xs="column"
      fxLayoutAlign="left"
      fxLayoutGap="10px"
-     fxLayoutGap.xs="0"
-     >
+     fxLayoutGap.xs="0">
   <ul class="breadcrumb" fxFlex fxFlexOffset.xs="0">
     <li class="breadcrumb-item"><a routerLink="/projects">Home</a></li>
     <li *ngIf="!clusterName.length" class="breadcrumb-item" [ngClass]="{'active': !clusterName}" >{{ activePageTitle }}</li>

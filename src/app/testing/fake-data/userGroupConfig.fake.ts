@@ -1,4 +1,4 @@
-import { UserGroupConfig } from '../../shared/model/Config';
+import {UserGroupConfig} from '../../shared/model/Config';
 
 export function fakeUserGroupConfig(): UserGroupConfig {
   return {

@@ -1,0 +1,56 @@
+<form [formGroup]="nodeForm" fxLayout="column">
+  <mat-form-field fxFlex>
+    <input matInput formControlName="count" min="1" type="number" placeholder="Number of nodes*:" autocomplete="off">
+    <mat-error *ngIf="nodeForm.controls.count.hasError('required')">Number of nodes is required.</mat-error>
+    <mat-error *ngIf="nodeForm.controls.count.hasError('ipsMissing')">Not enough IPs left. Reduce number of nodes or add more machine networks</mat-error>
+  </mat-form-field>
+
+  <kubermatic-aws-node-data *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-aws-node-data>
+
+  <kubermatic-digitalocean-node-data *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData" [projectId]="projectId" [clusterId]="cluster.id" [seedDCName]="seedDCName"></kubermatic-digitalocean-node-data>
+
+  <kubermatic-openstack-node-data *ngIf="cluster.spec.cloud.openstack" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData" [projectId]="projectId" [clusterId]="cluster.id" [seedDCName]="seedDCName"></kubermatic-openstack-node-data>
+
+  <kubermatic-hetzner-node-data *ngIf="cluster.spec.cloud.hetzner" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-hetzner-node-data>
+
+  <kubermatic-vsphere-node-data *ngIf="cluster.spec.cloud.vsphere" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-vsphere-node-data>
+
+  <kubermatic-azure-node-data *ngIf="cluster.spec.cloud.azure" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData" [projectId]="projectId" [clusterId]="cluster.id" [seedDCName]="seedDCName"></kubermatic-azure-node-data>
+
+  <mat-form-field class="operating-system">
+    <mat-select placeholder="Operating System*:" formControlName="operatingSystem">
+      <mat-option value="ubuntu">Ubuntu</mat-option>
+      <mat-option value="centos">CentOS</mat-option>
+      <mat-option value="containerLinux" *ngIf="!cluster.spec.cloud.hetzner">Container Linux</mat-option>
+    </mat-select>
+    <mat-hint *ngIf="cluster.spec.cloud.openstack">Select the operating system of the entered image</mat-hint>
+    <mat-hint *ngIf="cluster.spec.cloud.vsphere">Select the operating system of the entered template</mat-hint>
+  </mat-form-field>
+</form>
+
+<form [formGroup]="operatingSystemForm" fxLayout="column">
+  <div fxFlex="100%">
+    <!-- Options for Ubuntu -->
+    <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'" class="os-options" [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'with-margin' : ''">
+      <label fxFlex="50%">Upgrade system on first boot</label>
+      <mat-checkbox fxFlex="50%" id="distUpgradeOnBootUbuntu" formControlName="distUpgradeOnBootUbuntu"></mat-checkbox>
+    </div>
+
+     <!-- Options for CentOS -->
+    <div *ngIf="nodeForm.controls.operatingSystem.value === 'centos'" class="os-options" [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'with-margin' : ''">
+      <label fxFlex="50%">Upgrade system on first boot</label>
+      <mat-checkbox fxFlex="50%" id="distUpgradeOnBootCentos" formControlName="distUpgradeOnBootCentos"></mat-checkbox>
+    </div>
+
+    <!-- Options for Container Linux -->
+    <div *ngIf="nodeForm.controls.operatingSystem.value === 'containerLinux'" class="os-options" [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'with-margin' : ''">
+      <label fxFlex="50%">Disable auto-update</label>
+      <mat-checkbox fxFlex="50%" id="disableAutoUpdate" formControlName="disableAutoUpdate"></mat-checkbox>
+    </div>
+  </div>
+</form>
+
+
+<kubermatic-openstack-options *ngIf="cluster.spec.cloud.openstack" [nodeData]="nodeData" [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-options>
+<kubermatic-vsphere-options *ngIf="cluster.spec.cloud.vsphere" [nodeData]="nodeData" [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-options>
+<kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean && !hideOptional" [nodeData]="nodeData"></kubermatic-digitalocean-options>

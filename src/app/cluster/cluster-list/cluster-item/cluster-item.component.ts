@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { DatacenterService, HealthService } from '../../../core/services';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { HealthEntity } from '../../../shared/entity/HealthEntity';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {Subscription} from 'rxjs';
+import {DatacenterService, HealthService} from '../../../core/services';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {HealthEntity} from '../../../shared/entity/HealthEntity';
 
 @Component({
   selector: 'kubermatic-cluster-item',
@@ -16,16 +16,14 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() projectID: string;
   @Input() index: number;
-  public nodeDC: DataCenterEntity;
-  public seedDC: DataCenterEntity;
-  public health: HealthEntity;
+  nodeDC: DataCenterEntity;
+  seedDC: DataCenterEntity;
+  health: HealthEntity;
   private subscriptions: Subscription[] = [];
 
-  constructor(private dcService: DatacenterService,
-              private router: Router,
-              private healthService: HealthService) {}
+  constructor(private dcService: DatacenterService, private router: Router, private healthService: HealthService) {}
 
-  public ngOnInit(): void {
+  ngOnInit(): void {
     this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((result) => {
       this.nodeDC = result;
       this.dcService.getDataCenter(this.nodeDC.spec.seed).subscribe((seedRes) => {
@@ -34,13 +32,14 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     });
 
     if (!!this.seedDC && this.getClusterItemClass() !== 'statusDeleting' && !this.cluster.deletionTimestamp) {
-      this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.projectID).subscribe((health) => {
-        this.health = health;
-      });
+      this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.projectID)
+          .subscribe((health) => {
+            this.health = health;
+          });
     }
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();
@@ -48,7 +47,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getClusterImagePath(): string {
+  getClusterImagePath(): string {
     let path = '/assets/images/clouds/';
 
     if (this.cluster.spec.cloud.aws) {
@@ -70,19 +69,19 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     return path;
   }
 
-  public getShortClusterName(name: string): string {
+  getShortClusterName(name: string): string {
     return name.length > 12 ? name.slice(0, 12) + '...' : name;
   }
 
-  public getClusterItemClass(): string {
+  getClusterItemClass(): string {
     let itemClass = this.healthService.getClusterHealthStatus(this.cluster, this.health);
     if (this.index % 2 !== 0) {
-      itemClass = itemClass  + ' odd';
+      itemClass = itemClass + ' odd';
     }
     return itemClass;
   }
 
-  public getDatacenter(): string {
+  getDatacenter(): string {
     let datacenter: string;
     this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((res) => {
       datacenter = res.spec.seed;
@@ -94,5 +93,4 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     const dc = this.getDatacenter();
     this.router.navigate(['/projects/' + this.projectID + '/dc/' + dc + '/clusters/' + this.cluster.id]);
   }
-
 }

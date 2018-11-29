@@ -1,13 +1,13 @@
-import { NodeProvider } from '../model/NodeProviderConstants';
-import { AWSCloudSpec } from './cloud/AWSCloudSpec';
-import { AzureCloudSpec } from './cloud/AzureCloudSpec';
-import { BareMetalCloudSpec } from './cloud/BareMetalCloudSpec';
-import { BringYourOwnCloudSpec } from './cloud/BringYourOwnCloudSpec';
-import { DigitaloceanCloudSpec } from './cloud/DigitaloceanCloudSpec';
-import { FakeCloudSpec } from './cloud/FakeCloudSpec';
-import { HetznerCloudSpec } from './cloud/HetznerCloudSpec';
-import { OpenstackCloudSpec } from './cloud/OpenstackCloudSpec';
-import { VSphereCloudSpec } from './cloud/VSphereCloudSpec';
+import {NodeProvider} from '../model/NodeProviderConstants';
+import {AWSCloudSpec} from './cloud/AWSCloudSpec';
+import {AzureCloudSpec} from './cloud/AzureCloudSpec';
+import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
+import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
+import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
+import {FakeCloudSpec} from './cloud/FakeCloudSpec';
+import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
+import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
+import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
 
 export function getClusterProvider(cluster: ClusterEntity): string {
   switch (true) {

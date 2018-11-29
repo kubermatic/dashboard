@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
-import { WizardService } from '../../core/services';
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
-import { MachineNetworkForm } from '../../shared/model/ClusterForm';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {WizardService} from '../../core/services';
+import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {MachineNetworkForm} from '../../shared/model/ClusterForm';
 
 @Component({
   selector: 'kubermatic-set-machine-networks',
@@ -13,12 +13,12 @@ import { MachineNetworkForm } from '../../shared/model/ClusterForm';
 })
 
 export class SetMachineNetworksComponent implements OnInit, OnDestroy {
-  @Input() public cluster: ClusterEntity;
-  public setMachineNetworkForm: FormGroup;
-  public machineNetworkFormData: MachineNetworkForm[] = [];
+  @Input() cluster: ClusterEntity;
+  setMachineNetworkForm: FormGroup;
+  machineNetworkFormData: MachineNetworkForm[] = [];
   private subscriptions: Subscription[] = [];
 
-  constructor(private wizardService: WizardService) { }
+  constructor(private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.setMachineNetworkForm = new FormGroup({
@@ -39,7 +39,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public ngOnDestroy(): void {
+  ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
         sub.unsubscribe();

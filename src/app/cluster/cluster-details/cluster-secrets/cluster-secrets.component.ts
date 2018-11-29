@@ -1,13 +1,13 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
-import { AppConfigService } from '../../../app-config.service';
-import { HealthService } from '../../../core/services';
-import { ClusterEntity } from '../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../shared/entity/DatacenterEntity';
-import { HealthEntity } from '../../../shared/entity/HealthEntity';
-import { UserGroupConfig } from '../../../shared/model/Config';
-import { AddMachineNetworkComponent } from './add-machine-network/add-machine-network.component';
-import { RevokeAdminTokenComponent } from './revoke-admin-token/revoke-admin-token.component';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material';
+import {AppConfigService} from '../../../app-config.service';
+import {HealthService} from '../../../core/services';
+import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {HealthEntity} from '../../../shared/entity/HealthEntity';
+import {UserGroupConfig} from '../../../shared/model/Config';
+import {AddMachineNetworkComponent} from './add-machine-network/add-machine-network.component';
+import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
@@ -20,34 +20,34 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   @Input() userGroup: string;
-  public expand = false;
-  public dialogRef: any;
-  public isClusterRunning: boolean;
-  public healthStatus: string;
-  public health: HealthEntity;
-  public userGroupConfig: UserGroupConfig;
+  expand = false;
+  dialogRef: any;
+  isClusterRunning: boolean;
+  healthStatus: string;
+  health: HealthEntity;
+  userGroupConfig: UserGroupConfig;
 
-  constructor(public dialog: MatDialog,
-              private healthService: HealthService,
-              private appConfigService: AppConfigService) { }
+  constructor(
+      public dialog: MatDialog, private healthService: HealthService, private appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
   }
 
   ngOnChanges(): void {
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((health) => {
-      this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
-      this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
-      this.health = health;
-    });
+    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .subscribe((health) => {
+          this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
+          this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
+          this.health = health;
+        });
   }
 
   isExpand(expand: boolean): void {
     this.expand = expand;
   }
 
-  public decode(type: string): void {
+  decode(type: string): void {
     /* let data;
     let name;
 
@@ -81,11 +81,11 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
       a.click();
       document.body.removeChild(a);
     } else {*/
-      return;
+    return;
     // }
   }
 
-  public getIcon(name: string): string {
+  getIcon(name: string): string {
     if (this.health) {
       switch (name) {
         case 'apiserver':
@@ -106,7 +106,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
     }
   }
 
-  public getIconClass(isHealthy: boolean): string {
+  getIconClass(isHealthy: boolean): string {
     if (isHealthy) {
       return 'iconRunning';
     } else if (!(isHealthy)) {
@@ -120,7 +120,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
     }
   }
 
-  public getStatus(name: string): string {
+  getStatus(name: string): string {
     if (this.health) {
       switch (name) {
         case 'apiserver':
@@ -141,7 +141,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
     }
   }
 
-  public getHealthStatus(isHealthy: boolean): string {
+  getHealthStatus(isHealthy: boolean): string {
     if (isHealthy) {
       return 'Running';
     } else if (!isHealthy) {
@@ -155,7 +155,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
     }
   }
 
-  public revokeAdminTokenDialog(): void {
+  revokeAdminTokenDialog(): void {
     this.dialogRef = this.dialog.open(RevokeAdminTokenComponent);
 
     this.dialogRef.componentInstance.cluster = this.cluster;
@@ -164,8 +164,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
 
     this.dialogRef.afterClosed().subscribe((result) => {});
   }
-
-  public addMachineNetwork(): void {
+  addMachineNetwork(): void {
     this.dialogRef = this.dialog.open(AddMachineNetworkComponent);
 
     this.dialogRef.componentInstance.cluster = this.cluster;
@@ -174,5 +173,4 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
 
     this.dialogRef.afterClosed().subscribe((result) => {});
   }
-
 }

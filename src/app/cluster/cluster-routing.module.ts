@@ -1,21 +1,21 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { ClusterDetailsComponent } from '../cluster/cluster-details/cluster-details.component';
-import { AuthGuard } from '../core/services/auth/auth.guard';
-import { ClusterListComponent } from './cluster-list/cluster-list.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {ClusterDetailsComponent} from '../cluster/cluster-details/cluster-details.component';
+import {AuthGuard} from '../core/services/auth/auth.guard';
+import {ClusterListComponent} from './cluster-list/cluster-list.component';
 
 const routes: Routes = [
   {
     path: '',
     component: ClusterListComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Manage Clusters' },
+    data: {title: 'Manage Clusters'},
   },
   {
     path: ':clusterName',
     component: ClusterDetailsComponent,
     canActivate: [AuthGuard],
-    data: { title: 'Cluster details' },
+    data: {title: 'Cluster details'},
   },
 ];
 

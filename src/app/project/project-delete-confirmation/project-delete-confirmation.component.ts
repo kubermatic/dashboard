@@ -1,8 +1,8 @@
-import { Component, DoCheck, Input } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
-import { ApiService } from '../../core/services';
-import { NotificationActions } from '../../redux/actions/notification.actions';
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import {Component, DoCheck, Input} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
+import {ApiService} from '../../core/services';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 @Component({
   selector: 'kubermatic-project-delete-confirmation',
@@ -13,11 +13,9 @@ import { ProjectEntity } from '../../shared/entity/ProjectEntity';
 export class ProjectDeleteConfirmationComponent implements DoCheck {
   @Input() project: ProjectEntity;
 
-  public inputName = '';
+  inputName = '';
 
-  constructor(private api: ApiService,
-              private dialogRef: MatDialogRef<ProjectDeleteConfirmationComponent>) {
-  }
+  constructor(private api: ApiService, private dialogRef: MatDialogRef<ProjectDeleteConfirmationComponent>) {}
 
   ngDoCheck(): void {
     document.getElementById('name').focus();

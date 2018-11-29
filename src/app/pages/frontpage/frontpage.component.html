@@ -5,4 +5,4 @@
 </div>
 
 <div class="frontpage-bg"></div>
-<particles [params]="myParams" [style]="myStyle" [width]="width" [height]="height"></particles>
+<particles *ngIf="isInitialized" [params]="myParams" [style]="myStyle" width="100" height="100"></particles>

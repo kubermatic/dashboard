@@ -1,20 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { interval, Subject, Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { ApiService, InitialNodeDataService, ProjectService, WizardService } from '../core/services';
-import { AddNodeService } from '../core/services/add-node/add-node.service';
-import { Step, StepsService } from '../core/services/wizard/steps.service';
-import { GoogleAnalyticsService } from '../google-analytics.service';
-import { NotificationActions } from '../redux/actions/notification.actions';
-import { ClusterEntity, getEmptyCloudProviderSpec } from '../shared/entity/ClusterEntity';
-import { getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeEntity } from '../shared/entity/NodeEntity';
-import { ProjectEntity } from '../shared/entity/ProjectEntity';
-import { SSHKeyEntity } from '../shared/entity/SSHKeyEntity';
-import { ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm } from '../shared/model/ClusterForm';
-import { CreateClusterModel } from '../shared/model/CreateClusterModel';
-import { NodeProvider } from '../shared/model/NodeProviderConstants';
-import { NodeData } from '../shared/model/NodeSpecChange';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {interval, Subject, Subscription} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {ApiService, InitialNodeDataService, ProjectService, WizardService} from '../core/services';
+import {AddNodeService} from '../core/services/add-node/add-node.service';
+import {Step, StepsService} from '../core/services/wizard/steps.service';
+import {GoogleAnalyticsService} from '../google-analytics.service';
+import {NotificationActions} from '../redux/actions/notification.actions';
+import {ClusterEntity, getEmptyCloudProviderSpec} from '../shared/entity/ClusterEntity';
+import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeEntity} from '../shared/entity/NodeEntity';
+import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
+import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../shared/model/ClusterForm';
+import {CreateClusterModel} from '../shared/model/CreateClusterModel';
+import {NodeProvider} from '../shared/model/NodeProviderConstants';
+import {NodeData} from '../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -22,32 +22,29 @@ import { NodeData } from '../shared/model/NodeSpecChange';
   styleUrls: ['./wizard.component.scss'],
 })
 export class WizardComponent implements OnInit, OnDestroy {
-  public steps: Step[] = [];
-  public currentStep: Step;
-  public currentStepIndex: number;
-  public cluster: ClusterEntity;
-  public node: NodeEntity;
-  public clusterSpecFormData: ClusterSpecForm = { valid: false, name: '', version: '' };
-  public machineNetworksFormData: MachineNetworkForm[] = [{ valid: false, cidr: '', dnsServers: [''], gateway: '' }];
-  public setMachineNetworksFormData: SetMachineNetworksForm = { valid: false, machineNetworks: this.machineNetworksFormData, setMachineNetworks: false };
-  public clusterProviderFormData: ClusterProviderForm = { valid: false, provider: '' };
-  public clusterDatacenterFormData: ClusterDatacenterForm = { valid: false };
-  public clusterProviderSettingsFormData: ClusterProviderSettingsForm = { valid: false };
-  public clusterSSHKeys: SSHKeyEntity[] = [];
-  public addNodeData: NodeData;
-  public creating = false;
-  public project: ProjectEntity;
+  steps: Step[] = [];
+  currentStep: Step;
+  currentStepIndex: number;
+  cluster: ClusterEntity;
+  node: NodeEntity;
+  clusterSpecFormData: ClusterSpecForm = {valid: false, name: '', version: ''};
+  machineNetworksFormData: MachineNetworkForm[] = [{valid: false, cidr: '', dnsServers: [''], gateway: ''}];
+  setMachineNetworksFormData:
+      SetMachineNetworksForm = {valid: false, machineNetworks: this.machineNetworksFormData, setMachineNetworks: false};
+  clusterProviderFormData: ClusterProviderForm = {valid: false, provider: ''};
+  clusterDatacenterFormData: ClusterDatacenterForm = {valid: false};
+  clusterProviderSettingsFormData: ClusterProviderSettingsForm = {valid: false};
+  clusterSSHKeys: SSHKeyEntity[] = [];
+  addNodeData: NodeData;
+  creating = false;
+  project: ProjectEntity;
   private subscriptions: Subscription[] = [];
 
-  constructor(private wizardService: WizardService,
-              private addNodeService: AddNodeService,
-              private stepsService: StepsService,
-              private initialNodeDataService: InitialNodeDataService,
-              private router: Router,
-              private projectService: ProjectService,
-              private api: ApiService,
-              public googleAnalyticsService: GoogleAnalyticsService) {
-
+  constructor(
+      private wizardService: WizardService, private addNodeService: AddNodeService, private stepsService: StepsService,
+      private initialNodeDataService: InitialNodeDataService, private router: Router,
+      private projectService: ProjectService, private api: ApiService,
+      public googleAnalyticsService: GoogleAnalyticsService) {
     this.cluster = {
       name: '',
       spec: {
@@ -60,13 +57,10 @@ export class WizardComponent implements OnInit, OnDestroy {
     };
 
     this.addNodeData = {
-      node: {
-        spec: {
-          cloud: {},
-          operatingSystem: {},
-          versions: {},
-        },
-        status: {},
+      spec: {
+        cloud: {},
+        operatingSystem: {},
+        versions: {},
       },
       count: 3,
     };
@@ -106,7 +100,8 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     // When the provider got changed, update the cluster
     // Caveat: We must not delete existing provider settings.
-    // Caveat: The DC stays set. When changing the provider we have a invalid dc stored in the cluster. But will be changed on the next step.
+    // Caveat: The DC stays set. When changing the provider we have a invalid dc stored in the cluster. But will be
+    // changed on the next step.
     this.subscriptions.push(this.wizardService.clusterProviderFormChanges$.subscribe((data) => {
       this.clusterProviderFormData = data;
 
@@ -119,22 +114,25 @@ export class WizardComponent implements OnInit, OnDestroy {
       let oldDC = '';
 
       if (!!this.clusterDatacenterFormData.datacenter) {
-        oldProviderSpec = this.clusterDatacenterFormData.datacenter.spec[this.clusterDatacenterFormData.datacenter.spec.provider];
-        oldProviderNodeSpec = this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider];
+        oldProviderSpec =
+            this.clusterDatacenterFormData.datacenter.spec[this.clusterDatacenterFormData.datacenter.spec.provider];
+        oldProviderNodeSpec = this.addNodeData.spec.cloud[this.clusterProviderFormData.provider];
         oldDC = this.clusterDatacenterFormData.datacenter.spec.seed;
       }
-      this.cluster.spec.cloud = { dc: oldDC };
+      this.cluster.spec.cloud = {dc: oldDC};
 
       if (oldProviderSpec == null || oldProviderSpec !== undefined) {
-        this.cluster.spec.cloud[this.clusterProviderFormData.provider] = getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
-        this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
-        this.addNodeData.node.spec.operatingSystem = getEmptyOperatingSystemSpec();
-        this.addNodeData.node.spec.versions = getEmptyNodeVersionSpec();
+        this.cluster.spec.cloud[this.clusterProviderFormData.provider] =
+            getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
+        this.addNodeData.spec.cloud[this.clusterProviderFormData.provider] =
+            getEmptyNodeProviderSpec(this.clusterProviderFormData.provider);
+        this.addNodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
+        this.addNodeData.spec.versions = getEmptyNodeVersionSpec();
         this.clusterDatacenterFormData.valid = false;
         this.clusterProviderSettingsFormData.valid = false;
       } else {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] = oldProviderSpec;
-        this.addNodeData.node.spec.cloud[this.clusterProviderFormData.provider] = oldProviderNodeSpec;
+        this.addNodeData.spec.cloud[this.clusterProviderFormData.provider] = oldProviderNodeSpec;
       }
       this.wizardService.changeCluster(this.cluster);
       if (this.clusterProviderFormData.valid) {
@@ -206,12 +204,23 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   updateSteps(): void {
-    const setClusterSpecStep: Step = { name: 'set-cluster-spec', description: 'Cluster', valid: () => this.clusterSpecFormData.valid };
-    const setMachinenNetworksStep: Step = { name: 'set-machine-networks', description: 'Machine Networks', valid: () => this.setMachineNetworksFormData.valid };
-    const setProviderStep: Step = { name: 'set-provider', description: 'Provider', valid: () => this.clusterProviderFormData.valid };
-    const setDatacenterStep: Step = { name: 'set-datacenter', description: 'Datacenter', valid: () => this.clusterDatacenterFormData.valid };
-    const setProviderSettingsStep: Step = { name: 'set-provider-settings', description: 'Settings', valid: () => this.clusterProviderSettingsFormData.valid && this.addNodeData.valid };
-    const summary: Step = { name: 'summary', description: 'Summary', valid: () => true };
+    const setClusterSpecStep:
+        Step = {name: 'set-cluster-spec', description: 'Cluster', valid: () => this.clusterSpecFormData.valid};
+    const setMachinenNetworksStep: Step = {
+      name: 'set-machine-networks',
+      description: 'Machine Networks',
+      valid: () => this.setMachineNetworksFormData.valid
+    };
+    const setProviderStep:
+        Step = {name: 'set-provider', description: 'Provider', valid: () => this.clusterProviderFormData.valid};
+    const setDatacenterStep:
+        Step = {name: 'set-datacenter', description: 'Datacenter', valid: () => this.clusterDatacenterFormData.valid};
+    const setProviderSettingsStep: Step = {
+      name: 'set-provider-settings',
+      description: 'Settings',
+      valid: () => this.clusterProviderSettingsFormData.valid && this.addNodeData.valid
+    };
+    const summary: Step = {name: 'summary', description: 'Summary', valid: () => true};
 
     if (this.clusterProviderFormData.provider === NodeProvider.BRINGYOUROWN) {
       this.steps = [
@@ -233,7 +242,6 @@ export class WizardComponent implements OnInit, OnDestroy {
     }
 
     this.stepsService.changeSteps(this.steps);
-
   }
 
   stepForward(): void {
@@ -252,40 +260,44 @@ export class WizardComponent implements OnInit, OnDestroy {
       keyNames.push(key.name);
     }
 
-    const createCluster: CreateClusterModel = { name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames };
+    const createCluster: CreateClusterModel = {name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames};
 
-    this.subscriptions.push(this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
-    .subscribe((cluster) => {
-      NotificationActions.success('Success', `Cluster successfully created`);
-      this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
+    this.subscriptions.push(
+        this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
+            .subscribe(
+                (cluster) => {
+                  NotificationActions.success('Success', `Cluster successfully created`);
+                  this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
-      const isReady = new Subject<boolean>();
-      const timer = interval(5000).pipe(takeUntil(isReady));
-      timer.subscribe((tick) => {
-        this.api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe((clusterRes) => {
-          this.router.navigate(['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
+                  const isReady = new Subject<boolean>();
+                  const timer = interval(5000).pipe(takeUntil(isReady));
+                  timer.subscribe((tick) => {
+                    this.api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe((clusterRes) => {
+                      this.router.navigate(
+                          ['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
 
-          if (this.clusterSSHKeys.length > 0) {
-            for (const key of this.clusterSSHKeys) {
-              this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id).subscribe((sshkey) => {
-                NotificationActions.success('Success', `SSH key ${key.name} was added successfully`);
-              });
-            }
-          }
-          isReady.next(true);
-          this.creating = false;
-        });
-      });
+                      if (this.clusterSSHKeys.length > 0) {
+                        for (const key of this.clusterSSHKeys) {
+                          this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id)
+                              .subscribe((sshkey) => {
+                                NotificationActions.success('Success', `SSH key ${key.name} was added successfully`);
+                              });
+                        }
+                      }
+                      isReady.next(true);
+                      this.creating = false;
+                    });
+                  });
 
-      if (this.clusterProviderFormData.provider !== 'bringyourown') {
-        this.initialNodeDataService.storeInitialNodeData(this.addNodeData.count, cluster, this.addNodeData.node);
-      }
-    },
-    (error) => {
-      NotificationActions.error('Error', `Could not create cluster`);
-      this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
-      this.creating = false;
-    }));
+                  if (this.clusterProviderFormData.provider !== 'bringyourown') {
+                    this.initialNodeDataService.storeInitialNodeData(
+                        this.addNodeData.count, cluster, this.addNodeData.spec);
+                  }
+                },
+                () => {
+                  NotificationActions.error('Error', `Could not create cluster`);
+                  this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
+                  this.creating = false;
+                }));
   }
-
 }

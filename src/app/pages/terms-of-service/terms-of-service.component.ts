@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'kubermatic-terms-of-service',
@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./terms-of-service.component.scss'],
 })
 export class TermsOfServiceComponent {
-  constructor() { }
+  constructor() {}
 }

@@ -284,29 +284,29 @@
             <ng-container *ngIf="cluster.spec.cloud.digitalocean">
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Node Size</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.digitalocean.size }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.digitalocean.size }}</div>
               </div>
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Backups</div>
                 <div fxFlex="50%">
-                  <i [ngClass]="nodeData.node.spec.cloud.digitalocean.backups ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.digitalocean.backups ? 'fa fa-check' : 'fa fa-times'"></i>
                 </div>
               </div>
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">IPv6</div>
                 <div fxFlex="50%">
-                  <i [ngClass]="nodeData.node.spec.cloud.digitalocean.ipv6 ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.digitalocean.ipv6 ? 'fa fa-check' : 'fa fa-times'"></i>
                 </div>
               </div>
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Monitoring</div>
                 <div fxFlex="50%">
-                  <i [ngClass]="nodeData.node.spec.cloud.digitalocean.monitoring ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.digitalocean.monitoring ? 'fa fa-check' : 'fa fa-times'"></i>
                 </div>
               </div>
-              <div class="km-card-list-content" fxFlex="50%" *ngIf="nodeData.node.spec.cloud.digitalocean.tags.length > 0">
+              <div class="km-card-list-content" fxFlex="50%" *ngIf="nodeData.spec.cloud.digitalocean.tags.length > 0">
                 <div fxFlex="50%" class="km-card-list-key">Tags</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.digitalocean.tags }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.digitalocean.tags }}</div>
               </div>
             </ng-container>
 
@@ -314,23 +314,23 @@
             <ng-container *ngIf="cluster.spec.cloud.aws">
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Node Size</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.aws.instanceType }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.aws.instanceType }}</div>
               </div>
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Disk Type</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.aws.volumeType }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.aws.volumeType }}</div>
               </div>
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Disk Size in GB</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.aws.diskSize }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.aws.diskSize }}</div>
               </div>
-              <div class="km-card-list-content" fxFlex="50%" *ngIf="nodeData.node.spec.cloud.aws.ami">
+              <div class="km-card-list-content" fxFlex="50%" *ngIf="nodeData.spec.cloud.aws.ami">
                 <div fxFlex="50%" class="km-card-list-key">AMI ID</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.aws.ami }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.aws.ami }}</div>
               </div>
-              <div class="km-card-list-content" fxFlex="50%" *ngIf="displayTags(nodeData.node.spec.cloud.aws.tags)">
+              <div class="km-card-list-content" fxFlex="50%" *ngIf="displayTags(nodeData.spec.cloud.aws.tags)">
                 <div fxFlex="50%" class="km-card-list-key">Tags</div>
-                <div fxFlex="50%">{{ getTagsFromObject(nodeData.node.spec.cloud.aws.tags) }}</div>
+                <div fxFlex="50%">{{ getTagsFromObject(nodeData.spec.cloud.aws.tags) }}</div>
               </div>
             </ng-container>
 
@@ -338,11 +338,11 @@
             <ng-container *ngIf="cluster.spec.cloud.openstack">
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Node Size</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.openstack.flavor }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.openstack.flavor }}</div>
               </div>
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Node Image</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.openstack.image }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.openstack.image }}</div>
               </div>
             </ng-container>
 
@@ -350,7 +350,7 @@
             <ng-container *ngIf="cluster.spec.cloud.hetzner">
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Node Size</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.hetzner.type }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.hetzner.type }}</div>
               </div>
             </ng-container>
 
@@ -358,15 +358,15 @@
             <ng-container *ngIf="cluster.spec.cloud.vsphere">
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Number of CPU's</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.vsphere.cpus }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.vsphere.cpus }}</div>
               </div>
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Memory in MB</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.vsphere.memory }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.vsphere.memory }}</div>
               </div>
-              <div class="km-card-list-content" fxFlex="50%" *ngIf="nodeData.node.spec.cloud.vsphere.template">
+              <div class="km-card-list-content" fxFlex="50%" *ngIf="nodeData.spec.cloud.vsphere.template">
                 <div fxFlex="50%" class="km-card-list-key">VM Template</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.vsphere.template }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.vsphere.template }}</div>
               </div>
             </ng-container>
 
@@ -374,17 +374,17 @@
             <ng-container *ngIf="cluster.spec.cloud.azure">
               <div class="km-card-list-content" fxFlex="50%">
                 <div fxFlex="50%" class="km-card-list-key">Node Size</div>
-                <div fxFlex="50%">{{ nodeData.node.spec.cloud.azure.size }}</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.azure.size }}</div>
               </div>
-              <div class="km-card-list-content" fxFlex="50%" *ngIf="nodeData.node.spec.cloud.azure.assignPublicIP">
+              <div class="km-card-list-content" fxFlex="50%" *ngIf="nodeData.spec.cloud.azure.assignPublicIP">
                 <div fxFlex="50%" class="km-card-list-key">Assign Public IP</div>
                 <div fxFlex="50%">
-                  <i [ngClass]="nodeData.node.spec.cloud.azure.assignPublicIP ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.azure.assignPublicIP ? 'fa fa-check' : 'fa fa-times'"></i>
                 </div>
               </div>
-              <div class="km-card-list-content" fxFlex="50%" *ngIf="displayTags(nodeData.node.spec.cloud.azure.tags)">
+              <div class="km-card-list-content" fxFlex="50%" *ngIf="displayTags(nodeData.spec.cloud.azure.tags)">
                 <div fxFlex="50%" class="km-card-list-key">Tags</div>
-                <div fxFlex="50%">{{ getTagsFromObject(nodeData.node.spec.cloud.azure.tags) }}</div>
+                <div fxFlex="50%">{{ getTagsFromObject(nodeData.spec.cloud.azure.tags) }}</div>
               </div>
             </ng-container>
 
@@ -403,22 +403,22 @@
               <div fxFlex="50%" class="km-card-list-key">Operating System</div>
               <div fxFlex="50%">{{ getOperatingSystem() }}</div>
             </div>
-            <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.ubuntu">
+            <div fxLayout class="km-card-list-content" *ngIf="nodeData.spec.operatingSystem.ubuntu">
               <div fxFlex="50%" class="km-card-list-key">Upgrade system on first boot</div>
               <div fxFlex="50%">
-                <i [ngClass]="nodeData.node.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+                <i [ngClass]="nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
               </div>
             </div>
-            <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.centos">
+            <div fxLayout class="km-card-list-content" *ngIf="nodeData.spec.operatingSystem.centos">
               <div fxFlex="50%" class="km-card-list-key">Upgrade system on first boot</div>
               <div fxFlex="50%">
-                <i [ngClass]="nodeData.node.spec.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+                <i [ngClass]="nodeData.spec.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
               </div>
             </div>
-            <div fxLayout class="km-card-list-content" *ngIf="nodeData.node.spec.operatingSystem.containerLinux">
+            <div fxLayout class="km-card-list-content" *ngIf="nodeData.spec.operatingSystem.containerLinux">
               <div fxFlex="50%" class="km-card-list-key">Disable auto-update</div>
               <div fxFlex="50%">
-                <i [ngClass]="nodeData.node.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
+                <i [ngClass]="nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
               </div>
             </div>
           </ng-container>

@@ -1,14 +1,16 @@
-import { NgReduxFormModule } from '@angular-redux/form';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatOptionModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTabsModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import 'hammerjs';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { CustomFormsModule } from 'ng2-validation';
-import { ClipboardModule } from 'ngx-clipboard';
-import { AddSshKeyModalComponent } from './components/add-ssh-key-modal/add-ssh-key-modal.component';
+
+import {NgReduxFormModule} from '@angular-redux/form';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
+import {FlexLayoutModule} from '@angular/flex-layout';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardModule, MatCheckboxModule, MatDialogModule, MatDividerModule, MatExpansionModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatOptionModule, MatProgressBarModule, MatProgressSpinnerModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule, MatTabsModule, MatToolbarModule, MatTooltipModule} from '@angular/material';
+import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {CustomFormsModule} from 'ng2-validation';
+import {ClipboardModule} from 'ngx-clipboard';
+
+import {AddSshKeyModalComponent} from './components/add-ssh-key-modal/add-ssh-key-modal.component';
 
 const modules: any[] = [
   CommonModule,

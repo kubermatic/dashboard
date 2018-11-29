@@ -1,16 +1,16 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatDialog } from '@angular/material';
-import { BrowserModule, By } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { SlimLoadingBarModule } from 'ng2-slim-loading-bar';
-import { AppConfigService } from '../../../app-config.service';
-import { UserService } from '../../../core/services';
-import { SharedModule } from '../../../shared/shared.module';
-import { fakeDigitaloceanCluster } from '../../../testing/fake-data/cluster.fake';
-import { nodesFake } from '../../../testing/fake-data/node.fake';
-import { AppConfigMockService } from '../../../testing/services/app-config-mock.service';
-import { UserMockService } from '../../../testing/services/user-mock.service';
-import { NodeListComponent } from './node-list.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {MatDialog} from '@angular/material';
+import {BrowserModule, By} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {AppConfigService} from '../../../app-config.service';
+import {UserService} from '../../../core/services';
+import {SharedModule} from '../../../shared/shared.module';
+import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
+import {nodesFake} from '../../../testing/fake-data/node.fake';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {UserMockService} from '../../../testing/services/user-mock.service';
+import {NodeListComponent} from './node-list.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -24,19 +24,21 @@ describe('NodeComponent', () => {
   let component: NodeListComponent;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        NodeListComponent,
-      ],
-      providers: [
-        { provide: UserService, useClass: UserMockService },
-        { provide: AppConfigService, useClass: AppConfigMockService },
-        MatDialog,
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            NodeListComponent,
+          ],
+          providers: [
+            {provide: UserService, useClass: UserMockService},
+            {provide: AppConfigService, useClass: AppConfigMockService},
+            MatDialog,
+          ],
+        })
+        .compileComponents();
   }));
 
   beforeEach(() => {
@@ -45,8 +47,8 @@ describe('NodeComponent', () => {
   });
 
   it('should create the cluster details cmp', async(() => {
-    expect(component).toBeTruthy();
-  }));
+       expect(component).toBeTruthy();
+     }));
 
   it('should hide remove button', () => {
     component.nodes = nodesFake();
@@ -67,15 +69,21 @@ describe('NodeComponent', () => {
 
     component.cluster = fakeDigitaloceanCluster();
 
-    expect(component.getNodeHealthStatus(nodes[0], 0)).toEqual({
-      color: green,
-      status: 'Running',
-      class: 'statusRunning',
-    }, 'should return classes for green icon');
-    expect(component.getNodeHealthStatus(nodes[1], 0)).toEqual({
-      color: orange,
-      status: 'Pending',
-      class: 'statusWaiting',
-    }, 'should return classes for orange icon');
+    expect(component.getNodeHealthStatus(nodes[0], 0))
+        .toEqual(
+            {
+              color: green,
+              status: 'Running',
+              class: 'statusRunning',
+            },
+            'should return classes for green icon');
+    expect(component.getNodeHealthStatus(nodes[1], 0))
+        .toEqual(
+            {
+              color: orange,
+              status: 'Pending',
+              class: 'statusWaiting',
+            },
+            'should return classes for orange icon');
   });
 });

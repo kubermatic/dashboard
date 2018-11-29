@@ -16,10 +16,10 @@ pipeline:
     commands:
       - make install
 
-  linting:
+  static-check:
     image: node:8
     commands:
-      - make lint
+      - make check
 
   node-dist:
     image: node:8

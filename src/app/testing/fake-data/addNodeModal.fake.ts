@@ -1,6 +1,6 @@
-import { AzureSizes } from '../../shared/entity/provider/azure/AzureSizeEntity';
-import { DigitaloceanSizes } from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import { OpenstackFlavor } from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
+import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 
 export function fakeDigitaloceanSizes(): DigitaloceanSizes {
   return {

@@ -1,11 +1,10 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot } from '@angular/router';
-import { environment } from '../../../../environments/environment';
-import { Auth } from './auth.service';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot} from '@angular/router';
+import {environment} from '../../../../environments/environment';
+import {Auth} from './auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-
   constructor(private auth: Auth) {}
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {

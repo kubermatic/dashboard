@@ -1,10 +1,10 @@
-import { NodeProvider } from '../model/NodeProviderConstants';
-import { AWSNodeSpec } from './node/AWSNodeSpec';
-import { AzureNodeSpec } from './node/AzureNodeSpec';
-import { DigitaloceanNodeSpec } from './node/DigitaloceanNodeSpec';
-import { HetznerNodeSpec } from './node/HetznerNodeSpec';
-import { OpenstackNodeSpec } from './node/OpenstackNodeSpec';
-import { VSphereNodeSpec } from './node/VSphereNodeSpec';
+import {NodeProvider} from '../model/NodeProviderConstants';
+import {AWSNodeSpec} from './node/AWSNodeSpec';
+import {AzureNodeSpec} from './node/AzureNodeSpec';
+import {DigitaloceanNodeSpec} from './node/DigitaloceanNodeSpec';
+import {HetznerNodeSpec} from './node/HetznerNodeSpec';
+import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
+import {VSphereNodeSpec} from './node/VSphereNodeSpec';
 
 export class NodeEntity {
   creationTimestamp?: Date;
@@ -128,17 +128,14 @@ export function getEmptyNodeProviderSpec(provider: string): object {
   return {};
 }
 
-export function getEmptyOperatingSystemSpec(): object {
-  const osSpec: OperatingSystemSpec = {
+export function getEmptyOperatingSystemSpec(): OperatingSystemSpec {
+  return {
     ubuntu: {
       distUpgradeOnBoot: false,
     },
   };
-  return osSpec;
 }
 
-export function getEmptyNodeVersionSpec(): object {
-  const versionSpec: NodeVersionInfo = {
-  };
-  return versionSpec;
+export function getEmptyNodeVersionSpec(): NodeVersionInfo {
+  return {};
 }

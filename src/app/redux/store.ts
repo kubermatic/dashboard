@@ -1,8 +1,8 @@
-import { composeReducers, defaultFormReducer } from '@angular-redux/form';
-import { combineReducers } from 'redux';
-import { Auth, AuthReducer, INITIAL_STATE as INITIAL_STATE_AUTH } from './reducers/auth';
-import { Breadcrumb, BreadcrumbReducer, INITIAL_STATE as INITIAL_STATE_BREADCRUNB } from './reducers/breadcrumb';
-import { INITIAL_STATE as INITIAL_STATE_NOTIFICATION, Notification, NotificationReducer } from './reducers/notification';
+import {composeReducers, defaultFormReducer} from '@angular-redux/form';
+import {combineReducers} from 'redux';
+import {Auth, AuthReducer, INITIAL_STATE as INITIAL_STATE_AUTH} from './reducers/auth';
+import {Breadcrumb, BreadcrumbReducer, INITIAL_STATE as INITIAL_STATE_BREADCRUNB} from './reducers/breadcrumb';
+import {INITIAL_STATE as INITIAL_STATE_NOTIFICATION, Notification, NotificationReducer} from './reducers/notification';
 
 /* Store Interface */
 export interface Store {
@@ -20,10 +20,10 @@ export const INITIAL_STATE: Store = {
 
 /* Combine State Reducers */
 export const StoreReducer = composeReducers(
-  defaultFormReducer(),
-  combineReducers<Store>({
-    auth: AuthReducer,
-    breadcrumb: BreadcrumbReducer,
-    notification: NotificationReducer,
-  }),
+    defaultFormReducer(),
+    combineReducers<Store>({
+      auth: AuthReducer,
+      breadcrumb: BreadcrumbReducer,
+      notification: NotificationReducer,
+    }),
 );

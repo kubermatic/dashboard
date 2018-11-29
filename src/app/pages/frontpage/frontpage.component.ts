@@ -1,23 +1,44 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { environment } from '../../../environments/environment';
-import { Auth } from '../../core/services';
+import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
+import {environment} from '../../../environments/environment';
+import {Auth} from '../../core/services';
 
 @Component({
   selector: 'kubermatic-frontpage',
   templateUrl: './frontpage.component.html',
   styleUrls: ['./frontpage.component.scss'],
 })
-export class FrontpageComponent implements OnInit {
-  public myStyle: object = {};
-  public myParams: object = {};
-  public width = 100;
-  public height = 100;
-  public environment: any = environment;
-  public isAuth = false;
+export class FrontpageComponent implements OnInit, AfterViewInit {
+  myStyle: object = {
+    'position': 'fixed',
+    'width': '100%',
+    'height': '100%',
+    'z-index': 0,
+    'top': 0,
+    'left': 0,
+    'right': 0,
+    'bottom': 0,
+  };
 
-  constructor(private auth: Auth, private router: Router) {
-  }
+  myParams: object = {
+    particles: {
+      number: {
+        value: 80,
+      },
+      color: {
+        value: '#fff',
+      },
+      shape: {
+        type: 'circle',
+      },
+    },
+  };
+
+  isInitialized = false;
+  environment: any = environment;
+  isAuth = false;
+
+  constructor(private auth: Auth, private router: Router) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {
@@ -32,34 +53,17 @@ export class FrontpageComponent implements OnInit {
       this.router.navigate(['/projects']);
       this.isAuth = true;
     }
-
-    this.myStyle = {
-      'position': 'fixed',
-      'width': '100%',
-      'height': '100%',
-      'z-index': 0,
-      'top': 0,
-      'left': 0,
-      'right': 0,
-      'bottom': 0,
-    };
-
-    this.myParams = {
-      particles: {
-        number: {
-          value: 100,
-        },
-        color: {
-          value: '#fff',
-        },
-        shape: {
-          type: 'circle',
-        },
-      },
-    };
   }
 
-  public goToLogin(): void {
+  ngAfterViewInit(): void {
+    setTimeout(() => {
+      // Displaying of particles has to be delayed to avoid race condition and component crash.
+      // It was introduced after APP_INITIALIZER was added to the ApiService.
+      this.isInitialized = true;
+    });
+  }
+
+  goToLogin(): void {
     document.getElementById('login-button').click();
   }
 }

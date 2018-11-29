@@ -1,11 +1,11 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { MatDialogRef } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { ApiService, WizardService } from '../../../../core/services';
-import { NotificationActions } from '../../../../redux/actions/notification.actions';
-import { ClusterEntity } from '../../../../shared/entity/ClusterEntity';
-import { DataCenterEntity } from '../../../../shared/entity/DatacenterEntity';
-import { MachineNetworkForm } from '../../../../shared/model/ClusterForm';
+import {Component, Input, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
+import {Subscription} from 'rxjs';
+import {ApiService, WizardService} from '../../../../core/services';
+import {NotificationActions} from '../../../../redux/actions/notification.actions';
+import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
+import {MachineNetworkForm} from '../../../../shared/model/ClusterForm';
 
 @Component({
   selector: 'kubermatic-add-machine-network',
@@ -17,12 +17,12 @@ export class AddMachineNetworkComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
-  public machineNetworkFormData: MachineNetworkForm[] = [];
+  machineNetworkFormData: MachineNetworkForm[] = [];
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private wizardService: WizardService,
-              private dialogRef: MatDialogRef<AddMachineNetworkComponent>) {}
+  constructor(
+      private api: ApiService, private wizardService: WizardService,
+      private dialogRef: MatDialogRef<AddMachineNetworkComponent>) {}
 
   ngOnInit(): void {
     this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe((res: MachineNetworkForm[]) => {
@@ -47,8 +47,7 @@ export class AddMachineNetworkComponent implements OnInit {
   addMachineNetworks(): void {
     if (this.machineNetworkFormData.length > 0) {
       for (const i in this.machineNetworkFormData) {
-        if (this.machineNetworkFormData[i].cidr === '' ||
-            this.machineNetworkFormData[i].dnsServers.length === 0 ||
+        if (this.machineNetworkFormData[i].cidr === '' || this.machineNetworkFormData[i].dnsServers.length === 0 ||
             this.machineNetworkFormData[i].gateway === '') {
           return;
         } else {
@@ -65,5 +64,4 @@ export class AddMachineNetworkComponent implements OnInit {
       this.dialogRef.close(res);
     });
   }
-
 }

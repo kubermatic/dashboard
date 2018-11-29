@@ -1,10 +1,10 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { DatacenterService } from '../../core/services/datacenter/datacenter.service';
-import { WizardService } from '../../core/services/wizard/wizard.service';
-import { ClusterEntity, getClusterProvider } from '../../shared/entity/ClusterEntity';
-import { DataCenterEntity, getDatacenterProvider } from '../../shared/entity/DatacenterEntity';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {Subscription} from 'rxjs';
+import {DatacenterService} from '../../core/services/datacenter/datacenter.service';
+import {WizardService} from '../../core/services/wizard/wizard.service';
+import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
+import {DataCenterEntity, getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-set-datacenter',
@@ -13,11 +13,11 @@ import { DataCenterEntity, getDatacenterProvider } from '../../shared/entity/Dat
 })
 export class SetDatacenterComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  public setDatacenterForm: FormGroup;
-  public datacenters: DataCenterEntity[] = [];
+  setDatacenterForm: FormGroup;
+  datacenters: DataCenterEntity[] = [];
   private subscriptions: Subscription[] = [];
 
-  constructor(private dcService: DatacenterService, private wizardService: WizardService) { }
+  constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.setDatacenterForm = new FormGroup({

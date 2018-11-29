@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, Sort } from '@angular/material';
-import { find } from 'lodash';
-import { interval, Subscription } from 'rxjs';
-import { AddProjectComponent } from '../add-project/add-project.component';
-import { AppConfigService } from '../app-config.service';
-import { ApiService, ProjectService, UserService } from '../core/services';
-import { ProjectEntity } from '../shared/entity/ProjectEntity';
-import { UserGroupConfig } from '../shared/model/Config';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, Sort} from '@angular/material';
+import {find} from 'lodash';
+import {interval, Subscription} from 'rxjs';
+import {AddProjectComponent} from '../add-project/add-project.component';
+import {AppConfigService} from '../app-config.service';
+import {ApiService, ProjectService, UserService} from '../core/services';
+import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {UserGroupConfig} from '../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-project',
@@ -15,20 +15,18 @@ import { UserGroupConfig } from '../shared/model/Config';
 })
 
 export class ProjectComponent implements OnInit, OnDestroy {
-  public projects: ProjectEntity[];
-  public loading = true;
-  public currentProject: ProjectEntity;
-  public sortedProjects: ProjectEntity[] = [];
-  public sort: Sort = { active: 'name', direction: 'asc' };
-  public userGroup: string;
-  public userGroupConfig: UserGroupConfig;
+  projects: ProjectEntity[];
+  loading = true;
+  currentProject: ProjectEntity;
+  sortedProjects: ProjectEntity[] = [];
+  sort: Sort = {active: 'name', direction: 'asc'};
+  userGroup: string;
+  userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private appConfigService: AppConfigService,
-              private projectService: ProjectService,
-              private userService: UserService,
-              public dialog: MatDialog) { }
+  constructor(
+      private api: ApiService, private appConfigService: AppConfigService, private projectService: ProjectService,
+      private userService: UserService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -42,7 +40,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }));
 
     const timer = interval(10000);
-    this.subscriptions.push(timer.subscribe((tick) => {
+    this.subscriptions.push(timer.subscribe(() => {
       this.refreshProjects();
     }));
     this.refreshProjects();
@@ -64,7 +62,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }));
   }
 
-  public addProject(): void {
+  addProject(): void {
     const modal = this.dialog.open(AddProjectComponent);
     const sub = modal.afterClosed().subscribe((added) => {
       if (added) {
@@ -74,7 +72,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  public trackProject(index: number, project: ProjectEntity): number {
+  trackProject(index: number, project: ProjectEntity): number {
     const prevProject = find(this.projects, (item) => {
       return item.name === project.name;
     });
@@ -106,5 +104,4 @@ export class ProjectComponent implements OnInit, OnDestroy {
   compare(a, b, isAsc): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
-
 }

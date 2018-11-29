@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {DashboardComponent} from './dashboard/dashboard.component';
 
 const appRoutes: Routes = [
   {
@@ -20,7 +20,7 @@ const appRoutes: Routes = [
         loadChildren: './sshkey/sshkey.module#SSHKeyModule',
       },
       {
-      path: 'projects/:projectID/members',
+        path: 'projects/:projectID/members',
         loadChildren: './member/member.module#MemberModule',
       },
       {

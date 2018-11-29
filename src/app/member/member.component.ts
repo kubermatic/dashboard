@@ -1,12 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog, Sort } from '@angular/material';
-import { interval, Subscription } from 'rxjs';
-import { AppConfigService } from '../app-config.service';
-import { ApiService, ProjectService, UserService } from '../core/services';
-import { MemberEntity } from '../shared/entity/MemberEntity';
-import { ProjectEntity } from '../shared/entity/ProjectEntity';
-import { UserGroupConfig } from '../shared/model/Config';
-import { AddMemberComponent } from './add-member/add-member.component';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog, Sort} from '@angular/material';
+import {interval, Subscription} from 'rxjs';
+import {AppConfigService} from '../app-config.service';
+import {ApiService, ProjectService, UserService} from '../core/services';
+import {MemberEntity} from '../shared/entity/MemberEntity';
+import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {UserGroupConfig} from '../shared/model/Config';
+import {AddMemberComponent} from './add-member/add-member.component';
 
 @Component({
   selector: 'kubermatic-member',
@@ -15,20 +15,18 @@ import { AddMemberComponent } from './add-member/add-member.component';
 })
 
 export class MemberComponent implements OnInit, OnDestroy {
-  public project: ProjectEntity;
-  public members: MemberEntity[] = [];
-  public loading = true;
-  public sortedMembers: MemberEntity[] = [];
-  public sort: Sort = { active: 'name', direction: 'asc' };
-  public userGroup: string;
-  public userGroupConfig: UserGroupConfig;
+  project: ProjectEntity;
+  members: MemberEntity[] = [];
+  loading = true;
+  sortedMembers: MemberEntity[] = [];
+  sort: Sort = {active: 'name', direction: 'asc'};
+  userGroup: string;
+  userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService,
-              private projectService: ProjectService,
-              public dialog: MatDialog,
-              private userService: UserService,
-              private appConfigService: AppConfigService) { }
+  constructor(
+      private api: ApiService, private projectService: ProjectService, public dialog: MatDialog,
+      private userService: UserService, private appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
     this.project = this.projectService.project;
@@ -56,7 +54,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addMember(): void {
+  addMember(): void {
     const modal = this.dialog.open(AddMemberComponent);
     modal.componentInstance.project = this.project;
 
@@ -153,5 +151,4 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     return this.compare(groupA, groupB, isAsc);
   }
-
 }

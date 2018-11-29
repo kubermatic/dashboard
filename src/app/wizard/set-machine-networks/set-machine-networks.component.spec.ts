@@ -1,11 +1,11 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { WizardService } from '../../core/services';
-import { MachineNetworksModule } from '../../machine-networks/machine-networks.module';
-import { SharedModule } from '../../shared/shared.module';
-import { SetMachineNetworksComponent } from './set-machine-networks.component';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {ReactiveFormsModule} from '@angular/forms';
+import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {WizardService} from '../../core/services';
+import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
+import {SharedModule} from '../../shared/shared.module';
+import {SetMachineNetworksComponent} from './set-machine-networks.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -20,17 +20,19 @@ describe('SetMachineNetworksComponent', () => {
   let component: SetMachineNetworksComponent;
 
   beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        ...modules,
-      ],
-      declarations: [
-        SetMachineNetworksComponent,
-      ],
-      providers: [
-        WizardService,
-      ],
-    }).compileComponents();
+    TestBed
+        .configureTestingModule({
+          imports: [
+            ...modules,
+          ],
+          declarations: [
+            SetMachineNetworksComponent,
+          ],
+          providers: [
+            WizardService,
+          ],
+        })
+        .compileComponents();
   }));
 
   beforeEach(() => {

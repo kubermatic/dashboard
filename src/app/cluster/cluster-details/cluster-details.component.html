@@ -13,6 +13,9 @@
       <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'statusRunning'">
         Connect
       </button>
+      <button class="share-kubeconfig-btn" (click)="shareConfigDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'statusRunning'" *ngIf="!!config.share_kubeconfig">
+        Share cluster
+      </button>
       <a class="download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
       <button mat-button (click)="deleteClusterDialog()" mat-raised-button [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
         <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px;"></i>

@@ -1,4 +1,4 @@
-import { ProjectEntity } from '../../shared/entity/ProjectEntity';
+import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 export function fakeProjects(): ProjectEntity[] {
   return [

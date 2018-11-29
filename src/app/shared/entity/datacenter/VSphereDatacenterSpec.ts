@@ -1,4 +1,4 @@
-import { DatacenterOperatingSystemOptions } from '../DatacenterEntity';
+import {DatacenterOperatingSystemOptions} from '../DatacenterEntity';
 
 export class VSphereDatacenterSpec {
   datastore: string;

@@ -1,4 +1,4 @@
-import { ClusterEntity } from '../../shared/entity/ClusterEntity';
+import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 
 // fakeClusterWithMachineNetwork could contain 6 IPs
 export function fakeClusterWithMachineNetwork(): ClusterEntity {
@@ -10,7 +10,7 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-            token: 'token',
+          token: 'token',
         },
         aws: null,
         openstack: null,
@@ -46,7 +46,7 @@ export function fakeGatewayInCidr(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-            token: 'token',
+          token: 'token',
         },
         aws: null,
         openstack: null,
@@ -82,7 +82,7 @@ export function fakeGatewayNotInCidr(): ClusterEntity {
       cloud: {
         dc: 'do-fra1',
         digitalocean: {
-            token: 'token',
+          token: 'token',
         },
         aws: null,
         openstack: null,
