@@ -23,6 +23,7 @@ import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/
 import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
+import { NodeDeploymentEntity } from '../../shared/entity/NodeDeploymentEntity';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -36,6 +37,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   datacenter: DataCenterEntity;
   sshKeys: SSHKeyEntity[] = [];
   nodes: NodeEntity[] = [];
+  nodeDeployments: NodeDeploymentEntity[];
   isClusterRunning: boolean;
   clusterHealthClass: string;
   health: HealthEntity;
@@ -47,7 +49,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   downgradesAvailable = false;
   moreSshKeys = false;
   hasInitialNodes = false;
-  private isNodeDeploymentAPIAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -63,7 +64,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
     this.config = this.appConfigService.getConfig();
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
@@ -123,7 +123,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
                   const timer = interval(this.refreshInterval);
                   timer.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
-                    this.reloadCluster(clusterName, seedDCName, this.projectID);
+                    //this.reloadCluster(clusterName, seedDCName, this.projectID);
                   });
                 },
             (error) => {
@@ -173,6 +173,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           .subscribe((nodes) => {
             this.nodes = nodes;
           });
+
+      this.api.getClusterNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .pipe(takeUntil(this.unsubscribe))
+        .subscribe((nodeDeployments) => {
+          this.nodeDeployments = nodeDeployments;
+        })
     }
   }
 
@@ -278,7 +284,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getAddNodesLabel() {
-    return this.isNodeDeploymentAPIAvailable ? 'Add Node Deployment' : 'Add Nodes';
+    return this.api.isNodeDeploymentAPIAvailable() ? 'Add Node Deployment' : 'Add Nodes';
   }
 
   ngOnDestroy(): void {

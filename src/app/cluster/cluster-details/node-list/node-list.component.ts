@@ -7,7 +7,6 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
-import {NodeDuplicateComponent} from '../node-duplicate/node-duplicate.component';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -25,7 +24,6 @@ export class NodeListComponent implements OnInit {
   @Input() isClusterRunning: boolean;
   @Input() hasInitialNodes: boolean;
   clickedDeleteNode = {};
-  clickedDuplicateNode = {};
   isShowNodeDetails = {};
   userGroupConfig: UserGroupConfig;
   userGroup: string;
@@ -66,21 +64,6 @@ export class NodeListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       this.deleteNode.emit(node);
-    });
-  }
-
-  duplicateNodeDialog(node: NodeEntity): void {
-    this.clickedDuplicateNode[node.id] = true;
-    const dialogRef = this.dialog.open(NodeDuplicateComponent);
-    dialogRef.componentInstance.node = node;
-    dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.datacenter = this.datacenter;
-
-    dialogRef.componentInstance.projectID = this.projectID;
-
-    const sub = dialogRef.afterClosed().subscribe((result) => {
-      this.clickedDuplicateNode[node.id] = false;
-      sub.unsubscribe();
     });
   }
 
@@ -185,7 +168,7 @@ export class NodeListComponent implements OnInit {
   toggleNode(nodeID: string): void {
     const element = event.target as HTMLElement;
     const className = element.className;
-    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'copy') {
+    if (!this.clickedDeleteNode[nodeID] && className !== 'copy') {
       if (this.isShowNodeDetails[nodeID]) {
         this.isShowNodeDetails[nodeID] = false;
       } else if (!this.isShowNodeDetails[nodeID]) {

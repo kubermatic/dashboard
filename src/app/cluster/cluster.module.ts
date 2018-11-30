@@ -22,17 +22,18 @@ import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshk
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {NodeDeleteConfirmationComponent} from './cluster-details/node-delete-confirmation/node-delete-confirmation.component';
 import {NodeDeleteConfirmationService} from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
-import {NodeDuplicateComponent} from './cluster-details/node-duplicate/node-duplicate.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
 import {ClusterHealthStatusComponent} from './cluster-health-status/cluster-health-status.component';
 import {ClusterItemComponent} from './cluster-list/cluster-item/cluster-item.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
+import { NodeDeploymentListComponent } from './cluster-details/node-deployment-list/node-deployment-list.component';
 
 const components: any[] = [
   ClusterDetailsComponent,
   NodeListComponent,
+  NodeDeploymentListComponent,
   ClusterListComponent,
   ClusterItemComponent,
   ClusterHealthStatusComponent,
@@ -41,7 +42,6 @@ const components: any[] = [
 const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
   NodeDeleteConfirmationComponent,
-  NodeDuplicateComponent,
   ChangeClusterVersionComponent,
   AddNodesModalComponent,
   ClusterSecretsComponent,
