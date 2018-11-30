@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { MatDialog, MatTableDataSource } from '@angular/material';
+import {MatDialog, MatTableDataSource} from '@angular/material';
+
 import {AppConfigService} from '../../../app-config.service';
 import {UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
-import { NodeDeploymentEntity } from '../../../shared/entity/NodeDeploymentEntity';
 
 @Component({
   selector: 'kubermatic-node-deployment-list',
@@ -23,7 +24,7 @@ export class NodeDeploymentListComponent implements OnInit {
   @Input() hasInitialNodes: boolean;
   @Output() deleteNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
 
-  displayedColumns: string[] = ['position', 'name', 'replicas', 'created'];
+  displayedColumns: string[] = ['position', 'name', 'replicas', 'ver', 'created'];
   userGroupConfig: UserGroupConfig;
   userGroup: string;
 
@@ -38,10 +39,7 @@ export class NodeDeploymentListComponent implements OnInit {
 
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
     const dataSource = new MatTableDataSource<NodeDeploymentEntity>();
-
     dataSource.data = this.nodeDeployments;
-
     return dataSource;
   }
-
 }
