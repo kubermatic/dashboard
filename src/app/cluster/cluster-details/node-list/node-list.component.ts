@@ -1,12 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {AppConfigService} from '../../../app-config.service';
-import {UserService} from '../../../core/services';
+import {ApiService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
+import {NodeDuplicateComponent} from '../node-duplicate/node-duplicate.component';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -23,6 +24,7 @@ export class NodeListComponent implements OnInit {
   @Input() clusterHealthStatus: string;
   @Input() isClusterRunning: boolean;
   @Input() hasInitialNodes: boolean;
+  isNodeDeploymentAPIAvailable = false;
   clickedDeleteNode = {};
   clickedDuplicateNode = {};
   isShowNodeDetails = {};
@@ -45,9 +47,12 @@ export class NodeListComponent implements OnInit {
     },
   };
 
-  constructor(public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService) {}
+  constructor(
+      public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService,
+      private readonly api: ApiService) {}
 
   ngOnInit(): void {
+    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
@@ -63,7 +68,7 @@ export class NodeListComponent implements OnInit {
 
     dialogRef.componentInstance.projectID = this.projectID;
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(() => {
       this.deleteNode.emit(node);
     });
   }
@@ -75,7 +80,7 @@ export class NodeListComponent implements OnInit {
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.projectID = this.projectID;
-    const sub = dialogRef.afterClosed().subscribe((result) => {
+    const sub = dialogRef.afterClosed().subscribe(() => {
       this.clickedDuplicateNode[node.id] = false;
       sub.unsubscribe();
     });

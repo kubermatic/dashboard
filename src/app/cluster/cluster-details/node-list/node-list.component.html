@@ -65,11 +65,21 @@
                 </ng-container>
 
                 <ng-container *ngSwitchCase="false">
-                  <button mat-icon-button class="km-duplicate-node" matTooltip="Duplicate Node" (click)="duplicateNodeDialog(node)">
+                  <button mat-icon-button
+                          class="km-duplicate-node"
+                          matTooltip="Duplicate Node"
+                          (click)="duplicateNodeDialog(node)"
+                          *ngIf="isNodeDeploymentAPIAvailable">
                     <i class="fa fa-clone" aria-hidden="true"></i>
                   </button>
-                  <button mat-icon-button class="km-delete-node" matTooltip="Delete Node" (click)="deleteNodeDialog(node)" [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
-                    <i class="fa fa-trash-o" aria-hidden="true" [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'disabled' : ''"></i>
+                  <button mat-icon-button
+                          class="km-delete-node"
+                          matTooltip="Delete Node"
+                          (click)="deleteNodeDialog(node)"
+                          [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
+                    <i class="fa fa-trash-o"
+                       aria-hidden="true"
+                       [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'disabled' : ''"></i>
                   </button>
                 </ng-container>
               </ng-container>
