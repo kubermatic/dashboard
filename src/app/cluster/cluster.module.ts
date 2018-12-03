@@ -1,7 +1,9 @@
 import {NgModule} from '@angular/core';
 import {MatTabsModule} from '@angular/material';
+
 import {NodeDataModule} from '../node-data/node-data.module';
 import {SharedModule} from '../shared/shared.module';
+
 import {AddNodesModalComponent} from './cluster-details/add-nodes-modal/add-nodes-modal.component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster-connect.component';
@@ -22,13 +24,13 @@ import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshk
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {NodeDeleteConfirmationComponent} from './cluster-details/node-delete-confirmation/node-delete-confirmation.component';
 import {NodeDeleteConfirmationService} from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
+import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
 import {ClusterHealthStatusComponent} from './cluster-health-status/cluster-health-status.component';
 import {ClusterItemComponent} from './cluster-list/cluster-item/cluster-item.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
-import { NodeDeploymentListComponent } from './cluster-details/node-deployment-list/node-deployment-list.component';
 
 const components: any[] = [
   ClusterDetailsComponent,

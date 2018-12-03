@@ -116,28 +116,29 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="km-pre-card-title">Node Deployments</div>
+  <div *ngIf="isNodeDeploymentAPIAvailable">
+    <div class="km-pre-card-title">Node Deployments</div>
+    <kubermatic-node-deployment-list [cluster]="cluster"
+                                     [nodeDeployments]="nodeDeployments"
+                                     (deleteNodeDeployment)="reloadClusterNodes()"
+                                     [datacenter]="datacenter"
+                                     [projectID]="projectID"
+                                     [clusterHealthStatus]="clusterHealthClass"
+                                     [isClusterRunning]="isClusterRunning"
+                                     [hasInitialNodes]="hasInitialNodes"></kubermatic-node-deployment-list>
+  </div>
 
-  <kubermatic-node-deployment-list [cluster]="cluster"
-                                   [nodeDeployments]="nodeDeployments"
-                                   (deleteNodeDeployment)="reloadClusterNodes()"
-                                   [datacenter]="datacenter"
-                                   [projectID]="projectID"
-                                   [clusterHealthStatus]="clusterHealthClass"
-                                   [isClusterRunning]="isClusterRunning"
-                                   [hasInitialNodes]="hasInitialNodes"></kubermatic-node-deployment-list>
-
-
-  <div class="km-pre-card-title">Nodes</div>
-
-  <kubermatic-node-list [cluster]="cluster"
-                        [nodes]="nodes"
-                        (deleteNode)="reloadClusterNodes()"
-                        [datacenter]="datacenter"
-                        [projectID]="projectID"
-                        [clusterHealthStatus]="clusterHealthClass"
-                        [isClusterRunning]="isClusterRunning"
-                        [hasInitialNodes]="hasInitialNodes"></kubermatic-node-list>
+  <div>
+    <div class="km-pre-card-title">Nodes</div>
+    <kubermatic-node-list [cluster]="cluster"
+                          [nodes]="nodes"
+                          (deleteNode)="reloadClusterNodes()"
+                          [datacenter]="datacenter"
+                          [projectID]="projectID"
+                          [clusterHealthStatus]="clusterHealthClass"
+                          [isClusterRunning]="isClusterRunning"
+                          [hasInitialNodes]="hasInitialNodes"></kubermatic-node-list>
+  </div>
 
   <div style="margin-bottom: 70px;"></div>
 </ng-container>

@@ -11,6 +11,7 @@ import {NodeService} from '../../core/services/node/node.service';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
+import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, UserGroupConfig} from '../../shared/model/Config';
@@ -23,7 +24,6 @@ import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/
 import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
-import { NodeDeploymentEntity } from '../../shared/entity/NodeDeploymentEntity';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -49,6 +49,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   downgradesAvailable = false;
   moreSshKeys = false;
   hasInitialNodes = false;
+  isNodeDeploymentAPIAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -69,6 +70,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
+    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
 
     this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this.unsubscribe)).subscribe((group) => {
       this.userGroup = group;
@@ -122,9 +124,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                   this.clusterSubject.next(data[1]);
 
                   const timer = interval(this.refreshInterval);
-                  timer.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
-                    //this.reloadCluster(clusterName, seedDCName, this.projectID);
-                  });
+                  timer.pipe(takeUntil(this.unsubscribe))
+                      .subscribe(() => this.reloadCluster(clusterName, seedDCName, this.projectID));
                 },
             (error) => {
               if (error.status === 404) {
@@ -174,11 +175,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             this.nodes = nodes;
           });
 
-      this.api.getClusterNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-        .pipe(takeUntil(this.unsubscribe))
-        .subscribe((nodeDeployments) => {
-          this.nodeDeployments = nodeDeployments;
-        })
+      if (this.isNodeDeploymentAPIAvailable) {
+        this.api.getClusterNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe((nodeDeployments) => {
+              this.nodeDeployments = nodeDeployments;
+            });
+      }
     }
   }
 
@@ -284,7 +287,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getAddNodesLabel() {
-    return this.api.isNodeDeploymentAPIAvailable() ? 'Add Node Deployment' : 'Add Nodes';
+    return this.isNodeDeploymentAPIAvailable ? 'Add Node Deployment' : 'Add Nodes';
   }
 
   ngOnDestroy(): void {
