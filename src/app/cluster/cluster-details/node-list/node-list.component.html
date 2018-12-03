@@ -69,7 +69,7 @@
                           class="km-duplicate-node"
                           matTooltip="Duplicate Node"
                           (click)="duplicateNodeDialog(node)"
-                          *ngIf="isNodeDeploymentAPIAvailable">
+                          *ngIf="!isNodeDeploymentAPIAvailable">
                     <i class="fa fa-clone" aria-hidden="true"></i>
                   </button>
                   <button mat-icon-button
