@@ -1,12 +1,14 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
 import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {AddNodeService} from '../core/services/add-node/add-node.service';
 import {SharedModule} from '../shared/shared.module';
 import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
 import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../testing/fake-data/node.fake';
+import {RouterStub} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
@@ -59,6 +61,7 @@ describe('NodeDataComponent', () => {
             {provide: ApiService, useValue: apiMock},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
+            {provide: Router, useClass: RouterStub},
           ],
         })
         .compileComponents();
