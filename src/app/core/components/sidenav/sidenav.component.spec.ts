@@ -118,12 +118,12 @@ describe('SidenavComponent', () => {
       deletionTimestamp: undefined,
       status: '',
     };
-    expect(component.compareProjectsEquality(a, b)).toBeFalsy();
-    expect(component.compareProjectsEquality(b, a)).toBeFalsy();
+    expect(component.projectService.compareProjectsEquality(a, b)).toBeFalsy();
+    expect(component.projectService.compareProjectsEquality(b, a)).toBeFalsy();
 
     b.id = a.id;
-    expect(component.compareProjectsEquality(a, b)).toBeTruthy();
-    expect(component.compareProjectsEquality(b, a)).toBeTruthy();
+    expect(component.projectService.compareProjectsEquality(a, b)).toBeTruthy();
+    expect(component.projectService.compareProjectsEquality(b, a)).toBeTruthy();
   });
 
   it('should correctly create router links', () => {

@@ -4,7 +4,7 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MAT_DIALOG_DATA, MatDialogRef, MatTabsModule} from '@angular/material';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {ApiService, ProjectService} from '../../../core/services';
 import {AddNodeService} from '../../../core/services/add-node/add-node.service';
@@ -27,7 +27,7 @@ import {fakeDigitaloceanSizes} from '../../../testing/fake-data/addNodeModal.fak
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeDigitaloceanCreateNode, nodeDataFake} from '../../../testing/fake-data/node.fake';
-import {ActivatedRouteStub, RouterTestingModule} from '../../../testing/router-stubs';
+import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
@@ -76,6 +76,7 @@ describe('AddNodeModalComponent', () => {
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
+            {provide: Router, useClass: RouterStub},
             AddNodeService,
             WizardService,
             GoogleAnalyticsService,
