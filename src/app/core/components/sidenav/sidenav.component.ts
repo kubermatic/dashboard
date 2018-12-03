@@ -106,15 +106,23 @@ export class SidenavComponent implements OnInit, OnDestroy {
     });
   }
 
-  checkUrl(url: string): boolean {
+  checkUrl(url: string, type: string): string {
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;
     if (url === '/projects') {
-      return (snapshot.url === url);
+      if (type === 'routerLink') {
+        return (snapshot.url === url ? 'active' : '');
+      } else if (type === 'icon') {
+        return (snapshot.url === url ? 'white' : 'black');
+      }
     } else {
       const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
       const newUrl = '/projects/' + selectedProjectId + url;
-      return (snapshot.url === newUrl);
+      if (type === 'routerLink') {
+        return (snapshot.url === newUrl ? 'active' : '');
+      } else if (type === 'icon') {
+        return (snapshot.url === newUrl ? 'white' : 'black');
+      }
     }
   }
 
