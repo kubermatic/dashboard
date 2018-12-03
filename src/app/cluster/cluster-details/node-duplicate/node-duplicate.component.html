@@ -5,21 +5,25 @@
       <i class="fa fa-times" aria-hidden="true"></i>
     </button>
   </mat-toolbar>
+
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <p>You are on the way to duplicate the node "{{ node.name }}" with following settings:</p>
       <p class="km-duplicate-spec-title">Node Options:</p>
+
       <!-- AWS -->
       <div class="km-duplicate-spec-options" *ngIf="node.spec.cloud.aws">
         <p>Node Size: {{ node.spec.cloud.aws.instanceType }}</p>
         <p>Disk Size: {{ node.spec.cloud.aws.diskSize }}</p>
         <p>Disk Type: {{ node.spec.cloud.aws.volumeType }}</p>
       </div>
+
       <!-- Azure -->
       <div class="km-duplicate-spec-options" *ngIf="node.spec.cloud.azure">
         <p>Node Size: {{ node.spec.cloud.azure.size }}</p>
         <p>Assign Public IP: {{ node.spec.cloud.azure.assignPublicIP }}</p>
       </div>
+
       <!-- Digitalocean -->
       <div class="km-duplicate-spec-options" *ngIf="node.spec.cloud.digitalocean">
         <p>Node Size: {{ node.spec.cloud.digitalocean.size }}</p>
@@ -27,36 +31,44 @@
         <p>IPv6: {{ node.spec.cloud.digitalocean.ipv6 }}</p>
         <p>Monitoring: {{ node.spec.cloud.digitalocean.monitoring }}</p>
       </div>
+
       <!-- Hetzner -->
       <div class="km-duplicate-spec-options" *ngIf="node.spec.cloud.hetzner">
         <p>Node Type: {{ node.spec.cloud.hetzner.type }}</p>
       </div>
+
       <!-- Openstack -->
       <div class="km-duplicate-spec-options" *ngIf="node.spec.cloud.openstack">
         <p>Flavor: {{ node.spec.cloud.openstack.flavor }}</p>
         <p>Image: {{ node.spec.cloud.openstack.image }}</p>
       </div>
+
       <!-- VSphere -->
       <div class="km-duplicate-spec-options" *ngIf="node.spec.cloud.vsphere">
         <p>Number of CPUs: {{ node.spec.cloud.vsphere.cpu }}</p>
         <p>Memory in MB: {{ node.spec.cloud.vsphere.memory }}</p>
         <p>Template: {{ node.spec.cloud.vsphere.template }}</p>
       </div>
+
       <!-- Operating System -->
       <p class="km-duplicate-spec-title">Operating System:
         <span *ngIf="node.spec.operatingSystem.ubuntu">Ubuntu</span>
         <span *ngIf="!!node.spec.operatingSystem.containerLinux">Container Linux</span>
         <span *ngIf="!!node.spec.operatingSystem.centos">CentOS</span>
       </p>
+
       <div class="km-duplicate-spec-options" *ngIf="node.spec.operatingSystem.ubuntu">
         <p>Upgrade system on first boot: {{ node.spec.operatingSystem.ubuntu.distUpgradeOnBoot }}</p>
       </div>
+
       <div class="km-duplicate-spec-options" *ngIf="node.spec.operatingSystem.containerLinux">
         <p>Disable auto-update: {{ node.spec.operatingSystem.containerLinux.disableAutoUpdate }}</p>
       </div>
+
       <div class="km-duplicate-spec-options" *ngIf="node.spec.operatingSystem.centos">
         <p>Upgrade system on first boot: {{ node.spec.operatingSystem.centos.distUpgradeOnBoot }}</p>
       </div>
+
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

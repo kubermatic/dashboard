@@ -10,6 +10,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {NodeDuplicateComponent} from './node-duplicate.component';
+
 const modules: any[] = [
   BrowserModule,
   HttpClientModule,
@@ -17,9 +18,11 @@ const modules: any[] = [
   SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
+
 describe('NodeDuplicateComponent', () => {
   let fixture: ComponentFixture<NodeDuplicateComponent>;
   let component: NodeDuplicateComponent;
+
   beforeEach(() => {
     TestBed
         .configureTestingModule({
@@ -37,10 +40,12 @@ describe('NodeDuplicateComponent', () => {
         })
         .compileComponents();
   });
+
   beforeEach(() => {
     fixture = TestBed.createComponent(NodeDuplicateComponent);
     component = fixture.componentInstance;
   });
+
   it('should create the duplicate node cmp', async(() => {
        expect(component).toBeTruthy();
      }));
