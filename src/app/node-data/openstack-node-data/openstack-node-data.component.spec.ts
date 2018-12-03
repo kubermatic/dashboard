@@ -3,7 +3,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ApiService} from '../../core/services';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeOpenstackFlavors} from '../../testing/fake-data/addNodeModal.fake';
 import {fakeOpenstackCluster} from '../../testing/fake-data/cluster.fake';
@@ -31,7 +31,7 @@ describe('OpenstackNodeDataComponent', () => {
             OpenstackNodeDataComponent,
           ],
           providers: [
-            AddNodeService,
+            NodeDataService,
             {provide: ApiService, useValue: apiMock},
           ],
         })

@@ -3,13 +3,16 @@ import {MatDialog} from '@angular/material';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
 import {AppConfigService} from '../../../app-config.service';
-import {UserService} from '../../../core/services';
+import {ApiService, UserService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {nodesFake} from '../../../testing/fake-data/node.fake';
+import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
+
 import {NodeListComponent} from './node-list.component';
 
 const modules: any[] = [
@@ -33,6 +36,7 @@ describe('NodeComponent', () => {
             NodeListComponent,
           ],
           providers: [
+            {provide: ApiService, useClass: ApiMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,

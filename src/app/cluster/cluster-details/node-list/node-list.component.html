@@ -1,13 +1,13 @@
 <mat-card class="blue">
   <mat-card-header>
     <mat-card-title fxLayout>
-      <div fxFlex="3%">
+      <div fxFlex="4%">
         #
       </div>
       <div fxFlex="36%">
         Name
       </div>
-      <div fxFlex="15%">
+      <div fxFlex="14%">
         Kubelet Version
       </div>
       <div fxFlex="16%">
@@ -28,7 +28,7 @@
       <ng-container *ngSwitchCase="true">
         <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
           <div fxLayout>
-            <div fxFlex="3%">{{i + 1}}</div>
+            <div fxFlex="4%">{{i + 1}}</div>
 
             <div fxFlex="36%" style="word-break: normal ;" *ngIf="!node.spec.cloud.aws">
               {{node.name}}
@@ -38,7 +38,7 @@
               {{getNodeName(node)}}
               <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
             </div>
-            <div fxFlex="15%">
+            <div fxFlex="14%">
               <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
             </div>
             <div fxFlex="16%">
@@ -65,11 +65,21 @@
                 </ng-container>
 
                 <ng-container *ngSwitchCase="false">
-                  <button mat-icon-button class="km-duplicate-node" matTooltip="Duplicate Node" (click)="duplicateNodeDialog(node)">
+                  <button mat-icon-button
+                          class="km-duplicate-node"
+                          matTooltip="Duplicate Node"
+                          (click)="duplicateNodeDialog(node)"
+                          *ngIf="!isNodeDeploymentAPIAvailable">
                     <i class="fa fa-clone" aria-hidden="true"></i>
                   </button>
-                  <button mat-icon-button class="km-delete-node" matTooltip="Delete Node" (click)="deleteNodeDialog(node)" [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
-                    <i class="fa fa-trash-o" aria-hidden="true" [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'disabled' : ''"></i>
+                  <button mat-icon-button
+                          class="km-delete-node"
+                          matTooltip="Delete Node"
+                          (click)="deleteNodeDialog(node)"
+                          [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
+                    <i class="fa fa-trash-o"
+                       aria-hidden="true"
+                       [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'disabled' : ''"></i>
                   </button>
                 </ng-container>
               </ng-container>
@@ -236,7 +246,7 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        <div class="row no-item" *ngIf="clusterHealthStatus === 'statusRunning' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">No Node available. Please add a Node.</div>
+        <div class="row no-item" *ngIf="clusterHealthStatus === 'statusRunning' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">No Nodes available.</div>
         <div class="row" *ngIf="clusterHealthStatus !== 'statusRunning' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
           <mat-spinner color="accent" class="node-list-spinner" [diameter]="30"></mat-spinner>
         </div>

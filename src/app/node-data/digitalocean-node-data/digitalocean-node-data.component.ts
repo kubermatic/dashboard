@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@an
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {ApiService} from '../../core/services';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
@@ -24,7 +24,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   doNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private api: ApiService, private addNodeService: AddNodeService) {}
+  constructor(private api: ApiService, private addNodeService: NodeDataService) {}
 
   ngOnInit(): void {
     this.doNodeForm = new FormGroup({
