@@ -29,5 +29,17 @@
       <tr mat-header-row class="km-header-row" *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns" class="km-mat-row"></tr>
     </table>
+
+    <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">
+      <div class="row no-item"
+           *ngIf="clusterHealthStatus === 'statusRunning' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">
+        No Node Deployments available.
+      </div>
+      <div class="row"
+           *ngIf="clusterHealthStatus !== 'statusRunning' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+        <mat-spinner color="accent" class="node-list-spinner" [diameter]="30"></mat-spinner>
+      </div>
+    </ng-container>
+
   </mat-card-content>
 </mat-card>
