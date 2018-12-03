@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, ProjectService, UserService, WizardService} from '../../core/services';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {AWSNodeDataComponent} from '../../node-data/aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from '../../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../../node-data/digitalocean-node-data/digitalocean-node-data.component';
@@ -43,8 +43,9 @@ describe('SetSettingsComponent', () => {
   let component: SetSettingsComponent;
 
   beforeEach(async(() => {
-    const apiMock =
-        jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys']);
+    const apiMock = jasmine.createSpyObj(
+        'ApiService',
+        ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys', 'isNodeDeploymentAPIAvailable']);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
@@ -80,7 +81,7 @@ describe('SetSettingsComponent', () => {
             AzureNodeDataComponent,
           ],
           providers: [
-            AddNodeService,
+            NodeDataService,
             WizardService,
             {provide: ApiService, useValue: apiMock},
             {provide: DatacenterService, useValue: DatacenterMockService},

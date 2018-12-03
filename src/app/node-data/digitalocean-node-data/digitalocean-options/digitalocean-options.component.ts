@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {AddNodeService} from '../../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
@@ -15,7 +15,7 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
   doOptionsForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService) {}
+  constructor(private addNodeService: NodeDataService) {}
 
   ngOnInit(): void {
     this.doOptionsForm = new FormGroup({

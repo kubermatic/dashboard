@@ -1,3 +1,5 @@
+@import "colors";
+
 html, body {
   margin: 0;
   padding: 0;
@@ -853,4 +855,15 @@ mat-list-item.disabled {
   &.black {
     background-image: url("/assets/images/icons/black/member-black.png");
   }
+}
+
+.km-action-button-icon {
+  margin-right: 5px;
+}
+
+.km-pre-card-title {
+  margin-top: 30px;
+  color: $text-color;
+  font-size: 18px;
+  font-weight: 500;
 }

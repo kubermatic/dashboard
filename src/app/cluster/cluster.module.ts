@@ -1,8 +1,10 @@
 import {NgModule} from '@angular/core';
 import {MatTabsModule} from '@angular/material';
+
 import {NodeDataModule} from '../node-data/node-data.module';
 import {SharedModule} from '../shared/shared.module';
-import {AddNodeModalComponent} from './cluster-details/add-node-modal/add-node-modal.component';
+
+import {AddNodesModalComponent} from './cluster-details/add-nodes-modal/add-nodes-modal.component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -22,6 +24,7 @@ import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshk
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {NodeDeleteConfirmationComponent} from './cluster-details/node-delete-confirmation/node-delete-confirmation.component';
 import {NodeDeleteConfirmationService} from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
+import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeDuplicateComponent} from './cluster-details/node-duplicate/node-duplicate.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
@@ -33,6 +36,7 @@ import {ClusterRoutingModule} from './cluster-routing.module';
 const components: any[] = [
   ClusterDetailsComponent,
   NodeListComponent,
+  NodeDeploymentListComponent,
   ClusterListComponent,
   ClusterItemComponent,
   ClusterHealthStatusComponent,
@@ -43,7 +47,7 @@ const entryComponents: any[] = [
   NodeDeleteConfirmationComponent,
   NodeDuplicateComponent,
   ChangeClusterVersionComponent,
-  AddNodeModalComponent,
+  AddNodesModalComponent,
   ClusterSecretsComponent,
   ClusterConnectComponent,
   RevokeAdminTokenComponent,

@@ -1,6 +1,6 @@
 <form [formGroup]="nodeForm" fxLayout="column">
   <mat-form-field fxFlex>
-    <input matInput formControlName="count" min="1" type="number" placeholder="Number of nodes*:" autocomplete="off">
+    <input matInput formControlName="count" type="number" min="1" autocomplete="off" [placeholder]="getCountPlaceholder()">
   </mat-form-field>
 
   <kubermatic-aws-node-data *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-aws-node-data>
@@ -47,7 +47,6 @@
     </div>
   </div>
 </form>
-
 
 <kubermatic-openstack-options *ngIf="cluster.spec.cloud.openstack" [nodeData]="nodeData" [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-options>
 <kubermatic-vsphere-options *ngIf="cluster.spec.cloud.vsphere" [nodeData]="nodeData" [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-options>

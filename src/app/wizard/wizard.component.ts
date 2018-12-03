@@ -3,7 +3,7 @@ import {Router} from '@angular/router';
 import {interval, Subject, Subscription} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {ApiService, InitialNodeDataService, ProjectService, WizardService} from '../core/services';
-import {AddNodeService} from '../core/services/add-node/add-node.service';
+import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {Step, StepsService} from '../core/services/wizard/steps.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
@@ -38,7 +38,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-      private wizardService: WizardService, private addNodeService: AddNodeService, private stepsService: StepsService,
+      private wizardService: WizardService, private addNodeService: NodeDataService, private stepsService: StepsService,
       private initialNodeDataService: InitialNodeDataService, private router: Router,
       private projectService: ProjectService, private api: ApiService,
       public googleAnalyticsService: GoogleAnalyticsService) {

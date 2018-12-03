@@ -5,9 +5,11 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
 import {Auth} from '../../core/services/auth/auth.service';
+import {NodeService} from '../../core/services/node/node.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fake';
@@ -19,10 +21,13 @@ import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {HealthMockService} from '../../testing/services/health-mock.service';
+import {NodeMockService} from '../../testing/services/node-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
 import {ClusterHealthStatusComponent} from '../cluster-health-status/cluster-health-status.component';
+
 import {ClusterDetailsComponent} from './cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.component';
+import {NodeDeploymentListComponent} from './node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './node-list/node-list.component';
 
 describe('ClusterDetailsComponent', () => {
@@ -33,8 +38,10 @@ describe('ClusterDetailsComponent', () => {
   let apiMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj(
-        'ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL']);
+    apiMock = jasmine.createSpyObj('ApiService', [
+      'getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL',
+      'isNodeDeploymentAPIAvailable'
+    ]);
     apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
     apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
 
@@ -61,6 +68,7 @@ describe('ClusterDetailsComponent', () => {
             ClusterHealthStatusComponent,
             ClusterSecretsComponent,
             NodeListComponent,
+            NodeDeploymentListComponent,
           ],
           providers: [
             {provide: ApiService, useValue: apiMock},
@@ -71,6 +79,7 @@ describe('ClusterDetailsComponent', () => {
             {provide: HealthService, useClass: HealthMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: NodeService, useClass: NodeMockService},
             MatDialog,
 
             InitialNodeDataService,

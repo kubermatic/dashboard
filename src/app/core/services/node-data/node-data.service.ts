@@ -3,7 +3,7 @@ import {Subject} from 'rxjs/Subject';
 import {NodeData, NodeOperatingSystemData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Injectable()
-export class AddNodeService {
+export class NodeDataService {
   private _nodeProviderData = new Subject<NodeProviderData>();
   nodeProviderDataChanges$ = this._nodeProviderData.asObservable();
   private _nodeData = new Subject<NodeData>();

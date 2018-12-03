@@ -1,0 +1,27 @@
+@import "../../../../assets/css/colors";
+
+.km-node-deployment-table {
+  width: 100%;
+
+  .km-header-row {
+    background-color: $primary;
+  }
+
+  .km-header-cell {
+    color: #fff;
+    font-size: 14px;
+  }
+
+  tr.mat-row:nth-child(even) {
+    background-color: $medium-background;
+  }
+
+  td.mat-cell {
+    border-bottom-width: 0;
+    line-height: 60px;
+  }
+}
+
+.km-node-deployment-spinner {
+  margin: 20px auto !important;
+}

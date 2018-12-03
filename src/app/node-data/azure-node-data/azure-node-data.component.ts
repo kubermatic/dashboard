@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@an
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
-import {AddNodeService} from '../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
@@ -29,7 +29,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   private subscriptions: Subscription[] = [];
 
   constructor(
-      private addNodeService: AddNodeService, private wizardService: WizardService, private api: ApiService,
+      private addNodeService: NodeDataService, private wizardService: WizardService, private api: ApiService,
       private dcService: DatacenterService) {}
 
   ngOnInit(): void {

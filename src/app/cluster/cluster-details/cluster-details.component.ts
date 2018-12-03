@@ -1,20 +1,23 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, interval, ObservableInput, Subject, Subscription} from 'rxjs';
+import {combineLatest, interval, Subject, Subscription} from 'rxjs';
 import {retry, takeUntil} from 'rxjs/operators';
 import {gt, lt} from 'semver';
+
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
-import {NotificationActions} from '../../redux/actions/notification.actions';
+import {NodeService} from '../../core/services/node/node.service';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
+import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, UserGroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {AddNodeModalComponent} from './add-node-modal/add-node-modal.component';
+
+import {AddNodesModalComponent} from './add-nodes-modal/add-nodes-modal.component';
 import {ChangeClusterVersionComponent} from './change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -34,6 +37,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   datacenter: DataCenterEntity;
   sshKeys: SSHKeyEntity[] = [];
   nodes: NodeEntity[] = [];
+  nodeDeployments: NodeDeploymentEntity[];
   isClusterRunning: boolean;
   clusterHealthClass: string;
   health: HealthEntity;
@@ -45,6 +49,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   downgradesAvailable = false;
   moreSshKeys = false;
   hasInitialNodes = false;
+  isNodeDeploymentAPIAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -55,7 +60,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       private route: ActivatedRoute, private router: Router, private api: ApiService, public dialog: MatDialog,
       private initialNodeDataService: InitialNodeDataService, private dcService: DatacenterService,
       private healthService: HealthService, private userService: UserService,
-      private appConfigService: AppConfigService) {
+      private appConfigService: AppConfigService, private readonly node_: NodeService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
@@ -65,6 +70,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
+    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
 
     this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this.unsubscribe)).subscribe((group) => {
       this.userGroup = group;
@@ -118,25 +124,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                   this.clusterSubject.next(data[1]);
 
                   const timer = interval(this.refreshInterval);
-                  timer.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
-                    this.reloadCluster(clusterName, seedDCName, this.projectID);
-                  });
+                  timer.pipe(takeUntil(this.unsubscribe))
+                      .subscribe(() => this.reloadCluster(clusterName, seedDCName, this.projectID));
                 },
             (error) => {
               if (error.status === 404) {
                 this.router.navigate(['404']);
               }
             });
-  }
-
-  ngOnDestroy(): void {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
   }
 
   reloadCluster(clusterName: string, seedDCName: string, projectID: string): void {
@@ -156,30 +151,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     if (this.health && this.health.apiserver && this.health.controller && this.health.etcd &&
         this.health.machineController && this.health.scheduler) {
-      // Initial node creation
       const initialNodeCreationSub = this.clusterSubject.pipe(takeUntil(this.unsubscribe)).subscribe((cluster) => {
         const data = this.initialNodeDataService.getInitialNodeData(cluster);
-        if (data == null) {
-          if (initialNodeCreationSub) {
-            initialNodeCreationSub.unsubscribe();
-            this.hasInitialNodes = false;
-            return;
-          }
+        if (data == null && initialNodeCreationSub) {
+          initialNodeCreationSub.unsubscribe();
+          this.hasInitialNodes = false;
+          return;
         }
 
         if (cluster && this.health && this.health.apiserver && this.health.machineController) {
-          const createNodeObservables: Array<ObservableInput<NodeEntity>> = [];
-          for (let i = 0; i < data.nodeCount; i++) {
-            const node = {
-              spec: data.nodeSpec,
-            } as NodeEntity;
-            createNodeObservables.push(
-                this.api.createClusterNode(cluster, node, this.datacenter.metadata.name, this.projectID));
-          }
-          combineLatest(createNodeObservables).pipe(takeUntil(this.unsubscribe)).subscribe(() => {
-            NotificationActions.success('Success', `Node(s) successfully created`);
-            this.reloadClusterNodes();
-          });
+          this.node_.createInitialNodes(data, this.datacenter, cluster, this.projectID);
           this.initialNodeDataService.clearInitialNodeData(cluster);
         }
       });
@@ -193,6 +174,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           .subscribe((nodes) => {
             this.nodes = nodes;
           });
+
+      if (this.isNodeDeploymentAPIAvailable) {
+        this.api.getClusterNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+            .pipe(takeUntil(this.unsubscribe))
+            .subscribe((nodeDeployments) => {
+              this.nodeDeployments = nodeDeployments;
+            });
+      }
     }
   }
 
@@ -220,14 +209,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   addNode(): void {
-    const modal = this.dialog.open(AddNodeModalComponent);
+    const modal = this.dialog.open(AddNodesModalComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
-
-    const sub = modal.afterClosed().subscribe(() => {
+    modal.afterClosed().toPromise().then(() => {
       this.reloadClusterNodes();
-      sub.unsubscribe();
     });
   }
 
@@ -235,13 +222,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this.dialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
-
     modal.componentInstance.projectID = this.projectID;
-    const sub = modal.afterClosed().subscribe((deleted) => {
+    modal.afterClosed().toPromise().then((deleted) => {
       if (deleted) {
         this.router.navigate(['/projects/' + this.projectID + '/clusters']);
       }
-      sub.unsubscribe();
     });
   }
 
@@ -264,9 +249,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.possibleVersions = this.versionsList;
-    const sub = modal.afterClosed().subscribe(() => {
+    modal.afterClosed().toPromise().then(() => {
       this.reloadCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID);
-      sub.unsubscribe();
     });
   }
 
@@ -275,21 +259,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isLoaded(): boolean {
-    if (this.cluster && getClusterProvider(this.cluster) === NodeProvider.BRINGYOUROWN) {
-      return true;
-    } else if (this.cluster) {
-      return !!this.nodeDc;
-    }
+    return this.cluster && (getClusterProvider(this.cluster) === NodeProvider.BRINGYOUROWN || !!this.nodeDc);
   }
 
   editProviderSettings(): void {
     const modal = this.dialog.open(EditProviderSettingsComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
-
-    const sub = modal.afterClosed().subscribe(() => {
-      sub.unsubscribe();
-    });
   }
 
   editSSHKeys(): void {
@@ -297,9 +273,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
-
-    const sub = modal.afterClosed().subscribe(() => {
-      sub.unsubscribe();
+    modal.afterClosed().toPromise().then(() => {
       this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe((keys) => {
@@ -310,5 +284,19 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   loadMoreSshKeys(moreSshKeys: boolean): void {
     this.moreSshKeys = moreSshKeys;
+  }
+
+  getAddNodesLabel() {
+    return this.isNodeDeploymentAPIAvailable ? 'Add Node Deployment' : 'Add Nodes';
+  }
+
+  ngOnDestroy(): void {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
   }
 }
