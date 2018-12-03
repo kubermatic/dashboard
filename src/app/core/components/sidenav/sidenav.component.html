@@ -20,23 +20,23 @@
       </mat-list-item>
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('create-cluster')">
-        <a mat-line [routerLink]="getRouterLink('wizard')"  [ngClass]="checkUrl('/wizard', 'routerLink')"><i class="fa fa-magic fa-lg"></i> Create Cluster</a>
+        <a mat-line [routerLink]="getRouterLink('wizard')"  [ngClass]="getLinkClass('/wizard')"><i class="fa fa-magic fa-lg"></i> Create Cluster</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('clusters')">
-        <a mat-line [routerLink]="getRouterLink('clusters')" [ngClass]="checkUrl('/clusters', 'routerLink')"><i class="iconCluster" [ngClass]="checkUrl('/clusters', 'icon')"></i> Manage Clusters</a>
+        <a mat-line [routerLink]="getRouterLink('clusters')" [ngClass]="getLinkClass('/clusters')"><i class="iconCluster" [ngClass]="getIconClass('/clusters')"></i> Manage Clusters</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('sshKeys')">
-        <a mat-line [routerLink]="getRouterLink('sshkeys')" [ngClass]="checkUrl('/sshkeys', 'routerLink')"><i class="iconKey" [ngClass]="checkUrl('/sshkeys', 'icon')"></i> Manage SSH keys</a>
+        <a mat-line [routerLink]="getRouterLink('sshkeys')" [ngClass]="getLinkClass('/sshkeys')"><i class="iconKey" [ngClass]="getIconClass('/sshkeys')"></i> Manage SSH keys</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('members')">
-        <a mat-line [routerLink]="getRouterLink('members')" [ngClass]="checkUrl('/members', 'routerLink')"><i class="iconMember" [ngClass]="checkUrl('/members', 'icon')"></i> Members</a>
+        <a mat-line [routerLink]="getRouterLink('members')" [ngClass]="getLinkClass('/members')"><i class="iconMember" [ngClass]="getIconClass('/members')"></i> Members</a>
       </mat-list-item>
 
       <mat-list-item>
-        <a mat-line routerLink="/projects" [ngClass]="checkUrl('/projects', 'routerLink')"><i class="iconProject" [ngClass]="checkUrl('/projects', 'icon')"></i> Projects</a>
+        <a mat-line routerLink="/projects" [ngClass]="getLinkClass('/projects')"><i class="iconProject" [ngClass]="getIconClass('/projects')"></i> Projects</a>
       </mat-list-item>
     </div>
   </mat-nav-list>
