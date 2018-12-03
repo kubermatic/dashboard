@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {Router} from '@angular/router';
 import {AppConfigService} from '../../app-config.service';
 import {ProjectService, UserService} from '../../core/services';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
@@ -20,8 +19,8 @@ export class ProjectItemComponent implements OnInit {
   userGroupConfig: UserGroupConfig;
 
   constructor(
-      public dialog: MatDialog, private router: Router, private projectService: ProjectService,
-      private userService: UserService, private appConfigService: AppConfigService) {}
+      public dialog: MatDialog, public projectService: ProjectService, private userService: UserService,
+      private appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -36,28 +35,9 @@ export class ProjectItemComponent implements OnInit {
     }
   }
 
-  getProjectStateIconClass(): string {
-    let iconClass = '';
-    if (!!this.project) {
-      switch (this.project.status) {
-        case 'Active':
-          iconClass = 'fa fa-circle green';
-          break;
-        case 'Inactive':
-          iconClass = 'fa fa-spin fa-circle-o-notch orange';
-          break;
-        case 'Terminating':
-          iconClass = 'fa fa-circle-o red';
-          break;
-      }
-    }
-    return iconClass;
-  }
-
   selectProject(): void {
     if (!this.clickedDeleteProject[this.project.id]) {
-      this.projectService.changeSelectedProject(this.project);
-      this.projectService.storeProject(this.project);
+      this.projectService.changeAndStoreSelectedProject(this.project);
     }
   }
 
@@ -67,7 +47,7 @@ export class ProjectItemComponent implements OnInit {
     modal.componentInstance.project = this.project;
     const sub = modal.afterClosed().subscribe((deleted) => {
       if (deleted) {
-        this.router.navigate(['/projects']);
+        this.projectService.navigateToProjectPage();
         this.projectService.changeSelectedProject({
           id: '',
           name: '',

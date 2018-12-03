@@ -2,6 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatTabsModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, ProjectService, UserService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
@@ -20,6 +21,7 @@ import {fakeDigitaloceanSizes} from '../../testing/fake-data/addNodeModal.fake';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
+import {RouterStub} from '../../testing/router-stubs';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
@@ -87,6 +89,7 @@ describe('SetSettingsComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: Router, useClass: RouterStub},
           ],
         })
         .compileComponents();

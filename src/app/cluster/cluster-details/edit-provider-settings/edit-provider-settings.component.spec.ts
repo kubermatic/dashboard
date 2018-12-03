@@ -2,10 +2,12 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
 import {ApiService, ClusterService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
+import {RouterStub} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
@@ -47,6 +49,7 @@ describe('EditProviderSettingsComponent', () => {
             {provide: ApiService, useClass: ApiMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
+            {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,
           ],
         })

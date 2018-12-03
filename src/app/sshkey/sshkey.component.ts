@@ -31,15 +31,17 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
       private appConfigService: AppConfigService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.projectID = this.route.snapshot.paramMap.get('projectID');
+    this.subscriptions.push(this.route.paramMap.subscribe((m) => {
+      this.projectID = m.get('projectID');
+      this.refreshSSHKeys();
+    }));
 
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
-    const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe((tick) => {
+    this.subscriptions.push(interval(5000).subscribe(() => {
       this.refreshSSHKeys();
     }));
     this.refreshSSHKeys();

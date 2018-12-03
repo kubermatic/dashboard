@@ -4,10 +4,8 @@ import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {interval, Subscription} from 'rxjs';
 import {environment} from '../../../../environments/environment';
 import {AddProjectComponent} from '../../../add-project/add-project.component';
-import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
-import {ApiService, ProjectService, UserService} from '../../services';
+import {ApiService, ProjectService} from '../../services';
 
 @Component({
   selector: 'kubermatic-sidenav',
@@ -19,26 +17,20 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
-  userGroup: string;
-  userGroupConfig: UserGroupConfig;
   private subscriptions: Subscription[] = [];
   private readonly notActiveProjectRefreshInterval = 1500;
 
   constructor(
-      public dialog: MatDialog, private api: ApiService, private router: Router, private projectService: ProjectService,
-      private userService: UserService, private appConfigService: AppConfigService) {}
+      public dialog: MatDialog, private api: ApiService, private router: Router,
+      public projectService: ProjectService) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.loadProjects();
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((data) => {
       for (const i in this.projects) {
-        if (this.compareProjectsEquality(this.projects[i], data)) {
+        if (this.projectService.compareProjectsEquality(this.projects[i], data)) {
           this.selectedProject = data;
-          this.userService.currentUserGroup(this.projects[i].id).subscribe((group) => {
-            this.userGroup = group;
-          });
           return;
         }
       }
@@ -50,8 +42,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private changeSelectedProject(project: ProjectEntity): void {
-    this.projectService.changeSelectedProject(project);
-    this.projectService.storeProject(project);
+    this.projectService.changeAndStoreSelectedProject(project);
     this.selectedProject = project;
   }
 
@@ -61,7 +52,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
         this.api.getProjects().toPromise().then((res) => {
           this.projects = res;
           for (const i in this.projects) {
-            if (this.compareProjectsEquality(this.projects[i], this.selectedProject)) {
+            if (this.projectService.compareProjectsEquality(this.projects[i], this.selectedProject)) {
               this.changeSelectedProject(this.projects[i]);
             }
           }
@@ -70,43 +61,20 @@ export class SidenavComponent implements OnInit, OnDestroy {
     }));
   }
 
-  isProjectSelected(viewName: string): string {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    if (this.selectedProject === undefined || this.selectedProject.status !== 'Active') {
-      return 'disabled';
-    } else {
-      if (!!this.userGroupConfig && this.userGroup) {
-        if (viewName === 'create-cluster') {
-          return !this.userGroupConfig[this.userGroup].clusters.create ? 'disabled' : '';
-        } else {
-          return !this.userGroupConfig[this.userGroup][viewName].view ? 'disabled' : '';
-        }
-      }
-    }
-  }
-
   loadProjects(): void {
     this.api.getProjects().subscribe((res) => {
       this.projects = res;
 
       if (this.projects.length === 1) {
         this.changeSelectedProject(this.projects[0]);
-        this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-        this.userService.currentUserGroup(this.projects[0].id).subscribe((group) => {
-          this.userGroup = group;
-        });
         return;
       }
 
       const projectFromStorage = this.projectService.getProjectFromStorage();
       if (!!projectFromStorage) {
         for (const i in this.projects) {
-          if (this.compareProjectsEquality(this.projects[i], projectFromStorage)) {
+          if (this.projectService.compareProjectsEquality(this.projects[i], projectFromStorage)) {
             this.changeSelectedProject(this.projects[i]);
-            this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-            this.userService.currentUserGroup(this.projects[i].id).subscribe((group) => {
-              this.userGroup = group;
-            });
           }
         }
       }
@@ -121,9 +89,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
       select.value = previous;
     } else {
       for (const i in this.projects) {
-        if (this.compareProjectsEquality(this.projects[i], event.value)) {
+        if (this.projectService.compareProjectsEquality(this.projects[i], event.value)) {
           this.changeSelectedProject(this.projects[i]);
-          this.router.navigate(['/projects']);
         }
       }
     }
@@ -134,13 +101,20 @@ export class SidenavComponent implements OnInit, OnDestroy {
     const sub = modal.afterClosed().subscribe((added) => {
       if (added) {
         this.loadProjects();
-        this.router.navigate(['/projects']);
       }
       sub.unsubscribe();
     });
   }
 
-  setIconColor(url: string): boolean {
+  getLinkClass(url: string): string {
+    return this.checkUrl(url) ? 'active' : '';
+  }
+
+  getIconClass(url: string): string {
+    return this.checkUrl(url) ? 'white' : 'black';
+  }
+
+  checkUrl(url: string): boolean {
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;
     if (url === '/projects') {
@@ -152,31 +126,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
     }
   }
 
-  compareProjectsEquality(a: ProjectEntity, b: ProjectEntity): boolean {
-    return !!a && !!b && a.id === b.id;
-  }
-
   getRouterLink(target: string): string {
     const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
     return `/projects/${selectedProjectId}/${target}`;
-  }
-
-  getSelectedProjectStateIconClass(): string {
-    let iconClass = '';
-    if (!!this.selectedProject) {
-      switch (this.selectedProject.status) {
-        case 'Active':
-          iconClass = 'fa fa-circle green';
-          break;
-        case 'Inactive':
-          iconClass = 'fa fa-spin fa-circle-o-notch orange';
-          break;
-        case 'Terminating':
-          iconClass = 'fa fa-circle-o red';
-          break;
-      }
-    }
-    return iconClass;
   }
 
   ngOnDestroy(): void {
