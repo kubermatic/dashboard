@@ -9,7 +9,7 @@
     <kubermatic-notification></kubermatic-notification>
 
     <mat-sidenav-container>
-      <mat-sidenav #sidenav opened mode="side" *ngIf="auth.authenticated()">
+      <mat-sidenav #sidenav opened disableClose mode="side" *ngIf="auth.authenticated()">
         <kubermatic-sidenav></kubermatic-sidenav>
       </mat-sidenav>
 
