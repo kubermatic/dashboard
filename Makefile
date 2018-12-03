@@ -29,9 +29,6 @@ e2e:
 dist:
 	@$(CC) run build -prod
 
-format:
-	@$(CC) run tsfmt
-
 build: dist
 	CGO_ENABLED=0 go build -ldflags '-w -extldflags '-static'' -o dashboard-v2 .
 

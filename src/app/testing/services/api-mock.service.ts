@@ -28,8 +28,13 @@ export class ApiMockService {
   member: MemberEntity = fakeMember();
   members: MemberEntity[] = fakeMembers();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
+  isNodeDeploymentAPIAvailable_ = false;
 
   constructor() {}
+
+  isNodeDeploymentAPIAvailable(): boolean {
+    return this.isNodeDeploymentAPIAvailable_;
+  }
 
   getProjects(): Observable<ProjectEntity[]> {
     return of(this.projects);

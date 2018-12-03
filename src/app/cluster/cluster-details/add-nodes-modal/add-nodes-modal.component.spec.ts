@@ -33,17 +33,21 @@ import {asyncData} from '../../../testing/services/api-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {AddNodesModalComponent} from './add-nodes-modal.component';
+import {NodeService} from '../../../core/services/node/node.service';
 
 describe('AddNodesModalComponent', () => {
   let fixture: ComponentFixture<AddNodesModalComponent>;
   let component: AddNodesModalComponent;
   let activatedRoute: ActivatedRouteStub;
-  let createClusterNodeSpy: Spy;
+  let createNodesSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'createClusterNode']);
+    const apiMock = jasmine.createSpyObj(
+        'ApiService', ['getDigitaloceanSizes', 'createClusterNode', 'isNodeDeploymentAPIAvailable']);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    createClusterNodeSpy = apiMock.createClusterNode.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
+
+    const nodeMock = jasmine.createSpyObj('NodeService', ['createNodes']);
+    createNodesSpy = nodeMock.createNodes.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
 
     TestBed
         .configureTestingModule({
@@ -77,6 +81,7 @@ describe('AddNodesModalComponent', () => {
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
+            {provide: NodeService, useClass: nodeMock},
             NodeDataService,
             WizardService,
             GoogleAnalyticsService,
@@ -107,11 +112,10 @@ describe('AddNodesModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call createClusterNode method from the api', fakeAsync(() => {
+  it('should call createNodes method from the NodeService', fakeAsync(() => {
        component.addNodes();
        tick();
-
-       expect(createClusterNodeSpy.and.callThrough()).toHaveBeenCalled();
+       expect(createNodesSpy.and.callThrough()).toHaveBeenCalled();
      }));
 
   it('should render mat-dialog-actions', () => {
