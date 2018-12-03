@@ -37,7 +37,7 @@
       </div>
       <div class="row"
            *ngIf="clusterHealthStatus !== 'statusRunning' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
-        <mat-spinner color="accent" class="node-list-spinner" [diameter]="30"></mat-spinner>
+        <mat-spinner color="accent" class="km-node-deployment-spinner" [diameter]="30"></mat-spinner>
       </div>
     </ng-container>
 
