@@ -14,9 +14,7 @@ export class ProjectService {
   userGroup: string;
   userGroupConfig: UserGroupConfig;
 
-  constructor(private router: Router, private userService: UserService, private appConfigService: AppConfigService) {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-  }
+  constructor(private router: Router, private userService: UserService, private appConfigService: AppConfigService) {}
 
   changeSelectedProject(data: ProjectEntity): void {
     this._project.next(data);
@@ -71,6 +69,7 @@ export class ProjectService {
   }
 
   changeViewOnProjectChange(): void {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;
 
@@ -110,6 +109,7 @@ export class ProjectService {
   }
 
   isProjectSelected(viewName: string): string {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     if (this.project === undefined || this.project.status !== 'Active') {
       return 'disabled';
     } else {
