@@ -22,8 +22,6 @@ import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-clu
 import {EditSSHKeyDeleteConfirmationComponent} from './cluster-details/edit-sshkeys/edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
 import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
-import {NodeDeleteConfirmationComponent} from './cluster-details/node-delete-confirmation/node-delete-confirmation.component';
-import {NodeDeleteConfirmationService} from './cluster-details/node-delete-confirmation/node-delete-confirmation.service';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeDuplicateComponent} from './cluster-details/node-duplicate/node-duplicate.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
@@ -44,7 +42,6 @@ const components: any[] = [
 
 const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
-  NodeDeleteConfirmationComponent,
   NodeDuplicateComponent,
   ChangeClusterVersionComponent,
   AddNodesModalComponent,
@@ -81,9 +78,6 @@ const entryComponents: any[] = [
   ],
   entryComponents: [
     ...entryComponents,
-  ],
-  providers: [
-    NodeDeleteConfirmationService,
   ],
 })
 export class ClusterModule {

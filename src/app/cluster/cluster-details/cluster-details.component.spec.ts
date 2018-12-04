@@ -10,6 +10,7 @@ import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
 import {Auth} from '../../core/services/auth/auth.service';
 import {NodeService} from '../../core/services/node/node.service';
+import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fake';
@@ -81,7 +82,7 @@ describe('ClusterDetailsComponent', () => {
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: NodeService, useClass: NodeMockService},
             MatDialog,
-
+            GoogleAnalyticsService,
             InitialNodeDataService,
           ],
         })

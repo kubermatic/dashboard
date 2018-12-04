@@ -36,6 +36,10 @@ export class ApiMockService {
     return this.isNodeDeploymentAPIAvailable_;
   }
 
+  deleteClusterNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
+    return of(null);
+  }
+
   getProjects(): Observable<ProjectEntity[]> {
     return of(this.projects);
   }

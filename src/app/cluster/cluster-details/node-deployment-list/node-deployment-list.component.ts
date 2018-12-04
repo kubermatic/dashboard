@@ -1,8 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {MatDialog, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
 
 import {AppConfigService} from '../../../app-config.service';
-import {UserService} from '../../../core/services';
+import {ApiService, UserService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
@@ -15,6 +18,14 @@ import {UserGroupConfig} from '../../../shared/model/Config';
 })
 
 export class NodeDeploymentListComponent implements OnInit {
+  private static getHealthStatus_(color: string, status: string, className: string): object {
+    return {
+      color,
+      status,
+      class: className,
+    };
+  }
+
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodeDeployments: NodeDeploymentEntity[] = [];
@@ -24,11 +35,13 @@ export class NodeDeploymentListComponent implements OnInit {
   @Input() hasInitialNodes: boolean;
   @Output() deleteNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
 
-  displayedColumns: string[] = ['position', 'name', 'replicas', 'ver', 'created', 'status'];
+  displayedColumns: string[] = ['position', 'name', 'replicas', 'ver', 'created', 'status', 'actions'];
   userGroupConfig: UserGroupConfig;
   userGroup: string;
 
-  constructor(public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService) {}
+  constructor(
+      public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService,
+      private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -45,25 +58,19 @@ export class NodeDeploymentListComponent implements OnInit {
 
   getHealthStatus(nd: NodeDeploymentEntity, index: number): object {
     const green = 'fa fa-circle green';
-    const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
-    const healthStatus = {};
+    const orange = 'fa fa-spin fa-circle-o-notch orange';
+    let healthStatus = {};
 
     if (!!nd.deletionTimestamp) {
-      healthStatus['color'] = orangeSpinner;
-      healthStatus['status'] = 'Deleting';
-      healthStatus['class'] = 'statusDeleting';
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Deleting', 'statusDeleting');
+    } else if (!nd.status) {
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Pending', 'statusWaiting');
     } else if (nd.status.availableReplicas === nd.spec.replicas) {
-      healthStatus['color'] = green;
-      healthStatus['status'] = 'Running';
-      healthStatus['class'] = 'statusRunning';
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(green, 'Running', 'statusRunning');
     } else if (nd.status.availableReplicas > nd.spec.replicas) {
-      healthStatus['color'] = orangeSpinner;
-      healthStatus['status'] = 'Updating';
-      healthStatus['class'] = 'statusWaiting';
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Updating', 'statusWaiting');
     } else {
-      healthStatus['color'] = orangeSpinner;
-      healthStatus['status'] = 'Pending';
-      healthStatus['class'] = 'statusWaiting';
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Pending', 'statusWaiting');
     }
 
     if (index % 2 !== 0) {
@@ -71,5 +78,32 @@ export class NodeDeploymentListComponent implements OnInit {
     }
 
     return healthStatus;
+  }
+
+  showDeleteDialog(nd: NodeDeploymentEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Node Deployment',
+        message: `You are on the way to delete the ${nd.name} node deployment. It cannot be undone!`,
+        confirmLabel: 'Delete',
+        cancelLabel: 'Close',
+      },
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
+
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteClusterNodeDeployment(this.cluster.id, nd, this.datacenter.metadata.name, this.projectID)
+            .subscribe(() => {
+              NotificationActions.success('Success', 'Node removed successfully');
+              this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
+              this.deleteNodeDeployment.emit(nd);
+            });
+      }
+    });
   }
 }

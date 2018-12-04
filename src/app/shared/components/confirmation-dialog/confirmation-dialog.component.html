@@ -1,0 +1,25 @@
+<div class="km-dialog-box" (keydown.enter)="onEnterKeyDown()">
+  <mat-toolbar>
+    {{data.title}}
+    <button mat-icon-button mat-dialog-close>
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </button>
+  </mat-toolbar>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+      <p>{{data.message}}</p>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button mat-raised-button
+            [mat-dialog-close]="false">
+      {{data.cancelLabel}}
+    </button>
+    <button mat-raised-button
+            color="primary"
+            class="mat-primary"
+            [mat-dialog-close]="true">
+      {{data.confirmLabel}}
+    </button>
+  </mat-dialog-actions>
+</div>

@@ -9,8 +9,8 @@ import {MatAutocompleteModule, MatButtonModule, MatCardModule, MatCheckboxModule
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {CustomFormsModule} from 'ng2-validation';
 import {ClipboardModule} from 'ngx-clipboard';
-
 import {AddSshKeyModalComponent} from './components/add-ssh-key-modal/add-ssh-key-modal.component';
+import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 
 const modules: any[] = [
   CommonModule,
@@ -50,12 +50,17 @@ const modules: any[] = [
   ],
   declarations: [
     AddSshKeyModalComponent,
+    ConfirmationDialogComponent,
   ],
   exports: [
     ...modules,
     AddSshKeyModalComponent,
+    ConfirmationDialogComponent,
   ],
-  entryComponents: [AddSshKeyModalComponent],
+  entryComponents: [
+    AddSshKeyModalComponent,
+    ConfirmationDialogComponent,
+  ],
 })
 
 export class SharedModule {
