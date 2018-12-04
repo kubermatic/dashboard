@@ -41,13 +41,15 @@ export class ApiService {
     return client.get<any[]>(url, {headers})
         .toPromise()
         .then((response) => {
-          this.isNodeDeploymentAPIAvailable_ = true;
+          // TODO Enable after feature will be implemented:
+          //  this.isNodeDeploymentAPIAvailable_ = true;
           return response;
         })
         .catch((error: HttpErrorResponse) => {
-          // 404 and 405 are the status codes returned if endpoint path and method are not implemented.
-          // That's why if we encounter them we can assume that this functionality is not implemented on API side.
-          this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
+          // TODO Enable after feature will be implemented:
+          //  404 and 405 are the status codes returned if endpoint path and method are not implemented.
+          //  That's why if we encounter them we can assume that this functionality is not implemented on API side.
+          //  this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
           return error;
         });
   }
