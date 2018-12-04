@@ -25,3 +25,15 @@
 .km-node-deployment-spinner {
   margin: 20px auto !important;
 }
+
+.km-node-deployment-health {
+  text-align: center;
+
+  &.green {
+    color: $healthy-status-color;
+  }
+
+  &.orange {
+    color: $waiting-status-color;
+  }
+}
