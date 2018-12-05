@@ -10,6 +10,8 @@ install:
 	@$(CC) ci
 
 check: install
+	pwd
+	ls
 	@$(CC) run check
 
 run:
