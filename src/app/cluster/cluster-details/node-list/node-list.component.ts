@@ -1,12 +1,15 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, UserService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
-import {NodeDeleteConfirmationComponent} from '../node-delete-confirmation/node-delete-confirmation.component';
 import {NodeDuplicateComponent} from '../node-duplicate/node-duplicate.component';
 
 @Component({
@@ -33,23 +36,11 @@ export class NodeListComponent implements OnInit {
   config: MatDialogConfig = {
     disableClose: false,
     hasBackdrop: true,
-    backdropClass: '',
-    width: '',
-    height: '',
-    position: {
-      top: '',
-      bottom: '',
-      left: '',
-      right: '',
-    },
-    data: {
-      message: 'Jazzy jazz jazz',
-    },
   };
 
   constructor(
       public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService,
-      private readonly api: ApiService) {}
+      private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
@@ -60,16 +51,31 @@ export class NodeListComponent implements OnInit {
   }
 
   deleteNodeDialog(node: NodeEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Node',
+        message: `You are on the way to delete the ${node.name} node. It cannot be undone!`,
+        confirmLabel: 'Delete',
+        cancelLabel: 'Close',
+      },
+    };
+
     this.clickedDeleteNode[node.id] = true;
-    const dialogRef = this.dialog.open(NodeDeleteConfirmationComponent, this.config);
-    dialogRef.componentInstance.node = node;
-    dialogRef.componentInstance.cluster = this.cluster;
-    dialogRef.componentInstance.datacenter = this.datacenter;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
-    dialogRef.componentInstance.projectID = this.projectID;
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.deleteNode.emit(node);
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteClusterNode(this.cluster.id, node, this.datacenter.metadata.name, this.projectID)
+            .subscribe(() => {
+              NotificationActions.success('Success', 'Node removed successfully');
+              this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
+              this.deleteNode.emit(node);
+            });
+      }
     });
   }
 
