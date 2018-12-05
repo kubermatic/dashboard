@@ -146,7 +146,7 @@ pipeline:
     icon_url: https://avatars2.githubusercontent.com/u/2181346?v=4&s=200
     channel: dev
     template: >
-        ${DRONE_COMMIT_AUTHOR} deployed a new Dashboard to dev. :heart:
+        ${DRONE_COMMIT_AUTHOR} deployed a new Dashboard to dev & cloud. :heart:
     when:
       status: [ success ]
       branch: master
