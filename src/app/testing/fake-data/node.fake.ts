@@ -1,3 +1,4 @@
+import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
@@ -94,6 +95,82 @@ export function nodeFake(): NodeEntity {
       errorMessage: null,
     },
   };
+}
+
+export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
+  return [
+    {
+      id: 'machine-deployment-324343dfs-sdfsd',
+      name: 'kubermatic-machine-deployment-dasd32',
+      creationTimestamp: new Date(),
+      spec: {
+        replicas: 3,
+        template: {
+          cloud: {
+            digitalocean: {
+              size: '4gb',
+              backups: null,
+              ipv6: null,
+              monitoring: null,
+              tags: null,
+            },
+            aws: null,
+            openstack: null,
+            vsphere: null,
+            hetzner: null,
+            azure: null,
+          },
+          operatingSystem: {
+            ubuntu: {
+              distUpgradeOnBoot: false,
+            },
+            centos: null,
+            containerLinux: null,
+          },
+          versions: {
+            kubelet: null,
+          },
+        }
+      },
+      status: {
+        availableReplicas: 3,
+      }
+    },
+    {
+      id: 'machine-deployment-r32234v23-333rg',
+      name: 'kubermatic-machine-deployment-rw4tfr',
+      creationTimestamp: new Date(),
+      spec: {
+        replicas: 3,
+        template: {
+          cloud: {
+            digitalocean: {
+              size: '2gb',
+              backups: null,
+              ipv6: null,
+              monitoring: null,
+              tags: null,
+            },
+            aws: null,
+            openstack: null,
+            vsphere: null,
+            hetzner: null,
+            azure: null,
+          },
+          operatingSystem: {
+            ubuntu: {
+              distUpgradeOnBoot: false,
+            },
+            centos: null,
+            containerLinux: null,
+          },
+          versions: {
+            kubelet: null,
+          },
+        }
+      }
+    }
+  ];
 }
 
 export function nodesFake(): NodeEntity[] {

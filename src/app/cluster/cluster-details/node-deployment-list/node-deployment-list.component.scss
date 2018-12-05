@@ -37,3 +37,11 @@
     color: $waiting-status-color;
   }
 }
+
+.km-node-deployment-action {
+  color: $text-color !important;
+
+  i {
+    font-size: 18px;
+  }
+}

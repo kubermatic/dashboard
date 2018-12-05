@@ -58,15 +58,21 @@ export class ApiService {
     return this.isNodeDeploymentAPIAvailable_;
   }
 
-  createClusterNodeDeployment(cluster: ClusterEntity, node: NodeDeploymentEntity, dc: string, projectID: string):
+  createClusterNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):
       Observable<NodeDeploymentEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
-    return this.http.post<NodeDeploymentEntity>(url, node, {headers: this.headers});
+    return this.http.post<NodeDeploymentEntity>(url, nd, {headers: this.headers});
   }
 
   getClusterNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
     return this.http.get<NodeDeploymentEntity[]>(url, {headers: this.headers});
+  }
+
+  deleteClusterNodeDeployment(cluster: string, nd: NodeDeploymentEntity, dc: string, projectID: string):
+      Observable<any> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${nd.id}`;
+    return this.http.delete(url, {headers: this.headers});
   }
 
   getProjects(): Observable<ProjectEntity[]> {
