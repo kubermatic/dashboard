@@ -5,6 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {WizardService} from '../../core/services';
 import {MachineNetworksModule} from '../../machine-networks/machine-networks.module';
 import {SharedModule} from '../../shared/shared.module';
+import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {SetMachineNetworksComponent} from './set-machine-networks.component';
 
 const modules: any[] = [
@@ -51,8 +52,8 @@ describe('SetMachineNetworksComponent', () => {
           gateway: '',
         }],
       },
-
     };
+    component.nodeData = nodeDataFake();
     fixture.detectChanges();
   });
 
