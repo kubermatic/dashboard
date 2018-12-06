@@ -1,6 +1,6 @@
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material';
-import {BrowserModule, By} from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
@@ -11,19 +11,13 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {nodeFake, nodesFake} from '../../../testing/fake-data/node.fake';
+import {nodeDeploymentsFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 
-import {NodeListComponent} from './node-list.component';
-
-class MatDialogMock {
-  open() {
-    return {afterClosed: () => of([true])};
-  }
-}
+import {NodeDeploymentListComponent} from './node-deployment-list.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -32,9 +26,15 @@ const modules: any[] = [
   SharedModule,
 ];
 
-describe('NodeComponent', () => {
-  let fixture: ComponentFixture<NodeListComponent>;
-  let component: NodeListComponent;
+class MatDialogMock {
+  open() {
+    return {afterClosed: () => of([true])};
+  }
+}
+
+describe('NodeDeploymentListComponent', () => {
+  let fixture: ComponentFixture<NodeDeploymentListComponent>;
+  let component: NodeDeploymentListComponent;
   let apiService: ApiService;
 
   beforeEach(async(() => {
@@ -44,7 +44,7 @@ describe('NodeComponent', () => {
             ...modules,
           ],
           declarations: [
-            NodeListComponent,
+            NodeDeploymentListComponent,
           ],
           providers: [
             {provide: ApiService, useClass: ApiMockService},
@@ -58,7 +58,7 @@ describe('NodeComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NodeListComponent);
+    fixture = TestBed.createComponent(NodeDeploymentListComponent);
     component = fixture.componentInstance;
     apiService = fixture.debugElement.injector.get(ApiService);
   });
@@ -67,26 +67,15 @@ describe('NodeComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('should hide remove button', () => {
-    component.nodes = nodesFake();
-    component.cluster = fakeDigitaloceanCluster();
-    fixture.detectChanges();
-
-    const deRemoveButtons = fixture.debugElement.queryAll(By.css('.km-btn-remove-node-wrapper'));
-
-    expect(deRemoveButtons[0]).not.toBeNull();
-    expect(deRemoveButtons.length).toBe(2, 'should display 2 remove button 2');
-  });
-
-  it('should return correct css-classes', () => {
+  it('should return correct CSS classes', () => {
     const green = 'fa fa-circle green';
     const orange = 'fa fa-spin fa-circle-o-notch orange';
 
-    const nodes = nodesFake();
+    const nds = nodeDeploymentsFake();
 
     component.cluster = fakeDigitaloceanCluster();
 
-    expect(component.getNodeHealthStatus(nodes[0], 0))
+    expect(component.getHealthStatus(nds[0], 0))
         .toEqual(
             {
               color: green,
@@ -94,7 +83,7 @@ describe('NodeComponent', () => {
               class: 'statusRunning',
             },
             'should return classes for green icon');
-    expect(component.getNodeHealthStatus(nodes[1], 0))
+    expect(component.getHealthStatus(nds[1], 0))
         .toEqual(
             {
               color: orange,
@@ -104,15 +93,15 @@ describe('NodeComponent', () => {
             'should return classes for orange icon');
   });
 
-  it('should call deleteClusterNode', fakeAsync(() => {
+  it('should call deleteClusterNodeDeployment', fakeAsync(() => {
        component.cluster = fakeDigitaloceanCluster();
        component.datacenter = fakeDigitaloceanDatacenter();
        component.projectID = fakeProject().id;
 
        fixture.detectChanges();
-       const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(of(null));
+       const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNodeDeployment').and.returnValue(of(null));
 
-       component.deleteNodeDialog(nodeFake());
+       component.showDeleteDialog(nodeDeploymentsFake()[0]);
        tick();
 
        expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);

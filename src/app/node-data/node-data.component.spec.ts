@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
-import {AddNodeService} from '../core/services/add-node/add-node.service';
+import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {SharedModule} from '../shared/shared.module';
 import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
 import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
@@ -29,7 +29,8 @@ describe('NodeDataComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', [
-      'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard'
+      'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard',
+      'isNodeDeploymentAPIAvailable'
     ]);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
@@ -56,7 +57,7 @@ describe('NodeDataComponent', () => {
             AzureNodeDataComponent,
           ],
           providers: [
-            AddNodeService,
+            NodeDataService,
             WizardService,
             {provide: ApiService, useValue: apiMock},
             {provide: DatacenterService, useClass: DatacenterMockService},

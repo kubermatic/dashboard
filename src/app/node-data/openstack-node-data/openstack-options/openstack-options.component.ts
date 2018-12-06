@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {DatacenterService} from '../../../core/services';
-import {AddNodeService} from '../../../core/services/add-node/add-node.service';
+import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
@@ -18,7 +18,7 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
   osOptionsForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: AddNodeService, private dcService: DatacenterService) {}
+  constructor(private addNodeService: NodeDataService, private dcService: DatacenterService) {}
 
   ngOnInit(): void {
     this.osOptionsForm = new FormGroup({

@@ -2,10 +2,12 @@ import {HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
+
 import {environment} from '../../../../environments/environment';
 import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
+import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
@@ -39,13 +41,15 @@ export class ApiService {
     return client.get<any[]>(url, {headers})
         .toPromise()
         .then((response) => {
-          this.isNodeDeploymentAPIAvailable_ = true;
+          // TODO Enable after feature will be implemented:
+          //  this.isNodeDeploymentAPIAvailable_ = true;
           return response;
         })
         .catch((error: HttpErrorResponse) => {
-          // 404 and 405 are the status codes returned if endpoint path and method are not implemented.
-          // That's why if we encounter them we can assume that this functionality is not implemented on API side.
-          this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
+          // TODO Enable after feature will be implemented:
+          //  404 and 405 are the status codes returned if endpoint path and method are not implemented.
+          //  That's why if we encounter them we can assume that this functionality is not implemented on API side.
+          //  this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
           return error;
         });
   }
@@ -54,9 +58,21 @@ export class ApiService {
     return this.isNodeDeploymentAPIAvailable_;
   }
 
-  getClusterNodeDeployments(cluster: string, dc: string, projectID: string): Observable<any[]> {
+  createClusterNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):
+      Observable<NodeDeploymentEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
+    return this.http.post<NodeDeploymentEntity>(url, nd, {headers: this.headers});
+  }
+
+  getClusterNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
-    return this.http.get<any[]>(url, {headers: this.headers});
+    return this.http.get<NodeDeploymentEntity[]>(url, {headers: this.headers});
+  }
+
+  deleteClusterNodeDeployment(cluster: string, nd: NodeDeploymentEntity, dc: string, projectID: string):
+      Observable<any> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${nd.id}`;
+    return this.http.delete(url, {headers: this.headers});
   }
 
   getProjects(): Observable<ProjectEntity[]> {

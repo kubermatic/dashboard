@@ -1,0 +1,88 @@
+<mat-card class="blue">
+  <mat-card-content>
+    <table class="km-node-deployment-table" mat-table [dataSource]="getDataSource()">
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell">#</th>
+        <td mat-cell *matCellDef="let i = index">{{i + 1}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell">Name</th>
+        <td mat-cell *matCellDef="let element">{{element.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="replicas">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell">
+          <span>Replicas&nbsp;</span>
+          <span matTooltip="Number of available machines of desired machines from the template. A machine is considered as available when it is ready for at least 'minReadySeconds'.">
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+          </span>
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <span>{{!!element.status?.availableReplicas ? element.status.availableReplicas : 0}}/{{element.spec.replicas}}&nbsp;</span>
+          <span *ngIf="element.status?.availableReplicas > element.spec.replicas"
+                matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating.">
+            <i class="fa fa-question-circle" aria-hidden="true"></i>
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ver">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell">Kubelet Version</th>
+        <td mat-cell *matCellDef="let element">v{{element.spec.template.versions?.kubelet}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="created">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell">Created</th>
+        <td mat-cell *matCellDef="let element">{{element.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell">Status</th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <i [matTooltip]="getHealthStatus(element, i).status"
+             [ngClass]="getHealthStatus(element, i).color"
+             class="km-node-deployment-health"></i>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell"></th>
+        <td mat-cell *matCellDef="let element">
+          <ng-container [ngSwitch]="!!element.deletionTimestamp">
+            <ng-container *ngSwitchCase="true">
+              <mat-spinner [diameter]="30" class="km-spinner" color="accent"></mat-spinner>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="false">
+              <button mat-icon-button
+                      class="km-node-deployment-action"
+                      matTooltip="Delete Node Deployment"
+                      (click)="showDeleteDialog(element)"
+                      [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
+                <i class="fa fa-trash-o"
+                   aria-hidden="true"
+                   [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'disabled' : ''"></i>
+              </button>
+            </ng-container>
+          </ng-container>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row class="km-header-row" *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">
+      <div class="row no-item"
+           *ngIf="clusterHealthStatus === 'statusRunning' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">
+        No Node Deployments available.
+      </div>
+      <div class="row"
+           *ngIf="clusterHealthStatus !== 'statusRunning' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+        <mat-spinner color="accent" class="km-node-deployment-spinner" [diameter]="30"></mat-spinner>
+      </div>
+    </ng-container>
+
+  </mat-card-content>
+</mat-card>

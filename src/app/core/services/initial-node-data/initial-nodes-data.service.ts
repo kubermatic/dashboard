@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {NodeSpec} from '../../../shared/entity/NodeEntity';
 
-class InitialNodeData {
+export class InitialNodeData {
   cluster: string;
   nodeCount: number;
   nodeSpec: NodeSpec;

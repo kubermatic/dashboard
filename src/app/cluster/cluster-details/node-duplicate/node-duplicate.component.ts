@@ -12,7 +12,6 @@ import {NodeEntity} from '../../../shared/entity/NodeEntity';
   templateUrl: './node-duplicate.component.html',
   styleUrls: ['./node-duplicate.component.scss'],
 })
-
 export class NodeDuplicateComponent implements OnInit {
   @Input() node: NodeEntity;
   @Input() cluster: ClusterEntity;
@@ -37,11 +36,10 @@ export class NodeDuplicateComponent implements OnInit {
       status: {},
     };
 
-    this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name, this.projectID)
-        .subscribe((result) => {
-          NotificationActions.success('Success', `Duplicate node successfully`);
-          this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDuplicated');
-        });
+    this.api.createClusterNode(this.cluster, nodeSpec, this.datacenter.metadata.name, this.projectID).subscribe(() => {
+      NotificationActions.success('Success', `Node duplicated successfully`);
+      this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDuplicated');
+    });
     this.dialogRef.close(true);
   }
 }

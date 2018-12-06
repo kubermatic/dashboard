@@ -1,14 +1,14 @@
 <ng-container *ngIf="isLoaded()">
   <div fxLayout class="cluster-detail-actions">
     <div fxFlex="100%" align="right">
-      <button class="add-node-btn"
-              mat-raised-button color="primary"
+      <button mat-raised-button
+              color="primary"
               (click)="addNode()"
               [disabled]="!isClusterRunning"
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
               [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.create">
-          <i class="fa fa-plus" style="margin-right: 5px;" aria-hidden="true"></i>
-          Add Node
+        <i class="fa fa-plus km-action-button-icon" aria-hidden="true"></i>
+        {{getAddNodesLabel()}}
       </button>
       <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'statusRunning'">
         Connect
@@ -18,7 +18,7 @@
       </button>
       <a class="download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
       <button mat-button (click)="deleteClusterDialog()" mat-raised-button [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
-        <i class="fa fa-trash-o" aria-hidden="true" style="margin-right: 5px;"></i>
+        <i class="fa fa-trash-o km-action-button-icon" aria-hidden="true"></i>
         Delete Cluster
       </button>
     </div>
@@ -31,11 +31,6 @@
         <kubermatic-cluster-health-status [cluster]="cluster" [datacenter]="datacenter" [projectID]="projectID"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
-    <!-- <mat-card-subtitle *ngIf="cluster.spec.pause" fxLayout >
-      <div fxFlex>
-        <p class="pauseReason">{{cluster.spec.pauseReason}}</p>
-      </div>
-    </mat-card-subtitle> -->
     <mat-card-content fxLayout class="row">
       <div fxFlex="20%">
         <strong>Master Version:</strong>
@@ -58,7 +53,7 @@
         <div fxFlex="30%">Node Region</div>
         <div fxFlex="25%">
           SSH keys
-          <span class="km-card-ssh-tooltip" matTooltip="You can login into the nodes with the user 'root', 'ubuntu' or 'core'.">
+          <span matTooltip="You can login into the nodes with the user 'root', 'ubuntu' or 'core'.">
             <i class="fa fa-question-circle" aria-hidden="true"></i>
           </span>
         </div>
@@ -114,7 +109,6 @@
                   <span class="iconArrowUp"></span>
                 </div>
               </div>
-              <!-- <div fxFlex="3%"></div>-->
             </ul>
           </ng-container>
         </div>
@@ -122,7 +116,29 @@
     </mat-card-content>
   </mat-card>
 
-  <kubermatic-node-list [cluster]="cluster" [nodes]="nodes" (deleteNode)="reloadClusterNodes()" [datacenter]="datacenter" [projectID]="projectID" [clusterHealthStatus]="clusterHealthClass" [isClusterRunning]="isClusterRunning" [hasInitialNodes]="hasInitialNodes"></kubermatic-node-list>
+  <div *ngIf="isNodeDeploymentAPIAvailable">
+    <div class="km-pre-card-title">Node Deployments</div>
+    <kubermatic-node-deployment-list [cluster]="cluster"
+                                     [nodeDeployments]="nodeDeployments"
+                                     (deleteNodeDeployment)="reloadClusterNodes()"
+                                     [datacenter]="datacenter"
+                                     [projectID]="projectID"
+                                     [clusterHealthStatus]="clusterHealthClass"
+                                     [isClusterRunning]="isClusterRunning"
+                                     [hasInitialNodes]="hasInitialNodes"></kubermatic-node-deployment-list>
+  </div>
+
+  <div>
+    <div class="km-pre-card-title">Nodes</div>
+    <kubermatic-node-list [cluster]="cluster"
+                          [nodes]="nodes"
+                          (deleteNode)="reloadClusterNodes()"
+                          [datacenter]="datacenter"
+                          [projectID]="projectID"
+                          [clusterHealthStatus]="clusterHealthClass"
+                          [isClusterRunning]="isClusterRunning"
+                          [hasInitialNodes]="hasInitialNodes"></kubermatic-node-list>
+  </div>
 
   <div style="margin-bottom: 70px;"></div>
 </ng-container>

@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, ProjectService} from '../core/services';
-import {AddNodeService} from '../core/services/add-node/add-node.service';
+import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {StepsService} from '../core/services/wizard/steps.service';
 import {WizardService} from '../core/services/wizard/wizard.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
@@ -107,7 +107,7 @@ describe('WizardComponent', () => {
             MatDialog,
             InitialNodeDataService,
             WizardService,
-            AddNodeService,
+            NodeDataService,
             StepsService,
             ClusterNameGenerator,
             GoogleAnalyticsService,
