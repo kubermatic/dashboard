@@ -270,12 +270,17 @@
           <div class="node-settings" fxLayout>
 
             <ng-container *ngIf="!cluster.spec.cloud.bringyourown">
-              <div class="km-card-list-content" fxFlex="50%">
-                <div fxFlex="50%" class="km-card-list-key">
-                  Node Count
+              <div class="km-card-list-content" fxFlex="50%" fxLayout="column">
+                <div fxFlex="100%">
+                  <div fxFlex="50%" class="km-card-list-key">
+                    Node Count
+                  </div>
+                  <div fxFlex="50%" [ngClass]="noMoreIpsLeft ? 'km-warning' : '' ">
+                  {{ nodeData.count }}
+                  </div>
                 </div>
-                <div fxFlex="50%">
-                {{ nodeData.count }}
+                <div fxFlex="100%">
+                  <p *ngIf="noMoreIpsLeft" class="km-warning">Not enough IPs left. Reduce number of nodes or add more machine networks.</p>
                 </div>
               </div>
             </ng-container>
