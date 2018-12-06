@@ -3,6 +3,7 @@ import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
 import {WizardService} from '../core/services';
+import {ClusterEntity} from '../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-machine-networks',
@@ -11,7 +12,7 @@ import {WizardService} from '../core/services';
 })
 
 export class MachineNetworksComponent implements OnInit, OnDestroy {
-  @Input() cluster: any;
+  @Input() cluster: ClusterEntity;
   @Input() width: number;
   @Input() isWizard: boolean;
   machineNetworksForm: FormGroup;

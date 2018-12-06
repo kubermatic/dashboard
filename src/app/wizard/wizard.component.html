@@ -4,9 +4,6 @@
   <!-- Cluster Spec -->
   <kubermatic-set-cluster-spec [cluster]="cluster" *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
 
-  <!-- Machine Networks -->
-  <kubermatic-set-machine-networks [cluster]="cluster" *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
-
   <!-- Cluster Provider -->
   <kubermatic-set-provider [cluster]="cluster" *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
 
@@ -15,6 +12,9 @@
 
   <!-- Provider Settings -->
   <kubermatic-set-settings [cluster]="cluster" [clusterSSHKeys]="clusterSSHKeys" [nodeData]="addNodeData" *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
+
+  <!-- Machine Networks -->
+  <kubermatic-set-machine-networks [cluster]="cluster" [nodeData]="addNodeData" *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
 
   <!-- Provider Summary -->
   <kubermatic-summary *ngIf="currentStep.name === 'summary'" [clusterSSHKeys]="clusterSSHKeys"

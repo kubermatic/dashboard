@@ -225,15 +225,22 @@ export class WizardComponent implements OnInit, OnDestroy {
     if (this.clusterProviderFormData.provider === NodeProvider.BRINGYOUROWN) {
       this.steps = [
         setClusterSpecStep,
-        setMachinenNetworksStep,
         setProviderStep,
         setDatacenterStep,
+        summary,
+      ];
+    } else if (this.clusterProviderFormData.provider === NodeProvider.VSPHERE) {
+      this.steps = [
+        setClusterSpecStep,
+        setProviderStep,
+        setDatacenterStep,
+        setProviderSettingsStep,
+        setMachinenNetworksStep,
         summary,
       ];
     } else {
       this.steps = [
         setClusterSpecStep,
-        setMachinenNetworksStep,
         setProviderStep,
         setDatacenterStep,
         setProviderSettingsStep,

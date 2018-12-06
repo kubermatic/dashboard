@@ -5,6 +5,7 @@ import {debounceTime} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {MachineNetworkForm} from '../../shared/model/ClusterForm';
+import {NodeData} from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-set-machine-networks',
@@ -14,6 +15,7 @@ import {MachineNetworkForm} from '../../shared/model/ClusterForm';
 
 export class SetMachineNetworksComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
+  @Input() nodeData: NodeData;
   setMachineNetworkForm: FormGroup;
   machineNetworkFormData: MachineNetworkForm[] = [];
   private subscriptions: Subscription[] = [];
@@ -27,6 +29,10 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
 
     if (!!this.cluster.spec.machineNetworks && this.cluster.spec.machineNetworks.length > 0) {
       this.setMachineNetworkForm.controls.checkMachineNetworks.setValue(true);
+    }
+
+    if (!this.nodeData.spec.operatingSystem.containerLinux) {
+      this.setMachineNetworkForm.controls.checkMachineNetworks.disable();
     }
 
     this.subscriptions.push(this.setMachineNetworkForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
