@@ -20,6 +20,7 @@ export class AddNodesModalComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
+  @Input() existingNodesCount: number;
   nodeDC: DataCenterEntity;
   addNodesData: NodeData = this.getInitialNodeData();
   private subscriptions: Subscription[] = [];

@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
-import {MatTabsModule} from '@angular/material';
 
+import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
 import {NodeDataModule} from '../node-data/node-data.module';
 import {SharedModule} from '../shared/shared.module';
 
@@ -9,6 +9,7 @@ import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-ve
 import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
+import {AddMachineNetworkComponent} from './cluster-details/cluster-secrets/add-machine-network/add-machine-network.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
 import {RevokeAdminTokenComponent} from './cluster-details/cluster-secrets/revoke-admin-token/revoke-admin-token.component';
 import {AWSProviderSettingsComponent} from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
@@ -22,6 +23,7 @@ import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-clu
 import {EditSSHKeyDeleteConfirmationComponent} from './cluster-details/edit-sshkeys/edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
 import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
+
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeDuplicateComponent} from './cluster-details/node-duplicate/node-duplicate.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
@@ -42,12 +44,14 @@ const components: any[] = [
 
 const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
+
   NodeDuplicateComponent,
   ChangeClusterVersionComponent,
   AddNodesModalComponent,
   ClusterSecretsComponent,
   ClusterConnectComponent,
   RevokeAdminTokenComponent,
+  AddMachineNetworkComponent,
   EditProviderSettingsComponent,
   AWSProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
@@ -66,7 +70,8 @@ const entryComponents: any[] = [
   imports: [
     SharedModule,
     ClusterRoutingModule,
-    MatTabsModule,
+
+    MachineNetworksModule,
     NodeDataModule,
   ],
   declarations: [
@@ -79,6 +84,7 @@ const entryComponents: any[] = [
   entryComponents: [
     ...entryComponents,
   ],
+
 })
 export class ClusterModule {
 }

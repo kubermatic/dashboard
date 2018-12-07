@@ -1,6 +1,9 @@
 <form [formGroup]="nodeForm" fxLayout="column">
   <mat-form-field fxFlex>
+
     <input matInput formControlName="count" type="number" min="1" autocomplete="off" [placeholder]="getCountPlaceholder()">
+    <mat-error *ngIf="nodeForm.controls.count.hasError('required')">Number of nodes is required.</mat-error>
+    <mat-error *ngIf="nodeForm.controls.count.hasError('ipsMissing')">Not enough IPs left. Reduce number of nodes or add more machine networks</mat-error>
   </mat-form-field>
 
   <kubermatic-aws-node-data *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-aws-node-data>

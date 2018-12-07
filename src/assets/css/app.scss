@@ -747,7 +747,8 @@ mat-card-header {
 }
 
 // cluster details: edit provider settings
-.km-provider-edit-settings {
+.km-provider-edit-settings,
+.km-machine-networks-settings {
   .mat-menu-content {
     padding: 0 !important;
   }
@@ -883,4 +884,8 @@ mat-list-item.disabled {
   color: $text-color;
   font-size: 18px;
   font-weight: 500;
+}
+
+.km-warning {
+  color: $warning !important;
 }

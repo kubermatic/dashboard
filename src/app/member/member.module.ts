@@ -1,5 +1,4 @@
 import {NgModule} from '@angular/core';
-import {MatTabsModule} from '@angular/material';
 import {SharedModule} from '../shared/shared.module';
 import {MemberDeleteConfirmationComponent} from './member-delete-confirmation/member-delete-confirmation.component';
 import {MemberItemComponent} from './member-item/member-item.component';
@@ -15,7 +14,6 @@ const components: any[] = [
 @NgModule({
   imports: [
     SharedModule,
-    MatTabsModule,
     MemberRoutingModule,
   ],
   declarations: [

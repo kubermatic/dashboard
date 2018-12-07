@@ -1,0 +1,17 @@
+<div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
+  <mat-card class="set-machine-networks" fxFlex="100%">
+    <mat-card-header class="km-machine-networks">
+      <mat-card-title>
+        <form [formGroup]="setMachineNetworkForm">
+          <h4>
+            <mat-checkbox id="configure-machine-networks" formControlName="checkMachineNetworks">Configure Machine Networks</mat-checkbox>
+          </h4>
+          <p *ngIf="!nodeData.spec.operatingSystem.containerLinux" class="km-warning">Please note: Machine Networks are only available for Container Linux.</p>
+        </form>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content *ngIf="!!setMachineNetworkForm.controls.checkMachineNetworks.value">
+      <kubermatic-machine-networks [cluster]="cluster" [width]="50" [isWizard]="true"></kubermatic-machine-networks>
+    </mat-card-content>
+  </mat-card>
+</div>

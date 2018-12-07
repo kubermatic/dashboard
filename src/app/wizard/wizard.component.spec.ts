@@ -10,6 +10,7 @@ import {StepsService} from '../core/services/wizard/steps.service';
 import {WizardService} from '../core/services/wizard/wizard.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
+import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
 import {AWSNodeDataComponent} from '../node-data/aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from '../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../node-data/digitalocean-node-data/digitalocean-node-data.component';
@@ -31,6 +32,7 @@ import {ProjectMockService} from '../testing/services/project-mock.service';
 import {ProgressComponent} from './progress/progress.component';
 import {SetClusterSpecComponent} from './set-cluster-spec/set-cluster-spec.component';
 import {SetDatacenterComponent} from './set-datacenter/set-datacenter.component';
+import {SetMachineNetworksComponent} from './set-machine-networks/set-machine-networks.component';
 import {SetProviderComponent} from './set-provider/set-provider.component';
 import {AWSClusterSettingsComponent} from './set-settings/provider-settings/aws/aws.component';
 import {AzureClusterSettingsComponent} from './set-settings/provider-settings/azure/azure.component';
@@ -44,7 +46,6 @@ import {SetSettingsComponent} from './set-settings/set-settings.component';
 import {ClusterSSHKeysComponent} from './set-settings/ssh-keys/cluster-ssh-keys.component';
 import {SummaryComponent} from './summary/summary.component';
 import {WizardComponent} from './wizard.component';
-
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
   let component: WizardComponent;
@@ -65,6 +66,7 @@ describe('WizardComponent', () => {
             SharedModule,
             MatButtonToggleModule,
             MatTabsModule,
+            MachineNetworksModule,
           ],
           declarations: [
             WizardComponent,
@@ -90,6 +92,7 @@ describe('WizardComponent', () => {
             VSphereOptionsComponent,
             AzureNodeDataComponent,
             SetClusterSpecComponent,
+            SetMachineNetworksComponent,
             SetProviderComponent,
             SetDatacenterComponent,
             SummaryComponent,

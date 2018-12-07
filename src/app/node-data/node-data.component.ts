@@ -1,3 +1,4 @@
+
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
@@ -6,6 +7,7 @@ import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
+import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
 
 @Component({
   selector: 'kubermatic-node-data',
@@ -13,10 +15,11 @@ import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
   styleUrls: ['./node-data.component.scss'],
 })
 
+
 export class NodeDataComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() nodeData: NodeData;
-
+  @Input() existingNodesCount: number;
   projectId: string;
   seedDCName: string;
   nodeForm: FormGroup;
@@ -24,7 +27,9 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   hideOptional = true;
   isNodeDeploymentAPIAvailable = false;
   private subscriptions: Subscription[] = [];
+
   private providerData: NodeProviderData = {valid: false};
+
 
   constructor(
       private addNodeService: NodeDataService, private wizardService: WizardService, private _dc: DatacenterService,
@@ -32,13 +37,18 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.nodeForm = new FormGroup({
-      count: new FormControl(this.nodeData.count, [Validators.required, Validators.min(1)]),
+      count: new FormControl(
+          this.nodeData.count,
+          [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
       operatingSystem: new FormControl(Object.keys(this.nodeData.spec.operatingSystem)[0], Validators.required),
     });
+
+    this.nodeForm.controls.count.markAsTouched();
 
     let distUpgradeOnBootUbuntu = false;
     let distUpgradeOnBootCentos = false;
     let disableAutoUpdate = false;
+
     if (!!this.nodeData.spec.operatingSystem.ubuntu) {
       distUpgradeOnBootUbuntu = this.nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
     } else if (!!this.nodeData.spec.operatingSystem.centos) {
@@ -53,11 +63,13 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
+
     this.subscriptions.push(this.nodeForm.valueChanges.subscribe(() => {
       this.operatingSystemForm.setValue(
           {distUpgradeOnBootUbuntu: false, distUpgradeOnBootCentos: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
+
 
     this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
