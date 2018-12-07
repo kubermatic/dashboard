@@ -16,11 +16,12 @@
   flex-wrap: wrap;
 }
 
-.km-machine-networks-firm-inner{
+.km-machine-networks-firm-inner {
   &.withPadding {
     padding-right: 30px;
+
     &:nth-child(2n+2) {
-      padding-right: 0px;
+      padding-right: 0;
       padding-left: 20px;
     }
   }

@@ -744,7 +744,8 @@ button.close {
 }
 
 // cluster details: edit provider settings
-.km-provider-edit-settings, .km-machine-networks-settings {
+.km-provider-edit-settings,
+.km-machine-networks-settings {
   .mat-menu-content {
     padding: 0 !important;
   }
@@ -857,7 +858,6 @@ mat-list-item.disabled {
   }
 }
 
-
 .km-action-button-icon {
   margin-right: 5px;
 }
@@ -868,6 +868,7 @@ mat-list-item.disabled {
   font-size: 18px;
   font-weight: 500;
 }
+
 .km-warning {
   color: $warning !important;
 }
