@@ -133,7 +133,14 @@ export class CloudSpec {
 
 export class ClusterSpec {
   cloud: CloudSpec;
+  machineNetworks?: MachineNetwork[];
   version?: string;
+}
+
+export class MachineNetwork {
+  cidr: string;
+  dnsServers: string[];
+  gateway: string;
 }
 
 export class Certificate {

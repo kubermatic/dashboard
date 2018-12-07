@@ -1,10 +1,11 @@
 import {NgModule} from '@angular/core';
-import {MatButtonToggleModule, MatTabsModule} from '@angular/material';
+import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
 import {NodeDataModule} from '../node-data/node-data.module';
 import {SharedModule} from '../shared/shared.module';
 import {ProgressComponent} from './progress/progress.component';
 import {SetClusterSpecComponent} from './set-cluster-spec/set-cluster-spec.component';
 import {SetDatacenterComponent} from './set-datacenter/set-datacenter.component';
+import {SetMachineNetworksComponent} from './set-machine-networks/set-machine-networks.component';
 import {SetProviderComponent} from './set-provider/set-provider.component';
 import {AWSClusterSettingsComponent} from './set-settings/provider-settings/aws/aws.component';
 import {AzureClusterSettingsComponent} from './set-settings/provider-settings/azure/azure.component';
@@ -24,6 +25,7 @@ const components: any[] = [
   WizardComponent,
   ProgressComponent,
   SetClusterSpecComponent,
+  SetMachineNetworksComponent,
   SetDatacenterComponent,
   SetProviderComponent,
   SetSettingsComponent,
@@ -43,9 +45,8 @@ const components: any[] = [
   imports: [
     SharedModule,
     WizardRoutingModule,
-    MatButtonToggleModule,
-    MatTabsModule,
     NodeDataModule,
+    MachineNetworksModule,
   ],
   declarations: [
     ...components,

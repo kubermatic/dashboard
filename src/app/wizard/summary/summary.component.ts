@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
+import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 
@@ -15,18 +16,25 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() providerFormData: ClusterProviderForm;
   @Input() datacenterFormData: ClusterDatacenterForm;
+  noMoreIpsLeft = false;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (!!this.cluster.spec.machineNetworks) {
+      this.noMoreIpsLeft = this.noIpsLeft(this.cluster, this.nodeData.count);
+    }
+  }
 
   ngOnDestroy(): void {}
 
   getOperatingSystem(): string {
     if (this.nodeData.spec.operatingSystem.ubuntu) {
       return 'Ubuntu';
+
     } else if (this.nodeData.spec.operatingSystem.centos) {
       return 'CentOS';
+
     } else if (this.nodeData.spec.operatingSystem.containerLinux) {
       return 'Container Linux';
     } else {
@@ -56,5 +64,19 @@ export class SummaryComponent implements OnInit, OnDestroy {
       }
     }
     return tagsValue;
+  }
+
+  getDnsServers(dnsServers: string[]): string {
+    return dnsServers.join(', ');
+  }
+
+  noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
+    const ipCount = getIpCount(cluster);
+
+    if (!!ipCount && ipCount > 0) {
+      return !((ipCount - nodeCount) >= 0);
+    } else {
+      return false;
+    }
   }
 }

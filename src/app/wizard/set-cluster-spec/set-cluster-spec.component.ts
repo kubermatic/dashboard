@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
@@ -10,11 +11,13 @@ import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
   templateUrl: 'set-cluster-spec.component.html',
   styleUrls: ['set-cluster-spec.component.scss'],
 })
+
 export class SetClusterSpecComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
+  checkMachineNetworksTooltip = '';
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -26,12 +29,8 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: new FormControl(this.cluster.spec.version),
     });
 
-    this.subscriptions.push(this.clusterSpecForm.valueChanges.subscribe((data) => {
-      this.wizardService.changeClusterSpec({
-        name: this.clusterSpecForm.controls.name.value,
-        version: this.clusterSpecForm.controls.version.value,
-        valid: this.clusterSpecForm.valid,
-      });
+    this.subscriptions.push(this.clusterSpecForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
+      this.setClusterSpec();
     }));
 
     this.loadMasterVersions();
@@ -59,5 +58,13 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
         }
       }
     }));
+  }
+
+  setClusterSpec(): void {
+    this.wizardService.changeClusterSpec({
+      name: this.clusterSpecForm.controls.name.value,
+      version: this.clusterSpecForm.controls.version.value,
+      valid: this.clusterSpecForm.valid,
+    });
   }
 }

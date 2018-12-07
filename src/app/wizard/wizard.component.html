@@ -1,7 +1,7 @@
 <kubermatic-progress [steps]="steps" [currentStepIndex]="currentStepIndex" [currentStep]="currentStep"></kubermatic-progress>
 
 <mat-card>
-  <!-- Cluster Cluster Spec -->
+  <!-- Cluster Spec -->
   <kubermatic-set-cluster-spec [cluster]="cluster" *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
 
   <!-- Cluster Provider -->
@@ -12,6 +12,9 @@
 
   <!-- Provider Settings -->
   <kubermatic-set-settings [cluster]="cluster" [clusterSSHKeys]="clusterSSHKeys" [nodeData]="addNodeData" *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
+
+  <!-- Machine Networks -->
+  <kubermatic-set-machine-networks [cluster]="cluster" [nodeData]="addNodeData" *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
 
   <!-- Provider Summary -->
   <kubermatic-summary *ngIf="currentStep.name === 'summary'" [clusterSSHKeys]="clusterSSHKeys"
@@ -27,14 +30,13 @@
       Back
     </button>
     <button *ngIf="currentStepIndex < steps.length - 1" type="button" [disabled]="!currentStep.valid()" mat-raised-button color="primary" (click)="stepForward()">
-      <ng-container>
-        Next
-      </ng-container>
+      Next
+    </button>
+    <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0" type="button" mat-raised-button color="primary" (click)="stepForward()">
+      Skip
     </button>
     <button *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating || project.status !== 'Active'" type="button" mat-raised-button color="primary" (click)="createCluster()">
-      <ng-container>
-        Create
-      </ng-container>
+      Create
     </button>
     <span class="project-status-info" *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
     <a type="button" class="cancel-button" routerLink="/projects/{{project.id}}/clusters">Cancel</a>

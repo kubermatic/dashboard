@@ -12,6 +12,19 @@ export class ClusterSpecForm {
   valid: boolean;
 }
 
+export class SetMachineNetworksForm {
+  setMachineNetworks: boolean;
+  machineNetworks: MachineNetworkForm[];
+  valid: boolean;
+}
+
+export class MachineNetworkForm {
+  cidr: string;
+  dnsServers: string[];
+  gateway: string;
+  valid: boolean;
+}
+
 export class ClusterProviderForm {
   provider: string;
   valid: boolean;
