@@ -11,7 +11,6 @@ import {Config} from '../../../../shared/model/Config';
 @Component({
   selector: 'kubermatic-openstack-cluster-settings',
   templateUrl: './openstack.component.html',
-  styleUrls: ['./openstack.component.scss'],
 })
 export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;

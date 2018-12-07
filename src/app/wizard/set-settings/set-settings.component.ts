@@ -8,7 +8,6 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-set-settings',
   templateUrl: './set-settings.component.html',
-  styleUrls: ['./set-settings.component.scss'],
 })
 export class SetSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;

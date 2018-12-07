@@ -8,7 +8,6 @@ import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 @Component({
   selector: 'kubermatic-revoke-admin-token',
   templateUrl: './revoke-admin-token.component.html',
-  styleUrls: ['./revoke-admin-token.component.scss'],
 })
 
 export class RevokeAdminTokenComponent implements OnInit {

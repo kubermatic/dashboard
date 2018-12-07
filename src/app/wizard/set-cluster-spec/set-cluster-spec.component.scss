@@ -2,6 +2,7 @@
 
 .generate-name-btn {
   margin-top: 30px;
+
   &.button {
     background-color: transparent;
     border: none;
@@ -11,6 +12,7 @@
     font-size: 14px;
     font-weight: 600;
     padding: 0;
+
     &:hover {
       color: $primary;
     }
@@ -19,6 +21,7 @@
 
 .set-cluster-spec {
   padding: 0 3px;
+
   &:nth-child(1) {
     padding-right: 20px;
   }

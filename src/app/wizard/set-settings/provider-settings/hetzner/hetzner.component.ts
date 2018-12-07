@@ -8,7 +8,6 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 @Component({
   selector: 'kubermatic-hetzner-cluster-settings',
   templateUrl: './hetzner.component.html',
-  styleUrls: ['./hetzner.component.scss'],
 })
 export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;

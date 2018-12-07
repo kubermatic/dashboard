@@ -8,7 +8,6 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 @Component({
   selector: 'kubermatic-azure-cluster-settings',
   templateUrl: './azure.component.html',
-  styleUrls: ['./azure.component.scss'],
 })
 export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;

@@ -37,7 +37,6 @@ div.km-form-group-tags {
   }
 }
 
-
 div.azure-options {
   width: 100%;
   line-height: 30px;
@@ -45,7 +44,8 @@ div.azure-options {
   display: flex;
   margin: 0 0 10px;
 
-  mat-checkbox, label {
+  mat-checkbox,
+  label {
     flex: 1 1 100%;
   }
 }

@@ -10,44 +10,52 @@ footer {
   padding: 0 10px;
   width: 100%;
 
-
-  .copyright, .info {
+  .copyright,
+  .info {
     position: absolute;
     left: 10px;
     text-align: left;
     font-size: 13px;
     font-weight: 400;
     line-height: 40px;
+
     &.right {
       text-align: right;
       right: 35px;
       left: auto;
     }
+
     a {
       color: $text-color;
       font-size: 14px;
       font-weight: 400;
       text-decoration: none;
     }
+
     .info-item {
       margin: 0;
       display: inline-block;
+
       &.clickable {
         cursor: pointer;
         outline: none;
       }
+
       &.seperator {
         padding: 0 10px;
       }
     }
   }
+
   .footer-nav {
     ul {
       margin: 0;
       padding: 0;
       list-style-type: none;
+
       li {
         float: right;
+
         a {
           margin: 8px 5px;
           text-decoration: none;
@@ -72,6 +80,7 @@ footer {
 
     li {
       float: none;
+
       a {
         display: flex;
         align-items: center;
@@ -79,4 +88,3 @@ footer {
     }
   }
 }
-
