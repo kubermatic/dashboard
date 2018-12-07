@@ -16,7 +16,7 @@
       line-height: 36px;
       cursor: pointer;
 
-      &:after {
+      &::after {
         content: "/";
         padding: 0 5px;
         color: $light-text-color !important;
@@ -27,12 +27,13 @@
         text-decoration: none;
       }
 
-      &.breadcrumb-item.active, &:hover {
+      &.breadcrumb-item.active,
+      &:hover {
         color: $primary;
       }
 
       &:last-child {
-        &:after {
+        &::after {
           display: none;
         }
       }

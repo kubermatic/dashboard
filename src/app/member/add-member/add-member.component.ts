@@ -9,7 +9,6 @@ import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 @Component({
   selector: 'kubermatic-add-member',
   templateUrl: './add-member.component.html',
-  styleUrls: ['./add-member.component.scss'],
 })
 export class AddMemberComponent implements OnInit {
   @Input() project: ProjectEntity;

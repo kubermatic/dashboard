@@ -9,7 +9,6 @@ import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
 @Component({
   selector: 'kubermatic-edit-sshkey-delete-confirmation',
   templateUrl: './edit-sshkey-delete-confirmation.component.html',
-  styleUrls: ['./edit-sshkey-delete-confirmation.component.scss'],
 })
 
 export class EditSSHKeyDeleteConfirmationComponent {

@@ -8,7 +8,6 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 @Component({
   selector: 'kubermatic-digitalocean-cluster-settings',
   templateUrl: './digitalocean.component.html',
-  styleUrls: ['./digitalocean.component.scss'],
 })
 export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;

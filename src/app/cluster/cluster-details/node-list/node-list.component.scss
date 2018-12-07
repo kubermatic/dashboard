@@ -5,6 +5,7 @@
   margin-bottom: 10px;
   margin-top: -20px;
   line-height: 40px;
+
   p {
     margin: 0 auto;
     color: $warning-status-color;
@@ -27,7 +28,8 @@
   }
 }
 
-.km-delete-node, .km-duplicate-node {
+.km-delete-node,
+.km-duplicate-node {
   color: $text-color !important;
 
   i {
@@ -40,7 +42,7 @@
   margin: 5px;
 }
 
-.km-btn-remove-node-wrapper{
+.km-btn-remove-node-wrapper {
   position: relative;
 }
 
@@ -63,19 +65,21 @@ i.fa-info-circle {
   margin-left: -24px;
   margin-right: -24px;
   padding: 23px 20px 15px;
-  box-shadow: inset 0px 4px 4px rgba($text-color, 0.1);
+  box-shadow: inset 0 4px 4px rgba($text-color, 0.1);
 }
 
 .node-details-content {
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 10px 24px;
   line-height: 30px;
 
-  .km-card-list, .km-card-list-content {
+  .km-card-list,
+  .km-card-list-content {
     margin: 0;
-      .mat-card-content {
-        line-height: 25px;
-      }
+
+    .mat-card-content {
+      line-height: 25px;
+    }
   }
 
   .fa-check {
@@ -102,7 +106,7 @@ i.fa-info-circle {
 }
 
 .disabled {
-  color: $disabled-button-color
+  color: $disabled-button-color;
 }
 
 .accordion {
@@ -110,5 +114,5 @@ i.fa-info-circle {
 
   .node-details-wrapper {
     cursor: default;
-  } 
+  }
 }

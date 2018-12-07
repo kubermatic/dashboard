@@ -7,7 +7,6 @@ import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 @Component({
   selector: 'kubermatic-project-delete-confirmation',
   templateUrl: './project-delete-confirmation.component.html',
-  styleUrls: ['./project-delete-confirmation.component.scss'],
 })
 
 export class ProjectDeleteConfirmationComponent implements DoCheck {
@@ -33,7 +32,7 @@ export class ProjectDeleteConfirmationComponent implements DoCheck {
     if (!this.inputNameMatches()) {
       return;
     } else {
-      this.api.deleteProject(this.project.id).subscribe((result) => {
+      this.api.deleteProject(this.project.id).subscribe(() => {
         NotificationActions.success('Success', `Project is being deleted`);
       });
       this.dialogRef.close(true);

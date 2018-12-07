@@ -1,19 +1,20 @@
 @import "colors";
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
   position: absolute;
+
   @include titillium-font;
 
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
   color: $text-color;
 }
 
 // spinner
-
 .km-spinner {
   position: absolute;
   top: 0;
@@ -24,13 +25,11 @@ html, body {
 }
 
 // card
-
 .mat-card-header-text {
   height: auto;
   margin: 0;
   width: auto;
 }
-
 
 // global
 .code-block {
@@ -39,6 +38,7 @@ html, body {
   font-size: 14px;
   line-height: 20px;
   font-family: "Menlo", monospace;
+
   p {
     color: $text-color !important;
     font-family: "Menlo", monospace;
@@ -50,11 +50,11 @@ html, body {
 .mat-card-header {
   margin-bottom: 10px;
   border: none;
-
 }
 
 .mat-card-title {
   margin: 0;
+
   h4 {
     font-weight: 600;
     margin: 10px 0;
@@ -71,11 +71,13 @@ html, body {
       font-size: 14px;
     }
   }
+
   p {
     color: $light-button-color;
     font-size: 12px;
     margin: 0 0 15px;
   }
+
   button {
     background-color: transparent;
     border: none;
@@ -89,7 +91,7 @@ html, body {
 }
 
 // Notifications
-simple-notifications *  {
+simple-notifications * {
   cursor: auto;
   z-index: 2000;
 }
@@ -101,25 +103,30 @@ simple-notifications *  {
   }
 }
 
- // Projects
+// Projects
 .km-project-toggle {
   .mat-tab-header {
     border-bottom: none;
   }
+
   .mat-ink-bar {
     visibility: hidden !important;
     height: 0;
   }
+
   .mat-tab-label {
     background-color: $secondary !important;
     opacity: 1;
     margin-right: 3px;
     padding: 0;
+
     &.mat-tab-disabled {
       background-color: $disabled-button-color !important;
     }
+
     &.mat-tab-label-active {
       opacity: 1;
+
       .mat-tab-label-content {
         width: 100%;
         height: 100%;
@@ -127,6 +134,7 @@ simple-notifications *  {
         color: $white-text-color;
       }
     }
+
     .mat-tab-label-content {
       text-transform: uppercase;
       font-size: 16px;
@@ -144,7 +152,7 @@ mat-button-toggle-group {
     margin-right: 20px;
     display: flex;
     align-items: center;
-    background-color: #FFFFFF;
+    background-color: #fff;
     border: 1px solid $border;
     cursor: pointer;
     max-width: 90px;
@@ -158,7 +166,7 @@ mat-button-toggle-group {
   }
 
   .mat-button-toggle-checked {
-    background-color: #FFFFFF;
+    background-color: #fff;
     border: 1px solid $primary;
   }
 
@@ -180,6 +188,7 @@ mat-button-toggle-group[group='datacenterGroup'] {
     padding: 20px 0;
     width: 100%;
   }
+
   .mat-button-toggle-button {
     height: 100%;
   }
@@ -189,13 +198,14 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-button-toggle-label-content {
     height: 100%;
   }
+
   .mat-button-toggle-button {
     height: 100%;
   }
 }
 
 .mat-card.blue {
-  padding: 0px;
+  padding: 0;
   margin: 20px 0 0 0;
 
   .mat-card-header {
@@ -205,9 +215,11 @@ mat-button-toggle-group[group='providerGroup'] {
     line-height: 30px;
     background-color: $primary;
     color: #fff;
+
     .mat-card-header-text {
       width: 100%;
-      margin: 0px;
+      margin: 0;
+
       .mat-card-title {
         font-weight: 500;
         padding: 0;
@@ -224,9 +236,11 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-card-content {
     line-height: 40px;
 
-    &.row, .row {
+    &.row,
+    .row {
       line-height: 40px;
       padding: 10px 24px;
+
       &.small {
         padding: 10px 24px;
         margin: 0;
@@ -235,6 +249,7 @@ mat-button-toggle-group[group='providerGroup'] {
 
       &.accordion {
         padding-bottom: 0;
+
         > div:first-child {
           padding-bottom: 10px;
         }
@@ -264,7 +279,8 @@ mat-button-toggle-group[group='providerGroup'] {
         }
       }
 
-      &.statusFailed, &.statusDeleting {
+      &.statusFailed,
+      &.statusDeleting {
         background-color: rgba($warning-background, 0.15);
 
         &:hover {
@@ -272,7 +288,8 @@ mat-button-toggle-group[group='providerGroup'] {
         }
       }
 
-      &.no-item, .no-item {
+      &.no-item,
+      .no-item {
         text-align: center;
         font-size: 14px;
         color: $text-color;
@@ -287,6 +304,7 @@ mat-button-toggle-group[group='providerGroup'] {
 
       .region {
         align-items: center;
+
         .flag-icon {
           font-size: 24px;
           margin-right: 10px;
@@ -311,16 +329,19 @@ mat-button-toggle-group[group='providerGroup'] {
     background-color: rgba($waiting-background, 0.1);
   }
 
-  &.statusFailed, &.statusDeleting {
+  &.statusFailed,
+  &.statusDeleting {
     background-color: rgba($warning-background, 0.15);
   }
 
   .mat-card-header {
-    padding: 20px 24px 0px;
+    padding: 20px 24px 0;
     margin: 0;
+
     .mat-card-header-text {
       width: 100%;
-      margin: 0px;
+      margin: 0;
+
       .mat-card-title {
         font-weight: 500;
         padding: 0;
@@ -344,7 +365,9 @@ mat-button-toggle-group[group='providerGroup'] {
 
   .mat-card-content {
     line-height: 40px;
-    &.row, .row {
+
+    &.row,
+    .row {
       line-height: 40px;
       padding: 10px 24px;
     }
@@ -352,7 +375,6 @@ mat-button-toggle-group[group='providerGroup'] {
 }
 
 // modal close icon
-
 button.close {
   position: absolute;
   right: 20px;
@@ -361,7 +383,21 @@ button.close {
 .mat-toolbar {
   border: none;
   padding: 0;
+  font-size: 18px;
+  font-weight: 600;
   position: relative;
+  background-color: $primary !important;
+  color: white !important;
+  margin-bottom: 10px;
+
+  .mat-dialog-info {
+    margin-left: 10px;
+  }
+
+  .fa-pencil {
+    margin-left: 15px;
+    margin-right: 10px;
+  }
 }
 
 mat-dialog-content {
@@ -378,57 +414,56 @@ mat-dialog-content {
   margin: 3px 0 !important;
 }
 
-.mat-input-wrapper {
-  margin: 0 8px;
-}
-
-.mat-form-field {
-  width: 100%;
-}
-
 .mat-select-value-text {
   font-size: 14px;
 }
-
 
 // Scrollbar
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
+
 ::-webkit-scrollbar-button {
-  width: 0px;
-  height: 0px;
+  width: 0;
+  height: 0;
 }
+
 ::-webkit-scrollbar-thumb {
   background: $light-text-color;
-  border: 0px none #ffffff;
+  border: 0 none #fff;
   border-radius: 50px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: $light-text-color;
 }
+
 ::-webkit-scrollbar-thumb:active {
   background: $light-text-color;
 }
+
 ::-webkit-scrollbar-track {
   background: $medium-background;
-  border: 0px none #ffffff;
+  border: 0 none #fff;
   border-radius: 50px;
 }
+
 ::-webkit-scrollbar-track:hover {
   background: $medium-background;
 }
+
 ::-webkit-scrollbar-track:active {
   background: $medium-background;
 }
+
 ::-webkit-scrollbar-corner {
   background: transparent;
 }
 
 mat-card-header {
   .mat-card-title {
-    padding-top: 0px;
+    padding-top: 0;
     font-size: 18px;
   }
 
@@ -445,6 +480,7 @@ mat-card-header {
   &:hover {
     color: $primary;
   }
+
   &:active {
     color: rgba($primary, 0.7);
   }
@@ -452,30 +488,23 @@ mat-card-header {
 
 // List Header sorting arrow
 .mat-sort-header-arrow {
-   margin: auto 0 auto 6px !important;
-   color: $white-text-color !important;
+  margin: auto 0 auto 6px !important;
+  color: $white-text-color !important;
 }
 
-
 // mat card remove border
-
 .mat-card {
   box-shadow: none !important;
   border-radius: 0 !important;
 }
 
 // input styling
-
-.mat-input-wrapper {
-  margin: 1.5em 0 1em;
-  padding-bottom: 6px;
-}
-
 .mat-select-placeholder {
   font-size: 14px !important;
 }
 
-.mat-input-placeholder, .mat-form-field-label {
+.mat-input-placeholder,
+.mat-form-field-label {
   font-size: 14px !important;
   color: $light-button-color !important;
   font-weight: 500 !important;
@@ -490,7 +519,7 @@ mat-card-header {
 }
 
 .mat-checkbox-frame {
-  border-color: #C1C9D4;
+  border-color: #c1c9d4;
 }
 
 .mat-checkbox-background {
@@ -501,6 +530,7 @@ mat-card-header {
   .mat-checkbox-background {
     background-color: transparent;
   }
+
   .mat-checkbox-frame {
     border-color: $text-color;
   }
@@ -530,25 +560,26 @@ mat-card-header {
   padding: 0;
 }
 
-
 // Mat Tab Toggle
 .km-change-view {
-  .mat-tab-group.mat-primary .mat-tab-label:focus, .mat-tab-group.mat-primary .mat-tab-link:focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
+  .mat-tab-group.mat-primary .mat-tab-label:focus,
+  .mat-tab-group.mat-primary .mat-tab-link:focus,
+  .mat-tab-nav-bar.mat-primary .mat-tab-label:focus,
+  .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
     background-color: transparent !important;
   }
+
   .mat-tab-label {
     height: 36px !important;
     min-width: 120px !important;
   }
 }
 
-
 // tooltip
 .mat-tooltip {
   background-color: rgba($primary, 0.7) !important;
   margin-top: 5px !important;
 }
-
 
 // button shadow
 
@@ -559,7 +590,6 @@ mat-card-header {
   font-weight: 500 !important;
 }
 
-
 // loading indicater
 #km-top-progress-bar {
   visibility: hidden;
@@ -567,7 +597,7 @@ mat-card-header {
   top: 0;
   left: 0;
   opacity: 1;
-  width:100%;
+  width: 100%;
   z-index: 5000;
 }
 
@@ -581,12 +611,6 @@ mat-card-header {
   background-color: transparent !important;
 }
 // modal
-
-button.close {
-  position: absolute;
-  right: 20px;
-}
-
 .btn-right {
   float: right;
 }
@@ -605,29 +629,6 @@ button.close {
   margin-top: 0;
 }
 
-.mat-toolbar {
-  border: none;
-  padding: 0;
-  font-size: 18px;
-  font-weight: 600;
-  position: relative;
-}
-
-.mat-toolbar {
-  background-color: $primary !important;
-  color: white !important;
-  margin-bottom: 10px;
-
-  .mat-dialog-info {
-    margin-left: 10px;
-  }
-
-  .fa-pencil {
-    margin-left: 15px;
-    margin-right: 10px;
-  }
-}
-
 // modal action
 .mat-dialog-actions {
   justify-content: center;
@@ -635,9 +636,10 @@ button.close {
   button {
     font-size: 14px;
     font-weight: 600 !important;
-    border-radius: 0px;
-    padding: 0px 22px;
+    border-radius: 0;
+    padding: 0 22px;
     line-height: 16px;
+
     &.mat-raised-button {
       color: $text-color;
     }
@@ -650,7 +652,7 @@ button.close {
     &.mat-raised-button.mat-primary[disabled] {
       color: #fff;
       background-color: $border;
-      box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
     }
   }
 }
@@ -659,6 +661,7 @@ button.close {
   padding: 0 !important;
   max-width: 600px;
   border-radius: 0;
+
   .mat-toolbar-row {
     position: relative;
   }
@@ -669,16 +672,19 @@ button.close {
     .mat-toolbar-row {
       height: 30px;
     }
+
     h4 {
       font-weight: 500;
       font-size: 14px;
       margin: 0;
     }
+
     button {
       position: absolute;
       font-size: 20px;
       right: 7px;
       top: 3px;
+
       i {
         color: white;
       }
@@ -687,7 +693,7 @@ button.close {
 
   .mat-dialog-content {
     padding: 5px 10px 0;
-    margin: 0px;
+    margin: 0;
 
     p {
       font-size: 14px;
@@ -695,28 +701,24 @@ button.close {
     }
 
     .mat-input-wrapper {
-      margin: 8px 0;
+      margin: 0;
     }
+
     .mat-input-infix {
       font-size: 14px;
     }
   }
 
   .mat-dialog-actions {
-
     &:last-child {
       margin-bottom: 12px;
     }
+
     button {
       margin-right: 10px;
     }
   }
 }
-
-.mat-dialog-container .mat-dialog-content .mat-input-wrapper {
-  margin: 0;
-}
-
 
 // provider message
 
@@ -728,6 +730,7 @@ button.close {
   padding-right: 15px;
   color: $text-color;
   text-align: center;
+
   a {
     color: $primary;
     text-decoration: none;
@@ -767,14 +770,17 @@ mat-list-item.disabled {
   width: 25px;
   height: 25px;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
   cursor: pointer;
+
   &.white {
     background-image: url("/assets/images/icons/white/delete-white.png");
   }
+
   &.black {
     background-image: url("/assets/images/icons/black/delete-black.png");
   }
+
   &:disabled {
     opacity: 0.3;
   }
@@ -785,14 +791,17 @@ mat-list-item.disabled {
   width: 25px;
   height: 25px;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
   cursor: pointer;
+
   &.white {
     background-image: url("/assets/images/icons/white/edit-white.png");
   }
+
   &.black {
     background-image: url("/assets/images/icons/black/edit-black.png");
   }
+
   &:disabled {
     opacity: 0.3;
   }
@@ -803,11 +812,13 @@ mat-list-item.disabled {
   width: 20px;
   height: 20px;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
   cursor: pointer;
+
   &.white {
     background-image: url("/assets/images/icons/white/cluster-white.png");
   }
+
   &.black {
     background-image: url("/assets/images/icons/black/cluster-black.png");
   }
@@ -818,11 +829,13 @@ mat-list-item.disabled {
   width: 20px;
   height: 20px;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
   cursor: pointer;
+
   &.white {
     background-image: url("/assets/images/icons/white/key-white.png");
   }
+
   &.black {
     background-image: url("/assets/images/icons/black/key-black.png");
   }
@@ -833,11 +846,13 @@ mat-list-item.disabled {
   width: 20px;
   height: 20px;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
   cursor: pointer;
+
   &.white {
     background-image: url("/assets/images/icons/white/project-white.png");
   }
+
   &.black {
     background-image: url("/assets/images/icons/black/project-black.png");
   }
@@ -848,11 +863,13 @@ mat-list-item.disabled {
   width: 20px;
   height: 20px;
   background-repeat: no-repeat;
-  background-size:contain;
+  background-size: contain;
   cursor: pointer;
+
   &.white {
     background-image: url("/assets/images/icons/white/member-white.png");
   }
+
   &.black {
     background-image: url("/assets/images/icons/black/member-black.png");
   }

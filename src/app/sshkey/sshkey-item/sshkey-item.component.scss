@@ -1,27 +1,4 @@
 @import "../../../assets/css/colors";
-/*
-.row {
-  height: 40px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $light-background !important;
-  }
-
-  div, p {
-    height: 100%;
-  }
-}
-
-p {
-  display: flex;
-  align-items: center;
-
-  &.km-icon {
-    justify-content: flex-end;
-    padding-right: 20px;
-  }
-}*/
 
 .sshkey-item {
   color: $text-color;
@@ -45,10 +22,8 @@ p {
   }
 }
 
-
 .button-delete {
   position: absolute;
-  right: 24px;
   top: 8px;
   z-index: 1;
   right: 0;
@@ -59,7 +34,7 @@ p {
   padding: 23px 20px 15px;
 
   .publickey-content {
-    background-color: #ffffff;
+    background-color: #fff;
 
     .publickey-name {
       font-weight: 500;
@@ -71,7 +46,7 @@ p {
     .publickey {
       padding: 15px 20px;
       background-color: $medium-background;
-      word-wrap:break-word;
+      word-wrap: break-word;
       -ms-hyphens: auto;
       -webkit-hyphens: auto;
       hyphens: auto;
@@ -79,9 +54,7 @@ p {
       line-height: 18px;
     }
   }
-
 }
-
 
 .iconDelete {
   float: right;

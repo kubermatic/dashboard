@@ -10,7 +10,6 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-vsphere-options',
   templateUrl: './vsphere-options.component.html',
-  styleUrls: ['./vsphere-options.component.scss'],
 })
 
 export class VSphereOptionsComponent implements OnInit, OnDestroy {
