@@ -2,7 +2,9 @@
 
 .mat-nav-list {
   padding: 0 !important;
-  .mat-list-item, a {
+
+  .mat-list-item,
+  a {
     font-size: 14px;
     font-weight: 400;
     color: $text-color;
@@ -25,7 +27,6 @@
         mat-select {
           font-weight: 600;
           line-height: 35px;
-
         }
 
         .health-state {
@@ -56,9 +57,12 @@
     padding: 10px 30px !important;
     display: flex;
     align-items: center;
-    &:hover, &.active {
+
+    &:hover,
+    &.active {
       color: #fff;
       background-color: $primary;
+
       i {
         color: #fff;
       }
@@ -68,7 +72,7 @@
       width: 20px;
       margin-right: 10px;
     }
-  }  
+  }
 }
 
 mat-option[value='addProject'] {
@@ -79,6 +83,7 @@ mat-option[value='addProject'] {
 .disabled {
   pointer-events: none;
   cursor: default;
+
   a {
     color: $light-text-color !important;
   }

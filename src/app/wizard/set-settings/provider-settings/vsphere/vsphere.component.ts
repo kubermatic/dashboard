@@ -9,7 +9,6 @@ import {VSphereNetwork} from '../../../../shared/entity/provider/vsphere/VSphere
 @Component({
   selector: 'kubermatic-vsphere-cluster-settings',
   templateUrl: './vsphere.component.html',
-  styleUrls: ['./vsphere.component.scss'],
 })
 export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;

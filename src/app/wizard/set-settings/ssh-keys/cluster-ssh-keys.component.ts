@@ -14,7 +14,6 @@ import {UserGroupConfig} from '../../../shared/model/Config';
 @Component({
   selector: 'kubermatic-cluster-ssh-keys',
   templateUrl: './cluster-ssh-keys.component.html',
-  styleUrls: ['./cluster-ssh-keys.component.scss'],
 })
 export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;

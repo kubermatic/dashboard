@@ -1,4 +1,5 @@
-kubermatic-root, mat-sidenav-container {
+kubermatic-root,
+mat-sidenav-container {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -14,18 +15,18 @@ mat-sidenav {
 
 .mat-sidenav {
   width: 210px;
-  background-color: #F7FAFF;
+  background-color: #f7faff;
   color: #fff;
 }
 
 .mat-sidenav-container {
-  background-color: #F1F1F1;
+  background-color: #f1f1f1;
 }
 
 .mat-input-wrapper {
-  margin: 0px;
+  margin: 0;
 }
 
-.main .content{
+.main .content {
   margin: 0 20px;
 }
