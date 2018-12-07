@@ -8,8 +8,8 @@
   div.orange {
     color: $waiting-status-color;
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     right: 0;
     bottom: 0;
     font-size: 18px;
@@ -17,6 +17,7 @@
     text-align: center;
     display: inline-block;
   }
+
   .orange.static {
     display: none;
   }
@@ -24,8 +25,8 @@
   .green {
     color: $healthy-status-color;
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     right: 0;
     bottom: 0;
     font-size: 18px;
@@ -47,8 +48,8 @@
   div.red {
     color: $warning;
     position: absolute;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     right: 0;
     bottom: 0;
     font-size: 18px;
@@ -56,16 +57,33 @@
     text-align: center;
     display: inline-block;
   }
+
   .red.static {
     display: none;
   }
 }
 
+@keyframes server-status-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
 
-@keyframes server-status-pulse{
-  0%{transform:scale(1);opacity:0}
-  12%{opacity:.6}
-  20%{opacity:.1}
-  25%{transform:scale(1.6);opacity:0}
-  to{transform:scale(1.6);opacity:0}
+  12% {
+    opacity: .6;
+  }
+
+  20% {
+    opacity: .1;
+  }
+
+  25% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1.6);
+    opacity: 0;
+  }
 }

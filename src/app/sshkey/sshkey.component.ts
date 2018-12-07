@@ -13,7 +13,6 @@ import {UserGroupConfig} from '../shared/model/Config';
 @Component({
   selector: 'kubermatic-sshkey',
   templateUrl: './sshkey.component.html',
-  styleUrls: ['./sshkey.component.scss'],
 })
 
 export class SSHKeyComponent implements OnInit, OnDestroy {

@@ -11,7 +11,6 @@ import {UserGroupConfig} from '../shared/model/Config';
 @Component({
   selector: 'kubermatic-project',
   templateUrl: './project.component.html',
-  styleUrls: ['./project.component.scss'],
 })
 
 export class ProjectComponent implements OnInit, OnDestroy {

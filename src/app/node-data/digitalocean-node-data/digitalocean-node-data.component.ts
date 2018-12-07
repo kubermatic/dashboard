@@ -10,7 +10,6 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-digitalocean-node-data',
   templateUrl: './digitalocean-node-data.component.html',
-  styleUrls: ['./digitalocean-node-data.component.scss'],
 })
 
 export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChanges {
