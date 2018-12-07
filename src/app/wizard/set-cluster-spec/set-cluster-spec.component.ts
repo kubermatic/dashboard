@@ -51,6 +51,22 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   loadMasterVersions(): void {
     this.subscriptions.push(this.api.getMasterVersions().subscribe((versions) => {
       this.masterVersions = versions;
+
+      this.masterVersions.push({
+        version: '3.9',
+        allowedNodeVersions: ['1.11.5'],
+      });
+
+      this.masterVersions.push({
+        version: '3.10',
+        allowedNodeVersions: ['1.11.5'],
+      });
+
+      this.masterVersions.push({
+        version: '3.11',
+        allowedNodeVersions: ['1.11.5'],
+      });
+
       for (const i in versions) {
         if (versions[i].default) {
           this.defaultVersion = versions[i].version;

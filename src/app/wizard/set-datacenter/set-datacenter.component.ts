@@ -5,6 +5,7 @@ import {DatacenterService} from '../../core/services/datacenter/datacenter.servi
 import {WizardService} from '../../core/services/wizard/wizard.service';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity, getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
+import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
 @Component({
   selector: 'kubermatic-set-datacenter',
@@ -33,10 +34,17 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
         }
         const provider = getDatacenterProvider(datacenter);
         const clusterProvider = getClusterProvider(this.cluster);
-        if (provider === clusterProvider) {
+
+        if (provider === clusterProvider || this.cluster.spec.cloud.openstack) {
+          providerDatacenters.push(datacenter);
+        }
+
+        // when clicked openshift display provider options for baremetal (kubeadm)
+        if (clusterProvider === NodeProvider.OPENSHIFT && provider === NodeProvider.BRINGYOUROWN) {
           providerDatacenters.push(datacenter);
         }
       }
+
       this.datacenters = providerDatacenters;
     }));
 

@@ -7,6 +7,7 @@ export class NodeProvider {
   static readonly VSPHERE: string = 'vsphere';
   static readonly HETZNER: string = 'hetzner';
   static readonly AZURE: string = 'azure';
+  static readonly OPENSHIFT: string = 'openshift';
 
   static readonly Supported: string[] = [
     NodeProvider.AWS,
@@ -16,6 +17,7 @@ export class NodeProvider {
     NodeProvider.VSPHERE,
     NodeProvider.HETZNER,
     NodeProvider.AZURE,
+    NodeProvider.OPENSHIFT,
   ];
 
   static readonly ProviderNames: object = {
@@ -26,6 +28,7 @@ export class NodeProvider {
     [NodeProvider.VSPHERE]: 'VMware vSphere',
     [NodeProvider.HETZNER]: 'Hetzner cloud',
     [NodeProvider.AZURE]: 'Azure',
+    [NodeProvider.OPENSHIFT]: 'OpenShift',
   };
 }
 
