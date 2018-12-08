@@ -50,7 +50,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   getClusterImagePath(): string {
     let path = '/assets/images/clouds/';
 
-    if (this.cluster.name.indexOf('openshift')) {
+    if (this.cluster.name.indexOf('openshift') > -1) {
       path += 'openshift.png';
     } else if (this.cluster.spec.cloud.aws) {
       path += 'aws.png';
