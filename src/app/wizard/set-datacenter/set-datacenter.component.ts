@@ -35,11 +35,11 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
         const provider = getDatacenterProvider(datacenter);
         const clusterProvider = getClusterProvider(this.cluster);
 
-        if (provider === clusterProvider || this.cluster.spec.cloud.openstack) {
+        if (provider === clusterProvider) {
           providerDatacenters.push(datacenter);
         }
 
-        // when clicked openshift display provider options for baremetal (kubeadm)
+        // When clicked openshift display provider options for KubeAdm.
         if (clusterProvider === NodeProvider.OPENSHIFT && provider === NodeProvider.BRINGYOUROWN) {
           providerDatacenters.push(datacenter);
         }
