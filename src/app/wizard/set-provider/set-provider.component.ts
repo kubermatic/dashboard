@@ -16,8 +16,12 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   setProviderForm: FormGroup;
   providers: string[] = [];
   private subscriptions: Subscription[] = [];
+  isOnDevServer = false;
 
-  constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
+  constructor(
+      private dcService: DatacenterService,
+      private wizardService: WizardService,
+  ) {}
 
   ngOnInit(): void {
     this.setProviderForm = new FormGroup({
@@ -48,6 +52,9 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       }
       this.providers = providers;
     }));
+
+    // Enable OpenShift only on dev.kubermatic.io.
+    this.isOnDevServer = window.location.host.includes('dev.kubermatic.io');
   }
 
   ngOnDestroy(): void {

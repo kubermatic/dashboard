@@ -14,7 +14,7 @@
              src="/assets/images/clouds/{{provider}}.png"
              alt="{{provider}}">
       </mat-button-toggle>
-      <mat-button-toggle value="openshift">
+      <mat-button-toggle *ngIf="isOnDevServer" value="openshift">
         <img class="provider-logo"
              src="/assets/images/clouds/openshift.png"
              alt="OpenShift">
