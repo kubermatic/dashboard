@@ -38,6 +38,7 @@ export class NavigationComponent implements OnInit {
     this.router.navigate(['']);
     this.auth.logout();
     this.projectService.removeProject();
+    delete this.currentUser;
   }
 
   scrolledChanged(isScrolled): void {
