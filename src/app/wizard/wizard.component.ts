@@ -224,7 +224,8 @@ export class WizardComponent implements OnInit, OnDestroy {
     };
     const summary: Step = {name: 'summary', description: 'Summary', valid: () => true};
 
-    if (this.clusterProviderFormData.provider === NodeProvider.BRINGYOUROWN) {
+    if (this.clusterProviderFormData.provider === NodeProvider.BRINGYOUROWN ||
+        this.clusterProviderFormData.provider === NodeProvider.OPENSHIFT) {
       this.steps = [
         setClusterSpecStep,
         setProviderStep,
@@ -266,10 +267,20 @@ export class WizardComponent implements OnInit, OnDestroy {
     const datacenter = this.clusterDatacenterFormData.datacenter;
     const createCluster = this._getCreateCluterModel();
 
+    if (createCluster.cluster.spec.cloud.openshift) {
+      createCluster.cluster.spec.cloud.openshift = undefined;
+      createCluster.cluster.spec.cloud.bringyourown = {};
+      createCluster.cluster.name = `${this.cluster.name}-openshift`;
+      createCluster.cluster.spec.version =
+          WizardComponent.mapOpenShiftToKubernetesVersion(createCluster.cluster.spec.version);
+    }
+
     this.subscriptions.push(
-        this.api.createCluster(this._getCreateCluterModel(), datacenter.spec.seed, this.project.id)
+        this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
             .subscribe(
                 (cluster) => {
+                  this.cluster.name = cluster.name;
+
                   NotificationActions.success('Success', `Cluster ${createCluster.cluster.name} successfully created`);
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
@@ -324,5 +335,15 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
       }
     };
+  }
+
+  static mapOpenShiftToKubernetesVersion(version: string): string {
+    if (version.startsWith('3.11')) {
+      return '1.11.5';
+    } else if (version.startsWith('3.10')) {
+      return '1.10.11';
+    } else {
+      return '1.12.3';
+    }
   }
 }

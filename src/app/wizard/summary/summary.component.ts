@@ -26,7 +26,11 @@ export class SummaryComponent implements OnInit {
   }
 
   getOperatingSystem(): string {
-    return NodeUtils.getOperatingSystem(this.nodeData.spec);
+    if (this.cluster.name.endsWith('openshift') || this.cluster.spec.cloud.openshift) {
+      return 'CentOS';
+    } else {
+      return NodeUtils.getOperatingSystem(this.nodeData.spec);
+    }
   }
 
   displayTags(tags: object): boolean {
@@ -60,6 +64,16 @@ export class SummaryComponent implements OnInit {
       return !((ipCount - nodeCount) >= 0);
     } else {
       return false;
+    }
+  }
+
+  mapKubernetesToOpenShiftVersion(version: string): string {
+    if (version.startsWith('1.11')) {
+      return '3.11';
+    } else if (version.startsWith('1.10')) {
+      return '3.10';
+    } else {
+      return '3.9';
     }
   }
 }

@@ -6,7 +6,7 @@ import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
 import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
 import {FakeCloudSpec} from './cloud/FakeCloudSpec';
 import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
-import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
+import {OpenShiftCloudSpec, OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
 import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
 
 export function getClusterProvider(cluster: ClusterEntity): string {
@@ -34,6 +34,9 @@ export function getClusterProvider(cluster: ClusterEntity): string {
     }
     case !!cluster.spec.cloud.azure: {
       return NodeProvider.AZURE;
+    }
+    case !!cluster.spec.cloud.openshift: {
+      return NodeProvider.OPENSHIFT;
     }
   }
   return '';
@@ -72,6 +75,10 @@ export function getEmptyCloudProviderSpec(provider: string): object {
       return {
         name: '',
       } as BareMetalCloudSpec;
+    case NodeProvider.OPENSHIFT:
+      return {
+        name: '',
+      } as OpenShiftCloudSpec;
     case NodeProvider.OPENSTACK:
       return {
         username: '',
@@ -121,6 +128,7 @@ export class CloudSpec {
   aws?: AWSCloudSpec;
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
+  openshift?: OpenShiftCloudSpec;
   baremetal?: BareMetalCloudSpec;
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;

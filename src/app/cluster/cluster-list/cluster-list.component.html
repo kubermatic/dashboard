@@ -49,7 +49,7 @@
             *matCellDef="let element">
           <ng-container [ngSwitch]="!!element.spec.cloud">
             <ng-container *ngSwitchCase="true">
-              <span class="km-provider-logo km-provider-logo-{{getProvider(element.spec.cloud)}}"></span>
+              <span class="km-provider-logo km-provider-logo-{{getProvider(element)}}"></span>
             </ng-container>
             <p *ngSwitchCase="false"
                class="text-muted">

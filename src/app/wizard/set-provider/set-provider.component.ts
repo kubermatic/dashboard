@@ -14,11 +14,17 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   setProviderForm: FormGroup;
   providers: string[] = [];
+  isOpenShift = false;
   private subscriptions: Subscription[] = [];
 
-  constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
+  constructor(
+      private dcService: DatacenterService,
+      private wizardService: WizardService,
+  ) {}
 
   ngOnInit(): void {
+    this.isOpenShift = !this.cluster.spec.version.startsWith('1');
+
     this.setProviderForm = new FormGroup({
       provider: new FormControl(getClusterProvider(this.cluster), [Validators.required]),
     });

@@ -16,6 +16,8 @@ export class ClusterUtils {
       return 'vsphere';
     } else if (cloud.azure) {
       return 'azure';
+    } else if (cloud.openshift) {
+      return 'openshift';
     }
   }
 }

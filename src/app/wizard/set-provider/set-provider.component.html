@@ -12,10 +12,16 @@
         fxLayout="row wrap">
     <mat-button-toggle-group group="providerGroup"
                              formControlName="provider">
-      <mat-button-toggle *ngFor="let provider of providers;"
-                         value="{{provider}}"
-                         (click)="this.changeClusterProvider()">
-        <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
+      <ng-container *ngIf="!isOpenShift">
+        <mat-button-toggle *ngFor="let provider of providers;"
+                           value="{{provider}}"
+                           (click)="this.changeClusterProvider()">
+          <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
+        </mat-button-toggle>
+      </ng-container>
+      <mat-button-toggle value="openshift"
+                         *ngIf="isOpenShift">
+        <span class="km-provider-logo km-provider-logo-openshift"></span>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </form>

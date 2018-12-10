@@ -6,7 +6,7 @@ import {first} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, UserService} from '../../core/services';
-import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {UserGroupConfig} from '../../shared/model/Config';
@@ -97,8 +97,12 @@ export class ClusterListComponent implements OnInit, OnDestroy {
         ['/projects/' + this.projectID + '/dc/' + this.nodeDC[cluster.id].spec.seed + '/clusters/' + cluster.id]);
   }
 
-  getProvider(cloud: CloudSpec): string {
-    return ClusterUtils.getProvider(cloud);
+  getProvider(cluster: ClusterEntity): string {
+    if (cluster.name.endsWith('-openshift')) {
+      return 'openshift';
+    } else {
+      return ClusterUtils.getProvider(cluster.spec.cloud);
+    }
   }
 
   loadNodeDc() {
