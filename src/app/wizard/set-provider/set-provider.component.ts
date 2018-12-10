@@ -17,7 +17,10 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   providers: string[] = [];
   private subscriptions: Subscription[] = [];
 
-  constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
+  constructor(
+      private dcService: DatacenterService,
+      private wizardService: WizardService,
+  ) {}
 
   ngOnInit(): void {
     this.setProviderForm = new FormGroup({

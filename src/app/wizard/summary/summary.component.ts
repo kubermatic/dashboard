@@ -29,7 +29,9 @@ export class SummaryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   getOperatingSystem(): string {
-    if (this.nodeData.spec.operatingSystem.ubuntu) {
+    if (this.cluster.name.endsWith('openshift') || this.cluster.spec.cloud.openshift) {
+      return 'CentOS';
+    } else if (this.nodeData.spec.operatingSystem.ubuntu) {
       return 'Ubuntu';
 
     } else if (this.nodeData.spec.operatingSystem.centos) {
@@ -73,6 +75,16 @@ export class SummaryComponent implements OnInit, OnDestroy {
       return !((ipCount - nodeCount) >= 0);
     } else {
       return false;
+    }
+  }
+
+  mapKubernetesToOpenShiftVersion(version: string): string {
+    if (version.startsWith('1.11')) {
+      return '3.11';
+    } else if (version.startsWith('1.10')) {
+      return '3.10';
+    } else {
+      return '3.9';
     }
   }
 }

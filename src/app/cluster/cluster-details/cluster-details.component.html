@@ -79,7 +79,8 @@
     <mat-card-content>
       <div class="km-row" fxLayout>
         <div fxFlex="42%">
-          <span class="km-provider-logo km-provider-logo-{{nodeDc.spec.provider}}"></span>
+          <span *ngIf="!cluster.spec.cloud.bringyourown || !(cluster.name.endsWith('openshift'))" class="km-provider-logo km-provider-logo-{{nodeDc.spec.provider}}"></span>
+          <span *ngIf="!!cluster.spec.cloud.bringyourown && (cluster.name.endsWith('openshift'))" class="km-provider-logo km-provider-logo-openshift"></span>
         </div>
         <div fxFlex="30%" class="km-region">
           <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">

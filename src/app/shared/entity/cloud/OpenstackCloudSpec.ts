@@ -8,3 +8,5 @@ export class OpenstackCloudSpec {
   floatingIpPool: string;
   subnetID: string;
 }
+
+export class OpenShiftCloudSpec {}

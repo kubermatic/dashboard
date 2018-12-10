@@ -17,7 +17,10 @@
             </div>
             <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.version">
               <div fxFlex="50%" class="km-card-list-key">Master Version</div>
-              <div fxFlex="50%">{{ cluster.spec.version }}</div>
+              <div fxFlex="50%">
+                <ng-container *ngIf="cluster.name.endsWith('openshift')">{{mapKubernetesToOpenShiftVersion(cluster.spec.version)}}</ng-container>
+                <ng-container *ngIf="!cluster.name.endsWith('openshift')">{{cluster.spec.version}}</ng-container>
+              </div>
             </div>
             <div fxLayout class="km-card-list-content km-provider">
               <div fxFlex="50%" class="km-card-list-key">Provider</div>
@@ -53,7 +56,7 @@
           </div>
         </div>
 
-        <div fxFlex="50%" class="km-summary-right km-summary-box" *ngIf="!cluster.spec.cloud.bringyourown">
+        <div fxFlex="50%" class="km-summary-right km-summary-box" *ngIf="!cluster.spec.cloud.bringyourown && !cluster.spec.cloud.openshift">
           <h3>Provider Settings</h3>
           <!-- DO -->
           <ng-container *ngIf="cluster.spec.cloud.digitalocean">
@@ -267,7 +270,7 @@
       </div>
     </div>
 
-    <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" *ngIf="!cluster.spec.cloud.bringyourown">
+    <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px" *ngIf="!cluster.spec.cloud.bringyourown  && !cluster.spec.cloud.openshift">
       <div fxFlex="100%" class="km-summary-container">
         <div class="km-summary-full km-summary-box">
           <h3>Node Settings</h3>
@@ -447,7 +450,7 @@
           </ng-container>
         </div>
 
-        <div fxFlex="50%" class="km-summary-right km-summary-box" *ngIf="!cluster.spec.cloud.bringyourown">
+        <div fxFlex="50%" class="km-summary-right km-summary-box" *ngIf="!cluster.spec.cloud.bringyourown  && !cluster.spec.cloud.openshift">
           <h3>SSH keys</h3>
           <ng-container *ngIf="clusterSSHKeys.length">
             <div fxLayout class="km-card-list-content">

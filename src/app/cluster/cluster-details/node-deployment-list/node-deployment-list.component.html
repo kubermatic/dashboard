@@ -83,11 +83,11 @@
 
     <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">
       <div class="km-row km-no-item"
-           *ngIf="clusterHealthStatus === 'km-status-running' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">
+           *ngIf="clusterHealthStatus === 'km-status-running' && !hasInitialNodes || !isClusterRunning && (cluster.spec.cloud.bringyourown || cluster.name.endsWith('-openshift'))">
         No Node Deployments available.
       </div>
       <div class="km-row"
-           *ngIf="clusterHealthStatus !== 'km-status-running' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+           *ngIf="clusterHealthStatus !== 'km-status-running' || !!hasInitialNodes || !isClusterRunning && (!cluster.spec.cloud.bringyourown || (cluster.name.endsWith('-openshift')))">
         <mat-spinner color="accent" class="km-node-deployment-spinner" [diameter]="30"></mat-spinner>
       </div>
     </ng-container>
@@ -95,7 +95,7 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card [fxShow]="!!cluster.spec.cloud.bringyourown" class="km-mat-card-code-block">
+<mat-card [fxShow]="!!cluster.spec.cloud.bringyourown && !(cluster.name.endsWith('-openshift'))" class="km-mat-card-code-block">
   <mat-card-content>
     <div class="km-code-block">
       <p>

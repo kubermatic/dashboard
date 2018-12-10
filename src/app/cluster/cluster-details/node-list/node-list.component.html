@@ -245,7 +245,7 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card [fxShow]="!!cluster.spec.cloud.bringyourown" class="km-mat-card-code-block">
+<mat-card [fxShow]="!!cluster.spec.cloud.bringyourown && !(cluster.name.endsWith('openshift'))" class="km-mat-card-code-block">
   <mat-card-content>
     <div class="km-code-block">
       <p>

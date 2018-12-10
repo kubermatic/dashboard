@@ -55,7 +55,11 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     } else if (this.cluster.spec.cloud.openstack) {
       return 'openstack';
     } else if (this.cluster.spec.cloud.bringyourown) {
-      return 'bringyourown';
+      if (this.cluster.name.endsWith('-openshift')) {
+        return 'openshift';
+      } else {
+        return 'bringyourown';
+      }
     } else if (this.cluster.spec.cloud.hetzner) {
       return 'hetzner';
     } else if (this.cluster.spec.cloud.vsphere) {

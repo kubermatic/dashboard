@@ -12,6 +12,9 @@
       <mat-button-toggle *ngFor="let provider of providers;" value="{{provider}}" (click)="this.changeClusterProvider()">
         <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
       </mat-button-toggle>
+      <mat-button-toggle value="openshift">
+        <span class="km-provider-logo km-provider-logo-openshift"></span>
+      </mat-button-toggle>
     </mat-button-toggle-group>
   </form>
 </mat-card-content>
