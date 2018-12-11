@@ -274,12 +274,15 @@ export class WizardComponent implements OnInit, OnDestroy {
       createCluster.spec.cloud.openshift = undefined;
       createCluster.spec.cloud.bringyourown = {};
       createCluster.name = `${this.cluster.name}-openshift`;
+      createCluster.spec.version = WizardComponent.mapOpenShiftToKubernetesVersion(createCluster.spec.version);
     }
 
     this.subscriptions.push(
         this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
             .subscribe(
                 (cluster) => {
+                  this.cluster.name = cluster.name;
+
                   NotificationActions.success('Success', `Cluster successfully created`);
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
@@ -313,5 +316,15 @@ export class WizardComponent implements OnInit, OnDestroy {
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
                   this.creating = false;
                 }));
+  }
+
+  static mapOpenShiftToKubernetesVersion(version: string): string {
+    if (version.startsWith('3.11')) {
+      return '1.11.5';
+    } else if (version.startsWith('3.10')) {
+      return '1.10.11';
+    } else {
+      return '1.12.3';
+    }
   }
 }
