@@ -17,6 +17,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @Input() providerFormData: ClusterProviderForm;
   @Input() datacenterFormData: ClusterDatacenterForm;
   noMoreIpsLeft = false;
+  isOnDevServer = false;
 
   constructor() {}
 
@@ -24,6 +25,9 @@ export class SummaryComponent implements OnInit, OnDestroy {
     if (!!this.cluster.spec.machineNetworks) {
       this.noMoreIpsLeft = this.noIpsLeft(this.cluster, this.nodeData.count);
     }
+
+    // Enable OpenShift only on dev.kubermatic.io.
+    this.isOnDevServer = window.location.host.includes('dev.kubermatic.io');
   }
 
   ngOnDestroy(): void {}
@@ -77,6 +81,16 @@ export class SummaryComponent implements OnInit, OnDestroy {
       return !((ipCount - nodeCount) >= 0);
     } else {
       return false;
+    }
+  }
+
+  mapKubernetesToOpenShiftVersion(version: string): string {
+    if (version.startsWith('1.11')) {
+      return '3.11';
+    } else if (version.startsWith('1.10')) {
+      return '3.10';
+    } else {
+      return '3.9';
     }
   }
 }
