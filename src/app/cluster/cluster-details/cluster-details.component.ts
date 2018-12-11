@@ -55,6 +55,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private versionsList: string[] = [];
   private refreshInterval = 10000;
   private subscriptions: Subscription[] = [];
+  isOnDevServer = false;
 
   constructor(
       private route: ActivatedRoute, private router: Router, private api: ApiService, public dialog: MatDialog,
@@ -71,6 +72,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
     this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
+
+    // Enable OpenShift only on dev.kubermatic.io.
+    this.isOnDevServer = window.location.host.includes('dev.kubermatic.io');
 
     this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this.unsubscribe)).subscribe((group) => {
       this.userGroup = group;
