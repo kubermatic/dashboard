@@ -78,8 +78,7 @@
     <mat-card-content>
       <div class="row" fxLayout>
         <div fxFlex="42%">
-          <img *ngIf="!isOnDevServer || !cluster.name.endsWith('openshift')" src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="provider-logo" alt="Cluster Icon" />
-          <img *ngIf="isOnDevServer && cluster.name.endsWith('openshift')" src="/assets/images/clouds/openshift.png" class="provider-logo" alt="Cluster Icon" />
+          <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="provider-logo" alt="Cluster Icon" />
         </div>
         <div fxFlex="30%" class="region">
           <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">
