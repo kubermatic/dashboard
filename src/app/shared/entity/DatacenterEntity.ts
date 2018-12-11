@@ -4,7 +4,7 @@ import {AzureDatacenterSpec} from './datacenter/AzureDatacenterSpec';
 import {BringYourOwnDatacenterSpec} from './datacenter/BringYourOwnDatacenterSpec';
 import {DigitaloceanDatacenterSpec} from './datacenter/DigitaloceanDatacenterSpec';
 import {HetznerDatacenterSpec} from './datacenter/HetznerDatacenterSpec';
-import {OpenStackDatacenterSpec} from './datacenter/OpenStackDatacenterSpec';
+import {OpenShiftDatacenterSpec, OpenStackDatacenterSpec} from './datacenter/OpenStackDatacenterSpec';
 import {VSphereDatacenterSpec} from './datacenter/VSphereDatacenterSpec';
 import {MetadataEntity} from './MetadataEntity';
 
@@ -42,6 +42,7 @@ export class DatacenterSpec {
   vsphere?: VSphereDatacenterSpec;
   hetzner?: HetznerDatacenterSpec;
   azure?: AzureDatacenterSpec;
+  openshift?: OpenShiftDatacenterSpec;
 }
 
 export class DatacenterOperatingSystemOptions {
@@ -72,6 +73,9 @@ export function getDatacenterProvider(datacenter: DataCenterEntity): string {
     }
     case !!datacenter.spec.azure: {
       return NodeProvider.AZURE;
+    }
+    case !!datacenter.spec.openshift: {
+      return NodeProvider.OPENSHIFT;
     }
   }
   return '';

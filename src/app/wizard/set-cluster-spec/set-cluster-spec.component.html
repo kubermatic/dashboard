@@ -36,7 +36,8 @@
         <mat-form-field>
           <mat-select placeholder="Master Version (optional):" formControlName="version">
               <mat-option *ngFor="let version of masterVersions" [value]="version.version">
-                {{ version.version }}
+                <ng-container *ngIf="isOnDevServer">{{ version.version.startsWith('1') ? 'Kubernetes ' : 'OpenShift '}}</ng-container>
+                <ng-container>{{ version.version }}</ng-container>
               </mat-option>
           </mat-select>
           <mat-hint>Select the version that should be used for cluster creation. Unless otherwise specified, the default version {{defaultVersion}} will be used.</mat-hint>
