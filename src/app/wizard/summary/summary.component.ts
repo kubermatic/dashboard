@@ -33,7 +33,9 @@ export class SummaryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   getOperatingSystem(): string {
-    if (this.nodeData.spec.operatingSystem.ubuntu) {
+    if (this.isOnDevServer && (this.cluster.name.endsWith('openshift') || this.cluster.spec.cloud.openshift)) {
+      return 'CentOS';
+    } else if (this.nodeData.spec.operatingSystem.ubuntu) {
       return 'Ubuntu';
 
     } else if (this.nodeData.spec.operatingSystem.centos) {
