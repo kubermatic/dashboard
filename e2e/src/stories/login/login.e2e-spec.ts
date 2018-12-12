@@ -40,6 +40,8 @@ describe('Login story', () => {
     expect(projectsPage.getLogoutButton().isPresent()).toBeTruthy();
 
     await projectsPage.getLogoutButton().click();
+
+    loginPage.waitForElement(loginPage.getLoginButton());
     expect(loginPage.getLoginButton().isPresent()).toBeTruthy();
   });
 });
