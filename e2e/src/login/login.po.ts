@@ -1,6 +1,10 @@
-import { browser, by, element } from 'protractor';
+import {browser, by, element} from 'protractor';
+import {BasePage} from '../shared/base.po';
 
-export class LoginPage {
+export class LoginPage extends BasePage {
+  private _loginButton = by.id('login-button');
+  private _loginButtonNavbar = by.className('button login');
+
   navigateTo(): any {
     return browser.get('/');
   }
@@ -10,10 +14,10 @@ export class LoginPage {
   }
 
   getLoginButton(): any {
-    return element(by.id('login-button'));
+    return element(this._loginButton);
   }
 
-  getInnerText(): any {
-    return element(by.className('frontpage-inner-text')).getText();
+  getNavbarLoginButton(): any {
+    return element(this._loginButtonNavbar);
   }
 }
