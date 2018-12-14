@@ -1,9 +1,11 @@
-import {browser, ElementFinder, Locator, WebElement} from 'protractor';
+import {browser, ElementFinder, ExpectedConditions} from 'protractor';
 
 export class BasePage {
-  waitForElement(locatorOrElement: Locator|WebElement|ElementFinder): any {
-    return browser.wait(() => {
-      return browser.isElementPresent(locatorOrElement);
-    });
+  waitForElement(element: ElementFinder): any {
+    return browser.wait(ExpectedConditions.visibilityOf(element), 30000);
+  }
+
+  waitToDisappear(element: ElementFinder): any {
+    return browser.wait(ExpectedConditions.stalenessOf(element), 30000);
   }
 }
