@@ -3,8 +3,8 @@ import {by, element} from 'protractor';
 import {BasePage} from '../shared/base.po';
 
 export class ProjectsPage extends BasePage {
-  private _logoutButton = by.xpath('//div[contains(@class, \'auth\')]/span[2]');
-  private _addProjectButton = by.xpath('//kubermatic-project/div/div/div/button');
+  private _logoutButton = by.id('navbar-logout-btn');
+  private _addProjectButton = by.id('add-project-top-btn');
   private _addProjectDialog = by.xpath('//mat-dialog-container/kubermatic-add-project');
   private _projectNameInput = by.xpath('//mat-dialog-container/kubermatic-add-project//mat-form-field//input');
   private _saveProjectButton = by.xpath('//mat-dialog-container/kubermatic-add-project//mat-dialog-actions/button[2]');
