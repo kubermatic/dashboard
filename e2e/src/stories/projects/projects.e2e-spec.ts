@@ -46,28 +46,18 @@ describe('Projects story', () => {
   });
 
   it('should delete created project', async () => {
-    await projectsPage.waitForRedirect('/clusters');
-
-    await projectsPage.navigateTo();
-    await projectsPage.waitForElement(projectsPage.getDeleteProjectButton(projectName));
+    projectsPage.waitForElement(projectsPage.getDeleteProjectButton(projectName));
     await projectsPage.getDeleteProjectButton(projectName).click();
     expect(projectsPage.getDeleteProjectDialog().isPresent()).toBeTruthy();
 
     await projectsPage.getDeleteProjectDialogInput().sendKeys(projectName);
     await projectsPage.getDeleteProjectDialogButton().click();
 
-    await projectsPage.waitToDisappear(projectsPage.getProjectItem(projectName));
+    projectsPage.waitToDisappear(projectsPage.getProjectItem(projectName));
     expect(projectsPage.getProjectItem(projectName).isPresent()).toBeFalsy();
   });
 
   it('should logout', async () => {
-    await projectsPage.waitForNotifications();
-    await projectsPage.waitForElement(projectsPage.getLogoutButton());
-    expect(projectsPage.getLogoutButton().isPresent()).toBeTruthy();
 
-    await projectsPage.getLogoutButton().click();
-
-    await loginPage.waitForElement(loginPage.getLoginButton());
-    expect(loginPage.getLoginButton().isPresent()).toBeTruthy();
   });
 });
