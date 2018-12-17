@@ -8,6 +8,7 @@ import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/Cluste
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
@@ -58,19 +59,24 @@ export class ApiService {
     return this.isNodeDeploymentAPIAvailable_;
   }
 
-  createClusterNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):
+  createNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):
       Observable<NodeDeploymentEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
     return this.http.post<NodeDeploymentEntity>(url, nd, {headers: this.headers});
   }
 
-  getClusterNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
+  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
     return this.http.get<NodeDeploymentEntity[]>(url, {headers: this.headers});
   }
 
-  deleteClusterNodeDeployment(cluster: string, nd: NodeDeploymentEntity, dc: string, projectID: string):
-      Observable<any> {
+  patchNodeDeployment(patch: NodeDeploymentPatch, clusterId: string, dc: string, projectID: string):
+      Observable<NodeDeploymentEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}`;
+    return this.http.patch<NodeDeploymentEntity>(url, patch, {headers: this.headers});
+  }
+
+  deleteNodeDeployment(cluster: string, nd: NodeDeploymentEntity, dc: string, projectID: string): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${nd.id}`;
     return this.http.delete(url, {headers: this.headers});
   }

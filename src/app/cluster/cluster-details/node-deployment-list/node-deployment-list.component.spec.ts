@@ -99,7 +99,7 @@ describe('NodeDeploymentListComponent', () => {
        component.projectID = fakeProject().id;
 
        fixture.detectChanges();
-       const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNodeDeployment').and.returnValue(of(null));
+       const spyDeleteClusterNode = spyOn(apiService, 'deleteNodeDeployment').and.returnValue(of(null));
 
        component.showDeleteDialog(nodeDeploymentsFake()[0]);
        tick();

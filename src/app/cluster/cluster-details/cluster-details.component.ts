@@ -176,7 +176,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           });
 
       if (this.isNodeDeploymentAPIAvailable) {
-        this.api.getClusterNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        this.api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
             .pipe(takeUntil(this.unsubscribe))
             .subscribe((nodeDeployments) => {
               this.nodeDeployments = nodeDeployments;

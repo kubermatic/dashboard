@@ -97,7 +97,7 @@ export class NodeDeploymentListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this.api.deleteClusterNodeDeployment(this.cluster.id, nd, this.datacenter.metadata.name, this.projectID)
+        this.api.deleteNodeDeployment(this.cluster.id, nd, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {
               NotificationActions.success('Success', 'Node removed successfully');
               this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
