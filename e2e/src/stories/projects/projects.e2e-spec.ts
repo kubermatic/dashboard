@@ -47,7 +47,7 @@ describe('Projects story', () => {
 
   it('should delete created project', async () => {
     // Give it some time to initialize the project and make it active
-    browser.sleep(5000);
+    await browser.sleep(5000);
 
     await projectsPage.navigateTo();
     await projectsPage.waitForElement(projectsPage.getDeleteProjectButton(projectName));
