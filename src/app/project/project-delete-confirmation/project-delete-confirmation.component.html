@@ -13,7 +13,7 @@
 
       <mat-form-field style="width: 100%" >
         <input id="km-delete-project-dialog-input" matInput type="text" placeholder="Name of the Project:"
-               title="Project name" (blur)="onChange($event)" (keyup)="onChange($event)">
+               title="Project name" (blur)="onChange($event)" (keyup)="onChange($event)" #projectNameInput>
       </mat-form-field>
     </div>
   </mat-dialog-content>
