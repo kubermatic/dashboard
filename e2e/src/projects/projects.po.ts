@@ -3,15 +3,15 @@ import {by, element} from 'protractor';
 import {BasePage} from '../shared/base.po';
 
 export class ProjectsPage extends BasePage {
-  private _logoutButton = by.id('navbar-logout-btn');
-  private _addProjectButton = by.id('add-project-top-btn');
-  private _addProjectDialog = by.xpath('//mat-dialog-container/kubermatic-add-project');
-  private _projectNameInput = by.xpath('//mat-dialog-container/kubermatic-add-project//mat-form-field//input');
-  private _saveProjectButton = by.xpath('//mat-dialog-container/kubermatic-add-project//mat-dialog-actions/button[2]');
-  private _deleteProjectDialog = by.xpath('//mat-dialog-container/kubermatic-project-delete-confirmation');
-  private _deleteProjectDialogInput = by.xpath('//mat-dialog-container/kubermatic-project-delete-confirmation//input');
-  private _deleteProjectDialogButton = by.xpath('//mat-dialog-actions//button[2]');
-  private _projectsNavButton = by.xpath('//mat-nav-list//mat-list-item[6]//a');
+  private _logoutButton = by.id('km-navbar-logout-btn');
+  private _addProjectButton = by.id('km-add-project-top-btn');
+  private _addProjectDialog = by.id('km-add-project-dialog');
+  private _projectNameInput = by.id('km-add-project-dialog-input');
+  private _saveProjectButton = by.id('km-add-project-dialog-save');
+  private _deleteProjectDialog = by.id('km-delete-project-dialog');
+  private _deleteProjectDialogInput = by.id('km-delete-project-dialog-input');
+  private _deleteProjectDialogButton = by.id('km-delete-project-dialog-btn');
+  private _projectsNavButton = by.id('km-nav-item-projects');
 
   navigateTo(): any {
     return element(this._projectsNavButton).click();
@@ -38,11 +38,11 @@ export class ProjectsPage extends BasePage {
   }
 
   getProjectItem(projectName: string): any {
-    return element(by.xpath(`//kubermatic-project-item//*[text()='${projectName}']`));
+    return element(by.id(`km-project-name-${projectName}`));
   }
 
   getDeleteProjectButton(projectName: string): any {
-    return element(by.xpath(`//kubermatic-project-item//*[text()='${projectName}']/parent::div/parent::div/div[3]//button`));
+    return element(by.id(`km-delete-project-${projectName}`));
   }
 
   getDeleteProjectDialog(): any {
