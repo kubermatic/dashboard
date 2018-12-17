@@ -15,7 +15,7 @@ If you would like to connect with your local API then you should use `npm run se
 The application will automatically reload if you change any of the source files.
 
 ### Formatting the code
-We are using [Google TypeScript Style](https://github.com/google/ts-style) to ensure consistent code formatting and linting.
+We are using [Google TypeScript Style](https://github.com/google/ts-style) and [Stylelint](https://github.com/stylelint/stylelint) to ensure consistent code formatting and linting.
 
 To check if files are correctly formatted and linted use `npm run check` command.
 
@@ -26,7 +26,6 @@ Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github
 
 ### Running the end-to-end tests
 Run `npm run e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `npm run serve`.
 
 ### Building the application
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
