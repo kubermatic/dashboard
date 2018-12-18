@@ -8,17 +8,16 @@ import {ClustersPage} from "../../clusters/clusters.po";
 import {CreateClusterPage} from "../../clusters/create/create.po";
 
 /**
- * This is the user story that tests basic kubermatic features such as:
+ * This is the user story that tests basic kubermatic dashboard features such as:
  *  - login/logout
  *  - CRUD for projects, clusters, members
  *
  * It executes the following steps:
  *  - Login using static credentials as test user 'roxy'
  *  - Create new project called 'e2e-test-project'
- *  - Create new cluster using kubeadm provider
- *  - Edit created cluster ...
- *  - Create new member
- *  - Edit created member info
+ *  - Create new cluster callsed 'e2e-test-cluster' using kubeadm provider
+ *  - Add new member
+ *  - Edit group of added member
  *  - Delete created resources (member, cluster, project).
  *  - Logout from the application
  */
