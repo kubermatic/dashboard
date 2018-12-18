@@ -1,4 +1,4 @@
-<div class="km-dialog-box">
+<div id="km-edit-member-dialog" class="km-dialog-box">
   <mat-toolbar>
     Edit Member
     <button mat-icon-button mat-dialog-close>
@@ -10,7 +10,7 @@
       <form [formGroup]="editMemberForm" fxLayout="column">
         <p>You are on the way to edit the member "{{member.name}}".</p>
         <mat-form-field fxFlex>
-          <mat-select placeholder="Group*:" formControlName="group">
+          <mat-select id="km-edit-member-dialog-group-combobox" placeholder="Group*:" formControlName="group">
             <mat-option value="editors">Editor</mat-option>
             <mat-option value="viewers">Viewer</mat-option>
           </mat-select>
@@ -26,7 +26,8 @@
   <button mat-dialog-close mat-raised-button>
     Close
   </button>
-  <button mat-raised-button color="primary" (click)="editMember()" [disabled]="!editMemberForm.valid">
+  <button id="km-edit-member-dialog-edit-btn" mat-raised-button color="primary" (click)="editMember()"
+          [disabled]="!editMemberForm.valid">
     Edit
   </button>
   </mat-dialog-actions>

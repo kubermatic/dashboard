@@ -17,7 +17,8 @@
         Share cluster
       </button>
       <a class="download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
-      <button mat-button (click)="deleteClusterDialog()" mat-raised-button [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
+      <button id="km-delete-cluster-btn" mat-button (click)="deleteClusterDialog()" mat-raised-button
+              [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
         <i class="fa fa-trash-o km-action-button-icon" aria-hidden="true"></i>
         Delete Cluster
       </button>
