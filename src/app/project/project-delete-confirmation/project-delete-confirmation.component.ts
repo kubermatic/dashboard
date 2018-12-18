@@ -1,4 +1,4 @@
-import {Component, DoCheck, Input} from '@angular/core';
+import {Component, DoCheck, ElementRef, Input, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {ApiService} from '../../core/services';
 import {NotificationActions} from '../../redux/actions/notification.actions';
@@ -11,13 +11,14 @@ import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 export class ProjectDeleteConfirmationComponent implements DoCheck {
   @Input() project: ProjectEntity;
+  @ViewChild('projectNameInput') projectNameInputRef: ElementRef;
 
   inputName = '';
 
   constructor(private api: ApiService, private dialogRef: MatDialogRef<ProjectDeleteConfirmationComponent>) {}
 
   ngDoCheck(): void {
-    document.getElementById('name').focus();
+    this.projectNameInputRef.nativeElement.focus();
   }
 
   onChange(event: any): void {
