@@ -92,7 +92,7 @@ describe('SetClusterSpecComponent', () => {
     component.generateName();
     fixture.detectChanges();
 
-    const nameElement = fixture.debugElement.query(By.css('#name')).nativeElement;
+    const nameElement = fixture.debugElement.query(By.css('#km-create-cluster-name-input')).nativeElement;
 
     expect(spyGenerateName.and.callThrough()).toHaveBeenCalledTimes(1);
     expect(component.clusterSpecForm.controls['name'].value).toBe(generatedName, 'should patch value');
