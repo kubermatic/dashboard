@@ -37,7 +37,6 @@ export class NodeListComponent implements OnInit {
     disableClose: false,
     hasBackdrop: true,
   };
-  isOnDevServer = false;
 
   constructor(
       public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService,
@@ -49,9 +48,6 @@ export class NodeListComponent implements OnInit {
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
-
-    // Enable OpenShift only on dev.kubermatic.io.
-    this.isOnDevServer = window.location.host.includes('dev.kubermatic.io');
   }
 
   deleteNodeDialog(node: NodeEntity): void {
