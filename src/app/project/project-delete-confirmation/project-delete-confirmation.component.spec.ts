@@ -63,7 +63,7 @@ describe('ProjectDeleteConfirmationComponent', () => {
 
     fixture.detectChanges();
 
-    const input = fixture.debugElement.query(By.css('#name'));
+    const input = fixture.debugElement.query(By.css('#km-delete-project-dialog-input'));
     const inputElement = input.nativeElement;
     inputElement.value = fakeProject().name;
     inputElement.dispatchEvent(new Event('blur'));

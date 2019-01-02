@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 'use strict';
 
 const express = require('express');
@@ -62,7 +61,7 @@ let proxyRequest = function (path, req, res) {
 };
 
 let isMockedResource = function(path) {
-  return (mockedResources.indexOf(path.split("/")[0]) != -1);
+  return (mockedResources.indexOf(path.split("/")[0]) !== -1);
 };
 
 let dispatchRequest = function (req, res, httpVerb) {
