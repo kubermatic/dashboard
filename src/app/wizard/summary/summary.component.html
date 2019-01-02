@@ -17,10 +17,7 @@
             </div>
             <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.version">
               <div fxFlex="50%" class="km-card-list-key">Master Version</div>
-              <div fxFlex="50%">
-                <ng-container *ngIf="isOnDevServer && cluster.name.endsWith('openshift')">{{mapKubernetesToOpenShiftVersion(cluster.spec.version)}}</ng-container>
-                <ng-container *ngIf="!isOnDevServer || !cluster.name.endsWith('openshift')">{{cluster.spec.version}}</ng-container>
-              </div>
+              <div fxFlex="50%">{{ cluster.spec.version }}</div>
             </div>
             <div fxLayout class="km-card-list-content provider">
               <div fxFlex="50%" class="km-card-list-key">Provider</div>
