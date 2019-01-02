@@ -1,4 +1,5 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/fonts";
 
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
@@ -13,7 +14,7 @@ ng2-slim-loading-bar {
 .navigation-bar {
   z-index: 2;
   height: 45px;
-  background-color: #fff;
+  background-color: $white-text-color;
   position: fixed;
   top: 0;
   left: 0;
@@ -33,7 +34,7 @@ ng2-slim-loading-bar {
   .auth {
     font-size: 14px;
     line-height: 45px;
-    font-family: "Titillium Web", "Roboto", "Kaushan Script", Helvetica, Arial, cursive;
+    font-family: $primary-font-cursive;
     font-weight: 400;
     text-align: right;
 
@@ -70,7 +71,7 @@ ng2-slim-loading-bar {
   display: inline-block;
   color: $text-color;
   text-decoration: none;
-  font-family: "Titillium Web", "Roboto", "Kaushan Script", Helvetica, Arial, cursive;
+  font-family: $primary-font-cursive;
   font-weight: 600;
 }
 

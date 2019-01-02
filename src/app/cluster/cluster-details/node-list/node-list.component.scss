@@ -1,7 +1,7 @@
 @import "../../../../assets/css/colors";
 
 .km-conditionsMessage {
-  border-top: 1px solid rgba($border, 0.3);
+  border-top: 1px solid $light-border;
   margin-bottom: 10px;
   margin-top: -20px;
   line-height: 40px;
@@ -69,7 +69,7 @@ i.fa-info-circle {
 }
 
 .node-details-content {
-  background-color: #fff;
+  background-color: $white-text-color;
   padding: 10px 24px;
   line-height: 30px;
 

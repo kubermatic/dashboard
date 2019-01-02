@@ -1,4 +1,5 @@
 @import "colors";
+@import "fonts";
 
 html,
 body {
@@ -10,7 +11,7 @@ body {
 
   @include titillium-font;
 
-  background-color: #f1f1f1;
+  background-color: $grey-background;
   color: $text-color;
 }
 
@@ -37,11 +38,11 @@ body {
   padding: 5px 15px;
   font-size: 14px;
   line-height: 20px;
-  font-family: "Menlo", monospace;
+  font-family: $code-block;
 
   p {
     color: $text-color !important;
-    font-family: "Menlo", monospace;
+    font-family: $code-block;
   }
 }
 
@@ -152,7 +153,7 @@ mat-button-toggle-group {
     margin-right: 20px;
     display: flex;
     align-items: center;
-    background-color: #fff;
+    background-color: $white-text-color;
     border: 1px solid $border;
     cursor: pointer;
     max-width: 90px;
@@ -166,7 +167,7 @@ mat-button-toggle-group {
   }
 
   .mat-button-toggle-checked {
-    background-color: #fff;
+    background-color: $white-text-color;
     border: 1px solid $primary;
   }
 
@@ -214,7 +215,7 @@ mat-button-toggle-group[group='providerGroup'] {
     height: 30px;
     line-height: 30px;
     background-color: $primary;
-    color: #fff;
+    color: $white-text-color;
 
     .mat-card-header-text {
       width: 100%;
@@ -272,19 +273,19 @@ mat-button-toggle-group[group='providerGroup'] {
       }
 
       &.statusWaiting {
-        background-color: rgba($waiting-background, 0.1);
+        background-color: $pending;
 
         &:hover {
-          background-color: rgba($waiting-background, 0.2);
+          background-color: $pending-hover;
         }
       }
 
       &.statusFailed,
       &.statusDeleting {
-        background-color: rgba($warning-background, 0.15);
+        background-color: $deleting;
 
         &:hover {
-          background-color: rgba($warning-background, 0.25);
+          background-color: $deleting-hover;
         }
       }
 
@@ -326,12 +327,12 @@ mat-button-toggle-group[group='providerGroup'] {
   margin: 0;
 
   &.statusWaiting {
-    background-color: rgba($waiting-background, 0.1);
+    background-color: $pending;
   }
 
   &.statusFailed,
   &.statusDeleting {
-    background-color: rgba($warning-background, 0.15);
+    background-color: $deleting;
   }
 
   .mat-card-header {
@@ -387,7 +388,7 @@ button.close {
   font-weight: 600;
   position: relative;
   background-color: $primary !important;
-  color: white !important;
+  color: $white-text-color !important;
   margin-bottom: 10px;
 
   .mat-dialog-info {
@@ -431,7 +432,7 @@ mat-dialog-content {
 
 ::-webkit-scrollbar-thumb {
   background: $light-text-color;
-  border: 0 none #fff;
+  border: 0 none $white-text-color;
   border-radius: 50px;
 }
 
@@ -445,7 +446,7 @@ mat-dialog-content {
 
 ::-webkit-scrollbar-track {
   background: $medium-background;
-  border: 0 none #fff;
+  border: 0 none $white-text-color;
   border-radius: 50px;
 }
 
@@ -482,7 +483,7 @@ mat-card-header {
   }
 
   &:active {
-    color: rgba($primary, 0.7);
+    color: $light-primary;
   }
 }
 
@@ -519,7 +520,7 @@ mat-card-header {
 }
 
 .mat-checkbox-frame {
-  border-color: #c1c9d4;
+  border-color: $checkbox-frame;
 }
 
 .mat-checkbox-background {
@@ -577,7 +578,7 @@ mat-card-header {
 
 // tooltip
 .mat-tooltip {
-  background-color: rgba($primary, 0.7) !important;
+  background-color: $light-primary !important;
   margin-top: 5px !important;
 }
 
@@ -645,12 +646,12 @@ mat-card-header {
     }
 
     &.mat-raised-button.mat-primary {
-      color: #fff;
+      color: $white-text-color;
       background-color: $primary;
     }
 
     &.mat-raised-button.mat-primary[disabled] {
-      color: #fff;
+      color: $white-text-color;
       background-color: $border;
       box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
     }
@@ -686,7 +687,7 @@ mat-card-header {
       top: 3px;
 
       i {
-        color: white;
+        color: $white-text-color;
       }
     }
   }

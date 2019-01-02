@@ -14,7 +14,7 @@
     text-align: center;
 
     i {
-      color: #fff;
+      color: $white-text-color;
       margin-left: 5px;
 
       &.fa-check {
@@ -25,7 +25,7 @@
 
   .wizard-step {
     padding-top: 8px;
-    color: #fff;
+    color: $white-text-color;
     font-weight: bold;
 
     .title-unchecked {
