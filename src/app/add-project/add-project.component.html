@@ -1,4 +1,4 @@
-<div class="km-dialog-box">
+<div id="km-add-project-dialog" class="km-dialog-box">
   <mat-toolbar>
     <span mat-dialog-info>
       <i class="fa fa-pencil" aria-hidden="true"></i>
@@ -12,7 +12,8 @@
     <div class="mat-dialog-content">
       <form [formGroup]="addProjectForm" fxLayout="column">
         <mat-form-field fxFlex>
-          <input matInput formControlName="name" type="text" placeholder="Project Name*:" autocomplete="off" cdkFocusInitial>
+          <input id="km-add-project-dialog-input" matInput formControlName="name"
+                 type="text" placeholder="Project Name*:" autocomplete="off" cdkFocusInitial>
           <mat-error *ngIf="addProjectForm.controls.name.hasError('required')">
             Name is <strong>required</strong>
           </mat-error>
@@ -24,7 +25,7 @@
   <button mat-dialog-close mat-raised-button>
     Cancel
   </button>
-  <button mat-raised-button color="primary" (click)="addProject()" [disabled]="!addProjectForm.valid">
+  <button id="km-add-project-dialog-save" mat-raised-button color="primary" (click)="addProject()" [disabled]="!addProjectForm.valid">
     Save
   </button>
   </mat-dialog-actions>

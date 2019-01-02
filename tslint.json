@@ -2,6 +2,7 @@
   "extends": "gts/tslint.json",
   "rules": {
     "no-any": false,
+    "no-console": true,
     "no-namespace": false,
     "switch-default": false,
     "variable-name": false

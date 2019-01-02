@@ -69,4 +69,12 @@ describe('NavigationComponent', () => {
        expect(spyNavigate).toHaveBeenCalled();
        expect(spyLogOut).toHaveBeenCalled();
      }));
+
+  it('should not display user information after logout', async(() => {
+       fixture.detectChanges();
+       expect(component.currentUser).toBeDefined();
+
+       component.logout();
+       expect(component.currentUser).not.toBeDefined();
+     }));
 });

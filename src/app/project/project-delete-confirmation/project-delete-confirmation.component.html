@@ -1,4 +1,4 @@
-<div class="km-dialog-box" (keydown.enter)="deleteProject()">
+<div id="km-delete-project-dialog" class="km-dialog-box" (keydown.enter)="deleteProject()">
  <mat-toolbar>
     Delete Project confirmation
     <button mat-icon-button mat-dialog-close>
@@ -12,7 +12,8 @@
       <p>If you know what you are doing, <strong>please type the name of the project</strong>:</p>
 
       <mat-form-field style="width: 100%" >
-        <input id="name" matInput type="text" placeholder="Name of the Project:" title="Project name" (blur)="onChange($event)" (keyup)="onChange($event)">
+        <input id="km-delete-project-dialog-input" matInput type="text" placeholder="Name of the Project:"
+               title="Project name" (blur)="onChange($event)" (keyup)="onChange($event)" #projectNameInput>
       </mat-form-field>
     </div>
   </mat-dialog-content>
@@ -20,7 +21,8 @@
     <button mat-dialog-close mat-raised-button>
       Close
     </button>
-    <button (click)="deleteProject()" mat-dialog-close mat-raised-button color="primary" class="mat-primary" [disabled]="!inputNameMatches()">
+    <button id="km-delete-project-dialog-btn" (click)="deleteProject()" mat-dialog-close mat-raised-button
+            color="primary" class="mat-primary" [disabled]="!inputNameMatches()">
       Delete
     </button>
   </mat-dialog-actions>

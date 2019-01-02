@@ -1,12 +1,12 @@
-import { browser } from 'protractor';
-import { LoginPage } from './login.po';
+import {LoginPage} from './login.po';
 
-describe('login page', () => {
+
+describe('Login page', () => {
   const page = new LoginPage();
 
   beforeAll(() => {
-    browser.waitForAngularEnabled(false); // TODO It should be enabled. Now it is disabled for all tests.
     page.navigateTo();
+    page.waitForElement(page.getLoginButton());
   });
 
   it('should have proper title', () => {
@@ -15,8 +15,8 @@ describe('login page', () => {
     });
   });
 
-  it('should display proper inner text', () => {
-    expect(page.getInnerText()).toContain('SCALE APPS WITH ONE CLICK');
+  it('should display login button on the navbar', () => {
+    expect(page.getNavbarLoginButton().isPresent()).toBeTruthy();
   });
 
   it('should display login button', () => {
