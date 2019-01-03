@@ -1,4 +1,4 @@
-<div class="km-dialog-box" (keydown.enter)="deleteCluster()">
+<div id="km-delete-cluster-dialog" class="km-dialog-box" (keydown.enter)="deleteCluster()">
  <mat-toolbar>
     Delete Cluster confirmation
     <button mat-icon-button mat-dialog-close>
@@ -12,7 +12,8 @@
       <p>If you know what you are doing, <strong>please type the name of the cluster</strong>:</p>
 
       <mat-form-field style="width: 100%" >
-        <input id="name" matInput type="text" placeholder="Name of the Cluster:" title="Cluster name" (blur)="onChange($event)" (keyup)="onChange($event)">
+        <input id="km-delete-cluster-dialog-input" matInput type="text" placeholder="Name of the Cluster:"
+               title="Cluster name" (blur)="onChange($event)" (keyup)="onChange($event)" #clusterNameInput>
       </mat-form-field>
     </div>
   </mat-dialog-content>
@@ -20,7 +21,8 @@
     <button mat-dialog-close mat-raised-button>
       Close
     </button>
-    <button (click)="deleteCluster()" mat-dialog-close mat-raised-button color="primary" class="mat-primary" [disabled]="!inputNameMatches()">
+    <button id="km-delete-cluster-dialog-delete-btn" (click)="deleteCluster()" mat-dialog-close
+            mat-raised-button color="primary" class="mat-primary" [disabled]="!inputNameMatches()">
       Delete
     </button>
   </mat-dialog-actions>

@@ -1,7 +1,7 @@
 <div *ngIf="!loading">
   <div fxLayout>
     <div fxFlex align="right">
-      <button mat-raised-button color="primary" type="button" (click)="addMember()" [disabled]="!!userGroup && !userGroupConfig[userGroup].members.invite">
+      <button id="km-add-member-top-btn" mat-raised-button color="primary" type="button" (click)="addMember()" [disabled]="!!userGroup && !userGroupConfig[userGroup].members.invite">
         <span class="btn-text-default">+ Add Member</span>
       </button>
     </div>

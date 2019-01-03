@@ -16,11 +16,6 @@ exports.config = {
     chromeOptions: {
       args: ['--headless', '--no-sandbox', '--disable-gpu', '--window-size=1024,768']
     }
-  }, {
-    browserName: 'firefox',
-    'moz:firefoxOptions': {
-      args: ['--headless']
-    }
   }],
 
   framework: 'jasmine',
