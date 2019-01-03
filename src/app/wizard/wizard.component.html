@@ -25,17 +25,17 @@
                       [clusterSSHKeys]="clusterSSHKeys"></kubermatic-summary>
 
   <!-- Navigation Buttons -->
-  <div class="buttom-navigation">
+  <div class="button-navigation">
     <button type="button" class="btn-back" mat-raised-button (click)="stepBack()" *ngIf="currentStepIndex !== 0">
       Back
     </button>
-    <button *ngIf="currentStepIndex < steps.length - 1" type="button" [disabled]="!currentStep.valid()" mat-raised-button color="primary" (click)="stepForward()">
+    <button id="km-create-cluster-next-btn" *ngIf="currentStepIndex < steps.length - 1" type="button" [disabled]="!currentStep.valid()" mat-raised-button color="primary" (click)="stepForward()">
       Next
     </button>
     <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0" type="button" mat-raised-button color="primary" (click)="stepForward()">
       Skip
     </button>
-    <button *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating || project.status !== 'Active'" type="button" mat-raised-button color="primary" (click)="createCluster()">
+    <button id="km-create-cluster-create-btn" *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating || project.status !== 'Active'" type="button" mat-raised-button color="primary" (click)="createCluster()">
       Create
     </button>
     <span class="project-status-info" *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>

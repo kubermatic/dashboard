@@ -20,11 +20,11 @@
       </mat-list-item>
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('create-cluster')">
-        <a mat-line [routerLink]="getRouterLink('wizard')"  [ngClass]="getLinkClass('/wizard')"><i class="fa fa-magic fa-lg"></i> Create Cluster</a>
+        <a id="km-nav-item-create-cluster" mat-line [routerLink]="getRouterLink('wizard')" [ngClass]="getLinkClass('/wizard')"><i class="fa fa-magic fa-lg"></i> Create Cluster</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('clusters')">
-        <a mat-line [routerLink]="getRouterLink('clusters')" [ngClass]="getLinkClass('/clusters')"><i class="iconCluster" [ngClass]="getIconClass('/clusters')"></i> Manage Clusters</a>
+        <a id="km-nav-item-clusters" mat-line [routerLink]="getRouterLink('clusters')" [ngClass]="getLinkClass('/clusters')"><i class="iconCluster" [ngClass]="getIconClass('/clusters')"></i> Manage Clusters</a>
       </mat-list-item>
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('sshKeys')">
@@ -32,7 +32,7 @@
       </mat-list-item>
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('members')">
-        <a mat-line [routerLink]="getRouterLink('members')" [ngClass]="getLinkClass('/members')"><i class="iconMember" [ngClass]="getIconClass('/members')"></i> Members</a>
+        <a id="km-nav-item-members" mat-line [routerLink]="getRouterLink('members')" [ngClass]="getLinkClass('/members')"><i class="iconMember" [ngClass]="getIconClass('/members')"></i> Members</a>
       </mat-list-item>
 
       <mat-list-item>

@@ -1,4 +1,4 @@
-import {Component, DoCheck, Input, OnInit} from '@angular/core';
+import {Component, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {ApiService, InitialNodeDataService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
@@ -14,6 +14,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
+  @ViewChild('clusterNameInput') clusterNameInputRef: ElementRef;
 
   inputName = '';
 
@@ -26,7 +27,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(): void {
-    document.getElementById('name').focus();
+    this.clusterNameInputRef.nativeElement.focus();
   }
 
   onChange(event: any): void {

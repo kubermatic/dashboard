@@ -1,7 +1,7 @@
 <div *ngIf="!loading">
   <div fxLayout>
     <div fxFlex align="right">
-      <button mat-raised-button color="primary" type="button" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.create" (click)="loadWizard()">
+      <button id="km-add-cluster-top-btn" mat-raised-button color="primary" type="button" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.create" (click)="loadWizard()">
         <span class="btn-text-default">+ Add Cluster</span>
       </button>
     </div>

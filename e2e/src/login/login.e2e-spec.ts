@@ -1,12 +1,12 @@
 import {LoginPage} from './login.po';
-
+import {KMElement} from "../shared/element-utils";
 
 describe('Login page', () => {
   const page = new LoginPage();
 
   beforeAll(() => {
     page.navigateTo();
-    page.waitForElement(page.getLoginButton());
+    KMElement.waitToAppear(page.getLoginButton());
   });
 
   it('should have proper title', () => {

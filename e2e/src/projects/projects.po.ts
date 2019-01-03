@@ -1,9 +1,8 @@
 import {by, element} from 'protractor';
 
-import {BasePage} from '../shared/base.po';
+import {NavPage} from '../shared/nav.po';
 
-export class ProjectsPage extends BasePage {
-  private _logoutButton = by.id('km-navbar-logout-btn');
+export class ProjectsPage extends NavPage {
   private _addProjectButton = by.id('km-add-project-top-btn');
   private _addProjectDialog = by.id('km-add-project-dialog');
   private _projectNameInput = by.id('km-add-project-dialog-input');
@@ -11,14 +10,9 @@ export class ProjectsPage extends BasePage {
   private _deleteProjectDialog = by.id('km-delete-project-dialog');
   private _deleteProjectDialogInput = by.id('km-delete-project-dialog-input');
   private _deleteProjectDialogButton = by.id('km-delete-project-dialog-btn');
-  private _projectsNavButton = by.id('km-nav-item-projects');
 
   navigateTo(): any {
-    return element(this._projectsNavButton).click();
-  }
-
-  getLogoutButton(): any {
-    return element(this._logoutButton);
+    return this.getProjectsNavButton().click();
   }
 
   getAddProjectButton(): any {
