@@ -32,12 +32,12 @@ import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../test
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {AddNodesModalComponent} from './add-nodes-modal.component';
+import {NodeDataModalComponent} from './node-data-modal.component';
 import {NodeService} from '../../../core/services/node/node.service';
 
 describe('AddNodesModalComponent', () => {
-  let fixture: ComponentFixture<AddNodesModalComponent>;
-  let component: AddNodesModalComponent;
+  let fixture: ComponentFixture<NodeDataModalComponent>;
+  let component: NodeDataModalComponent;
   let activatedRoute: ActivatedRouteStub;
   let createNodesSpy: Spy;
 
@@ -62,7 +62,7 @@ describe('AddNodesModalComponent', () => {
             MatTabsModule,
           ],
           declarations: [
-            AddNodesModalComponent,
+            NodeDataModalComponent,
             NodeDataComponent,
             OpenstackNodeDataComponent,
             OpenstackOptionsComponent,
@@ -92,16 +92,17 @@ describe('AddNodesModalComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddNodesModalComponent);
+    fixture = TestBed.createComponent(NodeDataModalComponent);
     component = fixture.componentInstance;
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
-    component.addNodesData = {
+    component.nodeData = {
       spec: fakeDigitaloceanCreateNode().spec,
       count: 1,
       valid: true,
     };
-    component.addNodesData = nodeDataFake();
+    component.nodeData = nodeDataFake();
+    component.editMode = false;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {clusterName: 'tbbfvttvs'};
@@ -114,7 +115,7 @@ describe('AddNodesModalComponent', () => {
   });
 
   it('should call createNodes method from the NodeService', fakeAsync(() => {
-       component.addNodes();
+       component.performAction();
        tick();
        expect(createNodesSpy.and.callThrough()).toHaveBeenCalled();
      }));

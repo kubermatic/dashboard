@@ -1,4 +1,5 @@
-<div class="km-dialog-box kd-add-nodes-dialog">
+<div class="km-dialog-box kd-add-nodes-dialog"
+     *ngIf="nodeData">
   <mat-toolbar>
     {{getDialogLabel()}}
     <button mat-icon-button mat-dialog-close>
@@ -11,7 +12,7 @@
   </mat-tab-group>
   <mat-dialog-content class="km-add-node-outer">
     <div class="mat-dialog-content km-add-node-inner">
-      <kubermatic-node-data [cluster]="cluster" [nodeData]="addNodesData" [existingNodesCount]="existingNodesCount"></kubermatic-node-data>
+      <kubermatic-node-data [cluster]="cluster" [nodeData]="nodeData" [existingNodesCount]="existingNodesCount"></kubermatic-node-data>
     </div>
   </mat-dialog-content>
 
@@ -19,7 +20,7 @@
     <button mat-dialog-close mat-raised-button>
       Close
     </button>
-    <button mat-raised-button mat-dialog-close color="primary" [disabled]="!addNodesData.valid" (click)="addNodes()" class="btn btn-primary">
+    <button mat-raised-button mat-dialog-close color="primary" [disabled]="!nodeData.valid" (click)="performAction()" class="btn btn-primary">
       {{getDialogLabel()}}
     </button>
   </mat-dialog-actions>
