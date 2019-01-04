@@ -93,7 +93,7 @@ describe('NodeDeploymentListComponent', () => {
             'should return classes for orange icon');
   });
 
-  it('should call deleteClusterNodeDeployment', fakeAsync(() => {
+  it('should call deleteNodeDeployment', fakeAsync(() => {
        component.cluster = fakeDigitaloceanCluster();
        component.datacenter = fakeDigitaloceanDatacenter();
        component.projectID = fakeProject().id;
