@@ -34,17 +34,26 @@ import {DatacenterMockService} from '../../../testing/services/datacenter-mock.s
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {NodeDataModalComponent} from './node-data-modal.component';
 import {NodeService} from '../../../core/services/node/node.service';
+import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 
 describe('AddNodesModalComponent', () => {
   let fixture: ComponentFixture<NodeDataModalComponent>;
   let component: NodeDataModalComponent;
   let activatedRoute: ActivatedRouteStub;
   let createNodesSpy: Spy;
+  let nodeDepPatchSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj(
-        'ApiService', ['getDigitaloceanSizes', 'createClusterNode', 'isNodeDeploymentAPIAvailable']);
+        'ApiService',
+        ['getDigitaloceanSizes', 'createClusterNode', 'isNodeDeploymentAPIAvailable', 'patchNodeDeployment']);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    nodeDepPatchSpy = apiMock.patchNodeDeployment.and.returnValue(asyncData(({
+      spec: {
+        replicas: 1,
+        template: fakeDigitaloceanCreateNode().spec,
+      }
+    } as NodeDeploymentEntity)));
 
     const nodeMock = jasmine.createSpyObj('NodeService', ['createNodes']);
     createNodesSpy = nodeMock.createNodes.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
@@ -114,10 +123,18 @@ describe('AddNodesModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call createNodes method from the NodeService', fakeAsync(() => {
+  it('should call createNodes method from the NodeService if not in edit mode', fakeAsync(() => {
        component.performAction();
        tick();
        expect(createNodesSpy.and.callThrough()).toHaveBeenCalled();
+     }));
+
+  it('should call patchNodeDeployment method from the ApiService if in edit mode', fakeAsync(() => {
+       component.editMode = true;
+       component.nodeDeploymentId = 'test';
+       component.performAction();
+       tick();
+       expect(nodeDepPatchSpy.and.callThrough()).toHaveBeenCalled();
      }));
 
   it('should render mat-dialog-actions', () => {
