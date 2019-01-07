@@ -1,7 +1,7 @@
 import {CommonModule} from '@angular/common';
 import {NgModule} from '@angular/core';
 import {ReactiveFormsModule} from '@angular/forms';
-import {MatAutocompleteModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule} from '@angular/material';
+import {MatAutocompleteModule, MatCardModule, MatCheckboxModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule, MatTooltipModule} from '@angular/material';
 import {AWSNodeDataComponent} from './aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from './azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from './digitalocean-node-data/digitalocean-node-data.component';
@@ -24,6 +24,7 @@ import {VSphereOptionsComponent} from './vsphere-add-node/vsphere-options/vspher
     MatCheckboxModule,
     MatCardModule,
     MatAutocompleteModule,
+    MatTooltipModule,
   ],
   declarations: [
     NodeDataComponent,

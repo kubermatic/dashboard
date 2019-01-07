@@ -1,3 +1,5 @@
+@import '../../../assets/css/colors';
+
 .km-floating-ip-checkbox {
   width: 100%;
   line-height: 30px;
@@ -9,6 +11,10 @@
   }
 
   mat-checkbox {
-    padding: 0 8px;
+    padding: 0 12px;
   }
+}
+
+.km-floating-ip-checkbox-info-icon {
+  padding-left: 4px;
 }
