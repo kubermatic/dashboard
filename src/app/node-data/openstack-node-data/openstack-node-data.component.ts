@@ -120,8 +120,4 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
                                   .subscribe((flavors) => this.handleFlavours(flavors)));
     }
   }
-
-  canAssignFloatingIP(): boolean {
-    return true;
-  }
 }
