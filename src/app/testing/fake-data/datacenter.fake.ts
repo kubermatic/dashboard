@@ -69,7 +69,7 @@ export function fakeOpenstackDatacenter(): DataCenterEntity {
           centos: '',
           ubuntu: 'Ubuntu 16.04 LTS 2018.03.26',
         },
-        enforce_floating_ip: true,
+        enforce_floating_ip: false,
       },
       location: 'Frankfurt',
       provider: 'openstack',
