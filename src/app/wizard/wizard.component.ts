@@ -121,7 +121,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       }
       this.cluster.spec.cloud = {dc: oldDC};
 
-      if (oldProviderSpec == null || oldProviderSpec !== undefined) {
+      if (oldProviderSpec === null || oldProviderSpec !== undefined) {
         this.cluster.spec.cloud[this.clusterProviderFormData.provider] =
             getEmptyCloudProviderSpec(this.clusterProviderFormData.provider);
         this.addNodeData.spec.cloud[this.clusterProviderFormData.provider] =

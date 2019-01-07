@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {ApiService} from '../../core/services';
+import {ApiService, DatacenterService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
@@ -9,6 +9,7 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
   selector: 'kubermatic-openstack-node-data',
+  styleUrls: ['./openstack-node-data.component.scss'],
   templateUrl: './openstack-node-data.component.html',
 })
 export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges {
@@ -23,18 +24,33 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
   osNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: NodeDataService, private api: ApiService) {}
+  constructor(private addNodeService: NodeDataService, private api: ApiService, private dcService: DatacenterService) {}
 
   ngOnInit(): void {
     this.osNodeForm = new FormGroup({
       flavor: new FormControl(this.nodeData.spec.cloud.openstack.flavor, Validators.required),
+      useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
     });
+
     this.subscriptions.push(this.osNodeForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     this.loadFlavors();
+
+    this.subscriptions.push(this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((dc) => {
+      if (dc.spec.openstack.enforce_floating_ip) {
+        this.osNodeForm.controls.useFloatingIP.setValue(true);
+        this.osNodeForm.controls.useFloatingIP.disable();
+        return;
+      }
+
+      if (!this.cloudSpec.openstack.floatingIpPool) {
+        this.osNodeForm.controls.useFloatingIP.setValue(false);
+        this.osNodeForm.controls.useFloatingIP.disable();
+      }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -57,6 +73,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
         openstack: {
           flavor: this.osNodeForm.controls.flavor.value,
           image: this.nodeData.spec.cloud.openstack.image,
+          useFloatingIP: this.osNodeForm.controls.useFloatingIP.value,
         },
       },
       valid: this.osNodeForm.valid,
@@ -102,5 +119,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
       this.subscriptions.push(this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId)
                                   .subscribe((flavors) => this.handleFlavours(flavors)));
     }
+  }
+
+  canAssignFloatingIP(): boolean {
+    return true;
   }
 }

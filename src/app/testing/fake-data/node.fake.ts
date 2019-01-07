@@ -319,6 +319,7 @@ export function nodeDataFake(): NodeData {
         openstack: {
           flavor: 'm1.small',
           image: '',
+          useFloatingIP: false,
         },
         hetzner: {
           type: 'cx31',

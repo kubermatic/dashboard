@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Subject} from 'rxjs/Subject';
+
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../../../shared/model/ClusterForm';
 
@@ -23,6 +25,7 @@ export class WizardService {
   clusterProviderFormChanges$ = this._clusterProviderForm.asObservable();
   // Cluster datacenter - form data
   private _clusterDatacenterForm = new Subject<ClusterDatacenterForm>();
+  private _selectedDatacenter: DataCenterEntity;
   clusterDatacenterFormChanges$ = this._clusterDatacenterForm.asObservable();
   // Cluster provider settings - form data
   private _clusterProviderSettingsForm = new Subject<ClusterProviderSettingsForm>();
@@ -55,6 +58,7 @@ export class WizardService {
   }
 
   changeClusterDatacenter(data: ClusterDatacenterForm): void {
+    this._selectedDatacenter = data.datacenter;
     this._clusterDatacenterForm.next(data);
   }
 
@@ -68,5 +72,9 @@ export class WizardService {
 
   changeSettingsFormView(data: ClusterSettingsFormView): void {
     this._clusterSettingsFormView.next(data);
+  }
+
+  getSelectedDatacenter(): DataCenterEntity {
+    return this._selectedDatacenter;
   }
 }

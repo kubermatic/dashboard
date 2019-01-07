@@ -103,6 +103,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       const osSpec: OpenstackNodeSpec = {
         flavor: 'm1.small',
         image: '',
+        useFloatingIP: false,
       };
       return osSpec;
     case NodeProvider.VSPHERE:

@@ -1,0 +1,14 @@
+.km-floating-ip-checkbox {
+  width: 100%;
+  line-height: 30px;
+  font-size: 14px;
+  display: flex;
+
+  &.with-margin {
+    margin: 5px 0 10px;
+  }
+
+  mat-checkbox {
+    padding: 0 8px;
+  }
+}
