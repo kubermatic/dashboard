@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {MatTabChangeEvent} from '@angular/material';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {MAT_DIALOG_DATA, MatTabChangeEvent} from '@angular/material';
 import {Subscription} from 'rxjs';
 
 import {ApiService, DatacenterService, WizardService} from '../../../core/services';
@@ -14,35 +14,37 @@ import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 
+export interface NodeDataModalData {
+  cluster: ClusterEntity;
+  datacenter: DataCenterEntity;
+  projectID: string;
+  existingNodesCount: number;
+
+  // Fields specific for edit mode (not required if using dialog to add new nodes).
+  editMode?: boolean;
+  nodeData?: NodeData;
+  nodeDeployment?: NodeDeploymentEntity;
+}
+
 @Component({
   selector: 'kubermatic-node-data-modal',
   templateUrl: './node-data-modal.component.html',
   styleUrls: ['./node-data-modal.component.scss'],
 })
 export class NodeDataModalComponent implements OnInit, OnDestroy {
-  @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
-  @Input() projectID: string;
-  @Input() existingNodesCount: number;
-  @Input() nodeData: NodeData;
-
-  // Fields specific for edit mode (not required if using dialog to add new nodes).
-  @Input() editMode = false;
-  @Input() nodeDeploymentId: string;
   @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
-
   nodeDC: DataCenterEntity;
   private subscriptions: Subscription[] = [];
   private isNodeDeploymentAPIAvailable = false;
 
   constructor(
-      private api: ApiService, private nodeDataService: NodeDataService, private nodeService: NodeService,
-      private wizardService: WizardService, private dcService: DatacenterService,
-      public googleAnalyticsService: GoogleAnalyticsService) {}
+      @Inject(MAT_DIALOG_DATA) public data: NodeDataModalData, private api: ApiService,
+      private nodeDataService: NodeDataService, private nodeService: NodeService, private wizardService: WizardService,
+      private dcService: DatacenterService, public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    if (!this.nodeData) {
-      this.nodeData = {
+    if (!this.data.nodeData) {
+      this.data.nodeData = {
         spec: {
           cloud: {},
           operatingSystem: {},
@@ -53,16 +55,18 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       };
     }
 
-    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((result) => {
+    this.dcService.getDataCenter(this.data.cluster.spec.cloud.dc).subscribe((result) => {
       this.nodeDC = result;
     });
 
-    this.nodeData.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
-    this.nodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
-    this.nodeData.spec.versions = getEmptyNodeVersionSpec();
+    if (this.data.editMode !== true) {
+      this.data.nodeData.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
+      this.data.nodeData.spec.operatingSystem = getEmptyOperatingSystemSpec();
+      this.data.nodeData.spec.versions = getEmptyNodeVersionSpec();
+    }
 
     this.subscriptions.push(this.nodeDataService.nodeDataChanges$.subscribe(async (data: NodeData) => {
-      this.nodeData = await data;
+      this.data.nodeData = await data;
     }));
 
     this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
@@ -82,20 +86,15 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   }
 
   getDialogLabel() {
-    return `${this.editMode ? 'Edit' : 'Add'} ${this.isNodeDeploymentAPIAvailable ? 'Node Deployment' : 'Node'}`;
+    return `${this.data.editMode ? 'Edit' : 'Add'} ${this.isNodeDeploymentAPIAvailable ? 'Node Deployment' : 'Node'}`;
   }
 
   performAction(): void {
-    if (this.editMode) {
-      const patch: NodeDeploymentPatch = {
-        spec: {
-          replicas: this.nodeData.count,
-          template: this.nodeData.spec,
-        },
-      };
+    if (this.data.editMode) {
       this.api
           .patchNodeDeployment(
-              this.nodeDeploymentId, patch, this.cluster.id, this.datacenter.metadata.name, this.projectID)
+              this.data.nodeDeployment, this.createPatch(), this.data.cluster.id, this.data.datacenter.metadata.name,
+              this.data.projectID)
           .toPromise()
           .then(
               (nd) => {
@@ -108,7 +107,25 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
                 this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
               });
     } else {
-      this.nodeService.createNodes(this.nodeData, this.datacenter, this.cluster, this.projectID);
+      this.nodeService.createNodes(this.data.nodeData, this.data.datacenter, this.data.cluster, this.data.projectID);
     }
+  }
+
+  private createPatch(): NodeDeploymentPatch {
+    const patch: NodeDeploymentPatch = {
+      spec: {
+        replicas: this.data.nodeData.count,
+        template: this.data.nodeData.spec,
+      },
+    };
+
+    // As we are using merge patch to send whole spec we need to ensure that previous values will be unset
+    // and replaced by the values from patch. That's why we need to set undefined fields to null.
+    // It is not part of API service as it is not required in all cases (i.e. replicas count change).
+    patch.spec.template.operatingSystem.ubuntu = patch.spec.template.operatingSystem.ubuntu || null;
+    patch.spec.template.operatingSystem.centos = patch.spec.template.operatingSystem.centos || null;
+    patch.spec.template.operatingSystem.containerLinux = patch.spec.template.operatingSystem.containerLinux || null;
+
+    return patch;
   }
 }

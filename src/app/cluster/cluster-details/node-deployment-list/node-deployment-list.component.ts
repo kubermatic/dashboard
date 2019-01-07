@@ -82,18 +82,22 @@ export class NodeDeploymentListComponent implements OnInit {
   }
 
   showEditDialog(nd: NodeDeploymentEntity): void {
-    const modal = this.dialog.open(NodeDataModalComponent);
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.projectID = this.projectID;
-    modal.componentInstance.existingNodesCount = nd.spec.replicas;
-    modal.componentInstance.editMode = true;
-    modal.componentInstance.nodeDeploymentId = nd.id;
-    modal.componentInstance.nodeData = {
-      count: JSON.parse(JSON.stringify(nd.spec.replicas)),  // Deep copy method from MDN.
-      spec: JSON.parse(JSON.stringify(nd.spec.template)),
-      valid: true,
-    };
+    const modal = this.dialog.open(NodeDataModalComponent, {
+      data: {
+        cluster: this.cluster,
+        datacenter: this.datacenter,
+        projectID: this.projectID,
+        existingNodesCount: nd.spec.replicas,
+        editMode: true,
+        nodeDeployment: nd,
+        nodeData: {
+          count: JSON.parse(JSON.stringify(nd.spec.replicas)),  // Deep copy method from MDN.
+          spec: JSON.parse(JSON.stringify(nd.spec.template)),
+          valid: true,
+        },
+      }
+    });
+
     modal.componentInstance.editNodeDeployment.subscribe((nd) => {
       this.changeNodeDeployment.emit(nd);
     });

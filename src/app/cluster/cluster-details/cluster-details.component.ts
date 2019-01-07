@@ -209,11 +209,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   addNode(): void {
-    const modal = this.dialog.open(NodeDataModalComponent);
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.projectID = this.projectID;
-    modal.componentInstance.existingNodesCount = this.nodes.length;
+    const modal = this.dialog.open(NodeDataModalComponent, {
+      data: {
+        cluster: this.cluster,
+        datacenter: this.datacenter,
+        projectID: this.projectID,
+        existingNodesCount: this.nodes.length,
+        editMode: false,
+      }
+    });
+
     modal.afterClosed().toPromise().then(() => {
       this.reloadClusterNodes();
     });

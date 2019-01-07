@@ -30,7 +30,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
       size: new FormControl(this.nodeData.spec.cloud.digitalocean.size, Validators.required),
     });
 
-    this.subscriptions.push(this.doNodeForm.valueChanges.subscribe((data) => {
+    this.subscriptions.push(this.doNodeForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 

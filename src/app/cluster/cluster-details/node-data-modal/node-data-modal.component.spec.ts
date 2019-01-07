@@ -103,15 +103,15 @@ describe('AddNodesModalComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NodeDataModalComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
-    component.nodeData = {
+    component.data.cluster = fakeDigitaloceanCluster();
+    component.data.datacenter = fakeDigitaloceanDatacenter();
+    component.data.nodeData = {
       spec: fakeDigitaloceanCreateNode().spec,
       count: 1,
       valid: true,
     };
-    component.nodeData = nodeDataFake();
-    component.editMode = false;
+    component.data.nodeData = nodeDataFake();
+    component.data.editMode = false;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {clusterName: 'tbbfvttvs'};
@@ -130,8 +130,14 @@ describe('AddNodesModalComponent', () => {
      }));
 
   it('should call patchNodeDeployment method from the ApiService if in edit mode', fakeAsync(() => {
-       component.editMode = true;
-       component.nodeDeploymentId = 'test';
+       component.data.editMode = true;
+       component.data.nodeDeployment = {
+         id: 'test',
+         spec: {
+           replicas: 1,
+           template: fakeDigitaloceanCreateNode().spec,
+         },
+       };
        component.performAction();
        tick();
        expect(nodeDepPatchSpy.and.callThrough()).toHaveBeenCalled();
