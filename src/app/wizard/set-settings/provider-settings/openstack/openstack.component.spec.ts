@@ -2,14 +2,17 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {AppConfigService} from '../../../../app-config.service';
 import {ApiService, Auth, WizardService} from '../../../../core/services';
 import {Config} from '../../../../shared/model/Config';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
+import {fakeOpenstackDatacenter} from '../../../../testing/fake-data/datacenter.fake';
 import {openstackTenantsFake} from '../../../../testing/fake-data/wizard.fake';
 import {asyncData} from '../../../../testing/services/api-mock.service';
 import {AuthMockService} from '../../../../testing/services/auth-mock.service';
+
 import {OpenstackClusterSettingsComponent} from './openstack.component';
 
 describe('OpenstackClusterSettingsComponent', () => {
@@ -48,6 +51,8 @@ describe('OpenstackClusterSettingsComponent', () => {
   describe('Default config', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
+      const wizardService: WizardService = TestBed.get(WizardService);
+      spyOn(wizardService, 'getSelectedDatacenter').and.returnValue(fakeOpenstackDatacenter());
       component = fixture.componentInstance;
       component.cluster = fakeOpenstackCluster();
       component.cluster.spec.cloud.openstack = {
@@ -83,6 +88,8 @@ describe('OpenstackClusterSettingsComponent', () => {
       };
 
       fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
+      const wizardService: WizardService = TestBed.get(WizardService);
+      spyOn(wizardService, 'getSelectedDatacenter').and.returnValue(fakeOpenstackDatacenter());
       component = fixture.componentInstance;
       component.cluster = fakeOpenstackCluster();
       component.cluster.spec.cloud.openstack = {

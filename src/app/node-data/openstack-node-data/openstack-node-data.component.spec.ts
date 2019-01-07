@@ -2,13 +2,16 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiService} from '../../core/services';
+
+import {ApiService, DatacenterService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeOpenstackFlavors} from '../../testing/fake-data/addNodeModal.fake';
 import {fakeOpenstackCluster} from '../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
+
 import {OpenstackNodeDataComponent} from './openstack-node-data.component';
 
 describe('OpenstackNodeDataComponent', () => {
@@ -32,6 +35,7 @@ describe('OpenstackNodeDataComponent', () => {
           ],
           providers: [
             NodeDataService,
+            {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ApiService, useValue: apiMock},
           ],
         })
