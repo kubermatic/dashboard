@@ -32,7 +32,7 @@ export class ApiMockService {
 
   constructor() {}
 
-  isNodeDeploymentAPIAvailable(): boolean {
+  isNodeDeploymentEnabled(): boolean {
     return this.isNodeDeploymentAPIAvailable_;
   }
 
