@@ -159,20 +159,16 @@ export class NodeListComponent implements OnInit {
     return addresses;
   }
 
-  getOsImagePath(node: NodeEntity): string {
-    let path = '/assets/images/operating-system/';
-
+  getOsImage(node: NodeEntity): string {
     if (node.spec.operatingSystem.containerLinux) {
-      path += 'containerlinux.png';
+      return 'containerlinux';
     } else if (node.spec.operatingSystem.ubuntu) {
-      path += 'ubuntu.png';
+      return 'ubuntu';
     } else if (node.spec.operatingSystem.centos) {
-      path += 'centos.png';
+      return 'centos';
     } else {
-      path = '';
+      return '';
     }
-
-    return path;
   }
 
   showInfo(node: NodeEntity): boolean {

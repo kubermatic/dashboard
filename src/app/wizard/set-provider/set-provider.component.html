@@ -10,9 +10,7 @@
   <form [formGroup]="setProviderForm" fxLayoutAlign="left" fxLayout="row wrap">
     <mat-button-toggle-group group="providerGroup" formControlName="provider">
       <mat-button-toggle *ngFor="let provider of providers;" value="{{provider}}">
-        <img class="provider-logo"
-             src="/assets/images/clouds/{{provider}}.png"
-             alt="{{provider}}">
+        <div class="provider-logo provider-logo-{{provider}}"></div>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </form>

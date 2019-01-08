@@ -79,7 +79,7 @@
     <mat-card-content>
       <div class="row" fxLayout>
         <div fxFlex="42%">
-          <img src="/assets/images/clouds/{{nodeDc.spec.provider}}.png" class="provider-logo" alt="Cluster Icon" />
+          <div class="provider-logo provider-logo-{{nodeDc.spec.provider}}"></div>
         </div>
         <div fxFlex="30%" class="region">
           <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">

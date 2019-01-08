@@ -198,6 +198,7 @@ mat-button-toggle-group[group='datacenterGroup'] {
 mat-button-toggle-group[group='providerGroup'] {
   .mat-button-toggle-label-content {
     height: 100%;
+    padding: 0 10px;
   }
 
   .mat-button-toggle-button {
@@ -316,8 +317,8 @@ mat-button-toggle-group[group='providerGroup'] {
 }
 
 .provider-logo {
-  height: auto !important;
-  width: auto !important;
+  height: 100% !important;
+  width: 100% !important;
   max-height: 40px !important;
   max-width: 70px !important;
 }
@@ -755,7 +756,6 @@ mat-card-header {
   }
 }
 
-// Icons
 mat-list-item.disabled {
   i {
     opacity: 0.3;
@@ -764,116 +764,6 @@ mat-list-item.disabled {
 
 .btn-in-box:disabled {
   color: $disabled-button-color;
-}
-
-.iconDelete {
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/delete-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/delete-black.png");
-  }
-
-  &:disabled {
-    opacity: 0.3;
-  }
-}
-
-.iconEdit {
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/edit-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/edit-black.png");
-  }
-
-  &:disabled {
-    opacity: 0.3;
-  }
-}
-
-.iconCluster {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/cluster-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/cluster-black.png");
-  }
-}
-
-.iconKey {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/key-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/key-black.png");
-  }
-}
-
-.iconProject {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/project-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/project-black.png");
-  }
-}
-
-.iconMember {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/member-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/member-black.png");
-  }
 }
 
 .km-action-button-icon {

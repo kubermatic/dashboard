@@ -97,7 +97,8 @@
                   <div class="km-card-list-content" fxFlex="50%">
                     <div fxFlex="50%" class="km-card-list-key">Operating System:</div>
                     <div fxFlex="50%">
-                      <img [src]="getOsImagePath(node)" class="os-image"/>
+                      <div class="os-image os-image-{{getOsImage(node)}}"></div>
+                      <!-- <img [src]="getOsImagePath(node)" class="os-image"/> -->
                     </div>
                   </div>
 

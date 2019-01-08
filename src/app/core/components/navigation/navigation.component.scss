@@ -21,11 +21,10 @@ ng2-slim-loading-bar {
   width: 100%;
   box-shadow: 0 4px 4px rgba($text-color, 0.1);
 
-  .logo {
+  .km-header-logo {
     display: block;
     margin: 0 auto;
     width: 184px;
-    background-image: url("../../../../assets/images/logo/header-logo-kubermatic.png");
     height: 45px;
     background-size: 218px;
     background-position: 0 -24px;
@@ -43,10 +42,6 @@ ng2-slim-loading-bar {
     }
 
     .login {
-      background-image: url("../../../../assets/images/login.svg");
-      background-repeat: no-repeat;
-      background-size: auto 10px;
-      background-position: center left;
       padding-left: 15px;
       margin-right: 25px;
       font-weight: 500;
@@ -54,10 +49,6 @@ ng2-slim-loading-bar {
     }
 
     .logout {
-      background-image: url("../../../../assets/images/logout.svg");
-      background-size: auto 10px;
-      background-repeat: no-repeat;
-      background-position: center left;
       padding-left: 15px;
       margin-right: 25px;
       font-weight: 500;
