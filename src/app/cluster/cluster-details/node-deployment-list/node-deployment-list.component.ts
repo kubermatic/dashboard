@@ -91,8 +91,8 @@ export class NodeDeploymentListComponent implements OnInit {
         editMode: true,
         nodeDeployment: nd,
         nodeData: {
-          count: JSON.parse(JSON.stringify(nd.spec.replicas)),  // Deep copy method from MDN.
-          spec: JSON.parse(JSON.stringify(nd.spec.template)),
+          count: nd.spec.replicas,
+          spec: JSON.parse(JSON.stringify(nd.spec.template)),  // Deep copy method from MDN.
           valid: true,
         },
       }
