@@ -43,7 +43,7 @@ export class NodeListComponent implements OnInit {
       private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
+    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentEnabled();
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;

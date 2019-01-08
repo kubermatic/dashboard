@@ -4,6 +4,7 @@ import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
+import {AppConfigService} from '../../../app-config.service';
 import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
@@ -28,7 +29,8 @@ export class ApiService {
   private token: string;
   private isNodeDeploymentAPIAvailable_ = false;
 
-  constructor(private http: HttpClient, private auth: Auth, private backend: HttpBackend) {
+  constructor(
+      private http: HttpClient, private auth: Auth, private backend: HttpBackend, private appConfig: AppConfigService) {
     this.token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
   }
@@ -42,21 +44,19 @@ export class ApiService {
     return client.get<any[]>(url, {headers})
         .toPromise()
         .then((response) => {
-          // TODO Enable after feature will be implemented:
-          //  this.isNodeDeploymentAPIAvailable_ = true;
+          this.isNodeDeploymentAPIAvailable_ = true;
           return response;
         })
         .catch((error: HttpErrorResponse) => {
-          // TODO Enable after feature will be implemented:
-          //  404 and 405 are the status codes returned if endpoint path and method are not implemented.
-          //  That's why if we encounter them we can assume that this functionality is not implemented on API side.
-          //  this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
+          // 404 and 405 are the status codes returned if endpoint path and method are not implemented.
+          // That's why if we encounter them we can assume that this functionality is not implemented on API side.
+          this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
           return error;
         });
   }
 
-  isNodeDeploymentAPIAvailable(): boolean {
-    return this.isNodeDeploymentAPIAvailable_;
+  isNodeDeploymentEnabled(): boolean {
+    return this.isNodeDeploymentAPIAvailable_ && this.appConfig.getConfig().enable_node_deployments;
   }
 
   createNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):

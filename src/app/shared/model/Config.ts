@@ -1,4 +1,5 @@
 export interface Config {
+  enable_node_deployments?: boolean;
   show_demo_info?: boolean;
   show_terms_of_service?: boolean;
   share_kubeconfig?: boolean;
