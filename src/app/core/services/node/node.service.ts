@@ -53,7 +53,7 @@ export class NodeService {
   private createNodeDeployment_(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string):
       void {
     const createObservables: Array<ObservableInput<any>> = [];
-    createObservables.push(this.api_.createClusterNodeDeployment(
+    createObservables.push(this.api_.createNodeDeployment(
         cluster, NodeService.getNodeDeploymentEntity_(nodeData), dc.metadata.name, project));
     this.observeCreation_(createObservables, 'Node Deployment successfully created');
   }

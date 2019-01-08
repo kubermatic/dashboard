@@ -57,6 +57,13 @@
             <ng-container *ngSwitchCase="false">
               <button mat-icon-button
                       class="km-node-deployment-action"
+                      matTooltip="Edit Node Deployment"
+                      (click)="showEditDialog(element)">
+                <mat-icon class="iconEdit black"></mat-icon>
+              </button>
+
+              <button mat-icon-button
+                      class="km-node-deployment-action"
                       matTooltip="Delete Node Deployment"
                       (click)="showDeleteDialog(element)"
                       [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">

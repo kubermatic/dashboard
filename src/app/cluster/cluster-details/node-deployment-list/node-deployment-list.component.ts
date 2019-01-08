@@ -10,6 +10,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {NodeDataModalComponent} from '../node-data-modal/node-data-modal.component';
 
 @Component({
   selector: 'kubermatic-node-deployment-list',
@@ -33,7 +34,7 @@ export class NodeDeploymentListComponent implements OnInit {
   @Input() clusterHealthStatus: string;
   @Input() isClusterRunning: boolean;
   @Input() hasInitialNodes: boolean;
-  @Output() deleteNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
+  @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
 
   displayedColumns: string[] = ['position', 'name', 'replicas', 'ver', 'created', 'status', 'actions'];
   userGroupConfig: UserGroupConfig;
@@ -80,6 +81,28 @@ export class NodeDeploymentListComponent implements OnInit {
     return healthStatus;
   }
 
+  showEditDialog(nd: NodeDeploymentEntity): void {
+    const modal = this.dialog.open(NodeDataModalComponent, {
+      data: {
+        cluster: this.cluster,
+        datacenter: this.datacenter,
+        projectID: this.projectID,
+        existingNodesCount: nd.spec.replicas,
+        editMode: true,
+        nodeDeployment: nd,
+        nodeData: {
+          count: nd.spec.replicas,
+          spec: JSON.parse(JSON.stringify(nd.spec.template)),  // Deep copy method from MDN.
+          valid: true,
+        },
+      }
+    });
+
+    modal.componentInstance.editNodeDeployment.subscribe((nd) => {
+      this.changeNodeDeployment.emit(nd);
+    });
+  }
+
   showDeleteDialog(nd: NodeDeploymentEntity): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
@@ -97,11 +120,11 @@ export class NodeDeploymentListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this.api.deleteClusterNodeDeployment(this.cluster.id, nd, this.datacenter.metadata.name, this.projectID)
+        this.api.deleteNodeDeployment(this.cluster.id, nd, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {
-              NotificationActions.success('Success', 'Node removed successfully');
-              this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
-              this.deleteNodeDeployment.emit(nd);
+              NotificationActions.success('Success', 'Node Deployment removed successfully');
+              this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleted');
+              this.changeNodeDeployment.emit(nd);
             });
       }
     });

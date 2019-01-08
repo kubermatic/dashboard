@@ -4,7 +4,6 @@ import {MachineNetworksModule} from '../machine-networks/machine-networks.module
 import {NodeDataModule} from '../node-data/node-data.module';
 import {SharedModule} from '../shared/shared.module';
 
-import {AddNodesModalComponent} from './cluster-details/add-nodes-modal/add-nodes-modal.component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -23,7 +22,7 @@ import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-clu
 import {EditSSHKeyDeleteConfirmationComponent} from './cluster-details/edit-sshkeys/edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
 import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
-
+import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeDuplicateComponent} from './cluster-details/node-duplicate/node-duplicate.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
@@ -47,7 +46,7 @@ const entryComponents: any[] = [
 
   NodeDuplicateComponent,
   ChangeClusterVersionComponent,
-  AddNodesModalComponent,
+  NodeDataModalComponent,
   ClusterSecretsComponent,
   ClusterConnectComponent,
   RevokeAdminTokenComponent,

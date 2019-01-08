@@ -12,21 +12,7 @@ export class NodeDeploymentEntity {
 export class NodeDeploymentSpec {
   replicas: number;
   template: NodeSpec;
-  strategy?: NodeDeploymentStrategy;
-  minReadySeconds?: number;
-  revisionHistoryLimit?: number;
   paused?: boolean;
-  progressDeadlineSeconds?: number;
-}
-
-export class NodeDeploymentStrategy {
-  type?: string;
-  rollingUpdate?: NodeDeploymentRollingUpdate;
-}
-
-export class NodeDeploymentRollingUpdate {
-  maxUnavailable?: number|string;
-  maxSurge?: number|string;
 }
 
 export class NodeDeploymentStatus {
