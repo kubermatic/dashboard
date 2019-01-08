@@ -69,7 +69,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       this.data.nodeData = await data;
     }));
 
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
+    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentEnabled();
     this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
   }
 

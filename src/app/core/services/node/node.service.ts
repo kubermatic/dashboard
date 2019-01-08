@@ -43,7 +43,7 @@ export class NodeService {
   }
 
   createNodes(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
-    if (this.api_.isNodeDeploymentAPIAvailable()) {
+    if (this.api_.isNodeDeploymentEnabled()) {
       this.createNodeDeployment_(nodeData, dc, cluster, project);
     } else {
       this.createNodes_(nodeData, dc, cluster, project);

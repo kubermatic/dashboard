@@ -90,7 +90,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     }));
 
     this.projectId = this._project.project.id;
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
+    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentEnabled();
   }
 
   ngOnDestroy(): void {
