@@ -45,8 +45,7 @@ describe('AddNodesModalComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj(
-        'ApiService',
-        ['getDigitaloceanSizes', 'createClusterNode', 'isNodeDeploymentAPIAvailable', 'patchNodeDeployment']);
+        'ApiService', ['getDigitaloceanSizes', 'createClusterNode', 'isNodeDeploymentEnabled', 'patchNodeDeployment']);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     nodeDepPatchSpy = apiMock.patchNodeDeployment.and.returnValue(asyncData(({
       spec: {

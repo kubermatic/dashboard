@@ -45,7 +45,7 @@ describe('SetSettingsComponent', () => {
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj(
         'ApiService',
-        ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys', 'isNodeDeploymentAPIAvailable']);
+        ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys', 'isNodeDeploymentEnabled']);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));

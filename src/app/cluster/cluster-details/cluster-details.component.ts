@@ -70,7 +70,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentAPIAvailable();
+    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentEnabled();
 
     this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this.unsubscribe)).subscribe((group) => {
       this.userGroup = group;
