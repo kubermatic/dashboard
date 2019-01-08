@@ -1,0 +1,15 @@
+# See the OWNERS docs: https://git.k8s.io/community/contributors/guide/owners.md
+
+approvers:
+  - kgroschoff
+  - maciaszczykm
+  - floreks
+  - zreigz
+  - p0lyn0mial
+
+reviewers:
+  - kgroschoff
+  - maciaszczykm
+  - floreks
+  - zreigz
+  - p0lyn0mial
