@@ -59,13 +59,13 @@ describe('OpenstackNodeDataComponent', () => {
 
   it('should disable floating ip checkbox when required by datacenter', () => {
     const datacenterService = TestBed.get(DatacenterService);
-    const tooltipEl = fixture.debugElement.query(By.css('.km-floating-ip-checkbox-info-icon'));
     const dc = fakeOpenstackDatacenter();
     dc.spec.openstack.enforce_floating_ip = true;
     spyOn(datacenterService, 'getDataCenter').and.returnValue(of(dc));
     spyOn(component, 'isInWizard').and.returnValue(false);
 
     fixture.detectChanges();
+    const tooltipEl = fixture.debugElement.query(By.css('.km-floating-ip-checkbox-info-icon'));
     expect(tooltipEl).not.toBeNull();
     expect(component.osNodeForm.controls.useFloatingIP.disabled).toBeTruthy();
   });
