@@ -36,7 +36,7 @@ export class ApiMockService {
     return this.isNodeDeploymentAPIAvailable_;
   }
 
-  deleteClusterNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
+  deleteNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
     return of(null);
   }
 

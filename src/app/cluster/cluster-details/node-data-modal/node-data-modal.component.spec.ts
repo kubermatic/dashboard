@@ -32,19 +32,28 @@ import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../test
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {AddNodesModalComponent} from './add-nodes-modal.component';
+import {NodeDataModalComponent} from './node-data-modal.component';
 import {NodeService} from '../../../core/services/node/node.service';
+import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 
 describe('AddNodesModalComponent', () => {
-  let fixture: ComponentFixture<AddNodesModalComponent>;
-  let component: AddNodesModalComponent;
+  let fixture: ComponentFixture<NodeDataModalComponent>;
+  let component: NodeDataModalComponent;
   let activatedRoute: ActivatedRouteStub;
   let createNodesSpy: Spy;
+  let nodeDepPatchSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj(
-        'ApiService', ['getDigitaloceanSizes', 'createClusterNode', 'isNodeDeploymentAPIAvailable']);
+        'ApiService',
+        ['getDigitaloceanSizes', 'createClusterNode', 'isNodeDeploymentAPIAvailable', 'patchNodeDeployment']);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    nodeDepPatchSpy = apiMock.patchNodeDeployment.and.returnValue(asyncData(({
+      spec: {
+        replicas: 1,
+        template: fakeDigitaloceanCreateNode().spec,
+      }
+    } as NodeDeploymentEntity)));
 
     const nodeMock = jasmine.createSpyObj('NodeService', ['createNodes']);
     createNodesSpy = nodeMock.createNodes.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
@@ -62,7 +71,7 @@ describe('AddNodesModalComponent', () => {
             MatTabsModule,
           ],
           declarations: [
-            AddNodesModalComponent,
+            NodeDataModalComponent,
             NodeDataComponent,
             OpenstackNodeDataComponent,
             OpenstackOptionsComponent,
@@ -92,16 +101,17 @@ describe('AddNodesModalComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddNodesModalComponent);
+    fixture = TestBed.createComponent(NodeDataModalComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster();
-    component.datacenter = fakeDigitaloceanDatacenter();
-    component.addNodesData = {
+    component.data.cluster = fakeDigitaloceanCluster();
+    component.data.datacenter = fakeDigitaloceanDatacenter();
+    component.data.nodeData = {
       spec: fakeDigitaloceanCreateNode().spec,
       count: 1,
       valid: true,
     };
-    component.addNodesData = nodeDataFake();
+    component.data.nodeData = nodeDataFake();
+    component.data.editMode = false;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {clusterName: 'tbbfvttvs'};
@@ -113,10 +123,24 @@ describe('AddNodesModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call createNodes method from the NodeService', fakeAsync(() => {
-       component.addNodes();
+  it('should call createNodes method from the NodeService if not in edit mode', fakeAsync(() => {
+       component.performAction();
        tick();
        expect(createNodesSpy.and.callThrough()).toHaveBeenCalled();
+     }));
+
+  it('should call patchNodeDeployment method from the ApiService if in edit mode', fakeAsync(() => {
+       component.data.editMode = true;
+       component.data.nodeDeployment = {
+         id: 'test',
+         spec: {
+           replicas: 1,
+           template: fakeDigitaloceanCreateNode().spec,
+         },
+       };
+       component.performAction();
+       tick();
+       expect(nodeDepPatchSpy.and.callThrough()).toHaveBeenCalled();
      }));
 
   it('should render mat-dialog-actions', () => {

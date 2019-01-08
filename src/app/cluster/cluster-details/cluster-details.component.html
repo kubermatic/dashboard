@@ -121,7 +121,7 @@
     <div class="km-pre-card-title">Node Deployments</div>
     <kubermatic-node-deployment-list [cluster]="cluster"
                                      [nodeDeployments]="nodeDeployments"
-                                     (deleteNodeDeployment)="reloadClusterNodes()"
+                                     (changeNodeDeployment)="reloadClusterNodes()"
                                      [datacenter]="datacenter"
                                      [projectID]="projectID"
                                      [clusterHealthStatus]="clusterHealthClass"
