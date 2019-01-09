@@ -5,12 +5,12 @@ import (
 )
 
 type createAction struct {
-	randomize bool
+	randomize   bool
 	emailDomain string
-	userID string
-	username string
-	email string
-	password string
+	userID      string
+	username    string
+	email       string
+	password    string
 }
 
 func (createAction) Type() ActionType {
@@ -37,11 +37,11 @@ func (this createAction) Validate() error {
 
 func newCreateAction(randomize bool, userID, username, email, emailDomain, password string) Action {
 	return &createAction{
-		randomize: randomize,
-		userID: userID,
-		username: username,
-		email: email,
+		randomize:   randomize,
+		userID:      userID,
+		username:    username,
+		email:       email,
 		emailDomain: emailDomain,
-		password: password,
+		password:    password,
 	}
 }

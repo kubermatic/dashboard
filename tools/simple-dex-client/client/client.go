@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 
-	"github.com/kubermatic/simple-dex-client/user"
+	"github.com/kubermatic/dashboard-v2/tools/simple-dex-client/user"
 )
 
 type dexClient struct {

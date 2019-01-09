@@ -1,6 +1,6 @@
 package action
 
-type listAction struct {}
+type listAction struct{}
 
 func (listAction) Type() ActionType {
 	return List

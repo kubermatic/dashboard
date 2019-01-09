@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/kubermatic/simple-dex-client/user"
+	"github.com/kubermatic/dashboard-v2/tools/simple-dex-client/user"
 )
 
 type DexClient interface {

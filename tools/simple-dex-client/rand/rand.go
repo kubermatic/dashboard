@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+	alphabet            = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 	defaultStringLength = 10
 )
 
@@ -14,7 +14,7 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-func RandString(lengthArg... int) string {
+func RandString(lengthArg ...int) string {
 	length := defaultStringLength
 	if len(lengthArg) == 1 {
 		length = lengthArg[0]
