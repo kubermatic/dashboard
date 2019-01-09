@@ -59,7 +59,7 @@
                       class="km-node-deployment-action"
                       matTooltip="Edit Node Deployment"
                       (click)="showEditDialog(element)">
-                <mat-icon class="iconEdit black"></mat-icon>
+                <mat-icon class="km-icon-edit black"></mat-icon>
               </button>
 
               <button mat-icon-button
@@ -69,7 +69,7 @@
                       [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
                 <i class="fa fa-trash-o"
                    aria-hidden="true"
-                   [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'disabled' : ''"></i>
+                   [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'km-disabled' : ''"></i>
               </button>
             </ng-container>
           </ng-container>

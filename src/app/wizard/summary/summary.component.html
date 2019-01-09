@@ -9,7 +9,7 @@
     <div fxLayout="column" fxLayout.sm="column" fxLayout.xs="column" fxLayoutGap="20px">
       <div fxFlex="100%" class="km-summary-container">
         <div fxFlex="50%" class="km-summary-left">
-          <div class="km-summary-box seperated">
+          <div class="km-summary-box km-seperated">
             <h3>General</h3>
             <div fxLayout class="km-card-list-content">
               <div fxFlex="50%" class="km-card-list-key">Name</div>
@@ -19,13 +19,13 @@
               <div fxFlex="50%" class="km-card-list-key">Master Version</div>
               <div fxFlex="50%">{{ cluster.spec.version }}</div>
             </div>
-            <div fxLayout class="km-card-list-content provider">
+            <div fxLayout class="km-card-list-content km-provider">
               <div fxFlex="50%" class="km-card-list-key">Provider</div>
               <div fxFlex="50%">
 
                 <div class="cloud">
-                  <div class="provider-icon">
-                    <div class="provider-logo provider-logo-{{providerFormData.provider}}"></div>
+                  <div class="km-provider-icon">
+                    <div class="km-provider-logo km-provider-logo-{{providerFormData.provider}}"></div>
                   </div>
                 </div>
               </div>
@@ -225,9 +225,9 @@
       <div fxFlex="100%" class="km-summary-container">
         <div class="km-summary-full km-summary-box">
           <h3>Machine Networks</h3>
-          <div class="node-settings" fxLayout>
+          <div class="km-node-settings" fxLayout>
 
-              <div class="km-card-list-content machine-networks" fxFlex="50%" *ngFor="let network of cluster.spec.machineNetworks; let i=index">
+              <div class="km-card-list-content km-machine-networks" fxFlex="50%" *ngFor="let network of cluster.spec.machineNetworks; let i=index">
                 <div fxLayout="column">
                   <strong>Machine Network #{{i+1}}</strong>
                   <div fxLayout="row">
@@ -242,7 +242,7 @@
                     <div fxFlex="50%" class="km-card-list-key">
                       DNS Server
                     </div>
-                    <div fxFlex="50%" class="machine-networks-dns-server">
+                    <div fxFlex="50%" class="km-machine-networks-dns-server">
                     {{ getDnsServers(network.dnsServers) }}
                     </div>
                   </div>
@@ -267,7 +267,7 @@
       <div fxFlex="100%" class="km-summary-container">
         <div class="km-summary-full km-summary-box">
           <h3>Node Settings</h3>
-          <div class="node-settings" fxLayout>
+          <div class="km-node-settings" fxLayout>
 
             <ng-container *ngIf="!cluster.spec.cloud.bringyourown">
               <div class="km-card-list-content" fxFlex="50%" fxLayout="column">

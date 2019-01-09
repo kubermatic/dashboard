@@ -1,16 +1,16 @@
-<nav class="sub-nav"
+<nav class="km-sub-nav"
      fxLayout
      fxLayout.xs="column"
      fxLayoutAlign="left"
      fxLayoutGap="10px"
      fxLayoutGap.xs="0">
-  <ul class="breadcrumb" fxFlex fxFlexOffset.xs="0">
-    <li class="breadcrumb-item"><a routerLink="/projects">Home</a></li>
-    <li *ngIf="!clusterName.length" class="breadcrumb-item" [ngClass]="{'active': !clusterName}" >{{ activePageTitle }}</li>
+  <ul class="km-breadcrumb" fxFlex fxFlexOffset.xs="0">
+    <li class="km-breadcrumb-item"><a routerLink="/projects">Home</a></li>
+    <li *ngIf="!clusterName.length" class="km-breadcrumb-item" [ngClass]="{'active': !clusterName}" >{{ activePageTitle }}</li>
 
     <ng-container  *ngIf="clusterName.length">
-      <li class="breadcrumb-item"><a routerLink="/projects">Manage Projects</a></li>
-      <li class="breadcrumb-item" [ngClass]="{'active': clusterName}">{{clusterName}}</li>
+      <li class="km-breadcrumb-item"><a routerLink="/projects">Manage Projects</a></li>
+      <li class="km-breadcrumb-item" [ngClass]="{'active': clusterName}">{{clusterName}}</li>
     </ng-container>
   </ul>
 </nav>

@@ -108,10 +108,10 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
 
   getIconClass(isHealthy: boolean): string {
     if (isHealthy) {
-      return 'iconRunning';
+      return 'km-icon-running';
     } else if (!(isHealthy)) {
       if (!this.health.apiserver) {
-        return 'iconFailed';
+        return 'km-icon-failed';
       } else {
         return 'fa fa-spin fa-circle-o-notch';
       }

@@ -1,14 +1,14 @@
 <div class="km-row" [ngClass]="getClusterItemClass()" (click)="navigateToCluster()">
   <div fxLayout>
     <div fxFlex="40%" fxFlex.xs="40%">
-        <span class="health-state-container"><kubermatic-cluster-health-status [cluster]="cluster" [datacenter]="seedDC" [projectID]="projectID"></kubermatic-cluster-health-status></span>
+        <span class="km-health-state-container"><kubermatic-cluster-health-status [cluster]="cluster" [datacenter]="seedDC" [projectID]="projectID"></kubermatic-cluster-health-status></span>
         <p class="km-cluster-name" fxHide.gt-sm >{{getShortClusterName(cluster.name)}}</p>
         <p [attr.id]="'km-clusters-' + cluster.name" class="km-cluster-name" fxHide.lt-md >{{cluster.name}}</p>
     </div>
     <div fxFlex="30%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
       <ng-container [ngSwitch]="!!cluster.spec.cloud">
         <ng-container *ngSwitchCase="true">
-          <span class="provider-logo provider-logo-{{getProvider()}}"></span>
+          <span class="km-provider-logo km-provider-logo-{{getProvider()}}"></span>
         </ng-container>
         <p *ngSwitchCase="false" class="text-muted">
           No provider

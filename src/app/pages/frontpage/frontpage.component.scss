@@ -1,7 +1,7 @@
 @import "../../../assets/css/colors";
 @import "../../../assets/css/fonts";
 
-.frontpage-bg {
+.km-frontpage-bg {
   background-color: $primary;
   position: absolute;
   height: 100%;
@@ -11,10 +11,10 @@
   z-index: -1;
 }
 
-.frontpage-content {
+.km-frontpage-content {
   margin-top: 15%;
 
-  .frontpage-inner-text {
+  .km-frontpage-inner-text {
     text-align: center;
     color: $white-text-color;
     text-transform: uppercase;

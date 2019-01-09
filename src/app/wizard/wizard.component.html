@@ -25,8 +25,8 @@
                       [clusterSSHKeys]="clusterSSHKeys"></kubermatic-summary>
 
   <!-- Navigation Buttons -->
-  <div class="button-navigation">
-    <button type="button" class="btn-back" mat-raised-button (click)="stepBack()" *ngIf="currentStepIndex !== 0">
+  <div class="km-button-navigation">
+    <button type="button" class="km-btn-back" mat-raised-button (click)="stepBack()" *ngIf="currentStepIndex !== 0">
       Back
     </button>
     <button id="km-create-cluster-next-btn" *ngIf="currentStepIndex < steps.length - 1" type="button" [disabled]="!currentStep.valid()" mat-raised-button color="primary" (click)="stepForward()">
@@ -38,8 +38,8 @@
     <button id="km-create-cluster-create-btn" *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating || project.status !== 'Active'" type="button" mat-raised-button color="primary" (click)="createCluster()">
       Create
     </button>
-    <span class="project-status-info" *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
-    <a type="button" class="cancel-button" routerLink="/projects/{{project.id}}/clusters">Cancel</a>
+    <span class="km-project-status-info" *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
+    <a type="button" class="km-cancel-button" routerLink="/projects/{{project.id}}/clusters">Cancel</a>
   </div>
 
 </mat-card>

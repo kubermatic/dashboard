@@ -316,7 +316,7 @@ mat-button-toggle-group[group='providerGroup'] {
   }
 }
 
-.provider-logo {
+.km-provider-logo {
   display: block;
   height: 100% !important;
   width: 100% !important;
@@ -328,12 +328,12 @@ mat-button-toggle-group[group='providerGroup'] {
   padding: 0;
   margin: 0;
 
-  &.statusWaiting {
+  &.km-status-waiting {
     background-color: $pending;
   }
 
-  &.statusFailed,
-  &.statusDeleting {
+  &.km-status-failed,
+  &.km-status-deleting {
     background-color: $deleting;
   }
 
@@ -360,7 +360,7 @@ mat-button-toggle-group[group='providerGroup'] {
   }
 
   .mat-card-subtitle {
-    .pauseReason {
+    .km-pause-reason {
       margin-top: 0;
       color: $warning-status-color;
     }
@@ -477,7 +477,7 @@ mat-card-header {
 }
 
 // copy text
-.copy {
+.km-copy {
   cursor: pointer;
 
   &:hover {
@@ -614,16 +614,16 @@ mat-card-header {
   background-color: transparent !important;
 }
 // modal
-.btn-right {
+.km-btn-right {
   float: right;
 }
 
-.dialog {
+.km-dialog {
   width: 545px;
 }
 
 @media screen and (max-width: 745px) {
-  .dialog {
+  .km-dialog {
     width: 100%;
   }
 }
@@ -725,7 +725,7 @@ mat-card-header {
 
 // provider message
 
-.provider-message {
+.km-provider-message {
   height: 52px;
   background-color: $medium-background;
   margin: 5px 0;
@@ -741,7 +741,7 @@ mat-card-header {
 }
 
 // download kubeconfig button
-.download-kubeconfig-btn {
+.km-download-kubeconfig-btn {
   span.mat-button-wrapper {
     display: flex;
     height: 100%;
@@ -763,7 +763,7 @@ mat-list-item.disabled {
   }
 }
 
-.btn-in-box:disabled {
+.km-btn-in-box:disabled {
   color: $disabled-button-color;
 }
 

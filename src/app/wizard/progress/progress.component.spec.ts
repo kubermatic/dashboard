@@ -70,7 +70,7 @@ describe('ProgressComponent', () => {
   });
 
   it('should return correct title class', () => {
-    expect(component.getTitleClass(2)).toBe('title-unchecked');
+    expect(component.getTitleClass(2)).toBe('km-title-unchecked');
     expect(component.getTitleClass(1)).toBe('');
     expect(component.getTitleClass(0)).toBe('');
   });

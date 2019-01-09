@@ -29,7 +29,7 @@
           line-height: 35px;
         }
 
-        .health-state {
+        .km-health-state {
           margin-left: 6px;
           text-align: center;
 
@@ -80,7 +80,7 @@ mat-option[value='addProject'] {
   font-weight: 600;
 }
 
-.disabled {
+.km-disabled {
   pointer-events: none;
   cursor: default;
 

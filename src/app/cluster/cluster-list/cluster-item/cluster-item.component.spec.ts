@@ -85,7 +85,7 @@ describe('ClusterItemComponent', () => {
        tick();
        discardPeriodicTasks();
 
-       const de = fixture.debugElement.query(By.css('.provider-logo-digitalocean'));
+       const de = fixture.debugElement.query(By.css('.km-provider-logo-digitalocean'));
        expect(de).toBeTruthy();
      }));
 });

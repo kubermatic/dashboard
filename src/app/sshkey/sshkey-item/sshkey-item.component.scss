@@ -1,49 +1,42 @@
 @import "../../../assets/css/colors";
 
-.sshkey-item {
+.km-sshkey-item {
   color: $text-color;
   font-size: 12px;
   cursor: pointer;
   position: relative;
 
-  .key-name {
+  .km-key-name {
     font-weight: 500;
     font-size: 14px;
   }
 
-  .key-timestamp {
+  .km-key-timestamp {
     font-size: 12px;
   }
 
-  .key-fingerprint {
+  .km-key-fingerprint {
     text-overflow: ellipsis;
     overflow: hidden;
     padding-right: 30px;
   }
 }
 
-.button-delete {
-  position: absolute;
-  top: 8px;
-  z-index: 1;
-  right: 0;
-}
-
-.publickey-wrapper {
+.km-publickey-wrapper {
   background-color: $light-background;
   padding: 23px 20px 15px;
 
-  .publickey-content {
+  .km-publickey-content {
     background-color: $white-text-color;
 
-    .publickey-name {
+    .km-publickey-name {
       font-weight: 500;
       text-transform: uppercase;
       color: $text-color;
       padding: 10px 24px;
     }
 
-    .publickey {
+    .km-publickey {
       padding: 15px 20px;
       background-color: $medium-background;
       word-wrap: break-word;
@@ -56,6 +49,6 @@
   }
 }
 
-.iconDelete {
+.km-icon-delete {
   float: right;
 }

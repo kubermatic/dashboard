@@ -189,7 +189,7 @@ export class NodeListComponent implements OnInit {
   toggleNode(nodeID: string): void {
     const element = event.target as HTMLElement;
     const className = element.className;
-    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'copy') {
+    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'km-copy') {
       if (this.isShowNodeDetails[nodeID]) {
         this.isShowNodeDetails[nodeID] = false;
       } else if (!this.isShowNodeDetails[nodeID]) {

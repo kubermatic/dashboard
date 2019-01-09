@@ -1,5 +1,5 @@
 <ng-container *ngIf="isLoaded()">
-  <div fxLayout class="cluster-detail-actions">
+  <div fxLayout class="km-cluster-detail-actions">
     <div fxFlex="100%" align="right">
       <button mat-raised-button
               color="primary"
@@ -16,7 +16,7 @@
       <button class="share-kubeconfig-btn" (click)="shareConfigDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'km-status-running'" *ngIf="!!config.share_kubeconfig">
         Share cluster
       </button>
-      <a class="download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
+      <a class="km-download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
       <button id="km-delete-cluster-btn" mat-button (click)="deleteClusterDialog()" mat-raised-button
               [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
         <i class="fa fa-trash-o km-action-button-icon" aria-hidden="true"></i>
@@ -28,7 +28,7 @@
   <mat-card class="white" [ngClass]="clusterHealthClass">
     <mat-card-header class="km-card-main-header">
       <mat-card-title>
-        <span ngxClipboard [cbContent]="cluster.name" matTooltip="click to copy" class="copy km-cluster-name">{{cluster.name}}</span>
+        <span ngxClipboard [cbContent]="cluster.name" matTooltip="click to copy" class="km-copy km-cluster-name">{{cluster.name}}</span>
         <kubermatic-cluster-health-status [cluster]="cluster" [datacenter]="datacenter" [projectID]="projectID"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
@@ -36,11 +36,11 @@
       <div fxFlex="20%">
         <strong>Master Version:</strong>
       </div>
-      <div fxFlex="35%" class="change-version" *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)">
-        <span (click)="changeClusterVersionDialog()" matTooltip="click to change version" class="copy">{{cluster.spec.version}}
+      <div fxFlex="35%" class="km-change-version" *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)">
+        <span (click)="changeClusterVersionDialog()" matTooltip="click to change version" class="km-copy">{{cluster.spec.version}}
         <small [hidden]="!updatesAvailable">upgrade available</small></span>
       </div>
-      <div fxFlex="35%" class="change-version" [hidden]="isClusterRunning && (updatesAvailable || downgradesAvailable)">
+      <div fxFlex="35%" class="km-change-version" [hidden]="isClusterRunning && (updatesAvailable || downgradesAvailable)">
         {{cluster.spec.version}}
       </div>
     </mat-card-content>
@@ -64,11 +64,11 @@
           </button>
           <mat-menu #menu="matMenu" class="km-provider-edit-settings">
             <button mat-menu-item (click)="editProviderSettings()" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.edit">
-              <mat-icon class="iconEdit black"></mat-icon>
+              <mat-icon class="km-icon-edit black"></mat-icon>
               <span>Edit Settings</span>
             </button>
             <button mat-menu-item (click)="editSSHKeys()" [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.edit">
-              <mat-icon class="iconEdit black"></mat-icon>
+              <mat-icon class="km-icon-edit black"></mat-icon>
               <span>Manage SSH keys</span>
             </button>
           </mat-menu>
@@ -79,7 +79,7 @@
     <mat-card-content>
       <div class="km-row" fxLayout>
         <div fxFlex="42%">
-          <span class="provider-logo provider-logo-{{nodeDc.spec.provider}}"></span>
+          <span class="km-provider-logo km-provider-logo-{{nodeDc.spec.provider}}"></span>
         </div>
         <div fxFlex="30%" class="km-region">
           <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">
@@ -97,7 +97,7 @@
               <div class="km-ssh-keys-list-more" *ngIf="sshKeys.length > 3">
                 <div class="km-more-sshKeys-btn" (click)="loadMoreSshKeys(true)" *ngIf="!moreSshKeys">
                   <strong>More</strong>
-                  <span class="iconArrowDown"></span>
+                  <span class="km-icon-arrow-down"></span>
                 </div>
                 <div class="km-more-sshKeys" *ngIf="moreSshKeys">
                   <li *ngFor="let key of sshKeys.slice(3, sshKeys.length+1)">
@@ -107,7 +107,7 @@
                 </div>
                 <div class="km-more-sshKeys-btn" (click)="loadMoreSshKeys(false)" *ngIf="moreSshKeys">
                   <strong>Less</strong>
-                  <span class="iconArrowUp"></span>
+                  <span class="km-icon-arrow-up"></span>
                 </div>
               </div>
             </ul>
