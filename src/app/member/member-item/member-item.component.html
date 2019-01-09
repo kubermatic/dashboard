@@ -1,13 +1,13 @@
 <div class="km-row" [ngClass]="getMemberItemClass()">
   <div fxLayout>
     <div fxFlex="35%" fxFlex.xs="40%">
-      <p class="member-name">{{ member.name }}</p>
+      <p class="km-member-name">{{ member.name }}</p>
     </div>
     <div fxFlex="35%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
-      <p class="member-email">{{ member.email }}</p>
+      <p class="km-member-email">{{ member.email }}</p>
     </div>
     <div fxFlex="20%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
-      <p class="member-group">{{ getGroup(member.projects) }}</p>
+      <p class="km-member-group">{{ getGroup(member.projects) }}</p>
     </div>
     <div fxFlex="10%" fxHide.sm fxHide.xs>
       <p class="km-icon">

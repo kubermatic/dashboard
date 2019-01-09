@@ -19,7 +19,7 @@ export class CreateClusterPage extends NavPage {
   }
 
   getProviderButton(providerName: string): any {
-    return element(by.className(`provider-logo-${providerName}`));
+    return element(by.className(`km-provider-logo-${providerName}`));
   }
 
   getDatacenterLocationButton(location: string): any {

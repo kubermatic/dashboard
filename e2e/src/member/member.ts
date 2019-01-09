@@ -54,7 +54,7 @@ export class MembersPage extends NavPage {
   }
 
   getMemberGroup(email: string): any {
-    return element(by.xpath(`${this._getMemberItemPath(email)}//..//*[contains(@class,'member-group')]`));
+    return element(by.xpath(`${this._getMemberItemPath(email)}//..//*[contains(@class,'km-member-group')]`));
   }
 
   getDeleteMemberDialog(): any {
