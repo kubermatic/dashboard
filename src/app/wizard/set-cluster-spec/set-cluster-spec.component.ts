@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {interval, Subscription} from 'rxjs';
+import {debounce} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
@@ -17,7 +17,6 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
-  checkMachineNetworksTooltip = '';
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -29,9 +28,14 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: new FormControl(this.cluster.spec.version),
     });
 
-    this.subscriptions.push(this.clusterSpecForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
-      this.setClusterSpec();
-    }));
+    this.subscriptions.push(this.clusterSpecForm.valueChanges
+                                .pipe(debounce(() => {
+                                  this._invalidateStep();
+                                  return interval(1000);
+                                }))
+                                .subscribe(() => {
+                                  this.setClusterSpec();
+                                }));
 
     this.loadMasterVersions();
   }
@@ -65,6 +69,14 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       name: this.clusterSpecForm.controls.name.value,
       version: this.clusterSpecForm.controls.version.value,
       valid: this.clusterSpecForm.valid,
+    });
+  }
+
+  private _invalidateStep(): void {
+    this.wizardService.changeClusterSpec({
+      name: this.clusterSpecForm.controls.name.value,
+      version: this.clusterSpecForm.controls.version.value,
+      valid: false,
     });
   }
 }
