@@ -47,26 +47,22 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  getClusterImagePath(): string {
-    let path = '/assets/images/clouds/';
-
+  getProvider(): string {
     if (this.cluster.spec.cloud.aws) {
-      path += 'aws.png';
+      return 'aws';
     } else if (this.cluster.spec.cloud.digitalocean) {
-      path += 'digitalocean.png';
+      return 'digitalocean';
     } else if (this.cluster.spec.cloud.openstack) {
-      path += 'openstack.png';
+      return 'openstack';
     } else if (this.cluster.spec.cloud.bringyourown) {
-      path += 'bringyourown.png';
+      return 'bringyourown';
     } else if (this.cluster.spec.cloud.hetzner) {
-      path += 'hetzner.png';
+      return 'hetzner';
     } else if (this.cluster.spec.cloud.vsphere) {
-      path += 'vsphere.png';
+      return 'vsphere';
     } else if (this.cluster.spec.cloud.azure) {
-      path += 'azure.png';
+      return 'azure';
     }
-
-    return path;
   }
 
   getShortClusterName(name: string): string {

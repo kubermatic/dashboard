@@ -1,0 +1,285 @@
+// logo
+.km-header-logo {
+  background-image: url("/assets/images/logo/header-logo-kubermatic.png");
+  background-repeat: no-repeat;
+}
+
+// login & logout
+.login {
+  background-image: url("/assets/images/login.svg");
+  background-repeat: no-repeat;
+  background-size: auto 10px;
+  background-position: center left;
+}
+
+.logout {
+  background-image: url("/assets/images/logout.svg");
+  background-size: auto 10px;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+// icons
+.iconDelete {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+  &.white {
+    background-image: url("/assets/images/icons/white/delete-white.png");
+  }
+
+  &.black {
+    background-image: url("/assets/images/icons/black/delete-black.png");
+  }
+
+  &:disabled {
+    opacity: 0.3;
+  }
+}
+
+.iconEdit {
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+  &.white {
+    background-image: url("/assets/images/icons/white/edit-white.png");
+  }
+
+  &.black {
+    background-image: url("/assets/images/icons/black/edit-black.png");
+  }
+
+  &:disabled {
+    opacity: 0.3;
+  }
+}
+
+.iconCluster {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+  &.white {
+    background-image: url("/assets/images/icons/white/cluster-white.png");
+  }
+
+  &.black {
+    background-image: url("/assets/images/icons/black/cluster-black.png");
+  }
+}
+
+.iconKey {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+  &.white {
+    background-image: url("/assets/images/icons/white/key-white.png");
+  }
+
+  &.black {
+    background-image: url("/assets/images/icons/black/key-black.png");
+  }
+}
+
+.iconProject {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+  &.white {
+    background-image: url("/assets/images/icons/white/project-white.png");
+  }
+
+  &.black {
+    background-image: url("/assets/images/icons/black/project-black.png");
+  }
+}
+
+.iconMember {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+
+  &.white {
+    background-image: url("/assets/images/icons/white/member-white.png");
+  }
+
+  &.black {
+    background-image: url("/assets/images/icons/black/member-black.png");
+  }
+}
+
+.iconArrowUp {
+  display: inline-block;
+  width: 12px;
+  height: 9px;
+  background-image: url("/assets/images/Arrow_up.svg");
+  background-repeat: no-repeat;
+}
+
+.iconArrowDown {
+  display: inline-block;
+  width: 12px;
+  height: 9px;
+  background-image: url("/assets/images/Arrow_down.svg");
+  background-repeat: no-repeat;
+}
+
+.iconRunning {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 12px;
+  height: 10px;
+  background-image: url("/assets/images/Running-Check.svg");
+  background-repeat: no-repeat;
+}
+
+.iconFailed {
+  display: inline-block;
+  margin: 0 10px 0 5px;
+  width: 2px;
+  height: 10px;
+  background-image: url("/assets/images/Failed.svg");
+  background-repeat: no-repeat;
+}
+
+.iconLogs {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 12px;
+  height: 10px;
+  background-image: url("/assets/images/Logs.svg");
+  background-repeat: no-repeat;
+}
+
+.iconDocuments {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 12px;
+  height: 11px;
+  background-image: url("/assets/images/Documents.svg");
+  background-repeat: no-repeat;
+}
+
+.iconDownload {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 12px;
+  height: 10px;
+  background-image: url("/assets/images/Download_blue.svg");
+  background-repeat: no-repeat;
+}
+
+// provider logos
+.provider-logo-aws {
+  background-image: url("/assets/images/clouds/aws.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-azure {
+  background-image: url("/assets/images/clouds/azure.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-baremetal {
+  background-image: url("/assets/images/clouds/baremetal.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-bringyourown {
+  background-image: url("/assets/images/clouds/bringyourown.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-digitalocean {
+  background-image: url("/assets/images/clouds/digitalocean.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-fake {
+  background-image: url("/assets/images/clouds/fake.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-hetzner {
+  background-image: url("/assets/images/clouds/hetzner.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-loodsecluster {
+  background-image: url("/assets/images/clouds/loodsecluster.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-openstack {
+  background-image: url("/assets/images/clouds/openstack.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.provider-logo-vsphere {
+  background-image: url("/assets/images/clouds/vsphere.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+// operating system logos
+.os-image-centos {
+  background-image: url("/assets/images/operating-system/centos.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center left;
+}
+
+.os-image-containerlinux {
+  background-image: url("/assets/images/operating-system/containerlinux.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center left;
+}
+
+.os-image-ubuntu {
+  background-image: url("/assets/images/operating-system/ubuntu.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center left;
+}

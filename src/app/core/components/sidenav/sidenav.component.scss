@@ -60,11 +60,11 @@
 
     &:hover,
     &.active {
-      color: #fff;
+      color: $white-text-color;
       background-color: $primary;
 
       i {
-        color: #fff;
+        color: $white-text-color;
       }
     }
 

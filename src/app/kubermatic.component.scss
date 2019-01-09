@@ -1,3 +1,5 @@
+@import "../assets/css/colors";
+
 kubermatic-root,
 mat-sidenav-container {
   margin: 0;
@@ -15,12 +17,12 @@ mat-sidenav {
 
 .mat-sidenav {
   width: 210px;
-  background-color: #f7faff;
-  color: #fff;
+  background-color: $medium-background;
+  color: $white-text-color;
 }
 
 .mat-sidenav-container {
-  background-color: #f1f1f1;
+  background-color: $grey-background;
 }
 
 .mat-input-wrapper {
