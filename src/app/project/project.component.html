@@ -26,10 +26,10 @@
         <kubermatic-project-item *ngFor="let project of sortedProjects; let iProject = index; trackBy: trackProject" [index]="iProject" [project]="project" fxFlex></kubermatic-project-item>
       </ng-container>
       <ng-container *ngSwitchCase="false">
-        <div fxFlex class="row odd no-item">No Project available. Please add a Project.</div>
+        <div fxFlex class="km-row km-odd km-no-item">No Project available. Please add a Project.</div>
       </ng-container>
       <ng-container>
-        <div class="row">
+        <div class="km-row">
           <button class="btn-in-box" (click)="addProject()">+ Add Project</button>
         </div>
       </ng-container>

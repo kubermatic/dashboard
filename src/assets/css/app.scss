@@ -33,7 +33,7 @@ body {
 }
 
 // global
-.code-block {
+.km-code-block {
   background-color: $medium-background;
   padding: 5px 15px;
   font-size: 14px;
@@ -230,7 +230,7 @@ mat-button-toggle-group[group='providerGroup'] {
     }
   }
 
-  &.small .mat-card-header {
+  &.km-small .mat-card-header {
     height: 20px;
     line-height: 20px;
   }
@@ -238,18 +238,18 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-card-content {
     line-height: 40px;
 
-    &.row,
-    .row {
+    &.km-row,
+    .km-row {
       line-height: 40px;
       padding: 10px 24px;
 
-      &.small {
+      &.km-small {
         padding: 10px 24px;
         margin: 0;
         line-height: normal;
       }
 
-      &.accordion {
+      &.km-accordion {
         padding-bottom: 0;
 
         > div:first-child {
@@ -261,19 +261,19 @@ mat-button-toggle-group[group='providerGroup'] {
         outline: none;
       }
 
-      .cluster-name {
+      .km-cluster-name {
         line-height: 40px;
       }
 
-      &.odd {
+      &.km-odd {
         background-color: $medium-background;
       }
 
-      &.statusRunning:hover {
+      &.km-status-running:hover {
         background-color: $light-background;
       }
 
-      &.statusWaiting {
+      &.km-status-waiting {
         background-color: $pending;
 
         &:hover {
@@ -281,8 +281,8 @@ mat-button-toggle-group[group='providerGroup'] {
         }
       }
 
-      &.statusFailed,
-      &.statusDeleting {
+      &.km-status-failed,
+      &.km-status-deleting {
         background-color: $deleting;
 
         &:hover {
@@ -290,8 +290,8 @@ mat-button-toggle-group[group='providerGroup'] {
         }
       }
 
-      &.no-item,
-      .no-item {
+      &.km-no-item,
+      .km-no-item {
         text-align: center;
         font-size: 14px;
         color: $text-color;
@@ -304,7 +304,7 @@ mat-button-toggle-group[group='providerGroup'] {
         font-size: 14px;
       }
 
-      .region {
+      .km-region {
         align-items: center;
 
         .flag-icon {
@@ -352,7 +352,7 @@ mat-button-toggle-group[group='providerGroup'] {
         font-size: 18px;
         line-height: 28px;
 
-        .cluster-name {
+        .km-cluster-name {
           float: left;
         }
       }
@@ -369,8 +369,8 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-card-content {
     line-height: 40px;
 
-    &.row,
-    .row {
+    &.km-row,
+    .km-row {
       line-height: 40px;
       padding: 10px 24px;
     }

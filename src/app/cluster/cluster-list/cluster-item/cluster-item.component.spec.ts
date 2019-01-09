@@ -68,14 +68,14 @@ describe('ClusterItemComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('should set statusRunning class odd', fakeAsync(() => {
+  it('should set km-status-running class odd', fakeAsync(() => {
        component.cluster = fakeDigitaloceanCluster();
        component.index = 1;
        fixture.detectChanges();
        tick();
        discardPeriodicTasks();
 
-       expect(component.getClusterItemClass()).toBe(ClusterHealth.RUNNING + ' odd');
+       expect(component.getClusterItemClass()).toBe(ClusterHealth.RUNNING + ' km-odd');
      }));
 
   it('should set path of cluster image', fakeAsync(() => {

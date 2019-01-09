@@ -26,7 +26,7 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
+        <div class="km-row km-accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
           <div fxLayout>
             <div fxFlex="4%">{{i + 1}}</div>
 
@@ -246,8 +246,8 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        <div class="row no-item" *ngIf="clusterHealthStatus === 'statusRunning' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">No Nodes available.</div>
-        <div class="row" *ngIf="clusterHealthStatus !== 'statusRunning' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+        <div class="km-row km-no-item" *ngIf="clusterHealthStatus === 'km-status-running' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">No Nodes available.</div>
+        <div class="km-row" *ngIf="clusterHealthStatus !== 'km-status-running' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
           <mat-spinner color="accent" class="node-list-spinner" [diameter]="30"></mat-spinner>
         </div>
       </ng-container>
@@ -257,7 +257,7 @@
 
 <mat-card [fxShow]="!!cluster.spec.cloud.bringyourown" class="km-mat-card-code-block">
   <mat-card-content>
-    <div class="code-block">
+    <div class="km-code-block">
       <p>
 #Install kubeadm on you local system & the worker node: https://kubernetes.io/docs/setup/independent/install-kubeadm/<br>
 <br>

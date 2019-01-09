@@ -25,10 +25,10 @@
         <kubermatic-cluster-item *ngFor="let data of sortedData; let i = index; trackBy: trackCluster" [cluster]="data" [projectID]="projectID" [index]="i" fxFlex></kubermatic-cluster-item>
       </ng-container>
       <ng-container *ngSwitchCase="false">
-        <div fxFlex class="row odd no-item" >No Cluster available. Please add a Cluster.</div>
+        <div fxFlex class="km-row km-odd km-no-item" >No Cluster available. Please add a Cluster.</div>
       </ng-container>
       <ng-container>
-        <div class="row">
+        <div class="km-row">
           <button class="button white" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.create" (click)="loadWizard()">
             <strong>+ Add Cluster</strong>
           </button>

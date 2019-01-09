@@ -1,5 +1,5 @@
 export class ClusterHealth {
-  static readonly WAITING: string = 'statusWaiting';
-  static readonly RUNNING: string = 'statusRunning';
-  static readonly DELETING: string = 'statusDeleting';
+  static readonly WAITING: string = 'km-status-waiting';
+  static readonly RUNNING: string = 'km-status-running';
+  static readonly DELETING: string = 'km-status-deleting';
 }

@@ -81,12 +81,12 @@
     </table>
 
     <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">
-      <div class="row no-item"
-           *ngIf="clusterHealthStatus === 'statusRunning' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">
+      <div class="km-row km-no-item"
+           *ngIf="clusterHealthStatus === 'km-status-running' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">
         No Node Deployments available.
       </div>
-      <div class="row"
-           *ngIf="clusterHealthStatus !== 'statusRunning' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+      <div class="km-row"
+           *ngIf="clusterHealthStatus !== 'km-status-running' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
         <mat-spinner color="accent" class="km-node-deployment-spinner" [diameter]="30"></mat-spinner>
       </div>
     </ng-container>
