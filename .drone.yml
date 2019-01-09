@@ -139,17 +139,17 @@ pipeline:
     when:
       branch: master
 
-  deploy-cloud:
-    group: deploy
-    image: kubeciio/kubectl:0.2
-    pull: true
-    kubectl: set image deployment/kubermatic-ui-v2 webserver=quay.io/kubermatic/ui-v2:{{ .DroneCommit }}
-    namespace: kubermatic
-    secrets:
-    - source: kubeconfig_cloud
-      target: kubeconfig
-    when:
-      branch: master
+  # deploy-cloud:
+  #   group: deploy
+  #   image: kubeciio/kubectl:0.2
+  #   pull: true
+  #   kubectl: set image deployment/kubermatic-ui-v2 webserver=quay.io/kubermatic/ui-v2:{{ .DroneCommit }}
+  #   namespace: kubermatic
+  #   secrets:
+  #   - source: kubeconfig_cloud
+  #     target: kubeconfig
+  #   when:
+  #     branch: master
 
   cache:
     image: drillster/drone-volume-cache
