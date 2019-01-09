@@ -47,23 +47,6 @@ button:disabled {
   }
 }
 
-// sshkeys
-.iconArrowUp {
-  display: inline-block;
-  width: 12px;
-  height: 9px;
-  background-image: url("../../../assets/images/Arrow_up.svg");
-  background-repeat: no-repeat;
-}
-
-.iconArrowDown {
-  display: inline-block;
-  width: 12px;
-  height: 9px;
-  background-image: url("../../../assets/images/Arrow_down.svg");
-  background-repeat: no-repeat;
-}
-
 // health dot header
 kubermatic-cluster-health-status {
   display: inline-block;

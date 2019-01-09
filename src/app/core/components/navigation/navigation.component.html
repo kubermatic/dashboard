@@ -13,7 +13,7 @@
         <div class="mat-button-focus-overlay"></div>
       </button>
     </div>
-    <div fxFlex.sm="60%"><a class="logo"></a></div>
+    <div fxFlex.sm="60%"><a class="km-header-logo"></a></div>
     <div fxFlex.sm="20%" class="auth">
       <span class="current-user" *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
       <span id="km-navbar-logout-btn"  class="button logout" *ngIf="auth.authenticated()" (click)="logout()">

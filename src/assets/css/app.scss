@@ -1,4 +1,5 @@
 @import "colors";
+@import "fonts";
 
 html,
 body {
@@ -10,7 +11,7 @@ body {
 
   @include titillium-font;
 
-  background-color: #f1f1f1;
+  background-color: $grey-background;
   color: $text-color;
 }
 
@@ -37,11 +38,11 @@ body {
   padding: 5px 15px;
   font-size: 14px;
   line-height: 20px;
-  font-family: "Menlo", monospace;
+  font-family: $code-block;
 
   p {
     color: $text-color !important;
-    font-family: "Menlo", monospace;
+    font-family: $code-block;
   }
 }
 
@@ -152,7 +153,7 @@ mat-button-toggle-group {
     margin-right: 20px;
     display: flex;
     align-items: center;
-    background-color: #fff;
+    background-color: $white-text-color;
     border: 1px solid $border;
     cursor: pointer;
     max-width: 90px;
@@ -166,7 +167,7 @@ mat-button-toggle-group {
   }
 
   .mat-button-toggle-checked {
-    background-color: #fff;
+    background-color: $white-text-color;
     border: 1px solid $primary;
   }
 
@@ -197,6 +198,7 @@ mat-button-toggle-group[group='datacenterGroup'] {
 mat-button-toggle-group[group='providerGroup'] {
   .mat-button-toggle-label-content {
     height: 100%;
+    padding: 0 10px;
   }
 
   .mat-button-toggle-button {
@@ -214,7 +216,7 @@ mat-button-toggle-group[group='providerGroup'] {
     height: 30px;
     line-height: 30px;
     background-color: $primary;
-    color: #fff;
+    color: $white-text-color;
 
     .mat-card-header-text {
       width: 100%;
@@ -272,19 +274,19 @@ mat-button-toggle-group[group='providerGroup'] {
       }
 
       &.statusWaiting {
-        background-color: rgba($waiting-background, 0.1);
+        background-color: $pending;
 
         &:hover {
-          background-color: rgba($waiting-background, 0.2);
+          background-color: $pending-hover;
         }
       }
 
       &.statusFailed,
       &.statusDeleting {
-        background-color: rgba($warning-background, 0.15);
+        background-color: $deleting;
 
         &:hover {
-          background-color: rgba($warning-background, 0.25);
+          background-color: $deleting-hover;
         }
       }
 
@@ -315,8 +317,8 @@ mat-button-toggle-group[group='providerGroup'] {
 }
 
 .provider-logo {
-  height: auto !important;
-  width: auto !important;
+  height: 100% !important;
+  width: 100% !important;
   max-height: 40px !important;
   max-width: 70px !important;
 }
@@ -326,12 +328,12 @@ mat-button-toggle-group[group='providerGroup'] {
   margin: 0;
 
   &.statusWaiting {
-    background-color: rgba($waiting-background, 0.1);
+    background-color: $pending;
   }
 
   &.statusFailed,
   &.statusDeleting {
-    background-color: rgba($warning-background, 0.15);
+    background-color: $deleting;
   }
 
   .mat-card-header {
@@ -387,7 +389,7 @@ button.close {
   font-weight: 600;
   position: relative;
   background-color: $primary !important;
-  color: white !important;
+  color: $white-text-color !important;
   margin-bottom: 10px;
 
   .mat-dialog-info {
@@ -431,7 +433,7 @@ mat-dialog-content {
 
 ::-webkit-scrollbar-thumb {
   background: $light-text-color;
-  border: 0 none #fff;
+  border: 0 none $white-text-color;
   border-radius: 50px;
 }
 
@@ -445,7 +447,7 @@ mat-dialog-content {
 
 ::-webkit-scrollbar-track {
   background: $medium-background;
-  border: 0 none #fff;
+  border: 0 none $white-text-color;
   border-radius: 50px;
 }
 
@@ -482,7 +484,7 @@ mat-card-header {
   }
 
   &:active {
-    color: rgba($primary, 0.7);
+    color: $light-primary;
   }
 }
 
@@ -519,7 +521,7 @@ mat-card-header {
 }
 
 .mat-checkbox-frame {
-  border-color: #c1c9d4;
+  border-color: $checkbox-frame;
 }
 
 .mat-checkbox-background {
@@ -577,7 +579,7 @@ mat-card-header {
 
 // tooltip
 .mat-tooltip {
-  background-color: rgba($primary, 0.7) !important;
+  background-color: $light-primary !important;
   margin-top: 5px !important;
 }
 
@@ -645,12 +647,12 @@ mat-card-header {
     }
 
     &.mat-raised-button.mat-primary {
-      color: #fff;
+      color: $white-text-color;
       background-color: $primary;
     }
 
     &.mat-raised-button.mat-primary[disabled] {
-      color: #fff;
+      color: $white-text-color;
       background-color: $border;
       box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
     }
@@ -686,7 +688,7 @@ mat-card-header {
       top: 3px;
 
       i {
-        color: white;
+        color: $white-text-color;
       }
     }
   }
@@ -754,7 +756,6 @@ mat-card-header {
   }
 }
 
-// Icons
 mat-list-item.disabled {
   i {
     opacity: 0.3;
@@ -763,116 +764,6 @@ mat-list-item.disabled {
 
 .btn-in-box:disabled {
   color: $disabled-button-color;
-}
-
-.iconDelete {
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/delete-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/delete-black.png");
-  }
-
-  &:disabled {
-    opacity: 0.3;
-  }
-}
-
-.iconEdit {
-  display: inline-block;
-  width: 25px;
-  height: 25px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/edit-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/edit-black.png");
-  }
-
-  &:disabled {
-    opacity: 0.3;
-  }
-}
-
-.iconCluster {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/cluster-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/cluster-black.png");
-  }
-}
-
-.iconKey {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/key-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/key-black.png");
-  }
-}
-
-.iconProject {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/project-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/project-black.png");
-  }
-}
-
-.iconMember {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/member-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/member-black.png");
-  }
 }
 
 .km-action-button-icon {

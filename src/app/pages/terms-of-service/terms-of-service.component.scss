@@ -1,9 +1,11 @@
+@import "../../../assets/css/colors";
+
 .page-terms-of-service {
   font-size: 14px;
   margin-bottom: 60px;
 
   p {
-    color: #444d58;
+    color: $text-color;
     font-size: 14px;
   }
 
