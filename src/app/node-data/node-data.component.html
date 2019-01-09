@@ -18,7 +18,7 @@
 
   <kubermatic-azure-node-data *ngIf="cluster.spec.cloud.azure" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData" [projectId]="projectId" [clusterId]="cluster.id" [seedDCName]="seedDCName"></kubermatic-azure-node-data>
 
-  <mat-form-field class="operating-system">
+  <mat-form-field class="km-operating-system">
     <mat-select placeholder="Operating System*:" formControlName="operatingSystem">
       <mat-option value="ubuntu">Ubuntu</mat-option>
       <mat-option value="centos">CentOS</mat-option>

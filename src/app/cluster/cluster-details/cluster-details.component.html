@@ -10,10 +10,10 @@
         <i class="fa fa-plus km-action-button-icon" aria-hidden="true"></i>
         {{getAddNodesLabel()}}
       </button>
-      <button class="connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'km-status-running'">
+      <button class="km-connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'km-status-running'">
         Connect
       </button>
-      <button class="share-kubeconfig-btn" (click)="shareConfigDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'km-status-running'" *ngIf="!!config.share_kubeconfig">
+      <button class="km-share-kubeconfig-btn" (click)="shareConfigDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'km-status-running'" *ngIf="!!config.share_kubeconfig">
         Share cluster
       </button>
       <a class="km-download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
@@ -84,7 +84,7 @@
         <div fxFlex="30%" class="km-region">
           <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">
             <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
-            <span class="location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
+            <span class="km-location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
           </ng-container>
         </div>
         <div fxFlex="25%">
