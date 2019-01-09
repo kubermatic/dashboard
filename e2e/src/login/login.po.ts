@@ -3,7 +3,7 @@ import {NavPage} from '../shared/nav.po';
 
 export class LoginPage extends NavPage {
   private _loginButton = by.id('login-button');
-  private _loginButtonNavbar = by.className('button login');
+  private _loginButtonNavbar = by.className('km-button km-login');
 
   navigateTo(): any {
     return browser.get('/');

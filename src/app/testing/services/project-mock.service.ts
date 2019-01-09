@@ -102,16 +102,16 @@ export class ProjectMockService {
 
   isProjectSelected(viewName: string): string {
     if (this.project === undefined || this.project.status !== 'Active') {
-      return 'disabled';
+      return 'km-disabled';
     } else {
       if (!!this.userGroupConfig && this.userGroup) {
         if (viewName === 'create-cluster') {
-          return !this.userGroupConfig[this.userGroup].clusters.create ? 'disabled' : '';
+          return !this.userGroupConfig[this.userGroup].clusters.create ? 'km-disabled' : '';
         } else {
-          return !this.userGroupConfig[this.userGroup][viewName].view ? 'disabled' : '';
+          return !this.userGroupConfig[this.userGroup][viewName].view ? 'km-disabled' : '';
         }
       } else {
-        return 'disabled';
+        return 'km-disabled';
       }
     }
   }

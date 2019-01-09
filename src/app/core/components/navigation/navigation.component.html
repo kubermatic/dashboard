@@ -2,9 +2,9 @@
 
   <ng2-slim-loading-bar [color]="'white'" [height]="'2px'"></ng2-slim-loading-bar>
 
-  <div fxLayout class="navigation-bar">
+  <div fxLayout class="km-navigation-bar">
     <div fxFlex.sm="20%">
-      <button class="sidenav-toggle mat-button nav-mobile" (click)="showMobileNav()" mat-button>
+      <button class="km-sidenav-toggle mat-button km-nav-mobile" (click)="showMobileNav()" mat-button>
           <span class="mat-button-wrapper">
             <mat-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</mat-icon>
             <span>Kubermatic</span>
@@ -14,12 +14,12 @@
       </button>
     </div>
     <div fxFlex.sm="60%"><a class="km-header-logo"></a></div>
-    <div fxFlex.sm="20%" class="auth">
-      <span class="current-user" *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
-      <span id="km-navbar-logout-btn"  class="button logout" *ngIf="auth.authenticated()" (click)="logout()">
+    <div fxFlex.sm="20%" class="km-auth">
+      <span class="km-current-user" *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
+      <span id="km-navbar-logout-btn"  class="km-button km-logout" *ngIf="auth.authenticated()" (click)="logout()">
         Logout
       </span>
-      <a class="button login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}">
+      <a class="km-button km-login"  *ngIf="!auth.authenticated()" href="{{environment.coreOSdexAuth}}">
         Login / Sign-in
       </a>
     </div>
@@ -28,7 +28,7 @@
 
 <!-- TODO: add mobile nav -->
   <!--
-        <button class="sidenav-toggle mat-button nav-mobile" (click)="showMobileNav()" mat-button>
+        <button class="km-sidenav-toggle mat-button km-nav-mobile" (click)="showMobileNav()" mat-button>
           <span class="mat-button-wrapper">
             <mat-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</mat-icon>
             <span>Kubermatic</span>

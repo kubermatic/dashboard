@@ -32,7 +32,7 @@ export class MemberItemComponent implements OnInit {
 
   getMemberItemClass(): string {
     if (this.index % 2 !== 0) {
-      return 'odd';
+      return 'km-odd';
     }
   }
 

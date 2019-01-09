@@ -31,7 +31,7 @@ export class ProjectItemComponent implements OnInit {
 
   getProjectItemClass(): string {
     if (this.index % 2 !== 0) {
-      return 'odd';
+      return 'km-odd';
     }
   }
 

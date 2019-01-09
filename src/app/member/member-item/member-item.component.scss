@@ -1,6 +1,6 @@
 @import "../../../assets/css/colors";
 
-.row {
+.km-row {
   height: 40px;
   cursor: pointer;
 
@@ -22,7 +22,7 @@ p {
     justify-content: flex-end;
     padding-right: 20px;
 
-    .iconEdit {
+    .km-icon-edit {
       margin-right: 15px;
     }
   }

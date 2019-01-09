@@ -68,14 +68,14 @@ describe('ClusterItemComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('should set statusRunning class odd', fakeAsync(() => {
+  it('should set km-status-running class odd', fakeAsync(() => {
        component.cluster = fakeDigitaloceanCluster();
        component.index = 1;
        fixture.detectChanges();
        tick();
        discardPeriodicTasks();
 
-       expect(component.getClusterItemClass()).toBe(ClusterHealth.RUNNING + ' odd');
+       expect(component.getClusterItemClass()).toBe(ClusterHealth.RUNNING + ' km-odd');
      }));
 
   it('should set path of cluster image', fakeAsync(() => {
@@ -85,7 +85,7 @@ describe('ClusterItemComponent', () => {
        tick();
        discardPeriodicTasks();
 
-       const de = fixture.debugElement.query(By.css('.provider-logo-digitalocean'));
+       const de = fixture.debugElement.query(By.css('.km-provider-logo-digitalocean'));
        expect(de).toBeTruthy();
      }));
 });

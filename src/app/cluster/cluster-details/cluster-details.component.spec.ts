@@ -97,7 +97,7 @@ describe('ClusterDetailsComponent', () => {
     activatedRoute.testParamMap = {clusterName: '4k6txp5sq', seedDc: 'europe-west3-c'};
 
     fixture.debugElement.query(By.css('.km-spinner'));
-    fixture.debugElement.query(By.css('.cluster-detail-actions'));
+    fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
   });
 
   it('should create the cluster details cmp', async(() => {
@@ -133,7 +133,7 @@ describe('ClusterDetailsComponent', () => {
 
   it('should render template after requests', fakeAsync(() => {
        fixture.detectChanges();
-       let de = fixture.debugElement.query(By.css('.cluster-detail-actions'));
+       let de = fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
        const spinnerDe = fixture.debugElement.query(By.css('.km-spinner'));
 
        expect(de).toBeNull('element should not be rendered before requests');
@@ -144,7 +144,7 @@ describe('ClusterDetailsComponent', () => {
        tick();
        fixture.detectChanges();
 
-       de = fixture.debugElement.query(By.css('.cluster-detail-actions'));
+       de = fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
        expect(de).not.toBeNull('element should be rendered after requests');
 
        discardPeriodicTasks();
