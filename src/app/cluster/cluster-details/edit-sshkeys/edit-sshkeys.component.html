@@ -35,11 +35,11 @@
             </ng-container>
 
             <ng-container *ngSwitchCase="false">
-              <div fxFlex class="row odd no-item">No SSHKey available. Please add a SSHKey.</div>
+              <div fxFlex class="km-row km-odd km-no-item">No SSHKey available. Please add a SSHKey.</div>
             </ng-container>
 
             <ng-container>
-              <div class="row add-sshkey-button">
+              <div class="km-row add-sshkey-button">
                 <button (click)="addSshKey()" [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">+ Add SSH key</button>
               </div>
             </ng-container>

@@ -63,19 +63,19 @@ export class NodeDeploymentListComponent implements OnInit {
     let healthStatus = {};
 
     if (!!nd.deletionTimestamp) {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Deleting', 'statusDeleting');
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Deleting', 'km-status-deleting');
     } else if (!nd.status) {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Pending', 'statusWaiting');
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Pending', 'km-status-waiting');
     } else if (nd.status.availableReplicas === nd.spec.replicas) {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(green, 'Running', 'statusRunning');
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(green, 'Running', 'km-status-running');
     } else if (nd.status.availableReplicas > nd.spec.replicas) {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Updating', 'statusWaiting');
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Updating', 'km-status-waiting');
     } else {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Pending', 'statusWaiting');
+      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Pending', 'km-status-waiting');
     }
 
     if (index % 2 !== 0) {
-      healthStatus['class'] += ' odd';
+      healthStatus['class'] += ' km-odd';
     }
 
     return healthStatus;

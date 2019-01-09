@@ -34,7 +34,7 @@ export class EditSSHKeysItemComponent implements OnInit {
 
   getSshKeyItemClass(): string {
     if (this.index % 2 !== 0) {
-      return 'odd';
+      return 'km-odd';
     }
   }
 

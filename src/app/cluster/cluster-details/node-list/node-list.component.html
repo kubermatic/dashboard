@@ -26,7 +26,7 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <div class="row accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
+        <div class="km-row km-accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
           <div fxLayout>
             <div fxFlex="4%">{{i + 1}}</div>
 
@@ -44,17 +44,17 @@
             <div fxFlex="16%">
               <div *ngIf="!!node.status.addresses && !!getAddresses(node).InternalIP">
                 Int.IP:
-                <span class="copy" [cbContent]="getAddresses(node).InternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).InternalIP}}</span>
+                <span class="km-copy" [cbContent]="getAddresses(node).InternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).InternalIP}}</span>
               </div>
               <div *ngIf="!!node.status.addresses && !!getAddresses(node).ExternalIP">
                 Ext.IP:
-                <span class="copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).ExternalIP}}</span>
+                <span class="km-copy" [cbContent]="getAddresses(node).ExternalIP" ngxClipboard  matTooltip="click to copy">{{getAddresses(node).ExternalIP}}</span>
               </div>
             </div>
             <div fxFlex="16%">
               <span *ngIf="!!node.creationTimestamp">{{node.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
             </div>
-            <div fxFlex="5%" class="health-state">
+            <div fxFlex="5%" class="km-health-state">
               <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
             </div>
 
@@ -79,7 +79,7 @@
                           [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
                     <i class="fa fa-trash-o"
                        aria-hidden="true"
-                       [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'disabled' : ''"></i>
+                       [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'km-disabled' : ''"></i>
                   </button>
                 </ng-container>
               </ng-container>
@@ -89,15 +89,15 @@
             <p color="accent">{{node.status.errorMessage}}</p>
           </div>
 
-          <div class="node-details-wrapper" *ngIf="!!isShowNodeDetails[node.id]">
-            <div class="node-details-content">
+          <div class="km-node-details-wrapper" *ngIf="!!isShowNodeDetails[node.id]">
+            <div class="km-node-details-content">
               <div fxLayout="column" fxLayoutGap="20px">
-                <div class="node-details" fxLayout>
+                <div class="km-node-details" fxLayout>
 
                   <div class="km-card-list-content" fxFlex="50%">
                     <div fxFlex="50%" class="km-card-list-key">Operating System:</div>
                     <div fxFlex="50%">
-                      <div class="os-image os-image-{{getOsImage(node)}}"></div>
+                      <div class="km-os-image km-os-image-{{getOsImage(node)}}"></div>
                     </div>
                   </div>
 
@@ -246,9 +246,9 @@
       </ng-container>
 
       <ng-container *ngSwitchCase="false">
-        <div class="row no-item" *ngIf="clusterHealthStatus === 'statusRunning' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">No Nodes available.</div>
-        <div class="row" *ngIf="clusterHealthStatus !== 'statusRunning' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
-          <mat-spinner color="accent" class="node-list-spinner" [diameter]="30"></mat-spinner>
+        <div class="km-row km-no-item" *ngIf="clusterHealthStatus === 'km-status-running' && !hasInitialNodes || !isClusterRunning && cluster.spec.cloud.bringyourown">No Nodes available.</div>
+        <div class="km-row" *ngIf="clusterHealthStatus !== 'km-status-running' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+          <mat-spinner color="accent" class="km-node-list-spinner" [diameter]="30"></mat-spinner>
         </div>
       </ng-container>
     </ng-container>
@@ -257,7 +257,7 @@
 
 <mat-card [fxShow]="!!cluster.spec.cloud.bringyourown" class="km-mat-card-code-block">
   <mat-card-content>
-    <div class="code-block">
+    <div class="km-code-block">
       <p>
 #Install kubeadm on you local system & the worker node: https://kubernetes.io/docs/setup/independent/install-kubeadm/<br>
 <br>

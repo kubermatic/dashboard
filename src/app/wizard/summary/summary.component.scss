@@ -32,11 +32,11 @@ mat-card {
     }
   }
 
-  .seperated {
+  .km-seperated {
     margin-bottom: 20px;
   }
 
-  .node-settings {
+  .km-node-settings {
     flex-flow: row wrap;
   }
 
@@ -65,21 +65,21 @@ input[type="password"].km-card-list-secret {
   height: 26px;
   line-height: 26px;
 
-  &.machine-networks {
+  &.km-machine-networks {
     padding-bottom: 15px;
   }
 
-  &.provider {
+  &.km-provider {
     height: auto;
     line-height: 50px;
     align-items: center;
 
-    .provider-logo {
+    .km-provider-logo {
       padding-top: 15px;
     }
   }
 
-  .machine-networks-dns-server {
+  .km-machine-networks-dns-server {
     word-break: break-word;
   }
 }

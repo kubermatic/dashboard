@@ -31,7 +31,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
       });
     });
 
-    if (!!this.seedDC && this.getClusterItemClass() !== 'statusDeleting' && !this.cluster.deletionTimestamp) {
+    if (!!this.seedDC && this.getClusterItemClass() !== 'km-status-deleting' && !this.cluster.deletionTimestamp) {
       this.healthService.getClusterHealth(this.cluster.id, this.seedDC.metadata.name, this.projectID)
           .subscribe((health) => {
             this.health = health;
@@ -72,7 +72,7 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
   getClusterItemClass(): string {
     let itemClass = this.healthService.getClusterHealthStatus(this.cluster, this.health);
     if (this.index % 2 !== 0) {
-      itemClass = itemClass + ' odd';
+      itemClass = itemClass + ' km-odd';
     }
     return itemClass;
   }

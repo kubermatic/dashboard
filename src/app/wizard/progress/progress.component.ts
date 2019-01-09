@@ -33,7 +33,7 @@ export class ProgressComponent implements OnInit, OnDestroy {
     let titleClass = '';
 
     if (this.currentStepIndex < step) {
-      titleClass = 'title-unchecked';
+      titleClass = 'km-title-unchecked';
     }
     return titleClass;
   }

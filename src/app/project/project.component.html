@@ -2,7 +2,7 @@
   <div fxLayout>
     <div fxFlex align="right">
       <button id="km-add-project-top-btn" mat-raised-button color="primary" type="button" (click)="addProject()">
-        <span class="btn-text-default">+ Add Project</span>
+        <span class="km-btn-text-default">+ Add Project</span>
       </button>
     </div>
   </div>
@@ -26,11 +26,11 @@
         <kubermatic-project-item *ngFor="let project of sortedProjects; let iProject = index; trackBy: trackProject" [index]="iProject" [project]="project" fxFlex></kubermatic-project-item>
       </ng-container>
       <ng-container *ngSwitchCase="false">
-        <div fxFlex class="row odd no-item">No Project available. Please add a Project.</div>
+        <div fxFlex class="km-row km-odd km-no-item">No Project available. Please add a Project.</div>
       </ng-container>
       <ng-container>
-        <div class="row">
-          <button class="btn-in-box" (click)="addProject()">+ Add Project</button>
+        <div class="km-row">
+          <button class="km-btn-in-box" (click)="addProject()">+ Add Project</button>
         </div>
       </ng-container>
     </mat-card-content>
