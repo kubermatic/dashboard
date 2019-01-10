@@ -33,7 +33,7 @@ pipeline:
 
   e2e:
     image: atlassianlabs/docker-node-jdk-chrome-firefox:2018-12-10
-    secrets: [kubermatic_e2e_username, kubermatic_e2e_password]
+    secrets: [kubermatic_dex_dev_e2e_username, kubermatic_dex_dev_e2e_password]
     commands:
       - npm run e2e
 

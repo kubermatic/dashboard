@@ -25,7 +25,7 @@ To automatically fix issues run `npm run fix` command.
 Run `npm test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
 ### Running the end-to-end tests
-Currently e2e tests are being executed against `dev.kubermatic.io` server. Before running tests make sure that `KUBERMATIC_E2E_USERNAME` and `KUBERMATIC_E2E_PASSWORD` environment variables are set. To run end-to-end tests via [Protractor](http://www.protractortest.org/), simply execute `npm run e2e`.
+Currently e2e tests are being executed against `dev.kubermatic.io` server. Before running tests make sure that `KUBERMATIC_DEX_DEV_E2E_USERNAME` and `KUBERMATIC_DEX_DEV_E2E_PASSWORD` environment variables are set. To run end-to-end tests via [Protractor](http://www.protractortest.org/), simply execute `npm run e2e`.
 
 ### Building the application
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
