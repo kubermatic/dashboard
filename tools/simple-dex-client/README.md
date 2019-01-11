@@ -52,7 +52,7 @@ zag/wIFkbyhx14jP4HyMsUrhw3xljdoRRVxAWuWO1cBgdqU=
 -----END CERTIFICATE-----
 ```
 
-Base64 online encoder: https://www.base64encode.org/
+You can use base64 online encoder: https://www.base64encode.org/ or simply execute `base64 < cert.crt` when on Linux.
 
 Encoded certificate:
 ```
