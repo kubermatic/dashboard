@@ -75,9 +75,13 @@
         <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
           <div class="km-node-deployment-details"
                [@detailExpand]="isElementExpanded(element) ? 'expanded' : 'collapsed'">
-            Details: TODO
-
-            {{nodeDeploymentNodes | json}}
+            <kubermatic-node-list style="width: 100%; margin-bottom: 24px;"
+                                  [cluster]="cluster"
+                                  [nodes]="nodeDeploymentNodes"
+                                  [datacenter]="datacenter"
+                                  [projectID]="projectID"
+                                  [isClusterRunning]="isClusterRunning"
+                                  [hasInitialNodes]="hasInitialNodes"></kubermatic-node-list>
           </div>
         </td>
       </ng-container>
