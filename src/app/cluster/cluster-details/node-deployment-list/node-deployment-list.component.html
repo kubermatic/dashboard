@@ -76,6 +76,8 @@
           <div class="km-node-deployment-details"
                [@detailExpand]="isElementExpanded(element) ? 'expanded' : 'collapsed'">
             Details: TODO
+
+            {{nodeDeploymentNodes | json}}
           </div>
         </td>
       </ng-container>

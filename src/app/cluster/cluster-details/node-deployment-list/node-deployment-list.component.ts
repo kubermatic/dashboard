@@ -10,6 +10,7 @@ import {ConfirmationDialogComponent} from '../../../shared/components/confirmati
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 import {NodeDataModalComponent} from '../node-data-modal/node-data-modal.component';
 
@@ -47,6 +48,7 @@ export class NodeDeploymentListComponent implements OnInit {
 
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
   expandedElement: string|null;
+  nodeDeploymentNodes: NodeEntity[];
   userGroupConfig: UserGroupConfig;
   userGroup: string;
 
@@ -95,12 +97,21 @@ export class NodeDeploymentListComponent implements OnInit {
     if (this.isElementExpanded(element)) {
       this.expandedElement = null;
     } else {
-      this.expandedElement = element.name;
+      this.expandElement(element);
     }
   }
 
   isElementExpanded(element: NodeDeploymentEntity): boolean {
     return element.name === this.expandedElement;
+  }
+
+  expandElement(element: NodeDeploymentEntity): void {
+    this.nodeDeploymentNodes = [];  // TODO: Implement cache/map to store previous requests before new data loads.
+    this.expandedElement = element.name;
+    this.api.getNodeDeploymentNodes(element, this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .subscribe(nodes => {
+          this.nodeDeploymentNodes = nodes;
+        });
   }
 
   showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
