@@ -75,3 +75,19 @@ Application arguments:
  - `--email-domain` - User email domain that should be used when creating user with randomize option enabled
  - `--password` - User password that should be used when creating user
  
+### Example
+Create an user with random name and `e2e-` prefix:
+ ```bash
+ $ ./simple-dex-client --dex-host="127.0.0.1:5557" --action="create" --prefix="e2e-" --randomize --email-domain="example.com" --password="testpwd"
+ ```
+ 
+Delete user with email `test@example.com`:
+```bash
+$ ./simple-dex-client --dex-host="127.0.0.1:5557" --action="delete" --email="test@example.com"
+```
+
+List users:
+```bash
+$ ./simple-dex-client --dex-host="127.0.0.1:5557" --action="list"
+
+```
