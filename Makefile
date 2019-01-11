@@ -23,6 +23,7 @@ test:
 	@$(CC) run test
 
 test-headless: install
+	node --version
 	@$(CC) run test:headless
 
 run-e2e: install
