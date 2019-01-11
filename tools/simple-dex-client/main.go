@@ -18,9 +18,9 @@ import (
 
 var (
 	argDexHost     = pflag.String("dex-host", "", "Dex gRPC API address")
-	argAction      = pflag.String("action", "", "Action that should be performed on dex gRPC users API. Supported action: create, list, delete.")
-	argPrefix      = pflag.String("prefix", "", "Add prefix to created user name and email.")
-	argRandomize   = pflag.Bool("randomize", false, "Generate user with random id, name and email. Providing password is still required.")
+	argAction      = pflag.String("action", "", "Action that should be performed on dex gRPC users API. Supported actions: create, list, delete.")
+	argPrefix      = pflag.String("prefix", "", "Add prefix to the created user name and email.")
+	argRandomize   = pflag.Bool("randomize", false, "Generate user with random id, name and email. Providing password and email domain is still required.")
 	argUserID      = pflag.String("user-id", "", "User ID that should be used when creating user with randomize option disabled.")
 	argUsername    = pflag.String("username", "", "Username that should be used when creating user with randomize option disabled.")
 	argEmail       = pflag.String("email", "", "User email that should be used when creating user with randomize option disabled.")
