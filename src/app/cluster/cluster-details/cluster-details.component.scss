@@ -1,13 +1,13 @@
 @import "../../../assets/css/colors";
 
-.change-version {
+.km-change-version {
   small {
     margin-left: 10px;
     color: $primary;
   }
 }
 
-a.download-kubeconfig-btn {
+a.km-download-kubeconfig-btn {
   display: inline-block;
 }
 
@@ -54,7 +54,7 @@ kubermatic-cluster-health-status {
 }
 
 // setting menu
-.cluster-detail-actions {
+.km-cluster-detail-actions {
   padding-bottom: 15px;
 
   mat-button {

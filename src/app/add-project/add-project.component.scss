@@ -5,11 +5,11 @@
   padding: 0;
 }
 
-.how-to-project {
+.km-how-to-project {
   margin-top: 40px;
   background-color: $light-background;
 
-  .header {
+  .km-how-to-project-header {
     text-transform: uppercase;
     color: $white-text-color;
     background-color: $secondary;
@@ -19,7 +19,7 @@
     line-height: 40px;
   }
 
-  .content {
+  .km-how-to-project-content {
     font-size: 15px;
     color: $text-color;
     padding: 20px 15px;
@@ -27,9 +27,9 @@
     line-height: 20px;
   }
 
-  .first,
-  .second {
-    .content {
+  .km-how-to-project-first,
+  .km-how-to-project-second {
+    .km-how-to-project-content {
       border-right: 1px solid $white-text-color;
     }
   }

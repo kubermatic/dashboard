@@ -103,7 +103,7 @@ describe('ClusterListComponent', () => {
   it('should not render cluster list', fakeAsync(() => {
        fixture.detectChanges();
 
-       const de = fixture.debugElement.query(By.css('.no-item'));
+       const de = fixture.debugElement.query(By.css('.km-no-item'));
 
        expect(de).toBeNull('list should not be rendered');
        discardPeriodicTasks();

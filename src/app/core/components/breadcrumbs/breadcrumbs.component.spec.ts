@@ -69,7 +69,7 @@ describe('BreadcrumbsComponent', () => {
   it('should render 2 breadcrumbs', () => {
     fixture.detectChanges();
 
-    const de = fixture.debugElement.queryAll(By.css('.breadcrumb-item'));
+    const de = fixture.debugElement.queryAll(By.css('.km-breadcrumb-item'));
     expect(de.length).toBe(2);
   });
 });

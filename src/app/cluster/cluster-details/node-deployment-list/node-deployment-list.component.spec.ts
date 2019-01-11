@@ -80,7 +80,7 @@ describe('NodeDeploymentListComponent', () => {
             {
               color: green,
               status: 'Running',
-              class: 'statusRunning',
+              class: 'km-status-running',
             },
             'should return classes for green icon');
     expect(component.getHealthStatus(nds[1], 0))
@@ -88,7 +88,7 @@ describe('NodeDeploymentListComponent', () => {
             {
               color: orange,
               status: 'Pending',
-              class: 'statusWaiting',
+              class: 'km-status-waiting',
             },
             'should return classes for orange icon');
   });

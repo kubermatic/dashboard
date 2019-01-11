@@ -5,14 +5,14 @@
 }
 
 // login & logout
-.login {
+.km-login {
   background-image: url("/assets/images/login.svg");
   background-repeat: no-repeat;
   background-size: auto 10px;
   background-position: center left;
 }
 
-.logout {
+.km-logout {
   background-image: url("/assets/images/logout.svg");
   background-size: auto 10px;
   background-repeat: no-repeat;
@@ -20,7 +20,7 @@
 }
 
 // icons
-.iconDelete {
+.km-icon-delete {
   display: inline-block;
   width: 25px;
   height: 25px;
@@ -41,7 +41,7 @@
   }
 }
 
-.iconEdit {
+.km-icon-edit {
   display: inline-block;
   width: 25px;
   height: 25px;
@@ -62,7 +62,7 @@
   }
 }
 
-.iconCluster {
+.km-icon-cluster {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -79,7 +79,7 @@
   }
 }
 
-.iconKey {
+.km-icon-key {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -96,7 +96,7 @@
   }
 }
 
-.iconProject {
+.km-icon-project {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -113,7 +113,7 @@
   }
 }
 
-.iconMember {
+.km-icon-member {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -130,7 +130,7 @@
   }
 }
 
-.iconArrowUp {
+.km-icon-arrow-up {
   display: inline-block;
   width: 12px;
   height: 9px;
@@ -138,7 +138,7 @@
   background-repeat: no-repeat;
 }
 
-.iconArrowDown {
+.km-icon-arrow-down {
   display: inline-block;
   width: 12px;
   height: 9px;
@@ -146,7 +146,7 @@
   background-repeat: no-repeat;
 }
 
-.iconRunning {
+.km-icon-running {
   display: inline-block;
   margin: 0 5px 0 0;
   width: 12px;
@@ -155,7 +155,7 @@
   background-repeat: no-repeat;
 }
 
-.iconFailed {
+.km-icon-failed {
   display: inline-block;
   margin: 0 10px 0 5px;
   width: 2px;
@@ -164,7 +164,7 @@
   background-repeat: no-repeat;
 }
 
-.iconLogs {
+.km-icon-logs {
   display: inline-block;
   margin: 0 5px 0 0;
   width: 12px;
@@ -173,7 +173,7 @@
   background-repeat: no-repeat;
 }
 
-.iconDocuments {
+.km-icon-documents {
   display: inline-block;
   margin: 0 5px 0 0;
   width: 12px;
@@ -182,7 +182,7 @@
   background-repeat: no-repeat;
 }
 
-.iconDownload {
+.km-icon-download {
   display: inline-block;
   margin: 0 5px 0 0;
   width: 12px;
@@ -192,70 +192,70 @@
 }
 
 // provider logos
-.provider-logo-aws {
+.km-provider-logo-aws {
   background-image: url("/assets/images/clouds/aws.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-azure {
+.km-provider-logo-azure {
   background-image: url("/assets/images/clouds/azure.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-baremetal {
+.km-provider-logo-baremetal {
   background-image: url("/assets/images/clouds/baremetal.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-bringyourown {
+.km-provider-logo-bringyourown {
   background-image: url("/assets/images/clouds/bringyourown.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-digitalocean {
+.km-provider-logo-digitalocean {
   background-image: url("/assets/images/clouds/digitalocean.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-fake {
+.km-provider-logo-fake {
   background-image: url("/assets/images/clouds/fake.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-hetzner {
+.km-provider-logo-hetzner {
   background-image: url("/assets/images/clouds/hetzner.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-loodsecluster {
+.km-provider-logo-loodsecluster {
   background-image: url("/assets/images/clouds/loodsecluster.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-openstack {
+.km-provider-logo-openstack {
   background-image: url("/assets/images/clouds/openstack.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
 }
 
-.provider-logo-vsphere {
+.km-provider-logo-vsphere {
   background-image: url("/assets/images/clouds/vsphere.png");
   background-repeat: no-repeat;
   background-size: contain;
@@ -263,21 +263,21 @@
 }
 
 // operating system logos
-.os-image-centos {
+.km-os-image-centos {
   background-image: url("/assets/images/operating-system/centos.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center left;
 }
 
-.os-image-containerlinux {
+.km-os-image-containerlinux {
   background-image: url("/assets/images/operating-system/containerlinux.png");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center left;
 }
 
-.os-image-ubuntu {
+.km-os-image-ubuntu {
   background-image: url("/assets/images/operating-system/ubuntu.png");
   background-repeat: no-repeat;
   background-size: contain;

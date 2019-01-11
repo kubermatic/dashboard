@@ -11,7 +11,7 @@ ng2-slim-loading-bar {
   z-index: 2;
 }
 
-.navigation-bar {
+.km-navigation-bar {
   z-index: 2;
   height: 45px;
   background-color: $white-text-color;
@@ -30,25 +30,25 @@ ng2-slim-loading-bar {
     background-position: 0 -24px;
   }
 
-  .auth {
+  .km-auth {
     font-size: 14px;
     line-height: 45px;
     font-family: $primary-font-cursive;
     font-weight: 400;
     text-align: right;
 
-    .current-user {
+    .km-current-user {
       margin-right: 20px;
     }
 
-    .login {
+    .km-login {
       padding-left: 15px;
       margin-right: 25px;
       font-weight: 500;
       line-height: 22px;
     }
 
-    .logout {
+    .km-logout {
       padding-left: 15px;
       margin-right: 25px;
       font-weight: 500;
@@ -57,7 +57,7 @@ ng2-slim-loading-bar {
   }
 }
 
-.button {
+.km-button {
   cursor: pointer;
   display: inline-block;
   color: $text-color;
@@ -66,16 +66,16 @@ ng2-slim-loading-bar {
   font-weight: 600;
 }
 
-.nav-mobile {
+.km-nav-mobile {
   display: none;
 }
 
 @media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
-  .nav-default {
+  .km-nav-default {
     display: none;
   }
 
-  .nav-mobile {
+  .km-nav-mobile {
     display: block;
   }
 }

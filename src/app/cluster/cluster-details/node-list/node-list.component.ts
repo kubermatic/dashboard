@@ -102,23 +102,23 @@ export class NodeListComponent implements OnInit {
     if (!!node.status.errorMessage && !node.deletionTimestamp) {
       nodeHealthStatus['color'] = red;
       nodeHealthStatus['status'] = 'Failed';
-      nodeHealthStatus['class'] = 'statusFailed';
+      nodeHealthStatus['class'] = 'km-status-failed';
     } else if (!!node.status.nodeInfo.kubeletVersion && !node.status.errorMessage && !node.deletionTimestamp) {
       nodeHealthStatus['color'] = green;
       nodeHealthStatus['status'] = 'Running';
-      nodeHealthStatus['class'] = 'statusRunning';
+      nodeHealthStatus['class'] = 'km-status-running';
     } else if (!!node.deletionTimestamp) {
       nodeHealthStatus['color'] = orangeSpinner;
       nodeHealthStatus['status'] = 'Deleting';
-      nodeHealthStatus['class'] = 'statusDeleting';
+      nodeHealthStatus['class'] = 'km-status-deleting';
     } else {
       nodeHealthStatus['color'] = orangeSpinner;
       nodeHealthStatus['status'] = 'Pending';
-      nodeHealthStatus['class'] = 'statusWaiting';
+      nodeHealthStatus['class'] = 'km-status-waiting';
     }
 
     if (index % 2 !== 0) {
-      nodeHealthStatus['class'] += ' odd';
+      nodeHealthStatus['class'] += ' km-odd';
     }
 
     return nodeHealthStatus;
@@ -189,7 +189,7 @@ export class NodeListComponent implements OnInit {
   toggleNode(nodeID: string): void {
     const element = event.target as HTMLElement;
     const className = element.className;
-    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'copy') {
+    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'km-copy') {
       if (this.isShowNodeDetails[nodeID]) {
         this.isShowNodeDetails[nodeID] = false;
       } else if (!this.isShowNodeDetails[nodeID]) {
