@@ -117,12 +117,13 @@ export class SidenavComponent implements OnInit, OnDestroy {
   checkUrl(url: string): boolean {
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;
-    if (url === '/projects') {
+
+    if (url === 'projects') {
       return (snapshot.url === url);
     } else {
       const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
-      const newUrl = '/projects/' + selectedProjectId + url;
-      return (snapshot.url === newUrl);
+      const urlArray = snapshot.url.split('/');
+      return !!urlArray.find((x) => x === selectedProjectId) && !!urlArray.find((x) => x === url);
     }
   }
 
