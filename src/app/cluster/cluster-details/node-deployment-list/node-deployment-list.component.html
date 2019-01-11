@@ -1,9 +1,13 @@
 <mat-card class="blue">
   <mat-card-content>
-    <table class="km-node-deployment-table" mat-table [dataSource]="getDataSource()">
-      <ng-container matColumnDef="position">
-        <th mat-header-cell *matHeaderCellDef class="km-header-cell">#</th>
-        <td mat-cell *matCellDef="let i = index">{{i + 1}}</td>
+    <table class="km-node-deployment-table" mat-table [dataSource]="getDataSource()" multiTemplateDataRows>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef class="km-header-cell"></th>
+        <td mat-cell *matCellDef="let element; let i = index">
+          <i [matTooltip]="getHealthStatus(element, i).status"
+             [ngClass]="getHealthStatus(element, i).color"
+             class="km-node-deployment-health"></i>
+        </td>
       </ng-container>
 
       <ng-container matColumnDef="name">
@@ -37,15 +41,6 @@
         <td mat-cell *matCellDef="let element">{{element.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
       </ng-container>
 
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef class="km-header-cell">Status</th>
-        <td mat-cell *matCellDef="let element; let i = index">
-          <i [matTooltip]="getHealthStatus(element, i).status"
-             [ngClass]="getHealthStatus(element, i).color"
-             class="km-node-deployment-health"></i>
-        </td>
-      </ng-container>
-
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef class="km-header-cell"></th>
         <td mat-cell *matCellDef="let element">
@@ -58,14 +53,14 @@
               <button mat-icon-button
                       class="km-node-deployment-action"
                       matTooltip="Edit Node Deployment"
-                      (click)="showEditDialog(element)">
+                      (click)="showEditDialog(element, $event)">
                 <mat-icon class="km-icon-edit black"></mat-icon>
               </button>
 
               <button mat-icon-button
                       class="km-node-deployment-action"
                       matTooltip="Delete Node Deployment"
-                      (click)="showDeleteDialog(element)"
+                      (click)="showDeleteDialog(element, $event)"
                       [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
                 <i class="fa fa-trash-o"
                    aria-hidden="true"
@@ -76,8 +71,22 @@
         </td>
       </ng-container>
 
+      <ng-container matColumnDef="expandedDetail">
+        <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+          <div class="km-node-deployment-details"
+               [@detailExpand]="isElementExpanded(element) ? 'expanded' : 'collapsed'">
+            Details: TODO
+          </div>
+        </td>
+      </ng-container>
+
       <tr mat-header-row class="km-header-row" *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="km-mat-row"></tr>
+      <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+          class="km-node-deployment-row"
+          [class.example-expanded-row]="isElementExpanded(element)"
+          (click)="onElementClick(element)">
+      </tr>
+      <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="km-node-deployment-row"></tr>
     </table>
 
     <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">

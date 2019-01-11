@@ -1,3 +1,4 @@
+import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
 
@@ -16,8 +17,16 @@ import {NodeDataModalComponent} from '../node-data-modal/node-data-modal.compone
   selector: 'kubermatic-node-deployment-list',
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
+  animations: [
+    trigger(
+        'detailExpand',
+        [
+          state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
+          state('expanded', style({height: '*'})),
+          transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+        ]),
+  ],
 })
-
 export class NodeDeploymentListComponent implements OnInit {
   private static getHealthStatus_(color: string, status: string, className: string): object {
     return {
@@ -36,7 +45,8 @@ export class NodeDeploymentListComponent implements OnInit {
   @Input() hasInitialNodes: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
 
-  displayedColumns: string[] = ['position', 'name', 'replicas', 'ver', 'created', 'status', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
+  expandedElement: string|null;
   userGroupConfig: UserGroupConfig;
   userGroup: string;
 
@@ -81,7 +91,20 @@ export class NodeDeploymentListComponent implements OnInit {
     return healthStatus;
   }
 
-  showEditDialog(nd: NodeDeploymentEntity): void {
+  onElementClick(element: NodeDeploymentEntity): void {
+    if (this.isElementExpanded(element)) {
+      this.expandedElement = null;
+    } else {
+      this.expandedElement = element.name;
+    }
+  }
+
+  isElementExpanded(element: NodeDeploymentEntity): boolean {
+    return element.name === this.expandedElement;
+  }
+
+  showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
+    event.stopPropagation();
     const modal = this.dialog.open(NodeDataModalComponent, {
       data: {
         cluster: this.cluster,
@@ -103,7 +126,8 @@ export class NodeDeploymentListComponent implements OnInit {
     });
   }
 
-  showDeleteDialog(nd: NodeDeploymentEntity): void {
+  showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,

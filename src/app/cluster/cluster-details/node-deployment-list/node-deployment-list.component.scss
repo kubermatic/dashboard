@@ -12,8 +12,16 @@
     font-size: 14px;
   }
 
-  tr.mat-row:nth-child(even) {
-    background-color: $medium-background;
+  tr {
+    cursor: pointer;
+
+    &.mat-row:nth-child(3n) {
+      background-color: $medium-background;
+    }
+
+    &.mat-row:nth-child(4n) {
+      background-color: $medium-background;
+    }
   }
 
   td.mat-cell {
@@ -49,4 +57,17 @@
     width: 18px;
     height: 18px;
   }
+}
+
+tr.km-node-deployment-row {
+  height: 0;
+}
+
+.km-node-deployment-row td {
+  border-bottom-width: 0;
+}
+
+.km-node-deployment-details {
+  overflow: hidden;
+  display: flex;
 }
