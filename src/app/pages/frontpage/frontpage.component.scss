@@ -1,4 +1,5 @@
 @import "../../../assets/css/colors";
+@import "../../../assets/css/fonts";
 
 .frontpage-bg {
   background-color: $primary;
@@ -15,9 +16,9 @@
 
   .frontpage-inner-text {
     text-align: center;
-    color: #fff;
+    color: $white-text-color;
     text-transform: uppercase;
-    font-family: 'Titillium Web', sans-serif;
+    font-family: $primary-font-sans-serif;
     font-size: 28px;
     font-weight: 600;
     margin-bottom: 25px;
@@ -27,15 +28,15 @@
     line-height: 57px !important;
     color: $primary;
     font-size: 28px;
-    font-family: 'Titillium Web', sans-serif;
+    font-family: $primary-font-sans-serif;
     width: 470px;
     height: 60px;
     font-weight: 600 !important;
     z-index: 1;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: $raised-button;
 
     &:hover {
-      background-color: rgba(255, 255, 255, 0.9);
+      background-color: $raised-button-hover;
     }
   }
 }

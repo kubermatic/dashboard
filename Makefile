@@ -1,5 +1,5 @@
 SHELL=/bin/bash
-REPO=kubermatic/ui-v2
+REPO=quay.io/kubermatic/ui-v2
 TAGS=dev
 BUILD_FLAG += $(foreach tag, $(TAGS), -t $(REPO):$(tag))
 CC=npm

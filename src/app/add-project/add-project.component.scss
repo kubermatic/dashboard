@@ -11,9 +11,9 @@
 
   .header {
     text-transform: uppercase;
-    color: #fff;
+    color: $white-text-color;
     background-color: $secondary;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid $white-text-color;
     padding-left: 15px;
     height: 40px;
     line-height: 40px;
@@ -21,7 +21,7 @@
 
   .content {
     font-size: 15px;
-    color: #444d58;
+    color: $text-color;
     padding: 20px 15px;
     margin: 10px 0;
     line-height: 20px;
@@ -30,7 +30,7 @@
   .first,
   .second {
     .content {
-      border-right: 1px solid #fff;
+      border-right: 1px solid $white-text-color;
     }
   }
 }

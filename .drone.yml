@@ -77,11 +77,61 @@ pipeline:
     when:
       event: [tag]
 
+  quay-always:
+    group: push
+    image: plugins/docker
+    registry: quay.io
+    repo: quay.io/kubermatic/ui-v2
+    password: ${QUAY_PASSWORD}
+    username: ${QUAY_USERNAME}
+    tags:
+      - ${DRONE_COMMIT}
+    secrets:
+    - source: quay_username
+      target: docker_username
+    - source: quay_password
+      target: docker_password
+
+  quay-master:
+    group: push
+    image: plugins/docker
+    registry: quay.io
+    repo: quay.io/kubermatic/ui-v2
+    password: ${QUAY_PASSWORD}
+    username: ${QUAY_USERNAME}
+    tags:
+      - master
+    secrets:
+    - source: quay_username
+      target: docker_username
+    - source: quay_password
+      target: docker_password
+    when:
+      branch: master
+
+  quay-release:
+    group: push
+    image: plugins/docker
+    registry: quay.io
+    repo: quay.io/kubermatic/ui-v2
+    password: ${QUAY_PASSWORD}
+    username: ${QUAY_USERNAME}
+    tags:
+      - ${DRONE_TAG}
+      - latest
+    secrets:
+    - source: quay_username
+      target: docker_username
+    - source: quay_password
+      target: docker_password
+    when:
+      event: [tag]
+
   deploy-dev:
     group: deploy
     image: kubeciio/kubectl:0.2
     pull: true
-    kubectl: set image deployment/kubermatic-ui-v2 webserver=kubermatic/ui-v2:{{ .DroneCommit }}
+    kubectl: set image deployment/kubermatic-ui-v2 webserver=quay.io/kubermatic/ui-v2:{{ .DroneCommit }}
     namespace: kubermatic
     secrets:
       - source: kubeconfig_dev
@@ -89,17 +139,17 @@ pipeline:
     when:
       branch: master
 
-  deploy-cloud:
-    group: deploy
-    image: kubeciio/kubectl:0.2
-    pull: true
-    kubectl: set image deployment/kubermatic-ui-v2 webserver=kubermatic/ui-v2:{{ .DroneCommit }}
-    namespace: kubermatic
-    secrets:
-    - source: kubeconfig_cloud
-      target: kubeconfig
-    when:
-      branch: master
+  # deploy-cloud:
+  #   group: deploy
+  #   image: kubeciio/kubectl:0.2
+  #   pull: true
+  #   kubectl: set image deployment/kubermatic-ui-v2 webserver=quay.io/kubermatic/ui-v2:{{ .DroneCommit }}
+  #   namespace: kubermatic
+  #   secrets:
+  #   - source: kubeconfig_cloud
+  #     target: kubeconfig
+  #   when:
+  #     branch: master
 
   cache:
     image: drillster/drone-volume-cache
