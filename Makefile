@@ -7,9 +7,9 @@ CC=npm
 all: install run
 
 install:
-	@$(CC) install
+	@$(CC) ci
 
-check:
+check: install
 	@$(CC) run check
 
 run:
@@ -20,13 +20,13 @@ test-full: test e2e
 test:
 	@$(CC) run test
 
-test-headless:
+test-headless: install
 	@$(CC) run test:headless
 
-e2e:
+run-e2e: install
 	@$(CC) run e2e
 
-dist:
+dist: install
 	@$(CC) run build -prod
 
 build:
