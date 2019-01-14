@@ -1,7 +1,6 @@
 SHELL=/bin/bash
 REPO=quay.io/kubermatic/ui-v2
-TAGS=dev
-BUILD_FLAG += $(foreach tag, $(TAGS), -t $(REPO):$(tag))
+IMAGE_TAG = $(shell echo $$(git rev-parse HEAD && if [[ -n $$(git status --porcelain) ]]; then echo '-dirty'; fi)|tr -d ' ')
 CC=npm
 
 all: install run
@@ -32,10 +31,8 @@ dist: install
 build:
 	CGO_ENABLED=0 go build -ldflags '-w -extldflags '-static'' -o dashboard-v2 .
 
-docker-build:
-	docker build $(BUILD_FLAG) .
+docker-build: build dist
+	docker build -t $(REPO):$(IMAGE_TAG) .
 
 docker-push:
-	for TAG in $(TAGS) ; do \
-		docker push $(REPO):$$TAG ; \
-	done
+	docker push $(REPO):$(IMAGE_TAG)
