@@ -19,9 +19,15 @@ p {
   align-items: center;
 
   &.km-icon {
-    justify-content: flex-end;
     padding-right: 20px;
+    height: 21px;
+    width: 21px;
   }
+}
+
+.km-project-item-actions {
+  justify-content: flex-end;
+  display: flex;
 }
 
 .km-health-state {

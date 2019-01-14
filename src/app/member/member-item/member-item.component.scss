@@ -14,16 +14,26 @@
   }
 }
 
+.km-project-item-actions {
+  justify-content: flex-end;
+  display: flex;
+}
+
 p {
   display: flex;
   align-items: center;
 
   &.km-icon {
-    justify-content: flex-end;
     padding-right: 20px;
 
     .km-icon-edit {
       margin-right: 15px;
+    }
+
+    .km-icon-edit,
+    .km-icon-delete {
+      height: 21px;
+      width: 21px;
     }
   }
 }

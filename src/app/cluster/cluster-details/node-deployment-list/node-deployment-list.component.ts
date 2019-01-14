@@ -17,7 +17,6 @@ import {NodeDataModalComponent} from '../node-data-modal/node-data-modal.compone
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
 })
-
 export class NodeDeploymentListComponent implements OnInit {
   private static getHealthStatus_(color: string, status: string, className: string): object {
     return {
@@ -36,7 +35,7 @@ export class NodeDeploymentListComponent implements OnInit {
   @Input() hasInitialNodes: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
 
-  displayedColumns: string[] = ['position', 'name', 'replicas', 'ver', 'created', 'status', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
   userGroupConfig: UserGroupConfig;
   userGroup: string;
 

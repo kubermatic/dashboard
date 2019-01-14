@@ -1,10 +1,8 @@
 <mat-card class="blue">
   <mat-card-header>
     <mat-card-title fxLayout>
-      <div fxFlex="4%">
-        #
-      </div>
-      <div fxFlex="36%">
+      <div fxFlex="3%"></div>
+      <div fxFlex="42%">
         Name
       </div>
       <div fxFlex="14%">
@@ -16,9 +14,6 @@
       <div fxFlex="16%">
         Created
       </div>
-      <div fxFlex="5%" align="center">
-        Status
-      </div>
       <div fxFlex="10%"></div>
     </mat-card-title>
   </mat-card-header>
@@ -28,9 +23,10 @@
       <ng-container *ngSwitchCase="true">
         <div class="km-row km-accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
           <div fxLayout>
-            <div fxFlex="4%">{{i + 1}}</div>
-
-            <div fxFlex="36%" style="word-break: normal ;" *ngIf="!node.spec.cloud.aws">
+            <div fxFlex="3%" class="km-health-state">
+              <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
+            </div>
+            <div fxFlex="42%" style="word-break: normal ;" *ngIf="!node.spec.cloud.aws">
               {{node.name}}
               <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
             </div>
@@ -53,9 +49,6 @@
             </div>
             <div fxFlex="16%">
               <span *ngIf="!!node.creationTimestamp">{{node.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
-            </div>
-            <div fxFlex="5%" class="km-health-state">
-              <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
             </div>
 
             <div fxFlex="10%" class="km-btn-remove-node-wrapper">
