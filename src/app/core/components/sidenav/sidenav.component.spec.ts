@@ -60,7 +60,7 @@ describe('SidenavComponent', () => {
               provide: Router,
               useValue: {
                 routerState: {
-                  snapshot: {url: [{path: 1}, {path: 2}]},
+                  snapshot: {url: ''},
                 },
               },
             },

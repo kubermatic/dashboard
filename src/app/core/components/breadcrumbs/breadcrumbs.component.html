@@ -6,10 +6,10 @@
      fxLayoutGap.xs="0">
   <ul class="km-breadcrumb" fxFlex fxFlexOffset.xs="0">
     <li class="km-breadcrumb-item"><a routerLink="/projects">Home</a></li>
-    <li *ngIf="!clusterName.length" class="km-breadcrumb-item" [ngClass]="{'active': !clusterName}" >{{ activePageTitle }}</li>
+    <li *ngIf="!clusterName.length && activePageTitle !== 'Cluster details'" class="km-breadcrumb-item" [ngClass]="{'active': !clusterName}" >{{ activePageTitle }}</li>
 
-    <ng-container  *ngIf="clusterName.length">
-      <li class="km-breadcrumb-item"><a routerLink="/projects">Manage Projects</a></li>
+    <ng-container *ngIf="clusterName.length">
+      <li class="km-breadcrumb-item"><a routerLink="/projects/{{project}}/clusters">Manage Clusters</a></li>
       <li class="km-breadcrumb-item" [ngClass]="{'active': clusterName}">{{clusterName}}</li>
     </ng-container>
   </ul>
