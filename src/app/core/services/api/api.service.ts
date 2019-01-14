@@ -70,6 +70,12 @@ export class ApiService {
     return this.http.get<NodeDeploymentEntity[]>(url, {headers: this.headers});
   }
 
+  getNodeDeploymentNodes(nd: NodeDeploymentEntity, cluster: string, dc: string, projectID: string):
+      Observable<NodeEntity[]> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${nd.id}/nodes`;
+    return this.http.get<NodeEntity[]>(url, {headers: this.headers});
+  }
+
   patchNodeDeployment(
       nd: NodeDeploymentEntity, patch: NodeDeploymentPatch, clusterId: string, dc: string,
       projectID: string): Observable<NodeDeploymentEntity> {

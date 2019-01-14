@@ -13,8 +13,6 @@
 }
 
 .km-health-state {
-  text-align: center;
-
   i.red {
     color: $waiting-status-color;
   }
@@ -33,7 +31,7 @@
   color: $text-color !important;
 
   i {
-    font-size: 18px;
+    font-size: 21px;
   }
 }
 
@@ -43,7 +41,10 @@
 }
 
 .km-btn-remove-node-wrapper {
+  padding-right: 20px;
   position: relative;
+  justify-content: flex-end;
+  display: flex;
 }
 
 .km-node-list-spinner {

@@ -12,10 +12,8 @@
       {{sshKey.spec.fingerprint}}
     </div>
   </div>
-  <div fxFlex="10%" fxHide.sm fxHide.xs>
-    <p class="km-icon">
-      <span class="km-icon-delete black" (click)="deleteSshKey()"></span>
-    </p>
+  <div fxFlex="10%" fxHide.sm fxHide.xs fxLayoutAlign="end center">
+    <span class="km-icon-delete black" (click)="deleteSshKey()"></span>
   </div>
 </div>
 <div class="km-publickey-wrapper" *ngIf="isShowPublicKey">
