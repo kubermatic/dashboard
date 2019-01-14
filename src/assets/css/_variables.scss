@@ -1,0 +1,12 @@
+@function rem($multiplier) {
+  $font-size: 10px;
+
+  @return $multiplier * $font-size;
+}
+
+$subhead-font-size-base-lg: rem(1.8) !default;
+$subhead-font-size-base: rem(1.6) !default;
+$body-font-size-base: rem(1.4) !default;
+$caption-font-size-base: rem(1.2) !default;
+
+$baseline-grid: 8px;

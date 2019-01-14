@@ -1,14 +1,16 @@
 import {Component, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
 import {ApiService, InitialNodeDataService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-delete-confirmation',
   templateUrl: './cluster-delete-confirmation.component.html',
+  styleUrls: ['cluster-delete-confirmation.component.scss'],
 })
 export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() cluster: ClusterEntity;
@@ -16,6 +18,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() projectID: string;
   @ViewChild('clusterNameInput') clusterNameInputRef: ElementRef;
 
+  deleteForm: FormGroup;
   inputName = '';
 
   constructor(
@@ -23,6 +26,10 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
       private initialNodeDataService: InitialNodeDataService, public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
+    this.deleteForm = new FormGroup({
+      clusterLBCleanupCheckbox: new FormControl(),
+      clusterVolumeCleanupCheckbox: new FormControl(),
+    });
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');
   }
 
@@ -42,11 +49,16 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
     if (!this.inputNameMatches()) {
       return;
     } else {
-      this.api.deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe(() => {
-        this.initialNodeDataService.clearInitialNodeData(this.cluster);
-        NotificationActions.success('Success', `Cluster is being deleted`);
-        this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
-      });
+      this.api
+          .deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID, {
+            [Finalizer.DeleteLoadBalancers]: !!this.deleteForm.controls.clusterLBCleanupCheckbox.value,
+            [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
+          })
+          .subscribe(() => {
+            this.initialNodeDataService.clearInitialNodeData(this.cluster);
+            NotificationActions.success('Success', `Cluster is being deleted`);
+            this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
+          });
       this.dialogRef.close(true);
     }
   }

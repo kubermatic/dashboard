@@ -39,6 +39,11 @@ export function getClusterProvider(cluster: ClusterEntity): string {
   return '';
 }
 
+export const enum Finalizer {
+  DeleteVolumes = 'DeleteVolumes',
+  DeleteLoadBalancers = 'DeleteLoadBalancers',
+}
+
 export class ClusterEntity {
   creationTimestamp?: Date;
   deletionTimestamp?: Date;
