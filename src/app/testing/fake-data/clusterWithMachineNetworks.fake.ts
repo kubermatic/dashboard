@@ -8,23 +8,29 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
     name: 'nifty-haibt',
     spec: {
       cloud: {
-        dc: 'do-fra1',
-        digitalocean: {
-          token: 'token',
-        },
+        dc: 'vsphere-hetzner',
+        digitalocean: null,
         aws: null,
         openstack: null,
         baremetal: null,
         bringyourown: null,
         hetzner: null,
-        vsphere: null,
+        vsphere: {
+          username: 'foo',
+          password: 'bar',
+          vmNetName: '',
+          infraManagementUser: {
+            username: 'foo',
+            password: 'bar',
+          },
+        },
         azure: null,
       },
       version: '1.8.5',
       machineNetworks: [
         {
           cidr: '192.182.0.0/29',
-          dnsServers: ['8.8.8.8'],
+          dnsServers: ['8.8.8.8', '8.8.1.1'],
           gateway: '190.128.0.2',
         },
       ],
@@ -44,16 +50,22 @@ export function fakeGatewayInCidr(): ClusterEntity {
     name: 'nifty-haibt',
     spec: {
       cloud: {
-        dc: 'do-fra1',
-        digitalocean: {
-          token: 'token',
-        },
+        dc: 'vsphere-hetzner',
+        digitalocean: null,
         aws: null,
         openstack: null,
         baremetal: null,
         bringyourown: null,
         hetzner: null,
-        vsphere: null,
+        vsphere: {
+          username: 'foo',
+          password: 'bar',
+          vmNetName: '',
+          infraManagementUser: {
+            username: 'foo',
+            password: 'bar',
+          },
+        },
         azure: null,
       },
       version: '1.8.5',
@@ -80,16 +92,22 @@ export function fakeGatewayNotInCidr(): ClusterEntity {
     name: 'nifty-haibt',
     spec: {
       cloud: {
-        dc: 'do-fra1',
-        digitalocean: {
-          token: 'token',
-        },
+        dc: 'vsphere-hetzner',
+        digitalocean: null,
         aws: null,
         openstack: null,
         baremetal: null,
         bringyourown: null,
         hetzner: null,
-        vsphere: null,
+        vsphere: {
+          username: 'foo',
+          password: 'bar',
+          vmNetName: '',
+          infraManagementUser: {
+            username: 'foo',
+            password: 'bar',
+          },
+        },
         azure: null,
       },
       version: '1.8.5',
