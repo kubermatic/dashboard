@@ -1,14 +1,19 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiService} from '../../core/services';
+import {of} from 'rxjs';
+
+import {ApiService, DatacenterService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeOpenstackFlavors} from '../../testing/fake-data/addNodeModal.fake';
 import {fakeOpenstackCluster} from '../../testing/fake-data/cluster.fake';
+import {fakeOpenstackDatacenter} from '../../testing/fake-data/datacenter.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
+
 import {OpenstackNodeDataComponent} from './openstack-node-data.component';
 
 describe('OpenstackNodeDataComponent', () => {
@@ -16,8 +21,9 @@ describe('OpenstackNodeDataComponent', () => {
   let component: OpenstackNodeDataComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavorsForWizard']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getOpenStackFlavorsForWizard', 'getOpenStackFlavors']);
     apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors()));
+    apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
 
     TestBed
         .configureTestingModule({
@@ -32,6 +38,7 @@ describe('OpenstackNodeDataComponent', () => {
           ],
           providers: [
             NodeDataService,
+            {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ApiService, useValue: apiMock},
           ],
         })
@@ -48,5 +55,27 @@ describe('OpenstackNodeDataComponent', () => {
   it('should create the add node cmp', () => {
     expect(component).toBeTruthy();
     fixture.detectChanges();
+  });
+
+  it('should disable floating ip checkbox when required by datacenter', () => {
+    const datacenterService = TestBed.get(DatacenterService);
+    const dc = fakeOpenstackDatacenter();
+    dc.spec.openstack.enforce_floating_ip = true;
+    spyOn(datacenterService, 'getDataCenter').and.returnValue(of(dc));
+    spyOn(component, 'isInWizard').and.returnValue(false);
+
+    fixture.detectChanges();
+    const tooltipEl = fixture.debugElement.query(By.css('.km-floating-ip-checkbox-info-icon'));
+    expect(tooltipEl).not.toBeNull();
+    expect(component.osNodeForm.controls.useFloatingIP.disabled).toBeTruthy();
+  });
+
+  it('should enable floating ip checkbox when not enforced by datacenter', () => {
+    const tooltipEl = fixture.debugElement.query(By.css('.km-floating-ip-checkbox-info-icon'));
+    spyOn(component, 'isInWizard').and.returnValue(false);
+
+    fixture.detectChanges();
+    expect(tooltipEl).toBeNull();
+    expect(component.osNodeForm.controls.useFloatingIP.disabled).toBeFalsy();
   });
 });
