@@ -24,7 +24,7 @@
       <div class="km-copyright">
         <p class="km-info-item">powered by <a href="https://loodse.com" target="_blank">Loodse <sup>®</sup></a></p>
         <p class="km-info-item km-seperator" *ngIf="!!version"> | </p>
-        <p *ngIf="!!version" class="km-info-item">{{version.tag}} ({{version.hash}})</p>
+        <p *ngIf="!!version" class="km-info-item"><span *ngIf="!version.dirty">{{version.tag}}</span><span *ngIf="!!version.dirty">v{{version.semverString}}</span></p>
       </div>
       <div class="km-info km-info-right">
         <p class="km-info-item" *ngIf="config.show_demo_info">This is a <strong>demo system</strong></p>

@@ -6,6 +6,6 @@ export const versionInfo = (() => {
     return require('../../git-version.json') as VersionInfo;
   } catch {
     // In dev the file might not exist:
-    return {tag: 'v0.0.0', hash: 'dev'};
+    return {dirty: false, tag: 'v0.0.0', hash: 'dev', distance: '0', semverString: '0.0.0+0.dev'};
   }
 })();
