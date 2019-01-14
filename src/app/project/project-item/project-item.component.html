@@ -1,15 +1,19 @@
 <div class="km-row" [ngClass]="getProjectItemClass()" (click)="selectProject()">
   <div fxLayout>
-    <div fxFlex="50%" fxFlex.xs="40%">
+    <div fxFlex="3%">
+      <div class="km-health-state">
+        <i [matTooltip]="project.status" [ngClass]="projectService.getProjectStateIconClass()"></i>
+      </div>
+    </div>
+    <div fxFlex="80%">
       <p [attr.id]="'km-project-name-' + project.name" class="project-name">{{ project.name }}</p>
     </div>
-    <div fxFlex="40%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
-      <div class="km-health-state"><i [matTooltip]="project.status" [ngClass]="projectService.getProjectStateIconClass()"></i></div>
-      <p class="project-status">{{ project.status }}</p>
-    </div>
-    <div fxFlex="10%" fxHide.sm fxHide.xs>
+    <div fxFlex="17%">
       <p class="km-icon">
-        <button [attr.id]="'km-delete-project-' + project.name" class="km-icon-delete black" (click)="deleteProject()" [disabled]="!!userGroup && !userGroupConfig[userGroup].projects.delete"></button>
+        <button [attr.id]="'km-delete-project-' + project.name"
+                class="km-icon-delete black"
+                (click)="deleteProject()"
+                [disabled]="!!userGroup && !userGroupConfig[userGroup].projects.delete"></button>
       </p>
     </div>
   </div>
