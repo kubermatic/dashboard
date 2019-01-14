@@ -39,10 +39,9 @@ export class MemberComponent implements OnInit, OnDestroy {
     }));
 
     const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe(
-        (tick) => {
-            // this.refreshMembers();
-        }));
+    this.subscriptions.push(timer.subscribe(() => {
+      this.refreshMembers();
+    }));
     this.refreshMembers();
   }
 

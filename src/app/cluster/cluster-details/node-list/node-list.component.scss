@@ -41,7 +41,10 @@
 }
 
 .km-btn-remove-node-wrapper {
+  padding-right: 20px;
   position: relative;
+  justify-content: flex-end;
+  display: flex;
 }
 
 .km-node-list-spinner {
