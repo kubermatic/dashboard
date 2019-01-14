@@ -23,6 +23,7 @@ import {EditSSHKeyDeleteConfirmationComponent} from './cluster-details/edit-sshk
 import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
+import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeDuplicateComponent} from './cluster-details/node-duplicate/node-duplicate.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
@@ -36,6 +37,7 @@ const components: any[] = [
   ClusterDetailsComponent,
   NodeListComponent,
   NodeDeploymentListComponent,
+  NodeDeploymentDetailsComponent,
   ClusterListComponent,
   ClusterItemComponent,
   ClusterHealthStatusComponent,

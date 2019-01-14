@@ -1,7 +1,10 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+
 import {ClusterDetailsComponent} from '../cluster/cluster-details/cluster-details.component';
 import {AuthGuard} from '../core/services/auth/auth.guard';
+
+import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 
 const routes: Routes = [
@@ -16,6 +19,12 @@ const routes: Routes = [
     component: ClusterDetailsComponent,
     canActivate: [AuthGuard],
     data: {title: 'Cluster details'},
+  },
+  {
+    path: ':clusterName/nd/:nodeDeploymentID',
+    component: NodeDeploymentDetailsComponent,
+    canActivate: [AuthGuard],
+    data: {title: 'Node Deployment details'},
   },
 ];
 

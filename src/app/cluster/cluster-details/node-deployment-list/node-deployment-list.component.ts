@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
+import {Router} from '@angular/router';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, UserService} from '../../../core/services';
@@ -41,7 +42,8 @@ export class NodeDeploymentListComponent implements OnInit {
 
   constructor(
       public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService,
-      private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService,
+      private router: Router) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -78,6 +80,12 @@ export class NodeDeploymentListComponent implements OnInit {
     }
 
     return healthStatus;
+  }
+
+  goToDetails(nd: NodeDeploymentEntity) {
+    this.router.navigate(
+        ['/projects/' + this.projectID + '/dc/' + this.datacenter.metadata.name + '/clusters/' + this.cluster.id +
+         /nd/ + nd.id]);
   }
 
   showEditDialog(nd: NodeDeploymentEntity): void {
