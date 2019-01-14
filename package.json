@@ -10,7 +10,7 @@
     "start": "ng serve --hmr",
     "start:local": "ng serve --hmr --proxy-config proxy-local.conf.json",
     "start:mock": "concurrently --kill-others --prefix \"[{name}]\" --names \"mock-server,ng-serve\" \"node mock-server.js\" \"ng serve --hmr --proxy-config proxy-mock.conf.json\"",
-    "build": "ng build --prod && node git-version.js",
+    "build": "ng build --prod && npm run versioninfo",
     "test": "ng test",
     "test:headless": "ng test --browsers=ChromeHeadless --watch=false",
     "test:firefox": "ng test --browsers=FirefoxAutoAllowGUM --watch=false",
