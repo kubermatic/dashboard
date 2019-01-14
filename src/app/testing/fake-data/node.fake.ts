@@ -372,6 +372,7 @@ export function nodeDataCentOsFake(): NodeData {
         openstack: {
           flavor: 'm1.small',
           image: '',
+          useFloatingIP: false,
         },
         hetzner: {
           type: 'cx31',
@@ -424,6 +425,7 @@ export function nodeDataContainerLinuxFake(): NodeData {
         openstack: {
           flavor: 'm1.small',
           image: '',
+          useFloatingIP: false,
         },
         hetzner: {
           type: 'cx31',
