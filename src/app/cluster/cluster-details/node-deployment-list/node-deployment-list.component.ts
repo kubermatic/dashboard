@@ -1,4 +1,3 @@
-import {animate, state, style, transition, trigger} from '@angular/animations';
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
 
@@ -10,7 +9,6 @@ import {ConfirmationDialogComponent} from '../../../shared/components/confirmati
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
-import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 import {NodeDataModalComponent} from '../node-data-modal/node-data-modal.component';
 
@@ -18,15 +16,6 @@ import {NodeDataModalComponent} from '../node-data-modal/node-data-modal.compone
   selector: 'kubermatic-node-deployment-list',
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
-  animations: [
-    trigger(
-        'detailExpand',
-        [
-          state('collapsed', style({height: '0px', minHeight: '0', display: 'none'})),
-          state('expanded', style({height: '*'})),
-          transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-        ]),
-  ],
 })
 export class NodeDeploymentListComponent implements OnInit {
   private static getHealthStatus_(color: string, status: string, className: string): object {
@@ -47,8 +36,6 @@ export class NodeDeploymentListComponent implements OnInit {
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
 
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
-  expandedElement: string|null;
-  nodeDeploymentNodes: NodeEntity[];
   userGroupConfig: UserGroupConfig;
   userGroup: string;
 
@@ -91,27 +78,6 @@ export class NodeDeploymentListComponent implements OnInit {
     }
 
     return healthStatus;
-  }
-
-  onElementClick(element: NodeDeploymentEntity): void {
-    if (this.isElementExpanded(element)) {
-      this.expandedElement = null;
-    } else {
-      this.expandElement(element);
-    }
-  }
-
-  isElementExpanded(element: NodeDeploymentEntity): boolean {
-    return element.name === this.expandedElement;
-  }
-
-  expandElement(element: NodeDeploymentEntity): void {
-    this.nodeDeploymentNodes = [];  // TODO: Implement cache/map to store previous requests before new data loads.
-    this.expandedElement = element.name;
-    this.api.getNodeDeploymentNodes(element, this.cluster.id, this.datacenter.metadata.name, this.projectID)
-        .subscribe(nodes => {
-          this.nodeDeploymentNodes = nodes;
-        });
   }
 
   showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
