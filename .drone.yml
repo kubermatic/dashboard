@@ -32,10 +32,10 @@ pipeline:
       - make test-headless
 
   e2e:
-    image: atlassianlabs/docker-node-jdk-chrome-firefox:2018-12-10
+    image: quay.io/kubermatic/chrome-headless:v0.3
     secrets: [kubermatic_dex_dev_e2e_username, kubermatic_dex_dev_e2e_password]
     commands:
-      - npm run e2e
+      - make run-e2e
 
   build:
     image: golang:1.10
