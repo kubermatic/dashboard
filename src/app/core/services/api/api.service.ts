@@ -5,7 +5,7 @@ import {catchError} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity, Finalizer, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
@@ -26,7 +26,7 @@ export class ApiService {
   private location: string = window.location.protocol + '//' + window.location.host;
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
-  private token: string;
+  private readonly token: string;
   private isNodeDeploymentAPIAvailable_ = false;
 
   constructor(
@@ -117,8 +117,15 @@ export class ApiService {
     return this.http.patch<ClusterEntity>(url, patch, {headers: this.headers});
   }
 
-  deleteCluster(cluster: string, dc: string, projectID: string): Observable<any> {
+  deleteCluster(cluster: string, dc: string, projectID: string, finalizers?: {[key in Finalizer]: boolean}):
+      Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}`;
+    if (finalizers !== undefined) {
+      for (const key of Object.keys(finalizers)) {
+        this.headers = this.headers.set(key, finalizers[key].toString());
+      }
+    }
+
     return this.http.delete(url, {headers: this.headers});
   }
 

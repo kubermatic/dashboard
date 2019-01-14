@@ -1,0 +1,21 @@
+@import "../../../../assets/css/variables";
+@import "../../../../assets/css/colors";
+
+.km-delete-cluster-name-input {
+  width: 100%;
+}
+
+.km-delete-cluster-checkbox {
+  font-size: $body-font-size-base;
+  margin-bottom: $baseline-grid;
+}
+
+.km-delete-cluster-warning {
+  display: flex;
+  font-size: $body-font-size-base;
+
+  mat-icon {
+    color: $waiting-status-color;
+    margin-right: $baseline-grid;
+  }
+}
