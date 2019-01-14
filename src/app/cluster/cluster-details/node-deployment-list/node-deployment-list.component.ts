@@ -80,8 +80,7 @@ export class NodeDeploymentListComponent implements OnInit {
     return healthStatus;
   }
 
-  showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
-    event.stopPropagation();
+  showEditDialog(nd: NodeDeploymentEntity): void {
     const modal = this.dialog.open(NodeDataModalComponent, {
       data: {
         cluster: this.cluster,
@@ -103,8 +102,7 @@ export class NodeDeploymentListComponent implements OnInit {
     });
   }
 
-  showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {
-    event.stopPropagation();
+  showDeleteDialog(nd: NodeDeploymentEntity): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
