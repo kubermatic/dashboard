@@ -132,7 +132,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
                 this.openstackSettingsForm.controls.username.value, this.openstackSettingsForm.controls.password.value,
                 this.openstackSettingsForm.controls.tenant.value, this.openstackSettingsForm.controls.domain.value,
                 this.cluster.spec.cloud.dc)
-            .subscribe((networks) => {
+            .subscribe((networks: OpenstackNetwork[]) => {
               networks = networks.sort((a, b) => {
                 return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
               });
@@ -196,6 +196,10 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
               this.loadingSubnetIds = false;
             }));
+  }
+
+  isFloatingIPEnforced(): boolean {
+    return this.wizardService.getSelectedDatacenter().spec.openstack.enforce_floating_ip;
   }
 
   ngOnDestroy(): void {

@@ -43,11 +43,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   }
 
   displayTags(tags: object): boolean {
-    if (Object.keys(tags).length > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return Object.keys(tags).length > 0;
   }
 
   getTagsFromObject(tags: object): string {

@@ -17,7 +17,7 @@
   <kubermatic-set-machine-networks [cluster]="cluster" [nodeData]="addNodeData" *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
 
   <!-- Provider Summary -->
-  <kubermatic-summary *ngIf="currentStep.name === 'summary'" [clusterSSHKeys]="clusterSSHKeys"
+  <kubermatic-summary *ngIf="currentStep.name === 'summary'"
                       [nodeData]="addNodeData"
                       [cluster]="cluster"
                       [providerFormData]="clusterProviderFormData"

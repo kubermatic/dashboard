@@ -5,4 +5,5 @@ export class OpenStackDatacenterSpec {
   auth_url: string;
   region: string;
   images: DatacenterOperatingSystemOptions;
+  enforce_floating_ip: boolean;
 }
