@@ -9,7 +9,7 @@
     <div fxFlex="20%" fxFlex.sm="20.66%" fxFlex.xs="25%" fxLayoutAlign="left center">
       <p class="km-member-group">{{ getGroup(member.projects) }}</p>
     </div>
-    <div fxFlex="10%" fxHide.sm fxHide.xs>
+    <div fxFlex="10%" class="km-project-item-actions">
       <p class="km-icon">
         <button class="km-icon-edit black" (click)="editMember()" [ngClass]="!!userGroup && !userGroupConfig[userGroup].members.edit"></button>
         <button class="km-icon-delete black" (click)="deleteMember()" [disabled]="!!userGroup && !userGroupConfig[userGroup].members.remove"></button>
