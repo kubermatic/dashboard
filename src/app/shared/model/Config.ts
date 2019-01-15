@@ -6,6 +6,7 @@ export interface Config {
   openstack?: {wizard_use_default_user?: boolean;};
   google_analytics_code?: string;
   google_analytics_config?: object;
+  cleanup_cluster?: boolean;
 }
 
 export interface UserGroupConfig {
