@@ -10,7 +10,8 @@
 
     <ng-container *ngIf="clusterName.length">
       <li class="km-breadcrumb-item"><a routerLink="/projects/{{project}}/clusters">Manage Clusters</a></li>
-      <li class="km-breadcrumb-item" [ngClass]="{'active': clusterName}">{{clusterName}}</li>
+      <li class="km-breadcrumb-item" [ngClass]="{'active': !!clusterName && !nodeDeployment}">{{clusterName}}</li>
+      <li class="km-breadcrumb-item" *ngIf="nodeDeployment" [ngClass]="{'active': nodeDeployment}">{{nodeDeployment}}</li>
     </ng-container>
   </ul>
 </nav>

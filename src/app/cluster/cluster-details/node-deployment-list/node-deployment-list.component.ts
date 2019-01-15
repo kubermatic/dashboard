@@ -47,7 +47,7 @@ export class NodeDeploymentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
+    this.userService.currentUserGroup(this.projectID).toPromise().then((group) => {
       this.userGroup = group;
     });
   }
@@ -105,7 +105,7 @@ export class NodeDeploymentListComponent implements OnInit {
       }
     });
 
-    modal.componentInstance.editNodeDeployment.subscribe((nd) => {
+    modal.componentInstance.editNodeDeployment.toPromise().then((nd) => {
       this.changeNodeDeployment.emit(nd);
     });
   }
@@ -125,7 +125,7 @@ export class NodeDeploymentListComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
-    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+    dialogRef.afterClosed().toPromise().then((isConfirmed: boolean) => {
       if (isConfirmed) {
         this.api.deleteNodeDeployment(this.cluster.id, nd, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {

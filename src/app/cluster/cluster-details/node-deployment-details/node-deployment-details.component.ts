@@ -43,29 +43,18 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._nodeDeploymentID = this._route.snapshot.paramMap.get('nodeDeploymentID');
     this.projectID = this._route.snapshot.paramMap.get('projectID');
 
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((group) => {
-      this.userGroup = group;
-    });
-
     this.loadNodeDeployment();
     this.loadNodes();
-
-    this._api.getCluster(this._clusterName, this._dcName, this.projectID).toPromise().then((c) => {
-      this.cluster = c;
-
-      this.dcService.getDataCenter(this.cluster.spec.cloud.dc).toPromise().then((d) => {
-        this.dc = d;
-      });
-    });
+    this.loadClusterData();
+    this.loadUserGroupData();
 
     // TODO edit button at top
     // TODO del button...
     // TODO status icon
     // TODO 10s interval
     // TODO unsubscribe others
-    // TODO fix breadcrumb
-    // TODO fix api call in console
+    // TODO fix api error in console
+    // TODO wrong dc??? Error 404: cluster-provider "do-fra1" not found
   }
 
   loadNodeDeployment(): void {
@@ -82,6 +71,23 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
           this.nodes = nodes;
           this.areNodesLoaded = true;
         });
+  }
+
+  loadClusterData(): void {
+    this._api.getCluster(this._clusterName, this._dcName, this.projectID).toPromise().then((c) => {
+      this.cluster = c;
+
+      this.dcService.getDataCenter(this.cluster.spec.cloud.dc).toPromise().then((d) => {
+        this.dc = d;
+      });
+    });
+  }
+
+  loadUserGroupData(): void {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((ug) => {
+      this.userGroup = ug;
+    });
   }
 
   ngOnDestroy(): void {
