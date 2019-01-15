@@ -21,10 +21,8 @@ import {UserGroupConfig} from '../../../shared/model/Config';
 export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
   nodes: NodeEntity[] = [];
-
   cluster: ClusterEntity;
   dc: DataCenterEntity;
-
   projectID: string;
   userGroup: string;
   userGroupConfig: UserGroupConfig;
@@ -56,7 +54,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     // TODO status icon
     // TODO 10s interval
     // TODO wrong dc??? Error 404: cluster-provider "do-fra1" not found
-    // TODO highlight link with color
   }
 
   loadNodeDeployment(): void {
