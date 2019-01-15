@@ -76,7 +76,7 @@ describe('NodeDeploymentDetailsComponent', () => {
     activatedRoute.testParamMap = {clusterName: '4k6txp5sq', seedDc: 'europe-west3-c'};
   });
 
-  it('should initialize', async(() => {
-       expect(component).toBeTruthy();
-     }));
+  it('should initialize', () => {
+    expect(component).toBeTruthy();
+  });
 });
