@@ -107,7 +107,7 @@ export class NodeDeploymentListComponent implements OnInit {
       }
     });
 
-    modal.componentInstance.editNodeDeployment.toPromise().then((nd) => {
+    modal.componentInstance.editNodeDeployment.pipe(first()).subscribe((nd) => {
       this.changeNodeDeployment.emit(nd);
     });
   }
@@ -128,7 +128,7 @@ export class NodeDeploymentListComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
-    dialogRef.afterClosed().toPromise().then((isConfirmed: boolean) => {
+    dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this.api.deleteNodeDeployment(this.cluster.id, nd, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {
