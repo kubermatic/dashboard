@@ -21,9 +21,10 @@ import {UserGroupConfig} from '../../../shared/model/Config';
 export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
   nodes: NodeEntity[] = [];
-  areNodesLoaded = false;
+
   cluster: ClusterEntity;
   dc: DataCenterEntity;
+
   projectID: string;
   userGroup: string;
   userGroupConfig: UserGroupConfig;
@@ -31,6 +32,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _clusterName: string;
   private _dcName: string;
   private _nodeDeploymentID: string;
+  private _areNodesLoaded = false;
+  private _isClusterDataLoaded = false;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -52,9 +55,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     // TODO del button...
     // TODO status icon
     // TODO 10s interval
-    // TODO unsubscribe others
-    // TODO fix api error in console
     // TODO wrong dc??? Error 404: cluster-provider "do-fra1" not found
+    // TODO highlight link with color
   }
 
   loadNodeDeployment(): void {
@@ -69,7 +71,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._api.getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
         .subscribe((nodes) => {
           this.nodes = nodes;
-          this.areNodesLoaded = true;
+          this._areNodesLoaded = true;
         });
   }
 
@@ -79,6 +81,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
       this.dcService.getDataCenter(this.cluster.spec.cloud.dc).toPromise().then((d) => {
         this.dc = d;
+        this._isClusterDataLoaded = true;
       });
     });
   }
@@ -88,6 +91,10 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((ug) => {
       this.userGroup = ug;
     });
+  }
+
+  isInitialized(): boolean {
+    return this._isClusterDataLoaded && this._areNodesLoaded;
   }
 
   ngOnDestroy(): void {

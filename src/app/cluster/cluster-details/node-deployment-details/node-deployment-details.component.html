@@ -1,4 +1,4 @@
-<kubermatic-node-list *ngIf="areNodesLoaded"
+<kubermatic-node-list *ngIf="isInitialized()"
                       [cluster]="cluster"
                       [nodes]="nodes"
                       (deleteNode)="loadNodes()"
