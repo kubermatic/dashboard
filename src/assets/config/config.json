@@ -5,5 +5,6 @@
   "share_kubeconfig": false,
   "openstack": {
     "wizard_use_default_user": false
-  }
+  },
+  "cleanup_cluster":  false
 }
