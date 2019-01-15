@@ -88,7 +88,8 @@ export class NodeDeploymentListComponent implements OnInit {
          /nd/ + nd.id]);
   }
 
-  showEditDialog(nd: NodeDeploymentEntity): void {
+  showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
+    event.stopPropagation();
     const modal = this.dialog.open(NodeDataModalComponent, {
       data: {
         cluster: this.cluster,
@@ -110,7 +111,8 @@ export class NodeDeploymentListComponent implements OnInit {
     });
   }
 
-  showDeleteDialog(nd: NodeDeploymentEntity): void {
+  showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,

@@ -54,14 +54,14 @@
                 <button mat-icon-button
                         class="km-node-deployment-action"
                         matTooltip="Edit Node Deployment"
-                        (click)="showEditDialog(element)">
+                        (click)="showEditDialog(element, $event)">
                   <mat-icon class="km-icon-edit black"></mat-icon>
                 </button>
 
                 <button mat-icon-button
                         class="km-node-deployment-action"
                         matTooltip="Delete Node Deployment"
-                        (click)="showDeleteDialog(element)"
+                        (click)="showDeleteDialog(element, $event)"
                         [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
                   <i class="fa fa-trash-o"
                      aria-hidden="true"
