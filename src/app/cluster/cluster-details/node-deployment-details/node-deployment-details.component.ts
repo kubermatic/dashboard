@@ -11,13 +11,11 @@ import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity'
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 
-
 @Component({
   selector: 'kubermatic-cluster-details',
   templateUrl: './node-deployment-details.component.html',
   styleUrls: ['./node-deployment-details.component.scss'],
 })
-
 export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
   nodes: NodeEntity[] = [];
@@ -55,11 +53,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       this.loadNodes();
     });
 
-    // TODO edit button at top
-    // TODO del button...
-    // TODO status icon
     // TODO wrong dc??? Error 404: cluster-provider "do-fra1" not found
-    // TODO event propagation
+    // TODO stop event propagation
     // TODO fix breadcrumbs link to specific cluster
   }
 
