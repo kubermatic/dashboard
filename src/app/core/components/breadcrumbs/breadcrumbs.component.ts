@@ -1,5 +1,5 @@
 import {select} from '@angular-redux/store';
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {ApiService} from '../../../core/services';
@@ -9,20 +9,26 @@ import {ApiService} from '../../../core/services';
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.scss'],
 })
-export class BreadcrumbsComponent implements OnInit {
+export class BreadcrumbsComponent {
   activePageTitle = '';
-  clusterName = '';
   project = '';
+  datacenter = '';
+  cluster = '';
+  clusterName = '';
   nodeDeployment = '';
+  nodeDeploymentName = '';
 
   @select(['breadcrumb', 'crumb']) breadcrumb$: Observable<string>;
 
   constructor(private api: ApiService, private router: Router) {
     this.breadcrumb$.subscribe((crumb) => {
       this.activePageTitle = crumb;
-      this.clusterName = '';
       this.project = '';
+      this.datacenter = '';
+      this.cluster = '';
+      this.clusterName = '';
       this.nodeDeployment = '';
+      this.nodeDeploymentName = '';
 
       const regExpProject = /\/projects\/([\w\d\-]*)\/./;
       const regExpDatacenter = /\/dc\/([\w\d\-]*)\/./;
@@ -37,25 +43,22 @@ export class BreadcrumbsComponent implements OnInit {
         this.project = matchResProject[1];
 
         if (matchResDatacenter && matchResCluster) {
-          this.api.getCluster(matchResCluster[1], matchResDatacenter[1], matchResProject[1])
-              .toPromise()
-              .then((cluster) => {
-                this.clusterName = cluster.name;
-              });
+          this.datacenter = matchResDatacenter[1];
+          this.cluster = matchResCluster[1];
+          this.api.getCluster(this.cluster, this.datacenter, this.project).toPromise().then((c) => {
+            this.clusterName = c.name;
+          });
 
           if (matchResNodeDeployment) {
-            this.api
-                .getNodeDeployment(
-                    matchResNodeDeployment[1], matchResCluster[1], matchResDatacenter[1], matchResProject[1])
+            this.nodeDeployment = matchResNodeDeployment[1];
+            this.api.getNodeDeployment(this.nodeDeployment, this.cluster, this.datacenter, this.project)
                 .toPromise()
                 .then((nd) => {
-                  this.nodeDeployment = nd.name;
+                  this.nodeDeploymentName = nd.name;
                 });
           }
         }
       }
     });
   }
-
-  ngOnInit(): void {}
 }
