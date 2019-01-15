@@ -29,7 +29,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _dcName: string;
   private _nodeDeploymentID: string;
   private _areNodesLoaded = false;
-  private _isClusterDataLoaded = false;
+  private _isClusterLoaded = false;
+  private _isDatacenterLoaded = false;
   private _refreshInterval = 10000;
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -45,7 +46,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
     this.loadNodeDeployment();
     this.loadNodes();
-    this.loadClusterData();
+    this.loadCluster();
+    this.loadDatacenter();
     this.loadUserGroupData();
 
     interval(this._refreshInterval).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -70,14 +72,17 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         });
   }
 
-  loadClusterData(): void {
+  loadCluster(): void {
     this._api.getCluster(this._clusterName, this._dcName, this.projectID).toPromise().then((c) => {
       this.cluster = c;
+      this._isClusterLoaded = true;
+    });
+  }
 
-      this.dcService.getDataCenter(this.cluster.spec.cloud.dc).toPromise().then((d) => {
-        this.dc = d;
-        this._isClusterDataLoaded = true;
-      });
+  loadDatacenter(): void {
+    this.dcService.getDataCenter(this._dcName).toPromise().then((d) => {
+      this.dc = d;
+      this._isDatacenterLoaded = true;
     });
   }
 
@@ -89,7 +94,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isInitialized(): boolean {
-    return this._isClusterDataLoaded && this._areNodesLoaded;
+    return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded;
   }
 
   ngOnDestroy(): void {
