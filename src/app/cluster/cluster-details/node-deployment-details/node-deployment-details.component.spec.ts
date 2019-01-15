@@ -1,6 +1,6 @@
 import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
-import {BrowserModule, By} from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
@@ -13,8 +13,6 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {nodesFake} from '../../../testing/fake-data/node.fake';
-import {fakeSSHKeys} from '../../../testing/fake-data/sshkey.fake';
 import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -22,9 +20,6 @@ import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {HealthMockService} from '../../../testing/services/health-mock.service';
 import {NodeMockService} from '../../../testing/services/node-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
-import {ClusterHealthStatusComponent} from '../../cluster-health-status/cluster-health-status.component';
-import {ClusterSecretsComponent} from '../cluster-secrets/cluster-secrets.component';
-import {NodeDeploymentListComponent} from '../node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from '../node-list/node-list.component';
 
 import {NodeDeploymentDetailsComponent} from './node-deployment-details.component';
@@ -35,22 +30,13 @@ describe('NodeDeploymentDetailsComponent', () => {
   let activatedRoute: ActivatedRouteStub;
 
   let apiMock;
+  let dcMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', [
-      'getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL',
-      'isNodeDeploymentEnabled'
-    ]);
+    apiMock = jasmine.createSpyObj('ApiService', ['getCluster']);
     apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
-
-    apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake()));
-    apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
-    apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
-
-    const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-
-    datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
+    dcMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
+    dcMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
 
     TestBed
         .configureTestingModule({
@@ -64,14 +50,11 @@ describe('NodeDeploymentDetailsComponent', () => {
           ],
           declarations: [
             NodeDeploymentDetailsComponent,
-            ClusterHealthStatusComponent,
-            ClusterSecretsComponent,
             NodeListComponent,
-            NodeDeploymentListComponent,
           ],
           providers: [
             {provide: ApiService, useValue: apiMock},
-            {provide: DatacenterService, useValue: datacenterMock},
+            {provide: DatacenterService, useValue: dcMock},
             {provide: Auth, useClass: AuthMockService},
             {provide: Router, useClass: RouterStub},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
@@ -91,9 +74,6 @@ describe('NodeDeploymentDetailsComponent', () => {
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {clusterName: '4k6txp5sq', seedDc: 'europe-west3-c'};
-
-    fixture.debugElement.query(By.css('.km-spinner'));
-    fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
   });
 
   it('should initialize', async(() => {
