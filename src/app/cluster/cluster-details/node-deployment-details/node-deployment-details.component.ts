@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {interval, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {first, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, DatacenterService, UserService} from '../../../core/services';
@@ -73,14 +73,14 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadCluster(): void {
-    this._api.getCluster(this._clusterName, this._dcName, this.projectID).toPromise().then((c) => {
+    this._api.getCluster(this._clusterName, this._dcName, this.projectID).pipe(first()).subscribe((c) => {
       this.cluster = c;
       this._isClusterLoaded = true;
     });
   }
 
   loadDatacenter(): void {
-    this.dcService.getDataCenter(this._dcName).toPromise().then((d) => {
+    this.dcService.getDataCenter(this._dcName).pipe(first()).subscribe((d) => {
       this.dc = d;
       this._isDatacenterLoaded = true;
     });

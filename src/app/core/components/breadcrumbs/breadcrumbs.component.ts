@@ -2,7 +2,9 @@ import {select} from '@angular-redux/store';
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
-import {ApiService} from '../../../core/services';
+import {first} from 'rxjs/operators';
+
+import {ApiService} from '../../services';
 
 @Component({
   selector: 'kubermatic-breadcrumbs',
@@ -45,15 +47,15 @@ export class BreadcrumbsComponent {
         if (matchResDatacenter && matchResCluster) {
           this.datacenter = matchResDatacenter[1];
           this.cluster = matchResCluster[1];
-          this.api.getCluster(this.cluster, this.datacenter, this.project).toPromise().then((c) => {
+          this.api.getCluster(this.cluster, this.datacenter, this.project).pipe(first()).subscribe((c) => {
             this.clusterName = c.name;
           });
 
           if (matchResNodeDeployment) {
             this.nodeDeployment = matchResNodeDeployment[1];
             this.api.getNodeDeployment(this.nodeDeployment, this.cluster, this.datacenter, this.project)
-                .toPromise()
-                .then((nd) => {
+                .pipe(first())
+                .subscribe((nd) => {
                   this.nodeDeploymentName = nd.name;
                 });
           }
