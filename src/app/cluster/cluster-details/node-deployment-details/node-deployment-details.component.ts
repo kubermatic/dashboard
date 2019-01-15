@@ -52,10 +52,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       this.loadNodeDeployment();
       this.loadNodes();
     });
-
-    // TODO wrong dc??? Error 404: cluster-provider "do-fra1" not found
-    // TODO stop event propagation
-    // TODO fix breadcrumbs link to specific cluster
   }
 
   loadNodeDeployment(): void {
