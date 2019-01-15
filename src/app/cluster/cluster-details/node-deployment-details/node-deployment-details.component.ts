@@ -58,7 +58,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodeDeployment(): void {
     this._api.getNodeDeployment(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
-        .pipe(takeUntil(this._unsubscribe))
+        .pipe(first())
         .subscribe((nd) => {
           this.nodeDeployment = nd;
         });
@@ -66,6 +66,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodes(): void {
     this._api.getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
+        .pipe(first())
         .subscribe((nodes) => {
           this.nodes = nodes;
           this._areNodesLoaded = true;
