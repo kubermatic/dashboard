@@ -6,6 +6,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
+import {AppConfigService} from '../../../app-config.service';
 import {InitialNodeDataService} from '../../../core/services';
 import {ApiService} from '../../../core/services/api/api.service';
 import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
@@ -16,6 +17,7 @@ import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation.component';
@@ -50,6 +52,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,
+            {provide: AppConfigService, useClass: AppConfigMockService},
           ],
         })
         .compileComponents();
