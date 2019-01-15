@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
+import {first} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, UserService} from '../../../core/services';
@@ -47,7 +48,7 @@ export class NodeDeploymentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).toPromise().then((group) => {
+    this.userService.currentUserGroup(this.projectID).pipe(first()).subscribe((group) => {
       this.userGroup = group;
     });
   }
