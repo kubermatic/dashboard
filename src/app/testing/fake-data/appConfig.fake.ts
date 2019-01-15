@@ -9,5 +9,6 @@ export function fakeAppConfig(): Config {
     openstack: {
       wizard_use_default_user: false,
     },
+    cleanup_cluster: false,
   };
 }

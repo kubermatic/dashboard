@@ -1,6 +1,7 @@
 import {Component, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
+import {AppConfigService} from '../../../app-config.service';
 import {ApiService, InitialNodeDataService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
@@ -23,12 +24,13 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
 
   constructor(
       private api: ApiService, private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
-      private initialNodeDataService: InitialNodeDataService, public googleAnalyticsService: GoogleAnalyticsService) {}
+      private initialNodeDataService: InitialNodeDataService, public googleAnalyticsService: GoogleAnalyticsService,
+      private _appConfig: AppConfigService) {}
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({
-      clusterLBCleanupCheckbox: new FormControl(),
-      clusterVolumeCleanupCheckbox: new FormControl(),
+      clusterLBCleanupCheckbox: new FormControl(!!this._appConfig.getConfig().cleanup_cluster),
+      clusterVolumeCleanupCheckbox: new FormControl(!!this._appConfig.getConfig().cleanup_cluster),
     });
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');
   }
