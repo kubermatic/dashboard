@@ -39,3 +39,4 @@ Thumbs.db
 
 # generated
 bindata_assetfs.go
+git-version.json

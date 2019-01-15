@@ -8,6 +8,7 @@ import {Auth} from './core/services';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {INITIAL_STATE, Store, StoreReducer} from './redux/store';
 import {Config} from './shared/model/Config';
+import {versionInfo} from './version-info';
 
 @Component({
   selector: 'kubermatic-root',
@@ -17,6 +18,7 @@ import {Config} from './shared/model/Config';
 export class KubermaticComponent implements OnInit {
   @ViewChild('sidenav') sidenav: MatSidenav;
   config: Config = {show_demo_info: false, show_terms_of_service: false};
+  version = versionInfo;
 
   constructor(
       private sidenavService: SidenavService,
