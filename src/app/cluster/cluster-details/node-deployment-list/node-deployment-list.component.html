@@ -12,13 +12,7 @@
 
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef class="km-header-cell">Name</th>
-        <td mat-cell *matCellDef="let element">
-          <span (click)="goToDetails(element)"
-                class="km-clickable km-link"
-                matTooltip="View Node Deployment">
-            {{element.name}}
-          </span>
-        </td>
+        <td mat-cell *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="replicas">
@@ -80,7 +74,10 @@
       </ng-container>
 
       <tr mat-header-row class="km-header-row" *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="km-mat-row"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row km-clickable"
+          (click)="goToDetails(row)"></tr>
     </table>
 
     <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">

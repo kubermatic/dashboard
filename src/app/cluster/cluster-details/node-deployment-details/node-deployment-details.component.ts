@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Subject} from 'rxjs';
+import {interval, Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
@@ -32,6 +32,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _nodeDeploymentID: string;
   private _areNodesLoaded = false;
   private _isClusterDataLoaded = false;
+  private _refreshInterval = 10000;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -49,11 +50,17 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this.loadClusterData();
     this.loadUserGroupData();
 
+    interval(this._refreshInterval).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this.loadNodeDeployment();
+      this.loadNodes();
+    });
+
     // TODO edit button at top
     // TODO del button...
     // TODO status icon
-    // TODO 10s interval
     // TODO wrong dc??? Error 404: cluster-provider "do-fra1" not found
+    // TODO event propagation
+    // TODO fix breadcrumbs link to specific cluster
   }
 
   loadNodeDeployment(): void {
