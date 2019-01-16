@@ -25,14 +25,18 @@
       a {
         color: $light-text-color;
         text-decoration: none;
-      }
 
-      &.km-breadcrumb-item.active,
-      &:hover {
-        color: $primary;
+        &:hover {
+          color: $primary;
+        }
       }
 
       &:last-child {
+        &,
+        * {
+          color: $primary !important;
+        }
+
         &::after {
           display: none;
         }

@@ -2,6 +2,7 @@ import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/t
 import {MatDialog} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 
@@ -13,6 +14,7 @@ import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeDeploymentsFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
+import {RouterStub} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
@@ -51,6 +53,7 @@ describe('NodeDeploymentListComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: MatDialog, useClass: MatDialogMock},
+            {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,
           ],
         })
@@ -101,7 +104,7 @@ describe('NodeDeploymentListComponent', () => {
        fixture.detectChanges();
        const spyDeleteClusterNode = spyOn(apiService, 'deleteNodeDeployment').and.returnValue(of(null));
 
-       component.showDeleteDialog(nodeDeploymentsFake()[0]);
+       component.showDeleteDialog(nodeDeploymentsFake()[0], new MouseEvent('click'));
        tick();
 
        expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
