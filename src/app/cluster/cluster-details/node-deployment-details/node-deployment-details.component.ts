@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {interval, Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
@@ -35,14 +35,15 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private _route: ActivatedRoute, private _api: ApiService, private appConfigService: AppConfigService,
-      private userService: UserService, private dcService: DatacenterService) {}
+      private _activatedRoute: ActivatedRoute, private _router: Router, private _apiService: ApiService,
+      private _appConfigService: AppConfigService, private _userService: UserService,
+      private _datacenterService: DatacenterService) {}
 
   ngOnInit(): void {
-    this._clusterName = this._route.snapshot.paramMap.get('clusterName');
-    this._dcName = this._route.snapshot.paramMap.get('seedDc');
-    this._nodeDeploymentID = this._route.snapshot.paramMap.get('nodeDeploymentID');
-    this.projectID = this._route.snapshot.paramMap.get('projectID');
+    this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
+    this._dcName = this._activatedRoute.snapshot.paramMap.get('seedDc');
+    this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
+    this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
 
     this.loadNodeDeployment();
     this.loadNodes();
@@ -57,7 +58,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodeDeployment(): void {
-    this._api.getNodeDeployment(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
+    this._apiService.getNodeDeployment(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
         .pipe(first())
         .subscribe((nd) => {
           this.nodeDeployment = nd;
@@ -65,7 +66,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadNodes(): void {
-    this._api.getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
+    this._apiService.getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
         .pipe(first())
         .subscribe((nodes) => {
           this.nodes = nodes;
@@ -74,28 +75,32 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadCluster(): void {
-    this._api.getCluster(this._clusterName, this._dcName, this.projectID).pipe(first()).subscribe((c) => {
+    this._apiService.getCluster(this._clusterName, this._dcName, this.projectID).pipe(first()).subscribe((c) => {
       this.cluster = c;
       this._isClusterLoaded = true;
     });
   }
 
   loadDatacenter(): void {
-    this.dcService.getDataCenter(this._dcName).pipe(first()).subscribe((d) => {
+    this._datacenterService.getDataCenter(this._dcName).pipe(first()).subscribe((d) => {
       this.dc = d;
       this._isDatacenterLoaded = true;
     });
   }
 
   loadUserGroupData(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((ug) => {
+    this.userGroupConfig = this._appConfigService.getUserGroupConfig();
+    this._userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((ug) => {
       this.userGroup = ug;
     });
   }
 
   isInitialized(): boolean {
     return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded;
+  }
+
+  goBackToCluster(): void {
+    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this._dcName + '/clusters/' + this._clusterName]);
   }
 
   ngOnDestroy(): void {
