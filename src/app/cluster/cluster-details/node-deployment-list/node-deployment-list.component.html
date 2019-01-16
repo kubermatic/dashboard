@@ -54,14 +54,14 @@
                 <button mat-icon-button
                         class="km-node-deployment-action"
                         matTooltip="Edit Node Deployment"
-                        (click)="showEditDialog(element)">
+                        (click)="showEditDialog(element, $event)">
                   <mat-icon class="km-icon-edit black"></mat-icon>
                 </button>
 
                 <button mat-icon-button
                         class="km-node-deployment-action"
                         matTooltip="Delete Node Deployment"
-                        (click)="showDeleteDialog(element)"
+                        (click)="showDeleteDialog(element, $event)"
                         [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
                   <i class="fa fa-trash-o"
                      aria-hidden="true"
@@ -74,7 +74,10 @@
       </ng-container>
 
       <tr mat-header-row class="km-header-row" *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="km-mat-row"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row km-clickable"
+          (click)="goToDetails(row)"></tr>
     </table>
 
     <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">

@@ -16,6 +16,10 @@
     background-color: $medium-background;
   }
 
+  tr.mat-row:hover {
+    background-color: $light-background !important;
+  }
+
   td.mat-cell {
     border-bottom-width: 0;
     line-height: 60px;

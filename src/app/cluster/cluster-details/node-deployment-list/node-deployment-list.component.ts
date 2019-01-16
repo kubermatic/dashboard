@@ -1,5 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatTableDataSource} from '@angular/material';
+import {Router} from '@angular/router';
+import {first} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, UserService} from '../../../core/services';
@@ -41,11 +43,12 @@ export class NodeDeploymentListComponent implements OnInit {
 
   constructor(
       public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService,
-      private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService,
+      private router: Router) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
+    this.userService.currentUserGroup(this.projectID).pipe(first()).subscribe((group) => {
       this.userGroup = group;
     });
   }
@@ -80,7 +83,14 @@ export class NodeDeploymentListComponent implements OnInit {
     return healthStatus;
   }
 
-  showEditDialog(nd: NodeDeploymentEntity): void {
+  goToDetails(nd: NodeDeploymentEntity) {
+    this.router.navigate(
+        ['/projects/' + this.projectID + '/dc/' + this.datacenter.metadata.name + '/clusters/' + this.cluster.id +
+         /nd/ + nd.id]);
+  }
+
+  showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
+    event.stopPropagation();
     const modal = this.dialog.open(NodeDataModalComponent, {
       data: {
         cluster: this.cluster,
@@ -97,12 +107,13 @@ export class NodeDeploymentListComponent implements OnInit {
       }
     });
 
-    modal.componentInstance.editNodeDeployment.subscribe((nd) => {
+    modal.componentInstance.editNodeDeployment.pipe(first()).subscribe((nd) => {
       this.changeNodeDeployment.emit(nd);
     });
   }
 
-  showDeleteDialog(nd: NodeDeploymentEntity): void {
+  showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -117,7 +128,7 @@ export class NodeDeploymentListComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
-    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+    dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this.api.deleteNodeDeployment(this.cluster.id, nd, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {

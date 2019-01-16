@@ -1,0 +1,9 @@
+<kubermatic-node-list *ngIf="isInitialized()"
+                      [cluster]="cluster"
+                      [nodes]="nodes"
+                      (deleteNode)="loadNodes()"
+                      [datacenter]="dc"
+                      [projectID]="projectID"
+                      [isClusterRunning]="true"
+                      [hasInitialNodes]="true"
+                      clusterHealthStatus="km-status-running"></kubermatic-node-list>
