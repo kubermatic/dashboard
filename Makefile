@@ -34,5 +34,5 @@ build:
 docker-build: build dist
 	docker build -t $(REPO):$(IMAGE_TAG) .
 
-docker-push:
+docker-push: docker-build
 	docker push $(REPO):$(IMAGE_TAG)
