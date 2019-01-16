@@ -1,4 +1,28 @@
 <ng-container *ngIf="isInitialized()">
+  <div fxLayout class="km-node-deployment-detail-actions">
+    <div fxFlex="100%" align="right">
+      <button mat-button
+              mat-raised-button
+              color="primary">
+        <i class="fa fa-history" aria-hidden="true"></i>
+        View Cluster
+      </button>
+      <button mat-button
+              mat-raised-button
+              color="primary">
+        <mat-icon class="km-icon-edit white"></mat-icon>
+        Edit Node Deployment
+      </button>
+      <button mat-button
+              mat-raised-button
+              color="primary"
+              [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
+        <i class="fa fa-trash-o" aria-hidden="true"></i>
+        Delete Node Deployment
+      </button>
+    </div>
+  </div>
+
   <kubermatic-node-list [cluster]="cluster"
                         [nodes]="nodes"
                         (deleteNode)="loadNodes()"
