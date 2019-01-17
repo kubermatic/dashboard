@@ -65,7 +65,7 @@ export class AppConfigService {
             this.gitVersion = resp as VersionInfo;
           })
           .catch(() => {
-            NotificationActions.error('Error', `Could not Git version file`);
+            NotificationActions.error('Error', `Could not read Git version file`);
           });
     });
   }
