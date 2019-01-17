@@ -24,10 +24,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.setProviderForm.valueChanges.subscribe((data) => {
-      this.wizardService.changeClusterProvider({
-        provider: this.setProviderForm.controls.provider.value,
-        valid: this.setProviderForm.valid,
-      });
+      this.changeClusterProvider();
     }));
 
     this.subscriptions.push(this.dcService.getDataCenters().subscribe((datacenters) => {
@@ -47,6 +44,13 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       }
       this.providers = providers;
     }));
+  }
+
+  changeClusterProvider(): void {
+    this.wizardService.changeClusterProvider({
+      provider: this.setProviderForm.controls.provider.value,
+      valid: this.setProviderForm.valid,
+    });
   }
 
   ngOnDestroy(): void {
