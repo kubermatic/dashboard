@@ -49,7 +49,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   downgradesAvailable = false;
   moreSshKeys = false;
   hasInitialNodes = false;
-  isNodeDeploymentAPIAvailable = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -70,7 +69,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this.route.snapshot.paramMap.get('clusterName');
     const seedDCName = this.route.snapshot.paramMap.get('seedDc');
     this.projectID = this.route.snapshot.paramMap.get('projectID');
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentEnabled();
 
     this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this.unsubscribe)).subscribe((group) => {
       this.userGroup = group;
@@ -175,13 +173,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             this.nodes = nodes;
           });
 
-      if (this.isNodeDeploymentAPIAvailable) {
-        this.api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-            .pipe(takeUntil(this.unsubscribe))
-            .subscribe((nodeDeployments) => {
-              this.nodeDeployments = nodeDeployments;
-            });
-      }
+      this.api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+          .pipe(takeUntil(this.unsubscribe))
+          .subscribe((nodeDeployments) => {
+            this.nodeDeployments = nodeDeployments;
+          });
     }
   }
 
@@ -290,10 +286,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   loadMoreSshKeys(moreSshKeys: boolean): void {
     this.moreSshKeys = moreSshKeys;
-  }
-
-  getAddNodesLabel() {
-    return this.isNodeDeploymentAPIAvailable ? 'Add Node Deployment' : 'Add Nodes';
   }
 
   ngOnDestroy(): void {
