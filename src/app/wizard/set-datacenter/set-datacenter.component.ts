@@ -41,17 +41,21 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.push(this.setDatacenterForm.valueChanges.subscribe((data) => {
-      let dc: DataCenterEntity = null;
-      for (const datacenter of this.datacenters) {
-        if (this.setDatacenterForm.controls.datacenter.value === datacenter.metadata.name) {
-          dc = datacenter;
-        }
-      }
-      this.wizardService.changeClusterDatacenter({
-        datacenter: dc,
-        valid: this.setDatacenterForm.valid,
-      });
+      this.changeClusterDatacenter();
     }));
+  }
+
+  changeClusterDatacenter(): void {
+    let dc: DataCenterEntity = null;
+    for (const datacenter of this.datacenters) {
+      if (this.setDatacenterForm.controls.datacenter.value === datacenter.metadata.name) {
+        dc = datacenter;
+      }
+    }
+    this.wizardService.changeClusterDatacenter({
+      datacenter: dc,
+      valid: this.setDatacenterForm.valid,
+    });
   }
 
   ngOnDestroy(): void {
