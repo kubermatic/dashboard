@@ -55,7 +55,7 @@ describe('AddNodesModalComponent', () => {
     } as NodeDeploymentEntity)));
 
     const nodeMock = jasmine.createSpyObj('NodeService', ['createNodeDeployment']);
-    createNodesSpy = nodeMock.createNodes.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
+    createNodesSpy = nodeMock.createNodeDeployment.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
 
     TestBed
         .configureTestingModule({
@@ -122,7 +122,7 @@ describe('AddNodesModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call createNodes method from the NodeService if not in edit mode', fakeAsync(() => {
+  it('should call createNodeDeployment method from the NodeService if not in edit mode', fakeAsync(() => {
        component.performAction();
        tick();
        expect(createNodesSpy.and.callThrough()).toHaveBeenCalled();
