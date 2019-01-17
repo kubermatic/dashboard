@@ -29,8 +29,7 @@ describe('NodeDataComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', [
-      'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard',
-      'isNodeDeploymentEnabled'
+      'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard'
     ]);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));

@@ -8,13 +8,13 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
-import {Auth} from '../../core/services/auth/auth.service';
+import {Auth} from '../../core/services';
 import {NodeService} from '../../core/services/node/node.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fake';
-import {nodesFake} from '../../testing/fake-data/node.fake';
+import {nodeDeploymentsFake, nodesFake} from '../../testing/fake-data/node.fake';
 import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
 import {fakeUserGroupConfig} from '../../testing/fake-data/userGroupConfig.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
@@ -35,23 +35,21 @@ describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
   let component: ClusterDetailsComponent;
   let activatedRoute: ActivatedRouteStub;
-
   let apiMock;
 
   beforeEach(async(() => {
     apiMock = jasmine.createSpyObj('ApiService', [
       'getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL',
-      'isNodeDeploymentEnabled'
+      'getNodeDeployments'
     ]);
     apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
     apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
-
+    apiMock.getNodeDeployments.and.returnValue(asyncData(nodeDeploymentsFake));
     apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake()));
     apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
     apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-
     datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
 
     TestBed

@@ -35,7 +35,6 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   nodeDC: DataCenterEntity;
   private subscriptions: Subscription[] = [];
-  private isNodeDeploymentAPIAvailable = false;
 
   constructor(
       @Inject(MAT_DIALOG_DATA) public data: NodeDataModalData, private api: ApiService,
@@ -69,7 +68,6 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       this.data.nodeData = await data;
     }));
 
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentEnabled();
     this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
   }
 
@@ -86,7 +84,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   }
 
   getDialogLabel() {
-    return `${this.data.editMode ? 'Edit' : 'Add'} ${this.isNodeDeploymentAPIAvailable ? 'Node Deployment' : 'Node'}`;
+    return `${this.data.editMode ? 'Edit' : 'Add'} Node Deployment`;
   }
 
   performAction(): void {
@@ -107,7 +105,8 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
                 this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
               });
     } else {
-      this.nodeService.createNodes(this.data.nodeData, this.data.datacenter, this.data.cluster, this.data.projectID);
+      this.nodeService.createNodeDeployment(
+          this.data.nodeData, this.data.datacenter, this.data.cluster, this.data.projectID);
     }
   }
 

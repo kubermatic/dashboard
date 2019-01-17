@@ -1,6 +1,6 @@
 import {CommonModule} from '@angular/common';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {APP_INITIALIZER, NgModule, Optional, SkipSelf} from '@angular/core';
+import {NgModule, Optional, SkipSelf} from '@angular/core';
 import {BrowserXhr} from '@angular/http';
 import {RouterModule} from '@angular/router';
 import {SimpleNotificationsModule} from 'angular2-notifications';
@@ -77,10 +77,6 @@ const interceptors: any[] = [
   },
 ];
 
-export function init(api: ApiService): () => Promise<any> {
-  return () => api.init();
-}
-
 @NgModule({
   imports: [
     ...modules,
@@ -93,12 +89,6 @@ export function init(api: ApiService): () => Promise<any> {
     {
       provide: BrowserXhr,
       useClass: ProgressBrowserXhr,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: init,
-      deps: [ApiService],
-      multi: true,
     },
     ...interceptors,
   ],

@@ -25,7 +25,6 @@ import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
-import {NodeDuplicateComponent} from './cluster-details/node-duplicate/node-duplicate.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
 import {ClusterHealthStatusComponent} from './cluster-health-status/cluster-health-status.component';
@@ -45,8 +44,6 @@ const components: any[] = [
 
 const entryComponents: any[] = [
   ClusterDeleteConfirmationComponent,
-
-  NodeDuplicateComponent,
   ChangeClusterVersionComponent,
   NodeDataModalComponent,
   ClusterSecretsComponent,
