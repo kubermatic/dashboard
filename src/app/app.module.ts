@@ -22,6 +22,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
   return () => {
     appConfig.loadAppConfig();
     appConfig.loadUserGroupConfig();
+    appConfig.loadGitVersion();
   };
 };
 
