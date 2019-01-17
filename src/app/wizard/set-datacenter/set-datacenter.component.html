@@ -9,7 +9,7 @@
   <p *ngIf="cluster.spec.cloud.bringyourown">This is the kubermatic datacenter you want your master components to run in.</p>
   <form [formGroup]="setDatacenterForm" fxLayoutAlign="left" fxLayout="row wrap">
     <mat-button-toggle-group group="datacenterGroup" formControlName="datacenter">
-      <mat-button-toggle *ngFor="let datacenter of datacenters;" value="{{datacenter.metadata.name}}">
+      <mat-button-toggle *ngFor="let datacenter of datacenters;" value="{{datacenter.metadata.name}}" (click)="this.changeClusterDatacenter()">
         <span class="flag-icon flag-icon-{{ datacenter.spec.country.toLowerCase() }}">
         </span>
         <div class="km-location">
