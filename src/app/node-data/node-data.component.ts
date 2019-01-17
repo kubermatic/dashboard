@@ -2,7 +2,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
+import {DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
@@ -25,7 +25,6 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   nodeForm: FormGroup;
   operatingSystemForm: FormGroup;
   hideOptional = true;
-  isNodeDeploymentAPIAvailable = false;
   private subscriptions: Subscription[] = [];
 
   private providerData: NodeProviderData = {valid: false};
@@ -33,7 +32,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   constructor(
       private addNodeService: NodeDataService, private wizardService: WizardService, private _dc: DatacenterService,
-      private _project: ProjectService, private api: ApiService) {}
+      private _project: ProjectService) {}
 
   ngOnInit(): void {
     this.nodeForm = new FormGroup({
@@ -90,7 +89,6 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     }));
 
     this.projectId = this._project.project.id;
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentEnabled();
   }
 
   ngOnDestroy(): void {
@@ -140,9 +138,5 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       count: this.nodeForm.controls.count.value,
       valid: this.providerData.valid,
     };
-  }
-
-  getCountPlaceholder(): string {
-    return this.isNodeDeploymentAPIAvailable ? `Replicas*:` : `Number of nodes*:`;
   }
 }

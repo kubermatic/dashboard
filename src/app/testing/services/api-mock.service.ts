@@ -28,13 +28,8 @@ export class ApiMockService {
   member: MemberEntity = fakeMember();
   members: MemberEntity[] = fakeMembers();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
-  isNodeDeploymentAPIAvailable_ = false;
 
   constructor() {}
-
-  isNodeDeploymentEnabled(): boolean {
-    return this.isNodeDeploymentAPIAvailable_;
-  }
 
   deleteNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
     return of(null);

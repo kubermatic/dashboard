@@ -54,7 +54,8 @@
           "options": {
             "browserTarget": "kubermatic:build",
             "proxyConfig": "./proxy.conf.json",
-            "port": 8000
+            "port": 8000,
+            "hmrWarning": false
           },
           "configurations": {
             "production": {

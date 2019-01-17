@@ -1,10 +1,9 @@
-import {HttpBackend, HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {AppConfigService} from '../../../app-config.service';
 import {ClusterEntity, Finalizer, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
@@ -27,36 +26,10 @@ export class ApiService {
   private restRoot: string = environment.restRoot;
   private headers: HttpHeaders = new HttpHeaders();
   private readonly token: string;
-  private isNodeDeploymentAPIAvailable_ = false;
 
-  constructor(
-      private http: HttpClient, private auth: Auth, private backend: HttpBackend, private appConfig: AppConfigService) {
+  constructor(private http: HttpClient, private auth: Auth) {
     this.token = this.auth.getBearerToken();
     this.headers = this.headers.set('Authorization', 'Bearer ' + this.token);
-  }
-
-  init(): Promise<any> {
-    const client = new HttpClient(this.backend);  // Skips interceptor chain.
-    const dummy = '__dummy__';
-    const url = `${this.restRoot}/projects/${dummy}/dc/${dummy}/clusters/${dummy}/nodedeployments`;
-    const headers = new HttpHeaders();  // It is important to skip authorization header here.
-
-    return client.get<any[]>(url, {headers})
-        .toPromise()
-        .then((response) => {
-          this.isNodeDeploymentAPIAvailable_ = true;
-          return response;
-        })
-        .catch((error: HttpErrorResponse) => {
-          // 404 and 405 are the status codes returned if endpoint path and method are not implemented.
-          // That's why if we encounter them we can assume that this functionality is not implemented on API side.
-          this.isNodeDeploymentAPIAvailable_ = (error.status !== 404 && error.status !== 405);
-          return error;
-        });
-  }
-
-  isNodeDeploymentEnabled(): boolean {
-    return this.isNodeDeploymentAPIAvailable_ && this.appConfig.getConfig().enable_node_deployments;
   }
 
   createNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):

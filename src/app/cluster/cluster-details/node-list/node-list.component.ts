@@ -27,7 +27,6 @@ export class NodeListComponent implements OnInit {
   @Input() clusterHealthStatus: string;
   @Input() isClusterRunning: boolean;
   @Input() hasInitialNodes: boolean;
-  isNodeDeploymentAPIAvailable = false;
   clickedDeleteNode = {};
   clickedDuplicateNode = {};
   isShowNodeDetails = {};
@@ -43,7 +42,6 @@ export class NodeListComponent implements OnInit {
       private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.isNodeDeploymentAPIAvailable = this.api.isNodeDeploymentEnabled();
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;

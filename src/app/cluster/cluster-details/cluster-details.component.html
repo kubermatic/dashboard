@@ -8,7 +8,7 @@
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
               [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.create">
         <i class="fa fa-plus km-action-button-icon" aria-hidden="true"></i>
-        {{getAddNodesLabel()}}
+        Add Node Deployment
       </button>
       <button class="km-connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'km-status-running'">
         Connect
@@ -117,23 +117,20 @@
     </mat-card-content>
   </mat-card>
 
-  <div *ngIf="isNodeDeploymentAPIAvailable">
-    <div class="km-pre-card-title">Node Deployments</div>
-    <kubermatic-node-deployment-list [cluster]="cluster"
-                                     [nodeDeployments]="nodeDeployments"
-                                     (changeNodeDeployment)="reloadClusterNodes()"
-                                     [datacenter]="datacenter"
-                                     [projectID]="projectID"
-                                     [clusterHealthStatus]="clusterHealthClass"
-                                     [isClusterRunning]="isClusterRunning"
-                                     [hasInitialNodes]="hasInitialNodes"></kubermatic-node-deployment-list>
-  </div>
+  <div class="km-pre-card-title">Node Deployments</div>
+  <kubermatic-node-deployment-list [cluster]="cluster"
+                                   [nodeDeployments]="nodeDeployments"
+                                   (changeNodeDeployment)="reloadClusterNodes()"
+                                   [datacenter]="datacenter"
+                                   [projectID]="projectID"
+                                   [clusterHealthStatus]="clusterHealthClass"
+                                   [isClusterRunning]="isClusterRunning"
+                                   [hasInitialNodes]="hasInitialNodes"></kubermatic-node-deployment-list>
 
-  <div *ngIf="!isNodeDeploymentAPIAvailable || nodes.length > 0">
+  <div *ngIf="nodes.length > 0">
     <div class="km-pre-card-title">
       <ng-container>Nodes&nbsp;</ng-container>
-        <span *ngIf="isNodeDeploymentAPIAvailable"
-              matTooltip="Single Node management is being deprecated in favour of Node Deployments. This table displays only the Nodes that are not controlled by other resources (i.e. children of Node Deployment).">
+        <span matTooltip="Single Node management is being deprecated in favour of Node Deployments. This table displays only the Nodes that are not controlled by other resources (i.e. children of Node Deployment).">
           <i class="fa fa-warning" aria-hidden="true"></i>
         </span>
     </div>

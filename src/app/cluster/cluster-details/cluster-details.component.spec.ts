@@ -39,10 +39,8 @@ describe('ClusterDetailsComponent', () => {
   let apiMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', [
-      'getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL',
-      'isNodeDeploymentEnabled'
-    ]);
+    apiMock = jasmine.createSpyObj(
+        'ApiService', ['getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL']);
     apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
     apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
 
