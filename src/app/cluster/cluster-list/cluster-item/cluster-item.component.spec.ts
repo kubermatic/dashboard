@@ -7,7 +7,7 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {Auth, DatacenterService, HealthService, ProjectService} from '../../../core/services';
 import {ClusterHealth} from '../../../shared/model/ClusterHealthConstants';
 import {SharedModule} from '../../../shared/shared.module';
-import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
+import {fakeAWSCluster, fakeAzureCluster, fakeBringyourownCluster, fakeDigitaloceanCluster, fakeHetznerCluster, fakeOpenstackCluster, fakeVSphereCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeBringyourownSeedDatacenter, fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeHealth} from '../../../testing/fake-data/health.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
@@ -88,4 +88,48 @@ describe('ClusterItemComponent', () => {
        const de = fixture.debugElement.query(By.css('.km-provider-logo-digitalocean'));
        expect(de).toBeTruthy();
      }));
+
+  it('should get correct provider string', () => {
+    component.cluster = fakeDigitaloceanCluster();
+    fixture.detectChanges();
+    expect(component.getProvider()).toEqual('digitalocean');
+
+    component.cluster = fakeAWSCluster();
+    fixture.detectChanges();
+    expect(component.getProvider()).toEqual('aws');
+
+    component.cluster = fakeOpenstackCluster();
+    fixture.detectChanges();
+    expect(component.getProvider()).toEqual('openstack');
+
+    component.cluster = fakeHetznerCluster();
+    fixture.detectChanges();
+    expect(component.getProvider()).toEqual('hetzner');
+
+    component.cluster = fakeVSphereCluster();
+    fixture.detectChanges();
+    expect(component.getProvider()).toEqual('vsphere');
+
+    component.cluster = fakeAzureCluster();
+    fixture.detectChanges();
+    expect(component.getProvider()).toEqual('azure');
+
+    component.cluster = fakeBringyourownCluster();
+    fixture.detectChanges();
+    expect(component.getProvider()).toEqual('bringyourown');
+  });
+
+  it('should decide if name should be shortened', () => {
+    let name = 'shortName';
+    expect(component.getShortClusterName(name)).toEqual('shortName');
+
+    name = 'thisNameIsNotShortEnough';
+    expect(component.getShortClusterName(name)).toEqual('thisNameIsNo...');
+  });
+
+  it('should get datacenter', () => {
+    component.cluster = fakeDigitaloceanCluster();
+    fixture.detectChanges();
+    expect(component.getDatacenter()).toEqual('europe-west3-c');
+  });
 });
