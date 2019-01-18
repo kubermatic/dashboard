@@ -1,4 +1,4 @@
-FROM quay.io/kubermatic/go-111-docker:11.2-1806-0
+FROM golang:1.11.2
 
 RUN curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
     && curl -sL https://deb.nodesource.com/setup_8.x | bash - \
