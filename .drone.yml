@@ -24,6 +24,7 @@ pipeline:
   node-dist:
     image: node:8
     commands:
+      - git fetch
       - make dist
 
   test:
