@@ -89,7 +89,7 @@ export function fakeVSphereCluster(): ClusterEntity {
     name: 'nifty-haibt',
     spec: {
       cloud: {
-        dc: 'do-fra1',
+        dc: 'vsphere-hetzner',
         digitalocean: null,
         aws: null,
         openstack: null,
