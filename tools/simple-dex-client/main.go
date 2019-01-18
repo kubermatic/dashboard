@@ -108,6 +108,9 @@ func dispatch(act action.Action, dexClient client.DexClient) {
 	case action.Create:
 		dexUser := readUserFromArgs()
 		err = dexClient.CreateUser(dexUser)
+		if err == nil {
+			fmt.Println(dexUser.GetEmail())
+		}
 	case action.List:
 		if userList, err := dexClient.ListUsers(); err == nil {
 			fmt.Println(userList)
