@@ -24,10 +24,9 @@ describe('AddProjectComponent', () => {
   let fixture: ComponentFixture<AddMemberComponent>;
   let component: AddMemberComponent;
   let createMembersSpy: Spy;
-  let apiMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', ['createMembers']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['createMembers']);
     createMembersSpy = apiMock.createMembers.and.returnValue(asyncData(fakeMember()));
 
     TestBed

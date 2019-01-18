@@ -2,7 +2,6 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-
 import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {WizardService} from '../../../core/services/wizard/wizard.service';
@@ -10,7 +9,6 @@ import {SharedModule} from '../../../shared/shared.module';
 import {fakeVSphereCluster} from '../../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
-
 import {VSphereOptionsComponent} from './vsphere-options.component';
 
 const modules: any[] = [
