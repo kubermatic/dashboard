@@ -16,14 +16,14 @@ If you would like to connect with your local API then you should use `npm run se
 
 The application will automatically reload if you change any of the source files.
 
-#### Using a docker container
+#### Using a Docker container
 
-##### Run it against the API on https://dev.kubermatic.io
+##### With dev.kubermatic.io API
 ```bash
 ./hack/run-dashboard.sh
 ```
 
-##### Run it against a local running API
+##### With locally running API
 ```bash
 ./hack/run-local-dashboard.sh
 ```
@@ -46,9 +46,9 @@ Run `npm run build` to build the project. The build artifacts will be stored in 
 
 Please check `package.json` for more information regarding the available commands and the project setup.
 
-### Running any node command withing a docker command
+### Running commands within the Docker container
 
-This will run the below commands in a NodeJS docker container with the source code mounted and set as working directory.
+This will run the below commands in a NodeJS Docker container with the source code mounted and set as working directory.
 ```bash
 ./hack/run-in-docker.sh npm install
 ./hack/run-in-docker.sh npm foo
