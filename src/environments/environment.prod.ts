@@ -1,4 +1,4 @@
-import {nonce} from 'nonce-str';
+import nonce from 'nonce-str';
 
 const redirect_uri = window.location.protocol + '//' + window.location.host + '/projects';
 const oauth = window.location.protocol + '//' + window.location.host + '/dex/auth';
