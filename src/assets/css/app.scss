@@ -75,6 +75,14 @@ body {
   }
 }
 
+.mat-button-toggle-group-appearance-standard {
+  border: none;
+}
+
+.mat-button-toggle:hover {
+  border: solid 1px $primary;
+}
+
 .mat-card-content {
   .mat-form-field {
     .mat-input-placeholder-wrapper .mat-input-placeholder {
