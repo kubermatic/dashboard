@@ -1,0 +1,7 @@
+[[constraint]]
+  name = "github.com/dexidp/dex"
+  version = "2.12.0"
+
+[prune]
+  go-tests = true
+  unused-packages = true
