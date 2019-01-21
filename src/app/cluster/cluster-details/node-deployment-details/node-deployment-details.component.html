@@ -53,6 +53,10 @@
         <div value>{{nodeDeployment.spec.template.versions.kubelet}}</div>
       </km-property>
       <km-property>
+        <div key>Cluster name</div>
+        <div value class="km-link" (click)="goBackToCluster()">{{cluster.name}}</div>
+      </km-property>
+      <km-property>
         <div key>Creation date</div>
         <div value>{{nodeDeployment.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</div>
       </km-property>
