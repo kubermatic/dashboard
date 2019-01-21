@@ -3,7 +3,7 @@
   <ng2-slim-loading-bar [color]="'white'" [height]="'2px'"></ng2-slim-loading-bar>
 
   <div fxLayout class="km-navigation-bar">
-    <div fxFlex.sm="20%">
+    <div fxFlex="20%">
       <button class="km-sidenav-toggle mat-button km-nav-mobile" (click)="showMobileNav()" mat-button>
           <span class="mat-button-wrapper">
             <mat-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</mat-icon>
@@ -13,8 +13,8 @@
         <div class="mat-button-focus-overlay"></div>
       </button>
     </div>
-    <div fxFlex.sm="60%"><a class="km-header-logo"></a></div>
-    <div fxFlex.sm="20%" class="km-auth">
+    <div fxFlex="60%"><a class="km-header-logo"></a></div>
+    <div fxFlex="20%" class="km-auth">
       <span class="km-current-user" *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
       <span id="km-navbar-logout-btn"  class="km-button km-logout" *ngIf="auth.authenticated()" (click)="logout()">
         Logout

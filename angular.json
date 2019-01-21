@@ -21,8 +21,8 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/assets/css/global.scss",
               "src/assets/css/custom_theme.scss",
+              "src/assets/css/global.scss",
               "node_modules/flag-icon-css/css/flag-icon.min.css"
             ],
             "scripts": [
@@ -80,8 +80,8 @@
               "node_modules/jquery/dist/jquery.js"
             ],
             "styles": [
-              "src/assets/css/global.scss",
               "src/assets/css/custom_theme.scss",
+              "src/assets/css/global.scss",
               "node_modules/flag-icon-css/css/flag-icon.min.css"
             ],
             "assets": [

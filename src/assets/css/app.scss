@@ -1,5 +1,6 @@
 @import "colors";
 @import "fonts";
+@import "variables";
 
 html,
 body {
@@ -51,6 +52,16 @@ body {
 .mat-card-header {
   margin-bottom: 10px;
   border: none;
+
+  .mat-card-title {
+    padding-top: 0;
+    font-size: 14px;
+  }
+
+  .mat-card-header-text {
+    width: 100%;
+    margin: 0;
+  }
 }
 
 .mat-card-title {
@@ -61,6 +72,18 @@ body {
     margin: 10px 0;
     font-size: 18px;
     color: $text-color;
+  }
+}
+
+.mat-button-toggle-group-appearance-standard {
+  border: none;
+}
+
+.mat-button-toggle-group-appearance-standard .mat-button-toggle + .mat-button-toggle {
+  border-left: solid 1px rgba(0, 0, 0, 0.12);
+
+  &:hover {
+    border-left: solid 1px $primary;
   }
 }
 
@@ -462,18 +485,6 @@ mat-dialog-content {
 
 ::-webkit-scrollbar-corner {
   background: transparent;
-}
-
-mat-card-header {
-  .mat-card-title {
-    padding-top: 0;
-    font-size: 18px;
-  }
-
-  .mat-card-header-text {
-    width: 100%;
-    margin: 0;
-  }
 }
 
 // copy text
