@@ -94,8 +94,9 @@ export class NodeService {
         if (data) {
           this.createNodeDeployment(data.nodeData, data.datacenter, data.cluster, data.projectID);
           resolve(true);
+        } else {
+          resolve(false);
         }
-        resolve(false);
       });
     });
   }
@@ -141,8 +142,9 @@ export class NodeService {
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
                     reject(error);
                   });
+        } else {
+          resolve(false);
         }
-        resolve(false);
       });
     });
   }
@@ -182,8 +184,9 @@ export class NodeService {
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleteFailed');
                     reject(error);
                   });
+        } else {
+          resolve(false);
         }
-        resolve(false);
       });
     });
   }
