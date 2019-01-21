@@ -33,7 +33,7 @@ import {asyncData} from '../../../testing/services/api-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {NodeDataModalComponent} from './node-data-modal.component';
-import {NodeService} from '../../../core/services/node/node.service';
+import {NodeService} from '../../services/node.service';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 
 describe('AddNodesModalComponent', () => {

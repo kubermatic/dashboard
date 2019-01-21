@@ -31,6 +31,7 @@ import {ClusterHealthStatusComponent} from './cluster-health-status/cluster-heal
 import {ClusterItemComponent} from './cluster-list/cluster-item/cluster-item.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
+import {NodeService} from './services/node.service';
 
 const components: any[] = [
   ClusterDetailsComponent,
@@ -82,7 +83,9 @@ const entryComponents: any[] = [
   entryComponents: [
     ...entryComponents,
   ],
-
+  providers: [
+    NodeService,
+  ]
 })
 export class ClusterModule {
 }

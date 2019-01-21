@@ -7,7 +7,6 @@ import {gt, lt} from 'semver';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
-import {NodeService} from '../../core/services/node/node.service';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
@@ -16,13 +15,13 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, UserGroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {NodeService} from '../services/node.service';
 
 import {ChangeClusterVersionComponent} from './change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
-import {NodeDataModalComponent} from './node-data-modal/node-data-modal.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
 
 @Component({
@@ -205,19 +204,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   addNode(): void {
-    const modal = this.dialog.open(NodeDataModalComponent, {
-      data: {
-        cluster: this.cluster,
-        datacenter: this.datacenter,
-        projectID: this.projectID,
-        existingNodesCount: this.nodes.length,
-        editMode: false,
-      }
-    });
-
-    modal.afterClosed().toPromise().then(() => {
-      this.reloadClusterNodes();
-    });
+    this.node_.showNodeDeploymentCreateDialog(this.nodes.length, this.cluster, this.projectID, this.datacenter)
+        .then((isConfirmed) => {
+          if (isConfirmed) {
+            this.reloadClusterNodes();
+          }
+        });
   }
 
   deleteClusterDialog(): void {

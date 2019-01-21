@@ -10,13 +10,15 @@
       </button>
       <button mat-button
               mat-raised-button
-              color="primary">
+              color="primary"
+              (click)="showEditDialog()">
         <mat-icon class="km-icon-edit white"></mat-icon>
         Edit Node Deployment
       </button>
       <button mat-button
               mat-raised-button
               color="primary"
+              (click)="showDeleteDialog()"
               [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
         <i class="fa fa-trash-o" aria-hidden="true"></i>
         Delete Node Deployment

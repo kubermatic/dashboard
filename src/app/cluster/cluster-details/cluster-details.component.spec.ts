@@ -9,7 +9,6 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
 import {Auth} from '../../core/services';
-import {NodeService} from '../../core/services/node/node.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
@@ -25,6 +24,7 @@ import {HealthMockService} from '../../testing/services/health-mock.service';
 import {NodeMockService} from '../../testing/services/node-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
 import {ClusterHealthStatusComponent} from '../cluster-health-status/cluster-health-status.component';
+import {NodeService} from '../services/node.service';
 
 import {ClusterDetailsComponent} from './cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.component';

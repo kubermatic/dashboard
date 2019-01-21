@@ -5,11 +5,11 @@ import {first} from 'rxjs/operators';
 
 import {AppConfigService} from '../../../app-config.service';
 import {UserService} from '../../../core/services';
-import {NodeService} from '../../../core/services/node/node.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {NodeService} from '../../services/node.service';
 
 @Component({
   selector: 'kubermatic-node-deployment-list',

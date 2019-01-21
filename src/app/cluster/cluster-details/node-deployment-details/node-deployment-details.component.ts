@@ -10,6 +10,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {NodeService} from '../../services/node.service';
 
 @Component({
   selector: 'kubermatic-cluster-details',
@@ -20,7 +21,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
   nodes: NodeEntity[] = [];
   cluster: ClusterEntity;
-  dc: DataCenterEntity;
+  datacenter: DataCenterEntity;
   projectID: string;
   userGroup: string;
   userGroupConfig: UserGroupConfig;
@@ -35,9 +36,10 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private _activatedRoute: ActivatedRoute, private _router: Router, private _apiService: ApiService,
-      private _appConfigService: AppConfigService, private _userService: UserService,
-      private _datacenterService: DatacenterService) {}
+      private readonly _activatedRoute: ActivatedRoute, private readonly _router: Router,
+      private readonly _apiService: ApiService, private readonly _appConfigService: AppConfigService,
+      private readonly _userService: UserService, private readonly _datacenterService: DatacenterService,
+      private readonly _nodeService: NodeService) {}
 
   ngOnInit(): void {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
@@ -83,7 +85,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadDatacenter(): void {
     this._datacenterService.getDataCenter(this._dcName).pipe(first()).subscribe((d) => {
-      this.dc = d;
+      this.datacenter = d;
       this._isDatacenterLoaded = true;
     });
   }
@@ -101,6 +103,28 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   goBackToCluster(): void {
     this._router.navigate(['/projects/' + this.projectID + '/dc/' + this._dcName + '/clusters/' + this._clusterName]);
+  }
+
+  showEditDialog(): void {
+    this._nodeService
+        .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.datacenter, undefined)
+        .then((isConfirmed) => {
+          if (isConfirmed) {
+            this.loadNodeDeployment();
+            this.loadNodes();
+          }
+        });
+  }
+
+  showDeleteDialog(): void {
+    this._nodeService
+        .showNodeDeploymentDeleteDialog(
+            this.nodeDeployment, this.cluster.id, this.projectID, this.datacenter.metadata.name, undefined)
+        .then((isConfirmed) => {
+          if (isConfirmed) {
+            this.goBackToCluster();
+          }
+        });
   }
 
   ngOnDestroy(): void {
