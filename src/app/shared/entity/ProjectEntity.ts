@@ -5,3 +5,7 @@ export class ProjectEntity {
   name: string;
   status: string;
 }
+
+export class EditProjectEntity {
+  name: string;
+}

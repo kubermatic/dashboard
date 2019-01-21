@@ -10,6 +10,10 @@
     </div>
     <div fxFlex="17%" class="km-project-item-actions">
       <p class="km-icon">
+        <button [attr.id]="'km-edit-project-' + project.name"
+                class="km-icon-edit black"
+                (click)="editProject()"
+                [disabled]="!!userGroup && !userGroupConfig[userGroup].projects.edit"></button>
         <button [attr.id]="'km-delete-project-' + project.name"
                 class="km-icon-delete black"
                 (click)="deleteProject()"
