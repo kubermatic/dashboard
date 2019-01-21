@@ -5,15 +5,19 @@ export class DexPage {
     return element(by.xpath('//span[contains(text(),"Static Credentials")]'));
   }
 
-  getStaticLoginInput(): any {
+  getLoginInput(): any {
     return element(by.xpath('//input[@id="login"]'));
   }
 
-  getStaticPasswordInput(): any {
+  getPasswordInput(): any {
     return element(by.xpath('//input[@id="password"]'));
   }
 
-  getStaticLoginSubmitButton(): any {
+  getLoginSubmitButton(): any {
     return element(by.id('submit-login'));
+  }
+
+  getLoginWithEmailButton(): any {
+    return element(by.xpath('//span[contains(text(),"with Email")]'));
   }
 }
