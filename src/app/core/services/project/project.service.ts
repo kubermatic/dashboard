@@ -56,6 +56,10 @@ export class ProjectService {
     this.router.navigate(['/projects/' + this.project.id + '/clusters']);
   }
 
+  navigateToClusterDetailPage(url: string): void {
+    this.router.navigate([url]);
+  }
+
   navigateToWizard(): void {
     this.router.navigate(['/projects/' + this.project.id + '/wizard']);
   }
@@ -70,24 +74,30 @@ export class ProjectService {
 
   changeViewOnProjectChange(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    const state: RouterState = this.router.routerState;
-    const snapshot: RouterStateSnapshot = state.snapshot;
+    const router: Router = this.router;
+    setTimeout(() => {
+      const state: RouterState = router.routerState;
+      const snapshot: RouterStateSnapshot = state.snapshot;
+      const urlArray = snapshot.url.split('/');
 
-    if (!!this.project && this.project.status === 'Active') {
-      if ((snapshot.url.search(/(\/wizard)/) > -1) && !!this.userGroupConfig[this.userGroup].clusters.create) {
-        this.navigateToWizard();
-      } else if ((snapshot.url.search(/(\/members)/) > -1) && !!this.userGroupConfig[this.userGroup].members.view) {
-        this.navigateToMemberPage();
-      } else if ((snapshot.url.search(/(\/sshkeys)/) > -1) && !!this.userGroupConfig[this.userGroup].sshKeys.view) {
-        this.navigateToSshKeyPage();
-      } else if (snapshot.url === '/projects)') {
-        this.navigateToProjectPage();
+      if (!!this.project && this.project.status === 'Active') {
+        if ((snapshot.url.search(/(\/wizard)/) > -1) && !!this.userGroupConfig[this.userGroup].clusters.create) {
+          this.navigateToWizard();
+        } else if ((snapshot.url.search(/(\/members)/) > -1) && !!this.userGroupConfig[this.userGroup].members.view) {
+          this.navigateToMemberPage();
+        } else if ((snapshot.url.search(/(\/sshkeys)/) > -1) && !!this.userGroupConfig[this.userGroup].sshKeys.view) {
+          this.navigateToSshKeyPage();
+        } else if (!!urlArray.find((x) => x === this.project.id) && !!urlArray.find((x) => x === 'dc')) {
+          this.navigateToClusterDetailPage(snapshot.url);
+        } else if (snapshot.url === '/projects)') {
+          this.navigateToProjectPage();
+        } else {
+          this.navigateToClusterPage();
+        }
       } else {
-        this.navigateToClusterPage();
+        this.navigateToProjectPage();
       }
-    } else {
-      this.navigateToProjectPage();
-    }
+    }, 500);
   }
 
   getProjectStateIconClass(): string {

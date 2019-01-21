@@ -121,6 +121,32 @@ export function fakeAzureDatacenter(): DataCenterEntity {
   };
 }
 
+export function fakeVSphereDatacenter(): DataCenterEntity {
+  return {
+    metadata: {
+      name: 'vsphere-hetzner',
+    },
+    seed: false,
+    spec: {
+      seed: 'europe-west3-c',
+      country: 'DE',
+      location: 'Hetzner',
+      provider: 'vsphere',
+      vsphere: {
+        cluster: 'loodse-cluster',
+        endpoint: 'https://loodse.com',
+        datacenter: 'Datacenter',
+        datastore: 'datastore1',
+        templates: {
+          centos: 'centos-template',
+          coreos: 'coreos-template',
+          ubuntu: 'ubuntu-template',
+        },
+      },
+    },
+  };
+}
+
 export function fakeSeedDatacenters(): DataCenterEntity[] {
   return [fakeBringyourownSeedDatacenter()];
 }
@@ -132,5 +158,6 @@ export function fakeNodeDatacenters(): DataCenterEntity[] {
     fakeOpenstackDatacenter(),
     fakeAzureDatacenter(),
     fakeBringyourownSeedDatacenter(),
+    fakeVSphereDatacenter(),
   ];
 }

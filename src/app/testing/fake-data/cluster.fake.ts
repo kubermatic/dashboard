@@ -89,7 +89,7 @@ export function fakeVSphereCluster(): ClusterEntity {
     name: 'nifty-haibt',
     spec: {
       cloud: {
-        dc: 'do-fra1',
+        dc: 'vsphere-hetzner',
         digitalocean: null,
         aws: null,
         openstack: null,
@@ -220,6 +220,32 @@ export function fakeAzureCluster(): ClusterEntity {
   };
 }
 
+export function fakeBringyourownCluster(): ClusterEntity {
+  return {
+    creationTimestamp: new Date(),
+    id: '4k6txp5sq',
+    name: 'nifty-haibt',
+    spec: {
+      cloud: {
+        dc: 'do-fra1',
+        digitalocean: null,
+        aws: null,
+        openstack: null,
+        baremetal: null,
+        bringyourown: {},
+        vsphere: null,
+        hetzner: null,
+        azure: null,
+      },
+      version: '1.8.5',
+    },
+    status: {
+      url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
+      version: '1.8.5',
+    },
+  };
+}
+
 export function fakeToken(): Token {
   return {
     token: 'test-token',
@@ -228,6 +254,7 @@ export function fakeToken(): Token {
 
 export function fakeClusters(): ClusterEntity[] {
   return [
-    fakeDigitaloceanCluster(), fakeAWSCluster(), fakeOpenstackCluster(), fakeHetznerCluster(), fakeAzureCluster()
+    fakeDigitaloceanCluster(), fakeAWSCluster(), fakeOpenstackCluster(), fakeHetznerCluster(), fakeAzureCluster(),
+    fakeBringyourownCluster()
   ];
 }

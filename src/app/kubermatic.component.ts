@@ -2,13 +2,14 @@ import {DevToolsExtension, NgRedux} from '@angular-redux/store';
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatSidenav} from '@angular/material';
 import {NavigationEnd, Router} from '@angular/router';
+
 import {AppConfigService} from './app-config.service';
 import {SidenavService} from './core/components/sidenav/sidenav.service';
 import {Auth} from './core/services';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {INITIAL_STATE, Store, StoreReducer} from './redux/store';
+import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config} from './shared/model/Config';
-import {versionInfo} from './version-info';
 
 @Component({
   selector: 'kubermatic-root',
@@ -18,7 +19,7 @@ import {versionInfo} from './version-info';
 export class KubermaticComponent implements OnInit {
   @ViewChild('sidenav') sidenav: MatSidenav;
   config: Config = {show_demo_info: false, show_terms_of_service: false};
-  version = versionInfo;
+  version: VersionInfo;
 
   constructor(
       private sidenavService: SidenavService,
@@ -46,6 +47,7 @@ export class KubermaticComponent implements OnInit {
   ngOnInit(): void {
     setTimeout(() => {
       this.config = this.appConfigService.getConfig();
+      this.version = this.appConfigService.getGitVersion();
       if (this.config.google_analytics_code) {
         this.googleAnalyticsService.activate(
             this.config.google_analytics_code,
