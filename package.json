@@ -55,7 +55,6 @@
     "@angular/platform-browser": "7.2.1",
     "@angular/platform-browser-dynamic": "7.2.1",
     "@angular/router": "7.2.1",
-    "angular": "^1.7.6",
     "angular-particle": "^1.0.4",
     "angular2-notifications": "^2.0.0",
     "animate.css": "^3.5.2",
