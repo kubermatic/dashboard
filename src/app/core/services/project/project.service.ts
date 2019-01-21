@@ -136,6 +136,6 @@ export class ProjectService {
   }
 
   compareProjectsEquality(a: ProjectEntity, b: ProjectEntity): boolean {
-    return !!a && !!b && a.id === b.id && a.name === b.name;
+    return !!a && !!b && a.id === b.id;
   }
 }

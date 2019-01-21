@@ -31,6 +31,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
       for (const i in this.projects) {
         if (this.projectService.compareProjectsEquality(this.projects[i], data)) {
           this.selectedProject = data;
+          if (this.projects[i].name !== data.name) {
+            this.loadProjects();
+          }
           return;
         }
       }
