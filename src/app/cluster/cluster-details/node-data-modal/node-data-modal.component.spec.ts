@@ -1,6 +1,6 @@
 import {NgReduxTestingModule} from '@angular-redux/store/lib/testing/ng-redux-testing.module';
 import {HttpClientModule} from '@angular/common/http';
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef, MatTabsModule} from '@angular/material';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -15,8 +15,6 @@ import {AWSNodeDataComponent} from '../../../node-data/aws-node-data/aws-node-da
 import {AzureNodeDataComponent} from '../../../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../../../node-data/digitalocean-node-data/digitalocean-node-data.component';
 import {DigitaloceanOptionsComponent} from '../../../node-data/digitalocean-node-data/digitalocean-options/digitalocean-options.component';
-
-import Spy = jasmine.Spy;
 import {HetznerNodeDataComponent} from '../../../node-data/hetzner-node-data/hetzner-node-data.component';
 import {NodeDataComponent} from '../../../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../../../node-data/openstack-node-data/openstack-node-data.component';
@@ -32,30 +30,20 @@ import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../test
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
-import {NodeDataModalComponent} from './node-data-modal.component';
 import {NodeService} from '../../services/node.service';
-import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+
+import {NodeDataModalComponent} from './node-data-modal.component';
 
 describe('AddNodesModalComponent', () => {
   let fixture: ComponentFixture<NodeDataModalComponent>;
   let component: NodeDataModalComponent;
   let activatedRoute: ActivatedRouteStub;
-  let createNodesSpy: Spy;
-  let nodeDepPatchSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock =
         jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'createClusterNode', 'patchNodeDeployment']);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    nodeDepPatchSpy = apiMock.patchNodeDeployment.and.returnValue(asyncData(({
-      spec: {
-        replicas: 1,
-        template: fakeDigitaloceanCreateNode().spec,
-      }
-    } as NodeDeploymentEntity)));
-
     const nodeMock = jasmine.createSpyObj('NodeService', ['createNodeDeployment']);
-    createNodesSpy = nodeMock.createNodeDeployment.and.returnValue(asyncData(fakeDigitaloceanCreateNode()));
 
     TestBed
         .configureTestingModule({
@@ -122,7 +110,7 @@ describe('AddNodesModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render mat-dialog-actions', () => {
+  it('should render action buttons', () => {
     const actions = fixture.debugElement.query(By.css('.mat-dialog-actions'));
     expect(actions).not.toBeNull();
   });
