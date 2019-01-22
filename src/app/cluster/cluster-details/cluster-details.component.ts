@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, interval, Subject, Subscription} from 'rxjs';
-import {retry, takeUntil} from 'rxjs/operators';
+import {first, retry, takeUntil} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {AppConfigService} from '../../app-config.service';
@@ -205,7 +205,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   addNode(): void {
     this.node_.showNodeDeploymentCreateDialog(this.nodes.length, this.cluster, this.projectID, this.datacenter)
-        .then((isConfirmed) => {
+        .pipe(first())
+        .subscribe((isConfirmed) => {
           if (isConfirmed) {
             this.reloadClusterNodes();
           }

@@ -1,6 +1,7 @@
 import {fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material';
 import {of} from 'rxjs';
+import {first} from 'rxjs/operators';
 
 import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
@@ -64,9 +65,11 @@ describe('NodeService', () => {
        const dcName = fakeDigitaloceanDatacenter().metadata.name;
        let isConfirmed = false;
 
-       service.showNodeDeploymentDeleteDialog(nd, clusterID, projectID, dcName, null).then(confirmed => {
-         isConfirmed = confirmed;
-       });
+       service.showNodeDeploymentDeleteDialog(nd, clusterID, projectID, dcName, null)
+           .pipe(first())
+           .subscribe(confirmed => {
+             isConfirmed = confirmed;
+           });
        tick();
 
        expect(isConfirmed).toBeTruthy();
