@@ -19,8 +19,6 @@ class MatDialogMock {
 }
 
 describe('NodeService', () => {
-  let apiService: ApiService;
-
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
@@ -30,8 +28,6 @@ describe('NodeService', () => {
         {provide: MatDialog, useClass: MatDialogMock},
       ],
     });
-
-    apiService = TestBed.get(ApiService);
   });
 
   it('should initialize', inject([NodeService], (service: NodeService) => {
