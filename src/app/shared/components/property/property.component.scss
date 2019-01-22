@@ -6,12 +6,13 @@
 
 .km-property-label {
   font-size: $caption-font-size-base;
-  line-height: $caption-font-size-base;
+  line-height: 2 * $baseline-grid;
   margin-bottom: 0;
 }
 
 .km-property-value {
-  font-size: $subhead-font-size-base-lg;
+  font-size: $subhead-font-size-base;
+  line-height: 4 * $baseline-grid;
   margin-bottom: $baseline-grid;
   word-break: break-all;
 }
