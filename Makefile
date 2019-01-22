@@ -25,9 +25,6 @@ test-headless: install
 run-e2e-ci: install
 	./hack/run_ci_e2e_test.sh
 
-run-e2e: install
-	@$(CC) run e2e
-
 dist: install
 	@$(CC) run build -prod
 
@@ -39,3 +36,6 @@ docker-build: build dist
 
 docker-push: docker-build
 	docker push $(REPO):$(IMAGE_TAG)
+
+deploy:
+	kubectl set image deployment/kubermatic-ui-v2 webserver=$(REPO):$(IMAGE_TAG)

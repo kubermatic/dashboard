@@ -27,9 +27,9 @@ var (
 	argEmailDomain = pflag.String("email-domain", "", "User email domain that should be used when creating user with randomize option enabled.")
 	argPassword    = pflag.String("password", "", "User password that should be used when creating user.")
 
-	caCertEnvName     = "CA_CERT"
-	clientCertEnvName = "CLIENT_CERT"
-	clientKeyEnvName  = "CLIENT_KEY"
+	caCertEnvName     = "KUBERMATIC_DEX_DEV_CA_CERT"
+	clientCertEnvName = "KUBERMATIC_DEX_DEV_CLIENT_CERT"
+	clientKeyEnvName  = "KUBERMATIC_DEX_DEV_CLIENT_KEY"
 
 	caCertBytes     []byte
 	clientCertBytes []byte
