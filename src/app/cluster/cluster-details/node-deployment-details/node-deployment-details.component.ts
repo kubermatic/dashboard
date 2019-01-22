@@ -31,6 +31,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _clusterName: string;
   private _dcName: string;
   private _nodeDeploymentID: string;
+  private _isNodeDeploymentLoaded = false;
   private _areNodesLoaded = false;
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
@@ -85,6 +86,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         .subscribe((nd) => {
           this.nodeDeployment = nd;
           this.system = this._nodeService.getOperatingSystem(nd.spec.template);
+          this._isNodeDeploymentLoaded = true;
         });
   }
 
@@ -120,7 +122,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isInitialized(): boolean {
-    return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded;
+    return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded && this._isNodeDeploymentLoaded;
   }
 
   getHealthStatus(): object {
