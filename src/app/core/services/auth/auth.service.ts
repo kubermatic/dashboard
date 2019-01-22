@@ -13,6 +13,7 @@ export class Auth {
       // localhost is only served via http, though secure cookie is not possible
       // following line will only work when domain is localhost
       this.cookieService.set('token', token, 1, null, 'localhost');
+      this.cookieService.set('token', token, 1, null, '127.0.0.1');
     }
   }
 
