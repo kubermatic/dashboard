@@ -21,7 +21,9 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
   nodes: NodeEntity[] = [];
   cluster: ClusterEntity;
+  clusterProvider: string;
   datacenter: DataCenterEntity;
+  system: string;
   projectID: string;
   userGroup: string;
   userGroupConfig: UserGroupConfig;
@@ -34,6 +36,24 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _isDatacenterLoaded = false;
   private _refreshInterval = 10000;
   private _unsubscribe: Subject<any> = new Subject();
+
+  private static _getClusterProvider(cluster: ClusterEntity): string {
+    if (cluster.spec.cloud.aws) {
+      return 'aws';
+    } else if (cluster.spec.cloud.digitalocean) {
+      return 'digitalocean';
+    } else if (cluster.spec.cloud.openstack) {
+      return 'openstack';
+    } else if (cluster.spec.cloud.bringyourown) {
+      return 'bringyourown';
+    } else if (cluster.spec.cloud.hetzner) {
+      return 'hetzner';
+    } else if (cluster.spec.cloud.vsphere) {
+      return 'vsphere';
+    } else if (cluster.spec.cloud.azure) {
+      return 'azure';
+    }
+  }
 
   constructor(
       private readonly _activatedRoute: ActivatedRoute, private readonly _router: Router,
@@ -64,6 +84,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe((nd) => {
           this.nodeDeployment = nd;
+          this.system = this._nodeService.getOperatingSystem(nd.spec.template);
         });
   }
 
@@ -79,6 +100,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadCluster(): void {
     this._apiService.getCluster(this._clusterName, this._dcName, this.projectID).pipe(first()).subscribe((c) => {
       this.cluster = c;
+      this.clusterProvider = NodeDeploymentDetailsComponent._getClusterProvider(this.cluster);
       this._isClusterLoaded = true;
     });
   }
@@ -99,6 +121,10 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   isInitialized(): boolean {
     return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded;
+  }
+
+  getHealthStatus(): object {
+    return this._nodeService.getHealthStatus(this.nodeDeployment);
   }
 
   goBackToCluster(): void {

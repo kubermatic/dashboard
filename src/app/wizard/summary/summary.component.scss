@@ -47,14 +47,6 @@ mat-card {
   }
 }
 
-.fa-check {
-  color: $healthy-status-color !important;
-}
-
-.fa-times {
-  color: $warning !important;
-}
-
 input[type="password"].km-card-list-secret {
   border: 0 solid $white-text-color;
   background-color: transparent;

@@ -17,14 +17,6 @@ import {NodeService} from '../../services/node.service';
   styleUrls: ['node-deployment-list.component.scss'],
 })
 export class NodeDeploymentListComponent implements OnInit {
-  private static getHealthStatus_(color: string, status: string, className: string): object {
-    return {
-      color,
-      status,
-      class: className,
-    };
-  }
-
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodeDeployments: NodeDeploymentEntity[] = [];
@@ -56,22 +48,7 @@ export class NodeDeploymentListComponent implements OnInit {
   }
 
   getHealthStatus(nd: NodeDeploymentEntity, index: number): object {
-    const green = 'fa fa-circle green';
-    const orange = 'fa fa-spin fa-circle-o-notch orange';
-    let healthStatus = {};
-
-    if (!!nd.deletionTimestamp) {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Deleting', 'km-status-deleting');
-    } else if (!nd.status) {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Pending', 'km-status-waiting');
-    } else if (nd.status.availableReplicas === nd.spec.replicas) {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(green, 'Running', 'km-status-running');
-    } else if (nd.status.availableReplicas > nd.spec.replicas) {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Updating', 'km-status-waiting');
-    } else {
-      healthStatus = NodeDeploymentListComponent.getHealthStatus_(orange, 'Pending', 'km-status-waiting');
-    }
-
+    const healthStatus = this._nodeService.getHealthStatus(nd);
     if (index % 2 !== 0) {
       healthStatus['class'] += ' km-odd';
     }

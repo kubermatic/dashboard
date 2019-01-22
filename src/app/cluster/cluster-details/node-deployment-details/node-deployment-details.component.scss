@@ -1,3 +1,4 @@
+@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
 .km-icon-edit {
@@ -7,4 +8,24 @@
 
 .km-node-deployment-detail-card {
   margin-top: 2 * $baseline-grid;
+}
+
+.km-node-deployment-health {
+  text-align: center;
+
+  &.green {
+    color: $healthy-status-color;
+  }
+
+  &.orange {
+    color: $waiting-status-color;
+  }
+}
+
+.km-node-deployment-name {
+  margin-left: 2 * $baseline-grid;
+}
+
+.km-provider-logo {
+  height: 5 * $baseline-grid !important;
 }

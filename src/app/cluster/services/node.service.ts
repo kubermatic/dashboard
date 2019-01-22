@@ -12,12 +12,13 @@ import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../shared/entity/NodeDeploymentPatch';
+import {NodeSpec} from '../../shared/entity/NodeEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
 @Injectable()
 export class NodeService {
-  private static getNodeDeploymentEntity_(nodeData: NodeData): NodeDeploymentEntity {
+  private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeploymentEntity {
     return {
       spec: {
         template: nodeData.spec,
@@ -26,14 +27,14 @@ export class NodeService {
     };
   }
 
-  private static convertNodeData(initialNodeData: InitialNodeData): NodeData {
+  private static _convertNodeData(initialNodeData: InitialNodeData): NodeData {
     return {
       count: initialNodeData.nodeCount,
       spec: initialNodeData.nodeSpec,
     };
   }
 
-  private static createPatch(data: NodeDataModalData): NodeDeploymentPatch {
+  private static _createPatch(data: NodeDataModalData): NodeDeploymentPatch {
     const patch: NodeDeploymentPatch = {
       spec: {
         replicas: data.nodeData.count,
@@ -51,6 +52,14 @@ export class NodeService {
     return patch;
   }
 
+  private static _getHealthStatus(color: string, status: string, className: string): object {
+    return {
+      color,
+      status,
+      class: className,
+    };
+  }
+
   constructor(
       private readonly _apiService: ApiService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
@@ -59,14 +68,14 @@ export class NodeService {
 
   createInitialNodes(initialNodeData: InitialNodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string):
       void {
-    const nodeData = NodeService.convertNodeData(initialNodeData);
+    const nodeData = NodeService._convertNodeData(initialNodeData);
     this.createNodeDeployment(nodeData, dc, cluster, project);
   }
 
   createNodeDeployment(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
     const createObservables: Array<ObservableInput<any>> = [];
     createObservables.push(this._apiService.createNodeDeployment(
-        cluster, NodeService.getNodeDeploymentEntity_(nodeData), dc.metadata.name, project));
+        cluster, NodeService._getNodeDeploymentEntity(nodeData), dc.metadata.name, project));
     this.observeCreation_(createObservables, 'Node Deployment successfully created');
   }
 
@@ -75,6 +84,35 @@ export class NodeService {
       NotificationActions.success('Success', successMessage);
       this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
     });
+  }
+
+  getOperatingSystem(spec: NodeSpec): string {
+    if (spec.operatingSystem.ubuntu) {
+      return 'Ubuntu';
+    } else if (spec.operatingSystem.centos) {
+      return 'CentOS';
+    } else if (spec.operatingSystem.containerLinux) {
+      return 'Container Linux';
+    } else {
+      return '';
+    }
+  }
+
+  getHealthStatus(nd: NodeDeploymentEntity): object {
+    const green = 'fa fa-circle green';
+    const orange = 'fa fa-spin fa-circle-o-notch orange';
+
+    if (!!nd.deletionTimestamp) {
+      return NodeService._getHealthStatus(orange, 'Deleting', 'km-status-deleting');
+    } else if (!nd.status) {
+      return NodeService._getHealthStatus(orange, 'Pending', 'km-status-waiting');
+    } else if (nd.status.availableReplicas === nd.spec.replicas) {
+      return NodeService._getHealthStatus(green, 'Running', 'km-status-running');
+    } else if (nd.status.availableReplicas > nd.spec.replicas) {
+      return NodeService._getHealthStatus(orange, 'Updating', 'km-status-waiting');
+    } else {
+      return NodeService._getHealthStatus(orange, 'Pending', 'km-status-waiting');
+    }
   }
 
   showNodeDeploymentCreateDialog(
@@ -125,7 +163,7 @@ export class NodeService {
         if (data) {
           this._apiService
               .patchNodeDeployment(
-                  data.nodeDeployment, NodeService.createPatch(data), data.cluster.id, data.datacenter.metadata.name,
+                  data.nodeDeployment, NodeService._createPatch(data), data.cluster.id, data.datacenter.metadata.name,
                   data.projectID)
               .toPromise()
               .then(
