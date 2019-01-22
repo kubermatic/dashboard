@@ -13,6 +13,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
+import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -79,16 +80,16 @@ describe('NodeDeploymentDetailsComponent', () => {
     component.nodes = nodesFake();
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
-    component.projectID = 'testproj';
-
-    spyOn(component, 'isInitialized').and.returnValue(true);
+    component.projectID = fakeProject().id;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {
-      clusterName: '4k6txp5sq',
-      seedDc: 'europe-west3-c',
-      nodeDeploymentID: 'machine-deployment-324343dfs-sdfsd',
+      clusterName: component.cluster.id,
+      seedDc: component.datacenter.metadata.name,
+      nodeDeploymentID: component.nodeDeployment.id,
     };
+
+    spyOn(component, 'isInitialized').and.returnValue(true);
 
     fixture.debugElement.injector.get(ApiService);
     fixture.detectChanges();
