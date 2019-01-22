@@ -1,24 +1,26 @@
 import {Injectable} from '@angular/core';
 import * as moment from 'moment';
+import {CookieService} from 'ngx-cookie-service';
 
 @Injectable()
 export class Auth {
-  constructor() {
+  constructor(private cookieService: CookieService) {
     const token = this.getTokenFromQuery();
     if (token) {
       // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
       this.removeFragment();
-      localStorage.setItem('token', token);
+      // expires in 1 day (24h)
+      this.cookieService.set('token', token, 1);
     }
   }
 
   getBearerToken(): string {
-    return localStorage.getItem('token');
+    return this.cookieService.get('token');
   }
 
   authenticated(): boolean {
     // Check if there's an unexpired JWT
-    // This searches for an item in localStorage with key == 'token'
+    // This searches for an item in cookies with key == 'token'
     if (!!this.getBearerToken()) {
       const tokenExp = this.decodeToken(this.getBearerToken());
       return moment().isBefore(moment(tokenExp.exp * 1000));
@@ -36,7 +38,7 @@ export class Auth {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    this.cookieService.delete('token');
   }
 
   private getTokenFromQuery(): string {
