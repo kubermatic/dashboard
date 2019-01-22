@@ -27,6 +27,8 @@ run-e2e-ci: install
 
 dist: install
 	@$(CC) run build -prod
+	git rev-parse HEAD
+	cat src/assets/config/git-version.json
 
 build:
 	CGO_ENABLED=0 go build -ldflags '-w -extldflags '-static'' -o dashboard-v2 .
