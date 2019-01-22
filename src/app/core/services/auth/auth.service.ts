@@ -9,8 +9,14 @@ export class Auth {
     if (token) {
       // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
       this.removeFragment();
+      // set( name: string, value: string, expires?: number | Date, path?: string, domain?: string,
+      //     secure?: boolean, sameSite?: 'Lax' | 'Strict' ): void;
       // expires in 1 day (24h)
-      this.cookieService.set('token', token, 1);
+      // following line will only work on https
+      this.cookieService.set('token', token, 1, null, null, true);
+      // localhost is only served via http, though secure cookie is not possible
+      // following line will only work when domain is localhost
+      this.cookieService.set('token', token, 1, null, 'localhost');
     }
   }
 
