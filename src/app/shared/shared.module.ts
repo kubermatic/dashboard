@@ -11,6 +11,7 @@ import {CustomFormsModule} from 'ng2-validation';
 import {ClipboardModule} from 'ngx-clipboard';
 import {AddSshKeyModalComponent} from './components/add-ssh-key-modal/add-ssh-key-modal.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
+import {PropertyComponent} from './components/property/property.component';
 
 const modules: any[] = [
   CommonModule,
@@ -56,11 +57,13 @@ const modules: any[] = [
   declarations: [
     AddSshKeyModalComponent,
     ConfirmationDialogComponent,
+    PropertyComponent,
   ],
   exports: [
     ...modules,
     AddSshKeyModalComponent,
     ConfirmationDialogComponent,
+    PropertyComponent,
   ],
   entryComponents: [
     AddSshKeyModalComponent,
