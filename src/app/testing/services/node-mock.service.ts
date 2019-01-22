@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 
 import {InitialNodeData} from '../../core/services/initial-node-data/initial-nodes-data.service';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
@@ -25,5 +25,21 @@ export class NodeMockService {
       status: 'Pending',
       class: 'km-status-waiting',
     };
+  }
+
+  showNodeDeploymentEditDialog(
+      nd: NodeDeploymentEntity, cluster: ClusterEntity, projectID: string, datacenter: DataCenterEntity,
+      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Promise<boolean> {
+    return new Promise((resolve => {
+      resolve(true);
+    }));
+  }
+
+  showNodeDeploymentDeleteDialog(
+      nd: NodeDeploymentEntity, clusterID: string, projectID: string, dcName: string,
+      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Promise<boolean> {
+    return new Promise((resolve => {
+      resolve(true);
+    }));
   }
 }
