@@ -4,6 +4,14 @@ mat-card {
   padding: 0;
 }
 
+.fa-check {
+  color: $healthy-status-color !important;
+}
+
+.fa-times {
+  color: $warning !important;
+}
+
 .km-summary-container {
   .km-summary-box {
     border: 1px solid $border;

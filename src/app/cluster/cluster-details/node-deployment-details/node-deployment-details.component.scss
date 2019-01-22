@@ -26,6 +26,14 @@
   margin-left: 2 * $baseline-grid;
 }
 
+.fa-check {
+  color: $healthy-status-color !important;
+}
+
+.fa-times {
+  color: $warning !important;
+}
+
 .km-provider-logo {
   height: 4 * $baseline-grid !important;
 }
