@@ -1,1 +1,39 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
+
+.km-icon-edit {
+  height: 14px;
+  width: 14px;
+}
+
+.km-node-deployment-detail-card {
+  margin-top: 2 * $baseline-grid;
+}
+
+.km-node-deployment-health {
+  text-align: center;
+
+  &.green {
+    color: $healthy-status-color;
+  }
+
+  &.orange {
+    color: $waiting-status-color;
+  }
+}
+
+.km-node-deployment-name {
+  margin-left: 2 * $baseline-grid;
+}
+
+.fa-check {
+  color: $healthy-status-color !important;
+}
+
+.fa-times {
+  color: $warning !important;
+}
+
+.km-provider-logo {
+  height: 4 * $baseline-grid !important;
+}

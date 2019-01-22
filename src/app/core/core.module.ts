@@ -17,10 +17,9 @@ import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {SidenavService} from './components/sidenav/sidenav.service';
 import {CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ApiService, Auth, AUTH_PROVIDERS, AuthGuard, ClusterService, DatacenterService, HealthService, InitialNodeDataService} from './services';
+import {WizardService} from './services';
 import {NodeDataService} from './services/node-data/node-data.service';
-import {NodeService} from './services/node/node.service';
 import {StepsService} from './services/wizard/steps.service';
-import {WizardService} from './services/wizard/wizard.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 import {ProgressBrowserXhr} from './util/ProgressBrowserXhr';
 
@@ -48,7 +47,6 @@ const services: any[] = [
   AuthGuard,
   DatacenterService,
   NodeDataService,
-  NodeService,
   WizardService,
   StepsService,
   ClusterNameGenerator,

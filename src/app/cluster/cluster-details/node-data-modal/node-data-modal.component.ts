@@ -2,15 +2,12 @@ import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angul
 import {MAT_DIALOG_DATA, MatTabChangeEvent} from '@angular/material';
 import {Subscription} from 'rxjs';
 
-import {ApiService, DatacenterService, WizardService} from '../../../core/services';
+import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
-import {NodeService} from '../../../core/services/node/node.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
-import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
-import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
 
@@ -37,9 +34,9 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-      @Inject(MAT_DIALOG_DATA) public data: NodeDataModalData, private api: ApiService,
-      private nodeDataService: NodeDataService, private nodeService: NodeService, private wizardService: WizardService,
-      private dcService: DatacenterService, public googleAnalyticsService: GoogleAnalyticsService) {}
+      @Inject(MAT_DIALOG_DATA) public data: NodeDataModalData, private nodeDataService: NodeDataService,
+      private wizardService: WizardService, private dcService: DatacenterService,
+      public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     if (!this.data.nodeData) {
@@ -85,46 +82,5 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
 
   getDialogLabel() {
     return `${this.data.editMode ? 'Edit' : 'Add'} Node Deployment`;
-  }
-
-  performAction(): void {
-    if (this.data.editMode) {
-      this.api
-          .patchNodeDeployment(
-              this.data.nodeDeployment, this.createPatch(), this.data.cluster.id, this.data.datacenter.metadata.name,
-              this.data.projectID)
-          .toPromise()
-          .then(
-              (nd) => {
-                NotificationActions.success('Success', 'Node Deployment updated successfully');
-                this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
-                this.editNodeDeployment.emit(nd);
-              },
-              () => {
-                NotificationActions.error('Error', `Could not update Node Deployment`);
-                this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
-              });
-    } else {
-      this.nodeService.createNodeDeployment(
-          this.data.nodeData, this.data.datacenter, this.data.cluster, this.data.projectID);
-    }
-  }
-
-  private createPatch(): NodeDeploymentPatch {
-    const patch: NodeDeploymentPatch = {
-      spec: {
-        replicas: this.data.nodeData.count,
-        template: this.data.nodeData.spec,
-      },
-    };
-
-    // As we are using merge patch to send whole spec we need to ensure that previous values will be unset
-    // and replaced by the values from patch. That's why we need to set undefined fields to null.
-    // It is not part of API service as it is not required in all cases (i.e. replicas count change).
-    patch.spec.template.operatingSystem.ubuntu = patch.spec.template.operatingSystem.ubuntu || null;
-    patch.spec.template.operatingSystem.centos = patch.spec.template.operatingSystem.centos || null;
-    patch.spec.template.operatingSystem.containerLinux = patch.spec.template.operatingSystem.containerLinux || null;
-
-    return patch;
   }
 }
