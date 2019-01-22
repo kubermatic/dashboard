@@ -122,26 +122,6 @@ describe('AddNodesModalComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call createNodeDeployment method from the NodeService if not in edit mode', fakeAsync(() => {
-       component.performAction();
-       tick();
-       expect(createNodesSpy.and.callThrough()).toHaveBeenCalled();
-     }));
-
-  it('should call patchNodeDeployment method from the ApiService if in edit mode', fakeAsync(() => {
-       component.data.editMode = true;
-       component.data.nodeDeployment = {
-         id: 'test',
-         spec: {
-           replicas: 1,
-           template: fakeDigitaloceanCreateNode().spec,
-         },
-       };
-       component.performAction();
-       tick();
-       expect(nodeDepPatchSpy.and.callThrough()).toHaveBeenCalled();
-     }));
-
   it('should render mat-dialog-actions', () => {
     const actions = fixture.debugElement.query(By.css('.mat-dialog-actions'));
     expect(actions).not.toBeNull();
