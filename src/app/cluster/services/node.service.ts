@@ -80,7 +80,7 @@ export class NodeService {
   }
 
   private observeCreation_(createObservables: Array<ObservableInput<any>>, successMessage: string): void {
-    combineLatest(createObservables).toPromise().then(() => {
+    combineLatest(createObservables).pipe(first()).subscribe(() => {
       NotificationActions.success('Success', successMessage);
       this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
     });
@@ -165,8 +165,8 @@ export class NodeService {
               .patchNodeDeployment(
                   data.nodeDeployment, NodeService._createPatch(data), data.cluster.id, data.datacenter.metadata.name,
                   data.projectID)
-              .toPromise()
-              .then(
+              .pipe(first())
+              .subscribe(
                   (nd) => {
                     NotificationActions.success('Success', 'Node Deployment updated successfully');
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
