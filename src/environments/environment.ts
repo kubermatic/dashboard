@@ -1,5 +1,3 @@
-import nonce from 'nonce-str';
-
 // The file contents for the current environment will overwrite these during build.
 // The build system defaults to the dev environment which uses `environment.ts`, but if you do
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
@@ -18,5 +16,5 @@ export const environment = {
   restRootV3: 'api/v3',
   digitalOceanRestRoot: 'https://api.digitalocean.com/v2',
   coreOSdexAuth: oauth + '?response_type=id_token&client_id=kubermatic&redirect_uri=' + redirect_uri +
-      '&scope=' + scope.join(' ') + '&nonce=' + nonce(32),
+      '&scope=' + scope.join(' ') + '&nonce=random',
 };

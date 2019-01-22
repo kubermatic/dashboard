@@ -69,7 +69,6 @@
     "ng2-validation": "4.2.0",
     "ngx-clipboard": "11.1.9",
     "ngx-window-token": "^1.0.0",
-    "nonce-str": "^1.0.1",
     "openstack-lib": "0.0.2",
     "redux": "^4.0.0",
     "rxjs": "^6.0.0",
