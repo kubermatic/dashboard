@@ -135,7 +135,7 @@ export class NodeService {
 
   showNodeDeploymentEditDialog(
       nd: NodeDeploymentEntity, cluster: ClusterEntity, projectID: string, datacenter: DataCenterEntity,
-      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Observable<boolean> {
+      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Promise<boolean> {
     const dialogRef = this._matDialog.open(NodeDataModalComponent, {
       data: {
         cluster,
@@ -152,36 +152,38 @@ export class NodeService {
       }
     });
 
-    return dialogRef.afterClosed().pipe<boolean>(map((data: NodeDataModalData) => {
-      if (data) {
-        this._apiService
-            .patchNodeDeployment(
-                data.nodeDeployment, NodeService._createPatch(data), data.cluster.id, data.datacenter.metadata.name,
-                data.projectID)
-            .pipe(first())
-            .subscribe(
-                (nd) => {
-                  NotificationActions.success('Success', 'Node Deployment updated successfully');
-                  this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
-                  if (changeEventEmitter) {
-                    changeEventEmitter.emit(nd);
-                  }
-                  return true;
-                },
-                () => {
-                  NotificationActions.error('Error', `Could not update Node Deployment`);
-                  this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
-                  return false;
-                });
-      } else {
-        return false;
-      }
-    }));
+    return new Promise((resolve, reject) => {
+      dialogRef.afterClosed().subscribe((data: NodeDataModalData) => {
+        if (data) {
+          this._apiService
+              .patchNodeDeployment(
+                  data.nodeDeployment, NodeService._createPatch(data), data.cluster.id, data.datacenter.metadata.name,
+                  data.projectID)
+              .pipe(first())
+              .subscribe(
+                  (nd) => {
+                    NotificationActions.success('Success', 'Node Deployment updated successfully');
+                    this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
+                    if (changeEventEmitter) {
+                      changeEventEmitter.emit(nd);
+                    }
+                    resolve(true);
+                  },
+                  () => {
+                    NotificationActions.error('Error', `Could not update Node Deployment`);
+                    this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
+                    reject(false);
+                  });
+        } else {
+          resolve(false);
+        }
+      });
+    });
   }
 
   showNodeDeploymentDeleteDialog(
       nd: NodeDeploymentEntity, clusterID: string, projectID: string, dcName: string,
-      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Observable<boolean> {
+      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Promise<boolean> {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -196,26 +198,28 @@ export class NodeService {
     const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
     this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
-    return dialogRef.afterClosed().pipe<boolean>(map((isConfirmed: boolean) => {
-      if (isConfirmed) {
-        this._apiService.deleteNodeDeployment(clusterID, nd, dcName, projectID)
-            .subscribe(
-                () => {
-                  NotificationActions.success('Success', 'Node Deployment removed successfully');
-                  this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleted');
-                  if (changeEventEmitter) {
-                    changeEventEmitter.emit(nd);
-                  }
-                  return true;
-                },
-                () => {
-                  NotificationActions.error('Error', `Could not remove Node Deployment`);
-                  this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleteFailed');
-                  return false;
-                });
-      } else {
-        return false;
-      }
-    }));
+    return new Promise((resolve, reject) => {
+      dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
+        if (isConfirmed) {
+          this._apiService.deleteNodeDeployment(clusterID, nd, dcName, projectID)
+              .subscribe(
+                  () => {
+                    NotificationActions.success('Success', 'Node Deployment removed successfully');
+                    this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleted');
+                    if (changeEventEmitter) {
+                      changeEventEmitter.emit(nd);
+                    }
+                    resolve(true);
+                  },
+                  () => {
+                    NotificationActions.error('Error', `Could not remove Node Deployment`);
+                    this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleteFailed');
+                    reject(false);
+                  });
+        } else {
+          resolve(false);
+        }
+      });
+    });
   }
 }

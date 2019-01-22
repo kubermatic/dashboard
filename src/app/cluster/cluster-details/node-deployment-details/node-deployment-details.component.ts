@@ -136,8 +136,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   showEditDialog(): void {
     this._nodeService
         .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.datacenter, undefined)
-        .pipe(first())
-        .subscribe((isConfirmed) => {
+        .then((isConfirmed) => {
           if (isConfirmed) {
             this.loadNodeDeployment();
             this.loadNodes();
@@ -149,8 +148,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._nodeService
         .showNodeDeploymentDeleteDialog(
             this.nodeDeployment, this.cluster.id, this.projectID, this.datacenter.metadata.name, undefined)
-        .pipe(first())
-        .subscribe((isConfirmed) => {
+        .then((isConfirmed) => {
           if (isConfirmed) {
             this.goBackToCluster();
           }
