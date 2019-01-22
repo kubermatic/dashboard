@@ -14,7 +14,7 @@ exports.config = {
   multiCapabilities: [{
     browserName: 'chrome',
     chromeOptions: {
-      args: ['--headless', '--no-sandbox', '--disable-gpu', '--window-size=1024,768']
+      args: ['--headless', '--no-sandbox', '--disable-gpu', '--window-size=1920,1080']
     }
   }],
 
