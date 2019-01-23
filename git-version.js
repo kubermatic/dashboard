@@ -9,6 +9,9 @@ const gitInfo = gitDescribeSync({
   dirtyMark: false,
   dirtySemver: false
 });
+
 const versionInfoJson = JSON.stringify(gitInfo, null, 2);
+
+console.log(versionInfoJson + '\n');
 
 writeFileSync(resolve(__dirname, 'src', 'assets', 'config', 'git-version.json'), versionInfoJson);

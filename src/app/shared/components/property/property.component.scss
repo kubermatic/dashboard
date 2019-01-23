@@ -1,0 +1,18 @@
+@import '../../../../assets/css/variables';
+
+.km-property-container {
+  margin: (.75 * $baseline-grid) (8 * $baseline-grid) (.75 * $baseline-grid) 0;
+}
+
+.km-property-label {
+  font-size: $caption-font-size-base;
+  line-height: 2 * $baseline-grid;
+  margin-bottom: 0;
+}
+
+.km-property-value {
+  font-size: $subhead-font-size-base;
+  line-height: 4 * $baseline-grid;
+  margin-bottom: $baseline-grid;
+  word-break: break-all;
+}
