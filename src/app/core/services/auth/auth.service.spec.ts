@@ -4,6 +4,7 @@ import {HttpClientModule} from '@angular/common/http';
 import {inject, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterTestingModule} from '@angular/router/testing';
+import {CookieService} from 'ngx-cookie-service';
 import {Auth} from './auth.service';
 
 describe('Auth', () => {
@@ -18,6 +19,7 @@ describe('Auth', () => {
           declarations: [],
           providers: [
             Auth,
+            CookieService,
           ],
         })
         .compileComponents();

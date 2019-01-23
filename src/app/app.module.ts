@@ -4,6 +4,7 @@ import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
+import {CookieService} from 'ngx-cookie-service';
 import {AddProjectComponent} from './add-project/add-project.component';
 import {AppConfigService} from './app-config.service';
 import {AppRoutingModule} from './app-routing.module';
@@ -50,6 +51,7 @@ const appInitializerFn = (appConfig: AppConfigService) => {
       multi: true,
       deps: [AppConfigService],
     },
+    CookieService,
     ProjectService,
     UserService,
     GoogleAnalyticsService,
