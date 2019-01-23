@@ -4,7 +4,7 @@
 const {SpecReporter} = require('jasmine-spec-reporter');
 
 exports.config = {
-  allScriptsTimeout: 15000,
+  allScriptsTimeout: 30000,
 
   specs: [
     './src/**/*.e2e-spec.ts'
@@ -14,13 +14,13 @@ exports.config = {
   multiCapabilities: [{
     browserName: 'chrome',
     chromeOptions: {
-      args: ['--headless', '--no-sandbox', '--disable-gpu', '--window-size=1024,768']
+      args: ['--headless', '--no-sandbox', '--disable-gpu', '--window-size=1920,1080']
     }
   }],
 
   framework: 'jasmine',
   jasmineNodeOpts: {
-    defaultTimeoutInterval: 30000,
+    defaultTimeoutInterval: 60000,
   },
 
   directConnect: true,

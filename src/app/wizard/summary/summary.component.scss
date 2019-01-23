@@ -4,6 +4,14 @@ mat-card {
   padding: 0;
 }
 
+.fa-check {
+  color: $healthy-status-color !important;
+}
+
+.fa-times {
+  color: $warning !important;
+}
+
 .km-summary-container {
   .km-summary-box {
     border: 1px solid $border;
@@ -45,14 +53,6 @@ mat-card {
     font-weight: 600;
     color: $text-color;
   }
-}
-
-.fa-check {
-  color: $healthy-status-color !important;
-}
-
-.fa-times {
-  color: $warning !important;
 }
 
 input[type="password"].km-card-list-secret {

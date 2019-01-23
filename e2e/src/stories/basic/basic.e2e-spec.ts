@@ -44,12 +44,12 @@ describe('Basic story', () => {
 
   it('should login', () => {
     loginPage.getLoginButton().click();
-    dexPage.getStaticLoginButton().click();
+    dexPage.getLoginWithEmailButton().click();
 
-    dexPage.getStaticLoginInput().sendKeys(browser.params.KUBERMATIC_E2E_USERNAME);
-    dexPage.getStaticPasswordInput().sendKeys(browser.params.KUBERMATIC_E2E_PASSWORD);
+    dexPage.getLoginInput().sendKeys(browser.params.KUBERMATIC_E2E_USERNAME);
+    dexPage.getPasswordInput().sendKeys(browser.params.KUBERMATIC_E2E_PASSWORD);
 
-    dexPage.getStaticLoginSubmitButton().click();
+    dexPage.getLoginSubmitButton().click();
 
     KMElement.waitToAppear(projectsPage.getLogoutButton());
     expect(projectsPage.getLogoutButton().isPresent()).toBeTruthy();
@@ -57,6 +57,7 @@ describe('Basic story', () => {
 
   it('should create a new project', () => {
     projectsPage.navigateTo();
+    KMElement.waitForNotifications();
     KMElement.waitToAppear(projectsPage.getAddProjectButton());
 
     projectsPage.getAddProjectButton().click();
@@ -133,6 +134,7 @@ describe('Basic story', () => {
   });
 
   it('should delete created member', () => {
+    KMElement.waitForNotifications();
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
     KMElement.waitToAppear(membersPage.getDeleteMemberDialog());

@@ -97,7 +97,7 @@ export class NodeListComponent implements OnInit {
       nodeHealthStatus['class'] = 'km-status-deleting';
     } else {
       nodeHealthStatus['color'] = orangeSpinner;
-      nodeHealthStatus['status'] = 'Pending';
+      nodeHealthStatus['status'] = 'In progress';
       nodeHealthStatus['class'] = 'km-status-waiting';
     }
 

@@ -62,7 +62,7 @@ func (this *dexClient) DeleteUser(user user.DexUser) error {
 	}
 
 	if resp, err := this.client.DeletePassword(context.TODO(), deleteReq); err != nil || resp.NotFound {
-		if resp.NotFound {
+		if resp != nil && resp.NotFound {
 			return fmt.Errorf("user %s not found", deleteReq.Email)
 		}
 		return fmt.Errorf("failed to delete user: %v", err)
