@@ -16,6 +16,41 @@ import {NodeSpec} from '../../shared/entity/NodeEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
+export class NodeDeploymentHealthStatus {
+  static readonly COLOR_GREEN = 'fa fa-circle green';
+  static readonly COLOR_ORANGE = 'fa fa-spin fa-circle-o-notch orange';
+  static readonly COLOR_RED = 'fa fa-spin fa-circle-o-notch red';
+
+  static readonly STATUS_DELETING = 'Deleting';
+  static readonly STATUS_PROVISIONING = 'Provisioning';
+  static readonly STATUS_RUNNING = 'Running';
+  static readonly STATUS_UPDATING = 'Updating';
+
+  static getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {
+    if (!!nd.deletionTimestamp) {
+      return new NodeDeploymentHealthStatus(
+          NodeDeploymentHealthStatus.STATUS_DELETING, NodeDeploymentHealthStatus.COLOR_RED);
+    } else if (nd.status && nd.status.updatedReplicas !== nd.spec.replicas) {
+      return new NodeDeploymentHealthStatus(
+          NodeDeploymentHealthStatus.STATUS_UPDATING, NodeDeploymentHealthStatus.COLOR_ORANGE);
+    } else if (nd.status && nd.status.availableReplicas === nd.spec.replicas) {
+      return new NodeDeploymentHealthStatus(
+          NodeDeploymentHealthStatus.STATUS_RUNNING, NodeDeploymentHealthStatus.COLOR_GREEN);
+    } else {
+      return new NodeDeploymentHealthStatus(
+          NodeDeploymentHealthStatus.STATUS_PROVISIONING, NodeDeploymentHealthStatus.COLOR_ORANGE);
+    }
+  }
+
+  status: string;
+  color: string;
+
+  constructor(status: string, color: string) {
+    this.status = status;
+    this.color = color;
+  }
+}
+
 @Injectable()
 export class NodeService {
   private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeploymentEntity {
@@ -52,12 +87,16 @@ export class NodeService {
     return patch;
   }
 
-  private static _getHealthStatus(color: string, status: string, className: string): object {
-    return {
-      color,
-      status,
-      class: className,
-    };
+  static getOperatingSystem(spec: NodeSpec): string {
+    if (spec.operatingSystem.ubuntu) {
+      return 'Ubuntu';
+    } else if (spec.operatingSystem.centos) {
+      return 'CentOS';
+    } else if (spec.operatingSystem.containerLinux) {
+      return 'Container Linux';
+    } else {
+      return '';
+    }
   }
 
   constructor(
@@ -80,35 +119,6 @@ export class NodeService {
           NotificationActions.success('Success', 'Node Deployment successfully created');
           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
         });
-  }
-
-  getOperatingSystem(spec: NodeSpec): string {
-    if (spec.operatingSystem.ubuntu) {
-      return 'Ubuntu';
-    } else if (spec.operatingSystem.centos) {
-      return 'CentOS';
-    } else if (spec.operatingSystem.containerLinux) {
-      return 'Container Linux';
-    } else {
-      return '';
-    }
-  }
-
-  getHealthStatus(nd: NodeDeploymentEntity): object {
-    const green = 'fa fa-circle green';
-    const orange = 'fa fa-spin fa-circle-o-notch orange';
-
-    if (!nd || !!nd.deletionTimestamp) {
-      return NodeService._getHealthStatus(orange, 'Deleting', 'km-status-deleting');
-    } else if (!nd.status) {
-      return NodeService._getHealthStatus(orange, 'In progress', 'km-status-waiting');
-    } else if (nd.status.availableReplicas === nd.spec.replicas) {
-      return NodeService._getHealthStatus(green, 'Running', 'km-status-running');
-    } else if (nd.status.availableReplicas > nd.spec.replicas) {
-      return NodeService._getHealthStatus(orange, 'Updating', 'km-status-waiting');
-    } else {
-      return NodeService._getHealthStatus(orange, 'In progress', 'km-status-waiting');
-    }
   }
 
   showNodeDeploymentCreateDialog(

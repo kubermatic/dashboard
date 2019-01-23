@@ -10,7 +10,7 @@ import {nodeDeploymentsFake} from '../../testing/fake-data/node.fake';
 import {fakeProject} from '../../testing/fake-data/project.fake';
 import {ApiMockService} from '../../testing/services/api-mock.service';
 
-import {NodeService} from './node.service';
+import {NodeDeploymentHealthStatus, NodeService} from './node.service';
 
 class MatDialogMock {
   open() {
@@ -39,20 +39,18 @@ describe('NodeService', () => {
        const green = 'fa fa-circle green';
        const orange = 'fa fa-spin fa-circle-o-notch orange';
 
-       expect(service.getHealthStatus(nds[0]))
+       expect(NodeDeploymentHealthStatus.getHealthStatus(nds[0]))
            .toEqual(
                {
                  color: green,
                  status: 'Running',
-                 class: 'km-status-running',
                },
                'should return classes for green icon');
-       expect(service.getHealthStatus(nds[1]))
+       expect(NodeDeploymentHealthStatus.getHealthStatus(nds[1]))
            .toEqual(
                {
                  color: orange,
-                 status: 'In progress',
-                 class: 'km-status-waiting',
+                 status: 'Provisioning',
                },
                'should return classes for orange icon');
      }));

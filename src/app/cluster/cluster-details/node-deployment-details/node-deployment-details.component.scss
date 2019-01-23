@@ -20,6 +20,10 @@
   &.orange {
     color: $waiting-status-color;
   }
+
+  &.red {
+    color: $warning-status-color;
+  }
 }
 
 .km-node-deployment-name {
