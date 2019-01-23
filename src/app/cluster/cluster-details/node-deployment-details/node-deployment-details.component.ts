@@ -10,7 +10,8 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
-import {NodeDeploymentHealthStatus, NodeService} from '../../services/node.service';
+import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {NodeService} from '../../services/node.service';
 
 @Component({
   selector: 'kubermatic-cluster-details',

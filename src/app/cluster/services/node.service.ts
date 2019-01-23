@@ -16,41 +16,6 @@ import {NodeSpec} from '../../shared/entity/NodeEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
-export class NodeDeploymentHealthStatus {
-  static readonly COLOR_GREEN = 'fa fa-circle green';
-  static readonly COLOR_ORANGE = 'fa fa-spin fa-circle-o-notch orange';
-  static readonly COLOR_RED = 'fa fa-spin fa-circle-o-notch red';
-
-  static readonly STATUS_DELETING = 'Deleting';
-  static readonly STATUS_PROVISIONING = 'Provisioning';
-  static readonly STATUS_RUNNING = 'Running';
-  static readonly STATUS_UPDATING = 'Updating';
-
-  static getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {
-    if (!!nd.deletionTimestamp) {
-      return new NodeDeploymentHealthStatus(
-          NodeDeploymentHealthStatus.STATUS_DELETING, NodeDeploymentHealthStatus.COLOR_RED);
-    } else if (nd.status && nd.status.updatedReplicas !== nd.spec.replicas) {
-      return new NodeDeploymentHealthStatus(
-          NodeDeploymentHealthStatus.STATUS_UPDATING, NodeDeploymentHealthStatus.COLOR_ORANGE);
-    } else if (nd.status && nd.status.availableReplicas === nd.spec.replicas) {
-      return new NodeDeploymentHealthStatus(
-          NodeDeploymentHealthStatus.STATUS_RUNNING, NodeDeploymentHealthStatus.COLOR_GREEN);
-    } else {
-      return new NodeDeploymentHealthStatus(
-          NodeDeploymentHealthStatus.STATUS_PROVISIONING, NodeDeploymentHealthStatus.COLOR_ORANGE);
-    }
-  }
-
-  status: string;
-  color: string;
-
-  constructor(status: string, color: string) {
-    this.status = status;
-    this.color = color;
-  }
-}
-
 @Injectable()
 export class NodeService {
   private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeploymentEntity {

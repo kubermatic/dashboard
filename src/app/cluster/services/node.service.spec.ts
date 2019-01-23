@@ -10,7 +10,7 @@ import {nodeDeploymentsFake} from '../../testing/fake-data/node.fake';
 import {fakeProject} from '../../testing/fake-data/project.fake';
 import {ApiMockService} from '../../testing/services/api-mock.service';
 
-import {NodeDeploymentHealthStatus, NodeService} from './node.service';
+import {NodeService} from './node.service';
 
 class MatDialogMock {
   open() {
@@ -32,27 +32,6 @@ describe('NodeService', () => {
 
   it('should initialize', inject([NodeService], (service: NodeService) => {
        expect(service).toBeTruthy();
-     }));
-
-  it('should return correct CSS classes', inject([NodeService], (service: NodeService) => {
-       const nds = nodeDeploymentsFake();
-       const green = 'fa fa-circle green';
-       const orange = 'fa fa-spin fa-circle-o-notch orange';
-
-       expect(NodeDeploymentHealthStatus.getHealthStatus(nds[0]))
-           .toEqual(
-               {
-                 color: green,
-                 status: 'Running',
-               },
-               'should return classes for green icon');
-       expect(NodeDeploymentHealthStatus.getHealthStatus(nds[1]))
-           .toEqual(
-               {
-                 color: orange,
-                 status: 'Provisioning',
-               },
-               'should return classes for orange icon');
      }));
 
   it('should resolve promise with true value', fakeAsync(inject([NodeService], (service: NodeService) => {
