@@ -30,7 +30,7 @@ describe('Basic story', () => {
   const dexPage = new DexPage();
   const membersPage = new MembersPage();
 
-  const projectName = 'e2e-test-project';
+  let projectName = 'e2e-test-project';
   const clusterName = 'e2e-test-cluster';
   const providerName = 'bringyourown';
   const datacenterLocation = 'Frankfurt';
@@ -167,8 +167,31 @@ describe('Basic story', () => {
     expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeFalsy();
   });
 
-  it('should delete created project', () => {
+  it('should edit created project name', async () => {
+    const oldProjectName = projectName;
     projectsPage.navigateTo();
+    KMElement.waitForNotifications();
+    KMElement.waitToAppear(projectsPage.getProjectEditBtn(projectName));
+    projectsPage.getProjectEditBtn(projectName).click();
+    expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
+
+    KMElement.waitToAppear(projectsPage.getEditProjectDialogInput());
+    projectName = 'e2e-test-project-2';
+    KMElement.sendKeys(projectsPage.getEditProjectDialogInput(), projectName);
+    KMElement.waitForClickable(projectsPage.getEditProjectDialogEditBtn());
+    projectsPage.getEditProjectDialogEditBtn().click();
+
+    KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
+
+    // Switch views to reload members list
+    clustersPage.navigateTo();
+    projectsPage.navigateTo();
+
+    KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
+    expect(await projectsPage.getProjectItem(projectName).getText()).not.toEqual(oldProjectName);
+  });
+
+  it('should delete created project', () => {
     KMElement.waitForNotifications();
     KMElement.waitToAppear(projectsPage.getDeleteProjectButton(projectName));
     projectsPage.getDeleteProjectButton(projectName).click();

@@ -20,8 +20,16 @@ p {
 
   &.km-icon {
     padding-right: 20px;
-    height: 21px;
-    width: 21px;
+
+    .km-icon-edit {
+      margin-right: 15px;
+    }
+
+    .km-icon-edit,
+    .km-icon-delete {
+      height: 21px;
+      width: 21px;
+    }
   }
 }
 
