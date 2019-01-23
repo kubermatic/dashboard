@@ -22,7 +22,7 @@ export class NodeMockService {
   getHealthStatus(nd: NodeDeploymentEntity): object {
     return {
       color: 'fa fa-spin fa-circle-o-notch orange',
-      status: 'Pending',
+      status: 'In progress',
       class: 'km-status-waiting',
     };
   }
