@@ -98,7 +98,7 @@ describe('NodeComponent', () => {
         .toEqual(
             {
               color: orange,
-              status: 'Pending',
+              status: 'In progress',
               class: 'km-status-waiting',
             },
             'should return classes for orange icon');

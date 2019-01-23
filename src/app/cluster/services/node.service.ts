@@ -107,7 +107,7 @@ export class NodeService {
     } else if (nd.status.availableReplicas > nd.spec.replicas) {
       return NodeService._getHealthStatus(orange, 'Updating', 'km-status-waiting');
     } else {
-      return NodeService._getHealthStatus(orange, 'Pending', 'km-status-waiting');
+      return NodeService._getHealthStatus(orange, 'In progress', 'km-status-waiting');
     }
   }
 
