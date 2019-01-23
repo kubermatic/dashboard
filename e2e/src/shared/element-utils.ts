@@ -1,6 +1,6 @@
 import {browser, by, element, ElementFinder, ExpectedConditions} from "protractor";
 
-const waitTimeout = 30000;
+const waitTimeout = 60000;
 
 export class KMElement {
   static waitToAppear(element: ElementFinder): any {

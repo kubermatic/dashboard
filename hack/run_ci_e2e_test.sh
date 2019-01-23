@@ -24,29 +24,23 @@ function delete::user {
 		return
 	fi
 
-	echo "Deleting user: ${USER_TO_DELETE}"
+	echo "Deleting user: ${USER_TO_DELETE} from the dex"
 	${DEX_CLIENT_BIN} --dex-host=localhost:5557 --action=delete --email=${USER_TO_DELETE}
 }
 
 function cleanup {
-	if [[ -z "${KUBERMATIC_DEX_DEV_E2E_USERNAME}" ]]; then
-		return
-	fi
-
-	K8C_USER_ID=$(kubectl get users -o json | jq -r '.items[] | select(.spec.email == "'${KUBERMATIC_DEX_DEV_E2E_USERNAME}'") | .metadata.name')
+	K8C_USER_ID=$(kubectl get users -o json | jq -r ".items[] | select(.spec.email == \"${KUBERMATIC_DEX_DEV_E2E_USERNAME}\") | .metadata.name")
 
 	if [[ -z ${K8C_USER_ID} ]]; then
-	 	echo "User with email: ${KUBERMATIC_DEX_DEV_E2E_USERNAME} not found."
+	 	echo "User with email: ${KUBERMATIC_DEX_DEV_E2E_USERNAME} not found in Kubermatic"
 	 	delete::user ${KUBERMATIC_DEX_DEV_E2E_USERNAME}
 	 	return
 	fi
 
 	kubectl delete user ${K8C_USER_ID}
-
 	delete::user ${KUBERMATIC_DEX_DEV_E2E_USERNAME}
-	KUBERMATIC_DEX_DEV_E2E_USERNAME=""
 }
-trap cleanup EXIT ERR
+trap cleanup EXIT
 
 apt install -y jq
 
