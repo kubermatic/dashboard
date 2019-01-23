@@ -29,7 +29,7 @@ function delete::user {
 }
 
 function cleanup {
-	K8C_USER_ID=$(kubectl get users -o json | jq -r ".items[] | select(.spec.email == \"${KUBERMATIC_DEX_DEV_E2E_USERNAME}\") | .metadata.name")
+	K8C_USER_ID=$(kubectl get users -o json | jq -r ".items[] | select(.spec.email == \"${KUBERMATIC_DEX_DEV_E2E_USERNAME,,}\") | .metadata.name")
 
 	if [[ -z ${K8C_USER_ID} ]]; then
 	 	echo "User with email: ${KUBERMATIC_DEX_DEV_E2E_USERNAME} not found in Kubermatic"
