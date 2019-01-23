@@ -101,7 +101,7 @@ export class NodeService {
     if (!nd || !!nd.deletionTimestamp) {
       return NodeService._getHealthStatus(orange, 'Deleting', 'km-status-deleting');
     } else if (!nd.status) {
-      return NodeService._getHealthStatus(orange, 'Pending', 'km-status-waiting');
+      return NodeService._getHealthStatus(orange, 'In progress', 'km-status-waiting');
     } else if (nd.status.availableReplicas === nd.spec.replicas) {
       return NodeService._getHealthStatus(green, 'Running', 'km-status-running');
     } else if (nd.status.availableReplicas > nd.spec.replicas) {
