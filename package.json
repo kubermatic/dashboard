@@ -68,6 +68,7 @@
     "moment": "^2.23.0",
     "ng2-validation": "4.2.0",
     "ngx-clipboard": "11.1.9",
+    "ngx-cookie-service": "^2.1.0",
     "ngx-window-token": "^1.0.0",
     "openstack-lib": "0.0.2",
     "redux": "^4.0.0",
