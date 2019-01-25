@@ -42,6 +42,16 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
     return !this.clusterId || this.clusterId.length === 0;
   }
 
+  getSizesFormState(): [string, boolean] {
+    if ((!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token.length === 0) && this.isInWizard()) {
+      return ['Please enter a valid token first!', true];
+    } else if (this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
+      return ['Loading sizes...', true];
+    } else {
+      return ['Node Size*:', false];
+    }
+  }
+
   reloadDigitaloceanSizes(): void {
     if (this.isInWizard()) {
       if (this.cloudSpec.digitalocean.token) {

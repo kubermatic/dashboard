@@ -80,6 +80,16 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
     };
   }
 
+  getFlavorsFormState(): [string, boolean] {
+    if (!this.loadingFlavors && this.isInWizard() && !this.hasCredentials()) {
+      return ['Please enter your credentials first!', true];
+    } else if (this.loadingFlavors) {
+      return ['Loading flavors...', true];
+    } else {
+      return ['Flavor*:', false];
+    }
+  }
+
   isInWizard(): boolean {
     return !this.clusterId || this.clusterId.length === 0;
   }
