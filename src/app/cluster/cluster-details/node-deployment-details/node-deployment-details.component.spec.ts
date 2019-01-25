@@ -10,6 +10,7 @@ import {AppConfigService} from '../../../app-config.service';
 import {ApiService, Auth, DatacenterService, HealthService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
+import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
@@ -77,6 +78,7 @@ describe('NodeDeploymentDetailsComponent', () => {
     component = fixture.componentInstance;
 
     component.nodeDeployment = nodeDeploymentsFake()[0];
+    component.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(component.nodeDeployment);
     component.nodes = nodesFake();
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
