@@ -1,4 +1,4 @@
-import {async, ComponentFixture, fakeAsync, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonToggleModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
@@ -48,11 +48,13 @@ describe('SetProviderComponent', () => {
        expect(component).toBeTruthy();
        component.cluster = fakeDigitaloceanCluster();
        fixture.detectChanges();
+       tick();
      }));
 
   it('should get provider from cluster', fakeAsync(() => {
        component.cluster = fakeDigitaloceanCluster();
        fixture.detectChanges();
+       tick();
        expect(component.setProviderForm.controls.provider.valid).toBeTruthy();
        expect(component.setProviderForm.controls.provider.value === 'digitalocean').toBeTruthy();
      }));
@@ -68,6 +70,7 @@ describe('SetProviderComponent', () => {
          },
        };
        fixture.detectChanges();
+       tick();
        expect(component.setProviderForm.controls.provider.valid).toBeFalsy();
      }));
 });
