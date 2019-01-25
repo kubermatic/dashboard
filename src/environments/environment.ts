@@ -3,9 +3,12 @@
 // `ng build --env=prod` then `environment.prod.ts` will be used instead.
 // The list of which env maps to which file can be found in `angular-cli.json`.
 
+import {RandomString} from '../app/shared/functions/generate-random-string';
+
 const redirect_uri = window.location.protocol + '//' + window.location.host + '/projects';
 const oauth = 'https://dev.kubermatic.io/dex/auth';
 const scope: string[] = ['openid', 'email', 'profile', 'groups'];
+const nonceString = RandomString(32);
 
 export const environment = {
   name: 'dev',
@@ -16,5 +19,5 @@ export const environment = {
   restRootV3: 'api/v3',
   digitalOceanRestRoot: 'https://api.digitalocean.com/v2',
   coreOSdexAuth: oauth + '?response_type=id_token&client_id=kubermatic&redirect_uri=' + redirect_uri +
-      '&scope=' + scope.join(' ') + '&nonce=random',
+      '&scope=' + scope.join(' ') + '&nonce=' + nonceString,
 };

@@ -1,5 +1,6 @@
 import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
+import {CookieService} from 'ngx-cookie-service';
 import {environment} from '../../../environments/environment';
 import {Auth} from '../../core/services';
 
@@ -38,7 +39,7 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
   environment: any = environment;
   isAuth = false;
 
-  constructor(private auth: Auth, private router: Router) {}
+  constructor(private auth: Auth, private router: Router, private cookieService: CookieService) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {
@@ -52,6 +53,15 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
     if (this.auth.authenticated()) {
       this.router.navigate(['/projects']);
       this.isAuth = true;
+    }
+    const nonceRegExp = /&nonce=(.*)$/;
+    const nonceStr = nonceRegExp.exec(environment.coreOSdexAuth);
+    if (!!nonceStr[1]) {
+      this.cookieService.set('nonce', nonceStr[1], null, null, null, true);
+      // localhost is only served via http, though secure cookie is not possible
+      // following line will only work when domain is localhost
+      this.cookieService.set('nonce', nonceStr[1], null, null, 'localhost');
+      this.cookieService.set('nonce', nonceStr[1], null, null, '127.0.0.1');
     }
   }
 

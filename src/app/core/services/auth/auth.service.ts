@@ -6,19 +6,26 @@ import {CookieService} from 'ngx-cookie-service';
 export class Auth {
   constructor(private cookieService: CookieService) {
     const token = this.getTokenFromQuery();
-    if (token) {
-      // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
-      this.removeFragment();
-      this.cookieService.set('token', token, 1, null, null, true);
-      // localhost is only served via http, though secure cookie is not possible
-      // following line will only work when domain is localhost
-      this.cookieService.set('token', token, 1, null, 'localhost');
-      this.cookieService.set('token', token, 1, null, '127.0.0.1');
+    const nonce = this.getNonce();
+    if (!!token && !!nonce) {
+      if (this.compareNonceWithToken(token)) {
+        // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
+        this.removeFragment();
+        this.cookieService.set('token', token, 1, null, null, true);
+        // localhost is only served via http, though secure cookie is not possible
+        // following line will only work when domain is localhost
+        this.cookieService.set('token', token, 1, null, 'localhost');
+        this.cookieService.set('token', token, 1, null, '127.0.0.1');
+      }
     }
   }
 
   getBearerToken(): string {
     return this.cookieService.get('token');
+  }
+
+  getNonce(): string {
+    return this.cookieService.get('nonce');
   }
 
   authenticated(): boolean {
@@ -40,8 +47,20 @@ export class Auth {
     return '';
   }
 
+  compareNonceWithToken(token: string): boolean {
+    if (!!token && !!this.getNonce()) {
+      const decodedToken = this.decodeToken(token);
+      const nonce = this.getNonce();
+      if (!!nonce && !!decodedToken) {
+        return (nonce === decodedToken.nonce);
+      }
+    }
+    return false;
+  }
+
   logout(): void {
     this.cookieService.delete('token');
+    this.cookieService.delete('nonce');
   }
 
   private getTokenFromQuery(): string {
