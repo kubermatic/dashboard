@@ -7,8 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
-import {Auth} from '../../core/services';
+import {ApiService, Auth, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';

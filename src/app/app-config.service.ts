@@ -1,5 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
+import {first} from 'rxjs/operators';
 
 import {environment} from '../environments/environment';
 
@@ -23,12 +24,11 @@ export class AppConfigService {
   loadAppConfig(): void {
     const jsonfile = environment.configUrl;
     setTimeout(() => {
-      return this.http.get(jsonfile)
-          .toPromise()
-          .then((resp) => {
+      return this.http.get(jsonfile).pipe(first()).subscribe(
+          (resp) => {
             this.appConfig = resp as Config;
-          })
-          .catch(() => {
+          },
+          () => {
             NotificationActions.error('Error', `Could not read configuration file`);
           });
     });
@@ -41,12 +41,11 @@ export class AppConfigService {
   loadUserGroupConfig(): void {
     const jsonfile = '../assets/config/userGroupConfig.json';
     setTimeout(() => {
-      return this.http.get(jsonfile)
-          .toPromise()
-          .then((resp) => {
+      return this.http.get(jsonfile).pipe(first()).subscribe(
+          (resp) => {
             this.userGroupConfig = resp as UserGroupConfig;
-          })
-          .catch(() => {
+          },
+          () => {
             NotificationActions.error('Error', `Could not read user group configuration file`);
           });
     });
@@ -59,12 +58,11 @@ export class AppConfigService {
   loadGitVersion(): void {
     const jsonfile = environment.gitVersionUrl;
     setTimeout(() => {
-      return this.http.get(jsonfile)
-          .toPromise()
-          .then((resp) => {
+      return this.http.get(jsonfile).pipe(first()).subscribe(
+          (resp) => {
             this.gitVersion = resp as VersionInfo;
-          })
-          .catch(() => {
+          },
+          () => {
             NotificationActions.error('Error', `Could not read Git version file`);
           });
     });
