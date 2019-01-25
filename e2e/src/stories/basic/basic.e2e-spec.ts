@@ -183,9 +183,11 @@ describe('Basic story', () => {
 
     KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
 
-    // Switch views to reload members list
-    clustersPage.navigateTo();
+    KMElement.waitForRedirect('/clusters');
+    // We need to wait for autoredirect after edit to finish otherwise it will autoredirect again after too fast page switch.
+    browser.sleep(5000);
     projectsPage.navigateTo();
+    KMElement.waitForRedirect('/projects');
 
     KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
     expect(await projectsPage.getProjectItem(projectName).getText()).not.toEqual(oldProjectName);
