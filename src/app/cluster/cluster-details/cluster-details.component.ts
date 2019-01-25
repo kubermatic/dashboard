@@ -218,7 +218,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
-    modal.afterClosed().toPromise().then((deleted) => {
+    modal.afterClosed().pipe(first()).subscribe((deleted) => {
       if (deleted) {
         this.router.navigate(['/projects/' + this.projectID + '/clusters']);
       }
@@ -244,7 +244,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.possibleVersions = this.versionsList;
-    modal.afterClosed().toPromise().then(() => {
+    modal.afterClosed().pipe(first()).subscribe(() => {
       this.reloadCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID);
     });
   }
@@ -268,7 +268,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
-    modal.afterClosed().toPromise().then(() => {
+    modal.afterClosed().pipe(first()).subscribe(() => {
       this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe((keys) => {

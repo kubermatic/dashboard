@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {first} from 'rxjs/operators';
 import {ApiService, Auth, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -19,7 +20,7 @@ export class ShareKubeconfigComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.auth.authenticated()) {
-      this.userService.getUser().toPromise().then((user) => {
+      this.userService.getUser().pipe(first()).subscribe((user) => {
         this.userID = user.id;
         this.kubeconfigLink =
             this.api.getShareKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id, this.userID);

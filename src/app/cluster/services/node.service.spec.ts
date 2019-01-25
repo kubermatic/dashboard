@@ -57,14 +57,14 @@ describe('NodeService', () => {
                'should return classes for orange icon');
      }));
 
-  it('should resolve promise with true value', fakeAsync(inject([NodeService], (service: NodeService) => {
+  it('should resolve with true value', fakeAsync(inject([NodeService], (service: NodeService) => {
        const nd = nodeDeploymentsFake()[0];
        const clusterID = fakeDigitaloceanCluster().id;
        const projectID = fakeProject().id;
        const dcName = fakeDigitaloceanDatacenter().metadata.name;
        let isConfirmed = false;
 
-       service.showNodeDeploymentDeleteDialog(nd, clusterID, projectID, dcName, null).then(confirmed => {
+       service.showNodeDeploymentDeleteDialog(nd, clusterID, projectID, dcName, null).subscribe(confirmed => {
          isConfirmed = confirmed;
        });
        tick();
