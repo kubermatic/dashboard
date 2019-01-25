@@ -4,22 +4,16 @@ import {HealthStatusColor, HealthStatusMessage} from './health-status';
 import {NodeDeploymentHealthStatus} from './node-deployment-health-status';
 
 describe('NodeDeploymentHealthStatus', () => {
-  it('should return correct CSS classes', () => {
+  it('should return correct status for node deployments', () => {
     const nds = nodeDeploymentsFake();
 
     expect(NodeDeploymentHealthStatus.getHealthStatus(nds[0]))
         .toEqual(
-            {
-              color: HealthStatusColor.Green,
-              message: HealthStatusMessage.Running,
-            } as NodeDeploymentHealthStatus,
-            'should return classes for green icon');
+            new NodeDeploymentHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green),
+            'should be correct for running node deployment');
     expect(NodeDeploymentHealthStatus.getHealthStatus(nds[1]))
         .toEqual(
-            {
-              color: HealthStatusColor.Orange,
-              message: HealthStatusMessage.Provisioning,
-            } as NodeDeploymentHealthStatus,
-            'should return classes for orange icon');
+            new NodeDeploymentHealthStatus(HealthStatusMessage.Provisioning, HealthStatusColor.Orange),
+            'should be correct for provisioning node deployment');
   });
 });

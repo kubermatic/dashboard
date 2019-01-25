@@ -9,6 +9,7 @@ export enum HealthStatusMessage {
   Provisioning = 'Provisioning',
   Running = 'Running',
   Updating = 'Updating',
+  Failed = 'Failed',
 }
 
 export class HealthStatus {
