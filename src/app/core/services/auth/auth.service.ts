@@ -8,7 +8,7 @@ export class Auth {
     const token = this.getTokenFromQuery();
     const nonce = this.getNonce();
     if (!!token && !!nonce) {
-      if (this.compareNonceWithToken(token)) {
+      if (this.compareNonceWithToken(token, nonce)) {
         // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
         this.removeFragment();
         this.cookieService.set('token', token, 1, null, null, true);
@@ -47,11 +47,10 @@ export class Auth {
     return '';
   }
 
-  compareNonceWithToken(token: string): boolean {
-    if (!!token && !!this.getNonce()) {
+  compareNonceWithToken(token: string, nonce: string): boolean {
+    if (!!token && !!nonce) {
       const decodedToken = this.decodeToken(token);
-      const nonce = this.getNonce();
-      if (!!nonce && !!decodedToken) {
+      if (!!decodedToken) {
         return (nonce === decodedToken.nonce);
       }
     }
