@@ -29,7 +29,7 @@
   <mat-card class="km-node-deployment-detail-card white">
     <mat-card-header class="km-card-main-header">
       <mat-card-title>
-        <i [matTooltip]="nodeDeploymentHealthStatus.status"
+        <i [matTooltip]="nodeDeploymentHealthStatus.message"
            [ngClass]="nodeDeploymentHealthStatus.color"
            class="km-node-deployment-health"></i>
         <span class="km-node-deployment-name">{{nodeDeployment.name}}</span>
@@ -38,7 +38,7 @@
     <mat-card-content fxLayout="row wrap" class="km-row">
       <km-property>
         <div key>Status</div>
-        <div value>{{nodeDeploymentHealthStatus.status}}</div>
+        <div value>{{nodeDeploymentHealthStatus.message}}</div>
       </km-property>
       <km-property>
         <div key>Replicas</div>
