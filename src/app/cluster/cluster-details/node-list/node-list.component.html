@@ -21,7 +21,7 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <div class="km-row km-accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
+        <div class="km-row km-accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).css">
           <div fxLayout>
             <div fxFlex="3%" class="km-health-state">
               <i [matTooltip]="getNodeHealthStatus(node,i).message" [ngClass]="getNodeHealthStatus(node,i).color"></i>
