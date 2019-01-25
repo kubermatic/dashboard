@@ -1,9 +1,9 @@
 <form [formGroup]="osNodeForm" fxLayout="column">
   <div fxFlex class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Flavor*:" formControlName="flavor">
-        <mat-option *ngIf="!loadingFlavors && isInWizard() && !hasCredentials()" [value]="0">Please enter your credentials first!</mat-option>
-        <mat-option *ngIf="loadingFlavors" [value]="0">Loading sizes...</mat-option>
+      <mat-select formControlName="flavor"
+                  [placeholder]="getFlavorsFormState()[0]"
+                  [disabled]="getFlavorsFormState()[1]">
         <mat-option *ngFor="let flavor of flavors" [value]="flavor.slug">
         {{flavor.slug}} - {{ flavor.memory / 1024 }} GB RAM, {{ flavor.vcpus }} CPU{{ (flavor.vcpus!=1) ? 's' : '' }}, {{ flavor.disk }} GB Disk
         </mat-option>
@@ -11,7 +11,8 @@
     </mat-form-field>
     <div *ngIf="!isInWizard()" class="km-floating-ip-checkbox with-margin">
       <label fxFlex="50%">Allocate Floating IP</label>
-      <i class="fa fa-info-circle km-floating-ip-checkbox-info-icon" matTooltip="Floating IP usage is enforced by selected datacenter"
+      <i class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
+         matTooltip="Floating IP usage is enforced by selected datacenter"
          *ngIf="isFloatingIPEnforced()"></i>
       <mat-checkbox fxFlex="50%" formControlName="useFloatingIP"></mat-checkbox>
     </div>
