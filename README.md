@@ -7,12 +7,26 @@
 Before you can start the application locally you should install the dependencies using `npm i` command.
 
 ### Starting the application
+
+#### Using locally installed NodeJS
 To start development server that will proxy API calls to the https://dev.kubermatic.io/ use 
 `npm start` command and navigate to http://localhost:8000/.
 
 If you would like to connect with your local API then you should use `npm run serve:local`.
 
 The application will automatically reload if you change any of the source files.
+
+#### Using a Docker container
+
+##### With dev.kubermatic.io API
+```bash
+./hack/run-dashboard.sh
+```
+
+##### With locally running API
+```bash
+./hack/run-local-dashboard.sh
+```
 
 ### Formatting the code
 We are using [Google TypeScript Style](https://github.com/google/ts-style) and [Stylelint](https://github.com/stylelint/stylelint) to ensure consistent code formatting and linting.
@@ -33,3 +47,12 @@ Currently e2e tests are being executed against `dev.kubermatic.io` server. Befor
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
 
 Please check `package.json` for more information regarding the available commands and the project setup.
+
+### Running commands within the Docker container
+
+This will run the below commands in a NodeJS Docker container with the source code mounted and set as working directory.
+```bash
+./hack/run-in-docker.sh npm install
+./hack/run-in-docker.sh npm foo
+./hack/run-in-docker.sh npm bar
+```
