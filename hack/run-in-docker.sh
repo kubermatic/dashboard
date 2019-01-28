@@ -3,7 +3,7 @@ set -euo pipefail
 
 IMAGE_NAME="node:8.15-jessie"
 REL_ROOT_DIR="$(dirname "$0")/../"
-ABS_ROOT_DIR="$(realpath ${REL_ROOT_DIR})"
+ABS_ROOT_DIR="$(cd ${REL_ROOT_DIR}; pwd)"
 
 CMD="$@"
 docker run \
