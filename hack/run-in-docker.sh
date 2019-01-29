@@ -10,7 +10,7 @@ docker run \
   -u "$(id -u):$(id -g)" \
   -v ${ABS_ROOT_DIR}:/code \
   -w /code \
-  -p 8000:8000 \
+  --net=host \
   -ti \
   ${IMAGE_NAME} \
   /bin/bash -c "${CMD}"
