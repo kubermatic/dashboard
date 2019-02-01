@@ -8,6 +8,11 @@
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <p>{{data.message}}</p>
+
+      <mat-form-field style="width: 100%" *ngIf="!!data.verifyName">
+        <input id={{data.inputId}} matInput type="text" placeholder={{data.inputPlaceholder}} title={{data.inputTitle}} (blur)="onChange($event)" (keyup)="onChange($event)">
+      </mat-form-field>
+
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
@@ -20,7 +25,8 @@
             color="primary"
             class="mat-primary"
             [mat-dialog-close]="true"
-            id={{data.confirmLabelId}}>
+            id={{data.confirmLabelId}}
+            [disabled]="!inputNameMatches()">
       {{data.confirmLabel}}
     </button>
   </mat-dialog-actions>

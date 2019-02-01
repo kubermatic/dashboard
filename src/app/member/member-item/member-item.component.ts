@@ -80,6 +80,7 @@ export class MemberItemComponent implements OnInit {
         confirmLabelId: 'km-delete-member-dialog-btn',
         cancelLabel: 'Close',
         cancelLabelId: 'km-close-member-dialog-btn',
+        verifyName: false,
       },
     };
 

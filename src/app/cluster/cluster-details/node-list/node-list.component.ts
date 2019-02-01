@@ -59,6 +59,7 @@ export class NodeListComponent implements OnInit {
         confirmLabelId: 'km-delete-node-dialog-btn',
         cancelLabel: 'Close',
         cancelLabelId: 'km-close-node-dialog-btn',
+        verifyName: false,
       },
     };
 

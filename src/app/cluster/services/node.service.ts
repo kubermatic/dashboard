@@ -203,6 +203,7 @@ export class NodeService {
         confirmLabelId: 'km-delete-node-deployment-dialog-btn',
         cancelLabel: 'Close',
         cancelLabelId: 'km-close-node-deployment-dialog-btn',
+        verifyName: false,
       },
     };
 

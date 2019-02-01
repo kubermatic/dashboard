@@ -55,6 +55,7 @@ export class EditSSHKeysItemComponent implements OnInit {
         confirmLabelId: 'km-delete-cluster-sshkey-dialog-btn',
         cancelLabel: 'Close',
         cancelLabelId: 'km-close-cluster-sshkey-dialog-btn',
+        verifyName: false,
       },
     };
 
