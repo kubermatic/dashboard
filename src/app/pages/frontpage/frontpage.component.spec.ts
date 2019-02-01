@@ -5,10 +5,13 @@ import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {ParticlesModule} from 'angular-particle';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {CookieService} from 'ngx-cookie-service';
+
 import {Auth} from '../../core/services/index';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterStub} from '../../testing/router-stubs';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
+
 import {FrontpageComponent} from './frontpage.component';
 
 const modules: any[] = [
@@ -38,6 +41,7 @@ describe('FrontpageComponent', () => {
           providers: [
             {provide: Router, useClass: RouterStub},
             {provide: Auth, useClass: AuthMockService},
+            CookieService,
           ],
         })
         .compileComponents();
