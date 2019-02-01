@@ -10,6 +10,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeService} from '../../services/node.service';
 
 @Component({
@@ -19,6 +20,7 @@ import {NodeService} from '../../services/node.service';
 })
 export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
+  nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
   nodes: NodeEntity[] = [];
   cluster: ClusterEntity;
   clusterProvider: string;
@@ -85,7 +87,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe((nd) => {
           this.nodeDeployment = nd;
-          this.system = this._nodeService.getOperatingSystem(nd.spec.template);
+          this.system = NodeService.getOperatingSystem(this.nodeDeployment.spec.template);
+          this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);
           this._isNodeDeploymentLoaded = true;
         });
   }
@@ -123,10 +126,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   isInitialized(): boolean {
     return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded && this._isNodeDeploymentLoaded;
-  }
-
-  getHealthStatus(): object {
-    return this._nodeService.getHealthStatus(this.nodeDeployment);
   }
 
   goBackToCluster(): void {

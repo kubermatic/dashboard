@@ -9,6 +9,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeService} from '../../services/node.service';
 
 @Component({
@@ -47,13 +48,8 @@ export class NodeDeploymentListComponent implements OnInit {
     return dataSource;
   }
 
-  getHealthStatus(nd: NodeDeploymentEntity, index: number): object {
-    const healthStatus = this._nodeService.getHealthStatus(nd);
-    if (index % 2 !== 0) {
-      healthStatus['class'] += ' km-odd';
-    }
-
-    return healthStatus;
+  getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {
+    return NodeDeploymentHealthStatus.getHealthStatus(nd);
   }
 
   goToDetails(nd: NodeDeploymentEntity) {

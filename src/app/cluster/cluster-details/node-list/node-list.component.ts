@@ -10,6 +10,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -76,36 +77,14 @@ export class NodeListComponent implements OnInit {
     });
   }
 
-  getNodeHealthStatus(node: NodeEntity, index: number): object {
-    const green = 'fa fa-circle green';
-    const red = 'fa fa-circle-o red';
-    const orangeSpinner = 'fa fa-spin fa-circle-o-notch orange';
+  getNodeHealthStatus(n: NodeEntity, i: number): object {
+    const hs = NodeHealthStatus.getHealthStatus(n);
 
-    const nodeHealthStatus = {};
-
-    if (!!node.status.errorMessage && !node.deletionTimestamp) {
-      nodeHealthStatus['color'] = red;
-      nodeHealthStatus['status'] = 'Failed';
-      nodeHealthStatus['class'] = 'km-status-failed';
-    } else if (!!node.status.nodeInfo.kubeletVersion && !node.status.errorMessage && !node.deletionTimestamp) {
-      nodeHealthStatus['color'] = green;
-      nodeHealthStatus['status'] = 'Running';
-      nodeHealthStatus['class'] = 'km-status-running';
-    } else if (!!node.deletionTimestamp) {
-      nodeHealthStatus['color'] = orangeSpinner;
-      nodeHealthStatus['status'] = 'Deleting';
-      nodeHealthStatus['class'] = 'km-status-deleting';
-    } else {
-      nodeHealthStatus['color'] = orangeSpinner;
-      nodeHealthStatus['status'] = 'In progress';
-      nodeHealthStatus['class'] = 'km-status-waiting';
+    if (i % 2 !== 0) {
+      hs.css += ' km-odd';
     }
 
-    if (index % 2 !== 0) {
-      nodeHealthStatus['class'] += ' km-odd';
-    }
-
-    return nodeHealthStatus;
+    return hs;
   }
 
   getFormattedNodeMemory(memory: string): string {
