@@ -4,6 +4,8 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
+import {AppConfigService} from '../app-config.service';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, ProjectService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {StepsService} from '../core/services/wizard/steps.service';
@@ -26,9 +28,11 @@ import {masterVersionsFake} from '../testing/fake-data/cluster-spec.fake';
 import {fakeDigitaloceanCluster} from '../testing/fake-data/cluster.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
+import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import {HealthMockService} from '../testing/services/health-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
+
 import {ProgressComponent} from './progress/progress.component';
 import {SetClusterSpecComponent} from './set-cluster-spec/set-cluster-spec.component';
 import {SetDatacenterComponent} from './set-datacenter/set-datacenter.component';
@@ -46,6 +50,7 @@ import {SetSettingsComponent} from './set-settings/set-settings.component';
 import {ClusterSSHKeysComponent} from './set-settings/ssh-keys/cluster-ssh-keys.component';
 import {SummaryComponent} from './summary/summary.component';
 import {WizardComponent} from './wizard.component';
+
 describe('WizardComponent', () => {
   let fixture: ComponentFixture<WizardComponent>;
   let component: WizardComponent;
@@ -104,6 +109,7 @@ describe('WizardComponent', () => {
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: HealthService, useClass: HealthMockService},
             {provide: ProjectService, useClass: ProjectMockService},
+            {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,
             InitialNodeDataService,
             WizardService,
