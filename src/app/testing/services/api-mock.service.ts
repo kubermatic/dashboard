@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
+import {async} from 'rxjs-compat/scheduler/async';
 import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEntity';
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
@@ -32,7 +33,7 @@ export class ApiMockService {
   constructor() {}
 
   deleteNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
-    return of(null);
+    return of({});
   }
 
   getProjects(): Observable<ProjectEntity[]> {
@@ -40,6 +41,10 @@ export class ApiMockService {
   }
 
   createProject(): Observable<ProjectEntity> {
+    return of(this.project);
+  }
+
+  editProject(projectID: string, editProjectEntity: EditProjectEntity): Observable<any> {
     return of(this.project);
   }
 
@@ -129,5 +134,5 @@ export class ApiMockService {
 }
 
 export function asyncData<T>(data: T): Observable<T> {
-  return defer(() => Promise.resolve(data));
+  return defer(() => of(data, async));
 }

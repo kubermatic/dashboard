@@ -10,7 +10,7 @@ import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEnt
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
@@ -73,6 +73,11 @@ export class ApiService {
   createProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
     const url = `${this.restRoot}/projects`;
     return this.http.post<ProjectEntity>(url, createProjectModel, {headers: this.headers});
+  }
+
+  editProject(projectID: string, editProjectEntity: EditProjectEntity): Observable<any> {
+    const url = `${this.restRoot}/projects/${projectID}`;
+    return this.http.put(url, editProjectEntity, {headers: this.headers});
   }
 
   deleteProject(projectID: string): Observable<any> {

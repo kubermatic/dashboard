@@ -4,6 +4,7 @@ import {AppConfigService} from '../../app-config.service';
 import {ProjectService, UserService} from '../../core/services';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {UserGroupConfig} from '../../shared/model/Config';
+import {EditProjectComponent} from '../edit-project/edit-project.component';
 import {ProjectDeleteConfirmationComponent} from '../project-delete-confirmation/project-delete-confirmation.component';
 
 @Component({
@@ -15,6 +16,7 @@ export class ProjectItemComponent implements OnInit {
   @Input() index: number;
   @Input() project: ProjectEntity;
   clickedDeleteProject = {};
+  clickedEditProject = {};
   userGroup: string;
   userGroupConfig: UserGroupConfig;
 
@@ -36,9 +38,22 @@ export class ProjectItemComponent implements OnInit {
   }
 
   selectProject(): void {
-    if (!this.clickedDeleteProject[this.project.id]) {
+    if (!this.clickedDeleteProject[this.project.id] && !this.clickedEditProject[this.project.id]) {
       this.projectService.changeAndStoreSelectedProject(this.project);
     }
+  }
+
+  editProject(): void {
+    this.clickedEditProject[this.project.id] = true;
+    const modal = this.dialog.open(EditProjectComponent);
+    modal.componentInstance.project = this.project;
+    const sub = modal.afterClosed().subscribe((edited) => {
+      if (!!edited) {
+        this.projectService.changeAndStoreSelectedProject(edited);
+      }
+      delete this.clickedEditProject[this.project.id];
+      sub.unsubscribe();
+    });
   }
 
   deleteProject(): void {

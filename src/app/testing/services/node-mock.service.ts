@@ -1,4 +1,5 @@
 import {EventEmitter, Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
 
 import {InitialNodeData} from '../../core/services/initial-node-data/initial-nodes-data.service';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
@@ -29,17 +30,13 @@ export class NodeMockService {
 
   showNodeDeploymentEditDialog(
       nd: NodeDeploymentEntity, cluster: ClusterEntity, projectID: string, datacenter: DataCenterEntity,
-      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Promise<boolean> {
-    return new Promise((resolve => {
-      resolve(true);
-    }));
+      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Observable<boolean> {
+    return of(true);
   }
 
   showNodeDeploymentDeleteDialog(
       nd: NodeDeploymentEntity, clusterID: string, projectID: string, dcName: string,
-      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Promise<boolean> {
-    return new Promise((resolve => {
-      resolve(true);
-    }));
+      changeEventEmitter: EventEmitter<NodeDeploymentEntity>): Observable<boolean> {
+    return of(true);
   }
 }
