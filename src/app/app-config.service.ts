@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable, Injector} from '@angular/core';
-import {first} from 'rxjs/operators';
+import {tap} from 'rxjs/operators';
 
 import {environment} from '../environments/environment';
 
@@ -16,56 +16,54 @@ export class AppConfigService {
   private http: HttpClient;
 
   constructor(private inj: Injector) {
-    setTimeout(() => {
-      this.http = this.inj.get(HttpClient);
-    });
+    this.http = this.inj.get(HttpClient);
   }
 
-  loadAppConfig(): void {
+  loadAppConfig(): Promise<{}> {
     const jsonfile = environment.configUrl;
-    setTimeout(() => {
-      return this.http.get(jsonfile).pipe(first()).subscribe(
-          (resp) => {
-            this.appConfig = resp as Config;
-          },
-          () => {
-            NotificationActions.error('Error', `Could not read configuration file`);
-          });
-    });
+    return this.http.get(jsonfile)
+        .pipe(tap(
+            (resp) => {
+              this.appConfig = resp as Config;
+            },
+            () => {
+              NotificationActions.error('Error', `Could not read configuration file`);
+            }))
+        .toPromise();
   }
 
   getConfig(): Config {
     return this.appConfig;
   }
 
-  loadUserGroupConfig(): void {
+  loadUserGroupConfig(): Promise<{}> {
     const jsonfile = '../assets/config/userGroupConfig.json';
-    setTimeout(() => {
-      return this.http.get(jsonfile).pipe(first()).subscribe(
-          (resp) => {
-            this.userGroupConfig = resp as UserGroupConfig;
-          },
-          () => {
-            NotificationActions.error('Error', `Could not read user group configuration file`);
-          });
-    });
+    return this.http.get(jsonfile)
+        .pipe(tap(
+            (resp) => {
+              this.userGroupConfig = resp as UserGroupConfig;
+            },
+            () => {
+              NotificationActions.error('Error', `Could not read user group configuration file`);
+            }))
+        .toPromise();
   }
 
   getUserGroupConfig(): UserGroupConfig {
     return this.userGroupConfig;
   }
 
-  loadGitVersion(): void {
+  loadGitVersion(): Promise<{}> {
     const jsonfile = environment.gitVersionUrl;
-    setTimeout(() => {
-      return this.http.get(jsonfile).pipe(first()).subscribe(
-          (resp) => {
-            this.gitVersion = resp as VersionInfo;
-          },
-          () => {
-            NotificationActions.error('Error', `Could not read Git version file`);
-          });
-    });
+    return this.http.get(jsonfile)
+        .pipe(tap(
+            (resp) => {
+              this.gitVersion = resp as VersionInfo;
+            },
+            () => {
+              NotificationActions.error('Error', `Could not read Git version file`);
+            }))
+        .toPromise();
   }
 
   getGitVersion(): VersionInfo {
