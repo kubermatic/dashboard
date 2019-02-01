@@ -1,7 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material';
+import {ApiService} from '../../core/services';
+import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {SSHKeyDeleteConfirmationComponent} from '../sshkey-delete-confirmation/sshkey-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-sshkey-item',
@@ -19,7 +22,8 @@ export class SSHKeyItemComponent implements OnInit {
   publicKeyName: string;
   publicKey: string;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(
+      public dialog: MatDialog, private api: ApiService, private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.publicKeyName = this.sshKey.spec.publicKey.split(' ')[0];
@@ -33,11 +37,32 @@ export class SSHKeyItemComponent implements OnInit {
   }
 
   deleteSshKey(): void {
-    const modal = this.dialog.open(SSHKeyDeleteConfirmationComponent);
-    modal.componentInstance.projectId = this.projectId;
-    modal.componentInstance.sshKey = this.sshKey;
-    const sub = modal.afterClosed().subscribe(() => {
-      sub.unsubscribe();
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        dialogId: 'km-delete-sshkey-dialog',
+        title: 'Remove SSH key from project',
+        message:
+            'You are on the way to remove the SSH key ${this.sshKey.name} from the project. This cannot be undone!',
+        confirmLabel: 'Delete',
+        confirmLabelId: 'km-delete-sshkey-dialog-btn',
+        cancelLabel: 'Close',
+        cancelLabelId: 'km-close-sshkey-dialog-btn',
+        verifyName: false,
+      },
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('sshKeyOverview', 'deleteSshKeyOpened');
+
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteSSHKey(this.sshKey.id, this.projectId).subscribe(() => {
+          NotificationActions.success('Success', 'SSH key has been removed from project');
+          this.googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
+        });
+      }
     });
   }
 
