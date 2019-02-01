@@ -64,18 +64,14 @@ export class ProjectItemComponent implements OnInit {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        dialogId: 'km-delete-project-dialog',
         title: 'Delete Project',
         message: `You are on the way to delete the project ${
             this.project
                 .name}. Deletion of projects cannot be undone! If you know what you are doing, please type the name of the project:`,
         confirmLabel: 'Delete',
-        confirmLabelId: 'km-delete-project-dialog-btn',
         cancelLabel: 'Close',
-        cancelLabelId: 'km-close-project-dialog-btn',
         verifyName: true,
         compareName: this.project.name,
-        inputId: 'km-delete-project-dialog-input',
         inputPlaceholder: 'Name of the Project:',
         inputTitle: 'Project name',
       },

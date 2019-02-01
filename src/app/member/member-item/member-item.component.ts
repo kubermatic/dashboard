@@ -72,14 +72,11 @@ export class MemberItemComponent implements OnInit {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        dialogId: 'km-delete-member-dialog',
         title: 'Remove member from project',
         message: `You are on the way to remove the member ${this.member.name} from the project ${
             this.project.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
-        confirmLabelId: 'km-delete-member-dialog-btn',
         cancelLabel: 'Close',
-        cancelLabelId: 'km-close-member-dialog-btn',
         verifyName: false,
       },
     };

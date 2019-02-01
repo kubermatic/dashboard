@@ -7,9 +7,6 @@ export class ProjectsPage extends NavPage {
   private _addProjectDialog = by.id('km-add-project-dialog');
   private _projectNameInput = by.id('km-add-project-dialog-input');
   private _saveProjectButton = by.id('km-add-project-dialog-save');
-  private _deleteProjectDialog = by.id('km-delete-project-dialog');
-  private _deleteProjectDialogInput = by.id('km-delete-project-dialog-input');
-  private _deleteProjectDialogButton = by.id('km-delete-project-dialog-btn');
   private _editProjectDialogEditBtn= by.id('km-edit-project-dialog-edit-btn');
   private _editProjectDialogInput = by.id('km-edit-project-dialog-input');
   private _editProjectDialog = by.id('km-edit-project-dialog');
@@ -40,18 +37,6 @@ export class ProjectsPage extends NavPage {
 
   getDeleteProjectButton(projectName: string): any {
     return element(by.id(`km-delete-project-${projectName}`));
-  }
-
-  getDeleteProjectDialog(): any {
-    return element(this._deleteProjectDialog);
-  }
-
-  getDeleteProjectDialogInput(): any {
-    return element(this._deleteProjectDialogInput);
-  }
-
-  getDeleteProjectDialogButton(): any {
-    return element(this._deleteProjectDialogButton);
   }
 
   getProjectEditBtn(projectName: string): any {

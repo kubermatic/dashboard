@@ -2,6 +2,7 @@ import {ProjectsPage} from "../../projects/projects.po";
 import {LoginPage} from "../../login/login.po";
 import {browser} from "protractor";
 import {DexPage} from "../../dex/dex.po";
+import {ConfirmationDialog} from "../../shared/confirmation.po";
 import {KMElement} from "../../shared/element-utils";
 import {MembersPage} from "../../member/member";
 import {ClustersPage} from "../../clusters/clusters.po";
@@ -29,6 +30,7 @@ describe('Basic story', () => {
   const createClusterPage = new CreateClusterPage();
   const dexPage = new DexPage();
   const membersPage = new MembersPage();
+  const confirmationDialog = new ConfirmationDialog();
 
   let projectName = 'e2e-test-project';
   const clusterName = 'e2e-test-cluster';
@@ -137,8 +139,8 @@ describe('Basic story', () => {
     KMElement.waitForNotifications();
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
-    KMElement.waitToAppear(membersPage.getDeleteMemberDialog());
-    membersPage.getDeleteMemberDialogBtn().click();
+    KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
+    confirmationDialog.getConfirmationDialogConfirmBtn().click();
 
     // Switch views to reload members list
     clustersPage.navigateTo();
@@ -197,10 +199,10 @@ describe('Basic story', () => {
     KMElement.waitForNotifications();
     KMElement.waitToAppear(projectsPage.getDeleteProjectButton(projectName));
     projectsPage.getDeleteProjectButton(projectName).click();
-    expect(projectsPage.getDeleteProjectDialog().isPresent()).toBeTruthy();
+    expect(confirmationDialog.getConfirmationDialog().isPresent()).toBeTruthy();
 
-    projectsPage.getDeleteProjectDialogInput().sendKeys(projectName);
-    projectsPage.getDeleteProjectDialogButton().click();
+    KMElement.sendKeys(confirmationDialog.getConfirmationDialogInput(), projectName);
+    confirmationDialog.getConfirmationDialogConfirmBtn().click();
 
     KMElement.waitToDisappear(projectsPage.getProjectItem(projectName));
     expect(projectsPage.getProjectItem(projectName).isPresent()).toBeFalsy();

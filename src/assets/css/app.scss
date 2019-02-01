@@ -432,6 +432,10 @@ mat-dialog-content {
 
 .km-dialog-box {
   min-width: 400px;
+
+  &#km-confirmation-dialog mat-form-field {
+    width: 100%;
+  }
 }
 
 // Input Fields

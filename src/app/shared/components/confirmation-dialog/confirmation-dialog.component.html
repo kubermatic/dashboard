@@ -1,4 +1,4 @@
-<div class="km-dialog-box" id={{data.dialogId}} (keydown.enter)="onEnterKeyDown()">
+<div class="km-dialog-box" id="km-confirmation-dialog" (keydown.enter)="onEnterKeyDown()">
   <mat-toolbar>
     {{data.title}}
     <button mat-icon-button mat-dialog-close>
@@ -9,8 +9,8 @@
     <div class="mat-dialog-content">
       <p>{{data.message}}</p>
 
-      <mat-form-field style="width: 100%" *ngIf="!!data.verifyName">
-        <input id={{data.inputId}} matInput type="text" placeholder={{data.inputPlaceholder}} title={{data.inputTitle}} (blur)="onChange($event)" (keyup)="onChange($event)">
+      <mat-form-field *ngIf="!!data.verifyName">
+        <input id="km-confirmation-dialog-input" matInput type="text" placeholder={{data.inputPlaceholder}} title={{data.inputTitle}} (blur)="onChange($event)" (keyup)="onChange($event)">
       </mat-form-field>
 
     </div>
@@ -18,14 +18,14 @@
   <mat-dialog-actions>
     <button mat-raised-button
             [mat-dialog-close]="false"
-            id={{data.cancelLabelId}}>
+            id="km-confirmation-dialog-cancel-btn">
       {{data.cancelLabel}}
     </button>
     <button mat-raised-button
             color="primary"
             class="mat-primary"
             [mat-dialog-close]="true"
-            id={{data.confirmLabelId}}
+            id="km-confirmation-dialog-confirm-btn"
             [disabled]="!inputNameMatches()">
       {{data.confirmLabel}}
     </button>
