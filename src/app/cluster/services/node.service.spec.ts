@@ -34,29 +34,6 @@ describe('NodeService', () => {
        expect(service).toBeTruthy();
      }));
 
-  it('should return correct CSS classes', inject([NodeService], (service: NodeService) => {
-       const nds = nodeDeploymentsFake();
-       const green = 'fa fa-circle green';
-       const orange = 'fa fa-spin fa-circle-o-notch orange';
-
-       expect(service.getHealthStatus(nds[0]))
-           .toEqual(
-               {
-                 color: green,
-                 status: 'Running',
-                 class: 'km-status-running',
-               },
-               'should return classes for green icon');
-       expect(service.getHealthStatus(nds[1]))
-           .toEqual(
-               {
-                 color: orange,
-                 status: 'In progress',
-                 class: 'km-status-waiting',
-               },
-               'should return classes for orange icon');
-     }));
-
   it('should resolve with true value', fakeAsync(inject([NodeService], (service: NodeService) => {
        const nd = nodeDeploymentsFake()[0];
        const clusterID = fakeDigitaloceanCluster().id;

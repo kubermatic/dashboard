@@ -78,32 +78,6 @@ describe('NodeComponent', () => {
     expect(deRemoveButtons.length).toBe(2, 'should display 2 remove button 2');
   });
 
-  it('should return correct css-classes', () => {
-    const green = 'fa fa-circle green';
-    const orange = 'fa fa-spin fa-circle-o-notch orange';
-
-    const nodes = nodesFake();
-
-    component.cluster = fakeDigitaloceanCluster();
-
-    expect(component.getNodeHealthStatus(nodes[0], 0))
-        .toEqual(
-            {
-              color: green,
-              status: 'Running',
-              class: 'km-status-running',
-            },
-            'should return classes for green icon');
-    expect(component.getNodeHealthStatus(nodes[1], 0))
-        .toEqual(
-            {
-              color: orange,
-              status: 'In progress',
-              class: 'km-status-waiting',
-            },
-            'should return classes for orange icon');
-  });
-
   it('should call deleteClusterNode', fakeAsync(() => {
        component.cluster = fakeDigitaloceanCluster();
        component.datacenter = fakeDigitaloceanDatacenter();

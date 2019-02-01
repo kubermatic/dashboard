@@ -29,13 +29,17 @@
   <mat-card class="km-node-deployment-detail-card white">
     <mat-card-header class="km-card-main-header">
       <mat-card-title>
-        <i [matTooltip]="getHealthStatus().status"
-           [ngClass]="getHealthStatus().color"
+        <i [matTooltip]="nodeDeploymentHealthStatus.message"
+           [ngClass]="nodeDeploymentHealthStatus.color"
            class="km-node-deployment-health"></i>
         <span class="km-node-deployment-name">{{nodeDeployment.name}}</span>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap" class="km-row">
+      <km-property>
+        <div key>Status</div>
+        <div value>{{nodeDeploymentHealthStatus.message}}</div>
+      </km-property>
       <km-property>
         <div key>Replicas</div>
         <div value>
@@ -59,13 +63,13 @@
         <div value>{{system}}</div>
       </km-property>
       <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.ubuntu">
-        <div key>Upgrade system on first boot</div>
+        <div key>Upgrade system on the first boot</div>
         <div value>
           <i [ngClass]="nodeDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
         </div>
       </km-property>
       <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.centos">
-        <div key>Upgrade system on first boot</div>
+        <div key>Upgrade system on the first boot</div>
         <div value>
           <i [ngClass]="nodeDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
         </div>

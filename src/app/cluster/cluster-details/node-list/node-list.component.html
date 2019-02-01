@@ -21,10 +21,10 @@
 
     <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <div class="km-row km-accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).class">
+        <div class="km-row km-accordion" *ngFor="let node of nodes, let i = index" (click)="toggleNode(node.id)" [ngClass]="getNodeHealthStatus(node,i).css">
           <div fxLayout>
             <div fxFlex="3%" class="km-health-state">
-              <i [matTooltip]="getNodeHealthStatus(node).status" [ngClass]="getNodeHealthStatus(node,i).color"></i>
+              <i [matTooltip]="getNodeHealthStatus(node,i).message" [ngClass]="getNodeHealthStatus(node,i).color"></i>
             </div>
             <div fxFlex="42%" style="word-break: normal ;" *ngIf="!node.spec.cloud.aws">
               {{node.name}}
