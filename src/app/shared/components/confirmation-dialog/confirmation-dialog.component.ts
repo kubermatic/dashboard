@@ -2,10 +2,13 @@ import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 
 export interface ConfirmationDialogConfig {
+  dialogId: string;
   title: string;
   message: string;
   confirmLabel: string;
+  confirmLabelId: string;
   cancelLabel: string;
+  cancelLabelId: string;
 }
 
 @Component({

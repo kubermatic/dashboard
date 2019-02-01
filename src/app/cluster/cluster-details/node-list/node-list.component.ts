@@ -52,10 +52,13 @@ export class NodeListComponent implements OnInit {
       disableClose: false,
       hasBackdrop: true,
       data: {
+        dialogId: 'km-delete-node-dialog',
         title: 'Delete Node',
         message: `You are on the way to delete the ${node.name} node. It cannot be undone!`,
         confirmLabel: 'Delete',
+        confirmLabelId: 'km-delete-node-dialog-btn',
         cancelLabel: 'Close',
+        cancelLabelId: 'km-close-node-dialog-btn',
       },
     };
 

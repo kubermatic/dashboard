@@ -196,10 +196,13 @@ export class NodeService {
       disableClose: false,
       hasBackdrop: true,
       data: {
+        dialogId: 'km-delete-node-deployment-dialog',
         title: 'Delete Node Deployment',
         message: `You are on the way to delete the ${nd.name} node deployment. It cannot be undone!`,
         confirmLabel: 'Delete',
+        confirmLabelId: 'km-delete-node-deployment-dialog-btn',
         cancelLabel: 'Close',
+        cancelLabelId: 'km-close-node-deployment-dialog-btn',
       },
     };
 
