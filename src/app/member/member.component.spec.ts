@@ -6,6 +6,7 @@ import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
+import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {ApiMockService} from '../testing/services/api-mock.service';
@@ -41,6 +42,7 @@ describe('MemberComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,
+            GoogleAnalyticsService,
           ],
         })
         .compileComponents();

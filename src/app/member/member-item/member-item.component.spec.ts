@@ -4,8 +4,10 @@ import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {of} from 'rxjs';
 import {AppConfigService} from '../../app-config.service';
-import {ProjectService, UserService} from '../../core/services';
+import {ApiService, ProjectService, UserService} from '../../core/services';
+import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterTestingModule} from '../../testing/router-stubs';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
@@ -28,6 +30,9 @@ describe('MemberItemComponent', () => {
   let component: MemberItemComponent;
 
   beforeEach(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['deleteMembers']);
+    apiMock.deleteMembers.and.returnValue(of(null));
+
     TestBed
         .configureTestingModule({
           imports: [
@@ -37,6 +42,8 @@ describe('MemberItemComponent', () => {
             MemberItemComponent,
           ],
           providers: [
+            GoogleAnalyticsService,
+            {provide: ApiService, useValue: apiMock},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: UserService, useClass: UserMockService},
