@@ -34,7 +34,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
-    this.disableSize();
+    this.checkSizeState();
     this.reloadDigitaloceanSizes();
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -43,9 +43,8 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
     return !this.clusterId || this.clusterId.length === 0;
   }
 
-  disableSize(): void {
-    if ((!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token.length === 0) && this.isInWizard() ||
-        (this.sizes.standard.length === 0 && this.sizes.optimized.length === 0)) {
+  checkSizeState(): void {
+    if (this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
       this.doNodeForm.controls.size.disable();
     } else {
       this.doNodeForm.controls.size.enable();
@@ -69,7 +68,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
             this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe((data) => {
               this.sizes = data;
               this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
-              this.disableSize();
+              this.checkSizeState();
             }));
       }
     } else {
@@ -77,7 +76,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
           this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
             this.sizes = data;
             this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
-            this.disableSize();
+            this.checkSizeState();
           }));
     }
   }

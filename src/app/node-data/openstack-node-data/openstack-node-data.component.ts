@@ -38,7 +38,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     this.loadFlavors();
-    this.disableFlavors();
+    this.checkFlavorState();
 
     this.subscriptions.push(this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((dc) => {
       if (dc.spec.openstack.enforce_floating_ip) {
@@ -81,8 +81,8 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
     };
   }
 
-  disableFlavors(): void {
-    if (!this.loadingFlavors && this.isInWizard() && !this.hasCredentials() || this.flavors.length === 0) {
+  checkFlavorState(): void {
+    if (this.flavors.length === 0) {
       this.osNodeForm.controls.flavor.disable();
     } else {
       this.osNodeForm.controls.flavor.enable();
@@ -134,14 +134,14 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
                                       this.cloudSpec.dc)
                                   .subscribe((flavors) => {
                                     this.handleFlavours(flavors);
-                                    this.disableFlavors();
+                                    this.checkFlavorState();
                                   }));
     } else {
       this.loadingFlavors = true;
       this.subscriptions.push(
           this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId).subscribe((flavors) => {
             this.handleFlavours(flavors);
-            this.disableFlavors();
+            this.checkFlavorState();
           }));
     }
   }
