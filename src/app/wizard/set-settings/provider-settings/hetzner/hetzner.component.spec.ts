@@ -38,7 +38,7 @@ describe('HetznerClusterSettingsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the digitalocean cluster cmp', () => {
+  it('should create the hetzner cluster cmp', () => {
     expect(component).toBeTruthy();
   });
 
