@@ -46,15 +46,14 @@ describe('DigitaloceanNodeDataComponent', () => {
     component = fixture.componentInstance;
     component.cloudSpec = fakeDigitaloceanCluster().spec.cloud;
     component.nodeData = nodeDataFake();
+    fixture.detectChanges();
   });
 
   it('should create the add node cmp', () => {
     expect(component).toBeTruthy();
-    fixture.detectChanges();
   });
 
-  it('form valid when initializing since digitalocean has sane defaults for required fields', () => {
-    fixture.detectChanges();
-    expect(component.doNodeForm.valid).toBeTruthy();
+  it('form invalid when initializing', () => {
+    expect(component.doNodeForm.valid).toBeFalsy();
   });
 });
