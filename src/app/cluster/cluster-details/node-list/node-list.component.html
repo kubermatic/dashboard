@@ -32,7 +32,7 @@
             </div>
             <div fxFlex="36%" style="word-break: normal ;" *ngIf="node.spec.cloud.aws">
               {{getNodeName(node)}}
-              <i class="fa fa-info-circle" matTooltip="{{getInfo(node)}}" *ngIf="showInfo(node)"></i>
+              <i class="fa fa-info-circle" matTooltip="{{getInfo(onde)}}" *ngIf="showInfo(node)"></i>
             </div>
             <div fxFlex="14%">
               <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
@@ -178,6 +178,10 @@
                     <div class="km-card-list-content" fxFlex="50%">
                       <div fxFlex="50%" class="km-card-list-key">Node Image:</div>
                       <div fxFlex="50%">{{node.spec.cloud.openstack.image}}</div>
+                    </div>
+                    <div class="km-card-list-content" fxFlex="50%" *ngIf="displayTags(node.spec.cloud.openstack.tags)">
+                      <div fxFlex="50%" class="km-card-list-key">Tags:</div>
+                      <div fxFlex="50%">{{ getTagsFromObject(node.spec.cloud.openstack.tags) }}</div>
                     </div>
                   </ng-container>
 

@@ -4,4 +4,23 @@
       <input matInput formControlName="image" placeholder="Image*:" autocomplete="off">
     </mat-form-field>
   </div>
+
+  <div class="km-form-group-tags-header" *ngIf="!hideOptional">
+    Tags
+    <i class="fa fa-plus" style="float: right;" aria-hidden="true" (click)="addTag()"></i>
+  </div>
+  <div class="km-form-group-tags" *ngIf="!hideOptional">
+    <div fxFlex="100%" *ngFor="let tag of getTagForm(osOptionsForm); let i=index" formArrayName="tags">
+      <div class="km-form-group-tags-inner" [formGroupName]="i">
+        <mat-form-field fxFlex="42%">
+          <input matInput formControlName="key" placeholder="key" autocomplete="off">
+        </mat-form-field>
+        <span class="km-seperator">:</span>
+        <mat-form-field fxFlex="42%">
+          <input matInput formControlName="value" placeholder="value" autocomplete="off">
+        </mat-form-field>
+        <i class="fa fa-times" aria-hidden="true" (click)="deleteTag(i)"></i>
+      </div>
+    </div>
+  </div>
 </form>

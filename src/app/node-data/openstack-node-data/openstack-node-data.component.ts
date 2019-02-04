@@ -75,6 +75,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
           flavor: this.osNodeForm.controls.flavor.value,
           image: this.nodeData.spec.cloud.openstack.image,
           useFloatingIP: this.osNodeForm.controls.useFloatingIP.value,
+          tags: this.nodeData.spec.cloud.openstack.tags,
         },
       },
       valid: this.osNodeForm.valid,
