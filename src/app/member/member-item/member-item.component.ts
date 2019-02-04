@@ -1,12 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 import {AppConfigService} from '../../app-config.service';
-import {UserService} from '../../core/services';
+import {ApiService, UserService} from '../../core/services';
+import {GoogleAnalyticsService} from '../../google-analytics.service';
+import {NotificationActions} from '../../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity, MemberProject} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {UserGroupConfig} from '../../shared/model/Config';
 import {EditMemberComponent} from '../edit-member/edit-member.component';
-import {MemberDeleteConfirmationComponent} from '../member-delete-confirmation/member-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-member-item',
@@ -20,8 +22,9 @@ export class MemberItemComponent implements OnInit {
   userGroupConfig: UserGroupConfig;
   userGroup: string;
 
-  constructor(private dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService) {
-  }
+  constructor(
+      private api: ApiService, private googleAnalyticsService: GoogleAnalyticsService, private dialog: MatDialog,
+      private appConfigService: AppConfigService, private userService: UserService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -65,11 +68,28 @@ export class MemberItemComponent implements OnInit {
   }
 
   deleteMember(): void {
-    const modal = this.dialog.open(MemberDeleteConfirmationComponent);
-    modal.componentInstance.project = this.project;
-    modal.componentInstance.member = this.member;
-    const sub = modal.afterClosed().subscribe((deleted) => {
-      sub.unsubscribe();
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Remove member from project',
+        message: `You are on the way to remove the member ${this.member.name} from the project ${
+            this.project.name}. This cannot be undone!`,
+        confirmLabel: 'Delete',
+        cancelLabel: 'Close',
+      },
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('memberOverview', 'deleteMemberOpened');
+
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteMembers(this.project.id, this.member).subscribe(() => {
+          NotificationActions.success('Success', 'Member has been removed from project');
+          this.googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
+        });
+      }
     });
   }
 }

@@ -19,7 +19,6 @@ import {HetznerProviderSettingsComponent} from './cluster-details/edit-provider-
 import {OpenstackProviderSettingsComponent} from './cluster-details/edit-provider-settings/openstack-provider-settings/openstack-provider-settings.component';
 import {VSphereProviderSettingsComponent} from './cluster-details/edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
 import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-cluster-sshkeys/add-cluster-sshkeys.component';
-import {EditSSHKeyDeleteConfirmationComponent} from './cluster-details/edit-sshkeys/edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
 import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
@@ -60,7 +59,6 @@ const entryComponents: any[] = [
   AzureProviderSettingsComponent,
   EditSSHKeysComponent,
   EditSSHKeysItemComponent,
-  EditSSHKeyDeleteConfirmationComponent,
   AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,
 ];

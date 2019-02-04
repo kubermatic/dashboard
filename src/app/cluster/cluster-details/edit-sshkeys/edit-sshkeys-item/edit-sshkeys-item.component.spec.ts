@@ -3,8 +3,10 @@ import {MatDialog} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {of} from 'rxjs';
 import {AppConfigService} from '../../../../app-config.service';
-import {UserService} from '../../../../core/services';
+import {ApiService, UserService} from '../../../../core/services';
+import {GoogleAnalyticsService} from '../../../../google-analytics.service';
 import {SharedModule} from '../../../../shared/shared.module';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
@@ -22,6 +24,9 @@ describe('EditSSHKeysItemComponent', () => {
   let component: EditSSHKeysItemComponent;
 
   beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['deleteClusterSSHKey']);
+    apiMock.deleteClusterSSHKey.and.returnValue(of(null));
+
     TestBed
         .configureTestingModule({
           imports: [
@@ -32,8 +37,10 @@ describe('EditSSHKeysItemComponent', () => {
           ],
           providers: [
             MatDialog,
+            {provide: ApiService, useValue: apiMock},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            GoogleAnalyticsService,
           ],
         })
         .compileComponents();

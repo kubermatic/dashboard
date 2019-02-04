@@ -1,12 +1,14 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatDialogConfig} from '@angular/material';
 import {AppConfigService} from '../../../../app-config.service';
-import {UserService} from '../../../../core/services';
+import {ApiService, UserService} from '../../../../core/services';
+import {GoogleAnalyticsService} from '../../../../google-analytics.service';
+import {NotificationActions} from '../../../../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../../../../shared/model/Config';
-import {EditSSHKeyDeleteConfirmationComponent} from '../edit-sshkey-delete-confirmation/edit-sshkey-delete-confirmation.component';
 
 @Component({
   selector: 'kubermatic-edit-sshkeys-item',
@@ -23,7 +25,9 @@ export class EditSSHKeysItemComponent implements OnInit {
   userGroup: string;
   userGroupConfig: UserGroupConfig;
 
-  constructor(public dialog: MatDialog, private userService: UserService, private appConfigService: AppConfigService) {}
+  constructor(
+      public dialog: MatDialog, private api: ApiService, private googleAnalyticsService: GoogleAnalyticsService,
+      private userService: UserService, private appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -39,13 +43,29 @@ export class EditSSHKeysItemComponent implements OnInit {
   }
 
   deleteSshKey(): void {
-    const modal = this.dialog.open(EditSSHKeyDeleteConfirmationComponent);
-    modal.componentInstance.projectID = this.projectID;
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.sshKey = this.sshKey;
-    const sub = modal.afterClosed().subscribe(() => {
-      sub.unsubscribe();
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Remove SSH key from cluster',
+        message: `You are on the way to remove the SSH key ${this.sshKey.name} from cluster ${
+            this.cluster.name}. This cannot be undone!`,
+        confirmLabel: 'Delete',
+        cancelLabel: 'Close',
+      },
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteSshKeyOpened');
+
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteClusterSSHKey(this.sshKey.id, this.cluster.id, this.datacenter.metadata.name, this.projectID)
+            .subscribe(() => {
+              NotificationActions.success('Success', 'SSH key has been removed from cluster');
+              this.googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
+            });
+      }
     });
   }
 }
