@@ -19,12 +19,10 @@ import {EditMemberComponent} from './member/edit-member/edit-member.component';
 import {MobileNavigationComponent} from './overlays';
 import {SharedModule} from './shared/shared.module';
 
-const appInitializerFn = (appConfig: AppConfigService) => {
-  return () => {
-    appConfig.loadAppConfig();
-    appConfig.loadUserGroupConfig();
-    appConfig.loadGitVersion();
-  };
+const appInitializerFn = (appConfig: AppConfigService): Function => {
+  return () => appConfig.loadAppConfig()
+                   .then(() => appConfig.loadUserGroupConfig())
+                   .then(() => appConfig.loadGitVersion());
 };
 
 @NgModule({

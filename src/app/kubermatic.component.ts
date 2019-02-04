@@ -45,17 +45,15 @@ export class KubermaticComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    setTimeout(() => {
-      this.config = this.appConfigService.getConfig();
-      this.version = this.appConfigService.getGitVersion();
-      if (this.config.google_analytics_code) {
-        this.googleAnalyticsService.activate(
-            this.config.google_analytics_code,
-            this.config.google_analytics_config,
-            this.router.url,
-        );
-      }
-    }, 3000);
+    this.config = this.appConfigService.getConfig();
+    this.version = this.appConfigService.getGitVersion();
+    if (this.config.google_analytics_code) {
+      this.googleAnalyticsService.activate(
+          this.config.google_analytics_code,
+          this.config.google_analytics_config,
+          this.router.url,
+      );
+    }
     this.sidenavService.setSidenav(this.sidenav);
   }
 

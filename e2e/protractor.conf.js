@@ -13,12 +13,12 @@ function createConfig() {
     ],
 
     maxSessions: 1,
-    multiCapabilities: [{
+    capabilities: {
       browserName: 'chrome',
       chromeOptions: {
         args: ['--no-sandbox', '--disable-gpu', '--window-size=1920,1080']
       }
-    }],
+    },
 
     framework: 'jasmine',
     jasmineNodeOpts: {
@@ -49,16 +49,29 @@ function createConfig() {
       }));
 
       browser.waitForAngularEnabled(false);
+
+      afterEach(() => {
+        browser.manage().logs().get('browser').then(function (browserLog) {
+          browserLog.forEach((entry) => {
+            console.log('log: ' + entry.message);
+          });
+        });
+      });
     }
   };
 
   if (!!process.env.JOB_NAME) {
-    config.multiCapabilities = [{
+    config.capabilities = {
       browserName: 'chrome',
       chromeOptions: {
         args: ['--headless', '--no-sandbox', '--disable-gpu', '--window-size=1920,1080', '--disable-extensions', '--disable-dev-shm-usage', '--disable-infobars']
+      },
+      loggingPrefs: {
+        driver: 'DEBUG',
+        server: 'DEBUG',
+        browser: 'DEBUG'
       }
-    }];
+    };
   }
 
   return config;

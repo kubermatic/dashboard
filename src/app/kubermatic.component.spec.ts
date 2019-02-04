@@ -17,6 +17,7 @@ import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
 import {SharedModule} from './shared/shared.module';
 import {ApiMockService} from './testing/services/api-mock.service';
+import {AppConfigMockService} from './testing/services/app-config-mock.service';
 import {AuthMockService} from './testing/services/auth-mock.service';
 import {DatacenterMockService} from './testing/services/datacenter-mock.service';
 import {ProjectMockService} from './testing/services/project-mock.service';
@@ -62,9 +63,9 @@ describe('KubermaticComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: UserService, useClass: UserMockService},
+            {provide: AppConfigService, useClass: AppConfigMockService},
             AuthGuard,
             SidenavService,
-            AppConfigService,
             GoogleAnalyticsService,
           ],
         })

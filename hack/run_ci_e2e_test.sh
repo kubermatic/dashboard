@@ -60,4 +60,5 @@ export KUBERMATIC_DEX_DEV_E2E_PASSWORD=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' |
 export KUBERMATIC_DEX_DEV_E2E_USERNAME=$(${DEX_CLIENT_BIN} --dex-host=localhost:5557 --action=create --randomize --prefix=${E2E_USERNAME_PREFIX} --email-domain=${E2E_USER_EMAIL_DOMAIN} --password=${KUBERMATIC_DEX_DEV_E2E_PASSWORD})
 echo "Created user: ${KUBERMATIC_DEX_DEV_E2E_USERNAME}"
 
+npm run versioninfo
 npm run e2e
