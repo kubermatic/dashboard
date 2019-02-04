@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DatacenterService} from '../../../core/services/datacenter/datacenter.service';
+import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../testing/fake-data/cluster.fake';
@@ -30,7 +30,7 @@ describe('OpenstackOptionsComponent', () => {
           declarations: [
             OpenstackOptionsComponent,
           ],
-          providers: [NodeDataService, {provide: DatacenterService, useClass: DatacenterMockService}],
+          providers: [NodeDataService, WizardService, {provide: DatacenterService, useClass: DatacenterMockService}],
         })
         .compileComponents();
   }));
@@ -54,7 +54,9 @@ describe('OpenstackOptionsComponent', () => {
   it('should call getOsOptionsData method', () => {
     component.osOptionsForm.controls.image.patchValue('test-image');
     fixture.detectChanges();
-    expect(component.getOsOptionsData())
-        .toEqual({spec: {openstack: {flavor: 'm1.small', image: 'test-image', useFloatingIP: false}}, valid: true});
+    expect(component.getOsOptionsData()).toEqual({
+      spec: {openstack: {flavor: 'm1.small', image: 'test-image', useFloatingIP: false, tags: {}}},
+      valid: true
+    });
   });
 });

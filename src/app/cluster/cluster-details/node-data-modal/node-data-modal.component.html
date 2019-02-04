@@ -6,7 +6,7 @@
       <i class="fa fa-times" aria-hidden="true"></i>
     </button>
   </mat-toolbar>
-  <mat-tab-group class="km-change-view" (selectedTabChange)="onTabChange($event)" *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown && !data.cluster.spec.cloud.openstack">
+  <mat-tab-group class="km-change-view" (selectedTabChange)="onTabChange($event)" *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown">
     <mat-tab label="Simple"></mat-tab>
     <mat-tab label="Extended"></mat-tab>
   </mat-tab-group>

@@ -845,3 +845,7 @@ div.km-form-group-tags {
     cursor: pointer;
   }
 }
+
+.km-add-node-inner .km-form-group-tags-inner mat-form-field {
+  width: 45% !important;
+}
