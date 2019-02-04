@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"log"
 	"net/http"
 	"os"
@@ -11,6 +10,8 @@ import (
 	"strings"
 	"syscall"
 	"time"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 func main() {
@@ -53,11 +54,14 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	// Forces caches to submit the request to the origin server for validation before releasing a cached copy.
-	w.Header().Add("Cache-Control", "no-cache")
+	// disable caching for the main HTML page
+	if r.URL.Path == "/" || r.URL.Path == "/index.html" {
+		// Forces caches to submit the request to the origin server for validation before releasing a cached copy.
+		w.Header().Add("Cache-Control", "no-cache")
 
-	// It is used for backwards compatibility with HTTP/1.0 caches.
-	w.Header().Add("Pragma", "no-cache")
+		// It is used for backwards compatibility with HTTP/1.0 caches.
+		w.Header().Add("Pragma", "no-cache")
+	}
 
 	// Don't list directories, a directory has a / suffix.
 	if r.URL.Path != "/" && strings.HasSuffix(r.URL.Path, "/") {
