@@ -37,7 +37,7 @@ describe('Basic story', () => {
   const providerName = 'bringyourown';
   const datacenterLocation = 'Frankfurt';
 
-  const memberEmail = 'roxy@kubermatic.io';
+  const memberEmail = 'roxy2@kubermatic.io';
 
   beforeAll(() => {
     loginPage.navigateTo();
