@@ -7,8 +7,6 @@ export class MembersPage extends NavPage {
   private _addMemberDialogEmailInput = by.id('km-add-member-dialog-email-input');
   private _addMemberDialogGroupCombobox = by.id('km-add-member-dialog-group-combobox');
   private _addMemberDialogAddBtn = by.id('km-add-member-dialog-add-btn');
-  private _deleteMemberDialogBtn = by.id('km-delete-member-dialog-btn');
-  private _deleteMemberDialog = by.id('km-delete-member-dialog');
   private _editMemberDialogEditBtn = by.id('km-edit-member-dialog-edit-btn');
   private _editMemberDialogGroupCombobox = by.id('km-edit-member-dialog-group-combobox');
   private _editMemberDialog = by.id('km-edit-member-dialog');
@@ -55,14 +53,6 @@ export class MembersPage extends NavPage {
 
   getMemberGroup(email: string): any {
     return element(by.xpath(`${this._getMemberItemPath(email)}//..//*[contains(@class,'km-member-group')]`));
-  }
-
-  getDeleteMemberDialog(): any {
-    return element(this._deleteMemberDialog);
-  }
-
-  getDeleteMemberDialogBtn(): any {
-    return element(this._deleteMemberDialogBtn);
   }
 
   getMemberEditBtn(email: string): any {

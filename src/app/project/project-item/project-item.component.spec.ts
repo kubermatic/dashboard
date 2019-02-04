@@ -5,8 +5,10 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {of} from 'rxjs';
 import {AppConfigService} from '../../app-config.service';
-import {ProjectService, UserService} from '../../core/services';
+import {ApiService, ProjectService, UserService} from '../../core/services';
+import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
@@ -29,6 +31,9 @@ describe('ProjectItemComponent', () => {
   let component: ProjectItemComponent;
 
   beforeEach(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['deleteProject']);
+    apiMock.deleteProject.and.returnValue(of(null));
+
     TestBed
         .configureTestingModule({
           imports: [
@@ -43,6 +48,8 @@ describe('ProjectItemComponent', () => {
             {provide: Router, useClass: RouterStub},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: ApiService, useValue: apiMock},
+            GoogleAnalyticsService,
           ],
         })
         .compileComponents();

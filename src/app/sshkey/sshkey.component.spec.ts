@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, UserService} from '../core/services';
+import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {ApiMockService} from '../testing/services/api-mock.service';
@@ -41,6 +42,7 @@ describe('SSHKeyComponent', () => {
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             MatDialog,
+            GoogleAnalyticsService,
           ],
         })
         .compileComponents();
