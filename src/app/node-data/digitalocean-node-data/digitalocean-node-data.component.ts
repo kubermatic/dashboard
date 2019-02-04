@@ -34,6 +34,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
+    this.checkSizeState();
     this.reloadDigitaloceanSizes();
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -42,13 +43,21 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
     return !this.clusterId || this.clusterId.length === 0;
   }
 
-  getSizesFormState(): [string, boolean] {
-    if ((!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token.length === 0) && this.isInWizard()) {
-      return ['Please enter a valid token first!', true];
-    } else if (this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
-      return ['Loading sizes...', true];
+  checkSizeState(): void {
+    if (this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
+      this.doNodeForm.controls.size.disable();
     } else {
-      return ['Node Size*:', false];
+      this.doNodeForm.controls.size.enable();
+    }
+  }
+
+  getSizesFormState(): string {
+    if ((!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token.length === 0) && this.isInWizard()) {
+      return 'Please enter a valid token first!';
+    } else if (this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
+      return 'Loading sizes...';
+    } else {
+      return 'Node Size*:';
     }
   }
 
@@ -59,6 +68,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
             this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe((data) => {
               this.sizes = data;
               this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
+              this.checkSizeState();
             }));
       }
     } else {
@@ -66,6 +76,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
           this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
             this.sizes = data;
             this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
+            this.checkSizeState();
           }));
     }
   }

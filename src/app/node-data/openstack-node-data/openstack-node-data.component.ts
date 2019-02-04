@@ -38,6 +38,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     this.loadFlavors();
+    this.checkFlavorState();
 
     this.subscriptions.push(this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((dc) => {
       if (dc.spec.openstack.enforce_floating_ip) {
@@ -80,13 +81,21 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
     };
   }
 
-  getFlavorsFormState(): [string, boolean] {
-    if (!this.loadingFlavors && this.isInWizard() && !this.hasCredentials()) {
-      return ['Please enter your credentials first!', true];
-    } else if (this.loadingFlavors) {
-      return ['Loading flavors...', true];
+  checkFlavorState(): void {
+    if (this.flavors.length === 0) {
+      this.osNodeForm.controls.flavor.disable();
     } else {
-      return ['Flavor*:', false];
+      this.osNodeForm.controls.flavor.enable();
+    }
+  }
+
+  getFlavorsFormState(): string {
+    if (!this.loadingFlavors && this.isInWizard() && !this.hasCredentials()) {
+      return 'Please enter your credentials first!';
+    } else if (this.loadingFlavors) {
+      return 'Loading flavors...';
+    } else {
+      return 'Flavor*:';
     }
   }
 
@@ -123,11 +132,17 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
                                       this.cloudSpec.openstack.username, this.cloudSpec.openstack.password,
                                       this.cloudSpec.openstack.tenant, this.cloudSpec.openstack.domain,
                                       this.cloudSpec.dc)
-                                  .subscribe((flavors) => this.handleFlavours(flavors)));
+                                  .subscribe((flavors) => {
+                                    this.handleFlavours(flavors);
+                                    this.checkFlavorState();
+                                  }));
     } else {
       this.loadingFlavors = true;
-      this.subscriptions.push(this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId)
-                                  .subscribe((flavors) => this.handleFlavours(flavors)));
+      this.subscriptions.push(
+          this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId).subscribe((flavors) => {
+            this.handleFlavours(flavors);
+            this.checkFlavorState();
+          }));
     }
   }
 
