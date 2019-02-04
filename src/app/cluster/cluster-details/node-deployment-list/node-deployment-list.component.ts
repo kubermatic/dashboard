@@ -60,13 +60,16 @@ export class NodeDeploymentListComponent implements OnInit {
 
   showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
     event.stopPropagation();
-    this._nodeService.showNodeDeploymentEditDialog(
-        nd, this.cluster, this.projectID, this.datacenter, this.changeNodeDeployment);
+    this._nodeService
+        .showNodeDeploymentEditDialog(nd, this.cluster, this.projectID, this.datacenter, this.changeNodeDeployment)
+        .subscribe(() => {});
   }
 
   showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {
     event.stopPropagation();
-    this._nodeService.showNodeDeploymentDeleteDialog(
-        nd, this.cluster.id, this.projectID, this.datacenter.metadata.name, this.changeNodeDeployment);
+    this._nodeService
+        .showNodeDeploymentDeleteDialog(
+            nd, this.cluster.id, this.projectID, this.datacenter.metadata.name, this.changeNodeDeployment)
+        .subscribe(() => {});
   }
 }
