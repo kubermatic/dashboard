@@ -69,13 +69,18 @@ describe('Basic story', () => {
     projectsPage.getSaveProjectButton().click();
 
     KMElement.waitToDisappear(projectsPage.getAddProjectDialog());
+    KMElement.waitForRedirect("/clusters");
+    // We need to wait for autoredirect after create to finish otherwise it will autoredirect again after too fast page switch.
+    browser.sleep(5000);
     projectsPage.navigateTo();
+    KMElement.waitForRedirect("/projects");
     KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
 
     expect(projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
   });
 
   it('should create a new cluster', () => {
+    clustersPage.navigateTo();
     KMElement.waitForClickable(clustersPage.getAddClusterTopBtn());
 
     clustersPage.getCreateClusterNavButton().click();
