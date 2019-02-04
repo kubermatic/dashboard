@@ -77,7 +77,6 @@ export class MemberItemComponent implements OnInit {
             this.project.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
-        verifyName: false,
       },
     };
 

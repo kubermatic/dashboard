@@ -52,7 +52,6 @@ export class EditSSHKeysItemComponent implements OnInit {
             this.cluster.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
-        verifyName: false,
       },
     };
 

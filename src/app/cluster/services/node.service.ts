@@ -200,7 +200,6 @@ export class NodeService {
         message: `You are on the way to delete the ${nd.name} node deployment. It cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
-        verifyName: false,
       },
     };
 

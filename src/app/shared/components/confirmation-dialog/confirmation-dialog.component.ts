@@ -6,7 +6,6 @@ export interface ConfirmationDialogConfig {
   message: string;
   confirmLabel: string;
   cancelLabel: string;
-  verifyName: boolean;
   // following fields only required, if dialog should have an input field for verification
   compareName?: string;
   inputPlaceholder?: string;
@@ -37,7 +36,7 @@ export class ConfirmationDialogComponent {
   }
 
   inputNameMatches(): boolean {
-    if (!!this.data.verifyName) {
+    if (!!this.data.compareName && this.data.compareName.length > 0) {
       return this.inputName === this.data.compareName;
     }
     return true;

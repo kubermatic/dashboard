@@ -9,7 +9,7 @@
     <div class="mat-dialog-content">
       <p>{{data.message}}</p>
 
-      <mat-form-field *ngIf="!!data.verifyName">
+      <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">
         <input id="km-confirmation-dialog-input" matInput type="text" placeholder={{data.inputPlaceholder}} title={{data.inputTitle}} (blur)="onChange($event)" (keyup)="onChange($event)">
       </mat-form-field>
 

@@ -49,7 +49,6 @@ export class SSHKeyItemComponent implements OnInit {
         confirmLabelId: 'km-delete-sshkey-dialog-btn',
         cancelLabel: 'Close',
         cancelLabelId: 'km-close-sshkey-dialog-btn',
-        verifyName: false,
       },
     };
 

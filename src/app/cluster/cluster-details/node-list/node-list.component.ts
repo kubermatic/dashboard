@@ -56,7 +56,6 @@ export class NodeListComponent implements OnInit {
         message: `You are on the way to delete the ${node.name} node. It cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
-        verifyName: false,
       },
     };
 
