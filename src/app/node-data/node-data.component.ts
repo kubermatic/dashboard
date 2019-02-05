@@ -18,6 +18,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() nodeData: NodeData;
   @Input() existingNodesCount: number;
+  @Input() isInWizard = false;
   projectId: string;
   seedDCName: string;
   nodeForm: FormGroup;
@@ -36,7 +37,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
           this.nodeData.count,
           [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
       operatingSystem: new FormControl(Object.keys(this.nodeData.spec.operatingSystem)[0], Validators.required),
-      name: new FormControl({value: this.nodeData.name, disabled: this.nodeData.name && this.nodeData.name.length > 0}),
+      name: new FormControl({
+        value: this.nodeData.name,
+        disabled: this.nodeData.name && this.nodeData.name.length > 0 && !this.isInWizard
+      }),
     });
 
     this.nodeForm.controls.count.markAsTouched();
