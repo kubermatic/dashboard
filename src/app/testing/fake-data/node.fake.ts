@@ -320,6 +320,7 @@ export function nodeDataFake(): NodeData {
           flavor: 'm1.small',
           image: '',
           useFloatingIP: false,
+          tags: {},
         },
         hetzner: {
           type: 'cx31',
@@ -373,6 +374,7 @@ export function nodeDataCentOsFake(): NodeData {
           flavor: 'm1.small',
           image: '',
           useFloatingIP: false,
+          tags: {},
         },
         hetzner: {
           type: 'cx31',
@@ -426,6 +428,7 @@ export function nodeDataContainerLinuxFake(): NodeData {
           flavor: 'm1.small',
           image: '',
           useFloatingIP: false,
+          tags: {},
         },
         hetzner: {
           type: 'cx31',
