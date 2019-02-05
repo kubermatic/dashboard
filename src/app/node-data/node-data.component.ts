@@ -129,6 +129,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     }
   }
 
+  getNamePlaceholder(): string {
+    return `Name${this.isNameDisabled ? '' : ' (optional)'}`;
+  }
+
   generateName(): void {
     this.nodeForm.patchValue({name: this.nameGenerator.generateName()});
   }

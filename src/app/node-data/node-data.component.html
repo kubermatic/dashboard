@@ -1,7 +1,7 @@
 <form [formGroup]="nodeForm" fxLayout="column">
   <div fxLayout="row" fxLayoutGap="16px">
     <mat-form-field>
-      <input matInput formControlName="name" type="text" autocomplete="off" placeholder="Name (optional)">
+      <input matInput formControlName="name" type="text" autocomplete="off" [placeholder]="getNamePlaceholder()">
     </mat-form-field>
     <div fxLayoutAlign=" center"><button mat-button color="primary" (click)="generateName()" *ngIf="!isNameDisabled">Random</button></div>
   </div>
