@@ -21,6 +21,7 @@ export class GroupConfig {
   sshKeys?: SSHKeys;
   clusters?: Clusters;
   nodes?: Nodes;
+  nodeDeployments?: NodeDeployments;
 }
 
 export class Projects {
@@ -53,6 +54,14 @@ export class Clusters {
 
 export class Nodes {
   view?: boolean;
+  edit?: boolean;
+  create?: boolean;
+  delete?: boolean;
+}
+
+export class NodeDeployments {
+  view?: boolean;
+  edit?: boolean;
   create?: boolean;
   delete?: boolean;
 }
