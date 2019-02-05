@@ -10,6 +10,7 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-openstack-options',
   templateUrl: './openstack-options.component.html',
+  styleUrls: ['./openstack-options.component.scss'],
 })
 
 export class OpenstackOptionsComponent implements OnInit, OnDestroy {

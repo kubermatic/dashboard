@@ -7,7 +7,7 @@
 
   <div class="km-form-group-tags-header" *ngIf="!hideOptional">
     Tags
-    <i class="fa fa-plus" style="float: right;" aria-hidden="true" (click)="addTag()"></i>
+    <i class="fa fa-plus" aria-hidden="true" (click)="addTag()"></i>
   </div>
   <div class="km-form-group-tags" *ngIf="!hideOptional">
     <div fxFlex="100%" *ngFor="let tag of getTagForm(osOptionsForm); let i=index" formArrayName="tags">
