@@ -104,6 +104,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         flavor: 'm1.small',
         image: '',
         useFloatingIP: false,
+        tags: {'': ''},
       };
       return osSpec;
     case NodeProvider.VSPHERE:

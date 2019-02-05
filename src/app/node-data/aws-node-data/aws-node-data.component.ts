@@ -10,7 +10,6 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-aws-node-data',
   templateUrl: './aws-node-data.component.html',
-  styleUrls: ['./aws-node-data.component.scss'],
 })
 
 export class AWSNodeDataComponent implements OnInit, OnDestroy {

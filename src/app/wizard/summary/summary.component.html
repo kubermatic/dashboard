@@ -349,6 +349,10 @@
                 <div fxFlex="50%" class="km-card-list-key">Node Image</div>
                 <div fxFlex="50%">{{ nodeData.spec.cloud.openstack.image }}</div>
               </div>
+              <div class="km-card-list-content" fxFlex="50%" *ngIf="displayTags(nodeData.spec.cloud.openstack.tags)">
+                <div fxFlex="50%" class="km-card-list-key">Tags</div>
+                <div fxFlex="50%">{{ getTagsFromObject(nodeData.spec.cloud.openstack.tags) }}</div>
+              </div>
             </ng-container>
 
             <!-- Hetzner Nodes -->
