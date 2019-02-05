@@ -3,7 +3,7 @@
     <mat-form-field>
       <input matInput formControlName="name" type="text" autocomplete="off" placeholder="Name (optional)">
     </mat-form-field>
-    <div fxLayoutAlign=" center"><button mat-button color="primary" (click)="generateName()">Random</button></div>
+    <div fxLayoutAlign=" center"><button mat-button color="primary" (click)="generateName()" *ngIf="!isNameDisabled">Random</button></div>
   </div>
 
   <mat-form-field fxFlex>

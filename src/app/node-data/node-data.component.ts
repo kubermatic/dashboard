@@ -21,6 +21,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() existingNodesCount: number;
   @Input() isInWizard = false;
+  isNameDisabled: boolean;
   projectId: string;
   seedDCName: string;
   nodeForm: FormGroup;
@@ -34,15 +35,14 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       private wizardService: WizardService, private _dc: DatacenterService, private _project: ProjectService) {}
 
   ngOnInit(): void {
+    this.isNameDisabled = this.nodeData.name && this.nodeData.name.length > 0 && !this.isInWizard;
+
     this.nodeForm = new FormGroup({
       count: new FormControl(
           this.nodeData.count,
           [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
       operatingSystem: new FormControl(Object.keys(this.nodeData.spec.operatingSystem)[0], Validators.required),
-      name: new FormControl({
-        value: this.nodeData.name,
-        disabled: this.nodeData.name && this.nodeData.name.length > 0 && !this.isInWizard
-      }),
+      name: new FormControl({value: this.nodeData.name, disabled: this.isNameDisabled}),
     });
 
     this.nodeForm.controls.count.markAsTouched();
