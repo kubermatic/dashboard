@@ -14,8 +14,6 @@ import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
   templateUrl: './node-data.component.html',
   styleUrls: ['./node-data.component.scss'],
 })
-
-
 export class NodeDataComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() nodeData: NodeData;
@@ -26,9 +24,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   operatingSystemForm: FormGroup;
   hideOptional = true;
   private subscriptions: Subscription[] = [];
-
   private providerData: NodeProviderData = {valid: false};
-
 
   constructor(
       private addNodeService: NodeDataService, private wizardService: WizardService, private _dc: DatacenterService,
@@ -40,6 +36,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
           this.nodeData.count,
           [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
       operatingSystem: new FormControl(Object.keys(this.nodeData.spec.operatingSystem)[0], Validators.required),
+      name: new FormControl({value: this.nodeData.name, disabled: this.nodeData.name && this.nodeData.name.length > 0}),
     });
 
     this.nodeForm.controls.count.markAsTouched();
@@ -62,13 +59,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
-
     this.subscriptions.push(this.nodeForm.valueChanges.subscribe(() => {
       this.operatingSystemForm.setValue(
           {distUpgradeOnBootUbuntu: false, distUpgradeOnBootCentos: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
-
 
     this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
@@ -135,6 +130,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
         operatingSystem: this.getOSSpec(),
         versions: {},
       },
+      name: this.nodeForm.controls.name.value,
       count: this.nodeForm.controls.count.value,
       valid: this.providerData.valid,
     };
