@@ -281,15 +281,15 @@ export class WizardComponent implements OnInit, OnDestroy {
 
                   const isReady = new Subject<boolean>();
                   const timer = interval(5000).pipe(takeUntil(isReady));
-                  timer.subscribe((tick) => {
-                    this.api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe((clusterRes) => {
+                  timer.subscribe(() => {
+                    this.api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe(() => {
                       this.router.navigate(
                           ['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
 
                       if (this.clusterSSHKeys.length > 0) {
                         for (const key of this.clusterSSHKeys) {
                           this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id)
-                              .subscribe((sshkey) => {
+                              .subscribe(() => {
                                 NotificationActions.success('Success', `SSH key ${key.name} was added successfully`);
                               });
                         }
@@ -301,7 +301,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
                   if (this.clusterProviderFormData.provider !== 'bringyourown') {
                     this.initialNodeDataService.storeInitialNodeData(
-                        this.addNodeData.count, cluster, this.addNodeData.spec);
+                        this.addNodeData.name, this.addNodeData.count, cluster, this.addNodeData.spec);
                   }
                 },
                 () => {

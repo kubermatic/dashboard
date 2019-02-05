@@ -30,6 +30,7 @@ export class NodeService {
 
   private static _convertNodeData(initialNodeData: InitialNodeData): NodeData {
     return {
+      name: initialNodeData.name,
       count: initialNodeData.nodeCount,
       spec: initialNodeData.nodeSpec,
     };

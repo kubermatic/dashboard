@@ -3,6 +3,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {NodeSpec} from '../../../shared/entity/NodeEntity';
 
 export class InitialNodeData {
+  name: string;
   cluster: string;
   nodeCount: number;
   nodeSpec: NodeSpec;
@@ -10,10 +11,9 @@ export class InitialNodeData {
 
 @Injectable()
 export class InitialNodeDataService {
-  constructor() {}
-
-  storeInitialNodeData(nodeCount: number, cluster: ClusterEntity, nodeSpec: NodeSpec): void {
+  storeInitialNodeData(name: string, nodeCount: number, cluster: ClusterEntity, nodeSpec: NodeSpec): void {
     const data: InitialNodeData = {
+      name,
       nodeCount,
       nodeSpec,
       cluster: cluster.id,
