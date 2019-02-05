@@ -6,7 +6,7 @@
               (click)="addNode()"
               [disabled]="!isClusterRunning"
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
-              [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.create">
+              [disabled]="!!userGroup && !userGroupConfig[userGroup].nodeDeployments.create">
         <i class="fa fa-plus km-action-button-icon" aria-hidden="true"></i>
         Add Node Deployment
       </button>

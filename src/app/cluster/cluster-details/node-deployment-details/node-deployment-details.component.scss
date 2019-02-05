@@ -4,6 +4,10 @@
 .km-icon-edit {
   height: 14px;
   width: 14px;
+
+  &.km-disabled {
+    opacity: 0.3;
+  }
 }
 
 .km-node-deployment-detail-card {

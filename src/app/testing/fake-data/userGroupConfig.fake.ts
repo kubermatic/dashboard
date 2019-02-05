@@ -29,6 +29,13 @@ export function fakeUserGroupConfig(): UserGroupConfig {
       },
       nodes: {
         view: true,
+        edit: true,
+        create: true,
+        delete: true,
+      },
+      nodeDeployments: {
+        view: true,
+        edit: true,
         create: true,
         delete: true,
       },
@@ -60,6 +67,13 @@ export function fakeUserGroupConfig(): UserGroupConfig {
       },
       nodes: {
         view: true,
+        edit: true,
+        create: true,
+        delete: true,
+      },
+      nodeDeployments: {
+        view: true,
+        edit: true,
         create: true,
         delete: true,
       },
@@ -91,8 +105,15 @@ export function fakeUserGroupConfig(): UserGroupConfig {
       },
       nodes: {
         view: true,
-        create: true,
-        delete: true,
+        edit: false,
+        create: false,
+        delete: false,
+      },
+      nodeDeployments: {
+        view: true,
+        edit: false,
+        create: false,
+        delete: false,
       },
     },
   };

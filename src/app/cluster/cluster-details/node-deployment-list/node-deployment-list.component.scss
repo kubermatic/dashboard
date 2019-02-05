@@ -62,5 +62,9 @@
   .km-icon-edit {
     width: 21px;
     height: 21px;
+
+    &.km-disabled {
+      opacity: 0.3;
+    }
   }
 }
