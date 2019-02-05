@@ -2,8 +2,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
+
 import {DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
+import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
@@ -28,8 +30,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   private providerData: NodeProviderData = {valid: false};
 
   constructor(
-      private addNodeService: NodeDataService, private wizardService: WizardService, private _dc: DatacenterService,
-      private _project: ProjectService) {}
+      private nameGenerator: ClusterNameGenerator, private addNodeService: NodeDataService,
+      private wizardService: WizardService, private _dc: DatacenterService, private _project: ProjectService) {}
 
   ngOnInit(): void {
     this.nodeForm = new FormGroup({
@@ -125,6 +127,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
           },
         };
     }
+  }
+
+  generateName(): void {
+    this.nodeForm.patchValue({name: this.nameGenerator.generateName()});
   }
 
   getAddNodeData(): NodeData {

@@ -1,7 +1,10 @@
 <form [formGroup]="nodeForm" fxLayout="column">
-  <mat-form-field fxFlex>
-    <input matInput formControlName="name" type="text" autocomplete="off" placeholder="Name (optional)">
-  </mat-form-field>
+  <div fxLayout="row" fxLayoutGap="16px">
+    <mat-form-field>
+      <input matInput formControlName="name" type="text" autocomplete="off" placeholder="Name (optional)">
+    </mat-form-field>
+    <div fxLayoutAlign=" center"><button mat-button color="primary" (click)="generateName()">Random</button></div>
+  </div>
 
   <mat-form-field fxFlex>
     <input matInput formControlName="count" type="number" min="1" autocomplete="off" placeholder="Number of replicas*">
