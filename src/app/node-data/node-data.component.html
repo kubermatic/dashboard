@@ -1,8 +1,8 @@
 <form [formGroup]="nodeForm" fxLayout="column">
   <div fxLayout="row" fxLayoutGap="16px">
-    <mat-form-field class="km-node-deployment-name" [ngClass]="{wizard: isInWizard}">
+    <mat-form-field class="km-node-deployment-name" [ngClass]="{small: isInWizard, none: isNameDisabled}">
       <input matInput formControlName="name" type="text" autocomplete="off" placeholder="Name">
-      <mat-hint>This field is optional, leave it empty to generate the name on the server side. You can also use the random button to generate it on your own.</mat-hint>
+      <mat-hint *ngIf="!isNameDisabled">This field is optional, leave it empty to generate the name on the server side. You can also use the random button to generate it on your own.</mat-hint>
     </mat-form-field>
     <div fxLayoutAlign=" center"><button mat-button color="primary" (click)="generateName()" *ngIf="!isNameDisabled">Random</button></div>
   </div>
