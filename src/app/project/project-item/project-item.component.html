@@ -5,8 +5,20 @@
         <i [matTooltip]="project.status" [ngClass]="projectService.getProjectStateIconClass()"></i>
       </div>
     </div>
-    <div fxFlex="80%">
+    <div fxFlex="16%">
       <p [attr.id]="'km-project-name-' + project.name" class="project-name">{{ project.name }}</p>
+    </div>
+    <div fxFlex="16%">
+      <p class="project-id">{{ project.id }}</p>
+    </div>
+    <div fxFlex="16%">
+      <p class="project-role">{{ getRole() }}</p>
+    </div>
+    <div fxFlex="16%">
+      <p class="project-owners">OWNERS</p>
+    </div>
+    <div fxFlex="16%">
+      <p class="project-clusters">{{ clusterCount }}</p>
     </div>
     <div fxFlex="17%" class="km-project-item-actions">
       <p class="km-icon">
