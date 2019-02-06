@@ -797,6 +797,10 @@ mat-list-item.disabled {
   color: $warning !important;
 }
 
+.km-muted {
+  color: $light-text-color;
+}
+
 .km-link:hover {
   cursor: pointer;
   color: $primary;

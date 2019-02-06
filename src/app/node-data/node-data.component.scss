@@ -2,6 +2,19 @@ mat-form-field.operating-system {
   margin-top: 20px;
 }
 
+mat-form-field.km-node-deployment-name {
+  font-size: 15px;
+  margin-bottom: 40px;
+
+  &.small {
+    margin-bottom: 20px;
+  }
+
+  &.none {
+    margin-bottom: auto;
+  }
+}
+
 div.km-os-options {
   width: 100%;
   line-height: 30px;

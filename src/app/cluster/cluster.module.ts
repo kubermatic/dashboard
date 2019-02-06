@@ -67,7 +67,6 @@ const entryComponents: any[] = [
   imports: [
     SharedModule,
     ClusterRoutingModule,
-
     MachineNetworksModule,
     NodeDataModule,
   ],

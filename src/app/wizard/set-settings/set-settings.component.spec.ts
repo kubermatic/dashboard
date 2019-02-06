@@ -3,9 +3,11 @@ import {MatTabsModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
+
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, ProjectService, UserService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
+import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {AWSNodeDataComponent} from '../../node-data/aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from '../../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../../node-data/digitalocean-node-data/digitalocean-node-data.component';
@@ -25,8 +27,10 @@ import {RouterStub} from '../../testing/router-stubs';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
+import {ClusterNameGeneratorMock} from '../../testing/services/name-generator-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
+
 import {AWSClusterSettingsComponent} from './provider-settings/aws/aws.component';
 import {AzureClusterSettingsComponent} from './provider-settings/azure/azure.component';
 import {BringyourownClusterSettingsComponent} from './provider-settings/bringyourown/bringyourown.component';
@@ -89,6 +93,7 @@ describe('SetSettingsComponent', () => {
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: Router, useClass: RouterStub},
+            {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
           ],
         })
         .compileComponents();

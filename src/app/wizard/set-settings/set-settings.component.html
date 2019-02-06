@@ -31,7 +31,7 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content fxLayout="column">
-        <kubermatic-node-data [cluster]="cluster" [nodeData]="nodeData" [existingNodesCount]="0"></kubermatic-node-data>
+        <kubermatic-node-data [cluster]="cluster" [nodeData]="nodeData" [existingNodesCount]="0" isInWizard="true"></kubermatic-node-data>
         <kubermatic-cluster-ssh-keys [cluster]="cluster" [selectedKeys]="clusterSSHKeys"></kubermatic-cluster-ssh-keys>
       </mat-card-content>
     </mat-card>

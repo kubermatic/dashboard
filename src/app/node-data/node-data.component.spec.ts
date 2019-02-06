@@ -2,8 +2,10 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
+
 import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
+import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {SharedModule} from '../shared/shared.module';
 import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
 import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
@@ -11,7 +13,9 @@ import {nodeDataFake} from '../testing/fake-data/node.fake';
 import {RouterStub} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
+import {ClusterNameGeneratorMock} from '../testing/services/name-generator-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
+
 import {AWSNodeDataComponent} from './aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from './azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from './digitalocean-node-data/digitalocean-node-data.component';
@@ -62,6 +66,7 @@ describe('NodeDataComponent', () => {
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Router, useClass: RouterStub},
+            {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
           ],
         })
         .compileComponents();

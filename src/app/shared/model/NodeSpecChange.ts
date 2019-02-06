@@ -1,6 +1,7 @@
 import {CentosSpec, ContainerLinuxSpec, NodeCloudSpec, NodeSpec, UbuntuSpec} from '../entity/NodeEntity';
 
 export class NodeData {
+  name?: string;
   spec?: NodeSpec;
   count?: number;
   valid?: boolean;
