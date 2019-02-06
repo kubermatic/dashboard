@@ -10,6 +10,7 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {ApiService, ProjectService} from '../../../core/services';
 import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
+import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {AWSNodeDataComponent} from '../../../node-data/aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from '../../../node-data/azure-node-data/azure-node-data.component';
@@ -29,12 +30,13 @@ import {fakeDigitaloceanCreateNode, nodeDataFake} from '../../../testing/fake-da
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
+import {ClusterNameGeneratorMock} from '../../../testing/services/name-generator-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {NodeService} from '../../services/node.service';
 
 import {NodeDataModalComponent} from './node-data-modal.component';
 
-describe('AddNodesModalComponent', () => {
+describe('NodeDataModalData', () => {
   let fixture: ComponentFixture<NodeDataModalComponent>;
   let component: NodeDataModalComponent;
   let activatedRoute: ActivatedRouteStub;
@@ -79,6 +81,7 @@ describe('AddNodesModalComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: NodeService, useValue: nodeMock},
             {provide: Router, useClass: RouterStub},
+            {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
             NodeDataService,
             WizardService,
             GoogleAnalyticsService,

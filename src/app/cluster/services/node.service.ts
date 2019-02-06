@@ -20,6 +20,7 @@ import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node
 export class NodeService {
   private static _getNodeDeploymentEntity(nodeData: NodeData): NodeDeploymentEntity {
     return {
+      name: nodeData.name,
       spec: {
         template: nodeData.spec,
         replicas: nodeData.count,
@@ -29,6 +30,7 @@ export class NodeService {
 
   private static _convertNodeData(initialNodeData: InitialNodeData): NodeData {
     return {
+      name: initialNodeData.name,
       count: initialNodeData.nodeCount,
       spec: initialNodeData.nodeSpec,
     };
@@ -121,6 +123,7 @@ export class NodeService {
         nodeDeployment: nd,
         nodeData: {
           count: nd.spec.replicas,
+          name: nd.name,
           spec: JSON.parse(JSON.stringify(nd.spec.template)),  // Deep copy method from MDN.
           valid: true,
         },
