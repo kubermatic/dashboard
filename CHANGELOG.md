@@ -1,3 +1,19 @@
+### [v1.1.0]()
+
+
+- It is now possible to edit the project name in UI. [#1003](https://github.com/kubermatic/dashboard-v2/issues/1003) ([kgroschoff](https://github.com/kgroschoff))
+- Machine Networks for VSphere can now be set in the UI [#829](https://github.com/kubermatic/dashboard-v2/issues/829) ([kgroschoff](https://github.com/kgroschoff))
+- VSphere: Setting a dedicated VSphere user for cloud provider functionalities is now possible. [#834](https://github.com/kubermatic/dashboard-v2/issues/834) ([kgroschoff](https://github.com/kgroschoff))
+- Fixed that the cluster upgrade link did not appear directly when the details page is loaded [#836](https://github.com/kubermatic/dashboard-v2/issues/836) ([bashofmann](https://github.com/bashofmann))
+- Kubeconfig can now be shared via a generated link from the UI [#857](https://github.com/kubermatic/dashboard-v2/issues/857) ([kgroschoff](https://github.com/kgroschoff))
+- Fixed duplicated SSH keys in summary view during cluster creation. [#879](https://github.com/kubermatic/dashboard-v2/issues/879) ([kgroschoff](https://github.com/kgroschoff))
+- On project change, the user will stay on the same page, if he has the corresponding rights. [#889](https://github.com/kubermatic/dashboard-v2/issues/889) ([kgroschoff](https://github.com/kgroschoff))
+- Fixed issues with caching the main page. [#893](https://github.com/kubermatic/dashboard-v2/issues/893) ([maciaszczykm](https://github.com/maciaszczykm))
+- Added support for creating, viewing, updating and deleting node deployments. [#949](https://github.com/kubermatic/dashboard-v2/issues/949) ([maciaszczykm](https://github.com/maciaszczykm))
+- Added Node Deployment details view [#973](https://github.com/kubermatic/dashboard-v2/issues/973) ([maciaszczykm](https://github.com/maciaszczykm))
+
+
+
 
 ### [v1.0.2]()
 
