@@ -25,6 +25,7 @@ export class ProjectItemComponent implements OnInit {
   userGroup: string;
   userGroupConfig: UserGroupConfig;
   clusterCount = 0;
+  owners = [];
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -71,7 +72,6 @@ export class ProjectItemComponent implements OnInit {
         for (const cs of dcClusters) {
           clusters.push(...cs);
         }
-        // this.clusters = clusters;
         this.clusterCount = clusters.length;
       }));
     });

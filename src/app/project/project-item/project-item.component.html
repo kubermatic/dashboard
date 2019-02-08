@@ -5,22 +5,23 @@
         <i [matTooltip]="project.status" [ngClass]="projectService.getProjectStateIconClass()"></i>
       </div>
     </div>
-    <div fxFlex="16%">
+    <div fxFlex="25%">
       <p [attr.id]="'km-project-name-' + project.name" class="project-name">{{ project.name }}</p>
     </div>
-    <div fxFlex="16%">
+    <div fxFlex="18%">
       <p class="project-id">{{ project.id }}</p>
     </div>
-    <div fxFlex="16%">
+    <div fxFlex="18%">
       <p class="project-role">{{ getRole() }}</p>
     </div>
-    <div fxFlex="16%">
-      <p class="project-owners">OWNERS</p>
-    </div>
-    <div fxFlex="16%">
+    <div fxFlex="18%">
       <p class="project-clusters">{{ clusterCount }}</p>
     </div>
-    <div fxFlex="17%" class="km-project-item-actions">
+    <!-- Feature not implemented in backend yet -->
+    <!-- <div fxFlex="24%">
+      <p class="project-owners" *ngFor="let owner of project.owners">{{owner.name}} ({{owner.email}})</p>
+    </div> -->
+    <div fxFlex="18%" class="km-project-item-actions">
       <p class="km-icon">
         <button [attr.id]="'km-edit-project-' + project.name"
                 class="km-icon-edit black"
