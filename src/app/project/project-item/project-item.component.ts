@@ -1,12 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
-import {combineLatest, ObservableInput, Subscription} from 'rxjs';
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {UserGroupConfig} from '../../shared/model/Config';
 import {EditProjectComponent} from '../edit-project/edit-project.component';
@@ -25,8 +23,6 @@ export class ProjectItemComponent implements OnInit {
   userGroup: string;
   userGroupConfig: UserGroupConfig;
   clusterCount = 0;
-  owners = [];
-  private subscriptions: Subscription[] = [];
 
   constructor(
       public dialog: MatDialog, public projectService: ProjectService, private userService: UserService,
@@ -63,17 +59,11 @@ export class ProjectItemComponent implements OnInit {
 
   getClusterCount(): void {
     this.dcService.getSeedDataCenters().subscribe((datacenters) => {
-      const clusters: ClusterEntity[] = [];
-      const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
       for (const dc of datacenters) {
-        dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.project.id));
+        this.api.getClusters(dc.metadata.name, this.project.id).subscribe((dcClusters) => {
+          this.clusterCount = dcClusters.length;
+        });
       }
-      this.subscriptions.push(combineLatest(dcClustersObservables).subscribe((dcClusters) => {
-        for (const cs of dcClusters) {
-          clusters.push(...cs);
-        }
-        this.clusterCount = clusters.length;
-      }));
     });
   }
 
