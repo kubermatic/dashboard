@@ -24,6 +24,7 @@ import {VSphereNodeDataComponent} from '../../../node-data/vsphere-add-node/vsph
 import {VSphereOptionsComponent} from '../../../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanSizes} from '../../../testing/fake-data/addNodeModal.fake';
+import {masterVersionsFake} from '../../../testing/fake-data/cluster-spec.fake';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeDigitaloceanCreateNode, nodeDataFake} from '../../../testing/fake-data/node.fake';
@@ -42,9 +43,10 @@ describe('NodeDataModalData', () => {
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const apiMock =
-        jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'createClusterNode', 'patchNodeDeployment']);
+    const apiMock = jasmine.createSpyObj(
+        'ApiService', ['getDigitaloceanSizes', 'createClusterNode', 'patchNodeDeployment', 'getClusterNodeUpgrades']);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    apiMock.getClusterNodeUpgrades.and.returnValue(asyncData(masterVersionsFake()));
     const nodeMock = jasmine.createSpyObj('NodeService', ['createNodeDeployment']);
 
     TestBed
