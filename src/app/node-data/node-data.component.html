@@ -13,6 +13,14 @@
     <mat-error *ngIf="nodeForm.controls.count.hasError('ipsMissing')">Not enough IPs left. Reduce number of replicas or add more machine networks.</mat-error>
   </mat-form-field>
 
+  <mat-form-field *ngIf="!isInWizard">
+    <mat-select placeholder="kubelet version" formControlName="kubelet">
+      <mat-option *ngFor="let version of versions" [value]="version">
+        {{ version }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
   <kubermatic-aws-node-data *ngIf="cluster.spec.cloud.aws" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData"></kubermatic-aws-node-data>
 
   <kubermatic-digitalocean-node-data *ngIf="cluster.spec.cloud.digitalocean" [cloudSpec]="cluster.spec.cloud" [nodeData]="nodeData" [projectId]="projectId" [clusterId]="cluster.id" [seedDCName]="seedDCName"></kubermatic-digitalocean-node-data>
