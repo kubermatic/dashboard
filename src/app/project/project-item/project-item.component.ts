@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+import {first} from 'rxjs/operators';
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
@@ -58,9 +59,9 @@ export class ProjectItemComponent implements OnInit {
   }
 
   getClusterCount(): void {
-    this.dcService.getSeedDataCenters().subscribe((datacenters) => {
+    this.dcService.getSeedDataCenters().pipe(first()).subscribe((datacenters) => {
       for (const dc of datacenters) {
-        this.api.getClusters(dc.metadata.name, this.project.id).subscribe((dcClusters) => {
+        this.api.getClusters(dc.metadata.name, this.project.id).pipe(first()).subscribe((dcClusters) => {
           this.clusterCount = dcClusters.length;
         });
       }
