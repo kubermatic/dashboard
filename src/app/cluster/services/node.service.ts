@@ -1,6 +1,6 @@
 import {EventEmitter, Injectable} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
-import {EMPTY, Observable, of} from 'rxjs';
+import {Observable, of} from 'rxjs';
 import {catchError, first, flatMap, map} from 'rxjs/operators';
 
 import {ApiService} from '../../core/services';
@@ -143,11 +143,10 @@ export class NodeService {
                         .pipe(catchError(() => {
                           NotificationActions.error('Error', `Could not update Node Deployment`);
                           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
-                          return EMPTY;
+                          return of(undefined);
                         }));
                   }
-
-                  return EMPTY;
+                  return of(undefined);
                 }))
         .pipe(flatMap(
             (nd: NodeDeploymentEntity):
@@ -158,10 +157,8 @@ export class NodeService {
                     if (changeEventEmitter) {
                       changeEventEmitter.emit(nd);
                     }
-
                     return of(true);
                   }
-
                   return of(false);
                 }))
         .pipe(first());
@@ -194,11 +191,10 @@ export class NodeService {
                         .pipe(catchError(() => {
                           NotificationActions.error('Error', `Could not remove Node Deployment`);
                           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleteFailed');
-                          return EMPTY;
+                          return of(false);
                         }));
                   }
-
-                  return EMPTY;
+                  return of(false);
                 }))
         .pipe(flatMap(
             (data: any):
@@ -209,10 +205,8 @@ export class NodeService {
                     if (changeEventEmitter) {
                       changeEventEmitter.emit(nd);
                     }
-
                     return of(true);
                   }
-
                   return of(false);
                 }))
         .pipe(first());
