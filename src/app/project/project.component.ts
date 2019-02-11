@@ -92,8 +92,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
       switch (sort.active) {
         case 'name':
           return this.compare(a.name, b.name, isAsc);
-        case 'status':
-          return this.compare(a.status, b.status, isAsc);
         default:
           return 0;
       }
