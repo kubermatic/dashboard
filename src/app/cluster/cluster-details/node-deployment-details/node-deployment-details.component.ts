@@ -35,6 +35,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _nodeDeploymentID: string;
   private _isNodeDeploymentLoaded = false;
   private _areNodesLoaded = false;
+  private _areNodesEventsLoaded = false;
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
   private _refreshInterval = 10000;
@@ -72,6 +73,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
     this.loadNodeDeployment();
     this.loadNodes();
+    this.loadNodesEvents();
     this.loadCluster();
     this.loadDatacenter();
     this.loadUserGroupData();
@@ -79,6 +81,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     interval(this._refreshInterval).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.loadNodeDeployment();
       this.loadNodes();
+      this.loadNodesEvents();
     });
   }
 
@@ -99,6 +102,16 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         .subscribe((nodes) => {
           this.nodes = nodes;
           this._areNodesLoaded = true;
+        });
+  }
+
+  loadNodesEvents(): void {
+    this._apiService
+        .getNodeDeploymentNodesEvents(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
+        .pipe(first())
+        .subscribe((events) => {
+          // console.log(events);
+          this._areNodesEventsLoaded = true;
         });
   }
 
@@ -125,7 +138,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isInitialized(): boolean {
-    return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded && this._isNodeDeploymentLoaded;
+    return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded && this._isNodeDeploymentLoaded &&
+        this._areNodesEventsLoaded;
   }
 
   goBackToCluster(): void {

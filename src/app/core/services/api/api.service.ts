@@ -53,6 +53,12 @@ export class ApiService {
     return this.http.get<NodeEntity[]>(url, {headers: this.headers});
   }
 
+  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<any> {
+    const url =
+        `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/events`;
+    return this.http.get<any[]>(url, {headers: this.headers});
+  }
+
   patchNodeDeployment(
       nd: NodeDeploymentEntity, patch: NodeDeploymentPatch, clusterId: string, dc: string,
       projectID: string): Observable<NodeDeploymentEntity> {
