@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
+import {first} from 'rxjs/operators';
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, ProjectService, UserService} from '../../core/services';
+import {ApiService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -14,6 +15,7 @@ import {EditProjectComponent} from '../edit-project/edit-project.component';
   templateUrl: './project-item.component.html',
   styleUrls: ['./project-item.component.scss'],
 })
+
 export class ProjectItemComponent implements OnInit {
   @Input() index: number;
   @Input() project: ProjectEntity;
@@ -21,10 +23,11 @@ export class ProjectItemComponent implements OnInit {
   clickedEditProject = {};
   userGroup: string;
   userGroupConfig: UserGroupConfig;
+  clusterCount = 0;
 
   constructor(
       public dialog: MatDialog, public projectService: ProjectService, private userService: UserService,
-      private appConfigService: AppConfigService, private api: ApiService,
+      private appConfigService: AppConfigService, private api: ApiService, private dcService: DatacenterService,
       private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
@@ -32,12 +35,37 @@ export class ProjectItemComponent implements OnInit {
     this.userService.currentUserGroup(this.project.id).subscribe((group) => {
       this.userGroup = group;
     });
+
+    this.getClusterCount();
   }
 
   getProjectItemClass(): string {
     if (this.index % 2 !== 0) {
       return 'km-odd';
     }
+  }
+
+  getRole(): string {
+    switch (this.userGroup) {
+      case 'owners':
+        return 'Owner';
+      case 'editors':
+        return 'Editor';
+      case 'viewers':
+        return 'Viewer';
+      default:
+        return '';
+    }
+  }
+
+  getClusterCount(): void {
+    this.dcService.getSeedDataCenters().pipe(first()).subscribe((datacenters) => {
+      for (const dc of datacenters) {
+        this.api.getClusters(dc.metadata.name, this.project.id).pipe(first()).subscribe((dcClusters) => {
+          this.clusterCount += dcClusters.length;
+        });
+      }
+    });
   }
 
   selectProject(): void {
