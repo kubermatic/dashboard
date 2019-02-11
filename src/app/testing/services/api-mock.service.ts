@@ -96,6 +96,10 @@ export class ApiMockService {
     return of([]);
   }
 
+  getClusterNodeUpgrades(cluster: string): Observable<MasterVersion[]> {
+    return of([]);
+  }
+
   addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
     return of(null);
   }

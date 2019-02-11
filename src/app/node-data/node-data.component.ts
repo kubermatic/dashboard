@@ -2,11 +2,12 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
+import {first} from 'rxjs/operators';
 
-import {DatacenterService, ProjectService, WizardService} from '../core/services';
+import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
-import {ClusterEntity} from '../shared/entity/ClusterEntity';
+import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
 import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
@@ -27,14 +28,18 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   nodeForm: FormGroup;
   operatingSystemForm: FormGroup;
   hideOptional = true;
+  versions: string[] = [];
   private subscriptions: Subscription[] = [];
   private providerData: NodeProviderData = {valid: false};
 
   constructor(
       private nameGenerator: ClusterNameGenerator, private addNodeService: NodeDataService,
-      private wizardService: WizardService, private _dc: DatacenterService, private _project: ProjectService) {}
+      private wizardService: WizardService, private _dc: DatacenterService, private _project: ProjectService,
+      private readonly _apiService: ApiService) {}
 
   ngOnInit(): void {
+    const initialKubeletVersion = this.nodeData.spec.versions.kubelet;
+    this.projectId = this._project.project.id;
     this.isNameDisabled = this.nodeData.name && this.nodeData.name.length > 0 && !this.isInWizard;
 
     this.nodeForm = new FormGroup({
@@ -44,6 +49,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       operatingSystem: new FormControl(Object.keys(this.nodeData.spec.operatingSystem)[0], Validators.required),
       name: new FormControl({value: this.nodeData.name, disabled: this.isNameDisabled}),
     });
+
+    if (!this.isInWizard) {
+      this.nodeForm.addControl('kubelet', new FormControl());
+    }
 
     this.nodeForm.controls.count.markAsTouched();
 
@@ -87,9 +96,27 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this._dc.getDataCenter(this.cluster.spec.cloud.dc).subscribe((dc) => {
       this.seedDCName = dc.spec.seed;
-    }));
 
-    this.projectId = this._project.project.id;
+      if (!this.isInWizard) {
+        this._apiService.getClusterNodeUpgrades(this.projectId, this.seedDCName, this.cluster.id)
+            .pipe(first())
+            .subscribe((upgrades: MasterVersion[]) => {
+              upgrades.forEach(upgrade => this.versions.push(upgrade.version));
+              if (this.versions.length > 0) {
+                if (this.versions.includes(initialKubeletVersion)) {
+                  // First, try to default to kubelet version from node data (edit mode).
+                  this.nodeForm.patchValue({kubelet: initialKubeletVersion});
+                } else if (this.versions.includes(this.cluster.spec.version)) {
+                  // Then, try to default to control plane version from cluster (adding new node).
+                  this.nodeForm.patchValue({kubelet: this.cluster.spec.version});
+                } else {
+                  // Otherwise, just pick newest version from the list as default.
+                  this.nodeForm.patchValue({kubelet: this.versions[this.versions.length - 1]});
+                }
+              }
+            });
+      }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -134,11 +161,18 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   getAddNodeData(): NodeData {
+    let versions = {};
+    if (!this.isInWizard) {
+      versions = {
+        kubelet: this.nodeForm.controls.kubelet.value,
+      };
+    }
+
     return {
       spec: {
         cloud: this.providerData.spec,
         operatingSystem: this.getOSSpec(),
-        versions: {},
+        versions,
       },
       name: this.nodeForm.controls.name.value,
       count: this.nodeForm.controls.count.value,
