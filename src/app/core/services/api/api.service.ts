@@ -180,6 +180,13 @@ export class ApiService {
     }));
   }
 
+  getClusterNodeUpgrades(projectID: string, dc: string, clusterID: string): Observable<MasterVersion[]> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/nodes/upgrades`;
+    return this.http.get<MasterVersion[]>(url, {headers: this.headers}).pipe(catchError(() => {
+      return of<MasterVersion[]>([]);
+    }));
+  }
+
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
     return this.http.put<Token>(url, token, {headers: this.headers});

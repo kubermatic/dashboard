@@ -8,6 +8,7 @@ import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {SharedModule} from '../shared/shared.module';
 import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
+import {masterVersionsFake} from '../testing/fake-data/cluster-spec.fake';
 import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../testing/fake-data/node.fake';
 import {RouterStub} from '../testing/router-stubs';
@@ -33,12 +34,14 @@ describe('NodeDataComponent', () => {
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', [
-      'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard'
+      'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard',
+      'getClusterNodeUpgrades'
     ]);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
     apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors()));
+    apiMock.getClusterNodeUpgrades.and.returnValue(asyncData(masterVersionsFake()));
 
     TestBed
         .configureTestingModule({
