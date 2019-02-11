@@ -62,7 +62,7 @@ export class ProjectItemComponent implements OnInit {
     this.dcService.getSeedDataCenters().pipe(first()).subscribe((datacenters) => {
       for (const dc of datacenters) {
         this.api.getClusters(dc.metadata.name, this.project.id).pipe(first()).subscribe((dcClusters) => {
-          this.clusterCount = dcClusters.length;
+          this.clusterCount += dcClusters.length;
         });
       }
     });
