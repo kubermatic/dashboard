@@ -1,5 +1,5 @@
-import {Component, Input} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
 import {EventEntity} from '../../entity/EventEntity';
 
@@ -8,17 +8,19 @@ import {EventEntity} from '../../entity/EventEntity';
   templateUrl: './event-list.component.html',
   styleUrls: ['./event-list.component.scss'],
 })
-export class EventListComponent {
+export class EventListComponent implements OnInit {
   @Input() events: EventEntity[] = [];
 
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  dataSource = new MatTableDataSource<EventEntity>();
   displayedColumns: string[] = ['type', 'message', 'involvedObjectName'];
 
-  // todo sort pagination
-
-  getDataSource(): MatTableDataSource<EventEntity> {
-    const dataSource = new MatTableDataSource<EventEntity>();
-    dataSource.data = this.events;
-    return dataSource;
+  ngOnInit(): void {
+    this.dataSource.data = this.events;
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   getTypeIcon(event: EventEntity): string {

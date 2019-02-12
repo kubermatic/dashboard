@@ -55,7 +55,8 @@ body {
     background-color: $primary;
   }
 
-  .km-header-cell {
+  .km-header-cell,
+ .mat-sort-header-button {
     color: $white-text-color;
     font-size: 14px;
   }
@@ -890,4 +891,9 @@ div.km-form-group-tags {
 
 .red {
   color: $warning-status-color;
+}
+
+// Bottom spacer.
+.km-bottom-spacer {
+  margin-bottom: 9 * $baseline-grid;
 }
