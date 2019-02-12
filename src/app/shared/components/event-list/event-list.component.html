@@ -15,7 +15,7 @@
       </ng-container>
 
       <ng-container matColumnDef="involvedObjectName">
-        <th mat-header-cell mat-sort-header *matHeaderCellDef class="km-header-cell">Involved Object</th>
+        <th mat-header-cell mat-sort-header *matHeaderCellDef class="km-header-cell">{{involvedObjectColumnName}}</th>
         <td mat-cell *matCellDef="let element">{{element.involvedObjectName}}</td>
       </ng-container>
 

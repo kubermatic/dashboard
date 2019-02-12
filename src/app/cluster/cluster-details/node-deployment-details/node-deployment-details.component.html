@@ -113,7 +113,8 @@
                         clusterHealthStatus="km-status-running"></kubermatic-node-list>
 
   <div class="km-pre-card-title">Nodes Events</div>
-  <km-event-list [events]="events"></km-event-list>
+  <km-event-list [events]="events"
+                 involvedObjectColumnName="Node"></km-event-list>
 
   <div class="km-bottom-spacer"></div>
 </ng-container>

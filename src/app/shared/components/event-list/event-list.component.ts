@@ -10,6 +10,7 @@ import {EventEntity} from '../../entity/EventEntity';
 })
 export class EventListComponent implements OnInit {
   @Input() events: EventEntity[] = [];
+  @Input() involvedObjectColumnName = 'Involved Object';
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
