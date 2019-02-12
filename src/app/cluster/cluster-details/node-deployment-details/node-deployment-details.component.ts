@@ -7,6 +7,7 @@ import {AppConfigService} from '../../../app-config.service';
 import {ApiService, DatacenterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {EventEntity} from '../../../shared/entity/EventEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
@@ -14,7 +15,7 @@ import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/no
 import {NodeService} from '../../services/node.service';
 
 @Component({
-  selector: 'kubermatic-cluster-details',
+  selector: 'km-node-deployment-details',
   templateUrl: './node-deployment-details.component.html',
   styleUrls: ['./node-deployment-details.component.scss'],
 })
@@ -22,6 +23,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
   nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
   nodes: NodeEntity[] = [];
+  events: EventEntity[] = [];
   cluster: ClusterEntity;
   clusterProvider: string;
   datacenter: DataCenterEntity;
@@ -35,6 +37,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _nodeDeploymentID: string;
   private _isNodeDeploymentLoaded = false;
   private _areNodesLoaded = false;
+  private _areNodesEventsLoaded = false;
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
   private _refreshInterval = 10000;
@@ -72,6 +75,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
     this.loadNodeDeployment();
     this.loadNodes();
+    this.loadNodesEvents();
     this.loadCluster();
     this.loadDatacenter();
     this.loadUserGroupData();
@@ -79,6 +83,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     interval(this._refreshInterval).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.loadNodeDeployment();
       this.loadNodes();
+      this.loadNodesEvents();
     });
   }
 
@@ -96,9 +101,19 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadNodes(): void {
     this._apiService.getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
         .pipe(first())
-        .subscribe((nodes) => {
-          this.nodes = nodes;
+        .subscribe((n) => {
+          this.nodes = n;
           this._areNodesLoaded = true;
+        });
+  }
+
+  loadNodesEvents(): void {
+    this._apiService
+        .getNodeDeploymentNodesEvents(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
+        .pipe(first())
+        .subscribe((e) => {
+          this.events = e;
+          this._areNodesEventsLoaded = true;
         });
   }
 
@@ -125,7 +140,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isInitialized(): boolean {
-    return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded && this._isNodeDeploymentLoaded;
+    return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded && this._isNodeDeploymentLoaded &&
+        this._areNodesEventsLoaded;
   }
 
   goBackToCluster(): void {

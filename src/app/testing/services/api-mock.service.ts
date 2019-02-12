@@ -36,6 +36,10 @@ export class ApiMockService {
     return of({});
   }
 
+  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<any[]> {
+    return of([]);
+  }
+
   getProjects(): Observable<ProjectEntity[]> {
     return of(this.projects);
   }
