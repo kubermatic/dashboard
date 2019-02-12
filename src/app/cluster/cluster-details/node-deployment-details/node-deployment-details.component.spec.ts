@@ -36,10 +36,12 @@ describe('NodeDeploymentDetailsComponent', () => {
   let dcMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', ['getCluster', 'getNodeDeploymentNodes', 'getNodeDeployment']);
+    apiMock = jasmine.createSpyObj(
+        'ApiService', ['getCluster', 'getNodeDeploymentNodes', 'getNodeDeployment', 'getNodeDeploymentNodesEvents']);
     apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
     apiMock.getNodeDeployment.and.returnValue(asyncData(nodeDeploymentsFake()[0]));
     apiMock.getNodeDeploymentNodes.and.returnValue(asyncData(nodesFake()));
+    apiMock.getNodeDeploymentNodesEvents.and.returnValue(asyncData([]));
     dcMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
     dcMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
 
