@@ -9,8 +9,10 @@ import {MatAutocompleteModule, MatButtonModule, MatButtonToggleModule, MatCardMo
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {CustomFormsModule} from 'ng2-validation';
 import {ClipboardModule} from 'ngx-clipboard';
+
 import {AddSshKeyModalComponent} from './components/add-ssh-key-modal/add-ssh-key-modal.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
+import {EventListComponent} from './components/event-list/event-list.component';
 import {PropertyComponent} from './components/property/property.component';
 
 const modules: any[] = [
@@ -58,12 +60,14 @@ const modules: any[] = [
     AddSshKeyModalComponent,
     ConfirmationDialogComponent,
     PropertyComponent,
+    EventListComponent,
   ],
   exports: [
     ...modules,
     AddSshKeyModalComponent,
     ConfirmationDialogComponent,
     PropertyComponent,
+    EventListComponent,
   ],
   entryComponents: [
     AddSshKeyModalComponent,

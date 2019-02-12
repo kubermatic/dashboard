@@ -6,6 +6,7 @@ import {catchError} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {ClusterEntity, Finalizer, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
+import {EventEntity} from '../../../shared/entity/EventEntity';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
@@ -53,10 +54,11 @@ export class ApiService {
     return this.http.get<NodeEntity[]>(url, {headers: this.headers});
   }
 
-  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string): Observable<any> {
+  getNodeDeploymentNodesEvents(ndId: string, cluster: string, dc: string, projectID: string):
+      Observable<EventEntity[]> {
     const url =
         `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments/${ndId}/nodes/events`;
-    return this.http.get<any[]>(url, {headers: this.headers});
+    return this.http.get<EventEntity[]>(url, {headers: this.headers});
   }
 
   patchNodeDeployment(

@@ -7,6 +7,7 @@ import {AppConfigService} from '../../../app-config.service';
 import {ApiService, DatacenterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {EventEntity} from '../../../shared/entity/EventEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
@@ -14,7 +15,7 @@ import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/no
 import {NodeService} from '../../services/node.service';
 
 @Component({
-  selector: 'kubermatic-cluster-details',
+  selector: 'km-node-deployment-details',
   templateUrl: './node-deployment-details.component.html',
   styleUrls: ['./node-deployment-details.component.scss'],
 })
@@ -22,6 +23,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
   nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
   nodes: NodeEntity[] = [];
+  events: EventEntity[] = [];
   cluster: ClusterEntity;
   clusterProvider: string;
   datacenter: DataCenterEntity;
@@ -99,8 +101,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadNodes(): void {
     this._apiService.getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
         .pipe(first())
-        .subscribe((nodes) => {
-          this.nodes = nodes;
+        .subscribe((n) => {
+          this.nodes = n;
           this._areNodesLoaded = true;
         });
   }
@@ -109,8 +111,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._apiService
         .getNodeDeploymentNodesEvents(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
         .pipe(first())
-        .subscribe((events) => {
-          // console.log(events);
+        .subscribe((e) => {
+          this.events = e;
           this._areNodesEventsLoaded = true;
         });
   }

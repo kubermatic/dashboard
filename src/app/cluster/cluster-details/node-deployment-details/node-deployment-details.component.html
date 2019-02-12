@@ -110,6 +110,8 @@
                         [isClusterRunning]="true"
                         [hasInitialNodes]="true"
                         clusterHealthStatus="km-status-running"></kubermatic-node-list>
+
+  <km-event-list [events]="events"></km-event-list>
 </ng-container>
 
 <ng-container *ngIf="!isInitialized()">
