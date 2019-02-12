@@ -48,6 +48,31 @@ body {
 }
 
 // global
+.km-table {
+  width: 100%;
+
+  .km-header-row {
+    background-color: $primary;
+  }
+
+  .km-header-cell {
+    color: $white-text-color;
+    font-size: 14px;
+  }
+
+  tr.mat-row:nth-child(even) {
+    background-color: $medium-background;
+  }
+
+  tr.mat-row:hover {
+    background-color: $light-background !important;
+  }
+
+  td.mat-cell {
+    border-bottom-width: 0;
+    line-height: 7.5 * $baseline-grid;
+  }
+}
 
 .mat-card-header {
   margin-bottom: 10px;
@@ -852,4 +877,17 @@ div.km-form-group-tags {
 
 .km-add-node-inner .km-form-group-tags-inner mat-form-field {
   width: 45% !important;
+}
+
+// Health statuses
+.green {
+  color: $healthy-status-color;
+}
+
+.orange {
+  color: $waiting-status-color;
+}
+
+.red {
+  color: $warning-status-color;
 }

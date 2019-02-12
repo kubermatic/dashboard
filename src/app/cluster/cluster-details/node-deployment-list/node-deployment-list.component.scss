@@ -1,49 +1,11 @@
 @import "../../../../assets/css/colors";
 
-.km-node-deployment-table {
-  width: 100%;
-
-  .km-header-row {
-    background-color: $primary;
-  }
-
-  .km-header-cell {
-    color: $white-text-color;
-    font-size: 14px;
-  }
-
-  tr.mat-row:nth-child(even) {
-    background-color: $medium-background;
-  }
-
-  tr.mat-row:hover {
-    background-color: $light-background !important;
-  }
-
-  td.mat-cell {
-    border-bottom-width: 0;
-    line-height: 60px;
-  }
-}
-
 .km-node-deployment-spinner {
   margin: 20px auto !important;
 }
 
 .km-node-deployment-health {
   text-align: center;
-
-  &.green {
-    color: $healthy-status-color;
-  }
-
-  &.orange {
-    color: $waiting-status-color;
-  }
-
-  &.red {
-    color: $warning-status-color;
-  }
 }
 
 .km-node-deployment-actions {
