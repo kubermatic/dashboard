@@ -129,6 +129,10 @@
               <div fxFlex="50%" class="km-card-list-key">Floating IP pool</div>
               <div fxFlex="50%">{{ cluster.spec.cloud.openstack.floatingIpPool }}</div>
             </div>
+            <div fxLayout class="km-card-list-content" *ngIf="cluster.spec.cloud.openstack.subnetID">
+              <div fxFlex="50%" class="km-card-list-key">Subnet ID</div>
+              <div fxFlex="50%">{{ cluster.spec.cloud.openstack.subnetID }}</div>
+            </div>
           </ng-container>
 
           <!-- Hetzner -->
