@@ -102,6 +102,7 @@
     </mat-card-content>
   </mat-card>
 
+  <div class="km-pre-card-title">Nodes</div>
   <kubermatic-node-list [cluster]="cluster"
                         [nodes]="nodes"
                         (deleteNode)="loadNodes()"
@@ -110,6 +111,12 @@
                         [isClusterRunning]="true"
                         [hasInitialNodes]="true"
                         clusterHealthStatus="km-status-running"></kubermatic-node-list>
+
+  <div class="km-pre-card-title">Nodes Events</div>
+  <km-event-list [events]="events"
+                 involvedObjectColumnName="Node"></km-event-list>
+
+  <div class="km-bottom-spacer"></div>
 </ng-container>
 
 <ng-container *ngIf="!isInitialized()">
