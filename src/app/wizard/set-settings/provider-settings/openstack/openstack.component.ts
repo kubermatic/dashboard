@@ -67,9 +67,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             (!!this.clusterSpec.cloudSpec && event.tenant !== this.clusterSpec.cloudSpec.openstack.tenant)) {
           this.loadTenants();
           this.loadOptionalSettings();
-        } else if (
-            event.network !== '' && !!this.clusterSpec.cloudSpec &&
-            event.network !== this.clusterSpec.cloudSpec.openstack.network) {
+        } else if (!!this.clusterSpec.cloudSpec && event.network !== this.clusterSpec.cloudSpec.openstack.network) {
           this.loadSubnetIds();
         }
       }
@@ -113,11 +111,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         .subscribe(
             (tenants) => {
               if (!!tenants && tenants.length > 0) {
-                const sortedTenants = tenants.sort((a, b) => {
+                this.tenants = tenants.sort((a, b) => {
                   return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
                 });
-
-                this.tenants = sortedTenants;
 
                 if (this.tenants.length === 0) {
                   this.openstackSettingsForm.controls.tenant.setValue('');
@@ -150,12 +146,12 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             this.cluster.spec.cloud.dc)
         .pipe(first())
         .subscribe((networks: OpenstackNetwork[]) => {
-          networks = networks.sort((a, b) => {
+          this.network = networks.filter((network) => network.external !== true).sort((a, b) => {
             return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
           });
-
-          this.network = networks.filter((network) => network.external !== true);
-          this.floatingIpPool = networks.filter((floatingIpPool) => floatingIpPool.external === true);
+          this.floatingIpPool = networks.filter((network) => network.external === true).sort((a, b) => {
+            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+          });
 
           if (this.network.length === 0) {
             this.openstackSettingsForm.controls.network.setValue('');
@@ -173,11 +169,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             this.cluster.spec.cloud.dc)
         .pipe(first())
         .subscribe((securityGroups) => {
-          const sortedSecurityGroups = securityGroups.sort((a, b) => {
+          this.securityGroup = securityGroups.sort((a, b) => {
             return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
           });
-
-          this.securityGroup = sortedSecurityGroups;
 
           if (this.securityGroup.length === 0) {
             this.openstackSettingsForm.controls.securityGroups.setValue('');
@@ -189,7 +183,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   loadSubnetIds(): void {
     if (this.openstackSettingsForm.controls.network.value === '') {
-      return;
+      return this.openstackSettingsForm.controls.subnetId.setValue('');
     }
 
     this.loadingSubnetIds = true;
@@ -201,11 +195,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             this.cluster.spec.cloud.dc, this.openstackSettingsForm.controls.network.value)
         .pipe(first())
         .subscribe((subnets) => {
-          const sortedSubnetIds = subnets.sort((a, b) => {
+          this.subnetIds = subnets.sort((a, b) => {
             return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
           });
-
-          this.subnetIds = sortedSubnetIds;
 
           if (this.subnetIds.length === 0) {
             this.openstackSettingsForm.controls.subnetId.setValue('');
