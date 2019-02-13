@@ -113,7 +113,7 @@ describe('Basic story', () => {
 
     KMElement.sendKeys(membersPage.getAddMemberDialogEmailInput(), memberEmail);
     membersPage.getAddMemberDialogGroupCombobox().click();
-    membersPage.getAddMemberDialogGroupOption(1).click();
+    membersPage.getAddMemberDialogGroupOption(2).click();
     membersPage.getAddMemberDialogAddBtn().click();
 
     KMElement.waitToDisappear(membersPage.getAddMemberDialog());
@@ -127,7 +127,7 @@ describe('Basic story', () => {
 
     KMElement.waitToAppear(membersPage.getEditMemberDialogGroupCombobox());
     membersPage.getEditMemberDialogGroupCombobox().click();
-    membersPage.getEditMemberDialogGroupOption(2).click();
+    membersPage.getEditMemberDialogGroupOption(3).click();
     membersPage.getEditMemberDialogEditBtn().click();
 
     KMElement.waitToDisappear(membersPage.getEditMemberDialog());

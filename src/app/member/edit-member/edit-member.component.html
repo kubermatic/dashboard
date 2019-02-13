@@ -11,6 +11,7 @@
         <p>You are on the way to edit the member "{{member.name}}".</p>
         <mat-form-field fxFlex>
           <mat-select id="km-edit-member-dialog-group-combobox" placeholder="Group*:" formControlName="group">
+            <mat-option value="owners">Owner</mat-option>
             <mat-option value="editors">Editor</mat-option>
             <mat-option value="viewers">Viewer</mat-option>
           </mat-select>
