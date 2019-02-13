@@ -1,6 +1,12 @@
 @import '../../../assets/css/colors';
 
 mat-button-toggle-group[group='datacenterGroup'] {
+  flex-wrap: wrap;
+
+  mat-button-toggle {
+    margin-top: 10px;
+  }
+
   div.km-location {
     font-weight: 300;
     font-size: 12px;

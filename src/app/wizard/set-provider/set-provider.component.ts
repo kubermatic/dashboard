@@ -9,6 +9,7 @@ import {getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
 @Component({
   selector: 'kubermatic-set-provider',
   templateUrl: 'set-provider.component.html',
+  styleUrls: ['set-provider.component.scss'],
 })
 export class SetProviderComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
