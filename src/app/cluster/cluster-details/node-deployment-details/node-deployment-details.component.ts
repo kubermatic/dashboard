@@ -77,7 +77,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this.loadNodes();
     this.loadNodesEvents();
     this.loadCluster();
-    this.loadDatacenter();
     this.loadUserGroupData();
 
     interval(this._refreshInterval).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -122,11 +121,12 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       this.cluster = c;
       this.clusterProvider = NodeDeploymentDetailsComponent._getClusterProvider(this.cluster);
       this._isClusterLoaded = true;
+      this.loadDatacenter();
     });
   }
 
   loadDatacenter(): void {
-    this._datacenterService.getDataCenter(this._dcName).pipe(first()).subscribe((d) => {
+    this._datacenterService.getDataCenter(this.cluster.spec.cloud.dc).pipe(first()).subscribe((d) => {
       this.datacenter = d;
       this._isDatacenterLoaded = true;
     });
