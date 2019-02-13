@@ -15,7 +15,7 @@ export class EventListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataSource = new MatTableDataSource<EventEntity>();
-  displayedColumns: string[] = ['type', 'message', 'involvedObjectName'];
+  displayedColumns: string[] = ['type', 'message', 'involvedObjectName', 'count', 'lastTimestamp'];
 
   ngOnInit(): void {
     this.dataSource.data = this.events;
