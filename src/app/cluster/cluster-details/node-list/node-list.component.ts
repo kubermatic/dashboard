@@ -149,7 +149,7 @@ export class NodeListComponent implements OnInit {
     return node.id.replace('machine-', '');
   }
 
-  toggleNode(nodeID: string): void {
+  toggleNode(event, nodeID: string): void {
     const element = event.target as HTMLElement;
     const className = element.className;
     if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'km-copy') {
