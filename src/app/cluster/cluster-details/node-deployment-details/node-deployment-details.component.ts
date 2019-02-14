@@ -27,6 +27,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   cluster: ClusterEntity;
   clusterProvider: string;
   datacenter: DataCenterEntity;
+  seedDatacenter: DataCenterEntity;
   system: string;
   projectID: string;
   userGroup: string;
@@ -40,6 +41,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _areNodesEventsLoaded = false;
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
+  private _isSeedDatacenterLoaded = false;
   private _refreshInterval = 10000;
   private _unsubscribe: Subject<any> = new Subject();
 
@@ -76,6 +78,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this.loadNodeDeployment();
     this.loadNodes();
     this.loadNodesEvents();
+    this.loadSeedDatacenter();
     this.loadCluster();
     this.loadUserGroupData();
 
@@ -132,6 +135,13 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadSeedDatacenter(): void {
+    this._datacenterService.getDataCenter(this._dcName).pipe(first()).subscribe((d) => {
+      this.seedDatacenter = d;
+      this._isSeedDatacenterLoaded = true;
+    });
+  }
+
   loadUserGroupData(): void {
     this.userGroupConfig = this._appConfigService.getUserGroupConfig();
     this._userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((ug) => {
@@ -140,8 +150,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isInitialized(): boolean {
-    return this._isClusterLoaded && this._isDatacenterLoaded && this._areNodesLoaded && this._isNodeDeploymentLoaded &&
-        this._areNodesEventsLoaded;
+    return this._isClusterLoaded && this._isDatacenterLoaded && this._isSeedDatacenterLoaded && this._areNodesLoaded &&
+        this._isNodeDeploymentLoaded && this._areNodesEventsLoaded;
   }
 
   goBackToCluster(): void {
@@ -150,7 +160,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   showEditDialog(): void {
     this._nodeService
-        .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.datacenter, undefined)
+        .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.seedDatacenter, undefined)
         .subscribe((isConfirmed) => {
           if (isConfirmed) {
             this.loadNodeDeployment();
@@ -162,7 +172,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   showDeleteDialog(): void {
     this._nodeService
         .showNodeDeploymentDeleteDialog(
-            this.nodeDeployment, this.cluster.id, this.projectID, this.datacenter.metadata.name, undefined)
+            this.nodeDeployment, this.cluster.id, this.projectID, this.seedDatacenter.metadata.name, undefined)
         .subscribe((isConfirmed) => {
           if (isConfirmed) {
             this.goBackToCluster();
