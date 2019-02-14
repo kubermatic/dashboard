@@ -12,7 +12,7 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeBringyourownSeedDatacenter, fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
@@ -84,12 +84,13 @@ describe('NodeDeploymentDetailsComponent', () => {
     component.nodes = nodesFake();
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
+    component.seedDatacenter = fakeBringyourownSeedDatacenter();
     component.projectID = fakeProject().id;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {
       clusterName: component.cluster.id,
-      seedDc: component.datacenter.metadata.name,
+      seedDc: component.datacenter.spec.seed,
       nodeDeploymentID: component.nodeDeployment.id,
     };
 
