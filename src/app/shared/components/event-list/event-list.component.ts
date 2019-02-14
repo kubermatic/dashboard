@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 
 import {EventEntity} from '../../entity/EventEntity';
@@ -7,7 +7,7 @@ import {EventEntity} from '../../entity/EventEntity';
   selector: 'km-event-list',
   templateUrl: './event-list.component.html',
 })
-export class EventListComponent implements OnInit {
+export class EventListComponent implements OnInit, OnChanges {
   @Input() events: EventEntity[] = [];
   @Input() involvedObjectColumnName = 'Involved Object';
 
@@ -21,6 +21,10 @@ export class EventListComponent implements OnInit {
     this.dataSource.data = this.events;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnChanges(): void {
+    this.dataSource.data = this.events;
   }
 
   getTypeIcon(event: EventEntity): string {
