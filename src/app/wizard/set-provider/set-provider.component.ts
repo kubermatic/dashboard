@@ -1,8 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {DatacenterService} from '../../core/services/datacenter/datacenter.service';
-import {WizardService} from '../../core/services/wizard/wizard.service';
+import {DatacenterService} from '../../core/services';
+import {WizardService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
 
@@ -15,6 +15,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   setProviderForm: FormGroup;
   providers: string[] = [];
+  isOpenShift = false;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -23,6 +24,8 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.isOpenShift = !this.cluster.spec.version.startsWith('1');
+
     this.setProviderForm = new FormGroup({
       provider: new FormControl(getClusterProvider(this.cluster), [Validators.required]),
     });
