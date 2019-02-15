@@ -1,26 +1,41 @@
-<div class="km-dialog-box" style="max-width: 500px; min-width: 500px;">
+<div class="km-dialog-box"
+     style="max-width: 500px; min-width: 500px;">
   <mat-toolbar>
     Edit Provider Settings
-    <button mat-icon-button mat-dialog-close>
-      <i class="fa fa-times" aria-hidden="true"></i>
+    <button mat-icon-button
+            mat-dialog-close>
+      <i class="fa fa-times"
+         aria-hidden="true"></i>
     </button>
   </mat-toolbar>
   <mat-dialog-content>
     <div class="mat-dialog-content km-edit-provider-settings">
       <p>You are on the way to edit the provider settings for "{{ cluster.name }}".</p>
-      <kubermatic-aws-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.aws"></kubermatic-aws-provider-settings>
-      <kubermatic-digitalocean-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-provider-settings>
-      <kubermatic-hetzner-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.hetzner"></kubermatic-hetzner-provider-settings>
-      <kubermatic-openstack-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.openstack"></kubermatic-openstack-provider-settings>
-      <kubermatic-vsphere-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.vsphere"></kubermatic-vsphere-provider-settings>
-      <kubermatic-azure-provider-settings [cluster]="cluster" *ngIf="!!cluster.spec.cloud.azure"></kubermatic-azure-provider-settings>
+      <kubermatic-aws-provider-settings [cluster]="cluster"
+                                        *ngIf="!!cluster.spec.cloud.aws"></kubermatic-aws-provider-settings>
+      <kubermatic-digitalocean-provider-settings [cluster]="cluster"
+                                                 *ngIf="!!cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-provider-settings>
+      <kubermatic-hetzner-provider-settings [cluster]="cluster"
+                                            *ngIf="!!cluster.spec.cloud.hetzner"></kubermatic-hetzner-provider-settings>
+      <kubermatic-openstack-provider-settings [cluster]="cluster"
+                                              *ngIf="!!cluster.spec.cloud.openstack"></kubermatic-openstack-provider-settings>
+      <kubermatic-vsphere-provider-settings [cluster]="cluster"
+                                            *ngIf="!!cluster.spec.cloud.vsphere"></kubermatic-vsphere-provider-settings>
+      <kubermatic-azure-provider-settings [cluster]="cluster"
+                                          *ngIf="!!cluster.spec.cloud.azure"></kubermatic-azure-provider-settings>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-dialog-close mat-raised-button>
+    <button mat-dialog-close
+            mat-raised-button>
       Close
     </button>
-    <button mat-raised-button mat-dialog-close color="primary" class="btn btn-primary" [disabled]="!providerSettingsPatch.isValid" (click)="saveProviderSettings()">
+    <button mat-raised-button
+            mat-dialog-close
+            color="primary"
+            class="btn btn-primary"
+            [disabled]="!providerSettingsPatch.isValid"
+            (click)="saveProviderSettings()">
       Save
     </button>
   </mat-dialog-actions>

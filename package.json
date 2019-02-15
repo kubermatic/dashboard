@@ -20,10 +20,10 @@
     "check": "npm run check:ts && npm run check:scss",
     "check:ts": "gts check",
     "check:scss": "stylelint \"src/**/*.scss\"",
-    "fix": "npm run fix:ts && npm run fix:scss",
+    "fix": "npm run fix:ts && npm run fix:scss && npm run fix:html",
     "fix:ts": "gts fix",
     "fix:scss": "stylelint \"src/**/*.scss\" --fix",
-    "fix:html": "js-beautify",
+    "fix:html": "js-beautify --end-with-newline --indent-size=2 --wrap-attributes=force-aligned --replace -f \"src/**/*.html\"",
     "clean": "gts clean",
     "versioninfo": "node git-version.js"
   },

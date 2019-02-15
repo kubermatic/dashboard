@@ -1,4 +1,5 @@
-<form [formGroup]="doOptionsForm" fxLayout="column">
+<form [formGroup]="doOptionsForm"
+      fxLayout="column">
   <mat-card-header>
     <mat-card-title>
       <h4>
@@ -9,18 +10,28 @@
   <div fxFlex="100%">
     <div class="km-node-options">
       <label fxFlex="50%">Backups</label>
-      <mat-checkbox fxFlex="50%" id="backups" formControlName="backups"></mat-checkbox>
+      <mat-checkbox fxFlex="50%"
+                    id="backups"
+                    formControlName="backups"></mat-checkbox>
     </div>
     <div class="km-node-options">
       <label fxFlex="50%">IPv6</label>
-      <mat-checkbox fxFlex="50%" id="ipv6" formControlName="ipv6"></mat-checkbox>
+      <mat-checkbox fxFlex="50%"
+                    id="ipv6"
+                    formControlName="ipv6"></mat-checkbox>
     </div>
     <div class="km-node-options">
       <label fxFlex="50%">Monitoring</label>
-      <mat-checkbox fxFlex="50%" id="monitoring" formControlName="monitoring"></mat-checkbox>
+      <mat-checkbox fxFlex="50%"
+                    id="monitoring"
+                    formControlName="monitoring"></mat-checkbox>
     </div>
     <mat-form-field>
-      <textarea matInput id="tags" formControlName="tags" placeholder="Tags" matTextareaAutosize></textarea>
+      <textarea matInput
+                id="tags"
+                formControlName="tags"
+                placeholder="Tags"
+                matTextareaAutosize></textarea>
       <mat-hint>seperate tags with comma</mat-hint>
     </mat-form-field>
   </div>

@@ -1,12 +1,19 @@
-<form [formGroup]="digitaloceanSettingsForm" fxLayout="column">
-  <div fxLayoutAlign="center center" class="km-provider-message">
+<form [formGroup]="digitaloceanSettingsForm"
+      fxLayout="column">
+  <div fxLayoutAlign="center center"
+       class="km-provider-message">
     <p>
       We need a DigitalOcean Personal Access Token.
-      You can create one&nbsp;<a target="_new" href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
+      You can create one&nbsp;<a target="_new"
+         href="https://cloud.digitalocean.com/settings/api/tokens/new">here</a>.
     </p>
   </div>
   <mat-form-field fxFlex>
-    <input matInput formControlName="token" type="password" placeholder="API Token*:" autocomplete="off">
+    <input matInput
+           formControlName="token"
+           type="password"
+           placeholder="API Token*:"
+           autocomplete="off">
     <mat-error *ngIf="digitaloceanSettingsForm.controls.token.hasError('required')">
       DigitalOcean Personal Access Token is <strong>required</strong>
     </mat-error>

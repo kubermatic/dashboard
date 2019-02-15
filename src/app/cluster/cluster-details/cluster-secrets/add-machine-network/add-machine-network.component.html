@@ -1,19 +1,28 @@
 <div class="km-dialog-box">
   <mat-toolbar>
     Add Machine Networks
-    <button mat-icon-button mat-dialog-close>
-      <i class="fa fa-times" aria-hidden="true"></i>
+    <button mat-icon-button
+            mat-dialog-close>
+      <i class="fa fa-times"
+         aria-hidden="true"></i>
     </button>
   </mat-toolbar>
 
   <mat-dialog-content>
-    <kubermatic-machine-networks [cluster]="cluster" [width]="100" [isWizard]="false"></kubermatic-machine-networks>
+    <kubermatic-machine-networks [cluster]="cluster"
+                                 [width]="100"
+                                 [isWizard]="false"></kubermatic-machine-networks>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-dialog-close mat-raised-button >
+    <button mat-dialog-close
+            mat-raised-button>
       Close
     </button>
-    <button (click)="addMachineNetworks()" mat-raised-button color="primary" class="mat-primary" [disabled]="!isValid()">
+    <button (click)="addMachineNetworks()"
+            mat-raised-button
+            color="primary"
+            class="mat-primary"
+            [disabled]="!isValid()">
       Add
     </button>
   </mat-dialog-actions>

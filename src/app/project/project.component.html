@@ -1,41 +1,60 @@
 <div *ngIf="!loading">
   <div fxLayout>
-    <div fxFlex align="right">
-      <button id="km-add-project-top-btn" mat-raised-button color="primary" type="button" (click)="addProject()">
+    <div fxFlex
+         align="right">
+      <button id="km-add-project-top-btn"
+              mat-raised-button
+              color="primary"
+              type="button"
+              (click)="addProject()">
         <span class="km-btn-text-default">+ Add Project</span>
       </button>
     </div>
   </div>
-  
+
   <mat-card class="blue km-project-view">
     <mat-card-header>
-      <mat-card-title fxLayout matSort (matSortChange)="sortProjectData($event)" matSortActive="name" matSortDirection="asc">
+      <mat-card-title fxLayout
+                      matSort
+                      (matSortChange)="sortProjectData($event)"
+                      matSortActive="name"
+                      matSortDirection="asc">
         <div fxFlex="3%"></div>
-        <div fxFlex="25%" mat-sort-header="name"><strong>Name</strong></div>
+        <div fxFlex="25%"
+             mat-sort-header="name"><strong>Name</strong></div>
         <div fxFlex="18%"><strong>ID</strong></div>
         <div fxFlex="18%"><strong>Role</strong></div>
         <div fxFlex="18%"><strong>Clusters</strong></div>
         <!-- Not implemented in backend yet -->
         <!-- <div fxFlex="24%"><strong>Owners</strong></div> -->
-        <div fxFlex="18%" fxHide.sm fxHide.xs></div>
+        <div fxFlex="18%"
+             fxHide.sm
+             fxHide.xs></div>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content fxLayout="column" [ngSwitch]="!!projects && projects.length > 0 ">
+    <mat-card-content fxLayout="column"
+                      [ngSwitch]="!!projects && projects.length > 0 ">
       <ng-container *ngSwitchCase="true">
-        <kubermatic-project-item *ngFor="let project of sortedProjects; let iProject = index; trackBy: trackProject" [index]="iProject" [project]="project" fxFlex></kubermatic-project-item>
+        <kubermatic-project-item *ngFor="let project of sortedProjects; let iProject = index; trackBy: trackProject"
+                                 [index]="iProject"
+                                 [project]="project"
+                                 fxFlex></kubermatic-project-item>
       </ng-container>
       <ng-container *ngSwitchCase="false">
-        <div fxFlex class="km-row km-odd km-no-item">No Project available. Please add a Project.</div>
+        <div fxFlex
+             class="km-row km-odd km-no-item">No Project available. Please add a Project.</div>
       </ng-container>
       <ng-container>
         <div class="km-row">
-          <button class="km-btn-in-box" (click)="addProject()">+ Add Project</button>
+          <button class="km-btn-in-box"
+                  (click)="addProject()">+ Add Project</button>
         </div>
       </ng-container>
     </mat-card-content>
   </mat-card>
 
 </div>
-<div *ngIf="loading" >
-  <mat-spinner color="accent" class="km-spinner"></mat-spinner>
+<div *ngIf="loading">
+  <mat-spinner color="accent"
+               class="km-spinner"></mat-spinner>
 </div>

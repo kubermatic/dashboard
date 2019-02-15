@@ -1,8 +1,17 @@
-<div class="km-frontpage-content" fxLayout="column" fxLayoutAlign="center center">
+<div class="km-frontpage-content"
+     fxLayout="column"
+     fxLayoutAlign="center center">
   <p class="km-frontpage-inner-text">Scale Apps with one click<br>
     in the cloud or in your own datacenter</p>
-  <a mat-raised-button class="login-button" id="login-button" href="{{environment.coreOSdexAuth}}">Login / Sign-in</a>
+  <a mat-raised-button
+     class="login-button"
+     id="login-button"
+     href="{{environment.coreOSdexAuth}}">Login / Sign-in</a>
 </div>
 
 <div class="km-frontpage-bg"></div>
-<particles *ngIf="isInitialized" [params]="myParams" [style]="myStyle" width="100" height="100"></particles>
+<particles *ngIf="isInitialized"
+           [params]="myParams"
+           [style]="myStyle"
+           width="100"
+           height="100"></particles>

@@ -1,45 +1,76 @@
-<form [formGroup]="awsSettingsForm" fxLayout="column">
-  <div fxLayoutAlign="center center" class="km-provider-message">
+<form [formGroup]="awsSettingsForm"
+      fxLayout="column">
+  <div fxLayoutAlign="center center"
+       class="km-provider-message">
 
-      <span>We need a AWS Access Key and Secret Access Key <b>with write access</b>.<br>
-      You can create one&nbsp;<a target="_new" href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
-      </span>
+    <span>We need a AWS Access Key and Secret Access Key <b>with write access</b>.<br>
+      You can create one&nbsp;<a target="_new"
+         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+    </span>
   </div>
   <mat-form-field fxFlex>
-    <input matInput formControlName="accessKeyId" type="password" placeholder="Access key ID*:" autocomplete="off">
+    <input matInput
+           formControlName="accessKeyId"
+           type="password"
+           placeholder="Access key ID*:"
+           autocomplete="off">
     <mat-error *ngIf="awsSettingsForm.controls.accessKeyId.hasError('required')">
       Access key ID is <strong>required</strong>
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <input matInput formControlName="secretAccessKey" type="password" placeholder="Secret access key*:" autocomplete="off">
+    <input matInput
+           formControlName="secretAccessKey"
+           type="password"
+           placeholder="Secret access key*:"
+           autocomplete="off">
     <mat-error *ngIf="awsSettingsForm.controls.secretAccessKey.hasError('required')">
       Secret access key is <strong>required</strong>
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex *ngIf="!hideOptional">
-    <input matInput formControlName="securityGroup" type="text" placeholder="Security group ID:" autocomplete="off">
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <input matInput
+           formControlName="securityGroup"
+           type="text"
+           placeholder="Security group ID:"
+           autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
     <mat-error *ngIf="awsSettingsForm.controls.securityGroup.hasError('pattern')">
       The security group ID need to look similar to 'sg-a2c195ca'
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex *ngIf="!hideOptional">
-    <input matInput formControlName="vpcId" type="text" placeholder="VPC ID:" autocomplete="off">
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <input matInput
+           formControlName="vpcId"
+           type="text"
+           placeholder="VPC ID:"
+           autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
     <mat-error *ngIf="awsSettingsForm.controls.vpcId.hasError('pattern')">
       The VPC ID needs to look similar to 'vpc-3a2f9851'
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex *ngIf="!hideOptional">
-    <input matInput formControlName="subnetId" type="text" placeholder="Subnet ID:" autocomplete="off">
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <input matInput
+           formControlName="subnetId"
+           type="text"
+           placeholder="Subnet ID:"
+           autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
     <mat-error *ngIf="awsSettingsForm.controls.subnetId.hasError('pattern')">
       The subnet ID needs to look similar to 'subnet-36275b5d'
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex *ngIf="!hideOptional">
-    <input matInput formControlName="routeTableId" type="text" placeholder="Route table ID:" autocomplete="off">
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <input matInput
+           formControlName="routeTableId"
+           type="text"
+           placeholder="Route table ID:"
+           autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Route table. If not specified, the default Route Table will be used.</mat-hint>
     <mat-error *ngIf="awsSettingsForm.controls.routeTableId.hasError('pattern')">
       The route table ID needs to look similar to 'rtb-0bd18f60'

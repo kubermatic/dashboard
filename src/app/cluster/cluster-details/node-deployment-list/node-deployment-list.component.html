@@ -1,9 +1,14 @@
 <mat-card class="blue">
   <mat-card-content>
-    <table class="km-table" mat-table [dataSource]="getDataSource()">
+    <table class="km-table"
+           mat-table
+           [dataSource]="getDataSource()">
       <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef class="km-header-cell"></th>
-        <td mat-cell *matCellDef="let element">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
           <i [matTooltip]="getHealthStatus(element).message"
              [ngClass]="getHealthStatus(element).color"
              class="km-node-deployment-health"></i>
@@ -11,43 +16,62 @@
       </ng-container>
 
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef class="km-header-cell">Name</th>
-        <td mat-cell *matCellDef="let element">{{element.name}}</td>
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Name</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="replicas">
-        <th mat-header-cell *matHeaderCellDef class="km-header-cell">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">
           <span>Replicas&nbsp;</span>
           <span matTooltip="Number of available machines of desired machines from the template. A machine is considered as available when it is ready for at least 'minReadySeconds'.">
-            <i class="fa fa-question-circle" aria-hidden="true"></i>
+            <i class="fa fa-question-circle"
+               aria-hidden="true"></i>
           </span>
         </th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell
+            *matCellDef="let element">
           <span>{{!!element.status?.availableReplicas ? element.status.availableReplicas : 0}}/{{element.spec.replicas}}&nbsp;</span>
           <span *ngIf="element.status?.availableReplicas > element.spec.replicas"
                 matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating.">
-            <i class="fa fa-question-circle" aria-hidden="true"></i>
+            <i class="fa fa-question-circle"
+               aria-hidden="true"></i>
           </span>
         </td>
       </ng-container>
 
       <ng-container matColumnDef="ver">
-        <th mat-header-cell *matHeaderCellDef class="km-header-cell">Kubelet Version</th>
-        <td mat-cell *matCellDef="let element">v{{element.spec.template.versions?.kubelet}}</td>
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Kubelet Version</th>
+        <td mat-cell
+            *matCellDef="let element">v{{element.spec.template.versions?.kubelet}}</td>
       </ng-container>
 
       <ng-container matColumnDef="created">
-        <th mat-header-cell *matHeaderCellDef class="km-header-cell">Created</th>
-        <td mat-cell *matCellDef="let element">{{element.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Created</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="km-header-cell"></th>
-        <td mat-cell *matCellDef="let element">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
           <div class="km-node-deployment-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="30" class="km-spinner" color="accent"></mat-spinner>
+                <mat-spinner [diameter]="30"
+                             class="km-spinner"
+                             color="accent"></mat-spinner>
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
@@ -56,7 +80,8 @@
                         matTooltip="Edit Node Deployment"
                         (click)="showEditDialog(element, $event)"
                         [disabled]="!!userGroup && !userGroupConfig[userGroup].nodeDeployments.edit">
-                  <mat-icon class="km-icon-edit black" [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodeDeployments.edit) ? 'km-disabled' : ''"></mat-icon>
+                  <mat-icon class="km-icon-edit black"
+                            [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodeDeployments.edit) ? 'km-disabled' : ''"></mat-icon>
                 </button>
 
                 <button mat-icon-button
@@ -74,7 +99,9 @@
         </td>
       </ng-container>
 
-      <tr mat-header-row class="km-header-row" *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns"
           class="km-mat-row km-clickable"
@@ -88,33 +115,36 @@
       </div>
       <div class="km-row"
            *ngIf="clusterHealthStatus !== 'km-status-running' || !!hasInitialNodes || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
-        <mat-spinner color="accent" class="km-node-deployment-spinner" [diameter]="30"></mat-spinner>
+        <mat-spinner color="accent"
+                     class="km-node-deployment-spinner"
+                     [diameter]="30"></mat-spinner>
       </div>
     </ng-container>
 
   </mat-card-content>
 </mat-card>
 
-<mat-card [fxShow]="!!cluster.spec.cloud.bringyourown" class="km-mat-card-code-block">
+<mat-card [fxShow]="!!cluster.spec.cloud.bringyourown"
+          class="km-mat-card-code-block">
   <mat-card-content>
     <div class="km-code-block">
       <p>
-#Install kubeadm on you local system & the worker node: https://kubernetes.io/docs/setup/independent/install-kubeadm/<br>
-<br>
-# ====================================<br>
-# ======= On your local system =======<br>
-# ====================================<br>
-#<br>
-# => Create a new token for the new node<br>
-kubeadm token --kubeconfig kubeconfig create --print-join-command<br>
-<br>
-# ====================================<br>
-# ======== On the worker node ========<br>
-# ====================================<br>
-#<br>
-#Use the command which got previously generated by kubeadm<br>
-#example:<br>
-#kubeadm join --token AAAAAA.BBBBBBBBBBBBB {{cluster.status.url}} --discovery-token-ca-cert-hash sha256:aaaabbbbcccc<br>
+        #Install kubeadm on you local system & the worker node: https://kubernetes.io/docs/setup/independent/install-kubeadm/<br>
+        <br>
+        # ====================================<br>
+        # ======= On your local system =======<br>
+        # ====================================<br>
+        #<br>
+        # => Create a new token for the new node<br>
+        kubeadm token --kubeconfig kubeconfig create --print-join-command<br>
+        <br>
+        # ====================================<br>
+        # ======== On the worker node ========<br>
+        # ====================================<br>
+        #<br>
+        #Use the command which got previously generated by kubeadm<br>
+        #example:<br>
+        #kubeadm join --token AAAAAA.BBBBBBBBBBBBB {{cluster.status.url}} --discovery-token-ca-cert-hash sha256:aaaabbbbcccc<br>
       </p>
     </div>
   </mat-card-content>

@@ -1,27 +1,47 @@
-<form [formGroup]="openstackSettingsForm" fxLayout="column">
+<form [formGroup]="openstackSettingsForm"
+      fxLayout="column">
   <mat-form-field fxFlex>
-    <input matInput formControlName="domain" type="text" placeholder="Domain*:" title="Domain" autocomplete="off">
+    <input matInput
+           formControlName="domain"
+           type="text"
+           placeholder="Domain*:"
+           title="Domain"
+           autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.domain.hasError('required')">
       Domain is <strong>required</strong>
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <input matInput formControlName="username" type="text" placeholder="Username*:" title="Username" autocomplete="off">
+    <input matInput
+           formControlName="username"
+           type="text"
+           placeholder="Username*:"
+           title="Username"
+           autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.username.hasError('required')">
       Username is <strong>required</strong>
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
-    <input matInput formControlName="password" type="password" placeholder="Password*:" title="Password" autocomplete="off">
+    <input matInput
+           formControlName="password"
+           type="password"
+           placeholder="Password*:"
+           title="Password"
+           autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.password.hasError('required')">
       Password is <strong>required</strong>
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex >
-    <input matInput formControlName="tenant" [placeholder]="getTenantsFormState()" [matAutocomplete]="auto">
+  <mat-form-field fxFlex>
+    <input matInput
+           formControlName="tenant"
+           [placeholder]="getTenantsFormState()"
+           [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let item of tenants" [value]="item.name">
-      {{item.name}}
+      <mat-option *ngFor="let item of tenants"
+                  [value]="item.name">
+        {{item.name}}
       </mat-option>
     </mat-autocomplete>
     <mat-error *ngIf="openstackSettingsForm.controls.tenant.hasError('required')">
@@ -29,9 +49,14 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex id="km-floating-ip-pool-field" *ngIf="!hideOptional || isFloatingIPEnforced()">
-    <mat-select [placeholder]="getOptionalSettingsFormState('Floating IP Pool')" formControlName="floatingIpPool" [required]="isFloatingIPEnforced()">
-      <mat-option *ngFor="let item of floatingIpPool" [value]="item.name">
+  <mat-form-field fxFlex
+                  id="km-floating-ip-pool-field"
+                  *ngIf="!hideOptional || isFloatingIPEnforced()">
+    <mat-select [placeholder]="getOptionalSettingsFormState('Floating IP Pool')"
+                formControlName="floatingIpPool"
+                [required]="isFloatingIPEnforced()">
+      <mat-option *ngFor="let item of floatingIpPool"
+                  [value]="item.name">
         {{item.name}}
       </mat-option>
     </mat-select>
@@ -39,9 +64,12 @@
   </mat-form-field>
 
 
-  <mat-form-field fxFlex *ngIf="!hideOptional">
-    <mat-select [placeholder]="getOptionalSettingsFormState('Security Group')" formControlName="securityGroups">
-      <mat-option *ngFor="let item of securityGroup" [value]="item.name">
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-select [placeholder]="getOptionalSettingsFormState('Security Group')"
+                formControlName="securityGroups">
+      <mat-option *ngFor="let item of securityGroup"
+                  [value]="item.name">
         {{item.name}}
       </mat-option>
     </mat-select>
@@ -50,10 +78,14 @@
     </mat-hint>
   </mat-form-field>
 
-  <div fxFlex class="mat-select-container" *ngIf="!hideOptional">
+  <div fxFlex
+       class="mat-select-container"
+       *ngIf="!hideOptional">
     <mat-form-field>
-      <mat-select [placeholder]="getOptionalSettingsFormState('Network')" formControlName="network">
-        <mat-option *ngFor="let item of network" [value]="item.name">
+      <mat-select [placeholder]="getOptionalSettingsFormState('Network')"
+                  formControlName="network">
+        <mat-option *ngFor="let item of network"
+                    [value]="item.name">
           {{item.name}}
         </mat-option>
       </mat-select>
@@ -64,10 +96,14 @@
     </mat-form-field>
   </div>
 
-  <div fxFlex class="mat-select-container" *ngIf="!hideOptional">
+  <div fxFlex
+       class="mat-select-container"
+       *ngIf="!hideOptional">
     <mat-form-field>
-      <mat-select [placeholder]="getSubnetIDFormState()" formControlName="subnetId">
-        <mat-option *ngFor="let subnet of subnetIds" [value]="subnet.name">
+      <mat-select [placeholder]="getSubnetIDFormState()"
+                  formControlName="subnetId">
+        <mat-option *ngFor="let subnet of subnetIds"
+                    [value]="subnet.name">
           {{subnet.name}}
         </mat-option>
       </mat-select>

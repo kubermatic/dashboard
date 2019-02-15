@@ -1,9 +1,13 @@
-<form [formGroup]="hetznerNodeForm" fxLayout="column">
-  <div fxFlex class="mat-select-container">
+<form [formGroup]="hetznerNodeForm"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Node type*:" formControlName="type">
-        <mat-option *ngFor="let type of types" [value]="type">
-        {{ type }}
+      <mat-select placeholder="Node type*:"
+                  formControlName="type">
+        <mat-option *ngFor="let type of types"
+                    [value]="type">
+          {{ type }}
         </mat-option>
       </mat-select>
     </mat-form-field>
