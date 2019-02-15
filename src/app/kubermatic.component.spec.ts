@@ -12,7 +12,7 @@ import {NavigationComponent} from './core/components/navigation/navigation.compo
 import {NotificationComponent} from './core/components/notification/notification.component';
 import {SidenavComponent} from './core/components/sidenav/sidenav.component';
 import {SidenavService} from './core/components/sidenav/sidenav.service';
-import {ApiService, Auth, AuthGuard, DatacenterService, ProjectService, UserService} from './core/services/index';
+import {ApiService, Auth, AuthGuard, DatacenterService, ProjectService, UserService} from './core/services';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
 import {SharedModule} from './shared/shared.module';

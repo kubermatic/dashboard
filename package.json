@@ -9,7 +9,6 @@
   "scripts": {
     "start": "npm run versioninfo && ng serve --hmr",
     "start:local": "npm run versioninfo && ng serve --hmr --proxy-config proxy-local.conf.json",
-    "start:mock": "concurrently --kill-others --prefix \"[{name}]\" --names \"mock-server,ng-serve\" \"node mock-server.js\" \"ng serve --hmr --proxy-config proxy-mock.conf.json\"",
     "build": "npm run versioninfo && ng build --prod",
     "test": "ng test",
     "test:headless": "ng test --browsers=ChromeHeadless --watch=false",
