@@ -110,18 +110,14 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(
             (tenants) => {
-              if (!!tenants && tenants.length > 0) {
-                this.tenants = tenants.sort((a, b) => {
-                  return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-                });
+              this.tenants = tenants.sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
 
-                if (this.tenants.length === 0) {
-                  this.openstackSettingsForm.controls.tenant.setValue('');
-                }
-
-              } else {
-                this.tenants = [];
+              if (this.tenants.length === 0) {
+                this.openstackSettingsForm.controls.tenant.setValue('');
               }
+
               this.loadingOptionalTenants = false;
             },
             () => {
@@ -219,7 +215,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       return 'Tenant: Please enter your credentials first!';
     } else if (this.loadingOptionalTenants) {
       return 'Loading Tenants...';
-    } else if (this.tenants.length === 0) {
+    } else if (!this.loadingOptionalTenants && this.tenants.length === 0) {
       return 'No Tenants available';
     } else {
       return 'Tenant*:';
@@ -262,7 +258,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     } else if (this.openstackSettingsForm.controls.network.value !== '' && this.subnetIds.length === 0) {
       return 'No Subnet IDs available';
     } else {
-      return 'Subnet IDs:';
+      return 'Subnet ID:';
     }
   }
 
