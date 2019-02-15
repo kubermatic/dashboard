@@ -1,73 +1,123 @@
 <ng-container *ngIf="isLoaded()">
-  <div fxLayout class="km-cluster-detail-actions">
-    <div fxFlex="100%" align="right">
+  <div fxLayout
+       class="km-cluster-detail-actions">
+    <div fxFlex="100%"
+         align="right">
       <button mat-raised-button
               color="primary"
               (click)="addNode()"
               [disabled]="!isClusterRunning"
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
               [disabled]="!!userGroup && !userGroupConfig[userGroup].nodeDeployments.create">
-        <i class="fa fa-plus km-action-button-icon" aria-hidden="true"></i>
+        <i class="fa fa-plus km-action-button-icon"
+           aria-hidden="true"></i>
         Add Node Deployment
       </button>
-      <button class="km-connect-kubeconfig-btn" (click)="connectClusterDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'km-status-running'">
+      <button class="km-connect-kubeconfig-btn"
+              (click)="connectClusterDialog()"
+              mat-button
+              mat-raised-button
+              color="primary"
+              [disabled]="this.clusterHealthClass !== 'km-status-running'">
         Connect
       </button>
-      <button class="km-share-kubeconfig-btn" (click)="shareConfigDialog()" mat-button mat-raised-button color="primary" [disabled]="this.clusterHealthClass !== 'km-status-running'" *ngIf="!!config.share_kubeconfig">
+      <button class="km-share-kubeconfig-btn"
+              (click)="shareConfigDialog()"
+              mat-button
+              mat-raised-button
+              color="primary"
+              [disabled]="this.clusterHealthClass !== 'km-status-running'"
+              *ngIf="!!config.share_kubeconfig">
         Share cluster
       </button>
-      <a class="km-download-kubeconfig-btn" mat-button mat-raised-button disabled="{{ !isClusterRunning }}" color="primary" href="{{ getDownloadURL() }}" target="_blank">Download config</a>
-      <button id="km-delete-cluster-btn" mat-button (click)="deleteClusterDialog()" mat-raised-button
+      <a class="km-download-kubeconfig-btn"
+         mat-button
+         mat-raised-button
+         disabled="{{ !isClusterRunning }}"
+         color="primary"
+         href="{{ getDownloadURL() }}"
+         target="_blank">Download config</a>
+      <button id="km-delete-cluster-btn"
+              mat-button
+              (click)="deleteClusterDialog()"
+              mat-raised-button
               [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
-        <i class="fa fa-trash-o km-action-button-icon" aria-hidden="true"></i>
+        <i class="fa fa-trash-o km-action-button-icon"
+           aria-hidden="true"></i>
         Delete Cluster
       </button>
     </div>
   </div>
 
-  <mat-card class="white" [ngClass]="clusterHealthClass">
+  <mat-card class="white"
+            [ngClass]="clusterHealthClass">
     <mat-card-header class="km-card-main-header">
       <mat-card-title>
-        <span ngxClipboard [cbContent]="cluster.name" matTooltip="click to copy" class="km-copy km-cluster-name">{{cluster.name}}</span>
-        <kubermatic-cluster-health-status [cluster]="cluster" [datacenter]="datacenter" [projectID]="projectID"></kubermatic-cluster-health-status>
+        <span ngxClipboard
+              [cbContent]="cluster.name"
+              matTooltip="click to copy"
+              class="km-copy km-cluster-name">{{cluster.name}}</span>
+        <kubermatic-cluster-health-status [cluster]="cluster"
+                                          [datacenter]="datacenter"
+                                          [projectID]="projectID"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content fxLayout class="km-row">
+    <mat-card-content fxLayout
+                      class="km-row">
       <div fxFlex="20%">
         <strong>Master Version:</strong>
       </div>
-      <div fxFlex="35%" class="km-change-version" *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)">
-        <span (click)="changeClusterVersionDialog()" matTooltip="click to change version" class="km-copy">{{cluster.spec.version}}
-        <small [hidden]="!updatesAvailable">upgrade available</small></span>
+      <div fxFlex="35%"
+           class="km-change-version"
+           *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)">
+        <span (click)="changeClusterVersionDialog()"
+              matTooltip="click to change version"
+              class="km-copy">{{cluster.spec.version}}
+          <small [hidden]="!updatesAvailable">upgrade available</small></span>
       </div>
-      <div fxFlex="35%" class="km-change-version" [hidden]="isClusterRunning && (updatesAvailable || downgradesAvailable)">
+      <div fxFlex="35%"
+           class="km-change-version"
+           [hidden]="isClusterRunning && (updatesAvailable || downgradesAvailable)">
         {{cluster.spec.version}}
       </div>
     </mat-card-content>
   </mat-card>
-  <kubermatic-cluster-secrets [cluster]="cluster" [datacenter]="datacenter" [projectID]="projectID" [userGroup]="userGroup"></kubermatic-cluster-secrets>
+  <kubermatic-cluster-secrets [cluster]="cluster"
+                              [datacenter]="datacenter"
+                              [projectID]="projectID"
+                              [userGroup]="userGroup"></kubermatic-cluster-secrets>
 
   <mat-card class="blue">
-    <mat-card-header >
+    <mat-card-header>
       <mat-card-title fxLayout>
         <div fxFlex="42%">Provider</div>
         <div fxFlex="30%">Node Region</div>
         <div fxFlex="25%">
           SSH keys
           <span matTooltip="You can login into the nodes with the user 'root', 'ubuntu' or 'core'.">
-            <i class="fa fa-question-circle" aria-hidden="true"></i>
+            <i class="fa fa-question-circle"
+               aria-hidden="true"></i>
           </span>
         </div>
-        <div fxFlex="3%" class="provider-menu">
-          <button mat-icon-button class="km-provider-menu-btn" [matMenuTriggerFor]="menu" *ngIf="!cluster.spec.cloud.bringyourown">
+        <div fxFlex="3%"
+             class="provider-menu">
+          <button mat-icon-button
+                  class="km-provider-menu-btn"
+                  [matMenuTriggerFor]="menu"
+                  *ngIf="!cluster.spec.cloud.bringyourown">
             <mat-icon>more_vert</mat-icon>
           </button>
-          <mat-menu #menu="matMenu" class="km-provider-edit-settings">
-            <button mat-menu-item (click)="editProviderSettings()" [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.edit">
+          <mat-menu #menu="matMenu"
+                    class="km-provider-edit-settings">
+            <button mat-menu-item
+                    (click)="editProviderSettings()"
+                    [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.edit">
               <mat-icon class="km-icon-edit black"></mat-icon>
               <span>Edit Settings</span>
             </button>
-            <button mat-menu-item (click)="editSSHKeys()" [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.edit">
+            <button mat-menu-item
+                    (click)="editSSHKeys()"
+                    [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.edit">
               <mat-icon class="km-icon-edit black"></mat-icon>
               <span>Manage SSH keys</span>
             </button>
@@ -77,11 +127,13 @@
     </mat-card-header>
 
     <mat-card-content>
-      <div class="km-row" fxLayout>
+      <div class="km-row"
+           fxLayout>
         <div fxFlex="42%">
           <span class="km-provider-logo km-provider-logo-{{nodeDc.spec.provider}}"></span>
         </div>
-        <div fxFlex="30%" class="km-region">
+        <div fxFlex="30%"
+             class="km-region">
           <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">
             <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
             <span class="km-location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
@@ -89,23 +141,30 @@
         </div>
         <div fxFlex="25%">
           <ng-container [ngSwitch]="sshKeys.length > 0">
-            <ul class="km-ssh-keys-list"  *ngSwitchCase="true">
+            <ul class="km-ssh-keys-list"
+                *ngSwitchCase="true">
               <li *ngFor="let key of sshKeys.slice(0, 3)">
                 <i class="fa fa-key"></i>
                 {{key.name}}
               </li>
-              <div class="km-ssh-keys-list-more" *ngIf="sshKeys.length > 3">
-                <div class="km-more-sshKeys-btn" (click)="loadMoreSshKeys(true)" *ngIf="!moreSshKeys">
+              <div class="km-ssh-keys-list-more"
+                   *ngIf="sshKeys.length > 3">
+                <div class="km-more-sshKeys-btn"
+                     (click)="loadMoreSshKeys(true)"
+                     *ngIf="!moreSshKeys">
                   <strong>More</strong>
                   <span class="km-icon-arrow-down"></span>
                 </div>
-                <div class="km-more-sshKeys" *ngIf="moreSshKeys">
+                <div class="km-more-sshKeys"
+                     *ngIf="moreSshKeys">
                   <li *ngFor="let key of sshKeys.slice(3, sshKeys.length+1)">
                     <i class="fa fa-key"></i>
                     {{key.name}}
                   </li>
                 </div>
-                <div class="km-more-sshKeys-btn" (click)="loadMoreSshKeys(false)" *ngIf="moreSshKeys">
+                <div class="km-more-sshKeys-btn"
+                     (click)="loadMoreSshKeys(false)"
+                     *ngIf="moreSshKeys">
                   <strong>Less</strong>
                   <span class="km-icon-arrow-up"></span>
                 </div>
@@ -130,9 +189,10 @@
   <div *ngIf="nodes.length > 0">
     <div class="km-pre-card-title">
       <ng-container>Nodes&nbsp;</ng-container>
-        <span matTooltip="Single Node management is being deprecated in favour of Node Deployments. This table displays only the Nodes that are not controlled by other resources (i.e. children of Node Deployment).">
-          <i class="fa fa-warning" aria-hidden="true"></i>
-        </span>
+      <span matTooltip="Single Node management is being deprecated in favour of Node Deployments. This table displays only the Nodes that are not controlled by other resources (i.e. children of Node Deployment).">
+        <i class="fa fa-warning"
+           aria-hidden="true"></i>
+      </span>
     </div>
     <kubermatic-node-list [cluster]="cluster"
                           [nodes]="nodes"
@@ -148,5 +208,6 @@
 </ng-container>
 
 <div *ngIf="!isLoaded()">
-  <mat-spinner color="accent" class="km-spinner"></mat-spinner>
+  <mat-spinner color="accent"
+               class="km-spinner"></mat-spinner>
 </div>
