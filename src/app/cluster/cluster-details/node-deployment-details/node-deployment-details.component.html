@@ -1,11 +1,14 @@
 <ng-container *ngIf="isInitialized()">
-  <div fxLayout class="km-node-deployment-detail-actions">
-    <div fxFlex="100%" align="right">
+  <div fxLayout
+       class="km-node-deployment-detail-actions">
+    <div fxFlex="100%"
+         align="right">
       <button mat-button
               mat-raised-button
               color="primary"
               (click)="goBackToCluster()">
-        <i class="fa fa-history" aria-hidden="true"></i>
+        <i class="fa fa-history"
+           aria-hidden="true"></i>
         Go back to Cluster
       </button>
       <button mat-button
@@ -13,7 +16,8 @@
               color="primary"
               (click)="showEditDialog()"
               [disabled]="!!userGroup && !userGroupConfig[userGroup].nodeDeployments.edit">
-        <mat-icon class="km-icon-edit" [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodeDeployments.edit) ? 'km-disabled black' : 'white'"></mat-icon>
+        <mat-icon class="km-icon-edit"
+                  [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodeDeployments.edit) ? 'km-disabled black' : 'white'"></mat-icon>
         Edit Node Deployment
       </button>
       <button mat-button
@@ -21,7 +25,8 @@
               color="primary"
               (click)="showDeleteDialog()"
               [disabled]="!!userGroup && !userGroupConfig[userGroup].nodeDeployments.delete">
-        <i class="fa fa-trash-o" aria-hidden="true"></i>
+        <i class="fa fa-trash-o"
+           aria-hidden="true"></i>
         Delete Node Deployment
       </button>
     </div>
@@ -36,7 +41,8 @@
         <span class="km-node-deployment-name">{{nodeDeployment.name}}</span>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap" class="km-row">
+    <mat-card-content fxLayout="row wrap"
+                      class="km-row">
       <km-property>
         <div key>Status</div>
         <div value>{{nodeDeploymentHealthStatus.message}}</div>
@@ -47,7 +53,8 @@
           <span>{{!!nodeDeployment.status?.availableReplicas ? nodeDeployment.status.availableReplicas : 0}}/{{nodeDeployment.spec.replicas}}&nbsp;</span>
           <span *ngIf="nodeDeployment.status?.availableReplicas > nodeDeployment.spec.replicas"
                 matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating.">
-            <i class="fa fa-question-circle" aria-hidden="true"></i>
+            <i class="fa fa-question-circle"
+               aria-hidden="true"></i>
           </span>
         </div>
       </km-property>
@@ -83,7 +90,9 @@
       </km-property>
       <km-property>
         <div key>Cluster name</div>
-        <div value class="km-link" (click)="goBackToCluster()">{{cluster.name}}</div>
+        <div value
+             class="km-link"
+             (click)="goBackToCluster()">{{cluster.name}}</div>
       </km-property>
       <km-property>
         <div key>Cluster provider</div>
@@ -120,5 +129,6 @@
 </ng-container>
 
 <ng-container *ngIf="!isInitialized()">
-  <mat-spinner color="accent" class="km-spinner"></mat-spinner>
+  <mat-spinner color="accent"
+               class="km-spinner"></mat-spinner>
 </ng-container>

@@ -4,20 +4,26 @@
      fxLayoutAlign="left"
      fxLayoutGap="10px"
      fxLayoutGap.xs="0">
-  <ul class="km-breadcrumb" fxFlex fxFlexOffset.xs="0">
+  <ul class="km-breadcrumb"
+      fxFlex
+      fxFlexOffset.xs="0">
     <li class="km-breadcrumb-item"><a routerLink="/projects">Home</a></li>
 
-    <li class="km-breadcrumb-item" *ngIf="!clusterName.length && activePageTitle !== 'Cluster details'">{{activePageTitle}}</li>
+    <li class="km-breadcrumb-item"
+        *ngIf="!clusterName.length && activePageTitle !== 'Cluster details'">{{activePageTitle}}</li>
 
-    <li class="km-breadcrumb-item" *ngIf="clusterName.length">
+    <li class="km-breadcrumb-item"
+        *ngIf="clusterName.length">
       <a routerLink="/projects/{{project}}/clusters">Manage Clusters</a>
     </li>
 
-    <li class="km-breadcrumb-item" *ngIf="clusterName.length">
+    <li class="km-breadcrumb-item"
+        *ngIf="clusterName.length">
       <a routerLink="/projects/{{project}}/dc/{{datacenter}}/clusters/{{cluster}}">{{clusterName}}</a>
     </li>
 
-    <li class="km-breadcrumb-item" *ngIf="nodeDeployment">
+    <li class="km-breadcrumb-item"
+        *ngIf="nodeDeployment">
       <a routerLink="/projects/{{project}}/dc/{{datacenter}}/clusters/{{cluster}}/nd/{{nodeDeployment}}">{{nodeDeployment}}</a>
     </li>
   </ul>

@@ -7,9 +7,14 @@
   <p>Choose a cloud provider for your Kubernetes nodes to be deployed by
     Kubermatic. Your nodes can be placed in any cloud you like.
   </p>
-  <form [formGroup]="setProviderForm" fxLayoutAlign="left" fxLayout="row wrap">
-    <mat-button-toggle-group group="providerGroup" formControlName="provider">
-      <mat-button-toggle *ngFor="let provider of providers;" value="{{provider}}" (click)="this.changeClusterProvider()">
+  <form [formGroup]="setProviderForm"
+        fxLayoutAlign="left"
+        fxLayout="row wrap">
+    <mat-button-toggle-group group="providerGroup"
+                             formControlName="provider">
+      <mat-button-toggle *ngFor="let provider of providers;"
+                         value="{{provider}}"
+                         (click)="this.changeClusterProvider()">
         <span class="km-provider-logo km-provider-logo-{{provider}}"></span>
       </mat-button-toggle>
     </mat-button-toggle-group>

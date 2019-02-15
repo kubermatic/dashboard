@@ -1,20 +1,30 @@
-<kubermatic-progress [steps]="steps" [currentStepIndex]="currentStepIndex" [currentStep]="currentStep"></kubermatic-progress>
+<kubermatic-progress [steps]="steps"
+                     [currentStepIndex]="currentStepIndex"
+                     [currentStep]="currentStep"></kubermatic-progress>
 
 <mat-card>
   <!-- Cluster Spec -->
-  <kubermatic-set-cluster-spec [cluster]="cluster" *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
+  <kubermatic-set-cluster-spec [cluster]="cluster"
+                               *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
 
   <!-- Cluster Provider -->
-  <kubermatic-set-provider [cluster]="cluster" *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
+  <kubermatic-set-provider [cluster]="cluster"
+                           *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
 
   <!-- Cluster Datacenter -->
-  <kubermatic-set-datacenter [cluster]="cluster" *ngIf="currentStep.name === 'set-datacenter'"></kubermatic-set-datacenter>
+  <kubermatic-set-datacenter [cluster]="cluster"
+                             *ngIf="currentStep.name === 'set-datacenter'"></kubermatic-set-datacenter>
 
   <!-- Provider Settings -->
-  <kubermatic-set-settings [cluster]="cluster" [clusterSSHKeys]="clusterSSHKeys" [nodeData]="addNodeData" *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
+  <kubermatic-set-settings [cluster]="cluster"
+                           [clusterSSHKeys]="clusterSSHKeys"
+                           [nodeData]="addNodeData"
+                           *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
 
   <!-- Machine Networks -->
-  <kubermatic-set-machine-networks [cluster]="cluster" [nodeData]="addNodeData" *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
+  <kubermatic-set-machine-networks [cluster]="cluster"
+                                   [nodeData]="addNodeData"
+                                   *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
 
   <!-- Provider Summary -->
   <kubermatic-summary *ngIf="currentStep.name === 'summary'"
@@ -26,20 +36,43 @@
 
   <!-- Navigation Buttons -->
   <div class="km-button-navigation">
-    <button type="button" class="km-btn-back" mat-raised-button (click)="stepBack()" *ngIf="currentStepIndex !== 0">
+    <button type="button"
+            class="km-btn-back"
+            mat-raised-button
+            (click)="stepBack()"
+            *ngIf="currentStepIndex !== 0">
       Back
     </button>
-    <button id="km-create-cluster-next-btn" *ngIf="currentStepIndex < steps.length - 1" type="button" [disabled]="!currentStep.valid()" mat-raised-button color="primary" (click)="stepForward()">
+    <button id="km-create-cluster-next-btn"
+            *ngIf="currentStepIndex < steps.length - 1"
+            type="button"
+            [disabled]="!currentStep.valid()"
+            mat-raised-button
+            color="primary"
+            (click)="stepForward()">
       Next
     </button>
-    <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0" type="button" mat-raised-button color="primary" (click)="stepForward()">
+    <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0"
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="stepForward()">
       Skip
     </button>
-    <button id="km-create-cluster-create-btn" *ngIf="currentStepIndex == steps.length - 1" [disabled]="creating || project.status !== 'Active'" type="button" mat-raised-button color="primary" (click)="createCluster()">
+    <button id="km-create-cluster-create-btn"
+            *ngIf="currentStepIndex == steps.length - 1"
+            [disabled]="creating || project.status !== 'Active'"
+            type="button"
+            mat-raised-button
+            color="primary"
+            (click)="createCluster()">
       Create
     </button>
-    <span class="km-project-status-info" *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
-    <a type="button" class="km-cancel-button" routerLink="/projects/{{project.id}}/clusters">Cancel</a>
+    <span class="km-project-status-info"
+          *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
+    <a type="button"
+       class="km-cancel-button"
+       routerLink="/projects/{{project.id}}/clusters">Cancel</a>
   </div>
 
 </mat-card>

@@ -1,8 +1,13 @@
-<form [formGroup]="deleteForm" id="km-delete-cluster-dialog" class="km-dialog-box" (keydown.enter)="deleteCluster()">
- <mat-toolbar>
+<form [formGroup]="deleteForm"
+      id="km-delete-cluster-dialog"
+      class="km-dialog-box"
+      (keydown.enter)="deleteCluster()">
+  <mat-toolbar>
     Delete Cluster confirmation
-    <button mat-icon-button mat-dialog-close>
-      <i class="fa fa-times" aria-hidden="true"></i>
+    <button mat-icon-button
+            mat-dialog-close>
+      <i class="fa fa-times"
+         aria-hidden="true"></i>
     </button>
   </mat-toolbar>
 
@@ -11,14 +16,17 @@
       <p>You are on the way to delete the cluster "{{cluster.name}}". Deletion of clusters cannot be UNDONE!</p>
 
       <!-- TODO(floreks): Reeneable once backend for deleting LBs will be fixed -->
-      <div class="km-delete-cluster-checkbox" *ngIf="false">
+      <div class="km-delete-cluster-checkbox"
+           *ngIf="false">
         <label fxFlex="60%">Cleanup connected Load Balancers</label>
-        <mat-checkbox fxFlex="40%" formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
+        <mat-checkbox fxFlex="40%"
+                      formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
       </div>
 
       <div class="km-delete-cluster-checkbox">
         <label fxFlex="60%">Cleanup connected volumes (PVs and PVCs)</label>
-        <mat-checkbox fxFlex="40%" formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
+        <mat-checkbox fxFlex="40%"
+                      formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
       </div>
 
       <div class="km-delete-cluster-warning">
@@ -29,24 +37,30 @@
       <p>If you know what you are doing, <strong>please type the name of the cluster</strong>:</p>
 
       <mat-form-field class="km-delete-cluster-name-input">
-        <input id="km-delete-cluster-dialog-input" matInput type="text" placeholder="Name of the Cluster:"
-               title="Cluster name" (blur)="onChange($event)" (keyup)="onChange($event)" #clusterNameInput>
+        <input id="km-delete-cluster-dialog-input"
+               matInput
+               type="text"
+               placeholder="Name of the Cluster:"
+               title="Cluster name"
+               (blur)="onChange($event)"
+               (keyup)="onChange($event)"
+               #clusterNameInput>
       </mat-form-field>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-dialog-close mat-raised-button>
+    <button mat-dialog-close
+            mat-raised-button>
       Close
     </button>
-    <button id="km-delete-cluster-dialog-delete-btn" (click)="deleteCluster()" mat-dialog-close
-            mat-raised-button color="primary" class="mat-primary" [disabled]="!inputNameMatches()">
+    <button id="km-delete-cluster-dialog-delete-btn"
+            (click)="deleteCluster()"
+            mat-dialog-close
+            mat-raised-button
+            color="primary"
+            class="mat-primary"
+            [disabled]="!inputNameMatches()">
       Delete
     </button>
   </mat-dialog-actions>
 </form>
-
-
-
-
-
-

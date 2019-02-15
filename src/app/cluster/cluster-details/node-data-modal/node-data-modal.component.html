@@ -2,25 +2,36 @@
      *ngIf="data.nodeData">
   <mat-toolbar>
     {{getDialogLabel()}}
-    <button mat-icon-button mat-dialog-close>
-      <i class="fa fa-times" aria-hidden="true"></i>
+    <button mat-icon-button
+            mat-dialog-close>
+      <i class="fa fa-times"
+         aria-hidden="true"></i>
     </button>
   </mat-toolbar>
-  <mat-tab-group class="km-change-view" (selectedTabChange)="onTabChange($event)" *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown">
+  <mat-tab-group class="km-change-view"
+                 (selectedTabChange)="onTabChange($event)"
+                 *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown">
     <mat-tab label="Simple"></mat-tab>
     <mat-tab label="Extended"></mat-tab>
   </mat-tab-group>
   <mat-dialog-content class="km-add-node-outer">
     <div class="mat-dialog-content km-add-node-inner">
-      <kubermatic-node-data [cluster]="data.cluster" [nodeData]="data.nodeData" [existingNodesCount]="data.existingNodesCount"></kubermatic-node-data>
+      <kubermatic-node-data [cluster]="data.cluster"
+                            [nodeData]="data.nodeData"
+                            [existingNodesCount]="data.existingNodesCount"></kubermatic-node-data>
     </div>
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-dialog-close mat-raised-button>
+    <button mat-dialog-close
+            mat-raised-button>
       Close
     </button>
-    <button mat-raised-button [mat-dialog-close]="data" color="primary" [disabled]="!data.nodeData.valid" class="btn btn-primary">
+    <button mat-raised-button
+            [mat-dialog-close]="data"
+            color="primary"
+            [disabled]="!data.nodeData.valid"
+            class="btn btn-primary">
       {{getDialogLabel()}}
     </button>
   </mat-dialog-actions>

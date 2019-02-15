@@ -1,20 +1,27 @@
-<kubermatic-digitalocean-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.digitalocean">
+<kubermatic-digitalocean-cluster-settings [cluster]="cluster"
+                                          *ngIf="cluster.spec.cloud.digitalocean">
 </kubermatic-digitalocean-cluster-settings>
 
-<kubermatic-aws-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.aws">
+<kubermatic-aws-cluster-settings [cluster]="cluster"
+                                 *ngIf="cluster.spec.cloud.aws">
 </kubermatic-aws-cluster-settings>
 
-<kubermatic-openstack-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.openstack">
+<kubermatic-openstack-cluster-settings [cluster]="cluster"
+                                       *ngIf="cluster.spec.cloud.openstack">
 </kubermatic-openstack-cluster-settings>
 
-<kubermatic-bringyourown-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.bringyourown">
+<kubermatic-bringyourown-cluster-settings [cluster]="cluster"
+                                          *ngIf="cluster.spec.cloud.bringyourown">
 </kubermatic-bringyourown-cluster-settings>
 
-<kubermatic-hetzner-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.hetzner">
+<kubermatic-hetzner-cluster-settings [cluster]="cluster"
+                                     *ngIf="cluster.spec.cloud.hetzner">
 </kubermatic-hetzner-cluster-settings>
 
-<kubermatic-vsphere-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.vsphere">
+<kubermatic-vsphere-cluster-settings [cluster]="cluster"
+                                     *ngIf="cluster.spec.cloud.vsphere">
 </kubermatic-vsphere-cluster-settings>
 
-<kubermatic-azure-cluster-settings [cluster]="cluster" *ngIf="cluster.spec.cloud.azure">
+<kubermatic-azure-cluster-settings [cluster]="cluster"
+                                   *ngIf="cluster.spec.cloud.azure">
 </kubermatic-azure-cluster-settings>

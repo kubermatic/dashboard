@@ -1,43 +1,72 @@
-<form [formGroup]="awsNodeForm" fxLayout="column">
-  <div fxFlex class="mat-select-container">
+<form [formGroup]="awsNodeForm"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Node Size*:" formControlName="type">
-        <mat-option *ngFor="let type of instanceTypes" [value]="type">
-        {{type}}
+      <mat-select placeholder="Node Size*:"
+                  formControlName="type">
+        <mat-option *ngFor="let type of instanceTypes"
+                    [value]="type">
+          {{type}}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 
-  <div fxFlex class="mat-select-container">
+  <div fxFlex
+       class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Disk type*:" formControlName="disk_type">
-        <mat-option *ngFor="let type of diskTypes" [value]="type">
-        {{type}}
+      <mat-select placeholder="Disk type*:"
+                  formControlName="disk_type">
+        <mat-option *ngFor="let type of diskTypes"
+                    [value]="type">
+          {{type}}
         </mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 
   <mat-form-field fxFlex>
-    <input matInput formControlName="disk_size" min="10" max="16000" type="number" placeholder="Disk size in GB (gp2)*:" autocomplete="off">
+    <input matInput
+           formControlName="disk_size"
+           min="10"
+           max="16000"
+           type="number"
+           placeholder="Disk size in GB (gp2)*:"
+           autocomplete="off">
   </mat-form-field>
 
-  <div class="km-form-group-tags-header" *ngIf="!hideOptional">
+  <div class="km-form-group-tags-header"
+       *ngIf="!hideOptional">
     Tags
-    <i class="fa fa-plus" style="float: right;" aria-hidden="true" (click)="addTag()"></i>
+    <i class="fa fa-plus"
+       style="float: right;"
+       aria-hidden="true"
+       (click)="addTag()"></i>
   </div>
-  <div class="km-form-group-tags" *ngIf="!hideOptional">
-    <div fxFlex="100%" *ngFor="let tag of getTagForm(awsNodeForm); let i=index" formArrayName="tags">
-      <div class="km-form-group-tags-inner" [formGroupName]="i">
+  <div class="km-form-group-tags"
+       *ngIf="!hideOptional">
+    <div fxFlex="100%"
+         *ngFor="let tag of getTagForm(awsNodeForm); let i=index"
+         formArrayName="tags">
+      <div class="km-form-group-tags-inner"
+           [formGroupName]="i">
         <mat-form-field fxFlex="42%">
-          <input matInput formControlName="key" placeholder="key" autocomplete="off">
+          <input matInput
+                 formControlName="key"
+                 placeholder="key"
+                 autocomplete="off">
         </mat-form-field>
         <span class="km-seperator">:</span>
         <mat-form-field fxFlex="42%">
-          <input matInput formControlName="value" placeholder="value" autocomplete="off">
+          <input matInput
+                 formControlName="value"
+                 placeholder="value"
+                 autocomplete="off">
         </mat-form-field>
-        <i class="fa fa-times" aria-hidden="true" (click)="deleteTag(i)"></i>
+        <i class="fa fa-times"
+           aria-hidden="true"
+           (click)="deleteTag(i)"></i>
       </div>
     </div>
   </div>

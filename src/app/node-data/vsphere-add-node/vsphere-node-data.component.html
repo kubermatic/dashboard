@@ -1,7 +1,15 @@
-<form [formGroup]="vsphereNodeForm" fxLayout="column">
-  <div fxFlex class="mat-select-container">
+<form [formGroup]="vsphereNodeForm"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
     <mat-form-field fxFlex>
-      <input matInput formControlName="cpu" min="1" max="8" type="number" placeholder="Number of CPUs*:" autocomplete="off">
+      <input matInput
+             formControlName="cpu"
+             min="1"
+             max="8"
+             type="number"
+             placeholder="Number of CPUs*:"
+             autocomplete="off">
       <mat-error *ngIf="vsphereNodeForm.controls.cpu.hasError('required')">
         Number of CPUs is <strong>required</strong>
       </mat-error>
@@ -13,7 +21,12 @@
       </mat-error>
     </mat-form-field>
     <mat-form-field fxFlex>
-      <input matInput formControlName="memory" min="512" type="number" placeholder="Memory in MB*:" autocomplete="off">
+      <input matInput
+             formControlName="memory"
+             min="512"
+             type="number"
+             placeholder="Memory in MB*:"
+             autocomplete="off">
     </mat-form-field>
   </div>
 </form>

@@ -1,6 +1,8 @@
 <ng-container>
 
-  <mat-tab-group class="km-change-view" (selectedTabChange)="changeView($event)" *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.bringyourown">
+  <mat-tab-group class="km-change-view"
+                 (selectedTabChange)="changeView($event)"
+                 *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.bringyourown">
     <mat-tab label="Simple"></mat-tab>
     <mat-tab label="Extended"></mat-tab>
   </mat-tab-group>
@@ -22,7 +24,8 @@
         <kubermatic-cluster-provider-settings [cluster]="cluster"></kubermatic-cluster-provider-settings>
       </mat-card-content>
     </mat-card>
-    <mat-card class="node-settings-card" fxFlex>
+    <mat-card class="node-settings-card"
+              fxFlex>
       <mat-card-header>
         <mat-card-title>
           <h4>
@@ -31,8 +34,12 @@
         </mat-card-title>
       </mat-card-header>
       <mat-card-content fxLayout="column">
-        <kubermatic-node-data [cluster]="cluster" [nodeData]="nodeData" [existingNodesCount]="0" isInWizard="true"></kubermatic-node-data>
-        <kubermatic-cluster-ssh-keys [cluster]="cluster" [selectedKeys]="clusterSSHKeys"></kubermatic-cluster-ssh-keys>
+        <kubermatic-node-data [cluster]="cluster"
+                              [nodeData]="nodeData"
+                              [existingNodesCount]="0"
+                              isInWizard="true"></kubermatic-node-data>
+        <kubermatic-cluster-ssh-keys [cluster]="cluster"
+                                     [selectedKeys]="clusterSSHKeys"></kubermatic-cluster-ssh-keys>
       </mat-card-content>
     </mat-card>
   </div>
