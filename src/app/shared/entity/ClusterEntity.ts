@@ -56,27 +56,24 @@ export class ClusterEntity {
 export function getEmptyCloudProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
-      const awsSpec: AWSCloudSpec = {
+      return {
         accessKeyId: '',
         secretAccessKey: '',
         routeTableId: '',
         vpcId: '',
         securityGroup: '',
         subnetId: '',
-      };
-      return awsSpec;
+      } as AWSCloudSpec;
     case NodeProvider.DIGITALOCEAN:
-      const doSpec: DigitaloceanCloudSpec = {
+      return {
         token: '',
-      };
-      return doSpec;
+      } as DigitaloceanCloudSpec;
     case NodeProvider.BAREMETAL:
-      const bmSpec: BareMetalCloudSpec = {
+      return {
         name: '',
-      };
-      return bmSpec;
+      } as BareMetalCloudSpec;
     case NodeProvider.OPENSTACK:
-      const osSpec: OpenstackCloudSpec = {
+      return {
         username: '',
         password: '',
         floatingIpPool: '',
@@ -85,13 +82,11 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         domain: 'Default',
         tenant: '',
         subnetID: '',
-      };
-      return osSpec;
+      } as OpenstackCloudSpec;
     case NodeProvider.BRINGYOUROWN:
-      const byoSpec: BringYourOwnCloudSpec = {};
-      return byoSpec;
+      return {} as BringYourOwnCloudSpec;
     case NodeProvider.VSPHERE:
-      const vsSpec: VSphereCloudSpec = {
+      return {
         username: '',
         password: '',
         vmNetName: '',
@@ -99,15 +94,13 @@ export function getEmptyCloudProviderSpec(provider: string): object {
           username: '',
           password: '',
         },
-      };
-      return vsSpec;
+      } as VSphereCloudSpec;
     case NodeProvider.HETZNER:
-      const hSpec: HetznerCloudSpec = {
+      return {
         token: '',
-      };
-      return hSpec;
+      } as HetznerCloudSpec;
     case NodeProvider.AZURE:
-      const azureSpec: AzureCloudSpec = {
+      return {
         clientID: '',
         clientSecret: '',
         resourceGroup: '',
@@ -117,8 +110,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         subscriptionID: '',
         tenantID: '',
         vnet: '',
-      };
-      return azureSpec;
+      } as AzureCloudSpec;
   }
   return {};
 }
@@ -148,19 +140,9 @@ export class MachineNetwork {
   gateway: string;
 }
 
-export class Certificate {
-  key: string;
-  cert: string;
-}
-
 export class Status {
   url: string;
   version: string;
-}
-
-export class SSHKeyPair {
-  privateKey: string;
-  publicKey: string;
 }
 
 export class MasterVersion {
