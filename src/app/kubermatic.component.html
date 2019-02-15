@@ -1,7 +1,8 @@
 <main>
   <div>
     <div class="km-progress-bar-container">
-      <mat-progress-bar id="km-top-progress-bar" mode="indeterminate"></mat-progress-bar>
+      <mat-progress-bar id="km-top-progress-bar"
+                        mode="indeterminate"></mat-progress-bar>
     </div>
 
     <kubermatic-navigation></kubermatic-navigation>
@@ -9,7 +10,11 @@
     <kubermatic-notification></kubermatic-notification>
 
     <mat-sidenav-container>
-      <mat-sidenav #sidenav opened disableClose mode="side" *ngIf="auth.authenticated()">
+      <mat-sidenav #sidenav
+                   opened
+                   disableClose
+                   mode="side"
+                   *ngIf="auth.authenticated()">
         <kubermatic-sidenav></kubermatic-sidenav>
       </mat-sidenav>
 
@@ -22,25 +27,34 @@
     </mat-sidenav-container>
     <footer fxlayout>
       <div class="km-copyright">
-        <p class="km-info-item">powered by <a href="https://loodse.com" target="_blank">Loodse <sup>®</sup></a></p>
-        <p *ngIf="!!version" class="km-info-item">
+        <p class="km-info-item">powered by <a href="https://loodse.com"
+             target="_blank">Loodse <sup>®</sup></a></p>
+        <p *ngIf="!!version"
+           class="km-info-item">
           <span class="km-seperator">|</span>
           <span *ngIf="!version.distance">{{version.tag}}</span>
           <span *ngIf="!!version.distance">v{{version.semverString}}</span>
         </p>
       </div>
       <div class="km-info km-info-right">
-        <p class="km-info-item" *ngIf="config.show_demo_info">This is a <strong>demo system</strong></p>
-        <p class="km-info-item km-seperator" *ngIf="config.show_demo_info && config.show_terms_of_service"> | </p>
-        <p class="km-info-item km-clickable" *ngIf="config.show_terms_of_service" (click)="showTermsOfService()">Terms of Service</p>
+        <p class="km-info-item"
+           *ngIf="config.show_demo_info">This is a <strong>demo system</strong></p>
+        <p class="km-info-item km-seperator"
+           *ngIf="config.show_demo_info && config.show_terms_of_service"> | </p>
+        <p class="km-info-item km-clickable"
+           *ngIf="config.show_terms_of_service"
+           (click)="showTermsOfService()">Terms of Service</p>
       </div>
       <div class="km-footer-nav">
         <ul class="km-social">
-          <li><a href="https://www.twitter.com/loodse" target="_blank"><i class="fa fa-twitter"></i></a>
+          <li><a href="https://www.twitter.com/loodse"
+               target="_blank"><i class="fa fa-twitter"></i></a>
           </li>
-          <li><a href="https://github.com/kubermatic" target="_blank"><i class="fa fa-github"></i></a>
+          <li><a href="https://github.com/kubermatic"
+               target="_blank"><i class="fa fa-github"></i></a>
           </li>
-          <li><a href="http://slack.kubermatic.io/" target="_blank"><i class="fa fa-slack"></i></a>
+          <li><a href="http://slack.kubermatic.io/"
+               target="_blank"><i class="fa fa-slack"></i></a>
           </li>
         </ul>
       </div>

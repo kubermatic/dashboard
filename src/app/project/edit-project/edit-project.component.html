@@ -1,16 +1,25 @@
-<div id="km-edit-project-dialog" class="km-dialog-box">
+<div id="km-edit-project-dialog"
+     class="km-dialog-box">
   <mat-toolbar>
     Edit Project
-    <button mat-icon-button mat-dialog-close>
-      <i class="fa fa-times" aria-hidden="true"></i>
+    <button mat-icon-button
+            mat-dialog-close>
+      <i class="fa fa-times"
+         aria-hidden="true"></i>
     </button>
   </mat-toolbar>
   <mat-dialog-content>
     <div class="mat-dialog-content">
-      <form [formGroup]="editProjectForm" fxLayout="column">
+      <form [formGroup]="editProjectForm"
+            fxLayout="column">
         <p>You are on the way to edit the project name for "{{project.name}}".</p>
         <mat-form-field fxFlex>
-          <input id="km-edit-project-dialog-input" matInput formControlName="name" type="text" placeholder="New project name*:" autocomplete="off">
+          <input id="km-edit-project-dialog-input"
+                 matInput
+                 formControlName="name"
+                 type="text"
+                 placeholder="New project name*:"
+                 autocomplete="off">
           <mat-error *ngIf="editProjectForm.controls.name.hasError('required')">
             Name is <strong>required</strong>
           </mat-error>
@@ -20,12 +29,16 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-  <button mat-dialog-close mat-raised-button>
-    Close
-  </button>
-  <button id="km-edit-project-dialog-edit-btn" mat-raised-button color="primary" (click)="editProject()"
-          [disabled]="!editProjectForm.valid">
-    Edit
-  </button>
+    <button mat-dialog-close
+            mat-raised-button>
+      Close
+    </button>
+    <button id="km-edit-project-dialog-edit-btn"
+            mat-raised-button
+            color="primary"
+            (click)="editProject()"
+            [disabled]="!editProjectForm.valid">
+      Edit
+    </button>
   </mat-dialog-actions>
 </div>

@@ -1,19 +1,29 @@
-<div class="km-container" fxLayout="column">
+<div class="km-container"
+     fxLayout="column">
   <div class="km-header-logo-wrapper">
     <div class="km-header-logo"></div>
   </div>
   <mat-nav-list>
-  <!-- Menus for logged in users -->
-  <div class="km-sidenav-top">
-  <mat-list-item >
-    <a mat-line routerLink="/wizard" [routerLinkActive]="['active']" (click)="closeModal()"><i class="fa fa-magic"></i> Create Cluster</a>
-  </mat-list-item>
-  <mat-list-item>
-    <a mat-line routerLink="/clusters" [routerLinkActive]="['active']" (click)="closeModal()"><i class="fa fa-cubes"></i> Manage Cluster</a>
-  </mat-list-item>
-  <mat-list-item>
-    <a mat-line routerLink="/sshkeys" [routerLinkActive]="['active']" (click)="closeModal()"><i class="fa fa-key"></i> Manage SSH keys</a>
-  </mat-list-item>
-  </div>
+    <!-- Menus for logged in users -->
+    <div class="km-sidenav-top">
+      <mat-list-item>
+        <a mat-line
+           routerLink="/wizard"
+           [routerLinkActive]="['active']"
+           (click)="closeModal()"><i class="fa fa-magic"></i> Create Cluster</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-line
+           routerLink="/clusters"
+           [routerLinkActive]="['active']"
+           (click)="closeModal()"><i class="fa fa-cubes"></i> Manage Cluster</a>
+      </mat-list-item>
+      <mat-list-item>
+        <a mat-line
+           routerLink="/sshkeys"
+           [routerLinkActive]="['active']"
+           (click)="closeModal()"><i class="fa fa-key"></i> Manage SSH keys</a>
+      </mat-list-item>
+    </div>
   </mat-nav-list>
 </div>

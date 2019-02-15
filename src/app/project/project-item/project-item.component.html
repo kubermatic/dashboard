@@ -1,12 +1,16 @@
-<div class="km-row" [ngClass]="getProjectItemClass()" (click)="selectProject()">
+<div class="km-row"
+     [ngClass]="getProjectItemClass()"
+     (click)="selectProject()">
   <div fxLayout>
     <div fxFlex="3%">
       <div class="km-health-state">
-        <i [matTooltip]="project.status" [ngClass]="projectService.getProjectStateIconClass()"></i>
+        <i [matTooltip]="project.status"
+           [ngClass]="projectService.getProjectStateIconClass()"></i>
       </div>
     </div>
     <div fxFlex="25%">
-      <p [attr.id]="'km-project-name-' + project.name" class="project-name">{{ project.name }}</p>
+      <p [attr.id]="'km-project-name-' + project.name"
+         class="project-name">{{ project.name }}</p>
     </div>
     <div fxFlex="18%">
       <p class="project-id">{{ project.id }}</p>
@@ -21,7 +25,8 @@
     <!-- <div fxFlex="24%">
       <p class="project-owners" *ngFor="let owner of project.owners">{{owner.name}} ({{owner.email}})</p>
     </div> -->
-    <div fxFlex="18%" class="km-project-item-actions">
+    <div fxFlex="18%"
+         class="km-project-item-actions">
       <p class="km-icon">
         <button [attr.id]="'km-edit-project-' + project.name"
                 class="km-icon-edit black"

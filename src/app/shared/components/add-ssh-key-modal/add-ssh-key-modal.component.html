@@ -6,14 +6,25 @@
     <div class="mat-dialog-content">
       <form [formGroup]="addSSHKeyForm">
         <mat-form-field class="km-ssh-key-input">
-          <input id="name" matInput formControlName="name" type="text" placeholder="Enter a unique name" autocomplete="off">
+          <input id="name"
+                 matInput
+                 formControlName="name"
+                 type="text"
+                 placeholder="Enter a unique name"
+                 autocomplete="off">
           <mat-error *ngIf="addSSHKeyForm.controls.name.hasError('required')">
             Name is <strong>required</strong>
           </mat-error>
         </mat-form-field>
 
         <mat-form-field class="km-ssh-key-textarea">
-          <textarea id="key" matInput formControlName="key" type="text" class="form-control" (change)="onNewKeyTextChanged()" placeholder="Enter the key of your device"></textarea>
+          <textarea id="key"
+                    matInput
+                    formControlName="key"
+                    type="text"
+                    class="form-control"
+                    (change)="onNewKeyTextChanged()"
+                    placeholder="Enter the key of your device"></textarea>
           <mat-hint>Remember to paste only the public part of your SSH key and store the private part safely.</mat-hint>
           <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
             Key is <strong>required</strong>
@@ -23,10 +34,15 @@
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-dialog-close mat-raised-button>
+    <button mat-dialog-close
+            mat-raised-button>
       Close
     </button>
-    <button (click)="addSSHKey()" mat-raised-button color="primary" class="mat-primary" [disabled]="!addSSHKeyForm.valid">
+    <button (click)="addSSHKey()"
+            mat-raised-button
+            color="primary"
+            class="mat-primary"
+            [disabled]="!addSSHKeyForm.valid">
       Add SSH key
     </button>
   </mat-dialog-actions>
