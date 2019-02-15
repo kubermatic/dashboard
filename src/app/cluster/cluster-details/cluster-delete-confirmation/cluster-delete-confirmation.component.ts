@@ -29,7 +29,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({
-      clusterLBCleanupCheckbox: new FormControl(false),
+      clusterLBCleanupCheckbox: new FormControl(!!this._appConfig.getConfig().cleanup_cluster),
       clusterVolumeCleanupCheckbox: new FormControl(!!this._appConfig.getConfig().cleanup_cluster),
     });
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');

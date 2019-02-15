@@ -15,9 +15,7 @@
     <div class="mat-dialog-content">
       <p>You are on the way to delete the cluster "{{cluster.name}}". Deletion of clusters cannot be UNDONE!</p>
 
-      <!-- TODO(floreks): Reeneable once backend for deleting LBs will be fixed -->
-      <div class="km-delete-cluster-checkbox"
-           *ngIf="false">
+      <div class="km-delete-cluster-checkbox">
         <label fxFlex="60%">Cleanup connected Load Balancers</label>
         <mat-checkbox fxFlex="40%"
                       formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
