@@ -120,6 +120,7 @@ export class ProjectItemComponent implements OnInit {
             creationTimestamp: null,
             deletionTimestamp: null,
             status: '',
+            owners: [],
           });
 
           this.projectService.removeProject();
