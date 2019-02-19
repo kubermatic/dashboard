@@ -46,8 +46,17 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
     }));
 
     this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe((data) => {
-      this.setImage(data);
-      this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
+      if ((!!this.nodeData.spec.operatingSystem.ubuntu && !!data.ubuntu) ||
+          (!!this.nodeData.spec.operatingSystem.centos && !!data.centos) ||
+          (!!this.nodeData.spec.operatingSystem.containerLinux && !!data.containerLinux)) {
+        if (this.nodeData.spec.cloud.openstack.image === '') {
+          this.setImage(data);
+        }
+        this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
+      } else {
+        this.setImage(data);
+        this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
+      }
     }));
 
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
