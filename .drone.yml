@@ -11,6 +11,13 @@ pipeline:
     volumes:
       - /tmp/cache:/cache
 
+  dep-check:
+    image: golang:1.11
+    commands:
+      - mkdir -p /go/bin
+      - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+      - make dep-check
+
   dependencies:
     image: node:8
     commands:
@@ -33,9 +40,9 @@ pipeline:
       - make test-headless
 
   build:
-    image: golang:1.10
+    image: golang:1.11
     commands:
-      - CGO_ENABLED=0 make build
+      - make build
 
   docker-always:
     group: push

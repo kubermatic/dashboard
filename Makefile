@@ -9,7 +9,7 @@ all: install run
 install:
 	@$(CC) ci
 
-check: dep-check install
+check: install
 	@$(CC) run check
 
 dep:
