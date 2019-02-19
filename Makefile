@@ -2,14 +2,21 @@ SHELL=/bin/bash
 REPO=quay.io/kubermatic/ui-v2
 IMAGE_TAG = $(shell echo $$(git rev-parse HEAD && if [[ -n $$(git status --porcelain) ]]; then echo '-dirty'; fi)|tr -d ' ')
 CC=npm
+export GOOS?=linux
 
 all: install run
 
 install:
 	@$(CC) ci
 
-check: install
+check: dep-check install
 	@$(CC) run check
+
+dep:
+	dep ensure -v
+
+dep-check:
+	dep check
 
 run:
 	@$(CC) start
