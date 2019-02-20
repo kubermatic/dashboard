@@ -2,7 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {first} from 'rxjs/operators';
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {ApiService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -27,7 +27,7 @@ export class ProjectItemComponent implements OnInit {
 
   constructor(
       public dialog: MatDialog, public projectService: ProjectService, private userService: UserService,
-      private appConfigService: AppConfigService, private api: ApiService, private dcService: DatacenterService,
+      private appConfigService: AppConfigService, private api: ApiService,
       private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
@@ -59,12 +59,8 @@ export class ProjectItemComponent implements OnInit {
   }
 
   getClusterCount(): void {
-    this.dcService.getSeedDataCenters().pipe(first()).subscribe((datacenters) => {
-      for (const dc of datacenters) {
-        this.api.getClusters(dc.metadata.name, this.project.id).pipe(first()).subscribe((dcClusters) => {
-          this.clusterCount += dcClusters.length;
-        });
-      }
+    this.api.getAllClusters(this.project.id).pipe(first()).subscribe((dcClusters) => {
+      this.clusterCount = dcClusters.length;
     });
   }
 
