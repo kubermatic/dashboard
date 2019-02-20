@@ -15,7 +15,7 @@ check: install
 dep:
 	dep ensure -v
 
-dep-check:
+godep-check:
 	dep check
 
 run:

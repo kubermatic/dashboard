@@ -11,12 +11,10 @@ pipeline:
     volumes:
       - /tmp/cache:/cache
 
-  dep-check:
-    image: golang:1.11
+  godep-check:
+    image: quay.io/kubermatic/dep:0.5.0-1
     commands:
-      - mkdir -p /go/bin
-      - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-      - make dep-check
+      - make godep-check
 
   dependencies:
     image: node:8
