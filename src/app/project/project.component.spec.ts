@@ -16,7 +16,6 @@ import {DatacenterMockService} from '../testing/services/datacenter-mock.service
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
 
-import {ProjectItemComponent} from './project-item/project-item.component';
 import {ProjectComponent} from './project.component';
 
 describe('ProjectComponent', () => {
@@ -33,7 +32,7 @@ describe('ProjectComponent', () => {
             RouterTestingModule,
             SharedModule,
           ],
-          declarations: [ProjectComponent, ProjectItemComponent],
+          declarations: [ProjectComponent],
           providers: [
             {provide: Router, useClass: RouterStub},
             {provide: ApiService, useClass: ApiMockService},

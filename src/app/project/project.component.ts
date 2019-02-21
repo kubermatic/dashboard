@@ -6,7 +6,7 @@ import {first} from 'rxjs/operators';
 
 import {AddProjectComponent} from '../add-project/add-project.component';
 import {AppConfigService} from '../app-config.service';
-import {ApiService, DatacenterService, ProjectService, UserService} from '../core/services';
+import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -25,7 +25,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
   projects: ProjectEntity[] = [];
   loading = true;
   currentProject: ProjectEntity;
-  sortedProjects: ProjectEntity[] = [];
   userGroup: string;
   userGroupConfig: UserGroupConfig;
   clusterCount = [];
@@ -39,7 +38,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   constructor(
       private api: ApiService, private appConfigService: AppConfigService, private projectService: ProjectService,
-      private userService: UserService, public dialog: MatDialog, private dcService: DatacenterService,
+      private userService: UserService, public dialog: MatDialog,
       private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
@@ -69,7 +68,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   refreshProjects(): void {
     this.subscriptions.push(this.api.getProjects().subscribe((res) => {
-      this.projects = res;
+      this.projects = res.sort((a, b) => {
+        return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+      });
       this.getClusterCount();
       this.getRole();
       this.loading = false;
@@ -102,14 +103,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   getClusterCount(): void {
     for (const project of this.projects) {
-      this.dcService.getSeedDataCenters().pipe(first()).subscribe((datacenters) => {
-        let count = 0;
-        for (const dc of datacenters) {
-          this.api.getClusters(dc.metadata.name, project.id).pipe(first()).subscribe((dcClusters) => {
-            count += dcClusters.length;
-            this.clusterCount[project.id] = count;
-          });
-        }
+      this.api.getAllClusters(project.id).pipe(first()).subscribe((dcClusters) => {
+        this.clusterCount[project.id] = dcClusters.length;
       });
     }
   }
@@ -161,19 +156,21 @@ export class ProjectComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this.api.deleteProject(project.id).subscribe(() => {
-          NotificationActions.success('Success', `Project is being deleted`);
+          NotificationActions.success('Success', `Project ${project.name} is being deleted`);
           this.googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
 
-          this.projectService.changeSelectedProject({
-            id: '',
-            name: '',
-            creationTimestamp: null,
-            deletionTimestamp: null,
-            status: '',
-            owners: [],
-          });
+          if (project.id === this.currentProject.id) {
+            this.projectService.changeSelectedProject({
+              id: '',
+              name: '',
+              creationTimestamp: null,
+              deletionTimestamp: null,
+              status: '',
+              owners: [],
+            });
+            this.projectService.removeProject();
+          }
 
-          this.projectService.removeProject();
           delete this.clickedDeleteProject[project.id];
           setTimeout(() => {
             this.projectService.navigateToProjectPage();

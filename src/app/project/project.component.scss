@@ -8,6 +8,14 @@
   text-align: center;
 }
 
+td.mat-cell.cdk-column-actions.mat-column-actions.ng-star-inserted {
+  vertical-align: middle;
+
+  &.km-cell-actions {
+    vertical-align: baseline;
+  }
+}
+
 .km-project-item-actions {
   display: flex;
   justify-content: flex-end;

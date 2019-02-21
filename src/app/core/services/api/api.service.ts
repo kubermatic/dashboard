@@ -93,6 +93,11 @@ export class ApiService {
     return this.http.delete(url, {headers: this.headers});
   }
 
+  getAllClusters(projectID: string): Observable<ClusterEntity[]> {
+    const url = `${this.restRoot}/projects/${projectID}/clusters`;
+    return this.http.get<ClusterEntity[]>(url, {headers: this.headers});
+  }
+
   getClusters(dc: string, projectID: string): Observable<ClusterEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters`;
     return this.http.get<ClusterEntity[]>(url, {headers: this.headers});

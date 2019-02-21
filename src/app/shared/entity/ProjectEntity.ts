@@ -8,7 +8,7 @@ export class ProjectEntity {
 }
 
 export class ProjectOwners {
-  creationTimestamp: Date;
+  creationTimestamp?: Date;
   deletionTimestamp?: Date;
   email: string;
   id?: string;

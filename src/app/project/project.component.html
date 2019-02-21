@@ -119,7 +119,8 @@
             *matHeaderCellDef
             class="km-header-cell"></th>
         <td mat-cell
-            *matCellDef="let element">
+            *matCellDef="let element"
+            [ngClass]="element.owners.length > 1 ? 'km-cell-actions' : ''">
           <div class="km-project-item-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
