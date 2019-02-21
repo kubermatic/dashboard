@@ -64,6 +64,10 @@ export class ApiMockService {
     return of(this.clusters);
   }
 
+  getAllClusters(projectID: string): Observable<ClusterEntity[]> {
+    return of(this.clusters);
+  }
+
   getSSHKeys(): Observable<SSHKeyEntity[]> {
     return of(this.sshKeys);
   }
