@@ -53,6 +53,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }));
 
     this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
 
     const timer = interval(10000);
     this.subscriptions.push(timer.subscribe(() => {
@@ -68,9 +70,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   refreshProjects(): void {
     this.subscriptions.push(this.api.getProjects().subscribe((res) => {
-      this.projects = res.sort((a, b) => {
-        return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-      });
+      this.projects = res;
       this.getClusterCount();
       this.getRole();
       this.loading = false;
