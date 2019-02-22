@@ -1,0 +1,43 @@
+@import "../../assets/css/colors";
+
+.km-projects-spinner {
+  margin: 20px auto !important;
+}
+
+.km-health-status {
+  text-align: center;
+}
+
+td.mat-cell.cdk-column-actions.mat-column-actions.ng-star-inserted {
+  vertical-align: middle;
+
+  &.km-cell-actions {
+    vertical-align: baseline;
+  }
+}
+
+.km-project-item-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  button {
+    margin-right: 15px;
+    width: 21px;
+    height: 21px;
+  }
+}
+
+.km-project-item-owner {
+  display: block;
+  line-height: 30px;
+  vertical-align: bottom;
+  height: 100%;
+
+  &:last-child {
+    margin-bottom: 15px;
+  }
+}
+
+.km-mat-row {
+  vertical-align: baseline;
+}

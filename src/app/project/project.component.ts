@@ -1,31 +1,45 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog, Sort} from '@angular/material';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {find} from 'lodash';
 import {interval, Subscription} from 'rxjs';
+import {first} from 'rxjs/operators';
+
 import {AddProjectComponent} from '../add-project/add-project.component';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
+import {GoogleAnalyticsService} from '../google-analytics.service';
+import {NotificationActions} from '../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {UserGroupConfig} from '../shared/model/Config';
+
+import {EditProjectComponent} from './edit-project/edit-project.component';
 
 @Component({
   selector: 'kubermatic-project',
   templateUrl: './project.component.html',
+  styleUrls: ['./project.component.scss'],
 })
 
 export class ProjectComponent implements OnInit, OnDestroy {
-  projects: ProjectEntity[];
+  projects: ProjectEntity[] = [];
   loading = true;
   currentProject: ProjectEntity;
-  sortedProjects: ProjectEntity[] = [];
-  sort: Sort = {active: 'name', direction: 'asc'};
   userGroup: string;
   userGroupConfig: UserGroupConfig;
+  clusterCount = [];
+  role = [];
+  clickedEditProject = {};
+  clickedDeleteProject = {};
+  displayedColumns: string[] = ['status', 'name', 'id', 'role', 'clusters', 'owners', 'actions'];
+  dataSource = new MatTableDataSource<ProjectEntity>();
+  @ViewChild(MatSort) sort: MatSort;
   private subscriptions: Subscription[] = [];
 
   constructor(
       private api: ApiService, private appConfigService: AppConfigService, private projectService: ProjectService,
-      private userService: UserService, public dialog: MatDialog) {}
+      private userService: UserService, public dialog: MatDialog,
+      private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -38,6 +52,10 @@ export class ProjectComponent implements OnInit, OnDestroy {
       });
     }));
 
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
+
     const timer = interval(10000);
     this.subscriptions.push(timer.subscribe(() => {
       this.refreshProjects();
@@ -45,20 +63,50 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.refreshProjects();
   }
 
-  ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+  getDataSource(): MatTableDataSource<ProjectEntity> {
+    this.dataSource.data = this.projects;
+    return this.dataSource;
   }
 
   refreshProjects(): void {
     this.subscriptions.push(this.api.getProjects().subscribe((res) => {
       this.projects = res;
-      this.sortProjectData(this.sort);
+      this.getClusterCount();
+      this.getRole();
       this.loading = false;
     }));
+  }
+
+  selectProject(project: ProjectEntity): void {
+    if (!this.clickedDeleteProject[project.id] && !this.clickedEditProject[project.id]) {
+      this.projectService.changeAndStoreSelectedProject(project);
+    }
+  }
+
+  getRole(): void {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    for (const project of this.projects) {
+      this.userService.currentUserGroup(project.id).subscribe((group) => {
+        switch (group) {
+          case 'owners':
+            return this.role[project.id] = 'Owner';
+          case 'editors':
+            return this.role[project.id] = 'Editor';
+          case 'viewers':
+            return this.role[project.id] = 'Viewer';
+          default:
+            return this.role[project.id] = '';
+        }
+      });
+    }
+  }
+
+  getClusterCount(): void {
+    for (const project of this.projects) {
+      this.api.getAllClusters(project.id).pipe(first()).subscribe((dcClusters) => {
+        this.clusterCount[project.id] = dcClusters.length;
+      });
+    }
   }
 
   addProject(): void {
@@ -71,34 +119,80 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
+  editProject(project: ProjectEntity): void {
+    this.clickedEditProject[project.id] = true;
+    const modal = this.dialog.open(EditProjectComponent);
+    modal.componentInstance.project = project;
+    const sub = modal.afterClosed().subscribe((edited) => {
+      if (!!edited) {
+        this.projectService.changeAndStoreSelectedProject(edited);
+      }
+      delete this.clickedEditProject[project.id];
+      sub.unsubscribe();
+    });
+  }
+
+  deleteProject(project: ProjectEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete Project',
+        message: `You are on the way to delete the project ${
+            project
+                .name}. Deletion of projects cannot be undone! If you know what you are doing, please type the name of the project:`,
+        confirmLabel: 'Delete',
+        cancelLabel: 'Close',
+        compareName: project.name,
+        inputPlaceholder: 'Name of the Project:',
+        inputTitle: 'Project name',
+      },
+    };
+
+    this.clickedDeleteProject[project.id] = true;
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('projectOverview', 'deleteProjectOpened');
+
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteProject(project.id).subscribe(() => {
+          NotificationActions.success('Success', `Project ${project.name} is being deleted`);
+          this.googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
+
+          if (project.id === this.currentProject.id) {
+            this.projectService.changeSelectedProject({
+              id: '',
+              name: '',
+              creationTimestamp: null,
+              deletionTimestamp: null,
+              status: '',
+              owners: [],
+            });
+            this.projectService.removeProject();
+          }
+
+          delete this.clickedDeleteProject[project.id];
+          setTimeout(() => {
+            this.projectService.navigateToProjectPage();
+          });
+        });
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    for (const sub of this.subscriptions) {
+      if (sub) {
+        sub.unsubscribe();
+      }
+    }
+  }
+
   trackProject(index: number, project: ProjectEntity): number {
     const prevProject = find(this.projects, (item) => {
       return item.name === project.name;
     });
 
     return prevProject && prevProject.status === project.status ? index : undefined;
-  }
-
-  sortProjectData(sort: Sort): void {
-    if (sort === null || !sort.active || sort.direction === '') {
-      this.sortedProjects = this.projects;
-      return;
-    }
-
-    this.sort = sort;
-
-    this.sortedProjects = this.projects.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return this.compare(a.name, b.name, isAsc);
-        default:
-          return 0;
-      }
-    });
-  }
-
-  compare(a, b, isAsc): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }

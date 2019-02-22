@@ -104,20 +104,8 @@ describe('SidenavComponent', () => {
   });
 
   it('should correctly compare projects basing on their IDs', () => {
-    const a: ProjectEntity = {
-      id: '1',
-      name: 'first',
-      creationTimestamp: undefined,
-      deletionTimestamp: undefined,
-      status: '',
-    };
-    const b: ProjectEntity = {
-      id: '2',
-      name: 'second',
-      creationTimestamp: undefined,
-      deletionTimestamp: undefined,
-      status: '',
-    };
+    const a: ProjectEntity = fakeProjects()[0];
+    const b: ProjectEntity = fakeProjects()[1];
     expect(component.projectService.compareProjectsEquality(a, b)).toBeFalsy();
     expect(component.projectService.compareProjectsEquality(b, a)).toBeFalsy();
 
@@ -127,18 +115,12 @@ describe('SidenavComponent', () => {
   });
 
   it('should correctly create router links', () => {
-    component.selectedProject = {
-      id: '1',
-      name: 'first',
-      creationTimestamp: undefined,
-      deletionTimestamp: undefined,
-      status: '',
-    };
-    expect(component.getRouterLink('clusters')).toBe('/projects/1/clusters');
-    expect(component.getRouterLink('members')).toBe('/projects/1/members');
+    component.selectedProject = fakeProjects()[0];
+    expect(component.getRouterLink('clusters')).toBe('/projects/' + fakeProjects()[0].id + '/clusters');
+    expect(component.getRouterLink('members')).toBe('/projects/' + fakeProjects()[0].id + '/members');
 
-    component.selectedProject.id = '2';
-    expect(component.getRouterLink('clusters')).toBe('/projects/2/clusters');
-    expect(component.getRouterLink('members')).toBe('/projects/2/members');
+    component.selectedProject.id = fakeProjects()[1].id;
+    expect(component.getRouterLink('clusters')).toBe('/projects/' + fakeProjects()[1].id + '/clusters');
+    expect(component.getRouterLink('members')).toBe('/projects/' + fakeProjects()[1].id + '/members');
   });
 });
