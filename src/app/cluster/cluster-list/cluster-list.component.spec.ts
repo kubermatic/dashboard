@@ -5,10 +5,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, DatacenterService, HealthService, UserService} from '../../core/services';
+import {ApiService, Auth, HealthService, UserService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
-import {fakeSeedDatacenters} from '../../testing/fake-data/datacenter.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
@@ -24,14 +23,11 @@ describe('ClusterListComponent', () => {
   let fixture: ComponentFixture<ClusterListComponent>;
   let component: ClusterListComponent;
   let getClustersSpy: Spy;
-  let getSeedDatacentersSpy: Spy;
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getClusters']);
-    getClustersSpy = apiMock.getClusters.and.returnValue(asyncData([fakeAWSCluster()]));
-    const dcMock = jasmine.createSpyObj('DatacenterService', ['getSeedDataCenters']);
-    getSeedDatacentersSpy = dcMock.getSeedDataCenters.and.returnValue(asyncData(fakeSeedDatacenters()));
+    const apiMock = jasmine.createSpyObj('ApiService', ['getAllClusters']);
+    getClustersSpy = apiMock.getAllClusters.and.returnValue(asyncData([fakeAWSCluster()]));
 
     TestBed
         .configureTestingModule({
@@ -50,7 +46,6 @@ describe('ClusterListComponent', () => {
           ],
           providers: [
             {provide: ApiService, useValue: apiMock},
-            {provide: DatacenterService, useValue: dcMock},
             {provide: Auth, useClass: AuthMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: HealthService, useClass: HealthMockService},
@@ -84,7 +79,6 @@ describe('ClusterListComponent', () => {
        // @ts-ignore
        expectedCluster.creationTimestamp = jasmine.any(Date);
 
-       expect(getSeedDatacentersSpy.and.callThrough()).toHaveBeenCalled();
        expect(getClustersSpy.and.callThrough()).toHaveBeenCalled();
        expect(component.clusters).toEqual([expectedCluster]);
        discardPeriodicTasks();
