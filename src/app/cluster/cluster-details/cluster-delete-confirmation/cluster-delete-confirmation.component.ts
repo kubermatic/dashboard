@@ -58,7 +58,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
           })
           .subscribe(() => {
             this.initialNodeDataService.clearInitialNodeData(this.cluster);
-            NotificationActions.success('Success', `Cluster is being deleted`);
+            NotificationActions.success('Success', `Cluster ${this.cluster.name} is being deleted`);
             this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
           });
       this.dialogRef.close(true);
