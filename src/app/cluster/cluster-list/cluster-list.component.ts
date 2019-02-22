@@ -2,9 +2,11 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Sort} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {find} from 'lodash';
-import {combineLatest, interval, ObservableInput, Subscription} from 'rxjs';
+import {interval, Subscription} from 'rxjs';
+import {first} from 'rxjs/operators';
+
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, DatacenterService, UserService} from '../../core/services';
+import {ApiService, UserService} from '../../core/services';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {UserGroupConfig} from '../../shared/model/Config';
 
@@ -25,7 +27,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   constructor(
       private api: ApiService, private route: ActivatedRoute, private appConfigService: AppConfigService,
-      private router: Router, private dcService: DatacenterService, private userService: UserService) {}
+      private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
@@ -55,24 +57,15 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   refreshClusters(): void {
-    this.subscriptions.push(this.dcService.getSeedDataCenters().subscribe((datacenters) => {
-      const clusters: ClusterEntity[] = [];
-      const dcClustersObservables: Array<ObservableInput<ClusterEntity[]>> = [];
-      for (const dc of datacenters) {
-        dcClustersObservables.push(this.api.getClusters(dc.metadata.name, this.projectID));
-      }
-      this.subscriptions.push(combineLatest(dcClustersObservables).subscribe((dcClusters) => {
-        for (const cs of dcClusters) {
-          clusters.push(...cs);
-        }
-        this.clusters = clusters;
-        this.sortData(this.sort);
-        this.loading = false;
-      }));
-      this.userService.currentUserGroup(this.projectID).subscribe((group) => {
-        this.userGroup = group;
-      });
-    }));
+    this.api.getAllClusters(this.projectID).pipe(first()).subscribe(c => {
+      this.clusters = c;
+      this.sortData(this.sort);
+      this.loading = false;
+    });
+
+    this.userService.currentUserGroup(this.projectID).pipe(first()).subscribe(ug => {
+      this.userGroup = ug;
+    });
   }
 
   trackCluster(index: number, cluster: ClusterEntity): number {
