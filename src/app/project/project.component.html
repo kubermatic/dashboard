@@ -35,7 +35,8 @@
             class="km-header-cell"
             mat-sort-header>Name</th>
         <td mat-cell
-            *matCellDef="let element">{{element.name}}</td>
+            *matCellDef="let element"
+            [attr.id]="'km-project-name-' + element.name">{{element.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="id">
@@ -92,11 +93,13 @@
 
               <ng-container *ngSwitchCase="false">
                 <button class="km-icon-edit black"
+                        [attr.id]="'km-edit-project-' + element.name"
                         matTooltip="Edit Project"
                         (click)="editProject(element)"
                         [disabled]="!!userGroup && !userGroupConfig[userGroup].projects.edit"></button>
 
                 <button class="km-icon-delete black"
+                        [attr.id]="'km-delete-project-' + element.name"
                         matTooltip="Delete Project"
                         (click)="deleteProject(element)"
                         [disabled]="!!userGroup && !userGroupConfig[userGroup].projects.delete"></button>
