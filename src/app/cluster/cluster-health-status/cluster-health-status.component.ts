@@ -19,7 +19,6 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
   green = 'fa fa-circle green';
   red = 'fa fa-circle red';
   orange = 'fa fa-spin fa-circle-o-notch orange';
-  redAction = 'fa fa-exclamation-triangle red';
   healthStatus: string;
   health: HealthEntity;
   private subscriptions: Subscription[] = [];
@@ -27,15 +26,15 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
   constructor(private healthService: HealthService) {}
 
   ngOnInit(): void {
-    const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe((tick) => {
-      this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-          .subscribe((health) => {
-            this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
-            this.health = health;
-          });
-    }));
+    this._getClusterHealth();
 
+    const timer = interval(5000);
+    this.subscriptions.push(timer.subscribe(() => {
+      this._getClusterHealth();
+    }));
+  }
+
+  _getClusterHealth(): void {
     this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .subscribe((health) => {
           this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
