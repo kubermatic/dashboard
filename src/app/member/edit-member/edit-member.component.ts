@@ -40,7 +40,7 @@ export class EditMemberComponent implements OnInit {
 
     this.api.editMembers(this.project.id, editMember).subscribe((res) => {
       this.dialogRef.close(true);
-      NotificationActions.success('Success', `Member is edited successfully`);
+      NotificationActions.success('Success', `Member ${this.member.name} is edited successfully`);
     });
   }
 }
