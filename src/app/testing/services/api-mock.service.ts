@@ -56,10 +56,6 @@ export class ApiMockService {
     return of(null);
   }
 
-  getAllClusters(projectID: string): Observable<ClusterEntity[]> {
-    return of(this.clusters);
-  }
-
   getCluster(clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
     return of(this.cluster);
   }
