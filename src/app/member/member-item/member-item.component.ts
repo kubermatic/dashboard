@@ -86,7 +86,8 @@ export class MemberItemComponent implements OnInit {
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this.api.deleteMembers(this.project.id, this.member).subscribe(() => {
-          NotificationActions.success('Success', 'Member has been removed from project');
+          NotificationActions.success(
+              'Success', 'Member ${this.member.name} has been removed from project ${this.project.name}');
           this.googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
         });
       }

@@ -60,7 +60,7 @@ export class AddMachineNetworkComponent implements OnInit {
       }
     }
     this.api.getCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((res) => {
-      NotificationActions.success('Success', `Machine Network(s) successfully added`);
+      NotificationActions.success('Success', `Machine Network(s) for ${this.cluster.name} successfully added`);
       this.dialogRef.close(res);
     });
   }

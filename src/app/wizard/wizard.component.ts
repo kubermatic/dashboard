@@ -276,7 +276,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
             .subscribe(
                 (cluster) => {
-                  NotificationActions.success('Success', `Cluster successfully created`);
+                  NotificationActions.success('Success', `Cluster ${createCluster.name} successfully created`);
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
                   const isReady = new Subject<boolean>();
@@ -290,7 +290,9 @@ export class WizardComponent implements OnInit, OnDestroy {
                         for (const key of this.clusterSSHKeys) {
                           this.api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id)
                               .subscribe(() => {
-                                NotificationActions.success('Success', `SSH key ${key.name} was added successfully`);
+                                NotificationActions.success(
+                                    'Success',
+                                    `SSH key ${key.name} was added successfully to cluster ${createCluster.name}`);
                               });
                         }
                       }
@@ -305,7 +307,7 @@ export class WizardComponent implements OnInit, OnDestroy {
                   }
                 },
                 () => {
-                  NotificationActions.error('Error', `Could not create cluster`);
+                  NotificationActions.error('Error', `Could not create cluster ${createCluster.name}`);
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
                   this.creating = false;
                 }));

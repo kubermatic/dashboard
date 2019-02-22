@@ -49,7 +49,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
     this.api.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id).subscribe((r) => {
       this.cluster = r;
       this.dialogRef.close();
-      NotificationActions.success('Success', `Cluster Version is being changed`);
+      NotificationActions.success('Success', `Cluster Version for ${this.cluster.name} is being changed`);
       this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
       this.selectedVersion = null;
     });

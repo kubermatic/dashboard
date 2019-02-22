@@ -23,7 +23,7 @@ export class RevokeAdminTokenComponent implements OnInit {
   revokeAdminToken(): void {
     this.api.editToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.adminToken)
         .subscribe((res) => {
-          NotificationActions.success('Success', `Revoke Admin Token successfully`);
+          NotificationActions.success('Success', `Successfully revoked Admin Token for cluster ${this.cluster.name}`);
           this.dialogRef.close(res);
         });
   }
