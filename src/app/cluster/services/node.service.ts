@@ -83,7 +83,7 @@ export class NodeService {
         .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), dc.metadata.name, project)
         .pipe(first())
         .subscribe(() => {
-          NotificationActions.success('Success', 'Node Deployment successfully created');
+          NotificationActions.success('Success', 'Node Deployment for ${cluster.name} successfully created');
           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
         });
   }
@@ -141,7 +141,8 @@ export class NodeService {
                             data.datacenter.metadata.name, data.projectID)
                         .pipe(first())
                         .pipe(catchError(() => {
-                          NotificationActions.error('Error', `Could not update Node Deployment`);
+                          NotificationActions.error(
+                              'Error', `Could not update Node Deployment for ${data.cluster.name}`);
                           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
                           return of(undefined);
                         }));
@@ -152,7 +153,8 @@ export class NodeService {
             (nd: NodeDeploymentEntity):
                 Observable<boolean> => {
                   if (nd) {
-                    NotificationActions.success('Success', 'Node Deployment updated successfully');
+                    NotificationActions.success(
+                        'Success', 'Node Deployment for ${data.cluster.name} updated successfully');
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
                     if (changeEventEmitter) {
                       changeEventEmitter.emit(nd);

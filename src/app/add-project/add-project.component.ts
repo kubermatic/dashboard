@@ -28,7 +28,7 @@ export class AddProjectComponent implements OnInit {
     this.api.createProject(createProject).subscribe((res) => {
       this.projectService.changeAndStoreSelectedProject(res);
       this.dialogRef.close(res);
-      NotificationActions.success('Success', `Project is added successfully`);
+      NotificationActions.success('Success', `Project ${createProject.name} is added successfully`);
     });
   }
 }

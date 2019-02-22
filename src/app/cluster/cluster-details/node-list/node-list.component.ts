@@ -69,7 +69,7 @@ export class NodeListComponent implements OnInit {
       if (isConfirmed) {
         this.api.deleteClusterNode(this.cluster.id, node, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {
-              NotificationActions.success('Success', 'Node removed successfully');
+              NotificationActions.success('Success', 'Node removed successfully from ${this.cluster.name}');
               this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
               this.deleteNode.emit(node);
             });

@@ -58,7 +58,8 @@ export class SSHKeyItemComponent implements OnInit {
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this.api.deleteSSHKey(this.sshKey.id, this.projectId).subscribe(() => {
-          NotificationActions.success('Success', 'SSH key has been removed from project');
+          NotificationActions.success(
+              'Success', 'SSH key ${this.sshKey.name} has been removed from project ${this.project.name}');
           this.googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
         });
       }
