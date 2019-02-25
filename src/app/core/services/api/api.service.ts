@@ -281,19 +281,19 @@ export class ApiService {
 
   getAzureSizesForWizard(
       clientID: string, clientSecret: string, subscriptionID: string, tenantID: string,
-      location: string): Observable<AzureSizes> {
+      location: string): Observable<AzureSizes[]> {
     this.headers = this.headers.set('ClientID', clientID);
     this.headers = this.headers.set('ClientSecret', clientSecret);
     this.headers = this.headers.set('SubscriptionID', subscriptionID);
     this.headers = this.headers.set('TenantID', tenantID);
     this.headers = this.headers.set('Location', location);
     const url = `${this.restRoot}/providers/azure/sizes`;
-    return this.http.get<AzureSizes>(url, {headers: this.headers});
+    return this.http.get<AzureSizes[]>(url, {headers: this.headers});
   }
 
-  getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes> {
+  getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes[]> {
     const url = `${this.restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/sizes`;
-    return this.http.get<AzureSizes>(url, {headers: this.headers});
+    return this.http.get<AzureSizes[]>(url, {headers: this.headers});
   }
 
   getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {

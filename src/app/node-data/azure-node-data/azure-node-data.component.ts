@@ -21,7 +21,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   @Input() clusterId: string;
   @Input() seedDCName: string;
 
-  sizes: AzureSizes;
+  sizes: AzureSizes[] = [];
   azureNodeForm: FormGroup;
   tags: FormArray;
   datacenter: DataCenterEntity;
@@ -72,6 +72,19 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
 
   isInWizard(): boolean {
     return !this.clusterId || this.clusterId.length === 0;
+  }
+
+  getSizesFormState(): string {
+    if ((!this.cloudSpec.azure.clientID || this.cloudSpec.azure.clientID === '') &&
+        (!this.cloudSpec.azure.clientSecret || this.cloudSpec.azure.clientSecret === '') &&
+        (!this.cloudSpec.azure.tenantID || this.cloudSpec.azure.tenantID === '') &&
+        (!this.cloudSpec.azure.subscriptionID || this.cloudSpec.azure.subscriptionID === '') && this.isInWizard()) {
+      return 'Please enter a valid token first!';
+    } else if (this.sizes.length === 0) {
+      return 'Loading sizes...';
+    } else {
+      return 'Node Size*:';
+    }
   }
 
   reloadAzureSizes(): void {

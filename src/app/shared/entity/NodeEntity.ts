@@ -116,7 +116,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       } as HetznerNodeSpec;
     case NodeProvider.AZURE:
       return {
-        size: 'Standard_A0',
+        size: '',
         assignPublicIP: false,
         tags: {'': ''},
       } as AzureNodeSpec;
