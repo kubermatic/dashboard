@@ -130,6 +130,11 @@ export class ApiService {
     return this.http.delete(url, {headers: this.headers});
   }
 
+  upgradeClusterNodeDeployments(version: string, cluster: string, dc: string, projectID: string): Observable<any> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes/upgrades`;
+    return this.http.put(url, {version} as MasterVersion, {headers: this.headers});
+  }
+
   getClusterNodes(cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes?hideInitialConditions=true`;
     return this.http.get<NodeEntity[]>(url, {headers: this.headers});
