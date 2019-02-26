@@ -58,6 +58,12 @@
           *matRowDef="let row; columns: displayedColumns"
           class="km-mat-row"></tr>
     </table>
+
+    <div *ngIf="!events || events.length === 0"
+         class="km-row km-no-item">
+      No events available.
+    </div>
+
     <mat-paginator [pageSizeOptions]="[10, 20]"
                    showFirstLastButtons></mat-paginator>
   </mat-card-content>
