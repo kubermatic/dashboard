@@ -56,17 +56,12 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
     this.nodeForm.controls.count.markAsTouched();
 
-    let distUpgradeOnBootUbuntu = false;
-    let distUpgradeOnBootCentos = false;
-    let disableAutoUpdate = false;
-
-    if (!!this.nodeData.spec.operatingSystem.ubuntu) {
-      distUpgradeOnBootUbuntu = this.nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
-    } else if (!!this.nodeData.spec.operatingSystem.centos) {
-      distUpgradeOnBootCentos = this.nodeData.spec.operatingSystem.centos.distUpgradeOnBoot;
-    } else if (!!this.nodeData.spec.operatingSystem.containerLinux) {
-      disableAutoUpdate = this.nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate;
-    }
+    const distUpgradeOnBootUbuntu =
+        !!this.nodeData.spec.operatingSystem.ubuntu && this.nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot;
+    const distUpgradeOnBootCentos =
+        !!this.nodeData.spec.operatingSystem.centos && this.nodeData.spec.operatingSystem.centos.distUpgradeOnBoot;
+    const disableAutoUpdate = !!this.nodeData.spec.operatingSystem.containerLinux &&
+        this.nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate;
 
     this.operatingSystemForm = new FormGroup({
       distUpgradeOnBootUbuntu: new FormControl(distUpgradeOnBootUbuntu),
@@ -75,8 +70,6 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.push(this.nodeForm.valueChanges.subscribe(() => {
-      this.operatingSystemForm.setValue(
-          {distUpgradeOnBootUbuntu: false, distUpgradeOnBootCentos: false, disableAutoUpdate: false});
       this.addNodeService.changeNodeData(this.getAddNodeData());
     }));
 
