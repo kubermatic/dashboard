@@ -59,7 +59,7 @@ export class SSHKeyItemComponent implements OnInit {
       if (isConfirmed) {
         this.api.deleteSSHKey(this.sshKey.id, this.projectId).subscribe(() => {
           NotificationActions.success(
-              'Success', 'SSH key ${this.sshKey.name} has been removed from project ${this.project.name}');
+              'Success', `SSH key ${this.sshKey.name} has been removed from project ${this.projectId}`);
           this.googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
         });
       }

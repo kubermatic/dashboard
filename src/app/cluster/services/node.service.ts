@@ -83,7 +83,7 @@ export class NodeService {
         .createNodeDeployment(cluster, NodeService._getNodeDeploymentEntity(nodeData), dc.metadata.name, project)
         .pipe(first())
         .subscribe(() => {
-          NotificationActions.success('Success', 'Node Deployment for ${cluster.name} successfully created');
+          NotificationActions.success('Success', `Node Deployment for ${cluster.name} successfully created`);
           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeAdded');
         });
   }
@@ -202,7 +202,7 @@ export class NodeService {
             (data: any):
                 Observable<boolean> => {
                   if (data) {
-                    NotificationActions.success('Success', 'Node Deployment removed successfully');
+                    NotificationActions.success('Success', `Node Deployment removed successfully`);
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentDeleted');
                     if (changeEventEmitter) {
                       changeEventEmitter.emit(nd);

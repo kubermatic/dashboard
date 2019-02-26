@@ -87,7 +87,7 @@ export class MemberItemComponent implements OnInit {
       if (isConfirmed) {
         this.api.deleteMembers(this.project.id, this.member).subscribe(() => {
           NotificationActions.success(
-              'Success', 'Member ${this.member.name} has been removed from project ${this.project.name}');
+              'Success', `Member ${this.member.name} has been removed from project ${this.project.name}`);
           this.googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
         });
       }
