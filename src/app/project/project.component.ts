@@ -197,7 +197,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   trackProject(index: number, project: ProjectEntity): number {
     const prevProject = find(this.projects, (item) => {
-      return item.name === project.name;
+      return item.id === project.id;
     });
 
     return prevProject && prevProject.status === project.status ? index : undefined;
