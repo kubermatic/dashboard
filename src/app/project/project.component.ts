@@ -1,6 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {find} from 'lodash';
 import {interval, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
 
@@ -110,9 +109,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   getClusterCount(): void {
     for (const project of this.projects) {
-      this.api.getAllClusters(project.id).pipe(first()).subscribe((dcClusters) => {
-        this.clusterCount[project.id] = dcClusters.length;
-      });
+      if (project.status === 'Active') {
+        this.api.getAllClusters(project.id).pipe(first()).subscribe((dcClusters) => {
+          this.clusterCount[project.id] = dcClusters.length;
+        });
+      }
     }
   }
 
@@ -193,13 +194,5 @@ export class ProjectComponent implements OnInit, OnDestroy {
         sub.unsubscribe();
       }
     }
-  }
-
-  trackProject(index: number, project: ProjectEntity): number {
-    const prevProject = find(this.projects, (item) => {
-      return item.id === project.id;
-    });
-
-    return prevProject && prevProject.status === project.status ? index : undefined;
   }
 }
