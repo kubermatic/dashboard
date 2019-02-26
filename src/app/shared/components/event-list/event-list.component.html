@@ -19,7 +19,8 @@
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Name</th>
+            class="km-header-cell">Name
+        </th>
         <td mat-cell
             *matCellDef="let element">{{element.message}}</td>
       </ng-container>
@@ -37,7 +38,8 @@
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Count</th>
+            class="km-header-cell">Count
+        </th>
         <td mat-cell
             *matCellDef="let element">{{element.count}}</td>
       </ng-container>
@@ -46,7 +48,8 @@
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Last Timestamp</th>
+            class="km-header-cell">Last Timestamp
+        </th>
         <td mat-cell
             *matCellDef="let element">{{element.lastTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
       </ng-container>
@@ -59,11 +62,10 @@
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="!events || events.length === 0">
-      <div class="km-row km-no-item">
-        No events available.
-      </div>
-    </ng-container>
+    <div *ngIf="!events || events.length === 0"
+         class="km-row km-no-item">
+      No events available.
+    </div>
 
     <mat-paginator [pageSizeOptions]="[10, 20]"
                    showFirstLastButtons></mat-paginator>
