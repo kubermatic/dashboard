@@ -11,16 +11,16 @@
     <div class="mat-dialog-content">
       <mat-form-field>
         <mat-select [(ngModel)]="selectedVersion"
-                    placeholder="Versions:">
-          <mat-option *ngFor="let version of possibleVersions"
+                    placeholder="Control Plane Version">
+          <mat-option *ngFor="let version of controlPlaneVersions"
                       [value]="version">
             {{version}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <div>
-        <p>Please recreate your nodes, to update them as well.</p>
-      </div>
+      <mat-checkbox [(ngModel)]="isNodeDeploymentUpgradeEnabled">
+        Upgrade Node Deployments
+      </mat-checkbox>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
