@@ -71,6 +71,13 @@ export class ProjectComponent implements OnInit, OnDestroy {
   refreshProjects(): void {
     this.subscriptions.push(this.api.getProjects().subscribe((res) => {
       this.projects = res;
+      for (const i in res) {
+        if (res.hasOwnProperty(i)) {
+          this.projects[i].owners = res[i].owners.sort((a, b) => {
+            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+          });
+        }
+      }
       this.getClusterCount();
       this.getRole();
       this.loading = false;
