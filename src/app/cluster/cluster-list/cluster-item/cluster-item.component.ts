@@ -1,6 +1,5 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {Subscription} from 'rxjs';
 import {DatacenterService, HealthService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
@@ -12,14 +11,13 @@ import {HealthEntity} from '../../../shared/entity/HealthEntity';
   styleUrls: ['./cluster-item.component.scss'],
 })
 
-export class ClusterItemComponent implements OnInit, OnDestroy {
+export class ClusterItemComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() projectID: string;
   @Input() index: number;
   nodeDC: DataCenterEntity;
   seedDC: DataCenterEntity;
   health: HealthEntity;
-  private subscriptions: Subscription[] = [];
 
   constructor(private dcService: DatacenterService, private router: Router, private healthService: HealthService) {}
 
@@ -36,14 +34,6 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
           .subscribe((health) => {
             this.health = health;
           });
-    }
-  }
-
-  ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
     }
   }
 
@@ -77,16 +67,10 @@ export class ClusterItemComponent implements OnInit, OnDestroy {
     return itemClass;
   }
 
-  getDatacenter(): string {
-    let datacenter: string;
-    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((res) => {
-      datacenter = res.spec.seed;
-    });
-    return datacenter;
-  }
-
   navigateToCluster(): void {
-    const dc = this.getDatacenter();
-    this.router.navigate(['/projects/' + this.projectID + '/dc/' + dc + '/clusters/' + this.cluster.id]);
+    this.dcService.getDataCenter(this.cluster.spec.cloud.dc).subscribe((res) => {
+      const dc = res.spec.seed;
+      this.router.navigate(['/projects/' + this.projectID + '/dc/' + dc + '/clusters/' + this.cluster.id]);
+    });
   }
 }

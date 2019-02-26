@@ -126,10 +126,4 @@ describe('ClusterItemComponent', () => {
     name = 'thisNameIsNotShortEnough';
     expect(component.getShortClusterName(name)).toEqual('thisNameIsNo...');
   });
-
-  it('should get datacenter', () => {
-    component.cluster = fakeDigitaloceanCluster();
-    fixture.detectChanges();
-    expect(component.getDatacenter()).toEqual('europe-west3-c');
-  });
 });

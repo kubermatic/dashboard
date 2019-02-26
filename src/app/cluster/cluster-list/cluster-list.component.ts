@@ -30,12 +30,12 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-
     this.subscriptions.push(this.route.paramMap.subscribe((m) => {
       this.projectID = m.get('projectID');
       this.refreshClusters();
     }));
+
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
 
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
@@ -44,8 +44,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.subscriptions.push(interval(5000).subscribe(() => {
       this.refreshClusters();
     }));
-
-    this.refreshClusters();
   }
 
   ngOnDestroy(): void {
