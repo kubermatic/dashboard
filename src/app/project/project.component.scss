@@ -8,14 +8,6 @@
   text-align: center;
 }
 
-td.mat-cell.cdk-column-actions.mat-column-actions.ng-star-inserted {
-  vertical-align: middle;
-
-  &.km-cell-actions {
-    vertical-align: baseline;
-  }
-}
-
 .km-project-item-actions {
   display: flex;
   justify-content: flex-end;
@@ -30,14 +22,5 @@ td.mat-cell.cdk-column-actions.mat-column-actions.ng-star-inserted {
 .km-project-item-owner {
   display: block;
   line-height: 30px;
-  vertical-align: bottom;
   height: 100%;
-
-  &:last-child {
-    margin-bottom: 15px;
-  }
-}
-
-.km-mat-row {
-  vertical-align: baseline;
 }
