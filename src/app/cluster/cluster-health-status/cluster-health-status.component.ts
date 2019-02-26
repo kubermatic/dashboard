@@ -27,7 +27,6 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this._getClusterHealth();
-
     const timer = interval(5000);
     this.subscriptions.push(timer.subscribe(() => {
       this._getClusterHealth();
@@ -67,11 +66,7 @@ export class ClusterHealthStatusComponent implements OnInit, OnDestroy {
   getHealthTooltipText(): string {
     if (this.healthStatus === ClusterHealth.DELETING) {
       return 'Deleting might take up to 15 minutes';
-    } /*else if (!!this.cluster.spec.pause) {
-      return 'Manual action required';
-    } else {
-      return '';
-    }*/
+    }
     return '';
   }
 }
