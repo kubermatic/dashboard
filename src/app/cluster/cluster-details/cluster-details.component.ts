@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, interval, Subject, Subscription} from 'rxjs';
+import {combineLatest, interval, Subject} from 'rxjs';
 import {first, retry, takeUntil} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
@@ -52,7 +52,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
   private refreshInterval = 10000;
-  private subscriptions: Subscription[] = [];
 
   constructor(
       private route: ActivatedRoute, private router: Router, private api: ApiService, public dialog: MatDialog,
@@ -284,10 +283,5 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
   }
 }
