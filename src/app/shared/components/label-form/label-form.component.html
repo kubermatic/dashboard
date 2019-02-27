@@ -1,0 +1,42 @@
+<mat-card-header>
+  <mat-card-title>
+    <h4>Labels</h4>
+  </mat-card-title>
+</mat-card-header>
+<form [formGroup]="labelsForm"
+      fxLayout="column">
+  <div formArrayName="labels">
+    <div *ngFor="let label of labelArray.controls; let i = index;"
+         [formGroupName]="i"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <mat-form-field fxFlex="40">
+        <input matInput
+               (keyup)="check(i)"
+               name="key"
+               formControlName="key"
+               placeholder="Key">
+        <mat-error *ngIf="label.get('key').errors?.unique"
+                   i18n>
+          {{label.get('key').value}} is not unique
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="40">
+        <input matInput
+               (keyup)="check(i)"
+               name="value"
+               formControlName="value"
+               placeholder="Value">
+      </mat-form-field>
+      <div fxFlex="10">
+        <button mat-icon-button
+                class="km-label-form-delete-button"
+                *ngIf="isRemovable()"
+                (click)="deleteLabel(i)">
+          <i class="fa fa-trash-o"
+             aria-hidden="true"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</form>

@@ -22,6 +22,7 @@ import {NodeService} from '../../services/node.service';
 export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   nodeDeployment: NodeDeploymentEntity;
   nodeDeploymentHealthStatus: NodeDeploymentHealthStatus;
+  labelKeys: string[] = [];
   nodes: NodeEntity[] = [];
   events: EventEntity[] = [];
   cluster: ClusterEntity;
@@ -92,8 +93,9 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadNodeDeployment(): void {
     this._apiService.getNodeDeployment(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
         .pipe(first())
-        .subscribe((nd) => {
+        .subscribe((nd: NodeDeploymentEntity) => {
           this.nodeDeployment = nd;
+          this.labelKeys = Object.keys(nd.spec.template.labels);
           this.system = NodeService.getOperatingSystem(this.nodeDeployment.spec.template);
           this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);
           this._isNodeDeploymentLoaded = true;

@@ -108,6 +108,18 @@
         <div key>Creation date</div>
         <div value>{{nodeDeployment.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</div>
       </km-property>
+
+      <km-property>
+        <div key>Labels</div>
+        <div value>
+          <mat-chip-list>
+            <mat-chip *ngFor="let labelKey of labelKeys">
+              {{labelKey}}: {{nodeDeployment.spec.template.labels[labelKey]}}
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </km-property>
+
     </mat-card-content>
   </mat-card>
 

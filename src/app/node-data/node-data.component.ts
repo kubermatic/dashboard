@@ -165,6 +165,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       spec: {
         cloud: this.providerData.spec,
         operatingSystem: this.getOSSpec(),
+        labels: this.nodeData.spec.labels,
         versions,
       },
       name: this.nodeForm.controls.name.value,

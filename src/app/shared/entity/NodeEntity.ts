@@ -19,6 +19,7 @@ export class NodeSpec {
   cloud: NodeCloudSpec;
   operatingSystem: OperatingSystemSpec;
   versions?: NodeVersionInfo;
+  labels?: object;
 }
 
 export class NodeCloudSpec {
