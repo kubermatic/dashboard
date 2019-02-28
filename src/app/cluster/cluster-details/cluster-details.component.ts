@@ -145,8 +145,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       this.hasInitialNodes = true;
     }
 
-    if (this.health && this.health.apiserver && this.health.controller && this.health.etcd &&
-        this.health.machineController && this.health.scheduler) {
+    if (this.health && HealthEntity.allHealthy(this.health)) {
       const initialNodeCreationSub = this.clusterSubject.pipe(takeUntil(this.unsubscribe)).subscribe((cluster) => {
         const data = this.initialNodeDataService.getInitialNodeData(cluster);
         if (data == null && initialNodeCreationSub) {
@@ -155,7 +154,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           return;
         }
 
-        if (cluster && this.health && this.health.apiserver && this.health.machineController) {
+        if (cluster && this.health && HealthEntity.allHealthy(this.health)) {
           this.node_.createInitialNodes(data, this.datacenter, cluster, this.projectID);
           this.initialNodeDataService.clearInitialNodeData(cluster);
         }
@@ -164,7 +163,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   reloadClusterNodes(): void {
-    if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
+    if (this.cluster && this.health && HealthEntity.allHealthy(this.health)) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe((nodes) => {

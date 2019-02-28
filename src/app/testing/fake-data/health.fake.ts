@@ -7,5 +7,6 @@ export function fakeHealth(): HealthEntity {
     etcd: true,
     machineController: true,
     scheduler: true,
+    cloudProviderInfrastructure: true,
   };
 }
