@@ -4,4 +4,5 @@ export class HealthEntity {
   etcd: boolean;
   machineController: boolean;
   scheduler: boolean;
+  cloudProviderInfrastructure: boolean;
 }
