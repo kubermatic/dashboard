@@ -9,7 +9,7 @@ import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
-import {HealthEntity} from '../../shared/entity/HealthEntity';
+import {allHealthy, HealthEntity} from '../../shared/entity/HealthEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
@@ -145,8 +145,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       this.hasInitialNodes = true;
     }
 
-    if (this.health && !!this.health.apiserver && !!this.health.controller && !!this.health.etcd &&
-        !!this.health.machineController && !!this.health.scheduler && !!this.health.cloudProviderInfrastructure) {
+    if (this.health && allHealthy(this.health)) {
       const initialNodeCreationSub = this.clusterSubject.pipe(takeUntil(this.unsubscribe)).subscribe((cluster) => {
         const data = this.initialNodeDataService.getInitialNodeData(cluster);
         if (data == null && initialNodeCreationSub) {
@@ -155,9 +154,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           return;
         }
 
-        if (cluster && this.health && !!this.health.apiserver && !!this.health.machineController &&
-            !!this.health.controller && !!this.health.etcd && !!this.health.scheduler &&
-            !!this.health.cloudProviderInfrastructure) {
+        if (cluster && this.health && allHealthy(this.health)) {
           this.node_.createInitialNodes(data, this.datacenter, cluster, this.projectID);
           this.initialNodeDataService.clearInitialNodeData(cluster);
         }
@@ -166,9 +163,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   reloadClusterNodes(): void {
-    if (this.cluster && this.health && !!this.health.apiserver && !!this.health.machineController &&
-        !!this.health.scheduler && !!this.health.controller && !!this.health.etcd &&
-        !!this.health.cloudProviderInfrastructure) {
+    if (this.cluster && this.health && allHealthy(this.health)) {
       this.api.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
           .pipe(takeUntil(this.unsubscribe))
           .subscribe((nodes) => {
