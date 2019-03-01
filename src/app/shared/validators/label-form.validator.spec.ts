@@ -13,6 +13,9 @@ const tooLongPrefix = 'beta.JTLp2AftZ7YtSwdf0m2K4yrwd6l8ynEQWICfgFjAfDgRDw3wNpbq
     '82SHI2C1p9XmmSinNtRAdOYYCiKZcYjRFw4i7F3UxAtLCUsLKxG3FJbiPf0EJDvAUDnv2Ktr7nIEpgD' +
     'C9Q8hIumOMFzEc61YgQpXiRAeq9CmTQmJSe.io';
 const invalidPrefix = '!@#$%^&*';
+const validValue = 'test';
+const tooLongValue = 'L1txKHOWiSe5dSUakuYw82l2IepfxxBMbDA6JFCzp1TeFQbEvQmpJkcBDU4Npv50';
+const invalidValue = '!@#$%^&*';
 
 describe('LabelFormValidators', () => {
   it('labelKeyNameLength should be valid', () => {
@@ -60,6 +63,30 @@ describe('LabelFormValidators', () => {
   it('labelKeyPrefixPattern should be invalid', () => {
     const control = {value: `${invalidPrefix}/${validKey}`} as FormControl;
     const result = LabelFormValidators.labelKeyPrefixPattern(control);
+    expect(result).not.toBe(null);
+  });
+
+  it('labelValueLength should be valid', () => {
+    const control = {value: `${validValue}`} as FormControl;
+    const result = LabelFormValidators.labelValueLength(control);
+    expect(result).toBe(null);
+  });
+
+  it('labelValueLength should be invalid', () => {
+    const control = {value: `${tooLongValue}`} as FormControl;
+    const result = LabelFormValidators.labelValueLength(control);
+    expect(result).not.toBe(null);
+  });
+
+  it('labelValuePattern should be valid', () => {
+    const control = {value: `${validValue}`} as FormControl;
+    const result = LabelFormValidators.labelValuePattern(control);
+    expect(result).toBe(null);
+  });
+
+  it('labelValuePattern should be invalid', () => {
+    const control = {value: `${invalidValue}`} as FormControl;
+    const result = LabelFormValidators.labelValuePattern(control);
     expect(result).not.toBe(null);
   });
 });
