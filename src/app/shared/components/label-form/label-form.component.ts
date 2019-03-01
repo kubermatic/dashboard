@@ -2,7 +2,7 @@ import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angul
 
 import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {SlideInOut} from '../../animations/slideinout';
-import {LabelFormValidators} from './label-form.validators';
+import {LabelFormValidators} from '../../validators/label-form.validators';
 
 @Component({
   selector: 'km-label-form',
