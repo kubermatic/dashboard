@@ -1,7 +1,6 @@
 import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
 
 import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
-import {LabelEntity} from './label-entity';
 
 @Component({
   selector: 'km-label-form',
@@ -21,8 +20,8 @@ import {LabelEntity} from './label-entity';
   ]
 })
 export class LabelFormComponent implements OnInit {
-  @Input() labels: LabelEntity[];
-  @Output() labelsChange = new EventEmitter<LabelEntity[]>();
+  @Input() labels: object;
+  @Output() labelsChange = new EventEmitter<object>();
   labelsForm: FormGroup;
 
   constructor(private readonly _formBuilder: FormBuilder) {}
@@ -37,12 +36,7 @@ export class LabelFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.labelsForm = this._formBuilder.group({labels: this._formBuilder.array([])});
-
-    // TODO: Add labels from input array.
-    // TODO: Fix array != object mismatch.
-
-    // Add empty field for the user.
-    this._addLabel();
+    this._initializeLabelsForm();
   }
 
   deleteLabel(index: number): void {
@@ -54,19 +48,24 @@ export class LabelFormComponent implements OnInit {
   }
 
   check(index: number): void {
-    // Add label if needed.
+    this._addLabelIfNeeded();
+    this._validateKey(index);
+    this._updateLabelsObject();
+  }
+
+  private _initializeLabelsForm(): void {
+    Object.keys(this.labels).forEach(key => {
+      this._addLabel(key, this.labels[key]);
+    });
+
+    this._addLabel();
+  }
+
+  private _addLabelIfNeeded(): void {
     const lastLabel = this.labelArray.at(this.labelArray.length - 1);
     if (LabelFormComponent._isFilled(lastLabel)) {
       this._addLabel();
     }
-
-    // Validate key.
-    this._validateKey(index);
-
-    // Update the model.
-    this.labels = this.labelArray.getRawValue();
-    this.labels = this.labels.filter(label => label.key.length !== 0 && label.value.length !== 0);
-    this.labelsChange.emit(this.labels);
   }
 
   // TODO: Add more validators to ensure Kubernetes' requirements for labels.
@@ -97,5 +96,16 @@ export class LabelFormComponent implements OnInit {
       }
     }
     return false;
+  }
+
+  private _updateLabelsObject(): void {
+    const labelsObject = {};
+    this.labelArray.getRawValue().forEach(kv => {
+      if (kv.key.length !== 0 && kv.value.length !== 0) {
+        labelsObject[kv.key] = kv.value;
+      }
+    });
+    this.labels = labelsObject;
+    this.labelsChange.emit(this.labels);
   }
 }

@@ -121,8 +121,6 @@
 
 <km-label-form [(labels)]="nodeData.spec.labels"></km-label-form>
 
-{{nodeData.spec.labels | json}}
-
 <kubermatic-openstack-options *ngIf="cluster.spec.cloud.openstack"
                               [nodeData]="nodeData"
                               [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-options>
