@@ -23,6 +23,7 @@ import {LabelFormValidators} from './label-form.validators';
   animations: [SlideInOut]
 })
 export class LabelFormComponent implements OnInit {
+  @Input() title = 'Labels';
   @Input() labels: object;
   @Output() labelsChange = new EventEmitter<object>();
   labelsForm: FormGroup;
