@@ -45,6 +45,7 @@ export class LabelFormComponent implements OnInit {
 
   deleteLabel(index: number): void {
     this.labelArray.removeAt(index);
+    this._updateLabelsObject();
   }
 
   isRemovable(): boolean {
