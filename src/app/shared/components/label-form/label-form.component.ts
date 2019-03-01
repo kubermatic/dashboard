@@ -26,6 +26,7 @@ export class LabelFormComponent implements OnInit {
   @Input() labels: object;
   @Output() labelsChange = new EventEmitter<object>();
   labelsForm: FormGroup;
+  initialLabels: object;
   isVisible = true;
 
   constructor(private readonly _formBuilder: FormBuilder) {}
@@ -39,8 +40,24 @@ export class LabelFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Initialize labels form.
     this.labelsForm = this._formBuilder.group({labels: this._formBuilder.array([])});
-    this._initialize();
+
+    // Make sure that labels object exist.
+    if (!this.labels) {
+      this.labels = {};
+    }
+
+    // Save initial state of labels.
+    this.initialLabels = this.labels;
+
+    // Setup labels form with label data.
+    Object.keys(this.labels).forEach(key => {
+      this._addLabel(key, this.labels[key]);
+    });
+
+    // Add initial label for the user.
+    this._addLabel();
   }
 
   deleteLabel(index: number): void {
@@ -60,18 +77,6 @@ export class LabelFormComponent implements OnInit {
 
   toggleVisibility(): void {
     this.isVisible = !this.isVisible;
-  }
-
-  private _initialize(): void {
-    if (!this.labels) {
-      this.labels = {};
-    }
-
-    Object.keys(this.labels).forEach(key => {
-      this._addLabel(key, this.labels[key]);
-    });
-
-    this._addLabel();
   }
 
   private _addLabelIfNeeded(): void {
@@ -126,13 +131,27 @@ export class LabelFormComponent implements OnInit {
   }
 
   private _updateLabelsObject(): void {
+    // Create a new labels object.
     const labelsObject = {};
+
+    // Fill it with current labels data.
     this.labelArray.getRawValue().forEach(kv => {
       if (kv.key.length !== 0 && kv.value.length !== 0) {
         labelsObject[kv.key] = kv.value;
       }
     });
+
+    // Nullify initial labels data (it is needed to make edit work as it uses JSON Merge Patch).
+    Object.keys(this.initialLabels).forEach(initialKey => {
+      if (!labelsObject.hasOwnProperty(initialKey)) {
+        labelsObject[initialKey] = null;
+      }
+    });
+
+    // Update labels object.
     this.labels = labelsObject;
+
+    // Emit the change event.
     this.labelsChange.emit(this.labels);
   }
 }
