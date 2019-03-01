@@ -27,9 +27,25 @@
                name="key"
                formControlName="key"
                placeholder="Key">
-        <mat-error *ngIf="label.get('key').errors?.unique"
+        <mat-error *ngIf="label.get('key').errors?.validLabelKeyUniqueness"
                    i18n>
-          {{label.get('key').value}} is not unique
+          Key is not unique
+        </mat-error>
+        <mat-error *ngIf="label.get('key').errors?.validLabelKeyPrefixPattern"
+                   i18n>
+          Prefix not allowed
+        </mat-error>
+        <mat-error *ngIf="label.get('key').errors?.validLabelKeyNamePattern"
+                   i18n>
+          Name not allowed
+        </mat-error>
+        <mat-error *ngIf="label.get('key').errors?.validLabelKeyPrefixLength"
+                   i18n>
+          Prefix is too long
+        </mat-error>
+        <mat-error *ngIf="label.get('key').errors?.validLabelKeyNameLength"
+                   i18n>
+          Name is too long
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="40">
@@ -38,6 +54,14 @@
                name="value"
                formControlName="value"
                placeholder="Value">
+        <mat-error *ngIf="label.get('value').errors?.validLabelValuePattern"
+                   i18n>
+          Value not allowed
+        </mat-error>
+        <mat-error *ngIf="label.get('value').errors?.validLabelValueLength"
+                   i18n>
+          Value is too long
+        </mat-error>
       </mat-form-field>
       <div fxFlex="10">
         <button mat-icon-button

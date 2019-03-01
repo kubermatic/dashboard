@@ -101,8 +101,11 @@ export class LabelFormComponent implements OnInit {
 
   private _validateKey(index: number): void {
     const elem = this.labelArray.at(index).get('key');
-    const isUnique = !this._isKeyDuplicated(index);
-    elem.setErrors(isUnique ? null : {unique: true});
+
+    if (this._isKeyDuplicated(index)) {
+      elem.setErrors({validLabelKeyUniqueness: true});
+    }
+
     this.labelsForm.updateValueAndValidity();
   }
 
