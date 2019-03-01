@@ -1,6 +1,7 @@
 import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angular/core';
 
 import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
+import {SlideInOut} from '../../animations/slideinout';
 
 @Component({
   selector: 'km-label-form',
@@ -17,12 +18,14 @@ import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VA
       useExisting: forwardRef(() => LabelFormComponent),
       multi: true,
     }
-  ]
+  ],
+  animations: [SlideInOut]
 })
 export class LabelFormComponent implements OnInit {
   @Input() labels: object;
   @Output() labelsChange = new EventEmitter<object>();
   labelsForm: FormGroup;
+  isVisible = true;
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
@@ -36,7 +39,7 @@ export class LabelFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.labelsForm = this._formBuilder.group({labels: this._formBuilder.array([])});
-    this._initializeLabelsForm();
+    this._initialize();
   }
 
   deleteLabel(index: number): void {
@@ -53,7 +56,15 @@ export class LabelFormComponent implements OnInit {
     this._updateLabelsObject();
   }
 
-  private _initializeLabelsForm(): void {
+  toggleVisibility(): void {
+    this.isVisible = !this.isVisible;
+  }
+
+  private _initialize(): void {
+    if (!this.labels) {
+      this.labels = {};
+    }
+
     Object.keys(this.labels).forEach(key => {
       this._addLabel(key, this.labels[key]);
     });

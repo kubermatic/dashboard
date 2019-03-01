@@ -1,10 +1,21 @@
 <mat-card-header>
   <mat-card-title>
-    <h4>Labels</h4>
+    <h4 fxLayoutGap="4px">
+      <span>Labels</span>
+      <i class="fa fa-eye"
+         matTooltip="Hide labels form"
+         *ngIf="isVisible"
+         (click)="toggleVisibility()"></i>
+      <i class="fa fa-eye-slash"
+         matTooltip="Show labels form"
+         *ngIf="!isVisible"
+         (click)="toggleVisibility()"></i>
+    </h4>
   </mat-card-title>
 </mat-card-header>
 <form [formGroup]="labelsForm"
-      fxLayout="column">
+      fxLayout="column"
+      [@slideInOut]="isVisible">
   <div formArrayName="labels">
     <div *ngFor="let label of labelArray.controls; let i = index;"
          [formGroupName]="i"
