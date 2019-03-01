@@ -2,6 +2,7 @@ import {Component, EventEmitter, forwardRef, Input, OnInit, Output} from '@angul
 
 import {AbstractControl, FormArray, FormBuilder, FormGroup, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {SlideInOut} from '../../animations/slideinout';
+import {LabelFormValidators} from './label-form.validators';
 
 @Component({
   selector: 'km-label-form',
@@ -79,11 +80,22 @@ export class LabelFormComponent implements OnInit {
     }
   }
 
-  // TODO: Add more validators to ensure Kubernetes' requirements for labels.
   private _addLabel(key = '', value = ''): void {
     this.labelArray.push(this._formBuilder.group({
-      key: [{value: key, disabled: false}, Validators.compose([Validators.maxLength(63)])],
-      value: [{value, disabled: false}, Validators.compose([Validators.maxLength(255)])],
+      key: [
+        {value: key, disabled: false}, Validators.compose([
+          LabelFormValidators.labelKeyNameLength,
+          LabelFormValidators.labelKeyPrefixLength,
+          LabelFormValidators.labelKeyNamePattern,
+          LabelFormValidators.labelKeyPrefixPattern,
+        ])
+      ],
+      value: [
+        {value, disabled: false}, Validators.compose([
+          LabelFormValidators.labelValueLength,
+          LabelFormValidators.labelValuePattern,
+        ])
+      ],
     }));
   }
 
