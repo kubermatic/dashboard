@@ -111,11 +111,7 @@
       <km-property>
         <div key>Node Labels</div>
         <div value>
-          <mat-chip-list>
-            <mat-chip *ngFor="let labelKey of labelKeys">
-              {{labelKey}}: {{nodeDeployment.spec.template.labels[labelKey]}}
-            </mat-chip>
-          </mat-chip-list>
+          <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
         </div>
       </km-property>
     </mat-card-content>

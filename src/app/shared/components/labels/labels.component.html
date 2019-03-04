@@ -1,0 +1,7 @@
+<mat-chip-list *ngIf="labelKeys.length > 0">
+  <mat-chip *ngFor="let labelKey of labelKeys">
+    <ng-container>{{labelKey}}</ng-container>
+    <ng-container *ngIf="!!labels[labelKey]">: {{labels[labelKey]}}</ng-container>
+  </mat-chip>
+</mat-chip-list>
+<div *ngIf="labelKeys.length === 0">-</div>

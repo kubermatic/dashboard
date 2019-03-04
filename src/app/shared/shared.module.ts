@@ -14,6 +14,7 @@ import {AddSshKeyModalComponent} from './components/add-ssh-key-modal/add-ssh-ke
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {EventListComponent} from './components/event-list/event-list.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
+import {LabelsComponent} from './components/labels/labels.component';
 import {PropertyComponent} from './components/property/property.component';
 
 const modules: any[] = [
@@ -65,6 +66,7 @@ const modules: any[] = [
     PropertyComponent,
     EventListComponent,
     LabelFormComponent,
+    LabelsComponent,
   ],
   exports: [
     ...modules,
@@ -73,6 +75,7 @@ const modules: any[] = [
     PropertyComponent,
     EventListComponent,
     LabelFormComponent,
+    LabelsComponent,
   ],
   entryComponents: [
     AddSshKeyModalComponent,
