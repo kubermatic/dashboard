@@ -36,6 +36,17 @@ export class LabelFormComponent implements OnInit {
     return this.labelsForm.get('labels') as FormArray;
   }
 
+  static filterNullifiedKeys(labels: object): object {
+    const filteredLabelsObject = {};
+    Object.keys(labels).forEach(key => {
+      // Do not allow nullified (marked for removal) labels.
+      if (labels[key] !== null) {
+        filteredLabelsObject[key] = labels[key];
+      }
+    });
+    return filteredLabelsObject;
+  }
+
   private static _isFilled(label: AbstractControl): boolean {
     return label.get('key').value.length !== 0;
   }
