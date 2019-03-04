@@ -55,31 +55,40 @@
       <mat-card-title>
         <span ngxClipboard
               [cbContent]="cluster.name"
-              matTooltip="click to copy"
+              matTooltip="Click to copy"
               class="km-copy km-cluster-name">{{cluster.name}}</span>
         <kubermatic-cluster-health-status [cluster]="cluster"
                                           [datacenter]="datacenter"
                                           [projectID]="projectID"></kubermatic-cluster-health-status>
       </mat-card-title>
     </mat-card-header>
-    <mat-card-content fxLayout
+    <mat-card-content fxLayout="row wrap"
                       class="km-row">
-      <div fxFlex="20%">
-        <strong>Master Version:</strong>
-      </div>
-      <div fxFlex="35%"
-           class="km-change-version"
-           *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)">
-        <span (click)="changeClusterVersionDialog()"
-              matTooltip="click to change version"
-              class="km-copy">{{cluster.spec.version}}
-          <small [hidden]="!updatesAvailable">upgrade available</small></span>
-      </div>
-      <div fxFlex="35%"
-           class="km-change-version"
-           [hidden]="isClusterRunning && (updatesAvailable || downgradesAvailable)">
-        {{cluster.spec.version}}
-      </div>
+      <km-property>
+        <div key>Cluster ID</div>
+        <div value
+             ngxClipboard
+             [cbContent]="cluster.id"
+             matTooltip="Click to copy"
+             class="km-copy">
+          {{cluster.id}}
+        </div>
+      </km-property>
+      <km-property>
+        <div key>Master Version</div>
+        <div value>
+          <span *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)"
+                (click)="changeClusterVersionDialog()"
+                matTooltip="Click to change the version"
+                class="km-copy">{{cluster.spec.version}}
+            <i *ngIf="updatesAvailable"
+               class="fa fa-arrow-up"></i>
+          </span>
+          <span *ngIf="!isClusterRunning || !(updatesAvailable || downgradesAvailable)">
+            {{cluster.spec.version}}
+          </span>
+        </div>
+      </km-property>
     </mat-card-content>
   </mat-card>
   <kubermatic-cluster-secrets [cluster]="cluster"
