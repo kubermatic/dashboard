@@ -21,7 +21,7 @@
          [formGroupName]="i"
          fxLayout="row"
          fxLayoutGap="10px">
-      <mat-form-field fxFlex="40">
+      <mat-form-field fxFlex="45">
         <input matInput
                (keyup)="check(i)"
                name="key"
@@ -48,7 +48,7 @@
           Name is too long
         </mat-error>
       </mat-form-field>
-      <mat-form-field fxFlex="40">
+      <mat-form-field fxFlex="45">
         <input matInput
                (keyup)="check(i)"
                name="value"
@@ -63,15 +63,13 @@
           Value is too long
         </mat-error>
       </mat-form-field>
-      <div fxFlex="10">
-        <button mat-icon-button
-                class="km-label-form-delete-button"
-                *ngIf="isRemovable()"
-                (click)="deleteLabel(i)">
-          <i class="fa fa-trash-o"
-             aria-hidden="true"></i>
-        </button>
-      </div>
+      <button mat-icon-button
+              class="km-label-form-delete-button"
+              *ngIf="isRemovable()"
+              (click)="deleteLabel(i)">
+        <i class="fa fa-trash-o"
+           aria-hidden="true"></i>
+      </button>
     </div>
   </div>
 </form>
