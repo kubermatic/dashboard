@@ -13,7 +13,6 @@ import {ApiMockService} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
-import {MemberItemComponent} from './member-item/member-item.component';
 import {MemberComponent} from './member.component';
 
 describe('MemberComponent', () => {
@@ -33,7 +32,6 @@ describe('MemberComponent', () => {
           ],
           declarations: [
             MemberComponent,
-            MemberItemComponent,
           ],
           providers: [
             {provide: Router, useClass: RouterStub},

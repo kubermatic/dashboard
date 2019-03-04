@@ -1,16 +1,21 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog, Sort} from '@angular/material';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {interval, Subscription} from 'rxjs';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
-import {MemberEntity} from '../shared/entity/MemberEntity';
+import {GoogleAnalyticsService} from '../google-analytics.service';
+import {NotificationActions} from '../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
+import {MemberEntity, MemberProject} from '../shared/entity/MemberEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {UserGroupConfig} from '../shared/model/Config';
 import {AddMemberComponent} from './add-member/add-member.component';
+import {EditMemberComponent} from './edit-member/edit-member.component';
 
 @Component({
   selector: 'kubermatic-member',
   templateUrl: './member.component.html',
+  styleUrls: ['./member.component.scss'],
 })
 
 export class MemberComponent implements OnInit, OnDestroy {
@@ -18,14 +23,17 @@ export class MemberComponent implements OnInit, OnDestroy {
   members: MemberEntity[] = [];
   loading = true;
   sortedMembers: MemberEntity[] = [];
-  sort: Sort = {active: 'name', direction: 'asc'};
   userGroup: string;
   userGroupConfig: UserGroupConfig;
+  displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
+  dataSource = new MatTableDataSource<MemberEntity>();
+  @ViewChild(MatSort) sort: MatSort;
   private subscriptions: Subscription[] = [];
 
   constructor(
       private api: ApiService, private projectService: ProjectService, public dialog: MatDialog,
-      private userService: UserService, private appConfigService: AppConfigService) {}
+      private userService: UserService, private appConfigService: AppConfigService,
+      private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.project = this.projectService.project;
@@ -37,6 +45,10 @@ export class MemberComponent implements OnInit, OnDestroy {
         this.userGroup = group;
       });
     }));
+
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
 
     const timer = interval(5000);
     this.subscriptions.push(timer.subscribe(() => {
@@ -51,6 +63,11 @@ export class MemberComponent implements OnInit, OnDestroy {
         sub.unsubscribe();
       }
     }
+  }
+
+  getDataSource(): MatTableDataSource<MemberEntity> {
+    this.dataSource.data = this.members;
+    return this.dataSource;
   }
 
   addMember(): void {
@@ -69,85 +86,67 @@ export class MemberComponent implements OnInit, OnDestroy {
     if (this.project) {
       this.subscriptions.push(this.api.getMembers(this.project.id).subscribe((res) => {
         this.members = res;
-        this.sortData(this.sort);
         this.loading = false;
       }));
     }
-  }
-
-  sortData(sort: Sort): void {
-    if (sort === null || !sort.active || sort.direction === '') {
-      this.sortedMembers = this.members;
-      return;
-    }
-
-    this.sort = sort;
-
-    this.sortedMembers = this.members.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return this.compare(a.name, b.name, isAsc);
-        case 'email':
-          return this.compare(a.email, b.email, isAsc);
-        case 'group':
-          return this.getGroup(a.projects, b.projects, isAsc);
-        default:
-          return 0;
-      }
-    });
   }
 
   compare(a, b, isAsc): number {
     return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 
-  getGroup(projectsA, projectsB, isAsc): number {
-    let groupA: string;
-    let groupB: string;
-
-    for (const i of Object.keys(projectsA)) {
-      if (projectsA[i].id === this.project.id) {
-        const group = projectsA[i].group.split('-')[0];
+  getGroup(memberProjects: MemberProject[]): string {
+    for (const i of Object.keys(memberProjects)) {
+      if (memberProjects[i].id === this.project.id) {
+        const group = memberProjects[i].group.split('-')[0];
         switch (group) {
           case 'owners':
-            groupA = 'Owner';
-            break;
+            return 'Owner';
           case 'editors':
-            groupA = 'Editor';
-            break;
+            return 'Editor';
           case 'viewers':
-            groupA = 'Viewer';
-            break;
+            return 'Viewer';
           default:
-            groupA = '';
-            break;
+            return '';
         }
       }
-      groupA = '';
+      return '';
     }
+  }
 
-    for (const i of Object.keys(projectsB)) {
-      if (projectsB[i].id === this.project.id) {
-        const group = projectsB[i].group.split('-')[0];
-        switch (group) {
-          case 'owners':
-            groupB = 'Owner';
-            break;
-          case 'editors':
-            groupB = 'Editor';
-            break;
-          case 'viewers':
-            groupB = 'Viewer';
-            break;
-          default:
-            groupB = '';
-            break;
-        }
+  editMember(member: MemberEntity): void {
+    const modal = this.dialog.open(EditMemberComponent);
+    modal.componentInstance.project = this.project;
+    modal.componentInstance.member = member;
+    const sub = modal.afterClosed().subscribe((edited) => {
+      sub.unsubscribe();
+    });
+  }
+
+  deleteMember(member: MemberEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Remove member from project',
+        message: `You are on the way to remove the member ${member.name} from the project ${
+            this.project.name}. This cannot be undone!`,
+        confirmLabel: 'Delete',
+        cancelLabel: 'Close',
+      },
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('memberOverview', 'deleteMemberOpened');
+
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteMembers(this.project.id, member).subscribe(() => {
+          NotificationActions.success(
+              'Success', `Member ${member.name} has been removed from project ${this.project.name}`);
+          this.googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
+        });
       }
-      groupB = '';
-    }
-
-    return this.compare(groupA, groupB, isAsc);
+    });
   }
 }
