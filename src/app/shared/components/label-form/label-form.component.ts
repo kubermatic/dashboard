@@ -37,7 +37,7 @@ export class LabelFormComponent implements OnInit {
   }
 
   private static _isFilled(label: AbstractControl): boolean {
-    return label.get('key').value.length !== 0 && label.get('value').value.length !== 0;
+    return label.get('key').value.length !== 0;
   }
 
   ngOnInit(): void {
@@ -137,7 +137,7 @@ export class LabelFormComponent implements OnInit {
 
     // Fill it with current labels data.
     this.labelArray.getRawValue().forEach(kv => {
-      if (kv.key.length !== 0 && kv.value.length !== 0) {
+      if (kv.key.length !== 0) {
         labelsObject[kv.key] = kv.value;
       }
     });
