@@ -24,7 +24,7 @@ export class NotificationComponent {
     pauseOnHover: true,
     preventDuplicates: false,
     preventLastDuplicates: 'visible',
-    position: ['right', 'top'],
+    position: ['right', 'bottom'],
   };
 
   @select(['notification', 'toast']) notification$: Observable<NotificationToast>;
