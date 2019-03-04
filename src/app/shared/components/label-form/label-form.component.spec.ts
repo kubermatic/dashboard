@@ -41,4 +41,41 @@ describe('LabelFormComponent', () => {
 
     expect(component.labels).not.toBeUndefined();
   });
+
+  it('should delete labels with nullify', () => {
+    expect(component.labels).toBeUndefined();
+
+    component.labels = {
+      'env': 'test',
+    };
+    component.ngOnInit();
+    component.deleteLabel(0);
+
+    expect(component.labels).toEqual({'env': null});
+  });
+
+  it('should delete labels without nullify', () => {
+    expect(component.labels).toBeUndefined();
+
+    component.labels = {
+      'env': 'test',
+    };
+    component.ngOnInit();
+    component.initialLabels = {};
+    component.deleteLabel(0);
+
+    expect(component.labels).toEqual({});
+  });
+
+  it('should toggle visibility', () => {
+    expect(component.isVisible).toBeTruthy();
+
+    component.toggleVisibility();
+
+    expect(component.isVisible).toBeFalsy();
+
+    component.toggleVisibility();
+
+    expect(component.isVisible).toBeTruthy();
+  });
 });
