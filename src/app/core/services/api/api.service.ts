@@ -4,6 +4,7 @@ import {Observable, of} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
+import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {ClusterEntity, Finalizer, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {EventEntity} from '../../../shared/entity/EventEntity';
@@ -35,6 +36,8 @@ export class ApiService {
 
   createNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):
       Observable<NodeDeploymentEntity> {
+    nd.spec.template.labels = LabelFormComponent.filterNullifiedKeys(nd.spec.template.labels);
+
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
     return this.http.post<NodeDeploymentEntity>(url, nd, {headers: this.headers});
   }

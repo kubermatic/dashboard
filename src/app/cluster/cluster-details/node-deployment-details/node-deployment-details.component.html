@@ -108,6 +108,12 @@
         <div key>Creation date</div>
         <div value>{{nodeDeployment.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</div>
       </km-property>
+      <km-property>
+        <div key>Node Labels</div>
+        <div value>
+          <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
+        </div>
+      </km-property>
     </mat-card-content>
   </mat-card>
 
