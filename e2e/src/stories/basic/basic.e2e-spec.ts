@@ -1,12 +1,11 @@
 import {ProjectsPage} from "../../projects/projects.po";
-import {LoginPage} from "../../login/login.po";
 import {browser} from "protractor";
-import {DexPage} from "../../dex/dex.po";
 import {ConfirmationDialog} from "../../shared/confirmation.po";
-import {KMElement} from "../../shared/element-utils";
+import {KMElement} from "../../utils/element";
 import {MembersPage} from "../../member/member";
 import {ClustersPage} from "../../clusters/clusters.po";
 import {CreateClusterPage} from "../../clusters/create/create.po";
+import { AuthUtils } from '../../utils/login';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -24,11 +23,9 @@ import {CreateClusterPage} from "../../clusters/create/create.po";
  */
 
 describe('Basic story', () => {
-  const loginPage = new LoginPage();
   const projectsPage = new ProjectsPage();
   const clustersPage = new ClustersPage();
   const createClusterPage = new CreateClusterPage();
-  const dexPage = new DexPage();
   const membersPage = new MembersPage();
   const confirmationDialog = new ConfirmationDialog();
 
@@ -39,22 +36,8 @@ describe('Basic story', () => {
 
   const memberEmail = 'roxy2@kubermatic.io';
 
-  beforeAll(() => {
-    loginPage.navigateTo();
-    KMElement.waitToAppear(loginPage.getLoginButton());
-  });
-
   it('should login', () => {
-    loginPage.getLoginButton().click();
-    dexPage.getLoginWithEmailButton().click();
-
-    dexPage.getLoginInput().sendKeys(browser.params.KUBERMATIC_E2E_USERNAME);
-    dexPage.getPasswordInput().sendKeys(browser.params.KUBERMATIC_E2E_PASSWORD);
-
-    dexPage.getLoginSubmitButton().click();
-
-    KMElement.waitToAppear(projectsPage.getLogoutButton());
-    expect(projectsPage.getLogoutButton().isPresent()).toBeTruthy();
+    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
   it('should create a new project', () => {
@@ -208,12 +191,6 @@ describe('Basic story', () => {
   });
 
   it('should logout', () => {
-    KMElement.waitToAppear(projectsPage.getLogoutButton());
-    expect(projectsPage.getLogoutButton().isPresent()).toBeTruthy();
-
-    projectsPage.getLogoutButton().click();
-
-    KMElement.waitToAppear(loginPage.getLoginButton());
-    expect(loginPage.getLoginButton().isPresent()).toBeTruthy();
+    AuthUtils.logout();
   });
 });
