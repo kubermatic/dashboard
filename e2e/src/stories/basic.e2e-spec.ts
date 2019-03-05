@@ -1,11 +1,13 @@
 import {ProjectsPage} from "../projects/projects.po";
 import {browser} from "protractor";
 import {ConfirmationDialog} from "../shared/confirmation.po";
-import {KMElement} from "../utils/element";
+import {KMElement} from "../shared/element";
 import {MembersPage} from "../member/member";
 import {ClustersPage} from "../clusters/clusters.po";
 import {CreateClusterPage} from "../clusters/create/create.po";
-import {AuthUtils} from '../utils/login';
+import { RandomUtils } from '../shared/random';
+import { ProjectCommons } from '../common/project';
+import { AuthCommons } from '../common/auth';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -29,7 +31,7 @@ describe('Basic story', () => {
   const membersPage = new MembersPage();
   const confirmationDialog = new ConfirmationDialog();
 
-  let projectName = 'e2e-test-project';
+  let projectName = `e2e-project-${RandomUtils.string()}`;
   const clusterName = 'e2e-test-cluster';
   const providerName = 'bringyourown';
   const datacenterLocation = 'Frankfurt';
@@ -37,28 +39,11 @@ describe('Basic story', () => {
   const memberEmail = 'roxy2@kubermatic.io';
 
   it('should login', () => {
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+    AuthCommons.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
   it('should create a new project', () => {
-    projectsPage.navigateTo();
-    KMElement.waitToAppear(projectsPage.getAddProjectButton());
-
-    projectsPage.getAddProjectButton().click();
-    expect(projectsPage.getAddProjectDialog().isPresent()).toBeTruthy();
-
-    projectsPage.getProjectNameInput().sendKeys(projectName);
-    projectsPage.getSaveProjectButton().click();
-
-    KMElement.waitToDisappear(projectsPage.getAddProjectDialog());
-    KMElement.waitForRedirect("/clusters");
-    // We need to wait for autoredirect after create to finish otherwise it will autoredirect again after too fast page switch.
-    browser.sleep(5000);
-    projectsPage.navigateTo();
-    KMElement.waitForRedirect("/projects");
-    KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
-
-    expect(projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
+    ProjectCommons.createProject(projectName);
   });
 
   it('should create a new cluster', () => {
@@ -161,7 +146,7 @@ describe('Basic story', () => {
     expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
 
     KMElement.waitToAppear(projectsPage.getEditProjectDialogInput());
-    projectName = 'e2e-test-project-2';
+    projectName = `e2e-project-${RandomUtils.string()}`;
     KMElement.sendKeys(projectsPage.getEditProjectDialogInput(), projectName);
     KMElement.waitForClickable(projectsPage.getEditProjectDialogEditBtn());
     projectsPage.getEditProjectDialogEditBtn().click();
@@ -179,18 +164,10 @@ describe('Basic story', () => {
   });
 
   it('should delete created project', () => {
-    KMElement.waitToAppear(projectsPage.getDeleteProjectButton(projectName));
-    projectsPage.getDeleteProjectButton(projectName).click();
-    expect(confirmationDialog.getConfirmationDialog().isPresent()).toBeTruthy();
-
-    KMElement.sendKeys(confirmationDialog.getConfirmationDialogInput(), projectName);
-    confirmationDialog.getConfirmationDialogConfirmBtn().click();
-
-    KMElement.waitToDisappear(projectsPage.getProjectItem(projectName));
-    expect(projectsPage.getProjectItem(projectName).isPresent()).toBeFalsy();
+    ProjectCommons.deleteProject(projectName);
   });
 
   it('should logout', () => {
-    AuthUtils.logout();
+    AuthCommons.logout();
   });
 });

@@ -25,4 +25,12 @@ export class CreateClusterPage extends NavPage {
   getDatacenterLocationButton(location: string): any {
     return element(by.xpath(`//div[normalize-space()='${location}']`));
   }
+
+  getDigitalOceanTokenInput(): any {
+    return element(by.id('km-digitalocean-token-input'));
+  }
+
+  getNodeNameInput(): any {
+    return element(by.id('km-node-name-input'));
+  }
 }

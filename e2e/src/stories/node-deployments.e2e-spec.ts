@@ -1,81 +1,66 @@
-import {ProjectsPage} from "../projects/projects.po";
 import {browser} from "protractor";
-import {ConfirmationDialog} from "../shared/confirmation.po";
-import {KMElement} from "../utils/element";
+import {KMElement} from "../shared/element";
 import {ClustersPage} from "../clusters/clusters.po";
 import {CreateClusterPage} from "../clusters/create/create.po";
-import {AuthUtils} from '../utils/login';
+import {RandomUtils} from '../shared/random';
+import { ProjectCommons } from '../common/project';
+import { AuthCommons } from '../common/auth';
 
-/**
- * This is the user story that tests basic kubermatic dashboard features such as:
- *  - login/logout
- *  - CRUD for projects, clusters, members
- *
- * It executes the following steps:
- *  - Login using static credentials as test user 'roxy'
- *  - Create new project called 'e2e-test-project'
- *  - Create new cluster called 'e2e-test-cluster' using kubeadm provider
- *  - Add new member
- *  - Edit group of added member
- *  - Delete created resources (member, cluster, project).
- *  - Logout from the application
- */
-
-describe('Basic story', () => {
-  const projectsPage = new ProjectsPage();
+describe('Node Deployments story', () => {
   const clustersPage = new ClustersPage();
   const createClusterPage = new CreateClusterPage();
-  const confirmationDialog = new ConfirmationDialog();
 
-  let projectName = 'e2e-test-project';
-  const clusterName = 'e2e-test-cluster';
-  const providerName = 'bringyourown';
+  const projectName = `e2e-test-project-${RandomUtils.string()}`;
+  const clusterName = `e2e-test-cluster-${RandomUtils.string()}`;
+  const initialNodeDeploymentName = `e2e-test-nd-${RandomUtils.string()}`;
+  const providerName = 'digitalocean';
   const datacenterLocation = 'Frankfurt';
 
-  it('should login', () => {
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+  beforeAll(() => {
+    AuthCommons.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+    ProjectCommons.createProject(projectName);
   });
 
-  it('should create a new project', () => {
-    projectsPage.navigateTo();
-    KMElement.waitToAppear(projectsPage.getAddProjectButton());
-
-    projectsPage.getAddProjectButton().click();
-    expect(projectsPage.getAddProjectDialog().isPresent()).toBeTruthy();
-
-    projectsPage.getProjectNameInput().sendKeys(projectName);
-    projectsPage.getSaveProjectButton().click();
-
-    KMElement.waitToDisappear(projectsPage.getAddProjectDialog());
-    KMElement.waitForRedirect("/clusters");
-    // We need to wait for autoredirect after create to finish otherwise it will autoredirect again after too fast page switch.
-    browser.sleep(5000);
-    projectsPage.navigateTo();
-    KMElement.waitForRedirect("/projects");
-    KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
-
-    expect(projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
-  });
-
-  it('should create a new cluster', () => {
+  it('should go to clusters page', () => {
     clustersPage.navigateTo();
     KMElement.waitForClickable(clustersPage.getAddClusterTopBtn());
+  });
 
+  it('should click on add cluster button', () => {
     clustersPage.getCreateClusterNavButton().click();
+  });
+
+  it('should set cluster name', () => {
     KMElement.waitToAppear(createClusterPage.getClusterNameInput());
     createClusterPage.getClusterNameInput().sendKeys(clusterName);
     KMElement.waitForClickable(createClusterPage.getNextButton());
     createClusterPage.getNextButton().click();
+  });
 
+  it('should set the provider', () => {
     KMElement.waitToAppear(createClusterPage.getProviderButton(providerName));
     createClusterPage.getProviderButton(providerName).click();
+  });
 
+  it('should set the datacenter location', () => {
     createClusterPage.getDatacenterLocationButton(datacenterLocation).click();
+  });
 
+  it('should set the provider settings', () => {
+    createClusterPage.getDigitalOceanTokenInput().sendKeys(browser.params.KUBERMATIC_E2E_DIGITALOCEAN_TOKEN);
+    createClusterPage.getNodeNameInput().sendKeys(initialNodeDeploymentName);
+
+    KMElement.waitForClickable(createClusterPage.getNextButton());
+    createClusterPage.getNextButton().click();
+  });
+
+  it('should confirm cluster creation', () => {
     KMElement.waitForClickable(createClusterPage.getCreateButton());
     createClusterPage.getCreateButton().click();
     KMElement.waitForRedirect('/clusters/');
+  });
 
+  it('check if cluster was created', () => {
     clustersPage.navigateTo();
     KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
     expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeTruthy();
@@ -100,19 +85,8 @@ describe('Basic story', () => {
     expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeFalsy();
   });
 
-  it('should delete created project', () => {
-    KMElement.waitToAppear(projectsPage.getDeleteProjectButton(projectName));
-    projectsPage.getDeleteProjectButton(projectName).click();
-    expect(confirmationDialog.getConfirmationDialog().isPresent()).toBeTruthy();
-
-    KMElement.sendKeys(confirmationDialog.getConfirmationDialogInput(), projectName);
-    confirmationDialog.getConfirmationDialogConfirmBtn().click();
-
-    KMElement.waitToDisappear(projectsPage.getProjectItem(projectName));
-    expect(projectsPage.getProjectItem(projectName).isPresent()).toBeFalsy();
-  });
-
-  it('should logout', () => {
-    AuthUtils.logout();
+  afterAll(() => {
+    ProjectCommons.deleteProject(projectName);
+    AuthCommons.logout();
   });
 });
