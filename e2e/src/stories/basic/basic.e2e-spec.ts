@@ -16,7 +16,7 @@ import {CreateClusterPage} from "../../clusters/create/create.po";
  * It executes the following steps:
  *  - Login using static credentials as test user 'roxy'
  *  - Create new project called 'e2e-test-project'
- *  - Create new cluster callsed 'e2e-test-cluster' using kubeadm provider
+ *  - Create new cluster called 'e2e-test-cluster' using kubeadm provider
  *  - Add new member
  *  - Edit group of added member
  *  - Delete created resources (member, cluster, project).
@@ -59,7 +59,6 @@ describe('Basic story', () => {
 
   it('should create a new project', () => {
     projectsPage.navigateTo();
-    KMElement.waitForNotifications();
     KMElement.waitToAppear(projectsPage.getAddProjectButton());
 
     projectsPage.getAddProjectButton().click();
@@ -106,7 +105,6 @@ describe('Basic story', () => {
   it('should add a new member', () => {
     membersPage.navigateTo();
 
-    KMElement.waitForNotifications();
     KMElement.waitForClickable(membersPage.getAddMemberBtn());
     membersPage.getAddMemberBtn().click();
     KMElement.waitToAppear(membersPage.getAddMemberDialog());
@@ -141,7 +139,6 @@ describe('Basic story', () => {
   });
 
   it('should delete created member', () => {
-    KMElement.waitForNotifications();
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
     KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
@@ -160,7 +157,6 @@ describe('Basic story', () => {
     KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
     clustersPage.getClusterItem(clusterName).click();
 
-    KMElement.waitForNotifications();
     KMElement.waitForClickable(clustersPage.getDeleteClusterBtn());
     clustersPage.getDeleteClusterBtn().click();
 
@@ -177,7 +173,6 @@ describe('Basic story', () => {
   it('should edit created project name', async () => {
     const oldProjectName = projectName;
     projectsPage.navigateTo();
-    KMElement.waitForNotifications();
     KMElement.waitToAppear(projectsPage.getProjectEditBtn(projectName));
     projectsPage.getProjectEditBtn(projectName).click();
     expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
@@ -201,7 +196,6 @@ describe('Basic story', () => {
   });
 
   it('should delete created project', () => {
-    KMElement.waitForNotifications();
     KMElement.waitToAppear(projectsPage.getDeleteProjectButton(projectName));
     projectsPage.getDeleteProjectButton(projectName).click();
     expect(confirmationDialog.getConfirmationDialog().isPresent()).toBeTruthy();
@@ -214,7 +208,6 @@ describe('Basic story', () => {
   });
 
   it('should logout', () => {
-    KMElement.waitForNotifications();
     KMElement.waitToAppear(projectsPage.getLogoutButton());
     expect(projectsPage.getLogoutButton().isPresent()).toBeTruthy();
 
