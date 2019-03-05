@@ -38,12 +38,14 @@ export class LabelFormComponent implements OnInit {
 
   static filterNullifiedKeys(labels: object): object {
     const filteredLabelsObject = {};
-    Object.keys(labels).forEach(key => {
-      // Do not allow nullified (marked for removal) labels.
-      if (labels[key] !== null) {
-        filteredLabelsObject[key] = labels[key];
-      }
-    });
+    if (labels instanceof Object) {
+      Object.keys(labels).forEach(key => {
+        // Do not allow nullified (marked for removal) labels.
+        if (labels[key] !== null) {
+          filteredLabelsObject[key] = labels[key];
+        }
+      });
+    }
     return filteredLabelsObject;
   }
 
