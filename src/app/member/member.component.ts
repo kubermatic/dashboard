@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {interval, Subscription} from 'rxjs';
+import {first} from 'rxjs/operators';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -23,6 +24,7 @@ export class MemberComponent implements OnInit, OnDestroy {
   members: MemberEntity[] = [];
   loading = true;
   sortedMembers: MemberEntity[] = [];
+  currentUser: MemberEntity;
   userGroup: string;
   userGroupConfig: UserGroupConfig;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
@@ -37,6 +39,10 @@ export class MemberComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.project = this.projectService.project;
+
+    this.userService.getUser().pipe(first()).subscribe((user) => {
+      this.currentUser = user;
+    });
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
       this.project = project;
