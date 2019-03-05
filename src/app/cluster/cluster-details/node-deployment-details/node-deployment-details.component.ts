@@ -92,7 +92,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadNodeDeployment(): void {
     this._apiService.getNodeDeployment(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
         .pipe(first())
-        .subscribe((nd) => {
+        .subscribe((nd: NodeDeploymentEntity) => {
           this.nodeDeployment = nd;
           this.system = NodeService.getOperatingSystem(this.nodeDeployment.spec.template);
           this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);

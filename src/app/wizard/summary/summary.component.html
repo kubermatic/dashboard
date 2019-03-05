@@ -453,6 +453,20 @@
               </div>
             </ng-container>
 
+            <div class="km-card-list-content"
+                 fxFlex="100%"
+                 fxLayout="column">
+              <div fxFlex="100%">
+                <div fxFlex="25%"
+                     class="km-card-list-key">
+                  Node Labels
+                </div>
+                <div fxFlex="75%">
+                  <km-labels [labels]="nodeData.spec.labels"></km-labels>
+                </div>
+              </div>
+            </div>
+
             <!-- DO Nodes -->
             <ng-container *ngIf="cluster.spec.cloud.digitalocean">
               <div class="km-card-list-content"
