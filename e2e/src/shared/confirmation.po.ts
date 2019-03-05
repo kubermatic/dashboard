@@ -1,6 +1,6 @@
 import {by, element} from 'protractor';
 
-import {NavPage} from '../shared/nav.po';
+import {NavPage} from './nav.po';
 
 export class ConfirmationDialog extends NavPage {
   private _confirmDialog = by.id('km-confirmation-dialog');

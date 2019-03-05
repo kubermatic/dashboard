@@ -5,7 +5,7 @@ import {KMElement} from "../../utils/element";
 import {MembersPage} from "../../member/member";
 import {ClustersPage} from "../../clusters/clusters.po";
 import {CreateClusterPage} from "../../clusters/create/create.po";
-import { AuthUtils } from '../../utils/login';
+import {AuthUtils} from '../../utils/login';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
