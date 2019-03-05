@@ -1,11 +1,11 @@
-import {ProjectsPage} from "../../projects/projects.po";
+import {ProjectsPage} from "../projects/projects.po";
 import {browser} from "protractor";
-import {ConfirmationDialog} from "../../shared/confirmation.po";
-import {KMElement} from "../../utils/element";
-import {MembersPage} from "../../member/member";
-import {ClustersPage} from "../../clusters/clusters.po";
-import {CreateClusterPage} from "../../clusters/create/create.po";
-import {AuthUtils} from '../../utils/login';
+import {ConfirmationDialog} from "../shared/confirmation.po";
+import {KMElement} from "../utils/element";
+import {MembersPage} from "../member/member";
+import {ClustersPage} from "../clusters/clusters.po";
+import {CreateClusterPage} from "../clusters/create/create.po";
+import {AuthUtils} from '../utils/login';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
