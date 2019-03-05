@@ -11,10 +11,6 @@ export class MembersPage extends NavPage {
   private _editMemberDialogGroupCombobox = by.id('km-edit-member-dialog-group-combobox');
   private _editMemberDialog = by.id('km-edit-member-dialog');
 
-  private _getMemberItemPath(email: string): any {
-    return `//kubermatic-member-item//*[normalize-space()="${email}"]`;
-  }
-
   navigateTo(): any {
     return this.getMembersNavButton().click();
   }
@@ -44,19 +40,19 @@ export class MembersPage extends NavPage {
   }
 
   getMemberDeleteBtn(email: string): any {
-    return element(by.xpath(`${this._getMemberItemPath(email)}//..//button[2]`));
+    return element(by.id(`km-delete-member-${email}`));
   }
 
   getMemberItem(email: string): any {
-    return element(by.xpath(this._getMemberItemPath(email)));
+    return element(by.id(`km-member-email-${email}`));
   }
 
   getMemberGroup(email: string): any {
-    return element(by.xpath(`${this._getMemberItemPath(email)}//..//*[contains(@class,'km-member-group')]`));
+    return element(by.id(`km-member-group-${email}`));
   }
 
   getMemberEditBtn(email: string): any {
-    return element(by.xpath(`${this._getMemberItemPath(email)}//..//button[1]`));
+    return element(by.id(`km-edit-member-${email}`));
   }
 
   getEditMemberDialogGroupOption(optionNr: number): any {

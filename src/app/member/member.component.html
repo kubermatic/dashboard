@@ -1,76 +1,103 @@
-<div *ngIf="!loading">
-  <div fxLayout>
-    <div fxFlex
-         align="right">
-      <button id="km-add-member-top-btn"
-              mat-raised-button
-              color="primary"
-              type="button"
-              (click)="addMember()"
-              [disabled]="!!userGroup && !userGroupConfig[userGroup].members.invite">
-        <span class="km-btn-text-default">+ Add Member</span>
-      </button>
-    </div>
+<div fxLayout>
+  <div fxFlex
+       align="right">
+    <button id="km-add-member-top-btn"
+            mat-raised-button
+            color="primary"
+            type="button"
+            (click)="addMember()"
+            [disabled]="!!userGroup && !userGroupConfig[userGroup].members.invite">
+      <span class="km-btn-text-default">+ Add Member</span>
+    </button>
   </div>
-
-  <mat-card class="blue km-member-view">
-    <mat-card-header>
-      <mat-card-title fxLayout
-                      matSort
-                      (matSortChange)="sortData($event)"
-                      matSortActive="name"
-                      matSortDirection="asc">
-        <div fxFlex="35%"
-             fxFlex.sm="20.66%"
-             fxFlex.xs="25%"
-             mat-sort-header="name">
-          <strong>Name</strong>
-        </div>
-        <div fxFlex="35%"
-             fxFlex.sm="20.66%"
-             fxFlex.xs="25%"
-             mat-sort-header="email">
-          <strong>Email</strong>
-        </div>
-        <div fxFlex="20%"
-             fxFlex.sm="20.66%"
-             fxFlex.xs="25%"
-             mat-sort-header="group">
-          <strong>Group</strong>
-        </div>
-        <div fxFlex="10%"
-             fxHide.sm
-             fxHide.xs>
-          <strong></strong>
-        </div>
-      </mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content fxLayout="column"
-                      [ngSwitch]="!!members && members.length > 0 ">
-      <ng-container *ngSwitchCase="true">
-        <kubermatic-member-item *ngFor="let member of sortedMembers; let i = index;"
-                                [index]="i"
-                                [project]="project"
-                                [member]="member"
-                                fxFlex></kubermatic-member-item>
-      </ng-container>
-      <ng-container *ngSwitchCase="false">
-        <div fxFlex
-             class="km-row km-odd km-no-item">No Member available. Please add a Member.</div>
-      </ng-container>
-      <ng-container>
-        <div class="km-row">
-          <button class="km-btn-in-box"
-                  (click)="addMember()"
-                  [disabled]="!!userGroup && !userGroupConfig[userGroup].members.invite">+ Add Member</button>
-        </div>
-      </ng-container>
-    </mat-card-content>
-  </mat-card>
-
 </div>
-<div *ngIf="loading">
-  <mat-spinner color="accent"
-               class="km-spinner"></mat-spinner>
-</div>
+
+<mat-card class="blue km-member-view">
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           matSort
+           [dataSource]="getDataSource()">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Name</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.name}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Email</th>
+        <td mat-cell
+            *matCellDef="let element"
+            [attr.id]="'km-member-email-' + element.email">{{element.email}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="group">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Group</th>
+        <td mat-cell
+            *matCellDef="let element"
+            [attr.id]="'km-member-group-' + element.email">{{getGroup(element.projects)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div class="km-member-item-actions">
+            <ng-container [ngSwitch]="!!element.deletionTimestamp">
+              <ng-container *ngSwitchCase="true">
+                <mat-spinner [diameter]="30"
+                             class="km-spinner"
+                             color="accent"></mat-spinner>
+              </ng-container>
+
+              <ng-container *ngSwitchCase="false">
+                <button class="km-icon-edit black"
+                        [attr.id]="'km-edit-member-' + element.email"
+                        matTooltip="Edit Member"
+                        (click)="editMember(element)"
+                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.edit) || (currentUser.email === element.email)"></button>
+
+                <button class="km-icon-delete black"
+                        [attr.id]="'km-delete-member-' + element.email"
+                        matTooltip="Delete Member"
+                        (click)="deleteMember(element)"
+                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.remove) || (currentUser.email === element.email)"></button>
+              </ng-container>
+            </ng-container>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="!members || members.length === 0">
+      <div class="km-row km-no-item"
+           *ngIf="!loading">
+        No Members available. Please add a Member.
+      </div>
+      <div class="km-row"
+           *ngIf="!!loading">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="30"></mat-spinner>
+      </div>
+    </ng-container>
+
+  </mat-card-content>
+</mat-card>
