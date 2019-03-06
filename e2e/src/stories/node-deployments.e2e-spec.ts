@@ -5,10 +5,13 @@ import {WizardPage} from "../pages/wizard/wizard.po";
 import {RandomUtils} from '../utils/random';
 import { ProjectUtils } from '../utils/project';
 import { AuthUtils } from '../utils/auth';
+import { ClusterUtils } from '../utils/cluster';
+import { NodeDeploymentDetailsPage } from '../pages/node-deployment-details/node-deployment-details.po';
 
 describe('Node Deployments story', () => {
   const clustersPage = new ClustersPage();
   const wizardPage = new WizardPage();
+  const nodeDeploymentDetailsPage = new NodeDeploymentDetailsPage();
 
   const projectName = RandomUtils.prefixedString('e2e-test-project');
   const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
@@ -66,23 +69,49 @@ describe('Node Deployments story', () => {
     expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeTruthy();
   });
 
-  it('should delete created cluster', () => {
+  it('should go to the cluster details page', () => {
     clustersPage.navigateTo();
 
     KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
     clustersPage.getClusterItem(clusterName).click();
+  });
 
-    KMElement.waitForClickable(clustersPage.getDeleteClusterBtn());
-    clustersPage.getDeleteClusterBtn().click();
+  it('should wait for initial node deployment to be created', () => {
+    KMElement.waitToAppear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 300000);
+  });
 
-    KMElement.waitToAppear(clustersPage.getDeleteClusterDialog());
-    KMElement.sendKeys(clustersPage.getDeleteClusterDialogInput(), clusterName);
-    KMElement.waitForClickable(clustersPage.getDeleteClusterDialogDeleteBtn());
-    clustersPage.getDeleteClusterDialogDeleteBtn().click();
+  it('should go to node deployment details', () => {
+    KMElement.waitForClickable(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName));
+    clustersPage.getNodeDeploymentItem(initialNodeDeploymentName).click();
+  });
 
-    KMElement.waitToAppear(clustersPage.getAddClusterTopBtn());
-    KMElement.waitToDisappear(clustersPage.getClusterItem(clusterName));
-    expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeFalsy();
+  it('should verify node deployment details', () => {
+    KMElement.waitToAppear(nodeDeploymentDetailsPage.getNodeDeploymentNameElement());
+    nodeDeploymentDetailsPage.getNodeDeploymentNameElement().getText().then((name: string) => {
+      expect(name).toEqual(initialNodeDeploymentName);
+    });
+
+    KMElement.waitToAppear(nodeDeploymentDetailsPage.getNodeDeploymentClusterNameElement());
+    nodeDeploymentDetailsPage.getNodeDeploymentClusterNameElement().getText().then((name: string) => {
+      expect(name).toEqual(clusterName);
+    });
+
+    const expectedStatus = 'Running';
+    KMElement.waitForContent(nodeDeploymentDetailsPage.getNodeDeploymentStatusElement(), expectedStatus, 300000);
+    nodeDeploymentDetailsPage.getNodeDeploymentStatusElement().getText().then((status: string) => {
+      expect(status).toEqual(expectedStatus);
+    });
+  });
+
+  it('should go to the cluster details page', () => {
+    clustersPage.navigateTo();
+
+    KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
+    clustersPage.getClusterItem(clusterName).click();
+  });
+
+  it('should delete created cluster', () => {
+    ClusterUtils.deleteCluster(clusterName);
   });
 
   afterAll(() => {

@@ -105,6 +105,7 @@
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns"
           class="km-mat-row km-clickable"
+          [attr.id]="row.id"
           (click)="goToDetails(row)"></tr>
     </table>
 

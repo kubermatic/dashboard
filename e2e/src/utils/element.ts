@@ -1,24 +1,29 @@
 import {browser, by, element, ElementFinder, ExpectedConditions} from "protractor";
 
-const waitTimeout = 60000;
+const defaultTimeout = 60000;
 
 export class KMElement {
-  static waitToAppear(element: ElementFinder): any {
+  static waitToAppear(element: ElementFinder, waitTimeout = defaultTimeout): any {
     return browser.wait(ExpectedConditions.visibilityOf(element), waitTimeout);
   }
 
-  static waitToDisappear(element: ElementFinder): any {
+  static waitToDisappear(element: ElementFinder, waitTimeout = defaultTimeout): any {
     return browser.wait(ExpectedConditions.stalenessOf(element), waitTimeout);
   }
 
-  static waitForClickable(element: ElementFinder): any {
+  static waitForClickable(element: ElementFinder, waitTimeout = defaultTimeout): any {
     return browser.wait(ExpectedConditions.elementToBeClickable(element), waitTimeout);
+  }
+
+  static waitForContent(element: ElementFinder, text: string, waitTimeout = defaultTimeout): any {
+    return browser.wait(ExpectedConditions.textToBePresentInElement(element, text), waitTimeout);
   }
 
   /**
    * @param url - partial url or full expected url after redirect
+   * @param waitTimeout - wait timeout for the operation to complete
    */
-  static waitForRedirect(url: string): any {
+  static waitForRedirect(url: string, waitTimeout = defaultTimeout): any {
     return browser.wait(ExpectedConditions.urlContains(url), waitTimeout);
   }
 

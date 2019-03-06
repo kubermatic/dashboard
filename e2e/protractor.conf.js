@@ -22,7 +22,7 @@ function createConfig() {
 
     framework: 'jasmine',
     jasmineNodeOpts: {
-      defaultTimeoutInterval: 60000,
+      defaultTimeoutInterval: 300000,
     },
 
     directConnect: true,
