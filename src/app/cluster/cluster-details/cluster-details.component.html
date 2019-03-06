@@ -18,7 +18,7 @@
               mat-button
               mat-raised-button
               color="primary"
-              [disabled]="this.clusterHealthClass !== 'km-status-running'">
+              [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')">
         Connect
       </button>
       <button class="km-share-kubeconfig-btn"
@@ -26,7 +26,7 @@
               mat-button
               mat-raised-button
               color="primary"
-              [disabled]="this.clusterHealthClass !== 'km-status-running'"
+              [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')"
               *ngIf="!!config.share_kubeconfig">
         Share cluster
       </button>
@@ -50,16 +50,16 @@
   </div>
 
   <mat-card class="white"
-            [ngClass]="clusterHealthClass">
+            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.css : ''">
     <mat-card-header class="km-card-main-header">
       <mat-card-title>
         <span ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
               class="km-copy km-cluster-name">{{cluster.name}}</span>
-        <kubermatic-cluster-health-status [cluster]="cluster"
-                                          [datacenter]="datacenter"
-                                          [projectID]="projectID"></kubermatic-cluster-health-status>
+        <i [matTooltip]="!!clusterHealthStatus ? clusterHealthStatus.message : ''"
+           [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.color : ''"
+           class="km-cluster-health"></i>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap"
@@ -191,7 +191,7 @@
                                    (changeNodeDeployment)="reloadClusterNodes()"
                                    [datacenter]="datacenter"
                                    [projectID]="projectID"
-                                   [clusterHealthStatus]="clusterHealthClass"
+                                   [clusterHealthStatus]="clusterHealthStatus"
                                    [isClusterRunning]="isClusterRunning"
                                    [hasInitialNodes]="hasInitialNodes"></kubermatic-node-deployment-list>
 
@@ -208,7 +208,7 @@
                           (deleteNode)="reloadClusterNodes()"
                           [datacenter]="datacenter"
                           [projectID]="projectID"
-                          [clusterHealthStatus]="clusterHealthClass"
+                          [clusterHealthStatus]="clusterHealthStatus"
                           [isClusterRunning]="isClusterRunning"
                           [hasInitialNodes]="hasInitialNodes"></kubermatic-node-list>
   </div>

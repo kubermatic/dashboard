@@ -7,11 +7,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
+import {ApiService, Auth, DatacenterService, InitialNodeDataService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fake';
+import {fakeHealth} from '../../testing/fake-data/health.fake';
 import {nodeDeploymentsFake, nodesFake} from '../../testing/fake-data/node.fake';
 import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
 import {fakeUserGroupConfig} from '../../testing/fake-data/userGroupConfig.fake';
@@ -19,10 +20,8 @@ import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
-import {HealthMockService} from '../../testing/services/health-mock.service';
 import {NodeMockService} from '../../testing/services/node-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
-import {ClusterHealthStatusComponent} from '../cluster-health-status/cluster-health-status.component';
 import {NodeService} from '../services/node.service';
 
 import {ClusterDetailsComponent} from './cluster-details.component';
@@ -39,7 +38,7 @@ describe('ClusterDetailsComponent', () => {
   beforeEach(async(() => {
     apiMock = jasmine.createSpyObj('ApiService', [
       'getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL',
-      'getNodeDeployments'
+      'getNodeDeployments', 'getClusterHealth'
     ]);
     apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
     apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
@@ -47,6 +46,7 @@ describe('ClusterDetailsComponent', () => {
     apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake()));
     apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
     apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
+    apiMock.getClusterHealth.and.returnValue(asyncData(fakeHealth()));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
     datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
@@ -63,7 +63,6 @@ describe('ClusterDetailsComponent', () => {
           ],
           declarations: [
             ClusterDetailsComponent,
-            ClusterHealthStatusComponent,
             ClusterSecretsComponent,
             NodeListComponent,
             NodeDeploymentListComponent,
@@ -74,7 +73,6 @@ describe('ClusterDetailsComponent', () => {
             {provide: Auth, useClass: AuthMockService},
             {provide: Router, useClass: RouterStub},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-            {provide: HealthService, useClass: HealthMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: NodeService, useClass: NodeMockService},

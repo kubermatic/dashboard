@@ -6,17 +6,16 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, DatacenterService, HealthService, UserService} from '../../core/services';
+import {ApiService, Auth, DatacenterService, UserService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
+import {fakeHealth} from '../../testing/fake-data/health.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
-import {HealthMockService} from '../../testing/services/health-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
-import {ClusterHealthStatusComponent} from '../cluster-health-status/cluster-health-status.component';
 
 import {ClusterListComponent} from './cluster-list.component';
 
@@ -29,8 +28,9 @@ describe('ClusterListComponent', () => {
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getAllClusters']);
+    const apiMock = jasmine.createSpyObj('ApiService', ['getAllClusters', 'getClusterHealth']);
     getClustersSpy = apiMock.getAllClusters.and.returnValue(asyncData([fakeAWSCluster()]));
+    apiMock.getClusterHealth.and.returnValue(asyncData([fakeHealth()]));
 
     TestBed
         .configureTestingModule({
@@ -44,13 +44,11 @@ describe('ClusterListComponent', () => {
           ],
           declarations: [
             ClusterListComponent,
-            ClusterHealthStatusComponent,
           ],
           providers: [
             {provide: ApiService, useValue: apiMock},
             {provide: Auth, useClass: AuthMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-            {provide: HealthService, useClass: HealthMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: Router, useClass: RouterStub},
             {provide: AppConfigService, useClass: AppConfigMockService},

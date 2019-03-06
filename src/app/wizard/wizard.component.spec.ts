@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, DatacenterService, HealthService, InitialNodeDataService, ProjectService} from '../core/services';
+import {ApiService, DatacenterService, InitialNodeDataService, ProjectService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {StepsService} from '../core/services/wizard/steps.service';
 import {WizardService} from '../core/services/wizard/wizard.service';
@@ -30,7 +30,6 @@ import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/ro
 import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
-import {HealthMockService} from '../testing/services/health-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 
 import {ProgressComponent} from './progress/progress.component';
@@ -107,7 +106,6 @@ describe('WizardComponent', () => {
             {provide: ApiService, useValue: apiMock},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-            {provide: HealthService, useClass: HealthMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,

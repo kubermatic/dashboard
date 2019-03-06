@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEntity';
+import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
@@ -10,6 +11,7 @@ import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
 import {fakeClusters, fakeDigitaloceanCluster, fakeToken} from '../fake-data/cluster.fake';
+import {fakeHealth} from '../fake-data/health.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
 import {nodesFake} from '../fake-data/node.fake';
 import {fakeProject, fakeProjects} from '../fake-data/project.fake';
@@ -29,6 +31,7 @@ export class ApiMockService {
   member: MemberEntity = fakeMember();
   members: MemberEntity[] = fakeMembers();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
+  health: HealthEntity = fakeHealth();
 
   constructor() {}
 
@@ -66,6 +69,10 @@ export class ApiMockService {
 
   getAllClusters(projectID: string): Observable<ClusterEntity[]> {
     return of(this.clusters);
+  }
+
+  getClusterHealth(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
+    return of(this.health);
   }
 
   getSSHKeys(): Observable<SSHKeyEntity[]> {

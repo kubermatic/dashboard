@@ -24,10 +24,9 @@
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <kubermatic-cluster-health-status *ngIf="element && seedDC[element.id] && projectID"
-                                            [cluster]="element"
-                                            [datacenter]="seedDC[element.id]"
-                                            [projectID]="projectID"></kubermatic-cluster-health-status>
+          <i [matTooltip]="getHealthStatus(element).message"
+             [ngClass]="getHealthStatus(element).color"
+             class="km-cluster-list-health"></i>
         </td>
       </ng-container>
 

@@ -6,7 +6,7 @@ import {first, retry, takeUntil} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, DatacenterService, HealthService, InitialNodeDataService, UserService} from '../../core/services';
+import {ApiService, DatacenterService, InitialNodeDataService, UserService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
@@ -15,6 +15,7 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, UserGroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {NodeService} from '../services/node.service';
 
 import {ChangeClusterVersionComponent} from './change-cluster-version/change-cluster-version.component';
@@ -38,7 +39,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   nodes: NodeEntity[] = [];
   nodeDeployments: NodeDeploymentEntity[];
   isClusterRunning: boolean;
-  clusterHealthClass: string;
+  clusterHealthStatus: ClusterHealthStatus;
   health: HealthEntity;
   projectID: string;
   userGroup: string;
@@ -56,8 +57,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   constructor(
       private route: ActivatedRoute, private router: Router, private api: ApiService, public dialog: MatDialog,
       private initialNodeDataService: InitialNodeDataService, private dcService: DatacenterService,
-      private healthService: HealthService, private userService: UserService,
-      private appConfigService: AppConfigService, private readonly node_: NodeService) {
+      private userService: UserService, private appConfigService: AppConfigService,
+      private readonly node_: NodeService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
@@ -90,10 +91,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     // Health
     this.clusterSubject.pipe(takeUntil(this.unsubscribe)).subscribe((cluster) => {
-      this.healthService.getClusterHealth(cluster.id, seedDCName, this.projectID).subscribe((health) => {
+      this.api.getClusterHealth(cluster.id, seedDCName, this.projectID).subscribe((health) => {
         this.health = health;
-        this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
-        this.clusterHealthClass = this.healthService.getClusterHealthStatus(this.cluster, health);
+        this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
+        this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
         this.reloadClusterNodes();
         this.reloadVersions();
       });

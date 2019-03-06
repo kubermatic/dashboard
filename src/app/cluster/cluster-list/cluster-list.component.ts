@@ -1,7 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import {find} from 'lodash';
 import {interval, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
 
@@ -9,7 +8,9 @@ import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, UserService} from '../../core/services';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {UserGroupConfig} from '../../shared/model/Config';
+import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 
 @Component({
   selector: 'kubermatic-cluster-list',
@@ -25,6 +26,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   userGroupConfig: UserGroupConfig;
   nodeDC: DataCenterEntity[] = [];
   seedDC: DataCenterEntity[] = [];
+  health: HealthEntity[] = [];
   provider = [];
   displayedColumns: string[] = ['status', 'name', 'provider', 'region'];
   dataSource = new MatTableDataSource<ClusterEntity>();
@@ -74,6 +76,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
       this.clusters = c;
       this.loading = false;
       this.loadNodeDc();
+      this.loadClusterHealth();
     });
 
     this.userService.currentUserGroup(this.projectID).pipe(first()).subscribe(ug => {
@@ -81,11 +84,8 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     });
   }
 
-  trackCluster(index: number, cluster: ClusterEntity): number {
-    const prevCluster = find(this.clusters, (item) => {
-      return item.name === cluster.name;
-    });
-    return prevCluster ? index : undefined;
+  getHealthStatus(cluster: ClusterEntity): ClusterHealthStatus {
+    return ClusterHealthStatus.getHealthStatus(cluster, this.health[cluster.id]);
   }
 
   loadWizard(): void {
@@ -123,6 +123,17 @@ export class ClusterListComponent implements OnInit, OnDestroy {
           this.seedDC[cluster.id] = seedRes;
         });
       });
+    }
+  }
+
+  loadClusterHealth() {
+    for (const cluster of this.clusters) {
+      if (!!this.seedDC[cluster.id]) {
+        this.api.getClusterHealth(cluster.id, this.seedDC[cluster.id].metadata.name, this.projectID)
+            .subscribe((health) => {
+              this.health[cluster.id] = health;
+            });
+      }
     }
   }
 }

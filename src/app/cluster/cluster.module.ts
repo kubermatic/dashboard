@@ -26,7 +26,6 @@ import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
-import {ClusterHealthStatusComponent} from './cluster-health-status/cluster-health-status.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
 import {NodeService} from './services/node.service';
@@ -37,7 +36,6 @@ const components: any[] = [
   NodeDeploymentListComponent,
   NodeDeploymentDetailsComponent,
   ClusterListComponent,
-  ClusterHealthStatusComponent,
 ];
 
 const entryComponents: any[] = [
