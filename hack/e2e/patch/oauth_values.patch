@@ -1,0 +1,64 @@
+--- values.yaml	2019-02-13 11:38:23.872411000 +0100
++++ values_new.yaml	2019-02-15 13:04:24.594082048 +0100
+@@ -1,4 +1,3 @@
+-##### Kubermatic oauth
+ dex:
+   image:
+     repository: "quay.io/dexidp/dex"
+@@ -6,31 +5,28 @@
+   replicas: 1
+   ingress:
+     host: ""
+-    path: "/dex"
+-#  connectors:
+-#  - type: github
+-#    id: github
+-#    name: GitHub
+-#    config:
+-#      clientID: some-client-id
+-#      clientSecret: some-client-secret
+-#      redirectURI: https://dev.kubermatic.io/dex/callback
+-#      orgs:
+-#      - name: kubermatic
+-#
+-#  clients:
+-#  - id: kubermatic
+-#    name: Kubermatic
+-#    secret: very-secret
+-#    RedirectURIs:
+-#    - http://localhost:8000
+-#    - https://dev.kubermatic.io
+-#    - http://localhost:8000/projects
+-#    - https://dev.kubermatic.io/projects
+-#
+-#  staticPasswordLogins:
+-#  - email: "admin@example.com"
+-#    # bcrypt hash of the string "password"
+-#    hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+-#    username: "admin"
+-#    userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
++    path: ""
++  clients:
++  - id: kubermatic
++    name: Kubermatic
++    secret: ZXhhbXBsZS1hcHAtc2VjcmV0
++    RedirectURIs:
++      - http://localhost:8000
++      - https://dev.kubermatic.io
++      - http://localhost:8000/projects
++      - https://dev.kubermatic.io/projects
++  - id: kubermaticIssuer
++    name: KubermaticIssuer
++    secret: MTc2ODQ3MDg4MmRlMzRjNjBiZjVlNzk0
++    RedirectURIs:
++      - http://localhost:8080/api/v1/kubeconfig
++  connectors:
++    - type: github
++      id: github
++      name: GitHub
++      config:
++        clientID: 0233c724a6d3c31f27a4
++        clientSecret: 1026f76467f95d274dcab0cfb6d16df168481736
++        redirectURI: https://dev.kubermatic.io/dex/callback
++        orgs:
++          - name: kubermatic

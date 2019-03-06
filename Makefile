@@ -32,6 +32,9 @@ test-headless: install
 run-e2e-ci: install
 	./hack/run_ci_e2e_test.sh
 
+run-e2e-ci-edge: install
+	./hack/e2e/run_ci_e2e_test.sh
+
 dist: install
 	@$(CC) run build -prod
 
