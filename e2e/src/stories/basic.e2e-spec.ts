@@ -89,6 +89,7 @@ describe('Basic story', () => {
 
   it('should edit created member info', async () => {
     const memberGroup = await membersPage.getMemberGroup(memberEmail).getText();
+    KMElement.waitToAppear(membersPage.getMemberEditBtn(memberEmail));
     membersPage.getMemberEditBtn(memberEmail).click();
 
     KMElement.waitToAppear(membersPage.getEditMemberDialogGroupCombobox());
@@ -107,6 +108,7 @@ describe('Basic story', () => {
   });
 
   it('should delete created member', () => {
+    KMElement.waitToAppear(membersPage.getMemberDeleteBtn(memberEmail));
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
     KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
