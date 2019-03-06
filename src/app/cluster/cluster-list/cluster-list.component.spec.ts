@@ -4,19 +4,22 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, HealthService, UserService} from '../../core/services';
+import {ApiService, Auth, DatacenterService, HealthService, UserService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 import {HealthMockService} from '../../testing/services/health-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
 import {ClusterHealthStatusComponent} from '../cluster-health-status/cluster-health-status.component';
-import {ClusterItemComponent} from './cluster-item/cluster-item.component';
+
 import {ClusterListComponent} from './cluster-list.component';
+
 import Spy = jasmine.Spy;
 
 describe('ClusterListComponent', () => {
@@ -41,7 +44,6 @@ describe('ClusterListComponent', () => {
           ],
           declarations: [
             ClusterListComponent,
-            ClusterItemComponent,
             ClusterHealthStatusComponent,
           ],
           providers: [
@@ -52,6 +54,7 @@ describe('ClusterListComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: Router, useClass: RouterStub},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: DatacenterService, useClass: DatacenterMockService},
           ],
         })
         .compileComponents();

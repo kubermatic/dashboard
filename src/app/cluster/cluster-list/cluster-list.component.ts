@@ -1,13 +1,14 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Sort} from '@angular/material';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatSort, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {find} from 'lodash';
 import {interval, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, UserService} from '../../core/services';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {ApiService, DatacenterService, UserService} from '../../core/services';
+import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {UserGroupConfig} from '../../shared/model/Config';
 
 @Component({
@@ -19,15 +20,20 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   clusters: ClusterEntity[] = [];
   loading = true;
   sortedData: ClusterEntity[] = [];
-  sort: Sort = {active: 'name', direction: 'asc'};
   projectID: string;
   userGroup: string;
   userGroupConfig: UserGroupConfig;
+  nodeDC: DataCenterEntity[] = [];
+  seedDC: DataCenterEntity[] = [];
+  provider = [];
+  displayedColumns: string[] = ['status', 'name', 'provider', 'region'];
+  dataSource = new MatTableDataSource<ClusterEntity>();
+  @ViewChild(MatSort) sort: MatSort;
   private subscriptions: Subscription[] = [];
 
   constructor(
       private api: ApiService, private route: ActivatedRoute, private appConfigService: AppConfigService,
-      private router: Router, private userService: UserService) {}
+      private router: Router, private userService: UserService, private dcService: DatacenterService) {}
 
   ngOnInit(): void {
     this.subscriptions.push(this.route.paramMap.subscribe((m) => {
@@ -40,6 +46,10 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
+
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
 
     this.subscriptions.push(interval(5000).subscribe(() => {
       this.refreshClusters();
@@ -54,11 +64,16 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     }
   }
 
+  getDataSource(): MatTableDataSource<ClusterEntity> {
+    this.dataSource.data = this.clusters;
+    return this.dataSource;
+  }
+
   refreshClusters(): void {
     this.api.getAllClusters(this.projectID).pipe(first()).subscribe(c => {
       this.clusters = c;
-      this.sortData(this.sort);
       this.loading = false;
+      this.loadNodeDc();
     });
 
     this.userService.currentUserGroup(this.projectID).pipe(first()).subscribe(ug => {
@@ -77,43 +92,37 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/projects/' + this.projectID + '/wizard']);
   }
 
-  sortData(sort: Sort): void {
-    if (sort === null || !sort.active || sort.direction === '') {
-      this.sortedData = this.clusters;
-      return;
-    }
-
-    this.sort = sort;
-
-    this.sortedData = this.clusters.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return this.compare(a.name, b.name, isAsc);
-        case 'provider':
-          return this.compare(this.getProviderName(a), this.getProviderName(b), isAsc);
-        case 'region':
-          return this.compare(a.spec.cloud.dc, b.spec.cloud.dc, isAsc);
-        default:
-          return 0;
-      }
-    });
+  navigateToCluster(cluster: ClusterEntity): void {
+    this.router.navigate(
+        ['/projects/' + this.projectID + '/dc/' + this.nodeDC[cluster.id].spec.seed + '/clusters/' + cluster.id]);
   }
 
-  private getProviderName(cluster: ClusterEntity): string {
-    if (cluster.spec.cloud.digitalocean) {
-      return 'digitalocean';
-    } else if (cluster.spec.cloud.bringyourown) {
-      return 'bringyourown';
-    } else if (cluster.spec.cloud.aws) {
+  getProvider(cloud: CloudSpec): string {
+    if (cloud.aws) {
       return 'aws';
-    } else if (cluster.spec.cloud.openstack) {
+    } else if (cloud.digitalocean) {
+      return 'digitalocean';
+    } else if (cloud.openstack) {
       return 'openstack';
+    } else if (cloud.bringyourown) {
+      return 'bringyourown';
+    } else if (cloud.hetzner) {
+      return 'hetzner';
+    } else if (cloud.vsphere) {
+      return 'vsphere';
+    } else if (cloud.azure) {
+      return 'azure';
     }
-    return '';
   }
 
-  compare(a, b, isAsc): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  loadNodeDc() {
+    for (const cluster of this.clusters) {
+      this.dcService.getDataCenter(cluster.spec.cloud.dc).subscribe((result) => {
+        this.nodeDC[cluster.id] = result;
+        this.dcService.getDataCenter(this.nodeDC[cluster.id].spec.seed).subscribe((seedRes) => {
+          this.seedDC[cluster.id] = seedRes;
+        });
+      });
+    }
   }
 }
