@@ -1,4 +1,4 @@
-import {browser, ElementFinder, ExpectedConditions} from "protractor";
+import {browser, by, element, ElementFinder, ExpectedConditions} from "protractor";
 
 const waitTimeout = 60000;
 
@@ -20,6 +20,21 @@ export class KMElement {
    */
   static waitForRedirect(url: string): any {
     return browser.wait(ExpectedConditions.urlContains(url), waitTimeout);
+  }
+
+  static waitForNotifications(): any {
+    const closeBtn = by.className('sn-close-button');
+    if(!element(closeBtn).isPresent()) {
+      return;
+    }
+
+    return element.all(closeBtn).then((elements: any[]) => {
+      elements.forEach((elem) => {
+        KMElement.waitToAppear(elem);
+        elem.click();
+        KMElement.waitToDisappear(elem);
+      });
+    });
   }
 
   static sendKeys(element: ElementFinder, text: string): any {

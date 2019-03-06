@@ -1,5 +1,5 @@
 import {LoginPage} from './login.po';
-import {KMElement} from "../shared/element";
+import {KMElement} from "../../utils/element";
 
 describe('Login page', () => {
   const page = new LoginPage();

@@ -1,7 +1,7 @@
-import {NavPage} from "../../shared/nav.po";
+import {NavPage} from "../shared/nav.po";
 import {by, element} from "protractor";
 
-export class CreateClusterPage extends NavPage {
+export class WizardPage extends NavPage {
   private _nextButton = by.id('km-create-cluster-next-btn');
   private _clusterNameInput = by.id('km-create-cluster-name-input');
   private _createButton = by.id('km-create-cluster-create-btn');

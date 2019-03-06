@@ -1,13 +1,13 @@
-import {ProjectsPage} from "../projects/projects.po";
+import {ProjectsPage} from "../pages/projects/projects.po";
 import {browser} from "protractor";
-import {ConfirmationDialog} from "../shared/confirmation.po";
-import {KMElement} from "../shared/element";
-import {MembersPage} from "../member/member";
-import {ClustersPage} from "../clusters/clusters.po";
-import {CreateClusterPage} from "../clusters/create/create.po";
-import { RandomUtils } from '../shared/random';
-import { ProjectCommons } from '../common/project';
-import { AuthCommons } from '../common/auth';
+import {ConfirmationDialog} from "../pages/shared/confirmation.po";
+import {KMElement} from "../utils/element";
+import {MembersPage} from "../pages/member/member";
+import {ClustersPage} from "../pages/clusters/clusters.po";
+import {WizardPage} from "../pages/wizard/wizard.po";
+import { RandomUtils } from '../utils/random';
+import { ProjectUtils } from '../utils/project';
+import { AuthUtils } from '../utils/auth';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -27,23 +27,23 @@ import { AuthCommons } from '../common/auth';
 describe('Basic story', () => {
   const projectsPage = new ProjectsPage();
   const clustersPage = new ClustersPage();
-  const createClusterPage = new CreateClusterPage();
+  const wizardPage = new WizardPage();
   const membersPage = new MembersPage();
   const confirmationDialog = new ConfirmationDialog();
 
-  let projectName = `e2e-project-${RandomUtils.string()}`;
-  const clusterName = 'e2e-test-cluster';
+  let projectName = RandomUtils.prefixedString('e2e-test-project');
+  const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
   const providerName = 'bringyourown';
   const datacenterLocation = 'Frankfurt';
 
   const memberEmail = 'roxy2@kubermatic.io';
 
   it('should login', () => {
-    AuthCommons.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
   it('should create a new project', () => {
-    ProjectCommons.createProject(projectName);
+    ProjectUtils.createProject(projectName);
   });
 
   it('should create a new cluster', () => {
@@ -51,18 +51,18 @@ describe('Basic story', () => {
     KMElement.waitForClickable(clustersPage.getAddClusterTopBtn());
 
     clustersPage.getCreateClusterNavButton().click();
-    KMElement.waitToAppear(createClusterPage.getClusterNameInput());
-    createClusterPage.getClusterNameInput().sendKeys(clusterName);
-    KMElement.waitForClickable(createClusterPage.getNextButton());
-    createClusterPage.getNextButton().click();
+    KMElement.waitToAppear(wizardPage.getClusterNameInput());
+    wizardPage.getClusterNameInput().sendKeys(clusterName);
+    KMElement.waitForClickable(wizardPage.getNextButton());
+    wizardPage.getNextButton().click();
 
-    KMElement.waitToAppear(createClusterPage.getProviderButton(providerName));
-    createClusterPage.getProviderButton(providerName).click();
+    KMElement.waitToAppear(wizardPage.getProviderButton(providerName));
+    wizardPage.getProviderButton(providerName).click();
 
-    createClusterPage.getDatacenterLocationButton(datacenterLocation).click();
+    wizardPage.getDatacenterLocationButton(datacenterLocation).click();
 
-    KMElement.waitForClickable(createClusterPage.getCreateButton());
-    createClusterPage.getCreateButton().click();
+    KMElement.waitForClickable(wizardPage.getCreateButton());
+    wizardPage.getCreateButton().click();
     KMElement.waitForRedirect('/clusters/');
 
     clustersPage.navigateTo();
@@ -143,12 +143,14 @@ describe('Basic story', () => {
   it('should edit created project name', async () => {
     const oldProjectName = projectName;
     projectsPage.navigateTo();
+    KMElement.waitForNotifications();
+
     KMElement.waitToAppear(projectsPage.getProjectEditBtn(projectName));
     projectsPage.getProjectEditBtn(projectName).click();
     expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
 
     KMElement.waitToAppear(projectsPage.getEditProjectDialogInput());
-    projectName = `e2e-project-${RandomUtils.string()}`;
+    projectName = RandomUtils.prefixedString('e2e-test-project');
     KMElement.sendKeys(projectsPage.getEditProjectDialogInput(), projectName);
     KMElement.waitForClickable(projectsPage.getEditProjectDialogEditBtn());
     projectsPage.getEditProjectDialogEditBtn().click();
@@ -166,10 +168,10 @@ describe('Basic story', () => {
   });
 
   it('should delete created project', () => {
-    ProjectCommons.deleteProject(projectName);
+    ProjectUtils.deleteProject(projectName);
   });
 
   it('should logout', () => {
-    AuthCommons.logout();
+    AuthUtils.logout();
   });
 });
