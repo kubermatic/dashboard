@@ -20,10 +20,6 @@ describe('ClusterHealthStatus', () => {
             new ClusterHealthStatus(
                 HealthStatusMessage.Provisioning, HealthStatusColor.Orange, HealthStatusCss.Provisioning),
             'should be correct for provisioning cluster');
-    expect(ClusterHealthStatus.getHealthStatus(cluster, healthFailed))
-        .toEqual(
-            new ClusterHealthStatus(HealthStatusMessage.Failed, HealthStatusColor.Red, HealthStatusCss.Failed),
-            'should be correct for failed cluster');
   });
 
   it('should return if cluster is running', () => {

@@ -16,8 +16,6 @@ export class ClusterHealthStatus extends HealthStatus {
       return new ClusterHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red, HealthStatusCss.Deleting);
     } else if (!!h && !!h.apiserver && !!h.scheduler && !!h.controller && !!h.machineController && !!h.etcd) {
       return new ClusterHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running);
-    } else if (!!h && !h.apiserver && !h.scheduler && !h.controller && !h.machineController && !h.etcd) {
-      return new ClusterHealthStatus(HealthStatusMessage.Failed, HealthStatusColor.Red, HealthStatusCss.Failed);
     } else {
       return new ClusterHealthStatus(
           HealthStatusMessage.Provisioning, HealthStatusColor.Orange, HealthStatusCss.Provisioning);
