@@ -8,6 +8,7 @@ import {LabelFormComponent} from '../../../shared/components/label-form/label-fo
 import {ClusterEntity, Finalizer, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {EventEntity} from '../../../shared/entity/EventEntity';
+import {HealthEntity} from '../../../shared/entity/HealthEntity';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
@@ -131,6 +132,11 @@ export class ApiService {
     }
 
     return this.http.delete(url, {headers: this.headers});
+  }
+
+  getClusterHealth(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/health`;
+    return this.http.get<HealthEntity>(url, {headers: this.headers});
   }
 
   upgradeClusterNodeDeployments(version: string, cluster: string, dc: string, projectID: string): Observable<any> {

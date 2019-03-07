@@ -4,10 +4,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../../../app-config.service';
-import {HealthService} from '../../../core/services';
+import {ApiService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
+import {fakeHealth} from '../../../testing/fake-data/health.fake';
+import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
-import {HealthMockService} from '../../../testing/services/health-mock.service';
 import {ClusterSecretsComponent} from './cluster-secrets.component';
 
 const modules: any[] = [
@@ -22,6 +23,9 @@ describe('ClusterSecretsComponent', () => {
   let component: ClusterSecretsComponent;
 
   beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getClusterHealth']);
+    apiMock.getClusterHealth.and.returnValue(asyncData([fakeHealth()]));
+
     TestBed
         .configureTestingModule({
           imports: [
@@ -31,7 +35,7 @@ describe('ClusterSecretsComponent', () => {
             ClusterSecretsComponent,
           ],
           providers: [
-            {provide: HealthService, useClass: HealthMockService},
+            {provide: ApiService, useValue: apiMock},
             {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,
           ],

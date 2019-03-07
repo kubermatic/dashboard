@@ -1,11 +1,12 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {AppConfigService} from '../../../app-config.service';
-import {HealthService} from '../../../core/services';
+import {ApiService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {AddMachineNetworkComponent} from './add-machine-network/add-machine-network.component';
 import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
 
@@ -23,24 +24,22 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
   expand = false;
   dialogRef: any;
   isClusterRunning: boolean;
-  healthStatus: string;
+  healthStatus: ClusterHealthStatus;
   health: HealthEntity;
   userGroupConfig: UserGroupConfig;
 
-  constructor(
-      public dialog: MatDialog, private healthService: HealthService, private appConfigService: AppConfigService) {}
+  constructor(public dialog: MatDialog, private api: ApiService, private appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
   }
 
   ngOnChanges(): void {
-    this.healthService.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-        .subscribe((health) => {
-          this.isClusterRunning = this.healthService.isClusterRunning(this.cluster, health);
-          this.healthStatus = this.healthService.getClusterHealthStatus(this.cluster, health);
-          this.health = health;
-        });
+    this.api.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((health) => {
+      this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
+      this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+      this.health = health;
+    });
   }
 
   isExpand(expand: boolean): void {

@@ -16,7 +16,7 @@ import {NotificationComponent} from './components/notification/notification.comp
 import {SidenavComponent} from './components/sidenav/sidenav.component';
 import {SidenavService} from './components/sidenav/sidenav.service';
 import {CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {ApiService, Auth, AuthGuard, ClusterService, DatacenterService, HealthService, InitialNodeDataService} from './services';
+import {ApiService, Auth, AuthGuard, ClusterService, DatacenterService, InitialNodeDataService} from './services';
 import {WizardService} from './services';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {StepsService} from './services/wizard/steps.service';
@@ -53,7 +53,6 @@ const services: any[] = [
   ApiService,
   InitialNodeDataService,
   ClusterService,
-  HealthService,
 ];
 
 const interceptors: any[] = [
