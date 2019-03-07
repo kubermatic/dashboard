@@ -7,7 +7,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, Auth, DatacenterService, HealthService, UserService} from '../../../core/services';
+import {ApiService, Auth, DatacenterService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
@@ -19,7 +19,6 @@ import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
-import {HealthMockService} from '../../../testing/services/health-mock.service';
 import {NodeMockService} from '../../../testing/services/node-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeService} from '../../services/node.service';
@@ -65,7 +64,6 @@ describe('NodeDeploymentDetailsComponent', () => {
             {provide: Auth, useClass: AuthMockService},
             {provide: Router, useClass: RouterStub},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
-            {provide: HealthService, useClass: HealthMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: NodeService, useClass: NodeMockService},

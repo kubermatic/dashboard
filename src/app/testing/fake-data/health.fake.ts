@@ -10,3 +10,25 @@ export function fakeHealth(): HealthEntity {
     cloudProviderInfrastructure: true,
   };
 }
+
+export function fakeHealthProvisioning(): HealthEntity {
+  return {
+    apiserver: true,
+    controller: true,
+    etcd: false,
+    machineController: true,
+    scheduler: false,
+    cloudProviderInfrastructure: false,
+  };
+}
+
+export function fakeHealthFailed(): HealthEntity {
+  return {
+    apiserver: false,
+    controller: false,
+    etcd: false,
+    machineController: false,
+    scheduler: false,
+    cloudProviderInfrastructure: false,
+  };
+}
