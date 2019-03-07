@@ -1,4 +1,4 @@
-import {browser, by, element, ElementFinder, ExpectedConditions} from "protractor";
+import {browser, by, element, ElementFinder, ExpectedConditions} from 'protractor';
 
 const defaultTimeout = 60000;
 
@@ -29,7 +29,7 @@ export class KMElement {
 
   static waitForNotifications(): any {
     const closeBtn = by.className('sn-close-button');
-    if(!element(closeBtn).isPresent()) {
+    if (!element(closeBtn).isPresent()) {
       return;
     }
 
@@ -44,7 +44,7 @@ export class KMElement {
 
   static sendKeys(element: ElementFinder, text: string): any {
     return element.getAttribute('value').then((v) => {
-      if(v.length < text.length) {
+      if (v.length < text.length) {
         return element.sendKeys(text.substring(v.length, text.length)).then(() => {
           return KMElement.sendKeys(element, text);
         });

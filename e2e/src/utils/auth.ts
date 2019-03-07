@@ -1,7 +1,8 @@
-import {KMElement} from './element';
-import {LoginPage} from '../pages/login/login.po';
 import {DexPage} from '../pages/dex/dex.po';
+import {LoginPage} from '../pages/login/login.po';
 import {NavPage} from '../pages/shared/nav.po';
+
+import {KMElement} from './element';
 
 export class AuthUtils {
   private static _loginPage = new LoginPage();

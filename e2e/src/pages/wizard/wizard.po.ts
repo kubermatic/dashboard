@@ -1,5 +1,6 @@
-import {NavPage} from "../shared/nav.po";
-import {by, element} from "protractor";
+import {by, element} from 'protractor';
+
+import {NavPage} from '../shared/nav.po';
 
 export class WizardPage extends NavPage {
   private _nextButton = by.id('km-create-cluster-next-btn');

@@ -1,5 +1,6 @@
+import {ClustersPage} from '../pages/clusters/clusters.po';
+
 import {KMElement} from './element';
-import { ClustersPage } from '../pages/clusters/clusters.po';
 
 export class ClusterUtils {
   private static _clusterPage = new ClustersPage();

@@ -1,13 +1,14 @@
-import {ProjectsPage} from "../pages/projects/projects.po";
-import {browser} from "protractor";
-import {ConfirmationDialog} from "../pages/shared/confirmation.po";
-import {KMElement} from "../utils/element";
-import {MembersPage} from "../pages/member/member";
-import {ClustersPage} from "../pages/clusters/clusters.po";
-import {WizardPage} from "../pages/wizard/wizard.po";
-import { RandomUtils } from '../utils/random';
-import { ProjectUtils } from '../utils/project';
-import { AuthUtils } from '../utils/auth';
+import {browser} from 'protractor';
+
+import {ClustersPage} from '../pages/clusters/clusters.po';
+import {MembersPage} from '../pages/member/member';
+import {ProjectsPage} from '../pages/projects/projects.po';
+import {ConfirmationDialog} from '../pages/shared/confirmation.po';
+import {WizardPage} from '../pages/wizard/wizard.po';
+import {AuthUtils} from '../utils/auth';
+import {KMElement} from '../utils/element';
+import {ProjectUtils} from '../utils/project';
+import {RandomUtils} from '../utils/random';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -158,7 +159,8 @@ describe('Basic story', () => {
     KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
 
     KMElement.waitForRedirect('/clusters');
-    // We need to wait for autoredirect after edit to finish otherwise it will autoredirect again after too fast page switch.
+    // We need to wait for autoredirect after edit to finish otherwise it will autoredirect again after too fast page
+    // switch.
     browser.sleep(5000);
     projectsPage.navigateTo();
     KMElement.waitForRedirect('/projects');

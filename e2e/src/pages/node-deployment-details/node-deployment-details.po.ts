@@ -1,4 +1,4 @@
-import { by, element, ElementFinder } from 'protractor';
+import {by, element, ElementFinder} from 'protractor';
 
 import {NavPage} from '../shared/nav.po';
 

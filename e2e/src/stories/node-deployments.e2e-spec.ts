@@ -1,12 +1,13 @@
-import {browser} from "protractor";
-import {KMElement} from "../utils/element";
-import {ClustersPage} from "../pages/clusters/clusters.po";
-import {WizardPage} from "../pages/wizard/wizard.po";
+import {browser} from 'protractor';
+
+import {ClustersPage} from '../pages/clusters/clusters.po';
+import {NodeDeploymentDetailsPage} from '../pages/node-deployment-details/node-deployment-details.po';
+import {WizardPage} from '../pages/wizard/wizard.po';
+import {AuthUtils} from '../utils/auth';
+import {ClusterUtils} from '../utils/cluster';
+import {KMElement} from '../utils/element';
+import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
-import { ProjectUtils } from '../utils/project';
-import { AuthUtils } from '../utils/auth';
-import { ClusterUtils } from '../utils/cluster';
-import { NodeDeploymentDetailsPage } from '../pages/node-deployment-details/node-deployment-details.po';
 
 describe('Node Deployments story', () => {
   const clustersPage = new ClustersPage();

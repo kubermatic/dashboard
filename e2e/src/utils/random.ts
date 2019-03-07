@@ -7,5 +7,3 @@ export class RandomUtils {
     return `${prefix}-${RandomUtils.string()}`;
   }
 }
-
-
