@@ -22,20 +22,27 @@ function createConfig() {
 
     framework: 'jasmine',
     jasmineNodeOpts: {
-      defaultTimeoutInterval: 60000,
+      defaultTimeoutInterval: 300000,
     },
 
     directConnect: true,
     baseUrl: 'http://localhost:8000/',
 
     onPrepare() {
-      if (process.env.KUBERMATIC_DEX_DEV_E2E_USERNAME === undefined ||
-        process.env.KUBERMATIC_DEX_DEV_E2E_PASSWORD === undefined) {
-        throw new Error(`'KUBERMATIC_DEX_DEV_E2E_USERNAME' and 'KUBERMATIC_DEX_DEV_E2E_PASSWORD' environment variables have to be set.`)
+      if(process.env.KUBERMATIC_DEX_DEV_E2E_USERNAME === undefined) {
+        throw new Error(`'KUBERMATIC_DEX_DEV_E2E_USERNAME' environment variable has to be set.`)
       }
-
       browser.params.KUBERMATIC_E2E_USERNAME = process.env.KUBERMATIC_DEX_DEV_E2E_USERNAME;
+
+      if (process.env.KUBERMATIC_DEX_DEV_E2E_PASSWORD === undefined ) {
+        throw new Error(`'KUBERMATIC_DEX_DEV_E2E_PASSWORD' environment variable has to be set.`)
+      }
       browser.params.KUBERMATIC_E2E_PASSWORD = process.env.KUBERMATIC_DEX_DEV_E2E_PASSWORD;
+
+      if (process.env.DO_E2E_TESTS_TOKEN === undefined ) {
+        throw new Error(`'DO_E2E_TESTS_TOKEN' environment variable has to be set.`)
+      }
+      browser.params.KUBERMATIC_E2E_DIGITALOCEAN_TOKEN = process.env.DO_E2E_TESTS_TOKEN;
 
       require('ts-node').register({
         project: require('path').join(__dirname, './tsconfig.e2e.json')

@@ -1,7 +1,8 @@
-import {NavPage} from "../../shared/nav.po";
-import {by, element} from "protractor";
+import {by, element} from 'protractor';
 
-export class CreateClusterPage extends NavPage {
+import {NavPage} from '../shared/nav.po';
+
+export class WizardPage extends NavPage {
   private _nextButton = by.id('km-create-cluster-next-btn');
   private _clusterNameInput = by.id('km-create-cluster-name-input');
   private _createButton = by.id('km-create-cluster-create-btn');
@@ -24,5 +25,13 @@ export class CreateClusterPage extends NavPage {
 
   getDatacenterLocationButton(location: string): any {
     return element(by.xpath(`//div[normalize-space()='${location}']`));
+  }
+
+  getDigitalOceanTokenInput(): any {
+    return element(by.id('km-digitalocean-token-input'));
+  }
+
+  getNodeNameInput(): any {
+    return element(by.id('km-node-name-input'));
   }
 }
