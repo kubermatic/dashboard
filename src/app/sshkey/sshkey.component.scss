@@ -1,0 +1,52 @@
+@import "../../assets/css/colors";
+@import "../../assets/css/variables";
+
+.km-key-name {
+  font-weight: 500;
+  font-size: $body-font-size-base;
+  margin: 0;
+  line-height: 20px;
+  color: $text-color;
+}
+
+.km-key-timestamp {
+  font-size: $caption-font-size-base;
+  margin: 0;
+  line-height: 20px;
+  color: $text-color;
+}
+
+.km-key-publickey {
+  padding: 0 !important;
+}
+
+.km-icon-delete {
+  width: 21px;
+  height: 21px;
+  margin-right: 20px;
+}
+
+.km-publickey-wrapper {
+  background-color: $light-background;
+  padding: 23px 20px 15px;
+
+  .km-publickey-content {
+    background-color: $white-text-color;
+
+    .km-publickey-name {
+      font-weight: 500;
+      text-transform: uppercase;
+      color: $text-color;
+      padding: 10px 24px;
+      line-height: 30px;
+    }
+
+    .km-publickey {
+      padding: 15px 20px;
+      background-color: $medium-background;
+      font-size: $caption-font-size-base;
+      line-height: 18px;
+      word-break: break-all;
+    }
+  }
+}
