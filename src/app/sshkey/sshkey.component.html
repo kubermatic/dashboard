@@ -50,7 +50,7 @@
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <div class="km-project-item-actions">
+          <div class="km-sshkey-item-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
                 <mat-spinner [diameter]="30"
