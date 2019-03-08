@@ -1,5 +1,6 @@
-import {NavPage} from "../shared/nav.po";
-import {by, element} from "protractor";
+import {by, element} from 'protractor';
+
+import {NavPage} from '../shared/nav.po';
 
 export class MembersPage extends NavPage {
   private _addMemberTopBtn = by.id('km-add-member-top-btn');

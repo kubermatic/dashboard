@@ -36,4 +36,8 @@ export class ClustersPage extends NavPage {
   getAddClusterTopBtn(): any {
     return element(this._addClusterTopBtn);
   }
+
+  getNodeDeploymentItem(nodeDeploymentName: string): any {
+    return element(by.id(nodeDeploymentName));
+  }
 }

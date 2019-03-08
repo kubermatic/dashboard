@@ -4,7 +4,8 @@
        fxLayoutGap="16px">
     <mat-form-field class="km-node-deployment-name"
                     [ngClass]="{small: isInWizard, none: isNameDisabled}">
-      <input matInput
+      <input id="km-node-name-input"
+             matInput
              formControlName="name"
              type="text"
              autocomplete="off"

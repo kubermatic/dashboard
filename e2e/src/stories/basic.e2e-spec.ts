@@ -1,12 +1,14 @@
-import {ProjectsPage} from "../../projects/projects.po";
-import {LoginPage} from "../../login/login.po";
-import {browser} from "protractor";
-import {DexPage} from "../../dex/dex.po";
-import {ConfirmationDialog} from "../../shared/confirmation.po";
-import {KMElement} from "../../shared/element-utils";
-import {MembersPage} from "../../member/member";
-import {ClustersPage} from "../../clusters/clusters.po";
-import {CreateClusterPage} from "../../clusters/create/create.po";
+import {browser} from 'protractor';
+
+import {ClustersPage} from '../pages/clusters/clusters.po';
+import {MembersPage} from '../pages/member/member';
+import {ProjectsPage} from '../pages/projects/projects.po';
+import {ConfirmationDialog} from '../pages/shared/confirmation.po';
+import {WizardPage} from '../pages/wizard/wizard.po';
+import {AuthUtils} from '../utils/auth';
+import {KMElement} from '../utils/element';
+import {ProjectUtils} from '../utils/project';
+import {RandomUtils} from '../utils/random';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -16,7 +18,7 @@ import {CreateClusterPage} from "../../clusters/create/create.po";
  * It executes the following steps:
  *  - Login using static credentials as test user 'roxy'
  *  - Create new project called 'e2e-test-project'
- *  - Create new cluster callsed 'e2e-test-cluster' using kubeadm provider
+ *  - Create new cluster called 'e2e-test-cluster' using kubeadm provider
  *  - Add new member
  *  - Edit group of added member
  *  - Delete created resources (member, cluster, project).
@@ -24,59 +26,25 @@ import {CreateClusterPage} from "../../clusters/create/create.po";
  */
 
 describe('Basic story', () => {
-  const loginPage = new LoginPage();
   const projectsPage = new ProjectsPage();
   const clustersPage = new ClustersPage();
-  const createClusterPage = new CreateClusterPage();
-  const dexPage = new DexPage();
+  const wizardPage = new WizardPage();
   const membersPage = new MembersPage();
   const confirmationDialog = new ConfirmationDialog();
 
-  let projectName = 'e2e-test-project';
-  const clusterName = 'e2e-test-cluster';
+  let projectName = RandomUtils.prefixedString('e2e-test-project');
+  const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
   const providerName = 'bringyourown';
   const datacenterLocation = 'Frankfurt';
 
   const memberEmail = 'roxy2@kubermatic.io';
 
-  beforeAll(() => {
-    loginPage.navigateTo();
-    KMElement.waitToAppear(loginPage.getLoginButton());
-  });
-
   it('should login', () => {
-    loginPage.getLoginButton().click();
-    dexPage.getLoginWithEmailButton().click();
-
-    dexPage.getLoginInput().sendKeys(browser.params.KUBERMATIC_E2E_USERNAME);
-    dexPage.getPasswordInput().sendKeys(browser.params.KUBERMATIC_E2E_PASSWORD);
-
-    dexPage.getLoginSubmitButton().click();
-
-    KMElement.waitToAppear(projectsPage.getLogoutButton());
-    expect(projectsPage.getLogoutButton().isPresent()).toBeTruthy();
+    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
   it('should create a new project', () => {
-    projectsPage.navigateTo();
-    KMElement.waitForNotifications();
-    KMElement.waitToAppear(projectsPage.getAddProjectButton());
-
-    projectsPage.getAddProjectButton().click();
-    expect(projectsPage.getAddProjectDialog().isPresent()).toBeTruthy();
-
-    projectsPage.getProjectNameInput().sendKeys(projectName);
-    projectsPage.getSaveProjectButton().click();
-
-    KMElement.waitToDisappear(projectsPage.getAddProjectDialog());
-    KMElement.waitForRedirect("/clusters");
-    // We need to wait for autoredirect after create to finish otherwise it will autoredirect again after too fast page switch.
-    browser.sleep(5000);
-    projectsPage.navigateTo();
-    KMElement.waitForRedirect("/projects");
-    KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
-
-    expect(projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
+    ProjectUtils.createProject(projectName);
   });
 
   it('should create a new cluster', () => {
@@ -84,18 +52,18 @@ describe('Basic story', () => {
     KMElement.waitForClickable(clustersPage.getAddClusterTopBtn());
 
     clustersPage.getCreateClusterNavButton().click();
-    KMElement.waitToAppear(createClusterPage.getClusterNameInput());
-    createClusterPage.getClusterNameInput().sendKeys(clusterName);
-    KMElement.waitForClickable(createClusterPage.getNextButton());
-    createClusterPage.getNextButton().click();
+    KMElement.waitToAppear(wizardPage.getClusterNameInput());
+    wizardPage.getClusterNameInput().sendKeys(clusterName);
+    KMElement.waitForClickable(wizardPage.getNextButton());
+    wizardPage.getNextButton().click();
 
-    KMElement.waitToAppear(createClusterPage.getProviderButton(providerName));
-    createClusterPage.getProviderButton(providerName).click();
+    KMElement.waitToAppear(wizardPage.getProviderButton(providerName));
+    wizardPage.getProviderButton(providerName).click();
 
-    createClusterPage.getDatacenterLocationButton(datacenterLocation).click();
+    wizardPage.getDatacenterLocationButton(datacenterLocation).click();
 
-    KMElement.waitForClickable(createClusterPage.getCreateButton());
-    createClusterPage.getCreateButton().click();
+    KMElement.waitForClickable(wizardPage.getCreateButton());
+    wizardPage.getCreateButton().click();
     KMElement.waitForRedirect('/clusters/');
 
     clustersPage.navigateTo();
@@ -106,7 +74,6 @@ describe('Basic story', () => {
   it('should add a new member', () => {
     membersPage.navigateTo();
 
-    KMElement.waitForNotifications();
     KMElement.waitForClickable(membersPage.getAddMemberBtn());
     membersPage.getAddMemberBtn().click();
     KMElement.waitToAppear(membersPage.getAddMemberDialog());
@@ -142,7 +109,6 @@ describe('Basic story', () => {
   });
 
   it('should delete created member', () => {
-    KMElement.waitForNotifications();
     KMElement.waitToAppear(membersPage.getMemberDeleteBtn(memberEmail));
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
@@ -162,7 +128,6 @@ describe('Basic story', () => {
     KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
     clustersPage.getClusterItem(clusterName).click();
 
-    KMElement.waitForNotifications();
     KMElement.waitForClickable(clustersPage.getDeleteClusterBtn());
     clustersPage.getDeleteClusterBtn().click();
 
@@ -180,12 +145,13 @@ describe('Basic story', () => {
     const oldProjectName = projectName;
     projectsPage.navigateTo();
     KMElement.waitForNotifications();
+
     KMElement.waitToAppear(projectsPage.getProjectEditBtn(projectName));
     projectsPage.getProjectEditBtn(projectName).click();
     expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
 
     KMElement.waitToAppear(projectsPage.getEditProjectDialogInput());
-    projectName = 'e2e-test-project-2';
+    projectName = RandomUtils.prefixedString('e2e-test-project');
     KMElement.sendKeys(projectsPage.getEditProjectDialogInput(), projectName);
     KMElement.waitForClickable(projectsPage.getEditProjectDialogEditBtn());
     projectsPage.getEditProjectDialogEditBtn().click();
@@ -193,7 +159,8 @@ describe('Basic story', () => {
     KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
 
     KMElement.waitForRedirect('/clusters');
-    // We need to wait for autoredirect after edit to finish otherwise it will autoredirect again after too fast page switch.
+    // We need to wait for autoredirect after edit to finish otherwise it will autoredirect again after too fast page
+    // switch.
     browser.sleep(5000);
     projectsPage.navigateTo();
     KMElement.waitForRedirect('/projects');
@@ -203,26 +170,10 @@ describe('Basic story', () => {
   });
 
   it('should delete created project', () => {
-    KMElement.waitForNotifications();
-    KMElement.waitToAppear(projectsPage.getDeleteProjectButton(projectName));
-    projectsPage.getDeleteProjectButton(projectName).click();
-    expect(confirmationDialog.getConfirmationDialog().isPresent()).toBeTruthy();
-
-    KMElement.sendKeys(confirmationDialog.getConfirmationDialogInput(), projectName);
-    confirmationDialog.getConfirmationDialogConfirmBtn().click();
-
-    KMElement.waitToDisappear(projectsPage.getProjectItem(projectName));
-    expect(projectsPage.getProjectItem(projectName).isPresent()).toBeFalsy();
+    ProjectUtils.deleteProject(projectName);
   });
 
   it('should logout', () => {
-    KMElement.waitForNotifications();
-    KMElement.waitToAppear(projectsPage.getLogoutButton());
-    expect(projectsPage.getLogoutButton().isPresent()).toBeTruthy();
-
-    projectsPage.getLogoutButton().click();
-
-    KMElement.waitToAppear(loginPage.getLoginButton());
-    expect(loginPage.getLoginButton().isPresent()).toBeTruthy();
+    AuthUtils.logout();
   });
 });
