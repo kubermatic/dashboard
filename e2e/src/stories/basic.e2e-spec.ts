@@ -9,6 +9,7 @@ import {AuthUtils} from '../utils/auth';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
+import { ClusterUtils } from '../utils/cluster';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -123,22 +124,7 @@ describe('Basic story', () => {
   });
 
   it('should delete created cluster', () => {
-    clustersPage.navigateTo();
-
-    KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
-    clustersPage.getClusterItem(clusterName).click();
-
-    KMElement.waitForClickable(clustersPage.getDeleteClusterBtn());
-    clustersPage.getDeleteClusterBtn().click();
-
-    KMElement.waitToAppear(clustersPage.getDeleteClusterDialog());
-    KMElement.sendKeys(clustersPage.getDeleteClusterDialogInput(), clusterName);
-    KMElement.waitForClickable(clustersPage.getDeleteClusterDialogDeleteBtn());
-    clustersPage.getDeleteClusterDialogDeleteBtn().click();
-
-    KMElement.waitToAppear(clustersPage.getAddClusterTopBtn());
-    KMElement.waitToDisappear(clustersPage.getClusterItem(clusterName));
-    expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeFalsy();
+    ClusterUtils.deleteCluster(clusterName);
   });
 
   it('should edit created project name', async () => {

@@ -6,6 +6,11 @@ export class ClusterUtils {
   private static _clusterPage = new ClustersPage();
 
   static deleteCluster(clusterName: string, waitTimeout = 60000): void {
+    ClusterUtils._clusterPage.navigateTo();
+
+    KMElement.waitToAppear(ClusterUtils._clusterPage.getClusterItem(clusterName));
+    ClusterUtils._clusterPage.getClusterItem(clusterName).click();
+
     KMElement.waitForClickable(ClusterUtils._clusterPage.getDeleteClusterBtn());
     ClusterUtils._clusterPage.getDeleteClusterBtn().click();
 
