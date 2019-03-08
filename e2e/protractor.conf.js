@@ -16,7 +16,7 @@ function createConfig() {
     capabilities: {
       browserName: 'chrome',
       chromeOptions: {
-        args: ['--no-sandbox', '--disable-gpu', '--window-size=1920,1080']
+        args: ['--no-sandbox', '--disable-gpu', '--window-size=1920,1080', '--disable-browser-side-navigation']
       }
     },
 
