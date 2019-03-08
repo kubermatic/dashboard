@@ -40,4 +40,8 @@ export class ClustersPage extends NavPage {
   getNodeDeploymentItem(nodeDeploymentName: string): any {
     return element(by.id(nodeDeploymentName));
   }
+
+  getNodeDeploymentRemoveBtn(nodeDeploymentName: string): any {
+    return element(by.xpath(`//*[@id="${nodeDeploymentName}"]//*[contains(@class, 'fa fa-trash-o')]`));
+  }
 }

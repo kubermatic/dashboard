@@ -145,9 +145,11 @@ describe('Basic story', () => {
     KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
 
     KMElement.waitForRedirect('/clusters');
-    // We need to wait for autoredirect after edit to finish otherwise it will autoredirect again after too fast page
-    // switch.
+
+    // We need to wait for autoredirect after edit to finish
+    // otherwise it will autoredirect again after too fast page switch.
     browser.sleep(5000);
+
     projectsPage.navigateTo();
     KMElement.waitForRedirect('/projects');
 

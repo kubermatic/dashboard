@@ -8,11 +8,13 @@ import {ClusterUtils} from '../utils/cluster';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
+import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 
 describe('Node Deployments story', () => {
   const clustersPage = new ClustersPage();
   const wizardPage = new WizardPage();
   const nodeDeploymentDetailsPage = new NodeDeploymentDetailsPage();
+  const confirmationDialog = new ConfirmationDialog();
 
   const projectName = RandomUtils.prefixedString('e2e-test-project');
   const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
@@ -109,6 +111,21 @@ describe('Node Deployments story', () => {
 
     KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
     clustersPage.getClusterItem(clusterName).click();
+  });
+
+  it('should remove initial node deployment', () => {
+    KMElement.waitToAppear(clustersPage.getNodeDeploymentRemoveBtn(initialNodeDeploymentName));
+    clustersPage.getNodeDeploymentRemoveBtn(initialNodeDeploymentName).click();
+
+    KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
+    confirmationDialog.getConfirmationDialogConfirmBtn().click();
+  });
+
+  it('should verify initial node deployment removal', () => {
+    browser.sleep(60000);
+
+    KMElement.waitToDisappear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 300000);
+    expect(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName).isPresent()).toBeFalsy();
   });
 
   it('should delete created cluster', () => {
