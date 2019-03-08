@@ -112,7 +112,7 @@ describe('Node Deployments story', () => {
   });
 
   it('should delete created cluster', () => {
-    ClusterUtils.deleteCluster(clusterName);
+    ClusterUtils.deleteCluster(clusterName, 600000);
   });
 
   afterAll(() => {
