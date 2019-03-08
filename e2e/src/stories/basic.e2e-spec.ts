@@ -9,7 +9,7 @@ import {AuthUtils} from '../utils/auth';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
-import { ClusterUtils } from '../utils/cluster';
+import {ClusterUtils} from '../utils/cluster';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
