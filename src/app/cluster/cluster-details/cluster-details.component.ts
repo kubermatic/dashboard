@@ -49,6 +49,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   downgradesAvailable = false;
   moreSshKeys = false;
   hasInitialNodes = false;
+  someUpgradesRestrictedByKubeletVersion = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -188,9 +189,15 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             this.updatesAvailable = false;
             for (const i in upgrades) {
               if (upgrades.hasOwnProperty(i)) {
+                if (upgrades[i].restrictedByKubeletVersion === true) {
+                  this.someUpgradesRestrictedByKubeletVersion = true;
+                  continue;
+                }
+
                 if (this.versionsList.indexOf(upgrades[i].version) < 0) {
                   this.versionsList.push(upgrades[i].version);
                 }
+
                 if (lt(this.cluster.spec.version, upgrades[i].version)) {
                   this.updatesAvailable = true;
                 } else if (gt(this.cluster.spec.version, upgrades[i].version)) {

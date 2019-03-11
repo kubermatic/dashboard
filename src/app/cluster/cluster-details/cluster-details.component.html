@@ -76,7 +76,8 @@
       </km-property>
       <km-property>
         <div key>Master Version</div>
-        <div value>
+        <div value
+             fxLayoutGap="4px">
           <span *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)"
                 (click)="changeClusterVersionDialog()"
                 matTooltip="Click to change the version"
@@ -84,6 +85,9 @@
             <i *ngIf="updatesAvailable"
                class="fa fa-arrow-up"></i>
           </span>
+          <i *ngIf="someUpgradesRestrictedByKubeletVersion"
+             matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
+             class="fa fa-exclamation-triangle orange"></i>
           <span *ngIf="!isClusterRunning || !(updatesAvailable || downgradesAvailable)">
             {{cluster.spec.version}}
           </span>
