@@ -14,7 +14,6 @@ import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSyst
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../shared/model/ClusterForm';
-import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeProvider} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
 
@@ -270,13 +269,26 @@ export class WizardComponent implements OnInit, OnDestroy {
       keyNames.push(key.name);
     }
 
-    const createCluster: CreateClusterModel = {name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames};
+    const createCluster = {
+      cluster: {
+        name: this.cluster.name,
+        spec: this.cluster.spec,
+        sshKeys: keyNames,
+      },
+      nodeDeployment: {
+        name: this.addNodeData.name,
+        spec: {
+          template: this.addNodeData.spec,
+          replicas: this.addNodeData.count,
+        },
+      },
+    };
 
     this.subscriptions.push(
         this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
             .subscribe(
                 (cluster) => {
-                  NotificationActions.success('Success', `Cluster ${createCluster.name} successfully created`);
+                  NotificationActions.success('Success', `Cluster ${createCluster.cluster.name} successfully created`);
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
                   const isReady = new Subject<boolean>();
@@ -292,7 +304,8 @@ export class WizardComponent implements OnInit, OnDestroy {
                               .subscribe(() => {
                                 NotificationActions.success(
                                     'Success',
-                                    `SSH key ${key.name} was added successfully to cluster ${createCluster.name}`);
+                                    `SSH key ${key.name} was added successfully to cluster ${
+                                        createCluster.cluster.name}`);
                               });
                         }
                       }
@@ -307,7 +320,7 @@ export class WizardComponent implements OnInit, OnDestroy {
                   }
                 },
                 () => {
-                  NotificationActions.error('Error', `Could not create cluster ${createCluster.name}`);
+                  NotificationActions.error('Error', `Could not create cluster ${createCluster.cluster.name}`);
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
                   this.creating = false;
                 }));

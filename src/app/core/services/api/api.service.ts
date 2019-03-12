@@ -19,7 +19,6 @@ import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/Dr
 import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
-import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {Auth} from '../auth/auth.service';
 
@@ -112,7 +111,7 @@ export class ApiService {
     return this.http.get<ClusterEntity>(url, {headers: this.headers});
   }
 
-  createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
+  createCluster(createClusterModel: object, dc: string, projectID: string): Observable<ClusterEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters`;
     return this.http.post<ClusterEntity>(url, createClusterModel, {headers: this.headers});
   }
