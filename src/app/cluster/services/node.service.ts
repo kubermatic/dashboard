@@ -142,7 +142,7 @@ export class NodeService {
                         .pipe(first())
                         .pipe(catchError(() => {
                           NotificationActions.error(
-                              'Error', `Could not update Node Deployment for ${data.cluster.name}`);
+                              'Error', `Could not update Node Deployment ${data.nodeDeployment.name}`);
                           this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdateFailed');
                           return of(undefined);
                         }));
@@ -153,7 +153,7 @@ export class NodeService {
             (nd: NodeDeploymentEntity):
                 Observable<boolean> => {
                   if (nd) {
-                    NotificationActions.success('Success', `Node Deployment for ${cluster.name} updated successfully`);
+                    NotificationActions.success('Success', `Node Deployment ${nd.name} updated successfully`);
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
                     if (changeEventEmitter) {
                       changeEventEmitter.emit(nd);
