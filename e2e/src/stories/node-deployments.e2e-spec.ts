@@ -80,7 +80,7 @@ describe('Node Deployments story', () => {
   });
 
   it('should wait for initial node deployment to be created', () => {
-    KMElement.waitToAppear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 300000);
+    KMElement.waitToAppear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 600000);
   });
 
   it('should go to node deployment details', () => {

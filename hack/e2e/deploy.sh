@@ -4,7 +4,7 @@ set -euo pipefail
 
 DELETE=${1:-''}
 
-KUBERMATIC_DOMAIN="localhost"
+KUBERMATIC_DOMAIN="ci.kubermatic.io"
 KUBERMATIC_PATH=./helm/kubermatic
 KUBERMATIC_CRD_PATH=${KUBERMATIC_PATH}/crd
 
@@ -23,7 +23,7 @@ KUBERMATIC_NAMESPACE="kubermatic"
 LOCAL_PROVISIONER_NAMESPACE="local-provisioner"
 
 KUBERMATIC_STORAGE_CLASS_NAME="kubermatic-fast"
-API_IMAGE_TAG=v2.9.2
+API_IMAGE_TAG=latest
 
 function cleanup {
 	kind delete cluster --name ${KUBECONFIG_CLUSTER_NAME}
@@ -61,7 +61,8 @@ function prepare::files {
 
 function start::cluster {
 	kind create cluster --name ${KUBECONFIG_CLUSTER_NAME}
-	mv ~/.kube/kind-config-${KUBECONFIG_CLUSTER_NAME} ~/.kube/config
+	cp ~/.kube/kind-config-${KUBECONFIG_CLUSTER_NAME} ~/.kube/config
+	export KUBECONFIG="$(kind get kubeconfig-path --name=${KUBECONFIG_CLUSTER_NAME})"
 }
 
 function prepare::cluster {
@@ -128,7 +129,7 @@ function deploy::kubermatic {
 		--set=kubermatic.controller.image.tag=${API_IMAGE_TAG} \
 		--set=kubermatic.api.image.tag=${API_IMAGE_TAG} \
 		--set=kubermatic.api.replicas=1 \
-		--set=kubermatic.rbac.image.tag=${API_IMAGE_TAG} \
+		--set=kubermatic.masterController.image.tag=${API_IMAGE_TAG} \
 		--set=kubermatic.controller.featureGates="" \
 		--values ${KUBERMATIC_PATH}/values.yaml \
 		--namespace ${KUBERMATIC_NAMESPACE} \
@@ -153,4 +154,7 @@ else
 	deploy::provisioner
 	deploy::dex
 	deploy::kubermatic
+
+	kubectl apply -f yamls/user.yaml
+	kubectl create ns sa-secrets
 fi

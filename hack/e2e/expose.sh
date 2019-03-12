@@ -1,14 +1,9 @@
 #!/usr/bin/env bash
 
-killall kubectl
+export KUBECONFIG=~/.kube/config
 
 # Expose dex to localhost
-nohup kubectl port-forward -n oauth svc/dex 5556:5556 &
+kubectl port-forward --address 0.0.0.0 -n oauth svc/dex 5556 > /dev/null 2> /dev/null &
 
 # Expose kubermatic API to localhost
-nohup kubectl port-forward -n kubermatic svc/kubermatic-api 8080:80 &
-
-# Expose local API server
-nohup kubectl proxy &
-
-rm nohup.out
+kubectl port-forward --address 0.0.0.0 -n kubermatic svc/kubermatic-api 8080:80 > /dev/null 2> /dev/null &

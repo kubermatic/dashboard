@@ -60,6 +60,9 @@
           "configurations": {
             "production": {
               "browserTarget": "kubermatic:build:production"
+            },
+            "local": {
+              "proxyConfig": "./proxy-local.conf.json"
             }
           }
         },
@@ -102,7 +105,7 @@
             ]
           }
         }
-      },
+      }
     },
     "kubermatic-e2e": {
       "root": "",
@@ -114,6 +117,11 @@
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "kubermatic:serve"
+          },
+          "configurations": {
+            "e2e-local": {
+              "devServerTarget": "kubermatic:serve:local"
+            }
           }
         },
         "lint": {

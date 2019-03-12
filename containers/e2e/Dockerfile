@@ -14,11 +14,20 @@ RUN apk update && \
     nodejs \
     npm \
     go \
-    chromium && \
+    make \
+	git \
+	chromium-chromedriver \
+	python \
+	gcc \
+	g++ \
+	chromium \
+	py-pip && \
+	pip install selenium && \
     rm -rf /var/cache/*
 
 ENV CHROME_BIN=/usr/bin/chromium-browser \
-    CHROME_PATH=/usr/lib/chromium/
+    CHROME_PATH=/usr/lib/chromium/ \
+    CHROME_DRIVER="/usr/bin/chromedriver"
 
 RUN curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.12.1-linux-amd64.tar.gz|tar -xvz && \
     chmod +x linux-amd64/helm && \
