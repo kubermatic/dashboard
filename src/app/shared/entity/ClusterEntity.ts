@@ -148,6 +148,7 @@ export class Status {
 export class MasterVersion {
   version: string;
   default?: boolean;
+  restrictedByKubeletVersion?: boolean;
 }
 
 export class Token {

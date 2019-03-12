@@ -149,12 +149,10 @@ describe('ClusterDetailsComponent', () => {
        apiMock.getClusterUpgrades.and.returnValue(asyncData([
          {
            version: '1.8.5',
-           allowedVersions: ['1.8.5'],
            default: false,
          },
          {
            version: '1.8.6',
-           allowedVersions: ['1.8.6'],
            default: false,
          },
        ]));
@@ -169,7 +167,6 @@ describe('ClusterDetailsComponent', () => {
        apiMock.getClusterUpgrades.and.returnValue(asyncData([
          {
            version: '1.8.5',
-           allowedVersions: ['1.8.5'],
            default: false,
          },
        ]));
@@ -184,12 +181,10 @@ describe('ClusterDetailsComponent', () => {
        apiMock.getClusterUpgrades.and.returnValue(asyncData([
          {
            version: '1.8.5',
-           allowedVersions: ['1.8.5'],
            default: false,
          },
          {
            version: '1.8.4',
-           allowedVersions: ['1.8.4'],
            default: false,
          },
        ]));
@@ -204,17 +199,14 @@ describe('ClusterDetailsComponent', () => {
        apiMock.getClusterUpgrades.and.returnValue(asyncData([
          {
            version: '1.8.5',
-           allowedVersions: ['1.8.5'],
            default: false,
          },
          {
            version: '1.8.4',
-           allowedVersions: ['1.8.4'],
            default: false,
          },
          {
            version: '1.8.6',
-           allowedVersions: ['1.8.6'],
            default: false,
          },
        ]));
@@ -222,6 +214,54 @@ describe('ClusterDetailsComponent', () => {
        tick();
        expect(component.updatesAvailable).toEqual(true, 'Updates should be available');
        expect(component.downgradesAvailable).toEqual(true, 'Downgrades should be available');
+       discardPeriodicTasks();
+     }));
+
+  it('should filter restricted versions', fakeAsync(() => {
+       apiMock.getClusterUpgrades.and.returnValue(asyncData([
+         {
+           version: '1.8.5',
+           default: false,
+         },
+         {
+           version: '1.8.4',
+           default: false,
+           restrictedByKubeletVersion: true,
+         },
+         {
+           version: '1.8.6',
+           default: false,
+           restrictedByKubeletVersion: true,
+         },
+       ]));
+       fixture.detectChanges();
+       tick();
+       expect(component.updatesAvailable).toBeFalsy();
+       expect(component.downgradesAvailable).toBeFalsy();
+       expect(component.someUpgradesRestrictedByKubeletVersion).toBeTruthy();
+       discardPeriodicTasks();
+     }));
+
+  it('should not filter non-restricted versions', fakeAsync(() => {
+       apiMock.getClusterUpgrades.and.returnValue(asyncData([
+         {
+           version: '1.8.5',
+           default: false,
+         },
+         {
+           version: '1.8.4',
+           default: false,
+         },
+         {
+           version: '1.8.6',
+           default: false,
+         },
+       ]));
+       fixture.detectChanges();
+       tick();
+       expect(component.updatesAvailable).toBeTruthy();
+       expect(component.downgradesAvailable).toBeTruthy();
+       expect(component.someUpgradesRestrictedByKubeletVersion).toBeFalsy();
        discardPeriodicTasks();
      }));
 });

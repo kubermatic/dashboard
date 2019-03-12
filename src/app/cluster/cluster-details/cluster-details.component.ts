@@ -49,6 +49,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   downgradesAvailable = false;
   moreSshKeys = false;
   hasInitialNodes = false;
+  someUpgradesRestrictedByKubeletVersion = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
   private versionsList: string[] = [];
@@ -188,13 +189,24 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             this.updatesAvailable = false;
             for (const i in upgrades) {
               if (upgrades.hasOwnProperty(i)) {
+                const isUpgrade = lt(this.cluster.spec.version, upgrades[i].version);
+                const isDowngrade = gt(this.cluster.spec.version, upgrades[i].version);
+
+                if (upgrades[i].restrictedByKubeletVersion === true) {
+                  if (isUpgrade) {
+                    this.someUpgradesRestrictedByKubeletVersion = true;  // Show warning only for restricted upgrades.
+                  }
+                  continue;  // Skip all restricted versions.
+                }
+
+                if (isUpgrade) {
+                  this.updatesAvailable = true;
+                } else if (isDowngrade) {
+                  this.downgradesAvailable = true;
+                }
+
                 if (this.versionsList.indexOf(upgrades[i].version) < 0) {
                   this.versionsList.push(upgrades[i].version);
-                }
-                if (lt(this.cluster.spec.version, upgrades[i].version)) {
-                  this.updatesAvailable = true;
-                } else if (gt(this.cluster.spec.version, upgrades[i].version)) {
-                  this.downgradesAvailable = true;
                 }
               }
             }
