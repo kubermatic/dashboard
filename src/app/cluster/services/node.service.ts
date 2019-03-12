@@ -153,8 +153,7 @@ export class NodeService {
             (nd: NodeDeploymentEntity):
                 Observable<boolean> => {
                   if (nd) {
-                    NotificationActions.success(
-                        'Success', 'Node Deployment for ${data.cluster.name} updated successfully');
+                    NotificationActions.success('Success', `Node Deployment for ${cluster.name} updated successfully`);
                     this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeploymentUpdated');
                     if (changeEventEmitter) {
                       changeEventEmitter.emit(nd);
