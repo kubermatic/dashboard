@@ -29,10 +29,12 @@ export class NodeProvider {
   };
 }
 
+// Keep in sync with https://aws.amazon.com/ec2/instance-types/.
 export namespace NodeInstanceFlavors {
   export const AWS: string[] = [
-    't2.nano', 't2.micro', 't2.small', 't2.medium', 't2.large', 'm4.large', 'm4.xlarge', 'm4.2xlarge', 'm4.4xlarge',
-    'm4.10xlarge', 'm4.16xlarge', 'm3.medium', 'm3.large', 'm3.xlarge', 'm3.2xlarge'
+    't3.nano',  't3.micro',  't3.small',   't3.medium',  't3.large',    't3.xlarge',   't3.2xlarge',
+    'm5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge', 'm5.metal',
+    'c5.large', 'c5.xlarge', 'c5.2xlarge', 'c5.4xlarge', 'c5.9xlarge',  'c5.18xlarge',
   ];
   export const Openstack: string[] = ['m1.micro', 'm1.tiny', 'm1.small', 'm1.medium', 'm1.large'];
   export const Hetzner: string[] =
