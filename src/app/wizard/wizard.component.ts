@@ -4,7 +4,7 @@ import {interval, Subject, Subscription} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, InitialNodeDataService, ProjectService, WizardService} from '../core/services';
+import {ApiService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {Step, StepsService} from '../core/services/wizard/steps.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -43,8 +43,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   constructor(
       private wizardService: WizardService, private addNodeService: NodeDataService, private stepsService: StepsService,
-      private initialNodeDataService: InitialNodeDataService, private router: Router,
-      private projectService: ProjectService, private api: ApiService,
+      private router: Router, private projectService: ProjectService, private api: ApiService,
       public googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfigService: AppConfigService) {
     const defaultNodeCount = this._appConfigService.getConfig().default_node_count || 3;
     this.cluster = {
@@ -313,11 +312,6 @@ export class WizardComponent implements OnInit, OnDestroy {
                       this.creating = false;
                     });
                   });
-
-                  if (this.clusterProviderFormData.provider !== 'bringyourown') {
-                    this.initialNodeDataService.storeInitialNodeData(
-                        this.addNodeData.name, this.addNodeData.count, cluster, this.addNodeData.spec);
-                  }
                 },
                 () => {
                   NotificationActions.error('Error', `Could not create cluster ${createCluster.cluster.name}`);

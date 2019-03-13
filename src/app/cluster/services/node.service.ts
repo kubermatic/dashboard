@@ -4,7 +4,6 @@ import {Observable, of} from 'rxjs';
 import {catchError, first, flatMap, map} from 'rxjs/operators';
 
 import {ApiService} from '../../core/services';
-import {InitialNodeData} from '../../core/services/initial-node-data/initial-nodes-data.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -25,14 +24,6 @@ export class NodeService {
         template: nodeData.spec,
         replicas: nodeData.count,
       },
-    };
-  }
-
-  private static _convertNodeData(initialNodeData: InitialNodeData): NodeData {
-    return {
-      name: initialNodeData.name,
-      count: initialNodeData.nodeCount,
-      spec: initialNodeData.nodeSpec,
     };
   }
 
@@ -71,12 +62,6 @@ export class NodeService {
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _matDialog: MatDialog,
   ) {}
-
-  createInitialNodes(initialNodeData: InitialNodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string):
-      void {
-    const nodeData = NodeService._convertNodeData(initialNodeData);
-    this.createNodeDeployment(nodeData, dc, cluster, project);
-  }
 
   createNodeDeployment(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
     this._apiService
