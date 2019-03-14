@@ -128,7 +128,7 @@
                         [datacenter]="seedDatacenter"
                         [projectID]="projectID"
                         [isClusterRunning]="true"
-                        clusterHealthStatus="km-status-running"></kubermatic-node-list>
+                        [clusterHealthStatus]="{css: 'km-status-running'}"></kubermatic-node-list>
 
   <div class="km-pre-card-title">Nodes Events</div>
   <km-event-list [events]="events"
