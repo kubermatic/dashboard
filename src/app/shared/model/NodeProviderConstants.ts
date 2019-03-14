@@ -17,27 +17,28 @@ export class NodeProvider {
     NodeProvider.HETZNER,
     NodeProvider.AZURE,
   ];
-
-  static readonly ProviderNames: object = {
-    [NodeProvider.AWS]: 'Amazon Web Services',
-    [NodeProvider.DIGITALOCEAN]: 'Digital Ocean',
-    [NodeProvider.OPENSTACK]: 'Openstack',
-    [NodeProvider.BRINGYOUROWN]: 'Bring Your Own',
-    [NodeProvider.VSPHERE]: 'VMware vSphere',
-    [NodeProvider.HETZNER]: 'Hetzner cloud',
-    [NodeProvider.AZURE]: 'Azure',
-  };
 }
 
 // Keep in sync with https://aws.amazon.com/ec2/instance-types/.
 export namespace NodeInstanceFlavors {
   export const AWS: string[] = [
-    't3.nano',  't3.micro',  't3.small',   't3.medium',  't3.large',    't3.xlarge',   't3.2xlarge',
-    'm5.large', 'm5.xlarge', 'm5.2xlarge', 'm5.4xlarge', 'm5.12xlarge', 'm5.24xlarge', 'm5.metal',
-    'c5.large', 'c5.xlarge', 'c5.2xlarge', 'c5.4xlarge', 'c5.9xlarge',  'c5.18xlarge',
+    't3.nano',
+    't3.micro',
+    't3.small',
+    't3.medium',
+    't3.large',
+    't3.xlarge',
+    't3.2xlarge',
+    'm5.large',
+    'm5d.large',
+    'm5.xlarge',
+    'm5.2xlarge',
+    'm3.medium',
+    'c5.large',
+    'c5.xlarge',
+    'c5.2xlarge',
   ];
   export const Openstack: string[] = ['m1.micro', 'm1.tiny', 'm1.small', 'm1.medium', 'm1.large'];
   export const Hetzner: string[] =
       ['cx11', 'cx21', 'cx31', 'cx41', 'cx51', 'cx11-ceph', 'cx21-ceph', 'cx31-ceph', 'cx41-ceph', 'cx51-ceph'];
-  export const VOID: string[] = [];
 }
