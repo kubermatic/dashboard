@@ -14,6 +14,7 @@ import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSyst
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../shared/model/ClusterForm';
+import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeProvider} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
 
@@ -263,28 +264,10 @@ export class WizardComponent implements OnInit, OnDestroy {
   createCluster(): void {
     this.creating = true;
     const datacenter = this.clusterDatacenterFormData.datacenter;
-    const keyNames: string[] = [];
-    for (const key of this.clusterSSHKeys) {
-      keyNames.push(key.name);
-    }
-
-    const createCluster = {
-      cluster: {
-        name: this.cluster.name,
-        spec: this.cluster.spec,
-        sshKeys: keyNames,
-      },
-      nodeDeployment: {
-        name: this.addNodeData.name,
-        spec: {
-          template: this.addNodeData.spec,
-          replicas: this.addNodeData.count,
-        },
-      },
-    };
+    const createCluster = this._getCreateCluterModel();
 
     this.subscriptions.push(
-        this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
+        this.api.createCluster(this._getCreateCluterModel(), datacenter.spec.seed, this.project.id)
             .subscribe(
                 (cluster) => {
                   NotificationActions.success('Success', `Cluster ${createCluster.cluster.name} successfully created`);
@@ -318,5 +301,28 @@ export class WizardComponent implements OnInit, OnDestroy {
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
                   this.creating = false;
                 }));
+  }
+
+
+  _getCreateCluterModel(): CreateClusterModel {
+    const keyNames: string[] = [];
+    for (const key of this.clusterSSHKeys) {
+      keyNames.push(key.name);
+    }
+
+    return {
+      cluster: {
+        name: this.cluster.name,
+        spec: this.cluster.spec,
+        sshKeys: keyNames,
+      },
+      nodeDeployment: {
+        name: this.addNodeData.name,
+        spec: {
+          template: this.addNodeData.spec,
+          replicas: this.addNodeData.count,
+        },
+      }
+    };
   }
 }
