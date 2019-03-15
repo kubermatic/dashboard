@@ -304,7 +304,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
 
-  _getCreateCluterModel(): CreateClusterModel {
+  private _getCreateCluterModel(): CreateClusterModel {
     const keyNames: string[] = [];
     for (const key of this.clusterSSHKeys) {
       keyNames.push(key.name);
