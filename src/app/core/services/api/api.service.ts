@@ -207,8 +207,8 @@ export class ApiService {
     }));
   }
 
-  getClusterNodeUpgrades(projectID: string, dc: string, clusterID: string): Observable<MasterVersion[]> {
-    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/nodes/upgrades`;
+  getClusterNodeUpgrades(controlPlaneVersion: string): Observable<MasterVersion[]> {
+    const url = `${this.restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}`;
     return this.http.get<MasterVersion[]>(url, {headers: this.headers}).pipe(catchError(() => {
       return of<MasterVersion[]>([]);
     }));
@@ -284,7 +284,7 @@ export class ApiService {
   }
 
   getMasterVersions(): Observable<MasterVersion[]> {
-    const url = `${this.restRoot}/versions`;
+    const url = `${this.restRoot}/upgrades/cluster`;
     return this.http.get<MasterVersion[]>(url, {headers: this.headers});
   }
 
