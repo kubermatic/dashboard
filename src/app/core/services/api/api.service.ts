@@ -284,7 +284,7 @@ export class ApiService {
   }
 
   getMasterVersions(): Observable<MasterVersion[]> {
-    const url = `${this.restRoot}/versions`;
+    const url = `${this.restRoot}/upgrades/cluster`;
     return this.http.get<MasterVersion[]>(url, {headers: this.headers});
   }
 
