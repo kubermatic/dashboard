@@ -208,7 +208,7 @@ export class ApiService {
   }
 
   getClusterNodeUpgrades(controlPlaneVersion: string): Observable<MasterVersion[]> {
-    const url = `${this.restRoot}/upgrades/nodes?control_plane_version=${controlPlaneVersion}`;
+    const url = `${this.restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}`;
     return this.http.get<MasterVersion[]>(url, {headers: this.headers}).pipe(catchError(() => {
       return of<MasterVersion[]>([]);
     }));
