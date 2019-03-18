@@ -18,36 +18,32 @@ describe('Multi Owner story', () => {
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
   const memberEmail2 = browser.params.KUBERMATIC_E2E_USERNAME_2;
 
-  beforeAll(() => {
-    // login with second user, to register him in dex
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
-    AuthUtils.logout();
-    // login with first user to create project for multiple owners
+  it('should login', () => {
     AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+  });
+
+  it('should create a new project', () => {
     ProjectUtils.createProject(projectNameMultiOwner);
   });
-  
-  it('should add a new member to project', () => {
-    browser.sleep(60000);
+
+  it('should add a new member', () => {
     membersPage.navigateTo();
 
     KMElement.waitForClickable(membersPage.getAddMemberBtn());
     membersPage.getAddMemberBtn().click();
     KMElement.waitToAppear(membersPage.getAddMemberDialog());
 
-    KMElement.waitToAppear(membersPage.getAddMemberDialogEmailInput());
     KMElement.sendKeys(membersPage.getAddMemberDialogEmailInput(), memberEmail2);
-    KMElement.waitToAppear(membersPage.getAddMemberDialogGroupCombobox());
     membersPage.getAddMemberDialogGroupCombobox().click();
     membersPage.getAddMemberDialogGroupOption(1).click();
     membersPage.getAddMemberDialogAddBtn().click();
 
     KMElement.waitToDisappear(membersPage.getAddMemberDialog());
-    KMElement.waitToAppear(membersPage.getMemberItem(memberEmail2), 300000);
+    KMElement.waitToAppear(membersPage.getMemberItem(memberEmail2));
     expect(membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
   });
 
-  it('should logout with first user', () => {
+  it('should logout', () => {
     AuthUtils.logout();
   });
 
@@ -67,14 +63,11 @@ describe('Multi Owner story', () => {
   });
 
   it('should delete other owner from project', () => {
-    membersPage.navigateTo();
     KMElement.waitToAppear(membersPage.getMemberDeleteBtn(memberEmail));
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
     KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
-    KMElement.waitToAppear(confirmationDialog.getConfirmationDialogConfirmBtn());
     confirmationDialog.getConfirmationDialogConfirmBtn().click();
-    KMElement.waitToDisappear(confirmationDialog.getConfirmationDialog());
 
     // Switch views to reload members list
     clustersPage.navigateTo();
@@ -84,7 +77,6 @@ describe('Multi Owner story', () => {
   });
 
   it('should delete created project', () => {
-    projectsPage.navigateTo();
     ProjectUtils.deleteProject(projectNameMultiOwner);
   });
 
