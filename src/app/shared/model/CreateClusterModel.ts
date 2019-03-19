@@ -3,7 +3,7 @@ import {NodeDeploymentEntity} from '../entity/NodeDeploymentEntity';
 
 export class CreateClusterModel {
   cluster: ClusterModel;
-  nodeDeployment: NodeDeploymentEntity;
+  nodeDeployment?: NodeDeploymentEntity;
 }
 
 class ClusterModel {
