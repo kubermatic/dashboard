@@ -67,7 +67,7 @@
   <div fxFlex class="mat-select-container" *ngIf="!hideOptional">
     <mat-form-field>
       <mat-select [placeholder]="getSubnetIDFormState()" formControlName="subnetId">
-        <mat-option *ngFor="let subnet of subnetIds" [value]="subnet.name">
+        <mat-option *ngFor="let subnet of subnetIds" [value]="subnet.id">
           {{subnet.name}}
         </mat-option>
       </mat-select>
