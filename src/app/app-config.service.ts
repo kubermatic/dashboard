@@ -5,6 +5,7 @@ import {tap} from 'rxjs/operators';
 import {environment} from '../environments/environment';
 
 import {NotificationActions} from './redux/actions/notification.actions';
+import {CustomLink} from './shared/entity/CustomLinks';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from './shared/model/Config';
 
@@ -13,6 +14,7 @@ export class AppConfigService {
   private appConfig: Config;
   private userGroupConfig: UserGroupConfig;
   private gitVersion: VersionInfo;
+  private customLinks: CustomLink[] = [];
   private http: HttpClient;
 
   constructor(private inj: Injector) {
@@ -23,8 +25,8 @@ export class AppConfigService {
     const jsonfile = environment.configUrl;
     return this.http.get(jsonfile)
         .pipe(tap(
-            (resp) => {
-              this.appConfig = resp as Config;
+            (resp: Config) => {
+              this.appConfig = resp;
             },
             () => {
               NotificationActions.error('Error', `Could not read configuration file`);
@@ -40,8 +42,8 @@ export class AppConfigService {
     const jsonfile = '../assets/config/userGroupConfig.json';
     return this.http.get(jsonfile)
         .pipe(tap(
-            (resp) => {
-              this.userGroupConfig = resp as UserGroupConfig;
+            (resp: UserGroupConfig) => {
+              this.userGroupConfig = resp;
             },
             () => {
               NotificationActions.error('Error', `Could not read user group configuration file`);
@@ -57,8 +59,8 @@ export class AppConfigService {
     const jsonfile = environment.gitVersionUrl;
     return this.http.get(jsonfile)
         .pipe(tap(
-            (resp) => {
-              this.gitVersion = resp as VersionInfo;
+            (resp: VersionInfo) => {
+              this.gitVersion = resp;
             },
             () => {
               NotificationActions.error('Error', `Could not read Git version file`);
@@ -68,5 +70,22 @@ export class AppConfigService {
 
   getGitVersion(): VersionInfo {
     return this.gitVersion;
+  }
+
+  loadCustomLinks(): Promise<{}> {
+    const jsonfile = environment.customLinksUrl;
+    return this.http.get(jsonfile)
+        .pipe(tap(
+            (resp: CustomLink[]) => {
+              this.customLinks = resp;
+            },
+            () => {
+              NotificationActions.error('Error', `Could not read custom links file`);
+            }))
+        .toPromise();
+  }
+
+  getCustomLinks(): CustomLink[] {
+    return this.customLinks;
   }
 }
