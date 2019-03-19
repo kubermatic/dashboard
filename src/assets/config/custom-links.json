@@ -1,0 +1,14 @@
+[
+  {
+    "label": "Google",
+    "url": "https://www.google.com/"
+  },
+  {
+    "label": "Kibana",
+    "url": "#"
+  },
+  {
+    "label": "Grafana",
+    "url": "#"
+  }
+]
