@@ -18,13 +18,17 @@ export class LabelsComponent implements OnInit, OnChanges {
 
   private _updateLabelKeys(): void {
     this.labelKeys = [];
-    if (this.labels instanceof Object) {
-      Object.keys(this.labels).forEach(key => {
-        // Do not display nullified (marked for removal) labels.
-        if (this.labels[key] !== null) {
-          this.labelKeys.push(key);
-        }
-      });
+    if (Array.isArray(this.labels)) {
+      this.labelKeys = this.labels;
+    } else {
+      if (this.labels instanceof Object) {
+        Object.keys(this.labels).forEach(key => {
+          // Do not display nullified (marked for removal) labels.
+          if (this.labels[key] !== null) {
+            this.labelKeys.push(key);
+          }
+        });
+      }
     }
   }
 }
