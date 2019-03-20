@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, UserService} from '../../../core/services';
@@ -36,6 +36,12 @@ export class NodeListComponent implements OnInit {
     disableClose: false,
     hasBackdrop: true,
   };
+  isShowNodeItem = [];
+  displayedColumns: string[] = ['status', 'name', 'kubeletVersion', 'ipAddresses', 'creationDate', 'actions'];
+  toggledColumns: string[] = ['nodeDetails'];
+  dataSource = new MatTableDataSource<NodeEntity>();
+  @ViewChild(MatSort) sort: MatSort;
+  shouldToggleNodeItem = (index, item) => this.isShowNodeItem[item.id];
 
   constructor(
       public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService,
@@ -46,6 +52,15 @@ export class NodeListComponent implements OnInit {
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
+
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
+  }
+
+  getDataSource(): MatTableDataSource<NodeEntity> {
+    this.dataSource.data = this.nodes;
+    return this.dataSource;
   }
 
   deleteNodeDialog(node: NodeEntity): void {
@@ -124,11 +139,11 @@ export class NodeListComponent implements OnInit {
 
   getOsImage(node: NodeEntity): string {
     if (node.spec.operatingSystem.containerLinux) {
-      return 'containerlinux';
+      return 'Container Linux';
     } else if (node.spec.operatingSystem.ubuntu) {
-      return 'ubuntu';
+      return 'Ubuntu';
     } else if (node.spec.operatingSystem.centos) {
-      return 'centos';
+      return 'CentOS';
     } else {
       return '';
     }
@@ -165,19 +180,7 @@ export class NodeListComponent implements OnInit {
     return Object.keys(tags).length > 0;
   }
 
-  getTagsFromObject(tags: object): string {
-    let tagsValue = '';
-    let counter = 0;
-    for (const i in tags) {
-      if (tags.hasOwnProperty(i)) {
-        counter++;
-        if (counter === 1) {
-          tagsValue += (i + ': ' + tags[i]);
-        } else {
-          tagsValue += (', ' + i + ': ' + tags[i]);
-        }
-      }
-    }
-    return tagsValue;
+  toggleNodeItem(element: NodeEntity): void {
+    this.isShowNodeItem[element.id] = !this.isShowNodeItem[element.id];
   }
 }
