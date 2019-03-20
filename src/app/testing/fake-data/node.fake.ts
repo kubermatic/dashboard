@@ -310,7 +310,7 @@ export function nodeDataFake(): NodeData {
           tags: [],
         },
         aws: {
-          instanceType: 't2.small',
+          instanceType: 't3.small',
           diskSize: 25,
           volumeType: 'standard',
           ami: '',
@@ -364,7 +364,7 @@ export function nodeDataCentOsFake(): NodeData {
           tags: [],
         },
         aws: {
-          instanceType: 't2.small',
+          instanceType: 't3.small',
           diskSize: 25,
           volumeType: 'standard',
           ami: '',
@@ -418,7 +418,7 @@ export function nodeDataContainerLinuxFake(): NodeData {
           tags: [],
         },
         aws: {
-          instanceType: 't2.small',
+          instanceType: 't3.small',
           diskSize: 25,
           volumeType: 'standard',
           ami: '',
