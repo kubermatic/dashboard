@@ -3,8 +3,11 @@ import {MatDialog, MatSelectChange} from '@angular/material';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {interval, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
+
 import {environment} from '../../../../environments/environment';
 import {AddProjectComponent} from '../../../add-project/add-project.component';
+import {AppConfigService} from '../../../app-config.service';
+import {CustomLink} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ApiService, ProjectService} from '../../services';
 
@@ -18,14 +21,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
+  customLinks: CustomLink[];
   private subscriptions: Subscription[] = [];
   private readonly notActiveProjectRefreshInterval = 1500;
 
   constructor(
-      public dialog: MatDialog, private api: ApiService, private router: Router,
-      public projectService: ProjectService) {}
+      public dialog: MatDialog, private api: ApiService, private router: Router, public projectService: ProjectService,
+      private readonly _appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
+    this.customLinks = this._appConfigService.getCustomLinks();
     this.loadProjects();
 
     this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((data) => {

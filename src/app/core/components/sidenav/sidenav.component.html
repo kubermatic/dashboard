@@ -1,7 +1,6 @@
 <div class="container"
      fxLayout="column">
   <mat-nav-list>
-    <!-- Menus for logged in users -->
     <div class="km-sidenav-top">
       <mat-list-item class="km-projects">
         <div class="km-projects-container">
@@ -67,5 +66,18 @@
       </mat-list-item>
     </div>
   </mat-nav-list>
-  <!--kubermatic-theme-picker></kubermatic-theme-picker-->
+
+  <div>
+    <mat-divider></mat-divider>
+    <mat-nav-list>
+      <mat-list-item *ngFor="let link of customLinks">
+        <a [href]="link.url"
+           mat-line
+           target="_blank">
+          <i class=""></i>
+          <span>{{link.label}}</span>
+        </a>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
 </div>
