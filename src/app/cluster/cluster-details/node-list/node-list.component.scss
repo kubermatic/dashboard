@@ -26,12 +26,19 @@
   }
 }
 
-.km-delete-node,
-.km-duplicate-node {
-  color: $text-color !important;
+.km-node-ip-addresses {
+  display: block;
+  line-height: 20px;
+}
 
-  i {
-    font-size: 21px;
+.km-node-item-actions {
+  display: flex;
+  justify-content: flex-end;
+
+  .km-icon-delete {
+    width: 21px;
+    height: 21px;
+    margin-right: 20px;
   }
 }
 
@@ -51,39 +58,22 @@
   margin: 20px auto !important;
 }
 
-.km-os-image {
-  height: 100%;
-  width: 100%;
-  max-height: 20px;
-  max-width: 65px;
-  margin-top: 4px;
-}
-
 i.fa-info-circle {
   color: $border;
   padding-left: 5px;
 }
 
-.km-node-details-wrapper {
-  background-color: $light-background;
-  margin-left: -24px;
-  margin-right: -24px;
-  padding: 23px 20px 15px;
-  box-shadow: inset 0 4px 4px rgba($text-color, 0.1);
+i.fa-exclamation-triangle {
+  color: $warning;
+  padding-left: 5px;
 }
 
-.km-node-details-content {
-  background-color: $white-text-color;
-  padding: 10px 24px;
-  line-height: 30px;
+.km-node-details {
+  background-color: $light-background;
 
-  .km-card-list,
-  .km-card-list-content {
-    margin: 0;
-
-    .mat-card-content {
-      line-height: 25px;
-    }
+  mat-card-content {
+    background-color: $medium-background;
+    margin-top: 15px;
   }
 
   .fa-check {
@@ -93,16 +83,6 @@ i.fa-info-circle {
   .fa-times {
     color: $warning-status-color;
   }
-
-  .km-node-details {
-    flex-flow: row wrap;
-  }
-
-  .km-card-list-key {
-    font-size: 14px;
-    font-weight: 600;
-    color: $text-color;
-  }
 }
 
 .km-mat-card-code-block {
@@ -111,12 +91,4 @@ i.fa-info-circle {
 
 .km-disabled {
   color: $disabled-button-color;
-}
-
-.km-accordion {
-  cursor: pointer;
-
-  .km-node-details-wrapper {
-    cursor: default;
-  }
 }
