@@ -83,7 +83,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
   switch (provider) {
     case NodeProvider.AWS:
       const awsSpec: AWSNodeSpec = {
-        instanceType: 't2.small',
+        instanceType: 't3.small',
         diskSize: 25,
         volumeType: 'standard',
         ami: '',
