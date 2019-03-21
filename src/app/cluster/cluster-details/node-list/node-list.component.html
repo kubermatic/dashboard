@@ -1,339 +1,317 @@
-<mat-card class="blue">
-  <mat-card-header>
-    <mat-card-title fxLayout>
-      <div fxFlex="3%"></div>
-      <div fxFlex="42%">
-        Name
-      </div>
-      <div fxFlex="14%">
-        Kubelet Version
-      </div>
-      <div fxFlex="16%">
-        IP addresses
-      </div>
-      <div fxFlex="16%">
-        Created
-      </div>
-      <div fxFlex="10%"></div>
-    </mat-card-title>
-  </mat-card-header>
+<mat-card class="blue km-node-list-view">
   <mat-card-content>
+    <table class="km-table"
+           mat-table
+           multiTemplateDataRows
+           matSort
+           [dataSource]="getDataSource()">
+      <ng-container matColumnDef="status">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <i [matTooltip]="getNodeHealthStatus(element,i).message"
+             [ngClass]="getNodeHealthStatus(element,i).color"></i>
+        </td>
+      </ng-container>
 
-    <ng-container [ngSwitch]="!!nodes && nodes.length > 0 ">
-      <ng-container *ngSwitchCase="true">
-        <div class="km-row km-accordion"
-             *ngFor="let node of nodes, let i = index"
-             (click)="toggleNode($event, node.id)"
-             [ngClass]="getNodeHealthStatus(node,i).css">
-          <div fxLayout>
-            <div fxFlex="3%"
-                 class="km-health-state">
-              <i [matTooltip]="getNodeHealthStatus(node,i).message"
-                 [ngClass]="getNodeHealthStatus(node,i).color"></i>
-            </div>
-            <div fxFlex="42%"
-                 style="word-break: normal ;"
-                 *ngIf="!node.spec.cloud.aws">
-              {{node.name}}
-              <i class="fa fa-info-circle"
-                 matTooltip="{{getInfo(node)}}"
-                 *ngIf="showInfo(node)"></i>
-            </div>
-            <div fxFlex="36%"
-                 style="word-break: normal ;"
-                 *ngIf="node.spec.cloud.aws">
-              {{getNodeName(node)}}
-              <i class="fa fa-info-circle"
-                 matTooltip="{{getInfo(node)}}"
-                 *ngIf="showInfo(node)"></i>
-            </div>
-            <div fxFlex="14%">
-              <span *ngIf="!!node.status.nodeInfo">{{node.status.nodeInfo.kubeletVersion}}</span>
-            </div>
-            <div fxFlex="16%">
-              <div *ngIf="!!node.status.addresses && !!getAddresses(node).InternalIP">
-                Int.IP:
-                <span class="km-copy"
-                      [cbContent]="getAddresses(node).InternalIP"
-                      ngxClipboard
-                      matTooltip="click to copy">{{getAddresses(node).InternalIP}}</span>
-              </div>
-              <div *ngIf="!!node.status.addresses && !!getAddresses(node).ExternalIP">
-                Ext.IP:
-                <span class="km-copy"
-                      [cbContent]="getAddresses(node).ExternalIP"
-                      ngxClipboard
-                      matTooltip="click to copy">{{getAddresses(node).ExternalIP}}</span>
-              </div>
-            </div>
-            <div fxFlex="16%">
-              <span *ngIf="!!node.creationTimestamp">{{node.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</span>
-            </div>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Name</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <ng-container *ngIf="!element.spec.cloud.aws">
+            {{element.name}}
+            <i class="fa fa-info-circle"
+               matTooltip="{{getInfo(element)}}"
+               *ngIf="showInfo(element)"></i>
+          </ng-container>
+          <ng-container *ngIf="element.spec.cloud.aws">
+            {{getNodeName(element)}}
+            <i class="fa fa-info-circle"
+               matTooltip="{{getInfo(element)}}"
+               *ngIf="showInfo(element)"></i>
+          </ng-container>
+          <ng-container *ngIf="element.status.errorMessage">
+            <i class="fa fa-exclamation-triangle"
+               matTooltip="{{element.status.errorMessage}}"></i>
+          </ng-container>
+        </td>
+      </ng-container>
 
-            <div fxFlex="10%"
-                 class="km-btn-remove-node-wrapper">
-              <ng-container [ngSwitch]="!!node.deletionTimestamp">
-                <ng-container *ngSwitchCase="true">
-                  <mat-spinner [diameter]="30"
-                               class="km-spinner"
-                               color="accent"></mat-spinner>
-                </ng-container>
+      <ng-container matColumnDef="kubeletVersion">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Kubelet Version</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.status.nodeInfo.kubeletVersion}}</td>
+      </ng-container>
 
-                <ng-container *ngSwitchCase="false">
-                  <button mat-icon-button
-                          class="km-delete-node"
-                          matTooltip="Delete Node"
-                          (click)="deleteNodeDialog(node)"
-                          [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete">
-                    <i class="fa fa-trash-o"
-                       aria-hidden="true"
-                       [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodes.delete) ? 'km-disabled' : ''"></i>
-                  </button>
-                </ng-container>
+      <ng-container matColumnDef="ipAddresses">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">IP Addresses</th>
+        <td mat-cell
+            *matCellDef="let element">
+          <span class="km-node-ip-addresses"
+                *ngIf="!!element.status.addresses && !!getAddresses(element).InternalIP">
+            Int.IP:
+            <span class="km-copy"
+                  [cbContent]="getAddresses(element).InternalIP"
+                  ngxClipboard
+                  matTooltip="click to copy">{{getAddresses(element).InternalIP}}</span>
+          </span>
+          <span class="km-node-ip-addresses"
+                *ngIf="!!element.status.addresses && !!getAddresses(element).ExternalIP">
+            Ext.IP:
+            <span class="km-copy"
+                  [cbContent]="getAddresses(element).ExternalIP"
+                  ngxClipboard
+                  matTooltip="click to copy">{{getAddresses(element).ExternalIP}}</span>
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="creationDate">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Creation Date</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"></th>
+        <td mat-cell
+            *matCellDef="let element">
+          <div class="km-node-item-actions">
+            <ng-container [ngSwitch]="!!element.deletionTimestamp">
+              <ng-container *ngSwitchCase="true">
+                <mat-spinner [diameter]="30"
+                             class="km-spinner"
+                             color="accent"></mat-spinner>
               </ng-container>
-            </div>
+
+              <ng-container *ngSwitchCase="false">
+                <button class="km-icon-delete black"
+                        [attr.id]="'km-delete-node-' + element.name"
+                        matTooltip="Delete Node"
+                        (click)="deleteNodeDialog(element)"
+                        [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete"></button>
+              </ng-container>
+            </ng-container>
           </div>
-          <div fxLayout
-               *ngIf="node.status.errorMessage && node.status.errorMessage.length"
-               class="km-conditionsMessage">
-            <p color="accent">{{node.status.errorMessage}}</p>
-          </div>
+        </td>
+      </ng-container>
 
-          <div class="km-node-details-wrapper"
-               *ngIf="!!isShowNodeDetails[node.id]">
-            <div class="km-node-details-content">
-              <div fxLayout="column"
-                   fxLayoutGap="20px">
-                <div class="km-node-details"
-                     fxLayout>
+      <ng-container matColumnDef="nodeDetails">
+        <td mat-cell
+            *matCellDef="let element"
+            class="km-node-details"
+            [attr.colspan]="displayedColumns.length">
+          <mat-card-content fxLayout="row wrap"
+                            class="km-row">
+            <km-property>
+              <div key>Operating System</div>
+              <div value>{{getOsImage(element)}}</div>
+            </km-property>
 
-                  <div class="km-card-list-content"
-                       fxFlex="50%">
-                    <div fxFlex="50%"
-                         class="km-card-list-key">Operating System:</div>
-                    <div fxFlex="50%">
-                      <div class="km-os-image km-os-image-{{getOsImage(node)}}"></div>
-                    </div>
-                  </div>
+            <km-property *ngIf="!!element.status.capacity.cpu && !!element.status.capacity.memory">
+              <div key>Capacity</div>
+              <div value>{{element.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}</div>
+            </km-property>
 
-                  <div class="km-card-list-content"
-                       fxFlex="50%"
-                       *ngIf="!!node.status.capacity.cpu && !!node.status.capacity.memory">
-                    <div fxFlex="50%"
-                         class="km-card-list-key">Capacity:</div>
-                    <div fxFlex="50%">
-                      {{node.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(node.status.capacity.memory)}}
-                    </div>
-                  </div>
-
-                  <div class="km-card-list-content"
-                       fxFlex="50%"
-                       *ngIf="!!node.spec.operatingSystem.ubuntu">
-                    <div fxFlex="50%"
-                         class="km-card-list-key">Upgrade system on first boot:</div>
-                    <div fxFlex="50%">
-                      <i [ngClass]="node.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
-                    </div>
-                  </div>
-
-                  <div class="km-card-list-content"
-                       fxFlex="50%"
-                       *ngIf="!!node.spec.operatingSystem.centos">
-                    <div fxFlex="50%"
-                         class="km-card-list-key">Upgrade system on first boot:</div>
-                    <div fxFlex="50%">
-                      <i [ngClass]="node.spec.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
-                    </div>
-                  </div>
-
-                  <div class="km-card-list-content"
-                       fxFlex="50%"
-                       *ngIf="!!node.spec.operatingSystem.containerLinux">
-                    <div fxFlex="50%"
-                         class="km-card-list-key">Disable auto-update:</div>
-                    <div fxFlex="50%">
-                      <i [ngClass]="node.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
-                    </div>
-                  </div>
-
-                  <!-- AWS -->
-                  <ng-container *ngIf="node.spec.cloud.aws">
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Node Size:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.aws.instanceType}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Disk Type:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.aws.volumeType}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Disk Size in GB:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.aws.diskSize}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%"
-                         *ngIf="node.spec.cloud.aws.ami">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">AMI ID:</div>
-                      <div fxFlex="50%">{{node.node.spec.cloud.aws.ami}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%"
-                         *ngIf="displayTags(node.spec.cloud.aws.tags)">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Tags:</div>
-                      <div fxFlex="50%">{{ getTagsFromObject(node.spec.cloud.aws.tags) }}</div>
-                    </div>
-                  </ng-container>
-
-                  <!-- DO -->
-                  <ng-container *ngIf="node.spec.cloud.digitalocean">
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Node Size:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.digitalocean.size}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Backups:</div>
-                      <div fxFlex="50%">
-                        <i [ngClass]="node.spec.cloud.digitalocean.backups ? 'fa fa-check' : 'fa fa-times'"></i>
-                      </div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">IPv6:</div>
-                      <div fxFlex="50%">
-                        <i [ngClass]="node.spec.cloud.digitalocean.ipv6 ? 'fa fa-check' : 'fa fa-times'"></i>
-                      </div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Monitoring:</div>
-                      <div fxFlex="50%">
-                        <i [ngClass]="node.spec.cloud.digitalocean.monitoring? 'fa fa-check' : 'fa fa-times'"></i>
-                      </div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%"
-                         *ngIf="node.spec.cloud.digitalocean.tags.length > 0">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Tags:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.digitalocean.tags}}</div>
-                    </div>
-                  </ng-container>
-
-                  <!-- OpenStack -->
-                  <ng-container *ngIf="node.spec.cloud.openstack">
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Node Size:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.openstack.flavor}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Node Image:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.openstack.image}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%"
-                         *ngIf="displayTags(node.spec.cloud.openstack.tags)">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Tags:</div>
-                      <div fxFlex="50%">{{ getTagsFromObject(node.spec.cloud.openstack.tags) }}</div>
-                    </div>
-                  </ng-container>
-
-                  <!-- Hetzner -->
-                  <ng-container *ngIf="node.spec.cloud.hetzner">
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Node Size:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.hetzner.type}}</div>
-                    </div>
-                  </ng-container>
-
-                  <!-- vSphere-->
-                  <ng-container *ngIf="node.spec.cloud.vsphere">
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Number of CPU's:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.vsphere.cpus}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Memory in MB:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.vsphere.memory}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%"
-                         *ngIf="node.spec.cloud.vsphere.template">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">VM Template:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.vsphere.template}}</div>
-                    </div>
-                  </ng-container>
-
-                  <!-- Azure-->
-                  <ng-container *ngIf="node.spec.cloud.azure">
-                    <div class="km-card-list-content"
-                         fxFlex="50%">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Node Size:</div>
-                      <div fxFlex="50%">{{node.spec.cloud.azure.size}}</div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%"
-                         *ngIf="node.spec.cloud.azure.assignPublicIP">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">Assign Public IP:</div>
-                      <div fxFlex="50%">
-                        <i [ngClass]="node.spec.cloud.azure.assignPublicIP ? 'fa fa-check' : 'fa fa-times'"></i>
-                      </div>
-                    </div>
-                    <div class="km-card-list-content"
-                         fxFlex="50%"
-                         *ngIf="displayTags(node.spec.cloud.azure.tags)">
-                      <div fxFlex="50%"
-                           class="km-card-list-key">VM Template:</div>
-                      <div fxFlex="50%">{{getTagsFromObject(node.spec.cloud.azure.tags)}}</div>
-                    </div>
-                  </ng-container>
-
-                </div>
+            <km-property *ngIf="!!element.spec.operatingSystem.ubuntu">
+              <div key>Upgrade system on first boot</div>
+              <div value>
+                <i [ngClass]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
               </div>
-            </div>
-          </div>
+            </km-property>
 
-        </div>
+            <km-property *ngIf="!!element.spec.operatingSystem.centos">
+              <div key>Upgrade system on first boot</div>
+              <div value>
+                <i [ngClass]="element.spec.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+              </div>
+            </km-property>
+
+            <km-property *ngIf="!!element.spec.operatingSystem.containerLinux">
+              <div key>Disable auto-update</div>
+              <div value>
+                <i [ngClass]="element.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
+              </div>
+            </km-property>
+
+            <!-- AWS -->
+            <ng-container *ngIf="element.spec.cloud.aws">
+              <km-property>
+                <div key>Node Size</div>
+                <div value>{{element.spec.cloud.aws.instanceType}}</div>
+              </km-property>
+
+              <km-property>
+                <div key>Disk Type</div>
+                <div value>{{element.spec.cloud.aws.volumeType}}</div>
+              </km-property>
+
+              <km-property>
+                <div key>Disk Size in GB</div>
+                <div value>{{element.spec.cloud.aws.diskSize}}</div>
+              </km-property>
+
+              <km-property *ngIf="element.spec.cloud.aws.ami">
+                <div key>AMI ID</div>
+                <div value>{{element.spec.cloud.aws.ami}}</div>
+              </km-property>
+
+              <km-property *ngIf="displayTags(element.spec.cloud.aws.tags)">
+                <div key>Tags</div>
+                <div value>
+                  <km-labels [labels]="element.spec.cloud.aws.tags"></km-labels>
+                </div>
+              </km-property>
+            </ng-container>
+
+            <!-- DO -->
+            <ng-container *ngIf="element.spec.cloud.digitalocean">
+              <km-property>
+                <div key>Node Size</div>
+                <div value>{{element.spec.cloud.digitalocean.size}}</div>
+              </km-property>
+
+              <km-property>
+                <div key>Backups</div>
+                <div value>
+                  <i [ngClass]="element.spec.cloud.digitalocean.backups ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </km-property>
+
+              <km-property>
+                <div key>IPv6</div>
+                <div value>
+                  <i [ngClass]="element.spec.cloud.digitalocean.ipv6 ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </km-property>
+
+              <km-property>
+                <div key>Monitoring</div>
+                <div value>
+                  <i [ngClass]="element.spec.cloud.digitalocean.monitoring ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </km-property>
+
+              <km-property *ngIf="element.spec.cloud.digitalocean.tags.length > 0">
+                <div key>Tags</div>
+                <div value>
+                  <km-labels [labels]="element.spec.cloud.digitalocean.tags"></km-labels>
+                </div>
+              </km-property>
+            </ng-container>
+
+            <!-- Openstack -->
+            <ng-container *ngIf="element.spec.cloud.openstack">
+              <km-property>
+                <div key>Node Size</div>
+                <div value>{{element.spec.cloud.openstack.flavor}}</div>
+              </km-property>
+
+              <km-property>
+                <div key>Node Image</div>
+                <div value>{{element.spec.cloud.openstack.image}}</div>
+              </km-property>
+
+              <km-property *ngIf="displayTags(element.spec.cloud.openstack.tags)">
+                <div key>Tags</div>
+                <div value>
+                  <km-labels [labels]="element.spec.cloud.openstack.tags"></km-labels>
+                </div>
+              </km-property>
+            </ng-container>
+
+            <!-- Hetzner -->
+            <ng-container *ngIf="element.spec.cloud.hetzner">
+              <km-property>
+                <div key>Node Size</div>
+                <div value>{{element.spec.cloud.hetzner.type}}</div>
+              </km-property>
+            </ng-container>
+
+            <!-- vSphere -->
+            <ng-container *ngIf="element.spec.cloud.vsphere">
+              <km-property>
+                <div key>Number of CPU's</div>
+                <div value>{{element.spec.cloud.vsphere.cpus}}</div>
+              </km-property>
+
+              <km-property>
+                <div key>Memory in MB</div>
+                <div value>{{element.spec.cloud.vsphere.memory}}</div>
+              </km-property>
+
+              <km-property *ngIf="element.spec.cloud.vsphere.template">
+                <div key>VM Template</div>
+                <div value>{{element.spec.cloud.vsphere.template}}</div>
+              </km-property>
+            </ng-container>
+
+            <!-- Azure -->
+            <ng-container *ngIf="element.spec.cloud.azure">
+              <km-property>
+                <div key>Node Size</div>
+                <div value>{{element.spec.cloud.azure.size}}</div>
+              </km-property>
+
+              <km-property *ngIf="element.spec.cloud.azure.assignPublicIP">
+                <div key>Assign Public IP</div>
+                <div value>
+                  <i [ngClass]="element.spec.cloud.azure.assignPublicIP ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </km-property>
+
+              <km-property *ngIf="displayTags(element.spec.cloud.azure.tags)">
+                <div key>Tags</div>
+                <div value>
+                  <km-labels [labels]="element.spec.cloud.azure.tags"></km-labels>
+                </div>
+              </km-property>
+            </ng-container>
+          </mat-card-content>
+        </td>
       </ng-container>
 
-      <ng-container *ngSwitchCase="false">
-        <div class="km-row km-no-item"
-             *ngIf="clusterHealthStatus && clusterHealthStatus.css === 'km-status-running' || !isClusterRunning && cluster.spec.cloud.bringyourown">No Nodes available.</div>
-        <div class="km-row"
-             *ngIf="!clusterHealthStatus || clusterHealthStatus.css !== 'km-status-running' || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
-          <mat-spinner color="accent"
-                       class="km-node-list-spinner"
-                       [diameter]="30"></mat-spinner>
-        </div>
-      </ng-container>
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns;"
+          class="km-mat-row km-clickable"
+          (click)="toggleNodeItem(row)"></tr>
+      <tr mat-row
+          *matRowDef="let row; let i=index; columns: toggledColumns; when: shouldToggleNodeItem"
+          class="km-mat-row"></tr>
+    </table>
+
+    <ng-container *ngIf="!nodes || nodes.length === 0">
+      <div class="km-row km-no-item"
+           *ngIf="!loading">
+        No Nodes available.
+      </div>
+      <div class="km-row"
+           *ngIf="!!loading">
+        <mat-spinner color="accent"
+                     class="km-spinner"
+                     [diameter]="30"></mat-spinner>
+      </div>
     </ng-container>
+
   </mat-card-content>
 </mat-card>
 

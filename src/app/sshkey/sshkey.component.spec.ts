@@ -12,7 +12,6 @@ import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/ro
 import {ApiMockService} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
-import {SSHKeyItemComponent} from './sshkey-item/sshkey-item.component';
 import {SSHKeyComponent} from './sshkey.component';
 
 describe('SSHKeyComponent', () => {
@@ -33,7 +32,6 @@ describe('SSHKeyComponent', () => {
           ],
           declarations: [
             SSHKeyComponent,
-            SSHKeyItemComponent,
           ],
           providers: [
             {provide: Router, useClass: RouterStub},
