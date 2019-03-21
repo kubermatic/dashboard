@@ -1,21 +1,17 @@
 @import '../../../assets/css/colors';
+@import '../../../assets/css/variables';
 
 .km-floating-ip-checkbox {
-  width: 100%;
-  line-height: 30px;
   font-size: 14px;
   display: flex;
-
-  &.with-margin {
-    margin: 5px 0 10px;
-  }
-
-  mat-checkbox {
-    padding: 0 12px;
-  }
+  line-height: $baseline-grid * 4;
+  margin: ($baseline-grid / 2) 0 ($baseline-grid * 2);
+  width: 100%;
 }
 
 .km-floating-ip-checkbox-info-icon {
+  bottom: $baseline-grid / 2;
   color: $light-text-color;
-  padding-left: 4px;
+  padding-left: $baseline-grid / 2;
+  position: relative;
 }

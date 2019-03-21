@@ -47,7 +47,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
         return;
       }
 
-      if (!this.cloudSpec.openstack.floatingIpPool) {
+      if (!this.isInWizard() && !this.cloudSpec.openstack.floatingIpPool) {
         this.osNodeForm.controls.useFloatingIP.setValue(false);
         this.osNodeForm.controls.useFloatingIP.disable();
       }

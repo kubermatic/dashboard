@@ -11,12 +11,13 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <div *ngIf="!isInWizard()"
-         class="km-floating-ip-checkbox with-margin">
-      <label fxFlex="50%">Allocate Floating IP</label>
-      <i class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
-         matTooltip="Floating IP usage is enforced by selected datacenter"
-         *ngIf="isFloatingIPEnforced()"></i>
+    <div class="km-floating-ip-checkbox">
+      <label fxFlex="50%">
+        Allocate Floating IP
+        <i *ngIf="isFloatingIPEnforced()"
+           class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
+           matTooltip="Floating IP usage is enforced by selected datacenter"></i>
+      </label>
       <mat-checkbox fxFlex="50%"
                     formControlName="useFloatingIP"></mat-checkbox>
     </div>
