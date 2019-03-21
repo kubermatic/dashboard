@@ -63,6 +63,7 @@ describe('Multi Owner story', () => {
   });
 
   it('should delete other owner from project', () => {
+    membersPage.navigateTo();
     KMElement.waitToAppear(membersPage.getMemberDeleteBtn(memberEmail));
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
@@ -77,6 +78,7 @@ describe('Multi Owner story', () => {
   });
 
   it('should delete created project', () => {
+    projectsPage.navigateTo();
     ProjectUtils.deleteProject(projectNameMultiOwner);
   });
 
