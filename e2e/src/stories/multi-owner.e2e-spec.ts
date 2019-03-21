@@ -18,6 +18,14 @@ describe('Multi Owner story', () => {
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
   const memberEmail2 = browser.params.KUBERMATIC_E2E_USERNAME_2;
 
+  it('should login with second user, to register him in dex', () => {
+    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
+  });
+
+  it('should logout with second user', () => {
+    AuthUtils.logout();
+  });
+
   it('should login', () => {
     AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
