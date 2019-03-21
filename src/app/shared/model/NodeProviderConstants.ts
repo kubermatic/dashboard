@@ -22,6 +22,8 @@ export class NodeProvider {
 // Keep in sync with https://aws.amazon.com/ec2/instance-types/.
 export namespace NodeInstanceFlavors {
   export const AWS: string[] = [
+    // Only list instances which have at least 2gb of memory. Otherwise the node is full with required pods like
+    // kube-proxy, cni, etc.
     't3.small', 't3.medium', 't3.large', 't3.xlarge', 't3.2xlarge', 'm5.large', 'm5d.large', 'm5.xlarge', 'm5.2xlarge',
     'm3.medium', 'c5.large', 'c5.xlarge', 'c5.2xlarge'
   ];
