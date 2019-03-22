@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 import {ApiService} from '../../../../core/services';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
@@ -10,15 +10,13 @@ import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
   templateUrl: './revoke-admin-token.component.html',
 })
 
-export class RevokeAdminTokenComponent implements OnInit {
+export class RevokeAdminTokenComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   adminToken: Token = {token: ''};
 
   constructor(private api: ApiService, private dialogRef: MatDialogRef<RevokeAdminTokenComponent>) {}
-
-  ngOnInit(): void {}
 
   revokeAdminToken(): void {
     this.api.editToken(this.cluster, this.datacenter.metadata.name, this.projectID, this.adminToken)
