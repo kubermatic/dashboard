@@ -11,6 +11,7 @@ import {EventEntity} from '../../../shared/entity/EventEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeService} from '../../services/node.service';
 
@@ -44,24 +45,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _isSeedDatacenterLoaded = false;
   private _refreshInterval = 10000;
   private _unsubscribe: Subject<any> = new Subject();
-
-  private static _getClusterProvider(cluster: ClusterEntity): string {
-    if (cluster.spec.cloud.aws) {
-      return 'aws';
-    } else if (cluster.spec.cloud.digitalocean) {
-      return 'digitalocean';
-    } else if (cluster.spec.cloud.openstack) {
-      return 'openstack';
-    } else if (cluster.spec.cloud.bringyourown) {
-      return 'bringyourown';
-    } else if (cluster.spec.cloud.hetzner) {
-      return 'hetzner';
-    } else if (cluster.spec.cloud.vsphere) {
-      return 'vsphere';
-    } else if (cluster.spec.cloud.azure) {
-      return 'azure';
-    }
-  }
 
   constructor(
       private readonly _activatedRoute: ActivatedRoute, private readonly _router: Router,
@@ -122,7 +105,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   loadCluster(): void {
     this._apiService.getCluster(this._clusterName, this._dcName, this.projectID).pipe(first()).subscribe((c) => {
       this.cluster = c;
-      this.clusterProvider = NodeDeploymentDetailsComponent._getClusterProvider(this.cluster);
+      this.clusterProvider = ClusterUtils.getProvider(this.cluster.spec.cloud);
       this._isClusterLoaded = true;
       this.loadDatacenter();
     });
