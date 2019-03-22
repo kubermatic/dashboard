@@ -21,7 +21,6 @@ import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-heal
 export class ClusterListComponent implements OnInit, OnDestroy {
   clusters: ClusterEntity[] = [];
   loading = true;
-  sortedData: ClusterEntity[] = [];
   projectID: string;
   userGroup: string;
   userGroupConfig: UserGroupConfig;

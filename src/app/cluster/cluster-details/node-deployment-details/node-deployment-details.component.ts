@@ -13,6 +13,7 @@ import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
 
 @Component({
@@ -77,7 +78,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe((nd: NodeDeploymentEntity) => {
           this.nodeDeployment = nd;
-          this.system = NodeService.getOperatingSystem(this.nodeDeployment.spec.template);
+          this.system = NodeUtils.getOperatingSystem(this.nodeDeployment.spec.template);
           this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);
           this._isNodeDeploymentLoaded = true;
         });

@@ -4,6 +4,7 @@ import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
+import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
 @Component({
   selector: 'kubermatic-summary',
@@ -29,17 +30,7 @@ export class SummaryComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {}
 
   getOperatingSystem(): string {
-    if (this.nodeData.spec.operatingSystem.ubuntu) {
-      return 'Ubuntu';
-
-    } else if (this.nodeData.spec.operatingSystem.centos) {
-      return 'CentOS';
-
-    } else if (this.nodeData.spec.operatingSystem.containerLinux) {
-      return 'Container Linux';
-    } else {
-      return '';
-    }
+    return NodeUtils.getOperatingSystem(this.nodeData.spec);
   }
 
   displayTags(tags: object): boolean {
