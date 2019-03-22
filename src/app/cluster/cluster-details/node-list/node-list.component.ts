@@ -10,6 +10,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
 
 @Component({
@@ -24,9 +25,8 @@ export class NodeListComponent implements OnInit {
   @Input() nodes: NodeEntity[] = [];
   @Input() projectID: string;
   @Output() deleteNode = new EventEmitter<NodeEntity>();
-  @Input() clusterHealthStatus: string;
+  @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  @Input() hasInitialNodes: boolean;
   clickedDeleteNode = {};
   clickedDuplicateNode = {};
   isShowNodeDetails = {};

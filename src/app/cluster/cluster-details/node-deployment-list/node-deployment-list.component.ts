@@ -9,6 +9,7 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
+import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeService} from '../../services/node.service';
 
@@ -22,9 +23,8 @@ export class NodeDeploymentListComponent implements OnInit {
   @Input() datacenter: DataCenterEntity;
   @Input() nodeDeployments: NodeDeploymentEntity[] = [];
   @Input() projectID: string;
-  @Input() clusterHealthStatus: string;
+  @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  @Input() hasInitialNodes: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
 
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];

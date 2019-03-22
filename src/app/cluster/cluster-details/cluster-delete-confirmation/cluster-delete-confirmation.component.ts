@@ -2,7 +2,7 @@ import {Component, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, InitialNodeDataService} from '../../../core/services';
+import {ApiService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
@@ -24,8 +24,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
 
   constructor(
       private api: ApiService, private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
-      private initialNodeDataService: InitialNodeDataService, public googleAnalyticsService: GoogleAnalyticsService,
-      private _appConfig: AppConfigService) {}
+      public googleAnalyticsService: GoogleAnalyticsService, private _appConfig: AppConfigService) {}
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({
@@ -57,7 +56,6 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
             [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
           })
           .subscribe(() => {
-            this.initialNodeDataService.clearInitialNodeData(this.cluster);
             NotificationActions.success('Success', `Cluster ${this.cluster.name} is being deleted`);
             this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
           });
