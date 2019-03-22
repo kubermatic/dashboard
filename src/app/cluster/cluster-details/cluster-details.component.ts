@@ -6,7 +6,7 @@ import {first, retry, takeUntil} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, DatacenterService, InitialNodeDataService, UserService} from '../../core/services';
+import {ApiService, DatacenterService, UserService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
@@ -48,7 +48,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   updatesAvailable = false;
   downgradesAvailable = false;
   moreSshKeys = false;
-  hasInitialNodes = false;
   someUpgradesRestrictedByKubeletVersion = false;
   private unsubscribe: Subject<any> = new Subject();
   private clusterSubject: Subject<ClusterEntity>;
@@ -57,9 +56,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   constructor(
       private route: ActivatedRoute, private router: Router, private api: ApiService, public dialog: MatDialog,
-      private initialNodeDataService: InitialNodeDataService, private dcService: DatacenterService,
-      private userService: UserService, private appConfigService: AppConfigService,
-      private readonly node_: NodeService) {
+      private dcService: DatacenterService, private userService: UserService,
+      private appConfigService: AppConfigService, private readonly node_: NodeService) {
     this.clusterSubject = new Subject<ClusterEntity>();
   }
 
@@ -73,8 +71,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     this.userService.currentUserGroup(this.projectID).pipe(takeUntil(this.unsubscribe)).subscribe((group) => {
       this.userGroup = group;
     });
-
-    this.initialNodeCreation();
 
     // Node datacenter & ssh keys - both once
     const onceSub = this.clusterSubject.subscribe((cluster) => {
@@ -107,7 +103,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
     // Nodes
     this.clusterSubject.pipe(takeUntil(this.unsubscribe)).subscribe(() => {
-      this.initialNodeCreation();
       this.reloadClusterNodes();
     });
 
@@ -140,28 +135,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.clusterSubject.next(res);
           this.reloadVersions();
         });
-  }
-
-  initialNodeCreation(): void {
-    if (!!this.cluster && !!this.initialNodeDataService.getInitialNodeData(this.cluster)) {
-      this.hasInitialNodes = true;
-    }
-
-    if (this.health && HealthEntity.allHealthy(this.health)) {
-      const initialNodeCreationSub = this.clusterSubject.pipe(takeUntil(this.unsubscribe)).subscribe((cluster) => {
-        const data = this.initialNodeDataService.getInitialNodeData(cluster);
-        if (data == null && initialNodeCreationSub) {
-          initialNodeCreationSub.unsubscribe();
-          this.hasInitialNodes = false;
-          return;
-        }
-
-        if (cluster && this.health && HealthEntity.allHealthy(this.health)) {
-          this.node_.createInitialNodes(data, this.datacenter, cluster, this.projectID);
-          this.initialNodeDataService.clearInitialNodeData(cluster);
-        }
-      });
-    }
   }
 
   reloadClusterNodes(): void {

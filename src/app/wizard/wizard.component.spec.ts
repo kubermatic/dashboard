@@ -6,10 +6,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, DatacenterService, InitialNodeDataService, ProjectService} from '../core/services';
+import {ApiService, DatacenterService, ProjectService} from '../core/services';
+import {WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {StepsService} from '../core/services/wizard/steps.service';
-import {WizardService} from '../core/services/wizard/wizard.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
@@ -109,7 +109,6 @@ describe('WizardComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,
-            InitialNodeDataService,
             WizardService,
             NodeDataService,
             StepsService,

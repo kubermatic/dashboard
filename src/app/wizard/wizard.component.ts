@@ -4,7 +4,7 @@ import {interval, Subject, Subscription} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, InitialNodeDataService, ProjectService, WizardService} from '../core/services';
+import {ApiService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {Step, StepsService} from '../core/services/wizard/steps.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -44,8 +44,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   constructor(
       private wizardService: WizardService, private addNodeService: NodeDataService, private stepsService: StepsService,
-      private initialNodeDataService: InitialNodeDataService, private router: Router,
-      private projectService: ProjectService, private api: ApiService,
+      private router: Router, private projectService: ProjectService, private api: ApiService,
       public googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfigService: AppConfigService) {
     const defaultNodeCount = this._appConfigService.getConfig().default_node_count || 3;
     this.cluster = {
@@ -265,18 +264,13 @@ export class WizardComponent implements OnInit, OnDestroy {
   createCluster(): void {
     this.creating = true;
     const datacenter = this.clusterDatacenterFormData.datacenter;
-    const keyNames: string[] = [];
-    for (const key of this.clusterSSHKeys) {
-      keyNames.push(key.name);
-    }
-
-    const createCluster: CreateClusterModel = {name: this.cluster.name, spec: this.cluster.spec, sshKeys: keyNames};
+    const createCluster = this._getCreateCluterModel();
 
     this.subscriptions.push(
-        this.api.createCluster(createCluster, datacenter.spec.seed, this.project.id)
+        this.api.createCluster(this._getCreateCluterModel(), datacenter.spec.seed, this.project.id)
             .subscribe(
                 (cluster) => {
-                  NotificationActions.success('Success', `Cluster ${createCluster.name} successfully created`);
+                  NotificationActions.success('Success', `Cluster ${createCluster.cluster.name} successfully created`);
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
                   const isReady = new Subject<boolean>();
@@ -292,7 +286,8 @@ export class WizardComponent implements OnInit, OnDestroy {
                               .subscribe(() => {
                                 NotificationActions.success(
                                     'Success',
-                                    `SSH key ${key.name} was added successfully to cluster ${createCluster.name}`);
+                                    `SSH key ${key.name} was added successfully to cluster ${
+                                        createCluster.cluster.name}`);
                               });
                         }
                       }
@@ -300,16 +295,34 @@ export class WizardComponent implements OnInit, OnDestroy {
                       this.creating = false;
                     });
                   });
-
-                  if (this.clusterProviderFormData.provider !== 'bringyourown') {
-                    this.initialNodeDataService.storeInitialNodeData(
-                        this.addNodeData.name, this.addNodeData.count, cluster, this.addNodeData.spec);
-                  }
                 },
                 () => {
-                  NotificationActions.error('Error', `Could not create cluster ${createCluster.name}`);
+                  NotificationActions.error('Error', `Could not create cluster ${createCluster.cluster.name}`);
                   this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
                   this.creating = false;
                 }));
+  }
+
+
+  private _getCreateCluterModel(): CreateClusterModel {
+    const keyNames: string[] = [];
+    for (const key of this.clusterSSHKeys) {
+      keyNames.push(key.name);
+    }
+
+    return {
+      cluster: {
+        name: this.cluster.name,
+        spec: this.cluster.spec,
+        sshKeys: keyNames,
+      },
+      nodeDeployment: {
+        name: this.addNodeData.name,
+        spec: {
+          template: this.addNodeData.spec,
+          replicas: this.addNodeData.count,
+        },
+      }
+    };
   }
 }

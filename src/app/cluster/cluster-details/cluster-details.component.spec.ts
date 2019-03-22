@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, DatacenterService, InitialNodeDataService, UserService} from '../../core/services';
+import {ApiService, Auth, DatacenterService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
@@ -78,7 +78,6 @@ describe('ClusterDetailsComponent', () => {
             {provide: NodeService, useClass: NodeMockService},
             MatDialog,
             GoogleAnalyticsService,
-            InitialNodeDataService,
           ],
         })
         .compileComponents();

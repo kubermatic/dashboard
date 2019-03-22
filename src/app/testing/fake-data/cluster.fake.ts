@@ -3,26 +3,28 @@ import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 
 export function clusterModelFake(): CreateClusterModel {
   return {
-    name: 'nifty-haibt',
-    spec: {
-      cloud: {
-        dc: 'do-fra1',
-        digitalocean: {
-          token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
+    cluster: {
+      name: 'nifty-haibt',
+      spec: {
+        cloud: {
+          dc: 'do-fra1',
+          digitalocean: {
+            token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
+          },
+          bringyourown: null,
+          aws: null,
+          openstack: null,
+          baremetal: null,
+          hetzner: null,
+          vsphere: null,
+          azure: null,
         },
-        bringyourown: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        hetzner: null,
-        vsphere: null,
-        azure: null,
+        version: '',
       },
-      version: '',
+      sshKeys: [
+        'key-ssh1',
+      ],
     },
-    sshKeys: [
-      'key-ssh1',
-    ],
   };
 }
 
