@@ -7,6 +7,8 @@ labels: kind/bug, team/ui
 
 **What happened?**:
 
+**What should happen?**:
+
 **How to reproduce?**:
 
 **Environment**
