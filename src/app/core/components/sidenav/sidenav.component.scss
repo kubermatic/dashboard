@@ -1,4 +1,5 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
 
 .mat-nav-list {
   padding: 0 !important;
@@ -87,4 +88,12 @@ mat-option[value='addProject'] {
   a {
     color: $light-text-color !important;
   }
+}
+
+.km-nav-header {
+  color: $text-color;
+  font-size: $caption-font-size-base;
+  font-weight: 600;
+  margin: (1.5 * $baseline-grid) (3.5 *  $baseline-grid);
+  text-transform: uppercase;
 }

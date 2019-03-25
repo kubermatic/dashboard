@@ -67,8 +67,9 @@
     </div>
   </mat-nav-list>
 
-  <div>
+  <div *ngIf="customLinks && customLinks.length > 0">
     <mat-divider></mat-divider>
+    <div class="km-nav-header">Custom links</div>
     <mat-nav-list>
       <mat-list-item *ngFor="let link of customLinks">
         <a [href]="link.url"
