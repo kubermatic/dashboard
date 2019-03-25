@@ -1,6 +1,6 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {MatTabChangeEvent} from '@angular/material';
-import {WizardService} from '../../core/services/wizard/wizard.service';
+import {WizardService} from '../../core/services';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
@@ -9,16 +9,12 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
   selector: 'kubermatic-set-settings',
   templateUrl: './set-settings.component.html',
 })
-export class SetSettingsComponent implements OnInit, OnDestroy {
+export class SetSettingsComponent {
   @Input() cluster: ClusterEntity;
   @Input() clusterSSHKeys: SSHKeyEntity[] = [];
   @Input() nodeData: NodeData;
 
   constructor(private wizardService: WizardService) {}
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {}
 
   changeView(event: MatTabChangeEvent): void {
     switch (event.tab.textLabel) {

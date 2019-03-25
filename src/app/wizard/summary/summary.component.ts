@@ -1,16 +1,17 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
+import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
 @Component({
   selector: 'kubermatic-summary',
   templateUrl: './summary.component.html',
   styleUrls: ['./summary.component.scss'],
 })
-export class SummaryComponent implements OnInit, OnDestroy {
+export class SummaryComponent implements OnInit {
   @Input() clusterSSHKeys: SSHKeyEntity[];
   @Input() nodeData: NodeData;
   @Input() cluster: ClusterEntity;
@@ -18,28 +19,14 @@ export class SummaryComponent implements OnInit, OnDestroy {
   @Input() datacenterFormData: ClusterDatacenterForm;
   noMoreIpsLeft = false;
 
-  constructor() {}
-
   ngOnInit(): void {
     if (!!this.cluster.spec.machineNetworks) {
       this.noMoreIpsLeft = this.noIpsLeft(this.cluster, this.nodeData.count);
     }
   }
 
-  ngOnDestroy(): void {}
-
   getOperatingSystem(): string {
-    if (this.nodeData.spec.operatingSystem.ubuntu) {
-      return 'Ubuntu';
-
-    } else if (this.nodeData.spec.operatingSystem.centos) {
-      return 'CentOS';
-
-    } else if (this.nodeData.spec.operatingSystem.containerLinux) {
-      return 'Container Linux';
-    } else {
-      return '';
-    }
+    return NodeUtils.getOperatingSystem(this.nodeData.spec);
   }
 
   displayTags(tags: object): boolean {

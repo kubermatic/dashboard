@@ -11,7 +11,6 @@ import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../shared/entity/NodeDeploymentPatch';
-import {NodeSpec} from '../../shared/entity/NodeEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
@@ -43,18 +42,6 @@ export class NodeService {
     patch.spec.template.operatingSystem.containerLinux = patch.spec.template.operatingSystem.containerLinux || null;
 
     return patch;
-  }
-
-  static getOperatingSystem(spec: NodeSpec): string {
-    if (spec.operatingSystem.ubuntu) {
-      return 'Ubuntu';
-    } else if (spec.operatingSystem.centos) {
-      return 'CentOS';
-    } else if (spec.operatingSystem.containerLinux) {
-      return 'Container Linux';
-    } else {
-      return '';
-    }
   }
 
   constructor(
