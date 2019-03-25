@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {Step, StepsService} from '../../core/services/wizard/steps.service';
 
 @Component({
@@ -6,16 +6,12 @@ import {Step, StepsService} from '../../core/services/wizard/steps.service';
   templateUrl: 'progress.component.html',
   styleUrls: ['progress.component.scss'],
 })
-export class ProgressComponent implements OnInit, OnDestroy {
+export class ProgressComponent {
   @Input() steps: Step[] = [];
   @Input() currentStepIndex = 0;
   @Input() currentStep: Step;
 
   constructor(private stepsService: StepsService) {}
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {}
 
   getIconClass(step: number): string {
     let iconClass = 'fa fa-circle-o-notch fa-spin';

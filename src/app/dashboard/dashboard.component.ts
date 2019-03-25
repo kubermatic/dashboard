@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
 import {filter, map, mergeMap} from 'rxjs/operators';
 import {BreadcrumbActions} from '../redux/actions/breadcrumb.actions';
@@ -7,7 +7,7 @@ import {BreadcrumbActions} from '../redux/actions/breadcrumb.actions';
   selector: 'kubermatic-dashboard',
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     this.router.events
         .pipe(
@@ -17,7 +17,6 @@ export class DashboardComponent implements OnInit {
               while (route.firstChild) {
                 route = route.firstChild;
               }
-
               return route;
             }),
             filter((route) => route.outlet === 'primary'),
@@ -27,6 +26,4 @@ export class DashboardComponent implements OnInit {
           BreadcrumbActions.putBreadcrumb(event['title']);
         });
   }
-
-  ngOnInit(): void {}
 }

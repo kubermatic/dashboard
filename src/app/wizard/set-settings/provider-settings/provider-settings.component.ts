@@ -1,16 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 
 @Component({
   selector: 'kubermatic-cluster-provider-settings',
   templateUrl: './provider-settings.component.html',
 })
-export class ClusterProviderSettingsComponent implements OnInit, OnDestroy {
+export class ClusterProviderSettingsComponent {
   @Input() cluster: ClusterEntity;
-
-  constructor() {}
-
-  ngOnInit(): void {}
-
-  ngOnDestroy(): void {}
 }

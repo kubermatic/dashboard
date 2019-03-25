@@ -10,6 +10,7 @@ import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {UserGroupConfig} from '../../shared/model/Config';
+import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 
 @Component({
@@ -20,7 +21,6 @@ import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-heal
 export class ClusterListComponent implements OnInit, OnDestroy {
   clusters: ClusterEntity[] = [];
   loading = true;
-  sortedData: ClusterEntity[] = [];
   projectID: string;
   userGroup: string;
   userGroupConfig: UserGroupConfig;
@@ -98,21 +98,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   getProvider(cloud: CloudSpec): string {
-    if (cloud.aws) {
-      return 'aws';
-    } else if (cloud.digitalocean) {
-      return 'digitalocean';
-    } else if (cloud.openstack) {
-      return 'openstack';
-    } else if (cloud.bringyourown) {
-      return 'bringyourown';
-    } else if (cloud.hetzner) {
-      return 'hetzner';
-    } else if (cloud.vsphere) {
-      return 'vsphere';
-    } else if (cloud.azure) {
-      return 'azure';
-    }
+    return ClusterUtils.getProvider(cloud);
   }
 
   loadNodeDc() {
