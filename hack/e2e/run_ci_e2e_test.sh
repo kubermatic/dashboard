@@ -5,9 +5,8 @@ set -euo pipefail
 CLUSTER_EXPOSER_DIR=${GOPATH}/src/github.com/kubermatic/cluster-exposer
 CLUSTER_EXPOSER_BIN=${CLUSTER_EXPOSER_DIR}/build/cluster-exposer
 
-# TODO: Remove when updating infra
-export KUBERMATIC_DEX_DEV_E2E_USERNAME=${KUBERMATIC_DEX_DEV_E2E_USERNAME:="roxy@loodse.com"}
-export KUBERMATIC_DEX_DEV_E2E_PASSWORD=${KUBERMATIC_DEX_DEV_E2E_PASSWORD:="password"}
+export KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
+export KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
 
 if [[ -z ${JOB_NAME} ]]; then
 	echo "This script should only be running in a CI environment."

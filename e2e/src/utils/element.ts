@@ -8,7 +8,7 @@ export class KMElement {
   }
 
   static waitToDisappear(element: ElementFinder, waitTimeout = defaultTimeout): any {
-    return browser.wait(ExpectedConditions.stalenessOf(element), waitTimeout);
+    return browser.wait(ExpectedConditions.invisibilityOf(element), waitTimeout);
   }
 
   static waitForClickable(element: ElementFinder, waitTimeout = defaultTimeout): any {

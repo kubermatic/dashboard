@@ -36,7 +36,7 @@ RUN curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.12.1-linux-am
     chmod +x kubectl && \
     mv kubectl /usr/local/bin
 
-RUN wget https://github.com/kubernetes-sigs/kind/releases/download/0.1.0/kind-linux-amd64 && \
+RUN wget https://github.com/kubernetes-sigs/kind/releases/download/0.2.0/kind-linux-amd64 && \
     chmod +x kind-linux-amd64 && \
     mv kind-linux-amd64 /usr/local/bin/kind
 

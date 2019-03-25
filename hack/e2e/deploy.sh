@@ -80,17 +80,17 @@ function deploy::helm {
 	kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=${TILLER_NAMESPACE}:tiller
 
 	helm init --tiller-namespace ${TILLER_NAMESPACE}
-	kubectl rollout status -w deployment/tiller-deploy --namespace=${TILLER_NAMESPACE}
+	kubectl rollout status -w deployment/tiller-deploy --namespace=${TILLER_NAMESPACE} --timeout=1m
 
 	kubectl patch deploy --namespace ${TILLER_NAMESPACE} tiller-deploy -p '{"spec":{"template":{"spec":{"serviceAccount":"tiller"}}}}'
-	kubectl rollout status -w deployment/tiller-deploy --namespace=${TILLER_NAMESPACE}
+	kubectl rollout status -w deployment/tiller-deploy --namespace=${TILLER_NAMESPACE} --timeout=1m
 }
 
 function deploy::provisioner {
 	echo "Deploying hostpath-provisioner"
 	helm repo add rimusz https://charts.rimusz.net
 	helm repo update
-	helm install --wait --timeout 300 \
+	helm install --wait --timeout 180 \
 		--tiller-namespace=${TILLER_NAMESPACE} \
 		--namespace ${LOCAL_PROVISIONER_NAMESPACE} \
 		--set storageClass.name=${KUBERMATIC_STORAGE_CLASS_NAME} \
@@ -99,7 +99,7 @@ function deploy::provisioner {
 
 function deploy::dex {
 	echo "Installing dex deployment"
-	helm install --wait --timeout 300 \
+	helm install --wait --timeout 180 \
 		--tiller-namespace=${TILLER_NAMESPACE} \
 		--set-string=dex.ingress.host=http://dex.oauth:5556 \
 		--values ${DEX_PATH}/values.yaml \
@@ -111,7 +111,7 @@ function deploy::kubermatic {
 	patch::kubeconfig
 
 	echo "Installing new kubermatic deployment"
-	helm install --wait --timeout 300 \
+	helm install --wait --timeout 180 \
 		--tiller-namespace=${TILLER_NAMESPACE} \
 		--set=kubermatic.isMaster=true \
 		--set=kubermatic.imagePullSecretData=$IMAGE_PULL_SECRET_DATA \
