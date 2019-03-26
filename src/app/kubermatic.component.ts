@@ -59,10 +59,9 @@ export class KubermaticComponent implements OnInit {
   }
 
   registerCustomCSS(): void {
-    const id = 'custom-css-id';
-    const href = this.appConfigService.getCustomCSS();
-
     if (this.appConfigService.hasCustomCSS()) {
+      const href = this.appConfigService.getCustomCSS();
+      const id = 'custom-css-id';
       const element = document.getElementById(id);
       if (element) {
         element['href'] = href;
