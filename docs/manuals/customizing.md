@@ -50,11 +50,15 @@ Now, having all the changes prepared let's build a container image and deploy it
 
 The result of this example should look like this:
 
-![Custom Theme](../assets/customizing-example.png)
+![Custom Theme](../assets/customizing/result-scss.png)
 
 ## Using CSS 
 
-...
+Let's override the default application theme and change the primary color to red and social link icons color to green.
+
+First, we need to find out what changes are needed.
+
+
 
 ### Example
 ...
@@ -66,6 +70,11 @@ inside the Kubernetes' cluster.
 
 Assuming that we have already built an image named `kubermatic/ui-v2:custom` we can run it using
 following command to mount our customizations into it:
+
+```
+docker run --rm -ti -v $(pwd)/docs/assets/customizing/style.css:/dist/assets/custom/style.css \
+--user=$(id -u) -p 8080:8080 quay.io/kubermatic/ui-v2:test
+```
 
 ...
 

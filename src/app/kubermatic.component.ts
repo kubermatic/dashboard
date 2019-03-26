@@ -55,6 +55,25 @@ export class KubermaticComponent implements OnInit {
       );
     }
     this.sidenavService.setSidenav(this.sidenav);
+    this.registerCustomCSS();
+  }
+
+  registerCustomCSS(): void {
+    const id = 'custom-css-id';
+    const href = this.appConfigService.getCustomCSS();
+
+    if (this.appConfigService.hasCustomCSS()) {
+      const element = document.getElementById(id);
+      if (element) {
+        element['href'] = href;
+      } else {
+        const node = document.createElement('link');
+        node.rel = 'stylesheet';
+        node.href = href;
+        node.id = id;
+        document.getElementsByTagName('head')[0].appendChild(node);
+      }
+    }
   }
 
   showTermsOfService(): void {
