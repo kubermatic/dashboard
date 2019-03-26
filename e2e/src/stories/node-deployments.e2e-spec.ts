@@ -100,7 +100,7 @@ describe('Node Deployments story', () => {
     });
 
     const expectedStatus = 'Running';
-    KMElement.waitForContent(nodeDeploymentDetailsPage.getNodeDeploymentStatusElement(), expectedStatus, 300000);
+    KMElement.waitForContent(nodeDeploymentDetailsPage.getNodeDeploymentStatusElement(), expectedStatus, 600000);
     nodeDeploymentDetailsPage.getNodeDeploymentStatusElement().getText().then((status: string) => {
       expect(status).toEqual(expectedStatus);
     });

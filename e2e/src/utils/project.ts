@@ -45,6 +45,8 @@ export class ProjectUtils {
     ProjectUtils._confirmationDialog.getConfirmationDialogConfirmBtn().click();
 
     KMElement.waitToDisappear(ProjectUtils._projectsPage.getProjectItem(projectName));
+    browser.sleep(5000);
+
     expect(ProjectUtils._projectsPage.getProjectItem(projectName).isPresent()).toBeFalsy();
   }
 }
