@@ -86,7 +86,6 @@ describe('Basic story', () => {
 
     KMElement.waitToDisappear(membersPage.getAddMemberDialog());
     KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
-    browser.sleep(5000);
 
     expect(membersPage.getMemberItem(memberEmail).isPresent()).toBeTruthy();
   });
