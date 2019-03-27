@@ -1,5 +1,6 @@
 SHELL=/bin/bash
 REPO=quay.io/kubermatic/ui-v2
+REPO_CUSTOM=quay.io/kubermatic/ui-v2-custom
 IMAGE_TAG = $(shell echo $$(git rev-parse HEAD && if [[ -n $$(git status --porcelain) ]]; then echo '-dirty'; fi)|tr -d ' ')
 CC=npm
 export GOOS?=linux
@@ -41,8 +42,17 @@ build:
 docker-build: build dist
 	docker build -t $(REPO):$(IMAGE_TAG) .
 
+docker-build-custom:
+	docker build -f Dockerfile.custom -t $(REPO_CUSTOM):$(IMAGE_TAG) .
+
+docker-run-custom: build dist
+	./dashboard-v2
+
 docker-push: docker-build
 	docker push $(REPO):$(IMAGE_TAG)
+
+docker-push-custom: docker-build-custom
+	docker push $(REPO_CUSTOM):$(IMAGE_TAG)
 
 deploy:
 	kubectl set image deployment/kubermatic-ui-v2 webserver=$(REPO):$(IMAGE_TAG)

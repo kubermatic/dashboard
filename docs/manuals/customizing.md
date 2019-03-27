@@ -1,6 +1,6 @@
 # Customizing the Application
 This manual explains how to apply custom theme to the application. As we are using SCSS that needs to be processed into
-the CSS during the build, there are two different approaches to it that will be described in the following sections.
+the CSS during the build, there are different approaches to it that will be described in the following sections.
 
 ## Customizing the Application Sources
 This is the most obvious approach to customizing the application. However, it requires access to the repository as some
@@ -55,6 +55,14 @@ Now, having all the changes prepared let's build a container image and deploy it
 The result of this example should look like this:
 
 ![Custom Theme](../assets/customizing.png)
+
+## Customizing the Application Sources inside Custom Container
+This approach is very similar to the first one, but this time application sources can be changed inside the custom
+container that was prepared specially for it. It allows to modify SCSS just like in the first approach, but files could
+be easily mounted into existing custom container, so there is no need to build another image.
+
+Custom image is defined inside `Dockerfile.custom` and should be kept inside `quay.io/kubermatic/ui-v2-custom`
+repository.
 
 ## Customizing the Application Without Changing the Sources
 This approach is recommended for those who cannot or do not want to modify application sources. It does not require
