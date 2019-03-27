@@ -1,31 +1,33 @@
 import {browser, by, element, ElementFinder, ExpectedConditions} from 'protractor';
 
 const defaultTimeout = 60000;
+// Number of retries to make sure that element meets required condition.
+const defaultRetries = 5;
 
 export class KMElement {
-  static waitToAppear(element: ElementFinder, waitTimeout = defaultTimeout): void {
-    for(let i=0;i<5;i++) {
+  static waitToAppear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
+    for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.visibilityOf(element), waitTimeout);
       browser.sleep(1000);
     }
   }
 
-  static waitToDisappear(element: ElementFinder, waitTimeout = defaultTimeout): void {
-    for(let i=0;i<5;i++) {
+  static waitToDisappear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
+    for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.invisibilityOf(element), waitTimeout);
       browser.sleep(1000);
     }
   }
 
-  static waitForClickable(element: ElementFinder, waitTimeout = defaultTimeout): void {
-    for(let i=0;i<5;i++) {
+  static waitForClickable(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
+    for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.elementToBeClickable(element), waitTimeout);
       browser.sleep(1000);
     }
   }
 
-  static waitForContent(element: ElementFinder, text: string, waitTimeout = defaultTimeout): void {
-    for(let i=0;i<5;i++) {
+  static waitForContent(element: ElementFinder, text: string, waitTimeout = defaultTimeout, retries = defaultRetries): void {
+    for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.textToBePresentInElement(element, text), waitTimeout);
       browser.sleep(1000);
     }
@@ -35,8 +37,8 @@ export class KMElement {
    * @param url - partial url or full expected url after redirect
    * @param waitTimeout - wait timeout for the operation to complete
    */
-  static waitForRedirect(url: string, waitTimeout = defaultTimeout): void {
-    for(let i=0;i<5;i++) {
+  static waitForRedirect(url: string, waitTimeout = defaultTimeout, retries = defaultRetries): void {
+    for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.urlContains(url), waitTimeout);
       browser.sleep(1000);
     }

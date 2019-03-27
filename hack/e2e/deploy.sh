@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Requires 'jq' and 'yq' to work!
 
 set -euo pipefail
 
@@ -32,7 +33,6 @@ function cleanup {
 	rm ./yamls/kubeconfig
 }
 
-# Requires 'jq' and 'yq' to work!
 function patch::kubeconfig {
 	cp ${KUBECONFIG_PATH} ./yamls/kubeconfig
 	KUBECONFIG_PATH=./yamls/kubeconfig
