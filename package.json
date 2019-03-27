@@ -112,7 +112,7 @@
     "ng2-slim-loading-bar": "4.0.0",
     "ngrx-store-freeze": "0.2.4",
     "ngrx-store-logger": "0.2.2",
-    "protractor": "6.0.0",
+    "protractor": "5.4.2",
     "request": "2.88.0",
     "stylelint": "^9.10.1",
     "stylelint-config-standard": "^18.2.0",
