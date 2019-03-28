@@ -24,7 +24,7 @@ KUBERMATIC_NAMESPACE="kubermatic"
 LOCAL_PROVISIONER_NAMESPACE="local-provisioner"
 
 KUBERMATIC_STORAGE_CLASS_NAME="kubermatic-fast"
-API_IMAGE_TAG=latest
+KUBERMATIC_IMAGE_TAG=latest
 
 function cleanup {
 	kind delete cluster --name ${KUBECONFIG_CLUSTER_NAME}
@@ -126,10 +126,10 @@ function deploy::kubermatic {
 		--set=kubermatic.ingressClass=non-existent \
 		--set=kubermatic.controller.replicas=1 \
 		--set=kubermatic.controller.datacenterName=${KUBECONFIG_CLUSTER_NAME} \
-		--set=kubermatic.controller.image.tag=${API_IMAGE_TAG} \
-		--set=kubermatic.api.image.tag=${API_IMAGE_TAG} \
+		--set=kubermatic.controller.image.tag=${KUBERMATIC_IMAGE_TAG} \
+		--set=kubermatic.api.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.api.replicas=1 \
-		--set=kubermatic.masterController.image.tag=${API_IMAGE_TAG} \
+		--set=kubermatic.masterController.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.controller.featureGates="" \
 		--values ${KUBERMATIC_PATH}/values.yaml \
 		--namespace ${KUBERMATIC_NAMESPACE} \
