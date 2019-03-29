@@ -43,7 +43,7 @@ docker-build: build dist
 	docker build -t $(REPO):$(IMAGE_TAG) .
 
 docker-build-custom:
-	docker build -f Dockerfile.custom -t $(REPO_CUSTOM):$(IMAGE_TAG) .
+	docker build -f containers/custom-dashboard/Dockerfile -t $(REPO_CUSTOM):$(IMAGE_TAG) .
 
 docker-run-custom: build dist
 	./dashboard-v2
