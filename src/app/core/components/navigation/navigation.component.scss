@@ -24,10 +24,19 @@ ng2-slim-loading-bar {
   .km-header-logo {
     display: block;
     margin: 0 auto;
-    width: 184px;
+    width: 220px;
     height: 45px;
-    background-size: 218px;
-    background-position: 0 -24px;
+    background-size: 220px;
+    background-position: 0 -5px;
+  }
+
+  .km-header-logo-altemista {
+    height: 45px;
+    width: 220px;
+    display: block;
+    margin: 0 20px auto;
+    background-size: 120px;
+    background-position: 0;
   }
 
   .km-auth {

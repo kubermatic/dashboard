@@ -7,6 +7,7 @@
 
   <div fxLayout
        class="km-navigation-bar">
+    <a class="km-header-logo-altemista"></a>
     <div fxFlex="20%">
       <button class="km-sidenav-toggle mat-button km-nav-mobile"
               (click)="showMobileNav()"
@@ -22,9 +23,9 @@
         <div class="mat-button-focus-overlay"></div>
       </button>
     </div>
-    <div fxFlex="60%"><a class="km-header-logo"></a></div>
-    <div fxFlex="20%"
-         class="km-auth">
+    <div fxFlex></div>
+    <a class="km-header-logo"></a>
+    <div class="km-auth">
       <span class="km-current-user"
             *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
       <span id="km-navbar-logout-btn"

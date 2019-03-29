@@ -1,5 +1,8 @@
 @import "../assets/css/colors";
 
+$toolbar-margin: 45px;
+$additional-margin: 20px;
+
 kubermatic-root,
 mat-sidenav-container {
   margin: 0;
@@ -7,22 +10,27 @@ mat-sidenav-container {
   width: 100%;
   top: 0;
   bottom: 0;
-  padding-top: 45px;
+  padding-top: $toolbar-margin;
   position: absolute;
 }
 
 mat-sidenav {
-  padding-top: 45px;
+  margin: ($toolbar-margin + $additional-margin) $additional-margin $additional-margin;
 }
 
 .mat-sidenav {
   width: 210px;
   background-color: $medium-background;
+  border: 0;
   color: $white-text-color;
 }
 
 .mat-sidenav-container {
   background-color: $grey-background;
+  background-image: url("/assets/images/background.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
 }
 
 .mat-input-wrapper {
@@ -30,5 +38,5 @@ mat-sidenav {
 }
 
 .main .content {
-  margin: 0 20px;
+  margin: 10px 2*$additional-margin;
 }
