@@ -65,13 +65,13 @@
                         [attr.id]="'km-edit-member-' + element.email"
                         matTooltip="Edit Member"
                         (click)="editMember(element)"
-                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.edit) || (currentUser.email === element.email)"></button>
+                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.edit) || (currentUser && currentUser.email === element.email)"></button>
 
                 <button class="km-icon-delete black"
                         [attr.id]="'km-delete-member-' + element.email"
                         matTooltip="Delete Member"
                         (click)="deleteMember(element)"
-                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.remove) || (currentUser.email === element.email)"></button>
+                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.remove) || (currentUser && currentUser.email === element.email)"></button>
               </ng-container>
             </ng-container>
           </div>
