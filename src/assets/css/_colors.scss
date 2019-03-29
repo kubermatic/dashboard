@@ -1,6 +1,6 @@
-$primary: #0288d1;
+$primary: #1d1d1b;
 
-$secondary: #75b7dd;
+$secondary: #6785c1;
 
 $warning: #ff5454;
 
@@ -22,7 +22,7 @@ $medium-background: #f7faff;
 
 $warning-background: #ffdad9;
 
-$waiting-background: #ffd55c;
+$waiting-background: #ffe28d;
 
 $waiting-status-color: orange;
 
@@ -36,9 +36,9 @@ $disabled-button-color: #d4d4d4;
 
 $disabled-text-color: rgba(0, 0, 0, 0.26);
 
-$pending: rgba($waiting-background, 0.1);
+$pending: rgba($waiting-background, 0.5);
 
-$pending-hover: rgba($waiting-background, 0.2);
+$pending-hover: rgba($waiting-background, 0.7);
 
 $deleting: rgba($warning-background, 0.15);
 

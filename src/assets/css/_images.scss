@@ -1,6 +1,11 @@
 // logo
 .km-header-logo {
-  background-image: url("/assets/images/logo/header-logo-kubermatic.png");
+  background-image: url("/assets/images/NTTLogoBlack.png");
+  background-repeat: no-repeat;
+}
+
+.km-header-logo-altemista {
+  background-image: url("/assets/images/AltemistaCloud.png");
   background-repeat: no-repeat;
 }
 
