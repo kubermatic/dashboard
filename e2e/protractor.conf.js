@@ -40,13 +40,13 @@ function createConfig() {
       browser.params.KUBERMATIC_E2E_USERNAME = process.env.KUBERMATIC_DEX_DEV_E2E_USERNAME;
 
       if(process.env.KUBERMATIC_DEX_DEV_E2E_USERNAME_2 === undefined) {
-        throw new Error(`'KUBERMATIC_DEX_DEV_E2E_USERNAME_2' environment variable has to be set.`)      }
+        throw new Error(`'KUBERMATIC_DEX_DEV_E2E_USERNAME_2' environment variable has to be set.`)
+      }
       browser.params.KUBERMATIC_E2E_USERNAME_2 = process.env.KUBERMATIC_DEX_DEV_E2E_USERNAME_2;
 
       if (process.env.KUBERMATIC_DEX_DEV_E2E_PASSWORD === undefined ) {
         throw new Error(`'KUBERMATIC_DEX_DEV_E2E_PASSWORD' environment variable has to be set.`)
       }
-      
       browser.params.KUBERMATIC_E2E_PASSWORD = process.env.KUBERMATIC_DEX_DEV_E2E_PASSWORD;
 
       if (process.env.DO_E2E_TESTS_TOKEN === undefined ) {

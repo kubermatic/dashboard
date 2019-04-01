@@ -28,7 +28,6 @@ describe('Multi Owner story', () => {
   });
   
   it('should add a new member to project', () => {
-    browser.sleep(60000);
     membersPage.navigateTo();
 
     KMElement.waitForClickable(membersPage.getAddMemberBtn());
@@ -45,14 +44,6 @@ describe('Multi Owner story', () => {
     KMElement.waitToDisappear(membersPage.getAddMemberDialog());
     KMElement.waitToAppear(membersPage.getMemberItem(memberEmail2), 300000);
     expect(membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
-  });
-
-  it('should logout with first user', () => {
-    AuthUtils.logout();
-  });
-
-  it('should login with second owner', () => {
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
   it ('should automatically redirect to cluster page, because user has exact one project', () => {
