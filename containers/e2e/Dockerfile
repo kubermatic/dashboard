@@ -15,14 +15,14 @@ RUN apk update && \
     npm \
     go \
     make \
-	git \
-	chromium-chromedriver \
-	python \
-	gcc \
-	g++ \
-	chromium \
-	py-pip && \
-	pip install selenium && \
+    git \
+    chromium-chromedriver \
+    python \
+    gcc \
+    g++ \
+    chromium \
+    py-pip && \
+    pip install selenium && \
     rm -rf /var/cache/*
 
 ENV CHROME_BIN=/usr/bin/chromium-browser \
