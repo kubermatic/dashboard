@@ -1,0 +1,34 @@
+--- dex-config.yaml	2019-02-13 11:38:23.872411000 +0100
++++ dex-config_new.yaml	2019-02-13 11:28:39.050159746 +0100
+@@ -4,7 +4,7 @@
+   name: dex
+ data:
+   config.yaml: |
+-    issuer: https://{{ .Values.dex.ingress.host }}{{ .Values.dex.ingress.path }}
++    issuer: {{ .Values.dex.ingress.host }}{{ .Values.dex.ingress.path }}
+     oauth2:
+       skipApprovalScreen: true
+       responseTypes:
+@@ -17,8 +17,8 @@
+         inCluster: true
+     web:
+       http: 0.0.0.0:5556
+-{{ if .Values.dex.grpc }}
+     enablePasswordDB: true
++{{ if .Values.dex.grpc }}
+     grpc:
+ {{ toYaml .Values.dex.grpc.api | indent 7 }}
+ {{- end }}
+@@ -30,3 +30,12 @@
+     staticClients:
+ {{ toYaml .Values.dex.clients | indent 7 }}
+ {{- end }}
++    staticPasswords:
++    - email: "roxy@loodse.com"
++      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
++      username: "roxy"
++      userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
++    - email: "roxy2@loodse.com"
++      hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
++      username: "roxy2"
++      userID: "08a8684b-db88-4b73-90a9-3cd1661f5467"

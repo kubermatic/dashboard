@@ -80,7 +80,7 @@ describe('Node Deployments story', () => {
   });
 
   it('should wait for initial node deployment to be created', () => {
-    KMElement.waitToAppear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 300000);
+    KMElement.waitToAppear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 600000);
   });
 
   it('should go to node deployment details', () => {
@@ -100,7 +100,7 @@ describe('Node Deployments story', () => {
     });
 
     const expectedStatus = 'Running';
-    KMElement.waitForContent(nodeDeploymentDetailsPage.getNodeDeploymentStatusElement(), expectedStatus, 300000);
+    KMElement.waitForContent(nodeDeploymentDetailsPage.getNodeDeploymentStatusElement(), expectedStatus, 600000);
     nodeDeploymentDetailsPage.getNodeDeploymentStatusElement().getText().then((status: string) => {
       expect(status).toEqual(expectedStatus);
     });

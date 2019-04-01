@@ -1,6 +1,7 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
+const failFast = require('protractor-fail-fast');
 const {SpecReporter} = require('jasmine-spec-reporter');
 
 exports.config = createConfig();
@@ -27,6 +28,10 @@ function createConfig() {
 
     directConnect: true,
     baseUrl: 'http://localhost:8000/',
+
+    plugins: [
+      failFast.init(),
+    ],
 
     onPrepare() {
       if(process.env.KUBERMATIC_DEX_DEV_E2E_USERNAME === undefined) {
@@ -64,10 +69,18 @@ function createConfig() {
           });
         });
       });
+    },
+
+    afterLaunch() {
+      failFast.clean();
     }
   };
 
   if (!!process.env.JOB_NAME) {
+    if(process.env.CHROME_DRIVER) {
+      config.chromeDriver = process.env.CHROME_DRIVER;
+    }
+
     config.capabilities = {
       browserName: 'chrome',
       chromeOptions: {
