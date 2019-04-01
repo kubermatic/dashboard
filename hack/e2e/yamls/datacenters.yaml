@@ -1,0 +1,27 @@
+datacenters:
+  prow-build-cluster:
+    location: Frankfurt
+    country: DE
+    provider: Loodse
+    is_seed: true
+    spec:
+      bringyourown:
+        region: DE
+      seed:
+        bringyourown: null
+  byo-kubernetes:
+    location: Frankfurt
+    seed: prow-build-cluster
+    country: DE
+    spec:
+      bringyourown:
+        region: DE
+      seed:
+        bringyourown: null
+  do-fra1:
+    location: Frankfurt
+    seed: prow-build-cluster
+    country: DE
+    spec:
+      digitalocean:
+        region: fra1

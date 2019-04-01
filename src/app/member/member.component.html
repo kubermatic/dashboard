@@ -34,7 +34,7 @@
             mat-sort-header>Email</th>
         <td mat-cell
             *matCellDef="let element"
-            [attr.id]="'km-member-email-' + element.email">{{element.email}}</td>
+            [attr.id]="'km-member-email-' + element?.email">{{element?.email}}</td>
       </ng-container>
 
       <ng-container matColumnDef="group">
@@ -43,7 +43,7 @@
             class="km-header-cell">Group</th>
         <td mat-cell
             *matCellDef="let element"
-            [attr.id]="'km-member-group-' + element.email">{{getGroup(element.projects)}}</td>
+            [attr.id]="'km-member-group-' + element?.email">{{getGroup(element.projects)}}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
@@ -62,16 +62,16 @@
 
               <ng-container *ngSwitchCase="false">
                 <button class="km-icon-edit black"
-                        [attr.id]="'km-edit-member-' + element.email"
+                        [attr.id]="'km-edit-member-' + element?.email"
                         matTooltip="Edit Member"
                         (click)="editMember(element)"
-                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.edit) || (currentUser && currentUser.email === element.email)"></button>
+                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.edit) || (currentUser?.email === element?.email)"></button>
 
                 <button class="km-icon-delete black"
-                        [attr.id]="'km-delete-member-' + element.email"
+                        [attr.id]="'km-delete-member-' + element?.email"
                         matTooltip="Delete Member"
                         (click)="deleteMember(element)"
-                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.remove) || (currentUser && currentUser.email === element.email)"></button>
+                        [disabled]="(!!userGroup && !userGroupConfig[userGroup].members.remove) || (currentUser?.email === element?.email)"></button>
               </ng-container>
             </ng-container>
           </div>

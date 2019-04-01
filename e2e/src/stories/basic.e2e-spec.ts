@@ -38,7 +38,7 @@ describe('Basic story', () => {
   const providerName = 'bringyourown';
   const datacenterLocation = 'Frankfurt';
 
-  const memberEmail = 'roxy2@kubermatic.io';
+  const memberEmail = 'roxy2@loodse.com';
 
   it('should login', () => {
     AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
@@ -86,6 +86,7 @@ describe('Basic story', () => {
 
     KMElement.waitToDisappear(membersPage.getAddMemberDialog());
     KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
+
     expect(membersPage.getMemberItem(memberEmail).isPresent()).toBeTruthy();
   });
 

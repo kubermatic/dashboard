@@ -14,6 +14,7 @@ export class AuthUtils {
     KMElement.waitToAppear(AuthUtils._loginPage.getLoginButton());
 
     AuthUtils._loginPage.getLoginButton().click();
+    KMElement.waitToAppear(AuthUtils._dexPage.getLoginWithEmailButton());
     AuthUtils._dexPage.getLoginWithEmailButton().click();
 
     AuthUtils._dexPage.getLoginInput().sendKeys(username);
