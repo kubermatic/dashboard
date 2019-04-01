@@ -72,4 +72,9 @@ export class NodeDeploymentListComponent implements OnInit {
             nd, this.cluster.id, this.projectID, this.datacenter.metadata.name, this.changeNodeDeployment)
         .subscribe(() => {});
   }
+
+  isRunning(): boolean {
+    return this.clusterHealthStatus && this.clusterHealthStatus.css === 'km-status-running' && this.isClusterRunning ||
+        (!!this.cluster.spec.cloud.bringyourown && !this.cluster.name.endsWith('-openshift'));
+  }
 }
