@@ -131,7 +131,6 @@ describe('Basic story', () => {
   it('should edit created project name', async () => {
     const oldProjectName = projectName;
     projectsPage.navigateTo();
-    KMElement.waitForNotifications();
 
     KMElement.waitToAppear(projectsPage.getProjectEditBtn(projectName));
     projectsPage.getProjectEditBtn(projectName).click();

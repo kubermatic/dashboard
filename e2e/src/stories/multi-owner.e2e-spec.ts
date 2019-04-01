@@ -7,6 +7,7 @@ import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 import {AuthUtils} from '../utils/auth';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
+import {RandomUtils} from "../utils/random";
 
 describe('Multi Owner story', () => {
   const projectsPage = new ProjectsPage();
@@ -14,7 +15,7 @@ describe('Multi Owner story', () => {
   const membersPage = new MembersPage();
   const confirmationDialog = new ConfirmationDialog();
 
-  const projectNameMultiOwner = 'e2e-test-project-multi-owner';
+  const projectNameMultiOwner = RandomUtils.prefixedString('e2e-test-project-multi-owner');
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
   const memberEmail2 = browser.params.KUBERMATIC_E2E_USERNAME_2;
 
@@ -46,9 +47,9 @@ describe('Multi Owner story', () => {
     expect(membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
   });
 
-  it ('should automatically redirect to cluster page, because user has exact one project', () => {
-    KMElement.waitForClickable(clustersPage.getAddClusterTopBtn());
-    expect(clustersPage.getAddClusterTopBtn().isPresent()).toBeTruthy();
+  it('should login as second owner', () => {
+    AuthUtils.logout();
+    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
   it('should check if multi owner project is in list', () => {
