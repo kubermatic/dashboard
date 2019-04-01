@@ -19,12 +19,16 @@ describe('Multi Owner story', () => {
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
   const memberEmail2 = browser.params.KUBERMATIC_E2E_USERNAME_2;
 
-  beforeAll(() => {
-    // login with second user, to register him in dex
+  it('should login as a second user and logout', () => {
     AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
     AuthUtils.logout();
-    // login with first user to create project for multiple owners
+  });
+
+  it('should login as a first user', () => {
     AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+  });
+
+  it('should create a test project', () => {
     ProjectUtils.createProject(projectNameMultiOwner);
   });
   
@@ -47,7 +51,7 @@ describe('Multi Owner story', () => {
     expect(membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
   });
 
-  it('should login as second owner', () => {
+  it('should login as a second owner', () => {
     AuthUtils.logout();
     AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
