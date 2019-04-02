@@ -18,6 +18,7 @@ import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity'
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
+import {CreateServiceAccountEntity, ServiceAccountEntity} from '../../../shared/entity/ServiceaccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
@@ -331,5 +332,21 @@ export class ApiService {
   deleteMembers(projectID: string, member: MemberEntity): any {
     const url = `${this.restRoot}/projects/${projectID}/users/${member.id}`;
     return this.http.delete(url, {headers: this.headers});
+  }
+
+  getServiceAccounts(projectID: string): Observable<ServiceAccountEntity[]> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts`;
+    return this.http.get<ServiceAccountEntity[]>(url, {headers: this.headers});
+  }
+
+  createServiceAccounts(projectID: string, serviceaccount: CreateServiceAccountEntity):
+      Observable<ServiceAccountEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts`;
+    return this.http.post<ServiceAccountEntity>(url, serviceaccount, {headers: this.headers});
+  }
+
+  editServiceAccounts(projectID: string, serviceaccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
+    return this.http.put<ServiceAccountEntity>(url, serviceaccount, {headers: this.headers});
   }
 }

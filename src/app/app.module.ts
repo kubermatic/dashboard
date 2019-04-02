@@ -6,6 +6,7 @@ import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-b
 import {RouterModule} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 import {environment} from '../environments/environment';
+import {AddProjectComponent} from './add-project/add-project.component';
 import {AppConfigService} from './app-config.service';
 import {AppRoutingModule} from './app-routing.module';
 import {CoreModule} from './core/core.module';
@@ -15,6 +16,7 @@ import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
 import {AddMemberComponent} from './member/add-member/add-member.component';
 import {EditMemberComponent} from './member/edit-member/edit-member.component';
+import {AddServiceAccountComponent} from './serviceaccount/add-serviceaccount/add-serviceaccount.component';
 import {SharedModule} from './shared/shared.module';
 
 const appInitializerFn = (appConfig: AppConfigService): Function => {
@@ -55,6 +57,7 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
   entryComponents: [
     AddMemberComponent,
     EditMemberComponent,
+    AddServiceAccountComponent,
   ],
   bootstrap: [KubermaticComponent],
 })

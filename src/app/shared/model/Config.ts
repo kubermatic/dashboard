@@ -25,6 +25,7 @@ export class GroupConfig {
   clusters?: Clusters;
   nodes?: Nodes;
   nodeDeployments?: NodeDeployments;
+  serviceaccounts?: ServiceAccounts;
 }
 
 export class Projects {
@@ -63,6 +64,13 @@ export class Nodes {
 }
 
 export class NodeDeployments {
+  view?: boolean;
+  edit?: boolean;
+  create?: boolean;
+  delete?: boolean;
+}
+
+export class ServiceAccounts {
   view?: boolean;
   edit?: boolean;
   create?: boolean;

@@ -1,12 +1,14 @@
 import {Injectable} from '@angular/core';
 import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
+
 import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
+import {CreateServiceAccountEntity, ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
@@ -15,6 +17,7 @@ import {fakeHealth} from '../fake-data/health.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
 import {nodesFake} from '../fake-data/node.fake';
 import {fakeProject, fakeProjects} from '../fake-data/project.fake';
+import {fakeServiceAccount, fakeServiceAccounts} from '../fake-data/serviceaccount.fake';
 import {fakeSSHKeys} from '../fake-data/sshkey.fake';
 import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
 
@@ -30,6 +33,8 @@ export class ApiMockService {
   token: Token = fakeToken();
   member: MemberEntity = fakeMember();
   members: MemberEntity[] = fakeMembers();
+  serviceAccount: ServiceAccountEntity = fakeServiceAccount();
+  serviceAccounts: ServiceAccountEntity[] = fakeServiceAccounts();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
   health: HealthEntity = fakeHealth();
 
@@ -145,6 +150,19 @@ export class ApiMockService {
 
   deleteMembers(projectID: string, member: MemberEntity): Observable<any> {
     return of(null);
+  }
+
+  getServiceAccounts(projectID: string): Observable<ServiceAccountEntity[]> {
+    return of(this.serviceAccounts);
+  }
+
+  createServiceAccounts(projectID: string, serviceAccount: CreateServiceAccountEntity):
+      Observable<ServiceAccountEntity> {
+    return of(this.serviceAccount);
+  }
+
+  editServiceAccounts(projectID: string, serviceAccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+    return of(this.serviceAccount);
   }
 
   getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
