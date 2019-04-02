@@ -26,15 +26,13 @@ export class AddMemberComponent implements OnInit {
   addMember(): void {
     const createMember: CreateMemberEntity = {
       email: this.addMemberForm.controls.email.value,
-      projects: [
-        {
-          group: this.addMemberForm.controls.group.value,
-          id: this.project.id,
-        },
-      ],
+      projects: [{
+        group: this.addMemberForm.controls.group.value,
+        id: this.project.id,
+      }],
     };
 
-    this.api.createMembers(this.project.id, createMember).subscribe((res) => {
+    this.api.createMembers(this.project.id, createMember).subscribe(() => {
       this.dialogRef.close(true);
       NotificationActions.success(
           'Success', `Member ${createMember.email} is added successfully to project ${this.project.name}`);
