@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {interval, Subscription, timer} from 'rxjs';
+import {Subscription, timer} from 'rxjs';
 import {first} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../core/services';
