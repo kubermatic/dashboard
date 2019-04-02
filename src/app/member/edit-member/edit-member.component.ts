@@ -15,7 +15,8 @@ export class EditMemberComponent implements OnInit {
   @Input() member: MemberEntity;
   editMemberForm: FormGroup;
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<EditMemberComponent>) {}
+  constructor(
+      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<EditMemberComponent>) {}
 
   ngOnInit(): void {
     this.editMemberForm = new FormGroup({
@@ -38,8 +39,8 @@ export class EditMemberComponent implements OnInit {
       ],
     };
 
-    this.api.editMembers(this.project.id, editMember).subscribe((res) => {
-      this.dialogRef.close(true);
+    this._apiService.editMembers(this.project.id, editMember).subscribe(() => {
+      this._matDialogRef.close(true);
       NotificationActions.success('Success', `Member ${this.member.name} is edited successfully`);
     });
   }
