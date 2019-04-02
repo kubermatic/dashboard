@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {interval, Subscription} from 'rxjs';
+import {interval, Subscription, timer} from 'rxjs';
 import {first} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../core/services';
@@ -42,8 +42,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._reloadMembers();
-    this._registerMembersReloadInterval(5000);
+    this._registerMembersReloadInterval(0, 5000);
   }
 
   ngOnDestroy(): void {
@@ -54,8 +53,8 @@ export class MemberComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _registerMembersReloadInterval(period: number): void {
-    this.subscriptions.push(interval(period).subscribe(() => {
+  private _registerMembersReloadInterval(dueTime: number, period: number): void {
+    this.subscriptions.push(timer(dueTime, period).subscribe(() => {
       this._reloadMembers();
     }));
   }
