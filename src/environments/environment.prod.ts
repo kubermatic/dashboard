@@ -10,6 +10,7 @@ export const environment = {
   production: true,
   configUrl: '/config/config.json',
   gitVersionUrl: '../assets/config/git-version.json',
+  customCSS: '../assets/custom/style.css',
   restRoot: '/api/v1',
   restRootV3: '/api/v3',
   digitalOceanRestRoot: 'https://api.digitalocean.com/v2',

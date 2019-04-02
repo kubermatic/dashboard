@@ -21,7 +21,8 @@ import {SharedModule} from './shared/shared.module';
 const appInitializerFn = (appConfig: AppConfigService): Function => {
   return () => appConfig.loadAppConfig()
                    .then(() => appConfig.loadUserGroupConfig())
-                   .then(() => appConfig.loadGitVersion());
+                   .then(() => appConfig.loadGitVersion())
+                   .then(() => appConfig.checkCustomCSS());
 };
 
 @NgModule({
