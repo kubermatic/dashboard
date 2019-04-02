@@ -28,7 +28,6 @@ export class LabelFormComponent implements OnInit {
   @Output() labelsChange = new EventEmitter<object>();
   labelsForm: FormGroup;
   initialLabels: object;
-  isVisible = true;
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
@@ -87,10 +86,6 @@ export class LabelFormComponent implements OnInit {
     this._addLabelIfNeeded();
     this._validateKey(index);
     this._updateLabelsObject();
-  }
-
-  toggleVisibility(): void {
-    this.isVisible = !this.isVisible;
   }
 
   private _addLabelIfNeeded(): void {
