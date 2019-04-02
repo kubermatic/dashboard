@@ -2,11 +2,14 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {interval, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
+
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MemberEntity, MemberProject} from '../shared/entity/MemberEntity';
+import {MemberEntity} from '../shared/entity/MemberEntity';
+import {MemberUtils} from '../shared/utils/member-utils/member-utils';
+
 import {AddMemberComponent} from './add-member/add-member.component';
 import {EditMemberComponent} from './edit-member/edit-member.component';
 
@@ -71,27 +74,12 @@ export class MemberComponent implements OnInit, OnDestroy {
     return this.dataSource;
   }
 
-  getGroup(memberProjects: MemberProject[]): string {
-    let result = '';
-    memberProjects.forEach(memberProject => {
-      if (this._projectService.project && memberProject.id === this._projectService.project.id) {
-        if (memberProject.group && memberProject.group.length > 0) {
-          const group = memberProject.group.split('-')[0];
-          switch (group) {
-            case 'owners':
-              result = 'Owner';
-              break;
-            case 'editors':
-              result = 'Editor';
-              break;
-            case 'viewers':
-              result = 'Viewer';
-              break;
-          }
-        }
-      }
-    });
-    return result;
+  getGroup(member: MemberEntity): string {
+    if (this._projectService.project) {
+      const group = MemberUtils.getGroupInProject(member, this._projectService.project.id);
+      return MemberUtils.getGroupDisplayName(group);
+    }
+    return '';
   }
 
   isAddEnabled(): boolean {

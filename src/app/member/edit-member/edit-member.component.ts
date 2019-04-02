@@ -5,6 +5,7 @@ import {ApiService} from '../../core/services';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {MemberEntity} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {MemberUtils} from '../../shared/utils/member-utils/member-utils';
 
 @Component({
   selector: 'kubermatic-edit-member',
@@ -20,7 +21,7 @@ export class EditMemberComponent implements OnInit {
 
   ngOnInit(): void {
     this.editMemberForm = new FormGroup({
-      group: new FormControl('', [Validators.required]),
+      group: new FormControl(MemberUtils.getGroupInProject(this.member, this.project.id), [Validators.required]),
     });
   }
 
