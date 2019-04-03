@@ -329,7 +329,7 @@ export class ApiService {
     return this.http.put<MemberEntity>(url, member, {headers: this.headers});
   }
 
-  deleteMembers(projectID: string, member: MemberEntity): any {
+  deleteMembers(projectID: string, member: MemberEntity): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/users/${member.id}`;
     return this.http.delete(url, {headers: this.headers});
   }
@@ -348,5 +348,10 @@ export class ApiService {
   editServiceAccounts(projectID: string, serviceaccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
     const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
     return this.http.put<ServiceAccountEntity>(url, serviceaccount, {headers: this.headers});
+  }
+
+  deleteServiceAccounts(projectID: string, serviceaccount: ServiceAccountEntity): Observable<any> {
+    const url = `${this.restRoot}/projects/${projectID}/users/${serviceaccount.id}`;
+    return this.http.delete(url, {headers: this.headers});
   }
 }

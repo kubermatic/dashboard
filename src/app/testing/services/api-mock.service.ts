@@ -165,6 +165,10 @@ export class ApiMockService {
     return of(this.serviceAccount);
   }
 
+  deleteServiceAccounts(projectID: string, serviceAccount: ServiceAccountEntity): Observable<any> {
+    return of(null);
+  }
+
   getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
     return of(this.vsphereNetworks);
   }

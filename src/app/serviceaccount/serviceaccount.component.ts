@@ -1,9 +1,12 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatDialog, MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {interval, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
+import {GoogleAnalyticsService} from '../google-analytics.service';
+import {NotificationActions} from '../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
@@ -31,7 +34,8 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
   constructor(
       private api: ApiService, private projectService: ProjectService, public dialog: MatDialog,
-      private userService: UserService, private appConfigService: AppConfigService) {}
+      private userService: UserService, private appConfigService: AppConfigService,
+      private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.project = this.projectService.project;
@@ -99,6 +103,33 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     modal.componentInstance.serviceaccount = serviceAccount;
     const sub = modal.afterClosed().subscribe((edited) => {
       sub.unsubscribe();
+    });
+  }
+
+  deleteServiceAccount(serviceAccount: ServiceAccountEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Remove member from project',
+        message: `You are on the way to remove the Service Account ${serviceAccount.name} from the project ${
+            this.project.name}. This cannot be undone!`,
+        confirmLabel: 'Delete',
+        cancelLabel: 'Close',
+      },
+    };
+
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('serviceAccountOverview', 'deleteServiceAccountOpened');
+
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteServiceAccounts(this.project.id, serviceAccount).subscribe(() => {
+          NotificationActions.success(
+              'Success', `Service Account ${serviceAccount.name} has been removed from project ${this.project.name}`);
+          this.googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
+        });
+      }
     });
   }
 }
