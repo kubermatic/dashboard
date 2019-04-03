@@ -56,25 +56,8 @@ describe('EditServiceAccountComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('should have invalid form after creating', () => {
-    expect(component.editServiceAccountForm.valid).toBeFalsy();
-  });
-
-  it('should have required fields', () => {
-    expect(component.editServiceAccountForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.editServiceAccountForm.controls.name.valid).toBeFalsy('name field is initially not valid');
-    expect(component.editServiceAccountForm.controls.name.hasError('required'))
-        .toBeTruthy('name field has initially required error');
-    expect(component.editServiceAccountForm.controls.group.valid).toBeFalsy('group field is initially not valid');
-    expect(component.editServiceAccountForm.controls.group.hasError('required'))
-        .toBeTruthy('group field has initially required error');
-
-    component.editServiceAccountForm.controls.name.patchValue('test-service-account');
-    expect(component.editServiceAccountForm.controls.name.hasError('required'))
-        .toBeFalsy('name field has no required error after setting name');
-    component.editServiceAccountForm.controls.group.patchValue('editor');
-    expect(component.editServiceAccountForm.controls.group.hasError('required'))
-        .toBeFalsy('group field has no required error after setting group');
+  it('should have valid form after creating', () => {
+    expect(component.editServiceAccountForm.valid).toBeTruthy();
   });
 
   it('should call editServiceAccount method', fakeAsync(() => {
