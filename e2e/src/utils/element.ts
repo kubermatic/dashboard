@@ -4,7 +4,7 @@ const defaultTimeout = 60000;
 // Number of retries to make sure that element meets required condition.
 const defaultRetries = 5;
 // Time to wait between retries (in ms)
-const defaultRetryTime = 20;
+const defaultRetryTime = 200;
 
 export class KMElement {
   static waitToAppear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {

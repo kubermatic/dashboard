@@ -19,12 +19,7 @@ describe('Multi Owner story', () => {
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
   const memberEmail2 = browser.params.KUBERMATIC_E2E_USERNAME_2;
 
-  it('should login as a second user and logout', () => {
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
-    AuthUtils.logout();
-  });
-
-  it('should login as a first user', () => {
+  it('should login as a first owner', () => {
     AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
@@ -41,7 +36,7 @@ describe('Multi Owner story', () => {
 
     KMElement.waitToAppear(membersPage.getAddMemberDialogEmailInput());
     KMElement.sendKeys(membersPage.getAddMemberDialogEmailInput(), memberEmail2);
-    KMElement.waitToAppear(membersPage.getAddMemberDialogGroupCombobox());
+    KMElement.waitForClickable(membersPage.getAddMemberDialogGroupCombobox());
     membersPage.getAddMemberDialogGroupCombobox().click();
     membersPage.getAddMemberDialogGroupOption(1).click();
     membersPage.getAddMemberDialogAddBtn().click();
@@ -62,13 +57,13 @@ describe('Multi Owner story', () => {
     expect(projectsPage.getProjectItem(projectNameMultiOwner).isPresent()).toBeTruthy();
   });
 
-  it('should delete other owner from project', () => {
+  it('should delete other owner from the project', () => {
     membersPage.navigateTo();
-    KMElement.waitToAppear(membersPage.getMemberDeleteBtn(memberEmail));
+    KMElement.waitForClickable(membersPage.getMemberDeleteBtn(memberEmail));
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
     KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
-    KMElement.waitToAppear(confirmationDialog.getConfirmationDialogConfirmBtn());
+    KMElement.waitForClickable(confirmationDialog.getConfirmationDialogConfirmBtn());
     confirmationDialog.getConfirmationDialogConfirmBtn().click();
     KMElement.waitToDisappear(confirmationDialog.getConfirmationDialog());
 

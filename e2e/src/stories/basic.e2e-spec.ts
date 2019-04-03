@@ -92,10 +92,10 @@ describe('Basic story', () => {
 
   it('should edit created member info', async () => {
     const memberGroup = await membersPage.getMemberGroup(memberEmail).getText();
-    KMElement.waitToAppear(membersPage.getMemberEditBtn(memberEmail));
+    KMElement.waitForClickable(membersPage.getMemberEditBtn(memberEmail));
     membersPage.getMemberEditBtn(memberEmail).click();
 
-    KMElement.waitToAppear(membersPage.getEditMemberDialogGroupCombobox());
+    KMElement.waitForClickable(membersPage.getEditMemberDialogGroupCombobox());
     membersPage.getEditMemberDialogGroupCombobox().click();
     membersPage.getEditMemberDialogGroupOption(3).click();
     membersPage.getEditMemberDialogEditBtn().click();
@@ -111,10 +111,10 @@ describe('Basic story', () => {
   });
 
   it('should delete created member', () => {
-    KMElement.waitToAppear(membersPage.getMemberDeleteBtn(memberEmail));
+    KMElement.waitForClickable(membersPage.getMemberDeleteBtn(memberEmail));
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
-    KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
+    KMElement.waitForClickable(confirmationDialog.getConfirmationDialog());
     confirmationDialog.getConfirmationDialogConfirmBtn().click();
 
     // Switch views to reload members list
@@ -132,7 +132,7 @@ describe('Basic story', () => {
     const oldProjectName = projectName;
     projectsPage.navigateTo();
 
-    KMElement.waitToAppear(projectsPage.getProjectEditBtn(projectName));
+    KMElement.waitForClickable(projectsPage.getProjectEditBtn(projectName));
     projectsPage.getProjectEditBtn(projectName).click();
     expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
 
