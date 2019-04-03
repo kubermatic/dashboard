@@ -72,7 +72,7 @@ describe('AddServiceAccountComponent', () => {
     component.addServiceAccountForm.controls.name.patchValue('test-service-account');
     expect(component.addServiceAccountForm.controls.name.hasError('required'))
         .toBeFalsy('name field has no required error after setting name');
-    component.addServiceAccountForm.controls.group.patchValue('editor');
+    component.addServiceAccountForm.controls.group.patchValue('editors');
     expect(component.addServiceAccountForm.controls.group.hasError('required'))
         .toBeFalsy('group field has no required error after setting group');
   });
@@ -80,7 +80,7 @@ describe('AddServiceAccountComponent', () => {
   it('should call addServiceAccount method', fakeAsync(() => {
        component.project = fakeProject();
        component.addServiceAccountForm.controls.name.patchValue('test-service-account');
-       component.addServiceAccountForm.controls.group.patchValue('editor');
+       component.addServiceAccountForm.controls.group.patchValue('editors');
        component.addServiceAccount();
        tick();
 

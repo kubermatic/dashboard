@@ -88,7 +88,7 @@ describe('SidenavComponent', () => {
   it('should get RouterLinks from template', () => {
     fixture.detectChanges();
 
-    expect(links.length).toBe(4, 'should have 4 links');
+    expect(links.length).toBe(5, 'should have 5 links');
     expect(links[0].linkParams).toBe('/projects//clusters', 'first link should go to clusters page');
   });
 

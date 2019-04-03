@@ -26,7 +26,7 @@ export class AddServiceAccountComponent implements OnInit {
 
   addServiceAccount(): void {
     const createServiceAccount: CreateServiceAccountEntity = {
-      name: this.addServiceAccountForm.controls.email.value,
+      name: this.addServiceAccountForm.controls.name.value,
       group: this.addServiceAccountForm.controls.group.value,
     };
 
