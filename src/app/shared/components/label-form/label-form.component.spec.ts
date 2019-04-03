@@ -66,16 +66,4 @@ describe('LabelFormComponent', () => {
 
     expect(component.labels).toEqual({});
   });
-
-  it('should toggle visibility', () => {
-    expect(component.isVisible).toBeTruthy();
-
-    component.toggleVisibility();
-
-    expect(component.isVisible).toBeFalsy();
-
-    component.toggleVisibility();
-
-    expect(component.isVisible).toBeTruthy();
-  });
 });
