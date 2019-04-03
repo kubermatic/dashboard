@@ -17,7 +17,9 @@ export class EditServiceAccountComponent implements OnInit {
   @Input() serviceaccount: ServiceAccountEntity;
   editServiceAccountForm: FormGroup;
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<EditServiceAccountComponent>) {}
+  constructor(
+      private readonly _apiService: ApiService,
+      private readonly _matDialogRef: MatDialogRef<EditServiceAccountComponent>) {}
 
   ngOnInit(): void {
     this.editServiceAccountForm = new FormGroup({
@@ -36,8 +38,8 @@ export class EditServiceAccountComponent implements OnInit {
       status: this.serviceaccount.id,
     };
 
-    this.api.editServiceAccounts(this.project.id, editServiceAccount).subscribe((res) => {
-      this.dialogRef.close(true);
+    this._apiService.editServiceAccounts(this.project.id, editServiceAccount).subscribe(() => {
+      this._matDialogRef.close(true);
       NotificationActions.success('Success', `Service Account ${this.serviceaccount.name} is edited successfully`);
     });
   }

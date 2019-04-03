@@ -15,7 +15,9 @@ export class AddServiceAccountComponent implements OnInit {
   @Input() project: ProjectEntity;
   addServiceAccountForm: FormGroup;
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<AddServiceAccountComponent>) {}
+  constructor(
+      private readonly _apiService: ApiService,
+      private readonly _matDialogRef: MatDialogRef<AddServiceAccountComponent>) {}
 
   ngOnInit(): void {
     this.addServiceAccountForm = new FormGroup({
@@ -30,8 +32,8 @@ export class AddServiceAccountComponent implements OnInit {
       group: this.addServiceAccountForm.controls.group.value,
     };
 
-    this.api.createServiceAccounts(this.project.id, createServiceAccount).subscribe((res) => {
-      this.dialogRef.close(true);
+    this._apiService.createServiceAccounts(this.project.id, createServiceAccount).subscribe(() => {
+      this._matDialogRef.close(true);
       NotificationActions.success(
           'Success',
           `Service Account ${createServiceAccount.name} is added successfully to project ${this.project.name}`);

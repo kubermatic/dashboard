@@ -1,16 +1,13 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {interval, Subscription} from 'rxjs';
-import {first} from 'rxjs/operators';
-import {AppConfigService} from '../app-config.service';
+import {EMPTY, Subject, timer} from 'rxjs';
+import {first, merge, switchMap, takeUntil} from 'rxjs/operators';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
-import {UserGroupConfig} from '../shared/model/Config';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
 
@@ -21,68 +18,51 @@ import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceacc
 })
 
 export class ServiceAccountComponent implements OnInit, OnDestroy {
-  project: ProjectEntity;
+  isInitializing = true;
   serviceAccounts: ServiceAccountEntity[] = [];
-  loading = true;
   currentUser: MemberEntity;
-  userGroup: string;
-  userGroupConfig: UserGroupConfig;
+  isShowToken = [];
   displayedColumns: string[] = ['status', 'name', 'group', 'creationDate', 'actions'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
   @ViewChild(MatSort) sort: MatSort;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
+  private _externalServiceAccountUpdate: Subject<any> = new Subject();
 
   constructor(
-      private api: ApiService, private projectService: ProjectService, public dialog: MatDialog,
-      private userService: UserService, private appConfigService: AppConfigService,
-      private googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
+      private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.project = this.projectService.project;
-
-    this.userService.getUser().pipe(first()).subscribe((user) => {
+    this._userService.getUser().pipe(first()).subscribe((user) => {
       this.currentUser = user;
     });
-
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
-      this.project = project;
-      this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-      this.userService.currentUserGroup(this.project.id).subscribe((group) => {
-        this.userGroup = group;
-      });
-    }));
 
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe(() => {
-      this.refreshServiceAccounts();
-    }));
-    this.refreshServiceAccounts();
+
+    timer(0, 5000)
+        .pipe(merge(this._externalServiceAccountUpdate))
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(
+            () => this._projectService.project ? this._apiService.getServiceAccounts(this._projectService.project.id) :
+                                                 EMPTY))
+        .subscribe(serviceaccounts => {
+          this.serviceAccounts = serviceaccounts;
+          this.isInitializing = false;
+        });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getDataSource(): MatTableDataSource<ServiceAccountEntity> {
     this.dataSource.data = this.serviceAccounts;
     return this.dataSource;
-  }
-
-  refreshServiceAccounts(): void {
-    if (this.project) {
-      this.subscriptions.push(this.api.getServiceAccounts(this.project.id).subscribe((res) => {
-        this.serviceAccounts = res;
-        this.loading = false;
-      }));
-    }
   }
 
   getStateIconClass(status: string): string {
@@ -111,23 +91,28 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  addServiceAccount(): void {
-    const modal = this.dialog.open(AddServiceAccountComponent);
-    modal.componentInstance.project = this.project;
+  isEnabled(action: string): boolean {
+    return !this._projectService.userGroup ||
+        this._projectService.userGroupConfig[this._projectService.userGroup].serviceaccounts[action];
+  }
 
-    const sub = modal.afterClosed().subscribe((added) => {
+  addServiceAccount(): void {
+    const modal = this._matDialog.open(AddServiceAccountComponent);
+    modal.componentInstance.project = this._projectService.project;
+
+    const sub = modal.afterClosed().pipe(first()).subscribe((added) => {
       if (added) {
-        this.refreshServiceAccounts();
+        this._externalServiceAccountUpdate.next();
       }
       sub.unsubscribe();
     });
   }
 
   editServiceAccount(serviceAccount: ServiceAccountEntity): void {
-    const modal = this.dialog.open(EditServiceAccountComponent);
-    modal.componentInstance.project = this.project;
+    const modal = this._matDialog.open(EditServiceAccountComponent);
+    modal.componentInstance.project = this._projectService.project;
     modal.componentInstance.serviceaccount = serviceAccount;
-    const sub = modal.afterClosed().subscribe((edited) => {
+    const sub = modal.afterClosed().pipe(first()).subscribe((edited) => {
       sub.unsubscribe();
     });
   }
@@ -139,22 +124,26 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       data: {
         title: 'Remove member from project',
         message: `You are on the way to remove the Service Account ${serviceAccount.name} from the project ${
-            this.project.name}. This cannot be undone!`,
+            this._projectService.project.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
       },
     };
 
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
-    this.googleAnalyticsService.emitEvent('serviceAccountOverview', 'deleteServiceAccountOpened');
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'deleteServiceAccountOpened');
 
-    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+    dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this.api.deleteServiceAccounts(this.project.id, serviceAccount).subscribe(() => {
-          NotificationActions.success(
-              'Success', `Service Account ${serviceAccount.name} has been removed from project ${this.project.name}`);
-          this.googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
-        });
+        this._apiService.deleteServiceAccounts(this._projectService.project.id, serviceAccount)
+            .pipe(first())
+            .subscribe(() => {
+              NotificationActions.success(
+                  'Success',
+                  `Service Account ${serviceAccount.name} has been removed from project ${
+                      this._projectService.project.name}`);
+              this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
+            });
       }
     });
   }
