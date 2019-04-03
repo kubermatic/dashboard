@@ -8,6 +8,7 @@ export function fakeHealth(): HealthEntity {
     machineController: true,
     scheduler: true,
     cloudProviderInfrastructure: true,
+    userClusterControllerManager: true,
   };
 }
 
@@ -19,6 +20,7 @@ export function fakeHealthProvisioning(): HealthEntity {
     machineController: true,
     scheduler: false,
     cloudProviderInfrastructure: false,
+    userClusterControllerManager: false,
   };
 }
 
@@ -30,5 +32,6 @@ export function fakeHealthFailed(): HealthEntity {
     machineController: false,
     scheduler: false,
     cloudProviderInfrastructure: false,
+    userClusterControllerManager: false,
   };
 }
