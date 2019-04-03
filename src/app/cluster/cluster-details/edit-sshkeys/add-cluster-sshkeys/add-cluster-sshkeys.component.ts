@@ -5,7 +5,7 @@ import {Subscription} from 'rxjs';
 import {AppConfigService} from '../../../../app-config.service';
 import {ApiService, UserService} from '../../../../core/services';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
-import {AddSshKeyModalComponent} from '../../../../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
 import {SSHKeyEntity} from '../../../../shared/entity/SSHKeyEntity';
@@ -76,7 +76,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   addProjectSSHKeys(): void {
-    const dialogRef = this.dialog.open(AddSshKeyModalComponent);
+    const dialogRef = this.dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this.projectID;
 
     dialogRef.afterClosed().subscribe((result) => {

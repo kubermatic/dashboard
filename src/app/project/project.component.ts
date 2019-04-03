@@ -3,10 +3,10 @@ import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/
 import {Subject, timer,} from 'rxjs';
 import {first, merge, takeUntil} from 'rxjs/operators';
 
-import {AddProjectComponent} from '../add-project/add-project.component';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
+import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
@@ -96,7 +96,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   addProject(): void {
-    this._matDialog.open(AddProjectComponent).afterClosed().pipe(first()).subscribe((isAdded) => {
+    this._matDialog.open(AddProjectDialogComponent).afterClosed().pipe(first()).subscribe((isAdded) => {
       if (isAdded) {
         this._externalProjectsUpdate.next();
       }
@@ -132,13 +132,12 @@ export class ProjectComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Project',
-        message: `You are on the way to delete the project ${
-            project
-                .name}. Deletion of projects cannot be undone! If you know what you are doing, please type the name of the project:`,
+        message: `You are on the way to delete the project ${project.name}. Deletion of projects cannot be undone!
+        If you know what you are doing, please type the name of the project:`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
         compareName: project.name,
-        inputPlaceholder: 'Name of the Project:',
+        inputPlaceholder: 'Project name',
         inputTitle: 'Project name',
       },
     };

@@ -1,4 +1,4 @@
-@import "../../assets/css/colors";
+@import "../../../../assets/css/colors";
 
 .mat-dialog-container {
   width: 200px;
@@ -27,8 +27,7 @@
     line-height: 20px;
   }
 
-  .km-how-to-project-first,
-  .km-how-to-project-second {
+  .km-project-how-to-cell {
     .km-how-to-project-content {
       border-right: 1px solid $white-text-color;
     }

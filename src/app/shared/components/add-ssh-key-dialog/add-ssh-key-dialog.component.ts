@@ -7,18 +7,18 @@ import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {SSHKeyEntity} from '../../entity/SSHKeyEntity';
 
 @Component({
-  selector: 'kubermatic-add-ssh-key-modal',
-  templateUrl: './add-ssh-key-modal.component.html',
-  styleUrls: ['./add-ssh-key-modal.component.scss'],
+  selector: 'kubermatic-add-ssh-key-dialog',
+  templateUrl: './add-ssh-key-dialog.component.html',
+  styleUrls: ['./add-ssh-key-dialog.component.scss'],
 })
-export class AddSshKeyModalComponent implements OnInit {
+export class AddSshKeyDialogComponent implements OnInit {
   @Input() projectID: string;
   addSSHKeyForm: FormGroup;
 
   constructor(
       private api: ApiService, private formBuilder: FormBuilder,
-      private dialogRef: MatDialogRef<AddSshKeyModalComponent>, public googleAnalyticsService: GoogleAnalyticsService) {
-  }
+      private dialogRef: MatDialogRef<AddSshKeyDialogComponent>,
+      public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.addSSHKeyForm = this.formBuilder.group({

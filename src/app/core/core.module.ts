@@ -5,7 +5,6 @@ import {BrowserXhr} from '@angular/http';
 import {RouterModule} from '@angular/router';
 import {SimpleNotificationsModule} from 'angular2-notifications';
 
-import {AddProjectComponent} from '../add-project/add-project.component';
 import {AddMemberComponent} from '../member/add-member/add-member.component';
 import {EditMemberComponent} from '../member/edit-member/edit-member.component';
 import {SharedModule} from '../shared/shared.module';
@@ -36,7 +35,6 @@ const components: any[] = [
   NavigationComponent,
   BreadcrumbsComponent,
   NotificationComponent,
-  AddProjectComponent,
   AddMemberComponent,
   EditMemberComponent,
 ];
