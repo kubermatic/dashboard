@@ -22,7 +22,7 @@ export class EditServiceAccountComponent implements OnInit {
   ngOnInit(): void {
     this.editServiceAccountForm = new FormGroup({
       name: new FormControl(this.serviceaccount.name, [Validators.required]),
-      group: new FormControl(this.serviceaccount.group, [Validators.required]),
+      group: new FormControl(this.serviceaccount.group.replace(/(\-[\w\d]+$)/, ''), [Validators.required]),
     });
   }
 

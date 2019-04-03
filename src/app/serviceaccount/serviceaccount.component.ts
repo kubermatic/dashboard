@@ -27,7 +27,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   currentUser: MemberEntity;
   userGroup: string;
   userGroupConfig: UserGroupConfig;
-  displayedColumns: string[] = ['name', 'group', 'status', 'creationDate', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'group', 'creationDate', 'actions'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
   @ViewChild(MatSort) sort: MatSort;
   private subscriptions: Subscription[] = [];
@@ -76,6 +76,28 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     return this.dataSource;
   }
 
+  refreshServiceAccounts(): void {
+    if (this.project) {
+      this.subscriptions.push(this.api.getServiceAccounts(this.project.id).subscribe((res) => {
+        this.serviceAccounts = res;
+        this.loading = false;
+      }));
+    }
+  }
+
+  getGroupDisplayName(group: string) {
+    const prefix = group.split('-')[0];
+    switch (prefix) {
+      case 'owners':
+        return 'Owner';
+      case 'editors':
+        return 'Editor';
+      case 'viewers':
+        return 'Viewer';
+    }
+    return '';
+  }
+
   addServiceAccount(): void {
     const modal = this.dialog.open(AddServiceAccountComponent);
     modal.componentInstance.project = this.project;
@@ -86,15 +108,6 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       }
       sub.unsubscribe();
     });
-  }
-
-  refreshServiceAccounts(): void {
-    if (this.project) {
-      this.subscriptions.push(this.api.getServiceAccounts(this.project.id).subscribe((res) => {
-        this.serviceAccounts = res;
-        this.loading = false;
-      }));
-    }
   }
 
   editServiceAccount(serviceAccount: ServiceAccountEntity): void {
