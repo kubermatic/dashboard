@@ -20,7 +20,6 @@ import {ProjectMockService} from '../../../testing/services/project-mock.service
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {click} from '../../../testing/utils/click-handler';
 import {ApiService, ProjectService, UserService} from '../../services';
-
 import {SidenavComponent} from './sidenav.component';
 
 const modules: any[] = [
