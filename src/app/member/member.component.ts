@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {Subject, timer} from 'rxjs';
-import {merge} from 'rxjs/internal/operators/merge';
-import {first, takeUntil} from 'rxjs/operators';
+import {first, merge, takeUntil} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -44,16 +43,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._registerMembersReload(0, 5000);
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
-  }
-
-  private _registerMembersReload(dueTime: number, period: number): void {
-    timer(dueTime, period).pipe(merge(this._externalMembersUpdate)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    timer(0, 5000).pipe(merge(this._externalMembersUpdate)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       if (this._projectService.project) {
         this._apiService.getMembers(this._projectService.project.id).pipe(first()).subscribe(members => {
           this.members = members;
@@ -61,6 +51,11 @@ export class MemberComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getDataSource(): MatTableDataSource<MemberEntity> {
