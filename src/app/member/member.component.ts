@@ -1,15 +1,15 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {interval, Subscription} from 'rxjs';
-import {first} from 'rxjs/operators';
-import {AppConfigService} from '../app-config.service';
+import {EMPTY, Subject, timer} from 'rxjs';
+import {first, merge, switchMap, takeUntil} from 'rxjs/operators';
+
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MemberEntity, MemberProject} from '../shared/entity/MemberEntity';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
-import {UserGroupConfig} from '../shared/model/Config';
+import {MemberEntity} from '../shared/entity/MemberEntity';
+import {MemberUtils} from '../shared/utils/member-utils/member-utils';
+
 import {AddMemberComponent} from './add-member/add-member.component';
 import {EditMemberComponent} from './edit-member/edit-member.component';
 
@@ -20,55 +20,43 @@ import {EditMemberComponent} from './edit-member/edit-member.component';
 })
 
 export class MemberComponent implements OnInit, OnDestroy {
-  project: ProjectEntity;
   members: MemberEntity[] = [];
-  loading = true;
-  sortedMembers: MemberEntity[] = [];
+  isInitializing = true;
   currentUser: MemberEntity;
-  userGroup: string;
-  userGroupConfig: UserGroupConfig;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<MemberEntity>();
   @ViewChild(MatSort) sort: MatSort;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
+  private _externalMembersUpdate: Subject<any> = new Subject();
 
   constructor(
-      private api: ApiService, private projectService: ProjectService, public dialog: MatDialog,
-      private userService: UserService, private appConfigService: AppConfigService,
-      private googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
+      private readonly _matDialog: MatDialog, private readonly _userService: UserService,
+      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.project = this.projectService.project;
-
-    this.userService.getUser().pipe(first()).subscribe((user) => {
+    this._userService.getUser().pipe(first()).subscribe((user) => {
       this.currentUser = user;
     });
-
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
-      this.project = project;
-      this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-      this.userService.currentUserGroup(this.project.id).subscribe((group) => {
-        this.userGroup = group;
-      });
-    }));
 
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe(() => {
-      this.refreshMembers();
-    }));
-    this.refreshMembers();
+    timer(0, 5000)
+        .pipe(merge(this._externalMembersUpdate))
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(
+            () => this._projectService.project ? this._apiService.getMembers(this._projectService.project.id) : EMPTY))
+        .subscribe(members => {
+          this.members = members;
+          this.isInitializing = false;
+        });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getDataSource(): MatTableDataSource<MemberEntity> {
@@ -76,57 +64,50 @@ export class MemberComponent implements OnInit, OnDestroy {
     return this.dataSource;
   }
 
-  addMember(): void {
-    const modal = this.dialog.open(AddMemberComponent);
-    modal.componentInstance.project = this.project;
+  getGroup(member: MemberEntity): string {
+    if (this._projectService.project) {
+      const group = MemberUtils.getGroupInProject(member, this._projectService.project.id);
+      return MemberUtils.getGroupDisplayName(group);
+    }
+    return '';
+  }
 
-    const sub = modal.afterClosed().subscribe((added) => {
-      if (added) {
-        this.refreshMembers();
+  isAddEnabled(): boolean {
+    return !this._projectService.userGroup ||
+        this._projectService.userGroupConfig[this._projectService.userGroup].members.invite;
+  }
+
+  addMember(): void {
+    const modal = this._matDialog.open(AddMemberComponent);
+    modal.componentInstance.project = this._projectService.project;
+    modal.afterClosed().pipe(first()).subscribe(isAdded => {
+      if (isAdded) {
+        this._externalMembersUpdate.next();
       }
-      sub.unsubscribe();
     });
   }
 
-  refreshMembers(): void {
-    if (this.project) {
-      this.subscriptions.push(this.api.getMembers(this.project.id).subscribe((res) => {
-        this.members = res;
-        this.loading = false;
-      }));
-    }
-  }
-
-  compare(a, b, isAsc): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-  }
-
-  getGroup(memberProjects: MemberProject[]): string {
-    for (const i of Object.keys(memberProjects)) {
-      if (memberProjects[i].id === this.project.id) {
-        const group = memberProjects[i].group.split('-')[0];
-        switch (group) {
-          case 'owners':
-            return 'Owner';
-          case 'editors':
-            return 'Editor';
-          case 'viewers':
-            return 'Viewer';
-          default:
-            return '';
-        }
-      }
-      return '';
-    }
+  isEditEnabled(member: MemberEntity): boolean {
+    return !this._projectService.userGroup ||
+        this._projectService.userGroupConfig[this._projectService.userGroup].members.edit ||
+        (this.currentUser && member && this.currentUser.email !== member.email);
   }
 
   editMember(member: MemberEntity): void {
-    const modal = this.dialog.open(EditMemberComponent);
-    modal.componentInstance.project = this.project;
+    const modal = this._matDialog.open(EditMemberComponent);
+    modal.componentInstance.project = this._projectService.project;
     modal.componentInstance.member = member;
-    const sub = modal.afterClosed().subscribe((edited) => {
-      sub.unsubscribe();
+    modal.afterClosed().pipe(first()).subscribe(isEdited => {
+      if (isEdited) {
+        this._externalMembersUpdate.next();
+      }
     });
+  }
+
+  isDeleteEnabled(member: MemberEntity): boolean {
+    return !this._projectService.userGroup ||
+        this._projectService.userGroupConfig[this._projectService.userGroup].members.remove ||
+        (this.currentUser && member && this.currentUser.email !== member.email);
   }
 
   deleteMember(member: MemberEntity): void {
@@ -136,21 +117,21 @@ export class MemberComponent implements OnInit, OnDestroy {
       data: {
         title: 'Remove member from project',
         message: `You are on the way to remove the member ${member.name} from the project ${
-            this.project.name}. This cannot be undone!`,
+            this._projectService.project.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
       },
     };
 
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
-    this.googleAnalyticsService.emitEvent('memberOverview', 'deleteMemberOpened');
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('memberOverview', 'deleteMemberOpened');
 
-    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+    dialogRef.afterClosed().pipe(first()).subscribe(isConfirmed => {
       if (isConfirmed) {
-        this.api.deleteMembers(this.project.id, member).subscribe(() => {
+        this._apiService.deleteMembers(this._projectService.project.id, member).pipe(first()).subscribe(() => {
           NotificationActions.success(
-              'Success', `Member ${member.name} has been removed from project ${this.project.name}`);
-          this.googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
+              'Success', `Member ${member.name} has been removed from project ${this._projectService.project.name}`);
+          this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
         });
       }
     });

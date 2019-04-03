@@ -14,7 +14,8 @@ export class AddMemberComponent implements OnInit {
   @Input() project: ProjectEntity;
   addMemberForm: FormGroup;
 
-  constructor(private api: ApiService, private dialogRef: MatDialogRef<AddMemberComponent>) {}
+  constructor(
+      private readonly _apiService: ApiService, private readonly _matDialogRef: MatDialogRef<AddMemberComponent>) {}
 
   ngOnInit(): void {
     this.addMemberForm = new FormGroup({
@@ -26,16 +27,14 @@ export class AddMemberComponent implements OnInit {
   addMember(): void {
     const createMember: CreateMemberEntity = {
       email: this.addMemberForm.controls.email.value,
-      projects: [
-        {
-          group: this.addMemberForm.controls.group.value,
-          id: this.project.id,
-        },
-      ],
+      projects: [{
+        group: this.addMemberForm.controls.group.value,
+        id: this.project.id,
+      }],
     };
 
-    this.api.createMembers(this.project.id, createMember).subscribe((res) => {
-      this.dialogRef.close(true);
+    this._apiService.createMembers(this.project.id, createMember).subscribe(() => {
+      this._matDialogRef.close(true);
       NotificationActions.success(
           'Success', `Member ${createMember.email} is added successfully to project ${this.project.name}`);
     });
