@@ -11,6 +11,7 @@ import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
   selector: 'kubermatic-edit-serviceaccount',
   templateUrl: './edit-serviceaccount.component.html',
 })
+
 export class EditServiceAccountComponent implements OnInit {
   @Input() project: ProjectEntity;
   @Input() serviceaccount: ServiceAccountEntity;
@@ -37,7 +38,7 @@ export class EditServiceAccountComponent implements OnInit {
 
     this.api.editServiceAccounts(this.project.id, editServiceAccount).subscribe((res) => {
       this.dialogRef.close(true);
-      NotificationActions.success('Success', `Service Account ${this.serviceaccount.name} is revoked successfully`);
+      NotificationActions.success('Success', `Service Account ${this.serviceaccount.name} is edited successfully`);
     });
   }
 }

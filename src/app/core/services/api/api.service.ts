@@ -18,7 +18,7 @@ import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity'
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
-import {CreateServiceAccountEntity, ServiceAccountEntity} from '../../../shared/entity/ServiceaccountEntity';
+import {CreateServiceAccountEntity, ServiceAccountEntity} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';

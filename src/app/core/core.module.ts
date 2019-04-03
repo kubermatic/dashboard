@@ -8,6 +8,7 @@ import {SimpleNotificationsModule} from 'angular2-notifications';
 import {AddMemberComponent} from '../member/add-member/add-member.component';
 import {EditMemberComponent} from '../member/edit-member/edit-member.component';
 import {AddServiceAccountComponent} from '../serviceaccount/add-serviceaccount/add-serviceaccount.component';
+import {EditServiceAccountComponent} from '../serviceaccount/edit-serviceaccount/edit-serviceaccount.component';
 import {SharedModule} from '../shared/shared.module';
 
 import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.component';
@@ -40,6 +41,7 @@ const components: any[] = [
   AddMemberComponent,
   EditMemberComponent,
   AddServiceAccountComponent,
+  EditServiceAccountComponent,
   FooterComponent,
 ];
 
