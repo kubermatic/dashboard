@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {Subscription, timer} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {Subject, timer} from 'rxjs';
+import {merge} from 'rxjs/internal/operators/merge';
+import {first, takeUntil} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -26,7 +27,8 @@ export class MemberComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<MemberEntity>();
   @ViewChild(MatSort) sort: MatSort;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
+  private _externalMembersUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -42,30 +44,23 @@ export class MemberComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._registerMembersReloadInterval(0, 5000);
+    this._registerMembersReload(0, 5000);
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  private _registerMembersReload(dueTime: number, period: number): void {
+    timer(dueTime, period).pipe(merge(this._externalMembersUpdate)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      if (this._projectService.project) {
+        this._apiService.getMembers(this._projectService.project.id).pipe(first()).subscribe(members => {
+          this.members = members;
+          this.isInitializing = false;
+        });
       }
-    }
-  }
-
-  private _registerMembersReloadInterval(dueTime: number, period: number): void {
-    this.subscriptions.push(timer(dueTime, period).subscribe(() => {
-      this._reloadMembers();
-    }));
-  }
-
-  private _reloadMembers(): void {
-    if (this._projectService.project) {
-      this._apiService.getMembers(this._projectService.project.id).pipe(first()).subscribe(members => {
-        this.members = members;
-        this.isInitializing = false;
-      });
-    }
+    });
   }
 
   getDataSource(): MatTableDataSource<MemberEntity> {
@@ -91,7 +86,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     modal.componentInstance.project = this._projectService.project;
     modal.afterClosed().pipe(first()).subscribe(isAdded => {
       if (isAdded) {
-        this._reloadMembers();
+        this._externalMembersUpdate.next();
       }
     });
   }
@@ -108,7 +103,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     modal.componentInstance.member = member;
     modal.afterClosed().pipe(first()).subscribe(isEdited => {
       if (isEdited) {
-        this._reloadMembers();
+        this._externalMembersUpdate.next();
       }
     });
   }
