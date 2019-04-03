@@ -26,8 +26,8 @@ export class EditProjectComponent implements OnInit {
       name: this.editProjectForm.controls.name.value,
     };
 
-    this.api.editProject(this.project.id, editProjectEntity).subscribe((res) => {
-      this.dialogRef.close(res);
+    this.api.editProject(this.project.id, editProjectEntity).subscribe((project) => {
+      this.dialogRef.close(project);
       NotificationActions.success('Success', `Project ${this.project.name} has been edited successfully`);
     });
   }
