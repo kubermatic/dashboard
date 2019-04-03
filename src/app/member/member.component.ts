@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {Subject, timer} from 'rxjs';
-import {first, merge, takeUntil} from 'rxjs/operators';
+import {EMPTY, Subject, timer} from 'rxjs';
+import {first, merge, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -43,14 +43,15 @@ export class MemberComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    timer(0, 5000).pipe(merge(this._externalMembersUpdate)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      if (this._projectService.project) {
-        this._apiService.getMembers(this._projectService.project.id).pipe(first()).subscribe(members => {
+    timer(0, 5000)
+        .pipe(merge(this._externalMembersUpdate))
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(
+            () => this._projectService.project ? this._apiService.getMembers(this._projectService.project.id) : EMPTY))
+        .subscribe(members => {
           this.members = members;
           this.isInitializing = false;
         });
-      }
-    });
   }
 
   ngOnDestroy(): void {
