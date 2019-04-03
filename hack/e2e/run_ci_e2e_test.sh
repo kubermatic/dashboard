@@ -35,16 +35,11 @@ cat /hosts > /etc/hosts
 # Start docker daemon
 dockerd > /dev/null 2> /dev/null &
 
-OLD_DIR=$(pwd)
-cd hack/e2e
-
-./deploy.sh
+deploy.sh
 DOCKER_CONFIG=/ docker run --name controller -d -v /root/.kube/config:/inner -v /etc/kubeconfig/kubeconfig:/outer --network host --privileged ${CONTROLLER_IMAGE} --kubeconfig-inner "/inner" --kubeconfig-outer "/outer" --namespace "default" --build-id "$PROW_JOB_ID"
 docker logs -f controller &
 
-./expose.sh
-
-cd ${OLD_DIR}
+expose.sh
 
 npm run versioninfo
 npm run e2e:local
