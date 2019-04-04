@@ -135,7 +135,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.deleteServiceAccounts(this._projectService.project.id, serviceAccount)
+        this._apiService.deleteServiceAccount(this._projectService.project.id, serviceAccount)
             .pipe(first())
             .subscribe(() => {
               NotificationActions.success(

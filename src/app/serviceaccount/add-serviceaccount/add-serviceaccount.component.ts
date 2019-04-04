@@ -32,7 +32,7 @@ export class AddServiceAccountComponent implements OnInit {
       group: this.addServiceAccountForm.controls.group.value,
     };
 
-    this._apiService.createServiceAccounts(this.project.id, createServiceAccount).subscribe(() => {
+    this._apiService.createServiceAccount(this.project.id, createServiceAccount).subscribe(() => {
       this._matDialogRef.close(true);
       NotificationActions.success(
           'Success',

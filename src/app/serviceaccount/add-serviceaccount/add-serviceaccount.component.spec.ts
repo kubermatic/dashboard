@@ -23,11 +23,11 @@ const modules: any[] = [
 describe('AddServiceAccountComponent', () => {
   let fixture: ComponentFixture<AddServiceAccountComponent>;
   let component: AddServiceAccountComponent;
-  let createServiceAccountsSpy: Spy;
+  let createServiceAccountSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['createServiceAccounts']);
-    createServiceAccountsSpy = apiMock.createServiceAccounts.and.returnValue(asyncData(fakeServiceAccount()));
+    const apiMock = jasmine.createSpyObj('ApiService', ['createServiceAccount']);
+    createServiceAccountSpy = apiMock.createServiceAccount.and.returnValue(asyncData(fakeServiceAccount()));
 
     TestBed
         .configureTestingModule({
@@ -84,6 +84,6 @@ describe('AddServiceAccountComponent', () => {
        component.addServiceAccount();
        tick();
 
-       expect(createServiceAccountsSpy.and.callThrough()).toHaveBeenCalled();
+       expect(createServiceAccountSpy.and.callThrough()).toHaveBeenCalled();
      }));
 });

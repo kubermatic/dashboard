@@ -38,7 +38,7 @@ export class EditServiceAccountComponent implements OnInit {
       status: this.serviceaccount.id,
     };
 
-    this._apiService.editServiceAccounts(this.project.id, editServiceAccount).subscribe(() => {
+    this._apiService.editServiceAccount(this.project.id, editServiceAccount).subscribe(() => {
       this._matDialogRef.close(true);
       NotificationActions.success('Success', `Service Account ${this.serviceaccount.name} is edited successfully`);
     });

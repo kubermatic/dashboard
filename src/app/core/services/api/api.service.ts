@@ -339,18 +339,18 @@ export class ApiService {
     return this.http.get<ServiceAccountEntity[]>(url, {headers: this.headers});
   }
 
-  createServiceAccounts(projectID: string, serviceaccount: CreateServiceAccountEntity):
+  createServiceAccount(projectID: string, serviceaccount: CreateServiceAccountEntity):
       Observable<ServiceAccountEntity> {
     const url = `${this.restRoot}/projects/${projectID}/serviceaccounts`;
     return this.http.post<ServiceAccountEntity>(url, serviceaccount, {headers: this.headers});
   }
 
-  editServiceAccounts(projectID: string, serviceaccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+  editServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
     const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
     return this.http.put<ServiceAccountEntity>(url, serviceaccount, {headers: this.headers});
   }
 
-  deleteServiceAccounts(projectID: string, serviceaccount: ServiceAccountEntity): Observable<any> {
+  deleteServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/users/${serviceaccount.id}`;
     return this.http.delete(url, {headers: this.headers});
   }

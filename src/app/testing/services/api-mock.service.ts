@@ -156,16 +156,16 @@ export class ApiMockService {
     return of(this.serviceAccounts);
   }
 
-  createServiceAccounts(projectID: string, serviceAccount: CreateServiceAccountEntity):
+  createServiceAccount(projectID: string, serviceAccount: CreateServiceAccountEntity):
       Observable<ServiceAccountEntity> {
     return of(this.serviceAccount);
   }
 
-  editServiceAccounts(projectID: string, serviceAccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+  editServiceAccount(projectID: string, serviceAccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
     return of(this.serviceAccount);
   }
 
-  deleteServiceAccounts(projectID: string, serviceAccount: ServiceAccountEntity): Observable<any> {
+  deleteServiceAccount(projectID: string, serviceAccount: ServiceAccountEntity): Observable<any> {
     return of(null);
   }
 
