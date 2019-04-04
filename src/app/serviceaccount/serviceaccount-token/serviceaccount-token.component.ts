@@ -1,12 +1,13 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {first} from 'rxjs/operators';
+import {EMPTY, Subject, timer} from 'rxjs';
+import {first, merge, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, ProjectService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
+import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
 
 @Component({
   selector: 'kubermatic-serviceaccount-token',
@@ -17,10 +18,12 @@ import {ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
 export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccountEntity;
   isInitializing = true;
-  serviceaccountToken: ServiceAccountEntity[] = [];
+  serviceaccountTokens: ServiceAccountTokenEntity[] = [];
   displayedColumns: string[] = ['name', 'creationDate', 'actions'];
-  dataSource = new MatTableDataSource<ServiceAccountEntity>();
+  dataSource = new MatTableDataSource<ServiceAccountTokenEntity>();
   @ViewChild(MatSort) sort: MatSort;
+  private _unsubscribe: Subject<any> = new Subject();
+  private _externalServiceAccountUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -31,11 +34,21 @@ export class ServiceAccountTokenComponent implements OnInit {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this.serviceaccountToken.push(this.serviceaccount);
+    timer(0, 5000)
+        .pipe(merge(this._externalServiceAccountUpdate))
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(
+            () => this._projectService.project ?
+                this._apiService.getServiceAccountTokens(this._projectService.project.id, this.serviceaccount) :
+                EMPTY))
+        .subscribe(serviceaccountTokens => {
+          this.serviceaccountTokens = serviceaccountTokens;
+          this.isInitializing = false;
+        });
   }
 
-  getDataSource(): MatTableDataSource<ServiceAccountEntity> {
-    this.dataSource.data = this.serviceaccountToken;
+  getDataSource(): MatTableDataSource<ServiceAccountTokenEntity> {
+    this.dataSource.data = this.serviceaccountTokens;
     return this.dataSource;
   }
 
@@ -44,7 +57,7 @@ export class ServiceAccountTokenComponent implements OnInit {
         this._projectService.userGroupConfig[this._projectService.userGroup].serviceaccountToken[action];
   }
 
-  regenerateServiceAccountToken(token: ServiceAccountEntity): void {
+  regenerateServiceAccountToken(token: ServiceAccountTokenEntity): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -73,7 +86,7 @@ export class ServiceAccountTokenComponent implements OnInit {
     });
   }
 
-  deleteServiceAccountToken(token: ServiceAccountEntity): void {
+  deleteServiceAccountToken(token: ServiceAccountTokenEntity): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,

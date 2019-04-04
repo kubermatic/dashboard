@@ -56,11 +56,6 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
           this.serviceAccounts = serviceaccounts;
           this.isInitializing = false;
         });
-
-    /*this._apiService.getServiceAccounts(this._projectService.project.id).subscribe((serviceaccounts) => {
-      this.serviceAccounts = serviceaccounts;
-        this.isInitializing = false;
-    })*/
   }
 
   ngOnDestroy(): void {

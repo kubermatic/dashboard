@@ -11,3 +11,11 @@ export class CreateServiceAccountEntity {
   name: string;
   group: string;
 }
+
+export class ServiceAccountTokenEntity {
+  creationTimestamp: Date;
+  deletionTimestamp?: Date;
+  id: string;
+  name: string;
+  token: string;
+}

@@ -4,6 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -13,6 +14,8 @@ import {ApiMockService} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
+
+import {ServiceAccountTokenComponent} from './serviceaccount-token/serviceaccount-token.component';
 import {ServiceAccountComponent} from './serviceaccount.component';
 
 describe('ServiceAccountComponent', () => {
@@ -32,6 +35,7 @@ describe('ServiceAccountComponent', () => {
           ],
           declarations: [
             ServiceAccountComponent,
+            ServiceAccountTokenComponent,
           ],
           providers: [
             {provide: Router, useClass: RouterStub},
