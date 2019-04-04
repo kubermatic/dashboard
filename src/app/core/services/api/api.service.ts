@@ -351,7 +351,7 @@ export class ApiService {
   }
 
   deleteServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<any> {
-    const url = `${this.restRoot}/projects/${projectID}/users/${serviceaccount.id}`;
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
     return this.http.delete(url, {headers: this.headers});
   }
 }
