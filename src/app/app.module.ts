@@ -18,6 +18,7 @@ import {AddMemberComponent} from './member/add-member/add-member.component';
 import {EditMemberComponent} from './member/edit-member/edit-member.component';
 import {AddServiceAccountComponent} from './serviceaccount/add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './serviceaccount/edit-serviceaccount/edit-serviceaccount.component';
+import {TokenDialogComponent} from './serviceaccount/token-dialog/token-dialog.component';
 import {SharedModule} from './shared/shared.module';
 
 const appInitializerFn = (appConfig: AppConfigService): Function => {
@@ -60,6 +61,7 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
     EditMemberComponent,
     AddServiceAccountComponent,
     EditServiceAccountComponent,
+    TokenDialogComponent,
   ],
   bootstrap: [KubermaticComponent],
 })

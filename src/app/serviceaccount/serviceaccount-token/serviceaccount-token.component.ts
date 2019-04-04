@@ -8,6 +8,7 @@ import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 @Component({
   selector: 'kubermatic-serviceaccount-token',
@@ -23,7 +24,7 @@ export class ServiceAccountTokenComponent implements OnInit {
   dataSource = new MatTableDataSource<ServiceAccountTokenEntity>();
   @ViewChild(MatSort) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
-  private _externalServiceAccountUpdate: Subject<any> = new Subject();
+  private _externalServiceAccountTokenUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -35,7 +36,7 @@ export class ServiceAccountTokenComponent implements OnInit {
     this.sort.direction = 'asc';
 
     timer(0, 5000)
-        .pipe(merge(this._externalServiceAccountUpdate))
+        .pipe(merge(this._externalServiceAccountTokenUpdate))
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(
             () => this._projectService.project ?
@@ -77,7 +78,8 @@ export class ServiceAccountTokenComponent implements OnInit {
       if (isConfirmed) {
         this._apiService.createServiceAccountToken(this._projectService.project.id, this.serviceaccount)
             .pipe(first())
-            .subscribe(() => {
+            .subscribe((token) => {
+              this.openTokenDialog(token);
               NotificationActions.success(
                   'Success', `Token has been added to Service Account ${this.serviceaccount.name}`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
@@ -113,5 +115,10 @@ export class ServiceAccountTokenComponent implements OnInit {
             });
       }
     });
+  }
+
+  openTokenDialog(token: ServiceAccountTokenEntity): void {
+    const modal = this._matDialog.open(TokenDialogComponent);
+    modal.componentInstance.serviceaccountToken = token;
   }
 }

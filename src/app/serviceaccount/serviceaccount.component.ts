@@ -7,11 +7,12 @@ import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
-import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
+import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../shared/entity/ServiceAccountEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
+import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
 @Component({
   selector: 'kubermatic-serviceaccount',
@@ -157,11 +158,18 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       if (isConfirmed) {
         this._apiService.createServiceAccountToken(this._projectService.project.id, serviceAccount)
             .pipe(first())
-            .subscribe(() => {
-              NotificationActions.success('Success', `Token has been added to Service Account ${serviceAccount.name}`);
+            .subscribe((token) => {
+              this.openTokenDialog(token);
+              NotificationActions.success(
+                  'Success', `Token ${token.name} has been added to Service Account ${serviceAccount.name}`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenAdded');
             });
       }
     });
+  }
+
+  openTokenDialog(token: ServiceAccountTokenEntity): void {
+    const modal = this._matDialog.open(TokenDialogComponent);
+    modal.componentInstance.serviceaccountToken = token;
   }
 }
