@@ -354,4 +354,15 @@ export class ApiService {
     const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
     return this.http.delete(url, {headers: this.headers});
   }
+
+  createServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
+    return this.http.post<ServiceAccountEntity>(url, {headers: this.headers});
+  }
+
+  deleteServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountEntity):
+      Observable<any> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
+    return this.http.delete(url, {headers: this.headers});
+  }
 }

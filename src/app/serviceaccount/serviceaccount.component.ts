@@ -25,8 +25,10 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   currentUser: MemberEntity;
   isShowToken = [];
   displayedColumns: string[] = ['status', 'name', 'group', 'creationDate', 'actions'];
+  toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
   @ViewChild(MatSort) sort: MatSort;
+  shouldToggleToken = (index, item) => this.isShowToken[item.id];
   private _unsubscribe: Subject<any> = new Subject();
   private _externalServiceAccountUpdate: Subject<any> = new Subject();
 
@@ -44,7 +46,6 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-
     timer(0, 5000)
         .pipe(merge(this._externalServiceAccountUpdate))
         .pipe(takeUntil(this._unsubscribe))
@@ -55,6 +56,11 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
           this.serviceAccounts = serviceaccounts;
           this.isInitializing = false;
         });
+
+    /*this._apiService.getServiceAccounts(this._projectService.project.id).subscribe((serviceaccounts) => {
+      this.serviceAccounts = serviceaccounts;
+        this.isInitializing = false;
+    })*/
   }
 
   ngOnDestroy(): void {
@@ -75,9 +81,13 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     return MemberUtils.getGroupDisplayName(group);
   }
 
-  isEnabled(action: string): boolean {
+  isEnabled(action: string, type: string): boolean {
     return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].serviceaccounts[action];
+        this._projectService.userGroupConfig[this._projectService.userGroup][type][action];
+  }
+
+  toggleToken(element: ServiceAccountEntity): void {
+    this.isShowToken[element.id] = !this.isShowToken[element.id];
   }
 
   addServiceAccount(): void {
@@ -128,6 +138,33 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
                   `Service Account ${serviceAccount.name} has been removed from project ${
                       this._projectService.project.name}`);
               this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
+            });
+      }
+    });
+  }
+
+  addServiceAccountToken(serviceAccount: ServiceAccountEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Add Token to Service Account',
+        message: `You are on the way to add a new Token to the Service Account ${serviceAccount.name}.`,
+        confirmLabel: 'Add',
+        cancelLabel: 'Close',
+      },
+    };
+
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'addServiceAccountTokenOpened');
+
+    dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this._apiService.createServiceAccountToken(this._projectService.project.id, serviceAccount)
+            .pipe(first())
+            .subscribe(() => {
+              NotificationActions.success('Success', `Token has been added to Service Account ${serviceAccount.name}`);
+              this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenAdded');
             });
       }
     });
