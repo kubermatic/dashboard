@@ -3,33 +3,35 @@ import {browser, by, element, ElementFinder, ExpectedConditions} from 'protracto
 const defaultTimeout = 60000;
 // Number of retries to make sure that element meets required condition.
 const defaultRetries = 5;
+// Time to wait between retries (in ms)
+const defaultRetryTime = 200;
 
 export class KMElement {
   static waitToAppear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
     for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.visibilityOf(element), waitTimeout);
-      browser.sleep(1000);
+      browser.sleep(defaultRetryTime);
     }
   }
 
   static waitToDisappear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
     for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.invisibilityOf(element), waitTimeout);
-      browser.sleep(1000);
+      browser.sleep(defaultRetryTime);
     }
   }
 
   static waitForClickable(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
     for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.elementToBeClickable(element), waitTimeout);
-      browser.sleep(1000);
+      browser.sleep(defaultRetryTime);
     }
   }
 
   static waitForContent(element: ElementFinder, text: string, waitTimeout = defaultTimeout, retries = defaultRetries): void {
     for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.textToBePresentInElement(element, text), waitTimeout);
-      browser.sleep(1000);
+      browser.sleep(defaultRetryTime);
     }
   }
 
@@ -40,7 +42,7 @@ export class KMElement {
   static waitForRedirect(url: string, waitTimeout = defaultTimeout, retries = defaultRetries): void {
     for(let i=0;i<retries;i++) {
       browser.wait(ExpectedConditions.urlContains(url), waitTimeout);
-      browser.sleep(1000);
+      browser.sleep(defaultRetryTime);
     }
   }
 
