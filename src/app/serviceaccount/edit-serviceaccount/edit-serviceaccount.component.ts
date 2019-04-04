@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
+import {first} from 'rxjs/operators';
 
 import {ApiService} from '../../core/services';
 import {NotificationActions} from '../../redux/actions/notification.actions';
@@ -38,7 +39,7 @@ export class EditServiceAccountComponent implements OnInit {
       status: this.serviceaccount.id,
     };
 
-    this._apiService.editServiceAccount(this.project.id, editServiceAccount).subscribe(() => {
+    this._apiService.editServiceAccount(this.project.id, editServiceAccount).pipe(first()).subscribe(() => {
       this._matDialogRef.close(true);
       NotificationActions.success('Success', `Service Account ${this.serviceaccount.name} is edited successfully`);
     });

@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
+import {first} from 'rxjs/operators';
 
 import {ApiService} from '../../core/services';
 import {NotificationActions} from '../../redux/actions/notification.actions';
@@ -32,7 +33,7 @@ export class AddServiceAccountComponent implements OnInit {
       group: this.addServiceAccountForm.controls.group.value,
     };
 
-    this._apiService.createServiceAccount(this.project.id, createServiceAccount).subscribe(() => {
+    this._apiService.createServiceAccount(this.project.id, createServiceAccount).pipe(first()).subscribe(() => {
       this._matDialogRef.close(true);
       NotificationActions.success(
           'Success',

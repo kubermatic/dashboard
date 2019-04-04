@@ -8,6 +8,7 @@ import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
 import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
+import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
 
@@ -79,16 +80,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   }
 
   getGroupDisplayName(group: string): string {
-    const prefix = group.split('-')[0];
-    switch (prefix) {
-      case 'owners':
-        return 'Owner';
-      case 'editors':
-        return 'Editor';
-      case 'viewers':
-        return 'Viewer';
-    }
-    return '';
+    return MemberUtils.getGroupDisplayName(group);
   }
 
   isEnabled(action: string): boolean {
@@ -100,11 +92,10 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     const modal = this._matDialog.open(AddServiceAccountComponent);
     modal.componentInstance.project = this._projectService.project;
 
-    const sub = modal.afterClosed().pipe(first()).subscribe((added) => {
-      if (added) {
+    modal.afterClosed().pipe(first()).subscribe((isAdded) => {
+      if (isAdded) {
         this._externalServiceAccountUpdate.next();
       }
-      sub.unsubscribe();
     });
   }
 
@@ -112,8 +103,10 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     const modal = this._matDialog.open(EditServiceAccountComponent);
     modal.componentInstance.project = this._projectService.project;
     modal.componentInstance.serviceaccount = serviceAccount;
-    const sub = modal.afterClosed().pipe(first()).subscribe((edited) => {
-      sub.unsubscribe();
+    modal.afterClosed().pipe(first()).subscribe((isEdited) => {
+      if (isEdited) {
+        this._externalServiceAccountUpdate.next();
+      }
     });
   }
 
@@ -122,7 +115,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Remove member from project',
+        title: 'Remove Service Account from project',
         message: `You are on the way to remove the Service Account ${serviceAccount.name} from the project ${
             this._projectService.project.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
