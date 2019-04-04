@@ -15,6 +15,7 @@ if [[ -z ${PROW_JOB_ID} ]]; then
 fi
 
 export KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
+export KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"
 export KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
 
 function cleanup {
