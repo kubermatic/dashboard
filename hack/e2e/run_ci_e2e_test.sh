@@ -41,7 +41,7 @@ cd hack/e2e
 ./deploy.sh
 DOCKER_CONFIG=/ docker run --name controller -d -v /root/.kube/config:/inner -v /etc/kubeconfig/kubeconfig:/outer --network host --privileged ${CONTROLLER_IMAGE} --kubeconfig-inner "/inner" --kubeconfig-outer "/outer" --namespace "default" --build-id "$PROW_JOB_ID"
 docker logs -f controller &
-kubectl -n kubermatic logs -f $(kubectl -n kubermatic get pod -l role=kubermatic-api | awk 'NR==2{print $1}') &
+kubectl --kubeconfig ~/.kube/config -n kubermatic logs -f $(kubectl --kubeconfig ~/.kube/config -n kubermatic get pod -l role=kubermatic-api | awk 'NR==2{print $1}') &
 
 ./expose.sh
 
