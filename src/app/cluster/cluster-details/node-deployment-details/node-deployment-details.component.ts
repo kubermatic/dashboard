@@ -42,13 +42,9 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private readonly _activatedRoute: ActivatedRoute,
-      private readonly _router: Router,
-      private readonly _apiService: ApiService,
-      private readonly _datacenterService: DatacenterService,
-      private readonly _nodeService: NodeService,
-      private readonly _projectService: ProjectService,
-  ) {}
+      private readonly _activatedRoute: ActivatedRoute, private readonly _router: Router,
+      private readonly _apiService: ApiService, private readonly _datacenterService: DatacenterService,
+      private readonly _nodeService: NodeService, private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
