@@ -6,9 +6,8 @@
       <button mat-raised-button
               color="primary"
               (click)="addNode()"
-              [disabled]="!isClusterRunning"
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
-              [disabled]="!!userGroup && !userGroupConfig[userGroup].nodeDeployments.create">
+              [disabled]="!isClusterRunning || (!!userGroup && !userGroupConfig[userGroup].nodeDeployments.create)">
         <i class="fa fa-plus km-action-button-icon"
            aria-hidden="true"></i>
         Add Node Deployment
