@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
-import {merge, Subject, timer} from 'rxjs';
+import {Subject, timer} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, ProjectService} from '../../core/services';
@@ -27,7 +27,6 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<ClusterEntity>();
   @ViewChild(MatSort) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
-  private _externalClustersUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -38,7 +37,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 5000), this._externalClustersUpdate)
+    timer(0, 5000)
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._apiService.getAllClusters(this._projectService.project.id)))
         .subscribe(clusters => {
