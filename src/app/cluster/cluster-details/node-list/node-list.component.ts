@@ -1,8 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 
-import {AppConfigService} from '../../../app-config.service';
-import {ApiService, UserService} from '../../../core/services';
+import {ApiService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -12,6 +11,7 @@ import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeHealthStatus} from '../../../shared/utils/health-status/node-health-status';
+import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 
 @Component({
   selector: 'kubermatic-node-list',
@@ -27,9 +27,6 @@ export class NodeListComponent implements OnInit {
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  clickedDeleteNode = {};
-  clickedDuplicateNode = {};
-  isShowNodeDetails = {};
   userGroupConfig: UserGroupConfig;
   userGroup: string;
   config: MatDialogConfig = {
@@ -44,15 +41,10 @@ export class NodeListComponent implements OnInit {
   shouldToggleNodeItem = (index, item) => this.isShowNodeItem[item.id];
 
   constructor(
-      public dialog: MatDialog, private appConfigService: AppConfigService, private userService: UserService,
-      private readonly api: ApiService, private readonly googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _matDialog: MatDialog, private readonly _apiService: ApiService,
+      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
-      this.userGroup = group;
-    });
-
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
@@ -75,17 +67,16 @@ export class NodeListComponent implements OnInit {
       },
     };
 
-    this.clickedDeleteNode[node.id] = true;
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
-    this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
+    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this.api.deleteClusterNode(this.cluster.id, node, this.datacenter.metadata.name, this.projectID)
+        this._apiService.deleteClusterNode(this.cluster.id, node, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {
               NotificationActions.success('Success', `Node removed successfully from ${this.cluster.name}`);
-              this.googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
+              this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');
               this.deleteNode.emit(node);
             });
       }
@@ -104,9 +95,7 @@ export class NodeListComponent implements OnInit {
 
   getFormattedNodeMemory(memory: string): string {
     const memRE = /([0-9]+)([a-zA-Z])i/;
-    const nodeAllocatable = memory;
-
-    const resRE = nodeAllocatable.match(memRE);
+    const resRE = memory.match(memRE);
 
     let nodeCapacity;
     const prefixes = ['Ki', 'Mi', 'Gi', 'Ti'];
@@ -114,7 +103,6 @@ export class NodeListComponent implements OnInit {
 
     if (resRE) {
       let ki = parseInt(resRE[1], 10);  // tslint:disable-line
-
       do {
         ki /= 1024;
         i++;
@@ -138,15 +126,7 @@ export class NodeListComponent implements OnInit {
   }
 
   getOsImage(node: NodeEntity): string {
-    if (node.spec.operatingSystem.containerLinux) {
-      return 'Container Linux';
-    } else if (node.spec.operatingSystem.ubuntu) {
-      return 'Ubuntu';
-    } else if (node.spec.operatingSystem.centos) {
-      return 'CentOS';
-    } else {
-      return '';
-    }
+    return NodeUtils.getOperatingSystem(node.spec);
   }
 
   showInfo(node: NodeEntity): boolean {
@@ -162,18 +142,6 @@ export class NodeListComponent implements OnInit {
 
   getNodeName(node: NodeEntity): string {
     return node.id.replace('machine-', '');
-  }
-
-  toggleNode(event: Event, nodeID: string): void {
-    const element = event.target as HTMLElement;
-    const className = element.className;
-    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'km-copy') {
-      if (this.isShowNodeDetails[nodeID]) {
-        this.isShowNodeDetails[nodeID] = false;
-      } else if (!this.isShowNodeDetails[nodeID]) {
-        this.isShowNodeDetails[nodeID] = true;
-      }
-    }
   }
 
   displayTags(tags: object): boolean {
