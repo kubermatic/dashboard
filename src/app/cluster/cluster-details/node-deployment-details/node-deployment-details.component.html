@@ -15,16 +15,16 @@
               mat-raised-button
               color="primary"
               (click)="showEditDialog()"
-              [disabled]="!!userGroup && !userGroupConfig[userGroup].nodeDeployments.edit">
+              [disabled]="!isEditEnabled()">
         <mat-icon class="km-icon-edit"
-                  [ngClass]="(!!userGroup && !userGroupConfig[userGroup].nodeDeployments.edit) ? 'km-disabled black' : 'white'"></mat-icon>
+                  [ngClass]="isEditEnabled() ? 'white' : 'km-disabled black'"></mat-icon>
         Edit Node Deployment
       </button>
       <button mat-button
               mat-raised-button
               color="primary"
               (click)="showDeleteDialog()"
-              [disabled]="!!userGroup && !userGroupConfig[userGroup].nodeDeployments.delete">
+              [disabled]="!isDeleteEnabled()">
         <i class="fa fa-trash-o"
            aria-hidden="true"></i>
         Delete Node Deployment
@@ -126,7 +126,7 @@
                         [nodes]="nodes"
                         (deleteNode)="loadNodes()"
                         [datacenter]="seedDatacenter"
-                        [projectID]="projectID"
+                        [projectID]="getProjectID()"
                         [isClusterRunning]="true"
                         [clusterHealthStatus]="{css: 'km-status-running'}"></kubermatic-node-list>
 
