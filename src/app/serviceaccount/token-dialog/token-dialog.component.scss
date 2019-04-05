@@ -1,3 +1,10 @@
+@import "../../../assets/css/colors";
+
 .km-code-block {
   word-break: break-all;
+}
+
+.fa-exclamation-triangle {
+  color: $attention;
+  margin-right: 5px;
 }

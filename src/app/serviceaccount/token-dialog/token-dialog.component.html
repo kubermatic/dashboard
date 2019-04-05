@@ -8,7 +8,10 @@
 </mat-toolbar>
 <mat-dialog-content>
   <div class="mat-dialog-content">
-    <p>Make sure to save this token on a safe place on your own device. It could not be displayed later again.</p>
+    <p>
+      <i class="fa fa-exclamation-triangle"></i>
+      Make sure to save this token at a safe place on your own device. It <strong>could not</strong> be displayed again!
+    </p>
     <p class="km-code-block km-copy"
        ngxClipboard
        [cbContent]="serviceaccountToken.token"
