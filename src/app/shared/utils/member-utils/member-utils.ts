@@ -2,13 +2,7 @@ import {MemberEntity} from '../../entity/MemberEntity';
 
 export class MemberUtils {
   static getGroupInProject(member: MemberEntity, projectID): string {
-    let group = '';
-    member.projects.forEach(memberProject => {
-      if (memberProject.id === projectID) {
-        group = memberProject.group;
-      }
-    });
-    return group;
+    return member.projects.find(memberProject => memberProject.id === projectID).group;
   }
 
   static getGroupDisplayName(group: string) {
