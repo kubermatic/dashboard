@@ -10,7 +10,8 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {CustomFormsModule} from 'ng2-validation';
 import {ClipboardModule} from 'ngx-clipboard';
 
-import {AddSshKeyModalComponent} from './components/add-ssh-key-modal/add-ssh-key-modal.component';
+import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
+import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
 import {EventListComponent} from './components/event-list/event-list.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
@@ -61,7 +62,8 @@ const modules: any[] = [
     ...modules,
   ],
   declarations: [
-    AddSshKeyModalComponent,
+    AddProjectDialogComponent,
+    AddSshKeyDialogComponent,
     ConfirmationDialogComponent,
     PropertyComponent,
     EventListComponent,
@@ -70,7 +72,8 @@ const modules: any[] = [
   ],
   exports: [
     ...modules,
-    AddSshKeyModalComponent,
+    AddProjectDialogComponent,
+    AddSshKeyDialogComponent,
     ConfirmationDialogComponent,
     PropertyComponent,
     EventListComponent,
@@ -78,7 +81,8 @@ const modules: any[] = [
     LabelsComponent,
   ],
   entryComponents: [
-    AddSshKeyModalComponent,
+    AddProjectDialogComponent,
+    AddSshKeyDialogComponent,
     ConfirmationDialogComponent,
   ],
 })

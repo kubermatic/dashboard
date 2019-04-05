@@ -5,13 +5,13 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
-import {ApiService} from '../../../core/services/index';
+import {ApiService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
-import {AddSshKeyModalComponent} from './add-ssh-key-modal.component';
+import {AddSshKeyDialogComponent} from './add-ssh-key-dialog.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -25,11 +25,11 @@ const modules: any[] = [
   MatInputModule,
 ];
 
-describe('AddSshKeyModalComponent', () => {
-  let fixture: ComponentFixture<AddSshKeyModalComponent>;
-  let component: AddSshKeyModalComponent;
+describe('AddSshKeyDialogComponent', () => {
+  let fixture: ComponentFixture<AddSshKeyDialogComponent>;
+  let component: AddSshKeyDialogComponent;
   let apiService: ApiService;
-  let dialogRef: MatDialogRef<AddSshKeyModalComponent, any>;
+  let dialogRef: MatDialogRef<AddSshKeyDialogComponent, any>;
 
   beforeEach(() => {
     TestBed
@@ -38,7 +38,7 @@ describe('AddSshKeyModalComponent', () => {
             ...modules,
           ],
           declarations: [
-            AddSshKeyModalComponent,
+            AddSshKeyDialogComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -51,12 +51,12 @@ describe('AddSshKeyModalComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddSshKeyModalComponent);
+    fixture = TestBed.createComponent(AddSshKeyDialogComponent);
     component = fixture.componentInstance;
     component.projectID = fakeProject().id;
     fixture.detectChanges();
     apiService = fixture.debugElement.injector.get(ApiService);
-    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyModalComponent, any>;
+    dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyDialogComponent, any>;
   });
 
   it('should create the add node modal cmp', async(() => {

@@ -138,6 +138,7 @@ describe('Basic story', () => {
 
     KMElement.waitToAppear(projectsPage.getEditProjectDialogInput());
     projectName = RandomUtils.prefixedString('e2e-test-project');
+    projectsPage.getEditProjectDialogInput().clear();
     KMElement.sendKeys(projectsPage.getEditProjectDialogInput(), projectName);
     KMElement.waitForClickable(projectsPage.getEditProjectDialogEditBtn());
     projectsPage.getEditProjectDialogEditBtn().click();

@@ -13,7 +13,7 @@ export interface ConfirmationDialogConfig {
 }
 
 @Component({
-  selector: 'kubermatic-node-delete-confirmation',
+  selector: 'kubermatic-confirmation-dialog',
   templateUrl: './confirmation-dialog.component.html',
 })
 export class ConfirmationDialogComponent {
