@@ -52,7 +52,7 @@ describe('Basic story', () => {
     clustersPage.navigateTo();
     KMElement.waitForClickable(clustersPage.getAddClusterTopBtn());
 
-    clustersPage.getCreateClusterNavButton().click();
+    clustersPage.getAddClusterTopBtn().click();
     KMElement.waitToAppear(wizardPage.getClusterNameInput());
     wizardPage.getClusterNameInput().sendKeys(clusterName);
     KMElement.waitForClickable(wizardPage.getNextButton());
