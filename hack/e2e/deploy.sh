@@ -57,6 +57,8 @@ function prepare::files {
 
 	cp -r $GOPATH/src/github.com/kubermatic/kubermatic/config/kubermatic ${KUBERMATIC_PATH}
 	rm ${KUBERMATIC_PATH}/templates/ingress.yaml
+
+	sed -i 's/- -v=4/- -v=8/' ${KUBERMATIC_PATH}/templates/kubermatic-api-dep.yaml
 }
 
 function start::cluster {
