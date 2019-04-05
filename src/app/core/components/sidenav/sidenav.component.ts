@@ -3,8 +3,9 @@ import {MatDialog, MatSelectChange} from '@angular/material';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {interval, Subscription} from 'rxjs';
 import {first} from 'rxjs/operators';
+
 import {environment} from '../../../../environments/environment';
-import {AddProjectComponent} from '../../../add-project/add-project.component';
+import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ApiService, ProjectService} from '../../services';
 
@@ -101,7 +102,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   addProject(): void {
-    const modal = this.dialog.open(AddProjectComponent);
+    const modal = this.dialog.open(AddProjectDialogComponent);
     const sub = modal.afterClosed().subscribe((added) => {
       if (added) {
         this.loadProjects();

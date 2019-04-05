@@ -4,14 +4,16 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import {ApiService, ProjectService} from '../core/services';
-import {SharedModule} from '../shared/shared.module';
-import {fakeDigitaloceanCluster} from '../testing/fake-data/cluster.fake';
-import {RouterStub} from '../testing/router-stubs';
-import {asyncData} from '../testing/services/api-mock.service';
-import {MatDialogRefMock} from '../testing/services/mat-dialog-ref-mock';
-import {ProjectMockService} from '../testing/services/project-mock.service';
-import {AddProjectComponent} from './add-project.component';
+
+import {ApiService, ProjectService} from '../../../core/services';
+import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
+import {RouterStub} from '../../../testing/router-stubs';
+import {asyncData} from '../../../testing/services/api-mock.service';
+import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
+import {ProjectMockService} from '../../../testing/services/project-mock.service';
+import {SharedModule} from '../../shared.module';
+
+import {AddProjectDialogComponent} from './add-project-dialog.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -20,9 +22,9 @@ const modules: any[] = [
   SharedModule,
 ];
 
-describe('AddProjectComponent', () => {
-  let fixture: ComponentFixture<AddProjectComponent>;
-  let component: AddProjectComponent;
+describe('AddProjectDialogComponent', () => {
+  let fixture: ComponentFixture<AddProjectDialogComponent>;
+  let component: AddProjectDialogComponent;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createProject']);
@@ -32,9 +34,6 @@ describe('AddProjectComponent', () => {
         .configureTestingModule({
           imports: [
             ...modules,
-          ],
-          declarations: [
-            AddProjectComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -47,7 +46,7 @@ describe('AddProjectComponent', () => {
   }));
 
   beforeEach(async(() => {
-    fixture = TestBed.createComponent(AddProjectComponent);
+    fixture = TestBed.createComponent(AddProjectDialogComponent);
     component = fixture.componentInstance;
   }));
 
