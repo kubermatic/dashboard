@@ -185,6 +185,11 @@ export class ApiMockService {
     return of(this.serviceAccountToken);
   }
 
+  editServiceAccountToken(projectID: string, serviceAccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
+      Observable<ServiceAccountTokenEntity> {
+    return of(this.serviceAccountToken);
+  }
+
   deleteServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
       Observable<any> {
     return of(null);

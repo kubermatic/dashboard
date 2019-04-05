@@ -76,12 +76,11 @@ export class ServiceAccountTokenComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.createServiceAccountToken(this._projectService.project.id, this.serviceaccount)
+        this._apiService.editServiceAccountToken(this._projectService.project.id, this.serviceaccount, token)
             .pipe(first())
             .subscribe((token) => {
               this.openTokenDialog(token);
-              NotificationActions.success(
-                  'Success', `Token has been added to Service Account ${this.serviceaccount.name}`);
+              NotificationActions.success('Success', `Token ${token.name} has been regenerated.`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
             });
       }

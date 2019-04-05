@@ -367,6 +367,12 @@ export class ApiService {
     return this.http.post<ServiceAccountTokenEntity>(url, {headers: this.headers});
   }
 
+  editServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
+      Observable<ServiceAccountTokenEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}tokens/${token.id}`;
+    return this.http.put<ServiceAccountTokenEntity>(url, {headers: this.headers});
+  }
+
   deleteServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
       Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
