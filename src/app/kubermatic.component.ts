@@ -74,8 +74,4 @@ export class KubermaticComponent implements OnInit {
       }
     }
   }
-
-  showTermsOfService(): void {
-    this.router.navigate(['/terms-of-service']);
-  }
 }
