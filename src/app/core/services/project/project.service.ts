@@ -3,7 +3,7 @@ import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
+import {GroupConfig, UserGroupConfig} from '../../../shared/model/Config';
 import {UserService} from '../user/user.service';
 
 @Injectable()
@@ -32,6 +32,11 @@ export class ProjectService {
   getProjectFromStorage(): ProjectEntity {
     const project = localStorage.getItem('project');
     return project && JSON.parse(project);
+  }
+
+  getUserGroupConfig(): GroupConfig {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    return !!this.userGroupConfig ? this.userGroupConfig[this.userGroup] : undefined;
   }
 
   changeAndStoreSelectedProject(project: ProjectEntity): void {

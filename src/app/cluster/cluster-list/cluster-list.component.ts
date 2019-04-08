@@ -63,8 +63,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   isAddEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].clusters.create;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().clusters.create;
   }
 
   loadWizard(): void {

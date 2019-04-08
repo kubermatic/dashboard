@@ -105,8 +105,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].projects.edit;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().projects.edit;
   }
 
   editProject(project: ProjectEntity, event: Event): void {
@@ -122,8 +121,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].projects.delete;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().projects.delete;
   }
 
   deleteProject(project: ProjectEntity, event: Event): void {

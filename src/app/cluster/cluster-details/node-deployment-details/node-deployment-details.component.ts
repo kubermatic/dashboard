@@ -134,8 +134,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].nodeDeployments.edit;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().nodeDeployments.edit;
   }
 
   showEditDialog(): void {
@@ -151,8 +150,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].nodeDeployments.delete;
+    return !this._projectService.getUserGroupConfig() ||
+        this._projectService.getUserGroupConfig().nodeDeployments.delete;
   }
 
   showDeleteDialog(): void {

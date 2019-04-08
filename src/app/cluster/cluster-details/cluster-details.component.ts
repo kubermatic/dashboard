@@ -170,8 +170,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   isAddNodeDeploymentsEnabled(): boolean {
     return this.isClusterRunning &&
-        (!this._projectService.userGroup ||
-         this._projectService.userGroupConfig[this._projectService.userGroup].nodeDeployments.create);
+        (!this._projectService.getUserGroupConfig() ||
+         this._projectService.getUserGroupConfig().nodeDeployments.create);
   }
 
   addNode(): void {
@@ -187,8 +187,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].clusters.delete;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().clusters.delete;
   }
 
   deleteClusterDialog(): void {
@@ -239,8 +238,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].clusters.edit;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().clusters.edit;
   }
 
   editProviderSettings(): void {
@@ -250,8 +248,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isSSHKeysEditEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].sshKeys.edit;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().sshKeys.edit;
   }
 
   editSSHKeys(): void {

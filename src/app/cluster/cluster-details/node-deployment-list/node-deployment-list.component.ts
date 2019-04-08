@@ -47,8 +47,7 @@ export class NodeDeploymentListComponent {
   }
 
   isEditEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].nodeDeployments.edit;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().nodeDeployments.edit;
   }
 
   showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
@@ -59,8 +58,8 @@ export class NodeDeploymentListComponent {
   }
 
   isDeleteEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].nodeDeployments.delete;
+    return !this._projectService.getUserGroupConfig() ||
+        this._projectService.getUserGroupConfig().nodeDeployments.delete;
   }
 
   showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {
