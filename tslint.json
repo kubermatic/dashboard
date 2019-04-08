@@ -5,6 +5,7 @@
     "no-console": true,
     "no-namespace": false,
     "switch-default": false,
-    "variable-name": false
+    "variable-name": false,
+    "eofline": true
   }
 }
