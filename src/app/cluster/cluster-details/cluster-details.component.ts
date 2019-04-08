@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, merge, Subject, timer} from 'rxjs';
-import {first, retry, takeUntil} from 'rxjs/operators';
+import {first, retry, switchMap, takeUntil} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {AppConfigService} from '../../app-config.service';
@@ -92,9 +92,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 this._apiService
                     .getCluster(this.cluster.id, this.datacenter.metadata.name, this._projectService.project.id)
                     .pipe(takeUntil(this._unsubscribe), retry(3))
-                    .subscribe((cluster) => {
+                    .pipe(switchMap(cluster => {
                       this.cluster = cluster;
-                      this._reloadHealth();
+                      return this._apiService.getClusterHealth(
+                          this.cluster.id, seedDCName, this._projectService.project.id);
+                    }))
+                    .subscribe((health) => {
+                      this.health = health;
+                      this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
+                      this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+
                       this._reloadVersions();
                       this.reloadClusterNodes();
                     });
@@ -105,16 +112,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                 this._router.navigate(['404']);
               }
             });
-  }
-
-  private _reloadHealth(): void {
-    const seedDCName = this._route.snapshot.paramMap.get('seedDc');
-    this._apiService.getClusterHealth(this.cluster.id, seedDCName, this._projectService.project.id)
-        .subscribe((health) => {
-          this.health = health;
-          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-          this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
-        });
   }
 
   private _reloadVersions(): void {
