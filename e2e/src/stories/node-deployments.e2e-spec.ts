@@ -33,7 +33,7 @@ describe('Node Deployments story', () => {
   });
 
   it('should click on add cluster button', () => {
-    clustersPage.getCreateClusterNavButton().click();
+    clustersPage.getAddClusterTopBtn().click();
   });
 
   it('should set cluster name', () => {

@@ -10,11 +10,11 @@
     <li class="km-breadcrumb-item"><a routerLink="/projects">Home</a></li>
 
     <li class="km-breadcrumb-item"
-        *ngIf="!clusterName.length && activePageTitle !== 'Cluster details'">{{activePageTitle}}</li>
+        *ngIf="!clusterName.length && activePageTitle !== 'Cluster Details'">{{activePageTitle}}</li>
 
     <li class="km-breadcrumb-item"
         *ngIf="clusterName.length">
-      <a routerLink="/projects/{{project}}/clusters">Manage Clusters</a>
+      <a routerLink="/projects/{{project}}/clusters">Clusters</a>
     </li>
 
     <li class="km-breadcrumb-item"

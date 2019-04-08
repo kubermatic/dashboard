@@ -58,12 +58,12 @@ describe('BreadcrumbsComponent', () => {
   });
 
   it('should set activePageTitle', () => {
-    setMockNgRedux(fixture, 'Manage Clusters');
+    setMockNgRedux(fixture, 'Clusters');
     fixture.detectChanges();
 
     const crumb = component.activePageTitle;
 
-    expect(crumb).toBe('Manage Clusters');
+    expect(crumb).toBe('Clusters');
   });
 
   it('should render 2 breadcrumbs', () => {
