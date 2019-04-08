@@ -85,22 +85,22 @@ describe('SidenavComponent', () => {
   it('should get RouterLinks from template', () => {
     fixture.detectChanges();
 
-    expect(links.length).toBe(5, 'should have 5 links');
-    expect(links[0].linkParams).toBe('/projects//wizard', '1st link should go to Wizard');
+    expect(links.length).toBe(4, 'should have 4 links');
+    expect(links[0].linkParams).toBe('/projects//clusters', 'first link should go to clusters page');
   });
 
-  it('can click Wizard link in template', () => {
+  it('can click clusters link in template', () => {
     fixture.detectChanges();
 
-    const wizardLinkDe = linkDes[0];
-    const wizardLink = links[0];
+    const clustersLinkDe = linkDes[0];
+    const clustersLink = links[0];
 
-    expect(wizardLink.navigatedTo).toBeNull('link should not have navigated yet');
+    expect(clustersLink.navigatedTo).toBeNull('link should not have navigated yet');
 
-    click(wizardLinkDe);
+    click(clustersLinkDe);
     fixture.detectChanges();
 
-    expect(wizardLink.navigatedTo).toBe('/projects//wizard');
+    expect(clustersLink.navigatedTo).toBe('/projects//clusters');
   });
 
   it('should correctly compare projects basing on their IDs', () => {
