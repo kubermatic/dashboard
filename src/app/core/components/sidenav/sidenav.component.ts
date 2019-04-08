@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatSelectChange} from '@angular/material';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
-import {interval, Subscription} from 'rxjs';
+import {Subscription, timer} from 'rxjs';
 import {first} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
@@ -52,7 +52,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private registerProjectRefreshInterval(): void {
-    this.subscriptions.push(interval(this.notActiveProjectRefreshInterval).subscribe(() => {
+    this.subscriptions.push(timer(this.notActiveProjectRefreshInterval).subscribe(() => {
       if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
         this.api.getProjects().pipe(first()).subscribe((res) => {
           this.projects = res;

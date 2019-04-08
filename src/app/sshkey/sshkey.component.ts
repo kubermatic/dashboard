@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
-import {interval, Subscription} from 'rxjs';
+import {Subscription, timer} from 'rxjs';
 import {retry} from 'rxjs/operators';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, UserService} from '../core/services';
@@ -52,11 +52,9 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    const timer = interval(10000);
-    this.subscriptions.push(timer.subscribe(() => {
+    this.subscriptions.push(timer(0, 10000).subscribe(() => {
       this.refreshSSHKeys();
     }));
-    this.refreshSSHKeys();
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, Sort} from '@angular/material';
 import {find} from 'lodash';
-import {interval, Subscription} from 'rxjs';
+import {Subscription, timer} from 'rxjs';
 import {retry} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, UserService} from '../../../core/services';
@@ -40,11 +40,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       this.userGroup = group;
     });
 
-    const timer = interval(5000);
-    this.subscriptions.push(timer.subscribe((tick) => {
-      this.refreshSSHKeys();
-    }));
-    this.refreshSSHKeys();
+    this.subscriptions.push(timer(0, 5000).subscribe(() => this.refreshSSHKeys()));
   }
 
   ngOnDestroy(): void {
