@@ -7,7 +7,7 @@
               color="primary"
               (click)="addNode()"
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
-              [disabled]="!isClusterRunning || (!!userGroup && !userGroupConfig[userGroup].nodeDeployments.create)">
+              [disabled]="!isAddNodeDeploymentsEnabled()">
         <i class="fa fa-plus km-action-button-icon"
            aria-hidden="true"></i>
         Add Node Deployment
@@ -40,7 +40,7 @@
               mat-button
               (click)="deleteClusterDialog()"
               mat-raised-button
-              [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
+              [disabled]="!isDeleteEnabled()">
         <i class="fa fa-trash-o km-action-button-icon"
            aria-hidden="true"></i>
         Delete Cluster
@@ -95,9 +95,7 @@
     </mat-card-content>
   </mat-card>
   <kubermatic-cluster-secrets [cluster]="cluster"
-                              [datacenter]="datacenter"
-                              [projectID]="projectID"
-                              [userGroup]="userGroup"></kubermatic-cluster-secrets>
+                              [datacenter]="datacenter"></kubermatic-cluster-secrets>
 
   <mat-card class="blue">
     <mat-card-header>
@@ -123,13 +121,13 @@
                     class="km-provider-edit-settings">
             <button mat-menu-item
                     (click)="editProviderSettings()"
-                    [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.edit">
+                    [disabled]="!isEditEnabled()">
               <mat-icon class="km-icon-edit black"></mat-icon>
               <span>Edit Settings</span>
             </button>
             <button mat-menu-item
                     (click)="editSSHKeys()"
-                    [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.edit">
+                    [disabled]="!isSSHKeysEditEnabled()">
               <mat-icon class="km-icon-edit black"></mat-icon>
               <span>Manage SSH keys</span>
             </button>

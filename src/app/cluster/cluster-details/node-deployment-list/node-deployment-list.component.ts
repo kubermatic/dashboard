@@ -26,10 +26,8 @@ export class NodeDeploymentListComponent {
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
 
   constructor(
-      private readonly _router: Router,
-      private readonly _nodeService: NodeService,
-      private readonly _projectService: ProjectService,
-  ) {}
+      private readonly _router: Router, private readonly _nodeService: NodeService,
+      private readonly _projectService: ProjectService) {}
 
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
     const dataSource = new MatTableDataSource<NodeDeploymentEntity>();
