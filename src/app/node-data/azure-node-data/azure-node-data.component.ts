@@ -99,14 +99,18 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
                                           this.datacenter.spec.azure.location)
                                       .subscribe((data) => {
                                         this.sizes = data;
-                                        this.azureNodeForm.controls.size.setValue(this.nodeData.spec.cloud.azure.size);
+                                        if (this.nodeData.spec.cloud.azure.size === '') {
+                                          this.azureNodeForm.controls.size.setValue(this.sizes[0].name);
+                                        }
                                       }));
         }
       } else {
         this.subscriptions.push(
             this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
               this.sizes = data;
-              this.azureNodeForm.controls.size.setValue(this.nodeData.spec.cloud.azure.size);
+              if (this.nodeData.spec.cloud.azure.size === '') {
+                this.azureNodeForm.controls.size.setValue(this.sizes[0].name);
+              }
             }));
       }
     } else {

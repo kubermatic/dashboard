@@ -67,7 +67,9 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
         this.subscriptions.push(
             this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token).subscribe((data) => {
               this.sizes = data;
-              this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
+              if (this.nodeData.spec.cloud.digitalocean.size === '') {
+                this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
+              }
               this.checkSizeState();
             }));
       }
@@ -75,7 +77,9 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
       this.subscriptions.push(
           this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
             this.sizes = data;
-            this.doNodeForm.controls.size.setValue(this.nodeData.spec.cloud.digitalocean.size);
+            if (this.nodeData.spec.cloud.digitalocean.size === '') {
+              this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
+            }
             this.checkSizeState();
           }));
     }
