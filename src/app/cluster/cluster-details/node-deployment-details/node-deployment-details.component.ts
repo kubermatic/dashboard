@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {interval, Subject} from 'rxjs';
+import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, ProjectService} from '../../../core/services';
@@ -38,7 +38,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
   private _isSeedDatacenterLoaded = false;
-  private _refreshInterval = 10000;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -51,17 +50,14 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._dcName = this._activatedRoute.snapshot.paramMap.get('seedDc');
     this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
 
-    this.loadNodeDeployment();
-    this.loadNodes();
-    this.loadNodesEvents();
-    this.loadSeedDatacenter();
-    this.loadCluster();
-
-    interval(this._refreshInterval).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    timer(0, 10000).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.loadNodeDeployment();
       this.loadNodes();
       this.loadNodesEvents();
     });
+
+    this.loadSeedDatacenter();
+    this.loadCluster();
   }
 
   loadNodeDeployment(): void {
