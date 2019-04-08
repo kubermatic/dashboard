@@ -38,6 +38,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   sshKeys: SSHKeyEntity[] = [];
   nodes: NodeEntity[] = [];
   nodeDeployments: NodeDeploymentEntity[];
+  isNodeDeploymentLoadFinished = false;
   isClusterRunning: boolean;
   clusterHealthStatus: ClusterHealthStatus;
   health: HealthEntity;
@@ -162,6 +163,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this._unsubscribe))
           .subscribe((nodeDeployments) => {
             this.nodeDeployments = nodeDeployments;
+            this.isNodeDeploymentLoadFinished = true;
           });
     }
   }

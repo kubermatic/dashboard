@@ -22,6 +22,7 @@ export class NodeDeploymentListComponent {
   @Input() projectID: string;
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
+  @Input() isNodeDeploymentLoadFinished: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
 

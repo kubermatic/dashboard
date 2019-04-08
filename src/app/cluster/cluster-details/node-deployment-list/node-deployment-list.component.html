@@ -111,11 +111,11 @@
 
     <ng-container *ngIf="!nodeDeployments || nodeDeployments.length === 0">
       <div class="km-row km-no-item"
-           *ngIf="clusterHealthStatus && clusterHealthStatus.css === 'km-status-running' || !isClusterRunning && cluster.spec.cloud.bringyourown">
+           *ngIf="isNodeDeploymentLoadFinished && clusterHealthStatus && clusterHealthStatus.css === 'km-status-running' || !isClusterRunning && cluster.spec.cloud.bringyourown">
         No Node Deployments available.
       </div>
       <div class="km-row"
-           *ngIf="!clusterHealthStatus || clusterHealthStatus.css !== 'km-status-running' || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
+           *ngIf="!isNodeDeploymentLoadFinished || !clusterHealthStatus || clusterHealthStatus.css !== 'km-status-running' || !isClusterRunning && !!!cluster.spec.cloud.bringyourown">
         <mat-spinner color="accent"
                      class="km-node-deployment-spinner"
                      [diameter]="30"></mat-spinner>
