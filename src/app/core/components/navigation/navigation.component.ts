@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
 import {environment} from '../../../../environments/environment';
 import {AppConstants} from '../../../shared/constants/constants';
