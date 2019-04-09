@@ -10,6 +10,7 @@ import {AddProjectDialogComponent} from '../shared/components/add-project-dialog
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
+import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
 import {EditProjectComponent} from './edit-project/edit-project.component';
 
@@ -92,8 +93,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this._projectService.changeAndStoreSelectedProject(project);
   }
 
-  getProjectStateIconClass(): string {
-    return this._projectService.getProjectStateIconClass();
+  getProjectStateIconClass(project: ProjectEntity): string {
+    return ProjectUtils.getIconClass(project);
   }
 
   addProject(): void {

@@ -24,7 +24,7 @@
         <td mat-cell
             *matCellDef="let element">
           <i [matTooltip]="element.status"
-             [ngClass]="getProjectStateIconClass"
+             [ngClass]="getProjectStateIconClass(element)"
              class="km-health-state"></i>
         </td>
       </ng-container>

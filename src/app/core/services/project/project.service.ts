@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
+
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig, UserGroupConfig} from '../../../shared/model/Config';
+import {ProjectUtils} from '../../../shared/utils/project-utils/project-utils';
 import {UserService} from '../user/user.service';
 
 @Injectable()
@@ -106,21 +108,7 @@ export class ProjectService {
   }
 
   getProjectStateIconClass(): string {
-    let iconClass = '';
-    if (!!this.project) {
-      switch (this.project.status) {
-        case 'Active':
-          iconClass = 'fa fa-circle green';
-          break;
-        case 'Inactive':
-          iconClass = 'fa fa-spin fa-circle-o-notch orange';
-          break;
-        case 'Terminating':
-          iconClass = 'fa fa-circle-o red';
-          break;
-      }
-    }
-    return iconClass;
+    return ProjectUtils.getIconClass(this.project);
   }
 
   isProjectSelected(viewName: string): string {
