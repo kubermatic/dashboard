@@ -4,8 +4,8 @@
     <div class="km-sidenav-top">
       <mat-list-item class="km-projects">
         <div class="km-projects-container">
+          <mat-label>Project</mat-label>
           <mat-select #select
-                      placeholder="Project"
                       (selectionChange)="selectionChange($event, selectedProject, select)"
                       [ngModel]="selectedProject"
                       [compareWith]="projectService.compareProjectsEquality"

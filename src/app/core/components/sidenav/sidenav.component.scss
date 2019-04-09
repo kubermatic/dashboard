@@ -7,6 +7,22 @@
   height: 100%;
   color: $secondary;
 
+  mat-label {
+    margin: 3px 0 !important;
+    font-size: 12px;
+    line-height: 12px;
+  }
+
+  .mat-select-value-text {
+    color: $secondary;
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+  .mat-select-arrow {
+    color: $secondary;
+  }
+
   .mat-nav-list a {
     font-size: 18px;
     font-weight: 400;
@@ -14,10 +30,6 @@
 
   .mat-list-item i {
     background-color: $secondary;
-  }
-
-  .mat-select-value-text {
-    color: $secondary;
   }
 }
 
@@ -36,7 +48,7 @@
       .km-projects-container {
         display: flex;
         flex-direction: column;
-        padding: 0 15px;
+        padding: 0 30px;
         width: 100%;
 
         mat-label {
