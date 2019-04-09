@@ -1,5 +1,14 @@
 @import "../../../../assets/css/colors";
 
+$sidenav-width: 250px;
+
+.container {
+  width: $sidenav-width;
+  background-color: #203f58;
+  height: 100%;
+  color: $white-text-color;
+}
+
 .mat-nav-list {
   padding: 0 !important;
 
@@ -7,12 +16,12 @@
   a {
     font-size: 14px;
     font-weight: 400;
-    color: $text-color;
+    color: #dcf3fa;
     height: 40px;
 
     &.km-projects {
-      height: 85px;
-      border-bottom: 1px solid $border;
+      height: 45px;
+      border-bottom: 2px solid #00a3d9;
 
       .km-projects-container {
         display: flex;
@@ -28,28 +37,7 @@
           font-weight: 600;
           line-height: 35px;
         }
-
-        .km-health-state {
-          margin-left: 6px;
-          text-align: center;
-
-          i.red {
-            color: $warning-status-color;
-          }
-
-          i.green {
-            color: $healthy-status-color;
-          }
-
-          i.orange {
-            color: $waiting-status-color;
-          }
-        }
       }
-    }
-
-    i {
-      color: $text-color;
     }
   }
 
@@ -73,11 +61,6 @@
       margin-right: 10px;
     }
   }
-}
-
-mat-option[value='addProject'] {
-  border-bottom: 1px solid $border !important;
-  font-weight: 600;
 }
 
 .km-disabled {

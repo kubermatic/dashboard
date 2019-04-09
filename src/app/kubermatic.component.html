@@ -5,10 +5,6 @@
                         mode="indeterminate"></mat-progress-bar>
     </div>
 
-    <kubermatic-navigation></kubermatic-navigation>
-
-    <kubermatic-notification></kubermatic-notification>
-
     <mat-sidenav-container>
       <mat-sidenav #sidenav
                    opened
@@ -22,6 +18,8 @@
            fxFlex
            fxLayout="column">
         <div fxFlex>
+          <kubermatic-navigation></kubermatic-navigation>
+          <kubermatic-notification></kubermatic-notification>
           <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
           <router-outlet></router-outlet>
         </div>

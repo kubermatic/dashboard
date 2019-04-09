@@ -4,25 +4,17 @@
     <div class="km-sidenav-top">
       <mat-list-item class="km-projects">
         <div class="km-projects-container">
-          <mat-label fxLayout="row">
-            <span>Selected Project</span>
-            <div class="km-health-state"
-                 *ngIf="!!selectedProject">
-              <i [matTooltip]="selectedProject.status"
-                 [ngClass]="projectService.getProjectStateIconClass()"></i>
-            </div>
-          </mat-label>
           <mat-select #select
-                      placeholder="Select Project"
+                      placeholder="Project"
                       (selectionChange)="selectionChange($event, selectedProject, select)"
                       [ngModel]="selectedProject"
                       [compareWith]="projectService.compareProjectsEquality"
                       disableOptionCentering>
-            <mat-option (click)="addProject()">+ Add Project</mat-option>
             <mat-option *ngFor="let project of projects"
                         [value]="project">
-              {{ project.name }}
+              {{project.name}}
             </mat-option>
+            <mat-option (click)="addProject()">+ Add Project</mat-option>
           </mat-select>
         </div>
       </mat-list-item>
