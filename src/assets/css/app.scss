@@ -53,6 +53,7 @@ body {
 
   .km-header-row {
     background-color: $primary;
+    height: 6 * $baseline-grid;
   }
 
   .km-header-cell,
@@ -71,7 +72,17 @@ body {
 
   td.mat-cell {
     border-bottom-width: 0;
-    line-height: 7.5 * $baseline-grid;
+    line-height: 3 * $baseline-grid;
+    padding-right: 2 * $baseline-grid;
+    padding-top: .5 * $baseline-grid;
+
+    &:last-of-type {
+      padding-right: 2 * $baseline-grid;
+    }
+
+    &:first-of-type {
+      padding-left: 2 * $baseline-grid;
+    }
   }
 }
 
