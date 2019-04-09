@@ -1,8 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, Sort} from '@angular/material';
 import {find} from 'lodash';
-import {Subscription, timer} from 'rxjs';
-import {retry} from 'rxjs/operators';
+import {Subject, timer} from 'rxjs';
+import {retry, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -28,7 +28,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   sort: Sort = {active: 'name', direction: 'asc'};
   userGroup: string;
   userGroupConfig: UserGroupConfig;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       private api: ApiService, private userService: UserService, private appConfigService: AppConfigService,
@@ -40,25 +40,23 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
       this.userGroup = group;
     });
 
-    this.subscriptions.push(timer(0, 5000).subscribe(() => this.refreshSSHKeys()));
+    timer(0, 5000).pipe(takeUntil(this._unsubscribe)).subscribe(() => this.refreshSSHKeys());
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   refreshSSHKeys(): void {
-    this.subscriptions.push(this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-                                .pipe(retry(3))
-                                .subscribe((res) => {
-                                  this.sshKeys = res;
-                                  this.sortSshKeyData(this.sort);
-                                  this.loading = false;
-                                }));
+    this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        .pipe(retry(3))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((res) => {
+          this.sshKeys = res;
+          this.sortSshKeyData(this.sort);
+          this.loading = false;
+        });
   }
 
   addSshKey(): void {
