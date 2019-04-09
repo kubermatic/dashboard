@@ -228,7 +228,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
          this.openstackSettingsForm.controls.password.value === '' ||
          this.openstackSettingsForm.controls.domain.value === '' ||
          this.openstackSettingsForm.controls.tenant.value === '')) {
-      return field + ': Please enter Tenant first!';
+      return field + ': Please enter Tenant/Project first!';
     } else if (this.loadingOptionalSettings) {
       return 'Loading ' + field + 's...';
     } else {
