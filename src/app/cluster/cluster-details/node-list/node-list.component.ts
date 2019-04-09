@@ -28,7 +28,6 @@ export class NodeListComponent implements OnInit {
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
   clickedDeleteNode = {};
-  clickedDuplicateNode = {};
   isShowNodeDetails = {};
   userGroupConfig: UserGroupConfig;
   userGroup: string;
@@ -81,6 +80,7 @@ export class NodeListComponent implements OnInit {
 
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      delete this.clickedDeleteNode[node.id];
       if (isConfirmed) {
         this.api.deleteClusterNode(this.cluster.id, node, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {
@@ -164,23 +164,15 @@ export class NodeListComponent implements OnInit {
     return node.id.replace('machine-', '');
   }
 
-  toggleNode(event: Event, nodeID: string): void {
-    const element = event.target as HTMLElement;
-    const className = element.className;
-    if (!this.clickedDeleteNode[nodeID] && !this.clickedDuplicateNode[nodeID] && className !== 'km-copy') {
-      if (this.isShowNodeDetails[nodeID]) {
-        this.isShowNodeDetails[nodeID] = false;
-      } else if (!this.isShowNodeDetails[nodeID]) {
-        this.isShowNodeDetails[nodeID] = true;
-      }
-    }
-  }
-
   displayTags(tags: object): boolean {
     return Object.keys(tags).length > 0;
   }
 
   toggleNodeItem(element: NodeEntity): void {
-    this.isShowNodeItem[element.id] = !this.isShowNodeItem[element.id];
+    const elem = event.target as HTMLElement;
+    const className = elem.className;
+    if (!this.clickedDeleteNode[element.id] && className !== 'km-copy') {
+      this.isShowNodeItem[element.id] = !this.isShowNodeItem[element.id];
+    }
   }
 }
