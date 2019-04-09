@@ -25,6 +25,11 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
     this.hetznerNodeForm = new FormGroup({
       type: new FormControl(this.nodeData.spec.cloud.hetzner.type, Validators.required),
     });
+
+    if (this.nodeData.spec.cloud.hetzner.type === '') {
+      this.hetznerNodeForm.controls.type.setValue(this.types[0]);
+    }
+
     this.subscriptions.push(this.hetznerNodeForm.valueChanges.subscribe((data) => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));

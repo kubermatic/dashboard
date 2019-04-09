@@ -5,6 +5,9 @@
     "font-family-no-missing-generic-family-keyword": null,
     "no-descending-specificity": null,
     "number-leading-zero": null,
-    "selector-type-no-unknown": null
+    "selector-type-no-unknown": null,
+    "selector-pseudo-element-no-unknown": [true, {
+      "ignorePseudoElements": ["ng-deep"]
+    }]
   }
 }

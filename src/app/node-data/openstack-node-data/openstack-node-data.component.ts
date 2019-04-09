@@ -116,8 +116,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
       return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
     });
     this.flavors = sortedFlavors;
-    if (sortedFlavors.length > 0 && this.osNodeForm.controls.flavor.value !== '0') {
-      this.osNodeForm.controls.flavor.setValue(this.nodeData.spec.cloud.openstack.flavor);
+    if (sortedFlavors.length > 0 && this.osNodeForm.controls.flavor.value !== '0' &&
+        this.nodeData.spec.cloud.openstack.flavor === '') {
+      this.osNodeForm.controls.flavor.setValue(this.flavors[0].slug);
     }
     this.loadingFlavors = false;
   }
