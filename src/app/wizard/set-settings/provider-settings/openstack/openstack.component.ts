@@ -212,13 +212,13 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         (this.openstackSettingsForm.controls.username.value === '' ||
          this.openstackSettingsForm.controls.password.value === '' ||
          this.openstackSettingsForm.controls.domain.value === '')) {
-      return 'Tenant/Project: Please enter your credentials first!';
+      return 'Project: Please enter your credentials first!';
     } else if (this.loadingOptionalTenants) {
-      return 'Loading Tenants/Projects...';
+      return 'Loading Projects...';
     } else if (!this.loadingOptionalTenants && this.tenants.length === 0) {
-      return 'No Tenants/Projects available';
+      return 'No Projects available';
     } else {
-      return 'Tenant/Project*:';
+      return 'Project*:';
     }
   }
 
@@ -228,7 +228,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
          this.openstackSettingsForm.controls.password.value === '' ||
          this.openstackSettingsForm.controls.domain.value === '' ||
          this.openstackSettingsForm.controls.tenant.value === '')) {
-      return field + ': Please enter Tenant/Project first!';
+      return field + ': Please enter Project first!';
     } else if (this.loadingOptionalSettings) {
       return 'Loading ' + field + 's...';
     } else {
