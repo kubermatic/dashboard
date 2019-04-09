@@ -7,13 +7,17 @@
   height: 100%;
   color: $secondary;
 
-  mat-list-item i {
+  .mat-nav-list a {
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .mat-list-item i {
     background-color: $secondary;
   }
 
-  div.mat-select-value > span {
-    color: red !important;
-    font-size: 100px;
+  .mat-select-value-text {
+    color: $secondary;
   }
 }
 
@@ -22,8 +26,6 @@
 
   .mat-list-item,
   a {
-    font-size: 14px;
-    font-weight: 400;
     color: $secondary;
     height: $toolbar-height;
 
@@ -39,11 +41,6 @@
 
         mat-label {
           margin: 5px 0;
-        }
-
-        mat-select {
-          font-weight: 600;
-          line-height: 35px;
         }
       }
     }
@@ -66,7 +63,7 @@
 
     i {
       width: 20px;
-      margin-right: 10px;
+      margin-right: 16px;
     }
   }
 }

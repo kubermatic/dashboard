@@ -22,6 +22,7 @@
       <mat-list-item [ngClass]="projectService.isProjectSelected('clusters')">
         <a id="km-nav-item-clusters"
            mat-line
+           fxLayoutAlign=" center"
            [routerLink]="getRouterLink('clusters')"
            [ngClass]="getLinkClass('clusters')">
           <i class="km-icon-cluster"></i> Clusters</a>
@@ -29,6 +30,7 @@
 
       <mat-list-item [ngClass]="projectService.isProjectSelected('sshKeys')">
         <a mat-line
+           fxLayoutAlign=" center"
            [routerLink]="getRouterLink('sshkeys')"
            [ngClass]="getLinkClass('sshkeys')">
           <i class="km-icon-key"></i> SSH Keys</a>
@@ -37,6 +39,7 @@
       <mat-list-item [ngClass]="projectService.isProjectSelected('members')">
         <a id="km-nav-item-members"
            mat-line
+           fxLayoutAlign=" center"
            [routerLink]="getRouterLink('members')"
            [ngClass]="getLinkClass('members')">
           <i class="km-icon-member"></i> Members</a>
@@ -45,6 +48,7 @@
       <mat-list-item>
         <a id="km-nav-item-projects"
            mat-line
+           fxLayoutAlign=" center"
            routerLink="/projects"
            [ngClass]="getLinkClass('projects')">
           <i class="km-icon-project"></i> Projects</a>
