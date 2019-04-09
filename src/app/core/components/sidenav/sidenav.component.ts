@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatSelectChange} from '@angular/material';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
-import {Subscription, timer} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {Subject, timer} from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
@@ -19,8 +19,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
-  private subscriptions: Subscription[] = [];
-  private readonly notActiveProjectRefreshInterval = 1500;
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       public dialog: MatDialog, private api: ApiService, private router: Router,
@@ -29,7 +28,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadProjects();
 
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((data) => {
+    this.projectService.selectedProjectChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       for (const i in this.projects) {
         if (this.projectService.compareProjectsEquality(this.projects[i], data)) {
           this.selectedProject = data;
@@ -41,7 +40,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
       this.loadProjects();
       this.selectedProject = data;
-    }));
+    });
 
     this.registerProjectRefreshInterval();
   }
@@ -52,7 +51,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private registerProjectRefreshInterval(): void {
-    this.subscriptions.push(timer(this.notActiveProjectRefreshInterval).subscribe(() => {
+    timer(0, 1500).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
         this.api.getProjects().pipe(first()).subscribe((res) => {
           this.projects = res;
@@ -63,7 +62,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
           }
         });
       }
-    }));
+    });
   }
 
   loadProjects(): void {
@@ -138,10 +137,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }
