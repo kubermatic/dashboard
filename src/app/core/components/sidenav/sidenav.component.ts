@@ -114,10 +114,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return this.checkUrl(url) ? 'active' : '';
   }
 
-  getIconClass(url: string): string {
-    return this.checkUrl(url) ? 'white' : 'black';
-  }
-
   checkUrl(url: string): boolean {
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;

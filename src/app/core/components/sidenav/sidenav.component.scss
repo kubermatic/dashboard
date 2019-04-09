@@ -1,12 +1,22 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
 
 $sidenav-width: 250px;
 
 .container {
   width: $sidenav-width;
-  background-color: #203f58;
+  background-color: $primary;
   height: 100%;
-  color: $white-text-color;
+  color: $secondary;
+
+  mat-list-item i {
+    background-color: $secondary;
+  }
+
+  div.mat-select-value > span {
+    color: red !important;
+    font-size: 100px;
+  }
 }
 
 .mat-nav-list {
@@ -16,11 +26,11 @@ $sidenav-width: 250px;
   a {
     font-size: 14px;
     font-weight: 400;
-    color: #dcf3fa;
-    height: 40px;
+    color: $secondary;
+    height: $toolbar-height;
 
     &.km-projects {
-      height: 45px;
+      height: $toolbar-height;
       border-bottom: 2px solid #00a3d9;
 
       .km-projects-container {
@@ -48,11 +58,11 @@ $sidenav-width: 250px;
 
     &:hover,
     &.active {
-      color: $white-text-color;
-      background-color: $primary;
+      color: #dcf3fa;
+      background-color: #31586f;
 
       i {
-        color: $white-text-color;
+        background-color: #dcf3fa;
       }
     }
 
@@ -68,6 +78,6 @@ $sidenav-width: 250px;
   cursor: default;
 
   a {
-    color: $light-text-color !important;
+    opacity: 40%;
   }
 }
