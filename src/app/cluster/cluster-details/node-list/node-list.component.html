@@ -104,7 +104,7 @@
                 <button class="km-icon-delete black"
                         [attr.id]="'km-delete-node-' + element.name"
                         matTooltip="Delete Node"
-                        (click)="deleteNodeDialog(element)"
+                        (click)="deleteNodeDialog(element, $event)"
                         [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete"></button>
               </ng-container>
             </ng-container>

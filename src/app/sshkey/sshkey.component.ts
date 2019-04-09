@@ -24,7 +24,6 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   userGroup: string;
   userGroupConfig: UserGroupConfig;
   projectID: string;
-  clickedDeleteSshKey = {};
   isShowPublicKey = [];
   displayedColumns: string[] = ['name', 'fingerprint', 'actions'];
   toggledColumns: string[] = ['publickey'];
@@ -97,7 +96,8 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteSshKey(sshKey: SSHKeyEntity): void {
+  deleteSshKey(sshKey: SSHKeyEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -112,12 +112,10 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
       },
     };
 
-    this.clickedDeleteSshKey[sshKey.id] = true;
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
     this.googleAnalyticsService.emitEvent('sshKeyOverview', 'deleteSshKeyOpened');
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
-      delete this.clickedDeleteSshKey[sshKey.id];
       if (isConfirmed) {
         this.api.deleteSSHKey(sshKey.id, this.projectID).subscribe(() => {
           NotificationActions.success(
@@ -129,8 +127,6 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   }
 
   togglePublicKey(element: SSHKeyEntity): void {
-    if (!this.clickedDeleteSshKey[element.id]) {
-      this.isShowPublicKey[element.id] = !this.isShowPublicKey[element.id];
-    }
+    this.isShowPublicKey[element.id] = !this.isShowPublicKey[element.id];
   }
 }

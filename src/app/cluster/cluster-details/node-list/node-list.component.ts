@@ -27,7 +27,6 @@ export class NodeListComponent implements OnInit {
   @Output() deleteNode = new EventEmitter<NodeEntity>();
   @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  clickedDeleteNode = {};
   isShowNodeDetails = {};
   userGroupConfig: UserGroupConfig;
   userGroup: string;
@@ -62,7 +61,8 @@ export class NodeListComponent implements OnInit {
     return this.dataSource;
   }
 
-  deleteNodeDialog(node: NodeEntity): void {
+  deleteNodeDialog(node: NodeEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -74,13 +74,11 @@ export class NodeListComponent implements OnInit {
       },
     };
 
-    this.clickedDeleteNode[node.id] = true;
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
     this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
 
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
-      delete this.clickedDeleteNode[node.id];
       if (isConfirmed) {
         this.api.deleteClusterNode(this.cluster.id, node, this.datacenter.metadata.name, this.projectID)
             .subscribe(() => {
@@ -171,7 +169,7 @@ export class NodeListComponent implements OnInit {
   toggleNodeItem(element: NodeEntity): void {
     const elem = event.target as HTMLElement;
     const className = elem.className;
-    if (!this.clickedDeleteNode[element.id] && className !== 'km-copy') {
+    if (className !== 'km-copy') {
       this.isShowNodeItem[element.id] = !this.isShowNodeItem[element.id];
     }
   }
