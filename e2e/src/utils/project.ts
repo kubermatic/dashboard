@@ -18,7 +18,9 @@ export class ProjectUtils {
     ProjectUtils._projectsPage.getSaveProjectButton().click();
 
     KMElement.waitToDisappear(ProjectUtils._projectsPage.getAddProjectDialog());
+
     KMElement.waitToAppear(ProjectUtils._projectsPage.getProjectItem(projectName));
+    KMElement.waitToAppear(ProjectUtils._projectsPage.getActiveProjectItem(projectName), 300000);
 
     expect(ProjectUtils._projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
   }
