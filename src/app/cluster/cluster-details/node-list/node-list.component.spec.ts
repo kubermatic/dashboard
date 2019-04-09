@@ -71,11 +71,12 @@ describe('NodeComponent', () => {
        component.cluster = fakeDigitaloceanCluster();
        component.datacenter = fakeDigitaloceanDatacenter();
        component.projectID = fakeProject().id;
+       const event = new MouseEvent('click');
 
        fixture.detectChanges();
        const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(of(null));
 
-       component.deleteNodeDialog(nodeFake());
+       component.deleteNodeDialog(nodeFake(), event);
        tick();
 
        expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
