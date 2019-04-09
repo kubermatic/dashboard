@@ -97,7 +97,8 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     });
   }
 
-  editServiceAccount(serviceAccount: ServiceAccountEntity): void {
+  editServiceAccount(serviceAccount: ServiceAccountEntity, event: Event): void {
+    event.stopPropagation();
     const modal = this._matDialog.open(EditServiceAccountComponent);
     modal.componentInstance.project = this._projectService.project;
     modal.componentInstance.serviceaccount = serviceAccount;
@@ -108,7 +109,8 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteServiceAccount(serviceAccount: ServiceAccountEntity): void {
+  deleteServiceAccount(serviceAccount: ServiceAccountEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -139,7 +141,8 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     });
   }
 
-  addServiceAccountToken(serviceAccount: ServiceAccountEntity): void {
+  addServiceAccountToken(serviceAccount: ServiceAccountEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
