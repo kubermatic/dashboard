@@ -1,5 +1,3 @@
-import {browser} from 'protractor';
-
 import {ProjectsPage} from '../pages/projects/projects.po';
 import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 
@@ -20,14 +18,6 @@ export class ProjectUtils {
     ProjectUtils._projectsPage.getSaveProjectButton().click();
 
     KMElement.waitToDisappear(ProjectUtils._projectsPage.getAddProjectDialog());
-    KMElement.waitForRedirect('/clusters');
-
-    // We need to wait for autoredirect after create to finish
-    // otherwise it will autoredirect again after too fast page switch.
-    browser.sleep(5000);
-
-    ProjectUtils._projectsPage.navigateTo();
-    KMElement.waitForRedirect('/projects');
     KMElement.waitToAppear(ProjectUtils._projectsPage.getProjectItem(projectName));
 
     expect(ProjectUtils._projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
