@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
-import {interval, Subscription} from 'rxjs';
-import {retry} from 'rxjs/operators';
+import {Subject, timer} from 'rxjs';
+import {retry, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -29,8 +29,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   toggledColumns: string[] = ['publickey'];
   dataSource = new MatTableDataSource<SSHKeyEntity>();
   @ViewChild(MatSort) sort: MatSort;
-  private subscriptions: Subscription[] = [];
-  shouldTogglePublicKey = (index, item) => this.isShowPublicKey[item.id];
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       private route: ActivatedRoute, private api: ApiService, private userService: UserService,
@@ -38,10 +37,10 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
       private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.route.paramMap.subscribe((m) => {
+    this.route.paramMap.pipe(takeUntil(this._unsubscribe)).subscribe((m) => {
       this.projectID = m.get('projectID');
       this.refreshSSHKeys();
-    }));
+    });
 
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
@@ -52,20 +51,15 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    const timer = interval(10000);
-    this.subscriptions.push(timer.subscribe(() => {
-      this.refreshSSHKeys();
-    }));
-    this.refreshSSHKeys();
+    timer(0, 10000).pipe(takeUntil(this._unsubscribe)).subscribe(() => this.refreshSSHKeys());
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
+
+  shouldTogglePublicKey = (index, item) => this.isShowPublicKey[item.id];
 
   getDataSource(): MatTableDataSource<SSHKeyEntity> {
     this.dataSource.data = this.sshKeys;
@@ -81,10 +75,10 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys(): void {
-    this.subscriptions.push(this.api.getSSHKeys(this.projectID).pipe(retry(3)).subscribe((res) => {
+    this.api.getSSHKeys(this.projectID).pipe(retry(3)).pipe(takeUntil(this._unsubscribe)).subscribe((res) => {
       this.sshKeys = res;
       this.loading = false;
-    }));
+    });
   }
 
   addSshKey(): void {

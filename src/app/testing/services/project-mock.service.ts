@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
+
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {GroupConfig} from '../../shared/model/Config';
 import {fakeMember} from '../fake-data/member.fake';
 import {fakeProject} from '../fake-data/project.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
@@ -33,6 +35,10 @@ export class ProjectMockService {
   getProjectFromStorage(): string {
     const project = localStorage.getItem('project');
     return project && JSON.parse(project);
+  }
+
+  getUserGroupConfig(): GroupConfig {
+    return fakeUserGroupConfig[this.userGroup];
   }
 
   changeAndStoreSelectedProject(project: ProjectEntity): void {

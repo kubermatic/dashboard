@@ -72,8 +72,7 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
 
   isAddEnabled(): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].members.invite;
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().members.invite;
   }
 
   addMember(): void {
@@ -87,8 +86,7 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(member: MemberEntity): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].members.edit ||
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().members.edit ||
         (this.currentUser && member && this.currentUser.email !== member.email);
   }
 
@@ -104,8 +102,7 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(member: MemberEntity): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].members.remove ||
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().members.remove ||
         (this.currentUser && member && this.currentUser.email !== member.email);
   }
 
