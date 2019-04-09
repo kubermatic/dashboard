@@ -14,7 +14,7 @@ const oauth = '${oauth}';
 const scope: string[] = ['openid', 'email', 'profile', 'groups'];
 const nonceString = RandomString(32);
 
-// This file is overriden by set-env.ts script during the e2e tests. Please keep it in sync.
+// This file is overridden by set-env.ts script during the e2e tests. Please keep it in sync.
 export const environment = {
   name: 'dev',
   production: false,

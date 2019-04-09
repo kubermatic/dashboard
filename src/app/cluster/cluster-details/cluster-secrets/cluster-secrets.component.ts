@@ -1,7 +1,7 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService} from '../../../core/services';
+import {ApiService, ProjectService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
@@ -19,8 +19,8 @@ import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token
 export class ClusterSecretsComponent implements OnInit, OnChanges {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
-  @Input() projectID: string;
-  @Input() userGroup: string;
+  projectID: string;
+  userGroup: string;
   expand = false;
   dialogRef: any;
   isClusterRunning: boolean;
@@ -28,18 +28,23 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
   health: HealthEntity;
   userGroupConfig: UserGroupConfig;
 
-  constructor(public dialog: MatDialog, private api: ApiService, private appConfigService: AppConfigService) {}
+  constructor(
+      public dialog: MatDialog, private api: ApiService, private appConfigService: AppConfigService,
+      private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
+    this.projectID = this._projectService.project.id;
+    this.userGroup = this._projectService.userGroup;
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
   }
 
   ngOnChanges(): void {
-    this.api.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((health) => {
-      this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-      this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
-      this.health = health;
-    });
+    this.api.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this._projectService.project.id)
+        .subscribe((health) => {
+          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
+          this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+          this.health = health;
+        });
   }
 
   isExpand(expand: boolean): void {
@@ -143,33 +148,25 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
   getHealthStatus(isHealthy: boolean): string {
     if (isHealthy) {
       return 'Running';
-    } else if (!isHealthy) {
+    } else {
       if (!this.health.apiserver) {
         return 'Failed';
       } else {
         return 'Pending';
       }
-    } else {
-      return '';
     }
   }
 
   revokeAdminTokenDialog(): void {
     this.dialogRef = this.dialog.open(RevokeAdminTokenComponent);
-
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
     this.dialogRef.componentInstance.projectID = this.projectID;
-
-    this.dialogRef.afterClosed().subscribe((result) => {});
   }
   addMachineNetwork(): void {
     this.dialogRef = this.dialog.open(AddMachineNetworkComponent);
-
     this.dialogRef.componentInstance.cluster = this.cluster;
     this.dialogRef.componentInstance.datacenter = this.datacenter;
     this.dialogRef.componentInstance.projectID = this.projectID;
-
-    this.dialogRef.afterClosed().subscribe((result) => {});
   }
 }

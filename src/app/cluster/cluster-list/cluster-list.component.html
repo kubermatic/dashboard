@@ -5,7 +5,7 @@
             mat-raised-button
             color="primary"
             type="button"
-            [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.create"
+            [disabled]="!isAddEnabled()"
             (click)="loadWizard()">
       <span class="btn-text-default">+ Add Cluster</span>
     </button>
@@ -82,11 +82,11 @@
 
     <ng-container *ngIf="!clusters || clusters.length === 0">
       <div class="km-row km-no-item"
-           *ngIf="!loading">
+           *ngIf="!isInitialized">
         No Clusters available. Please add a new Cluster.
       </div>
       <div class="km-row"
-           *ngIf="!!loading">
+           *ngIf="isInitialized">
         <mat-spinner color="accent"
                      class="km-spinner"
                      [diameter]="30"></mat-spinner>
