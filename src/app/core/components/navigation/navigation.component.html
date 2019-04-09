@@ -1,27 +1,10 @@
 <header (scrollChange)="scrolledChanged($event)"
         [ngClass]="{scrolled: isScrolled}"
         (window:resize)="onResize($event)">
-
   <ng2-slim-loading-bar [color]="'white'"
                         [height]="'2px'"></ng2-slim-loading-bar>
-
   <div fxLayout
        class="km-navigation-bar">
-    <div fxFlex="20%">
-      <button class="km-sidenav-toggle mat-button km-nav-mobile"
-              (click)="showMobileNav()"
-              mat-button>
-        <span class="mat-button-wrapper">
-          <mat-icon role="img"
-                    class="material-icons mat-icon"
-                    aria-label="menu">menu</mat-icon>
-          <span>Kubermatic</span>
-        </span>
-        <div class="mat-button-ripple mat-ripple"
-             mat-ripple></div>
-        <div class="mat-button-focus-overlay"></div>
-      </button>
-    </div>
     <a class="km-header-logo"></a>
     <div fxFlex></div>
     <div fxFlex="20%"
@@ -41,18 +24,4 @@
       </a>
     </div>
   </div>
-
-
-  <!-- TODO: add mobile nav -->
-  <!--
-        <button class="km-sidenav-toggle mat-button km-nav-mobile" (click)="showMobileNav()" mat-button>
-          <span class="mat-button-wrapper">
-            <mat-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</mat-icon>
-            <span>Kubermatic</span>
-          </span>
-          <div class="mat-button-ripple mat-ripple" mat-ripple></div>
-          <div class="mat-button-focus-overlay"></div>
-        </button>
-      -->
-
 </header>

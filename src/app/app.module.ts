@@ -14,7 +14,6 @@ import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
 import {AddMemberComponent} from './member/add-member/add-member.component';
 import {EditMemberComponent} from './member/edit-member/edit-member.component';
-import {MobileNavigationComponent} from './overlays';
 import {SharedModule} from './shared/shared.module';
 
 const appInitializerFn = (appConfig: AppConfigService): Function => {
@@ -38,7 +37,6 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
   declarations: [
     KubermaticComponent,
     DashboardComponent,
-    MobileNavigationComponent,
   ],
   providers: [
     AppConfigService,
@@ -54,7 +52,6 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
     GoogleAnalyticsService,
   ],
   entryComponents: [
-    MobileNavigationComponent,
     AddMemberComponent,
     EditMemberComponent,
   ],
