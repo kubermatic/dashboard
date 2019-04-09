@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, DatacenterService, UserService} from '../../core/services';
+import {ApiService, Auth, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
@@ -15,12 +15,12 @@ import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fak
 import {fakeHealth} from '../../testing/fake-data/health.fake';
 import {nodeDeploymentsFake, nodesFake} from '../../testing/fake-data/node.fake';
 import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
-import {fakeUserGroupConfig} from '../../testing/fake-data/userGroupConfig.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {NodeMockService} from '../../testing/services/node-mock.service';
+import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
 import {NodeService} from '../services/node.service';
 
@@ -76,6 +76,7 @@ describe('ClusterDetailsComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: NodeService, useClass: NodeMockService},
+            {provide: ProjectService, useClass: ProjectMockService},
             MatDialog,
             GoogleAnalyticsService,
           ],
@@ -133,8 +134,6 @@ describe('ClusterDetailsComponent', () => {
        expect(de).toBeNull('element should not be rendered before requests');
        expect(spinnerDe).not.toBeNull('spinner should be rendered before requests');
 
-       component.userGroupConfig = fakeUserGroupConfig();
-       component.userGroup = 'owners';
        tick();
        fixture.detectChanges();
 

@@ -2,13 +2,18 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService} from '../../../core/services';
+import {ApiService, ProjectService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeHealth} from '../../../testing/fake-data/health.fake';
+import {RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {ProjectMockService} from '../../../testing/services/project-mock.service';
+
 import {ClusterSecretsComponent} from './cluster-secrets.component';
 
 const modules: any[] = [
@@ -37,6 +42,8 @@ describe('ClusterSecretsComponent', () => {
           providers: [
             {provide: ApiService, useValue: apiMock},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: ProjectService, useClass: ProjectMockService},
+            {provide: Router, useClass: RouterStub},
             MatDialog,
           ],
         })
