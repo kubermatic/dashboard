@@ -18,15 +18,15 @@
   text-align: center;
 
   &.green {
-    color: $healthy-status-color;
+    color: $indicator-green;
   }
 
   &.orange {
-    color: $waiting-status-color;
+    color: $indicator-orange;
   }
 
   &.red {
-    color: $warning-status-color;
+    color: $indicator-red;
   }
 }
 
@@ -35,11 +35,11 @@
 }
 
 .fa-check {
-  color: $healthy-status-color !important;
+  color: $indicator-green !important;
 }
 
 .fa-times {
-  color: $warning !important;
+  color: $indicator-red !important;
 }
 
 .km-provider-logo {

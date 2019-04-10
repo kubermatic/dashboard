@@ -8,21 +8,21 @@
 
   p {
     margin: 0 auto;
-    color: $warning-status-color;
+    color: $indicator-red;
   }
 }
 
 .km-health-state {
   i.red {
-    color: $warning-status-color;
+    color: $indicator-red;
   }
 
   i.green {
-    color: $healthy-status-color;
+    color: $indicator-green;
   }
 
   i.orange {
-    color: $waiting-status-color;
+    color: $indicator-orange;
   }
 }
 
@@ -64,7 +64,7 @@ i.fa-info-circle {
 }
 
 i.fa-exclamation-triangle {
-  color: $warning;
+  color: $indicator-red;
   padding-left: 5px;
 }
 
@@ -77,11 +77,11 @@ i.fa-exclamation-triangle {
   }
 
   .fa-check {
-    color: $healthy-status-color;
+    color: $indicator-green;
   }
 
   .fa-times {
-    color: $warning-status-color;
+    color: $indicator-red;
   }
 }
 

@@ -106,20 +106,20 @@ export class ProjectMockService {
     return iconClass;
   }
 
-  isProjectSelected(viewName: string): string {
-    if (this.project === undefined || this.project.status !== 'Active') {
-      return 'km-disabled';
+  isViewEnabled(viewName: string): boolean {
+    if (!this.project || this.project.status !== 'Active') {
+      return false;
     } else {
       if (!!this.userGroupConfig && this.userGroup) {
-        if (viewName === 'create-cluster') {
-          return !this.userGroupConfig[this.userGroup].clusters.create ? 'km-disabled' : '';
-        } else {
-          return !this.userGroupConfig[this.userGroup][viewName].view ? 'km-disabled' : '';
-        }
+        return this.userGroupConfig[this.userGroup][viewName].view;
       } else {
-        return 'km-disabled';
+        return false;
       }
     }
+  }
+
+  getMenuItemClass(viewName: string): string {
+    return this.isViewEnabled(viewName) ? '' : 'km-disabled';
   }
 
   compareProjectsEquality(a: ProjectEntity, b: ProjectEntity): boolean {

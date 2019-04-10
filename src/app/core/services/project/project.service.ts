@@ -5,7 +5,6 @@ import {Subject} from 'rxjs/Subject';
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig, UserGroupConfig} from '../../../shared/model/Config';
-import {ProjectUtils} from '../../../shared/utils/project-utils/project-utils';
 import {UserService} from '../user/user.service';
 
 @Injectable()
@@ -107,25 +106,21 @@ export class ProjectService {
     }, 500);
   }
 
-  getProjectStateIconClass(): string {
-    return ProjectUtils.getIconClass(this.project);
-  }
-
-  isProjectSelected(viewName: string): string {
+  isViewEnabled(viewName: string): boolean {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    if (this.project === undefined || this.project.status !== 'Active') {
-      return 'km-disabled';
+    if (!this.project || this.project.status !== 'Active') {
+      return false;
     } else {
       if (!!this.userGroupConfig && this.userGroup) {
-        if (viewName === 'create-cluster') {
-          return !this.userGroupConfig[this.userGroup].clusters.create ? 'km-disabled' : '';
-        } else {
-          return !this.userGroupConfig[this.userGroup][viewName].view ? 'km-disabled' : '';
-        }
+        return this.userGroupConfig[this.userGroup][viewName].view;
       } else {
-        return 'km-disabled';
+        return false;
       }
     }
+  }
+
+  getMenuItemClass(viewName: string): string {
+    return this.isViewEnabled(viewName) ? '' : 'km-disabled';
   }
 
   compareProjectsEquality(a: ProjectEntity, b: ProjectEntity): boolean {

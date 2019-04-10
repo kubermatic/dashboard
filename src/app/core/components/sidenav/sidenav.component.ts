@@ -114,10 +114,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return this.checkUrl(url) ? 'active' : '';
   }
 
-  getIconClass(url: string): string {
-    return this.checkUrl(url) ? 'white' : 'black';
-  }
-
   checkUrl(url: string): boolean {
     const state: RouterState = this.router.routerState;
     const snapshot: RouterStateSnapshot = state.snapshot;
@@ -134,6 +130,21 @@ export class SidenavComponent implements OnInit, OnDestroy {
   getRouterLink(target: string): string {
     const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
     return `/projects/${selectedProjectId}/${target}`;
+  }
+
+  getTooltip(viewName: string): string {
+    let tooltip: string;
+    if (!this.projectService.isViewEnabled(viewName)) {
+      tooltip = 'Cannot enter this view.';
+      if (!this.projectService.project) {
+        tooltip += ' There is no selected project.';
+      } else if (this.projectService.project.status !== 'Active') {
+        tooltip += ' Selected project is not active.';
+      } else {
+        tooltip += ' Missing required rights.';
+      }
+    }
+    return tooltip;
   }
 
   ngOnDestroy(): void {
