@@ -29,6 +29,7 @@ test:
 
 test-headless: install
 	@$(CC) run test:headless
+	bash <(curl -s https://codecov.io/bash)
 
 run-e2e-ci: install
 	./hack/e2e/run_ci_e2e_test.sh

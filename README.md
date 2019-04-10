@@ -1,5 +1,6 @@
 # Kubermatic Dashboard
 [![Status](https://drone.loodse.com/api/badges/kubermatic/dashboard-v2/status.svg)](https://drone.loodse.com/kubermatic/dashboard-v2)
+[![codecov](https://codecov.io/gh/kubermatic/dashboard-v2/branch/master/graph/badge.svg?token=njXM3OrmAM)](https://codecov.io/gh/kubermatic/dashboard-v2)
 
 ## Development
 
