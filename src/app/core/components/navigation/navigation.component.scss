@@ -12,6 +12,10 @@ ng2-slim-loading-bar {
   z-index: 2;
 }
 
+.km-sidenav-padding {
+  padding-left: $sidenav-width;
+}
+
 .km-navigation-bar {
   z-index: 2;
   height: $toolbar-height;
@@ -21,14 +25,13 @@ ng2-slim-loading-bar {
   left: 0;
   width: 100%;
   box-shadow: 0 4px 4px rgba($text-color, 0.1);
-  padding-left: $sidenav-width;
 
   .km-header-logo {
     display: block;
     width: 240px;
     height: $toolbar-height;
     background-size: 218px;
-    background-position: 0 -24px;
+    background-position: 0 -22px;
   }
 
   .km-auth {

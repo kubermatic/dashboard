@@ -9,96 +9,89 @@ $project-picker-border-width: 2px;
   height: 100%;
   color: $secondary;
 
-  .km-projects-container {
-    position: relative;
-  }
+  .mat-nav-list {
+    padding: 0 !important;
 
-  .km-projects-icon {
-    position: absolute;
-    right: 42px;
-    top: 16px;
-    background-color: $secondary;
-    pointer-events: none;
-    color: $secondary-light;
-    height: 12px;
-    width: 12px;
-  }
+    .mat-list-item,
+    a {
+      color: $secondary;
+      height: $toolbar-height;
 
-  mat-label {
-    margin: 3px 0 !important;
-    font-size: 12px;
-    line-height: 12px;
-  }
+      &.km-projects {
+        height: $toolbar-height - ($project-picker-border-width / 2);
+        border-bottom: #00a3d9 solid $project-picker-border-width;
+      }
+    }
 
-  .mat-select-value-text {
-    color: $secondary;
-    font-size: 16px;
-    line-height: 16px;
-  }
+    a {
+      padding: 10px 30px !important;
+      display: flex;
+      align-items: center;
 
-  .mat-select-arrow {
-    visibility: hidden;
-  }
+      &:hover,
+      &.active {
+        color: $secondary-light;
+        background-color: $primary-light;
 
-  .mat-nav-list a {
-    font-size: 18px;
-    font-weight: 400;
-  }
-
-  .mat-list-item i {
-    background-color: $secondary;
-  }
-
-  .km-disabled {
-    cursor: default;
-    opacity: 0.4;
-    pointer-events: none;
-  }
-}
-
-.mat-nav-list {
-  padding: 0 !important;
-
-  .mat-list-item,
-  a {
-    color: $secondary;
-    height: $toolbar-height;
-
-    &.km-projects {
-      height: $toolbar-height - ($project-picker-border-width / 2);
-      border-bottom: #00a3d9 solid $project-picker-border-width;
-
-      .km-projects-container {
-        display: flex;
-        flex-direction: column;
-        padding: 0 30px;
-        width: 100%;
-
-        mat-label {
-          margin: 5px 0;
+        i {
+          background-color: $secondary-light;
         }
       }
-    }
-  }
-
-  a {
-    padding: 10px 30px !important;
-    display: flex;
-    align-items: center;
-
-    &:hover,
-    &.active {
-      color: $secondary-light;
-      background-color: $primary-light;
 
       i {
-        background-color: $secondary-light;
+        width: 20px;
+        margin-right: 16px;
       }
     }
 
-    i {
-      width: 20px;
-      margin-right: 16px;
+    .km-projects-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 0 30px;
+      width: 100%;
+    }
+
+    .km-projects-icon {
+      position: absolute;
+      right: 42px;
+      top: 16px;
+      background-color: $secondary;
+      pointer-events: none;
+      color: $secondary-light;
+      height: 12px;
+      width: 12px;
+    }
+
+    mat-label {
+      margin: 3px 0 !important;
+      font-size: 12px;
+      line-height: 12px;
+    }
+
+    .mat-select-value-text {
+      color: $secondary;
+      font-size: 16px;
+      line-height: 16px;
+    }
+
+    .mat-select-arrow {
+      visibility: hidden;
+    }
+
+    .mat-nav-list a {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .mat-list-item i {
+      background-color: $secondary;
+    }
+
+    .km-disabled {
+      cursor: default;
+      opacity: 0.4;
+      pointer-events: none;
     }
   }
 }

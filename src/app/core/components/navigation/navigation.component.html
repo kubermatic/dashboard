@@ -4,7 +4,8 @@
   <ng2-slim-loading-bar color="white"
                         height="2px"></ng2-slim-loading-bar>
   <div fxLayout
-       class="km-navigation-bar">
+       class="km-navigation-bar"
+       [ngClass]="{'km-sidenav-padding': auth.authenticated()}">
     <a class="km-header-logo"></a>
     <div class="km-auth"
          fxFlex>
