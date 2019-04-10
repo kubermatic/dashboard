@@ -230,23 +230,23 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.openstackSettingsForm.controls.username.setValue('');
       component.loadingOptionalTenants = false;
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('Tenant: Please enter your credentials first!');
+      expect(component.getTenantsFormState()).toEqual('Project: Please enter your credentials first!');
 
       component.openstackSettingsForm.controls.username.setValue('username');
       component.openstackSettingsForm.controls.password.setValue('password');
       component.openstackSettingsForm.controls.domain.setValue('domain');
       component.loadingOptionalTenants = true;
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('Loading Tenants...');
+      expect(component.getTenantsFormState()).toEqual('Loading Projects...');
 
       component.loadingOptionalTenants = false;
       component.tenants = [];
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('No Tenants available');
+      expect(component.getTenantsFormState()).toEqual('No Projects available');
 
       component.tenants = openstackTenantsFake();
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('Tenant*:');
+      expect(component.getTenantsFormState()).toEqual('Project*:');
     });
 
     it('should set correct optional settings placeholder', () => {
@@ -254,7 +254,7 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.loadingOptionalSettings = false;
       fixture.detectChanges();
       expect(component.getOptionalSettingsFormState('Security Group'))
-          .toEqual('Security Group: Please enter Tenant first!');
+          .toEqual('Security Group: Please enter Project first!');
 
       component.openstackSettingsForm.controls.username.setValue('username');
       component.openstackSettingsForm.controls.password.setValue('password');
