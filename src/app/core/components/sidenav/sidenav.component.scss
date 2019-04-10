@@ -51,9 +51,7 @@ $project-picker-border-width: 2px;
 
     &.km-projects {
       height: $toolbar-height - ($project-picker-border-width / 2);
-      border-bottom-color: #00a3d9;
-      border-bottom-style: solid;
-      border-bottom-width: $project-picker-border-width;
+      border-bottom: #00a3d9 solid $project-picker-border-width;
 
       .km-projects-container {
         display: flex;
@@ -75,11 +73,11 @@ $project-picker-border-width: 2px;
 
     &:hover,
     &.active {
-      color: #dcf3fa;
-      background-color: #31586f;
+      color: $secondary-light;
+      background-color: $primary-light;
 
       i {
-        background-color: #dcf3fa;
+        background-color: $secondary-light;
       }
     }
 
