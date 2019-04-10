@@ -118,6 +118,15 @@
   background-repeat: no-repeat;
 }
 
+.km-icon-arrow-down-2 {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  mask: url("/assets/images/icons/arrow-down.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
 .km-icon-running {
   display: inline-block;
   margin: 0 5px 0 0;

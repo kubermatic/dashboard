@@ -9,6 +9,21 @@ $project-picker-border-width: 2px;
   height: 100%;
   color: $secondary;
 
+  .km-projects-container {
+    position: relative;
+  }
+
+  .km-projects-icon {
+    position: absolute;
+    right: 42px;
+    top: 16px;
+    background-color: $secondary;
+    pointer-events: none;
+    color: $secondary-light;
+    height: 12px;
+    width: 12px;
+  }
+
   mat-label {
     margin: 3px 0 !important;
     font-size: 12px;
@@ -22,7 +37,7 @@ $project-picker-border-width: 2px;
   }
 
   .mat-select-arrow {
-    color: $secondary;
+    visibility: hidden;
   }
 
   .mat-nav-list a {
