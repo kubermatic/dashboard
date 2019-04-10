@@ -75,6 +75,13 @@ $project-picker-border-width: 2px;
       line-height: 16px;
     }
 
+    ::ng-deep.mat-select-placeholder {
+      opacity: 0.4;
+      color: $secondary;
+      font-size: 16px !important;
+      line-height: 16px;
+    }
+
     ::ng-deep.mat-select-arrow {
       visibility: hidden;
     }
