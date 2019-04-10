@@ -36,6 +36,7 @@ pipeline:
     image: quay.io/kubermatic/chrome-headless:v0.3
     commands:
       - make test-headless
+    secrets: [ codecov_token ]
 
   build:
     image: golang:1.11
