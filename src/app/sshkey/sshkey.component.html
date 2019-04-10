@@ -62,7 +62,7 @@
                 <button class="km-icon-delete black"
                         [attr.id]="'km-delete-sshkey-' + element.name"
                         matTooltip="Delete SSH key"
-                        (click)="deleteSshKey(element)"
+                        (click)="deleteSshKey(element, $event)"
                         [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.delete"></button>
               </ng-container>
             </ng-container>
