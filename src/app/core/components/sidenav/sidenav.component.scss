@@ -69,13 +69,13 @@ $project-picker-border-width: 2px;
       line-height: 12px;
     }
 
-    .mat-select-value-text {
+    ::ng-deep.mat-select-value-text {
       color: $secondary;
       font-size: 16px;
       line-height: 16px;
     }
 
-    .mat-select-arrow {
+    ::ng-deep.mat-select-arrow {
       visibility: hidden;
     }
 

@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatSelectChange} from '@angular/material';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {Subject, timer} from 'rxjs';
@@ -13,7 +13,6 @@ import {ApiService, ProjectService} from '../../services';
   selector: 'kubermatic-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 
 export class SidenavComponent implements OnInit, OnDestroy {
