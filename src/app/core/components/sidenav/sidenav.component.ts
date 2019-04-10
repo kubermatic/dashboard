@@ -133,6 +133,21 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return `/projects/${selectedProjectId}/${target}`;
   }
 
+  getTooltip(viewName: string): string {
+    let tooltip: string;
+    if (!this.projectService.isViewEnabled(viewName)) {
+      tooltip = 'Cannot enter this view.';
+      if (!this.projectService.project) {
+        tooltip += ' There is no selected project.';
+      } else if (this.projectService.project.status !== 'Active') {
+        tooltip += ' Selected project is not active.';
+      } else {
+        tooltip += ' Missing required rights.';
+      }
+    }
+    return tooltip;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
