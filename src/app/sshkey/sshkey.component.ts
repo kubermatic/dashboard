@@ -90,7 +90,8 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteSshKey(sshKey: SSHKeyEntity): void {
+  deleteSshKey(sshKey: SSHKeyEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,

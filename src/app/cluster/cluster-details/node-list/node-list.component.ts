@@ -55,7 +55,8 @@ export class NodeListComponent implements OnInit {
     return this.dataSource;
   }
 
-  deleteNodeDialog(node: NodeEntity): void {
+  deleteNodeDialog(node: NodeEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -69,7 +70,6 @@ export class NodeListComponent implements OnInit {
 
     const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
     this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteNodeDialogOpened');
-
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
@@ -149,6 +149,10 @@ export class NodeListComponent implements OnInit {
   }
 
   toggleNodeItem(element: NodeEntity): void {
-    this.isShowNodeItem[element.id] = !this.isShowNodeItem[element.id];
+    const elem = event.target as HTMLElement;
+    const className = elem.className;
+    if (className !== 'km-copy') {
+      this.isShowNodeItem[element.id] = !this.isShowNodeItem[element.id];
+    }
   }
 }
