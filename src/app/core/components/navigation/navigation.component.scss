@@ -21,7 +21,7 @@ ng2-slim-loading-bar {
   left: 0;
   width: 100%;
   box-shadow: 0 4px 4px rgba($text-color, 0.1);
-  margin-left: $sidenav-width;
+  padding-left: $sidenav-width;
 
   .km-header-logo {
     display: block;

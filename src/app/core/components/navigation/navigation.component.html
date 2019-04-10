@@ -1,14 +1,13 @@
 <header (scrollChange)="scrolledChanged($event)"
         [ngClass]="{scrolled: isScrolled}"
         (window:resize)="onResize($event)">
-  <ng2-slim-loading-bar [color]="'white'"
-                        [height]="'2px'"></ng2-slim-loading-bar>
+  <ng2-slim-loading-bar color="white"
+                        height="2px"></ng2-slim-loading-bar>
   <div fxLayout
        class="km-navigation-bar">
     <a class="km-header-logo"></a>
-    <div fxFlex></div>
-    <div fxFlex="20%"
-         class="km-auth">
+    <div class="km-auth"
+         fxFlex>
       <span class="km-current-user"
             *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
       <span id="km-navbar-logout-btn"
