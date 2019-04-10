@@ -5,11 +5,11 @@ mat-card {
 }
 
 .fa-check {
-  color: $healthy-status-color !important;
+  color: $indicator-green !important;
 }
 
 .fa-times {
-  color: $warning !important;
+  color: $indicator-red !important;
 }
 
 .km-summary-container {
