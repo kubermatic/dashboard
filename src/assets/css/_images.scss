@@ -29,11 +29,11 @@
   cursor: pointer;
 
   &.white {
-    background-image: url("/assets/images/icons/white/delete-white.png");
+    background-image: url("/assets/images/icons/delete-white.png");
   }
 
   &.black {
-    background-image: url("/assets/images/icons/black/delete-black.png");
+    background-image: url("/assets/images/icons/delete-black.png");
   }
 
   &:disabled {
@@ -50,11 +50,11 @@
   cursor: pointer;
 
   &.white {
-    background-image: url("/assets/images/icons/white/edit-white.png");
+    background-image: url("/assets/images/icons/edit-white.png");
   }
 
   &.black {
-    background-image: url("/assets/images/icons/black/edit-black.png");
+    background-image: url("/assets/images/icons/edit-black.png");
   }
 
   &:disabled {
