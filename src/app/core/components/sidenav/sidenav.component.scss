@@ -1,6 +1,8 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
+$project-picker-border-width: 2px;
+
 .container {
   width: $sidenav-width;
   background-color: $primary;
@@ -42,8 +44,10 @@
     height: $toolbar-height;
 
     &.km-projects {
-      height: $toolbar-height;
-      border-bottom: 2px solid #00a3d9;
+      height: $toolbar-height - ($project-picker-border-width / 2);
+      border-bottom-color: #00a3d9;
+      border-bottom-style: solid;
+      border-bottom-width: $project-picker-border-width;
 
       .km-projects-container {
         display: flex;
