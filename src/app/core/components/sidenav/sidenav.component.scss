@@ -33,6 +33,12 @@ $project-picker-border-width: 2px;
   .mat-list-item i {
     background-color: $secondary;
   }
+
+  .km-disabled {
+    cursor: default;
+    opacity: 0.4;
+    pointer-events: none;
+  }
 }
 
 .mat-nav-list {
@@ -81,14 +87,5 @@ $project-picker-border-width: 2px;
       width: 20px;
       margin-right: 16px;
     }
-  }
-}
-
-.km-disabled {
-  pointer-events: none;
-  cursor: default;
-
-  a {
-    opacity: 40%;
   }
 }
