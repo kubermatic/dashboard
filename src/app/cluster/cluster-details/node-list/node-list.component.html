@@ -299,18 +299,10 @@
           class="km-mat-row"></tr>
     </table>
 
-    <ng-container *ngIf="!nodes || nodes.length === 0">
-      <div class="km-row km-no-item"
-           *ngIf="!loading">
-        No Nodes available.
-      </div>
-      <div class="km-row"
-           *ngIf="!!loading">
-        <mat-spinner color="accent"
-                     class="km-spinner"
-                     [diameter]="30"></mat-spinner>
-      </div>
-    </ng-container>
+    <div class="km-row km-no-item"
+         *ngIf="!nodes || nodes.length === 0">
+      No Nodes available.
+    </div>
 
   </mat-card-content>
 </mat-card>

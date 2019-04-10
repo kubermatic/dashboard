@@ -1,9 +1,8 @@
-import {browser} from 'protractor';
-
 import {ProjectsPage} from '../pages/projects/projects.po';
 import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 
 import {KMElement} from './element';
+import {browser} from 'protractor';
 
 export class ProjectUtils {
   private static _projectsPage = new ProjectsPage();
@@ -28,9 +27,12 @@ export class ProjectUtils {
 
     ProjectUtils._projectsPage.navigateTo();
     KMElement.waitForRedirect('/projects');
-    KMElement.waitToAppear(ProjectUtils._projectsPage.getProjectItem(projectName));
 
+    KMElement.waitToAppear(ProjectUtils._projectsPage.getProjectItem(projectName));
     expect(ProjectUtils._projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
+
+    KMElement.waitToAppear(ProjectUtils._projectsPage.getActiveProjectItem(projectName), 300000);
+    expect(ProjectUtils._projectsPage.getActiveProjectItem(projectName).isPresent()).toBeTruthy();
   }
 
   static deleteProject(projectName: string): void {

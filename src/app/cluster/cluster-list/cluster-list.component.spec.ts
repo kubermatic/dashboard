@@ -6,7 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, DatacenterService, UserService} from '../../core/services';
+import {ApiService, Auth, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeHealth} from '../../testing/fake-data/health.fake';
@@ -20,6 +20,7 @@ import {UserMockService} from '../../testing/services/user-mock.service';
 import {ClusterListComponent} from './cluster-list.component';
 
 import Spy = jasmine.Spy;
+import {ProjectMockService} from '../../testing/services/project-mock.service';
 
 describe('ClusterListComponent', () => {
   let fixture: ComponentFixture<ClusterListComponent>;
@@ -53,6 +54,7 @@ describe('ClusterListComponent', () => {
             {provide: Router, useClass: RouterStub},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
+            {provide: ProjectService, useClass: ProjectMockService},
           ],
         })
         .compileComponents();
@@ -86,7 +88,7 @@ describe('ClusterListComponent', () => {
      }));
 
   it('should render cluster list', fakeAsync(() => {
-       component.loading = false;
+       component.isInitialized = true;
        fixture.detectChanges();
 
        const de = fixture.debugElement.query(By.css('.blue'));

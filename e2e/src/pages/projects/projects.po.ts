@@ -35,6 +35,10 @@ export class ProjectsPage extends NavPage {
     return element(by.id(`km-project-name-${projectName}`));
   }
 
+  getActiveProjectItem(projectName: string): any {
+    return element(by.xpath(`//*[@id="km-project-name-${projectName}"]/../td/i[contains(@class, "km-health-state fa fa-circle green")]`));
+  }
+
   getDeleteProjectButton(projectName: string): any {
     return element(by.id(`km-delete-project-${projectName}`));
   }

@@ -1,8 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-import {WizardService} from '../../../../core/services/wizard/wizard.service';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
+import {WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
@@ -13,7 +13,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   azureSettingsForm: FormGroup;
   hideOptional = true;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private wizardService: WizardService) {}
 
@@ -30,7 +30,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       vnet: new FormControl(this.cluster.spec.cloud.azure.vnet),
     });
 
-    this.subscriptions.push(this.azureSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
+    this.azureSettingsForm.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           azure: {
@@ -48,18 +48,15 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
         },
         valid: this.azureSettingsForm.valid,
       });
-    }));
+    });
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }
