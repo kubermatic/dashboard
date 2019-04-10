@@ -422,7 +422,7 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-card-subtitle {
     .km-pause-reason {
       margin-top: 0;
-      color: $warning-status-color;
+      color: $indicator-red;
     }
   }
 
@@ -570,7 +570,7 @@ mat-dialog-content {
 }
 
 .mat-form-field-invalid .mat-form-field-label {
-  color: $warning-status-color !important;
+  color: $indicator-red !important;
 }
 
 .mat-checkbox-frame {
@@ -831,7 +831,7 @@ mat-list-item.disabled {
 }
 
 .km-warning {
-  color: $warning !important;
+  color: $indicator-red !important;
 }
 
 .km-muted {
@@ -893,15 +893,15 @@ div.km-form-group-tags {
 
 // Health statuses
 .green {
-  color: $healthy-status-color;
+  color: $indicator-green;
 }
 
 .orange {
-  color: $waiting-status-color;
+  color: $indicator-orange;
 }
 
 .red {
-  color: $warning-status-color;
+  color: $indicator-red;
 }
 
 // Bottom spacer.

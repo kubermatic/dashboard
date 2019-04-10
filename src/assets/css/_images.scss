@@ -29,11 +29,11 @@
   cursor: pointer;
 
   &.white {
-    background-image: url("/assets/images/icons/white/delete-white.png");
+    background-image: url("/assets/images/icons/delete-white.png");
   }
 
   &.black {
-    background-image: url("/assets/images/icons/black/delete-black.png");
+    background-image: url("/assets/images/icons/delete-black.png");
   }
 
   &:disabled {
@@ -50,11 +50,11 @@
   cursor: pointer;
 
   &.white {
-    background-image: url("/assets/images/icons/white/edit-white.png");
+    background-image: url("/assets/images/icons/edit-white.png");
   }
 
   &.black {
-    background-image: url("/assets/images/icons/black/edit-black.png");
+    background-image: url("/assets/images/icons/edit-black.png");
   }
 
   &:disabled {
@@ -64,70 +64,42 @@
 
 .km-icon-cluster {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
+  width: 22px;
+  height: 22px;
+  mask: url("/assets/images/icons/clusters.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
   cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/cluster-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/cluster-black.png");
-  }
 }
 
 .km-icon-key {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
+  width: 22px;
+  height: 22px;
+  mask: url("/assets/images/icons/ssh-keys.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
   cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/key-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/key-black.png");
-  }
 }
 
 .km-icon-project {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
+  width: 22px;
+  height: 22px;
+  mask: url("/assets/images/icons/projects.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
   cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/project-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/project-black.png");
-  }
 }
 
 .km-icon-member {
   display: inline-block;
-  width: 20px;
-  height: 20px;
-  background-repeat: no-repeat;
-  background-size: contain;
+  width: 22px;
+  height: 22px;
+  mask: url("/assets/images/icons/members.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
   cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/white/member-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/black/member-black.png");
-  }
 }
 
 .km-icon-arrow-up {
@@ -144,6 +116,15 @@
   height: 9px;
   background-image: url("/assets/images/Arrow_down.svg");
   background-repeat: no-repeat;
+}
+
+.km-icon-arrow-down-2 {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  mask: url("/assets/images/icons/arrow-down.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
 }
 
 .km-icon-running {

@@ -1,4 +1,5 @@
 @import "../../assets/css/colors";
+@import "../../assets/css/variables";
 
 .mat-card {
   margin-bottom: 50px;
@@ -6,6 +7,7 @@
   .mat-card-header {
     padding: 0;
     margin-bottom: 10px;
+    height: 6 * $baseline-grid;
   }
 
   .mat-card-header-text {
@@ -78,7 +80,7 @@
 }
 
 .km-project-status-info {
-  color: $warning;
+  color: $indicator-red;
   font-size: 10px;
   margin-left: 15px;
 }

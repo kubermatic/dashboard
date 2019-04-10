@@ -7,22 +7,7 @@ mat-sidenav-container {
   width: 100%;
   top: 0;
   bottom: 0;
-  padding: 45px 0 0;
   position: absolute;
-}
-
-mat-sidenav {
-  padding-top: 45px;
-}
-
-.mat-sidenav {
-  width: 210px;
-  background-color: $medium-background;
-  color: $white-text-color;
-}
-
-.mat-sidenav-container {
-  background-color: $grey-background;
 }
 
 .mat-input-wrapper {

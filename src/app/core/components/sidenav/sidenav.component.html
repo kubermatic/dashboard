@@ -4,58 +4,62 @@
     <div class="km-sidenav-top">
       <mat-list-item class="km-projects">
         <div class="km-projects-container">
-          <mat-label fxLayout="row">
-            <span>Selected Project</span>
-            <div class="km-health-state"
-                 *ngIf="!!selectedProject">
-              <i [matTooltip]="selectedProject.status"
-                 [ngClass]="projectService.getProjectStateIconClass()"></i>
-            </div>
-          </mat-label>
+          <mat-label>Project</mat-label>
           <mat-select #select
-                      placeholder="Select Project"
+                      placeholder="None"
                       (selectionChange)="selectionChange($event, selectedProject, select)"
                       [ngModel]="selectedProject"
                       [compareWith]="projectService.compareProjectsEquality"
                       disableOptionCentering>
-            <mat-option (click)="addProject()">+ Add Project</mat-option>
             <mat-option *ngFor="let project of projects"
                         [value]="project">
-              {{ project.name }}
+              {{project.name}}
             </mat-option>
+            <mat-option (click)="addProject()">+ Add Project</mat-option>
           </mat-select>
+          <div class="km-projects-icon km-icon-arrow-down-2"></div>
         </div>
       </mat-list-item>
 
-      <mat-list-item [ngClass]="projectService.isProjectSelected('clusters')">
-        <a id="km-nav-item-clusters"
-           mat-line
-           [routerLink]="getRouterLink('clusters')"
-           [ngClass]="getLinkClass('clusters')"><i class="km-icon-cluster"
-             [ngClass]="getIconClass('clusters')"></i> Clusters</a>
-      </mat-list-item>
+      <div [matTooltip]="getTooltip('clusters')">
+        <mat-list-item [ngClass]="projectService.getMenuItemClass('clusters')">
+          <a id="km-nav-item-clusters"
+             mat-line
+             fxLayoutAlign=" center"
+             [routerLink]="getRouterLink('clusters')"
+             [ngClass]="getLinkClass('clusters')">
+            <i class="km-icon-cluster"></i> Clusters</a>
+        </mat-list-item>
+      </div>
 
-      <mat-list-item [ngClass]="projectService.isProjectSelected('sshKeys')">
-        <a mat-line
-           [routerLink]="getRouterLink('sshkeys')"
-           [ngClass]="getLinkClass('sshkeys')"><i class="km-icon-key"
-             [ngClass]="getIconClass('sshkeys')"></i> SSH Keys</a>
-      </mat-list-item>
+      <div [matTooltip]="getTooltip('sshKeys')">
+        <mat-list-item [ngClass]="projectService.getMenuItemClass('sshKeys')">
+          <a mat-line
+             fxLayoutAlign=" center"
+             [routerLink]="getRouterLink('sshkeys')"
+             [ngClass]="getLinkClass('sshkeys')">
+            <i class="km-icon-key"></i> SSH Keys</a>
+        </mat-list-item>
+      </div>
 
-      <mat-list-item [ngClass]="projectService.isProjectSelected('members')">
-        <a id="km-nav-item-members"
-           mat-line
-           [routerLink]="getRouterLink('members')"
-           [ngClass]="getLinkClass('members')"><i class="km-icon-member"
-             [ngClass]="getIconClass('members')"></i> Members</a>
-      </mat-list-item>
+      <div [matTooltip]="getTooltip('members')">
+        <mat-list-item [ngClass]="projectService.getMenuItemClass('members')">
+          <a id="km-nav-item-members"
+             mat-line
+             fxLayoutAlign=" center"
+             [routerLink]="getRouterLink('members')"
+             [ngClass]="getLinkClass('members')">
+            <i class="km-icon-member"></i> Members</a>
+        </mat-list-item>
+      </div>
 
       <mat-list-item>
         <a id="km-nav-item-projects"
            mat-line
+           fxLayoutAlign=" center"
            routerLink="/projects"
-           [ngClass]="getLinkClass('projects')"><i class="km-icon-project"
-             [ngClass]="getIconClass('projects')"></i> Projects</a>
+           [ngClass]="getLinkClass('projects')">
+          <i class="km-icon-project"></i> Projects</a>
       </mat-list-item>
     </div>
   </mat-nav-list>
