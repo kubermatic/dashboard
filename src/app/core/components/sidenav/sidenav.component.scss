@@ -19,7 +19,7 @@ $project-picker-border-width: 2px;
 
       &.km-projects {
         height: $toolbar-height - ($project-picker-border-width / 2);
-        border-bottom: #00a3d9 solid $project-picker-border-width;
+        border-bottom: $alternative solid $project-picker-border-width;
       }
     }
 
@@ -59,8 +59,6 @@ $project-picker-border-width: 2px;
       background-color: $secondary;
       pointer-events: none;
       color: $secondary-light;
-      height: 12px;
-      width: 12px;
     }
 
     mat-label {
