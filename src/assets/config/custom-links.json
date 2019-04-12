@@ -28,7 +28,6 @@
   },
   {
     "label": "Artifactory",
-    "url": "https://jfrog.com/artifactory/",
-    "icon": "https://jfrog.com/wp-content/uploads/2017/12/Jfrog-Logo.svg"
+    "url": "https://jfrog.com/artifactory/"
   }
 ]
