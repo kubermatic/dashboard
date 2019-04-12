@@ -12,19 +12,19 @@ const routes: Routes = [
     path: '',
     component: ClusterListComponent,
     canActivate: [AuthGuard],
-    data: {title: 'Manage Clusters'},
+    data: {title: 'Clusters'},
   },
   {
     path: ':clusterName',
     component: ClusterDetailsComponent,
     canActivate: [AuthGuard],
-    data: {title: 'Cluster details'},
+    data: {title: 'Cluster Details'},
   },
   {
     path: ':clusterName/nd/:nodeDeploymentID',
     component: NodeDeploymentDetailsComponent,
     canActivate: [AuthGuard],
-    data: {title: 'Node Deployment details'},
+    data: {title: 'Node Deployment Details'},
   },
 ];
 

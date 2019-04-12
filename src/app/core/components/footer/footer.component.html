@@ -1,0 +1,47 @@
+<footer fxFlex
+        fxLayoutAlign=" center"
+        [ngClass]="authenticated ? 'km-dark-footer' : 'km-light-footer'">
+  <div fxLayout="row">
+    <div>powered by
+      <a href="https://loodse.com"
+         target="_blank">Loodse
+      </a>
+    </div>
+  </div>
+
+  <div *ngIf="!!version"
+       fxFlexAlign=" center"
+       fxLayout="row">
+    <div class="km-separator">–</div>
+    <div *ngIf="!version.distance">{{version.tag}}</div>
+    <div *ngIf="!!version.distance">v{{version.semverString}}</div>
+  </div>
+
+  <div fxFlex
+       fxLayoutAlign=" center">
+    <div *ngIf="showTermsOfService()"
+         fxLayoutAlign=" center">
+      <div class="km-separator">|</div>
+      <a routerLink="terms-of-service">Terms of Service</a>
+    </div>
+
+    <div *ngIf="isDemoSystem()"
+         fxLayoutAlign=" center">
+      <div class="km-separator">|</div>
+      <div>Demo system</div>
+    </div>
+  </div>
+
+  <div class="km-social"
+       fxFlexAlign="center"
+       fxLayoutAlign="end center">
+    <a href="https://www.twitter.com/loodse"
+       target="_blank"><i class="fa fa-twitter"></i></a>
+
+    <a href="https://github.com/kubermatic"
+       target="_blank"><i class="fa fa-github"></i></a>
+
+    <a href="http://slack.kubermatic.io/"
+       target="_blank"><i class="fa fa-slack"></i></a>
+  </div>
+</footer>

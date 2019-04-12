@@ -12,13 +12,13 @@
     <div class="mat-dialog-content">
       <form [formGroup]="editProjectForm"
             fxLayout="column">
-        <p>You are on the way to edit the project name for "{{project.name}}".</p>
+        <p>You are on the way to edit the {{project.name}} project name:</p>
         <mat-form-field fxFlex>
           <input id="km-edit-project-dialog-input"
                  matInput
                  formControlName="name"
                  type="text"
-                 placeholder="New project name*:"
+                 placeholder="Project name*"
                  autocomplete="off">
           <mat-error *ngIf="editProjectForm.controls.name.hasError('required')">
             Name is <strong>required</strong>

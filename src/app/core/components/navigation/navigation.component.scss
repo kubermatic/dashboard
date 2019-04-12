@@ -1,19 +1,24 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/fonts";
+@import "../../../../assets/css/variables";
 
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
 header {
-  height: 45px;
+  height: $toolbar-height;
 }
 
 ng2-slim-loading-bar {
   z-index: 2;
 }
 
+.km-sidenav-padding {
+  padding-left: $sidenav-width;
+}
+
 .km-navigation-bar {
   z-index: 2;
-  height: 45px;
+  height: $toolbar-height;
   background-color: $white-text-color;
   position: fixed;
   top: 0;
@@ -23,16 +28,15 @@ ng2-slim-loading-bar {
 
   .km-header-logo {
     display: block;
-    margin: 0 auto;
-    width: 184px;
-    height: 45px;
+    width: 240px;
+    height: $toolbar-height;
     background-size: 218px;
-    background-position: 0 -24px;
+    background-position: 0 -22px;
   }
 
   .km-auth {
     font-size: 14px;
-    line-height: 45px;
+    line-height: $toolbar-height;
     font-family: $primary-font-cursive;
     font-weight: 400;
     text-align: right;
@@ -64,18 +68,4 @@ ng2-slim-loading-bar {
   text-decoration: none;
   font-family: $primary-font-cursive;
   font-weight: 600;
-}
-
-.km-nav-mobile {
-  display: none;
-}
-
-@media screen and (max-width: $MOBILE_RESOLUTION_BREAKPOINT) {
-  .km-nav-default {
-    display: none;
-  }
-
-  .km-nav-mobile {
-    display: block;
-  }
 }

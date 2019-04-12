@@ -1,17 +1,17 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
-import {interval, Subject} from 'rxjs';
+import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
-import {AppConfigService} from '../../../app-config.service';
-import {ApiService, DatacenterService, UserService} from '../../../core/services';
+import {ApiService, DatacenterService, ProjectService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
+import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
 
 @Component({
@@ -29,10 +29,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   datacenter: DataCenterEntity;
   seedDatacenter: DataCenterEntity;
   system: string;
-  projectID: string;
-  userGroup: string;
-  userGroupConfig: UserGroupConfig;
-
   private _clusterName: string;
   private _dcName: string;
   private _nodeDeploymentID: string;
@@ -42,66 +38,44 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   private _isClusterLoaded = false;
   private _isDatacenterLoaded = false;
   private _isSeedDatacenterLoaded = false;
-  private _refreshInterval = 10000;
   private _unsubscribe: Subject<any> = new Subject();
-
-  private static _getClusterProvider(cluster: ClusterEntity): string {
-    if (cluster.spec.cloud.aws) {
-      return 'aws';
-    } else if (cluster.spec.cloud.digitalocean) {
-      return 'digitalocean';
-    } else if (cluster.spec.cloud.openstack) {
-      return 'openstack';
-    } else if (cluster.spec.cloud.bringyourown) {
-      return 'bringyourown';
-    } else if (cluster.spec.cloud.hetzner) {
-      return 'hetzner';
-    } else if (cluster.spec.cloud.vsphere) {
-      return 'vsphere';
-    } else if (cluster.spec.cloud.azure) {
-      return 'azure';
-    }
-  }
 
   constructor(
       private readonly _activatedRoute: ActivatedRoute, private readonly _router: Router,
-      private readonly _apiService: ApiService, private readonly _appConfigService: AppConfigService,
-      private readonly _userService: UserService, private readonly _datacenterService: DatacenterService,
-      private readonly _nodeService: NodeService) {}
+      private readonly _apiService: ApiService, private readonly _datacenterService: DatacenterService,
+      private readonly _nodeService: NodeService, private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
     this._dcName = this._activatedRoute.snapshot.paramMap.get('seedDc');
     this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
-    this.projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
 
-    this.loadNodeDeployment();
-    this.loadNodes();
-    this.loadNodesEvents();
-    this.loadSeedDatacenter();
-    this.loadCluster();
-    this.loadUserGroupData();
-
-    interval(this._refreshInterval).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    timer(0, 10000).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.loadNodeDeployment();
       this.loadNodes();
       this.loadNodesEvents();
     });
+
+    this.loadSeedDatacenter();
+    this.loadCluster();
   }
 
   loadNodeDeployment(): void {
-    this._apiService.getNodeDeployment(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
+    this._apiService
+        .getNodeDeployment(this._nodeDeploymentID, this._clusterName, this._dcName, this._projectService.project.id)
         .pipe(first())
         .subscribe((nd: NodeDeploymentEntity) => {
           this.nodeDeployment = nd;
-          this.system = NodeService.getOperatingSystem(this.nodeDeployment.spec.template);
+          this.system = NodeUtils.getOperatingSystem(this.nodeDeployment.spec.template);
           this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);
           this._isNodeDeploymentLoaded = true;
         });
   }
 
   loadNodes(): void {
-    this._apiService.getNodeDeploymentNodes(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
+    this._apiService
+        .getNodeDeploymentNodes(
+            this._nodeDeploymentID, this._clusterName, this._dcName, this._projectService.project.id)
         .pipe(first())
         .subscribe((n) => {
           this.nodes = n;
@@ -111,7 +85,8 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
   loadNodesEvents(): void {
     this._apiService
-        .getNodeDeploymentNodesEvents(this._nodeDeploymentID, this._clusterName, this._dcName, this.projectID)
+        .getNodeDeploymentNodesEvents(
+            this._nodeDeploymentID, this._clusterName, this._dcName, this._projectService.project.id)
         .pipe(first())
         .subscribe((e) => {
           this.events = e;
@@ -120,12 +95,14 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadCluster(): void {
-    this._apiService.getCluster(this._clusterName, this._dcName, this.projectID).pipe(first()).subscribe((c) => {
-      this.cluster = c;
-      this.clusterProvider = NodeDeploymentDetailsComponent._getClusterProvider(this.cluster);
-      this._isClusterLoaded = true;
-      this.loadDatacenter();
-    });
+    this._apiService.getCluster(this._clusterName, this._dcName, this._projectService.project.id)
+        .pipe(first())
+        .subscribe((c) => {
+          this.cluster = c;
+          this.clusterProvider = ClusterUtils.getProvider(this.cluster.spec.cloud);
+          this._isClusterLoaded = true;
+          this.loadDatacenter();
+        });
   }
 
   loadDatacenter(): void {
@@ -142,25 +119,28 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadUserGroupData(): void {
-    this.userGroupConfig = this._appConfigService.getUserGroupConfig();
-    this._userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((ug) => {
-      this.userGroup = ug;
-    });
-  }
-
   isInitialized(): boolean {
     return this._isClusterLoaded && this._isDatacenterLoaded && this._isSeedDatacenterLoaded && this._areNodesLoaded &&
         this._isNodeDeploymentLoaded && this._areNodesEventsLoaded;
   }
 
+  getProjectID(): string {
+    return this._projectService.project.id;
+  }
+
   goBackToCluster(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this._dcName + '/clusters/' + this._clusterName]);
+    this._router.navigate(
+        ['/projects/' + this._projectService.project.id + '/dc/' + this._dcName + '/clusters/' + this._clusterName]);
+  }
+
+  isEditEnabled(): boolean {
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().nodeDeployments.edit;
   }
 
   showEditDialog(): void {
     this._nodeService
-        .showNodeDeploymentEditDialog(this.nodeDeployment, this.cluster, this.projectID, this.seedDatacenter, undefined)
+        .showNodeDeploymentEditDialog(
+            this.nodeDeployment, this.cluster, this._projectService.project.id, this.seedDatacenter, undefined)
         .subscribe((isConfirmed) => {
           if (isConfirmed) {
             this.loadNodeDeployment();
@@ -169,10 +149,16 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         });
   }
 
+  isDeleteEnabled(): boolean {
+    return !this._projectService.getUserGroupConfig() ||
+        this._projectService.getUserGroupConfig().nodeDeployments.delete;
+  }
+
   showDeleteDialog(): void {
     this._nodeService
         .showNodeDeploymentDeleteDialog(
-            this.nodeDeployment, this.cluster.id, this.projectID, this.seedDatacenter.metadata.name, undefined)
+            this.nodeDeployment, this.cluster.id, this._projectService.project.id, this.seedDatacenter.metadata.name,
+            undefined)
         .subscribe((isConfirmed) => {
           if (isConfirmed) {
             this.goBackToCluster();

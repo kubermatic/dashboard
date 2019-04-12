@@ -1,0 +1,14 @@
+// Load third party styles like Font Awesome.
+@import "font-awesome/font-awesome";
+@import "titillium_web/titillium_web";
+
+// Load Angular Material theme.
+@import "theme";
+
+// Load variables used across the app.
+@import "colors";
+@import "fonts";
+@import "images";
+
+// Load app-wide styles.
+@import "app";

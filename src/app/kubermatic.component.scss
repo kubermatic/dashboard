@@ -1,34 +1,20 @@
 @import "../assets/css/colors";
+@import "../assets/css/variables";
 
 kubermatic-root,
 mat-sidenav-container {
   margin: 0;
-  padding: 0;
   width: 100%;
   top: 0;
   bottom: 0;
-  padding-top: 45px;
   position: absolute;
-}
-
-mat-sidenav {
-  padding-top: 45px;
-}
-
-.mat-sidenav {
-  width: 210px;
-  background-color: $medium-background;
-  color: $white-text-color;
-}
-
-.mat-sidenav-container {
-  background-color: $grey-background;
 }
 
 .mat-input-wrapper {
   margin: 0;
 }
 
-.main .content {
-  margin: 0 20px;
+.main {
+  height: 100%;
+  padding: 0 (2.5 * $baseline-grid);
 }

@@ -1,12 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatSelectChange} from '@angular/material';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
-import {interval, Subscription} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {Subject, timer} from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
-import {AddProjectComponent} from '../../../add-project/add-project.component';
 import {AppConfigService} from '../../../app-config.service';
+import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
 import {CustomLink} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ApiService, ProjectService} from '../../services';
@@ -22,8 +22,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
   customLinks: CustomLink[];
-  private subscriptions: Subscription[] = [];
-  private readonly notActiveProjectRefreshInterval = 1500;
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       public dialog: MatDialog, private api: ApiService, private router: Router, public projectService: ProjectService,
@@ -33,7 +32,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.customLinks = this._appConfigService.getCustomLinks();
     this.loadProjects();
 
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((data) => {
+    this.projectService.selectedProjectChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       for (const i in this.projects) {
         if (this.projectService.compareProjectsEquality(this.projects[i], data)) {
           this.selectedProject = data;
@@ -45,7 +44,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
       this.loadProjects();
       this.selectedProject = data;
-    }));
+    });
 
     this.registerProjectRefreshInterval();
   }
@@ -56,7 +55,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private registerProjectRefreshInterval(): void {
-    this.subscriptions.push(interval(this.notActiveProjectRefreshInterval).subscribe(() => {
+    timer(0, 1500).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
         this.api.getProjects().pipe(first()).subscribe((res) => {
           this.projects = res;
@@ -67,7 +66,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
           }
         });
       }
-    }));
+    });
   }
 
   loadProjects(): void {
@@ -106,7 +105,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   addProject(): void {
-    const modal = this.dialog.open(AddProjectComponent);
+    const modal = this.dialog.open(AddProjectDialogComponent);
     const sub = modal.afterClosed().subscribe((added) => {
       if (added) {
         this.loadProjects();
@@ -117,10 +116,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   getLinkClass(url: string): string {
     return this.checkUrl(url) ? 'active' : '';
-  }
-
-  getIconClass(url: string): string {
-    return this.checkUrl(url) ? 'white' : 'black';
   }
 
   checkUrl(url: string): boolean {
@@ -141,11 +136,23 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return `/projects/${selectedProjectId}/${target}`;
   }
 
-  ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
+  getTooltip(viewName: string): string {
+    let tooltip: string;
+    if (!this.projectService.isViewEnabled(viewName)) {
+      tooltip = 'Cannot enter this view.';
+      if (!this.projectService.project) {
+        tooltip += ' There is no selected project.';
+      } else if (this.projectService.project.status !== 'Active') {
+        tooltip += ' Selected project is not active.';
+      } else {
+        tooltip += ' Missing required rights.';
       }
     }
+    return tooltip;
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

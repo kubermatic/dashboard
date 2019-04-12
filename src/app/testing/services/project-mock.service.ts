@@ -1,7 +1,9 @@
 import {Injectable} from '@angular/core';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
+
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {GroupConfig} from '../../shared/model/Config';
 import {fakeMember} from '../fake-data/member.fake';
 import {fakeProject} from '../fake-data/project.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
@@ -33,6 +35,10 @@ export class ProjectMockService {
   getProjectFromStorage(): string {
     const project = localStorage.getItem('project');
     return project && JSON.parse(project);
+  }
+
+  getUserGroupConfig(): GroupConfig {
+    return fakeUserGroupConfig[this.userGroup];
   }
 
   changeAndStoreSelectedProject(project: ProjectEntity): void {
@@ -100,20 +106,20 @@ export class ProjectMockService {
     return iconClass;
   }
 
-  isProjectSelected(viewName: string): string {
-    if (this.project === undefined || this.project.status !== 'Active') {
-      return 'km-disabled';
+  isViewEnabled(viewName: string): boolean {
+    if (!this.project || this.project.status !== 'Active') {
+      return false;
     } else {
       if (!!this.userGroupConfig && this.userGroup) {
-        if (viewName === 'create-cluster') {
-          return !this.userGroupConfig[this.userGroup].clusters.create ? 'km-disabled' : '';
-        } else {
-          return !this.userGroupConfig[this.userGroup][viewName].view ? 'km-disabled' : '';
-        }
+        return this.userGroupConfig[this.userGroup][viewName].view;
       } else {
-        return 'km-disabled';
+        return false;
       }
     }
+  }
+
+  getMenuItemClass(viewName: string): string {
+    return this.isViewEnabled(viewName) ? '' : 'km-disabled';
   }
 
   compareProjectsEquality(a: ProjectEntity, b: ProjectEntity): boolean {

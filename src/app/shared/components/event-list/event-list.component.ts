@@ -9,13 +9,13 @@ import {EventEntity} from '../../entity/EventEntity';
 })
 export class EventListComponent implements OnInit, OnChanges {
   @Input() events: EventEntity[] = [];
-  @Input() involvedObjectColumnName = 'Involved Object';
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataSource = new MatTableDataSource<EventEntity>();
-  displayedColumns: string[] = ['type', 'message', 'involvedObjectName', 'count', 'lastTimestamp'];
+  displayedColumns: string[] =
+      ['type', 'message', 'involvedObjectName', 'involvedObjectKind', 'count', 'lastTimestamp'];
 
   ngOnInit(): void {
     this.dataSource.data = this.events;

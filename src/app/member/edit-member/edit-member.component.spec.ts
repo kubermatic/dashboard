@@ -52,19 +52,18 @@ describe('EditMemberComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create the edit member component', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
      }));
 
-  it('should have invalid form after creating', () => {
-    expect(component.editMemberForm.valid).toBeFalsy();
+  it('should have valid form defaults', () => {
+    expect(component.editMemberForm.valid).toBeTruthy();
   });
 
   it('should have required fields', () => {
-    expect(component.editMemberForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.editMemberForm.controls.group.valid).toBeFalsy('group field is initially not valid');
-    expect(component.editMemberForm.controls.group.hasError('required'))
-        .toBeTruthy('group field has initially required error');
+    component.editMemberForm.controls.group.patchValue('');
+    expect(component.editMemberForm.controls.group.valid).toBeFalsy('group field is invalid if empty');
+    expect(component.editMemberForm.controls.group.hasError('required')).toBeTruthy('group field has required error');
 
     component.editMemberForm.controls.group.patchValue('editor');
     expect(component.editMemberForm.controls.group.hasError('required'))

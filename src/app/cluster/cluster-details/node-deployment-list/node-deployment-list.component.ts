@@ -1,14 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
-import {first} from 'rxjs/operators';
 
-import {AppConfigService} from '../../../app-config.service';
-import {UserService} from '../../../core/services';
+import {ProjectService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
+import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeService} from '../../services/node.service';
 
@@ -17,30 +15,20 @@ import {NodeService} from '../../services/node.service';
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
 })
-export class NodeDeploymentListComponent implements OnInit {
+export class NodeDeploymentListComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodeDeployments: NodeDeploymentEntity[] = [];
   @Input() projectID: string;
-  @Input() clusterHealthStatus: string;
+  @Input() clusterHealthStatus: ClusterHealthStatus;
   @Input() isClusterRunning: boolean;
-  @Input() hasInitialNodes: boolean;
+  @Input() isNodeDeploymentLoadFinished: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
-
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
-  userGroupConfig: UserGroupConfig;
-  userGroup: string;
 
   constructor(
-      private appConfigService: AppConfigService, private userService: UserService, private router: Router,
-      private readonly _nodeService: NodeService) {}
-
-  ngOnInit(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).pipe(first()).subscribe((group) => {
-      this.userGroup = group;
-    });
-  }
+      private readonly _router: Router, private readonly _nodeService: NodeService,
+      private readonly _projectService: ProjectService) {}
 
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
     const dataSource = new MatTableDataSource<NodeDeploymentEntity>();
@@ -53,9 +41,13 @@ export class NodeDeploymentListComponent implements OnInit {
   }
 
   goToDetails(nd: NodeDeploymentEntity) {
-    this.router.navigate(
+    this._router.navigate(
         ['/projects/' + this.projectID + '/dc/' + this.datacenter.metadata.name + '/clusters/' + this.cluster.id +
          /nd/ + nd.id]);
+  }
+
+  isEditEnabled(): boolean {
+    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().nodeDeployments.edit;
   }
 
   showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
@@ -63,6 +55,11 @@ export class NodeDeploymentListComponent implements OnInit {
     this._nodeService
         .showNodeDeploymentEditDialog(nd, this.cluster, this.projectID, this.datacenter, this.changeNodeDeployment)
         .subscribe(() => {});
+  }
+
+  isDeleteEnabled(): boolean {
+    return !this._projectService.getUserGroupConfig() ||
+        this._projectService.getUserGroupConfig().nodeDeployments.delete;
   }
 
   showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {

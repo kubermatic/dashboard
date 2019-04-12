@@ -1,30 +1,14 @@
 <header (scrollChange)="scrolledChanged($event)"
         [ngClass]="{scrolled: isScrolled}"
         (window:resize)="onResize($event)">
-
-  <ng2-slim-loading-bar [color]="'white'"
-                        [height]="'2px'"></ng2-slim-loading-bar>
-
+  <ng2-slim-loading-bar color="white"
+                        height="2px"></ng2-slim-loading-bar>
   <div fxLayout
-       class="km-navigation-bar">
-    <div fxFlex="20%">
-      <button class="km-sidenav-toggle mat-button km-nav-mobile"
-              (click)="showMobileNav()"
-              mat-button>
-        <span class="mat-button-wrapper">
-          <mat-icon role="img"
-                    class="material-icons mat-icon"
-                    aria-label="menu">menu</mat-icon>
-          <span>Kubermatic</span>
-        </span>
-        <div class="mat-button-ripple mat-ripple"
-             mat-ripple></div>
-        <div class="mat-button-focus-overlay"></div>
-      </button>
-    </div>
-    <div fxFlex="60%"><a class="km-header-logo"></a></div>
-    <div fxFlex="20%"
-         class="km-auth">
+       class="km-navigation-bar"
+       [ngClass]="{'km-sidenav-padding': auth.authenticated()}">
+    <a class="km-header-logo"></a>
+    <div class="km-auth"
+         fxFlex>
       <span class="km-current-user"
             *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
       <span id="km-navbar-logout-btn"
@@ -40,18 +24,4 @@
       </a>
     </div>
   </div>
-
-
-  <!-- TODO: add mobile nav -->
-  <!--
-        <button class="km-sidenav-toggle mat-button km-nav-mobile" (click)="showMobileNav()" mat-button>
-          <span class="mat-button-wrapper">
-            <mat-icon role="img" class="material-icons mat-icon" aria-label="menu">menu</mat-icon>
-            <span>Kubermatic</span>
-          </span>
-          <div class="mat-button-ripple mat-ripple" mat-ripple></div>
-          <div class="mat-button-focus-overlay"></div>
-        </button>
-      -->
-
 </header>

@@ -5,7 +5,13 @@ export class EventEntity {
   name?: string;
   message?: string;
   type?: string;
-  involvedObjectName: string;
+  involvedObject: ObjectReference;
   lastTimestamp: Date;
   count: number;
+}
+
+export class ObjectReference {
+  name: string;
+  namespace: string;
+  kind: string;
 }

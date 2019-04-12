@@ -54,15 +54,15 @@ describe('EditProjectComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('should have invalid form after creating', () => {
-    expect(component.editProjectForm.valid).toBeFalsy();
+  it('should have valid form after creating', () => {
+    expect(component.editProjectForm.valid).toBeTruthy();
   });
 
   it('should have required fields', () => {
-    expect(component.editProjectForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.editProjectForm.controls.name.valid).toBeFalsy('name field is initially not valid');
-    expect(component.editProjectForm.controls.name.hasError('required'))
-        .toBeTruthy('name field has initially required error');
+    component.editProjectForm.controls.name.patchValue('');
+    expect(component.editProjectForm.valid).toBeFalsy('form is not valid');
+    expect(component.editProjectForm.controls.name.valid).toBeFalsy('name field is not valid');
+    expect(component.editProjectForm.controls.name.hasError('required')).toBeTruthy('name field has required error');
 
     component.editProjectForm.controls.name.patchValue('new-project-name');
     expect(component.editProjectForm.controls.name.hasError('required'))

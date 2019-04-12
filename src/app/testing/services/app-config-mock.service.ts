@@ -18,4 +18,12 @@ export class AppConfigMockService {
   getGitVersion(): VersionInfo {
     return fakeVersionInfo();
   }
+
+  hasCustomCSS(): boolean {
+    return false;
+  }
+
+  getCustomCSS(): string {
+    return '';
+  }
 }

@@ -60,7 +60,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
           }
         });
 
-    this._dialogRef.close();
+    this._dialogRef.close(true);
   }
 
   upgradeNodeDeployments(): void {

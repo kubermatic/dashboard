@@ -38,7 +38,7 @@ describe('Basic story', () => {
   const providerName = 'bringyourown';
   const datacenterLocation = 'Frankfurt';
 
-  const memberEmail = 'roxy2@kubermatic.io';
+  const memberEmail = 'roxy2@loodse.com';
 
   it('should login', () => {
     AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
@@ -52,7 +52,7 @@ describe('Basic story', () => {
     clustersPage.navigateTo();
     KMElement.waitForClickable(clustersPage.getAddClusterTopBtn());
 
-    clustersPage.getCreateClusterNavButton().click();
+    clustersPage.getAddClusterTopBtn().click();
     KMElement.waitToAppear(wizardPage.getClusterNameInput());
     wizardPage.getClusterNameInput().sendKeys(clusterName);
     KMElement.waitForClickable(wizardPage.getNextButton());
@@ -86,15 +86,16 @@ describe('Basic story', () => {
 
     KMElement.waitToDisappear(membersPage.getAddMemberDialog());
     KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
+
     expect(membersPage.getMemberItem(memberEmail).isPresent()).toBeTruthy();
   });
 
   it('should edit created member info', async () => {
     const memberGroup = await membersPage.getMemberGroup(memberEmail).getText();
-    KMElement.waitToAppear(membersPage.getMemberEditBtn(memberEmail));
+    KMElement.waitForClickable(membersPage.getMemberEditBtn(memberEmail));
     membersPage.getMemberEditBtn(memberEmail).click();
 
-    KMElement.waitToAppear(membersPage.getEditMemberDialogGroupCombobox());
+    KMElement.waitForClickable(membersPage.getEditMemberDialogGroupCombobox());
     membersPage.getEditMemberDialogGroupCombobox().click();
     membersPage.getEditMemberDialogGroupOption(3).click();
     membersPage.getEditMemberDialogEditBtn().click();
@@ -110,10 +111,10 @@ describe('Basic story', () => {
   });
 
   it('should delete created member', () => {
-    KMElement.waitToAppear(membersPage.getMemberDeleteBtn(memberEmail));
+    KMElement.waitForClickable(membersPage.getMemberDeleteBtn(memberEmail));
     membersPage.getMemberDeleteBtn(memberEmail).click();
 
-    KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
+    KMElement.waitForClickable(confirmationDialog.getConfirmationDialog());
     confirmationDialog.getConfirmationDialogConfirmBtn().click();
 
     // Switch views to reload members list
@@ -130,14 +131,14 @@ describe('Basic story', () => {
   it('should edit created project name', async () => {
     const oldProjectName = projectName;
     projectsPage.navigateTo();
-    KMElement.waitForNotifications();
 
-    KMElement.waitToAppear(projectsPage.getProjectEditBtn(projectName));
+    KMElement.waitForClickable(projectsPage.getProjectEditBtn(projectName));
     projectsPage.getProjectEditBtn(projectName).click();
     expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
 
     KMElement.waitToAppear(projectsPage.getEditProjectDialogInput());
     projectName = RandomUtils.prefixedString('e2e-test-project');
+    projectsPage.getEditProjectDialogInput().clear();
     KMElement.sendKeys(projectsPage.getEditProjectDialogInput(), projectName);
     KMElement.waitForClickable(projectsPage.getEditProjectDialogEditBtn());
     projectsPage.getEditProjectDialogEditBtn().click();

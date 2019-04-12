@@ -43,6 +43,10 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       tags: tagList,
     });
 
+    if (this.nodeData.spec.cloud.aws.instanceType === '') {
+      this.awsNodeForm.controls.type.setValue(this.instanceTypes[0]);
+    }
+
     this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));

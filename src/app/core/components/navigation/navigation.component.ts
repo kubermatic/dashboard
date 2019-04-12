@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material';
 import {Router} from '@angular/router';
 import {environment} from '../../../../environments/environment';
-import {MobileNavigationComponent} from '../../../overlays';
 import {AppConstants} from '../../../shared/constants/constants';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {Auth, ProjectService, UserService} from '../../services';
@@ -19,7 +17,7 @@ export class NavigationComponent implements OnInit {
   currentUser: MemberEntity;
 
   constructor(
-      public auth: Auth, private sidenavService: SidenavService, private router: Router, private dialog: MatDialog,
+      public auth: Auth, private sidenavService: SidenavService, private router: Router,
       private userService: UserService, private projectService: ProjectService) {}
 
   ngOnInit(): void {
@@ -49,9 +47,5 @@ export class NavigationComponent implements OnInit {
     if (event.target.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
       this.sidenavService.close();
     }
-  }
-
-  showMobileNav(): void {
-    this.dialog.open(MobileNavigationComponent);
   }
 }

@@ -53,6 +53,7 @@ body {
 
   .km-header-row {
     background-color: $primary;
+    height: 6 * $baseline-grid;
   }
 
   .km-header-cell,
@@ -71,7 +72,17 @@ body {
 
   td.mat-cell {
     border-bottom-width: 0;
-    line-height: 7.5 * $baseline-grid;
+    line-height: 3 * $baseline-grid;
+    padding-right: 2 * $baseline-grid;
+    padding-top: .5 * $baseline-grid;
+
+    &:last-of-type {
+      padding-right: 2 * $baseline-grid;
+    }
+
+    &:first-of-type {
+      padding-left: 2 * $baseline-grid;
+    }
   }
 }
 
@@ -411,7 +422,7 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-card-subtitle {
     .km-pause-reason {
       margin-top: 0;
-      color: $warning-status-color;
+      color: $indicator-red;
     }
   }
 
@@ -559,7 +570,7 @@ mat-dialog-content {
 }
 
 .mat-form-field-invalid .mat-form-field-label {
-  color: $warning-status-color !important;
+  color: $indicator-red !important;
 }
 
 .mat-checkbox-frame {
@@ -820,7 +831,7 @@ mat-list-item.disabled {
 }
 
 .km-warning {
-  color: $warning !important;
+  color: $indicator-red !important;
 }
 
 .km-muted {
@@ -882,15 +893,15 @@ div.km-form-group-tags {
 
 // Health statuses
 .green {
-  color: $healthy-status-color;
+  color: $indicator-green;
 }
 
 .orange {
-  color: $waiting-status-color;
+  color: $indicator-orange;
 }
 
 .red {
-  color: $warning-status-color;
+  color: $indicator-red;
 }
 
 // Bottom spacer.

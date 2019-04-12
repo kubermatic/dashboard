@@ -21,8 +21,7 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "src/assets/css/custom_theme.scss",
-              "src/assets/css/global.scss",
+              "src/assets/css/_main.scss",
               "node_modules/flag-icon-css/css/flag-icon.min.css"
             ],
             "scripts": [
@@ -60,6 +59,9 @@
           "configurations": {
             "production": {
               "browserTarget": "kubermatic:build:production"
+            },
+            "local": {
+              "proxyConfig": "./proxy-local.conf.json"
             }
           }
         },
@@ -74,14 +76,14 @@
           "options": {
             "main": "src/test.ts",
             "karmaConfig": "./karma.conf.js",
+            "codeCoverage": true,
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
             "scripts": [
               "node_modules/jquery/dist/jquery.js"
             ],
             "styles": [
-              "src/assets/css/custom_theme.scss",
-              "src/assets/css/global.scss",
+              "src/assets/css/_main.scss",
               "node_modules/flag-icon-css/css/flag-icon.min.css"
             ],
             "assets": [
@@ -102,7 +104,7 @@
             ]
           }
         }
-      },
+      }
     },
     "kubermatic-e2e": {
       "root": "",
@@ -114,6 +116,11 @@
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "kubermatic:serve"
+          },
+          "configurations": {
+            "e2e-local": {
+              "devServerTarget": "kubermatic:serve:local"
+            }
           }
         },
         "lint": {

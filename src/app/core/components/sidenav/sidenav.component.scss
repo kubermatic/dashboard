@@ -1,99 +1,106 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
-.mat-nav-list {
-  padding: 0 !important;
+$project-picker-border-width: 2px;
 
-  .mat-list-item,
-  a {
-    font-size: 14px;
-    font-weight: 400;
-    color: $text-color;
-    height: 40px;
+.container {
+  width: $sidenav-width;
+  background-color: $primary;
+  height: 100%;
+  color: $secondary;
 
-    &.km-projects {
-      height: 85px;
-      border-bottom: 1px solid $border;
+  .mat-nav-list {
+    padding: 0 !important;
 
-      .km-projects-container {
-        display: flex;
-        flex-direction: column;
-        padding: 0 15px;
-        width: 100%;
+    .mat-list-item,
+    a {
+      color: $secondary;
+      height: $toolbar-height;
 
-        mat-label {
-          margin: 5px 0;
-        }
-
-        mat-select {
-          font-weight: 600;
-          line-height: 35px;
-        }
-
-        .km-health-state {
-          margin-left: 6px;
-          text-align: center;
-
-          i.red {
-            color: $warning-status-color;
-          }
-
-          i.green {
-            color: $healthy-status-color;
-          }
-
-          i.orange {
-            color: $waiting-status-color;
-          }
-        }
+      &.km-projects {
+        height: $toolbar-height - ($project-picker-border-width / 2);
+        border-bottom: $alternative solid $project-picker-border-width;
       }
     }
 
-    i {
-      color: $text-color;
-    }
-  }
+    a {
+      padding: 10px 30px !important;
+      display: flex;
+      align-items: center;
 
-  a {
-    padding: 10px 30px !important;
-    display: flex;
-    align-items: center;
+      &:hover,
+      &.active {
+        color: $secondary-light;
+        background-color: $primary-light;
 
-    &:hover,
-    &.active {
-      color: $white-text-color;
-      background-color: $primary;
+        i {
+          background-color: $secondary-light;
+        }
+      }
 
       i {
-        color: $white-text-color;
+        width: 20px;
+        margin-right: 16px;
       }
     }
 
-    i {
-      width: 20px;
-      margin-right: 10px;
+    .km-projects-container {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      padding: 0 30px;
+      width: 100%;
+    }
+
+    .km-projects-icon {
+      position: absolute;
+      right: 42px;
+      top: 16px;
+      background-color: $secondary;
+      pointer-events: none;
+      color: $secondary-light;
+    }
+
+    mat-label {
+      margin: 3px 0 !important;
+      font-size: 12px;
+      line-height: 12px;
+    }
+
+    ::ng-deep.mat-select-value-text {
+      color: $secondary;
+      font-size: 16px;
+      line-height: 16px;
+    }
+
+    ::ng-deep.mat-select-placeholder {
+      opacity: 0.4;
+      color: $secondary;
+      font-size: 16px !important;
+      line-height: 16px;
+    }
+
+    ::ng-deep.mat-select-arrow {
+      visibility: hidden;
+    }
+
+    .mat-nav-list a {
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .mat-list-item i {
+      background-color: $secondary;
+    }
+
+    .km-disabled {
+      cursor: default;
+      opacity: 0.4;
+      pointer-events: none;
     }
   }
 }
 
-mat-option[value='addProject'] {
-  border-bottom: 1px solid $border !important;
-  font-weight: 600;
-}
-
-.km-disabled {
-  pointer-events: none;
-  cursor: default;
-
-  a {
-    color: $light-text-color !important;
-  }
-}
-
-.km-nav-header {
-  color: $text-color;
-  font-size: $caption-font-size-base;
-  font-weight: 600;
-  margin: (1.5 * $baseline-grid) (3.5 *  $baseline-grid);
-  text-transform: uppercase;
+.km-nav-custom-container {
+  background-color: $primary-dark;
 }

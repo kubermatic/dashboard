@@ -1,69 +1,88 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog, Sort} from '@angular/material';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute} from '@angular/router';
-import {find} from 'lodash';
-import {interval, Subscription} from 'rxjs';
-import {retry} from 'rxjs/operators';
+import {Subject, timer} from 'rxjs';
+import {retry, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../app-config.service';
 import {ApiService, UserService} from '../core/services';
-import {AddSshKeyModalComponent} from '../shared/components/add-ssh-key-modal/add-ssh-key-modal.component';
+import {GoogleAnalyticsService} from '../google-analytics.service';
+import {NotificationActions} from '../redux/actions/notification.actions';
+import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
+import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-sshkey',
   templateUrl: './sshkey.component.html',
+  styleUrls: ['./sshkey.component.scss'],
 })
 
 export class SSHKeyComponent implements OnInit, OnDestroy {
   loading = true;
   sshKeys: SSHKeyEntity[] = [];
-  sortedSshKeys: SSHKeyEntity[] = [];
-  sort: Sort = {active: 'name', direction: 'asc'};
   userGroup: string;
   userGroupConfig: UserGroupConfig;
-  private subscriptions: Subscription[] = [];
   projectID: string;
+  isShowPublicKey = [];
+  displayedColumns: string[] = ['name', 'fingerprint', 'actions'];
+  toggledColumns: string[] = ['publickey'];
+  dataSource = new MatTableDataSource<SSHKeyEntity>();
+  @ViewChild(MatSort) sort: MatSort;
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       private route: ActivatedRoute, private api: ApiService, private userService: UserService,
-      private appConfigService: AppConfigService, public dialog: MatDialog) {}
+      private appConfigService: AppConfigService, public dialog: MatDialog,
+      private googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.route.paramMap.subscribe((m) => {
+    this.route.paramMap.pipe(takeUntil(this._unsubscribe)).subscribe((m) => {
       this.projectID = m.get('projectID');
       this.refreshSSHKeys();
-    }));
+    });
 
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
-    this.subscriptions.push(interval(5000).subscribe(() => {
-      this.refreshSSHKeys();
-    }));
-    this.refreshSSHKeys();
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
+
+    timer(0, 10000).pipe(takeUntil(this._unsubscribe)).subscribe(() => this.refreshSSHKeys());
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  shouldTogglePublicKey = (index, item) => this.isShowPublicKey[item.id];
+
+  getDataSource(): MatTableDataSource<SSHKeyEntity> {
+    this.dataSource.data = this.sshKeys;
+    return this.dataSource;
+  }
+
+  getPublicKeyName(sshKey: SSHKeyEntity): string {
+    return sshKey.spec.publicKey.split(' ')[0];
+  }
+
+  getPublicKey(sshKey: SSHKeyEntity): string {
+    return sshKey.spec.publicKey.slice(this.getPublicKeyName(sshKey).length + 1, -1);
   }
 
   refreshSSHKeys(): void {
-    this.subscriptions.push(this.api.getSSHKeys(this.projectID).pipe(retry(3)).subscribe((res) => {
+    this.api.getSSHKeys(this.projectID).pipe(retry(3)).pipe(takeUntil(this._unsubscribe)).subscribe((res) => {
       this.sshKeys = res;
-      this.sortSshKeyData(this.sort);
       this.loading = false;
-    }));
+    });
   }
 
   addSshKey(): void {
-    const dialogRef = this.dialog.open(AddSshKeyModalComponent);
+    const dialogRef = this.dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this.projectID;
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -71,36 +90,37 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     });
   }
 
-  trackSshKey(index: number, shhKey: SSHKeyEntity): number {
-    const prevSSHKey = find(this.sshKeys, (item) => {
-      return item.name === shhKey.name;
-    });
+  deleteSshKey(sshKey: SSHKeyEntity, event: Event): void {
+    event.stopPropagation();
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        dialogId: 'km-delete-sshkey-dialog',
+        title: 'Remove SSH key from project',
+        message: `You are on the way to remove the SSH key ${sshKey.name} from the project. This cannot be undone!`,
+        confirmLabel: 'Delete',
+        confirmLabelId: 'km-delete-sshkey-dialog-btn',
+        cancelLabel: 'Close',
+        cancelLabelId: 'km-close-sshkey-dialog-btn',
+      },
+    };
 
-    return prevSSHKey === shhKey ? index : undefined;
-  }
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this.googleAnalyticsService.emitEvent('sshKeyOverview', 'deleteSshKeyOpened');
 
-  sortSshKeyData(sort: Sort): void {
-    if (sort === null || !sort.active || sort.direction === '') {
-      this.sortedSshKeys = this.sshKeys;
-      return;
-    }
-
-    this.sort = sort;
-
-    this.sortedSshKeys = this.sshKeys.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return this.compare(a.name, b.name, isAsc);
-        case 'status':
-          return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
-        default:
-          return 0;
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this.api.deleteSSHKey(sshKey.id, this.projectID).subscribe(() => {
+          NotificationActions.success(
+              'Success', `SSH key ${sshKey.name} has been removed from project ${this.projectID}`);
+          this.googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
+        });
       }
     });
   }
 
-  compare(a, b, isAsc): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  togglePublicKey(element: SSHKeyEntity): void {
+    this.isShowPublicKey[element.id] = !this.isShowPublicKey[element.id];
   }
 }

@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
+
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
+import {GroupConfig, UserGroupConfig} from '../../../shared/model/Config';
 import {UserService} from '../user/user.service';
 
 @Injectable()
@@ -32,6 +33,11 @@ export class ProjectService {
   getProjectFromStorage(): ProjectEntity {
     const project = localStorage.getItem('project');
     return project && JSON.parse(project);
+  }
+
+  getUserGroupConfig(): GroupConfig {
+    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
+    return !!this.userGroupConfig ? this.userGroupConfig[this.userGroup] : undefined;
   }
 
   changeAndStoreSelectedProject(project: ProjectEntity): void {
@@ -100,39 +106,21 @@ export class ProjectService {
     }, 500);
   }
 
-  getProjectStateIconClass(): string {
-    let iconClass = '';
-    if (!!this.project) {
-      switch (this.project.status) {
-        case 'Active':
-          iconClass = 'fa fa-circle green';
-          break;
-        case 'Inactive':
-          iconClass = 'fa fa-spin fa-circle-o-notch orange';
-          break;
-        case 'Terminating':
-          iconClass = 'fa fa-circle-o red';
-          break;
-      }
-    }
-    return iconClass;
-  }
-
-  isProjectSelected(viewName: string): string {
+  isViewEnabled(viewName: string): boolean {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    if (this.project === undefined || this.project.status !== 'Active') {
-      return 'km-disabled';
+    if (!this.project || this.project.status !== 'Active') {
+      return false;
     } else {
       if (!!this.userGroupConfig && this.userGroup) {
-        if (viewName === 'create-cluster') {
-          return !this.userGroupConfig[this.userGroup].clusters.create ? 'km-disabled' : '';
-        } else {
-          return !this.userGroupConfig[this.userGroup][viewName].view ? 'km-disabled' : '';
-        }
+        return this.userGroupConfig[this.userGroup][viewName].view;
       } else {
-        return 'km-disabled';
+        return false;
       }
     }
+  }
+
+  getMenuItemClass(viewName: string): string {
+    return this.isViewEnabled(viewName) ? '' : 'km-disabled';
   }
 
   compareProjectsEquality(a: ProjectEntity, b: ProjectEntity): boolean {

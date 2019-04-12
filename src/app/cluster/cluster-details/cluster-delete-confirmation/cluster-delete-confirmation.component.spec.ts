@@ -7,7 +7,6 @@ import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 import {AppConfigService} from '../../../app-config.service';
-import {InitialNodeDataService} from '../../../core/services';
 import {ApiService, DatacenterService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
@@ -45,7 +44,6 @@ describe('ClusterDeleteConfirmationComponent', () => {
             ClusterDeleteConfirmationComponent,
           ],
           providers: [
-            InitialNodeDataService,
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useClass: ApiMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},

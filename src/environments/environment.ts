@@ -10,12 +10,14 @@ const oauth = 'https://dev.kubermatic.io/dex/auth';
 const scope: string[] = ['openid', 'email', 'profile', 'groups'];
 const nonceString = RandomString(32);
 
+// This file is overridden by set-env.ts script during the e2e tests. Please keep it in sync.
 export const environment = {
   name: 'dev',
   production: false,
   configUrl: '../../assets/config/config.json',
   gitVersionUrl: '../../assets/config/git-version.json',
   customLinksUrl: '../../assets/config/custom-links.json',
+  customCSS: '../../assets/custom/style.css',
   restRoot: 'api/v1',
   restRootV3: 'api/v3',
   digitalOceanRestRoot: 'https://api.digitalocean.com/v2',

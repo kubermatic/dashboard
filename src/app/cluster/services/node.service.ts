@@ -4,7 +4,6 @@ import {Observable, of} from 'rxjs';
 import {catchError, first, flatMap, map} from 'rxjs/operators';
 
 import {ApiService} from '../../core/services';
-import {InitialNodeData} from '../../core/services/initial-node-data/initial-nodes-data.service';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -12,7 +11,6 @@ import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../shared/entity/NodeDeploymentPatch';
-import {NodeSpec} from '../../shared/entity/NodeEntity';
 import {NodeData} from '../../shared/model/NodeSpecChange';
 import {NodeDataModalComponent, NodeDataModalData} from '../cluster-details/node-data-modal/node-data-modal.component';
 
@@ -25,14 +23,6 @@ export class NodeService {
         template: nodeData.spec,
         replicas: nodeData.count,
       },
-    };
-  }
-
-  private static _convertNodeData(initialNodeData: InitialNodeData): NodeData {
-    return {
-      name: initialNodeData.name,
-      count: initialNodeData.nodeCount,
-      spec: initialNodeData.nodeSpec,
     };
   }
 
@@ -54,29 +44,11 @@ export class NodeService {
     return patch;
   }
 
-  static getOperatingSystem(spec: NodeSpec): string {
-    if (spec.operatingSystem.ubuntu) {
-      return 'Ubuntu';
-    } else if (spec.operatingSystem.centos) {
-      return 'CentOS';
-    } else if (spec.operatingSystem.containerLinux) {
-      return 'Container Linux';
-    } else {
-      return '';
-    }
-  }
-
   constructor(
       private readonly _apiService: ApiService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _matDialog: MatDialog,
   ) {}
-
-  createInitialNodes(initialNodeData: InitialNodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string):
-      void {
-    const nodeData = NodeService._convertNodeData(initialNodeData);
-    this.createNodeDeployment(nodeData, dc, cluster, project);
-  }
 
   createNodeDeployment(nodeData: NodeData, dc: DataCenterEntity, cluster: ClusterEntity, project: string): void {
     this._apiService

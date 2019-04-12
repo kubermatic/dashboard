@@ -5,10 +5,11 @@ export class HealthEntity {
   machineController: boolean;
   scheduler: boolean;
   cloudProviderInfrastructure: boolean;
+  userClusterControllerManager: boolean;
 
   static allHealthy(health: HealthEntity): boolean {
     return (
         health && !!health.apiserver && !!health.controller && !!health.etcd && !!health.machineController &&
-        !!health.scheduler && !!health.cloudProviderInfrastructure);
+        !!health.scheduler && !!health.cloudProviderInfrastructure && !!health.userClusterControllerManager);
   }
 }

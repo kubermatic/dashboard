@@ -7,11 +7,8 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {SimpleNotificationsModule} from 'angular2-notifications';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from './app-config.service';
-import {BreadcrumbsComponent} from './core/components/breadcrumbs/breadcrumbs.component';
-import {NavigationComponent} from './core/components/navigation/navigation.component';
-import {NotificationComponent} from './core/components/notification/notification.component';
-import {SidenavComponent} from './core/components/sidenav/sidenav.component';
 import {SidenavService} from './core/components/sidenav/sidenav.service';
+import {CoreModule} from './core/core.module';
 import {ApiService, Auth, AuthGuard, DatacenterService, ProjectService, UserService} from './core/services';
 import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
@@ -33,14 +30,11 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SlimLoadingBarModule.forRoot(),
   SharedModule,
+  CoreModule,
 ];
 
 const components: any[] = [
   KubermaticComponent,
-  NavigationComponent,
-  BreadcrumbsComponent,
-  NotificationComponent,
-  SidenavComponent,
 ];
 
 describe('KubermaticComponent', () => {

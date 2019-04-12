@@ -7,19 +7,19 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, Auth, DatacenterService, UserService} from '../../../core/services';
+import {ApiService, Auth, DatacenterService, ProjectService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeBringyourownSeedDatacenter, fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeDeploymentsFake, nodesFake} from '../../../testing/fake-data/node.fake';
-import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {NodeMockService} from '../../../testing/services/node-mock.service';
+import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeService} from '../../services/node.service';
 import {NodeListComponent} from '../node-list/node-list.component';
@@ -61,6 +61,7 @@ describe('NodeDeploymentDetailsComponent', () => {
           providers: [
             {provide: ApiService, useValue: apiMock},
             {provide: DatacenterService, useValue: dcMock},
+            {provide: ProjectService, useClass: ProjectMockService},
             {provide: Auth, useClass: AuthMockService},
             {provide: Router, useClass: RouterStub},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
@@ -83,7 +84,6 @@ describe('NodeDeploymentDetailsComponent', () => {
     component.cluster = fakeDigitaloceanCluster();
     component.datacenter = fakeDigitaloceanDatacenter();
     component.seedDatacenter = fakeBringyourownSeedDatacenter();
-    component.projectID = fakeProject().id;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {
