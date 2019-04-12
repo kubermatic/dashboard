@@ -1,14 +1,22 @@
 [
   {
-    "label": "Google",
-    "url": "https://www.google.com/"
-  },
-  {
     "label": "Kibana",
-    "url": "#"
+    "url": "https://www.elastic.co/products/kibana"
   },
   {
     "label": "Grafana",
+    "url": "https://grafana.com/"
+  },
+  {
+    "label": "GitHub",
+    "url": "https://github.com/kubermatic"
+  },
+  {
+    "label": "Custom",
     "url": "#"
+  },
+  {
+    "label": "Google",
+    "url": "https://google.com"
   }
 ]
