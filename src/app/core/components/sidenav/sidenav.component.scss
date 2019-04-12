@@ -102,8 +102,18 @@
     background-color: $primary-dark;
     border-top: $primary-light solid $sidenav-border-width;
 
-    a {
+    .mat-list-item a {
       font-size: $subhead-font-size-base;
+
+      i {
+        background-color: transparent;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+      }
 
       &:hover {
         background-color: $primary;

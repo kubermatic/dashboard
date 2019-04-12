@@ -18,12 +18,17 @@
     "icon": "slack"
   },
   {
-    "label": "Wrong icon",
+    "label": "Wrong",
     "url": "#",
     "icon": "wrong"
   },
   {
     "label": "Google",
     "url": "https://google.com"
+  },
+  {
+    "label": "Artifactory",
+    "url": "https://jfrog.com/artifactory/",
+    "icon": "https://jfrog.com/wp-content/uploads/2017/12/Jfrog-Logo.svg"
   }
 ]
