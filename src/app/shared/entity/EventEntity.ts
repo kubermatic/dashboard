@@ -13,5 +13,5 @@ export class EventEntity {
 export class ObjectReference {
   name: string;
   namespace: string;
-  kind: string;
+  type: string;
 }
