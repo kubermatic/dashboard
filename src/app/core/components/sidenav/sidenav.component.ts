@@ -7,7 +7,7 @@ import {first, takeUntil} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
-import {CustomLink} from '../../../shared/entity/CustomLinks';
+import {CUSTOM_LINK_ICON_CLASS_PREFIX, CustomLink, CustomLinkIcon} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ApiService, ProjectService} from '../../services';
 
@@ -149,6 +149,33 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
     return tooltip;
+  }
+
+  getCustomIcon(customLink: CustomLink): string {
+    // If custom link icon has been set and if it is one of the allowed values it can be used.
+    if (customLink.icon && Object.values(CustomLinkIcon).includes(customLink.icon)) {
+      return CUSTOM_LINK_ICON_CLASS_PREFIX + customLink.icon;
+    }
+
+    // Try to detect if matching icon is available checking the label and the URL of a custom link.
+    if (customLink.label) {
+      for (const customLinkIcon of Object.values(CustomLinkIcon)) {
+        if (customLink.label.includes(customLinkIcon)) {
+          return CUSTOM_LINK_ICON_CLASS_PREFIX + customLinkIcon;
+        }
+      }
+    }
+
+    if (customLink.url) {
+      for (const customLinkIcon of Object.values(CustomLinkIcon)) {
+        if (customLink.url.includes(customLinkIcon)) {
+          return CUSTOM_LINK_ICON_CLASS_PREFIX + customLinkIcon;
+        }
+      }
+    }
+
+    // Otherwise, return default icon.
+    return CUSTOM_LINK_ICON_CLASS_PREFIX + CustomLinkIcon.Default;
   }
 
   ngOnDestroy(): void {

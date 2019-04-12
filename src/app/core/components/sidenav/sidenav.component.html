@@ -71,7 +71,7 @@
       <a [href]="link.url"
          mat-line
          target="_blank">
-        <i class=""></i>
+        <i [class]="getCustomIcon(link)"></i>
         <span>{{link.label}}</span>
       </a>
     </mat-list-item>

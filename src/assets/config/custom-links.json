@@ -4,16 +4,23 @@
     "url": "https://www.elastic.co/products/kibana"
   },
   {
-    "label": "Grafana",
+    "label": "Monitoring",
     "url": "https://grafana.com/"
   },
   {
     "label": "GitHub",
-    "url": "https://github.com/kubermatic"
+    "url": "https://github.com/kubermatic",
+    "icon": "github"
   },
   {
     "label": "Custom",
-    "url": "#"
+    "url": "#",
+    "icon": "slack"
+  },
+  {
+    "label": "Wrong icon",
+    "url": "#",
+    "icon": "wrong"
   },
   {
     "label": "Google",
