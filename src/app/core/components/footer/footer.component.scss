@@ -32,7 +32,8 @@ footer {
   flex: 1 1 auto;
   text-align: end;
 
-  a {
+  i {
+    font-size: $subhead-font-size-base;
     padding-left: 1.5 * $baseline-grid;
   }
 }
