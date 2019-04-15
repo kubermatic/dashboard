@@ -9,7 +9,7 @@ describe('SidenavService', () => {
     });
   });
 
-  it('should ...', inject([SidenavService], (service: SidenavService) => {
+  it('should initialize', inject([SidenavService], (service: SidenavService) => {
        expect(service).toBeTruthy();
      }));
 });

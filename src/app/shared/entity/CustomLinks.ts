@@ -1,7 +1,7 @@
 export class CustomLink {
   label: string;
   url: string;
-  icon?: CustomLinkIcon;
+  icon?: CustomLinkIcon|string;
 }
 
 export enum CustomLinkIcon {
