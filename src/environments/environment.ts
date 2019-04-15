@@ -16,7 +16,6 @@ export const environment = {
   production: false,
   configUrl: '../../assets/config/config.json',
   gitVersionUrl: '../../assets/config/git-version.json',
-  customLinksUrl: '../../assets/config/custom-links.json',
   customCSS: '../../assets/custom/style.css',
   restRoot: 'api/v1',
   restRootV3: 'api/v3',
