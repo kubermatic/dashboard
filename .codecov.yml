@@ -9,6 +9,9 @@ coverage:
 
   status:
     project: yes
+      default:
+        target: auto
+        threshold: 1%
     patch: yes
     changes: no
 
