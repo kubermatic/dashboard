@@ -117,6 +117,10 @@
 
       &:hover {
         background-color: $primary;
+
+        i {
+          -webkit-filter: brightness(115%);
+        }
       }
     }
   }
