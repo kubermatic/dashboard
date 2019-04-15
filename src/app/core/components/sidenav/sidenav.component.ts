@@ -5,7 +5,9 @@ import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
+import {AppConfigService} from '../../../app-config.service';
 import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
+import {CustomLink, findMatchingServiceIcon} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ApiService, ProjectService} from '../../services';
 
@@ -19,13 +21,23 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
+  customLinks: CustomLink[];
+  private _isURL = new RegExp(
+      '^(https?:\\/\\/)?' +
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+          '((\\d{1,3}\\.){3}\\d{1,3}))' +
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+          '(\\?[;&a-z\\d%_.~+=-]*)?' +
+          '(\\#[-a-z\\d_]*)?$',
+      'i');
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      public dialog: MatDialog, private api: ApiService, private router: Router,
-      public projectService: ProjectService) {}
+      public dialog: MatDialog, private api: ApiService, private router: Router, public projectService: ProjectService,
+      private readonly _appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
+    this.customLinks = this._appConfigService.getCustomLinks();
     this.loadProjects();
 
     this.projectService.selectedProjectChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
@@ -145,6 +157,21 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
     return tooltip;
+  }
+
+  getCustomLinkIconStyle(customLink: CustomLink): any {
+    return {
+      'background-image': `url('${this.getCustomIcon(customLink)}')`,
+    };
+  }
+
+  getCustomIcon(customLink: CustomLink): string {
+    // If custom link icon has been set and if it is valid then it can be used.
+    if (customLink.icon && this._isURL.test(customLink.icon)) {
+      return customLink.icon;
+    }
+
+    return findMatchingServiceIcon(customLink);
   }
 
   ngOnDestroy(): void {
