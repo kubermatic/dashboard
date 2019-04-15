@@ -1,19 +1,6 @@
 {
   "cleanup_cluster":  false,
-  "custom_links": [
-    {
-      "label": "Twitter",
-      "url": "https://www.twitter.com/loodse"
-    },
-    {
-      "label": "GitHub",
-      "url": "https://github.com/kubermatic"
-    },
-    {
-      "label": "Slack",
-      "url": "http://slack.kubermatic.io/"
-    }
-  ],
+  "custom_links": [],
   "default_node_count": 3,
   "openstack": {
     "wizard_use_default_user": false
