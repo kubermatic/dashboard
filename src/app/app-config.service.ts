@@ -15,7 +15,6 @@ export class AppConfigService {
   private _userGroupConfig: UserGroupConfig;
   private _gitVersion: VersionInfo;
   private _hasCustomCSS: boolean;
-  private customLinks: CustomLink[] = [];
   private http: HttpClient;
 
   constructor(private inj: Injector) {
@@ -94,20 +93,7 @@ export class AppConfigService {
     return environment.customCSS;
   }
 
-  loadCustomLinks(): Promise<{}> {
-    const jsonfile = environment.customLinksUrl;
-    return this.http.get(jsonfile)
-        .pipe(tap(
-            (resp: CustomLink[]) => {
-              this.customLinks = resp;
-            },
-            () => {
-              NotificationActions.error('Error', `Could not read custom links file`);
-            }))
-        .toPromise();
-  }
-
   getCustomLinks(): CustomLink[] {
-    return this.customLinks;
+    return this._appConfig && this._appConfig.custom_links ? this._appConfig.custom_links : [];
   }
 }

@@ -1,10 +1,24 @@
 {
+  "cleanup_cluster":  false,
+  "custom_links": [
+    {
+      "label": "Twitter",
+      "url": "https://www.twitter.com/loodse"
+    },
+    {
+      "label": "GitHub",
+      "url": "https://github.com/kubermatic"
+    },
+    {
+      "label": "Slack",
+      "url": "http://slack.kubermatic.io/"
+    }
+  ],
   "default_node_count": 3,
-  "show_demo_info": false,
-  "show_terms_of_service": false,
-  "share_kubeconfig": false,
   "openstack": {
     "wizard_use_default_user": false
   },
-  "cleanup_cluster":  false
+  "share_kubeconfig": false,
+  "show_demo_info": false,
+  "show_terms_of_service": false
 }

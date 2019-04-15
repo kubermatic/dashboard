@@ -1,3 +1,5 @@
+import {CustomLink} from '../entity/CustomLinks';
+
 export interface Config {
   default_node_count?: number;
   show_demo_info?: boolean;
@@ -7,6 +9,7 @@ export interface Config {
   google_analytics_code?: string;
   google_analytics_config?: object;
   cleanup_cluster?: boolean;
+  custom_links?: CustomLink[];
 }
 
 export interface UserGroupConfig {

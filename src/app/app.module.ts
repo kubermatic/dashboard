@@ -20,7 +20,6 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
   return () => appConfig.loadAppConfig()
                    .then(() => appConfig.loadUserGroupConfig())
                    .then(() => appConfig.loadGitVersion())
-                   .then(() => appConfig.loadCustomLinks())
                    .then(() => appConfig.checkCustomCSS());
 };
 
