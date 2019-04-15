@@ -9,28 +9,29 @@ export class AuthUtils {
   private static _dexPage = new DexPage();
   private static _navPage = new NavPage();
 
-  static login(username: string, password: string): void {
-    AuthUtils._loginPage.navigateTo();
-    KMElement.waitToAppear(AuthUtils._loginPage.getLoginButton());
+  static async login(username: string, password: string) {
+    await AuthUtils._loginPage.navigateTo();
 
-    AuthUtils._loginPage.getLoginButton().click();
-    KMElement.waitToAppear(AuthUtils._dexPage.getLoginWithEmailButton());
-    AuthUtils._dexPage.getLoginWithEmailButton().click();
+    await KMElement.waitToAppear(AuthUtils._loginPage.getLoginButton());
+    await AuthUtils._loginPage.getLoginButton().click();
 
-    AuthUtils._dexPage.getLoginInput().sendKeys(username);
-    AuthUtils._dexPage.getPasswordInput().sendKeys(password);
+    await KMElement.waitToAppear(AuthUtils._dexPage.getLoginWithEmailButton());
+    await AuthUtils._dexPage.getLoginWithEmailButton().click();
 
-    AuthUtils._dexPage.getLoginSubmitButton().click();
+    await AuthUtils._dexPage.getLoginInput().sendKeys(username);
+    await AuthUtils._dexPage.getPasswordInput().sendKeys(password);
 
-    KMElement.waitToAppear(this._navPage.getLogoutButton());
+    await AuthUtils._dexPage.getLoginSubmitButton().click();
+
+    await KMElement.waitToAppear(this._navPage.getLogoutButton());
     expect(AuthUtils._navPage.getLogoutButton().isPresent()).toBeTruthy();
   }
 
-  static logout(): void {
+  static async logout() {
     KMElement.waitToAppear(AuthUtils._navPage.getLogoutButton());
     expect(AuthUtils._navPage.getLogoutButton().isPresent()).toBeTruthy();
 
-    AuthUtils._navPage.getLogoutButton().click();
+    await AuthUtils._navPage.getLogoutButton().click();
 
     KMElement.waitToAppear(AuthUtils._loginPage.getLoginButton());
     expect(AuthUtils._loginPage.getLoginButton().isPresent()).toBeTruthy();

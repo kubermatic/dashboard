@@ -8,7 +8,7 @@ export class ProjectUtils {
   private static _projectsPage = new ProjectsPage();
   private static _confirmationDialog = new ConfirmationDialog();
 
-  static createProject(projectName: string): void {
+  static async createProject(projectName: string): void {
     ProjectUtils._projectsPage.navigateTo();
     KMElement.waitToAppear(ProjectUtils._projectsPage.getAddProjectButton());
 
@@ -23,7 +23,7 @@ export class ProjectUtils {
 
     // We need to wait for autoredirect after create to finish
     // otherwise it will autoredirect again after too fast page switch.
-    browser.sleep(5000);
+    await browser.sleep(5000);
 
     ProjectUtils._projectsPage.navigateTo();
     KMElement.waitForRedirect('/projects');

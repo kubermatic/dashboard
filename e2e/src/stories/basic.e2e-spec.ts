@@ -40,34 +40,34 @@ describe('Basic story', () => {
 
   const memberEmail = 'roxy2@loodse.com';
 
-  it('should login', () => {
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+  it('should login', async () => {
+    await AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
-  it('should create a new project', () => {
-    ProjectUtils.createProject(projectName);
+  it('should create a new project', async () => {
+    await ProjectUtils.createProject(projectName);
   });
 
   it('should create a new cluster', () => {
     clustersPage.navigateTo();
-    KMElement.waitForClickable(clustersPage.getAddClusterTopBtn());
 
-    clustersPage.getAddClusterTopBtn().click();
+    KMElement.click(clustersPage.getAddClusterTopBtn());
+
     KMElement.waitToAppear(wizardPage.getClusterNameInput());
     wizardPage.getClusterNameInput().sendKeys(clusterName);
-    KMElement.waitForClickable(wizardPage.getNextButton());
-    wizardPage.getNextButton().click();
 
-    KMElement.waitToAppear(wizardPage.getProviderButton(providerName));
-    wizardPage.getProviderButton(providerName).click();
+    KMElement.click(wizardPage.getNextButton());
 
-    wizardPage.getDatacenterLocationButton(datacenterLocation).click();
+    KMElement.click(wizardPage.getProviderButton(providerName));
 
-    KMElement.waitForClickable(wizardPage.getCreateButton());
-    wizardPage.getCreateButton().click();
+    KMElement.click(wizardPage.getDatacenterLocationButton(datacenterLocation));
+
+    KMElement.click(wizardPage.getCreateButton());
+
     KMElement.waitForRedirect('/clusters/');
 
     clustersPage.navigateTo();
+
     KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
     expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeTruthy();
   });
@@ -75,14 +75,14 @@ describe('Basic story', () => {
   it('should add a new member', () => {
     membersPage.navigateTo();
 
-    KMElement.waitForClickable(membersPage.getAddMemberBtn());
-    membersPage.getAddMemberBtn().click();
-    KMElement.waitToAppear(membersPage.getAddMemberDialog());
+    KMElement.click(membersPage.getAddMemberBtn());
 
+    KMElement.waitToAppear(membersPage.getAddMemberDialog());
     KMElement.sendKeys(membersPage.getAddMemberDialogEmailInput(), memberEmail);
-    membersPage.getAddMemberDialogGroupCombobox().click();
-    membersPage.getAddMemberDialogGroupOption(2).click();
-    membersPage.getAddMemberDialogAddBtn().click();
+
+    KMElement.click(membersPage.getAddMemberDialogGroupCombobox());
+    KMElement.click(membersPage.getAddMemberDialogGroupOption(2));
+    KMElement.click(membersPage.getAddMemberDialogAddBtn());
 
     KMElement.waitToDisappear(membersPage.getAddMemberDialog());
     KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
@@ -92,11 +92,9 @@ describe('Basic story', () => {
 
   it('should edit created member info', async () => {
     const memberGroup = await membersPage.getMemberGroup(memberEmail).getText();
-    KMElement.waitForClickable(membersPage.getMemberEditBtn(memberEmail));
-    membersPage.getMemberEditBtn(memberEmail).click();
+    KMElement.click(membersPage.getMemberEditBtn(memberEmail));
 
-    KMElement.waitForClickable(membersPage.getEditMemberDialogGroupCombobox());
-    membersPage.getEditMemberDialogGroupCombobox().click();
+    KMElement.click(membersPage.getEditMemberDialogGroupCombobox());
     membersPage.getEditMemberDialogGroupOption(3).click();
     membersPage.getEditMemberDialogEditBtn().click();
 
@@ -111,11 +109,9 @@ describe('Basic story', () => {
   });
 
   it('should delete created member', () => {
-    KMElement.waitForClickable(membersPage.getMemberDeleteBtn(memberEmail));
-    membersPage.getMemberDeleteBtn(memberEmail).click();
+    KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
 
-    KMElement.waitForClickable(confirmationDialog.getConfirmationDialog());
-    confirmationDialog.getConfirmationDialogConfirmBtn().click();
+    KMElement.click(confirmationDialog.getConfirmationDialog());
 
     // Switch views to reload members list
     clustersPage.navigateTo();
@@ -132,16 +128,14 @@ describe('Basic story', () => {
     const oldProjectName = projectName;
     projectsPage.navigateTo();
 
-    KMElement.waitForClickable(projectsPage.getProjectEditBtn(projectName));
-    projectsPage.getProjectEditBtn(projectName).click();
+    KMElement.click(projectsPage.getProjectEditBtn(projectName));
     expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
 
     KMElement.waitToAppear(projectsPage.getEditProjectDialogInput());
     projectName = RandomUtils.prefixedString('e2e-test-project');
     projectsPage.getEditProjectDialogInput().clear();
     KMElement.sendKeys(projectsPage.getEditProjectDialogInput(), projectName);
-    KMElement.waitForClickable(projectsPage.getEditProjectDialogEditBtn());
-    projectsPage.getEditProjectDialogEditBtn().click();
+    KMElement.click(projectsPage.getEditProjectDialogEditBtn());
 
     KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
 
