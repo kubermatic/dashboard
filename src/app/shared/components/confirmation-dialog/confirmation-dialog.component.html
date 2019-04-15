@@ -2,7 +2,7 @@
      id="km-confirmation-dialog"
      (keydown.enter)="onEnterKeyDown()">
   <mat-toolbar>
-    {{data.title}}
+    <span class="km-dialog-title">{{data.title}}</span>
     <button mat-icon-button
             mat-dialog-close>
       <i class="fa fa-times"
