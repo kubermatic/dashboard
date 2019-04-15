@@ -115,6 +115,7 @@ function deploy::kubermatic {
 		--tiller-namespace=${TILLER_NAMESPACE} \
 		--set=kubermatic.isMaster=true \
 		--set=kubermatic.imagePullSecretData=$IMAGE_PULL_SECRET_DATA \
+		--set=kubermatic.auth.serviceAccountKey=$SERVICE_ACCOUNT_KEY \
 		--set=kubermatic.auth.tokenIssuer=http://dex.oauth:5556 \
 		--set=kubermatic.auth.clientID=kubermatic \
 		--set=kubermatic.datacenters=${DATACENTERS_ENCODED} \
@@ -139,6 +140,11 @@ function deploy::kubermatic {
 function check::env {
 	if [[ -z $IMAGE_PULL_SECRET_DATA ]]; then
 		echo "Image pull secret data not set."
+		exit -1
+	fi
+
+	if [[ -z $SERVICE_ACCOUNT_KEY ]]; then
+		echo "Service account key not set."
 		exit -1
 	fi
 }
