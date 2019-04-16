@@ -45,6 +45,22 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "e2e": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.ts"
+                }
+              ]
+            },
+            "e2e-local": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.e2e.local.ts"
+                }
+              ]
             }
           }
         },
@@ -64,21 +80,11 @@
               "proxyConfig": "./proxy-local.conf.json"
             },
             "e2e": {
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.e2e.ts"
-                }
-              ]
+              "browserTarget": "kubermatic:build:e2e"
             },
             "e2e-local": {
-              "proxyConfig": "./proxy-local.conf.json",
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.e2e.local.ts"
-                }
-              ]
+              "browserTarget": "kubermatic:build:e2e-local",
+              "proxyConfig": "./proxy-local.conf.json"
             }
           }
         },
