@@ -19,3 +19,7 @@ export class ServiceAccountTokenEntity {
   name: string;
   token?: string;
 }
+
+export class CreateTokenEntity {
+  name: string;
+}

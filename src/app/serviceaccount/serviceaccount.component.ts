@@ -8,12 +8,12 @@ import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
-import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../shared/entity/ServiceAccountEntity';
+import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
+import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
-import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
 @Component({
   selector: 'kubermatic-serviceaccount',
@@ -141,38 +141,14 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
   addServiceAccountToken(serviceAccount: ServiceAccountEntity, event: Event): void {
     event.stopPropagation();
-    const dialogConfig: MatDialogConfig = {
-      disableClose: false,
-      hasBackdrop: true,
-      data: {
-        title: 'Add Token to Service Account',
-        message: `You are on the way to add a new Token to the Service Account ${serviceAccount.name}.`,
-        confirmLabel: 'Add',
-        cancelLabel: 'Close',
-      },
-    };
+    const modal = this._matDialog.open(AddServiceAccountTokenComponent);
+    modal.componentInstance.project = this._projectService.project;
+    modal.componentInstance.serviceaccount = serviceAccount;
 
-    const dialogRef = this._matDialog.open(ConfirmationDialogComponent, dialogConfig);
-    this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'addServiceAccountTokenOpened');
-
-    dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
-      if (isConfirmed) {
-        this._apiService.createServiceAccountToken(this._projectService.project.id, serviceAccount)
-            .pipe(first())
-            .subscribe((token) => {
-              this.openTokenDialog(token);
-              NotificationActions.success(
-                  'Success', `Token ${token.name} has been added to Service Account ${serviceAccount.name}`);
-              this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenAdded');
-
-              this._externalServiceAccountUpdate.next();
-            });
+    modal.afterClosed().pipe(first()).subscribe((isAdded) => {
+      if (isAdded) {
+        this._externalServiceAccountUpdate.next();
       }
     });
-  }
-
-  openTokenDialog(token: ServiceAccountTokenEntity): void {
-    const modal = this._matDialog.open(TokenDialogComponent);
-    modal.componentInstance.serviceaccountToken = token;
   }
 }

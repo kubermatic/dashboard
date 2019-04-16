@@ -16,6 +16,7 @@ import {GoogleAnalyticsService} from './google-analytics.service';
 import {KubermaticComponent} from './kubermatic.component';
 import {AddMemberComponent} from './member/add-member/add-member.component';
 import {EditMemberComponent} from './member/edit-member/edit-member.component';
+import {AddServiceAccountTokenComponent} from './serviceaccount/add-serviceaccount-token/add-serviceaccount-token.component';
 import {AddServiceAccountComponent} from './serviceaccount/add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './serviceaccount/edit-serviceaccount/edit-serviceaccount.component';
 import {TokenDialogComponent} from './serviceaccount/token-dialog/token-dialog.component';
@@ -61,6 +62,7 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
     EditMemberComponent,
     AddServiceAccountComponent,
     EditServiceAccountComponent,
+    AddServiceAccountTokenComponent,
     TokenDialogComponent,
   ],
   bootstrap: [KubermaticComponent],
