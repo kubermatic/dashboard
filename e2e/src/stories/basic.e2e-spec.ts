@@ -48,7 +48,7 @@ describe('Basic story', () => {
     await ProjectUtils.createProject(projectName);
   });
 
-  it('should create a new cluster', () => {
+  it('should create a new cluster', async () => {
     clustersPage.navigateTo();
 
     KMElement.click(clustersPage.getAddClusterTopBtn());
@@ -72,7 +72,7 @@ describe('Basic story', () => {
     expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeTruthy();
   });
 
-  it('should add a new member', () => {
+  it('should add a new member', async () => {
     membersPage.navigateTo();
 
     KMElement.click(membersPage.getAddMemberBtn());
@@ -108,7 +108,7 @@ describe('Basic story', () => {
     expect(await membersPage.getMemberGroup(memberEmail).getText()).not.toEqual(memberGroup);
   });
 
-  it('should delete created member', () => {
+  it('should delete created member', async () => {
     KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
 
     KMElement.click(confirmationDialog.getConfirmationDialog());
@@ -152,11 +152,11 @@ describe('Basic story', () => {
     expect(await projectsPage.getProjectItem(projectName).getText()).not.toEqual(oldProjectName);
   });
 
-  it('should delete created project', () => {
+  it('should delete created project', async () => {
     ProjectUtils.deleteProject(projectName);
   });
 
-  it('should logout', () => {
+  it('should logout', async () => {
     AuthUtils.logout();
   });
 });

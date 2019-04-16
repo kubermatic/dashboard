@@ -19,12 +19,12 @@ describe('Multi Owner story', () => {
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
   const memberEmail2 = browser.params.KUBERMATIC_E2E_USERNAME_2;
 
-  it('should login as a first owner', () => {
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+  it('should login as a first owner', async () => {
+    await AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
-  it('should create a test project', () => {
-    ProjectUtils.createProject(projectNameMultiOwner);
+  it('should create a test project', async () => {
+    await ProjectUtils.createProject(projectNameMultiOwner);
   });
   
   it('should add a new member to project', () => {

@@ -22,9 +22,9 @@ describe('Node Deployments story', () => {
   const providerName = 'digitalocean';
   const datacenterLocation = 'Frankfurt';
 
-  beforeAll(() => {
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
-    ProjectUtils.createProject(projectName);
+  beforeAll(async () => {
+    await AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+    await ProjectUtils.createProject(projectName);
   });
 
   it('should go to clusters page', () => {
