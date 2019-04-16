@@ -11,7 +11,7 @@ export const environment = {
   configUrl: '../../assets/config/config.json',
   gitVersionUrl: '../../assets/config/git-version.json',
   customCSS: '../../assets/custom/style.css',
-  refreshTimeBase: 60000,  // Unit: ms
+  refreshTimeBase: 1000,  // Unit: ms
   restRoot: 'api/v1',
   restRootV3: 'api/v3',
   digitalOceanRestRoot: 'https://api.digitalocean.com/v2',
