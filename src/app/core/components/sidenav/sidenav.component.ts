@@ -22,14 +22,6 @@ export class SidenavComponent implements OnInit, OnDestroy {
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
   customLinks: CustomLink[];
-  private _isURL = new RegExp(
-      '^(https?:\\/\\/)?' +
-          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
-          '((\\d{1,3}\\.){3}\\d{1,3}))' +
-          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
-          '(\\?[;&a-z\\d%_.~+=-]*)?' +
-          '(\\#[-a-z\\d_]*)?$',
-      'i');
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -166,12 +158,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   getCustomIcon(customLink: CustomLink): string {
-    // If custom link icon has been set and if it is valid then it can be used.
-    if (customLink.icon && this._isURL.test(customLink.icon)) {
-      return customLink.icon;
-    }
-
-    return findMatchingServiceIcon(customLink);
+    return customLink.icon && customLink.icon.length > 0 ? customLink.icon : findMatchingServiceIcon(customLink);
   }
 
   ngOnDestroy(): void {
