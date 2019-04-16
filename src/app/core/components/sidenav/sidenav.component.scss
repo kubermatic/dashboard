@@ -1,8 +1,6 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
-$project-picker-border-width: 2px;
-
 .container {
   width: $sidenav-width;
   background-color: $primary;
@@ -18,8 +16,8 @@ $project-picker-border-width: 2px;
       height: $toolbar-height;
 
       &.km-projects {
-        height: $toolbar-height - ($project-picker-border-width / 2);
-        border-bottom: $alternative solid $project-picker-border-width;
+        height: $toolbar-height - ($sidenav-border-width / 2);
+        border-bottom: $alternative solid $sidenav-border-width;
       }
     }
 
@@ -97,6 +95,33 @@ $project-picker-border-width: 2px;
       cursor: default;
       opacity: 0.4;
       pointer-events: none;
+    }
+  }
+
+  .km-nav-custom-container {
+    background-color: $primary-dark;
+    border-top: $primary-light solid $sidenav-border-width;
+
+    .mat-list-item a {
+      font-size: $subhead-font-size-base;
+
+      i {
+        background-color: transparent;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+      }
+
+      &:hover {
+        background-color: $primary;
+
+        i {
+          -webkit-filter: brightness(115%);
+        }
+      }
     }
   }
 }

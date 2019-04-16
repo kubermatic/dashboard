@@ -27,13 +27,3 @@ footer {
 .km-separator {
   padding: 0 $baseline-grid;
 }
-
-.km-social {
-  flex: 1 1 auto;
-  text-align: end;
-
-  i {
-    font-size: $subhead-font-size-base;
-    padding-left: 1.5 * $baseline-grid;
-  }
-}
