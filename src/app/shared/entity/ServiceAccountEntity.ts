@@ -17,5 +17,5 @@ export class ServiceAccountTokenEntity {
   deletionTimestamp?: Date;
   id: string;
   name: string;
-  token: string;
+  token?: string;
 }

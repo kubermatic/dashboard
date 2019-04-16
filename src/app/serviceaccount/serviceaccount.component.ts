@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {EMPTY, Subject, timer} from 'rxjs';
-import {first, merge, switchMap, takeUntil} from 'rxjs/operators';
+import {merge, Subject, timer} from 'rxjs';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
+
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
@@ -47,12 +48,9 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    timer(0, 5000)
-        .pipe(merge(this._externalServiceAccountUpdate))
+    merge(timer(0, 10000), this._externalServiceAccountUpdate)
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(
-            () => this._projectService.project ? this._apiService.getServiceAccounts(this._projectService.project.id) :
-                                                 EMPTY))
+        .pipe(switchMap(() => this._apiService.getServiceAccounts(this._projectService.project.id)))
         .subscribe(serviceaccounts => {
           this.serviceAccounts = serviceaccounts;
           this.isInitializing = false;
@@ -166,6 +164,8 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
               NotificationActions.success(
                   'Success', `Token ${token.name} has been added to Service Account ${serviceAccount.name}`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenAdded');
+
+              this._externalServiceAccountUpdate.next();
             });
       }
     });
