@@ -32,18 +32,18 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private route: ActivatedRoute, private api: ApiService, private userService: UserService,
-      private appConfigService: AppConfigService, public dialog: MatDialog,
-      private googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _route: ActivatedRoute, private readonly _api: ApiService,
+      private readonly _userService: UserService, private readonly _appConfigService: AppConfigService,
+      public dialog: MatDialog, private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.route.paramMap.pipe(takeUntil(this._unsubscribe)).subscribe((m) => {
+    this._route.paramMap.pipe(takeUntil(this._unsubscribe)).subscribe((m) => {
       this.projectID = m.get('projectID');
       this.refreshSSHKeys();
     });
 
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
+    this.userGroupConfig = this._appConfigService.getUserGroupConfig();
+    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
@@ -51,7 +51,9 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    timer(0, 10000).pipe(takeUntil(this._unsubscribe)).subscribe(() => this.refreshSSHKeys());
+    timer(0, 10 * this._appConfigService.getRefreshTimeBase())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => this.refreshSSHKeys());
   }
 
   ngOnDestroy(): void {
@@ -75,7 +77,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys(): void {
-    this.api.getSSHKeys(this.projectID).pipe(retry(3)).pipe(takeUntil(this._unsubscribe)).subscribe((res) => {
+    this._api.getSSHKeys(this.projectID).pipe(retry(3)).pipe(takeUntil(this._unsubscribe)).subscribe((res) => {
       this.sshKeys = res;
       this.loading = false;
     });
@@ -107,14 +109,14 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     };
 
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
-    this.googleAnalyticsService.emitEvent('sshKeyOverview', 'deleteSshKeyOpened');
+    this._googleAnalyticsService.emitEvent('sshKeyOverview', 'deleteSshKeyOpened');
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this.api.deleteSSHKey(sshKey.id, this.projectID).subscribe(() => {
+        this._api.deleteSSHKey(sshKey.id, this.projectID).subscribe(() => {
           NotificationActions.success(
               'Success', `SSH key ${sshKey.name} has been removed from project ${this.projectID}`);
-          this.googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
+          this._googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
         });
       }
     });

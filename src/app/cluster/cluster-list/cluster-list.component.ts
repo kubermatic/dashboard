@@ -3,6 +3,7 @@ import {MatSort, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+import {AppConfigService} from '../../app-config.service';
 
 import {ApiService, DatacenterService, ProjectService} from '../../core/services';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
@@ -30,14 +31,15 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
-      private readonly _router: Router, private readonly _datacenterService: DatacenterService) {}
+      private readonly _router: Router, private readonly _datacenterService: DatacenterService,
+      private readonly _appConfig: AppConfigService) {}
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    timer(0, 5000)
+    timer(0, 5 * this._appConfig.getRefreshTimeBase())
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._apiService.getAllClusters(this._projectService.project.id)))
         .subscribe(clusters => {

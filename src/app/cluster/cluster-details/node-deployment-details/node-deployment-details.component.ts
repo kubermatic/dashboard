@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
+import {AppConfigService} from '../../../app-config.service';
 
 import {ApiService, DatacenterService, ProjectService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -43,14 +44,15 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _activatedRoute: ActivatedRoute, private readonly _router: Router,
       private readonly _apiService: ApiService, private readonly _datacenterService: DatacenterService,
-      private readonly _nodeService: NodeService, private readonly _projectService: ProjectService) {}
+      private readonly _nodeService: NodeService, private readonly _projectService: ProjectService,
+      private readonly _appConfig: AppConfigService) {}
 
   ngOnInit(): void {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
     this._dcName = this._activatedRoute.snapshot.paramMap.get('seedDc');
     this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
 
-    timer(0, 10000).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    timer(0, 10 * this._appConfig.getRefreshTimeBase()).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.loadNodeDeployment();
       this.loadNodes();
       this.loadNodesEvents();

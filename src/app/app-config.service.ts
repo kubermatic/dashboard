@@ -96,4 +96,8 @@ export class AppConfigService {
   getCustomLinks(): CustomLink[] {
     return this._appConfig && this._appConfig.custom_links ? this._appConfig.custom_links : [];
   }
+
+  getRefreshTimeBase(): number {
+    return environment.refreshTimeBase;
+  }
 }

@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {AppConfigService} from '../app-config.service';
 
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -32,7 +33,8 @@ export class MemberComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _matDialog: MatDialog, private readonly _userService: UserService,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfig: AppConfigService) {
+  }
 
   ngOnInit(): void {
     this._userService.getUser().pipe(first()).subscribe((user) => {
@@ -43,7 +45,7 @@ export class MemberComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 5000), this._externalMembersUpdate)
+    merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._externalMembersUpdate)
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(
             () => this._projectService.project ? this._apiService.getMembers(this._projectService.project.id) : EMPTY))

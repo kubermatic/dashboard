@@ -271,8 +271,7 @@ export class WizardComponent implements OnInit, OnDestroy {
               this.googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
 
               const isReady = new Subject<boolean>();
-              const timer = interval(5000).pipe(takeUntil(isReady));
-              timer.subscribe(() => {
+              interval(5 * this._appConfigService.getRefreshTimeBase()).pipe(takeUntil(isReady)).subscribe(() => {
                 this.api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe(() => {
                   this.router.navigate(
                       ['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
