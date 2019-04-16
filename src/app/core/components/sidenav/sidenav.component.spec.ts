@@ -143,7 +143,7 @@ describe('SidenavComponent', () => {
     const e: CustomLink = {label: 'Repository', url: 'www.github.com'};
     expect(component.getCustomIcon(e)).toBe(CustomLinkIcon.GitHub);
 
-    const f: CustomLink = {label: 'Unknown Service', url: 'www.unknown.com', icon: 'wrong-url'};
+    const f: CustomLink = {label: 'Unknown Service', url: 'www.unknown.com', icon: ''};
     expect(component.getCustomIcon(f)).toBe(CustomLinkIcon.Default);
 
     const g: CustomLink = {label: 'Unknown Service', url: 'www.unknown.com', icon: 'www.google.com/some-image.png'};
@@ -151,5 +151,11 @@ describe('SidenavComponent', () => {
 
     const h: CustomLink = {label: 'Slack', url: 'www.twitter.com', icon: 'www.google.com/some-image.png'};
     expect(component.getCustomIcon(h)).toBe(h.icon);
+
+    const i: CustomLink = {label: '', url: '', icon: '/assets-mounted-into-container/icons/slack.svg'};
+    expect(component.getCustomIcon(i)).toBe(i.icon);
+
+    const j: CustomLink = {label: 'Slack', url: 'slack.com', icon: '/assets-mounted-into-container/icons/github.svg'};
+    expect(component.getCustomIcon(j)).toBe(j.icon);
   });
 });
