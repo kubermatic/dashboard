@@ -89,24 +89,26 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
                   });
 
               // Register cluster reload interval.
-              merge(timer(0, 10000), this._externalClusterUpdate).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-                this._apiService
-                    .getCluster(this.cluster.id, this.datacenter.metadata.name, this._projectService.project.id)
-                    .pipe(takeUntil(this._unsubscribe), retry(3))
-                    .pipe(switchMap(cluster => {
-                      this.cluster = cluster;
-                      return this._apiService.getClusterHealth(
-                          this.cluster.id, seedDCName, this._projectService.project.id);
-                    }))
-                    .subscribe((health) => {
-                      this.health = health;
-                      this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-                      this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+              merge(timer(0, 10 * this._appConfigService.getRefreshTimeBase()), this._externalClusterUpdate)
+                  .pipe(takeUntil(this._unsubscribe))
+                  .subscribe(() => {
+                    this._apiService
+                        .getCluster(this.cluster.id, this.datacenter.metadata.name, this._projectService.project.id)
+                        .pipe(takeUntil(this._unsubscribe), retry(3))
+                        .pipe(switchMap(cluster => {
+                          this.cluster = cluster;
+                          return this._apiService.getClusterHealth(
+                              this.cluster.id, seedDCName, this._projectService.project.id);
+                        }))
+                        .subscribe((health) => {
+                          this.health = health;
+                          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
+                          this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
 
-                      this._reloadVersions();
-                      this.reloadClusterNodes();
-                    });
-              });
+                          this._reloadVersions();
+                          this.reloadClusterNodes();
+                        });
+                  });
             },
             (error) => {
               if (error.status === 404) {

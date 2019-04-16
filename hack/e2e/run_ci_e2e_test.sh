@@ -47,4 +47,4 @@ docker logs -f controller &
 cd ${OLD_DIR}
 
 npm run versioninfo
-npm run e2e:local --oauth=http://dex.oauth:5556/auth
+npm run e2e:local
