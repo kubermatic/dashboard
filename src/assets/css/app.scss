@@ -83,7 +83,16 @@ body {
     &:first-of-type {
       padding-left: 2 * $baseline-grid;
     }
+
+    &.mat-column-provider {
+      padding-top: .5 * $baseline-grid;
+      padding-bottom: .5 * $baseline-grid;
+    }
   }
+}
+
+.mat-column-status {
+  width: 2 * $baseline-grid;
 }
 
 .mat-card-header {

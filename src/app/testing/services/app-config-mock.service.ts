@@ -1,4 +1,6 @@
 import {Injectable} from '@angular/core';
+
+import {CustomLink} from '../../shared/entity/CustomLinks';
 import {VersionInfo} from '../../shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from '../../shared/model/Config';
 import {fakeAppConfig} from '../fake-data/appConfig.fake';
@@ -25,5 +27,13 @@ export class AppConfigMockService {
 
   getCustomCSS(): string {
     return '';
+  }
+
+  getCustomLinks(): CustomLink[] {
+    return [];
+  }
+
+  getRefreshTimeBase(): number {
+    return 1000;
   }
 }

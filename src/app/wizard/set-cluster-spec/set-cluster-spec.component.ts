@@ -20,7 +20,8 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   private subscriptions: Subscription[] = [];
 
   constructor(
-      private nameGenerator: ClusterNameGenerator, private api: ApiService, private wizardService: WizardService) {}
+      private readonly _nameGenerator: ClusterNameGenerator, private readonly _api: ApiService,
+      private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
@@ -49,11 +50,11 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   generateName(): void {
-    this.clusterSpecForm.patchValue({name: this.nameGenerator.generateName()});
+    this.clusterSpecForm.patchValue({name: this._nameGenerator.generateName()});
   }
 
   loadMasterVersions(): void {
-    this.subscriptions.push(this.api.getMasterVersions().subscribe((versions) => {
+    this.subscriptions.push(this._api.getMasterVersions().subscribe((versions) => {
       this.masterVersions = versions;
       for (const i in versions) {
         if (versions[i].default) {
@@ -65,7 +66,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   setClusterSpec(): void {
-    this.wizardService.changeClusterSpec({
+    this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       version: this.clusterSpecForm.controls.version.value,
       valid: this.clusterSpecForm.valid,
@@ -73,7 +74,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   private _invalidateStep(): void {
-    this.wizardService.changeClusterSpec({
+    this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       version: this.clusterSpecForm.controls.version.value,
       valid: false,

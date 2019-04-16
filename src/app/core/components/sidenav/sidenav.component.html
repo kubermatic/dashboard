@@ -63,4 +63,17 @@
       </mat-list-item>
     </div>
   </mat-nav-list>
+  <!--side border-->
+  <mat-nav-list *ngIf="customLinks && customLinks.length > 0"
+                class="km-nav-custom-container"
+                fxFlex>
+    <mat-list-item *ngFor="let link of customLinks">
+      <a [href]="link.url"
+         mat-line
+         target="_blank">
+        <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
+        <span>{{link.label}}</span>
+      </a>
+    </mat-list-item>
+  </mat-nav-list>
 </div>

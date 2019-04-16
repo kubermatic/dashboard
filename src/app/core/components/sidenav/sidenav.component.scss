@@ -1,8 +1,6 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
-$project-picker-border-width: 2px;
-
 .container {
   width: $sidenav-width;
   background-color: $primary;
@@ -18,8 +16,8 @@ $project-picker-border-width: 2px;
       height: $toolbar-height;
 
       &.km-projects {
-        height: $toolbar-height - ($project-picker-border-width / 2);
-        border-bottom: $alternative solid $project-picker-border-width;
+        height: $toolbar-height - ($sidenav-border-width / 2);
+        border-bottom: $alternative solid $sidenav-border-width;
       }
     }
 
@@ -62,22 +60,22 @@ $project-picker-border-width: 2px;
     }
 
     mat-label {
-      margin: 3px 0 !important;
-      font-size: 12px;
-      line-height: 12px;
+      margin: ($baseline-grid / 2) 0 !important;
+      font-size: $caption-font-size-base;
+      line-height: $caption-font-size-base;
     }
 
     ::ng-deep.mat-select-value-text {
       color: $secondary;
-      font-size: 16px;
-      line-height: 16px;
+      font-size: $subhead-font-size-base-lg;
+      line-height: $subhead-font-size-base-lg;
     }
 
     ::ng-deep.mat-select-placeholder {
       opacity: 0.4;
       color: $secondary;
-      font-size: 16px !important;
-      line-height: 16px;
+      font-size: $subhead-font-size-base-lg !important;
+      line-height: $subhead-font-size-base-lg;
     }
 
     ::ng-deep.mat-select-arrow {
@@ -85,7 +83,7 @@ $project-picker-border-width: 2px;
     }
 
     .mat-nav-list a {
-      font-size: 18px;
+      font-size: $subhead-font-size-base-lg;
       font-weight: 400;
     }
 
@@ -97,6 +95,33 @@ $project-picker-border-width: 2px;
       cursor: default;
       opacity: 0.4;
       pointer-events: none;
+    }
+  }
+
+  .km-nav-custom-container {
+    background-color: $primary-dark;
+    border-top: $primary-light solid $sidenav-border-width;
+
+    .mat-list-item a {
+      font-size: $subhead-font-size-base;
+
+      i {
+        background-color: transparent;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+      }
+
+      &:hover {
+        background-color: $primary;
+
+        i {
+          -webkit-filter: brightness(115%);
+        }
+      }
     }
   }
 }

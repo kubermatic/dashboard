@@ -137,6 +137,8 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
           return this.getHealthStatus(this.health.scheduler);
         case 'machineController':
           return this.getHealthStatus(this.health.machineController);
+        case 'uccm':
+          return this.getHealthStatus(this.health.userClusterControllerManager);
         default:
           return '';
       }

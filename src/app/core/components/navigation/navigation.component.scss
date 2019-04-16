@@ -2,7 +2,7 @@
 @import "../../../../assets/css/fonts";
 @import "../../../../assets/css/variables";
 
-$MOBILE_RESOLUTION_BREAKPOINT: 504px;
+$logo-width: 240px;
 
 header {
   height: $toolbar-height;
@@ -28,9 +28,9 @@ ng2-slim-loading-bar {
 
   .km-header-logo {
     display: block;
-    width: 240px;
+    width: $logo-width;
     height: $toolbar-height;
-    background-size: 218px;
+    background-size: $logo-width;
     background-position: 0 -22px;
   }
 

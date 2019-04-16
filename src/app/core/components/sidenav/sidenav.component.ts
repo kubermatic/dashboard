@@ -5,7 +5,9 @@ import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
+import {AppConfigService} from '../../../app-config.service';
 import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
+import {CustomLink, findMatchingServiceIcon} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ApiService, ProjectService} from '../../services';
 
@@ -19,13 +21,15 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
+  customLinks: CustomLink[];
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      public dialog: MatDialog, private api: ApiService, private router: Router,
-      public projectService: ProjectService) {}
+      public dialog: MatDialog, private api: ApiService, private router: Router, public projectService: ProjectService,
+      private readonly _appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
+    this.customLinks = this._appConfigService.getCustomLinks();
     this.loadProjects();
 
     this.projectService.selectedProjectChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
@@ -51,7 +55,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private registerProjectRefreshInterval(): void {
-    timer(0, 1500).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    timer(0, 1.5 * this._appConfigService.getRefreshTimeBase()).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
         this.api.getProjects().pipe(first()).subscribe((res) => {
           this.projects = res;
@@ -145,6 +149,16 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
     return tooltip;
+  }
+
+  getCustomLinkIconStyle(customLink: CustomLink): any {
+    return {
+      'background-image': `url('${this.getCustomIcon(customLink)}')`,
+    };
+  }
+
+  getCustomIcon(customLink: CustomLink): string {
+    return customLink.icon && customLink.icon.length > 0 ? customLink.icon : findMatchingServiceIcon(customLink);
   }
 
   ngOnDestroy(): void {

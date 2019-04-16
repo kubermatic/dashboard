@@ -5,6 +5,7 @@ import {first, tap} from 'rxjs/operators';
 import {environment} from '../environments/environment';
 
 import {NotificationActions} from './redux/actions/notification.actions';
+import {CustomLink} from './shared/entity/CustomLinks';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from './shared/model/Config';
 
@@ -90,5 +91,13 @@ export class AppConfigService {
 
   getCustomCSS(): string {
     return environment.customCSS;
+  }
+
+  getCustomLinks(): CustomLink[] {
+    return this._appConfig && this._appConfig.custom_links ? this._appConfig.custom_links : [];
+  }
+
+  getRefreshTimeBase(): number {
+    return environment.refreshTimeBase;
   }
 }
