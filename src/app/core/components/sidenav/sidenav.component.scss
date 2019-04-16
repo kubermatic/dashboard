@@ -60,22 +60,22 @@
     }
 
     mat-label {
-      margin: 3px 0 !important;
-      font-size: 12px;
-      line-height: 12px;
+      margin: ($baseline-grid / 2) 0 !important;
+      font-size: $caption-font-size-base;
+      line-height: $caption-font-size-base;
     }
 
     ::ng-deep.mat-select-value-text {
       color: $secondary;
-      font-size: 16px;
-      line-height: 16px;
+      font-size: $subhead-font-size-base-lg;
+      line-height: $subhead-font-size-base-lg;
     }
 
     ::ng-deep.mat-select-placeholder {
       opacity: 0.4;
       color: $secondary;
-      font-size: 16px !important;
-      line-height: 16px;
+      font-size: $subhead-font-size-base-lg !important;
+      line-height: $subhead-font-size-base-lg;
     }
 
     ::ng-deep.mat-select-arrow {
@@ -83,7 +83,7 @@
     }
 
     .mat-nav-list a {
-      font-size: 18px;
+      font-size: $subhead-font-size-base-lg;
       font-weight: 400;
     }
 
