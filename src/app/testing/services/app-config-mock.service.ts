@@ -32,4 +32,8 @@ export class AppConfigMockService {
   getCustomLinks(): CustomLink[] {
     return [];
   }
+
+  getRefreshTimeBase(): number {
+    return 1000;
+  }
 }

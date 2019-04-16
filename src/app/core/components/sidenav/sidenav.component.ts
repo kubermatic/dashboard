@@ -63,7 +63,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   private registerProjectRefreshInterval(): void {
-    timer(0, 1500).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    timer(0, 1.5 * this._appConfigService.getRefreshTimeBase()).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
         this.api.getProjects().pipe(first()).subscribe((res) => {
           this.projects = res;

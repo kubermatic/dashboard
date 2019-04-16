@@ -31,16 +31,18 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private api: ApiService, private userService: UserService, private appConfigService: AppConfigService,
-      public dialog: MatDialog) {}
+      private readonly _api: ApiService, private readonly _userService: UserService,
+      private readonly _appConfig: AppConfigService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
+    this.userGroupConfig = this._appConfig.getUserGroupConfig();
+    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
-    timer(0, 5000).pipe(takeUntil(this._unsubscribe)).subscribe(() => this.refreshSSHKeys());
+    timer(0, 5 * this._appConfig.getRefreshTimeBase())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => this.refreshSSHKeys());
   }
 
   ngOnDestroy(): void {
@@ -49,7 +51,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys(): void {
-    this.api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+    this._api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
         .pipe(retry(3))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((res) => {

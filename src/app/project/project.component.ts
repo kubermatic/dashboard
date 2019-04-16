@@ -2,6 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {AppConfigService} from '../app-config.service';
 
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -34,14 +35,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfig: AppConfigService) {
+  }
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 10000), this._externalProjectsUpdate)
+    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._externalProjectsUpdate)
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._apiService.getProjects()))
         .subscribe(projects => {
