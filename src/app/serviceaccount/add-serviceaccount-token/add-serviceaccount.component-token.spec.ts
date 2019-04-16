@@ -1,16 +1,18 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import Spy = jasmine.Spy;
+
 import {ApiService, ProjectService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeServiceAccount, fakeServiceAccountTokens} from '../../testing/fake-data/serviceaccount.fake';
 import {fakeProject} from '../../testing/fake-data/project.fake';
+import {fakeServiceAccount, fakeServiceAccountTokens} from '../../testing/fake-data/serviceaccount.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
+import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
+
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token.component';
 
 const modules: any[] = [
@@ -23,12 +25,10 @@ const modules: any[] = [
 describe('AddServiceAccountTokenComponent', () => {
   let fixture: ComponentFixture<AddServiceAccountTokenComponent>;
   let component: AddServiceAccountTokenComponent;
-  let createServiceAccountTokenSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createServiceAccountToken']);
-    createServiceAccountTokenSpy =
-        apiMock.createServiceAccountToken.and.returnValue(asyncData(fakeServiceAccountTokens()));
+    apiMock.createServiceAccountToken.and.returnValue(asyncData(fakeServiceAccountTokens()));
 
     TestBed
         .configureTestingModule({
@@ -37,6 +37,7 @@ describe('AddServiceAccountTokenComponent', () => {
           ],
           declarations: [
             AddServiceAccountTokenComponent,
+            TokenDialogComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
@@ -51,6 +52,8 @@ describe('AddServiceAccountTokenComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(AddServiceAccountTokenComponent);
     component = fixture.componentInstance;
+    component.project = fakeProject();
+    component.serviceaccount = fakeServiceAccount();
     fixture.detectChanges();
   }));
 
@@ -58,7 +61,7 @@ describe('AddServiceAccountTokenComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('form invalid after creating', () => {
+  it('form invalid after  creating', () => {
     expect(component.addServiceAccountTokenForm.valid).toBeFalsy();
   });
 
@@ -72,14 +75,4 @@ describe('AddServiceAccountTokenComponent', () => {
     expect(component.addServiceAccountTokenForm.controls.name.hasError('required'))
         .toBeFalsy('name field has no required error after setting name');
   });
-
-  it('should call addServiceAccountToken method', fakeAsync(() => {
-       component.project = fakeProject();
-       component.serviceaccount = fakeServiceAccount();
-       component.addServiceAccountTokenForm.controls.name.patchValue('test-service-account-token');
-       component.addServiceAccountToken();
-       tick();
-
-       expect(createServiceAccountTokenSpy.and.callThrough()).toHaveBeenCalled();
-     }));
 });
