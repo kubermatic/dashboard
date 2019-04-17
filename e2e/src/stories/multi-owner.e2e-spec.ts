@@ -3,17 +3,16 @@ import {browser} from 'protractor';
 import {ClustersPage} from '../pages/clusters/clusters.po';
 import {MembersPage} from '../pages/member/member';
 import {ProjectsPage} from '../pages/projects/projects.po';
-import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 import {AuthUtils} from '../utils/auth';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from "../utils/random";
+import { ConfirmationUtils } from '../utils/confirmation';
 
 describe('Multi Owner story', () => {
   const projectsPage = new ProjectsPage();
   const clustersPage = new ClustersPage();
   const membersPage = new MembersPage();
-  const confirmationDialog = new ConfirmationDialog();
 
   const projectNameMultiOwner = RandomUtils.prefixedString('e2e-test-project-multi-owner');
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
@@ -64,9 +63,7 @@ describe('Multi Owner story', () => {
     await membersPage.navigateTo();
     await KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
 
-    await KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
-    await KMElement.click(confirmationDialog.getConfirmationDialogConfirmBtn());
-    await KMElement.waitToDisappear(confirmationDialog.getConfirmationDialog());
+    await ConfirmationUtils.confirm();
 
     // Switch views to reload members list
     await clustersPage.navigateTo();

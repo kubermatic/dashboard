@@ -3,13 +3,13 @@ import {browser} from 'protractor';
 import {ClustersPage} from '../pages/clusters/clusters.po';
 import {MembersPage} from '../pages/member/member';
 import {ProjectsPage} from '../pages/projects/projects.po';
-import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 import {WizardPage} from '../pages/wizard/wizard.po';
 import {AuthUtils} from '../utils/auth';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
 import {ClusterUtils} from '../utils/cluster';
+import { ConfirmationUtils } from '../utils/confirmation';
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -31,7 +31,6 @@ describe('Basic story', () => {
   const clustersPage = new ClustersPage();
   const wizardPage = new WizardPage();
   const membersPage = new MembersPage();
-  const confirmationDialog = new ConfirmationDialog();
 
   let projectName = RandomUtils.prefixedString('e2e-test-project');
   const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
@@ -111,8 +110,7 @@ describe('Basic story', () => {
   it('should delete created member', async () => {
     await KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
 
-    await KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
-    await KMElement.click(confirmationDialog.getConfirmationDialogConfirmBtn());
+    await ConfirmationUtils.confirm();
 
     // Switch views to reload members list
     await clustersPage.navigateTo();

@@ -8,13 +8,12 @@ import {ClusterUtils} from '../utils/cluster';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
-import {ConfirmationDialog} from '../pages/shared/confirmation.po';
+import { ConfirmationUtils } from '../utils/confirmation';
 
 describe('Node Deployments story', () => {
   const clustersPage = new ClustersPage();
   const wizardPage = new WizardPage();
   const nodeDeploymentDetailsPage = new NodeDeploymentDetailsPage();
-  const confirmationDialog = new ConfirmationDialog();
 
   const projectName = RandomUtils.prefixedString('e2e-test-project');
   const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
@@ -110,8 +109,7 @@ describe('Node Deployments story', () => {
   it('should remove initial node deployment', async () => {
     await KMElement.click(clustersPage.getNodeDeploymentRemoveBtn(initialNodeDeploymentName));
 
-    await KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
-    await KMElement.click(confirmationDialog.getConfirmationDialogConfirmBtn());
+    await ConfirmationUtils.confirm();
   });
 
   it('should verify initial node deployment removal', async () => {
