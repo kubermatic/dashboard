@@ -12,7 +12,7 @@ export class ProjectUtils {
     await ProjectUtils._projectsPage.navigateTo();
 
     await KMElement.click(ProjectUtils._projectsPage.getAddProjectButton());
-    expect(ProjectUtils._projectsPage.getAddProjectDialog().isPresent()).toBeTruthy();
+    expect(await ProjectUtils._projectsPage.getAddProjectDialog().isPresent()).toBeTruthy();
 
     await ProjectUtils._projectsPage.getProjectNameInput().sendKeys(projectName);
     await KMElement.click(ProjectUtils._projectsPage.getSaveProjectButton());
@@ -30,10 +30,10 @@ export class ProjectUtils {
     await KMElement.waitForRedirect('/projects');
 
     await KMElement.waitToAppear(ProjectUtils._projectsPage.getProjectItem(projectName));
-    expect(ProjectUtils._projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
+    expect(await ProjectUtils._projectsPage.getProjectItem(projectName).isPresent()).toBeTruthy();
 
     await KMElement.waitToAppear(ProjectUtils._projectsPage.getActiveProjectItem(projectName), 300000);
-    expect(ProjectUtils._projectsPage.getActiveProjectItem(projectName).isPresent()).toBeTruthy();
+    expect(await ProjectUtils._projectsPage.getActiveProjectItem(projectName).isPresent()).toBeTruthy();
   }
 
   static async deleteProject(projectName: string) {
@@ -42,12 +42,12 @@ export class ProjectUtils {
     await KMElement.waitForRedirect('/projects');
 
     await KMElement.click(ProjectUtils._projectsPage.getDeleteProjectButton(projectName));
-    expect(ProjectUtils._confirmationDialog.getConfirmationDialog().isPresent()).toBeTruthy();
+    expect(await ProjectUtils._confirmationDialog.getConfirmationDialog().isPresent()).toBeTruthy();
 
-    await KMElement.sendKeys(ProjectUtils._confirmationDialog.getConfirmationDialogInput(), projectName);
+    await KMElement.fill(ProjectUtils._confirmationDialog.getConfirmationDialogInput(), projectName);
     await KMElement.click(ProjectUtils._confirmationDialog.getConfirmationDialogConfirmBtn());
 
     await KMElement.waitToDisappear(ProjectUtils._projectsPage.getProjectItem(projectName));
-    expect(ProjectUtils._projectsPage.getProjectItem(projectName).isPresent()).toBeFalsy();
+    expect(await ProjectUtils._projectsPage.getProjectItem(projectName).isPresent()).toBeFalsy();
   }
 }

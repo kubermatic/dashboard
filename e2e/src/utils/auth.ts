@@ -16,18 +16,18 @@ export class AuthUtils {
 
     await KMElement.click(AuthUtils._dexPage.getLoginWithEmailButton());
 
-    await AuthUtils._dexPage.getLoginInput().sendKeys(username);
-    await AuthUtils._dexPage.getPasswordInput().sendKeys(password);
+    await KMElement.fill(AuthUtils._dexPage.getLoginInput(), username);
+    await KMElement.fill(AuthUtils._dexPage.getPasswordInput(), password);
     await KMElement.click(AuthUtils._dexPage.getLoginSubmitButton());
 
     await KMElement.waitToAppear(this._navPage.getLogoutButton());
-    expect(AuthUtils._navPage.getLogoutButton().isPresent()).toBeTruthy();
+    expect(await AuthUtils._navPage.getLogoutButton().isPresent()).toBeTruthy();
   }
 
   static async logout() {
     await KMElement.click(AuthUtils._navPage.getLogoutButton());
 
     await KMElement.waitToAppear(AuthUtils._loginPage.getLoginButton());
-    expect(AuthUtils._loginPage.getLoginButton().isPresent()).toBeTruthy();
+    expect(await AuthUtils._loginPage.getLoginButton().isPresent()).toBeTruthy();
   }
 }

@@ -49,114 +49,114 @@ describe('Basic story', () => {
   });
 
   it('should create a new cluster', async () => {
-    clustersPage.navigateTo();
+    await clustersPage.navigateTo();
 
-    KMElement.click(clustersPage.getAddClusterTopBtn());
+    await KMElement.click(clustersPage.getAddClusterTopBtn());
 
-    KMElement.waitToAppear(wizardPage.getClusterNameInput());
-    wizardPage.getClusterNameInput().sendKeys(clusterName);
+    await KMElement.fill(wizardPage.getClusterNameInput(), clusterName);
 
-    KMElement.click(wizardPage.getNextButton());
+    await KMElement.click(wizardPage.getNextButton());
 
-    KMElement.click(wizardPage.getProviderButton(providerName));
+    await KMElement.click(wizardPage.getProviderButton(providerName));
 
-    KMElement.click(wizardPage.getDatacenterLocationButton(datacenterLocation));
+    await KMElement.click(wizardPage.getDatacenterLocationButton(datacenterLocation));
 
-    KMElement.click(wizardPage.getCreateButton());
+    await KMElement.click(wizardPage.getCreateButton());
 
-    KMElement.waitForRedirect('/clusters/');
+    await KMElement.waitForRedirect('/clusters/');
 
-    clustersPage.navigateTo();
+    await clustersPage.navigateTo();
 
-    KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
-    expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeTruthy();
+    await KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
+    expect(await clustersPage.getClusterItem(clusterName).isPresent()).toBeTruthy();
   });
 
   it('should add a new member', async () => {
-    membersPage.navigateTo();
+    await membersPage.navigateTo();
 
-    KMElement.click(membersPage.getAddMemberBtn());
+    await KMElement.click(membersPage.getAddMemberBtn());
 
-    KMElement.waitToAppear(membersPage.getAddMemberDialog());
-    KMElement.sendKeys(membersPage.getAddMemberDialogEmailInput(), memberEmail);
+    await KMElement.waitToAppear(membersPage.getAddMemberDialog());
+    await KMElement.fill(membersPage.getAddMemberDialogEmailInput(), memberEmail);
 
-    KMElement.click(membersPage.getAddMemberDialogGroupCombobox());
-    KMElement.click(membersPage.getAddMemberDialogGroupOption(2));
-    KMElement.click(membersPage.getAddMemberDialogAddBtn());
+    await KMElement.click(membersPage.getAddMemberDialogGroupCombobox());
+    await KMElement.click(membersPage.getAddMemberDialogGroupOption(2));
+    await KMElement.click(membersPage.getAddMemberDialogAddBtn());
 
-    KMElement.waitToDisappear(membersPage.getAddMemberDialog());
-    KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
+    await KMElement.waitToDisappear(membersPage.getAddMemberDialog());
+    await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
 
-    expect(membersPage.getMemberItem(memberEmail).isPresent()).toBeTruthy();
+    expect(await membersPage.getMemberItem(memberEmail).isPresent()).toBeTruthy();
   });
 
   it('should edit created member info', async () => {
     const memberGroup = await membersPage.getMemberGroup(memberEmail).getText();
-    KMElement.click(membersPage.getMemberEditBtn(memberEmail));
 
-    KMElement.click(membersPage.getEditMemberDialogGroupCombobox());
-    membersPage.getEditMemberDialogGroupOption(3).click();
-    membersPage.getEditMemberDialogEditBtn().click();
+    await KMElement.click(membersPage.getMemberEditBtn(memberEmail));
 
-    KMElement.waitToDisappear(membersPage.getEditMemberDialog());
+    await KMElement.click(membersPage.getEditMemberDialogGroupCombobox());
+    await KMElement.click(membersPage.getEditMemberDialogGroupOption(3));
+    await KMElement.click(membersPage.getEditMemberDialogEditBtn());
+
+    await KMElement.waitToDisappear(membersPage.getEditMemberDialog());
 
     // Switch views to reload members list
-    clustersPage.navigateTo();
-    membersPage.navigateTo();
+    await clustersPage.navigateTo();
+    await membersPage.navigateTo();
 
-    KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
+    await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
     expect(await membersPage.getMemberGroup(memberEmail).getText()).not.toEqual(memberGroup);
   });
 
   it('should delete created member', async () => {
-    KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
+    await KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
 
-    KMElement.click(confirmationDialog.getConfirmationDialog());
+    await KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
+    await KMElement.click(confirmationDialog.getConfirmationDialogConfirmBtn());
 
     // Switch views to reload members list
-    clustersPage.navigateTo();
-    membersPage.navigateTo();
+    await clustersPage.navigateTo();
+    await membersPage.navigateTo();
 
-    expect(membersPage.getMemberItem(memberEmail).isPresent()).toBeFalsy();
+    expect(await membersPage.getMemberItem(memberEmail).isPresent()).toBeFalsy();
   });
 
-  it('should delete created cluster', () => {
-    ClusterUtils.deleteCluster(clusterName);
+  it('should delete created cluster', async () => {
+    await ClusterUtils.deleteCluster(clusterName);
   });
 
   it('should edit created project name', async () => {
     const oldProjectName = projectName;
-    projectsPage.navigateTo();
-
-    KMElement.click(projectsPage.getProjectEditBtn(projectName));
-    expect(projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
-
-    KMElement.waitToAppear(projectsPage.getEditProjectDialogInput());
     projectName = RandomUtils.prefixedString('e2e-test-project');
-    projectsPage.getEditProjectDialogInput().clear();
-    KMElement.sendKeys(projectsPage.getEditProjectDialogInput(), projectName);
-    KMElement.click(projectsPage.getEditProjectDialogEditBtn());
 
-    KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
+    await projectsPage.navigateTo();
 
-    KMElement.waitForRedirect('/clusters');
+    await KMElement.click(projectsPage.getProjectEditBtn(oldProjectName));
+
+    expect(await projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
+    await KMElement.fill(projectsPage.getEditProjectDialogInput(), projectName);
+    await KMElement.click(projectsPage.getEditProjectDialogEditBtn());
+    await KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
+
+    await KMElement.waitForRedirect('/clusters');
 
     // We need to wait for autoredirect after edit to finish
     // otherwise it will autoredirect again after too fast page switch.
-    browser.sleep(5000);
+    await browser.sleep(5000);
 
-    projectsPage.navigateTo();
-    KMElement.waitForRedirect('/projects');
+    await projectsPage.navigateTo();
 
-    KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
+    await KMElement.waitForRedirect('/projects');
+
+    await KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
     expect(await projectsPage.getProjectItem(projectName).getText()).not.toEqual(oldProjectName);
   });
 
   it('should delete created project', async () => {
-    ProjectUtils.deleteProject(projectName);
+    await ProjectUtils.deleteProject(projectName);
   });
 
   it('should logout', async () => {
-    AuthUtils.logout();
+    await AuthUtils.logout();
   });
 });
