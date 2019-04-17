@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
+import {Router} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
@@ -68,24 +68,7 @@ export class ProjectMockService {
   }
 
   changeViewOnProjectChange(): void {
-    const state: RouterState = this.router.routerState;
-    const snapshot: RouterStateSnapshot = state.snapshot;
-
-    if (!!this.project && this.project.status === 'Active') {
-      if ((snapshot.url.search(/(\/wizard)/) > -1) && !!this.userGroupConfig[this.userGroup].clusters.create) {
-        this.navigateToWizard();
-      } else if ((snapshot.url.search(/(\/members)/) > -1) && !!this.userGroupConfig[this.userGroup].members.view) {
-        this.navigateToMemberPage();
-      } else if ((snapshot.url.search(/(\/sshkeys)/) > -1) && !!this.userGroupConfig[this.userGroup].sshKeys.view) {
-        this.navigateToSshKeyPage();
-      } else if (snapshot.url === '/projects)') {
-        this.navigateToProjectPage();
-      } else {
-        this.navigateToClusterPage();
-      }
-    } else {
-      this.navigateToProjectPage();
-    }
+    this.navigateToProjectPage();
   }
 
   getProjectStateIconClass(): string {

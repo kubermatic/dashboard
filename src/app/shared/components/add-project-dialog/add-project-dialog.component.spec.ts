@@ -1,9 +1,10 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import Spy = jasmine.Spy;
 
 import {ApiService, ProjectService} from '../../../core/services';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
@@ -25,10 +26,11 @@ const modules: any[] = [
 describe('AddProjectDialogComponent', () => {
   let fixture: ComponentFixture<AddProjectDialogComponent>;
   let component: AddProjectDialogComponent;
+  let createProjectSpy: Spy;
 
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['createProject']);
-    apiMock.createProject.and.returnValue(asyncData(fakeDigitaloceanCluster));
+    createProjectSpy = apiMock.createProject.and.returnValue(asyncData(fakeDigitaloceanCluster));
 
     TestBed
         .configureTestingModule({
@@ -48,9 +50,18 @@ describe('AddProjectDialogComponent', () => {
   beforeEach(async(() => {
     fixture = TestBed.createComponent(AddProjectDialogComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges();
   }));
 
   it('should create the add project component', async(() => {
        expect(component).toBeTruthy();
+     }));
+
+  it('should call createProject method', fakeAsync(() => {
+       component.addProjectForm.controls.name.patchValue('new-project-name');
+       component.addProject();
+       tick();
+
+       expect(createProjectSpy.and.callThrough()).toHaveBeenCalled();
      }));
 });
