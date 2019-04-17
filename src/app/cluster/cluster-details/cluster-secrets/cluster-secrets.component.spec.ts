@@ -8,7 +8,7 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../../../app-config.service';
 import {ApiService, ProjectService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
-import {fakeHealth} from '../../../testing/fake-data/health.fake';
+import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
@@ -58,4 +58,62 @@ describe('ClusterSecretsComponent', () => {
   it('should create the cluster secrets cmp', async(() => {
        expect(component).toBeTruthy();
      }));
+
+  it('should set variable expand', () => {
+    component.isExpand(true);
+    expect(component.expand).toBeTruthy();
+
+    component.isExpand(false);
+    expect(component.expand).toBeFalsy();
+  });
+
+  it('should set icon class `km-icon-running`', () => {
+    expect(component.getIconClass(true)).toBe('km-icon-running');
+  });
+
+  it('should set icon class `km-icon-failed`', () => {
+    component.health = fakeHealthFailed();
+    expect(component.getIconClass(false)).toBe('km-icon-failed');
+  });
+
+  it('should set icon class `fa fa-spin fa-circle-o-notch`', () => {
+    component.health = fakeHealthProvisioning();
+    expect(component.getIconClass(false)).toBe('fa fa-spin fa-circle-o-notch');
+  });
+
+  it('should set correct icon for controllers', () => {
+    component.health = fakeHealthProvisioning();
+    expect(component.getIcon('apiserver')).toBe('km-icon-running');
+    expect(component.getIcon('controller')).toBe('km-icon-running');
+    expect(component.getIcon('etcd')).toBe('fa fa-spin fa-circle-o-notch');
+    expect(component.getIcon('scheduler')).toBe('fa fa-spin fa-circle-o-notch');
+    expect(component.getIcon('machineController')).toBe('km-icon-running');
+    expect(component.getIcon('userClusterControllerManager')).toBe('fa fa-spin fa-circle-o-notch');
+    expect(component.getIcon('test-controller')).toBe('');
+  });
+
+  it('should set health status `Running`', () => {
+    expect(component.getHealthStatus(true)).toBe('Running');
+  });
+
+  it('should set health status `Failed`', () => {
+    component.health = fakeHealthFailed();
+    expect(component.getHealthStatus(false)).toBe('Failed');
+  });
+
+  it('should set health status `Pending`', () => {
+    component.health = fakeHealthProvisioning();
+    expect(component.getHealthStatus(false)).toBe('Pending');
+  });
+
+  it('should set correct status for controllers', () => {
+    component.health = fakeHealthProvisioning();
+    expect(component.getStatus('apiserver')).toBe('Running');
+    expect(component.getStatus('controller')).toBe('Running');
+    expect(component.getStatus('etcd')).toBe('Pending');
+    expect(component.getStatus('scheduler')).toBe('Pending');
+    expect(component.getStatus('machineController')).toBe('Running');
+    expect(component.getStatus('userClusterControllerManager')).toBe('Pending');
+    expect(component.getStatus('test-controller')).toBe('');
+  });
 });
