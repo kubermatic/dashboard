@@ -76,7 +76,7 @@ describe('EditProviderSettingsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call patchClusterProject method', fakeAsync(() => {
+  it('should call patchCluster method', fakeAsync(() => {
        component.cluster = fakeDigitaloceanCluster();
        component.datacenter = fakeDigitaloceanDatacenter();
        component.project = fakeProject();

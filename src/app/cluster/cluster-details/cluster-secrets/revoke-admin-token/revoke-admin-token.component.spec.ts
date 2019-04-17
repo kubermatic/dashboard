@@ -53,7 +53,7 @@ describe('RevokeAdminTokenComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call revokeAdminToken method', fakeAsync(() => {
+  it('should call editToken method', fakeAsync(() => {
        component.projectID = fakeProject().id;
        component.cluster = fakeDigitaloceanCluster();
        component.datacenter = fakeDigitaloceanDatacenter();
