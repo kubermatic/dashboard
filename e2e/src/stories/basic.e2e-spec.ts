@@ -145,7 +145,6 @@ describe('Basic story', () => {
     await browser.sleep(5000);
 
     await projectsPage.navigateTo();
-
     await KMElement.waitForRedirect('/projects');
 
     await KMElement.waitToAppear(projectsPage.getProjectItem(projectName));

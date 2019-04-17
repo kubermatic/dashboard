@@ -26,7 +26,6 @@ export class ProjectUtils {
     await browser.sleep(5000);
 
     await ProjectUtils._projectsPage.navigateTo();
-
     await KMElement.waitForRedirect('/projects');
 
     await KMElement.waitToAppear(ProjectUtils._projectsPage.getProjectItem(projectName));
@@ -38,7 +37,6 @@ export class ProjectUtils {
 
   static async deleteProject(projectName: string) {
     await ProjectUtils._projectsPage.navigateTo();
-
     await KMElement.waitForRedirect('/projects');
 
     await KMElement.click(ProjectUtils._projectsPage.getDeleteProjectButton(projectName));

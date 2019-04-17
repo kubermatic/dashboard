@@ -17,6 +17,7 @@ export class ClusterUtils {
     await KMElement.click(ClusterUtils._clusterPage.getDeleteClusterDialogDeleteBtn());
 
     await KMElement.waitToAppear(ClusterUtils._clusterPage.getAddClusterTopBtn());
+
     await KMElement.waitToDisappear(ClusterUtils._clusterPage.getClusterItem(clusterName), waitTimeout);
     expect(await ClusterUtils._clusterPage.getClusterItem(clusterName).isPresent()).toBeFalsy();
   }
