@@ -42,18 +42,22 @@ describe('Multi Owner story', () => {
     await KMElement.waitToDisappear(membersPage.getAddMemberDialog());
 
     await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail2), 300000);
-    expect(membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
+    expect(await membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
+  });
+
+  it('should logout', async () => {
+    await AuthUtils.logout();
   });
 
   it('should login as a second owner', async () => {
-    await AuthUtils.logout();
     await AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
   it('should check if multi owner project is in list', async () => {
     await projectsPage.navigateTo();
+
     await KMElement.waitToAppear(projectsPage.getProjectItem(projectNameMultiOwner));
-    expect(projectsPage.getProjectItem(projectNameMultiOwner).isPresent()).toBeTruthy();
+    expect(await projectsPage.getProjectItem(projectNameMultiOwner).isPresent()).toBeTruthy();
   });
 
   it('should delete other owner from the project', async () => {
