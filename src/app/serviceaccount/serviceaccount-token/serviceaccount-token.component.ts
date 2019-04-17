@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {EMPTY, Subject, timer} from 'rxjs';
-import {first, merge, switchMap, takeUntil} from 'rxjs/operators';
+import {merge, Subject, timer} from 'rxjs';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, ProjectService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
@@ -35,15 +35,12 @@ export class ServiceAccountTokenComponent implements OnInit {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    timer(0, 5000)
-        .pipe(merge(this._externalServiceAccountTokenUpdate))
+    merge(timer(0, 10000), this._externalServiceAccountTokenUpdate)
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(
-            () => this._projectService.project ?
-                this._apiService.getServiceAccountTokens(this._projectService.project.id, this.serviceaccount) :
-                EMPTY))
-        .subscribe(serviceaccountTokens => {
-          this.serviceaccountTokens = serviceaccountTokens;
+            () => this._apiService.getServiceAccountTokens(this._projectService.project.id, this.serviceaccount)))
+        .subscribe(tokens => {
+          this.serviceaccountTokens = tokens;
           this.isInitializing = false;
         });
   }
