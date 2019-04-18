@@ -47,7 +47,7 @@ export class KMElement {
   }
 
   private static async _sendKeys(element: ElementFinder, text: string) {
-    return await element.getAttribute('value').then(async v => {
+    return element.getAttribute('value').then(async v => {
       if (v.length < text.length) {
         return await element.sendKeys(text.substring(v.length, text.length)).then(async () => {
           return await KMElement._sendKeys(element, text);
