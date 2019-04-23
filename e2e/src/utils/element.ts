@@ -1,4 +1,4 @@
-import {browser, by, element, ElementFinder, ExpectedConditions} from 'protractor';
+import {browser, ElementFinder, ExpectedConditions} from 'protractor';
 
 const defaultTimeout = 60000;
 // Number of retries to make sure that element meets required condition.
@@ -7,67 +7,59 @@ const defaultRetries = 5;
 const defaultRetryTime = 200;
 
 export class KMElement {
-  static waitToAppear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
+  static async click(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries) {
+    await KMElement._waitForClickable(element, waitTimeout, retries);
+    await element.click();
+  }
+
+  static async fill(element: ElementFinder, text: string, waitTimeout = defaultTimeout, retries = defaultRetries) {
+    await KMElement.waitToAppear(element, waitTimeout, retries);
+    await element.clear();
+    await KMElement._sendKeys(element, text);
+  }
+
+  static async waitForContent(element: ElementFinder, text: string, waitTimeout = defaultTimeout, retries = defaultRetries) {
     for(let i=0;i<retries;i++) {
-      browser.wait(ExpectedConditions.visibilityOf(element), waitTimeout);
-      browser.sleep(defaultRetryTime);
+      await browser.wait(ExpectedConditions.textToBePresentInElement(element, text), waitTimeout);
+      await browser.sleep(defaultRetryTime);
     }
   }
 
-  static waitToDisappear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
+  static async waitForRedirect(url: string, waitTimeout = defaultTimeout, retries = defaultRetries) {
+    for(let i=0; i<retries; i++) {
+      await browser.wait(ExpectedConditions.urlContains(url), waitTimeout);
+      await browser.sleep(defaultRetryTime);
+    }
+  }
+
+  static async waitToAppear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries) {
     for(let i=0;i<retries;i++) {
-      browser.wait(ExpectedConditions.invisibilityOf(element), waitTimeout);
-      browser.sleep(defaultRetryTime);
+      await browser.wait(ExpectedConditions.visibilityOf(element), waitTimeout);
+      await browser.sleep(defaultRetryTime);
     }
   }
 
-  static waitForClickable(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries): void {
+  static async waitToDisappear(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries) {
     for(let i=0;i<retries;i++) {
-      browser.wait(ExpectedConditions.elementToBeClickable(element), waitTimeout);
-      browser.sleep(defaultRetryTime);
+      await browser.wait(ExpectedConditions.invisibilityOf(element), waitTimeout);
+      await browser.sleep(defaultRetryTime);
     }
   }
 
-  static waitForContent(element: ElementFinder, text: string, waitTimeout = defaultTimeout, retries = defaultRetries): void {
-    for(let i=0;i<retries;i++) {
-      browser.wait(ExpectedConditions.textToBePresentInElement(element, text), waitTimeout);
-      browser.sleep(defaultRetryTime);
-    }
-  }
-
-  /**
-   * @param url - partial url or full expected url after redirect
-   * @param waitTimeout - wait timeout for the operation to complete
-   */
-  static waitForRedirect(url: string, waitTimeout = defaultTimeout, retries = defaultRetries): void {
-    for(let i=0;i<retries;i++) {
-      browser.wait(ExpectedConditions.urlContains(url), waitTimeout);
-      browser.sleep(defaultRetryTime);
-    }
-  }
-
-  static async waitForNotifications(): Promise<any> {
-    const closeBtn = by.className('sn-close-button');
-    if (!element(closeBtn).isPresent()) {
-      return Promise.resolve(true);
-    }
-
-    return await element.all(closeBtn).then((elements: any[]) => {
-      elements.forEach(async (elem) => {
-        await KMElement.waitToAppear(elem);
-        elem.click();
-        await KMElement.waitToDisappear(elem);
-      });
-    });
-  }
-
-  static async sendKeys(element: ElementFinder, text: string): Promise<any> {
-    return await element.getAttribute('value').then((v) => {
+  private static async _sendKeys(element: ElementFinder, text: string) {
+    return element.getAttribute('value').then(async v => {
       if (v.length < text.length) {
-        return element.sendKeys(text.substring(v.length, text.length)).then(() => {
-          return KMElement.sendKeys(element, text);
+        return await element.sendKeys(text.substring(v.length, text.length)).then(async () => {
+          return await KMElement._sendKeys(element, text);
         });
       }
     });
+  }
+
+  private static async _waitForClickable(element: ElementFinder, waitTimeout = defaultTimeout, retries = defaultRetries) {
+    for(let i=0;i<retries;i++) {
+      await browser.wait(ExpectedConditions.elementToBeClickable(element), waitTimeout);
+      await browser.sleep(defaultRetryTime);
+    }
   }
 }
