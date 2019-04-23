@@ -45,6 +45,11 @@ export class ServiceAccountTokenComponent implements OnInit {
         });
   }
 
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
   getDataSource(): MatTableDataSource<ServiceAccountTokenEntity> {
     this.dataSource.data = this.serviceaccountTokens;
     return this.dataSource;
