@@ -3,83 +3,80 @@ import {browser} from 'protractor';
 import {ClustersPage} from '../pages/clusters/clusters.po';
 import {MembersPage} from '../pages/member/member';
 import {ProjectsPage} from '../pages/projects/projects.po';
-import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 import {AuthUtils} from '../utils/auth';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from "../utils/random";
+import { ConfirmationUtils } from '../utils/confirmation';
 
 describe('Multi Owner story', () => {
   const projectsPage = new ProjectsPage();
   const clustersPage = new ClustersPage();
   const membersPage = new MembersPage();
-  const confirmationDialog = new ConfirmationDialog();
 
   const projectNameMultiOwner = RandomUtils.prefixedString('e2e-test-project-multi-owner');
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
   const memberEmail2 = browser.params.KUBERMATIC_E2E_USERNAME_2;
 
-  it('should login as a first owner', () => {
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
+  it('should login as a first owner', async () => {
+    await AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
-  it('should create a test project', () => {
-    ProjectUtils.createProject(projectNameMultiOwner);
+  it('should create a test project', async () => {
+    await ProjectUtils.createProject(projectNameMultiOwner);
   });
   
-  it('should add a new member to project', () => {
-    membersPage.navigateTo();
+  it('should add a new member to project', async () => {
+    await membersPage.navigateTo();
 
-    KMElement.waitForClickable(membersPage.getAddMemberBtn());
-    membersPage.getAddMemberBtn().click();
-    KMElement.waitToAppear(membersPage.getAddMemberDialog());
+    await KMElement.click(membersPage.getAddMemberBtn());
 
-    KMElement.waitToAppear(membersPage.getAddMemberDialogEmailInput());
-    KMElement.sendKeys(membersPage.getAddMemberDialogEmailInput(), memberEmail2);
-    KMElement.waitForClickable(membersPage.getAddMemberDialogGroupCombobox());
-    membersPage.getAddMemberDialogGroupCombobox().click();
-    membersPage.getAddMemberDialogGroupOption(1).click();
-    membersPage.getAddMemberDialogAddBtn().click();
+    await KMElement.waitToAppear(membersPage.getAddMemberDialog());
+    await KMElement.waitToAppear(membersPage.getAddMemberDialogEmailInput());
+    await KMElement.fill(membersPage.getAddMemberDialogEmailInput(), memberEmail2);
 
-    KMElement.waitToDisappear(membersPage.getAddMemberDialog());
-    KMElement.waitToAppear(membersPage.getMemberItem(memberEmail2), 300000);
-    expect(membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
+    await KMElement.click(membersPage.getAddMemberDialogGroupCombobox());
+    await KMElement.click(membersPage.getAddMemberDialogGroupOption(1));
+    await KMElement.click(membersPage.getAddMemberDialogAddBtn());
+    await KMElement.waitToDisappear(membersPage.getAddMemberDialog());
+
+    await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail2), 300000);
+    expect(await membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
   });
 
-  it('should login as a second owner', () => {
-    AuthUtils.logout();
-    AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
+  it('should logout', async () => {
+    await AuthUtils.logout();
   });
 
-  it('should check if multi owner project is in list', () => {
-    projectsPage.navigateTo();
-    KMElement.waitToAppear(projectsPage.getProjectItem(projectNameMultiOwner));
-    expect(projectsPage.getProjectItem(projectNameMultiOwner).isPresent()).toBeTruthy();
+  it('should login as a second owner', async () => {
+    await AuthUtils.login(browser.params.KUBERMATIC_E2E_USERNAME_2, browser.params.KUBERMATIC_E2E_PASSWORD);
   });
 
-  it('should delete other owner from the project', () => {
-    membersPage.navigateTo();
-    KMElement.waitForClickable(membersPage.getMemberDeleteBtn(memberEmail));
-    membersPage.getMemberDeleteBtn(memberEmail).click();
+  it('should check if multi owner project is in list', async () => {
+    await projectsPage.navigateTo();
 
-    KMElement.waitToAppear(confirmationDialog.getConfirmationDialog());
-    KMElement.waitForClickable(confirmationDialog.getConfirmationDialogConfirmBtn());
-    confirmationDialog.getConfirmationDialogConfirmBtn().click();
-    KMElement.waitToDisappear(confirmationDialog.getConfirmationDialog());
+    await KMElement.waitToAppear(projectsPage.getProjectItem(projectNameMultiOwner));
+    expect(await projectsPage.getProjectItem(projectNameMultiOwner).isPresent()).toBeTruthy();
+  });
+
+  it('should delete other owner from the project', async () => {
+    await membersPage.navigateTo();
+    await KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
+
+    await ConfirmationUtils.confirm();
 
     // Switch views to reload members list
-    clustersPage.navigateTo();
-    membersPage.navigateTo();
+    await clustersPage.navigateTo();
+    await membersPage.navigateTo();
 
-    expect(membersPage.getMemberItem(memberEmail).isPresent()).toBeFalsy();
+    expect(await membersPage.getMemberItem(memberEmail).isPresent()).toBeFalsy();
   });
 
-  it('should delete created project', () => {
-    projectsPage.navigateTo();
-    ProjectUtils.deleteProject(projectNameMultiOwner);
+  it('should delete created project', async () => {
+    await ProjectUtils.deleteProject(projectNameMultiOwner);
   });
 
-  it('should logout', () => {
-    AuthUtils.logout();
+  it('should logout', async () => {
+    await AuthUtils.logout();
   });
 });

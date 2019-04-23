@@ -5,22 +5,20 @@ import {KMElement} from './element';
 export class ClusterUtils {
   private static _clusterPage = new ClustersPage();
 
-  static deleteCluster(clusterName: string, waitTimeout = 60000): void {
-    ClusterUtils._clusterPage.navigateTo();
+  static async deleteCluster(clusterName: string, waitTimeout = 60000) {
+    await ClusterUtils._clusterPage.navigateTo();
 
-    KMElement.waitToAppear(ClusterUtils._clusterPage.getClusterItem(clusterName));
-    ClusterUtils._clusterPage.getClusterItem(clusterName).click();
+    await KMElement.click(ClusterUtils._clusterPage.getClusterItem(clusterName));
 
-    KMElement.waitForClickable(ClusterUtils._clusterPage.getDeleteClusterBtn());
-    ClusterUtils._clusterPage.getDeleteClusterBtn().click();
+    await KMElement.click(ClusterUtils._clusterPage.getDeleteClusterBtn());
 
-    KMElement.waitToAppear(ClusterUtils._clusterPage.getDeleteClusterDialog());
-    KMElement.sendKeys(ClusterUtils._clusterPage.getDeleteClusterDialogInput(), clusterName);
-    KMElement.waitForClickable(ClusterUtils._clusterPage.getDeleteClusterDialogDeleteBtn());
-    ClusterUtils._clusterPage.getDeleteClusterDialogDeleteBtn().click();
+    await KMElement.waitToAppear(ClusterUtils._clusterPage.getDeleteClusterDialog());
+    await KMElement.fill(ClusterUtils._clusterPage.getDeleteClusterDialogInput(), clusterName);
+    await KMElement.click(ClusterUtils._clusterPage.getDeleteClusterDialogDeleteBtn());
 
-    KMElement.waitToAppear(ClusterUtils._clusterPage.getAddClusterTopBtn());
-    KMElement.waitToDisappear(ClusterUtils._clusterPage.getClusterItem(clusterName), waitTimeout);
-    expect(ClusterUtils._clusterPage.getClusterItem(clusterName).isPresent()).toBeFalsy();
+    await KMElement.waitToAppear(ClusterUtils._clusterPage.getAddClusterTopBtn());
+
+    await KMElement.waitToDisappear(ClusterUtils._clusterPage.getClusterItem(clusterName), waitTimeout);
+    expect(await ClusterUtils._clusterPage.getClusterItem(clusterName).isPresent()).toBeFalsy();
   }
 }
