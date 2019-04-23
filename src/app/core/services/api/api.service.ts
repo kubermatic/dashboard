@@ -19,7 +19,7 @@ import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/Dr
 import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
 
-import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
+import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
@@ -368,10 +368,18 @@ export class ApiService {
     return this.http.post<ServiceAccountTokenEntity>(url, token, {headers: this.headers});
   }
 
-  editServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
-      Observable<ServiceAccountTokenEntity> {
-    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}tokens/${token.id}`;
-    return this.http.put<ServiceAccountTokenEntity>(url, {headers: this.headers});
+  regenerateServiceAccountToken(
+      projectID: string, serviceaccount: ServiceAccountEntity,
+      token: ServiceAccountTokenEntity): Observable<ServiceAccountTokenEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
+    return this.http.put<ServiceAccountTokenEntity>(url, token, {headers: this.headers});
+  }
+
+  patchServiceAccountToken(
+      projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity,
+      patchToken: ServiceAccountTokenPatch): Observable<ServiceAccountTokenEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
+    return this.http.patch<ServiceAccountTokenEntity>(url, patchToken, {headers: this.headers});
   }
 
   deleteServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):

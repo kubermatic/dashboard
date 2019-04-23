@@ -8,7 +8,7 @@ import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
-import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
@@ -187,6 +187,18 @@ export class ApiMockService {
 
   editServiceAccountToken(projectID: string, serviceAccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
       Observable<ServiceAccountTokenEntity> {
+    return of(this.serviceAccountToken);
+  }
+
+  regenerateServiceAccountToken(
+      projectID: string, serviceaccount: ServiceAccountEntity,
+      token: ServiceAccountTokenEntity): Observable<ServiceAccountTokenEntity> {
+    return of(this.serviceAccountToken);
+  }
+
+  patchServiceAccountToken(
+      projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity,
+      patchToken: ServiceAccountTokenPatch): Observable<ServiceAccountTokenEntity> {
     return of(this.serviceAccountToken);
   }
 

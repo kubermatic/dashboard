@@ -8,7 +8,8 @@ import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
-import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
+import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit-serviceaccount-token.component';
+import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
 @Component({
   selector: 'kubermatic-serviceaccount-token',
@@ -18,9 +19,9 @@ import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccountEntity;
+  @Input() serviceaccountTokens: ServiceAccountTokenEntity[];
   isInitializing = true;
-  serviceaccountTokens: ServiceAccountTokenEntity[] = [];
-  displayedColumns: string[] = ['name', 'creationDate', 'actions'];
+  displayedColumns: string[] = ['name', 'creationDate', 'expiry', 'actions'];
   dataSource = new MatTableDataSource<ServiceAccountTokenEntity>();
   @ViewChild(MatSort) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
@@ -78,13 +79,26 @@ export class ServiceAccountTokenComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.editServiceAccountToken(this._projectService.project.id, this.serviceaccount, token)
+        this._apiService.regenerateServiceAccountToken(this._projectService.project.id, this.serviceaccount, token)
             .pipe(first())
             .subscribe((token) => {
               this.openTokenDialog(token);
               NotificationActions.success('Success', `Token ${token.name} has been regenerated.`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
             });
+      }
+    });
+  }
+
+  editServiceAccountToken(token: ServiceAccountTokenEntity): void {
+    const modal = this._matDialog.open(EditServiceAccountTokenComponent);
+    modal.componentInstance.project = this._projectService.project;
+    modal.componentInstance.serviceaccount = this.serviceaccount;
+    modal.componentInstance.token = token;
+
+    modal.afterClosed().pipe(first()).subscribe((isAdded) => {
+      if (isAdded) {
+        this._externalServiceAccountTokenUpdate.next();
       }
     });
   }

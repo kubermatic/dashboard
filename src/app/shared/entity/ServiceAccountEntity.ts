@@ -15,11 +15,16 @@ export class CreateServiceAccountEntity {
 export class ServiceAccountTokenEntity {
   creationTimestamp: Date;
   deletionTimestamp?: Date;
+  expiry: Date;
   id: string;
   name: string;
   token?: string;
 }
 
 export class CreateTokenEntity {
+  name: string;
+}
+
+export class ServiceAccountTokenPatch {
   name: string;
 }

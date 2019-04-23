@@ -8,6 +8,7 @@ import {AppConfigService} from '../../app-config.service';
 import {ApiService, ProjectService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
+import {fakeServiceAccountTokens} from '../../testing/fake-data/serviceaccount.fake';
 import {RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {ApiMockService} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
@@ -46,6 +47,7 @@ describe('ServiceAccountTokenComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ServiceAccountTokenComponent);
     component = fixture.componentInstance;
+    component.serviceaccountTokens = fakeServiceAccountTokens();
     fixture.detectChanges();
     fixture.debugElement.injector.get(Router);
   });

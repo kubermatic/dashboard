@@ -3,10 +3,10 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {first} from 'rxjs/operators';
 
-import {ApiService} from '../../core/services';
-import {NotificationActions} from '../../redux/actions/notification.actions';
-import {ProjectEntity} from '../../shared/entity/ProjectEntity';
-import {CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {ApiService} from '../../../core/services';
+import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
 import {TokenDialogComponent} from '../token-dialog/token-dialog.component';
 
 @Component({

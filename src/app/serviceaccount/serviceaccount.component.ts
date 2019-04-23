@@ -11,9 +11,9 @@ import {MemberEntity} from '../shared/entity/MemberEntity';
 import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
-import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
+import {AddServiceAccountTokenComponent} from './serviceaccount-token/add-serviceaccount-token/add-serviceaccount-token.component';
 
 @Component({
   selector: 'kubermatic-serviceaccount',
@@ -26,6 +26,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   serviceAccounts: ServiceAccountEntity[] = [];
   currentUser: MemberEntity;
   isShowToken = [];
+  tokenList = [];
   displayedColumns: string[] = ['status', 'name', 'group', 'creationDate', 'actions'];
   toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
@@ -82,6 +83,16 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
   toggleToken(element: ServiceAccountEntity): void {
     this.isShowToken[element.id] = !this.isShowToken[element.id];
+    if (!!this.isShowToken) {
+      this.getTokenList(element);
+    }
+  }
+
+  getTokenList(serviceaccount: ServiceAccountEntity): void {
+    this.tokenList[serviceaccount.id] = [];
+    this._apiService.getServiceAccountTokens(this._projectService.project.id, serviceaccount).subscribe(tokens => {
+      this.tokenList[serviceaccount.id] = tokens;
+    });
   }
 
   addServiceAccount(): void {

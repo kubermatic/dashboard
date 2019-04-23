@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
 
 @Component({
   selector: 'kubermatic-token-dialog',
