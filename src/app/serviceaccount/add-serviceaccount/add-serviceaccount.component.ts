@@ -23,7 +23,7 @@ export class AddServiceAccountComponent implements OnInit {
   ngOnInit(): void {
     this.addServiceAccountForm = new FormGroup({
       name: new FormControl('', [Validators.required]),
-      group: new FormControl('', [Validators.required]),
+      group: new FormControl('editors', [Validators.required]),
     });
   }
 

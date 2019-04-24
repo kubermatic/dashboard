@@ -9,6 +9,7 @@ import {ConfirmationDialogComponent} from '../shared/components/confirmation-dia
 import {MemberEntity} from '../shared/entity/MemberEntity';
 import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
+import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
 
@@ -67,16 +68,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   }
 
   getStateIconClass(status: string): string {
-    switch (status) {
-      case 'Active':
-        return 'fa fa-circle green';
-      case 'Inactive':
-        return 'fa fa-circle-o red';
-      case 'Terminating':
-        return 'fa fa-spin fa-circle-o-notch orange';
-      default:
-        return 'fa fa-spin fa-circle-o-notch orange';
-    }
+    return ProjectUtils.getStateIconClass(status);
   }
 
   getGroupDisplayName(group: string): string {

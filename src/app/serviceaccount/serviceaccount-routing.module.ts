@@ -8,7 +8,7 @@ const routes: Routes = [
     path: '',
     component: ServiceAccountComponent,
     canActivate: [AuthGuard],
-    data: {title: 'Manage Service Accounts'},
+    data: {title: 'Service Accounts'},
   },
 ];
 
