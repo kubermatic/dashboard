@@ -76,7 +76,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.cluster = cluster;
 
           return combineLatest(
-              this._apiService.getClusterSSHKeys(cluster.id, datacenter.metadata.name, this._projectService.getCurrentProjectId()),
+              this._apiService.getClusterSSHKeys(
+                  cluster.id, datacenter.metadata.name, this._projectService.getCurrentProjectId()),
               this._datacenterService.getDataCenter(cluster.spec.cloud.dc),
           );
         }))
@@ -91,7 +92,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           return combineLatest(
               this._apiService.getCluster(
                   this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId()),
-              this._apiService.getClusterHealth(this.cluster.id, seedDCName, this._projectService.getCurrentProjectId()),
+              this._apiService.getClusterHealth(
+                  this.cluster.id, seedDCName, this._projectService.getCurrentProjectId()),
               this._apiService.getClusterEvents(
                   this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId()));
         }))

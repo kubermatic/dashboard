@@ -12,6 +12,7 @@ import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fake';
+import {fakeEvents} from '../../testing/fake-data/event.fake';
 import {fakeHealth} from '../../testing/fake-data/health.fake';
 import {nodeDeploymentsFake, nodesFake} from '../../testing/fake-data/node.fake';
 import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
@@ -38,7 +39,7 @@ describe('ClusterDetailsComponent', () => {
   beforeEach(async(() => {
     apiMock = jasmine.createSpyObj('ApiService', [
       'getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL',
-      'getNodeDeployments', 'getClusterHealth'
+      'getNodeDeployments', 'getClusterHealth', 'getClusterEvents'
     ]);
     apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
     apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
@@ -47,6 +48,7 @@ describe('ClusterDetailsComponent', () => {
     apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
     apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
     apiMock.getClusterHealth.and.returnValue(asyncData(fakeHealth()));
+    apiMock.getClusterEvents.and.returnValue(asyncData(fakeEvents()));
 
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
     datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
