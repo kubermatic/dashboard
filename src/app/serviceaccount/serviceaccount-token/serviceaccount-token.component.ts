@@ -21,7 +21,7 @@ export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccountEntity;
   @Input() serviceaccountTokens: ServiceAccountTokenEntity[];
   isInitializing = true;
-  displayedColumns: string[] = ['name', 'creationDate', 'expiry', 'actions'];
+  displayedColumns: string[] = ['name', 'expiry', 'creationDate', 'actions'];
   dataSource = new MatTableDataSource<ServiceAccountTokenEntity>();
   @ViewChild(MatSort) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
