@@ -127,7 +127,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
     } else {
       const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
       const urlArray = snapshot.url.split('/');
-      return !!urlArray.find((x) => x === selectedProjectId) && !!urlArray.find((x) => x === url);
+      return (
+          !!urlArray.find((x) => x === selectedProjectId) &&
+          (!!urlArray.find((x) => x === url) || (url === 'clusters' && !!urlArray.find((x) => x === 'wizard'))));
     }
   }
 
