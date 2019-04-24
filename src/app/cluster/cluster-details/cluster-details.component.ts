@@ -9,6 +9,7 @@ import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, ProjectService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
+import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
@@ -48,6 +49,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   moreSshKeys = false;
   someUpgradesRestrictedByKubeletVersion = false;
   projectID: string;
+  events: EventEntity[] = [];
   private _versionsList: string[] = [];
   private _externalClusterUpdate: Subject<any> = new Subject();
   private _unsubscribe: Subject<any> = new Subject();
@@ -69,48 +71,41 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         this._apiService.getCluster(clusterName, seedDCName, this._projectService.getCurrentProjectId()))
         .pipe(retry(3))
         .pipe(first())
+        .pipe(switchMap(([datacenter, cluster]) => {
+          this.datacenter = datacenter;
+          this.cluster = cluster;
+
+          return combineLatest(
+              this._apiService.getClusterSSHKeys(cluster.id, datacenter.metadata.name, this._projectService.getCurrentProjectId()),
+              this._datacenterService.getDataCenter(cluster.spec.cloud.dc),
+          );
+        }))
+        .pipe(first())
+        .pipe(switchMap(([keys, datacenter]) => {
+          this.sshKeys = keys;
+          this.nodeDc = datacenter;
+
+          return merge(timer(0, 10 * this._appConfigService.getRefreshTimeBase()), this._externalClusterUpdate);
+        }))
+        .pipe(switchMap(() => {
+          return combineLatest(
+              this._apiService.getCluster(
+                  this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId()),
+              this._apiService.getClusterHealth(this.cluster.id, seedDCName, this._projectService.getCurrentProjectId()),
+              this._apiService.getClusterEvents(
+                  this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId()));
+        }))
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(
-            (data: any[]) => {
-              this.datacenter = data[0];
-              this.cluster = data[1];
+            ([cluster, health, events]) => {
+              this.cluster = cluster;
+              this.health = health;
+              this.events = events;
+              this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
+              this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
 
-              // Load SSH keys and node datacenter only during first load.
-              this._apiService
-                  .getClusterSSHKeys(
-                      this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId())
-                  .pipe(takeUntil(this._unsubscribe))
-                  .subscribe((keys) => {
-                    this.sshKeys = keys;
-                  });
-
-              this._datacenterService.getDataCenter(this.cluster.spec.cloud.dc)
-                  .pipe(takeUntil(this._unsubscribe))
-                  .subscribe((datacenter) => {
-                    this.nodeDc = datacenter;
-                  });
-
-              // Register cluster reload interval.
-              merge(timer(0, 10 * this._appConfigService.getRefreshTimeBase()), this._externalClusterUpdate)
-                  .pipe(takeUntil(this._unsubscribe))
-                  .subscribe(() => {
-                    this._apiService
-                        .getCluster(
-                            this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId())
-                        .pipe(takeUntil(this._unsubscribe), retry(3))
-                        .pipe(switchMap(cluster => {
-                          this.cluster = cluster;
-                          return this._apiService.getClusterHealth(
-                              this.cluster.id, seedDCName, this._projectService.getCurrentProjectId());
-                        }))
-                        .subscribe((health) => {
-                          this.health = health;
-                          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-                          this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
-
-                          this._reloadVersions();
-                          this.reloadClusterNodes();
-                        });
-                  });
+              this._reloadVersions();
+              this.reloadClusterNodes();
             },
             (error) => {
               if (error.status === 404) {
