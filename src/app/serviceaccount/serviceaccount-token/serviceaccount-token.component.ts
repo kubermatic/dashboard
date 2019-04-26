@@ -1,7 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {merge, Subject, timer} from 'rxjs';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {first} from 'rxjs/operators';
 
 import {ApiService, ProjectService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
@@ -20,12 +19,10 @@ import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 export class ServiceAccountTokenComponent implements OnInit {
   @Input() serviceaccount: ServiceAccountEntity;
   @Input() serviceaccountTokens: ServiceAccountTokenEntity[];
-  isInitializing = true;
+  @Input() isInitializing: boolean;
   displayedColumns: string[] = ['name', 'expiry', 'creationDate', 'actions'];
   dataSource = new MatTableDataSource<ServiceAccountTokenEntity>();
   @ViewChild(MatSort) sort: MatSort;
-  private _unsubscribe: Subject<any> = new Subject();
-  private _externalServiceAccountTokenUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -35,20 +32,6 @@ export class ServiceAccountTokenComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
-
-    merge(timer(0, 10000), this._externalServiceAccountTokenUpdate)
-        .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(
-            () => this._apiService.getServiceAccountTokens(this._projectService.project.id, this.serviceaccount)))
-        .subscribe(tokens => {
-          this.serviceaccountTokens = tokens;
-          this.isInitializing = false;
-        });
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 
   getDataSource(): MatTableDataSource<ServiceAccountTokenEntity> {
@@ -95,12 +78,6 @@ export class ServiceAccountTokenComponent implements OnInit {
     modal.componentInstance.project = this._projectService.project;
     modal.componentInstance.serviceaccount = this.serviceaccount;
     modal.componentInstance.token = token;
-
-    modal.afterClosed().pipe(first()).subscribe((isAdded) => {
-      if (isAdded) {
-        this._externalServiceAccountTokenUpdate.next();
-      }
-    });
   }
 
   deleteServiceAccountToken(token: ServiceAccountTokenEntity): void {

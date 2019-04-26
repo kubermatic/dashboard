@@ -27,6 +27,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   currentUser: MemberEntity;
   isShowToken = [];
   tokenList = [];
+  isTokenInitializing = [];
   displayedColumns: string[] = ['status', 'name', 'group', 'creationDate', 'actions'];
   toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
@@ -34,6 +35,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   shouldToggleToken = (index, item) => this.isShowToken[item.id];
   private _unsubscribe: Subject<any> = new Subject();
   private _externalServiceAccountUpdate: Subject<any> = new Subject();
+  private _externalServiceAccountTokenUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -85,14 +87,20 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     this.isShowToken[element.id] = !this.isShowToken[element.id];
     if (!!this.isShowToken) {
       this.getTokenList(element);
+      this.isTokenInitializing[element.id] = true;
     }
   }
 
   getTokenList(serviceaccount: ServiceAccountEntity): void {
     this.tokenList[serviceaccount.id] = [];
-    this._apiService.getServiceAccountTokens(this._projectService.project.id, serviceaccount).subscribe(tokens => {
-      this.tokenList[serviceaccount.id] = tokens;
-    });
+    merge(timer(0, 10000), this._externalServiceAccountTokenUpdate)
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(
+            switchMap(() => this._apiService.getServiceAccountTokens(this._projectService.project.id, serviceaccount)))
+        .subscribe(tokens => {
+          this.tokenList[serviceaccount.id] = tokens;
+          this.isTokenInitializing[serviceaccount.id] = false;
+        });
   }
 
   addServiceAccount(): void {
@@ -158,7 +166,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
     modal.afterClosed().pipe(first()).subscribe((isAdded) => {
       if (isAdded) {
-        this._externalServiceAccountUpdate.next();
+        this._externalServiceAccountTokenUpdate.next();
       }
     });
   }
