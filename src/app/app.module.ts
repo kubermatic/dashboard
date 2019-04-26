@@ -2,9 +2,10 @@ import {NgReduxFormModule} from '@angular-redux/form';
 import {NgReduxModule} from '@angular-redux/store';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
+import {environment} from '../environments/environment';
 import {AppConfigService} from './app-config.service';
 import {AppRoutingModule} from './app-routing.module';
 import {CoreModule} from './core/core.module';
@@ -28,7 +29,7 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
     CoreModule,
     SharedModule,
     BrowserModule,
-    BrowserAnimationsModule,
+    environment.animations ? BrowserAnimationsModule : NoopAnimationsModule,
     AppRoutingModule,
     NgReduxFormModule,
     NgReduxModule,
