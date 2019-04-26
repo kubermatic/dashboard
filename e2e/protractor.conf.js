@@ -29,10 +29,6 @@ function createConfig() {
     directConnect: true,
     baseUrl: 'http://localhost:8000/',
 
-    plugins: [
-      failFast.init(),
-    ],
-
     onPrepare() {
       if(process.env.KUBERMATIC_DEX_DEV_E2E_USERNAME === undefined) {
         throw new Error(`'KUBERMATIC_DEX_DEV_E2E_USERNAME' environment variable has to be set.`)
@@ -75,10 +71,6 @@ function createConfig() {
         });
       });
     },
-
-    afterLaunch() {
-      failFast.clean();
-    }
   };
 
   if (!!process.env.JOB_NAME) {
