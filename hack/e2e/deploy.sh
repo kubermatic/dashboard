@@ -51,9 +51,9 @@ function patch::kubeconfig {
 function prepare::files {
 	mkdir -p ./helm
 	cp -r $GOPATH/src/github.com/kubermatic/kubermatic/config/oauth ${DEX_PATH}
-	rm ${DEX_PATH}/templates/dex-ingress.yaml
+	rm ${DEX_PATH}/templates/ingress.yaml
 	patch ${DEX_PATH}/values.yaml ./patch/oauth_values.patch
-	patch ${DEX_PATH}/templates/dex-config.yaml ./patch/dex-config.patch
+	patch ${DEX_PATH}/templates/configmap.yaml ./patch/dex-config.patch
 
 	cp -r $GOPATH/src/github.com/kubermatic/kubermatic/config/kubermatic ${KUBERMATIC_PATH}
 	rm ${KUBERMATIC_PATH}/templates/ingress.yaml
