@@ -1,6 +1,8 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
 
 .km-sub-nav {
+  padding: $baseline-grid (2.5 * $baseline-grid);
   color: $light-text-color;
   line-height: 40px;
 

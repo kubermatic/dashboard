@@ -6,5 +6,4 @@ import {Component} from '@angular/core';
   styleUrls: ['./terms-of-service.component.scss'],
 })
 export class TermsOfServiceComponent {
-  constructor() {}
 }

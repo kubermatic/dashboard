@@ -1,16 +1,11 @@
 import {by, element} from 'protractor';
 
 import {NavPage} from '../shared/nav.po';
+import {KMElement} from '../../utils/element';
 
 export class ClustersPage extends NavPage {
-  private _deleteClusterBtn = by.id('km-delete-cluster-btn');
-  private _deleteClusterDialog = by.id('km-delete-cluster-dialog');
-  private _deleteClusterDialogDeleteBtn = by.id('km-delete-cluster-dialog-delete-btn');
-  private _deleteClusterDialogInput = by.id('km-delete-cluster-dialog-input');
-  private _addClusterTopBtn = by.id('km-add-cluster-top-btn');
-
   navigateTo(): any {
-    return this.getClustersNavButton().click();
+    return KMElement.click(super.getClustersNavButton());
   }
 
   getClusterItem(clusterName: string): any {
@@ -18,23 +13,23 @@ export class ClustersPage extends NavPage {
   }
 
   getDeleteClusterBtn(): any {
-    return element(this._deleteClusterBtn);
+    return element(by.id('km-delete-cluster-btn'));
   }
 
   getDeleteClusterDialog(): any {
-    return element(this._deleteClusterDialog);
+    return element(by.id('km-delete-cluster-dialog'));
   }
 
   getDeleteClusterDialogDeleteBtn(): any {
-    return element(this._deleteClusterDialogDeleteBtn);
+    return element(by.id('km-delete-cluster-dialog-delete-btn'));
   }
 
   getDeleteClusterDialogInput(): any {
-    return element(this._deleteClusterDialogInput);
+    return element(by.id('km-delete-cluster-dialog-input'));
   }
 
   getAddClusterTopBtn(): any {
-    return element(this._addClusterTopBtn);
+    return element(by.id('km-add-cluster-top-btn'));
   }
 
   getNodeDeploymentItem(nodeDeploymentName: string): any {

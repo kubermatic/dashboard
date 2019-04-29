@@ -127,4 +127,14 @@
       }
     }
   }
+
+  .km-sidenav-bottom {
+    border-top: $primary-light solid $sidenav-border-width;
+    font-size: $subhead-font-size-base;
+
+    .mat-list-item a i {
+      width: 2 * $baseline-grid;
+      height: 2 * $baseline-grid;
+    }
+  }
 }

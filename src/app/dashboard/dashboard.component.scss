@@ -1,9 +1,12 @@
+@import '../../assets/css/variables';
+
 :host {
   display: flex;
 
   ::ng-deep {
     & > *:not(router-outlet) {
       flex: 1 1 auto;
+      padding: 0 (2.5 * $baseline-grid);
     }
   }
 }

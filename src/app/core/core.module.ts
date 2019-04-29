@@ -19,7 +19,6 @@ import {FooterComponent} from './components/footer/footer.component';
 import {NavigationComponent} from './components/navigation/navigation.component';
 import {NotificationComponent} from './components/notification/notification.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {SidenavService} from './components/sidenav/sidenav.service';
 import {CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ApiService, Auth, AuthGuard, ClusterService, DatacenterService} from './services';
 import {WizardService} from './services';
@@ -59,7 +58,6 @@ const services: any[] = [
   WizardService,
   StepsService,
   ClusterNameGenerator,
-  SidenavService,
   ApiService,
   ClusterService,
 ];

@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {environment} from '../../../../environments/environment';
-import {AppConstants} from '../../../shared/constants/constants';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {Auth, ProjectService, UserService} from '../../services';
-import {SidenavService} from '../sidenav/sidenav.service';
 
 @Component({
   selector: 'kubermatic-navigation',
@@ -17,14 +15,10 @@ export class NavigationComponent implements OnInit {
   currentUser: MemberEntity;
 
   constructor(
-      public auth: Auth, private sidenavService: SidenavService, private router: Router,
-      private userService: UserService, private projectService: ProjectService) {}
+      public auth: Auth, private router: Router, private userService: UserService,
+      private projectService: ProjectService) {}
 
   ngOnInit(): void {
-    if (window.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
-      this.sidenavService.close();
-    }
-
     if (this.auth.authenticated()) {
       this.userService.getUser().subscribe((user) => {
         this.currentUser = user;
@@ -41,11 +35,5 @@ export class NavigationComponent implements OnInit {
 
   scrolledChanged(isScrolled): void {
     this.isScrolled = isScrolled;
-  }
-
-  onResize(event): void {
-    if (event.target.innerWidth < AppConstants.MOBILE_RESOLUTION_BREAKPOINT) {
-      this.sidenavService.close();
-    }
   }
 }

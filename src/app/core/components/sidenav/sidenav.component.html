@@ -63,18 +63,10 @@
         </mat-list-item>
       </div>
 
-      <mat-list-item>
-        <a id="km-nav-item-projects"
-           mat-line
-           fxLayoutAlign=" center"
-           routerLink="/projects"
-           [ngClass]="getLinkClass('projects')">
-          <i class="km-icon-project"></i> Projects</a>
-      </mat-list-item>
     </div>
   </mat-nav-list>
-  <!--side border-->
-  <mat-nav-list *ngIf="customLinks && customLinks.length > 0"
+
+  <mat-nav-list *ngIf="isCustomLinkPanelVisible()"
                 class="km-nav-custom-container"
                 fxFlex>
     <mat-list-item *ngFor="let link of customLinks">
@@ -86,4 +78,21 @@
       </a>
     </mat-list-item>
   </mat-nav-list>
+
+  <div *ngIf="!isCustomLinkPanelVisible()"
+       fxFlex></div>
+
+  <div class="km-sidenav-bottom">
+    <mat-nav-list>
+      <mat-list-item>
+        <a id="km-nav-item-projects"
+           mat-line
+           fxLayoutAlign="center center"
+           routerLink="/projects">
+          <i class="km-icon-arrow-left"></i>
+          <span>back to projects</span>
+        </a>
+      </mat-list-item>
+    </mat-nav-list>
+  </div>
 </div>

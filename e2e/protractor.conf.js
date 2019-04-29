@@ -1,7 +1,6 @@
 // Protractor configuration file, see link for more information
 // https://github.com/angular/protractor/blob/master/lib/config.ts
 
-const failFast = require('protractor-fail-fast');
 const {SpecReporter} = require('jasmine-spec-reporter');
 
 exports.config = createConfig();
@@ -17,7 +16,7 @@ function createConfig() {
     capabilities: {
       browserName: 'chrome',
       chromeOptions: {
-        args: ['--no-sandbox', '--disable-gpu', '--window-size=1920,1080', '--disable-browser-side-navigation']
+        args: ['--no-sandbox', '--disable-gpu', '--window-size=1920,1080', '--disable-extensions', '--disable-dev-shm-usage', '--disable-infobars', '--disable-browser-side-navigation']
       }
     },
 
@@ -81,7 +80,7 @@ function createConfig() {
     config.capabilities = {
       browserName: 'chrome',
       chromeOptions: {
-        args: ['--headless', '--no-sandbox', '--disable-gpu', '--window-size=1920,1080', '--disable-extensions', '--disable-dev-shm-usage', '--disable-infobars']
+        args: ['--headless', '--no-sandbox', '--disable-gpu', '--window-size=1920,1080', '--disable-extensions', '--disable-dev-shm-usage', '--disable-infobars', '--disable-browser-side-navigation']
       },
       loggingPrefs: {
         driver: 'DEBUG',

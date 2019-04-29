@@ -6,8 +6,6 @@ import {NotificationActions} from '../../../redux/actions/notification.actions';
 
 @Injectable()
 export class ErrorNotificationsInterceptor implements HttpInterceptor {
-  constructor() {}
-
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
         tap(

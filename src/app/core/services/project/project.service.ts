@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
-import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
+import {Router, RouterStateSnapshot} from '@angular/router';
 import {Subject} from 'rxjs/Subject';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig, UserGroupConfig} from '../../../shared/model/Config';
+import {ProjectUtils} from '../../../shared/utils/project-utils/project-utils';
 import {UserService} from '../user/user.service';
 
 @Injectable()
@@ -35,19 +36,19 @@ export class ProjectService {
     return project && JSON.parse(project);
   }
 
-  getUserGroupConfig(): GroupConfig {
+  getUserGroupConfig(userGroup: string = this.userGroup): GroupConfig {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    return !!this.userGroupConfig ? this.userGroupConfig[this.userGroup] : undefined;
+    return !!this.userGroupConfig ? this.userGroupConfig[userGroup] : undefined;
   }
 
-  changeAndStoreSelectedProject(project: ProjectEntity): void {
+  async changeAndStoreSelectedProject(project: ProjectEntity, changeView = true): Promise<any> {
     this.changeSelectedProject(project);
     this.storeProject(project);
     if (this.project.id !== '') {
-      this.userService.currentUserGroup(this.project.id).subscribe((group) => {
-        this.userGroup = group;
+      this.userGroup = await this.userService.currentUserGroup(this.project.id).toPromise();
+      if (changeView) {
         this.changeViewOnProjectChange();
-      });
+      }
     } else {
       this.userGroup = null;
       this.navigateToProjectPage();
@@ -84,15 +85,14 @@ export class ProjectService {
 
   changeViewOnProjectChange(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    const router: Router = this.router;
+    const snapshot: RouterStateSnapshot = this.router.routerState.snapshot;
+    const urlArray = snapshot.url.split('/');
     setTimeout(() => {
-      const state: RouterState = router.routerState;
-      const snapshot: RouterStateSnapshot = state.snapshot;
-      const urlArray = snapshot.url.split('/');
-
-      if (!!this.project && this.project.status === 'Active') {
+      if (this.isCurrentProjectActive()) {
         if ((snapshot.url.search(/(\/wizard)/) > -1) && !!this.userGroupConfig[this.userGroup].clusters.create) {
           this.navigateToWizard();
+        } else if ((snapshot.url.search(/(\/clusters)/) > -1) && !!this.userGroupConfig[this.userGroup].clusters.view) {
+          this.navigateToClusterPage();
         } else if ((snapshot.url.search(/(\/members)/) > -1) && !!this.userGroupConfig[this.userGroup].members.view) {
           this.navigateToMemberPage();
         } else if ((snapshot.url.search(/(\/sshkeys)/) > -1) && !!this.userGroupConfig[this.userGroup].sshKeys.view) {
@@ -103,10 +103,8 @@ export class ProjectService {
           this.navigateToServiceAccountPage();
         } else if (!!urlArray.find((x) => x === this.project.id) && !!urlArray.find((x) => x === 'dc')) {
           this.navigateToClusterDetailPage(snapshot.url);
-        } else if (snapshot.url === '/projects)') {
-          this.navigateToProjectPage();
         } else {
-          this.navigateToClusterPage();
+          this.navigateToProjectPage();
         }
       } else {
         this.navigateToProjectPage();
@@ -114,16 +112,16 @@ export class ProjectService {
     }, 500);
   }
 
+  isCurrentProjectActive(): boolean {
+    return ProjectUtils.isProjectActive(this.project);
+  }
+
   isViewEnabled(viewName: string): boolean {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    if (!this.project || this.project.status !== 'Active') {
-      return false;
+    if (!!this.project && this.project.status === 'Active' && !!this.userGroupConfig && this.userGroup) {
+      return this.userGroupConfig[this.userGroup][viewName].view;
     } else {
-      if (!!this.userGroupConfig && this.userGroup) {
-        return this.userGroupConfig[this.userGroup][viewName].view;
-      } else {
-        return false;
-      }
+      return false;
     }
   }
 

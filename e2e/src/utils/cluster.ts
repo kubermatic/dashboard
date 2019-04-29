@@ -1,11 +1,13 @@
 import {ClustersPage} from '../pages/clusters/clusters.po';
 
 import {KMElement} from './element';
+import {defaultTimeout} from './constants';
+import {browser} from 'protractor';
 
 export class ClusterUtils {
   private static _clusterPage = new ClustersPage();
 
-  static async deleteCluster(clusterName: string, waitTimeout = 60000) {
+  static async deleteCluster(clusterName: string, waitTimeout = defaultTimeout) {
     await ClusterUtils._clusterPage.navigateTo();
 
     await KMElement.click(ClusterUtils._clusterPage.getClusterItem(clusterName));
@@ -19,6 +21,6 @@ export class ClusterUtils {
     await KMElement.waitToAppear(ClusterUtils._clusterPage.getAddClusterTopBtn());
 
     await KMElement.waitToDisappear(ClusterUtils._clusterPage.getClusterItem(clusterName), waitTimeout);
-    expect(await ClusterUtils._clusterPage.getClusterItem(clusterName).isPresent()).toBeFalsy();
+    expect(await browser.isElementPresent(ClusterUtils._clusterPage.getClusterItem(clusterName))).toBeFalsy();
   }
 }

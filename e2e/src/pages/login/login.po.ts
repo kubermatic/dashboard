@@ -2,11 +2,8 @@ import {browser, by, element} from 'protractor';
 import {NavPage} from '../shared/nav.po';
 
 export class LoginPage extends NavPage {
-  private _loginButton = by.id('login-button');
-  private _loginButtonNavbar = by.className('km-button km-login');
-
-  async navigateTo(): Promise<any> {
-    return await browser.get('/');
+  navigateTo(): any {
+    return browser.get('/');
   }
 
   getPageTitle(): any {
@@ -14,10 +11,10 @@ export class LoginPage extends NavPage {
   }
 
   getLoginButton(): any {
-    return element(this._loginButton);
+    return element(by.id('login-button'));
   }
 
   getNavbarLoginButton(): any {
-    return element(this._loginButtonNavbar);
+    return element(by.className('km-button km-login'));
   }
 }

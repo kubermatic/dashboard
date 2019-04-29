@@ -14,7 +14,8 @@ export class MemberUtils {
         return 'Editor';
       case 'viewers':
         return 'Viewer';
+      default:
+        return '';
     }
-    return '';
   }
 }

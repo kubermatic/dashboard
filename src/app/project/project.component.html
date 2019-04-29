@@ -95,13 +95,13 @@
                         [attr.id]="'km-edit-project-' + element.name"
                         matTooltip="Edit Project"
                         (click)="editProject(element, $event)"
-                        [disabled]="!isEditEnabled()"></button>
+                        [disabled]="!isEditEnabled(element)"></button>
 
                 <button class="km-icon-delete black"
                         [attr.id]="'km-delete-project-' + element.name"
                         matTooltip="Delete Project"
                         (click)="deleteProject(element, $event)"
-                        [disabled]="!isDeleteEnabled()"></button>
+                        [disabled]="!isDeleteEnabled(element)"></button>
               </ng-container>
             </ng-container>
           </div>
@@ -113,7 +113,8 @@
           *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row
           *matRowDef="let row; columns: displayedColumns"
-          class="km-mat-row km-clickable"
+          class="km-mat-row"
+          [ngClass]="{'km-clickable': isProjectActive(row)}"
           (click)="selectProject(row)"></tr>
     </table>
 

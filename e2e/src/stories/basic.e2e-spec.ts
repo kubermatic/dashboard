@@ -9,7 +9,8 @@ import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
 import {ClusterUtils} from '../utils/cluster';
-import { ConfirmationUtils } from '../utils/confirmation';
+import {ConfirmationUtils} from '../utils/confirmation';
+import {minute} from "../utils/constants";
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -47,45 +48,74 @@ describe('Basic story', () => {
     await ProjectUtils.createProject(projectName);
   });
 
-  it('should create a new cluster', async () => {
-    await clustersPage.navigateTo();
-
-    await KMElement.click(clustersPage.getAddClusterTopBtn());
-
-    await KMElement.fill(wizardPage.getClusterNameInput(), clusterName);
-
-    await KMElement.click(wizardPage.getNextButton());
-
-    await KMElement.click(wizardPage.getProviderButton(providerName));
-
-    await KMElement.click(wizardPage.getDatacenterLocationButton(datacenterLocation));
-
-    await KMElement.click(wizardPage.getCreateButton());
-
-    await KMElement.waitForRedirect('/clusters/');
-
-    await clustersPage.navigateTo();
-
-    await KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
-    expect(await clustersPage.getClusterItem(clusterName).isPresent()).toBeTruthy();
+  it('should select the new project', async () => {
+    await ProjectUtils.selectProject(projectName);
   });
 
-  it('should add a new member', async () => {
+  it('should go to clusters page', async () => {
+    await clustersPage.navigateTo();
+  });
+
+  it('should click on add cluster button', async () => {
+    await KMElement.click(clustersPage.getAddClusterTopBtn());
+  });
+
+  it('should set cluster name', async () => {
+    await KMElement.fill(wizardPage.getClusterNameInput(), clusterName);
+    await KMElement.click(wizardPage.getNextButton());
+  });
+
+  it('should set the provider', async () => {
+    await KMElement.click(wizardPage.getProviderButton(providerName));
+  });
+
+  it('should set the datacenter location', async () => {
+    await KMElement.click(wizardPage.getDatacenterLocationButton(datacenterLocation));
+  });
+
+  it('should confirm cluster creation', async () => {
+    await KMElement.click(wizardPage.getCreateButton());
+  });
+
+  it('should wait for redirect to cluster details', async () => {
+    await KMElement.waitForRedirect('/clusters/');
+  });
+
+  it('should go back to clusters page', async () => {
+    await clustersPage.navigateTo();
+  });
+
+  it('should check if cluster was created', async () => {
+    await KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
+    expect(await clustersPage.getClusterItem(clusterName).isDisplayed()).toBeTruthy();
+  });
+
+  it('should go to the members page', async () => {
     await membersPage.navigateTo();
+  });
 
+  it('should open add member dialog', async () => {
     await KMElement.click(membersPage.getAddMemberBtn());
-
     await KMElement.waitToAppear(membersPage.getAddMemberDialog());
-    await KMElement.fill(membersPage.getAddMemberDialogEmailInput(), memberEmail);
+  });
 
+  it('should fill member email', async () => {
+    await KMElement.fill(membersPage.getAddMemberDialogEmailInput(), memberEmail);
+  });
+
+  it('should fill member role', async () => {
     await KMElement.click(membersPage.getAddMemberDialogGroupCombobox());
     await KMElement.click(membersPage.getAddMemberDialogGroupOption(2));
+  });
+
+  it('should confirm member creation', async () => {
     await KMElement.click(membersPage.getAddMemberDialogAddBtn());
-
     await KMElement.waitToDisappear(membersPage.getAddMemberDialog());
-    await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
+  });
 
-    expect(await membersPage.getMemberItem(memberEmail).isPresent()).toBeTruthy();
+  it('should wait for member to appear on the list', async () => {
+    await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
+    expect(await membersPage.getMemberItem(memberEmail).isDisplayed()).toBeTruthy();
   });
 
   it('should edit created member info', async () => {
@@ -99,24 +129,23 @@ describe('Basic story', () => {
 
     await KMElement.waitToDisappear(membersPage.getEditMemberDialog());
 
-    // Switch views to reload members list
-    await clustersPage.navigateTo();
-    await membersPage.navigateTo();
+    await browser.sleep(minute);
 
     await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail));
     expect(await membersPage.getMemberGroup(memberEmail).getText()).not.toEqual(memberGroup);
   });
 
-  it('should delete created member', async () => {
+  it('should click delete member button', async () => {
     await KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
+  });
 
+  it('should confirm member deletion', async () => {
     await ConfirmationUtils.confirm();
+  });
 
-    // Switch views to reload members list
-    await clustersPage.navigateTo();
-    await membersPage.navigateTo();
-
-    expect(await membersPage.getMemberItem(memberEmail).isPresent()).toBeFalsy();
+  it('should verify that member was deleted', async () => {
+    await KMElement.waitToDisappear(membersPage.getMemberItem(memberEmail));
+    expect(await browser.isElementPresent(membersPage.getMemberItem(memberEmail))).toBeFalsy();
   });
 
   it('should delete created cluster', async () => {
@@ -127,23 +156,14 @@ describe('Basic story', () => {
     const oldProjectName = projectName;
     projectName = RandomUtils.prefixedString('e2e-test-project');
 
-    await projectsPage.navigateTo();
+    await ProjectUtils.goBackToProjects();
 
     await KMElement.click(projectsPage.getProjectEditBtn(oldProjectName));
 
-    expect(await projectsPage.getEditProjectDialog().isPresent()).toBeTruthy();
+    expect(await projectsPage.getEditProjectDialog().isDisplayed()).toBeTruthy();
     await KMElement.fill(projectsPage.getEditProjectDialogInput(), projectName);
     await KMElement.click(projectsPage.getEditProjectDialogEditBtn());
     await KMElement.waitToDisappear(projectsPage.getEditProjectDialog());
-
-    await KMElement.waitForRedirect('/clusters');
-
-    // We need to wait for autoredirect after edit to finish
-    // otherwise it will autoredirect again after too fast page switch.
-    await browser.sleep(5000);
-
-    await projectsPage.navigateTo();
-    await KMElement.waitForRedirect('/projects');
 
     await KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
     expect(await projectsPage.getProjectItem(projectName).getText()).not.toEqual(oldProjectName);

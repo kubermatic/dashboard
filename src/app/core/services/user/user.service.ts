@@ -22,7 +22,7 @@ export class UserService {
   getUser(): Observable<MemberEntity> {
     const url = `${this.restRoot}/me`;
     if (!this.user) {
-      this.user = this.http.get<MemberEntity>(url, {headers: this.headers}).pipe(catchError((error) => {
+      this.user = this.http.get<MemberEntity>(url, {headers: this.headers}).pipe(catchError(() => {
         return of<MemberEntity>();
       }));
     }

@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatSelectChange} from '@angular/material';
-import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
+import {Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
@@ -119,18 +119,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   checkUrl(url: string): boolean {
-    const state: RouterState = this.router.routerState;
-    const snapshot: RouterStateSnapshot = state.snapshot;
-
-    if (url === 'projects') {
-      return (snapshot.url === '/' + url);
-    } else {
-      const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
-      const urlArray = snapshot.url.split('/');
-      return (
-          !!urlArray.find((x) => x === selectedProjectId) &&
-          (!!urlArray.find((x) => x === url) || (url === 'clusters' && !!urlArray.find((x) => x === 'wizard'))));
-    }
+    const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
+    const urlArray = this.router.routerState.snapshot.url.split('/');
+    return !!urlArray.find((x) => x === selectedProjectId) &&
+        (!!urlArray.find((x) => x === url) || (url === 'clusters' && !!urlArray.find((x) => x === 'wizard')));
   }
 
   getRouterLink(target: string): string {
@@ -151,6 +143,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
     return tooltip;
+  }
+
+  isCustomLinkPanelVisible(): boolean {
+    return this.customLinks && this.customLinks.length > 0;
   }
 
   getCustomLinkIconStyle(customLink: CustomLink): any {
