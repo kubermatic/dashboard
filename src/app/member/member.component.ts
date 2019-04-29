@@ -46,11 +46,9 @@ export class MemberComponent implements OnInit, OnDestroy {
     this.sort.direction = 'asc';
 
     merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._externalMembersUpdate)
-        .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(
-            () => this._projectService.project ?
-                this._apiService.getMembers(this._projectService.getCurrentProjectId()) :
-                EMPTY))
+            () => this._projectService.project ? this._apiService.getMembers(this._projectService.getCurrentProjectId()) : EMPTY))
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(members => {
           this.members = members;
           this.isInitializing = false;
@@ -80,8 +78,9 @@ export class MemberComponent implements OnInit, OnDestroy {
   addMember(): void {
     const modal = this._matDialog.open(AddMemberComponent);
     modal.componentInstance.project = this._projectService.project;
-    modal.afterClosed().pipe(first()).subscribe(isAdded => {
-      if (isAdded) {
+    modal.afterClosed().pipe(first()).subscribe((member: MemberEntity) => {
+      if (member) {
+        this.members.push(member);
         this._externalMembersUpdate.next();
       }
     });

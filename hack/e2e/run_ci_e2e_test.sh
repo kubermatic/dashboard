@@ -14,9 +14,9 @@ if [[ -z ${PROW_JOB_ID} ]]; then
 	exit 0
 fi
 
-export KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
-export KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"
-export KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
+export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
+export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"
+export CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
 
 function cleanup {
 	kubectl delete service -l "prow.k8s.io/id=$PROW_JOB_ID"
