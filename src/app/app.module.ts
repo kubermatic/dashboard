@@ -6,7 +6,6 @@ import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-b
 import {RouterModule} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
 import {environment} from '../environments/environment';
-import {AddProjectComponent} from './add-project/add-project.component';
 import {AppConfigService} from './app-config.service';
 import {AppRoutingModule} from './app-routing.module';
 import {CoreModule} from './core/core.module';

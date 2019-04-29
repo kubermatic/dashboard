@@ -5,6 +5,7 @@ import {ServiceAccountRoutingModule} from './serviceaccount-routing.module';
 import {ServiceAccountTokenComponent} from './serviceaccount-token/serviceaccount-token.component';
 import {ServiceAccountComponent} from './serviceaccount.component';
 
+
 const components: any[] = [
   ServiceAccountComponent,
   ServiceAccountTokenComponent,

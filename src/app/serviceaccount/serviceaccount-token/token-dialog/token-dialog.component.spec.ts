@@ -47,7 +47,7 @@ describe('TokenDialogComponent', () => {
     fixture.detectChanges();
   });
 
-  it('hould create the token dialog component', () => {
+  it('should create the token dialog component', () => {
     expect(component).toBeTruthy();
   });
 });
