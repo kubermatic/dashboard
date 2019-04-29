@@ -283,6 +283,16 @@
                 </div>
               </km-property>
             </ng-container>
+
+            <km-property *ngIf="!!element.status.nodeInfo.kernelVersion">
+              <div key>Kernel Version</div>
+              <div value>{{element.status.nodeInfo.kernelVersion}}</div>
+            </km-property>
+
+            <km-property *ngIf="!!element.status.nodeInfo.containerRuntimeVersion">
+              <div key>Container Runtime Version</div>
+              <div value>{{element.status.nodeInfo.containerRuntimeVersion}}</div>
+            </km-property>
           </mat-card-content>
         </td>
       </ng-container>
