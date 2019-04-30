@@ -71,6 +71,11 @@ describe('Basic story', () => {
   });
   
   it('should edit created member info', () => {
+    wait('**/users', 'GET', 'listUsers');
+  
+    ProjectsPage.visit();
+    MembersPage.visit();
+    
     MembersPage.editBtn(newUserEmail).click();
     MembersPage.editMemberDialogGroupCombobox().click();
     MembersPage.memberDialogGroup(Group.Viewer).click();
