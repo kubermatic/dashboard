@@ -78,6 +78,7 @@ export class NodeSystemInfo {
   kubeletVersion: string;
   operatingSystem: string;
   architecture: string;
+  containerRuntimeVersion: string;
 }
 
 export function getEmptyNodeProviderSpec(provider: string): object {
