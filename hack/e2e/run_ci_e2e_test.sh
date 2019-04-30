@@ -18,6 +18,8 @@ export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME="roxy@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_USERNAME_2="roxy2@loodse.com"
 export CYPRESS_KUBERMATIC_DEX_DEV_E2E_PASSWORD="password"
 
+export CYPRESS_RECORD_KEY=ca77061b-204e-41ba-b968-0f45d588b144
+
 function cleanup {
 	kubectl delete service -l "prow.k8s.io/id=$PROW_JOB_ID"
 

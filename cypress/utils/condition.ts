@@ -3,4 +3,5 @@ export enum Condition {
     Contain = 'contain',
     Include = 'include',
     NotExist = 'not.exist',
+    HaveClass = 'have.class',
 }

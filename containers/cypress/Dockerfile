@@ -3,6 +3,10 @@ FROM ubuntu:16.04
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
+COPY utils/ opt/e2e/
+RUN ln -s /opt/e2e/deploy.sh /usr/local/bin && \
+    ln -s /opt/e2e/expose.sh /usr/local/bin
+
 RUN apt-get update -qq && apt-get install -qqy \
     apt-transport-https \
     ca-certificates \
@@ -26,15 +30,15 @@ RUN apt-get update -qq && apt-get install -qqy \
     rm -rf /var/lib/apt/lists/*
 
 RUN curl -sL https://deb.nodesource.com/setup_11.x  | bash - && \
-	apt-get -y install nodejs
+	  apt-get -y install nodejs
 
 # Install Docker from Docker Inc. repositories.
 RUN curl -sSL https://get.docker.com/ | sh
 
 # Install Chrome
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-	apt update && \
-	apt install -y ./google-chrome-stable_current_amd64.deb
+	  apt update && \
+	  apt install -y ./google-chrome-stable_current_amd64.deb
 
 # Install Helm & Kubectl
 RUN curl -L https://storage.googleapis.com/kubernetes-helm/helm-v2.12.1-linux-amd64.tar.gz|tar -xvz && \

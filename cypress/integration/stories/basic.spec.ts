@@ -12,7 +12,7 @@ describe('Basic story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  const projectName = 'e2e-test-project';
+  let projectName = 'e2e-test-project';
   const clusterName = 'e2e-test-cluster';
   
   before(() => {
@@ -36,15 +36,10 @@ describe('Basic story', () => {
     
     ProjectsPage.addDialogInput().type(projectName).should(Condition.HaveValue, projectName);
     ProjectsPage.addDialogSaveBtn().click();
-    
-    // Autoredirect to an empty clusters view
-    wait('**/projects');
-    cy.url().should(Condition.Contain, '/clusters');
-    cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
   });
   
   it('should create a new cluster', () => {
-    ClustersPage.visit();
+    ProjectsPage.select(projectName);
     ClustersPage.addClusterBtn().click();
 
     WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
@@ -55,74 +50,71 @@ describe('Basic story', () => {
 
     cy.url().should(Condition.Contain, '/clusters');
   });
-  
+
   it('should add a new member', () => {
     MembersPage.visit();
-    
+
     wait('**/users');
-    
+
     MembersPage.addMemberBtn().click();
     MembersPage.addMemberDialogEmailInput().type(newUserEmail).should(Condition.HaveValue, newUserEmail);
     MembersPage.addMemberDialogGroupCombobox().click();
     MembersPage.memberDialogGroup(Group.Editor).click();
     MembersPage.addMemberDialogSaveBtn().click();
-    
+
     MembersPage.table().should(Condition.Contain, newUserEmail);
   });
-  
+
   it('should edit created member info', () => {
-    wait('**/users', 'GET', 'listUsers');
-  
-    ProjectsPage.visit();
-    MembersPage.visit();
-    
+    reloadUsers();
+
     MembersPage.editBtn(newUserEmail).click();
     MembersPage.editMemberDialogGroupCombobox().click();
     MembersPage.memberDialogGroup(Group.Viewer).click();
     MembersPage.editMemberDialogSaveBtn().click();
-  
-    wait('**/users', 'GET', 'listUsers');
-    
-    ProjectsPage.visit();
-    MembersPage.visit();
-    
+
+    reloadUsers();
+
     MembersPage.tableRowGroupColumn(newUserEmail).should(Condition.Contain, Group.Viewer);
   });
-  
+
   it('should delete created member', () => {
+    reloadUsers();
+
     MembersPage.deleteBtn(newUserEmail).click();
     MembersPage.deleteMemberDialogDeleteBtn().click();
-  
-    wait('**/users', 'GET', 'listUsers');
-    
-    ProjectsPage.visit();
-    MembersPage.visit();
-    
+
+    reloadUsers();
+
     MembersPage.tableRowEmailColumn(newUserEmail).should(Condition.NotExist);
   });
-  
+
   it('should delete created cluster', () => {
     ClustersPage.visit();
     ClustersPage.clusterItem(clusterName).click();
-    
+
     ClustersPage.deleteClusterBtn().click();
     ClustersPage.deleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
     ClustersPage.deleteDialogBtn().click();
-  
+
     wait('**/clusters');
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
   });
   
   it('should edit created project name', () => {
-  
+    ProjectsPage.visit();
+
+    ProjectsPage.editProjectBtn(projectName).click();
+
+    projectName = `${projectName}-edited`;
+    ProjectsPage.editDialogInput().type('-edited').should(Condition.HaveValue, projectName);
+    ProjectsPage.editDialogConfirmBtn().click();
   });
   
   it('should delete created project', () => {
-    ProjectsPage.visit();
-    
     ProjectsPage.deleteProjectBtn(projectName).click();
-    ProjectsPage.deleteDialogInput().type(projectName);
+    ProjectsPage.deleteDialogInput().type(projectName).should(Condition.HaveValue, projectName);
     ProjectsPage.deleteDialogConfirmBtn().click();
   });
   
@@ -130,3 +122,10 @@ describe('Basic story', () => {
     logout();
   });
 });
+
+function reloadUsers() {
+  wait('**/users', 'GET', 'listUsers');
+
+  ClustersPage.visit();
+  MembersPage.visit();
+}

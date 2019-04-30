@@ -137,6 +137,7 @@
         "e2e": {
           "builder": "ngx-cypress-builder:cypress",
           "options": {
+            "record": true,
             "port": 8000,
             "devServerTarget": "kubermatic:serve:e2e"
           },
