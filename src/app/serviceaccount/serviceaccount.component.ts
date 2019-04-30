@@ -3,6 +3,7 @@ import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/
 import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
+import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
@@ -38,7 +39,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _googleAnalyticsService: GoogleAnalyticsService,
-      private readonly _matDialog: MatDialog) {}
+      private readonly _matDialog: MatDialog, private readonly _appConfig: AppConfigService) {}
 
   ngOnInit(): void {
     this._userService.getUser().pipe(first()).subscribe((user) => {
@@ -49,7 +50,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 10000), this._externalServiceAccountUpdate)
+    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._externalServiceAccountUpdate)
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => this._apiService.getServiceAccounts(this._projectService.project.id)))
         .subscribe(serviceaccounts => {
@@ -91,7 +92,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
   getTokenList(serviceaccount: ServiceAccountEntity): void {
     this.tokenList[serviceaccount.id] = [];
-    timer(0, 10000)
+    timer(0, 10 * this._appConfig.getRefreshTimeBase())
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(
             () => !!this.tokenList[serviceaccount.id] ?
