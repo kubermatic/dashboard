@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {merge, Subject, timer} from 'rxjs';
+import {EMPTY, merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {ApiService, ProjectService, UserService} from '../core/services';
@@ -13,7 +13,6 @@ import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
-import {AddServiceAccountTokenComponent} from './serviceaccount-token/add-serviceaccount-token/add-serviceaccount-token.component';
 
 @Component({
   selector: 'kubermatic-serviceaccount',
@@ -35,7 +34,6 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   shouldToggleToken = (index, item) => this.isShowToken[item.id];
   private _unsubscribe: Subject<any> = new Subject();
   private _externalServiceAccountUpdate: Subject<any> = new Subject();
-  private _externalServiceAccountTokenUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -78,9 +76,9 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     return MemberUtils.getGroupDisplayName(group);
   }
 
-  isEnabled(action: string, type: string): boolean {
+  isEnabled(action: string): boolean {
     return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup][type][action];
+        this._projectService.userGroupConfig[this._projectService.userGroup].serviceaccounts[action];
   }
 
   toggleToken(element: ServiceAccountEntity): void {
@@ -93,10 +91,12 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
   getTokenList(serviceaccount: ServiceAccountEntity): void {
     this.tokenList[serviceaccount.id] = [];
-    merge(timer(0, 10000), this._externalServiceAccountTokenUpdate)
+    timer(0, 10000)
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(
-            switchMap(() => this._apiService.getServiceAccountTokens(this._projectService.project.id, serviceaccount)))
+        .pipe(switchMap(
+            () => !!this.tokenList[serviceaccount.id] ?
+                this._apiService.getServiceAccountTokens(this._projectService.project.id, serviceaccount) :
+                EMPTY))
         .subscribe(tokens => {
           this.tokenList[serviceaccount.id] = tokens;
           this.isTokenInitializing[serviceaccount.id] = false;
@@ -148,25 +148,13 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
         this._apiService.deleteServiceAccount(this._projectService.project.id, serviceAccount)
             .pipe(first())
             .subscribe(() => {
+              delete this.tokenList[serviceAccount.id];
               NotificationActions.success(
                   'Success',
                   `Service Account ${serviceAccount.name} has been removed from project ${
                       this._projectService.project.name}`);
               this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
             });
-      }
-    });
-  }
-
-  addServiceAccountToken(serviceAccount: ServiceAccountEntity, event: Event): void {
-    event.stopPropagation();
-    const modal = this._matDialog.open(AddServiceAccountTokenComponent);
-    modal.componentInstance.project = this._projectService.project;
-    modal.componentInstance.serviceaccount = serviceAccount;
-
-    modal.afterClosed().pipe(first()).subscribe((isAdded) => {
-      if (isAdded) {
-        this._externalServiceAccountTokenUpdate.next();
       }
     });
   }

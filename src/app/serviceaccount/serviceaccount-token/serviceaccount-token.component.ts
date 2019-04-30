@@ -7,6 +7,7 @@ import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {NotificationActions} from '../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
+import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
 import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
@@ -35,13 +36,19 @@ export class ServiceAccountTokenComponent implements OnInit {
   }
 
   getDataSource(): MatTableDataSource<ServiceAccountTokenEntity> {
-    this.dataSource.data = this.serviceaccountTokens;
+    this.dataSource.data = !!this.serviceaccountTokens ? this.serviceaccountTokens : [];
     return this.dataSource;
   }
 
   isEnabled(action: string): boolean {
     return !this._projectService.userGroup ||
         this._projectService.userGroupConfig[this._projectService.userGroup].serviceaccountToken[action];
+  }
+
+  addServiceAccountToken(): void {
+    const modal = this._matDialog.open(AddServiceAccountTokenComponent);
+    modal.componentInstance.project = this._projectService.project;
+    modal.componentInstance.serviceaccount = this.serviceaccount;
   }
 
   regenerateServiceAccountToken(token: ServiceAccountTokenEntity): void {
