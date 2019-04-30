@@ -9,6 +9,9 @@ import {AddMemberComponent} from '../member/add-member/add-member.component';
 import {EditMemberComponent} from '../member/edit-member/edit-member.component';
 import {AddServiceAccountComponent} from '../serviceaccount/add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from '../serviceaccount/edit-serviceaccount/edit-serviceaccount.component';
+import {AddServiceAccountTokenComponent} from '../serviceaccount/serviceaccount-token/add-serviceaccount-token/add-serviceaccount-token.component';
+import {EditServiceAccountTokenComponent} from '../serviceaccount/serviceaccount-token/edit-serviceaccount-token/edit-serviceaccount-token.component';
+import {TokenDialogComponent} from '../serviceaccount/serviceaccount-token/token-dialog/token-dialog.component';
 import {SharedModule} from '../shared/shared.module';
 
 import {BreadcrumbsComponent} from './components/breadcrumbs/breadcrumbs.component';
@@ -42,6 +45,9 @@ const components: any[] = [
   EditMemberComponent,
   AddServiceAccountComponent,
   EditServiceAccountComponent,
+  AddServiceAccountTokenComponent,
+  EditServiceAccountTokenComponent,
+  TokenDialogComponent,
   FooterComponent,
 ];
 

@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {EMPTY, Subject, timer} from 'rxjs';
-import {first, merge, switchMap, takeUntil} from 'rxjs/operators';
+import {merge, Subject, timer} from 'rxjs';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
+
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
@@ -12,6 +13,7 @@ import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
 import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceaccount.component';
+import {AddServiceAccountTokenComponent} from './serviceaccount-token/add-serviceaccount-token/add-serviceaccount-token.component';
 
 @Component({
   selector: 'kubermatic-serviceaccount',
@@ -24,11 +26,16 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   serviceAccounts: ServiceAccountEntity[] = [];
   currentUser: MemberEntity;
   isShowToken = [];
+  tokenList = [];
+  isTokenInitializing = [];
   displayedColumns: string[] = ['status', 'name', 'group', 'creationDate', 'actions'];
+  toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
   @ViewChild(MatSort) sort: MatSort;
+  shouldToggleToken = (index, item) => this.isShowToken[item.id];
   private _unsubscribe: Subject<any> = new Subject();
   private _externalServiceAccountUpdate: Subject<any> = new Subject();
+  private _externalServiceAccountTokenUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -44,13 +51,9 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-
-    timer(0, 5000)
-        .pipe(merge(this._externalServiceAccountUpdate))
+    merge(timer(0, 10000), this._externalServiceAccountUpdate)
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(
-            () => this._projectService.project ? this._apiService.getServiceAccounts(this._projectService.project.id) :
-                                                 EMPTY))
+        .pipe(switchMap(() => this._apiService.getServiceAccounts(this._projectService.project.id)))
         .subscribe(serviceaccounts => {
           this.serviceAccounts = serviceaccounts;
           this.isInitializing = false;
@@ -75,9 +78,29 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     return MemberUtils.getGroupDisplayName(group);
   }
 
-  isEnabled(action: string): boolean {
+  isEnabled(action: string, type: string): boolean {
     return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].serviceaccounts[action];
+        this._projectService.userGroupConfig[this._projectService.userGroup][type][action];
+  }
+
+  toggleToken(element: ServiceAccountEntity): void {
+    this.isShowToken[element.id] = !this.isShowToken[element.id];
+    if (!!this.isShowToken) {
+      this.getTokenList(element);
+      this.isTokenInitializing[element.id] = true;
+    }
+  }
+
+  getTokenList(serviceaccount: ServiceAccountEntity): void {
+    this.tokenList[serviceaccount.id] = [];
+    merge(timer(0, 10000), this._externalServiceAccountTokenUpdate)
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(
+            switchMap(() => this._apiService.getServiceAccountTokens(this._projectService.project.id, serviceaccount)))
+        .subscribe(tokens => {
+          this.tokenList[serviceaccount.id] = tokens;
+          this.isTokenInitializing[serviceaccount.id] = false;
+        });
   }
 
   addServiceAccount(): void {
@@ -91,7 +114,8 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     });
   }
 
-  editServiceAccount(serviceAccount: ServiceAccountEntity): void {
+  editServiceAccount(serviceAccount: ServiceAccountEntity, event: Event): void {
+    event.stopPropagation();
     const modal = this._matDialog.open(EditServiceAccountComponent);
     modal.componentInstance.project = this._projectService.project;
     modal.componentInstance.serviceaccount = serviceAccount;
@@ -102,7 +126,8 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteServiceAccount(serviceAccount: ServiceAccountEntity): void {
+  deleteServiceAccount(serviceAccount: ServiceAccountEntity, event: Event): void {
+    event.stopPropagation();
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
       hasBackdrop: true,
@@ -129,6 +154,19 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
                       this._projectService.project.name}`);
               this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
             });
+      }
+    });
+  }
+
+  addServiceAccountToken(serviceAccount: ServiceAccountEntity, event: Event): void {
+    event.stopPropagation();
+    const modal = this._matDialog.open(AddServiceAccountTokenComponent);
+    modal.componentInstance.project = this._projectService.project;
+    modal.componentInstance.serviceaccount = serviceAccount;
+
+    modal.afterClosed().pipe(first()).subscribe((isAdded) => {
+      if (isAdded) {
+        this._externalServiceAccountTokenUpdate.next();
       }
     });
   }

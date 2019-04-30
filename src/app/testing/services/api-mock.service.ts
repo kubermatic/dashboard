@@ -8,7 +8,7 @@ import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
-import {CreateServiceAccountEntity, ServiceAccountEntity} from '../../shared/entity/ServiceAccountEntity';
+import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
@@ -17,7 +17,7 @@ import {fakeHealth} from '../fake-data/health.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
 import {nodesFake} from '../fake-data/node.fake';
 import {fakeProject, fakeProjects} from '../fake-data/project.fake';
-import {fakeServiceAccount, fakeServiceAccounts} from '../fake-data/serviceaccount.fake';
+import {fakeServiceAccount, fakeServiceAccounts, fakeServiceAccountToken, fakeServiceAccountTokens} from '../fake-data/serviceaccount.fake';
 import {fakeSSHKeys} from '../fake-data/sshkey.fake';
 import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
 
@@ -35,6 +35,8 @@ export class ApiMockService {
   members: MemberEntity[] = fakeMembers();
   serviceAccount: ServiceAccountEntity = fakeServiceAccount();
   serviceAccounts: ServiceAccountEntity[] = fakeServiceAccounts();
+  serviceAccountToken: ServiceAccountTokenEntity = fakeServiceAccountToken();
+  serviceAccountTokens: ServiceAccountTokenEntity[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
   health: HealthEntity = fakeHealth();
 
@@ -171,6 +173,38 @@ export class ApiMockService {
 
   getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
     return of(this.vsphereNetworks);
+  }
+
+  getServiceAccountTokens(projectID: string, serviceaccount: ServiceAccountEntity):
+      Observable<ServiceAccountTokenEntity[]> {
+    return of(this.serviceAccountTokens);
+  }
+
+  createServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity):
+      Observable<ServiceAccountTokenEntity> {
+    return of(this.serviceAccountToken);
+  }
+
+  editServiceAccountToken(projectID: string, serviceAccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
+      Observable<ServiceAccountTokenEntity> {
+    return of(this.serviceAccountToken);
+  }
+
+  regenerateServiceAccountToken(
+      projectID: string, serviceaccount: ServiceAccountEntity,
+      token: ServiceAccountTokenEntity): Observable<ServiceAccountTokenEntity> {
+    return of(this.serviceAccountToken);
+  }
+
+  patchServiceAccountToken(
+      projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity,
+      patchToken: ServiceAccountTokenPatch): Observable<ServiceAccountTokenEntity> {
+    return of(this.serviceAccountToken);
+  }
+
+  deleteServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
+      Observable<any> {
+    return of(null);
   }
 }
 

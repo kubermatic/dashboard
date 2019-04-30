@@ -26,6 +26,7 @@ export class GroupConfig {
   nodes?: Nodes;
   nodeDeployments?: NodeDeployments;
   serviceaccounts?: ServiceAccounts;
+  serviceaccountToken?: ServiceAccountToken;
 }
 
 export class Projects {
@@ -71,6 +72,13 @@ export class NodeDeployments {
 }
 
 export class ServiceAccounts {
+  view?: boolean;
+  edit?: boolean;
+  create?: boolean;
+  delete?: boolean;
+}
+
+export class ServiceAccountToken {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
