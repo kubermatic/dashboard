@@ -7,7 +7,7 @@ import {ParticlesModule} from 'angular-particle';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {CookieService} from 'ngx-cookie-service';
 
-import {Auth} from '../../core/services/index';
+import {Auth} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {RouterStub} from '../../testing/router-stubs';
 import {AuthMockService} from '../../testing/services/auth-mock.service';

@@ -5,6 +5,10 @@ import {inject, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterTestingModule} from '@angular/router/testing';
 import {CookieService} from 'ngx-cookie-service';
+
+import {AppConfigService} from '../../../app-config.service';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+
 import {Auth} from './auth.service';
 
 describe('Auth', () => {
@@ -20,6 +24,7 @@ describe('Auth', () => {
           providers: [
             Auth,
             CookieService,
+            {provide: AppConfigService, useClass: AppConfigMockService},
           ],
         })
         .compileComponents();

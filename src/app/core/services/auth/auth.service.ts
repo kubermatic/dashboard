@@ -2,30 +2,40 @@ import {Injectable} from '@angular/core';
 import * as moment from 'moment';
 import {CookieService} from 'ngx-cookie-service';
 
+import {environment} from '../../../../environments/environment';
+import {AppConfigService} from '../../../app-config.service';
+
 @Injectable()
 export class Auth {
-  constructor(private cookieService: CookieService) {
+  constructor(private readonly _cookieService: CookieService, private readonly _appConfigService: AppConfigService) {
     const token = this.getTokenFromQuery();
     const nonce = this.getNonce();
     if (!!token && !!nonce) {
       if (this.compareNonceWithToken(token, nonce)) {
         // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
         this.removeFragment();
-        this.cookieService.set('token', token, 1, null, null, true);
+        this._cookieService.set('token', token, 1, null, null, true);
         // localhost is only served via http, though secure cookie is not possible
         // following line will only work when domain is localhost
-        this.cookieService.set('token', token, 1, null, 'localhost');
-        this.cookieService.set('token', token, 1, null, '127.0.0.1');
+        this._cookieService.set('token', token, 1, null, 'localhost');
+        this._cookieService.set('token', token, 1, null, '127.0.0.1');
       }
     }
   }
 
+  getOIDCProviderURL(): string {
+    return this._appConfigService.getConfig().oidc_provider_url &&
+            this._appConfigService.getConfig().oidc_provider_url.length > 0 ?
+        this._appConfigService.getConfig().oidc_provider_url :
+        environment.oidcProviderUrl;
+  }
+
   getBearerToken(): string {
-    return this.cookieService.get('token');
+    return this._cookieService.get('token');
   }
 
   getNonce(): string {
-    return this.cookieService.get('nonce');
+    return this._cookieService.get('nonce');
   }
 
   authenticated(): boolean {
@@ -58,8 +68,8 @@ export class Auth {
   }
 
   logout(): void {
-    this.cookieService.delete('token');
-    this.cookieService.delete('nonce');
+    this._cookieService.delete('token');
+    this._cookieService.delete('nonce');
   }
 
   private getTokenFromQuery(): string {
