@@ -1,9 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
 
 import {AppConfigService} from '../../../app-config.service';
-import {CustomLink, CustomLinkLocation, getCustomIcon} from '../../../shared/entity/CustomLinks';
 import {VersionInfo} from '../../../shared/entity/VersionInfo';
 import {Config} from '../../../shared/model/Config';
+import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-utils/custom-link';
 
 @Component({
   selector: 'kubermatic-footer',
@@ -30,9 +30,9 @@ export class FooterComponent implements OnInit {
     return this.config.show_terms_of_service;
   }
 
-  getCustomLinkIconStyle(customLink: CustomLink): any {
+  getCustomLinkIconStyle(link: CustomLink): any {
     return {
-      'background-image': `url('${getCustomIcon(customLink)}')`,
+      'background-image': `url('${CustomLink.getIcon(link)}')`,
     };
   }
 }

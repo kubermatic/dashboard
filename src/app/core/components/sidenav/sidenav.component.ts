@@ -7,8 +7,8 @@ import {first, takeUntil} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
-import {CustomLink, CustomLinkLocation, getCustomIcon} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-utils/custom-link';
 import {ApiService, ProjectService} from '../../services';
 
 @Component({
@@ -153,9 +153,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return tooltip;
   }
 
-  getCustomLinkIconStyle(customLink: CustomLink): any {
+  getCustomLinkIconStyle(link: CustomLink): any {
     return {
-      'background-image': `url('${getCustomIcon(customLink)}')`,
+      'background-image': `url('${CustomLink.getIcon(link)}')`,
     };
   }
 

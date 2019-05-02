@@ -5,9 +5,9 @@ import {first, tap} from 'rxjs/operators';
 import {environment} from '../environments/environment';
 
 import {NotificationActions} from './redux/actions/notification.actions';
-import {CustomLink, CustomLinkLocation} from './shared/entity/CustomLinks';
 import {VersionInfo} from './shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from './shared/model/Config';
+import {CustomLink, CustomLinkLocation} from './shared/utils/custom-link-utils/custom-link';
 
 @Injectable()
 export class AppConfigService {
