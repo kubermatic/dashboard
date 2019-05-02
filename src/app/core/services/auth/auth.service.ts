@@ -24,8 +24,10 @@ export class Auth {
   }
 
   getOIDCProviderURL(): string {
-    return this._appConfigService.getConfig().oidc_provider_url ? this._appConfigService.getConfig().oidc_provider_url :
-                                                                  environment.oidcProviderUrl;
+    return this._appConfigService.getConfig().oidc_provider_url &&
+            this._appConfigService.getConfig().oidc_provider_url.length > 0 ?
+        this._appConfigService.getConfig().oidc_provider_url :
+        environment.oidcProviderUrl;
   }
 
   getBearerToken(): string {
