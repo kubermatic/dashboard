@@ -1,5 +1,5 @@
---- dex-config.yaml	2019-02-13 11:38:23.872411000 +0100
-+++ dex-config_new.yaml	2019-02-13 11:28:39.050159746 +0100
+--- dex-config.yaml	2019-04-24 12:09:11.176589301 +0200
++++ dex-config-patched.yaml	2019-04-24 12:19:08.206213978 +0200
 @@ -4,7 +4,7 @@
    name: dex
  data:
@@ -9,17 +9,17 @@
      oauth2:
        skipApprovalScreen: true
        responseTypes:
-@@ -17,8 +17,8 @@
-         inCluster: true
-     web:
-       http: 0.0.0.0:5556
+@@ -21,8 +21,8 @@
+     expiry:
+ {{ toYaml .Values.dex.expiry | indent 6 }}
+ {{- end }}
 -{{ if .Values.dex.grpc }}
      enablePasswordDB: true
 +{{ if .Values.dex.grpc }}
      grpc:
  {{ toYaml .Values.dex.grpc.api | indent 7 }}
  {{- end }}
-@@ -30,3 +30,12 @@
+@@ -34,3 +34,12 @@
      staticClients:
  {{ toYaml .Values.dex.clients | indent 7 }}
  {{- end }}
