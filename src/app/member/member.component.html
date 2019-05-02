@@ -61,13 +61,13 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button class="km-icon-edit black"
+                <button class="km-icon-edit"
                         [attr.id]="'km-edit-member-' + element?.email"
                         matTooltip="Edit Member"
                         (click)="editMember(element)"
                         [disabled]="!isEditEnabled(element)"></button>
 
-                <button class="km-icon-delete black"
+                <button class="km-icon-delete"
                         [attr.id]="'km-delete-member-' + element?.email"
                         matTooltip="Delete Member"
                         (click)="deleteMember(element)"

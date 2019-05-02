@@ -68,13 +68,16 @@
           class="km-mat-row"></tr>
     </table>
 
+
     <div *ngIf="!hasEvents()"
          class="km-row km-no-item">
       No events available.
     </div>
 
+
     <mat-paginator *ngIf="hasEvents()"
                    [pageSizeOptions]="[10, 20]"
-                   showFirstLastButtons></mat-paginator>
+                   showFirstLastButtons
+                   class="km-paginator"></mat-paginator>
   </mat-card-content>
 </mat-card>
