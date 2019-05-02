@@ -9,7 +9,6 @@ import {MockComponent} from 'ng2-mock-component';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
-import {CustomLink, CustomLinkIcon} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProjects} from '../../../testing/fake-data/project.fake';
@@ -121,37 +120,5 @@ describe('SidenavComponent', () => {
     component.selectedProject.id = fakeProjects()[1].id;
     expect(component.getRouterLink('clusters')).toBe('/projects/' + fakeProjects()[1].id + '/clusters');
     expect(component.getRouterLink('members')).toBe('/projects/' + fakeProjects()[1].id + '/members');
-  });
-
-  it('should correctly assign icons', () => {
-    const a: CustomLink = {label: 'Unknown Service', url: 'www.unknown.com'};
-    expect(component.getCustomIcon(a)).toBe(CustomLinkIcon.Default);
-
-    const b: CustomLink = {label: '', url: ''};
-    expect(component.getCustomIcon(b)).toBe(CustomLinkIcon.Default);
-
-    const c: CustomLink = {label: 'Twitter', url: 'www.twitter.com'};
-    expect(component.getCustomIcon(c)).toBe(CustomLinkIcon.Twitter);
-
-    const d: CustomLink = {label: 'Slack', url: '192.168.1.1:8080'};
-    expect(component.getCustomIcon(d)).toBe(CustomLinkIcon.Slack);
-
-    const e: CustomLink = {label: 'Repository', url: 'www.github.com'};
-    expect(component.getCustomIcon(e)).toBe(CustomLinkIcon.GitHub);
-
-    const f: CustomLink = {label: 'Unknown Service', url: 'www.unknown.com', icon: ''};
-    expect(component.getCustomIcon(f)).toBe(CustomLinkIcon.Default);
-
-    const g: CustomLink = {label: 'Unknown Service', url: 'www.unknown.com', icon: 'www.google.com/some-image.png'};
-    expect(component.getCustomIcon(g)).toBe(g.icon);
-
-    const h: CustomLink = {label: 'Slack', url: 'www.twitter.com', icon: 'www.google.com/some-image.png'};
-    expect(component.getCustomIcon(h)).toBe(h.icon);
-
-    const i: CustomLink = {label: '', url: '', icon: '/assets-mounted-into-container/icons/slack.svg'};
-    expect(component.getCustomIcon(i)).toBe(i.icon);
-
-    const j: CustomLink = {label: 'Slack', url: 'slack.com', icon: '/assets-mounted-into-container/icons/github.svg'};
-    expect(component.getCustomIcon(j)).toBe(j.icon);
   });
 });
