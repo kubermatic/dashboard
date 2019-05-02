@@ -10,6 +10,7 @@ export interface Config {
   google_analytics_config?: object;
   cleanup_cluster?: boolean;
   custom_links?: CustomLink[];
+  oidc_provider_url?: string;
 }
 
 export interface UserGroupConfig {
