@@ -21,6 +21,10 @@ export enum CustomLinkLocation {
   Footer = 'footer'
 }
 
+export function getCustomIcon(customLink: CustomLink): string {
+  return customLink.icon && customLink.icon.length > 0 ? customLink.icon : findMatchingServiceIcon(customLink);
+}
+
 export function findMatchingServiceIcon(customLink: CustomLink) {
   if (isMatching(customLink, 'github')) {
     return CustomLinkIcon.GitHub;

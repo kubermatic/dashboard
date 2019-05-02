@@ -7,7 +7,7 @@ import {first, takeUntil} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
-import {CustomLink, CustomLinkLocation, findMatchingServiceIcon} from '../../../shared/entity/CustomLinks';
+import {CustomLink, CustomLinkLocation, getCustomIcon} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ApiService, ProjectService} from '../../services';
 
@@ -21,7 +21,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
-  customLinks: CustomLink[];
+  customLinks: CustomLink[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -155,12 +155,8 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   getCustomLinkIconStyle(customLink: CustomLink): any {
     return {
-      'background-image': `url('${this.getCustomIcon(customLink)}')`,
+      'background-image': `url('${getCustomIcon(customLink)}')`,
     };
-  }
-
-  getCustomIcon(customLink: CustomLink): string {
-    return customLink.icon && customLink.icon.length > 0 ? customLink.icon : findMatchingServiceIcon(customLink);
   }
 
   ngOnDestroy(): void {
