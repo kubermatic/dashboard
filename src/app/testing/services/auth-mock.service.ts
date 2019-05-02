@@ -4,6 +4,10 @@ import {Injectable} from '@angular/core';
 export class AuthMockService {
   isAuth = true;
 
+  getOIDCProviderURL(): string {
+    return '';
+  }
+
   authenticated(): boolean {
     return this.isAuth;
   }
