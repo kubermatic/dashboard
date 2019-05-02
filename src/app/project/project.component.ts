@@ -96,7 +96,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   getProjectStateIconClass(project: ProjectEntity): string {
-    return ProjectUtils.getIconClass(project);
+    return ProjectUtils.getStateIconClass(project.status);
   }
 
   addProject(): void {

@@ -1,0 +1,26 @@
+<mat-toolbar>
+  Token
+  <button mat-icon-button
+          mat-dialog-close>
+    <i class="fa fa-times"
+       aria-hidden="true"></i>
+  </button>
+</mat-toolbar>
+<mat-dialog-content>
+  <div class="mat-dialog-content">
+    <p>
+      <i class="fa fa-exclamation-triangle"></i>
+      Make sure to save this token at a safe place on your own device. It <strong>could not</strong> be displayed again!
+    </p>
+    <p class="km-code-block km-copy"
+       ngxClipboard
+       [cbContent]="serviceaccountToken.token"
+       matTooltip="click to copy">{{serviceaccountToken.token}}</p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-dialog-close
+          mat-raised-button>
+    Close
+  </button>
+</mat-dialog-actions>

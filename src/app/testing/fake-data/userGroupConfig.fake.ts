@@ -39,6 +39,18 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         create: true,
         delete: true,
       },
+      serviceaccounts: {
+        view: true,
+        edit: true,
+        create: true,
+        delete: true,
+      },
+      serviceaccountToken: {
+        view: true,
+        edit: true,
+        create: true,
+        delete: true,
+      },
     },
     editors: {
       projects: {
@@ -77,6 +89,18 @@ export function fakeUserGroupConfig(): UserGroupConfig {
         create: true,
         delete: true,
       },
+      serviceaccounts: {
+        view: false,
+        edit: false,
+        create: false,
+        delete: false,
+      },
+      serviceaccountToken: {
+        view: false,
+        edit: false,
+        create: false,
+        delete: false,
+      },
     },
     viewers: {
       projects: {
@@ -111,6 +135,18 @@ export function fakeUserGroupConfig(): UserGroupConfig {
       },
       nodeDeployments: {
         view: true,
+        edit: false,
+        create: false,
+        delete: false,
+      },
+      serviceaccounts: {
+        view: false,
+        edit: false,
+        create: false,
+        delete: false,
+      },
+      serviceaccountToken: {
+        view: false,
         edit: false,
         create: false,
         delete: false,

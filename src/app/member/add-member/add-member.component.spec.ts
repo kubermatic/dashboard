@@ -72,7 +72,7 @@ describe('AddProjectComponent', () => {
     component.addMemberForm.controls.email.patchValue('john@doe.com');
     expect(component.addMemberForm.controls.email.hasError('required'))
         .toBeFalsy('email field has no required error after setting email');
-    component.addMemberForm.controls.group.patchValue('editor');
+    component.addMemberForm.controls.group.patchValue('editors');
     expect(component.addMemberForm.controls.group.hasError('required'))
         .toBeFalsy('group field has no required error after setting group');
   });
@@ -80,7 +80,7 @@ describe('AddProjectComponent', () => {
   it('should call addMember method', fakeAsync(() => {
        component.project = fakeProject();
        component.addMemberForm.controls.email.patchValue('john@doe.com');
-       component.addMemberForm.controls.group.patchValue('editor');
+       component.addMemberForm.controls.group.patchValue('editors');
        component.addMember();
        tick();
 

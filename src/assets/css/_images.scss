@@ -102,6 +102,16 @@
   cursor: pointer;
 }
 
+.km-icon-serviceaccount {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  mask: url("/assets/images/icons/service-accounts.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  cursor: pointer;
+}
+
 .km-icon-arrow-up {
   display: inline-block;
   width: 12px;

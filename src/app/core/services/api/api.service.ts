@@ -18,6 +18,8 @@ import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity'
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
+
+import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
@@ -328,8 +330,61 @@ export class ApiService {
     return this.http.put<MemberEntity>(url, member, {headers: this.headers});
   }
 
-  deleteMembers(projectID: string, member: MemberEntity): any {
+  deleteMembers(projectID: string, member: MemberEntity): Observable<any> {
     const url = `${this.restRoot}/projects/${projectID}/users/${member.id}`;
+    return this.http.delete(url, {headers: this.headers});
+  }
+
+  getServiceAccounts(projectID: string): Observable<ServiceAccountEntity[]> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts`;
+    return this.http.get<ServiceAccountEntity[]>(url, {headers: this.headers});
+  }
+
+  createServiceAccount(projectID: string, serviceaccount: CreateServiceAccountEntity):
+      Observable<ServiceAccountEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts`;
+    return this.http.post<ServiceAccountEntity>(url, serviceaccount, {headers: this.headers});
+  }
+
+  editServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<ServiceAccountEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
+    return this.http.put<ServiceAccountEntity>(url, serviceaccount, {headers: this.headers});
+  }
+
+  deleteServiceAccount(projectID: string, serviceaccount: ServiceAccountEntity): Observable<any> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}`;
+    return this.http.delete(url, {headers: this.headers});
+  }
+
+  getServiceAccountTokens(projectID: string, serviceaccount: ServiceAccountEntity):
+      Observable<ServiceAccountTokenEntity[]> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
+    return this.http.get<ServiceAccountTokenEntity[]>(url, {headers: this.headers});
+  }
+
+  createServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: CreateTokenEntity):
+      Observable<ServiceAccountTokenEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens`;
+    return this.http.post<ServiceAccountTokenEntity>(url, token, {headers: this.headers});
+  }
+
+  regenerateServiceAccountToken(
+      projectID: string, serviceaccount: ServiceAccountEntity,
+      token: ServiceAccountTokenEntity): Observable<ServiceAccountTokenEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
+    return this.http.put<ServiceAccountTokenEntity>(url, token, {headers: this.headers});
+  }
+
+  patchServiceAccountToken(
+      projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity,
+      patchToken: ServiceAccountTokenPatch): Observable<ServiceAccountTokenEntity> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
+    return this.http.patch<ServiceAccountTokenEntity>(url, patchToken, {headers: this.headers});
+  }
+
+  deleteServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
+      Observable<any> {
+    const url = `${this.restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this.http.delete(url, {headers: this.headers});
   }
 }
