@@ -56,7 +56,7 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
     }
     const nonceRegExp = /&nonce=(.*)$/;
     const nonceStr = nonceRegExp.exec(this.auth.getOIDCProviderURL());
-    if (!!nonceStr[1]) {
+    if (!!nonceStr && nonceStr.length >= 2 && !!nonceStr[1]) {
       this.cookieService.set('nonce', nonceStr[1], null, null, null, true);
       // localhost is only served via http, though secure cookie is not possible
       // following line will only work when domain is localhost
