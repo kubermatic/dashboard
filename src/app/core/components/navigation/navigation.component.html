@@ -19,7 +19,7 @@
       </span>
       <a class="km-button km-login"
          *ngIf="!auth.authenticated()"
-         href="{{environment.coreOSdexAuth}}">
+         href="{{auth.getOIDCProviderURL()}}">
         Login / Sign-in
       </a>
     </div>

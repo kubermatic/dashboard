@@ -39,7 +39,7 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
   environment: any = environment;
   isAuth = false;
 
-  constructor(private auth: Auth, private router: Router, private cookieService: CookieService) {}
+  constructor(public auth: Auth, private router: Router, private cookieService: CookieService) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {
@@ -55,7 +55,7 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
       this.isAuth = true;
     }
     const nonceRegExp = /&nonce=(.*)$/;
-    const nonceStr = nonceRegExp.exec(environment.coreOSdexAuth);
+    const nonceStr = nonceRegExp.exec(this.auth.getOIDCProviderURL());
     if (!!nonceStr[1]) {
       this.cookieService.set('nonce', nonceStr[1], null, null, null, true);
       // localhost is only served via http, though secure cookie is not possible
