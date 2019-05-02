@@ -2,6 +2,7 @@ export class CustomLink {
   label: string;
   url: string;
   icon?: CustomLinkIcon|string;
+  location?: CustomLinkLocation;
 }
 
 export enum CustomLinkIcon {
@@ -13,6 +14,11 @@ export enum CustomLinkIcon {
   Prometheus = '/assets/images/icons/custom/prometheus.svg',
   Slack = '/assets/images/icons/custom/slack.svg',
   Twitter = '/assets/images/icons/custom/twitter.svg',
+}
+
+export enum CustomLinkLocation {
+  Default = 'default',
+  Footer = 'footer'
 }
 
 export function findMatchingServiceIcon(customLink: CustomLink) {

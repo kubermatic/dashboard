@@ -7,7 +7,7 @@ import {first, takeUntil} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
-import {CustomLink, findMatchingServiceIcon} from '../../../shared/entity/CustomLinks';
+import {CustomLink, CustomLinkLocation, findMatchingServiceIcon} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {ApiService, ProjectService} from '../../services';
 
@@ -29,7 +29,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       private readonly _appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
-    this.customLinks = this._appConfigService.getCustomLinks();
+    this.customLinks = this._appConfigService.getCustomLinks(CustomLinkLocation.Default);
     this.loadProjects();
 
     this.projectService.selectedProjectChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
