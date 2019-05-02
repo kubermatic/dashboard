@@ -78,6 +78,10 @@ export class ProjectService {
     this.router.navigate(['/projects/' + this.project.id + '/sshkeys']);
   }
 
+  navigateToServiceAccountPage(): void {
+    this.router.navigate(['/projects/' + this.project.id + '/serviceaccounts']);
+  }
+
   changeViewOnProjectChange(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
     const router: Router = this.router;
@@ -93,6 +97,10 @@ export class ProjectService {
           this.navigateToMemberPage();
         } else if ((snapshot.url.search(/(\/sshkeys)/) > -1) && !!this.userGroupConfig[this.userGroup].sshKeys.view) {
           this.navigateToSshKeyPage();
+        } else if (
+            (snapshot.url.search(/(\/serviceaccounts)/) > -1) &&
+            !!this.userGroupConfig[this.userGroup].serviceaccounts.view) {
+          this.navigateToServiceAccountPage();
         } else if (!!urlArray.find((x) => x === this.project.id) && !!urlArray.find((x) => x === 'dc')) {
           this.navigateToClusterDetailPage(snapshot.url);
         } else if (snapshot.url === '/projects)') {

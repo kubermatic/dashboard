@@ -53,6 +53,16 @@
         </mat-list-item>
       </div>
 
+      <div [matTooltip]="getTooltip('serviceaccounts')">
+        <mat-list-item [ngClass]="projectService.getMenuItemClass('serviceaccounts')">
+          <a mat-line
+             fxLayoutAlign=" center"
+             [routerLink]="getRouterLink('serviceaccounts')"
+             [ngClass]="getLinkClass('serviceaccounts')">
+            <i class="km-icon-serviceaccount"></i> Service Accounts</a>
+        </mat-list-item>
+      </div>
+
       <mat-list-item>
         <a id="km-nav-item-projects"
            mat-line
