@@ -5,12 +5,16 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
+import {AppConfigService} from '../../../app-config.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {RouterStub} from '../../../testing/router-stubs';
+import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {Auth, ProjectService, UserService} from '../../services/index';
+
 import {FooterComponent} from './footer.component';
 
 const modules: any[] = [
@@ -40,6 +44,7 @@ describe('FooterComponent', () => {
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Router, useClass: RouterStub},
             {provide: Auth, useClass: AuthMockService},
+            {provide: AppConfigService, useClass: AppConfigMockService},
           ],
         })
         .compileComponents();

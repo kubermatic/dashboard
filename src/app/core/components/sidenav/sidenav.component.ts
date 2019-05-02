@@ -7,8 +7,8 @@ import {first, takeUntil} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
-import {CustomLink, findMatchingServiceIcon} from '../../../shared/entity/CustomLinks';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-utils/custom-link';
 import {ApiService, ProjectService} from '../../services';
 
 @Component({
@@ -21,7 +21,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   environment: any = environment;
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
-  customLinks: CustomLink[];
+  customLinks: CustomLink[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -29,7 +29,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
       private readonly _appConfigService: AppConfigService) {}
 
   ngOnInit(): void {
-    this.customLinks = this._appConfigService.getCustomLinks();
+    this.customLinks = this._appConfigService.getCustomLinks(CustomLinkLocation.Default);
     this.loadProjects();
 
     this.projectService.selectedProjectChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
@@ -153,14 +153,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return tooltip;
   }
 
-  getCustomLinkIconStyle(customLink: CustomLink): any {
+  getCustomLinkIconStyle(link: CustomLink): any {
     return {
-      'background-image': `url('${this.getCustomIcon(customLink)}')`,
+      'background-image': `url('${CustomLink.getIcon(link)}')`,
     };
-  }
-
-  getCustomIcon(customLink: CustomLink): string {
-    return customLink.icon && customLink.icon.length > 0 ? customLink.icon : findMatchingServiceIcon(customLink);
   }
 
   ngOnDestroy(): void {

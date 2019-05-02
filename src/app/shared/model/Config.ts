@@ -1,4 +1,4 @@
-import {CustomLink} from '../entity/CustomLinks';
+import {CustomLink} from '../utils/custom-link-utils/custom-link';
 
 export interface Config {
   default_node_count?: number;
