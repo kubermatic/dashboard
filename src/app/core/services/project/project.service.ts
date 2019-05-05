@@ -1,10 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
+import {first} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {GroupConfig, UserGroupConfig} from '../../../shared/model/Config';
+import {ApiService} from '../api/api.service';
 import {UserService} from '../user/user.service';
 
 @Injectable()
@@ -12,10 +14,13 @@ export class ProjectService {
   private _project = new Subject<ProjectEntity>();
   selectedProjectChanges$ = this._project.asObservable();
   project: ProjectEntity;
+  projects: ProjectEntity[];
   userGroup: string;
   userGroupConfig: UserGroupConfig;
 
-  constructor(private router: Router, private userService: UserService, private appConfigService: AppConfigService) {}
+  constructor(
+      private router: Router, private apiService: ApiService, private userService: UserService,
+      private appConfigService: AppConfigService) {}
 
   changeSelectedProject(data: ProjectEntity): void {
     this._project.next(data);
@@ -33,6 +38,31 @@ export class ProjectService {
   getProjectFromStorage(): ProjectEntity {
     const project = localStorage.getItem('project');
     return project && JSON.parse(project);
+  }
+
+  getAndCompareProject(selectedProjectId: string) {
+    this.apiService.getProjects().pipe(first()).subscribe((res) => {
+      this.projects = res;
+      for (const i in this.projects) {
+        if (this.projects[i].id === selectedProjectId) {
+          this.changeAndStoreSelectedProject(this.projects[i]);
+        }
+      }
+    });
+  }
+
+  getCurrentProjectId() {
+    const router: Router = this.router;
+    const state: RouterState = router.routerState;
+    const snapshot: RouterStateSnapshot = state.snapshot;
+    const urlArray = snapshot.url.split('/');
+
+    if (!!this.project) {
+      return this.project.id;
+    } else {
+      this.getAndCompareProject(urlArray[2]);
+      return urlArray[2];
+    }
   }
 
   getUserGroupConfig(): GroupConfig {

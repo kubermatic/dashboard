@@ -48,7 +48,9 @@ export class MemberComponent implements OnInit, OnDestroy {
     merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._externalMembersUpdate)
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(
-            () => this._projectService.project ? this._apiService.getMembers(this._projectService.project.id) : EMPTY))
+            () => this._projectService.project ?
+                this._apiService.getMembers(this._projectService.getCurrentProjectId()) :
+                EMPTY))
         .subscribe(members => {
           this.members = members;
           this.isInitializing = false;
@@ -67,7 +69,7 @@ export class MemberComponent implements OnInit, OnDestroy {
 
   getGroup(member: MemberEntity): string {
     if (this._projectService.project) {
-      const group = MemberUtils.getGroupInProject(member, this._projectService.project.id);
+      const group = MemberUtils.getGroupInProject(member, this._projectService.getCurrentProjectId());
       return MemberUtils.getGroupDisplayName(group);
     }
     return '';
@@ -126,11 +128,14 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().pipe(first()).subscribe(isConfirmed => {
       if (isConfirmed) {
-        this._apiService.deleteMembers(this._projectService.project.id, member).pipe(first()).subscribe(() => {
-          NotificationActions.success(
-              'Success', `Member ${member.name} has been removed from project ${this._projectService.project.name}`);
-          this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
-        });
+        this._apiService.deleteMembers(this._projectService.getCurrentProjectId(), member)
+            .pipe(first())
+            .subscribe(() => {
+              NotificationActions.success(
+                  'Success',
+                  `Member ${member.name} has been removed from project ${this._projectService.project.name}`);
+              this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
+            });
       }
     });
   }

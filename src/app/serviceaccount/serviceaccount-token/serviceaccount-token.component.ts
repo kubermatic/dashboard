@@ -69,7 +69,8 @@ export class ServiceAccountTokenComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.regenerateServiceAccountToken(this._projectService.project.id, this.serviceaccount, token)
+        this._apiService
+            .regenerateServiceAccountToken(this._projectService.getCurrentProjectId(), this.serviceaccount, token)
             .pipe(first())
             .subscribe((token) => {
               this.openTokenDialog(token);
@@ -105,7 +106,8 @@ export class ServiceAccountTokenComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.deleteServiceAccountToken(this._projectService.project.id, this.serviceaccount, token)
+        this._apiService
+            .deleteServiceAccountToken(this._projectService.getCurrentProjectId(), this.serviceaccount, token)
             .pipe(first())
             .subscribe(() => {
               NotificationActions.success(

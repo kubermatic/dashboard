@@ -153,7 +153,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           NotificationActions.success('Success', `Project ${project.name} is being deleted`);
           this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
 
-          if (project.id === this._projectService.project.id) {
+          if (project.id === this._projectService.getCurrentProjectId()) {
             this._projectService.changeSelectedProject({
               id: '',
               name: '',
