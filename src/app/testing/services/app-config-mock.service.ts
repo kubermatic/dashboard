@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 
-import {CustomLink} from '../../shared/entity/CustomLinks';
 import {VersionInfo} from '../../shared/entity/VersionInfo';
 import {Config, UserGroupConfig} from '../../shared/model/Config';
+import {CustomLink} from '../../shared/utils/custom-link-utils/custom-link';
 import {fakeAppConfig} from '../fake-data/appConfig.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
 import {fakeVersionInfo} from '../fake-data/versionInfo.fake';

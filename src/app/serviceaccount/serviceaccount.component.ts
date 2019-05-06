@@ -52,7 +52,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
     merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._externalServiceAccountUpdate)
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._apiService.getServiceAccounts(this._projectService.project.id)))
+        .pipe(switchMap(() => this._apiService.getServiceAccounts(this._projectService.getCurrentProjectId())))
         .subscribe(serviceaccounts => {
           this.serviceAccounts = serviceaccounts;
           this.isInitializing = false;
@@ -96,7 +96,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(
             () => !!this.tokenList[serviceaccount.id] ?
-                this._apiService.getServiceAccountTokens(this._projectService.project.id, serviceaccount) :
+                this._apiService.getServiceAccountTokens(this._projectService.getCurrentProjectId(), serviceaccount) :
                 EMPTY))
         .subscribe(tokens => {
           this.tokenList[serviceaccount.id] = tokens;
@@ -146,7 +146,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.deleteServiceAccount(this._projectService.project.id, serviceAccount)
+        this._apiService.deleteServiceAccount(this._projectService.getCurrentProjectId(), serviceAccount)
             .pipe(first())
             .subscribe(() => {
               delete this.tokenList[serviceAccount.id];

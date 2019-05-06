@@ -31,4 +31,14 @@
       <div>Demo system</div>
     </div>
   </div>
+
+  <div *ngFor="let link of customLinks"
+       fxFlexAlign="center"
+       fxLayoutAlign="end center">
+    <a [href]="link.url"
+       [matTooltip]="link.label"
+       target="_blank">
+      <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
+    </a>
+  </div>
 </footer>

@@ -1,4 +1,4 @@
-import {CustomLink} from '../entity/CustomLinks';
+import {CustomLink} from '../utils/custom-link-utils/custom-link';
 
 export interface Config {
   default_node_count?: number;
@@ -10,6 +10,7 @@ export interface Config {
   google_analytics_config?: object;
   cleanup_cluster?: boolean;
   custom_links?: CustomLink[];
+  oidc_provider_url?: string;
 }
 
 export interface UserGroupConfig {

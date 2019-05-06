@@ -27,3 +27,19 @@ footer {
 .km-separator {
   padding: 0 $baseline-grid;
 }
+
+i {
+  background-color: transparent;
+  display: inline-block;
+  width: 2.5 * $baseline-grid;
+  height: 2.5 * $baseline-grid;
+  margin-left: 1.5 * $baseline-grid;
+  background-repeat: no-repeat;
+  background-size: contain;
+  cursor: pointer;
+  -webkit-filter: grayscale(100%);
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
