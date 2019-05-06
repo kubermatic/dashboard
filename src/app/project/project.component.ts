@@ -129,7 +129,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
     modal.componentInstance.project = project;
     modal.afterClosed().pipe(first()).subscribe((editedProject) => {
       if (editedProject) {
-        this._projectService.changeAndStoreSelectedProject(editedProject);
         this._externalProjectsUpdate.next();
       }
     });
@@ -167,15 +166,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
 
           if (project.id === this._projectService.getCurrentProjectId()) {
-            this._projectService.changeSelectedProject({
-              id: '',
-              name: '',
-              creationTimestamp: null,
-              deletionTimestamp: null,
-              status: '',
-              owners: [],
-            });
-            this._projectService.removeProject();
+            this._projectService.deselectProject();
           }
 
           this._externalProjectsUpdate.next();

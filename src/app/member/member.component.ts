@@ -68,11 +68,9 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
 
   getGroup(member: MemberEntity): string {
-    if (this._projectService.project) {
-      const group = MemberUtils.getGroupInProject(member, this._projectService.getCurrentProjectId());
-      return MemberUtils.getGroupDisplayName(group);
-    }
-    return '';
+    return this._projectService.project ? MemberUtils.getGroupDisplayName(MemberUtils.getGroupInProject(
+                                              member, this._projectService.getCurrentProjectId())) :
+                                          '';
   }
 
   isAddEnabled(): boolean {

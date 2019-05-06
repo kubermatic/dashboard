@@ -29,7 +29,7 @@ export class NavigationComponent implements OnInit {
   logout(): void {
     this.router.navigate(['']);
     this.auth.logout();
-    this.projectService.removeProject();
+    this.projectService.deselectProject();
     delete this.currentUser;
   }
 

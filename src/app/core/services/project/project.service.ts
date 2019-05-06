@@ -12,6 +12,7 @@ import {UserService} from '../user/user.service';
 
 @Injectable()
 export class ProjectService {
+  private static _localStorageProjectKey = 'project';
   private _project = new Subject<ProjectEntity>();
   selectedProjectChanges$ = this._project.asObservable();
   project: ProjectEntity;
@@ -23,21 +24,28 @@ export class ProjectService {
       private router: Router, private apiService: ApiService, private userService: UserService,
       private appConfigService: AppConfigService) {}
 
-  changeSelectedProject(data: ProjectEntity): void {
-    this._project.next(data);
-    this.project = data;
+  deselectProject(): void {
+    this.project = undefined;
+    this._project.next(undefined);
+    localStorage.removeItem(ProjectService._localStorageProjectKey);
+  }
+
+  changeSelectedProject(project: ProjectEntity): boolean {
+    if (ProjectUtils.isProjectActive(project)) {
+      this.project = project;
+      this._project.next(this.project);
+      return true;
+    } else {
+      return false;
+    }
   }
 
   storeProject(project: ProjectEntity): void {
-    localStorage.setItem(`project`, JSON.stringify(project));
-  }
-
-  removeProject(): void {
-    localStorage.removeItem('project');
+    localStorage.setItem(ProjectService._localStorageProjectKey, JSON.stringify(project));
   }
 
   getProjectFromStorage(): ProjectEntity {
-    const project = localStorage.getItem('project');
+    const project = localStorage.getItem(ProjectService._localStorageProjectKey);
     return project && JSON.parse(project);
   }
 
@@ -46,7 +54,7 @@ export class ProjectService {
       this.projects = res;
       for (const i in this.projects) {
         if (this.projects[i].id === selectedProjectId) {
-          this.changeAndStoreSelectedProject(this.projects[i]);
+          this.changeAndStoreSelectedProject(this.projects[i], false);
           break;
         }
       }

@@ -29,7 +29,7 @@ export class ProjectMockService {
     localStorage.setItem(`project`, JSON.stringify(fakeProject()));
   }
 
-  removeProject(): void {
+  deselectProject(): void {
     localStorage.removeItem('project');
   }
 
