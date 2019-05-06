@@ -5,7 +5,7 @@ import {Subject} from 'rxjs/Subject';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../shared/model/Config';
 import {fakeMember} from '../fake-data/member.fake';
-import {fakeProject} from '../fake-data/project.fake';
+import {fakeProject, fakeProjects} from '../fake-data/project.fake';
 import {fakeUserGroupConfig} from '../fake-data/userGroupConfig.fake';
 
 @Injectable()
@@ -14,6 +14,7 @@ export class ProjectMockService {
   private _project = new Subject<ProjectEntity>();
   selectedProjectChanges$ = this._project.asObservable();
   project = fakeProject();
+  projects = fakeProjects();
   userGroup = fakeMember().projects[0].group;
   userGroupConfig = fakeUserGroupConfig();
 
@@ -35,6 +36,26 @@ export class ProjectMockService {
   getProjectFromStorage(): string {
     const project = localStorage.getItem('project');
     return project && JSON.parse(project);
+  }
+
+  getAndCompareProject(selectedProjectId: string) {
+    this.projects = fakeProjects();
+    for (const i in this.projects) {
+      if (this.projects[i].id === selectedProjectId) {
+        this.changeAndStoreSelectedProject(this.projects[i]);
+      }
+    }
+  }
+
+  getCurrentProjectId() {
+    const urlArray = ['dev.kubermatic.io', 'projects', fakeProject().id];
+
+    if (!!this.project) {
+      return this.project.id;
+    } else {
+      this.getAndCompareProject(urlArray[2]);
+      return urlArray[2];
+    }
   }
 
   getUserGroupConfig(): GroupConfig {
