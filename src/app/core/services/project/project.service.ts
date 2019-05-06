@@ -40,28 +40,27 @@ export class ProjectService {
     return project && JSON.parse(project);
   }
 
-  getAndCompareProject(selectedProjectId: string) {
+  getAndCompareProject(selectedProjectId: string): void {
     this.apiService.getProjects().pipe(first()).subscribe((res) => {
       this.projects = res;
       for (const i in this.projects) {
         if (this.projects[i].id === selectedProjectId) {
           this.changeAndStoreSelectedProject(this.projects[i]);
+          break;
         }
       }
     });
   }
 
-  getCurrentProjectId() {
-    const router: Router = this.router;
-    const state: RouterState = router.routerState;
-    const snapshot: RouterStateSnapshot = state.snapshot;
-    const urlArray = snapshot.url.split('/');
-
+  getCurrentProjectId(): string|undefined {
+    const urlArray = this.router.routerState.snapshot.url.split('/');
     if (!!this.project) {
       return this.project.id;
-    } else {
-      this.getAndCompareProject(urlArray[2]);
+    } else if (urlArray.length > 2) {
+      this.getAndCompareProject(urlArray[2]);  // Assuming that the project ID is at index 2.
       return urlArray[2];
+    } else {
+      return undefined;
     }
   }
 
