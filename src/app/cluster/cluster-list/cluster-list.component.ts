@@ -41,7 +41,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
     timer(0, 5 * this._appConfig.getRefreshTimeBase())
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._apiService.getAllClusters(this._projectService.project.id)))
+        .pipe(switchMap(() => this._apiService.getAllClusters(this._projectService.getCurrentProjectId())))
         .subscribe(clusters => {
           this.clusters = clusters;
           this._loadNodeDc();
@@ -69,13 +69,13 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   }
 
   loadWizard(): void {
-    this._router.navigate(['/projects/' + this._projectService.project.id + '/wizard']);
+    this._router.navigate(['/projects/' + this._projectService.getCurrentProjectId() + '/wizard']);
   }
 
   navigateToCluster(cluster: ClusterEntity): void {
     this._router.navigate(
-        ['/projects/' + this._projectService.project.id + '/dc/' + this.nodeDC[cluster.id].spec.seed + '/clusters/' +
-         cluster.id]);
+        ['/projects/' + this._projectService.getCurrentProjectId() + '/dc/' + this.nodeDC[cluster.id].spec.seed +
+         '/clusters/' + cluster.id]);
   }
 
   getProvider(cloud: CloudSpec): string {
@@ -97,7 +97,8 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.clusters.forEach(cluster => {
       if (!!this.seedDC[cluster.id]) {
         this._apiService
-            .getClusterHealth(cluster.id, this.seedDC[cluster.id].metadata.name, this._projectService.project.id)
+            .getClusterHealth(
+                cluster.id, this.seedDC[cluster.id].metadata.name, this._projectService.getCurrentProjectId())
             .subscribe((health) => {
               this.health[cluster.id] = health;
             });
