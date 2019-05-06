@@ -4,6 +4,7 @@ import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 import {KMElement} from './element';
 import {NavPage} from '../pages/shared/nav.po';
 import {browser} from 'protractor';
+import {second} from "./constants";
 
 export class ProjectUtils {
   private static _navPage = new NavPage();
@@ -20,6 +21,8 @@ export class ProjectUtils {
     // Project should be active before we select it.
     await KMElement.waitToAppear(ProjectUtils._projectsPage.getActiveProjectItem(projectName));
     expect(await ProjectUtils._projectsPage.getActiveProjectItem(projectName).isDisplayed()).toBeTruthy();
+
+    browser.sleep(5 * second);
 
     await KMElement.click(ProjectUtils._projectsPage.getProjectItem(projectName));
 

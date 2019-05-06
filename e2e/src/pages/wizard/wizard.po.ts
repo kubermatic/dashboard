@@ -30,4 +30,8 @@ export class WizardPage extends NavPage {
   getNodeNameInput(): any {
     return element(by.id('km-node-name-input'));
   }
+
+  getNodeCountInput(): any {
+    return element(by.id('km-node-count-input'));
+  }
 }

@@ -19,6 +19,7 @@ describe('Node Deployments story', () => {
   const projectName = RandomUtils.prefixedString('e2e-test-project');
   const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
   const initialNodeDeploymentName = RandomUtils.prefixedString('e2e-test-nd');
+  const initialNodeDeploymentReplicas = '1';
   const providerName = 'digitalocean';
   const datacenterLocation = 'Frankfurt';
 
@@ -58,6 +59,7 @@ describe('Node Deployments story', () => {
   it('should set the provider settings', async () => {
     await KMElement.fill(wizardPage.getDigitalOceanTokenInput(), browser.params.KUBERMATIC_E2E_DIGITALOCEAN_TOKEN);
     await KMElement.fill(wizardPage.getNodeNameInput(), initialNodeDeploymentName);
+    await KMElement.fill(wizardPage.getNodeCountInput(), initialNodeDeploymentReplicas);
 
     await KMElement.click(wizardPage.getNextButton());
   });
