@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {ProjectService} from '../../../core/services';
 import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
 
 @Component({
@@ -10,13 +11,14 @@ import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEn
 export class TokenDialogComponent {
   @Input() serviceaccountToken: ServiceAccountTokenEntity;
 
-  constructor() {}
+  constructor(private readonly _projectService: ProjectService) {}
 
   downloadToken(): void {
     const blob = new Blob([this.serviceaccountToken.token], {type: 'text/plain'});
     const a = window.document.createElement('a');
     a.href = window.URL.createObjectURL(blob);
-    a.download = window.location.host + '-' + this.serviceaccountToken.id;
+    a.download =
+        window.location.host + '-' + this._projectService.getCurrentProjectId() + '-' + this.serviceaccountToken.name;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

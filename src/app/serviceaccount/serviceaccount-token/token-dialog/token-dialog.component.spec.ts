@@ -4,10 +4,15 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
+import {ProjectService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeServiceAccountToken} from '../../../testing/fake-data/serviceaccount.fake';
-import {RouterTestingModule} from '../../../testing/router-stubs';
+import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
+import {ProjectMockService} from '../../../testing/services/project-mock.service';
+
 import {TokenDialogComponent} from './token-dialog.component';
 
 const modules: any[] = [
@@ -34,6 +39,8 @@ describe('TokenDialogComponent', () => {
           providers: [
             {provide: MAT_DIALOG_DATA, useValue: {serviceaccountToken: fakeServiceAccountToken()}},
             {provide: MatDialogRef, useValue: {}},
+            {provide: Router, useClass: RouterStub},
+            {provide: ProjectService, useClass: ProjectMockService},
           ],
         })
         .compileComponents();
