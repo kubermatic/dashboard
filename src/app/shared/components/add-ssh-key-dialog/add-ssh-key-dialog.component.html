@@ -1,7 +1,14 @@
 <div class="km-dialog km-dialog-box">
-  <mat-toolbar>
-    Add SSH key
-  </mat-toolbar>
+  <div mat-dialog-title
+       fxLayoutAlign=" center">
+    <span>Add SSH Key</span>
+    <span fxFlex></span>
+    <button mat-icon-button
+            mat-dialog-close>
+      <i class="fa fa-times"
+         aria-hidden="true"></i>
+    </button>
+  </div>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <form [formGroup]="addSSHKeyForm">

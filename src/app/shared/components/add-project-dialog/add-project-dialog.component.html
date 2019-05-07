@@ -1,13 +1,15 @@
 <div id="km-add-project-dialog"
      class="km-dialog-box">
-  <mat-toolbar>
-    Add Project
+  <div mat-dialog-title
+       fxLayoutAlign=" center">
+    <span>Add Project</span>
+    <span fxFlex></span>
     <button mat-icon-button
             mat-dialog-close>
       <i class="fa fa-times"
          aria-hidden="true"></i>
     </button>
-  </mat-toolbar>
+  </div>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <form [formGroup]="addProjectForm"
@@ -17,7 +19,7 @@
                  matInput
                  formControlName="name"
                  type="text"
-                 placeholder="Project Name*:"
+                 placeholder="Name*:"
                  autocomplete="off"
                  cdkFocusInitial>
           <mat-error *ngIf="addProjectForm.controls.name.hasError('required')">
@@ -40,22 +42,4 @@
       Save
     </button>
   </mat-dialog-actions>
-  <div class="km-how-to-project"
-       fxLayout="row">
-    <div class="km-project-how-to-cell"
-         fxFlex="33%">
-      <div class="km-how-to-project-header">1 Add Project</div>
-      <div class="km-how-to-project-content">Add a project to manage your Clusters</div>
-    </div>
-    <div class="km-project-how-to-cell"
-         fxFlex="33%">
-      <div class="km-how-to-project-header">2 Add Member</div>
-      <div class="km-how-to-project-content">Add Members to give access to your Cluster</div>
-    </div>
-    <div class="km-project-how-to-cell"
-         fxFlex="34%">
-      <div class="km-how-to-project-header">3 Create Cluster</div>
-      <div class="km-how-to-project-content">Create and add Clusters to your Project</div>
-    </div>
-  </div>
 </div>

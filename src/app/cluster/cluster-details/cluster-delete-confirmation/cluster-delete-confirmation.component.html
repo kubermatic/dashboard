@@ -2,14 +2,16 @@
       id="km-delete-cluster-dialog"
       class="km-dialog-box"
       (keydown.enter)="deleteCluster()">
-  <mat-toolbar>
-    Delete Cluster
+  <div mat-dialog-title
+       fxLayoutAlign=" center">
+    <span>Delete Cluster</span>
+    <span fxFlex></span>
     <button mat-icon-button
             mat-dialog-close>
       <i class="fa fa-times"
          aria-hidden="true"></i>
     </button>
-  </mat-toolbar>
+  </div>
 
   <mat-dialog-content>
     <div class="mat-dialog-content">

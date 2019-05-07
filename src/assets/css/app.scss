@@ -52,7 +52,7 @@ body {
   width: 100%;
 
   .km-header-row {
-    background-color: $primary;
+    background-color: $alternative-dark;
     height: 6 * $baseline-grid;
   }
 
@@ -284,7 +284,7 @@ mat-button-toggle-group[group='providerGroup'] {
     margin: 0;
     height: 30px;
     line-height: 30px;
-    background-color: $primary;
+    background-color: $alternative-dark;
     color: $white-text-color;
 
     .mat-card-header-text {
@@ -443,32 +443,6 @@ mat-button-toggle-group[group='providerGroup'] {
       line-height: 40px;
       padding: 10px 24px;
     }
-  }
-}
-
-// modal close icon
-button.close {
-  position: absolute;
-  right: 20px;
-}
-
-.mat-toolbar {
-  border: none;
-  padding: 0;
-  font-size: 18px;
-  font-weight: 600;
-  position: relative;
-  background-color: $primary !important;
-  color: $white-text-color !important;
-  margin-bottom: 10px;
-
-  .mat-dialog-info {
-    margin-left: 10px;
-  }
-
-  .fa-pencil {
-    margin-left: 15px;
-    margin-right: 10px;
   }
 }
 
@@ -681,54 +655,6 @@ button.close {
   }
 }
 
-.mat-dialog-content {
-  margin-top: 0;
-}
-
-.mat-dialog-container {
-  padding: 0 !important;
-
-  .mat-toolbar {
-    height: 50px;
-
-    h4 {
-      font-weight: 500;
-      font-size: 14px;
-      margin: 0;
-    }
-
-    button {
-      position: absolute;
-      font-size: 20px;
-      right: 7px;
-      top: 3px;
-
-      i {
-        color: $white-text-color;
-      }
-    }
-  }
-
-  .mat-dialog-content {
-    padding: 5px 10px 0;
-    margin: 0;
-
-    p {
-      font-size: 14px;
-      font-weight: 400;
-      margin: 0 0 $baseline-grid 0;
-    }
-
-    .mat-input-wrapper {
-      margin: 0;
-    }
-
-    .mat-input-infix {
-      font-size: 14px;
-    }
-  }
-}
-
 // provider message
 
 .km-provider-message {
@@ -874,8 +800,25 @@ div.km-form-group-tags {
   }
 }
 
-// Dialog actions.
-.mat-dialog-actions {
-  justify-content: flex-end;
-  margin: $baseline-grid (2.5 * $baseline-grid) $baseline-grid !important;
+// Dialogs.
+.mat-dialog-container {
+  padding: $dialog-padding;
+
+  .mat-dialog-title {
+    color: $text-color;
+    font-weight: normal;
+  }
+
+  .mat-dialog-content {
+    font-size: 16px;
+    font-weight: 400;
+
+    p {
+      margin: 0 0 $baseline-grid;
+    }
+  }
+
+  .mat-dialog-actions {
+    justify-content: flex-end;
+  }
 }

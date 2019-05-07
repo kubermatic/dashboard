@@ -10,7 +10,6 @@ import {MachineNetworkForm} from '../../../../shared/model/ClusterForm';
 @Component({
   selector: 'kubermatic-add-machine-network',
   templateUrl: './add-machine-network.component.html',
-  styleUrls: ['./add-machine-network.component.scss'],
 })
 
 export class AddMachineNetworkComponent implements OnInit {
