@@ -15,12 +15,11 @@
         <div fxLayout>
           <div fxFlex
                align="right">
-            <button mat-raised-button
-                    color="primary"
+            <button mat-flat-button
                     type="button"
                     (click)="addSshKey()"
                     [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">
-              <span class="btn-text-default">Add SSH key</span>
+              <span class="btn-text-default">Add SSH Key</span>
             </button>
           </div>
         </div>
@@ -61,13 +60,6 @@
               <div fxFlex
                    class="km-row km-odd km-no-item">No SSHKey available. Please add a SSHKey.</div>
             </ng-container>
-
-            <ng-container>
-              <div class="km-row add-sshkey-button">
-                <button (click)="addSshKey()"
-                        [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">Add SSH key</button>
-              </div>
-            </ng-container>
           </mat-card-content>
         </mat-card>
       </div>
@@ -81,7 +73,8 @@
 
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
   </mat-dialog-actions>

@@ -43,12 +43,12 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
     <button id="km-add-member-dialog-add-btn"
-            mat-raised-button
-            color="primary"
+            mat-flat-button
             (click)="addMember()"
             [disabled]="!addMemberForm.valid">
       Add

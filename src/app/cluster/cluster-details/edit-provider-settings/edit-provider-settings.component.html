@@ -27,13 +27,12 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
-    <button mat-raised-button
+    <button mat-flat-button
             mat-dialog-close
-            color="primary"
-            class="btn btn-primary"
             [disabled]="!providerSettingsPatch.isValid"
             (click)="saveProviderSettings()">
       Save

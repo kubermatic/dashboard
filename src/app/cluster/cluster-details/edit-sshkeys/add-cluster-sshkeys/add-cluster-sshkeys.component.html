@@ -33,11 +33,11 @@
 
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
-    <button mat-raised-button
-            color="primary"
+    <button mat-flat-button
             (click)="addClusterSSHKeys()"
             [disabled]="!keysForm.valid">
       Add

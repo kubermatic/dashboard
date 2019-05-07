@@ -15,13 +15,12 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
     <button (click)="revokeAdminToken()"
-            mat-raised-button
-            color="primary"
-            class="mat-primary"
+            mat-flat-button
             [disabled]="!adminToken">
       Revoke
     </button>

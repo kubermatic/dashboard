@@ -472,16 +472,8 @@ button.close {
   }
 }
 
-mat-dialog-content {
-  margin-bottom: 15px;
-}
-
 .km-dialog-box {
-  min-width: 400px;
-
-  &#km-confirmation-dialog mat-form-field {
-    width: 100%;
-  }
+  min-width: $dialog-width;
 }
 
 // Input Fields
@@ -680,7 +672,7 @@ mat-dialog-content {
 }
 
 .km-dialog {
-  width: 545px;
+  width: $dialog-width;
 }
 
 @media screen and (max-width: 745px) {
@@ -693,49 +685,11 @@ mat-dialog-content {
   margin-top: 0;
 }
 
-// modal action
-.mat-dialog-actions {
-  justify-content: center;
-
-  button {
-    font-size: 14px;
-    font-weight: 600 !important;
-    border-radius: 0;
-    padding: 0 22px;
-    line-height: 16px;
-
-    &.mat-raised-button {
-      color: $text-color;
-    }
-
-    &.mat-raised-button.mat-primary {
-      color: $white-text-color;
-      background-color: $primary;
-    }
-
-    &.mat-raised-button.mat-primary[disabled] {
-      color: $white-text-color;
-      background-color: $border;
-      box-shadow: 0 3px 1px -2px rgba(0, 0, 0, .2), 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12);
-    }
-  }
-}
-
 .mat-dialog-container {
   padding: 0 !important;
-  max-width: 600px;
-  border-radius: 0;
-
-  .mat-toolbar-row {
-    position: relative;
-  }
 
   .mat-toolbar {
     height: 50px;
-
-    .mat-toolbar-row {
-      height: 30px;
-    }
 
     h4 {
       font-weight: 500;
@@ -762,6 +716,7 @@ mat-dialog-content {
     p {
       font-size: 14px;
       font-weight: 400;
+      margin: 0 0 $baseline-grid 0;
     }
 
     .mat-input-wrapper {
@@ -770,16 +725,6 @@ mat-dialog-content {
 
     .mat-input-infix {
       font-size: 14px;
-    }
-  }
-
-  .mat-dialog-actions {
-    &:last-child {
-      margin-bottom: 12px;
-    }
-
-    button {
-      margin-right: 10px;
     }
   }
 }
@@ -798,15 +743,6 @@ mat-dialog-content {
   a {
     color: $primary;
     text-decoration: none;
-  }
-}
-
-// download kubeconfig button
-.km-download-kubeconfig-btn {
-  span.mat-button-wrapper {
-    display: flex;
-    height: 100%;
-    align-items: center;
   }
 }
 
@@ -936,4 +872,10 @@ div.km-form-group-tags {
     color: $medium-text-color;
     border: 1px solid $medium-text-color;
   }
+}
+
+// Dialog actions.
+.mat-dialog-actions {
+  justify-content: flex-end;
+  padding: $baseline-grid (2.5 * $baseline-grid) (2 * $baseline-grid) !important;
 }

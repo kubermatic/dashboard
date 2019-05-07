@@ -1,10 +1,6 @@
 <div id="km-add-project-dialog"
      class="km-dialog-box">
   <mat-toolbar>
-    <span mat-dialog-info>
-      <i class="fa fa-pencil"
-         aria-hidden="true"></i>
-    </span>
     Add Project
     <button mat-icon-button
             mat-dialog-close>
@@ -33,12 +29,12 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Cancel
     </button>
     <button id="km-add-project-dialog-save"
-            mat-raised-button
-            color="primary"
+            mat-flat-button
             (click)="addProject()"
             [disabled]="!addProjectForm.valid">
       Save

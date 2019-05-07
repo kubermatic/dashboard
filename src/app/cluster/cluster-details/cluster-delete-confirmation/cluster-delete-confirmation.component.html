@@ -3,7 +3,7 @@
       class="km-dialog-box"
       (keydown.enter)="deleteCluster()">
   <mat-toolbar>
-    Delete Cluster confirmation
+    Delete Cluster
     <button mat-icon-button
             mat-dialog-close>
       <i class="fa fa-times"
@@ -48,15 +48,14 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
     <button id="km-delete-cluster-dialog-delete-btn"
             (click)="deleteCluster()"
             mat-dialog-close
-            mat-raised-button
-            color="primary"
-            class="mat-primary"
+            mat-flat-button
             [disabled]="!inputNameMatches()">
       Delete
     </button>

@@ -12,19 +12,13 @@
     </mat-select>
   </mat-form-field>
   <button *ngIf="keys.length > 0"
-          style="margin-top: 10px; padding: 0 10px;"
-          mat-button
-          color="primary"
           (click)="addSshKeyDialog()"
-          mat-raised-button
+          mat-flat-button
           [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">Add new SSH key</button>
   <div *ngIf="keys.length === 0">
     <p>You have no SSH keys</p>
-    <button style="margin-top: 10px; padding: 0 10px;"
-            mat-button
-            color="primary"
-            (click)="addSshKeyDialog()"
-            mat-raised-button
+    <button (click)="addSshKeyDialog()"
+            mat-flat-button
             [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">Add SSH key</button>
   </div>
 </form>
