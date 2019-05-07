@@ -20,7 +20,7 @@
                     type="button"
                     (click)="addSshKey()"
                     [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">
-              <span class="btn-text-default">+ Add SSH key</span>
+              <span class="btn-text-default">Add SSH key</span>
             </button>
           </div>
         </div>
@@ -65,7 +65,7 @@
             <ng-container>
               <div class="km-row add-sshkey-button">
                 <button (click)="addSshKey()"
-                        [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">+ Add SSH key</button>
+                        [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">Add SSH key</button>
               </div>
             </ng-container>
           </mat-card-content>

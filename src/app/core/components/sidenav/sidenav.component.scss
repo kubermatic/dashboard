@@ -1,6 +1,10 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
+.km-option-add-project {
+  color: $light-text-color;
+}
+
 .container {
   width: $sidenav-width;
   background-color: $primary;
