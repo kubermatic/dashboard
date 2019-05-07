@@ -3,6 +3,10 @@ FROM docker:18.06.3-ce-dind
 COPY start.sh /start.sh
 RUN chmod +x /start.sh
 
+COPY utils/ opt/e2e/
+RUN ln -s /opt/e2e/deploy.sh /usr/local/bin && \
+    ln -s /opt/e2e/expose.sh /usr/local/bin
+
 RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
