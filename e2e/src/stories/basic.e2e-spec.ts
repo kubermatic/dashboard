@@ -10,7 +10,8 @@ import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
 import {ClusterUtils} from '../utils/cluster';
 import {ConfirmationUtils} from '../utils/confirmation';
-import {minute} from "../utils/constants";
+import {minute, second} from "../utils/constants";
+import {NavPage} from "../pages/shared/nav.po";
 
 /**
  * This is the user story that tests basic kubermatic dashboard features such as:
@@ -32,6 +33,7 @@ describe('Basic story', () => {
   const clustersPage = new ClustersPage();
   const wizardPage = new WizardPage();
   const membersPage = new MembersPage();
+  const navPage = new NavPage();
 
   let projectName = RandomUtils.prefixedString('e2e-test-project');
   const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
@@ -48,8 +50,28 @@ describe('Basic story', () => {
     await ProjectUtils.createProject(projectName);
   });
 
-  it('should select the new project', async () => {
-    await ProjectUtils.selectProject(projectName);
+  it('1should select the new project', async () => {
+    // Project should be active before we select it.
+    await KMElement.waitToAppear(projectsPage.getActiveProjectItem(projectName));
+    expect(await projectsPage.getActiveProjectItem(projectName).isDisplayed()).toBeTruthy();
+  });
+
+  it('2should select the new project', async () => {
+    browser.sleep(5 * second);
+  });
+
+  it('3should select the new project', async () => {
+    await KMElement.click(projectsPage.getProjectItem(projectName));
+  });
+
+  it('4should select the new project', async () => {
+    await KMElement.waitForRedirect('/clusters');
+  });
+
+  it('5should select the new project', async () => {
+    // Wait until side menu will be available.
+    await KMElement.waitForClickable(navPage.getProjectsNavButton());
+    expect(await navPage.getProjectsNavButton().isDisplayed()).toBeTruthy();
   });
 
   it('should go to clusters page', async () => {
