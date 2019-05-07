@@ -20,7 +20,6 @@
         <div fxFlex>
           <kubermatic-navigation></kubermatic-navigation>
           <kubermatic-notification></kubermatic-notification>
-          <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
           <router-outlet></router-outlet>
         </div>
         <kubermatic-footer [version]="version"
