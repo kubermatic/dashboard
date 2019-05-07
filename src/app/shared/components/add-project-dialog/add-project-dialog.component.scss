@@ -1,4 +1,5 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
 
 .mat-dialog-container {
   width: 200px;
@@ -6,7 +7,6 @@
 }
 
 .km-how-to-project {
-  margin-top: 40px;
   background-color: $light-background;
 
   .km-how-to-project-header {

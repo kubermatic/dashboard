@@ -877,5 +877,5 @@ div.km-form-group-tags {
 // Dialog actions.
 .mat-dialog-actions {
   justify-content: flex-end;
-  padding: $baseline-grid (2.5 * $baseline-grid) (2 * $baseline-grid) !important;
+  margin: $baseline-grid (2.5 * $baseline-grid) $baseline-grid !important;
 }
