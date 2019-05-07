@@ -16,5 +16,5 @@ mat-sidenav-container {
 
 .main {
   height: 100%;
-  padding: 0 (2.5 * $baseline-grid);
+  padding: $content-padding $content-padding 0 $content-padding;
 }
