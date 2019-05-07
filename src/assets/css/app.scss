@@ -917,3 +917,23 @@ div.km-form-group-tags {
 .km-bottom-spacer {
   margin-bottom: 9 * $baseline-grid;
 }
+
+// Buttons.
+.mat-button,
+.mat-flat-button,
+.mat-raised-button {
+  font-size: $subhead-font-size-base;
+  line-height: 5 * $baseline-grid !important;
+  background-color: $alternative-dark;
+  color: $white-text-color;
+
+  &:not(:first-child) {
+    margin-left: 1.25 * $baseline-grid !important;
+  }
+
+  &.mat-alternative {
+    background-color: $white-text-color;
+    color: $medium-text-color;
+    border: 1px solid $medium-text-color;
+  }
+}

@@ -3,48 +3,40 @@
        class="km-cluster-detail-actions">
     <div fxFlex="100%"
          align="right">
-      <button mat-raised-button
-              color="primary"
+      <button id="km-delete-cluster-btn"
+              mat-flat-button
+              color="alternative"
+              (click)="deleteClusterDialog()"
+              [disabled]="!isDeleteEnabled()">
+        Delete Cluster
+      </button>
+      <div fxFlex></div>
+      <button mat-flat-button
               (click)="addNode()"
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
               [disabled]="!isAddNodeDeploymentsEnabled()">
-        <i class="fa fa-plus km-action-button-icon"
-           aria-hidden="true"></i>
         Add Node Deployment
       </button>
       <button class="km-connect-kubeconfig-btn"
               (click)="connectClusterDialog()"
-              mat-button
-              mat-raised-button
-              color="primary"
+              mat-flat-button
               [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')">
         Connect
       </button>
       <button class="km-share-kubeconfig-btn"
               (click)="shareConfigDialog()"
-              mat-button
-              mat-raised-button
-              color="primary"
+              mat-flat-button
               [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')"
               *ngIf="!!config.share_kubeconfig">
         Share cluster
       </button>
       <a class="km-download-kubeconfig-btn"
-         mat-button
-         mat-raised-button
+         mat-flat-button
          disabled="{{ !isClusterRunning }}"
-         color="primary"
-         href="{{ getDownloadURL() }}"
-         target="_blank">Download config</a>
-      <button id="km-delete-cluster-btn"
-              mat-button
-              (click)="deleteClusterDialog()"
-              mat-raised-button
-              [disabled]="!isDeleteEnabled()">
-        <i class="fa fa-trash-o km-action-button-icon"
-           aria-hidden="true"></i>
-        Delete Cluster
-      </button>
+         href="{{getDownloadURL()}}"
+         target="_blank">
+        Download Config
+      </a>
     </div>
   </div>
 
