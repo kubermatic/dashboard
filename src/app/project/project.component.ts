@@ -68,9 +68,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private _sortProjectOwners(): void {
     this.projects.forEach(project => {
-      project.owners = project.owners.sort((a, b) => {
-        return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-      });
+      project.owners = project.owners.sort((a, b) => a.name.localeCompare(b.name));
     });
   }
 
