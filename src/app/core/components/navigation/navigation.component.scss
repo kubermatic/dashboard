@@ -2,7 +2,9 @@
 @import "../../../../assets/css/fonts";
 @import "../../../../assets/css/variables";
 
-$logo-width: 240px;
+$logo-width: 160px;
+$logo-margin-top: 13px;
+$logo-margin-left: $logo-margin-top * 2;
 
 header {
   height: $toolbar-height;
@@ -20,10 +22,10 @@ ng2-slim-loading-bar {
 
   .km-header-logo {
     display: block;
-    width: $logo-width;
+    width: $logo-width + $logo-margin-left;
     height: $toolbar-height;
     background-size: $logo-width;
-    background-position: 0 -22px;
+    background-position: $logo-margin-left $logo-margin-top;
   }
 
   .km-auth {

@@ -3,20 +3,34 @@
 
 set -euo pipefail
 
+if [ "${1:-}" == "--help" ]; then
+  cat <<EOF
+Usage: $(basename $0) <k8c-img-tag>
+
+  <k8c-img-tag>       the tag of the Kubermatic image that will be deployed.
+
+Examples:
+  $(basename $0) latestbuild
+EOF
+  exit 0
+fi
+
 DELETE=${1:-''}
 
-KUBERMATIC_DOMAIN="ci.kubermatic.io"
-KUBERMATIC_PATH=./helm/kubermatic
-KUBERMATIC_CRD_PATH=${KUBERMATIC_PATH}/crd
+SCRIPT_PATH=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
 
-DEX_PATH=./helm/oauth
+KUBERMATIC_DOMAIN="ci.kubermatic.io"
+KUBERMATIC_PATH=${SCRIPT_PATH}/helm/kubermatic
+KUBERMATIC_CRD_PATH=${KUBERMATIC_PATH}/crd
 
 KUBECONFIG_PATH=~/.kube/config
 KUBECONFIG_CLUSTER_NAME="prow-build-cluster"
 KUBECONFIG_ENCODED=""
 
-DATACENTERS_PATH=./yamls/datacenters.yaml
+DATACENTERS_PATH=${SCRIPT_PATH}/yamls/datacenters.yaml
 DATACENTERS_ENCODED=$(base64 ${DATACENTERS_PATH} | tr -d '\n')
+
+DEX_PATH=${SCRIPT_PATH}/helm/oauth
 
 TILLER_NAMESPACE="helm"
 DEX_NAMESPACE="oauth"
@@ -24,18 +38,19 @@ KUBERMATIC_NAMESPACE="kubermatic"
 LOCAL_PROVISIONER_NAMESPACE="local-provisioner"
 
 KUBERMATIC_STORAGE_CLASS_NAME="kubermatic-fast"
-KUBERMATIC_IMAGE_TAG=latest
+KUBERMATIC_IMAGE_TAG=${1:-"latest"}
+KUBERMATIC_IMAGE="quay.io/kubermatic/api"
 
 function cleanup {
 	kind delete cluster --name ${KUBECONFIG_CLUSTER_NAME}
 
-	rm -rf ./helm
-	rm ./yamls/kubeconfig
+	rm -rf ${SCRIPT_PATH}/helm
+	rm ${SCRIPT_PATH}/yamls/kubeconfig
 }
 
 function patch::kubeconfig {
-	cp ${KUBECONFIG_PATH} ./yamls/kubeconfig
-	KUBECONFIG_PATH=./yamls/kubeconfig
+	cp ${KUBECONFIG_PATH} ${SCRIPT_PATH}/yamls/kubeconfig
+	KUBECONFIG_PATH=${SCRIPT_PATH}/yamls/kubeconfig
 
 	yq w -i ${KUBECONFIG_PATH} clusters[0].name ${KUBECONFIG_CLUSTER_NAME}
 	yq w -i ${KUBECONFIG_PATH} contexts[0].name ${KUBECONFIG_CLUSTER_NAME}
@@ -49,11 +64,11 @@ function patch::kubeconfig {
 }
 
 function prepare::files {
-	mkdir -p ./helm
+	mkdir -p ${SCRIPT_PATH}/helm
 	cp -r $GOPATH/src/github.com/kubermatic/kubermatic/config/oauth ${DEX_PATH}
 	rm ${DEX_PATH}/templates/ingress.yaml
-	patch ${DEX_PATH}/values.yaml ./patch/oauth_values.patch
-	patch ${DEX_PATH}/templates/configmap.yaml ./patch/dex-config.patch
+	patch ${DEX_PATH}/values.yaml ${SCRIPT_PATH}/patch/oauth_values.patch
+	patch ${DEX_PATH}/templates/configmap.yaml ${SCRIPT_PATH}/patch/dex-config.patch
 
 	cp -r $GOPATH/src/github.com/kubermatic/kubermatic/config/kubermatic ${KUBERMATIC_PATH}
 	rm ${KUBERMATIC_PATH}/templates/ingress.yaml
@@ -149,18 +164,28 @@ function check::env {
 	fi
 }
 
+# push::img loads Kubermatic image if available locally to kind cluster
+function push::img {
+	if [[ ! -z $(docker images -q ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG}) ]]; then
+		echo "Loading/pushing ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG} image to ${KUBECONFIG_CLUSTER_NAME} cluster"
+		kind load docker-image ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG} --name ${KUBECONFIG_CLUSTER_NAME}
+	fi
+}
+
+
 if [[ "${DELETE}" == "--delete" ]]; then
 	cleanup
 else
 	check::env
 	prepare::files
 	start::cluster
+	push::img
 	prepare::cluster
 	deploy::helm
 	deploy::provisioner
 	deploy::dex
 	deploy::kubermatic
 
-	kubectl apply -f yamls/user.yaml
+	kubectl apply -f ${SCRIPT_PATH}/yamls/user.yaml
 	kubectl create ns sa-secrets
 fi
