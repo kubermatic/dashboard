@@ -1,15 +1,6 @@
 <div id="km-add-project-dialog"
      class="km-dialog-box">
-  <div mat-dialog-title
-       fxLayoutAlign=" center">
-    <span>Add Project</span>
-    <span fxFlex></span>
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </div>
+  <km-dialog-title title="Add Project"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <form [formGroup]="addProjectForm"

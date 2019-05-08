@@ -1,15 +1,6 @@
 <div class="km-dialog-box km-add-nodes-dialog"
      *ngIf="data.nodeData">
-  <div mat-dialog-title
-       fxLayoutAlign=" center">
-    <span>{{getDialogLabel()}}</span>
-    <span fxFlex></span>
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </div>
+  <km-dialog-title [title]="getDialogLabel()"></km-dialog-title>
   <mat-tab-group class="km-change-view"
                  (selectedTabChange)="onTabChange($event)"
                  *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown">

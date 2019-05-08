@@ -1,16 +1,7 @@
 <div class="km-dialog-box"
      id="km-confirmation-dialog"
      (keydown.enter)="onEnterKeyDown()">
-  <div mat-dialog-title
-       fxLayoutAlign=" center">
-    <span>{{data.title}}</span>
-    <span fxFlex></span>
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </div>
+  <km-dialog-title [title]="data.title"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <p>{{data.message}}</p>
