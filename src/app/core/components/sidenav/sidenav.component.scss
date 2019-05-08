@@ -7,7 +7,7 @@
 
 .container {
   width: $sidenav-width;
-  background-color: $primary;
+  background-color: $alternative-dark;
   height: 100%;
 
   * {
@@ -121,7 +121,7 @@
       }
 
       &:hover {
-        background-color: $primary;
+        background-color: $alternative-dark;
 
         i {
           -webkit-filter: brightness(115%);

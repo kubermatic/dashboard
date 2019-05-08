@@ -52,7 +52,7 @@ body {
   width: 100%;
 
   .km-header-row {
-    background-color: $alternative-dark;
+    background-color: $primary;
     height: 6 * $baseline-grid;
   }
 
@@ -284,7 +284,7 @@ mat-button-toggle-group[group='providerGroup'] {
     margin: 0;
     height: 30px;
     line-height: 30px;
-    background-color: $alternative-dark;
+    background-color: $primary;
     color: $white-text-color;
 
     .mat-card-header-text {
@@ -786,7 +786,7 @@ div.km-form-group-tags {
 .mat-raised-button {
   font-size: $subhead-font-size-base;
   line-height: 5 * $baseline-grid !important;
-  background-color: $alternative-dark;
+  background-color: $primary;
   color: $white-text-color;
 
   &:not(:first-child) {
