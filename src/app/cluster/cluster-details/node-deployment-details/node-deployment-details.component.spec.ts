@@ -102,21 +102,6 @@ describe('NodeDeploymentDetailsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render go back action button', () => {
-    const action = fixture.debugElement.query(By.css('.fa-history'));
-    expect(action).not.toBeNull();
-  });
-
-  it('should render edit action button', () => {
-    const action = fixture.debugElement.query(By.css('.km-icon-edit'));
-    expect(action).not.toBeNull();
-  });
-
-  it('should render go back action button', () => {
-    const action = fixture.debugElement.query(By.css('.fa-trash-o'));
-    expect(action).not.toBeNull();
-  });
-
   it('should render cluster name', () => {
     const name = fixture.debugElement.query(By.css('.km-node-deployment-name'));
     expect(name.nativeElement.textContent).toContain(component.nodeDeployment.name);

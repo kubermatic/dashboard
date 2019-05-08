@@ -41,9 +41,6 @@ describe('AddSshKeyDialogComponent', () => {
           imports: [
             ...modules,
           ],
-          declarations: [
-            AddSshKeyDialogComponent,
-          ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
             {provide: ApiService, useClass: ApiMockService},
@@ -72,9 +69,8 @@ describe('AddSshKeyDialogComponent', () => {
   });
 
   it('name field validity', () => {
-    let errors = {};
     const name = component.addSSHKeyForm.controls['name'];
-    errors = name.errors || {};
+    let errors = name.errors || {};
     expect(errors['required']).toBeTruthy();
 
     name.setValue('test');
