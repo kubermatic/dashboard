@@ -9,6 +9,4 @@ import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEn
 
 export class TokenDialogComponent {
   @Input() serviceaccountToken: ServiceAccountTokenEntity;
-
-  constructor() {}
 }
