@@ -12,7 +12,7 @@ import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
-import {SharedModule} from '../../shared.module';
+import {DialogTitleComponent} from '../dialog-title/dialog-title.component';
 
 import {AddSshKeyDialogComponent} from './add-ssh-key-dialog.component';
 
@@ -26,7 +26,6 @@ const modules: any[] = [
   MatFormFieldModule,
   MatToolbarModule,
   MatInputModule,
-  SharedModule,
 ];
 
 describe('AddSshKeyDialogComponent', () => {
@@ -40,6 +39,9 @@ describe('AddSshKeyDialogComponent', () => {
         .configureTestingModule({
           imports: [
             ...modules,
+          ],
+          declarations: [
+            DialogTitleComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
