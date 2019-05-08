@@ -42,6 +42,7 @@ describe('AddSshKeyDialogComponent', () => {
           ],
           declarations: [
             DialogTitleComponent,
+            AddSshKeyDialogComponent,
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
