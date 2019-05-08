@@ -19,13 +19,13 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button class="km-download-sa-token-btn"
-          (click)="downloadToken()"
-          mat-button
-          mat-raised-button
-          color="primary">
-    Download Token
-  </button>
+  <a class="km-download-sa-token-btn"
+     mat-button
+     mat-raised-button
+     color="primary"
+     [href]="downloadUrl"
+     [download]="downloadTitle"
+     target="_blank">Download Token</a>
   <button mat-dialog-close
           mat-raised-button>
     Close

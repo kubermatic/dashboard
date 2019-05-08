@@ -1,4 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+
 import {ProjectService} from '../../../core/services';
 import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
 
@@ -8,19 +10,17 @@ import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEn
   styleUrls: ['./token-dialog.component.scss'],
 })
 
-export class TokenDialogComponent {
+export class TokenDialogComponent implements OnInit {
   @Input() serviceaccountToken: ServiceAccountTokenEntity;
+  downloadUrl: SafeUrl;
+  downloadTitle = '';
 
-  constructor(private readonly _projectService: ProjectService) {}
+  constructor(private readonly _projectService: ProjectService, private sanitizer: DomSanitizer) {}
 
-  downloadToken(): void {
+  ngOnInit(): void {
     const blob = new Blob([this.serviceaccountToken.token], {type: 'text/plain'});
-    const a = window.document.createElement('a');
-    a.href = window.URL.createObjectURL(blob);
-    a.download =
+    this.downloadUrl = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(blob));
+    this.downloadTitle =
         window.location.host + '-' + this._projectService.getCurrentProjectId() + '-' + this.serviceaccountToken.name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
   }
 }
