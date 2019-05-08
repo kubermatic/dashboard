@@ -9,14 +9,16 @@
   width: $sidenav-width;
   background-color: $primary;
   height: 100%;
-  color: $secondary;
+
+  * {
+    color: $secondary;
+  }
 
   .mat-nav-list {
     padding: 0 !important;
 
     .mat-list-item,
     a {
-      color: $secondary;
       height: $toolbar-height;
 
       &.km-projects {
@@ -26,6 +28,7 @@
     }
 
     a {
+      font-size: $subhead-font-size-base-lg !important;
       padding: 10px 30px !important;
       display: flex;
       align-items: center;
@@ -87,11 +90,6 @@
 
     ::ng-deep.mat-select-arrow {
       visibility: hidden;
-    }
-
-    .mat-nav-list a {
-      font-size: $subhead-font-size-base-lg;
-      font-weight: 400;
     }
 
     .mat-list-item i {
