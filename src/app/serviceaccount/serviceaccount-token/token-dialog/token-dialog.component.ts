@@ -1,4 +1,6 @@
 import {Component, Input} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
+
 import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEntity';
 
 @Component({
@@ -9,4 +11,10 @@ import {ServiceAccountTokenEntity} from '../../../shared/entity/ServiceAccountEn
 
 export class TokenDialogComponent {
   @Input() serviceaccountToken: ServiceAccountTokenEntity;
+
+  constructor(public dialogRef: MatDialogRef<TokenDialogComponent>) {}
+
+  onNoClick(): void {
+    this.dialogRef.close(false);
+  }
 }
