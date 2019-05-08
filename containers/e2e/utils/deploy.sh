@@ -3,6 +3,18 @@
 
 set -euo pipefail
 
+if [ "${1:-}" == "--help" ]; then
+  cat <<EOF
+Usage: $(basename $0) <k8c-img-tag>
+
+  <k8c-img-tag>       the tag of the Kubermatic image that will be deployed.
+
+Examples:
+  $(basename $0) latestbuild
+EOF
+  exit 0
+fi
+
 DELETE=${1:-''}
 
 SCRIPT_PATH=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
@@ -26,7 +38,8 @@ KUBERMATIC_NAMESPACE="kubermatic"
 LOCAL_PROVISIONER_NAMESPACE="local-provisioner"
 
 KUBERMATIC_STORAGE_CLASS_NAME="kubermatic-fast"
-KUBERMATIC_IMAGE_TAG=latest
+KUBERMATIC_IMAGE_TAG=${1:-"latest"}
+KUBERMATIC_IMAGE="quay.io/kubermatic/api"
 
 function cleanup {
 	kind delete cluster --name ${KUBECONFIG_CLUSTER_NAME}
@@ -151,12 +164,22 @@ function check::env {
 	fi
 }
 
+# push::img loads Kubermatic image if available locally to kind cluster
+function push::img {
+	if [[ ! -z $(docker images -q ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG}) ]]; then
+		echo "Loading/pushing ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG} image to ${KUBECONFIG_CLUSTER_NAME} cluster"
+		kind load docker-image ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG} --name ${KUBECONFIG_CLUSTER_NAME}
+	fi
+}
+
+
 if [[ "${DELETE}" == "--delete" ]]; then
 	cleanup
 else
 	check::env
 	prepare::files
 	start::cluster
+	push::img
 	prepare::cluster
 	deploy::helm
 	deploy::provisioner
