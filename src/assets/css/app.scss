@@ -802,7 +802,8 @@ mat-dialog-content {
 }
 
 // download kubeconfig button
-.km-download-kubeconfig-btn {
+.km-download-kubeconfig-btn,
+.km-download-sa-token-btn {
   span.mat-button-wrapper {
     display: flex;
     height: 100%;

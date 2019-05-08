@@ -10,7 +10,7 @@
   <div class="mat-dialog-content">
     <p>
       <i class="fa fa-exclamation-triangle"></i>
-      Make sure to save this token at a safe place on your own device. It <strong>could not</strong> be displayed again!
+      Make sure to save this token at a safe place on your own device. It <strong>cannot</strong> be displayed again after closing this window.
     </p>
     <p class="km-code-block km-copy"
        ngxClipboard
@@ -19,6 +19,13 @@
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>
+  <a class="km-download-sa-token-btn"
+     mat-button
+     mat-raised-button
+     color="primary"
+     [href]="downloadUrl"
+     [download]="downloadTitle"
+     target="_blank">Download Token</a>
   <button mat-dialog-close
           mat-raised-button>
     Close
