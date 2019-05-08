@@ -5,12 +5,15 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
+
 import {ApiService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
+import {SharedModule} from '../../shared.module';
+
 import {AddSshKeyDialogComponent} from './add-ssh-key-dialog.component';
 
 const modules: any[] = [
@@ -23,6 +26,7 @@ const modules: any[] = [
   MatFormFieldModule,
   MatToolbarModule,
   MatInputModule,
+  SharedModule,
 ];
 
 describe('AddSshKeyDialogComponent', () => {
