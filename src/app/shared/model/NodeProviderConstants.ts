@@ -4,6 +4,7 @@ export class NodeProvider {
   static readonly BRINGYOUROWN: string = 'bringyourown';
   static readonly BAREMETAL: string = 'baremetal';
   static readonly OPENSTACK: string = 'openstack';
+  static readonly PACKET: string = 'packet';
   static readonly VSPHERE: string = 'vsphere';
   static readonly HETZNER: string = 'hetzner';
   static readonly AZURE: string = 'azure';
@@ -12,6 +13,7 @@ export class NodeProvider {
     NodeProvider.AWS,
     NodeProvider.DIGITALOCEAN,
     NodeProvider.OPENSTACK,
+    NodeProvider.PACKET,
     NodeProvider.BRINGYOUROWN,
     NodeProvider.VSPHERE,
     NodeProvider.HETZNER,
