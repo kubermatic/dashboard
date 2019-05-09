@@ -1,4 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {MatDialogRef} from '@angular/material';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
 import {ProjectService} from '../../../core/services';
@@ -15,12 +16,18 @@ export class TokenDialogComponent implements OnInit {
   downloadUrl: SafeUrl;
   downloadTitle = '';
 
-  constructor(private readonly _projectService: ProjectService, private sanitizer: DomSanitizer) {}
+  constructor(
+      public dialogRef: MatDialogRef<TokenDialogComponent>, private readonly _projectService: ProjectService,
+      private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const blob = new Blob([this.serviceaccountToken.token], {type: 'text/plain'});
     this.downloadUrl = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(blob));
     this.downloadTitle =
         window.location.host + '-' + this._projectService.getCurrentProjectId() + '-' + this.serviceaccountToken.name;
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close(false);
   }
 }

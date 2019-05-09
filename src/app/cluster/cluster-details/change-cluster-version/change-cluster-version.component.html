@@ -1,12 +1,5 @@
 <div class="km-dialog-box">
-  <mat-toolbar>
-    Change Version
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </mat-toolbar>
+  <km-dialog-title title="Change Version"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <mat-form-field>
@@ -25,11 +18,11 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
-    <button mat-raised-button
-            color="primary"
+    <button mat-flat-button
             (click)="changeVersion()"
             [disabled]="!selectedVersion">
       Change

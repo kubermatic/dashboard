@@ -8,7 +8,6 @@ const routes: Routes = [
     path: '',
     component: SSHKeyComponent,
     canActivate: [AuthGuard],
-    data: {title: 'SSH Keys'},
   },
 ];
 

@@ -2,7 +2,7 @@
 @import "../../../assets/css/fonts";
 
 .km-frontpage-bg {
-  background-color: $primary;
+  background-color: $alternative-dark;
   position: absolute;
   height: 100%;
   width: 100%;
@@ -26,7 +26,7 @@
 
   .mat-raised-button {
     line-height: 57px !important;
-    color: $primary;
+    color: $alternative-dark;
     font-size: 28px;
     font-family: $primary-font-sans-serif;
     width: 470px;

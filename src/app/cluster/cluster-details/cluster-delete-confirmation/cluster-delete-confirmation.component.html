@@ -2,14 +2,7 @@
       id="km-delete-cluster-dialog"
       class="km-dialog-box"
       (keydown.enter)="deleteCluster()">
-  <mat-toolbar>
-    Delete Cluster confirmation
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </mat-toolbar>
+  <km-dialog-title title="Delete Cluster"></km-dialog-title>
 
   <mat-dialog-content>
     <div class="mat-dialog-content">
@@ -48,15 +41,14 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
     <button id="km-delete-cluster-dialog-delete-btn"
             (click)="deleteCluster()"
             mat-dialog-close
-            mat-raised-button
-            color="primary"
-            class="mat-primary"
+            mat-flat-button
             [disabled]="!inputNameMatches()">
       Delete
     </button>

@@ -1,13 +1,6 @@
 <div class="km-dialog-box"
      style="max-width: 500px; min-width: 500px;">
-  <mat-toolbar>
-    Add SSH keys to cluster
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </mat-toolbar>
+  <km-dialog-title title="Add SSH Keys to the Cluster"></km-dialog-title>
   <mat-dialog-content class="km-content-add-sshkeys">
     <div class="mat-dialog-content">
 
@@ -25,7 +18,7 @@
         </div>
         <button class="km-project-sshkey"
                 (click)="addProjectSSHKeys()"
-                *ngIf="!!userGroup && !!userGroupConfig[userGroup].sshKeys.create">+ Add SSH key to project</button>
+                *ngIf="!!userGroup && !!userGroupConfig[userGroup].sshKeys.create">Add SSH key to project</button>
       </form>
 
     </div>
@@ -33,11 +26,11 @@
 
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
-    <button mat-raised-button
-            color="primary"
+    <button mat-flat-button
             (click)="addClusterSSHKeys()"
             [disabled]="!keysForm.valid">
       Add

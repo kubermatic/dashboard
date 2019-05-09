@@ -5,12 +5,15 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {of} from 'rxjs';
+
 import {ApiService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
+import {DialogTitleComponent} from '../dialog-title/dialog-title.component';
+
 import {AddSshKeyDialogComponent} from './add-ssh-key-dialog.component';
 
 const modules: any[] = [
@@ -38,6 +41,7 @@ describe('AddSshKeyDialogComponent', () => {
             ...modules,
           ],
           declarations: [
+            DialogTitleComponent,
             AddSshKeyDialogComponent,
           ],
           providers: [
@@ -68,9 +72,8 @@ describe('AddSshKeyDialogComponent', () => {
   });
 
   it('name field validity', () => {
-    let errors = {};
     const name = component.addSSHKeyForm.controls['name'];
-    errors = name.errors || {};
+    let errors = name.errors || {};
     expect(errors['required']).toBeTruthy();
 
     name.setValue('test');

@@ -13,6 +13,7 @@ import {ClipboardModule} from 'ngx-clipboard';
 import {AddProjectDialogComponent} from './components/add-project-dialog/add-project-dialog.component';
 import {AddSshKeyDialogComponent} from './components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ConfirmationDialogComponent} from './components/confirmation-dialog/confirmation-dialog.component';
+import {DialogTitleComponent} from './components/dialog-title/dialog-title.component';
 import {EventListComponent} from './components/event-list/event-list.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
@@ -65,6 +66,7 @@ const modules: any[] = [
     AddProjectDialogComponent,
     AddSshKeyDialogComponent,
     ConfirmationDialogComponent,
+    DialogTitleComponent,
     PropertyComponent,
     EventListComponent,
     LabelFormComponent,
@@ -75,6 +77,7 @@ const modules: any[] = [
     AddProjectDialogComponent,
     AddSshKeyDialogComponent,
     ConfirmationDialogComponent,
+    DialogTitleComponent,
     PropertyComponent,
     EventListComponent,
     LabelFormComponent,
