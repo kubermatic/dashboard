@@ -3,37 +3,27 @@
        class="km-node-deployment-detail-actions">
     <div fxFlex="100%"
          align="right">
-      <button mat-button
-              mat-raised-button
-              color="primary"
-              (click)="goBackToCluster()">
-        <i class="fa fa-history"
-           aria-hidden="true"></i>
-        Go back to Cluster
-      </button>
-      <button mat-button
-              mat-raised-button
-              color="primary"
-              (click)="showEditDialog()"
-              [disabled]="!isEditEnabled()">
-        <mat-icon class="km-icon-edit"
-                  [ngClass]="isEditEnabled() ? 'white' : 'km-disabled black'"></mat-icon>
-        Edit Node Deployment
-      </button>
-      <button mat-button
-              mat-raised-button
-              color="primary"
+      <button mat-flat-button
+              color="alternative"
               (click)="showDeleteDialog()"
               [disabled]="!isDeleteEnabled()">
-        <i class="fa fa-trash-o"
-           aria-hidden="true"></i>
         Delete Node Deployment
+      </button>
+      <div fxFlex></div>
+      <button mat-flat-button
+              (click)="goBackToCluster()">
+        Go back to Cluster
+      </button>
+      <button mat-flat-button
+              (click)="showEditDialog()"
+              [disabled]="!isEditEnabled()">
+        Edit Node Deployment
       </button>
     </div>
   </div>
 
   <mat-card class="km-node-deployment-detail-card white">
-    <mat-card-header class="km-card-main-header">
+    <mat-card-header>
       <mat-card-title>
         <i [matTooltip]="nodeDeploymentHealthStatus.message"
            [ngClass]="nodeDeploymentHealthStatus.color"

@@ -1,13 +1,6 @@
 <div id="km-edit-member-dialog"
      class="km-dialog-box">
-  <mat-toolbar>
-    Edit Member
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </mat-toolbar>
+  <km-dialog-title title="Edit Member"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <form [formGroup]="editMemberForm"
@@ -31,12 +24,12 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
     <button id="km-edit-member-dialog-edit-btn"
-            mat-raised-button
-            color="primary"
+            mat-flat-button
             (click)="editMember()"
             [disabled]="!editMemberForm.valid">
       Edit

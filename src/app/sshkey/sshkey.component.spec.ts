@@ -86,7 +86,7 @@ describe('SSHKeyComponent', () => {
        noop.detectChanges();
        tick(15000);
 
-       const dialogTitle = document.body.querySelector('.km-dialog-title');
+       const dialogTitle = document.body.querySelector('.mat-dialog-title');
        const cancelButton = document.body.querySelector('#km-confirmation-dialog-cancel-btn');
        const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
