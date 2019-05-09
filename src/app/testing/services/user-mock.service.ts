@@ -7,8 +7,6 @@ import {fakeMember} from '../fake-data/member.fake';
 export class UserMockService {
   private user: Observable<MemberEntity>;
 
-  constructor() {}
-
   getUser(): Observable<MemberEntity> {
     this.user = of(fakeMember());
     return this.user;

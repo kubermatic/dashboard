@@ -21,13 +21,13 @@ export class AuthUtils {
     await KMElement.click(AuthUtils._dexPage.getLoginSubmitButton());
 
     await KMElement.waitToAppear(this._navPage.getLogoutButton());
-    expect(await AuthUtils._navPage.getLogoutButton().isPresent()).toBeTruthy();
+    expect(await AuthUtils._navPage.getLogoutButton().isDisplayed()).toBeTruthy();
   }
 
   static async logout() {
     await KMElement.click(AuthUtils._navPage.getLogoutButton());
 
     await KMElement.waitToAppear(AuthUtils._loginPage.getLoginButton());
-    expect(await AuthUtils._loginPage.getLoginButton().isPresent()).toBeTruthy();
+    expect(await AuthUtils._loginPage.getLoginButton().isDisplayed()).toBeTruthy();
   }
 }

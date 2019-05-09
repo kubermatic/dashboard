@@ -2,7 +2,7 @@
 @import '../../../../assets/css/variables';
 
 footer {
-  padding: $baseline-grid 0;
+  padding: $baseline-grid (2.5 * $baseline-grid);
   width: 100%;
   z-index: 999;
 

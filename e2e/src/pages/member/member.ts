@@ -1,35 +1,27 @@
 import {by, element} from 'protractor';
 
 import {NavPage} from '../shared/nav.po';
+import {KMElement} from '../../utils/element';
 
 export class MembersPage extends NavPage {
-  private _addMemberTopBtn = by.id('km-add-member-top-btn');
-  private _addMemberDialog = by.id('km-add-member-dialog');
-  private _addMemberDialogEmailInput = by.id('km-add-member-dialog-email-input');
-  private _addMemberDialogGroupCombobox = by.id('km-add-member-dialog-group-combobox');
-  private _addMemberDialogAddBtn = by.id('km-add-member-dialog-add-btn');
-  private _editMemberDialogEditBtn = by.id('km-edit-member-dialog-edit-btn');
-  private _editMemberDialogGroupCombobox = by.id('km-edit-member-dialog-group-combobox');
-  private _editMemberDialog = by.id('km-edit-member-dialog');
-
   navigateTo(): any {
-    return this.getMembersNavButton().click();
+    return KMElement.click(this.getMembersNavButton());
   }
 
   getAddMemberBtn(): any {
-    return element(this._addMemberTopBtn);
+    return element(by.id('km-add-member-top-btn'));
   }
 
   getAddMemberDialog(): any {
-    return element(this._addMemberDialog);
+    return element(by.id('km-add-member-dialog'));
   }
 
   getAddMemberDialogEmailInput(): any {
-    return element(this._addMemberDialogEmailInput);
+    return element(by.id('km-add-member-dialog-email-input'));
   }
 
   getAddMemberDialogGroupCombobox(): any {
-    return element(this._addMemberDialogGroupCombobox);
+    return element(by.id('km-add-member-dialog-group-combobox'));
   }
 
   getAddMemberDialogGroupOption(optionNr: number): any {
@@ -37,7 +29,7 @@ export class MembersPage extends NavPage {
   }
 
   getAddMemberDialogAddBtn(): any {
-    return element(this._addMemberDialogAddBtn);
+    return element(by.id('km-add-member-dialog-add-btn'));
   }
 
   getMemberDeleteBtn(email: string): any {
@@ -61,14 +53,14 @@ export class MembersPage extends NavPage {
   }
 
   getEditMemberDialogEditBtn(): any {
-    return element(this._editMemberDialogEditBtn);
+    return element(by.id('km-edit-member-dialog-edit-btn'));
   }
 
   getEditMemberDialogGroupCombobox(): any {
-    return element(this._editMemberDialogGroupCombobox);
+    return element(by.id('km-edit-member-dialog-group-combobox'));
   }
 
   getEditMemberDialog(): any {
-    return element(this._editMemberDialog);
+    return element(by.id('km-edit-member-dialog'));
   }
 }

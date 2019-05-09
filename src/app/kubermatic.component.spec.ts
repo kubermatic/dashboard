@@ -7,7 +7,6 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {SimpleNotificationsModule} from 'angular2-notifications';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from './app-config.service';
-import {SidenavService} from './core/components/sidenav/sidenav.service';
 import {CoreModule} from './core/core.module';
 import {ApiService, Auth, AuthGuard, DatacenterService, ProjectService, UserService} from './core/services';
 import {GoogleAnalyticsService} from './google-analytics.service';
@@ -59,7 +58,6 @@ describe('KubermaticComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             AuthGuard,
-            SidenavService,
             GoogleAnalyticsService,
           ],
         })

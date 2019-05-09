@@ -12,7 +12,6 @@ import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {Auth, ProjectService, UserService} from '../../services/index';
-import {SidenavService} from '../sidenav/sidenav.service';
 import {NavigationComponent} from './navigation.component';
 
 const modules: any[] = [
@@ -39,7 +38,6 @@ describe('NavigationComponent', () => {
             NavigationComponent,
           ],
           providers: [
-            SidenavService,
             MatDialog,
             {provide: UserService, useClass: UserMockService},
             {provide: ProjectService, useClass: ProjectMockService},

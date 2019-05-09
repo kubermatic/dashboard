@@ -3,28 +3,19 @@ import {by, element} from 'protractor';
 import {NavPage} from './nav.po';
 
 export class ConfirmationDialog extends NavPage {
-  private _confirmDialog = by.id('km-confirmation-dialog');
-  private _confirmDialogInput = by.id('km-confirmation-dialog-input');
-  private _confirmDialogCancelBtn = by.id('km-confirmation-dialog-cancel-btn');
-  private _confirmDialogConfirmBtn = by.id('km-confirmation-dialog-confirm-btn');
-
-  navigateTo(): any {
-    return this.getProjectsNavButton().click();
-  }
-
   getConfirmationDialog(): any {
-    return element(this._confirmDialog);
+    return element(by.id('km-confirmation-dialog'));
   }
 
   getConfirmationDialogInput(): any {
-    return element(this._confirmDialogInput);
+    return element(by.id('km-confirmation-dialog-input'));
   }
 
   getConfirmationDialogCancelBtn(): any {
-    return element(this._confirmDialogCancelBtn);
+    return element(by.id('km-confirmation-dialog-cancel-btn'));
   }
 
   getConfirmationDialogConfirmBtn(): any {
-    return element(this._confirmDialogConfirmBtn);
+    return element(by.id('km-confirmation-dialog-confirm-btn'));
   }
 }

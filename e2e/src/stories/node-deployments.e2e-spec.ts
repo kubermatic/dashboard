@@ -8,7 +8,8 @@ import {ClusterUtils} from '../utils/cluster';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from '../utils/random';
-import { ConfirmationUtils } from '../utils/confirmation';
+import {ConfirmationUtils} from '../utils/confirmation';
+import {minute} from '../utils/constants';
 
 describe('Node Deployments story', () => {
   const clustersPage = new ClustersPage();
@@ -18,6 +19,7 @@ describe('Node Deployments story', () => {
   const projectName = RandomUtils.prefixedString('e2e-test-project');
   const clusterName = RandomUtils.prefixedString('e2e-test-cluster');
   const initialNodeDeploymentName = RandomUtils.prefixedString('e2e-test-nd');
+  const initialNodeDeploymentReplicas = '1';
   const providerName = 'digitalocean';
   const datacenterLocation = 'Frankfurt';
 
@@ -27,6 +29,10 @@ describe('Node Deployments story', () => {
 
   it('should create a new project', async () => {
     await ProjectUtils.createProject(projectName);
+  });
+
+  it('should select the new project', async () => {
+    await ProjectUtils.selectProject(projectName);
   });
 
   it('should go to clusters page', async () => {
@@ -51,8 +57,9 @@ describe('Node Deployments story', () => {
   });
 
   it('should set the provider settings', async () => {
-    await KMElement.fill(wizardPage.getDigitalOceanTokenInput(), browser.params.KUBERMATIC_E2E_DIGITALOCEAN_TOKEN)
-    await KMElement.fill(wizardPage.getNodeNameInput(), initialNodeDeploymentName)
+    await KMElement.fill(wizardPage.getDigitalOceanTokenInput(), browser.params.KUBERMATIC_E2E_DIGITALOCEAN_TOKEN);
+    await KMElement.fill(wizardPage.getNodeNameInput(), initialNodeDeploymentName);
+    await KMElement.fill(wizardPage.getNodeCountInput(), initialNodeDeploymentReplicas);
 
     await KMElement.click(wizardPage.getNextButton());
   });
@@ -67,38 +74,37 @@ describe('Node Deployments story', () => {
     await clustersPage.navigateTo();
 
     await KMElement.waitToAppear(clustersPage.getClusterItem(clusterName));
-    expect(clustersPage.getClusterItem(clusterName).isPresent()).toBeTruthy();
+    expect(await clustersPage.getClusterItem(clusterName).isDisplayed()).toBeTruthy();
   });
 
   it('should go to the cluster details page', async () => {
     await clustersPage.navigateTo();
+
     await KMElement.click(clustersPage.getClusterItem(clusterName));
   });
 
   it('should wait for initial node deployment to be created', async () => {
-    await KMElement.waitToAppear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 600000);
+    await KMElement.waitToAppear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 10 * minute);
   });
 
   it('should go to node deployment details', async () => {
     await KMElement.click(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName));
   });
 
-  it('should verify node deployment details', async () => {
-    await KMElement.waitToAppear(nodeDeploymentDetailsPage.getNodeDeploymentNameElement());
-    nodeDeploymentDetailsPage.getNodeDeploymentNameElement().getText().then((name: string) => {
-      expect(name).toEqual(initialNodeDeploymentName);
-    });
+  it('should verify node deployment name', async () => {
+    await KMElement.waitToAppear(nodeDeploymentDetailsPage.getNodeDeploymentNameElement(), 10 * minute);
+    expect(await nodeDeploymentDetailsPage.getNodeDeploymentNameElement().getText()).toEqual(initialNodeDeploymentName);
+  });
 
-    await KMElement.waitToAppear(nodeDeploymentDetailsPage.getNodeDeploymentClusterNameElement());
-    nodeDeploymentDetailsPage.getNodeDeploymentClusterNameElement().getText().then((name: string) => {
-      expect(name).toEqual(clusterName);
-    });
+  it('should verify node deployment cluster name', async () => {
+    await KMElement.waitToAppear(nodeDeploymentDetailsPage.getNodeDeploymentClusterNameElement(), 10 * minute);
+    expect(await nodeDeploymentDetailsPage.getNodeDeploymentClusterNameElement().getText()).toEqual(clusterName);
+  });
 
+  it('should verify node deployment status', async () => {
     const expectedStatus = 'Running';
-    await KMElement.waitForContent(nodeDeploymentDetailsPage.getNodeDeploymentStatusElement(), expectedStatus, 600000);
-    nodeDeploymentDetailsPage.getNodeDeploymentStatusElement().getText().then((status: string) => {
-      expect(status).toEqual(expectedStatus);
-    });
+    await KMElement.waitForContent(nodeDeploymentDetailsPage.getNodeDeploymentStatusElement(), expectedStatus, 10 * minute);
+    expect(await nodeDeploymentDetailsPage.getNodeDeploymentStatusElement().getText()).toEqual(expectedStatus);
   });
 
   it('should go to the cluster details page', async () => {
@@ -113,17 +119,19 @@ describe('Node Deployments story', () => {
   });
 
   it('should verify initial node deployment removal', async () => {
-    await browser.sleep(60000);
+    await browser.sleep(minute);
 
-    await KMElement.waitToDisappear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName), 300000);
-    expect(await clustersPage.getNodeDeploymentItem(initialNodeDeploymentName).isPresent()).toBeFalsy();
+    await KMElement.waitToDisappear(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName));
+    expect(await browser.isElementPresent(clustersPage.getNodeDeploymentItem(initialNodeDeploymentName))).toBeFalsy();
   });
 
   it('should delete created cluster', async () => {
-    await ClusterUtils.deleteCluster(clusterName, 600000);
+    await ClusterUtils.deleteCluster(clusterName, 10 * minute);
   });
 
   it('should delete created project', async () => {
+    await ProjectUtils.goBackToProjects();
+
     await ProjectUtils.deleteProject(projectName);
   });
 

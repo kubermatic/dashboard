@@ -1,5 +1,5 @@
 import {KMElement} from './element';
-import { ConfirmationDialog } from '../pages/shared/confirmation.po';
+import {ConfirmationDialog} from '../pages/shared/confirmation.po';
 
 export class ConfirmationUtils {
   private static _confirmationDialog = new ConfirmationDialog();

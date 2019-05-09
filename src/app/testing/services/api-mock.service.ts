@@ -40,8 +40,6 @@ export class ApiMockService {
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
   health: HealthEntity = fakeHealth();
 
-  constructor() {}
-
   deleteNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
     return of({});
   }
