@@ -36,9 +36,14 @@
 
   <!-- Navigation Buttons -->
   <div class="km-button-navigation">
+    <a mat-flat-button
+       color="alternative"
+       routerLink="/projects/{{project.id}}/clusters">Cancel</a>
+    <div fxFlex></div>
     <button type="button"
             class="km-btn-back"
-            mat-raised-button
+            mat-flat-button
+            color="alternative"
             (click)="stepBack()"
             *ngIf="currentStepIndex !== 0">
       Back
@@ -47,15 +52,13 @@
             *ngIf="currentStepIndex < steps.length - 1"
             type="button"
             [disabled]="!currentStep.valid()"
-            mat-raised-button
-            color="primary"
+            mat-flat-button
             (click)="stepForward()">
       Next
     </button>
     <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0"
             type="button"
-            mat-raised-button
-            color="primary"
+            mat-flat-button
             (click)="stepForward()">
       Skip
     </button>
@@ -63,16 +66,13 @@
             *ngIf="currentStepIndex == steps.length - 1"
             [disabled]="creating || project.status !== 'Active'"
             type="button"
-            mat-raised-button
-            color="primary"
+            mat-flat-button
             (click)="createCluster()">
       Create
     </button>
     <span class="km-project-status-info"
           *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
-    <a type="button"
-       class="km-cancel-button"
-       routerLink="/projects/{{project.id}}/clusters">Cancel</a>
+
   </div>
 
 </mat-card>

@@ -1,19 +1,11 @@
-<mat-toolbar>
-  Connect to the Cluster
-  <button mat-icon-button
-          mat-dialog-close>
-    <i class="fa fa-times"
-       aria-hidden="true"></i>
-  </button>
-</mat-toolbar>
+<km-dialog-title title="Connect to the Cluster"></km-dialog-title>
 <mat-dialog-content>
   <div class="mat-dialog-content">
     <a class="km-download-kubeconfig-btn"
-       mat-raised-button
-       color="primary"
+       mat-flat-button
        href="{{ getDownloadURL() }}"
        target="_blank">Download config</a>
-    <p>Configure kubectl command line by running the following command in Directory where the kubeconfig-admin-{{cluster.id}} is located:</p>
+    <p><br>Configure kubectl command line by running the following command in Directory where the kubeconfig-admin-{{cluster.id}} is located:</p>
     <p class="km-code-block km-copy"
        ngxClipboard
        [cbContent]="copy('exportKubeconfig')"
@@ -35,7 +27,8 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-dialog-close
-          mat-raised-button>
+          mat-flat-button
+          color="alternative">
     Close
   </button>
 </mat-dialog-actions>

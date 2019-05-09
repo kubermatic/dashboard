@@ -116,6 +116,7 @@
   height: 9px;
   background-image: url("/assets/images/Arrow_down.svg");
   background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .km-icon-arrow-down-2 {
@@ -139,6 +140,13 @@
   padding: 0;
   -webkit-transform: rotate(90deg);
   transform: rotate(90deg);
+}
+
+.km-icon-close {
+  width: 20px;
+  height: 20px;
+  background-image: url("/assets/images/close.svg");
+  background-repeat: no-repeat;
 }
 
 .km-icon-running {

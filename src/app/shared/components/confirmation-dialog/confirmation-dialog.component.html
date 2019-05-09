@@ -1,18 +1,10 @@
 <div class="km-dialog-box"
      id="km-confirmation-dialog"
      (keydown.enter)="onEnterKeyDown()">
-  <mat-toolbar>
-    <span class="km-dialog-title">{{data.title}}</span>
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </mat-toolbar>
+  <km-dialog-title [title]="data.title"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <p>{{data.message}}</p>
-
       <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">
         <input id="km-confirmation-dialog-input"
                matInput
@@ -22,18 +14,16 @@
                (blur)="onChange($event)"
                (keyup)="onChange($event)">
       </mat-form-field>
-
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button mat-raised-button
+    <button mat-flat-button
+            color="alternative"
             [mat-dialog-close]="false"
             id="km-confirmation-dialog-cancel-btn">
       {{data.cancelLabel}}
     </button>
-    <button mat-raised-button
-            color="primary"
-            class="mat-primary"
+    <button mat-flat-button
             [mat-dialog-close]="true"
             id="km-confirmation-dialog-confirm-btn"
             [disabled]="!inputNameMatches()">

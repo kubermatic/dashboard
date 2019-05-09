@@ -13,14 +13,12 @@
                    *ngIf="auth.authenticated()">
         <kubermatic-sidenav></kubermatic-sidenav>
       </mat-sidenav>
-
       <div class="main"
            fxFlex
            fxLayout="column">
         <div fxFlex>
           <kubermatic-navigation></kubermatic-navigation>
           <kubermatic-notification></kubermatic-notification>
-          <kubermatic-breadcrumbs *ngIf="auth.authenticated()"></kubermatic-breadcrumbs>
           <router-outlet></router-outlet>
         </div>
         <kubermatic-footer [version]="version"

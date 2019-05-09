@@ -1,13 +1,6 @@
 <div class="km-dialog-box km-add-nodes-dialog"
      *ngIf="data.nodeData">
-  <mat-toolbar>
-    {{getDialogLabel()}}
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </mat-toolbar>
+  <km-dialog-title [title]="getDialogLabel()"></km-dialog-title>
   <mat-tab-group class="km-change-view"
                  (selectedTabChange)="onTabChange($event)"
                  *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown">
@@ -24,12 +17,12 @@
 
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
-    <button mat-raised-button
+    <button mat-flat-button
             [mat-dialog-close]="data"
-            color="primary"
             [disabled]="!data.nodeData.valid"
             class="btn btn-primary">
       {{getDialogLabel()}}

@@ -1,18 +1,24 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
+.km-option-add-project {
+  color: $light-text-color;
+}
+
 .container {
   width: $sidenav-width;
-  background-color: $primary;
+  background-color: $alternative-dark;
   height: 100%;
-  color: $secondary;
+
+  * {
+    color: $secondary;
+  }
 
   .mat-nav-list {
     padding: 0 !important;
 
     .mat-list-item,
     a {
-      color: $secondary;
       height: $toolbar-height;
 
       &.km-projects {
@@ -22,6 +28,7 @@
     }
 
     a {
+      font-size: $subhead-font-size-base-lg !important;
       padding: 10px 30px !important;
       display: flex;
       align-items: center;
@@ -85,11 +92,6 @@
       visibility: hidden;
     }
 
-    .mat-nav-list a {
-      font-size: $subhead-font-size-base-lg;
-      font-weight: 400;
-    }
-
     .mat-list-item i {
       background-color: $secondary;
     }
@@ -119,7 +121,7 @@
       }
 
       &:hover {
-        background-color: $primary;
+        background-color: $alternative-dark;
 
         i {
           -webkit-filter: brightness(115%);

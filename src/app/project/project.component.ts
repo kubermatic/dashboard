@@ -144,8 +144,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Project',
-        message: `You are on the way to delete the project ${project.name}. Deletion of projects cannot be undone!
-        If you know what you are doing, please type the name of the project:`,
+        message: `Are you sure you want to permanently delete project ${project.name}?`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
         compareName: project.name,

@@ -8,7 +8,6 @@ const routes: Routes = [
     path: '',
     component: WizardComponent,
     canActivate: [AuthGuard],
-    data: {title: 'Create Cluster'},
   },
 ];
 

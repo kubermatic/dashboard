@@ -1,13 +1,6 @@
 <div id="km-add-member-dialog"
      class="km-dialog-box">
-  <mat-toolbar>
-    Add Member
-    <button mat-icon-button
-            mat-dialog-close>
-      <i class="fa fa-times"
-         aria-hidden="true"></i>
-    </button>
-  </mat-toolbar>
+  <km-dialog-title title="Add Member"></km-dialog-title>
   <mat-dialog-content>
     <div class="mat-dialog-content">
       <form [formGroup]="addMemberForm"
@@ -43,12 +36,12 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-dialog-close
-            mat-raised-button>
+            mat-flat-button
+            color="alternative">
       Close
     </button>
     <button id="km-add-member-dialog-add-btn"
-            mat-raised-button
-            color="primary"
+            mat-flat-button
             (click)="addMember()"
             [disabled]="!addMemberForm.valid">
       Add
