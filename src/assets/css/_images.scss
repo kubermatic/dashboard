@@ -32,6 +32,10 @@
   mask-size: contain;
   cursor: pointer;
   background-color: $text-color;
+
+  &:disabled {
+    background-color: $disabled-button-color;
+  }
 }
 
 .km-icon-edit {
@@ -43,6 +47,10 @@
   mask-size: contain;
   cursor: pointer;
   background-color: $text-color;
+
+  &:disabled {
+    background-color: $disabled-button-color;
+  }
 }
 
 .km-icon-cluster {

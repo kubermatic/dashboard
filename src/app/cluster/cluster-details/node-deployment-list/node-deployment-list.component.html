@@ -89,9 +89,9 @@
                         matTooltip="Delete Node Deployment"
                         (click)="showDeleteDialog(element, $event)"
                         [disabled]="!isDeleteEnabled()">
-                  <i class="fa fa-trash-o"
-                     aria-hidden="true"
-                     [ngClass]="isDeleteEnabled() ? '' : 'km-disabled'"></i>
+                  <mat-icon class="km-icon-delete"
+                            aria-hidden="true"
+                            [ngClass]="isDeleteEnabled() ? '' : 'km-disabled'"></mat-icon>
                 </button>
               </ng-container>
             </ng-container>

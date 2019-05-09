@@ -37,12 +37,13 @@ a.km-download-kubeconfig-btn {
   }
 }
 
-.fa-trash-o {
-  color: $primary;
+.km-icon-delete {
+  width: 14px;
+  height: 14px;
 }
 
 button:disabled {
-  .fa-trash-o {
+  .km-icon-delete {
     color: $disabled-text-color;
   }
 }
