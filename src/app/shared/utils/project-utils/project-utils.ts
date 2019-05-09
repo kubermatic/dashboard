@@ -1,3 +1,5 @@
+import {ProjectEntity} from '../../entity/ProjectEntity';
+
 export class ProjectUtils {
   static getStateIconClass(status: string): string {
     switch (status) {
@@ -10,5 +12,9 @@ export class ProjectUtils {
       default:
         return 'fa fa-spin fa-circle-o-notch orange';
     }
+  }
+
+  static isProjectActive(project: ProjectEntity): boolean {
+    return !!project && project.status === 'Active';
   }
 }

@@ -5,22 +5,21 @@ import {LoginPage} from './login.po';
 describe('Login page', () => {
   const page = new LoginPage();
 
-  beforeAll(() => {
-    page.navigateTo();
-    KMElement.waitToAppear(page.getLoginButton());
+  beforeAll(async () => {
+    await page.navigateTo();
+
+    await KMElement.waitToAppear(page.getLoginButton());
   });
 
-  it('should have proper title', () => {
-    page.getPageTitle().then((title: string) => {
-      expect(title).toEqual('Kubermatic');
-    });
+  it('should have proper title', async () => {
+    expect(await page.getPageTitle()).toEqual('Kubermatic');
   });
 
-  it('should display login button on the navbar', () => {
-    expect(page.getNavbarLoginButton().isPresent()).toBeTruthy();
+  it('should display login button on the navbar', async () => {
+    expect(await page.getNavbarLoginButton().isDisplayed()).toBeTruthy();
   });
 
-  it('should display login button', () => {
-    expect(page.getLoginButton().isPresent()).toBeTruthy();
+  it('should display login button', async () => {
+    expect(await page.getLoginButton().isDisplayed()).toBeTruthy();
   });
 });

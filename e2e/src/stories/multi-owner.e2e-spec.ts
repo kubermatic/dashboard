@@ -7,14 +7,15 @@ import {AuthUtils} from '../utils/auth';
 import {KMElement} from '../utils/element';
 import {ProjectUtils} from '../utils/project';
 import {RandomUtils} from "../utils/random";
-import { ConfirmationUtils } from '../utils/confirmation';
+import {ConfirmationUtils} from '../utils/confirmation';
+import {minute} from '../utils/constants';
 
 describe('Multi Owner story', () => {
   const projectsPage = new ProjectsPage();
   const clustersPage = new ClustersPage();
   const membersPage = new MembersPage();
 
-  const projectNameMultiOwner = RandomUtils.prefixedString('e2e-test-project-multi-owner');
+  const projectName = RandomUtils.prefixedString('e2e-test-project');
   const memberEmail = browser.params.KUBERMATIC_E2E_USERNAME;
   const memberEmail2 = browser.params.KUBERMATIC_E2E_USERNAME_2;
 
@@ -23,7 +24,11 @@ describe('Multi Owner story', () => {
   });
 
   it('should create a test project', async () => {
-    await ProjectUtils.createProject(projectNameMultiOwner);
+    await ProjectUtils.createProject(projectName);
+  });
+
+  it('should select the new project', async () => {
+    await ProjectUtils.selectProject(projectName);
   });
   
   it('should add a new member to project', async () => {
@@ -40,8 +45,8 @@ describe('Multi Owner story', () => {
     await KMElement.click(membersPage.getAddMemberDialogAddBtn());
     await KMElement.waitToDisappear(membersPage.getAddMemberDialog());
 
-    await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail2), 300000);
-    expect(await membersPage.getMemberItem(memberEmail2).isPresent()).toBeTruthy();
+    await KMElement.waitToAppear(membersPage.getMemberItem(memberEmail2),5 * minute);
+    expect(await membersPage.getMemberItem(memberEmail2).isDisplayed()).toBeTruthy();
   });
 
   it('should logout', async () => {
@@ -53,14 +58,17 @@ describe('Multi Owner story', () => {
   });
 
   it('should check if multi owner project is in list', async () => {
-    await projectsPage.navigateTo();
+    await KMElement.waitToAppear(projectsPage.getProjectItem(projectName));
+    expect(await projectsPage.getProjectItem(projectName).isDisplayed()).toBeTruthy();
+  });
 
-    await KMElement.waitToAppear(projectsPage.getProjectItem(projectNameMultiOwner));
-    expect(await projectsPage.getProjectItem(projectNameMultiOwner).isPresent()).toBeTruthy();
+  it('should open multi owner project', async () => {
+    await ProjectUtils.selectProject(projectName);
   });
 
   it('should delete other owner from the project', async () => {
     await membersPage.navigateTo();
+
     await KMElement.click(membersPage.getMemberDeleteBtn(memberEmail));
 
     await ConfirmationUtils.confirm();
@@ -69,11 +77,13 @@ describe('Multi Owner story', () => {
     await clustersPage.navigateTo();
     await membersPage.navigateTo();
 
-    expect(await membersPage.getMemberItem(memberEmail).isPresent()).toBeFalsy();
+    expect(await browser.isElementPresent(membersPage.getMemberItem(memberEmail))).toBeFalsy();
   });
 
   it('should delete created project', async () => {
-    await ProjectUtils.deleteProject(projectNameMultiOwner);
+    await ProjectUtils.goBackToProjects();
+
+    await ProjectUtils.deleteProject(projectName);
   });
 
   it('should logout', async () => {

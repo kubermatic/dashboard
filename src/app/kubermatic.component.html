@@ -7,8 +7,8 @@
 
     <mat-sidenav-container>
       <mat-sidenav #sidenav
-                   opened
-                   disableClose
+                   opened="false"
+                   disableClose="true"
                    mode="side"
                    *ngIf="auth.authenticated()">
         <kubermatic-sidenav></kubermatic-sidenav>

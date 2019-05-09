@@ -1,10 +1,6 @@
 import {by, element} from 'protractor';
 
 export class DexPage {
-  getStaticLoginButton(): any {
-    return element(by.xpath('//span[contains(text(),"Static Credentials")]'));
-  }
-
   getLoginInput(): any {
     return element(by.xpath('//input[@id="login"]'));
   }

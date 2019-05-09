@@ -2,8 +2,8 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {merge, Subject, timer} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
-import {AppConfigService} from '../app-config.service';
 
+import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
@@ -26,6 +26,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   isInitializing = true;
   clusterCount = [];
   role = [];
+  rawRole = [];
   displayedColumns: string[] = ['status', 'name', 'id', 'role', 'clusters', 'owners', 'actions'];
   dataSource = new MatTableDataSource<ProjectEntity>();
   @ViewChild(MatSort) sort: MatSort;
@@ -67,9 +68,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private _sortProjectOwners(): void {
     this.projects.forEach(project => {
-      project.owners = project.owners.sort((a, b) => {
-        return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-      });
+      project.owners = project.owners.sort((a, b) => a.name.localeCompare(b.name));
     });
   }
 
@@ -87,12 +86,22 @@ export class ProjectComponent implements OnInit, OnDestroy {
     this.projects.forEach(project => {
       this._userService.currentUserGroup(project.id).subscribe((group) => {
         this.role[project.id] = MemberUtils.getGroupDisplayName(group);
+        this.rawRole[project.id] = group;
       });
     });
   }
 
-  selectProject(project: ProjectEntity): void {
-    this._projectService.changeAndStoreSelectedProject(project);
+  async selectProject(project: ProjectEntity): Promise<any> {
+    if (this.isProjectActive(project)) {
+      await this._projectService.changeAndStoreSelectedProject(project, false);
+      if (this._projectService.isViewEnabled('clusters')) {
+        this._projectService.navigateToClusterPage();
+      }
+    }
+  }
+
+  isProjectActive(project: ProjectEntity) {
+    return ProjectUtils.isProjectActive(project);
   }
 
   getProjectStateIconClass(project: ProjectEntity): string {
@@ -107,8 +116,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  isEditEnabled(): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().projects.edit;
+  isEditEnabled(project: ProjectEntity): boolean {
+    return !this._projectService.getUserGroupConfig(this.rawRole[project.id]) ||
+        this._projectService.getUserGroupConfig(this.rawRole[project.id]).projects.edit;
   }
 
   editProject(project: ProjectEntity, event: Event): void {
@@ -117,14 +127,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
     modal.componentInstance.project = project;
     modal.afterClosed().pipe(first()).subscribe((editedProject) => {
       if (editedProject) {
-        this._projectService.changeAndStoreSelectedProject(editedProject);
         this._externalProjectsUpdate.next();
       }
     });
   }
 
-  isDeleteEnabled(): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().projects.delete;
+  isDeleteEnabled(project: ProjectEntity): boolean {
+    return !this._projectService.getUserGroupConfig(this.rawRole[project.id]) ||
+        this._projectService.getUserGroupConfig(this.rawRole[project.id]).projects.delete;
   }
 
   deleteProject(project: ProjectEntity, event: Event): void {
@@ -153,15 +163,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
           this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
 
           if (project.id === this._projectService.getCurrentProjectId()) {
-            this._projectService.changeSelectedProject({
-              id: '',
-              name: '',
-              creationTimestamp: null,
-              deletionTimestamp: null,
-              status: '',
-              owners: [],
-            });
-            this._projectService.removeProject();
+            this._projectService.deselectProject();
           }
 
           this._externalProjectsUpdate.next();

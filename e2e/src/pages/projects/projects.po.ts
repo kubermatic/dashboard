@@ -3,32 +3,20 @@ import {by, element} from 'protractor';
 import {NavPage} from '../shared/nav.po';
 
 export class ProjectsPage extends NavPage {
-  private _addProjectButton = by.id('km-add-project-top-btn');
-  private _addProjectDialog = by.id('km-add-project-dialog');
-  private _projectNameInput = by.id('km-add-project-dialog-input');
-  private _saveProjectButton = by.id('km-add-project-dialog-save');
-  private _editProjectDialogEditBtn = by.id('km-edit-project-dialog-edit-btn');
-  private _editProjectDialogInput = by.id('km-edit-project-dialog-input');
-  private _editProjectDialog = by.id('km-edit-project-dialog');
-
-  navigateTo(): any {
-    return this.getProjectsNavButton().click();
-  }
-
   getAddProjectButton(): any {
-    return element(this._addProjectButton);
+    return element(by.id('km-add-project-top-btn'));
   }
 
   getAddProjectDialog(): any {
-    return element(this._addProjectDialog);
+    return element(by.id('km-add-project-dialog'));
   }
 
   getProjectNameInput(): any {
-    return element(this._projectNameInput);
+    return element(by.id('km-add-project-dialog-input'));
   }
 
   getSaveProjectButton(): any {
-    return element(this._saveProjectButton);
+    return element(by.id('km-add-project-dialog-save'));
   }
 
   getProjectItem(projectName: string): any {
@@ -48,14 +36,14 @@ export class ProjectsPage extends NavPage {
   }
 
   getEditProjectDialogEditBtn(): any {
-    return element(this._editProjectDialogEditBtn);
+    return element(by.id('km-edit-project-dialog-edit-btn'));
   }
 
   getEditProjectDialogInput(): any {
-    return element(this._editProjectDialogInput);
+    return element(by.id('km-edit-project-dialog-input'));
   }
 
   getEditProjectDialog(): any {
-    return element(this._editProjectDialog);
+    return element(by.id('km-edit-project-dialog'));
   }
 }

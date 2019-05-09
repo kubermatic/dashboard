@@ -1,8 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatSelectChange} from '@angular/material';
-import {Router, RouterState, RouterStateSnapshot} from '@angular/router';
-import {Subject, timer} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {Router} from '@angular/router';
+import {merge, Subject, timer} from 'rxjs';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
@@ -22,6 +22,7 @@ export class SidenavComponent implements OnInit, OnDestroy {
   projects: ProjectEntity[];
   selectedProject: ProjectEntity;
   customLinks: CustomLink[] = [];
+  private _externalProjectsUpdate: Subject<any> = new Subject();
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -30,87 +31,73 @@ export class SidenavComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.customLinks = this._appConfigService.getCustomLinks(CustomLinkLocation.Default);
-    this.loadProjects();
 
-    this.projectService.selectedProjectChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      for (const i in this.projects) {
-        if (this.projectService.compareProjectsEquality(this.projects[i], data)) {
-          this.selectedProject = data;
-          if (this.projects[i].name !== data.name) {
-            this.loadProjects();
-          }
-          return;
-        }
-      }
-      this.loadProjects();
-      this.selectedProject = data;
-    });
+    let isInitializing = true;
+    merge(timer(0, 5 * this._appConfigService.getRefreshTimeBase()), this._externalProjectsUpdate)
+        .pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(() => this.api.getProjects()))
+        .subscribe(projects => {
+          this.projects = projects.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          });
 
-    this.registerProjectRefreshInterval();
-  }
+          if (isInitializing) {
+            isInitializing = false;
 
-  private changeSelectedProject(project: ProjectEntity): void {
-    this.projectService.changeAndStoreSelectedProject(project);
-    this.selectedProject = project;
-  }
+            // If there is only one project, let's select it.
+            if (this.projects.length === 1) {
+              this._changeSelectedProject(this.projects[0], false);
+            }
 
-  private registerProjectRefreshInterval(): void {
-    timer(0, 1.5 * this._appConfigService.getRefreshTimeBase()).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      if (!!this.selectedProject && this.selectedProject.status !== 'Active') {
-        this.api.getProjects().pipe(first()).subscribe((res) => {
-          this.projects = res;
-          for (const i in this.projects) {
-            if (this.projectService.compareProjectsEquality(this.projects[i], this.selectedProject)) {
-              this.changeSelectedProject(this.projects[i]);
+            // TODO Load project from URL?
+
+            // If no project is selected, let's use the project from the storage.
+            if (!this.selectedProject) {
+              const localStorageProject = this.projectService.getProjectFromStorage();
+              if (!!localStorageProject) {
+                this.projects.forEach(project => {
+                  if (this.projectService.compareProjectsEquality(project, localStorageProject)) {
+                    this._changeSelectedProject(project, false);
+                  }
+                });
+              }
             }
           }
         });
-      }
+
+    this.projectService.selectedProjectChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this._externalProjectsUpdate.next();
+      this.selectedProject = data;
     });
   }
 
-  loadProjects(): void {
-    this.api.getProjects().subscribe((res) => {
-      this.projects = res;
-
-      if (this.projects.length === 1) {
-        this.changeSelectedProject(this.projects[0]);
-        return;
-      }
-
-      const projectFromStorage = this.projectService.getProjectFromStorage();
-      if (!!projectFromStorage) {
-        for (const i in this.projects) {
-          if (this.projectService.compareProjectsEquality(this.projects[i], projectFromStorage)) {
-            this.changeSelectedProject(this.projects[i]);
-          }
-        }
-      }
-    });
+  private _changeSelectedProject(project: ProjectEntity, changeView: boolean): void {
+    this.projectService.changeAndStoreSelectedProject(project, changeView);
+    this.selectedProject = project;
   }
 
-  selectionChange(event: MatSelectChange, previous: ProjectEntity, select: any): void {
+  onSelectionChange(event: MatSelectChange, previous: ProjectEntity, select: any): void {
     if (event.value === undefined) {
       // The only option with undefined value is "Add Project". If it gets
       // selected, we revert both the model and the control to the old value.
       this.selectedProject = previous;
       select.value = previous;
     } else {
-      for (const i in this.projects) {
-        if (this.projectService.compareProjectsEquality(this.projects[i], event.value)) {
-          this.changeSelectedProject(this.projects[i]);
+      // If value different than undefined was selected, let's find project
+      // with matching ID and select it.
+      this.projects.forEach(project => {
+        if (this.projectService.compareProjectsEquality(project, event.value)) {
+          this._changeSelectedProject(project, true);
         }
-      }
+      });
     }
   }
 
   addProject(): void {
-    const modal = this.dialog.open(AddProjectDialogComponent);
-    const sub = modal.afterClosed().subscribe((added) => {
+    this.dialog.open(AddProjectDialogComponent).afterClosed().pipe(first()).subscribe((added) => {
       if (added) {
-        this.loadProjects();
+        this._externalProjectsUpdate.next();
       }
-      sub.unsubscribe();
     });
   }
 
@@ -119,18 +106,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
   }
 
   checkUrl(url: string): boolean {
-    const state: RouterState = this.router.routerState;
-    const snapshot: RouterStateSnapshot = state.snapshot;
-
-    if (url === 'projects') {
-      return (snapshot.url === '/' + url);
-    } else {
-      const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
-      const urlArray = snapshot.url.split('/');
-      return (
-          !!urlArray.find((x) => x === selectedProjectId) &&
-          (!!urlArray.find((x) => x === url) || (url === 'clusters' && !!urlArray.find((x) => x === 'wizard'))));
-    }
+    const selectedProjectId = this.selectedProject ? this.selectedProject.id : '';
+    const urlArray = this.router.routerState.snapshot.url.split('/');
+    return !!urlArray.find((x) => x === selectedProjectId) &&
+        (!!urlArray.find((x) => x === url) || (url === 'clusters' && !!urlArray.find((x) => x === 'wizard')));
   }
 
   getRouterLink(target: string): string {
@@ -151,6 +130,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
       }
     }
     return tooltip;
+  }
+
+  isCustomLinkPanelVisible(): boolean {
+    return this.customLinks && this.customLinks.length > 0;
   }
 
   getCustomLinkIconStyle(link: CustomLink): any {

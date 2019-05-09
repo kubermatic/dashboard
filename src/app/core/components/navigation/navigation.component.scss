@@ -14,18 +14,10 @@ ng2-slim-loading-bar {
   z-index: 2;
 }
 
-.km-sidenav-padding {
-  padding-left: $sidenav-width;
-}
-
 .km-navigation-bar {
   z-index: 2;
   height: $toolbar-height;
   background-color: $white-text-color;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
   box-shadow: 0 4px 4px rgba($text-color, 0.1);
 
   .km-header-logo {
