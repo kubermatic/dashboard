@@ -50,25 +50,23 @@ describe('Basic story', () => {
     await ProjectUtils.createProject(projectName);
   });
 
-  it('1should select the new project', async () => {
+  it('should wait for the project to become active', async () => {
     // Project should be active before we select it.
     await KMElement.waitToAppear(projectsPage.getActiveProjectItem(projectName));
     expect(await projectsPage.getActiveProjectItem(projectName).isDisplayed()).toBeTruthy();
-  });
 
-  it('2should select the new project', async () => {
     browser.sleep(5 * second);
   });
 
-  it('3should select the new project', async () => {
+  it('should select the new project', async () => {
     await KMElement.click(projectsPage.getProjectItem(projectName));
   });
 
-  it('4should select the new project', async () => {
+  it('should wait for redirect to the clusters page', async () => {
     await KMElement.waitForRedirect('/clusters');
   });
 
-  it('5should select the new project', async () => {
+  it('should wait for side menu to appear', async () => {
     // Wait until side menu will be available.
     await KMElement.waitForClickable(navPage.getProjectsNavButton());
     expect(await navPage.getProjectsNavButton().isDisplayed()).toBeTruthy();
