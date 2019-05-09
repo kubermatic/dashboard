@@ -123,6 +123,17 @@ body {
       padding-bottom: .5 * $baseline-grid;
     }
   }
+
+  // transition for buttons in tables
+  .km-table-actions button {
+    opacity: 0;
+    transition: visibility 0s 0s, opacity 0s ease-out;
+  }
+
+  tr:hover button {
+    opacity: 1;
+    transition: opacity 0.3s ease-out;
+  }
 }
 
 .km-paginator {
