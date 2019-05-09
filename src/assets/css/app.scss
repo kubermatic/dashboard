@@ -578,6 +578,37 @@ mat-button-toggle-group[group='providerGroup'] {
 .mat-sort-header-arrow {
   margin: auto 0 auto 6px !important;
   color: $text-color !important;
+
+  .mat-sort-header-stem,
+  .mat-sort-header-pointer-left,
+  .mat-sort-header-pointer-right,
+  .mat-sort-header-pointer-middle {
+    background: none;
+  }
+}
+
+[aria-sort='ascending'] {
+  .mat-sort-header-arrow {
+    .mat-sort-header-indicator {
+      &::before {
+        content: url("/assets/images/arrow-up.svg");
+        position: absolute;
+        transform: translateY(3px);
+      }
+    }
+  }
+}
+
+[aria-sort='descending'] {
+  .mat-sort-header-arrow {
+    .mat-sort-header-indicator {
+      &::before {
+        content: url("/assets/images/arrow-up.svg");
+        transform: rotate(180deg) translateY(4px);
+        position: absolute;
+      }
+    }
+  }
 }
 
 // mat card remove border
