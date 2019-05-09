@@ -9,7 +9,7 @@ import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
@@ -99,6 +99,35 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  getOwnerArray(owners: ProjectOwners[]): string {
+    const ownerArray = [];
+    for (const i in owners) {
+      if (owners.hasOwnProperty(i)) {
+        ownerArray.push(owners[i].name);
+      }
+    }
+    return ownerArray.join(', ');
+  }
+
+  isMoreOwners(owners: ProjectOwners[]): boolean {
+    return this.getOwnerArray(owners).length > 30;
+  }
+
+  getMoreOwnersCount(owners: ProjectOwners[]): number {
+    return this.isMoreOwners(owners) ?
+        (owners.length - this.getOwnerArray(owners).substring(0, 30).split(', ').length) :
+        0;
+  }
+
+  getOwners(owners: ProjectOwners[]): string {
+    return this.isMoreOwners(owners) ? (this.getOwnerArray(owners).substring(0, 30)) : this.getOwnerArray(owners);
+  }
+
+  getMoreOwners(owners: ProjectOwners[]): string {
+    return this.getOwnerArray(owners).substring(30, this.getOwnerArray(owners).length);
+  }
+
 
   isProjectActive(project: ProjectEntity) {
     return ProjectUtils.isProjectActive(project);
