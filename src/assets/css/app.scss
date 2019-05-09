@@ -54,15 +54,6 @@ body {
   border-collapse: separate;
   border-spacing: 0;
 
-  tr:last-child td:first-child,
-  tr:last-child td:last-child {
-    border-bottom-left-radius: 5px;
-  }
-
-  tr:last-child td:last-child {
-    border-bottom-right-radius: 5px;
-  }
-
   tr:first-child th:first-child {
     border-top-left-radius: 5px;
   }
