@@ -12,16 +12,20 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 export class PacketClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   packetSettingsForm: FormGroup;
+  readonly availableBillingCycles = ['hourly', 'daily'];
   private packetSettingsFormSub: Subscription;
 
   constructor(private wizardService: WizardService) {}
 
   ngOnInit(): void {
+    const billingCycle = !!this.cluster.spec.cloud.packet.billingCycle ? this.cluster.spec.cloud.packet.billingCycle :
+                                                                         this.availableBillingCycles[0];
+
     this.packetSettingsForm = new FormGroup({
       apiKey: new FormControl(this.cluster.spec.cloud.packet.apiKey, [Validators.required, Validators.maxLength(256)]),
       projectID:
           new FormControl(this.cluster.spec.cloud.packet.projectID, [Validators.required, Validators.maxLength(256)]),
-      billingCycle: new FormControl(this.cluster.spec.cloud.packet.billingCycle, [Validators.maxLength(64)]),
+      billingCycle: new FormControl(billingCycle, [Validators.maxLength(64)]),
     });
 
     this.packetSettingsFormSub = this.packetSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {

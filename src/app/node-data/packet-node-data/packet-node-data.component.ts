@@ -25,21 +25,21 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
-    for (const i in this.nodeData.spec.cloud.aws.tags) {
-      if (this.nodeData.spec.cloud.aws.tags.hasOwnProperty(i)) {
+    for (const i in this.nodeData.spec.cloud.packet.tags) {
+      if (this.nodeData.spec.cloud.packet.tags.hasOwnProperty(i)) {
         tagList.push(new FormGroup({
           key: new FormControl(i),
-          value: new FormControl(this.nodeData.spec.cloud.aws.tags[i]),
+          value: new FormControl(this.nodeData.spec.cloud.packet.tags[i]),
         }));
       }
     }
 
     this.packetNodeForm = new FormGroup({
-      type: new FormControl(this.nodeData.spec.cloud.aws.instanceType, Validators.required),
+      type: new FormControl(this.nodeData.spec.cloud.packet.instanceType, Validators.required),
       tags: tagList,
     });
 
-    if (this.nodeData.spec.cloud.aws.instanceType === '') {
+    if (this.nodeData.spec.cloud.packet.instanceType === '') {
       this.packetNodeForm.controls.type.setValue(this.instanceTypes[0]);
     }
 

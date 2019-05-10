@@ -75,7 +75,7 @@ export function fakePacketCluster(): ClusterEntity {
         packet: {
           apiKey: '123',
           projectID: '1',
-          billingCycle: 'monthly',
+          billingCycle: 'hourly',
         }
       },
       version: '1.8.5',

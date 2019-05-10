@@ -30,14 +30,18 @@
       Packet project ID must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex>
-    <input matInput
-           formControlName="billingCycle"
-           type="text"
-           placeholder="Billing Cycle"
-           autocomplete="off">
-    <mat-error *ngIf="packetSettingsForm.controls.billingCycle.hasError('maxlength')">
-      Billing cycle must be less than <strong>64</strong> characters long.
-    </mat-error>
-  </mat-form-field>
+
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-select placeholder="Billing Cycle"
+                  formControlName="billingCycle">
+        <mat-option *ngFor="let billingCycle of availableBillingCycles"
+                    [value]="billingCycle">
+          {{billingCycle}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 </form>
