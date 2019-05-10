@@ -100,32 +100,46 @@ export class ProjectComponent implements OnInit, OnDestroy {
     }
   }
 
-  getOwnerArray(owners: ProjectOwners[]): string {
-    const ownerArray = [];
+  getOwnerNameArray(owners: ProjectOwners[]): string[] {
+    const ownerNameArray = [];
     for (const i in owners) {
       if (owners.hasOwnProperty(i)) {
-        ownerArray.push(owners[i].name);
+        ownerNameArray.push(owners[i].name);
       }
     }
-    return ownerArray.join(', ');
+    return ownerNameArray;
+  }
+
+  getOwnerString(owners: ProjectOwners[]): string {
+    return this.getOwnerNameArray(owners).join(', ');
+  }
+
+  getOwners(owners: ProjectOwners[]): string {
+    return this.isMoreOwners(owners) ? (this.getOwnerString(owners).substring(0, 30)) : this.getOwnerString(owners);
   }
 
   isMoreOwners(owners: ProjectOwners[]): boolean {
-    return this.getOwnerArray(owners).length > 30;
+    return this.getOwnerString(owners).length > 30;
   }
 
   getMoreOwnersCount(owners: ProjectOwners[]): number {
     return this.isMoreOwners(owners) ?
-        (owners.length - this.getOwnerArray(owners).substring(0, 30).split(', ').length) :
+        (owners.length - this.getOwnerString(owners).substring(0, 30).split(', ').length) :
         0;
   }
 
-  getOwners(owners: ProjectOwners[]): string {
-    return this.isMoreOwners(owners) ? (this.getOwnerArray(owners).substring(0, 30)) : this.getOwnerArray(owners);
-  }
-
   getMoreOwners(owners: ProjectOwners[]): string {
-    return this.getOwnerArray(owners).substring(30, this.getOwnerArray(owners).length);
+    // truncatedLength = number of displayed owner names
+    const truncatedLength = this.getOwnerString(owners).substring(0, 30).split(', ').length;
+    // count = length of original owner names that are displayed
+    // (truncatedLength - 1) * 2 = additional number of seperators (', ' = 2)
+    let count: number = (truncatedLength - 1) * 2;
+    for (let i = 0; i < truncatedLength; i++) {
+      count += owners[i].name.length;
+    }
+    // if last displayed name is not complete, show it in tooltip
+    return count > 30 ? this.getOwnerNameArray(owners).slice(truncatedLength - 1, owners.length).join(', ') :
+                        this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
   }
 
 
