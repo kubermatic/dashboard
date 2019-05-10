@@ -37,6 +37,7 @@ import {BringyourownClusterSettingsComponent} from './provider-settings/bringyou
 import {DigitaloceanClusterSettingsComponent} from './provider-settings/digitalocean/digitalocean.component';
 import {HetznerClusterSettingsComponent} from './provider-settings/hetzner/hetzner.component';
 import {OpenstackClusterSettingsComponent} from './provider-settings/openstack/openstack.component';
+import {PacketClusterSettingsComponent} from './provider-settings/packet/packet.component';
 import {ClusterProviderSettingsComponent} from './provider-settings/provider-settings.component';
 import {VSphereClusterSettingsComponent} from './provider-settings/vsphere/vsphere.component';
 import {SetSettingsComponent} from './set-settings.component';
@@ -72,6 +73,7 @@ describe('SetSettingsComponent', () => {
             HetznerClusterSettingsComponent,
             VSphereClusterSettingsComponent,
             AzureClusterSettingsComponent,
+            PacketClusterSettingsComponent,
             NodeDataComponent,
             OpenstackNodeDataComponent,
             OpenstackOptionsComponent,

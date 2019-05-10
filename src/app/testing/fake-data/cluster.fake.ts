@@ -56,6 +56,37 @@ export function fakeDigitaloceanCluster(): ClusterEntity {
   };
 }
 
+export function fakePacketCluster(): ClusterEntity {
+  return {
+    creationTimestamp: new Date(),
+    id: '4k6txp5sq',
+    name: 'nifty-haibt',
+    spec: {
+      cloud: {
+        dc: 'packet-ams',
+        digitalocean: null,
+        aws: null,
+        openstack: null,
+        baremetal: null,
+        bringyourown: null,
+        hetzner: null,
+        vsphere: null,
+        azure: null,
+        packet: {
+          apiKey: '123',
+          projectID: '1',
+          billingCycle: 'monthly',
+        }
+      },
+      version: '1.8.5',
+    },
+    status: {
+      url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
+      version: '1.8.5',
+    },
+  };
+}
+
 export function fakeHetznerCluster(): ClusterEntity {
   return {
     creationTimestamp: new Date(),

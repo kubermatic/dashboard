@@ -1,3 +1,5 @@
 export class PacketCloudSpec {
-  // TODO
+  apiKey: string;
+  projectID: string;
+  billingCycle: string;
 }

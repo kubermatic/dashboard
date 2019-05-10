@@ -128,7 +128,7 @@ export class CloudSpec {
   aws?: AWSCloudSpec;
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
-  packet?: OpenstackCloudSpec;
+  packet?: PacketCloudSpec;
   baremetal?: BareMetalCloudSpec;
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;
