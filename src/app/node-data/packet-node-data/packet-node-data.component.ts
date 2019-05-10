@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
@@ -17,26 +17,15 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   instanceTypes: string[] = NodeInstanceFlavors.Packet;
   packetNodeForm: FormGroup;
-  tags: FormArray;
   hideOptional = true;
   private subscriptions: Subscription[] = [];
 
   constructor(private addNodeService: NodeDataService, private wizardService: WizardService) {}
 
   ngOnInit(): void {
-    const tagList = new FormArray([]);
-    for (const i in this.nodeData.spec.cloud.packet.tags) {
-      if (this.nodeData.spec.cloud.packet.tags.hasOwnProperty(i)) {
-        tagList.push(new FormGroup({
-          key: new FormControl(i),
-          value: new FormControl(this.nodeData.spec.cloud.packet.tags[i]),
-        }));
-      }
-    }
-
     this.packetNodeForm = new FormGroup({
       type: new FormControl(this.nodeData.spec.cloud.packet.instanceType, Validators.required),
-      tags: tagList,
+      tags: new FormControl(this.nodeData.spec.cloud.packet.tags.toString().replace(/,/g, ',')),
     });
 
     if (this.nodeData.spec.cloud.packet.instanceType === '') {
@@ -55,40 +44,20 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    const tagMap = {};
-    for (const i in this.packetNodeForm.controls.tags.value) {
-      if (this.packetNodeForm.controls.tags.value[i].key !== '' &&
-          this.packetNodeForm.controls.tags.value[i].value !== '') {
-        tagMap[this.packetNodeForm.controls.tags.value[i].key] = this.packetNodeForm.controls.tags.value[i].value;
-      }
+    let packetTags: string[] = [];
+    if ((this.packetNodeForm.controls.tags.value).length > 0) {
+      packetTags = (this.packetNodeForm.controls.tags.value).split(/[\s]?,[\s]?/);
     }
 
     return {
       spec: {
         packet: {
           instanceType: this.packetNodeForm.controls.type.value,
-          tags: tagMap,
+          tags: packetTags,
         },
       },
       valid: this.packetNodeForm.valid,
     };
-  }
-
-  getTagForm(form): any {
-    return form.get('tags').controls;
-  }
-
-  addTag(): void {
-    this.tags = this.packetNodeForm.get('tags') as FormArray;
-    this.tags.push(new FormGroup({
-      key: new FormControl(''),
-      value: new FormControl(''),
-    }));
-  }
-
-  deleteTag(index: number): void {
-    const arrayControl = this.packetNodeForm.get('tags') as FormArray;
-    arrayControl.removeAt(index);
   }
 
   ngOnDestroy(): void {
