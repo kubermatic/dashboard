@@ -1,9 +1,11 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
+
 import {AWSNodeSpec} from './node/AWSNodeSpec';
 import {AzureNodeSpec} from './node/AzureNodeSpec';
 import {DigitaloceanNodeSpec} from './node/DigitaloceanNodeSpec';
 import {HetznerNodeSpec} from './node/HetznerNodeSpec';
 import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
+import {PacketNodeSpec} from './node/PacketNodeSpec';
 import {VSphereNodeSpec} from './node/VSphereNodeSpec';
 
 export class NodeEntity {
@@ -26,6 +28,7 @@ export class NodeCloudSpec {
   digitalocean?: DigitaloceanNodeSpec;
   aws?: AWSNodeSpec;
   openstack?: OpenstackNodeSpec;
+  packet?: PacketNodeSpec;
   hetzner?: HetznerNodeSpec;
   vsphere?: VSphereNodeSpec;
   azure?: AzureNodeSpec;
@@ -122,6 +125,11 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         assignPublicIP: false,
         tags: {'': ''},
       } as AzureNodeSpec;
+    case NodeProvider.PACKET:
+      return {
+        instanceType: '',
+        tags: {'': ''},
+      } as PacketNodeSpec;
   }
   return {};
 }
