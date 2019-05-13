@@ -22,6 +22,21 @@ export class NodeSpec {
   operatingSystem: OperatingSystemSpec;
   versions?: NodeVersionInfo;
   labels?: object;
+  taints?: Taint[];
+}
+
+export class Taint {
+  static NO_SCHEDULE = 'NoSchedule';
+  static PREFER_NO_SCHEDULE = 'PreferNoSchedule';
+  static NO_EXECUTE = 'NoExecute';
+
+  static getAvailableEffects(): string[] {
+    return [Taint.NO_SCHEDULE, Taint.PREFER_NO_SCHEDULE, Taint.NO_EXECUTE];
+  }
+
+  key: string;
+  value: string;
+  effect: string;
 }
 
 export class NodeCloudSpec {

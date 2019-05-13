@@ -114,6 +114,12 @@
             <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
           </div>
         </km-property>
+        <km-property>
+          <div key>Node Taints</div>
+          <div value>
+            <km-taints [taints]="nodeDeployment.spec.template.taints"></km-taints>
+          </div>
+        </km-property>
       </div>
     </mat-card-content>
   </mat-card>

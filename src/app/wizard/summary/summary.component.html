@@ -498,6 +498,20 @@
               </div>
             </div>
 
+            <div class="km-card-list-content"
+                 fxFlex="100%"
+                 fxLayout="column">
+              <div fxFlex="100%">
+                <div fxFlex="25%"
+                     class="km-card-list-key">
+                  Node Taints
+                </div>
+                <div fxFlex="75%">
+                  <km-taints [taints]="nodeData.spec.taints"></km-taints>
+                </div>
+              </div>
+            </div>
+
             <!-- DO Nodes -->
             <ng-container *ngIf="cluster.spec.cloud.digitalocean">
               <div class="km-card-list-content"
