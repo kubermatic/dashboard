@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {MatSort, MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 
 import {ProjectService} from '../../../core/services';
@@ -16,7 +16,7 @@ import {NodeService} from '../../services/node.service';
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
 })
-export class NodeDeploymentListComponent {
+export class NodeDeploymentListComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodeDeployments: NodeDeploymentEntity[] = [];
@@ -25,16 +25,24 @@ export class NodeDeploymentListComponent {
   @Input() isClusterRunning: boolean;
   @Input() isNodeDeploymentLoadFinished: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
+  dataSource = new MatTableDataSource<NodeDeploymentEntity>();
+  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   constructor(
       private readonly _router: Router, private readonly _nodeService: NodeService,
       private readonly _projectService: ProjectService) {}
 
+  ngOnInit(): void {
+    this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
+  }
+
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
-    const dataSource = new MatTableDataSource<NodeDeploymentEntity>();
-    dataSource.data = this.nodeDeployments;
-    return dataSource;
+    this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
+    return this.dataSource;
   }
 
   getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {
