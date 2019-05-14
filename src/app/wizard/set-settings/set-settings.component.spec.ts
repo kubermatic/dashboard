@@ -16,6 +16,7 @@ import {HetznerNodeDataComponent} from '../../node-data/hetzner-node-data/hetzne
 import {NodeDataComponent} from '../../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../../node-data/openstack-node-data/openstack-node-data.component';
 import {OpenstackOptionsComponent} from '../../node-data/openstack-node-data/openstack-options/openstack-options.component';
+import {PacketNodeDataComponent} from '../../node-data/packet-node-data/packet-node-data.component';
 import {VSphereNodeDataComponent} from '../../node-data/vsphere-add-node/vsphere-node-data.component';
 import {VSphereOptionsComponent} from '../../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
 import {SharedModule} from '../../shared/shared.module';
@@ -84,6 +85,7 @@ describe('SetSettingsComponent', () => {
             VSphereNodeDataComponent,
             VSphereOptionsComponent,
             AzureNodeDataComponent,
+            PacketNodeDataComponent,
           ],
           providers: [
             NodeDataService,

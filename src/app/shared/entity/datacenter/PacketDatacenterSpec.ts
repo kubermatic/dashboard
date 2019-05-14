@@ -1,3 +1,3 @@
 export class PacketDatacenterSpec {
-  // TODO
+  facilities: string[];
 }
