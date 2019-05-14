@@ -25,7 +25,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.packetNodeForm = new FormGroup({
       type: new FormControl(this.nodeData.spec.cloud.packet.instanceType, Validators.required),
-      tags: new FormControl(this.nodeData.spec.cloud.packet.tags.toString().replace(/,/g, ',')),
+      tags: new FormControl(this.nodeData.spec.cloud.packet.tags.toString().replace(/\,/g, ', ')),
     });
 
     if (this.nodeData.spec.cloud.packet.instanceType === '') {

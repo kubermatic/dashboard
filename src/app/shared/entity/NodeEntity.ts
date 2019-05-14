@@ -128,7 +128,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
     case NodeProvider.PACKET:
       return {
         instanceType: '',
-        tags: {'': ''},
+        tags: [],
       } as PacketNodeSpec;
   }
   return {};
