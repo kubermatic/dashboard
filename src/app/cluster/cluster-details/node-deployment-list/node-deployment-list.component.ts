@@ -8,6 +8,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
 
 @Component({
@@ -24,7 +25,7 @@ export class NodeDeploymentListComponent {
   @Input() isClusterRunning: boolean;
   @Input() isNodeDeploymentLoadFinished: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
-  displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
+  displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   constructor(
       private readonly _router: Router, private readonly _nodeService: NodeService,
@@ -38,6 +39,10 @@ export class NodeDeploymentListComponent {
 
   getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {
     return NodeDeploymentHealthStatus.getHealthStatus(nd);
+  }
+
+  getOperatingSystem(nd: NodeDeploymentEntity): string {
+    return NodeUtils.getOperatingSystem(nd.spec.template);
   }
 
   goToDetails(nd: NodeDeploymentEntity) {
