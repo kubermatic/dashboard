@@ -32,7 +32,9 @@ export class OpenstackCloudSpecPatch {
 }
 
 export class PacketCloudSpecPatch {
-  // TODO
+  apiKey?: string;
+  projectID?: string;
+  billingCycle?: string;
 }
 
 export class HetznerCloudSpecPatch {
