@@ -48,16 +48,16 @@ describe('PacketClusterSettingsComponent', () => {
     expect(component.packetSettingsForm.valid).toBeFalsy();
   });
 
-  it('token field validity', () => {
+  it('apiKey field validity', () => {
     expect(component.packetSettingsForm.valid).toBeFalsy('form is initially not valid');
     expect(component.packetSettingsForm.controls.apiKey.valid).toBeFalsy('apiKey field is initially not valid');
     expect(component.packetSettingsForm.controls.apiKey.hasError('required'))
         .toBeTruthy('apiKey field has initially required error');
 
     component.packetSettingsForm.controls.apiKey.patchValue('foo');
-    expect(component.packetSettingsForm.controls.token.hasError('required'))
+    expect(component.packetSettingsForm.controls.apiKey.hasError('required'))
         .toBeFalsy('apiKey field has no required error after setting foo');
-    expect(component.packetSettingsForm.controls.token.hasError('minlength'))
+    expect(component.packetSettingsForm.controls.apiKey.hasError('minlength'))
         .toBeFalsy('apiKey field has no min length error after setting foo');
   });
 });

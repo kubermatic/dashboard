@@ -338,6 +338,10 @@ export function nodeDataFake(): NodeData {
           assignPublicIP: false,
           tags: {},
         },
+        packet: {
+          instanceType: 'm1.small',
+          tags: [],
+        }
       },
       operatingSystem: {
         ubuntu: {

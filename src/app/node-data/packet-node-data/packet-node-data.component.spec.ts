@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
+import {fakePacketCluster} from '../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {PacketNodeDataComponent} from './packet-node-data.component';
 
@@ -40,7 +40,7 @@ describe('PacketNodeDataComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PacketNodeDataComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeAWSCluster().spec.cloud;
+    component.cloudSpec = fakePacketCluster().spec.cloud;
     component.nodeData = nodeDataFake();
   });
 
