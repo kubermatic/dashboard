@@ -2,8 +2,8 @@
 
 .km-card-progress-bar.mat-card {
   padding: 5px 10px 16px;
-  background-color: $primary;
-  border-radius: 0;
+  background-color: $alternative-light;
+  border-radius: 5px 5px 0 0;
 
   .mat-card-title {
     font-size: 16px;
@@ -14,7 +14,7 @@
     text-align: center;
 
     i {
-      color: $white-text-color;
+      color: $alternative-text-color;
       margin-left: 5px;
 
       &.fa-check {
@@ -25,11 +25,11 @@
 
   .km-wizard-step {
     padding-top: 8px;
-    color: $white-text-color;
+    color: $alternative-text-color;
     font-weight: bold;
 
     .km-title-unchecked {
-      color: $light-button-color;
+      color: $alternative-disabled-text-color;
     }
   }
 }

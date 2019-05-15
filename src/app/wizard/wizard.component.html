@@ -1,38 +1,39 @@
-<kubermatic-progress [steps]="steps"
-                     [currentStepIndex]="currentStepIndex"
-                     [currentStep]="currentStep"></kubermatic-progress>
+<div class="km-wizard-wrapper">
+  <kubermatic-progress [steps]="steps"
+                       [currentStepIndex]="currentStepIndex"
+                       [currentStep]="currentStep"></kubermatic-progress>
 
-<mat-card>
-  <!-- Cluster Spec -->
-  <kubermatic-set-cluster-spec [cluster]="cluster"
-                               *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
+  <mat-card>
+    <!-- Cluster Spec -->
+    <kubermatic-set-cluster-spec [cluster]="cluster"
+                                 *ngIf="currentStep.name === 'set-cluster-spec'"></kubermatic-set-cluster-spec>
 
-  <!-- Cluster Provider -->
-  <kubermatic-set-provider [cluster]="cluster"
-                           *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
+    <!-- Cluster Provider -->
+    <kubermatic-set-provider [cluster]="cluster"
+                             *ngIf="currentStep.name === 'set-provider'"></kubermatic-set-provider>
 
-  <!-- Cluster Datacenter -->
-  <kubermatic-set-datacenter [cluster]="cluster"
-                             *ngIf="currentStep.name === 'set-datacenter'"></kubermatic-set-datacenter>
+    <!-- Cluster Datacenter -->
+    <kubermatic-set-datacenter [cluster]="cluster"
+                               *ngIf="currentStep.name === 'set-datacenter'"></kubermatic-set-datacenter>
 
-  <!-- Provider Settings -->
-  <kubermatic-set-settings [cluster]="cluster"
-                           [clusterSSHKeys]="clusterSSHKeys"
-                           [nodeData]="addNodeData"
-                           *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
+    <!-- Provider Settings -->
+    <kubermatic-set-settings [cluster]="cluster"
+                             [clusterSSHKeys]="clusterSSHKeys"
+                             [nodeData]="addNodeData"
+                             *ngIf="currentStep.name === 'set-provider-settings'"></kubermatic-set-settings>
 
-  <!-- Machine Networks -->
-  <kubermatic-set-machine-networks [cluster]="cluster"
-                                   [nodeData]="addNodeData"
-                                   *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
+    <!-- Machine Networks -->
+    <kubermatic-set-machine-networks [cluster]="cluster"
+                                     [nodeData]="addNodeData"
+                                     *ngIf="currentStep.name === 'set-machine-networks'"></kubermatic-set-machine-networks>
 
-  <!-- Provider Summary -->
-  <kubermatic-summary *ngIf="currentStep.name === 'summary'"
-                      [nodeData]="addNodeData"
-                      [cluster]="cluster"
-                      [providerFormData]="clusterProviderFormData"
-                      [datacenterFormData]="clusterDatacenterFormData"
-                      [clusterSSHKeys]="clusterSSHKeys"></kubermatic-summary>
+    <!-- Provider Summary -->
+    <kubermatic-summary *ngIf="currentStep.name === 'summary'"
+                        [nodeData]="addNodeData"
+                        [cluster]="cluster"
+                        [providerFormData]="clusterProviderFormData"
+                        [datacenterFormData]="clusterDatacenterFormData"
+                        [clusterSSHKeys]="clusterSSHKeys"></kubermatic-summary>
 
   <!-- Navigation Buttons -->
   <div class="km-button-navigation">
@@ -73,6 +74,7 @@
     <span class="km-project-status-info"
           *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
 
-  </div>
+    </div>
 
-</mat-card>
+  </mat-card>
+</div>

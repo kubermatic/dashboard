@@ -1,3 +1,6 @@
+@import "colors";
+@import "variables";
+
 // logo
 .km-header-logo {
   background-image: url("/assets/images/logo/kubermatic.svg");
@@ -22,43 +25,31 @@
 // icons
 .km-icon-delete {
   display: inline-block;
-  width: 25px;
-  height: 25px;
-  background-repeat: no-repeat;
-  background-size: contain;
+  width: 18px;
+  height: 18px;
+  mask: url("/assets/images/icons/trash.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
   cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/delete-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/delete-black.png");
-  }
+  background-color: $text-color;
 
   &:disabled {
-    opacity: 0.3;
+    background-color: $disabled-button-color;
   }
 }
 
 .km-icon-edit {
   display: inline-block;
-  width: 25px;
-  height: 25px;
-  background-repeat: no-repeat;
-  background-size: contain;
+  width: 18px;
+  height: 18px;
+  mask: url("/assets/images/icons/edit.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
   cursor: pointer;
-
-  &.white {
-    background-image: url("/assets/images/icons/edit-white.png");
-  }
-
-  &.black {
-    background-image: url("/assets/images/icons/edit-black.png");
-  }
+  background-color: $text-color;
 
   &:disabled {
-    opacity: 0.3;
+    background-color: $disabled-button-color;
   }
 }
 
@@ -147,6 +138,7 @@
   height: 20px;
   background-image: url("/assets/images/close.svg");
   background-repeat: no-repeat;
+  background-color: transparent;
 }
 
 .km-icon-running {

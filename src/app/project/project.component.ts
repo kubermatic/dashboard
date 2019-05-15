@@ -9,7 +9,7 @@ import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
@@ -99,6 +99,49 @@ export class ProjectComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  getOwnerNameArray(owners: ProjectOwners[]): string[] {
+    const ownerNameArray = [];
+    for (const i in owners) {
+      if (owners.hasOwnProperty(i)) {
+        ownerNameArray.push(owners[i].name);
+      }
+    }
+    return ownerNameArray;
+  }
+
+  getOwnerString(owners: ProjectOwners[]): string {
+    return this.getOwnerNameArray(owners).join(', ');
+  }
+
+  getOwners(owners: ProjectOwners[]): string {
+    return this.isMoreOwners(owners) ? (this.getOwnerString(owners).substring(0, 30)) : this.getOwnerString(owners);
+  }
+
+  isMoreOwners(owners: ProjectOwners[]): boolean {
+    return this.getOwnerString(owners).length > 30;
+  }
+
+  getMoreOwnersCount(owners: ProjectOwners[]): number {
+    return this.isMoreOwners(owners) ?
+        (owners.length - this.getOwnerString(owners).substring(0, 30).split(', ').length) :
+        0;
+  }
+
+  getMoreOwners(owners: ProjectOwners[]): string {
+    // truncatedLength = number of displayed owner names
+    const truncatedLength = this.getOwnerString(owners).substring(0, 30).split(', ').length;
+    // count = length of original owner names that are displayed
+    // (truncatedLength - 1) * 2 = additional number of seperators (', ' = 2)
+    let count: number = (truncatedLength - 1) * 2;
+    for (let i = 0; i < truncatedLength; i++) {
+      count += owners[i].name.length;
+    }
+    // if last displayed name is not complete, show it in tooltip
+    return count > 30 ? this.getOwnerNameArray(owners).slice(truncatedLength - 1, owners.length).join(', ') :
+                        this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
+  }
+
 
   isProjectActive(project: ProjectEntity) {
     return ProjectUtils.isProjectActive(project);

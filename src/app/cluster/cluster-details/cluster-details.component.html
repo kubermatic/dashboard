@@ -3,6 +3,7 @@
        class="km-cluster-detail-actions">
     <div fxFlex="100%"
          align="right">
+
       <button id="km-delete-cluster-btn"
               mat-flat-button
               color="tertiary"
@@ -16,6 +17,7 @@
               (click)="addNode()"
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
               [disabled]="!isAddNodeDeploymentsEnabled()">
+
         Add Node Deployment
       </button>
       <button class="km-connect-kubeconfig-btn"
@@ -41,14 +43,17 @@
     </div>
   </div>
 
-  <mat-card class="white"
+
+  <mat-card class="white km-cluster-details"
             [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.css : ''">
-    <mat-card-header>
-      <mat-card-title>
+
+    <mat-card-header class="km-card-main-header">
+
+      <mat-card-title class="km-cluster-name">
         <span ngxClipboard
               [cbContent]="cluster.name"
               matTooltip="Click to copy"
-              class="km-copy km-cluster-name">{{cluster.name}}</span>
+              class="km-copy">{{cluster.name}}</span>
         <i [matTooltip]="!!clusterHealthStatus ? clusterHealthStatus.message : ''"
            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.color : ''"
            class="km-cluster-health"></i>
@@ -56,41 +61,45 @@
     </mat-card-header>
     <mat-card-content fxLayout="row wrap"
                       class="km-row">
-      <km-property>
-        <div key>Cluster ID</div>
-        <div value
-             ngxClipboard
-             [cbContent]="cluster.id"
-             matTooltip="Click to copy"
-             class="km-copy">
-          {{cluster.id}}
-        </div>
-      </km-property>
-      <km-property>
-        <div key>Master Version</div>
-        <div value
-             fxLayoutGap="4px">
-          <span *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)"
-                (click)="changeClusterVersionDialog()"
-                matTooltip="Click to change the version"
-                class="km-copy">{{cluster.spec.version}}
-            <i *ngIf="updatesAvailable"
-               class="fa fa-arrow-up"></i>
-          </span>
-          <i *ngIf="someUpgradesRestrictedByKubeletVersion"
-             matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
-             class="fa fa-exclamation-triangle orange"></i>
-          <span *ngIf="!isClusterRunning || !(updatesAvailable || downgradesAvailable)">
-            {{cluster.spec.version}}
-          </span>
-        </div>
-      </km-property>
-    </mat-card-content>
-  </mat-card>
-  <kubermatic-cluster-secrets [cluster]="cluster"
-                              [datacenter]="datacenter"></kubermatic-cluster-secrets>
 
-  <mat-card class="blue">
+      <div class="km-content-wrap">
+        <km-property>
+          <div key>Cluster ID</div>
+          <div value
+               ngxClipboard
+               [cbContent]="cluster.id"
+               matTooltip="Click to copy"
+               class="km-copy">
+            {{cluster.id}}
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Master Version</div>
+          <div value
+               fxLayoutGap="4px">
+            <span *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)"
+                  (click)="changeClusterVersionDialog()"
+                  matTooltip="Click to change the version"
+                  class="km-copy">{{cluster.spec.version}}
+              <i *ngIf="updatesAvailable"
+                 class="fa fa-arrow-up"></i>
+            </span>
+            <i *ngIf="someUpgradesRestrictedByKubeletVersion"
+               matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
+               class="fa fa-exclamation-triangle orange"></i>
+            <span *ngIf="!isClusterRunning || !(updatesAvailable || downgradesAvailable)">
+              {{cluster.spec.version}}
+            </span>
+          </div>
+        </km-property>
+      </div>
+    </mat-card-content>
+    <kubermatic-cluster-secrets [cluster]="cluster"
+                                [datacenter]="datacenter"></kubermatic-cluster-secrets>
+  </mat-card>
+
+
+  <mat-card class="km-with-table-header">
     <mat-card-header>
       <mat-card-title fxLayout>
         <div fxFlex="42%">Provider</div>
@@ -115,13 +124,15 @@
             <button mat-menu-item
                     (click)="editProviderSettings()"
                     [disabled]="!isEditEnabled()">
-              <mat-icon class="km-icon-edit black"></mat-icon>
+
+              <mat-icon class="km-icon-edit"></mat-icon>
               <span>Edit Settings</span>
             </button>
             <button mat-menu-item
                     (click)="editSSHKeys()"
                     [disabled]="!isSSHKeysEditEnabled()">
-              <mat-icon class="km-icon-edit black"></mat-icon>
+
+              <mat-icon class="km-icon-edit"></mat-icon>
               <span>Manage SSH keys</span>
             </button>
           </mat-menu>

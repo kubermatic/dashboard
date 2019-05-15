@@ -10,7 +10,7 @@
   </div>
 </div>
 
-<mat-card class="blue km-project-view">
+<mat-card class="km-with-table-header km-project-view">
   <mat-card-content>
     <table class="km-table"
            mat-table
@@ -68,10 +68,14 @@
             *matHeaderCellDef
             class="km-header-cell">Owners</th>
         <td mat-cell
-            *matCellDef="let element">
-          <span class="km-project-item-owner"
-                *ngFor="let owner of element.owners"
-                matTooltip="{{owner.email}}">{{owner.name}}</span>
+            *matCellDef="let element"
+            class="km-project-item-owner">
+          {{getOwners(element.owners)}}
+          <p class="km-project-more-owner"
+             *ngIf="isMoreOwners(element.owners)"
+             [matTooltip]="getMoreOwners(element.owners)"> ...
+            <span *ngIf="getMoreOwnersCount(element.owners) > 0">+{{getMoreOwnersCount(element.owners)}}</span>
+          </p>
         </td>
       </ng-container>
 
@@ -81,7 +85,7 @@
             class="km-header-cell"></th>
         <td mat-cell
             *matCellDef="let element">
-          <div class="km-project-item-actions">
+          <div class="km-table-actions km-project-item-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
                 <mat-spinner [diameter]="30"
@@ -90,13 +94,13 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button class="km-icon-edit black"
+                <button class="km-icon-edit"
                         [attr.id]="'km-edit-project-' + element.name"
                         matTooltip="Edit Project"
                         (click)="editProject(element, $event)"
                         [disabled]="!isEditEnabled(element)"></button>
 
-                <button class="km-icon-delete black"
+                <button class="km-icon-delete"
                         [attr.id]="'km-delete-project-' + element.name"
                         matTooltip="Delete Project"
                         (click)="deleteProject(element, $event)"

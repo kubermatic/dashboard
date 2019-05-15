@@ -3,6 +3,7 @@
        class="km-node-deployment-detail-actions">
     <div fxFlex="100%"
          align="right">
+
       <button mat-flat-button
               color="tertiary"
               (click)="showDeleteDialog()"
@@ -15,6 +16,7 @@
               (click)="goBackToCluster()">
         Go Back to the Cluster
       </button>
+
       <button mat-flat-button
               (click)="showEditDialog()"
               [disabled]="!isEditEnabled()">
@@ -25,90 +27,95 @@
 
   <mat-card class="km-node-deployment-detail-card white">
     <mat-card-header>
-      <mat-card-title>
+
+      <mat-card-title class="km-node-deployment-name">
         <i [matTooltip]="nodeDeploymentHealthStatus.message"
            [ngClass]="nodeDeploymentHealthStatus.color"
            class="km-node-deployment-health"></i>
-        <span class="km-node-deployment-name">{{nodeDeployment.name}}</span>
+
+        <span>{{nodeDeployment.name}}</span>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap"
                       class="km-row">
-      <km-property>
-        <div key>Status</div>
-        <div value
-             id="km-node-deployment-status">
-          {{nodeDeploymentHealthStatus.message}}
-        </div>
-      </km-property>
-      <km-property>
-        <div key>Replicas</div>
-        <div value>
-          <span>{{!!nodeDeployment.status?.availableReplicas ? nodeDeployment.status.availableReplicas : 0}}/{{!!nodeDeployment.spec?.replicas ? nodeDeployment.spec.replicas : 0}}</span>
-          <span *ngIf="nodeDeployment.status?.availableReplicas > nodeDeployment.spec.replicas"
-                matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating.">
-            <i class="fa fa-question-circle"
-               aria-hidden="true"></i>
-          </span>
-        </div>
-      </km-property>
-      <km-property>
-        <div key>Paused</div>
-        <div value>{{nodeDeployment.spec.paused}}</div>
-      </km-property>
-      <km-property>
-        <div key>kubelet version</div>
-        <div value>{{nodeDeployment.spec.template.versions.kubelet}}</div>
-      </km-property>
-      <km-property>
-        <div key>Operating system</div>
-        <div value>{{system}}</div>
-      </km-property>
-      <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.ubuntu">
-        <div key>Upgrade system on the first boot</div>
-        <div value>
-          <i [ngClass]="nodeDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
-        </div>
-      </km-property>
-      <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.centos">
-        <div key>Upgrade system on the first boot</div>
-        <div value>
-          <i [ngClass]="nodeDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
-        </div>
-      </km-property>
-      <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.containerLinux">
-        <div key>Disable auto-update</div>
-        <div value>
-          <i [ngClass]="nodeDeployment.spec.template.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
-        </div>
-      </km-property>
-      <km-property>
-        <div key>Cluster name</div>
-        <div value
-             class="km-link"
-             id="km-node-deployment-cluster-name"
-             (click)="goBackToCluster()">{{cluster.name}}</div>
-      </km-property>
-      <km-property>
-        <div key>Cluster provider</div>
-        <div value>
-          <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
-        </div>
-      </km-property>
-      <km-property>
-        <div key>Datacenter location</div>
-        <div value>{{datacenter.spec.country}}, {{datacenter.spec.location}}</div>
-      </km-property>
-      <km-property>
-        <div key>Creation date</div>
-        <div value>{{nodeDeployment.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</div>
-      </km-property>
-      <km-property>
-        <div key>Node Labels</div>
-        <div value>
-          <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
-        </div>
-      </km-property>
+
+      <div class="km-content-wrap">
+        <km-property>
+          <div key>Status</div>
+          <div value
+               id="km-node-deployment-status">
+            {{nodeDeploymentHealthStatus.message}}
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Replicas</div>
+          <div value>
+            <span>{{!!nodeDeployment.status?.availableReplicas ? nodeDeployment.status.availableReplicas : 0}}/{{!!nodeDeployment.spec?.replicas ? nodeDeployment.spec.replicas : 0}}</span>
+            <span *ngIf="nodeDeployment.status?.availableReplicas > nodeDeployment.spec.replicas"
+                  matTooltip="Number of available machines may be higher than number of desired machines from the template if deployment is updating.">
+              <i class="fa fa-question-circle"
+                 aria-hidden="true"></i>
+            </span>
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Paused</div>
+          <div value>{{nodeDeployment.spec.paused}}</div>
+        </km-property>
+        <km-property>
+          <div key>kubelet version</div>
+          <div value>{{nodeDeployment.spec.template.versions.kubelet}}</div>
+        </km-property>
+        <km-property>
+          <div key>Operating system</div>
+          <div value>{{system}}</div>
+        </km-property>
+        <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.ubuntu">
+          <div key>Upgrade system on the first boot</div>
+          <div value>
+            <i [ngClass]="nodeDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+          </div>
+        </km-property>
+        <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.centos">
+          <div key>Upgrade system on the first boot</div>
+          <div value>
+            <i [ngClass]="nodeDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+          </div>
+        </km-property>
+        <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.containerLinux">
+          <div key>Disable auto-update</div>
+          <div value>
+            <i [ngClass]="nodeDeployment.spec.template.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Cluster name</div>
+          <div value
+               class="km-link"
+               id="km-node-deployment-cluster-name"
+               (click)="goBackToCluster()">{{cluster.name}}</div>
+        </km-property>
+        <km-property>
+          <div key>Cluster provider</div>
+          <div value>
+            <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
+          </div>
+        </km-property>
+        <km-property>
+          <div key>Datacenter location</div>
+          <div value>{{datacenter.spec.country}}, {{datacenter.spec.location}}</div>
+        </km-property>
+        <km-property>
+          <div key>Creation date</div>
+          <div value>{{nodeDeployment.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</div>
+        </km-property>
+        <km-property>
+          <div key>Node Labels</div>
+          <div value>
+            <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
+          </div>
+        </km-property>
+      </div>
     </mat-card-content>
   </mat-card>
 

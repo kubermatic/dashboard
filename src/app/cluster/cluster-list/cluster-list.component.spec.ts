@@ -91,7 +91,7 @@ describe('ClusterListComponent', () => {
        component.isInitialized = true;
        fixture.detectChanges();
 
-       const de = fixture.debugElement.query(By.css('.blue'));
+       const de = fixture.debugElement.query(By.css('.km-with-table-header'));
 
        expect(de).not.toBeNull('list should be rendered');
        discardPeriodicTasks();
