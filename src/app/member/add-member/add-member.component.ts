@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
 import {ApiService} from '../../core/services';
 import {NotificationActions} from '../../redux/actions/notification.actions';
-import {CreateMemberEntity} from '../../shared/entity/MemberEntity';
+import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 
 @Component({
@@ -33,10 +33,10 @@ export class AddMemberComponent implements OnInit {
       }],
     };
 
-    this._apiService.createMembers(this.project.id, createMember).subscribe(() => {
-      this._matDialogRef.close(true);
+    this._apiService.createMembers(this.project.id, createMember).subscribe((member: MemberEntity) => {
+      this._matDialogRef.close(member);
       NotificationActions.success(
-          'Success', `Member ${createMember.email} is added successfully to project ${this.project.name}`);
+          'Success', `Member ${member.email} is added successfully to project ${this.project.name}`);
     });
   }
 }
