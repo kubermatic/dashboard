@@ -14,41 +14,6 @@ pipeline:
     commands:
       - make build
 
-  docker-always:
-    group: push
-    image: plugins/docker
-    repo: kubermatic/ui-v2
-    password: ${DOCKER_PASSWORD}
-    username: ${DOCKER_USERNAME}
-    tags:
-      - ${DRONE_COMMIT}
-    secrets: [ docker_username, docker_password ]
-
-  docker-master:
-    group: push
-    image: plugins/docker
-    repo: kubermatic/ui-v2
-    password: ${DOCKER_PASSWORD}
-    username: ${DOCKER_USERNAME}
-    tags:
-      - master
-    secrets: [ docker_username, docker_password ]
-    when:
-      branch: master
-
-  docker-release:
-    group: push
-    image: plugins/docker
-    repo: kubermatic/ui-v2
-    password: ${DOCKER_PASSWORD}
-    username: ${DOCKER_USERNAME}
-    tags:
-      - ${DRONE_TAG}
-      - latest
-    secrets: [ docker_username, docker_password ]
-    when:
-      event: [tag]
-
   quay-always:
     group: push
     image: plugins/docker
@@ -146,15 +111,11 @@ pipeline:
     author_recipient_mapping:
       - alvaroaleman=alvaro
       - cbrgm=christian
-      - glower=igor.komlew
-      - guusvw=guus
-      - j3ank=eugenia
       - kdomanski=kamil
       - kgroschoff=kristin.groschoff
       - kron4eg=artiom
       - mrIncompetent=henrik
       - p0lyn0mial=lukasz
-      - pkavajin=patrick
       - scheeles=sebastian
       - thz=tobias.hintze
       - toschneck=tobias.schneck
@@ -162,6 +123,7 @@ pipeline:
       - xmudrii=marko
       - maciaszczykm=marcin
       - floreks=sebastian.florek
+      - zreigz=lukasz.zajaczkowski
     when:
       status: [ failure ]
 
