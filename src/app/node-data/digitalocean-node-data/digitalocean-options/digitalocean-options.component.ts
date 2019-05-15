@@ -42,7 +42,8 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
   getDoOptionsData(): NodeProviderData {
     let doTags: string[] = [];
     if ((this.doOptionsForm.controls.tags.value).length > 0) {
-      doTags = (this.doOptionsForm.controls.tags.value).split(/[\s]?,[\s]?/);
+      doTags = (this.doOptionsForm.controls.tags.value).split('s');
+      doTags.map(tag => tag.trim());
     }
 
     return {
