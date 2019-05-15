@@ -8,10 +8,11 @@
               color="tertiary"
               (click)="deleteClusterDialog()"
               [disabled]="!isDeleteEnabled()">
-        Delete Cluster
+        Delete
       </button>
       <div fxFlex></div>
       <button mat-flat-button
+              color="alternative"
               (click)="addNode()"
               [fxHide]="nodeDc.spec.provider === 'bringyourown'"
               [disabled]="!isAddNodeDeploymentsEnabled()">
@@ -28,7 +29,7 @@
               mat-flat-button
               [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')"
               *ngIf="!!config.share_kubeconfig">
-        Share cluster
+        Share
       </button>
       <a class="km-download-kubeconfig-btn"
          mat-flat-button
