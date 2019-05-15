@@ -40,3 +40,8 @@ Thumbs.db
 # generated
 bindata_assetfs.go
 git-version.json
+
+# cypress
+cypress/fixtures
+cypress/screenshots
+cypress/videos
