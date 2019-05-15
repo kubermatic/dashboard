@@ -3,6 +3,8 @@
     <table class="km-table"
            mat-table
            matSort
+           matSortActive="name"
+           matSortDirection="asc"
            [dataSource]="getDataSource()">
       <ng-container matColumnDef="status">
         <th mat-header-cell

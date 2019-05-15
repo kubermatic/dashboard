@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {MatSort, MatTableDataSource} from '@angular/material';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 
 import {ProjectService} from '../../../core/services';
@@ -26,7 +26,6 @@ export class NodeDeploymentListComponent implements OnInit {
   @Input() isNodeDeploymentLoadFinished: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   dataSource = new MatTableDataSource<NodeDeploymentEntity>();
-  @ViewChild(MatSort) sort: MatSort;
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   constructor(
@@ -35,9 +34,6 @@ export class NodeDeploymentListComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
-    this.dataSource.sort = this.sort;
-    this.sort.active = 'name';
-    this.sort.direction = 'asc';
   }
 
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
