@@ -83,7 +83,6 @@ describe('ProjectComponent', () => {
        tick(15000);
 
        const dialogTitle = document.body.querySelector('.mat-dialog-title');
-       const cancelButton = document.body.querySelector('#km-confirmation-dialog-cancel-btn');
        const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
        const dialogInput = document.querySelector('#km-confirmation-dialog-input');
 
@@ -94,7 +93,6 @@ describe('ProjectComponent', () => {
        fixture.detectChanges();
 
        expect(dialogTitle.textContent).toBe('Delete Project');
-       expect(cancelButton.textContent).toBe(' Close ');
        expect(document.querySelector('#km-confirmation-dialog-input').getAttribute('value')).toBe(project.name);
 
        deleteButton.click();
