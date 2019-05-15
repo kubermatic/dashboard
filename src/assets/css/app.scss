@@ -780,6 +780,11 @@ div.km-form-group-tags {
   margin-bottom: 9 * $baseline-grid;
 }
 
+// Remove background overlay added by the menu.
+.mat-drawer-container {
+  background-color: transparent;
+}
+
 // Buttons.
 .mat-button,
 .mat-flat-button,
