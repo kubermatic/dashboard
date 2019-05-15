@@ -1,0 +1,23 @@
+<form [formGroup]="packetNodeForm"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-select placeholder="Node Size*"
+                  formControlName="type">
+        <mat-option *ngFor="let type of instanceTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field>
+    <input matInput
+           id="tags"
+           formControlName="tags"
+           placeholder="Tags">
+    <mat-hint>Seperate tags with commas.</mat-hint>
+  </mat-form-field>
+</form>

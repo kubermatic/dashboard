@@ -21,6 +21,7 @@ import {HetznerNodeDataComponent} from '../node-data/hetzner-node-data/hetzner-n
 import {NodeDataComponent} from '../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../node-data/openstack-node-data/openstack-node-data.component';
 import {OpenstackOptionsComponent} from '../node-data/openstack-node-data/openstack-options/openstack-options.component';
+import {PacketNodeDataComponent} from '../node-data/packet-node-data/packet-node-data.component';
 import {VSphereNodeDataComponent} from '../node-data/vsphere-add-node/vsphere-node-data.component';
 import {VSphereOptionsComponent} from '../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
 import {SharedModule} from '../shared/shared.module';
@@ -43,6 +44,7 @@ import {BringyourownClusterSettingsComponent} from './set-settings/provider-sett
 import {DigitaloceanClusterSettingsComponent} from './set-settings/provider-settings/digitalocean/digitalocean.component';
 import {HetznerClusterSettingsComponent} from './set-settings/provider-settings/hetzner/hetzner.component';
 import {OpenstackClusterSettingsComponent} from './set-settings/provider-settings/openstack/openstack.component';
+import {PacketClusterSettingsComponent} from './set-settings/provider-settings/packet/packet.component';
 import {ClusterProviderSettingsComponent} from './set-settings/provider-settings/provider-settings.component';
 import {VSphereClusterSettingsComponent} from './set-settings/provider-settings/vsphere/vsphere.component';
 import {SetSettingsComponent} from './set-settings/set-settings.component';
@@ -85,6 +87,8 @@ describe('WizardComponent', () => {
             HetznerClusterSettingsComponent,
             VSphereClusterSettingsComponent,
             AzureClusterSettingsComponent,
+            PacketNodeDataComponent,
+            PacketClusterSettingsComponent,
             NodeDataComponent,
             OpenstackNodeDataComponent,
             OpenstackOptionsComponent,

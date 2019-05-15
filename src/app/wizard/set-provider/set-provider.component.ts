@@ -1,6 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 import {DatacenterService, WizardService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
@@ -14,7 +16,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   setProviderForm: FormGroup;
   providers: string[] = [];
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
 
@@ -23,11 +25,11 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       provider: new FormControl(getClusterProvider(this.cluster), [Validators.required]),
     });
 
-    this.subscriptions.push(this.setProviderForm.valueChanges.subscribe((data) => {
+    this.setProviderForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.changeClusterProvider();
-    }));
+    });
 
-    this.subscriptions.push(this.dcService.getDataCenters().subscribe((datacenters) => {
+    this.dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe((datacenters) => {
       const providers: string[] = [];
       for (const datacenter of datacenters) {
         if (datacenter.seed) {
@@ -43,7 +45,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
         }
       }
       this.providers = providers;
-    }));
+    });
   }
 
   changeClusterProvider(): void {
@@ -54,10 +56,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }
