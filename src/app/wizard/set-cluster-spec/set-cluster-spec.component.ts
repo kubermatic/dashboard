@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {interval, Subscription} from 'rxjs';
-import {debounce} from 'rxjs/operators';
+import {interval, Subject} from 'rxjs';
+import {debounce, takeUntil} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
@@ -17,7 +17,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   clusterSpecForm: FormGroup;
   masterVersions: MasterVersion[] = [];
   defaultVersion: string;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
       private readonly _nameGenerator: ClusterNameGenerator, private readonly _api: ApiService,
@@ -29,24 +29,21 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       version: new FormControl(this.cluster.spec.version),
     });
 
-    this.subscriptions.push(this.clusterSpecForm.valueChanges
-                                .pipe(debounce(() => {
-                                  this._invalidateStep();
-                                  return interval(1000);
-                                }))
-                                .subscribe(() => {
-                                  this.setClusterSpec();
-                                }));
+    this.clusterSpecForm.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .pipe(debounce(() => {
+          this._invalidateStep();
+          return interval(1000);
+        }))
+        .subscribe(() => {
+          this.setClusterSpec();
+        });
 
     this.loadMasterVersions();
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   generateName(): void {
@@ -54,7 +51,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   loadMasterVersions(): void {
-    this.subscriptions.push(this._api.getMasterVersions().subscribe((versions) => {
+    this._api.getMasterVersions().pipe(takeUntil(this._unsubscribe)).subscribe((versions) => {
       this.masterVersions = versions;
       for (const i in versions) {
         if (versions[i].default) {
@@ -62,7 +59,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
           this.clusterSpecForm.controls.version.setValue(versions[i].version);
         }
       }
-    }));
+    });
   }
 
   setClusterSpec(): void {

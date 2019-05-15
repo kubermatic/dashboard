@@ -1,10 +1,12 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
+
 import {AWSDatacenterSpec} from './datacenter/AWSDatacenterSpec';
 import {AzureDatacenterSpec} from './datacenter/AzureDatacenterSpec';
 import {BringYourOwnDatacenterSpec} from './datacenter/BringYourOwnDatacenterSpec';
 import {DigitaloceanDatacenterSpec} from './datacenter/DigitaloceanDatacenterSpec';
 import {HetznerDatacenterSpec} from './datacenter/HetznerDatacenterSpec';
 import {OpenStackDatacenterSpec} from './datacenter/OpenStackDatacenterSpec';
+import {PacketDatacenterSpec} from './datacenter/PacketDatacenterSpec';
 import {VSphereDatacenterSpec} from './datacenter/VSphereDatacenterSpec';
 import {MetadataEntity} from './MetadataEntity';
 
@@ -24,6 +26,7 @@ export class DatacenterSpec {
   bringyourown?: BringYourOwnDatacenterSpec;
   aws?: AWSDatacenterSpec;
   openstack?: OpenStackDatacenterSpec;
+  packet?: PacketDatacenterSpec;
   vsphere?: VSphereDatacenterSpec;
   hetzner?: HetznerDatacenterSpec;
   azure?: AzureDatacenterSpec;
@@ -47,6 +50,9 @@ export function getDatacenterProvider(datacenter: DataCenterEntity): string {
   }
   if (!!datacenter.spec.openstack) {
     return NodeProvider.OPENSTACK;
+  }
+  if (!!datacenter.spec.packet) {
+    return NodeProvider.PACKET;
   }
   if (!!datacenter.spec.vsphere) {
     return NodeProvider.VSPHERE;

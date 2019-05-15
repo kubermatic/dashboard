@@ -1,0 +1,47 @@
+<form [formGroup]="packetSettingsForm"
+      fxLayout="column">
+  <div fxLayoutAlign="center center"
+       class="km-provider-message">
+    We need the Packet API key and the project ID. Billing cycle can also be specified.
+  </div>
+  <mat-form-field fxFlex>
+    <input matInput
+           formControlName="apiKey"
+           type="password"
+           placeholder="API Key*"
+           autocomplete="off">
+    <mat-error *ngIf="packetSettingsForm.controls.apiKey.hasError('required')">
+      Packet API key is <strong>required</strong>.
+    </mat-error>
+    <mat-error *ngIf="packetSettingsForm.controls.apiKey.hasError('maxlength')">
+      Packet API key must be less than <strong>256</strong> characters long.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex>
+    <input matInput
+           formControlName="projectID"
+           type="text"
+           placeholder="Project ID*"
+           autocomplete="off">
+    <mat-error *ngIf="packetSettingsForm.controls.projectID.hasError('required')">
+      Packet project ID is <strong>required</strong>.
+    </mat-error>
+    <mat-error *ngIf="packetSettingsForm.controls.projectID.hasError('maxlength')">
+      Packet project ID must be less than <strong>256</strong> characters long.
+    </mat-error>
+  </mat-form-field>
+
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-select placeholder="Billing Cycle"
+                  formControlName="billingCycle">
+        <mat-option *ngFor="let billingCycle of availableBillingCycles"
+                    [value]="billingCycle">
+          {{billingCycle}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</form>

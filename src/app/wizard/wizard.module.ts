@@ -1,7 +1,9 @@
 import {NgModule} from '@angular/core';
+
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
 import {NodeDataModule} from '../node-data/node-data.module';
 import {SharedModule} from '../shared/shared.module';
+
 import {ProgressComponent} from './progress/progress.component';
 import {SetClusterSpecComponent} from './set-cluster-spec/set-cluster-spec.component';
 import {SetDatacenterComponent} from './set-datacenter/set-datacenter.component';
@@ -13,6 +15,7 @@ import {BringyourownClusterSettingsComponent} from './set-settings/provider-sett
 import {DigitaloceanClusterSettingsComponent} from './set-settings/provider-settings/digitalocean/digitalocean.component';
 import {HetznerClusterSettingsComponent} from './set-settings/provider-settings/hetzner/hetzner.component';
 import {OpenstackClusterSettingsComponent} from './set-settings/provider-settings/openstack/openstack.component';
+import {PacketClusterSettingsComponent} from './set-settings/provider-settings/packet/packet.component';
 import {ClusterProviderSettingsComponent} from './set-settings/provider-settings/provider-settings.component';
 import {VSphereClusterSettingsComponent} from './set-settings/provider-settings/vsphere/vsphere.component';
 import {SetSettingsComponent} from './set-settings/set-settings.component';
@@ -34,6 +37,7 @@ const components: any[] = [
   ClusterProviderSettingsComponent,
   OpenstackClusterSettingsComponent,
   DigitaloceanClusterSettingsComponent,
+  PacketClusterSettingsComponent,
   AWSClusterSettingsComponent,
   BringyourownClusterSettingsComponent,
   HetznerClusterSettingsComponent,

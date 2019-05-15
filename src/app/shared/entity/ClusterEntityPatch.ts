@@ -16,6 +16,7 @@ export class CloudSpecPatch {
   digitalocean?: DigitaloceanCloudSpecPatch;
   aws?: AWSCloudSpecPatch;
   openstack?: OpenstackCloudSpecPatch;
+  packet?: PacketCloudSpecPatch;
   vsphere?: VSphereCloudSpecPatch;
   hetzner?: HetznerCloudSpecPatch;
   azure?: AzureCloudSpecPatch;
@@ -28,6 +29,12 @@ export class DigitaloceanCloudSpecPatch {
 export class OpenstackCloudSpecPatch {
   username?: string;
   password?: string;
+}
+
+export class PacketCloudSpecPatch {
+  apiKey?: string;
+  projectID?: string;
+  billingCycle?: string;
 }
 
 export class HetznerCloudSpecPatch {

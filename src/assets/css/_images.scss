@@ -196,7 +196,7 @@
 
 // provider logos
 .km-provider-logo-aws {
-  background-image: url("/assets/images/clouds/aws.png");
+  background-image: url("/assets/images/clouds/aws.svg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
@@ -261,6 +261,14 @@
 
 .km-provider-logo-openstack {
   background-image: url("/assets/images/clouds/openstack.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  min-height: 40px;
+}
+
+.km-provider-logo-packet {
+  background-image: url("/assets/images/clouds/packet.svg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;

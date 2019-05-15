@@ -88,6 +88,37 @@
             </div>
           </ng-container>
 
+          <!-- Packet -->
+          <ng-container *ngIf="cluster.spec.cloud.packet">
+            <div fxLayout
+                 class="km-card-list-content">
+              <div fxFlex="50%"
+                   class="km-card-list-key">API Key</div>
+              <div fxFlex="50%">
+                <input class="km-card-list-secret"
+                       type="password"
+                       value="{{cluster.spec.cloud.packet.apiKey}}"
+                       disabled />
+              </div>
+            </div>
+            <div fxLayout
+                 class="km-card-list-content">
+              <div fxFlex="50%"
+                   class="km-card-list-key">Project ID</div>
+              <div fxFlex="50%">
+                {{cluster.spec.cloud.packet.projectID}}
+              </div>
+            </div>
+            <div fxLayout
+                 class="km-card-list-content">
+              <div fxFlex="50%"
+                   class="km-card-list-key">Billing cycle</div>
+              <div fxFlex="50%">
+                {{cluster.spec.cloud.packet.billingCycle}}
+              </div>
+            </div>
+          </ng-container>
+
           <!-- AWS -->
           <ng-container *ngIf="cluster.spec.cloud.aws">
             <div fxLayout
