@@ -37,4 +37,8 @@ export class EventListComponent implements OnInit, OnChanges {
         return 'fa fa-question-circle';
     }
   }
+
+  hasEvents(): boolean {
+    return this.events && this.events.length > 0;
+  }
 }
