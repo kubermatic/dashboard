@@ -44,7 +44,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   constructor(
       private wizardService: WizardService, private addNodeService: NodeDataService, private stepsService: StepsService,
-      private router: Router, private projectService: ProjectService, private api: ApiService,
+      private router: Router, public projectService: ProjectService, private api: ApiService,
       public googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfigService: AppConfigService) {
     const defaultNodeCount = this._appConfigService.getConfig().default_node_count || 3;
     this.cluster = {

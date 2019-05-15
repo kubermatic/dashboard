@@ -25,6 +25,7 @@ import {HetznerNodeDataComponent} from './hetzner-node-data/hetzner-node-data.co
 import {NodeDataComponent} from './node-data.component';
 import {OpenstackNodeDataComponent} from './openstack-node-data/openstack-node-data.component';
 import {OpenstackOptionsComponent} from './openstack-node-data/openstack-options/openstack-options.component';
+import {PacketNodeDataComponent} from './packet-node-data/packet-node-data.component';
 import {VSphereNodeDataComponent} from './vsphere-add-node/vsphere-node-data.component';
 import {VSphereOptionsComponent} from './vsphere-add-node/vsphere-options/vsphere-options.component';
 
@@ -61,6 +62,7 @@ describe('NodeDataComponent', () => {
             VSphereNodeDataComponent,
             VSphereOptionsComponent,
             AzureNodeDataComponent,
+            PacketNodeDataComponent,
           ],
           providers: [
             NodeDataService,

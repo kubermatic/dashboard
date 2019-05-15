@@ -216,6 +216,22 @@
               </km-property>
             </ng-container>
 
+            <!-- Packet -->
+            <ng-container *ngIf="element.spec.cloud.packet">
+              <km-property>
+                <div key>Instance Type</div>
+                <div value>{{element.spec.cloud.packet.instanceType}}</div>
+              </km-property>
+
+
+              <km-property *ngIf="element.spec.cloud.packet.tags.length > 0">
+                <div key>Tags</div>
+                <div value>
+                  <km-labels [labels]="element.spec.cloud.packet.tags"></km-labels>
+                </div>
+              </km-property>
+            </ng-container>
+
             <!-- Openstack -->
             <ng-container *ngIf="element.spec.cloud.openstack">
               <km-property>

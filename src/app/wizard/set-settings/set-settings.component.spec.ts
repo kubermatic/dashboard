@@ -16,6 +16,7 @@ import {HetznerNodeDataComponent} from '../../node-data/hetzner-node-data/hetzne
 import {NodeDataComponent} from '../../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../../node-data/openstack-node-data/openstack-node-data.component';
 import {OpenstackOptionsComponent} from '../../node-data/openstack-node-data/openstack-options/openstack-options.component';
+import {PacketNodeDataComponent} from '../../node-data/packet-node-data/packet-node-data.component';
 import {VSphereNodeDataComponent} from '../../node-data/vsphere-add-node/vsphere-node-data.component';
 import {VSphereOptionsComponent} from '../../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
 import {SharedModule} from '../../shared/shared.module';
@@ -37,6 +38,7 @@ import {BringyourownClusterSettingsComponent} from './provider-settings/bringyou
 import {DigitaloceanClusterSettingsComponent} from './provider-settings/digitalocean/digitalocean.component';
 import {HetznerClusterSettingsComponent} from './provider-settings/hetzner/hetzner.component';
 import {OpenstackClusterSettingsComponent} from './provider-settings/openstack/openstack.component';
+import {PacketClusterSettingsComponent} from './provider-settings/packet/packet.component';
 import {ClusterProviderSettingsComponent} from './provider-settings/provider-settings.component';
 import {VSphereClusterSettingsComponent} from './provider-settings/vsphere/vsphere.component';
 import {SetSettingsComponent} from './set-settings.component';
@@ -72,6 +74,7 @@ describe('SetSettingsComponent', () => {
             HetznerClusterSettingsComponent,
             VSphereClusterSettingsComponent,
             AzureClusterSettingsComponent,
+            PacketClusterSettingsComponent,
             NodeDataComponent,
             OpenstackNodeDataComponent,
             OpenstackOptionsComponent,
@@ -82,6 +85,7 @@ describe('SetSettingsComponent', () => {
             VSphereNodeDataComponent,
             VSphereOptionsComponent,
             AzureNodeDataComponent,
+            PacketNodeDataComponent,
           ],
           providers: [
             NodeDataService,

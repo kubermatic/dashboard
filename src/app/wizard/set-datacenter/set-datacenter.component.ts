@@ -1,8 +1,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {DatacenterService} from '../../core/services/datacenter/datacenter.service';
-import {WizardService} from '../../core/services/wizard/wizard.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
+import {DatacenterService, WizardService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity, getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
 
@@ -15,7 +16,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   setDatacenterForm: FormGroup;
   datacenters: DataCenterEntity[] = [];
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
 
@@ -25,7 +26,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     });
 
     // Get all datacenters for the cluster cloud provider
-    this.subscriptions.push(this.dcService.getDataCenters().subscribe((datacenters) => {
+    this.dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe((datacenters) => {
       const providerDatacenters: DataCenterEntity[] = [];
       for (const datacenter of datacenters) {
         if (datacenter.seed) {
@@ -38,11 +39,11 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
         }
       }
       this.datacenters = providerDatacenters;
-    }));
+    });
 
-    this.subscriptions.push(this.setDatacenterForm.valueChanges.subscribe((data) => {
+    this.setDatacenterForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.changeClusterDatacenter();
-    }));
+    });
   }
 
   changeClusterDatacenter(): void {
@@ -59,10 +60,7 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

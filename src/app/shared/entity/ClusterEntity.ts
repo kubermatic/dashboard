@@ -1,4 +1,5 @@
 import {NodeProvider} from '../model/NodeProviderConstants';
+
 import {AWSCloudSpec} from './cloud/AWSCloudSpec';
 import {AzureCloudSpec} from './cloud/AzureCloudSpec';
 import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
@@ -7,6 +8,7 @@ import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
 import {FakeCloudSpec} from './cloud/FakeCloudSpec';
 import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
 import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
+import {PacketCloudSpec} from './cloud/PacketCloudSpec';
 import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
 
 export function getClusterProvider(cluster: ClusterEntity): string {
@@ -22,6 +24,9 @@ export function getClusterProvider(cluster: ClusterEntity): string {
     }
     case !!cluster.spec.cloud.openstack: {
       return NodeProvider.OPENSTACK;
+    }
+    case !!cluster.spec.cloud.packet: {
+      return NodeProvider.PACKET;
     }
     case !!cluster.spec.cloud.baremetal: {
       return NodeProvider.BAREMETAL;
@@ -111,6 +116,8 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         tenantID: '',
         vnet: '',
       } as AzureCloudSpec;
+    case NodeProvider.PACKET:
+      return {} as PacketCloudSpec;
   }
   return {};
 }
@@ -121,6 +128,7 @@ export class CloudSpec {
   aws?: AWSCloudSpec;
   bringyourown?: BringYourOwnCloudSpec;
   openstack?: OpenstackCloudSpec;
+  packet?: PacketCloudSpec;
   baremetal?: BareMetalCloudSpec;
   vsphere?: VSphereCloudSpec;
   hetzner?: HetznerCloudSpec;

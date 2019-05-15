@@ -35,44 +35,44 @@
                         [datacenterFormData]="clusterDatacenterFormData"
                         [clusterSSHKeys]="clusterSSHKeys"></kubermatic-summary>
 
-    <!-- Navigation Buttons -->
-    <div class="km-button-navigation">
-      <a mat-flat-button
-         color="tertiary"
-         routerLink="/projects/{{project.id}}/clusters">Cancel</a>
-      <div fxFlex></div>
-      <button type="button"
-              class="km-btn-back"
-              mat-flat-button
-              color="tertiary"
-              (click)="stepBack()"
-              *ngIf="currentStepIndex !== 0">
-        Back
-      </button>
-      <button id="km-create-cluster-next-btn"
-              *ngIf="currentStepIndex < steps.length - 1"
-              type="button"
-              [disabled]="!currentStep.valid()"
-              mat-flat-button
-              (click)="stepForward()">
-        Next
-      </button>
-      <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0"
-              type="button"
-              mat-flat-button
-              (click)="stepForward()">
-        Skip
-      </button>
-      <button id="km-create-cluster-create-btn"
-              *ngIf="currentStepIndex == steps.length - 1"
-              [disabled]="creating || project.status !== 'Active'"
-              type="button"
-              mat-flat-button
-              (click)="createCluster()">
-        Create
-      </button>
-      <span class="km-project-status-info"
-            *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
+  <!-- Navigation Buttons -->
+  <div class="km-button-navigation">
+    <a mat-flat-button
+       color="tertiary"
+       routerLink="/projects/{{projectService.getCurrentProjectId()}}/clusters">Cancel</a>
+    <div fxFlex></div>
+    <button type="button"
+            class="km-btn-back"
+            mat-flat-button
+            color="tertiary"
+            (click)="stepBack()"
+            *ngIf="currentStepIndex !== 0">
+      Back
+    </button>
+    <button id="km-create-cluster-next-btn"
+            *ngIf="currentStepIndex < steps.length - 1"
+            type="button"
+            [disabled]="!currentStep.valid()"
+            mat-flat-button
+            (click)="stepForward()">
+      Next
+    </button>
+    <button *ngIf="currentStep.name === 'set-machine-networks' && !!cluster.spec.machineNetworks && cluster.spec.machineNetworks.length === 0"
+            type="button"
+            mat-flat-button
+            (click)="stepForward()">
+      Skip
+    </button>
+    <button id="km-create-cluster-create-btn"
+            *ngIf="currentStepIndex == steps.length - 1"
+            [disabled]="creating || project.status !== 'Active'"
+            type="button"
+            mat-flat-button
+            (click)="createCluster()">
+      Create
+    </button>
+    <span class="km-project-status-info"
+          *ngIf="currentStepIndex == steps.length - 1 && project.status !== 'Active'">Project isn't ready yet, please wait a few more minutes.</span>
 
     </div>
 

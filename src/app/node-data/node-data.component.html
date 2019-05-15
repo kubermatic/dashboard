@@ -58,6 +58,10 @@
                                   [clusterId]="cluster.id"
                                   [seedDCName]="seedDCName"></kubermatic-openstack-node-data>
 
+  <kubermatic-packet-node-data *ngIf="cluster.spec.cloud.packet"
+                               [cloudSpec]="cluster.spec.cloud"
+                               [nodeData]="nodeData"></kubermatic-packet-node-data>
+
   <kubermatic-hetzner-node-data *ngIf="cluster.spec.cloud.hetzner"
                                 [cloudSpec]="cluster.spec.cloud"
                                 [nodeData]="nodeData"></kubermatic-hetzner-node-data>
