@@ -17,7 +17,6 @@ describe('Basic story', () => {
   
   before(() => {
     cy.clearCookies();
-  
   });
   
   beforeEach(() => {

@@ -1,3 +1,5 @@
+import {Condition} from "../utils/condition";
+
 export class ProjectsPage {
     static visit() {
         cy.get('#km-nav-item-projects').click();
@@ -5,9 +7,9 @@ export class ProjectsPage {
 
     static select(projectName: string) {
       cy.get(`#km-project-name-${projectName}`)
-        .parent()
-        .find('td.mat-column-status')
-        .find('i.km-health-state.fa.fa-circle.green')
+        .should(Condition.HaveLength, 1)
+        .get('i.km-health-state.fa.fa-circle.green')
+        .should(Condition.HaveLength, 1)
         .click();
     }
     
