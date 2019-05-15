@@ -793,8 +793,8 @@ div.km-form-group-tags {
     margin-left: 1.25 * $baseline-grid !important;
   }
 
-  &.mat-alternative {
-    background-color: $white-text-color;
+  &.mat-tertiary {
+    background-color: transparent;
     color: $medium-text-color;
     border: 1px solid $medium-text-color;
   }
