@@ -3,40 +3,11 @@ workspace:
   path: src/github.com/kubermatic/dashboard-v2
 
 pipeline:
-  cache-restore:
-    image: drillster/drone-volume-cache
-    restore: true
-    mount:
-      - ./node_modules
-    volumes:
-      - /tmp/cache:/cache
-
-  godep-check:
-    image: quay.io/kubermatic/dep:0.5.0-1
-    commands:
-      - make godep-check
-
-  dependencies:
-    image: node:8
-    commands:
-      - make install
-
-  static-check:
-    image: node:8
-    commands:
-      - make check
-
   node-dist:
     image: node:8
     commands:
       - git fetch
       - make dist
-
-  test:
-    image: quay.io/kubermatic/chrome-headless:v0.3
-    commands:
-      - make test-headless
-    secrets: [ codecov_token ]
 
   build:
     image: golang:1.11
