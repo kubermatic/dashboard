@@ -47,7 +47,9 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._externalMembersUpdate)
         .pipe(switchMap(
-            () => this._projectService.project ? this._apiService.getMembers(this._projectService.getCurrentProjectId()) : EMPTY))
+            () => this._projectService.project ?
+                this._apiService.getMembers(this._projectService.getCurrentProjectId()) :
+                EMPTY))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(members => {
           this.members = members;
