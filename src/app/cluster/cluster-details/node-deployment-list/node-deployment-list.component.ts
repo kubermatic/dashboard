@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 
@@ -8,6 +8,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
+import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
 import {NodeService} from '../../services/node.service';
 
 @Component({
@@ -15,7 +16,7 @@ import {NodeService} from '../../services/node.service';
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
 })
-export class NodeDeploymentListComponent {
+export class NodeDeploymentListComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodeDeployments: NodeDeploymentEntity[] = [];
@@ -24,20 +25,28 @@ export class NodeDeploymentListComponent {
   @Input() isClusterRunning: boolean;
   @Input() isNodeDeploymentLoadFinished: boolean;
   @Output() changeNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
-  displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'created', 'actions'];
+  dataSource = new MatTableDataSource<NodeDeploymentEntity>();
+  displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'os', 'created', 'actions'];
 
   constructor(
       private readonly _router: Router, private readonly _nodeService: NodeService,
       private readonly _projectService: ProjectService) {}
 
+  ngOnInit(): void {
+    this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
+  }
+
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
-    const dataSource = new MatTableDataSource<NodeDeploymentEntity>();
-    dataSource.data = this.nodeDeployments;
-    return dataSource;
+    this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
+    return this.dataSource;
   }
 
   getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {
     return NodeDeploymentHealthStatus.getHealthStatus(nd);
+  }
+
+  getOperatingSystem(nd: NodeDeploymentEntity): string {
+    return NodeUtils.getOperatingSystem(nd.spec.template);
   }
 
   goToDetails(nd: NodeDeploymentEntity) {
