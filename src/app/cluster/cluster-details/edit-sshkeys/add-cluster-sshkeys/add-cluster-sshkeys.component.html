@@ -25,11 +25,6 @@
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-dialog-close
-            mat-flat-button
-            color="tertiary">
-      Close
-    </button>
     <button mat-flat-button
             (click)="addClusterSSHKeys()"
             [disabled]="!keysForm.valid">

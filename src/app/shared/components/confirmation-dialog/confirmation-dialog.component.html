@@ -18,12 +18,6 @@
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button
-            color="tertiary"
-            [mat-dialog-close]="false"
-            id="km-confirmation-dialog-cancel-btn">
-      {{data.cancelLabel}}
-    </button>
-    <button mat-flat-button
             [mat-dialog-close]="true"
             id="km-confirmation-dialog-confirm-btn"
             [disabled]="!inputNameMatches()">

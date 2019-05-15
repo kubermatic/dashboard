@@ -16,11 +16,6 @@
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-dialog-close
-            mat-flat-button
-            color="tertiary">
-      Close
-    </button>
     <button mat-flat-button
             [mat-dialog-close]="data"
             [disabled]="!data.nodeData.valid"
