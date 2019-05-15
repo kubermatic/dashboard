@@ -2,6 +2,9 @@
   <mat-card-content>
     <table class="km-table"
            mat-table
+           matSort
+           matSortActive="name"
+           matSortDirection="asc"
            [dataSource]="getDataSource()">
       <ng-container matColumnDef="status">
         <th mat-header-cell
@@ -18,7 +21,8 @@
       <ng-container matColumnDef="name">
         <th mat-header-cell
             *matHeaderCellDef
-            class="km-header-cell">Name</th>
+            class="km-header-cell"
+            mat-sort-header>Name</th>
         <td mat-cell
             *matCellDef="let element">{{element.name}}</td>
       </ng-container>
@@ -50,6 +54,14 @@
             class="km-header-cell">Kubelet Version</th>
         <td mat-cell
             *matCellDef="let element">v{{element.spec.template.versions?.kubelet}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="os">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Operating System</th>
+        <td mat-cell
+            *matCellDef="let element">{{getOperatingSystem(element)}}</td>
       </ng-container>
 
       <ng-container matColumnDef="created">
