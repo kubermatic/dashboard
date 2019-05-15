@@ -897,14 +897,14 @@ div.km-form-group-tags {
     margin-left: 1.25 * $baseline-grid !important;
   }
 
-  &:hover {
+  &:hover:not([disabled]) {
     background-color: $primary-hover;
   }
 
   &.mat-alternative {
     background-color: $quaternary;
 
-    &:hover {
+    &:hover:not([disabled]) {
       background-color: $quaternary-hover;
     }
   }
@@ -914,7 +914,7 @@ div.km-form-group-tags {
     color: $medium-text-color;
     border: 1px solid $footer-text-color;
 
-    &:hover {
+    &:hover:not([disabled]) {
       background-color: $tertiary-hover;
     }
   }
