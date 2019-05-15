@@ -48,8 +48,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   getNodeProviderData(): NodeProviderData {
     let packetTags: string[] = [];
     if ((this.packetNodeForm.controls.tags.value).length > 0) {
-      packetTags = (this.packetNodeForm.controls.tags.value).split('s');
-      packetTags.map(tag => tag.trim());
+      packetTags = (this.packetNodeForm.controls.tags.value).split(',').map(tag => tag.trim());
     }
 
     return {
