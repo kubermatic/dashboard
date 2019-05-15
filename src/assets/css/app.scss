@@ -780,6 +780,11 @@ div.km-form-group-tags {
   margin-bottom: 9 * $baseline-grid;
 }
 
+// Remove background overlay added by the menu.
+.mat-drawer-container {
+  background-color: transparent;
+}
+
 // Buttons.
 .mat-button,
 .mat-flat-button,
@@ -793,10 +798,26 @@ div.km-form-group-tags {
     margin-left: 1.25 * $baseline-grid !important;
   }
 
+  &:hover {
+    background-color: $primary-hover;
+  }
+
   &.mat-alternative {
-    background-color: $white-text-color;
+    background-color: $quaternary;
+
+    &:hover {
+      background-color: $quaternary-hover;
+    }
+  }
+
+  &.mat-tertiary {
+    background-color: transparent;
     color: $medium-text-color;
-    border: 1px solid $medium-text-color;
+    border: 1px solid $footer-text-color;
+
+    &:hover {
+      background-color: $tertiary-hover;
+    }
   }
 }
 

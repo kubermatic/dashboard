@@ -4,20 +4,21 @@
     <div fxFlex="100%"
          align="right">
       <button mat-flat-button
-              color="alternative"
+              color="tertiary"
               (click)="showDeleteDialog()"
               [disabled]="!isDeleteEnabled()">
-        Delete Node Deployment
+        Delete
       </button>
       <div fxFlex></div>
       <button mat-flat-button
+              color="alternative"
               (click)="goBackToCluster()">
-        Go back to Cluster
+        Go Back to the Cluster
       </button>
       <button mat-flat-button
               (click)="showEditDialog()"
               [disabled]="!isEditEnabled()">
-        Edit Node Deployment
+        Edit
       </button>
     </div>
   </div>
