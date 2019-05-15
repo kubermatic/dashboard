@@ -2,11 +2,10 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, MatSelectChange} from '@angular/material';
 import {Router} from '@angular/router';
 import {merge, Subject, timer} from 'rxjs';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
-import {AddProjectDialogComponent} from '../../../shared/components/add-project-dialog/add-project-dialog.component';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {CustomLink, CustomLinkLocation} from '../../../shared/utils/custom-link-utils/custom-link';
 import {ApiService, ProjectService} from '../../services';
@@ -76,27 +75,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this.selectedProject = project;
   }
 
-  onSelectionChange(event: MatSelectChange, previous: ProjectEntity, select: any): void {
-    if (event.value === undefined) {
-      // The only option with undefined value is "Add Project". If it gets
-      // selected, we revert both the model and the control to the old value.
-      this.selectedProject = previous;
-      select.value = previous;
-    } else {
-      // If value different than undefined was selected, let's find project
-      // with matching ID and select it.
-      this.projects.forEach(project => {
-        if (this.projectService.compareProjectsEquality(project, event.value)) {
-          this._changeSelectedProject(project, true);
-        }
-      });
-    }
-  }
-
-  addProject(): void {
-    this.dialog.open(AddProjectDialogComponent).afterClosed().pipe(first()).subscribe((added) => {
-      if (added) {
-        this._externalProjectsUpdate.next();
+  onSelectionChange(event: MatSelectChange): void {
+    this.projects.forEach(project => {
+      if (this.projectService.compareProjectsEquality(project, event.value)) {
+        this._changeSelectedProject(project, true);
       }
     });
   }
