@@ -1,4 +1,5 @@
 @import "../../assets/css/colors";
+@import "../../assets/css/variables";
 
 .km-projects-spinner {
   margin: 20px auto !important;
@@ -13,14 +14,14 @@
   justify-content: flex-end;
 
   button {
-    margin-right: 15px;
-    width: 21px;
-    height: 21px;
+    margin-left: 20px;
   }
 }
 
-.km-project-item-owner {
-  display: block;
-  line-height: 30px;
-  height: 100%;
+.km-project-more-owner {
+  display: inline-block;
+  margin: 0;
+  font-size: $subhead-font-size-base;
+  color: $medium-text-color;
+  margin-left: -3px;
 }

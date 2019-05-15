@@ -1,5 +1,4 @@
-<div class="km-row km-sshkey-item"
-     [ngClass]="getSshKeyItemClass()">
+<div class="km-row km-sshkey-item">
   <div fxLayout
        fxFlex>
     <div fxFlex="90%"
@@ -13,7 +12,7 @@
        fxHide.sm
        fxHide.xs>
     <p class="km-icon">
-      <button class="km-icon-delete black"
+      <button class="km-icon-delete"
               (click)="deleteSshKey()"
               [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.delete"></button>
     </p>

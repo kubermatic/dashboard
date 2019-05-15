@@ -34,12 +34,6 @@
 .km-node-item-actions {
   display: flex;
   justify-content: flex-end;
-
-  .km-icon-delete {
-    width: 21px;
-    height: 21px;
-    margin-right: 20px;
-  }
 }
 
 .km-spinner {
@@ -87,8 +81,4 @@ i.fa-exclamation-triangle {
 
 .km-mat-card-code-block {
   margin-top: 20px;
-}
-
-.km-disabled {
-  color: $disabled-button-color;
 }

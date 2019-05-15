@@ -1,12 +1,17 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
-.km-icon-edit {
+.km-icon-edit,
+.km-icon-delete {
   height: 14px;
   width: 14px;
+  background-color: $white-text-color;
+}
 
-  &.km-disabled {
-    opacity: 0.3;
+button:disabled {
+  .km-icon-edit,
+  .km-icon-delete {
+    background-color: $disabled-text-color;
   }
 }
 
@@ -31,7 +36,12 @@
 }
 
 .km-node-deployment-name {
-  margin-left: 2 * $baseline-grid;
+  padding: 0 30px !important;
+  font-size: $subhead-font-size-base-lg !important;
+
+  .km-node-deployment-health {
+    padding-right: 2 * $baseline-grid;
+  }
 }
 
 .fa-check {

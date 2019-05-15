@@ -36,12 +36,6 @@ export class EditSSHKeysItemComponent implements OnInit {
     });
   }
 
-  getSshKeyItemClass(): string {
-    if (this.index % 2 !== 0) {
-      return 'km-odd';
-    }
-  }
-
   deleteSshKey(): void {
     const dialogConfig: MatDialogConfig = {
       disableClose: false,
