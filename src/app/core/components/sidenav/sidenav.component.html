@@ -7,17 +7,15 @@
           <mat-label>Project</mat-label>
           <mat-select #select
                       placeholder="None"
-                      (selectionChange)="onSelectionChange($event, selectedProject, select)"
+                      (selectionChange)="onSelectionChange($event)"
                       [ngModel]="selectedProject"
                       [compareWith]="projectService.compareProjectsEquality"
                       disableOptionCentering>
             <mat-option *ngFor="let project of projects"
-                        [value]="project">
+                        [value]="project"
+                        [disabled]="project.status !== 'Active'"
+                        [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
               {{project.name}}
-            </mat-option>
-            <mat-option (click)="addProject()"
-                        class="km-option-add-project">
-              Add Project
             </mat-option>
           </mat-select>
           <div class="km-projects-icon km-icon-arrow-down-2"></div>

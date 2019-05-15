@@ -90,11 +90,9 @@ describe('ServiceAccountComponent', () => {
        tick(15000);
 
        const dialogTitle = document.body.querySelector('.mat-dialog-title');
-       const cancelButton = document.body.querySelector('#km-confirmation-dialog-cancel-btn');
        const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
        expect(dialogTitle.textContent).toBe('Remove Service Account from project');
-       expect(cancelButton.textContent).toBe(' Close ');
        expect(deleteButton.textContent).toBe(' Delete ');
 
        deleteButton.click();

@@ -3,80 +3,16 @@ workspace:
   path: src/github.com/kubermatic/dashboard-v2
 
 pipeline:
-  cache-restore:
-    image: drillster/drone-volume-cache
-    restore: true
-    mount:
-      - ./node_modules
-    volumes:
-      - /tmp/cache:/cache
-
-  godep-check:
-    image: quay.io/kubermatic/dep:0.5.0-1
-    commands:
-      - make godep-check
-
-  dependencies:
-    image: node:8
-    commands:
-      - make install
-
-  static-check:
-    image: node:8
-    commands:
-      - make check
-
   node-dist:
     image: node:8
     commands:
       - git fetch
       - make dist
 
-  test:
-    image: quay.io/kubermatic/chrome-headless:v0.3
-    commands:
-      - make test-headless
-    secrets: [ codecov_token ]
-
   build:
     image: golang:1.11
     commands:
       - make build
-
-  docker-always:
-    group: push
-    image: plugins/docker
-    repo: kubermatic/ui-v2
-    password: ${DOCKER_PASSWORD}
-    username: ${DOCKER_USERNAME}
-    tags:
-      - ${DRONE_COMMIT}
-    secrets: [ docker_username, docker_password ]
-
-  docker-master:
-    group: push
-    image: plugins/docker
-    repo: kubermatic/ui-v2
-    password: ${DOCKER_PASSWORD}
-    username: ${DOCKER_USERNAME}
-    tags:
-      - master
-    secrets: [ docker_username, docker_password ]
-    when:
-      branch: master
-
-  docker-release:
-    group: push
-    image: plugins/docker
-    repo: kubermatic/ui-v2
-    password: ${DOCKER_PASSWORD}
-    username: ${DOCKER_USERNAME}
-    tags:
-      - ${DRONE_TAG}
-      - latest
-    secrets: [ docker_username, docker_password ]
-    when:
-      event: [tag]
 
   quay-always:
     group: push
@@ -175,15 +111,11 @@ pipeline:
     author_recipient_mapping:
       - alvaroaleman=alvaro
       - cbrgm=christian
-      - glower=igor.komlew
-      - guusvw=guus
-      - j3ank=eugenia
       - kdomanski=kamil
       - kgroschoff=kristin.groschoff
       - kron4eg=artiom
       - mrIncompetent=henrik
       - p0lyn0mial=lukasz
-      - pkavajin=patrick
       - scheeles=sebastian
       - thz=tobias.hintze
       - toschneck=tobias.schneck
@@ -191,6 +123,7 @@ pipeline:
       - xmudrii=marko
       - maciaszczykm=marcin
       - floreks=sebastian.florek
+      - zreigz=lukasz.zajaczkowski
     when:
       status: [ failure ]
 

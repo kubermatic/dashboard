@@ -136,6 +136,11 @@ export class ApiService {
     return this.http.delete(url, {headers: this.headers});
   }
 
+  getClusterEvents(cluster: string, dc: string, projectID: string): Observable<EventEntity[]> {
+    const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/events`;
+    return this.http.get<EventEntity[]>(url, {headers: this.headers});
+  }
+
   getClusterHealth(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/health`;
     return this.http.get<HealthEntity>(url, {headers: this.headers});

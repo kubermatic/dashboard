@@ -11,10 +11,6 @@ export class ConfirmationDialog extends NavPage {
     return element(by.id('km-confirmation-dialog-input'));
   }
 
-  getConfirmationDialogCancelBtn(): any {
-    return element(by.id('km-confirmation-dialog-cancel-btn'));
-  }
-
   getConfirmationDialogConfirmBtn(): any {
     return element(by.id('km-confirmation-dialog-confirm-btn'));
   }
