@@ -6,6 +6,7 @@ import {EventEntity} from '../../entity/EventEntity';
 @Component({
   selector: 'km-event-list',
   templateUrl: './event-list.component.html',
+  styleUrls: ['./event-list.component.scss'],
 })
 export class EventListComponent implements OnInit, OnChanges {
   @Input() events: EventEntity[] = [];
@@ -21,6 +22,8 @@ export class EventListComponent implements OnInit, OnChanges {
     this.dataSource.data = this.events;
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.sort.active = 'lastTimestamp';
+    this.sort.direction = 'desc';
   }
 
   ngOnChanges(): void {
