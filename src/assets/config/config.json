@@ -1,6 +1,20 @@
 {
   "cleanup_cluster":  false,
-  "custom_links": [],
+  "custom_links": [{
+    "label": "Twitter",
+    "url": "www.twitter.com",
+    "location": "footer"
+  }, {
+    "label": "Github",
+    "url": "www.github.com",
+    "location": "footer"
+  }, {
+    "label": "Twitter",
+    "url": "www.twitter.com"
+  }, {
+    "label": "Github",
+    "url": "www.github.com"
+  }],
   "default_node_count": 3,
   "openstack": {
     "wizard_use_default_user": false

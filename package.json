@@ -7,7 +7,7 @@
   "license": "propietary",
   "angular-cli": {},
   "scripts": {
-    "start": "npm run versioninfo && ng serve --hmr",
+    "start": "npm run versioninfo && ng serve --hmr --host 0.0.0.0",
     "start:local": "npm run versioninfo && ng serve --hmr --configuration=local",
     "build": "npm run versioninfo && ng build --prod",
     "test": "ng test",
