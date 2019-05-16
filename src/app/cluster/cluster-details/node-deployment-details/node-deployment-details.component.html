@@ -29,11 +29,10 @@
     <mat-card-header>
 
       <mat-card-title class="km-node-deployment-name">
+        <span>{{nodeDeployment.name}}</span>
         <i [matTooltip]="nodeDeploymentHealthStatus.message"
            [ngClass]="nodeDeploymentHealthStatus.color"
            class="km-node-deployment-health"></i>
-
-        <span>{{nodeDeployment.name}}</span>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap"
