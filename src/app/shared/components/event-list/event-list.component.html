@@ -21,6 +21,7 @@
             *matHeaderCellDef
             class="km-header-cell">Message</th>
         <td mat-cell
+            class="km-events-long-text"
             *matCellDef="let element">{{element.message}}</td>
       </ng-container>
 
@@ -30,6 +31,7 @@
             *matHeaderCellDef
             class="km-header-cell">Name</th>
         <td mat-cell
+            class="km-events-long-text"
             *matCellDef="let element">{{element.involvedObject.name}}</td>
       </ng-container>
 
@@ -39,6 +41,7 @@
             *matHeaderCellDef
             class="km-header-cell">Type</th>
         <td mat-cell
+            class="km-events-long-text"
             *matCellDef="let element">{{element.involvedObject.type}}</td>
       </ng-container>
 
@@ -57,6 +60,7 @@
             *matHeaderCellDef
             class="km-header-cell">Last Timestamp</th>
         <td mat-cell
+            class="km-events-long-text km-events-timestamp"
             *matCellDef="let element">{{element.lastTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
       </ng-container>
 
