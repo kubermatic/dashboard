@@ -4,33 +4,33 @@
     <input matInput
            formControlName="domain"
            type="text"
-           placeholder="Domain*:"
+           placeholder="Domain*"
            title="Domain"
            autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.domain.hasError('required')">
-      Domain is <strong>required</strong>
+      Domain is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
     <input matInput
            formControlName="username"
            type="text"
-           placeholder="Username*:"
+           placeholder="Username*"
            title="Username"
            autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.username.hasError('required')">
-      Username is <strong>required</strong>
+      Username is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
     <input matInput
            formControlName="password"
            type="password"
-           placeholder="Password*:"
+           placeholder="Password*"
            title="Password"
            autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.password.hasError('required')">
-      Password is <strong>required</strong>
+      Password is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
@@ -45,7 +45,7 @@
       </mat-option>
     </mat-autocomplete>
     <mat-error *ngIf="openstackSettingsForm.controls.tenant.hasError('required')">
-      Project is <strong>required</strong>
+      Project is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 

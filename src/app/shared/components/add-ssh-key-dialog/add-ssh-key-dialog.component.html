@@ -11,7 +11,7 @@
                  placeholder="Enter a unique name"
                  autocomplete="off">
           <mat-error *ngIf="addSSHKeyForm.controls.name.hasError('required')">
-            Name is <strong>required</strong>
+            Name is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
 
@@ -25,7 +25,7 @@
                     placeholder="Enter the key of your device"></textarea>
           <mat-hint>Remember to paste only the public part of your SSH key and store the private part safely.</mat-hint>
           <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
-            Key is <strong>required</strong>
+            Key is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
       </form>

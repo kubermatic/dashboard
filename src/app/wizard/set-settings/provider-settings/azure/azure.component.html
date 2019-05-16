@@ -4,10 +4,10 @@
     <input matInput
            formControlName="clientID"
            type="password"
-           placeholder="Client ID*:"
+           placeholder="Client ID*"
            autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.clientID.hasError('required')">
-      Client ID is <strong>required</strong>
+      Client ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
@@ -15,10 +15,10 @@
     <input matInput
            formControlName="clientSecret"
            type="password"
-           placeholder="Client Secret*:"
+           placeholder="Client Secret*"
            autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.clientSecret.hasError('required')">
-      Client Secret is <strong>required</strong>
+      Client Secret is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
@@ -26,10 +26,10 @@
     <input matInput
            formControlName="tenantID"
            type="password"
-           placeholder="Tenant ID*:"
+           placeholder="Tenant ID*"
            autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.tenantID.hasError('required')">
-      Tenant ID is <strong>required</strong>
+      Tenant ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
@@ -37,10 +37,10 @@
     <input matInput
            formControlName="subscriptionID"
            type="password"
-           placeholder="Subscription ID*:"
+           placeholder="Subscription ID*"
            autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.subscriptionID.hasError('required')">
-      Subscription ID is <strong>required</strong>
+      Subscription ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 
@@ -49,7 +49,7 @@
     <input matInput
            formControlName="resourceGroup"
            type="text"
-           placeholder="Resource Group:"
+           placeholder="Resource Group"
            autocomplete="off">
   </mat-form-field>
 
@@ -58,7 +58,7 @@
     <input matInput
            formControlName="routeTable"
            type="text"
-           placeholder="Route Table:"
+           placeholder="Route Table"
            autocomplete="off">
   </mat-form-field>
 
@@ -67,7 +67,7 @@
     <input matInput
            formControlName="securityGroup"
            type="text"
-           placeholder="Security Group:"
+           placeholder="Security Group"
            autocomplete="off">
   </mat-form-field>
 
@@ -76,7 +76,7 @@
     <input matInput
            formControlName="subnet"
            type="text"
-           placeholder="Subnet:"
+           placeholder="Subnet"
            autocomplete="off">
   </mat-form-field>
 
@@ -85,7 +85,7 @@
     <input matInput
            formControlName="vnet"
            type="text"
-           placeholder="VNet:"
+           placeholder="VNet"
            autocomplete="off">
   </mat-form-field>
 </form>

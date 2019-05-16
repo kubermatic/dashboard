@@ -5,17 +5,30 @@
     <div class="mat-dialog-content">
       <form [formGroup]="editMemberForm"
             fxLayout="column">
-        <p>You are on the way to edit the member "{{member.name}}".</p>
         <mat-form-field fxFlex>
+          <mat-label>Name</mat-label>
+          <input matInput
+                 disabled
+                 [value]="member.name">
+        </mat-form-field>
+
+        <mat-form-field fxFlex>
+          <mat-label>Email</mat-label>
+          <input matInput
+                 disabled
+                 [value]="member.email">
+        </mat-form-field>
+
+        <mat-form-field fxFlex>
+          <mat-label>Group</mat-label>
           <mat-select id="km-edit-member-dialog-group-combobox"
-                      placeholder="Group*:"
                       formControlName="group">
             <mat-option value="owners">Owner</mat-option>
             <mat-option value="editors">Editor</mat-option>
             <mat-option value="viewers">Viewer</mat-option>
           </mat-select>
           <mat-error *ngIf="editMemberForm.controls.group.hasError('required')">
-            Group is <strong>required</strong>
+            Group is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
 

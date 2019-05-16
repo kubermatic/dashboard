@@ -6,13 +6,15 @@
     <div class="mat-dialog-content">
       <p>{{data.message}}</p>
       <mat-form-field *ngIf="!!data.compareName && data.compareName.length > 0">
+        <mat-label>{{data.inputPlaceholder}}</mat-label>
         <input id="km-confirmation-dialog-input"
                matInput
                type="text"
                placeholder={{data.inputPlaceholder}}
                title={{data.inputTitle}}
                (blur)="onChange($event)"
-               (keyup)="onChange($event)">
+               (keyup)="onChange($event)"
+               cdkFocusInitial>
       </mat-form-field>
     </div>
   </mat-dialog-content>

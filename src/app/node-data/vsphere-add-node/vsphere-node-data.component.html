@@ -8,16 +8,16 @@
              min="1"
              max="8"
              type="number"
-             placeholder="Number of CPUs*:"
+             placeholder="Number of CPUs*"
              autocomplete="off">
       <mat-error *ngIf="vsphereNodeForm.controls.cpu.hasError('required')">
-        Number of CPUs is <strong>required</strong>
+        Number of CPUs is <strong>required</strong>.
       </mat-error>
       <mat-error *ngIf="vsphereNodeForm.controls.cpu.hasError('max')">
-        Number of CPUs can't be higher than 8
+        Number of CPUs can't be higher than 8.
       </mat-error>
       <mat-error *ngIf="vsphereNodeForm.controls.cpu.hasError('min')">
-        Number of CPUs have to be at least 1
+        Number of CPUs have to be at least 1.
       </mat-error>
     </mat-form-field>
     <mat-form-field>
@@ -25,7 +25,7 @@
              formControlName="memory"
              min="512"
              type="number"
-             placeholder="Memory in MB*:"
+             placeholder="Memory in MB*"
              autocomplete="off">
     </mat-form-field>
   </div>

@@ -9,10 +9,10 @@
     <input matInput
            formControlName="token"
            type="password"
-           placeholder="API Token*:"
+           placeholder="API Token*"
            autocomplete="off">
     <mat-error *ngIf="hetznerSettingsForm.controls.token.hasError('required')">
-      Token is <strong>required</strong>
+      Token is <strong>required</strong>.
     </mat-error>
     <mat-error *ngIf="(hetznerSettingsForm.controls.token.hasError('minlength')
                       || hetznerSettingsForm.controls.token.hasError('maxlength'))">
