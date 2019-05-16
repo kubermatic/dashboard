@@ -44,8 +44,7 @@
   </div>
 
 
-  <mat-card class="white km-cluster-details"
-            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.css : ''">
+  <mat-card class="white km-cluster-details">
 
     <mat-card-header class="km-card-main-header">
 
@@ -143,7 +142,8 @@
     <mat-card-content>
       <div class="km-row"
            fxLayout>
-        <div fxFlex="42%">
+        <div fxFlex="42%"
+             class="km-details-provider">
           <span class="km-provider-logo km-provider-logo-{{nodeDc.spec.provider}}"></span>
         </div>
         <div fxFlex="30%"
@@ -217,10 +217,9 @@
                           [isClusterRunning]="isClusterRunning"></kubermatic-node-list>
   </div>
 
-  <div class="km-pre-card-title">Cluster Events</div>
+  <div class="km-pre-card-title">Events</div>
   <km-event-list [events]="events"></km-event-list>
 
-  <div class="km-bottom-spacer"></div>
 </ng-container>
 
 <div *ngIf="!isLoaded()">

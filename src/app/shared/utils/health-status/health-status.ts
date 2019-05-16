@@ -1,7 +1,7 @@
 export enum HealthStatusColor {
   Green = 'fa fa-circle green',
-  Orange = 'fa fa-spin fa-circle-o-notch orange',
-  Red = 'fa fa-spin fa-circle-o-notch red',
+  Orange = 'fa fa-circle orange',
+  Red = 'fa fa-circle red',
 }
 
 export enum HealthStatusMessage {

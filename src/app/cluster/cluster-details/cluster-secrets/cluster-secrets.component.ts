@@ -109,7 +109,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
           return '';
       }
     } else {
-      return 'fa fa-spin fa-circle-o-notch';
+      return 'fa fa-circle';
     }
   }
 
@@ -120,7 +120,7 @@ export class ClusterSecretsComponent implements OnInit, OnChanges {
       if (!this.health.apiserver) {
         return 'km-icon-failed';
       } else {
-        return 'fa fa-spin fa-circle-o-notch';
+        return 'fa fa-circle';
       }
     } else {
       return '';

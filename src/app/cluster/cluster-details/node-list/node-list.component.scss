@@ -66,8 +66,8 @@ i.fa-exclamation-triangle {
   background-color: $light-background;
 
   mat-card-content {
-    background-color: $medium-background;
     margin-top: 15px;
+    border: none !important;
   }
 
   .fa-check {
