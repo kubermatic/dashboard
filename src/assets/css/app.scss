@@ -940,3 +940,8 @@ div.km-form-group-tags {
     justify-content: flex-end;
   }
 }
+
+// Tooltip
+.mat-tooltip-panel {
+  height: 4 * $baseline-grid;
+}

@@ -1,11 +1,15 @@
 import {NgReduxFormModule} from '@angular-redux/form';
 import {NgReduxModule} from '@angular-redux/store';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
+import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
+
+import {kmTooltipDefaultOptions} from '../app-config';
 import {environment} from '../environments/environment';
+
 import {AppConfigService} from './app-config.service';
 import {AppRoutingModule} from './app-routing.module';
 import {CoreModule} from './core/core.module';
@@ -51,6 +55,10 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
       useFactory: appInitializerFn,
       multi: true,
       deps: [AppConfigService],
+    },
+    {
+      provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
+      useValue: kmTooltipDefaultOptions,
     },
     CookieService,
     ProjectService,
