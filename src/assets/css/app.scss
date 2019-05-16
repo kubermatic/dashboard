@@ -444,7 +444,7 @@ mat-button-toggle-group[group='providerGroup'] {
   display: block;
   height: 100% !important;
   width: 100% !important;
-  max-height: 40px !important;
+  max-height: 30px !important;
   max-width: 70px !important;
 }
 
@@ -845,11 +845,6 @@ div.km-form-group-tags {
   color: $indicator-red;
 }
 
-// Bottom spacer.
-.km-bottom-spacer {
-  margin-bottom: 9 * $baseline-grid;
-}
-
 // Remove background overlay added by the menu.
 .mat-drawer-container {
   background-color: transparent;
@@ -921,4 +916,9 @@ div.km-form-group-tags {
   .mat-dialog-actions {
     justify-content: flex-end;
   }
+}
+
+// Tooltip
+.mat-tooltip-panel {
+  height: 4 * $baseline-grid;
 }

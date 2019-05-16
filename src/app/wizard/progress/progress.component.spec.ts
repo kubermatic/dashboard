@@ -63,12 +63,6 @@ describe('ProgressComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should return correct icon class', () => {
-    expect(component.getIconClass(0)).toBe('fa fa-check');
-    expect(component.getIconClass(1)).toBe('fa fa-circle-o-notch fa-spin');
-    expect(component.getIconClass(2)).toBe('');
-  });
-
   it('should return correct title class', () => {
     expect(component.getTitleClass(2)).toBe('km-title-unchecked');
     expect(component.getTitleClass(1)).toBe('');

@@ -28,7 +28,7 @@
     }
 
     a {
-      font-size: $subhead-font-size-base-lg !important;
+      font-size: $subhead-font-size-base-lg;
       padding: 10px 30px !important;
       display: flex;
       align-items: center;
@@ -59,7 +59,7 @@
 
     .km-projects-icon {
       position: absolute;
-      right: 42px;
+      right: 28px;
       top: 16px;
       background-color: $secondary;
       pointer-events: none;
@@ -126,6 +126,15 @@
         i {
           -webkit-filter: brightness(115%);
         }
+      }
+    }
+
+    .km-custom-list-item {
+      height: 6.25 * $baseline-grid;
+      font-size: $subhead-font-size-base;
+
+      a {
+        height: 6.25 * $baseline-grid;
       }
     }
   }

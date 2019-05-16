@@ -100,10 +100,10 @@ export class ProjectMockService {
           iconClass = 'fa fa-circle green';
           break;
         case 'Inactive':
-          iconClass = 'fa fa-spin fa-circle-o-notch orange';
+          iconClass = 'fa fa-circle orange';
           break;
         case 'Terminating':
-          iconClass = 'fa fa-circle-o red';
+          iconClass = 'fa fa-circle red';
           break;
       }
     }
