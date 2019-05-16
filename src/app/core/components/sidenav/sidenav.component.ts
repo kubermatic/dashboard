@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog, MatSelectChange} from '@angular/material';
+import {MatDialog, MatSelect, MatSelectChange} from '@angular/material';
 import {Router} from '@angular/router';
 import {merge, Subject, timer} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
@@ -122,6 +122,10 @@ export class SidenavComponent implements OnInit, OnDestroy {
     return {
       'background-image': `url('${CustomLink.getIcon(link)}')`,
     };
+  }
+
+  openDropdown(matSelect: MatSelect) {
+    matSelect.open();
   }
 
   ngOnDestroy(): void {

@@ -2,7 +2,8 @@
      fxLayout="column">
   <mat-nav-list>
     <div class="km-sidenav-top">
-      <mat-list-item class="km-projects">
+      <mat-list-item class="km-projects"
+                     (click)="openDropdown(select)">
         <div class="km-projects-container">
           <mat-label>Project</mat-label>
           <mat-select #select
@@ -70,7 +71,8 @@
   <mat-nav-list *ngIf="isCustomLinkPanelVisible()"
                 class="km-nav-custom-container"
                 fxFlex>
-    <mat-list-item *ngFor="let link of customLinks">
+    <mat-list-item *ngFor="let link of customLinks"
+                   class="km-custom-list-item">
       <a [href]="link.url"
          mat-line
          target="_blank">
