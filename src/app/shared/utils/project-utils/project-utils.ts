@@ -6,11 +6,11 @@ export class ProjectUtils {
       case 'Active':
         return 'fa fa-circle green';
       case 'Inactive':
-        return 'fa fa-circle-o red';
+        return 'fa fa-circle red';
       case 'Terminating':
-        return 'fa fa-spin fa-circle-o-notch orange';
+        return 'fa fa-circle orange';
       default:
-        return 'fa fa-spin fa-circle-o-notch orange';
+        return 'fa fa-circle orange';
     }
   }
 

@@ -14,7 +14,7 @@ export class ProgressComponent {
   constructor(private stepsService: StepsService) {}
 
   getIconClass(step: number): string {
-    let iconClass = 'fa fa-circle-o-notch fa-spin';
+    let iconClass = 'fa fa-circle';
 
     if (this.currentStepIndex > step) {
       iconClass = 'fa fa-check';

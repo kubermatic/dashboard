@@ -65,7 +65,7 @@ describe('ProgressComponent', () => {
 
   it('should return correct icon class', () => {
     expect(component.getIconClass(0)).toBe('fa fa-check');
-    expect(component.getIconClass(1)).toBe('fa fa-circle-o-notch fa-spin');
+    expect(component.getIconClass(1)).toBe('fa fa-circle');
     expect(component.getIconClass(2)).toBe('');
   });
 
