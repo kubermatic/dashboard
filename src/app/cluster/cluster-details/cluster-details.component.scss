@@ -85,4 +85,11 @@ kubermatic-cluster-health-status {
 
 .km-details-provider {
   align-self: center;
+  padding-top: 5px;
+}
+
+.km-provider-box {
+  mat-card-header {
+    line-height: 40px;
+  }
 }

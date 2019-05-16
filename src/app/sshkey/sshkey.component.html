@@ -23,14 +23,7 @@
             class="km-header-cell"
             mat-sort-header>SSH Keys</th>
         <td mat-cell
-            *matCellDef="let element">
-          <p class="km-key-name">
-            {{element.name}}
-          </p>
-          <p class="km-key-timestamp">
-            Created at {{element.creationTimestamp | date:'dd. MMMM yyyy'}}
-          </p>
-        </td>
+            *matCellDef="let element">{{element.name}}</td>
       </ng-container>
 
       <ng-container matColumnDef="fingerprint">
@@ -41,6 +34,15 @@
         <td mat-cell
             *matCellDef="let element"
             class="km-key-fingerprint">{{element.spec.fingerprint}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="creationTimestamp">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell"
+            mat-sort-header>Creation Date</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
       </ng-container>
 
       <ng-container matColumnDef="actions">
