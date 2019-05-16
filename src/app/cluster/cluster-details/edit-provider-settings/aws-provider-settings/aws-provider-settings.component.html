@@ -1,6 +1,7 @@
 <form [formGroup]="awsProviderSettingsForm"
       fxLayout="column">
   <mat-form-field fxFlex>
+    <mat-label>Access Key ID*</mat-label>
     <input matInput
            formControlName="accessKeyId"
            type="password"
@@ -11,6 +12,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>Secret Access Key*</mat-label>
     <input matInput
            formControlName="secretAccessKey"
            type="password"

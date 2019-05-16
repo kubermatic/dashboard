@@ -1,6 +1,7 @@
 <form [formGroup]="openstackSettingsForm"
       fxLayout="column">
   <mat-form-field fxFlex>
+    <mat-label>Domain*</mat-label>
     <input matInput
            formControlName="domain"
            type="text"
@@ -12,6 +13,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>Username*</mat-label>
     <input matInput
            formControlName="username"
            type="text"
@@ -23,6 +25,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>Password*</mat-label>
     <input matInput
            formControlName="password"
            type="password"
@@ -34,6 +37,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>{{getTenantsFormState()}}</mat-label>
     <input matInput
            formControlName="tenant"
            [placeholder]="getTenantsFormState()"
@@ -52,6 +56,7 @@
   <mat-form-field fxFlex
                   id="km-floating-ip-pool-field"
                   *ngIf="!hideOptional || isFloatingIPEnforced()">
+    <mat-label>{{getOptionalSettingsFormState('Floating IP Pool')}}</mat-label>
     <mat-select [placeholder]="getOptionalSettingsFormState('Floating IP Pool')"
                 formControlName="floatingIpPool"
                 [required]="isFloatingIPEnforced()">
@@ -66,6 +71,7 @@
 
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>{{getOptionalSettingsFormState('Security Group')}}</mat-label>
     <mat-select [placeholder]="getOptionalSettingsFormState('Security Group')"
                 formControlName="securityGroups">
       <mat-option *ngFor="let item of securityGroup"
@@ -82,6 +88,7 @@
        class="mat-select-container"
        *ngIf="!hideOptional">
     <mat-form-field>
+      <mat-label>{{getOptionalSettingsFormState('Network')}}</mat-label>
       <mat-select [placeholder]="getOptionalSettingsFormState('Network')"
                   formControlName="network">
         <mat-option *ngFor="let item of network"
@@ -100,6 +107,7 @@
        class="mat-select-container"
        *ngIf="!hideOptional">
     <mat-form-field>
+      <mat-label>{{getSubnetIDFormState()}}</mat-label>
       <mat-select [placeholder]="getSubnetIDFormState()"
                   formControlName="subnetId">
         <mat-option *ngFor="let subnet of subnetIds"

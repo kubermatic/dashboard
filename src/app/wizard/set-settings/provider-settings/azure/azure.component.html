@@ -1,6 +1,7 @@
 <form [formGroup]="azureSettingsForm"
       fxLayout="column">
   <mat-form-field fxFlex>
+    <mat-label>Client ID*</mat-label>
     <input matInput
            formControlName="clientID"
            type="password"
@@ -12,6 +13,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>Client Secret*</mat-label>
     <input matInput
            formControlName="clientSecret"
            type="password"
@@ -23,6 +25,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>Tenant ID*</mat-label>
     <input matInput
            formControlName="tenantID"
            type="password"
@@ -34,6 +37,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>Subscription ID*</mat-label>
     <input matInput
            formControlName="subscriptionID"
            type="password"
@@ -46,6 +50,7 @@
 
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>Resource Group</mat-label>
     <input matInput
            formControlName="resourceGroup"
            type="text"
@@ -55,6 +60,7 @@
 
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>Route Table</mat-label>
     <input matInput
            formControlName="routeTable"
            type="text"
@@ -64,6 +70,7 @@
 
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>Security Group</mat-label>
     <input matInput
            formControlName="securityGroup"
            type="text"
@@ -73,6 +80,7 @@
 
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>Subnet</mat-label>
     <input matInput
            formControlName="subnet"
            type="text"
@@ -82,6 +90,7 @@
 
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>VNet</mat-label>
     <input matInput
            formControlName="vnet"
            type="text"

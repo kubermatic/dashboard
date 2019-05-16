@@ -3,6 +3,7 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
+      <mat-label>{{getSizesFormState()}}</mat-label>
       <mat-select formControlName="size"
                   [placeholder]="getSizesFormState()">
         <mat-optgroup *ngIf="sizes.standard.length > 0"

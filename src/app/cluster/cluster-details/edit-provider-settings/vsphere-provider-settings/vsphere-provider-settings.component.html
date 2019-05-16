@@ -1,6 +1,7 @@
 <form [formGroup]="vsphereProviderSettingsForm"
       fxLayout="column">
   <mat-form-field fxFlex>
+    <mat-label>Username*</mat-label>
     <input matInput
            formControlName="infraManagementUsername"
            type="text"
@@ -11,6 +12,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>Password*</mat-label>
     <input matInput
            formControlName="infraManagementPassword"
            type="password"
@@ -21,6 +23,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>VSphere Cloud Provider Username</mat-label>
     <input matInput
            formControlName="username"
            type="text"
@@ -28,6 +31,7 @@
            autocomplete="off">
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>VSphere Cloud Provider Password</mat-label>
     <input matInput
            formControlName="password"
            type="password"

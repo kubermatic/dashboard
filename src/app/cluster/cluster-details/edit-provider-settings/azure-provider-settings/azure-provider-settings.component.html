@@ -1,6 +1,7 @@
 <form [formGroup]="azureProviderSettingsForm"
       fxLayout="column">
   <mat-form-field fxFlex>
+    <mat-label>Client ID*</mat-label>
     <input matInput
            formControlName="clientID"
            type="password"
@@ -12,6 +13,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>Client Secret*</mat-label>
     <input matInput
            formControlName="clientSecret"
            type="password"
@@ -23,6 +25,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>Tenant ID*</mat-label>
     <input matInput
            formControlName="tenantID"
            type="password"
@@ -34,6 +37,7 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>Subscription ID*</mat-label>
     <input matInput
            formControlName="subscriptionID"
            type="password"

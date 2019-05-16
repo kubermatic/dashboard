@@ -4,6 +4,7 @@
     <div class="mat-dialog-content">
       <form [formGroup]="addSSHKeyForm">
         <mat-form-field class="km-ssh-key-input">
+          <mat-label>Name*</mat-label>
           <input id="name"
                  matInput
                  formControlName="name"
@@ -16,6 +17,7 @@
         </mat-form-field>
 
         <mat-form-field class="km-ssh-key-textarea">
+          <mat-label>Key*</mat-label>
           <textarea id="key"
                     matInput
                     formControlName="key"

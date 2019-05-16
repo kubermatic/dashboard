@@ -1,6 +1,7 @@
 <form [formGroup]="openstackProviderSettingsForm"
       fxLayout="column">
   <mat-form-field fxFlex>
+    <mat-label>Username*</mat-label>
     <input matInput
            formControlName="username"
            type="text"
@@ -12,6 +13,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>Password*</mat-label>
     <input matInput
            formControlName="password"
            type="password"

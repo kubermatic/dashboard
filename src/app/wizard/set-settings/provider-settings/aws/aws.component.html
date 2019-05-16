@@ -9,6 +9,7 @@
     </span>
   </div>
   <mat-form-field fxFlex>
+    <mat-label>Access Key ID*</mat-label>
     <input matInput
            formControlName="accessKeyId"
            type="password"
@@ -19,6 +20,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>Secret Access Key*</mat-label>
     <input matInput
            formControlName="secretAccessKey"
            type="password"
@@ -30,6 +32,7 @@
   </mat-form-field>
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>Security Group ID</mat-label>
     <input matInput
            formControlName="securityGroup"
            type="text"
@@ -42,6 +45,7 @@
   </mat-form-field>
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>VPC ID</mat-label>
     <input matInput
            formControlName="vpcId"
            type="text"
@@ -54,6 +58,7 @@
   </mat-form-field>
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>Subnet ID</mat-label>
     <input matInput
            formControlName="subnetId"
            type="text"
@@ -66,6 +71,7 @@
   </mat-form-field>
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>Route Table ID</mat-label>
     <input matInput
            formControlName="routeTableId"
            type="text"

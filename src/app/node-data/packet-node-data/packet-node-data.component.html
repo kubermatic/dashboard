@@ -3,6 +3,7 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
+      <mat-label>Node Size*</mat-label>
       <mat-select placeholder="Node Size*"
                   formControlName="type">
         <mat-option *ngFor="let type of instanceTypes"
@@ -14,6 +15,7 @@
   </div>
 
   <mat-form-field>
+    <mat-label>Tags</mat-label>
     <input matInput
            id="tags"
            formControlName="tags"

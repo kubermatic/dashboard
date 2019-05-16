@@ -12,7 +12,7 @@
 
 .km-delete-cluster-warning {
   display: flex;
-  font-size: $body-font-size-base;
+  margin: 2 * $baseline-grid 0;
 
   mat-icon {
     color: $indicator-orange;

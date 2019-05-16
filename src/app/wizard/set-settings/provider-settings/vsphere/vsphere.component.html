@@ -1,6 +1,7 @@
 <form [formGroup]="vsphereSettingsForm"
       fxLayout="column">
   <mat-form-field fxFlex>
+    <mat-label>Username*</mat-label>
     <input matInput
            formControlName="infraManagementUsername"
            type="text"
@@ -11,6 +12,7 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>Password*</mat-label>
     <input matInput
            formControlName="infraManagementPassword"
            type="password"
@@ -22,6 +24,7 @@
   </mat-form-field>
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>VSphere Cloud Provider Username</mat-label>
     <input matInput
            formControlName="username"
            type="text"
@@ -30,6 +33,7 @@
   </mat-form-field>
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>VSphere Cloud Provider Password</mat-label>
     <input matInput
            formControlName="password"
            type="password"
@@ -38,6 +42,7 @@
   </mat-form-field>
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
+    <mat-label>Network</mat-label>
     <mat-select placeholder="Network"
                 formControlName="vmNetName">
       <mat-option *ngIf="!loadingNetwork && (vsphereSettingsForm.controls.username.value === '' || vsphereSettingsForm.controls.password.value === '')"

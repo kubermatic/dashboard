@@ -4,6 +4,7 @@
        fxLayoutGap="16px">
     <mat-form-field class="km-node-deployment-name"
                     [ngClass]="{small: isInWizard, none: isNameDisabled}">
+      <mat-label>Name</mat-label>
       <input id="km-node-name-input"
              matInput
              formControlName="name"
@@ -19,6 +20,7 @@
   </div>
 
   <mat-form-field fxFlex>
+    <mat-label>Replicas*</mat-label>
     <input id="km-node-count-input"
            matInput
            formControlName="count"
@@ -31,6 +33,7 @@
   </mat-form-field>
 
   <mat-form-field *ngIf="!isInWizard">
+    <mat-label>kubelet Version</mat-label>
     <mat-select placeholder="kubelet version"
                 formControlName="kubelet">
       <mat-option *ngFor="let version of versions"
@@ -78,6 +81,7 @@
                               [seedDCName]="seedDCName"></kubermatic-azure-node-data>
 
   <mat-form-field class="km-operating-system">
+    <mat-label>Operating System*</mat-label>
     <mat-select placeholder="Operating System*"
                 formControlName="operatingSystem">
       <mat-option value="ubuntu">Ubuntu</mat-option>

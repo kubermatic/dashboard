@@ -3,6 +3,7 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
+      <mat-label>{{getSizesFormState()}}</mat-label>
       <mat-select [placeholder]="getSizesFormState()"
                   formControlName="size">
         <mat-option *ngFor="let size of sizes"
@@ -40,6 +41,7 @@
       <div class="km-form-group-tags-inner"
            [formGroupName]="i">
         <mat-form-field fxFlex="42%">
+          <mat-label>Key</mat-label>
           <input matInput
                  formControlName="key"
                  placeholder="key"
@@ -47,6 +49,7 @@
         </mat-form-field>
         <span class="km-seperator">:</span>
         <mat-form-field fxFlex="42%">
+          <mat-label>Value</mat-label>
           <input matInput
                  formControlName="value"
                  placeholder="value"

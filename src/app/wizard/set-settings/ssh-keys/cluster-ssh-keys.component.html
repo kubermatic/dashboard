@@ -3,6 +3,7 @@
 </h4>
 <form [formGroup]="keysForm">
   <mat-form-field *ngIf="keys.length > 0">
+    <mat-label>SSH Keys</mat-label>
     <mat-select placeholder="SSH keys"
                 formControlName="keys"
                 multiple
