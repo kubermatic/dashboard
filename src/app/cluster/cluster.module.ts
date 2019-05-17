@@ -17,6 +17,7 @@ import {DigitaloceanProviderSettingsComponent} from './cluster-details/edit-prov
 import {EditProviderSettingsComponent} from './cluster-details/edit-provider-settings/edit-provider-settings.component';
 import {HetznerProviderSettingsComponent} from './cluster-details/edit-provider-settings/hetzner-provider-settings/hetzner-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from './cluster-details/edit-provider-settings/openstack-provider-settings/openstack-provider-settings.component';
+import {PacketProviderSettingsComponent} from './cluster-details/edit-provider-settings/packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from './cluster-details/edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
 import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-cluster-sshkeys/add-cluster-sshkeys.component';
 import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
@@ -53,6 +54,7 @@ const entryComponents: any[] = [
   OpenstackProviderSettingsComponent,
   VSphereProviderSettingsComponent,
   AzureProviderSettingsComponent,
+  PacketProviderSettingsComponent,
   EditSSHKeysComponent,
   EditSSHKeysItemComponent,
   AddClusterSSHKeysComponent,
