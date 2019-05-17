@@ -2,7 +2,9 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
+
 import {WizardService} from '../../../../core/services';
+import {AVAILABLE_PACKET_BILLING_CYCLES} from '../../../../shared/entity/cloud/PacketCloudSpec';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
 @Component({
@@ -12,14 +14,13 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 export class PacketClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   packetSettingsForm: FormGroup;
-  readonly availableBillingCycles = ['hourly', 'daily'];
   private packetSettingsFormSub: Subscription;
 
   constructor(private wizardService: WizardService) {}
 
   ngOnInit(): void {
     const billingCycle = !!this.cluster.spec.cloud.packet.billingCycle ? this.cluster.spec.cloud.packet.billingCycle :
-                                                                         this.availableBillingCycles[0];
+                                                                         this.getAvailableBillingCycles()[0];
 
     this.packetSettingsForm = new FormGroup({
       apiKey: new FormControl(this.cluster.spec.cloud.packet.apiKey, [Validators.required, Validators.maxLength(256)]),
@@ -41,6 +42,10 @@ export class PacketClusterSettingsComponent implements OnInit, OnDestroy {
         valid: this.packetSettingsForm.valid,
       });
     });
+  }
+
+  getAvailableBillingCycles(): string[] {
+    return AVAILABLE_PACKET_BILLING_CYCLES;
   }
 
   ngOnDestroy(): void {
