@@ -2,6 +2,7 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {ApiService, ClusterService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeHetznerCluster} from '../../../../testing/fake-data/cluster.fake';
@@ -12,7 +13,9 @@ import {AzureProviderSettingsComponent} from '../azure-provider-settings/azure-p
 import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/digitalocean-provider-settings.component';
 import {EditProviderSettingsComponent} from '../edit-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
+import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
+
 import {HetznerProviderSettingsComponent} from './hetzner-provider-settings.component';
 
 const modules: any[] = [
@@ -39,6 +42,7 @@ describe('HetznerProviderSettingsComponent', () => {
             OpenstackProviderSettingsComponent,
             VSphereProviderSettingsComponent,
             AzureProviderSettingsComponent,
+            PacketProviderSettingsComponent,
           ],
           providers: [
             ClusterService,

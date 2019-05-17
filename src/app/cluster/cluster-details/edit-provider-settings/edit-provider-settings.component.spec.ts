@@ -23,6 +23,7 @@ import {EditProviderSettingsComponent} from './edit-provider-settings.component'
 import {HetznerProviderSettingsComponent} from './hetzner-provider-settings/hetzner-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from './openstack-provider-settings/openstack-provider-settings.component';
 import {VSphereProviderSettingsComponent} from './vsphere-provider-settings/vsphere-provider-settings.component';
+import {PacketProviderSettingsComponent} from './packet-provider-settings/packet-provider-settings.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -52,6 +53,7 @@ describe('EditProviderSettingsComponent', () => {
             OpenstackProviderSettingsComponent,
             VSphereProviderSettingsComponent,
             AzureProviderSettingsComponent,
+            PacketProviderSettingsComponent,
           ],
           providers: [
             ClusterService,

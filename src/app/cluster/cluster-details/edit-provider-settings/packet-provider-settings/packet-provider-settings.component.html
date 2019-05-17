@@ -1,40 +1,39 @@
-<form [formGroup]="packetSettingsForm"
+<form [formGroup]="packetProviderSettingsForm"
       fxLayout="column">
-  <div fxLayoutAlign="center center"
-       class="km-provider-message">
-    We need the Packet API key and the project ID. Billing cycle can also be specified.
-  </div>
   <mat-form-field fxFlex>
+    <mat-label>API Token*</mat-label>
     <input matInput
            formControlName="apiKey"
            type="password"
-           placeholder="API Key*"
+           placeholder="Enter API Token"
            autocomplete="off">
-    <mat-error *ngIf="packetSettingsForm.controls.apiKey.hasError('required')">
+    <mat-error *ngIf="packetProviderSettingsForm.controls.apiKey.hasError('required')">
       Packet API key is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="packetSettingsForm.controls.apiKey.hasError('maxlength')">
+    <mat-error *ngIf="packetProviderSettingsForm.controls.apiKey.hasError('maxlength')">
       Packet API key must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>
+
   <mat-form-field fxFlex>
+    <mat-label>Project ID*</mat-label>
     <input matInput
            formControlName="projectID"
            type="text"
            placeholder="Project ID*"
            autocomplete="off">
-    <mat-error *ngIf="packetSettingsForm.controls.projectID.hasError('required')">
+    <mat-error *ngIf="packetProviderSettingsForm.controls.projectID.hasError('required')">
       Packet project ID is <strong>required</strong>.
     </mat-error>
-    <mat-error *ngIf="packetSettingsForm.controls.projectID.hasError('maxlength')">
+    <mat-error *ngIf="packetProviderSettingsForm.controls.projectID.hasError('maxlength')">
       Packet project ID must be less than <strong>256</strong> characters long.
     </mat-error>
   </mat-form-field>
 
-
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
+      <mat-label>Billing Cycle</mat-label>
       <mat-select placeholder="Billing Cycle"
                   formControlName="billingCycle">
         <mat-option *ngFor="let billingCycle of getAvailableBillingCycles()"
