@@ -187,14 +187,6 @@ body {
 }
 
 .mat-card-content {
-  .mat-form-field {
-    .mat-input-placeholder-wrapper .mat-input-placeholder {
-      color: $light-button-color;
-      font-weight: 600;
-      font-size: 14px;
-    }
-  }
-
   p {
     color: $light-button-color;
     font-size: 12px;
@@ -618,23 +610,6 @@ mat-button-toggle-group[group='providerGroup'] {
   box-shadow: none !important;
 }
 
-// input styling
-.mat-form-field-invalid .mat-form-field-label {
-  color: $indicator-red !important;
-}
-
-.mat-form-field {
-  width: 100%;
-}
-
-.mat-select {
-  width: 100%;
-}
-
-.mat-select-container {
-  padding: 0;
-}
-
 // Mat Tab Toggle
 .km-change-view {
   .mat-tab-group.mat-primary .mat-tab-label:focus,
@@ -862,8 +837,21 @@ div.km-form-group-tags {
 }
 
 // Inputs.
-.mat-form-field-appearance-outline .mat-form-field-outline {
-  color: $primary !important;
+mat-form-field.mat-form-field {
+  color: $text-color;
+  width: 100%;
+}
+
+span.mat-select-value-text {
+  color: $text-color;
+}
+
+.mat-form-field-outline {
+  //color: $primary;
+}
+
+.mat-form-field-invalid .mat-form-field-label {
+  //color: $indicator-red !important;
 }
 
 // Checkboxes.
