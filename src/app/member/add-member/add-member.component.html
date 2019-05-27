@@ -12,7 +12,8 @@
                  matInput
                  formControlName="email"
                  type="email"
-                 autocomplete="off">
+                 autocomplete="off"
+                 cdkFocusInitial>
           <mat-error *ngIf="addMemberForm.controls.email.hasError('required')">
             Email is <strong>required</strong>.
           </mat-error>

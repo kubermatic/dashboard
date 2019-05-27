@@ -10,7 +10,8 @@
                  formControlName="name"
                  type="text"
                  placeholder="Enter a unique name"
-                 autocomplete="off">
+                 autocomplete="off"
+                 cdkFocusInitial>
           <mat-error *ngIf="addSSHKeyForm.controls.name.hasError('required')">
             Name is <strong>required</strong>.
           </mat-error>
