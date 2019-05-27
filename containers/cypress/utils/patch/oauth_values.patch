@@ -1,7 +1,7 @@
---- values.yaml	2019-05-27 12:38:07.223600384 +0200
-+++ values1.yaml	2019-05-27 12:38:07.230598537 +0200
-@@ -5,37 +5,34 @@
-   replicas: 1
+--- values.yaml	2019-05-27 12:15:01.803516806 +0200
++++ values_new.yaml	2019-05-27 14:15:02.399068747 +0200
+@@ -5,7 +5,7 @@
+   replicas: 2
    ingress:
      host: ""
 -    path: "/dex"
@@ -9,49 +9,26 @@
    expiry:
      signingKeys: "6h"
      idTokens: "24h"
--#  connectors:
--#  - type: github
--#    id: github
--#    name: GitHub
--#    config:
--#      clientID: some-client-id
--#      clientSecret: some-client-secret
--#      redirectURI: https://dev.kubermatic.io/dex/callback
--#      orgs:
--#      - name: kubermatic
--#
--#  clients:
--#  - id: kubermatic
--#    name: Kubermatic
--#    secret: very-secret
--#    RedirectURIs:
--#    - http://localhost:8000
--#    - https://dev.kubermatic.io
--#    - http://localhost:8000/projects
--#    - https://dev.kubermatic.io/projects
--#
--#  staticPasswordLogins:
--#  - email: "admin@example.com"
--#    # bcrypt hash of the string "password"
--#    hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
--#    username: "admin"
--#    userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
+@@ -36,6 +36,30 @@
+ #    hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+ #    username: "admin"
+ #    userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"
 +  clients:
-+    - id: kubermatic
++  - id: kubermatic
 +    name: Kubermatic
 +    secret: ZXhhbXBsZS1hcHAtc2VjcmV0
 +    RedirectURIs:
-+      - http://localhost:8000
-+      - https://dev.kubermatic.io
-+      - http://localhost:8000/projects
-+      - https://dev.kubermatic.io/projects
-+    - id: kubermaticIssuer
++    - http://localhost:8000
++    - https://dev.kubermatic.io
++    - http://localhost:8000/projects
++    - https://dev.kubermatic.io/projects
++  - id: kubermaticIssuer
 +    name: KubermaticIssuer
 +    secret: MTc2ODQ3MDg4MmRlMzRjNjBiZjVlNzk0
 +    RedirectURIs:
-+      - http://localhost:8080/api/v1/kubeconfig
++    - http://localhost:8080/api/v1/kubeconfig
 +  connectors:
-+    - type: github
++  - type: github
 +    id: github
 +    name: GitHub
 +    config:
@@ -59,7 +36,7 @@
 +      clientSecret: 1026f76467f95d274dcab0cfb6d16df168481736
 +      redirectURI: https://dev.kubermatic.io/dex/callback
 +      orgs:
-+        - name: kubermatic
++      - name: kubermatic
    resources:
      requests:
        cpu: 10m
