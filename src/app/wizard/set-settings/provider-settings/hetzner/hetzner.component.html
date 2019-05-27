@@ -10,7 +10,6 @@
     <input matInput
            formControlName="token"
            type="password"
-           placeholder="API Token*"
            autocomplete="off">
     <mat-error *ngIf="hetznerSettingsForm.controls.token.hasError('required')">
       Token is <strong>required</strong>.

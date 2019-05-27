@@ -13,7 +13,6 @@
     <input matInput
            formControlName="accessKeyId"
            type="password"
-           placeholder="Access key ID*"
            autocomplete="off">
     <mat-error *ngIf="awsSettingsForm.controls.accessKeyId.hasError('required')">
       Access key ID is <strong>required</strong>.
@@ -24,7 +23,6 @@
     <input matInput
            formControlName="secretAccessKey"
            type="password"
-           placeholder="Secret access key*"
            autocomplete="off">
     <mat-error *ngIf="awsSettingsForm.controls.secretAccessKey.hasError('required')">
       Secret access key is <strong>required</strong>.
@@ -36,7 +34,6 @@
     <input matInput
            formControlName="securityGroup"
            type="text"
-           placeholder="Security group ID"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
     <mat-error *ngIf="awsSettingsForm.controls.securityGroup.hasError('pattern')">
@@ -49,7 +46,6 @@
     <input matInput
            formControlName="vpcId"
            type="text"
-           placeholder="VPC ID"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
     <mat-error *ngIf="awsSettingsForm.controls.vpcId.hasError('pattern')">
@@ -62,7 +58,6 @@
     <input matInput
            formControlName="subnetId"
            type="text"
-           placeholder="Subnet ID"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
     <mat-error *ngIf="awsSettingsForm.controls.subnetId.hasError('pattern')">
@@ -75,7 +70,6 @@
     <input matInput
            formControlName="routeTableId"
            type="text"
-           placeholder="Route table ID"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Route table. If not specified, the default Route Table will be used.</mat-hint>
     <mat-error *ngIf="awsSettingsForm.controls.routeTableId.hasError('pattern')">

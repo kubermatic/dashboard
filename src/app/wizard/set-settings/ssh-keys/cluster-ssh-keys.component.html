@@ -4,8 +4,7 @@
 <form [formGroup]="keysForm">
   <mat-form-field *ngIf="keys.length > 0">
     <mat-label>SSH Keys</mat-label>
-    <mat-select placeholder="SSH keys"
-                formControlName="keys"
+    <mat-select formControlName="keys"
                 multiple
                 [compareWith]="compareValues">
       <mat-option *ngFor="let key of keys"

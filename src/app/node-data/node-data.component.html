@@ -9,8 +9,7 @@
              matInput
              formControlName="name"
              type="text"
-             autocomplete="off"
-             placeholder="Name">
+             autocomplete="off">
       <mat-hint *ngIf="!isNameDisabled">This field is optional, leave it empty to generate the name on the server side. You can also use the random button to generate it on your own.</mat-hint>
     </mat-form-field>
     <div fxLayoutAlign=" center"><button mat-flat-button
@@ -26,16 +25,14 @@
            formControlName="count"
            type="number"
            min="1"
-           autocomplete="off"
-           placeholder="Number of replicas*">
+           autocomplete="off">
     <mat-error *ngIf="nodeForm.controls.count.hasError('required')">Number of replicas is required.</mat-error>
     <mat-error *ngIf="nodeForm.controls.count.hasError('ipsMissing')">Not enough IPs left. Reduce number of replicas or add more machine networks.</mat-error>
   </mat-form-field>
 
   <mat-form-field *ngIf="!isInWizard">
     <mat-label>kubelet Version</mat-label>
-    <mat-select placeholder="kubelet version"
-                formControlName="kubelet">
+    <mat-select formControlName="kubelet">
       <mat-option *ngFor="let version of versions"
                   [value]="version">
         {{ version }}
@@ -82,8 +79,7 @@
 
   <mat-form-field class="km-operating-system">
     <mat-label>Operating System*</mat-label>
-    <mat-select placeholder="Operating System*"
-                formControlName="operatingSystem">
+    <mat-select formControlName="operatingSystem">
       <mat-option value="ubuntu">Ubuntu</mat-option>
       <mat-option value="centos">CentOS</mat-option>
       <mat-option value="containerLinux"

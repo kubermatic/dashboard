@@ -4,8 +4,7 @@
     <div class="mat-dialog-content">
       <mat-form-field>
         <mat-label>Control Plane Version</mat-label>
-        <mat-select [(ngModel)]="selectedVersion"
-                    placeholder="Select Control Plane Version">
+        <mat-select [(ngModel)]="selectedVersion">
           <mat-option *ngFor="let version of controlPlaneVersions"
                       [value]="version">
             {{version}}

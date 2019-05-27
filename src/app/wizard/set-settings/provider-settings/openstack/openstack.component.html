@@ -5,7 +5,6 @@
     <input matInput
            formControlName="domain"
            type="text"
-           placeholder="Domain*"
            title="Domain"
            autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.domain.hasError('required')">
@@ -17,7 +16,6 @@
     <input matInput
            formControlName="username"
            type="text"
-           placeholder="Username*"
            title="Username"
            autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.username.hasError('required')">
@@ -29,7 +27,6 @@
     <input matInput
            formControlName="password"
            type="password"
-           placeholder="Password*"
            title="Password"
            autocomplete="off">
     <mat-error *ngIf="openstackSettingsForm.controls.password.hasError('required')">

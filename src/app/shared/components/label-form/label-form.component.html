@@ -15,8 +15,7 @@
         <input matInput
                (keyup)="check(i)"
                name="key"
-               formControlName="key"
-               placeholder="Key">
+               formControlName="key">
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyUniqueness"
                    i18n>
           Key is not unique.
@@ -43,8 +42,7 @@
         <input matInput
                (keyup)="check(i)"
                name="value"
-               formControlName="value"
-               placeholder="Value">
+               formControlName="value">
         <mat-error *ngIf="label.get('value').errors?.validLabelValuePattern"
                    i18n>
           Value not allowed.

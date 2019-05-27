@@ -26,7 +26,6 @@
             <mat-label>CIDR Range*</mat-label>
             <input matInput
                    formControlName="cidr"
-                   placeholder="CIDR Range *"
                    autocomplete="off">
             <mat-hint>Example: 196.44.198.32/29</mat-hint>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.cidr.hasError('required')">
@@ -40,7 +39,6 @@
           <mat-form-field class="km-machine-networks-form-field">
             <input matInput
                    formControlName="dnsServers"
-                   placeholder="DNS Servers *"
                    autocomplete="off">
             <mat-hint>DNS Servers separated with commas, example: 8.8.8.8, 8.8.8.4</mat-hint>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.dnsServers.hasError('required')">
@@ -54,7 +52,6 @@
             <mat-label>Gateway*</mat-label>
             <input matInput
                    formControlName="gateway"
-                   placeholder="Gateway *"
                    autocomplete="off">
             <mat-hint>Example: 10.0.0.1</mat-hint>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.gateway.hasError('required')">

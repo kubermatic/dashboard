@@ -19,7 +19,6 @@
                  matInput
                  formControlName="name"
                  type="text"
-                 placeholder="Enter a name for the cluster"
                  title="name"
                  autocomplete="off">
           <mat-hint>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy to remember.</mat-hint>
@@ -47,8 +46,7 @@
       <form [formGroup]="clusterSpecForm">
         <mat-form-field>
           <mat-label>Master Version</mat-label>
-          <mat-select placeholder="Select the version"
-                      formControlName="version">
+          <mat-select formControlName="version">
             <mat-option *ngFor="let version of masterVersions"
                         [value]="version.version">
               {{ version.version }}
