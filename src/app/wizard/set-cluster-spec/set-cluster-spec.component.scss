@@ -15,3 +15,57 @@
     padding-right: 20px;
   }
 }
+
+.km-cluster-spec-type {
+  mat-button-toggle {
+    min-height: 50px;
+    max-height: 50px;
+    min-width: 150px;
+    max-width: 150px;
+    margin-right: 0;
+    background-color: $grey-background;
+
+    i {
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+      filter: grayscale(100%);
+    }
+
+    &:hover i {
+      -webkit-filter: none;
+      -moz-filter: none;
+      -ms-filter: none;
+      -o-filter: none;
+      filter: none;
+    }
+
+    &[value='kubernetes'] {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    &[value='openshift'] {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    &.mat-button-toggle-checked {
+      background-color: transparent;
+
+      i {
+        -webkit-filter: none;
+        -moz-filter: none;
+        -ms-filter: none;
+        -o-filter: none;
+        filter: none;
+      }
+    }
+  }
+
+  ::ng-deep.mat-button-toggle-label-content {
+    color: $text-color;
+    font-weight: normal;
+  }
+}

@@ -29,7 +29,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   currentStepIndex: number;
   cluster: ClusterEntity;
   node: NodeEntity;
-  clusterSpecFormData: ClusterSpecForm = {valid: false, name: '', version: ''};
+  clusterSpecFormData: ClusterSpecForm = {valid: false, name: '', type: '', version: ''};
   machineNetworksFormData: MachineNetworkForm[] = [{valid: false, cidr: '', dnsServers: [''], gateway: ''}];
   setMachineNetworksFormData:
       SetMachineNetworksForm = {valid: false, machineNetworks: this.machineNetworksFormData, setMachineNetworks: false};
@@ -56,6 +56,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
         machineNetworks: [],
       },
+      type: ''
     };
 
     this.addNodeData = {
@@ -309,6 +310,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       cluster: {
         name: this.cluster.name,
         spec: this.cluster.spec,
+        type: this.cluster.type,
         sshKeys: keyNames,
       },
       nodeDeployment: {

@@ -42,6 +42,20 @@
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="clusterSpecForm">
+
+        <mat-button-toggle-group group="clusterSpecTypeGroup"
+                                 class="km-cluster-spec-type"
+                                 formControlName="type">
+          <mat-button-toggle value="kubernetes">
+            <i class="km-icon-kubernetes"></i>
+            Kubernetes
+          </mat-button-toggle>
+          <mat-button-toggle value="openshift">
+            <i class="km-icon-openshift"></i>
+            OpenShift
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+
         <mat-form-field>
           <mat-label>Master Version</mat-label>
           <mat-select formControlName="version">

@@ -27,7 +27,12 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this.clusterSpecForm = new FormGroup({
       name: new FormControl(this.cluster.name, [Validators.required, Validators.minLength(5)]),
       version: new FormControl(this.cluster.spec.version),
+      type: new FormControl(this.cluster.type),
     });
+
+    if (this.clusterSpecForm.controls.type.value === '') {
+      this.clusterSpecForm.controls.type.setValue('kubernetes');
+    }
 
     this.clusterSpecForm.valueChanges.pipe(takeUntil(this._unsubscribe))
         .pipe(debounce(() => {
@@ -35,6 +40,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
           return interval(1000);
         }))
         .subscribe(() => {
+          this.loadMasterVersions();
           this.setClusterSpec();
         });
 
@@ -51,20 +57,23 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   }
 
   loadMasterVersions(): void {
-    this._api.getMasterVersions().pipe(takeUntil(this._unsubscribe)).subscribe((versions) => {
-      this.masterVersions = versions;
-      for (const i in versions) {
-        if (versions[i].default) {
-          this.defaultVersion = versions[i].version;
-          this.clusterSpecForm.controls.version.setValue(versions[i].version);
-        }
-      }
-    });
+    this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((versions) => {
+          this.masterVersions = versions;
+          for (const i in versions) {
+            if (versions[i].default) {
+              this.defaultVersion = versions[i].version;
+              this.clusterSpecForm.controls.version.setValue(versions[i].version);
+            }
+          }
+        });
   }
 
   setClusterSpec(): void {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
+      type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
       valid: this.clusterSpecForm.valid,
     });
@@ -73,6 +82,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
   private _invalidateStep(): void {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
+      type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
       valid: false,
     });

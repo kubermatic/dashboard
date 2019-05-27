@@ -300,8 +300,9 @@ export class ApiService {
         clusterID}&user_id=${userID}`;
   }
 
-  getMasterVersions(): Observable<MasterVersion[]> {
-    const url = `${this.restRoot}/upgrades/cluster`;
+  // type has to be eather kubernetes or openshift
+  getMasterVersions(type: string): Observable<MasterVersion[]> {
+    const url = `${this.restRoot}/upgrades/cluster?type=${type}`;
     return this.http.get<MasterVersion[]>(url, {headers: this.headers});
   }
 

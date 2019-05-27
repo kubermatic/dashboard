@@ -56,6 +56,7 @@ export class ClusterEntity {
   name: string;
   spec: ClusterSpec;
   status?: Status;
+  type: string;
 }
 
 export function getEmptyCloudProviderSpec(provider: string): object {
