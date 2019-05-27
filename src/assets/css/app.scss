@@ -104,7 +104,7 @@ body {
   }
 
   td.mat-cell {
-    border-top: 1px solid $seperator;
+    border-top: 1px solid $separator;
     border-bottom-width: 0;
     line-height: 5 * $line-height;
     padding-right: 2 * $baseline-grid;
@@ -138,7 +138,7 @@ body {
 
 .km-paginator {
   border-radius: 0 0 5px 5px;
-  border-top: 1px solid $seperator;
+  border-top: 1px solid $separator;
 }
 
 .mat-column-status {
@@ -365,7 +365,7 @@ mat-button-toggle-group[group='providerGroup'] {
     .km-row {
       line-height: 5 * $line-height;
       padding: 0 30px;
-      border-top: 1px solid $seperator;
+      border-top: 1px solid $separator;
 
       &.km-small {
         padding: 10px 24px;
@@ -623,32 +623,6 @@ mat-button-toggle-group[group='providerGroup'] {
   color: $indicator-red !important;
 }
 
-.mat-checkbox-frame {
-  border-color: $checkbox-frame;
-}
-
-.mat-checkbox-background {
-  background-color: transparent;
-}
-
-.mat-checkbox-checked.mat-accent {
-  .mat-checkbox-background {
-    background-color: transparent;
-  }
-
-  .mat-checkbox-frame {
-    border-color: $text-color;
-  }
-}
-
-.mat-checkbox-checkmark {
-  fill: $text-color;
-}
-
-.mat-checkbox-checkmark-path {
-  stroke: $text-color !important;
-}
-
 .mat-form-field {
   width: 100%;
 }
@@ -888,14 +862,18 @@ div.km-form-group-tags {
 }
 
 // Inputs.
-::ng-deep mat-form-field.mat-form-field {
-  .mat-form-field-appearance-outline .mat-form-field-outline {
-    color: $quaternary !important;
-  }
+.mat-form-field-appearance-outline .mat-form-field-outline {
+  color: $primary !important;
 }
 
-.mat-focused > .mat-form-field-appearance-outline .mat-form-field-outline {
-  color: $primary !important;
+// Checkboxes.
+.mat-checkbox-checked .mat-checkbox-background {
+  background-color: $primary !important;
+}
+
+.mat-checkbox-frame {
+  border: 2px solid $separator;
+  border-radius: 5px;
 }
 
 // Dialogs.
@@ -919,7 +897,7 @@ div.km-form-group-tags {
   }
 }
 
-// Tooltip
+// Tooltips.
 .mat-tooltip-panel {
   height: 4 * $baseline-grid;
 }
