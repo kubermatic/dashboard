@@ -846,12 +846,13 @@ span.mat-select-value-text {
   color: $text-color;
 }
 
-.mat-form-field-outline {
-  //color: $primary;
+div.mat-form-field-outline.mat-form-field-outline-thick {
+  color: $quaternary;
 }
 
-.mat-form-field-invalid .mat-form-field-label {
-  //color: $indicator-red !important;
+mat-form-field:not(.mat-focused):not(.ng-invalid) div.mat-form-field-flex:hover label {
+  transition: all .2s ease;
+  color: $quaternary;
 }
 
 // Checkboxes.

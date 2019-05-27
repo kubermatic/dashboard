@@ -3,14 +3,14 @@
   <div fxLayout="row"
        fxLayoutGap="16px">
     <mat-form-field class="km-node-deployment-name"
-                    [ngClass]="{small: isInWizard, none: isNameDisabled}">
+                    [ngClass]="{none: isNameDisabled}">
       <mat-label>Name</mat-label>
       <input id="km-node-name-input"
              matInput
              formControlName="name"
              type="text"
              autocomplete="off">
-      <mat-hint *ngIf="!isNameDisabled">This field is optional, leave it empty to generate the name on the server side. You can also use the random button to generate it on your own.</mat-hint>
+      <mat-hint *ngIf="!isNameDisabled">Leave it empty to use server-side generation.</mat-hint>
     </mat-form-field>
     <div fxLayoutAlign=" center"><button mat-flat-button
               color="primary"
