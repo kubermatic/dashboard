@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -17,8 +18,13 @@ import (
 func main() {
 	addr := flag.String("address", "0.0.0.0:8080", "Address to listen on")
 	log, _ := zap.NewProduction()
-	defer log.Sync()
 	flag.Parse()
+
+	defer func() {
+		if err := log.Sync(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
