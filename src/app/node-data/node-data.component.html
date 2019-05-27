@@ -10,12 +10,12 @@
              formControlName="name"
              type="text"
              autocomplete="off">
+      <i class="km-icon-randomize"
+         matTooltip="Generate name"
+         (click)="generateName()"
+         *ngIf="!isNameDisabled"></i>
       <mat-hint *ngIf="!isNameDisabled">Leave it empty to use server-side generation.</mat-hint>
     </mat-form-field>
-    <div fxLayoutAlign=" center"><button mat-flat-button
-              color="primary"
-              (click)="generateName()"
-              *ngIf="!isNameDisabled">Random</button></div>
   </div>
 
   <mat-form-field fxFlex>

@@ -850,9 +850,9 @@ div.mat-form-field-outline.mat-form-field-outline-thick {
   color: $quaternary;
 }
 
-mat-form-field:not(.mat-focused):not(.ng-invalid) div.mat-form-field-flex:hover label {
+mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid) div.mat-form-field-flex:hover label {
   transition: all .2s ease;
-  color: $quaternary;
+  color: $quaternary-dark;
 }
 
 // Checkboxes.

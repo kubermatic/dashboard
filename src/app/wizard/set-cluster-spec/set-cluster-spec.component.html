@@ -21,16 +21,14 @@
                  type="text"
                  title="name"
                  autocomplete="off">
+          <i class="km-icon-randomize"
+             matTooltip="Generate name"
+             (click)="generateName()"></i>
           <mat-hint>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy to remember.</mat-hint>
           <mat-error *ngIf="clusterSpecForm.controls.name.hasError('required')">
             Name is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
-        <div class="km-generate-name-btn"
-             fxFlex>
-          <button type="button"
-                  (click)="generateName()">Generate name</button>
-        </div>
       </form>
     </mat-card-content>
   </mat-card>
