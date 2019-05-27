@@ -108,24 +108,7 @@
   cursor: pointer;
 }
 
-.km-icon-arrow-up {
-  display: inline-block;
-  width: 12px;
-  height: 9px;
-  background-image: url("/assets/images/Arrow_up.svg");
-  background-repeat: no-repeat;
-}
-
 .km-icon-arrow-down {
-  display: inline-block;
-  width: 12px;
-  height: 9px;
-  background-image: url("/assets/images/Arrow_down.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.km-icon-arrow-down-2 {
   display: inline-block;
   width: 12px;
   height: 12px;
@@ -135,7 +118,7 @@
   background-color: $text-color;
 }
 
-.km-icon-arrow-up-2 {
+.km-icon-arrow-up {
   display: inline-block;
   width: 12px;
   height: 12px;
