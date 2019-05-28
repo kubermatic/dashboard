@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"flag"
-	"log"
+	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -12,11 +12,20 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"go.uber.org/zap"
 )
 
 func main() {
 	addr := flag.String("address", "0.0.0.0:8080", "Address to listen on")
+	rawLog, _ := zap.NewProduction()
+	log := rawLog.Sugar()
 	flag.Parse()
+
+	defer func() {
+		if err := rawLog.Sync(); err != nil {
+			fmt.Println(err)
+		}
+	}()
 
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
@@ -35,7 +44,7 @@ func main() {
 	signal.Notify(stop, os.Interrupt, syscall.SIGKILL)
 
 	go func() {
-		log.Println("Starting the http server:", *addr)
+		log.Infof("Starting the http server: %s", *addr)
 		if err := s.ListenAndServe(); err != nil {
 			panic(err)
 		}
@@ -47,7 +56,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	log.Println("Shutting down the http server")
+	log.Infof("Shutting down the http server: %s", *addr)
 	if err := s.Shutdown(ctx); err != nil {
 		panic(err)
 	}

@@ -18,6 +18,8 @@ import {EventListComponent} from './components/event-list/event-list.component';
 import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {PropertyComponent} from './components/property/property.component';
+import {TaintFormComponent} from './components/taint-form/taint-form.component';
+import {TaintsComponent} from './components/taints/taints.component';
 
 const modules: any[] = [
   CommonModule,
@@ -71,6 +73,8 @@ const modules: any[] = [
     EventListComponent,
     LabelFormComponent,
     LabelsComponent,
+    TaintFormComponent,
+    TaintsComponent,
   ],
   exports: [
     ...modules,
@@ -82,6 +86,8 @@ const modules: any[] = [
     EventListComponent,
     LabelFormComponent,
     LabelsComponent,
+    TaintFormComponent,
+    TaintsComponent,
   ],
   entryComponents: [
     AddProjectDialogComponent,

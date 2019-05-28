@@ -34,7 +34,8 @@ export class NodeListComponent implements OnInit {
     hasBackdrop: true,
   };
   isShowNodeItem = [];
-  displayedColumns: string[] = ['status', 'name', 'kubeletVersion', 'ipAddresses', 'creationDate', 'actions'];
+  displayedColumns: string[] =
+      ['stateArrow', 'status', 'name', 'kubeletVersion', 'ipAddresses', 'creationDate', 'actions'];
   toggledColumns: string[] = ['nodeDetails'];
   dataSource = new MatTableDataSource<NodeEntity>();
   @ViewChild(MatSort) sort: MatSort;

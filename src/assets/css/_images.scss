@@ -53,6 +53,21 @@
   }
 }
 
+.km-icon-regenerate {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  mask: url("/assets/images/icons/regenerate.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  cursor: pointer;
+  background-color: $text-color;
+
+  &:disabled {
+    background-color: $disabled-button-color;
+  }
+}
+
 .km-icon-cluster {
   display: inline-block;
   width: 22px;
@@ -106,30 +121,26 @@
   cursor: pointer;
 }
 
-.km-icon-arrow-up {
-  display: inline-block;
-  width: 12px;
-  height: 9px;
-  background-image: url("/assets/images/Arrow_up.svg");
-  background-repeat: no-repeat;
-}
-
 .km-icon-arrow-down {
-  display: inline-block;
-  width: 12px;
-  height: 9px;
-  background-image: url("/assets/images/Arrow_down.svg");
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-.km-icon-arrow-down-2 {
   display: inline-block;
   width: 12px;
   height: 12px;
   mask: url("/assets/images/icons/arrow-down.svg");
   mask-repeat: no-repeat;
   mask-size: contain;
+  background-color: $text-color;
+}
+
+.km-icon-arrow-up {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  mask: url("/assets/images/icons/arrow-down.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $text-color;
+  -webkit-transform: rotate(180deg);
+  transform: rotate(180deg);
 }
 
 .km-icon-arrow-left {
