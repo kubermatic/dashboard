@@ -67,8 +67,8 @@ function prepare::files {
 	mkdir -p ${SCRIPT_PATH}/helm
 	cp -r $GOPATH/src/github.com/kubermatic/kubermatic/config/oauth ${DEX_PATH}
 	rm ${DEX_PATH}/templates/ingress.yaml
-	patch ${DEX_PATH}/values.yaml ${SCRIPT_PATH}/patch/oauth_values.patch
-	patch ${DEX_PATH}/templates/configmap.yaml ${SCRIPT_PATH}/patch/dex-config.patch
+	cp ${SCRIPT_PATH}/patch/oauth_values.yaml ${DEX_PATH}/values.yaml
+	cp ${SCRIPT_PATH}/patch/oauth_configmap.yaml ${DEX_PATH}/templates/configmap.yaml
 
 	cp -r $GOPATH/src/github.com/kubermatic/kubermatic/config/kubermatic ${KUBERMATIC_PATH}
 	rm ${KUBERMATIC_PATH}/templates/ingress.yaml
