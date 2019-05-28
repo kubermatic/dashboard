@@ -16,6 +16,7 @@
          *ngIf="!isNameDisabled"></i>
       <mat-hint *ngIf="!isNameDisabled">Leave it empty to use server-side generation.</mat-hint>
     </mat-form-field>
+
   </div>
 
   <mat-form-field fxFlex>
@@ -31,6 +32,7 @@
   </mat-form-field>
 
   <mat-form-field *ngIf="!isInWizard">
+
     <mat-label>kubelet Version</mat-label>
     <mat-select formControlName="kubelet">
       <mat-option *ngFor="let version of versions"
@@ -78,12 +80,15 @@
                               [seedDCName]="seedDCName"></kubermatic-azure-node-data>
 
   <mat-form-field class="km-operating-system">
+
     <mat-label>Operating System*</mat-label>
     <mat-select formControlName="operatingSystem">
-      <mat-option value="ubuntu">Ubuntu</mat-option>
+
+      <mat-option value="ubuntu"
+                  *ngIf="cluster.type !== 'openshift'">Ubuntu</mat-option>
       <mat-option value="centos">CentOS</mat-option>
       <mat-option value="containerLinux"
-                  *ngIf="!cluster.spec.cloud.hetzner">Container Linux</mat-option>
+                  *ngIf="!cluster.spec.cloud.hetzner && cluster.type !== 'openshift'">Container Linux</mat-option>
     </mat-select>
     <mat-hint *ngIf="cluster.spec.cloud.openstack">Select the operating system of the entered image</mat-hint>
     <mat-hint *ngIf="cluster.spec.cloud.vsphere">Select the operating system of the entered template</mat-hint>

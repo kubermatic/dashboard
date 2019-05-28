@@ -50,6 +50,10 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       name: new FormControl({value: this.nodeData.name, disabled: this.isNameDisabled}),
     });
 
+    if (this.cluster.type === 'openshift') {
+      this.nodeForm.controls.operatingSystem.setValue('centos');
+    }
+
     if (!this.isInWizard) {
       this.nodeForm.addControl('kubelet', new FormControl());
     }

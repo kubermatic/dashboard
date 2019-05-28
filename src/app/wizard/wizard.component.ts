@@ -83,6 +83,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       if (this.clusterSpecFormData.valid) {
         this.cluster.name = this.clusterSpecFormData.name;
         this.cluster.spec.version = this.clusterSpecFormData.version;
+        this.cluster.type = this.clusterSpecFormData.type;
         this.wizardService.changeCluster(this.cluster);
       }
     });

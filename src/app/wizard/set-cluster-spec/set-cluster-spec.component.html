@@ -56,7 +56,7 @@
           </mat-button-toggle>
         </mat-button-toggle-group>
 
-        <mat-form-field>
+        <mat-form-field class="km-version-inline">
           <mat-label>Master Version</mat-label>
           <mat-select formControlName="version">
             <mat-option *ngFor="let version of masterVersions"
@@ -64,7 +64,6 @@
               {{ version.version }}
             </mat-option>
           </mat-select>
-          <mat-hint>Select the version that should be used for cluster creation. Unless otherwise specified, v{{defaultVersion}} will be used.</mat-hint>
         </mat-form-field>
       </form>
     </mat-card-content>
