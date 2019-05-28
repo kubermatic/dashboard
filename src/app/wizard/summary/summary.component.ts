@@ -4,6 +4,7 @@ import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {getIpCount} from '../../shared/functions/get-ip-count';
 import {ClusterDatacenterForm, ClusterProviderForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
+import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
 @Component({
@@ -27,6 +28,10 @@ export class SummaryComponent implements OnInit {
 
   getOperatingSystem(): string {
     return NodeUtils.getOperatingSystem(this.nodeData.spec);
+  }
+
+  getType(type: string): string {
+    return ClusterUtils.getType(type);
   }
 
   displayTags(tags: object): boolean {

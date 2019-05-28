@@ -20,4 +20,12 @@ export class ClusterUtils {
       return 'packet';
     }
   }
+
+  static getType(type: string): string {
+    if (type === 'kubernetes') {
+      return 'Kubernetes';
+    } else if (type === 'openshift') {
+      return 'OpenShift';
+    }
+  }
 }
