@@ -50,6 +50,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   someUpgradesRestrictedByKubeletVersion = false;
   projectID: string;
   events: EventEntity[] = [];
+  displayedSSHKeys = 3;
   private _versionsList: string[] = [];
   private _externalClusterUpdate: Subject<any> = new Subject();
   private _unsubscribe: Subject<any> = new Subject();
@@ -270,8 +271,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadMoreSshKeys(moreSshKeys: boolean): void {
-    this.moreSshKeys = moreSshKeys;
+  getTruncatedSSHKeys(): string {
+    return this.sshKeys.slice(this.displayedSSHKeys).map(key => key.name).join(', ');
   }
 
   ngOnDestroy(): void {
