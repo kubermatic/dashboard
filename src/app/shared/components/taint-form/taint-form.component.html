@@ -1,0 +1,77 @@
+<mat-card-header>
+  <mat-card-title>
+    <h4>{{title}}</h4>
+  </mat-card-title>
+</mat-card-header>
+<form [formGroup]="taintsForm"
+      fxLayout="column">
+  <div formArrayName="taints">
+    <div *ngFor="let taint of taintArray.controls; let i = index;"
+         [formGroupName]="i"
+         fxLayout="row"
+         fxLayoutGap="10px">
+      <mat-form-field fxFlex="30">
+        <input matInput
+               (keyup)="check(i)"
+               name="key"
+               formControlName="key"
+               placeholder="Key">
+        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyUniqueness"
+                   i18n>
+          Key is not unique
+        </mat-error>
+        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyPrefixPattern"
+                   i18n>
+          Prefix not allowed
+        </mat-error>
+        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyNamePattern"
+                   i18n>
+          Name not allowed
+        </mat-error>
+        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyPrefixLength"
+                   i18n>
+          Prefix is too long
+        </mat-error>
+        <mat-error *ngIf="taint.get('key').errors?.validLabelKeyNameLength"
+                   i18n>
+          Name is too long
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="30">
+        <input matInput
+               (keyup)="check(i)"
+               name="value"
+               formControlName="value"
+               placeholder="Value">
+        <mat-error *ngIf="taint.get('value').errors?.validLabelValuePattern"
+                   i18n>
+          Value not allowed
+        </mat-error>
+        <mat-error *ngIf="taint.get('value').errors?.validLabelValueLength"
+                   i18n>
+          Value is too long
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field fxFlex="30">
+        <mat-select formControlName="effect"
+                    placeholder="Effect"
+                    (keyup)="check(i)"
+                    (change)="check(i)"
+                    (valueChange)="check(i)"
+                    (selectionChange)="check(i)">
+          <mat-option *ngFor="let effect of availableEffects"
+                      value="{{ effect }}">
+            {{ effect }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-icon-button
+              class="km-label-form-delete-button"
+              *ngIf="isRemovable()"
+              (click)="deleteTaint(i)">
+        <i class="fa fa-trash-o"
+           aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</form>
