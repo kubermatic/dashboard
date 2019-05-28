@@ -108,6 +108,19 @@
   cursor: pointer;
 }
 
+.km-icon-randomize {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-image: url("/assets/images/icons/randomize.svg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  right: $baseline-grid;
+  top: 1.25 * $baseline-grid;
+  position: absolute;
+  cursor: pointer;
+}
+
 .km-icon-arrow-down {
   display: inline-block;
   width: 12px;

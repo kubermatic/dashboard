@@ -1,7 +1,7 @@
 import {NgReduxFormModule} from '@angular-redux/form';
 import {NgReduxModule} from '@angular-redux/store';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import {MAT_TOOLTIP_DEFAULT_OPTIONS} from '@angular/material';
+import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MAT_TOOLTIP_DEFAULT_OPTIONS, MatFormFieldDefaultOptions} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule, NoopAnimationsModule} from '@angular/platform-browser/animations';
 import {RouterModule} from '@angular/router';
@@ -33,6 +33,10 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
                    .then(() => appConfig.checkCustomCSS());
 };
 
+const appearance: MatFormFieldDefaultOptions = {
+  appearance: 'outline'
+};
+
 @NgModule({
   imports: [
     CoreModule,
@@ -59,6 +63,10 @@ const appInitializerFn = (appConfig: AppConfigService): Function => {
     {
       provide: MAT_TOOLTIP_DEFAULT_OPTIONS,
       useValue: kmTooltipDefaultOptions,
+    },
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: appearance,
     },
     CookieService,
     ProjectService,

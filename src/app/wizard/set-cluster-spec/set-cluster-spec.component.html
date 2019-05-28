@@ -7,30 +7,28 @@
             fxFlex>
     <mat-card-header>
       <mat-card-title>
-        <h4>Name your Cluster</h4>
+        <h4>Cluster Name</h4>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="clusterSpecForm"
             fxLayout="column">
         <mat-form-field fxFlex>
+          <mat-label>Name*</mat-label>
           <input id="km-create-cluster-name-input"
                  matInput
                  formControlName="name"
                  type="text"
-                 placeholder="Enter a cluster name"
                  title="name"
                  autocomplete="off">
-          <mat-hint>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy for you to remember.</mat-hint>
+          <i class="km-icon-randomize"
+             matTooltip="Generate name"
+             (click)="generateName()"></i>
+          <mat-hint>This is how you will identify your Kubernetes cluster instance. Choose a name that is easy to remember.</mat-hint>
           <mat-error *ngIf="clusterSpecForm.controls.name.hasError('required')">
-            Name is <strong>required</strong>
+            Name is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
-        <div class="km-generate-name-btn"
-             fxFlex>
-          <button type="button"
-                  (click)="generateName()">Generate name</button>
-        </div>
       </form>
     </mat-card-content>
   </mat-card>
@@ -45,14 +43,14 @@
     <mat-card-content>
       <form [formGroup]="clusterSpecForm">
         <mat-form-field>
-          <mat-select placeholder="Master Version (optional):"
-                      formControlName="version">
+          <mat-label>Master Version</mat-label>
+          <mat-select formControlName="version">
             <mat-option *ngFor="let version of masterVersions"
                         [value]="version.version">
               {{ version.version }}
             </mat-option>
           </mat-select>
-          <mat-hint>Select the version that should be used for cluster creation. Unless otherwise specified, the default version {{defaultVersion}} will be used.</mat-hint>
+          <mat-hint>Select the version that should be used for cluster creation. Unless otherwise specified, v{{defaultVersion}} will be used.</mat-hint>
         </mat-form-field>
       </form>
     </mat-card-content>

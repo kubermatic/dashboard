@@ -1,21 +1,6 @@
 @import "../../assets/css/colors";
 @import "../../assets/css/variables";
 
-.km-key-name {
-  font-weight: 500;
-  font-size: $body-font-size-base;
-  margin: 0;
-  line-height: 20px;
-  color: $text-color;
-}
-
-.km-key-timestamp {
-  font-size: $caption-font-size-base;
-  margin: 0;
-  line-height: 20px;
-  color: $text-color;
-}
-
 .km-key-publickey {
   padding: 0 !important;
 }

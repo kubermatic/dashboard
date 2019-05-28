@@ -5,39 +5,37 @@
   <km-dialog-title title="Delete Cluster"></km-dialog-title>
 
   <mat-dialog-content>
-    <div class="mat-dialog-content">
-      <p>You are on the way to delete the cluster "{{cluster.name}}". Deletion of clusters cannot be UNDONE!</p>
+    <p>You are on the way to delete the cluster {{cluster.name}}. It cannot be undone!</p>
 
-      <div class="km-delete-cluster-checkbox">
-        <label fxFlex="60%">Cleanup connected Load Balancers</label>
-        <mat-checkbox fxFlex="40%"
-                      formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
-      </div>
-
-      <div class="km-delete-cluster-checkbox">
-        <label fxFlex="60%">Cleanup connected volumes (PVs and PVCs)</label>
-        <mat-checkbox fxFlex="40%"
-                      formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
-      </div>
-
-      <div class="km-delete-cluster-warning">
-        <mat-icon fxFlexAlign="center">warning</mat-icon>
-        <span>Be aware, that if you don't select the checkboxes above some leftover resources might still exist at your cloud provider after the cluster will be deleted.</span>
-      </div>
-
-      <p>If you know what you are doing, <strong>please type the name of the cluster</strong>:</p>
-
-      <mat-form-field class="km-delete-cluster-name-input">
-        <input id="km-delete-cluster-dialog-input"
-               matInput
-               type="text"
-               placeholder="Name of the Cluster:"
-               title="Cluster name"
-               (blur)="onChange($event)"
-               (keyup)="onChange($event)"
-               #clusterNameInput>
-      </mat-form-field>
+    <div class="km-delete-cluster-checkbox">
+      <label fxFlex>Cleanup connected Load Balancers</label>
+      <mat-checkbox fxFlex
+                    formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
     </div>
+
+    <div class="km-delete-cluster-checkbox">
+      <label fxFlex>Cleanup connected volumes (PVs and PVCs)</label>
+      <mat-checkbox fxFlex
+                    formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
+    </div>
+
+    <div class="km-delete-cluster-warning">
+      <mat-icon fxFlexAlign="center">warning</mat-icon>
+      <span>
+        Not selecting above options might leave some leftover resources at your cloud provider after cluster deletion.
+      </span>
+    </div>
+
+    <mat-form-field>
+      <mat-label>Cluster Name*</mat-label>
+      <input id="km-delete-cluster-dialog-input"
+             matInput
+             type="text"
+             title="Cluster name"
+             (blur)="onChange($event)"
+             (keyup)="onChange($event)"
+             #clusterNameInput>
+    </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-delete-cluster-dialog-delete-btn"

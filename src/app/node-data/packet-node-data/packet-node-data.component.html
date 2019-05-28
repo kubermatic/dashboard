@@ -3,8 +3,8 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Node Size*"
-                  formControlName="type">
+      <mat-label>Node Size*</mat-label>
+      <mat-select formControlName="type">
         <mat-option *ngFor="let type of instanceTypes"
                     [value]="type">
           {{type}}
@@ -14,10 +14,10 @@
   </div>
 
   <mat-form-field>
+    <mat-label>Tags</mat-label>
     <input matInput
            id="tags"
-           formControlName="tags"
-           placeholder="Tags">
+           formControlName="tags">
     <mat-hint>Seperate tags with commas.</mat-hint>
   </mat-form-field>
 </form>

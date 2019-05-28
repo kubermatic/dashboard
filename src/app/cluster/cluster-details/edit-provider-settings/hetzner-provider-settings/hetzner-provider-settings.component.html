@@ -1,16 +1,16 @@
 <form [formGroup]="hetznerProviderSettingsForm"
       fxLayout="column">
   <mat-form-field fxFlex>
+    <mat-label>API Token*</mat-label>
     <input matInput
            formControlName="token"
            type="password"
-           placeholder="API Token*:"
            autocomplete="off">
     <mat-error *ngIf="(hetznerProviderSettingsForm.controls.token.hasError('minlength') || hetznerProviderSettingsForm.controls.token.hasError('maxlength'))">
       Tokens must be exactly <strong>64</strong> characters long.
     </mat-error>
     <mat-error *ngIf="hetznerProviderSettingsForm.controls.token.hasError('required')">
-      API Token is <strong>required</strong>
+      API Token is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
 </form>

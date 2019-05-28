@@ -7,20 +7,21 @@
             fxLayout="column">
 
         <mat-form-field fxFlex>
+          <mat-label>Email*</mat-label>
           <input id="km-add-member-dialog-email-input"
                  matInput
                  formControlName="email"
                  type="email"
-                 placeholder="Email*:"
-                 autocomplete="off">
+                 autocomplete="off"
+                 cdkFocusInitial>
           <mat-error *ngIf="addMemberForm.controls.email.hasError('required')">
-            Email is <strong>required</strong>
+            Email is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field fxFlex>
+          <mat-label>Group*</mat-label>
           <mat-select id="km-add-member-dialog-group-combobox"
-                      placeholder="Group*:"
                       formControlName="group">
             <mat-option value="owners">Owner</mat-option>
             <mat-option value="editors">Editor</mat-option>

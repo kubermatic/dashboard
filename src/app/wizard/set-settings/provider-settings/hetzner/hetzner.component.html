@@ -6,13 +6,13 @@
     You can create one in your project access settings.
   </div>
   <mat-form-field fxFlex>
+    <mat-label>API Token*</mat-label>
     <input matInput
            formControlName="token"
            type="password"
-           placeholder="API Token*:"
            autocomplete="off">
     <mat-error *ngIf="hetznerSettingsForm.controls.token.hasError('required')">
-      Token is <strong>required</strong>
+      Token is <strong>required</strong>.
     </mat-error>
     <mat-error *ngIf="(hetznerSettingsForm.controls.token.hasError('minlength')
                       || hetznerSettingsForm.controls.token.hasError('maxlength'))">

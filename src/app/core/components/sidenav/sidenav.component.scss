@@ -72,11 +72,8 @@
       line-height: $caption-font-size-base;
     }
 
-    ::ng-deep.mat-select-value {
-      color: $secondary;
-    }
-
     ::ng-deep.mat-select-value-text {
+      color: $secondary;
       font-size: $subhead-font-size-base-lg;
       line-height: $subhead-font-size-base-lg + $baseline-grid / 2;
     }

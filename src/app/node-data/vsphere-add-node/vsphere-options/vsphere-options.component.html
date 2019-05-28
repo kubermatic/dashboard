@@ -3,10 +3,10 @@
   <div fxFlex="100%">
     <mat-form-field fxFlex
                     *ngIf="!hideOptional">
+      <mat-label>VM Template</mat-label>
       <input matInput
              formControlName="template"
              type="text"
-             placeholder="VM Template:"
              autocomplete="off">
       <mat-hint>Optional. If not set, a template called {{defaultTemplate}} will be used.</mat-hint>
     </mat-form-field>
