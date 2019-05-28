@@ -128,6 +128,9 @@
 <km-label-form title="Node Labels"
                [(labels)]="nodeData.spec.labels"></km-label-form>
 
+<km-taint-form title="Node Taints"
+               [(taints)]="nodeData.spec.taints"></km-taint-form>
+
 <kubermatic-openstack-options *ngIf="cluster.spec.cloud.openstack"
                               [nodeData]="nodeData"
                               [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-options>

@@ -5,6 +5,7 @@ import {catchError} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
+import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
 import {ClusterEntity, Finalizer, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
 import {EventEntity} from '../../../shared/entity/EventEntity';
@@ -40,6 +41,7 @@ export class ApiService {
   createNodeDeployment(cluster: ClusterEntity, nd: NodeDeploymentEntity, dc: string, projectID: string):
       Observable<NodeDeploymentEntity> {
     nd.spec.template.labels = LabelFormComponent.filterNullifiedKeys(nd.spec.template.labels);
+    nd.spec.template.taints = TaintFormComponent.filterNullifiedTaints(nd.spec.template.taints);
 
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodedeployments`;
     return this.http.post<NodeDeploymentEntity>(url, nd, {headers: this.headers});
@@ -70,6 +72,9 @@ export class ApiService {
   patchNodeDeployment(
       nd: NodeDeploymentEntity, patch: NodeDeploymentPatch, clusterId: string, dc: string,
       projectID: string): Observable<NodeDeploymentEntity> {
+    patch.spec.template.labels = LabelFormComponent.filterNullifiedKeys(patch.spec.template.labels);
+    patch.spec.template.taints = TaintFormComponent.filterNullifiedTaints(patch.spec.template.taints);
+
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${nd.id}`;
     return this.http.patch<NodeDeploymentEntity>(url, patch, {headers: this.headers});
   }
@@ -115,6 +120,11 @@ export class ApiService {
   }
 
   createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
+    createClusterModel.nodeDeployment.spec.template.labels =
+        LabelFormComponent.filterNullifiedKeys(createClusterModel.nodeDeployment.spec.template.labels);
+    createClusterModel.nodeDeployment.spec.template.taints =
+        TaintFormComponent.filterNullifiedTaints(createClusterModel.nodeDeployment.spec.template.taints);
+
     const url = `${this.restRoot}/projects/${projectID}/dc/${dc}/clusters`;
     return this.http.post<ClusterEntity>(url, createClusterModel, {headers: this.headers});
   }
