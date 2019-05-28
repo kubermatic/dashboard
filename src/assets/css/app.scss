@@ -136,12 +136,44 @@ body {
   }
 }
 
+.km-table-dropdown {
+  margin: 0;
+  padding: 0 !important;
+  background-color: $light-background;
+
+  .km-header-row,
+  .km-mat-row {
+    background-color: $light-background;
+  }
+
+  tr:first-child td:first-child {
+    border-top-left-radius: 5px;
+  }
+
+  tr:first-child td:last-child {
+    border-top-right-radius: 5px;
+  }
+
+  td.mat-cell {
+    border-top: 1px solid $dropdown-border;
+  }
+
+  td:first-child {
+    border-left: 1px solid $dropdown-border;
+  }
+
+  td:last-child {
+    border-right: 1px solid $dropdown-border;
+  }
+}
+
 .km-paginator {
   border-radius: 0 0 5px 5px;
   border-top: 1px solid $seperator;
 }
 
-.mat-column-status {
+.mat-column-status,
+.mat-column-stateArrow {
   width: 2 * $baseline-grid;
 }
 
@@ -602,7 +634,7 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-sort-header-arrow {
     .mat-sort-header-indicator {
       &::before {
-        content: url("/assets/images/arrow-up.svg");
+        content: url("/assets/images/icons/arrow-up.svg");
         position: absolute;
         transform: translateY(3px);
       }
@@ -614,7 +646,7 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-sort-header-arrow {
     .mat-sort-header-indicator {
       &::before {
-        content: url("/assets/images/arrow-up.svg");
+        content: url("/assets/images/icons/arrow-up.svg");
         transform: rotate(180deg) translateY(4px);
         position: absolute;
       }

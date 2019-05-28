@@ -28,7 +28,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   isShowToken = [];
   tokenList = [];
   isTokenInitializing = [];
-  displayedColumns: string[] = ['status', 'name', 'group', 'creationDate', 'actions'];
+  displayedColumns: string[] = ['stateArrow', 'status', 'name', 'group', 'creationDate', 'actions'];
   toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
   @ViewChild(MatSort) sort: MatSort;
@@ -58,6 +58,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
           this.isInitializing = false;
         });
   }
+
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
