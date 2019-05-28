@@ -5,10 +5,10 @@
     We need the Packet API key and the project ID. Billing cycle can also be specified.
   </div>
   <mat-form-field fxFlex>
+    <mat-label>API Key*</mat-label>
     <input matInput
            formControlName="apiKey"
            type="password"
-           placeholder="API Key*"
            autocomplete="off">
     <mat-error *ngIf="packetSettingsForm.controls.apiKey.hasError('required')">
       Packet API key is <strong>required</strong>.
@@ -18,10 +18,10 @@
     </mat-error>
   </mat-form-field>
   <mat-form-field fxFlex>
+    <mat-label>Project ID*</mat-label>
     <input matInput
            formControlName="projectID"
            type="text"
-           placeholder="Project ID*"
            autocomplete="off">
     <mat-error *ngIf="packetSettingsForm.controls.projectID.hasError('required')">
       Packet project ID is <strong>required</strong>.
@@ -35,8 +35,8 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Billing Cycle"
-                  formControlName="billingCycle">
+      <mat-label>Billing Cycle</mat-label>
+      <mat-select formControlName="billingCycle">
         <mat-option *ngFor="let billingCycle of getAvailableBillingCycles()"
                     [value]="billingCycle">
           {{billingCycle}}

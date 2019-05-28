@@ -104,7 +104,7 @@ body {
   }
 
   td.mat-cell {
-    border-top: 1px solid $seperator;
+    border-top: 1px solid $separator;
     border-bottom-width: 0;
     line-height: 5 * $line-height;
     padding-right: 2 * $baseline-grid;
@@ -169,7 +169,7 @@ body {
 
 .km-paginator {
   border-radius: 0 0 5px 5px;
-  border-top: 1px solid $seperator;
+  border-top: 1px solid $separator;
 }
 
 .mat-column-status,
@@ -219,14 +219,6 @@ body {
 }
 
 .mat-card-content {
-  .mat-form-field {
-    .mat-input-placeholder-wrapper .mat-input-placeholder {
-      color: $light-button-color;
-      font-weight: 600;
-      font-size: 14px;
-    }
-  }
-
   p {
     color: $light-button-color;
     font-size: 12px;
@@ -397,7 +389,7 @@ mat-button-toggle-group[group='providerGroup'] {
     .km-row {
       line-height: 5 * $line-height;
       padding: 0 30px;
-      border-top: 1px solid $seperator;
+      border-top: 1px solid $separator;
 
       &.km-small {
         padding: 10px 24px;
@@ -549,16 +541,7 @@ mat-button-toggle-group[group='providerGroup'] {
 
 .km-dialog-box {
   min-width: $dialog-width;
-}
-
-// Input Fields
-
-.mat-form-field-wrapper {
-  margin: 3px 0 !important;
-}
-
-.mat-select-value-text {
-  font-size: 14px;
+  width: $dialog-width;
 }
 
 // Scrollbar
@@ -657,68 +640,6 @@ mat-button-toggle-group[group='providerGroup'] {
 // mat card remove border
 .mat-card {
   box-shadow: none !important;
-}
-
-// input styling
-.mat-select-placeholder {
-  font-size: 14px !important;
-}
-
-.mat-input-placeholder,
-.mat-form-field-label {
-  font-size: 14px !important;
-  color: $light-button-color !important;
-  font-weight: 500 !important;
-}
-
-.mat-form-field-underline {
-  background-color: $border !important;
-}
-
-.mat-form-field-invalid .mat-form-field-label {
-  color: $indicator-red !important;
-}
-
-.mat-checkbox-frame {
-  border-color: $checkbox-frame;
-}
-
-.mat-checkbox-background {
-  background-color: transparent;
-}
-
-.mat-checkbox-checked.mat-accent {
-  .mat-checkbox-background {
-    background-color: transparent;
-  }
-
-  .mat-checkbox-frame {
-    border-color: $text-color;
-  }
-}
-
-.mat-checkbox-checkmark {
-  fill: $text-color;
-}
-
-.mat-checkbox-checkmark-path {
-  stroke: $text-color !important;
-}
-
-.mat-input-wrapper {
-  margin: 5px 0 0 0;
-}
-
-.mat-form-field {
-  width: 100%;
-}
-
-.mat-select {
-  width: 100%;
-}
-
-.mat-select-container {
-  padding: 0;
 }
 
 // Mat Tab Toggle
@@ -928,23 +849,57 @@ div.km-form-group-tags {
     background-color: $primary-hover;
   }
 
-  &.mat-alternative {
+  &.mat-alternative:not([disabled]) {
     background-color: $quaternary;
 
-    &:hover:not([disabled]) {
+    &:hover {
       background-color: $quaternary-hover;
     }
   }
 
-  &.mat-tertiary {
+  &.mat-tertiary:not([disabled]) {
     background-color: transparent;
     color: $medium-text-color;
     border: 1px solid $footer-text-color;
 
-    &:hover:not([disabled]) {
+    &:hover {
       background-color: $tertiary-hover;
     }
   }
+}
+
+// Inputs.
+mat-form-field.mat-form-field {
+  color: $text-color;
+  width: 100%;
+}
+
+span.mat-select-value-text {
+  color: $text-color;
+}
+
+div.mat-form-field-outline.mat-form-field-outline-thick {
+  color: $quaternary;
+}
+
+mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):not(.mat-form-field-disabled) div.mat-form-field-flex:hover label {
+  transition: all .2s ease;
+  color: $quaternary-dark;
+}
+
+mat-form-field.mat-focused:not(.ng-invalid) label,
+mat-form-field.mat-focused.ng-pristine label {
+  color: $alternative-text-color;
+}
+
+// Checkboxes.
+.mat-checkbox-checked .mat-checkbox-background {
+  background-color: $primary !important;
+}
+
+.mat-checkbox-frame {
+  border: 2px solid $separator;
+  border-radius: 5px;
 }
 
 // Dialogs.
@@ -968,7 +923,7 @@ div.km-form-group-tags {
   }
 }
 
-// Tooltip
+// Tooltips.
 .mat-tooltip-panel {
   height: 4 * $baseline-grid;
 }

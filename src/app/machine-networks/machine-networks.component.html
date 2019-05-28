@@ -23,42 +23,42 @@
           </span>
 
           <mat-form-field class="km-machine-networks-form-field">
+            <mat-label>CIDR Range*</mat-label>
             <input matInput
                    formControlName="cidr"
-                   placeholder="CIDR Range *"
                    autocomplete="off">
             <mat-hint>Example: 196.44.198.32/29</mat-hint>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.cidr.hasError('required')">
-              CIDR is <strong>required</strong>
+              CIDR is <strong>required</strong>.
             </mat-error>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.cidr.hasError('pattern')">
-              Pattern is not valid
+              Pattern is not valid.
             </mat-error>
           </mat-form-field>
+          <mat-label>DNS Servers*</mat-label>
           <mat-form-field class="km-machine-networks-form-field">
             <input matInput
                    formControlName="dnsServers"
-                   placeholder="DNS Servers *"
                    autocomplete="off">
             <mat-hint>DNS Servers separated with commas, example: 8.8.8.8, 8.8.8.4</mat-hint>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.dnsServers.hasError('required')">
-              DNS Server is <strong>required</strong>
+              DNS Server is <strong>required</strong>.
             </mat-error>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.dnsServers.hasError('pattern')">
-              Pattern is not valid
+              Pattern is not valid.
             </mat-error>
           </mat-form-field>
           <mat-form-field class="km-machine-networks-form-field">
+            <mat-label>Gateway*</mat-label>
             <input matInput
                    formControlName="gateway"
-                   placeholder="Gateway *"
                    autocomplete="off">
             <mat-hint>Example: 10.0.0.1</mat-hint>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.gateway.hasError('required')">
-              Gateway is <strong>required</strong>
+              Gateway is <strong>required</strong>.
             </mat-error>
             <mat-error *ngIf="machineNetworksForm.controls.machineNetworks.controls[i].controls.gateway.hasError('pattern')">
-              Pattern is not valid
+              Pattern is not valid.
             </mat-error>
           </mat-form-field>
         </div>

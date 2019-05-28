@@ -3,8 +3,8 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Node Size*:"
-                  formControlName="type">
+      <mat-label>Node Size*</mat-label>
+      <mat-select formControlName="type">
         <mat-option *ngFor="let type of instanceTypes"
                     [value]="type">
           {{type}}
@@ -16,8 +16,8 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
-      <mat-select placeholder="Disk type*:"
-                  formControlName="disk_type">
+      <mat-label>Disk Type*</mat-label>
+      <mat-select formControlName="disk_type">
         <mat-option *ngFor="let type of diskTypes"
                     [value]="type">
           {{type}}
@@ -27,19 +27,19 @@
   </div>
 
   <mat-form-field fxFlex>
+    <mat-label>Disk Size in GB (gp2)*</mat-label>
     <input matInput
            formControlName="disk_size"
            min="10"
            max="16000"
            type="number"
-           placeholder="Disk size in GB (gp2)*:"
            autocomplete="off">
   </mat-form-field>
 
   <mat-form-field fxFlex>
+    <mat-label>AMI ID</mat-label>
     <input matInput
            formControlName="ami"
-           placeholder="AMI ID:"
            autocomplete="off">
   </mat-form-field>
 
@@ -59,16 +59,16 @@
       <div class="km-form-group-tags-inner"
            [formGroupName]="i">
         <mat-form-field fxFlex="42%">
+          <mat-label>Key</mat-label>
           <input matInput
                  formControlName="key"
-                 placeholder="key"
                  autocomplete="off">
         </mat-form-field>
         <span class="km-seperator">:</span>
         <mat-form-field fxFlex="42%">
+          <mat-label>Value</mat-label>
           <input matInput
                  formControlName="value"
-                 placeholder="value"
                  autocomplete="off">
         </mat-form-field>
         <i class="fa fa-times"

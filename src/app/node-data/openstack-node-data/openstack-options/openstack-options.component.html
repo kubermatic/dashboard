@@ -2,9 +2,9 @@
       fxLayout="column">
   <div fxFlex="100%">
     <mat-form-field fxFlex>
+      <mat-label>Image*</mat-label>
       <input matInput
              formControlName="image"
-             placeholder="Image*:"
              autocomplete="off">
     </mat-form-field>
   </div>
@@ -24,16 +24,16 @@
       <div class="km-form-group-tags-inner"
            [formGroupName]="i">
         <mat-form-field fxFlex="42%">
+          <mat-label>Key</mat-label>
           <input matInput
                  formControlName="key"
-                 placeholder="key"
                  autocomplete="off">
         </mat-form-field>
         <span class="km-seperator">:</span>
         <mat-form-field fxFlex="42%">
+          <mat-label>Value</mat-label>
           <input matInput
                  formControlName="value"
-                 placeholder="value"
                  autocomplete="off">
         </mat-form-field>
         <i class="fa fa-times"

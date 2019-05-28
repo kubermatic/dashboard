@@ -11,45 +11,45 @@
          fxLayout="row"
          fxLayoutGap="10px">
       <mat-form-field fxFlex="45">
+        <mat-label>Key</mat-label>
         <input matInput
                (keyup)="check(i)"
                name="key"
-               formControlName="key"
-               placeholder="Key">
+               formControlName="key">
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyUniqueness"
                    i18n>
-          Key is not unique
+          Key is not unique.
         </mat-error>
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyPrefixPattern"
                    i18n>
-          Prefix not allowed
+          Prefix not allowed.
         </mat-error>
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyNamePattern"
                    i18n>
-          Name not allowed
+          Name not allowed.
         </mat-error>
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyPrefixLength"
                    i18n>
-          Prefix is too long
+          Prefix is too long.
         </mat-error>
         <mat-error *ngIf="label.get('key').errors?.validLabelKeyNameLength"
                    i18n>
-          Name is too long
+          Name is too long.
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="45">
+        <mat-label>Value</mat-label>
         <input matInput
                (keyup)="check(i)"
                name="value"
-               formControlName="value"
-               placeholder="Value">
+               formControlName="value">
         <mat-error *ngIf="label.get('value').errors?.validLabelValuePattern"
                    i18n>
-          Value not allowed
+          Value not allowed.
         </mat-error>
         <mat-error *ngIf="label.get('value').errors?.validLabelValueLength"
                    i18n>
-          Value is too long
+          Value is too long.
         </mat-error>
       </mat-form-field>
       <button mat-icon-button

@@ -5,7 +5,6 @@
     <input matInput
            formControlName="apiKey"
            type="password"
-           placeholder="Enter API Token"
            autocomplete="off">
     <mat-error *ngIf="packetProviderSettingsForm.controls.apiKey.hasError('required')">
       Packet API key is <strong>required</strong>.
@@ -20,7 +19,6 @@
     <input matInput
            formControlName="projectID"
            type="text"
-           placeholder="Project ID*"
            autocomplete="off">
     <mat-error *ngIf="packetProviderSettingsForm.controls.projectID.hasError('required')">
       Packet project ID is <strong>required</strong>.
@@ -34,8 +32,7 @@
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Billing Cycle</mat-label>
-      <mat-select placeholder="Billing Cycle"
-                  formControlName="billingCycle">
+      <mat-select formControlName="billingCycle">
         <mat-option *ngFor="let billingCycle of getAvailableBillingCycles()"
                     [value]="billingCycle">
           {{billingCycle}}

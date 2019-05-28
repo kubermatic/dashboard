@@ -3,36 +3,36 @@
   <div fxLayout="row"
        fxLayoutGap="16px">
     <mat-form-field class="km-node-deployment-name"
-                    [ngClass]="{small: isInWizard, none: isNameDisabled}">
+                    [ngClass]="{none: isNameDisabled}">
+      <mat-label>Name</mat-label>
       <input id="km-node-name-input"
              matInput
              formControlName="name"
              type="text"
-             autocomplete="off"
-             placeholder="Name">
-      <mat-hint *ngIf="!isNameDisabled">This field is optional, leave it empty to generate the name on the server side. You can also use the random button to generate it on your own.</mat-hint>
+             autocomplete="off">
+      <i class="km-icon-randomize"
+         matTooltip="Generate name"
+         (click)="generateName()"
+         *ngIf="!isNameDisabled"></i>
+      <mat-hint *ngIf="!isNameDisabled">Leave it empty to use server-side generation.</mat-hint>
     </mat-form-field>
-    <div fxLayoutAlign=" center"><button mat-flat-button
-              color="primary"
-              (click)="generateName()"
-              *ngIf="!isNameDisabled">Random</button></div>
   </div>
 
   <mat-form-field fxFlex>
+    <mat-label>Replicas*</mat-label>
     <input id="km-node-count-input"
            matInput
            formControlName="count"
            type="number"
            min="1"
-           autocomplete="off"
-           placeholder="Number of replicas*">
+           autocomplete="off">
     <mat-error *ngIf="nodeForm.controls.count.hasError('required')">Number of replicas is required.</mat-error>
     <mat-error *ngIf="nodeForm.controls.count.hasError('ipsMissing')">Not enough IPs left. Reduce number of replicas or add more machine networks.</mat-error>
   </mat-form-field>
 
   <mat-form-field *ngIf="!isInWizard">
-    <mat-select placeholder="kubelet version"
-                formControlName="kubelet">
+    <mat-label>kubelet Version</mat-label>
+    <mat-select formControlName="kubelet">
       <mat-option *ngFor="let version of versions"
                   [value]="version">
         {{ version }}
@@ -78,8 +78,8 @@
                               [seedDCName]="seedDCName"></kubermatic-azure-node-data>
 
   <mat-form-field class="km-operating-system">
-    <mat-select placeholder="Operating System*"
-                formControlName="operatingSystem">
+    <mat-label>Operating System*</mat-label>
+    <mat-select formControlName="operatingSystem">
       <mat-option value="ubuntu">Ubuntu</mat-option>
       <mat-option value="centos">CentOS</mat-option>
       <mat-option value="containerLinux"

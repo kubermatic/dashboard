@@ -6,15 +6,15 @@
       <form [formGroup]="addProjectForm"
             fxLayout="column">
         <mat-form-field fxFlex>
+          <mat-label>Name*</mat-label>
           <input id="km-add-project-dialog-input"
                  matInput
                  formControlName="name"
                  type="text"
-                 placeholder="Name*:"
                  autocomplete="off"
                  cdkFocusInitial>
           <mat-error *ngIf="addProjectForm.controls.name.hasError('required')">
-            Name is <strong>required</strong>
+            Name is <strong>required</strong>.
           </mat-error>
         </mat-form-field>
       </form>

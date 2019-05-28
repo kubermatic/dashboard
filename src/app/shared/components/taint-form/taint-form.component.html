@@ -11,11 +11,11 @@
          fxLayout="row"
          fxLayoutGap="10px">
       <mat-form-field fxFlex="30">
+        <mat-label>Key</mat-label>
         <input matInput
                (keyup)="check(i)"
                name="key"
-               formControlName="key"
-               placeholder="Key">
+               formControlName="key">
         <mat-error *ngIf="taint.get('key').errors?.validLabelKeyUniqueness"
                    i18n>
           Key is not unique
@@ -38,11 +38,11 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="30">
+        <mat-label>Value</mat-label>
         <input matInput
                (keyup)="check(i)"
                name="value"
-               formControlName="value"
-               placeholder="Value">
+               formControlName="value">
         <mat-error *ngIf="taint.get('value').errors?.validLabelValuePattern"
                    i18n>
           Value not allowed
@@ -53,8 +53,8 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field fxFlex="30">
+        <mat-label>Effect</mat-label>
         <mat-select formControlName="effect"
-                    placeholder="Effect"
                     (keyup)="check(i)"
                     (change)="check(i)"
                     (valueChange)="check(i)"

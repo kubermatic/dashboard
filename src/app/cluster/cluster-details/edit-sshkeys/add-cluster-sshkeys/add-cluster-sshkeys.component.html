@@ -6,9 +6,9 @@
 
       <p>Select a SSH key that you want to add to cluster <strong>{{cluster.name}}</strong>.</p>
       <form [formGroup]="keysForm">
+        <mat-label>SSH Keys</mat-label>
         <mat-form-field *ngIf="keys.length > 0">
-          <mat-select placeholder="SSH keys"
-                      formControlName="keys">
+          <mat-select formControlName="keys">
             <mat-option *ngFor="let key of keys"
                         value="{{key.id}}">{{key.name}}</mat-option>
           </mat-select>

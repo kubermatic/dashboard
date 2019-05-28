@@ -3,6 +3,7 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
+      <mat-label>{{getFlavorsFormState()}}</mat-label>
       <mat-select formControlName="flavor"
                   [placeholder]="getFlavorsFormState()">
         <mat-option *ngFor="let flavor of flavors"

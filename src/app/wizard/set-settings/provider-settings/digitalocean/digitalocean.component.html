@@ -9,14 +9,14 @@
     </p>
   </div>
   <mat-form-field fxFlex>
+    <mat-label>API Token*</mat-label>
     <input id="km-digitalocean-token-input"
            matInput
            formControlName="token"
            type="password"
-           placeholder="API Token*:"
            autocomplete="off">
     <mat-error *ngIf="digitaloceanSettingsForm.controls.token.hasError('required')">
-      DigitalOcean Personal Access Token is <strong>required</strong>
+      DigitalOcean Personal Access Token is <strong>required</strong>.
     </mat-error>
     <mat-error *ngIf="(digitaloceanSettingsForm.controls.token.hasError('minlength')
                       || digitaloceanSettingsForm.controls.token.hasError('maxlength'))">
