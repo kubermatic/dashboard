@@ -10,6 +10,7 @@ import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
 import {OperatingSystemSpec} from '../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../shared/model/NodeSpecChange';
+import {ClusterUtils} from '../shared/utils/cluster-utils/cluster-utils';
 import {NoIpsLeftValidator} from '../shared/validators/no-ips-left.validator';
 
 @Component({
@@ -157,6 +158,11 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   generateName(): void {
     this.nodeForm.patchValue({name: this.nameGenerator.generateName()});
   }
+
+  getVersionHeadline(type: string, isKubelet: boolean): string {
+    return ClusterUtils.getVersionHeadline(type, isKubelet);
+  }
+
 
   getAddNodeData(): NodeData {
     let versions = {};

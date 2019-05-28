@@ -98,7 +98,7 @@
         </km-property>
 
         <km-property>
-          <div key>Master Version</div>
+          <div key>{{getVersionHeadline(cluster.type, false)}}</div>
           <div value
                fxLayoutGap="4px">
             <span *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)"

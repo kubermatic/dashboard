@@ -38,7 +38,7 @@
                  class="km-card-list-content"
                  *ngIf="cluster.spec.version">
               <div fxFlex="50%"
-                   class="km-card-list-key">Master Version</div>
+                   class="km-card-list-key">{{getVersionHeadline(cluster.type, false)}}</div>
               <div fxFlex="50%">{{ cluster.spec.version }}</div>
             </div>
             <div fxLayout

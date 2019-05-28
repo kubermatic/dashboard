@@ -5,6 +5,7 @@ import {debounce, takeUntil} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
+import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',
@@ -53,6 +54,10 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   generateName(): void {
     this.clusterSpecForm.patchValue({name: this._nameGenerator.generateName()});
+  }
+
+  getVersionHeadline(type: string, isKubelet: boolean): string {
+    return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
   loadMasterVersions(): void {

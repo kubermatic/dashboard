@@ -6,6 +6,7 @@ import {ProjectService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
@@ -47,6 +48,10 @@ export class NodeDeploymentListComponent implements OnInit {
 
   getOperatingSystem(nd: NodeDeploymentEntity): string {
     return NodeUtils.getOperatingSystem(nd.spec.template);
+  }
+
+  getVersionHeadline(type: string, isKubelet: boolean): string {
+    return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
   goToDetails(nd: NodeDeploymentEntity) {

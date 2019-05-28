@@ -58,7 +58,7 @@
         </mat-button-toggle-group>
 
         <mat-form-field class="km-version-inline">
-          <mat-label>Master Version</mat-label>
+          <mat-label>{{getVersionHeadline(clusterSpecForm.controls.type.value, false)}}</mat-label>
           <mat-select formControlName="version">
             <mat-option *ngFor="let version of masterVersions"
                         [value]="version.version">

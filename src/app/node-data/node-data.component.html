@@ -33,7 +33,7 @@
 
   <mat-form-field *ngIf="!isInWizard">
 
-    <mat-label>kubelet Version</mat-label>
+    <mat-label>{{getVersionHeadline(cluster.type, true)}}</mat-label>
     <mat-select formControlName="kubelet">
       <mat-option *ngFor="let version of versions"
                   [value]="version">

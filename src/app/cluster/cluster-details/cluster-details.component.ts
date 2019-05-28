@@ -158,6 +158,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return ClusterUtils.getType(type);
   }
 
+  getVersionHeadline(type: string, isKubelet: boolean): string {
+    return ClusterUtils.getVersionHeadline(type, isKubelet);
+  }
+
   reloadClusterNodes(): void {
     if (this.cluster && HealthEntity.allHealthy(this.health)) {
       this._apiService

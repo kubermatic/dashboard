@@ -34,6 +34,10 @@ export class SummaryComponent implements OnInit {
     return ClusterUtils.getType(type);
   }
 
+  getVersionHeadline(type: string, isKubelet: boolean): string {
+    return ClusterUtils.getVersionHeadline(type, isKubelet);
+  }
+
   displayTags(tags: object): boolean {
     return Object.keys(tags).length > 0;
   }

@@ -28,4 +28,12 @@ export class ClusterUtils {
       return 'OpenShift';
     }
   }
+
+  static getVersionHeadline(type: string, isKubelet: boolean): string {
+    if (type === 'kubernetes') {
+      return isKubelet ? 'Kubelet Version' : 'Master Version';
+    } else if (type === 'openshift') {
+      return 'OpenShift Version';
+    }
+  }
 }
