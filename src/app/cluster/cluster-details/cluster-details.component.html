@@ -57,21 +57,39 @@
            [ngClass]="!!clusterHealthStatus ? clusterHealthStatus.color : ''"
            class="km-cluster-health"></i>
       </mat-card-title>
+
+      <div fxFlex="3%"
+           class="provider-menu">
+        <button mat-icon-button
+                class="km-provider-menu-btn"
+                [matMenuTriggerFor]="menu"
+                *ngIf="!cluster.spec.cloud.bringyourown">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu"
+                  class="km-provider-edit-settings">
+          <button mat-menu-item
+                  (click)="editProviderSettings()"
+                  [disabled]="!isEditEnabled()">
+
+            <mat-icon class="km-icon-edit"></mat-icon>
+            <span>Edit Settings</span>
+          </button>
+          <button mat-menu-item
+                  (click)="editSSHKeys()"
+                  [disabled]="!isSSHKeysEditEnabled()">
+
+            <mat-icon class="km-icon-edit"></mat-icon>
+            <span>Manage SSH keys</span>
+          </button>
+        </mat-menu>
+      </div>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap"
                       class="km-row">
 
       <div class="km-content-wrap">
-        <km-property>
-          <div key>Cluster ID</div>
-          <div value
-               ngxClipboard
-               [cbContent]="cluster.id"
-               matTooltip="Click to copy"
-               class="km-copy">
-            {{cluster.id}}
-          </div>
-        </km-property>
+
         <km-property>
           <div key>Master Version</div>
           <div value
@@ -91,103 +109,57 @@
             </span>
           </div>
         </km-property>
+
+        <km-property>
+          <div key>Cluster ID</div>
+          <div value
+               ngxClipboard
+               [cbContent]="cluster.id"
+               matTooltip="Click to copy"
+               class="km-copy">
+            {{cluster.id}}
+          </div>
+        </km-property>
+
+        <km-property>
+          <div key>Provider</div>
+          <div value>
+            <span class="km-provider-logo km-provider-logo-{{nodeDc.spec.provider}}"></span>
+          </div>
+        </km-property>
+
+        <km-property *ngIf="nodeDc.spec.provider !== 'bringyourown'">
+          <div key>Region</div>
+          <div value>{{nodeDc.spec.country}}, {{nodeDc.spec.location}}</div>
+        </km-property>
+
+        <km-property>
+          <div key>
+            <span>SSH Keys&nbsp;</span>
+            <span matTooltip="You can login into the nodes with the user 'root', 'ubuntu' or 'core'.">
+              <i class="fa fa-question-circle"
+                 aria-hidden="true"></i>
+            </span>
+          </div>
+          <div value>
+            <span *ngFor="let key of sshKeys.slice(0, displayedSSHKeys); let last = last">
+              <span>{{key.name}}</span>
+              <span *ngIf="!last">,&nbsp;</span>
+            </span>
+            <ng-container *ngIf="sshKeys.length > displayedSSHKeys">
+              <span>...&nbsp;</span>
+              <span [matTooltip]="getTruncatedSSHKeys()"
+                    class="km-ssh-keys-more">+{{sshKeys.length - displayedSSHKeys}}
+              </span>
+            </ng-container>
+            <span *ngIf="sshKeys.length < 1">-</span>
+          </div>
+        </km-property>
+
       </div>
     </mat-card-content>
     <kubermatic-cluster-secrets [cluster]="cluster"
                                 [datacenter]="datacenter"></kubermatic-cluster-secrets>
-  </mat-card>
-
-
-  <mat-card class="km-with-table-header km-provider-box">
-    <mat-card-header>
-      <mat-card-title fxLayout>
-        <div fxFlex="42%">Provider</div>
-        <div fxFlex="30%">Node Region</div>
-        <div fxFlex="25%">
-          SSH keys
-          <span matTooltip="You can login into the nodes with the user 'root', 'ubuntu' or 'core'.">
-            <i class="fa fa-question-circle"
-               aria-hidden="true"></i>
-          </span>
-        </div>
-        <div fxFlex="3%"
-             class="provider-menu">
-          <button mat-icon-button
-                  class="km-provider-menu-btn"
-                  [matMenuTriggerFor]="menu"
-                  *ngIf="!cluster.spec.cloud.bringyourown">
-            <mat-icon>more_vert</mat-icon>
-          </button>
-          <mat-menu #menu="matMenu"
-                    class="km-provider-edit-settings">
-            <button mat-menu-item
-                    (click)="editProviderSettings()"
-                    [disabled]="!isEditEnabled()">
-
-              <mat-icon class="km-icon-edit"></mat-icon>
-              <span>Edit Settings</span>
-            </button>
-            <button mat-menu-item
-                    (click)="editSSHKeys()"
-                    [disabled]="!isSSHKeysEditEnabled()">
-
-              <mat-icon class="km-icon-edit"></mat-icon>
-              <span>Manage SSH keys</span>
-            </button>
-          </mat-menu>
-        </div>
-      </mat-card-title>
-    </mat-card-header>
-
-    <mat-card-content>
-      <div class="km-row"
-           fxLayout>
-        <div fxFlex="42%"
-             class="km-details-provider">
-          <span class="km-provider-logo km-provider-logo-{{nodeDc.spec.provider}}"></span>
-        </div>
-        <div fxFlex="30%"
-             class="km-region">
-          <ng-container *ngIf="nodeDc.spec.provider !== 'bringyourown'">
-            <span class="{{'flag-icon flag-icon-' + nodeDc.spec.country.toLowerCase()}}"></span>
-            <span class="km-location">{{nodeDc.spec.country}} / {{nodeDc.spec.location}}</span>
-          </ng-container>
-        </div>
-        <div fxFlex="25%">
-          <ng-container [ngSwitch]="sshKeys.length > 0">
-            <ul class="km-ssh-keys-list"
-                *ngSwitchCase="true">
-              <li *ngFor="let key of sshKeys.slice(0, 3)">
-                <i class="fa fa-key"></i>
-                {{key.name}}
-              </li>
-              <div class="km-ssh-keys-list-more"
-                   *ngIf="sshKeys.length > 3">
-                <div class="km-more-sshKeys-btn"
-                     (click)="loadMoreSshKeys(true)"
-                     *ngIf="!moreSshKeys">
-                  <strong>More</strong>
-                  <span class="km-icon-arrow-down"></span>
-                </div>
-                <div class="km-more-sshKeys"
-                     *ngIf="moreSshKeys">
-                  <li *ngFor="let key of sshKeys.slice(3, sshKeys.length+1)">
-                    <i class="fa fa-key"></i>
-                    {{key.name}}
-                  </li>
-                </div>
-                <div class="km-more-sshKeys-btn"
-                     (click)="loadMoreSshKeys(false)"
-                     *ngIf="moreSshKeys">
-                  <strong>Less</strong>
-                  <span class="km-icon-arrow-up"></span>
-                </div>
-              </div>
-            </ul>
-          </ng-container>
-        </div>
-      </div>
-    </mat-card-content>
   </mat-card>
 
   <div class="km-pre-card-title">Node Deployments</div>
