@@ -36,7 +36,6 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
     this.clusterSpecForm.valueChanges.pipe(takeUntil(this._unsubscribe))
         .pipe(debounce(() => {
-          this._invalidateStep();
           return interval(1000);
         }))
         .subscribe(() => {
@@ -76,15 +75,6 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
       valid: this.clusterSpecForm.valid,
-    });
-  }
-
-  private _invalidateStep(): void {
-    this._wizardService.changeClusterSpec({
-      name: this.clusterSpecForm.controls.name.value,
-      type: this.clusterSpecForm.controls.type.value,
-      version: this.clusterSpecForm.controls.version.value,
-      valid: false,
     });
   }
 }

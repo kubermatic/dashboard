@@ -27,7 +27,7 @@
                  *ngIf="cluster.spec.version">
               <div fxFlex="50%"
                    class="km-card-list-key">Master Version</div>
-              <div fxFlex="50%">{{ cluster.spec.version }}</div>
+              <div fxFlex="50%">{{ cluster.type | titlecase }} / {{ cluster.spec.version }}</div>
             </div>
             <div fxLayout
                  class="km-card-list-content km-provider">
