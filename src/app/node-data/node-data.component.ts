@@ -97,7 +97,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       this.seedDCName = dc.spec.seed;
 
       if (!this.isInWizard) {
-        this._apiService.getClusterNodeUpgrades(this.cluster.spec.version)
+        this._apiService.getClusterNodeUpgrades(this.cluster.spec.version, this.cluster.type)
             .pipe(first())
             .subscribe((upgrades: MasterVersion[]) => {
               upgrades.forEach(upgrade => this.versions.push(upgrade.version));
