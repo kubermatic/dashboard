@@ -4,9 +4,16 @@ import {CookieService} from 'ngx-cookie-service';
 
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
+import {RandomString} from '../../../shared/functions/generate-random-string';
 
 @Injectable()
 export class Auth {
+  private readonly _nonce = RandomString(32);
+  private readonly _responseType = 'id_token';
+  private readonly _clientId = 'kubermatic';
+  private readonly _defaultScope = 'openid email profile groups';
+  private readonly _redirectUri = window.location.protocol + '//' + window.location.host + '/projects';
+
   constructor(private readonly _cookieService: CookieService, private readonly _appConfigService: AppConfigService) {
     const token = this.getTokenFromQuery();
     const nonce = this.getNonce();
@@ -24,10 +31,16 @@ export class Auth {
   }
 
   getOIDCProviderURL(): string {
-    return this._appConfigService.getConfig().oidc_provider_url &&
-            this._appConfigService.getConfig().oidc_provider_url.length > 0 ?
+    const baseUrl = this._appConfigService.getConfig().oidc_provider_url ?
         this._appConfigService.getConfig().oidc_provider_url :
         environment.oidcProviderUrl;
+
+    const scope = this._appConfigService.getConfig().oidc_provider_scope ?
+        this._appConfigService.getConfig().oidc_provider_scope :
+        this._defaultScope;
+
+    return `${baseUrl}?response_type=${this._responseType}&client_id=${this._clientId}` +
+        `&redirect_uri=${this._redirectUri}&scope=${scope}&nonce=${this._nonce}`;
   }
 
   getBearerToken(): string {

@@ -7,6 +7,5 @@
   },
   "share_kubeconfig": false,
   "show_demo_info": false,
-  "show_terms_of_service": false,
-  "oidc": "https://dev.kubermatic.io/dex/auth"
+  "show_terms_of_service": false
 }
