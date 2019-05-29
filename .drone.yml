@@ -14,38 +14,6 @@ pipeline:
     commands:
       - make build
 
-  quay-always:
-    group: push
-    image: plugins/docker
-    registry: quay.io
-    repo: quay.io/kubermatic/ui-v2
-    password: ${QUAY_PASSWORD}
-    username: ${QUAY_USERNAME}
-    tags:
-      - ${DRONE_COMMIT}
-    secrets:
-    - source: quay_username
-      target: docker_username
-    - source: quay_password
-      target: docker_password
-
-  quay-master:
-    group: push
-    image: plugins/docker
-    registry: quay.io
-    repo: quay.io/kubermatic/ui-v2
-    password: ${QUAY_PASSWORD}
-    username: ${QUAY_USERNAME}
-    tags:
-      - master
-    secrets:
-    - source: quay_username
-      target: docker_username
-    - source: quay_password
-      target: docker_password
-    when:
-      branch: master
-
   quay-release:
     group: push
     image: plugins/docker
@@ -115,7 +83,6 @@ pipeline:
       - kgroschoff=kristin.groschoff
       - kron4eg=artiom
       - mrIncompetent=henrik
-      - p0lyn0mial=lukasz
       - scheeles=sebastian
       - thz=tobias.hintze
       - toschneck=tobias.schneck
