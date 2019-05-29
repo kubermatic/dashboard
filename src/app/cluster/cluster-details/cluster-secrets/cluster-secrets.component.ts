@@ -1,11 +1,12 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {AppConfigService} from '../../../app-config.service';
-import {ApiService, ProjectService} from '../../../core/services';
+import {Subject} from 'rxjs';
+import {mergeMap, switchMap, takeUntil} from 'rxjs/operators';
+import {ApiService, ProjectService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
+import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {AddMachineNetworkComponent} from './add-machine-network/add-machine-network.component';
 import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
@@ -16,36 +17,43 @@ import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token
   styleUrls: ['./cluster-secrets.component.scss'],
 })
 
-export class ClusterSecretsComponent implements OnInit, OnChanges {
+export class ClusterSecretsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   projectID: string;
-  userGroup: string;
   expand = false;
   dialogRef: any;
   isClusterRunning: boolean;
   healthStatus: ClusterHealthStatus;
   health: HealthEntity;
-  userGroupConfig: UserGroupConfig;
+  groupConfig: GroupConfig;
+
+  private _unsubscribe = new Subject<void>();
 
   constructor(
-      public dialog: MatDialog, private api: ApiService, private appConfigService: AppConfigService,
-      private readonly _projectService: ProjectService) {}
+      public dialog: MatDialog, private api: ApiService, private readonly _projectService: ProjectService,
+      private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this.projectID = this._projectService.getCurrentProjectId();
-    this.userGroup = this._projectService.userGroup;
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-  }
-
-  ngOnChanges(): void {
-    this.api
-        .getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId())
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(project => {
+          this.projectID = project.id;
+          return this._userService.getCurrentUserGroup(project.id);
+        }))
+        .pipe(mergeMap(userGroup => {
+          this.groupConfig = this._userService.getUserGroupConfig(userGroup);
+          return this.api.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID);
+        }))
         .subscribe((health) => {
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
           this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
           this.health = health;
         });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   isExpand(expand: boolean): void {

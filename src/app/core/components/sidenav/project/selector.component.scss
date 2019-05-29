@@ -1,0 +1,56 @@
+@import '../../../../../assets/css/variables';
+@import '../../../../../assets/css/colors';
+
+.mat-list-item,
+a {
+  height: $toolbar-height;
+
+  &.km-projects {
+    height: $toolbar-height - ($sidenav-border-width / 2);
+    border-bottom: $alternative solid $sidenav-border-width;
+  }
+}
+
+.km-projects-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0 30px;
+  width: 100%;
+
+  * {
+    color: $secondary;
+  }
+}
+
+.km-projects-icon {
+  position: absolute;
+  right: 3.5 * $baseline-grid;
+  top: 16px;
+  background-color: $secondary;
+  pointer-events: none;
+  color: $secondary-light;
+}
+
+::ng-deep.mat-select-value-text {
+  color: $secondary !important;
+  font-size: $subhead-font-size-base-lg;
+  line-height: $subhead-font-size-base-lg + $baseline-grid / 2;
+}
+
+::ng-deep.mat-select-placeholder {
+  opacity: 0.4;
+  color: $secondary;
+  font-size: $subhead-font-size-base-lg !important;
+  line-height: $subhead-font-size-base-lg;
+}
+
+::ng-deep.mat-select-arrow {
+  visibility: hidden;
+}
+
+mat-label {
+  margin: ($baseline-grid / 2) 0 !important;
+  font-size: $caption-font-size-base;
+  line-height: $caption-font-size-base;
+}

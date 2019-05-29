@@ -1,9 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {merge, Subject, timer} from 'rxjs';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
-
-import {AppConfigService} from '../app-config.service';
+import {Subject} from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
 import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
@@ -31,29 +29,24 @@ export class ProjectComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<ProjectEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
-  private _externalProjectsUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfig: AppConfigService) {
-  }
+      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._externalProjectsUpdate)
-        .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._apiService.getProjects()))
-        .subscribe(projects => {
-          this.projects = projects;
-          this._sortProjectOwners();
-          this._loadClusterCounts();
-          this._loadCurrentUserRoles();
-          this.isInitializing = false;
-        });
+    this._projectService.projects.pipe(takeUntil(this._unsubscribe)).subscribe(projects => {
+      this.projects = projects;
+      this._sortProjectOwners();
+      this._loadClusterCounts();
+      this._loadCurrentUserRoles();
+      this.isInitializing = false;
+    });
   }
 
   ngOnDestroy(): void {
@@ -84,20 +77,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private _loadCurrentUserRoles(): void {
     this.projects.forEach(project => {
-      this._userService.currentUserGroup(project.id).subscribe((group) => {
+      this._userService.getCurrentUserGroup(project.id).subscribe((group) => {
         this.role[project.id] = MemberUtils.getGroupDisplayName(group);
         this.rawRole[project.id] = group;
       });
     });
   }
 
-  async selectProject(project: ProjectEntity): Promise<any> {
-    if (this.isProjectActive(project)) {
-      await this._projectService.changeAndStoreSelectedProject(project, false);
-      if (this._projectService.isViewEnabled('clusters')) {
-        this._projectService.navigateToClusterPage();
-      }
-    }
+  selectProject(project: ProjectEntity) {
+    this._projectService.selectProject(project);
   }
 
   getOwnerNameArray(owners: ProjectOwners[]): string[] {
@@ -154,14 +142,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
   addProject(): void {
     this._matDialog.open(AddProjectDialogComponent).afterClosed().pipe(first()).subscribe((isAdded) => {
       if (isAdded) {
-        this._externalProjectsUpdate.next();
+        this._projectService.onProjectsUpdate.next();
       }
     });
   }
 
   isEditEnabled(project: ProjectEntity): boolean {
-    return !this._projectService.getUserGroupConfig(this.rawRole[project.id]) ||
-        this._projectService.getUserGroupConfig(this.rawRole[project.id]).projects.edit;
+    return !this._userService.getUserGroupConfig(this.rawRole[project.id]) ||
+        this._userService.getUserGroupConfig(this.rawRole[project.id]).projects.edit;
   }
 
   editProject(project: ProjectEntity, event: Event): void {
@@ -170,14 +158,14 @@ export class ProjectComponent implements OnInit, OnDestroy {
     modal.componentInstance.project = project;
     modal.afterClosed().pipe(first()).subscribe((editedProject) => {
       if (editedProject) {
-        this._externalProjectsUpdate.next();
+        this._projectService.onProjectsUpdate.next();
       }
     });
   }
 
   isDeleteEnabled(project: ProjectEntity): boolean {
-    return !this._projectService.getUserGroupConfig(this.rawRole[project.id]) ||
-        this._projectService.getUserGroupConfig(this.rawRole[project.id]).projects.delete;
+    return !this._userService.getUserGroupConfig(this.rawRole[project.id]) ||
+        this._userService.getUserGroupConfig(this.rawRole[project.id]).projects.delete;
   }
 
   deleteProject(project: ProjectEntity, event: Event): void {
@@ -204,12 +192,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
         this._apiService.deleteProject(project.id).subscribe(() => {
           NotificationActions.success('Success', `Project ${project.name} is being deleted`);
           this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
-
-          if (project.id === this._projectService.getCurrentProjectId()) {
-            this._projectService.deselectProject();
-          }
-
-          this._externalProjectsUpdate.next();
+          this._projectService.onProjectsUpdate.next();
         });
       }
     });

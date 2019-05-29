@@ -1,11 +1,14 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
+import {Subject} from 'rxjs';
+import {switchMap, takeUntil} from 'rxjs/operators';
 
-import {ProjectService} from '../../../core/services';
+import {ProjectService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
+import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
@@ -29,12 +32,19 @@ export class NodeDeploymentListComponent implements OnInit {
   dataSource = new MatTableDataSource<NodeDeploymentEntity>();
   displayedColumns: string[] = ['status', 'name', 'replicas', 'ver', 'os', 'created', 'actions'];
 
+  private _unsubscribe: Subject<any> = new Subject();
+  private _currentGroupConfig: GroupConfig;
+
   constructor(
       private readonly _router: Router, private readonly _nodeService: NodeService,
-      private readonly _projectService: ProjectService) {}
+      private readonly _projectService: ProjectService, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
     this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
+
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(project => this._userService.getCurrentUserGroup(project.id)))
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.getUserGroupConfig(userGroup));
   }
 
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
@@ -61,7 +71,7 @@ export class NodeDeploymentListComponent implements OnInit {
   }
 
   isEditEnabled(): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().nodeDeployments.edit;
+    return !this._currentGroupConfig || this._currentGroupConfig.nodeDeployments.edit;
   }
 
   showEditDialog(nd: NodeDeploymentEntity, event: Event): void {
@@ -72,8 +82,7 @@ export class NodeDeploymentListComponent implements OnInit {
   }
 
   isDeleteEnabled(): boolean {
-    return !this._projectService.getUserGroupConfig() ||
-        this._projectService.getUserGroupConfig().nodeDeployments.delete;
+    return !this._currentGroupConfig || this._currentGroupConfig.nodeDeployments.delete;
   }
 
   showDeleteDialog(nd: NodeDeploymentEntity, event: Event): void {

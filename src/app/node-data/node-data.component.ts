@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
 
 import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
@@ -30,7 +30,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   hideOptional = true;
   versions: string[] = [];
   availableOS: string[] = [];
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
   private providerData: NodeProviderData = {valid: false};
 
   constructor(
@@ -40,7 +40,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const initialKubeletVersion = this.nodeData.spec.versions.kubelet;
-    this.projectId = this._project.project.id;
+    this._project.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => this.projectId = project.id);
     this.isNameDisabled = this.nodeData.name && this.nodeData.name.length > 0 && !this.isInWizard;
 
     this.nodeForm = new FormGroup({
@@ -75,26 +75,26 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       disableAutoUpdate: new FormControl(disableAutoUpdate),
     });
 
-    this.subscriptions.push(this.nodeForm.valueChanges.subscribe(() => {
+    this.nodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
-    }));
+    });
 
-    this.subscriptions.push(this.operatingSystemForm.valueChanges.subscribe(() => {
+    this.operatingSystemForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeData(this.getAddNodeData());
       this.addNodeService.changeNodeOperatingSystemData(this.getOSSpec());
-    }));
+    });
 
-    this.subscriptions.push(this.addNodeService.nodeProviderDataChanges$.subscribe((data) => {
+    this.addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.providerData = data;
       this.addNodeService.changeNodeData(this.getAddNodeData());
-    }));
+    });
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
 
-    this.subscriptions.push(this._dc.getDataCenter(this.cluster.spec.cloud.dc).subscribe((dc) => {
+    this._dc.getDataCenter(this.cluster.spec.cloud.dc).pipe(takeUntil(this._unsubscribe)).subscribe((dc) => {
       this.seedDCName = dc.spec.seed;
 
       if (!this.isInWizard) {
@@ -116,15 +116,12 @@ export class NodeDataComponent implements OnInit, OnDestroy {
               }
             });
       }
-    }));
+    });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getOSSpec(): OperatingSystemSpec {

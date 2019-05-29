@@ -105,12 +105,12 @@ describe('SidenavComponent', () => {
   it('should correctly compare projects basing on their IDs', () => {
     const a: ProjectEntity = fakeProjects()[0];
     const b: ProjectEntity = fakeProjects()[1];
-    expect(component.projectService.compareProjectsEquality(a, b)).toBeFalsy();
-    expect(component.projectService.compareProjectsEquality(b, a)).toBeFalsy();
+    expect(component.projectService.areProjectsEqual(a, b)).toBeFalsy();
+    expect(component.projectService.areProjectsEqual(b, a)).toBeFalsy();
 
     b.id = a.id;
-    expect(component.projectService.compareProjectsEquality(a, b)).toBeTruthy();
-    expect(component.projectService.compareProjectsEquality(b, a)).toBeTruthy();
+    expect(component.projectService.areProjectsEqual(a, b)).toBeTruthy();
+    expect(component.projectService.areProjectsEqual(b, a)).toBeTruthy();
   });
 
   it('should correctly create router links', () => {

@@ -2,29 +2,10 @@
      fxLayout="column">
   <mat-nav-list>
     <div class="km-sidenav-top">
-      <mat-list-item class="km-projects"
-                     (click)="openDropdown(select)">
-        <div class="km-projects-container">
-          <mat-label>Project</mat-label>
-          <mat-select #select
-                      placeholder="None"
-                      (selectionChange)="onSelectionChange($event)"
-                      [ngModel]="selectedProject"
-                      [compareWith]="projectService.compareProjectsEquality"
-                      disableOptionCentering>
-            <mat-option *ngFor="let project of projects"
-                        [value]="project"
-                        [disabled]="project.status !== 'Active'"
-                        [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
-              {{project.name}}
-            </mat-option>
-          </mat-select>
-          <div class="km-projects-icon km-icon-arrow-down"></div>
-        </div>
-      </mat-list-item>
+      <km-project-selector></km-project-selector>
 
       <div [matTooltip]="getTooltip('clusters')">
-        <mat-list-item [ngClass]="projectService.getMenuItemClass('clusters')">
+        <mat-list-item [ngClass]="getMenuItemClass('clusters')">
           <a id="km-nav-item-clusters"
              mat-line
              fxLayoutAlign=" center"
@@ -35,7 +16,7 @@
       </div>
 
       <div [matTooltip]="getTooltip('sshKeys')">
-        <mat-list-item [ngClass]="projectService.getMenuItemClass('sshKeys')">
+        <mat-list-item [ngClass]="getMenuItemClass('sshKeys')">
           <a mat-line
              fxLayoutAlign=" center"
              [routerLink]="getRouterLink('sshkeys')"
@@ -45,7 +26,7 @@
       </div>
 
       <div [matTooltip]="getTooltip('members')">
-        <mat-list-item [ngClass]="projectService.getMenuItemClass('members')">
+        <mat-list-item [ngClass]="getMenuItemClass('members')">
           <a id="km-nav-item-members"
              mat-line
              fxLayoutAlign=" center"
@@ -56,7 +37,7 @@
       </div>
 
       <div [matTooltip]="getTooltip('serviceaccounts')">
-        <mat-list-item [ngClass]="projectService.getMenuItemClass('serviceaccounts')">
+        <mat-list-item [ngClass]="getMenuItemClass('serviceaccounts')">
           <a mat-line
              fxLayoutAlign=" center"
              [routerLink]="getRouterLink('serviceaccounts')"

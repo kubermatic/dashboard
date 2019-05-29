@@ -1,15 +1,15 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialog} from '@angular/material';
-import {Subscription} from 'rxjs';
-import {AppConfigService} from '../../../app-config.service';
+import {Subject} from 'rxjs';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
 import {ApiService, ProjectService, UserService} from '../../../core/services';
 import {WizardService} from '../../../core/services/wizard/wizard.service';
 import {AddSshKeyDialogComponent} from '../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
-import {UserGroupConfig} from '../../../shared/model/Config';
+import {GroupConfig} from '../../../shared/model/Config';
 
 @Component({
   selector: 'kubermatic-cluster-ssh-keys',
@@ -23,45 +23,39 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   keysForm: FormGroup = new FormGroup({
     keys: new FormControl([], []),
   });
-  private keysSub: Subscription;
-  private keysFormSub: Subscription;
   project: ProjectEntity;
-  userGroup: string;
-  userGroupConfig: UserGroupConfig;
-  private subscriptions: Subscription[] = [];
+  groupConfig: GroupConfig;
+  private _unsubscribe = new Subject<void>();
 
   constructor(
-      private api: ApiService, private wizardService: WizardService, private dialog: MatDialog,
-      private projectService: ProjectService, private userService: UserService,
-      private appConfigService: AppConfigService) {}
+      private readonly _api: ApiService, private readonly _wizardService: WizardService,
+      private readonly _dialog: MatDialog, private readonly _projectService: ProjectService,
+      private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this.project = this.projectService.project;
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(project => {
+          this.project = project;
+          return this._userService.getCurrentUserGroup(this.project.id);
+        }))
+        .subscribe(group => this.groupConfig = this._userService.getUserGroupConfig(group));
 
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
+    this._projectService.onProjectChange.subscribe((project) => {
       this.project = project;
-      this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-      this.userService.currentUserGroup(this.project.id).subscribe((group) => {
-        this.userGroup = group;
-      });
-    }));
-
-    this.keysForm.controls.keys.patchValue(this.selectedKeys);
-
-    this.keysFormSub = this.keysForm.valueChanges.subscribe((data) => {
-      this.setClusterSSHKeysSpec();
     });
 
+    this.keysForm.controls.keys.patchValue(this.selectedKeys);
+    this.keysForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.setClusterSSHKeysSpec());
     this.reloadKeys();
   }
 
   ngOnDestroy(): void {
-    this.keysSub.unsubscribe();
-    this.keysFormSub.unsubscribe();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   reloadKeys(): void {
-    this.keysSub = this.api.getSSHKeys(this.project.id).subscribe((sshKeys) => {
+    this._api.getSSHKeys(this.project.id).pipe(first()).subscribe((sshKeys) => {
       this.keys = sshKeys.sort((a, b) => {
         return a.name.localeCompare(b.name);
       });
@@ -70,14 +64,11 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   addSshKeyDialog(): void {
-    const dialogRef = this.dialog.open(AddSshKeyDialogComponent);
+    const dialogRef = this._dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this.project.id;
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        if (this.keysSub) {
-          this.keysSub.unsubscribe();
-        }
         this.reloadKeys();
         const newValue = this.keysForm.controls.keys.value;
         newValue.push(result);
@@ -95,7 +86,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
         }
       }
     }
-    this.wizardService.changeClusterSSHKeys(clusterKeys);
+    this._wizardService.changeClusterSSHKeys(clusterKeys);
   }
 
   compareValues(value1: SSHKeyEntity, value2: SSHKeyEntity): boolean {

@@ -20,9 +20,7 @@ export class NavigationComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.auth.authenticated()) {
-      this.userService.getUser().subscribe((user) => {
-        this.currentUser = user;
-      });
+      this.userService.loggedInUser.subscribe(user => this.currentUser = user);
     }
   }
 

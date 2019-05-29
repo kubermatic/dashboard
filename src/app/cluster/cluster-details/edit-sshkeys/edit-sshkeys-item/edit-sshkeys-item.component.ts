@@ -31,7 +31,7 @@ export class EditSSHKeysItemComponent implements OnInit {
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
+    this.userService.getCurrentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
   }

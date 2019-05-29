@@ -18,13 +18,14 @@ import {FooterComponent} from './components/footer/footer.component';
 import {NavigationComponent} from './components/navigation/navigation.component';
 import {NotificationComponent} from './components/notification/notification.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
-import {ApiService, Auth, AuthGuard, ClusterService, DatacenterService} from './services';
+import {CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor, AuthInterceptor} from './interceptors';
+import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, ParamsService} from './services';
 import {WizardService} from './services';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 import {ProgressBrowserXhr} from './util/ProgressBrowserXhr';
+import {ProjectSelectorComponent} from "./components/sidenav/project/selector.component";
 
 const modules: any[] = [
   CommonModule,
@@ -36,6 +37,7 @@ const modules: any[] = [
 
 const components: any[] = [
   SidenavComponent,
+  ProjectSelectorComponent,
   NavigationComponent,
   NotificationComponent,
   AddMemberComponent,
@@ -51,6 +53,7 @@ const components: any[] = [
 const services: any[] = [
   Auth,
   AuthGuard,
+  AuthzGuard,
   DatacenterService,
   NodeDataService,
   WizardService,
@@ -58,6 +61,7 @@ const services: any[] = [
   ClusterNameGenerator,
   ApiService,
   ClusterService,
+  ParamsService,
 ];
 
 const interceptors: any[] = [
@@ -76,6 +80,11 @@ const interceptors: any[] = [
     useClass: LoaderInterceptor,
     multi: true,
   },
+  {
+    provide: HTTP_INTERCEPTORS,
+    useClass: AuthInterceptor,
+    multi: true,
+  }
 ];
 
 @NgModule({
