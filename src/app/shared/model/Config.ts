@@ -11,6 +11,7 @@ export interface Config {
   cleanup_cluster?: boolean;
   custom_links?: CustomLink[];
   oidc_provider_url?: string;
+  oidc_provider_scope?: string;
 }
 
 export interface UserGroupConfig {
