@@ -79,7 +79,6 @@ export class NotificationComponent {
   }
 
   copyToClipboard(text: string): void {
-    // TODO: Use navigator.clipboard instead of navigator['clipboard'] once TypeScript will support it.
-    navigator['clipboard'].writeText(text);
+    navigator.clipboard.writeText(text);
   }
 }
