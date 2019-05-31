@@ -12,6 +12,8 @@ export interface Config {
   custom_links?: CustomLink[];
   oidc_provider_url?: string;
   oidc_provider_scope?: string;
+  hide_kubernetes?: boolean;
+  hide_openshift?: boolean;
 }
 
 export interface UserGroupConfig {

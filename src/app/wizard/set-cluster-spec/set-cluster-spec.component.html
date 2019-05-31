@@ -50,11 +50,13 @@
         <mat-button-toggle-group group="clusterSpecTypeGroup"
                                  class="km-cluster-spec-type"
                                  formControlName="type">
-          <mat-button-toggle value="kubernetes">
+          <mat-button-toggle value="kubernetes"
+                             *ngIf="!hideType('kubernetes')">
             <i class="km-icon-kubernetes"></i>
             Kubernetes
           </mat-button-toggle>
-          <mat-button-toggle value="openshift">
+          <mat-button-toggle value="openshift"
+                             *ngIf="!hideType('openshift')">
             <i class="km-icon-openshift"></i>
             OpenShift
           </mat-button-toggle>

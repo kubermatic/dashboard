@@ -2,6 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {interval, Subject} from 'rxjs';
 import {debounce, takeUntil} from 'rxjs/operators';
+import {AppConfigService} from '../../app-config.service';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
@@ -22,7 +23,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   constructor(
       private readonly _nameGenerator: ClusterNameGenerator, private readonly _api: ApiService,
-      private readonly _wizardService: WizardService) {}
+      private readonly _wizardService: WizardService, private _appConfig: AppConfigService) {}
 
   ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
@@ -58,6 +59,10 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
+  }
+
+  hideType(type: string): boolean {
+    return !!this._appConfig.getConfig()['hide_' + type] ? this._appConfig.getConfig()['hide_' + type] : false;
   }
 
   loadMasterVersions(): void {
