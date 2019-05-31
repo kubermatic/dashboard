@@ -1,4 +1,9 @@
 @import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
+
+.km-cluster-spec {
+  display: flex;
+}
 
 .km-generate-name-btn {
   margin-top: 30px;
@@ -14,4 +19,64 @@
   &:nth-child(1) {
     padding-right: 20px;
   }
+}
+
+.km-cluster-spec-type {
+  mat-button-toggle {
+    min-height: 50px;
+    max-height: 50px;
+    min-width: 150px;
+    max-width: 150px;
+    margin: 2px 0 0 0;
+    border-width: 2px;
+    background-color: $grey-background;
+
+    i {
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+      filter: grayscale(100%);
+    }
+
+    &:hover {
+      background-color: transparent;
+      border: 2px solid $border;
+    }
+
+    &[value='kubernetes'] {
+      border-top-left-radius: 5px;
+      border-bottom-left-radius: 5px;
+    }
+
+    &[value='openshift'] {
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    &.mat-button-toggle-checked {
+      background-color: transparent;
+      border: 2px solid $primary;
+
+      i {
+        -webkit-filter: none;
+        -moz-filter: none;
+        -ms-filter: none;
+        -o-filter: none;
+        filter: none;
+      }
+    }
+  }
+
+  ::ng-deep.mat-button-toggle-label-content {
+    color: $text-color;
+    font-weight: normal;
+    font-size: $subhead-font-size-base;
+  }
+}
+
+.km-version-inline {
+  width: auto;
+  max-width: 130px;
+  margin-left: 20px;
 }

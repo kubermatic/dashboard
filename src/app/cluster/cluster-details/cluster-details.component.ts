@@ -16,6 +16,7 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {NodeService} from '../services/node.service';
 
@@ -151,6 +152,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             }
           });
     }
+  }
+
+  getType(type: string): string {
+    return ClusterUtils.getType(type);
+  }
+
+  getVersionHeadline(type: string, isKubelet: boolean): string {
+    return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
   reloadClusterNodes(): void {

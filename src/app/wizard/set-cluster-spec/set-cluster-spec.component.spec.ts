@@ -60,7 +60,7 @@ describe('SetClusterSpecComponent', () => {
           gateway: '',
         }],
       },
-
+      type: '',
     };
     fixture.detectChanges();
     nameGenerator = fixture.debugElement.injector.get(ClusterNameGenerator);

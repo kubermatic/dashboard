@@ -3,6 +3,7 @@ import {DataCenterEntity} from '../entity/DatacenterEntity';
 
 export class ClusterSpecForm {
   name: string;
+  type: string;
   version: string;
   valid: boolean;
 }

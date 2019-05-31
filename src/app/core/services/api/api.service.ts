@@ -224,8 +224,8 @@ export class ApiService {
     }));
   }
 
-  getClusterNodeUpgrades(controlPlaneVersion: string): Observable<MasterVersion[]> {
-    const url = `${this.restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}`;
+  getClusterNodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
+    const url = `${this.restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}&type=${type}`;
     return this.http.get<MasterVersion[]>(url, {headers: this.headers}).pipe(catchError(() => {
       return of<MasterVersion[]>([]);
     }));
@@ -300,8 +300,9 @@ export class ApiService {
         clusterID}&user_id=${userID}`;
   }
 
-  getMasterVersions(): Observable<MasterVersion[]> {
-    const url = `${this.restRoot}/upgrades/cluster`;
+  // type has to be eather kubernetes or openshift
+  getMasterVersions(type: string): Observable<MasterVersion[]> {
+    const url = `${this.restRoot}/upgrades/cluster?type=${type}`;
     return this.http.get<MasterVersion[]>(url, {headers: this.headers});
   }
 

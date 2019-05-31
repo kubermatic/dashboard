@@ -62,7 +62,16 @@
           <div value>{{nodeDeployment.spec.paused}}</div>
         </km-property>
         <km-property>
-          <div key>kubelet version</div>
+          <div key>Type</div>
+          <div value>
+            <span class="km-cluster-type"
+                  [matTooltip]="getType(cluster.type)">
+              <i class="km-icon-{{cluster.type}}"></i>
+            </span>
+          </div>
+        </km-property>
+        <km-property>
+          <div key>{{getVersionHeadline(cluster.type, true)}}</div>
           <div value>{{nodeDeployment.spec.template.versions.kubelet}}</div>
         </km-property>
         <km-property>

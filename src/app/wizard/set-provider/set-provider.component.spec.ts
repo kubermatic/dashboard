@@ -67,6 +67,7 @@ describe('SetProviderComponent', () => {
            },
            version: '',
          },
+         type: '',
        };
        fixture.detectChanges();
        tick();
