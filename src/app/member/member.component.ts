@@ -26,7 +26,7 @@ export class MemberComponent implements OnInit, OnDestroy {
   currentUser: MemberEntity;
   displayedColumns: string[] = ['name', 'email', 'group', 'actions'];
   dataSource = new MatTableDataSource<MemberEntity>();
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
   private _externalMembersUpdate: Subject<any> = new Subject();
 
