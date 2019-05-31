@@ -121,6 +121,32 @@ export function fakeAzureDatacenter(): DataCenterEntity {
   };
 }
 
+export function fakeGCPDatacenter(): DataCenterEntity {
+  return {
+    metadata: {
+      name: 'gcp-westeurope',
+      resourceVersion: 1,
+      selfLink: '',
+      uid: '',
+      creationTimestamp: new Date(),
+      labels: new Map(),
+      annotations: new Map(),
+    },
+    seed: false,
+    spec: {
+      gcp: {
+        region: 'europe-west3',
+        regional: false,
+        zone_suffixes: ['c'],
+      },
+      country: 'DE',
+      location: 'Europe West (Germany)',
+      provider: 'google',
+      seed: 'europe-west3-c',
+    },
+  };
+}
+
 export function fakeVSphereDatacenter(): DataCenterEntity {
   return {
     metadata: {

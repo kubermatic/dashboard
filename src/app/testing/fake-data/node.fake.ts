@@ -18,6 +18,7 @@ export function fakeDigitaloceanCreateNode(): NodeEntity {
         vsphere: null,
         hetzner: null,
         azure: null,
+        gcp: null,
       },
       operatingSystem: {
         ubuntu: {
@@ -53,6 +54,7 @@ export function nodeFake(): NodeEntity {
         vsphere: null,
         hetzner: null,
         azure: null,
+        gcp: null,
       },
       operatingSystem: {
         ubuntu: {
@@ -120,6 +122,7 @@ export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
             vsphere: null,
             hetzner: null,
             azure: null,
+            gcp: null,
           },
           operatingSystem: {
             ubuntu: {
@@ -157,6 +160,7 @@ export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
             vsphere: null,
             hetzner: null,
             azure: null,
+            gcp: null,
           },
           operatingSystem: {
             ubuntu: {
@@ -194,6 +198,7 @@ export function nodesFake(): NodeEntity[] {
           vsphere: null,
           hetzner: null,
           azure: null,
+          gcp: null,
         },
         operatingSystem: {
           ubuntu: {
@@ -255,6 +260,7 @@ export function nodesFake(): NodeEntity[] {
           vsphere: null,
           hetzner: null,
           azure: null,
+          gcp: null,
         },
         operatingSystem: {
           ubuntu: {
@@ -449,6 +455,15 @@ export function nodeDataContainerLinuxFake(): NodeData {
           size: 'cx31',
           assignPublicIP: false,
           tags: {},
+        },
+        gcp: {
+          diskSize: 25,
+          diskType: 'local-ssd',
+          machineType: '',
+          zone: '',
+          preemtible: true,
+          tags: [],
+          labels: {},
         },
       },
       operatingSystem: {
