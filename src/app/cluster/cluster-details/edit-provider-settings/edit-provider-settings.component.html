@@ -17,6 +17,9 @@
                                           *ngIf="!!cluster.spec.cloud.azure"></kubermatic-azure-provider-settings>
       <kubermatic-packet-provider-settings [cluster]="cluster"
                                            *ngIf="!!cluster.spec.cloud.packet"></kubermatic-packet-provider-settings>
+
+      <kubermatic-gcp-provider-settings [cluster]="cluster"
+                                        *ngIf="!!cluster.spec.cloud.gcp"></kubermatic-gcp-provider-settings>
     </div>
   </mat-dialog-content>
   <mat-dialog-actions>

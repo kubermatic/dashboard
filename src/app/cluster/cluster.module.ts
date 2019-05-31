@@ -15,6 +15,7 @@ import {AWSProviderSettingsComponent} from './cluster-details/edit-provider-sett
 import {AzureProviderSettingsComponent} from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from './cluster-details/edit-provider-settings/digitalocean-provider-settings/digitalocean-provider-settings.component';
 import {EditProviderSettingsComponent} from './cluster-details/edit-provider-settings/edit-provider-settings.component';
+import {GCPProviderSettingsComponent} from './cluster-details/edit-provider-settings/gcp-provider-settings/gcp-provider-settings.component';
 import {HetznerProviderSettingsComponent} from './cluster-details/edit-provider-settings/hetzner-provider-settings/hetzner-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from './cluster-details/edit-provider-settings/openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from './cluster-details/edit-provider-settings/packet-provider-settings/packet-provider-settings.component';
@@ -51,6 +52,7 @@ const entryComponents: any[] = [
   AWSProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
   HetznerProviderSettingsComponent,
+  GCPProviderSettingsComponent,
   OpenstackProviderSettingsComponent,
   VSphereProviderSettingsComponent,
   AzureProviderSettingsComponent,
