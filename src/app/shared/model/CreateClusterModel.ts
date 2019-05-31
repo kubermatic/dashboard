@@ -9,5 +9,6 @@ export class CreateClusterModel {
 class ClusterModel {
   name: string;
   spec: ClusterSpec;
+  type: string;
   sshKeys: string[];
 }

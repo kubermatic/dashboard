@@ -38,8 +38,10 @@ button:disabled {
   }
 }
 
-.km-provider-menu-btn {
-  margin-top: -5px;
+.km-provider-menu {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
 }
 
 .km-cluster-health {
@@ -54,4 +56,15 @@ button:disabled {
 
 .km-provider-logo {
   min-width: 12 * $baseline-grid;
+}
+
+.km-cluster-type {
+  display: flex;
+  align-items: center;
+  margin-top: 3px;
+
+  i {
+    max-width: 25px;
+    max-height: 25px;
+  }
 }
