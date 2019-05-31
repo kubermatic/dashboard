@@ -1,5 +1,10 @@
 import {CloudSpec} from '../../entity/ClusterEntity';
 
+export enum ClusterType {
+  Kubernetes = 'kubernetes',
+  OpenShift = 'openshift',
+}
+
 export class ClusterUtils {
   static getProvider(cloud: CloudSpec): string {
     if (cloud.aws) {
@@ -18,6 +23,23 @@ export class ClusterUtils {
       return 'azure';
     } else if (cloud.packet) {
       return 'packet';
+    }
+  }
+
+  static getType(type: string): ClusterType {
+    switch (type) {
+      case 'kubernetes':
+        return ClusterType.Kubernetes;
+      case 'openshift':
+        return ClusterType.OpenShift;
+    }
+  }
+
+  static getVersionHeadline(type: string, isKubelet: boolean): string {
+    if (type === 'kubernetes') {
+      return isKubelet ? 'Kubelet Version' : 'Master Version';
+    } else if (type === 'openshift') {
+      return 'OpenShift Version';
     }
   }
 }

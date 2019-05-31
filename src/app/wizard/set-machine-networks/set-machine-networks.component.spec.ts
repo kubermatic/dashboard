@@ -52,6 +52,7 @@ describe('SetMachineNetworksComponent', () => {
           gateway: '',
         }],
       },
+      type: '',
     };
     component.nodeData = nodeDataFake();
     fixture.detectChanges();

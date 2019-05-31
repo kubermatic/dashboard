@@ -131,6 +131,14 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     return this._projectService.getCurrentProjectId();
   }
 
+  getType(type: string): string {
+    return ClusterUtils.getType(type);
+  }
+
+  getVersionHeadline(type: string, isKubelet: boolean): string {
+    return ClusterUtils.getVersionHeadline(type, isKubelet);
+  }
+
   goBackToCluster(): void {
     this._router.navigate(
         ['/projects/' + this._projectService.getCurrentProjectId() + '/dc/' + this._dcName + '/clusters/' +

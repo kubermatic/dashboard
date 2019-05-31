@@ -24,9 +24,21 @@
             </div>
             <div fxLayout
                  class="km-card-list-content"
+                 *ngIf="cluster.type">
+              <div fxFlex="50%"
+                   class="km-card-list-key">Type</div>
+              <div fxFlex="50%">
+                <span class="km-cluster-type"
+                      [matTooltip]="getType(cluster.type)">
+                  <i class="km-icon-{{cluster.type}}"></i>
+                </span>
+              </div>
+            </div>
+            <div fxLayout
+                 class="km-card-list-content"
                  *ngIf="cluster.spec.version">
               <div fxFlex="50%"
-                   class="km-card-list-key">Master Version</div>
+                   class="km-card-list-key">{{getVersionHeadline(cluster.type, false)}}</div>
               <div fxFlex="50%">{{ cluster.spec.version }}</div>
             </div>
             <div fxLayout
@@ -494,20 +506,6 @@
                 </div>
                 <div fxFlex="75%">
                   <km-labels [labels]="nodeData.spec.labels"></km-labels>
-                </div>
-              </div>
-            </div>
-
-            <div class="km-card-list-content"
-                 fxFlex="100%"
-                 fxLayout="column">
-              <div fxFlex="100%">
-                <div fxFlex="25%"
-                     class="km-card-list-key">
-                  Node Taints
-                </div>
-                <div fxFlex="75%">
-                  <km-taints [taints]="nodeData.spec.taints"></km-taints>
                 </div>
               </div>
             </div>

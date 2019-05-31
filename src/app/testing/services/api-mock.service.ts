@@ -116,7 +116,7 @@ export class ApiMockService {
     return of([]);
   }
 
-  getClusterNodeUpgrades(cluster: string): Observable<MasterVersion[]> {
+  getClusterNodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
     return of([]);
   }
 

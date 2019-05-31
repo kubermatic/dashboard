@@ -45,9 +45,7 @@
 
 
   <mat-card class="white km-cluster-details">
-
     <mat-card-header class="km-card-main-header">
-
       <mat-card-title class="km-cluster-name">
         <span ngxClipboard
               [cbContent]="cluster.name"
@@ -58,8 +56,7 @@
            class="km-cluster-health"></i>
       </mat-card-title>
 
-      <div fxFlex="3%"
-           class="provider-menu">
+      <div class="km-provider-menu">
         <button mat-icon-button
                 class="km-provider-menu-btn"
                 [matMenuTriggerFor]="menu"
@@ -91,7 +88,17 @@
       <div class="km-content-wrap">
 
         <km-property>
-          <div key>Master Version</div>
+          <div key>Type</div>
+          <div value>
+            <span class="km-cluster-type"
+                  [matTooltip]="getType(cluster.type)">
+              <i class="km-icon-{{cluster.type}}"></i>
+            </span>
+          </div>
+        </km-property>
+
+        <km-property>
+          <div key>{{getVersionHeadline(cluster.type, false)}}</div>
           <div value
                fxLayoutGap="4px">
             <span *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)"

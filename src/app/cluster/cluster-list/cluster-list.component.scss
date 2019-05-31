@@ -17,3 +17,13 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   font-size: 14px;
   font-weight: 500;
 }
+
+.km-cluster-type {
+  display: flex;
+  align-items: center;
+
+  i {
+    max-width: 25px;
+    max-height: 25px;
+  }
+}

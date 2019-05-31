@@ -24,7 +24,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   seedDC: DataCenterEntity[] = [];
   health: HealthEntity[] = [];
   provider = [];
-  displayedColumns: string[] = ['status', 'name', 'provider', 'region'];
+  displayedColumns: string[] = ['status', 'name', 'provider', 'region', 'type'];
   dataSource = new MatTableDataSource<ClusterEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
@@ -80,6 +80,10 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   getProvider(cloud: CloudSpec): string {
     return ClusterUtils.getProvider(cloud);
+  }
+
+  getType(type: string): string {
+    return ClusterUtils.getType(type);
   }
 
   private _loadNodeDc(): void {

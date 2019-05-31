@@ -1,4 +1,4 @@
-# go-111-node8-with-docker
+# go-111-node-11-docker
 
 A simple image that contains go, nodejs and docker in order to publish images via docker in docker
 
