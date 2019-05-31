@@ -1,5 +1,10 @@
 import {CloudSpec} from '../../entity/ClusterEntity';
 
+export enum ClusterType {
+  Kubernetes = 'kubernetes',
+  OpenShift = 'openshift',
+}
+
 export class ClusterUtils {
   static getProvider(cloud: CloudSpec): string {
     if (cloud.aws) {
@@ -21,11 +26,12 @@ export class ClusterUtils {
     }
   }
 
-  static getType(type: string): string {
-    if (type === 'kubernetes') {
-      return 'Kubernetes';
-    } else if (type === 'openshift') {
-      return 'OpenShift';
+  static getType(type: string): ClusterType {
+    switch (type) {
+      case 'kubernetes':
+        return ClusterType.Kubernetes;
+      case 'openshift':
+        return ClusterType.OpenShift;
     }
   }
 
