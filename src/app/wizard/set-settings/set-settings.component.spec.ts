@@ -12,6 +12,7 @@ import {AWSNodeDataComponent} from '../../node-data/aws-node-data/aws-node-data.
 import {AzureNodeDataComponent} from '../../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../../node-data/digitalocean-node-data/digitalocean-node-data.component';
 import {DigitaloceanOptionsComponent} from '../../node-data/digitalocean-node-data/digitalocean-options/digitalocean-options.component';
+import {GCPNodeDataComponent} from '../../node-data/gcp-node-data/gcp-node-data.component';
 import {HetznerNodeDataComponent} from '../../node-data/hetzner-node-data/hetzner-node-data.component';
 import {NodeDataComponent} from '../../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../../node-data/openstack-node-data/openstack-node-data.component';
@@ -34,6 +35,7 @@ import {AWSClusterSettingsComponent} from './provider-settings/aws/aws.component
 import {AzureClusterSettingsComponent} from './provider-settings/azure/azure.component';
 import {BringyourownClusterSettingsComponent} from './provider-settings/bringyourown/bringyourown.component';
 import {DigitaloceanClusterSettingsComponent} from './provider-settings/digitalocean/digitalocean.component';
+import {GCPClusterSettingsComponent} from './provider-settings/gcp/gcp.component';
 import {HetznerClusterSettingsComponent} from './provider-settings/hetzner/hetzner.component';
 import {OpenstackClusterSettingsComponent} from './provider-settings/openstack/openstack.component';
 import {PacketClusterSettingsComponent} from './provider-settings/packet/packet.component';
@@ -67,6 +69,7 @@ describe('SetSettingsComponent', () => {
             VSphereClusterSettingsComponent,
             AzureClusterSettingsComponent,
             PacketClusterSettingsComponent,
+            GCPClusterSettingsComponent,
             NodeDataComponent,
             OpenstackNodeDataComponent,
             OpenstackOptionsComponent,
@@ -78,6 +81,7 @@ describe('SetSettingsComponent', () => {
             VSphereOptionsComponent,
             AzureNodeDataComponent,
             PacketNodeDataComponent,
+            GCPNodeDataComponent,
           ],
           providers: [
             NodeDataService,

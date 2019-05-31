@@ -10,14 +10,14 @@ import {ApiMockService} from '../../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/azure-provider-settings.component';
-import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings.component';
+import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/digitalocean-provider-settings.component';
 import {EditProviderSettingsComponent} from '../edit-provider-settings.component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/hetzner-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
 
-import {GCPProviderSettingsComponent} from './gcp-provider-settings/gcp-provider-settings.component';
+import {GCPProviderSettingsComponent} from './gcp-provider-settings.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -37,8 +37,8 @@ describe('GCPProviderSettingsComponent', () => {
           ],
           declarations: [
             EditProviderSettingsComponent,
-            AWSProviderSettingsComponent,
             GCPProviderSettingsComponent,
+            AWSProviderSettingsComponent,
             DigitaloceanProviderSettingsComponent,
             HetznerProviderSettingsComponent,
             OpenstackProviderSettingsComponent,
@@ -59,7 +59,12 @@ describe('GCPProviderSettingsComponent', () => {
     fixture = TestBed.createComponent(GCPProviderSettingsComponent);
     component = fixture.componentInstance;
     component.cluster = fakeGCPCluster();
-    component.cluster.spec.cloud.gcp.serviceAccount = '';
+    component.cluster.spec.cloud.gcp = {
+      serviceAccount: '',
+      firewallRuleName: '',
+      network: '',
+      subnetwork: '',
+    };
     fixture.detectChanges();
   });
 
@@ -71,15 +76,19 @@ describe('GCPProviderSettingsComponent', () => {
     expect(component.gcpProviderSettingsForm.valid).toBeFalsy();
   });
 
-  it('serviceaccount field validity', () => {
-    expect(component.gcpProviderSettingsForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.gcpProviderSettingsForm.controls.serviceaccount.valid)
-        .toBeFalsy('serviceaccount field is initially not valid');
-    expect(component.gcpProviderSettingsForm.controls.serviceaccount.hasError('required'))
-        .toBeTruthy('serviceaccount field has initially required error');
+  it('form required values', () => {
+    component.gcpProviderSettingsForm.reset();
+    fixture.detectChanges();
 
-    component.gcpProviderSettingsForm.controls.serviceaccount.patchValue('foo');
-    expect(component.gcpProviderSettingsForm.controls.serviceaccount.hasError('required'))
-        .toBeFalsy('serviceaccount field has no required error after setting foo');
+    expect(component.gcpProviderSettingsForm.valid).toBeFalsy('form is invalid with empty defaults');
+    expect(component.gcpProviderSettingsForm.controls.serviceAccount.hasError('required'))
+        .toBeTruthy('service account id field has required error');
+
+    component.gcpProviderSettingsForm.controls.serviceAccount.patchValue('foo');
+    fixture.detectChanges();
+    expect(component.gcpProviderSettingsForm.controls.serviceAccount.hasError('required'))
+        .toBeFalsy('service account id has no required error after setting value');
+
+    expect(component.gcpProviderSettingsForm.valid).toBeTruthy('form is valid after setting service account');
   });
 });

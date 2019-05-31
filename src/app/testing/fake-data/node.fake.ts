@@ -347,7 +347,16 @@ export function nodeDataFake(): NodeData {
         packet: {
           instanceType: 'm1.small',
           tags: [],
-        }
+        },
+        gcp: {
+          diskSize: 25,
+          diskType: 'local-ssd',
+          machineType: '',
+          zone: '',
+          preemptible: true,
+          tags: [],
+          labels: {},
+        },
       },
       operatingSystem: {
         ubuntu: {
@@ -401,6 +410,15 @@ export function nodeDataCentOsFake(): NodeData {
           size: 'cx31',
           assignPublicIP: false,
           tags: {},
+        },
+        gcp: {
+          diskSize: 25,
+          diskType: 'local-ssd',
+          machineType: '',
+          zone: '',
+          preemptible: true,
+          tags: [],
+          labels: {},
         },
       },
       operatingSystem: {
@@ -461,7 +479,7 @@ export function nodeDataContainerLinuxFake(): NodeData {
           diskType: 'local-ssd',
           machineType: '',
           zone: '',
-          preemtible: true,
+          preemptible: true,
           tags: [],
           labels: {},
         },

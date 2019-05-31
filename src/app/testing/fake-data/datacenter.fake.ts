@@ -125,7 +125,6 @@ export function fakeGCPDatacenter(): DataCenterEntity {
   return {
     metadata: {
       name: 'gcp-westeurope',
-      resourceVersion: 1,
       selfLink: '',
       uid: '',
       creationTimestamp: new Date(),
