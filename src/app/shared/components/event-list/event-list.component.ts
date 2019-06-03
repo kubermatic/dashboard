@@ -11,8 +11,8 @@ import {EventEntity} from '../../entity/EventEntity';
 export class EventListComponent implements OnInit, OnChanges {
   @Input() events: EventEntity[] = [];
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource = new MatTableDataSource<EventEntity>();
   displayedColumns: string[] =

@@ -39,7 +39,7 @@ export class NodeListComponent implements OnInit {
       ['stateArrow', 'status', 'name', 'kubeletVersion', 'ipAddresses', 'creationDate', 'actions'];
   toggledColumns: string[] = ['nodeDetails'];
   dataSource = new MatTableDataSource<NodeEntity>();
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   shouldToggleNodeItem = (index, item) => this.isShowNodeItem[item.id];
 
   constructor(

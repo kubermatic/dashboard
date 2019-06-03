@@ -1,4 +1,4 @@
-FROM quay.io/kubermatic/go-111-node8-docker:v0.1
+FROM quay.io/kubermatic/go-111-node-11-docker:v0.1
 
 LABEL maintainer="sebastian@loodse.com"
 

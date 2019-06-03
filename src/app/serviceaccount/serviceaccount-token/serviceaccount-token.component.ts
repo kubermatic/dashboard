@@ -23,7 +23,7 @@ export class ServiceAccountTokenComponent implements OnInit {
   @Input() isInitializing: boolean;
   displayedColumns: string[] = ['name', 'expiry', 'creationDate', 'actions'];
   dataSource = new MatTableDataSource<ServiceAccountTokenEntity>();
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,

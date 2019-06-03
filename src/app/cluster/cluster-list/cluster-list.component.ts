@@ -26,7 +26,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   provider = [];
   displayedColumns: string[] = ['status', 'name', 'provider', 'region', 'type'];
   dataSource = new MatTableDataSource<ClusterEntity>();
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
