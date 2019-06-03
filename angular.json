@@ -128,38 +128,6 @@
           }
         }
       }
-    },
-    "kubermatic-e2e": {
-      "root": "",
-      "sourceRoot": "e2e",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "ngx-cypress-builder:cypress",
-          "options": {
-            "record": false,
-            "port": 8000,
-            "devServerTarget": "kubermatic:serve:e2e"
-          },
-          "configurations": {
-            "e2e-local": {
-              "port": 8000,
-              "devServerTarget": "kubermatic:serve:e2e-local"
-            }
-          }
-        },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
-          "options": {
-            "tsConfig": [
-              "e2e/tsconfig.e2e.json"
-            ],
-            "exclude": [
-              "**/node_modules/**"
-            ]
-          }
-        }
-      }
     }
   },
   "defaultProject": "kubermatic",

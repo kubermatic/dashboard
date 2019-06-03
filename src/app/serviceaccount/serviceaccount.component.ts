@@ -31,7 +31,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['stateArrow', 'status', 'name', 'group', 'creationDate', 'actions'];
   toggledColumns: string[] = ['token'];
   dataSource = new MatTableDataSource<ServiceAccountEntity>();
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   shouldToggleToken = (index, item) => this.isShowToken[item.id];
   private _unsubscribe: Subject<any> = new Subject();
   private _externalServiceAccountUpdate: Subject<any> = new Subject();

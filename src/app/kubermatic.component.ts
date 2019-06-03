@@ -16,7 +16,7 @@ import {Config} from './shared/model/Config';
   styleUrls: ['./kubermatic.component.scss'],
 })
 export class KubermaticComponent implements OnInit {
-  @ViewChild('sidenav') sidenav: MatSidenav;
+  @ViewChild('sidenav', {static: false}) sidenav: MatSidenav;
   config: Config = {show_demo_info: false, show_terms_of_service: false};
   version: VersionInfo;
 

@@ -28,7 +28,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['stateArrow', 'name', 'fingerprint', 'creationTimestamp', 'actions'];
   toggledColumns: string[] = ['publickey'];
   dataSource = new MatTableDataSource<SSHKeyEntity>();
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(

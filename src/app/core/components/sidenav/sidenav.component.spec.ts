@@ -1,5 +1,5 @@
 import {HttpClientModule} from '@angular/common/http';
-import {DebugElement} from '@angular/core/src/debug/debug_node';
+import {DebugElement} from '@angular/core';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatDialog} from '@angular/material';
 import {BrowserModule, By} from '@angular/platform-browser';
@@ -19,6 +19,7 @@ import {ProjectMockService} from '../../../testing/services/project-mock.service
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {click} from '../../../testing/utils/click-handler';
 import {ApiService, ProjectService, UserService} from '../../services';
+
 import {SidenavComponent} from './sidenav.component';
 
 const modules: any[] = [

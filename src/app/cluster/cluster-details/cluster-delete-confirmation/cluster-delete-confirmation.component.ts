@@ -17,7 +17,7 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
-  @ViewChild('clusterNameInput') clusterNameInputRef: ElementRef;
+  @ViewChild('clusterNameInput', {static: true}) clusterNameInputRef: ElementRef;
 
   deleteForm: FormGroup;
   inputName = '';
