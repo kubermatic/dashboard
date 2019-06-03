@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {interval, Subject} from 'rxjs';
-import {debounce, takeUntil} from 'rxjs/operators';
+import {debounce, first, map, switchMap, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
@@ -36,16 +36,18 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       this.clusterSpecForm.controls.type.setValue('kubernetes');
     }
 
-    this.clusterSpecForm.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .pipe(debounce(() => {
-          return interval(1000);
-        }))
-        .subscribe(() => {
-          this.loadMasterVersions();
-          this.setClusterSpec();
-        });
+    this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)
+        .pipe(first())
+        .subscribe(this._setDefaultVersion.bind(this));
 
-    this.loadMasterVersions();
+    this.clusterSpecForm.controls.type.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(_ => this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)))
+        .subscribe(this._setDefaultVersion.bind(this));
+
+    this.clusterSpecForm.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .pipe(map(_ => this._invalidateStep()))
+        .pipe(debounce(() => interval(500)))
+        .subscribe(() => this.setClusterSpec());
   }
 
   ngOnDestroy(): void {
@@ -65,26 +67,31 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     return !!this._appConfig.getConfig()['hide_' + type] ? this._appConfig.getConfig()['hide_' + type] : false;
   }
 
-  loadMasterVersions(): void {
-    this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((versions) => {
-          this.masterVersions = versions;
-          for (const i in versions) {
-            if (versions[i].default) {
-              this.defaultVersion = versions[i].version;
-              this.clusterSpecForm.controls.version.setValue(versions[i].version);
-            }
-          }
-        });
-  }
-
   setClusterSpec(): void {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
       valid: this.clusterSpecForm.valid,
+    });
+  }
+
+  private _setDefaultVersion(versions: MasterVersion[]) {
+    this.masterVersions = versions;
+    for (const version of versions) {
+      if (version.default) {
+        this.defaultVersion = version.version;
+        this.clusterSpecForm.controls.version.setValue(version.version);
+      }
+    }
+  }
+
+  private _invalidateStep() {
+    this._wizardService.changeClusterSpec({
+      name: this.clusterSpecForm.controls.name.value,
+      type: this.clusterSpecForm.controls.type.value,
+      version: this.clusterSpecForm.controls.version.value,
+      valid: false,
     });
   }
 }
