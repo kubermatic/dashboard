@@ -3,20 +3,19 @@ import {Injectable} from '@angular/core';
 import {Observable, of, timer} from 'rxjs';
 import {catchError, map, shareReplay, switchMapTo} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
-import {AppConfigService} from "../../../app-config.service";
+import {AppConfigService} from '../../../app-config.service';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {GroupConfig} from "../../../shared/model/Config";
+import {GroupConfig} from '../../../shared/model/Config';
 
 @Injectable()
 export class UserService {
   private readonly restRoot: string = environment.restRoot;
   private _user$: Observable<MemberEntity>;
-  
-  constructor(private _http: HttpClient, private _appConfig: AppConfigService) {
-  }
+
+  constructor(private _http: HttpClient, private _appConfig: AppConfigService) {}
 
   get loggedInUser(): Observable<MemberEntity> {
-    if(!this._user$) {
+    if (!this._user$) {
       const timer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
       this._user$ = timer$.pipe(switchMapTo(this._getLoggedInUser())).pipe(shareReplay(1));
     }
@@ -34,7 +33,7 @@ export class UserService {
       return '';
     }));
   }
-  
+
   getUserGroupConfig(userGroup: string): GroupConfig {
     const userGroupConfig = this._appConfig.getUserGroupConfig();
     return !!userGroupConfig ? userGroupConfig[userGroup] : undefined;

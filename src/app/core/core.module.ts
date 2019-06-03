@@ -17,15 +17,15 @@ import {SharedModule} from '../shared/shared.module';
 import {FooterComponent} from './components/footer/footer.component';
 import {NavigationComponent} from './components/navigation/navigation.component';
 import {NotificationComponent} from './components/notification/notification.component';
+import {ProjectSelectorComponent} from './components/sidenav/project/selector.component';
 import {SidenavComponent} from './components/sidenav/sidenav.component';
-import {CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor, AuthInterceptor} from './interceptors';
+import {AuthInterceptor, CheckTokenInterceptor, ErrorNotificationsInterceptor, LoaderInterceptor} from './interceptors';
 import {ApiService, Auth, AuthGuard, AuthzGuard, ClusterService, DatacenterService, ParamsService} from './services';
 import {WizardService} from './services';
 import {NodeDataService} from './services/node-data/node-data.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 import {ProgressBrowserXhr} from './util/ProgressBrowserXhr';
-import {ProjectSelectorComponent} from "./components/sidenav/project/selector.component";
 
 const modules: any[] = [
   CommonModule,

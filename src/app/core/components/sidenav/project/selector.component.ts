@@ -1,9 +1,9 @@
-import {Component, OnDestroy, OnInit} from "@angular/core";
-import {MatSelect, MatSelectChange} from "@angular/material";
-import {Subject} from "rxjs";
-import {takeUntil} from "rxjs/operators";
-import {ProjectEntity} from "../../../../shared/entity/ProjectEntity";
-import {ProjectService} from "../../../services";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {MatSelect, MatSelectChange} from '@angular/material';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
+import {ProjectService} from '../../../services';
 
 @Component({
   selector: 'km-project-selector',
@@ -17,13 +17,11 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
 
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private readonly _projectService: ProjectService) {
-  }
+  constructor(private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
-    this._projectService.projects
-      .pipe(takeUntil(this._unsubscribe))
-      .subscribe(projects => this.projects = projects.sort((a, b) => a.name.localeCompare(b.name)));
+    this._projectService.projects.pipe(takeUntil(this._unsubscribe))
+        .subscribe(projects => this.projects = projects.sort((a, b) => a.name.localeCompare(b.name)));
 
     this._projectService.selectedProject.subscribe(project => this.selectedProject = project);
     this._projectService.onProjectChange.subscribe(project => this.selectedProject = project);

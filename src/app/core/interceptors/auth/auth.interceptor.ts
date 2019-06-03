@@ -1,15 +1,14 @@
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest,} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs/Observable';
-import {environment} from "../../../../environments/environment";
-import {Auth} from "../../services";
+import {environment} from '../../../../environments/environment';
+import {Auth} from '../../services';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
   private readonly _restRoot: string = environment.restRoot;
 
-  constructor(private _auth: Auth) {
-  }
+  constructor(private _auth: Auth) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = this._auth.getBearerToken();
