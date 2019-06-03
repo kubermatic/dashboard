@@ -115,7 +115,6 @@
     "ng2-slim-loading-bar": "4.0.0",
     "ngrx-store-freeze": "0.2.4",
     "ngrx-store-logger": "0.2.3",
-    "ngx-cypress-builder": "1.0.2",
     "node-gyp": "4.0.0",
     "request": "2.88.0",
     "start-server-and-test": "^1.9.1",
