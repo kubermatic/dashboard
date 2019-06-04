@@ -9,16 +9,15 @@ import {MockComponent} from 'ng2-mock-component';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeProjects} from '../../../testing/fake-data/project.fake';
 import {RouterLinkStubDirective, RouterTestingModule} from '../../../testing/router-stubs';
-import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {click} from '../../../testing/utils/click-handler';
-import {ApiService, ProjectService, UserService} from '../../services';
+import {ProjectService, UserService} from '../../services';
+import {ProjectSelectorComponent} from './project/selector.component';
 
 import {SidenavComponent} from './sidenav.component';
 
@@ -38,15 +37,13 @@ describe('SidenavComponent', () => {
   let links: RouterLinkStubDirective[];
 
   beforeEach(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getProjects']);
-    apiMock.getProjects.and.returnValue(asyncData(fakeProjects()));
-
     TestBed
         .configureTestingModule({
           imports: [
             ...modules,
           ],
           declarations: [
+            ProjectSelectorComponent,
             SidenavComponent,
             MockComponent({
               selector: 'a',
@@ -54,7 +51,6 @@ describe('SidenavComponent', () => {
             }),
           ],
           providers: [
-            {provide: ApiService, useValue: apiMock},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
@@ -87,7 +83,8 @@ describe('SidenavComponent', () => {
   it('should get RouterLinks from template', () => {
     fixture.detectChanges();
     expect(links.length).toBe(5, 'should have 5 links');
-    expect(links[0].linkParams).toBe('/projects//clusters', 'first link should go to clusters page');
+    expect(links[0].linkParams)
+        .toBe(`/projects/${fakeProjects()[0].id}/clusters`, 'first link should go to clusters page');
   });
 
 
@@ -99,27 +96,12 @@ describe('SidenavComponent', () => {
 
     click(clustersLinkDe);
     fixture.detectChanges();
-    expect(clustersLink.navigatedTo).toBe('/projects//clusters');
-  });
-
-  it('should correctly compare projects basing on their IDs', () => {
-    const a: ProjectEntity = fakeProjects()[0];
-    const b: ProjectEntity = fakeProjects()[1];
-    expect(component.projectService.areProjectsEqual(a, b)).toBeFalsy();
-    expect(component.projectService.areProjectsEqual(b, a)).toBeFalsy();
-
-    b.id = a.id;
-    expect(component.projectService.areProjectsEqual(a, b)).toBeTruthy();
-    expect(component.projectService.areProjectsEqual(b, a)).toBeTruthy();
+    expect(clustersLink.navigatedTo).toBe(`/projects/${fakeProjects()[0].id}/clusters`);
   });
 
   it('should correctly create router links', () => {
-    component.selectedProject = fakeProjects()[0];
+    fixture.detectChanges();
     expect(component.getRouterLink('clusters')).toBe('/projects/' + fakeProjects()[0].id + '/clusters');
     expect(component.getRouterLink('members')).toBe('/projects/' + fakeProjects()[0].id + '/members');
-
-    component.selectedProject.id = fakeProjects()[1].id;
-    expect(component.getRouterLink('clusters')).toBe('/projects/' + fakeProjects()[1].id + '/clusters');
-    expect(component.getRouterLink('members')).toBe('/projects/' + fakeProjects()[1].id + '/members');
   });
 });

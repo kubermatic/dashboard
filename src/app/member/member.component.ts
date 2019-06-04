@@ -124,7 +124,7 @@ export class MemberComponent implements OnInit, OnDestroy {
       data: {
         title: 'Remove member from project',
         message: `You are on the way to remove the member ${member.name} from the project ${
-            this._projectService.project.name}. This cannot be undone!`,
+            this._selectedProject.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
       },
@@ -137,7 +137,7 @@ export class MemberComponent implements OnInit, OnDestroy {
       if (isConfirmed) {
         this._apiService.deleteMembers(this._selectedProject.id, member).pipe(first()).subscribe(() => {
           NotificationActions.success(
-              'Success', `Member ${member.name} has been removed from project ${this._projectService.project.name}`);
+              'Success', `Member ${member.name} has been removed from project ${this._selectedProject.name}`);
           this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
         });
       }

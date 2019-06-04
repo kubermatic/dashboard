@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialog} from '@angular/material';
+import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 import {ApiService, ProjectService, UserService} from '../../../core/services';
@@ -23,16 +24,18 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
   keysForm: FormGroup = new FormGroup({
     keys: new FormControl([], []),
   });
-  project: ProjectEntity;
+  project = {} as ProjectEntity;
   groupConfig: GroupConfig;
   private _unsubscribe = new Subject<void>();
 
   constructor(
       private readonly _api: ApiService, private readonly _wizardService: WizardService,
       private readonly _dialog: MatDialog, private readonly _projectService: ProjectService,
-      private readonly _userService: UserService) {}
+      private readonly _userService: UserService, private readonly _activeRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.project.id = this._activeRoute.snapshot.paramMap.get('projectID');
+
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {
           this.project = project;

@@ -140,7 +140,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       data: {
         title: 'Remove Service Account from project',
         message: `You are on the way to remove the Service Account ${serviceAccount.name} from the project ${
-            this._projectService.project.name}. This cannot be undone!`,
+            this._selectedProject.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
       },
@@ -155,8 +155,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
           delete this.tokenList[serviceAccount.id];
           NotificationActions.success(
               'Success',
-              `Service Account ${serviceAccount.name} has been removed from project ${
-                  this._projectService.project.name}`);
+              `Service Account ${serviceAccount.name} has been removed from project ${this._selectedProject.name}`);
           this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
         });
       }

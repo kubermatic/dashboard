@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {environment} from '../../../../environments/environment';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {Auth, ProjectService, UserService} from '../../services';
+import {Auth, UserService} from '../../services';
 
 @Component({
   selector: 'kubermatic-navigation',
@@ -14,9 +14,7 @@ export class NavigationComponent implements OnInit {
   environment: any = environment;
   currentUser: MemberEntity;
 
-  constructor(
-      public auth: Auth, private router: Router, private userService: UserService,
-      private projectService: ProjectService) {}
+  constructor(public auth: Auth, private router: Router, private userService: UserService) {}
 
   ngOnInit(): void {
     if (this.auth.authenticated()) {
@@ -27,7 +25,6 @@ export class NavigationComponent implements OnInit {
   logout(): void {
     this.router.navigate(['']);
     this.auth.logout();
-    this.projectService.deselectProject();
     delete this.currentUser;
   }
 
