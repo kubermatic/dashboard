@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatTableDataSource} from '@angular/material';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Subject, timer} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../app-config.service';
@@ -30,15 +30,17 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<ClusterEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
-  private _selectedProject: ProjectEntity;
+  private _selectedProject = {} as ProjectEntity;
   private _currentGroupConfig: GroupConfig;
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _router: Router,
-      private readonly _datacenterService: DatacenterService, private readonly _appConfig: AppConfigService) {}
+      private readonly _datacenterService: DatacenterService, private readonly _appConfig: AppConfigService,
+      private readonly _activeRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this._selectedProject.id = this._activeRoute.snapshot.paramMap.get('projectID');
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
