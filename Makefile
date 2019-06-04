@@ -60,4 +60,4 @@ docker-run-custom: build dist
 	./dashboard-v2
 
 deploy:
-	kubectl set image deployment/kubermatic-ui-v2 webserver=$(REPO):$(IMAGE_TAG)
+	kubectl -n kubermatic set image deployment/kubermatic-ui-v2 webserver=$(REPO):$(IMAGE_TAG)
