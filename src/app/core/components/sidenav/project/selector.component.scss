@@ -11,7 +11,7 @@ a {
   }
 }
 
-.km-projects-container {
+::ng-deep.km-projects-container {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -21,36 +21,36 @@ a {
   * {
     color: $secondary;
   }
-}
 
-.km-projects-icon {
-  position: absolute;
-  right: 3.5 * $baseline-grid;
-  top: 16px;
-  background-color: $secondary;
-  pointer-events: none;
-  color: $secondary-light;
-}
+  .mat-select-arrow {
+    visibility: hidden;
+  }
 
-::ng-deep.mat-select-value-text {
-  color: $secondary !important;
-  font-size: $subhead-font-size-base-lg;
-  line-height: $subhead-font-size-base-lg + $baseline-grid / 2;
-}
+  .km-projects-icon {
+    position: absolute;
+    right: 3.5 * $baseline-grid;
+    top: 16px;
+    background-color: $secondary;
+    pointer-events: none;
+    color: $secondary-light;
+  }
 
-::ng-deep.mat-select-placeholder {
-  opacity: 0.4;
-  color: $secondary;
-  font-size: $subhead-font-size-base-lg !important;
-  line-height: $subhead-font-size-base-lg;
-}
+  .mat-select-value-text {
+    color: $secondary;
+    font-size: $subhead-font-size-base-lg;
+    line-height: $subhead-font-size-base-lg + $baseline-grid / 2;
+  }
 
-::ng-deep.mat-select-arrow {
-  visibility: hidden;
-}
+  .mat-select-placeholder {
+    opacity: 0.4;
+    color: $secondary;
+    font-size: $subhead-font-size-base-lg;
+    line-height: $subhead-font-size-base-lg;
+  }
 
-mat-label {
-  margin: ($baseline-grid / 2) 0 !important;
-  font-size: $caption-font-size-base;
-  line-height: $caption-font-size-base;
+  mat-label {
+    margin: ($baseline-grid / 2) 0;
+    font-size: $caption-font-size-base;
+    line-height: $caption-font-size-base;
+  }
 }
