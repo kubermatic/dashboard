@@ -1,4 +1,3 @@
-
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
@@ -127,6 +126,14 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   getOSSpec(): OperatingSystemSpec {
+    if (this.isClusterOpenshift()) {
+      return {
+        centos: {
+          distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootCentos.value,
+        },
+      };
+    }
+
     switch (this.nodeForm.controls.operatingSystem.value) {
       case 'ubuntu':
         return {
@@ -163,6 +170,9 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
+  isClusterOpenshift(): boolean {
+    return ClusterUtils.isOpenshiftType(this.cluster);
+  }
 
   getAddNodeData(): NodeData {
     let versions = {};

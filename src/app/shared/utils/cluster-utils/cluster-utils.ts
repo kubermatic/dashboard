@@ -1,4 +1,4 @@
-import {CloudSpec} from '../../entity/ClusterEntity';
+import {CloudSpec, ClusterEntity} from '../../entity/ClusterEntity';
 
 export enum ClusterType {
   Kubernetes = 'kubernetes',
@@ -33,6 +33,10 @@ export class ClusterUtils {
       case 'openshift':
         return ClusterType.OpenShift;
     }
+  }
+
+  static isOpenshiftType(cluster: ClusterEntity): boolean {
+    return ClusterUtils.getType(cluster.type) === ClusterType.OpenShift;
   }
 
   static getVersionHeadline(type: string, isKubelet: boolean): string {
