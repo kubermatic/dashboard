@@ -1,0 +1,21 @@
+<mat-list-item class="km-projects"
+               (click)="openDropdown(select)">
+  <div class="km-projects-container">
+    <mat-label>Project</mat-label>
+    <mat-select #select
+                placeholder="None"
+                class="km-projects-select"
+                (selectionChange)="onSelectionChange($event)"
+                [ngModel]="selectedProject"
+                [compareWith]="areProjectsEqual"
+                disableOptionCentering>
+      <mat-option *ngFor="let project of projects"
+                  [value]="project"
+                  [disabled]="project.status !== 'Active'"
+                  [matTooltip]="project.status !== 'Active' ? project.status + ' Project' : ''">
+        {{project.name}}
+      </mat-option>
+    </mat-select>
+    <div class="km-projects-icon km-icon-arrow-down"></div>
+  </div>
+</mat-list-item>

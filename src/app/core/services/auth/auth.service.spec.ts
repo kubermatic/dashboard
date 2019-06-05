@@ -30,7 +30,7 @@ describe('Auth', () => {
         .compileComponents();
   });
 
-  it('should ...', inject([Auth], (service: Auth) => {
+  it('should create auth service correctly', inject([Auth], (service: Auth) => {
        expect(service).toBeTruthy();
      }));
 });

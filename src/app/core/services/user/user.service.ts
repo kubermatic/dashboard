@@ -1,43 +1,47 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {catchError, map} from 'rxjs/operators';
+import {Observable, of, timer} from 'rxjs';
+import {catchError, map, shareReplay, switchMapTo} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
+import {AppConfigService} from '../../../app-config.service';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
-import {Auth} from '../auth/auth.service';
+import {GroupConfig} from '../../../shared/model/Config';
 
 @Injectable()
 export class UserService {
-  private restRoot: string = environment.restRoot;
-  private headers: HttpHeaders = new HttpHeaders();
+  private readonly restRoot: string = environment.restRoot;
+  private _user$: Observable<MemberEntity>;
 
-  user: Observable<MemberEntity>;
-  userGroup: string;
+  constructor(private _http: HttpClient, private _appConfig: AppConfigService) {}
 
-  constructor(private http: HttpClient, private auth: Auth) {
-    const token = this.auth.getBearerToken();
-    this.headers = this.headers.set('Authorization', 'Bearer ' + token);
-  }
-
-  getUser(): Observable<MemberEntity> {
-    const url = `${this.restRoot}/me`;
-    if (!this.user) {
-      this.user = this.http.get<MemberEntity>(url, {headers: this.headers}).pipe(catchError(() => {
-        return of<MemberEntity>();
-      }));
+  get loggedInUser(): Observable<MemberEntity> {
+    if (!this._user$) {
+      const timer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
+      this._user$ = timer$.pipe(switchMapTo(this._getLoggedInUser())).pipe(shareReplay(1));
     }
-    return this.user;
+
+    return this._user$;
   }
 
   currentUserGroup(projectID: string): Observable<string> {
-    return this.getUser().pipe(map((res) => {
-      for (const project of res.projects) {
+    return this.loggedInUser.pipe(map((member) => {
+      const projects = member.projects ? member.projects : [];
+      for (const project of projects) {
         if (project.id === projectID) {
-          const group = project.group.split('-')[0];
-          return this.userGroup = group;
+          return project.group.split('-')[0];
         }
       }
-      return this.userGroup = '';
+      return '';
     }));
+  }
+
+  userGroupConfig(userGroup: string): GroupConfig {
+    const userGroupConfig = this._appConfig.getUserGroupConfig();
+    return !!userGroupConfig ? userGroupConfig[userGroup] : undefined;
+  }
+
+  private _getLoggedInUser(): Observable<MemberEntity> {
+    const url = `${this.restRoot}/me`;
+    return this._http.get<MemberEntity>(url).pipe(catchError(() => of<MemberEntity>()));
   }
 }

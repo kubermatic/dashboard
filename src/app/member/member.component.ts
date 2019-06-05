@@ -9,6 +9,8 @@ import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {MemberEntity} from '../shared/entity/MemberEntity';
+import {ProjectEntity} from '../shared/entity/ProjectEntity';
+import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 
 import {AddMemberComponent} from './add-member/add-member.component';
@@ -28,7 +30,9 @@ export class MemberComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<MemberEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
-  private _externalMembersUpdate: Subject<any> = new Subject();
+  private _membersUpdate: Subject<any> = new Subject();
+  private _currentGroupConfig: GroupConfig;
+  private _selectedProject: ProjectEntity;
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -37,19 +41,22 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this._userService.getUser().pipe(first()).subscribe((user) => {
-      this.currentUser = user;
-    });
-
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._externalMembersUpdate)
-        .pipe(switchMap(
-            () => this._projectService.project ?
-                this._apiService.getMembers(this._projectService.getCurrentProjectId()) :
-                EMPTY))
+    this._userService.loggedInUser.pipe(first()).subscribe(user => this.currentUser = user);
+
+    this._projectService.selectedProject
+        .pipe(switchMap(project => {
+          this._selectedProject = project;
+          return this._userService.currentUserGroup(project.id);
+        }))
+        .pipe(first())
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+
+    merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
+        .pipe(switchMap(() => this._selectedProject ? this._apiService.getMembers(this._selectedProject.id) : EMPTY))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(members => {
           this.members = members;
@@ -68,44 +75,44 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
 
   getGroup(member: MemberEntity): string {
-    return this._projectService.project ? MemberUtils.getGroupDisplayName(MemberUtils.getGroupInProject(
-                                              member, this._projectService.getCurrentProjectId())) :
-                                          '';
+    return this._selectedProject ?
+        MemberUtils.getGroupDisplayName(MemberUtils.getGroupInProject(member, this._selectedProject.id)) :
+        '';
   }
 
   isAddEnabled(): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().members.invite;
+    return !this._currentGroupConfig || this._currentGroupConfig.members.invite;
   }
 
   addMember(): void {
     const modal = this._matDialog.open(AddMemberComponent);
-    modal.componentInstance.project = this._projectService.project;
+    modal.componentInstance.project = this._selectedProject;
     modal.afterClosed().pipe(first()).subscribe((member: MemberEntity) => {
       if (member) {
         this.members.push(member);
-        this._externalMembersUpdate.next();
+        this._membersUpdate.next();
       }
     });
   }
 
   isEditEnabled(member: MemberEntity): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().members.edit ||
+    return !this._currentGroupConfig || this._currentGroupConfig.members.edit ||
         (this.currentUser && member && this.currentUser.email !== member.email);
   }
 
   editMember(member: MemberEntity): void {
     const modal = this._matDialog.open(EditMemberComponent);
-    modal.componentInstance.project = this._projectService.project;
+    modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.member = member;
     modal.afterClosed().pipe(first()).subscribe(isEdited => {
       if (isEdited) {
-        this._externalMembersUpdate.next();
+        this._membersUpdate.next();
       }
     });
   }
 
   isDeleteEnabled(member: MemberEntity): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().members.remove ||
+    return !this._currentGroupConfig || this._currentGroupConfig.members.remove ||
         (this.currentUser && member && this.currentUser.email !== member.email);
   }
 
@@ -116,7 +123,7 @@ export class MemberComponent implements OnInit, OnDestroy {
       data: {
         title: 'Remove member from project',
         message: `You are on the way to remove the member ${member.name} from the project ${
-            this._projectService.project.name}. This cannot be undone!`,
+            this._selectedProject.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
       },
@@ -127,14 +134,11 @@ export class MemberComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().pipe(first()).subscribe(isConfirmed => {
       if (isConfirmed) {
-        this._apiService.deleteMembers(this._projectService.getCurrentProjectId(), member)
-            .pipe(first())
-            .subscribe(() => {
-              NotificationActions.success(
-                  'Success',
-                  `Member ${member.name} has been removed from project ${this._projectService.project.name}`);
-              this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
-            });
+        this._apiService.deleteMembers(this._selectedProject.id, member).pipe(first()).subscribe(() => {
+          NotificationActions.success(
+              'Success', `Member ${member.name} has been removed from project ${this._selectedProject.name}`);
+          this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
+        });
       }
     });
   }

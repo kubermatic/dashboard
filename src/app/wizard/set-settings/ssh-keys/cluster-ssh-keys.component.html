@@ -15,12 +15,12 @@
           (click)="addSshKeyDialog()"
           class="km-wizard-ssh-key"
           mat-flat-button
-          [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">Add new SSH key</button>
+          [disabled]="!!groupConfig && !groupConfig.sshKeys.create">Add new SSH key</button>
   <div *ngIf="keys.length === 0">
     <p>You have no SSH keys</p>
     <button (click)="addSshKeyDialog()"
             class="km-wizard-ssh-key"
             mat-flat-button
-            [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">Add SSH key</button>
+            [disabled]="!!groupConfig && !groupConfig.sshKeys.create">Add SSH key</button>
   </div>
 </form>

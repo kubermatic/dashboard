@@ -22,6 +22,10 @@ export interface UserGroupConfig {
   viewers?: GroupConfig;
 }
 
+export interface Viewable {
+  view?: boolean;
+}
+
 export class GroupConfig {
   projects?: Projects;
   members?: Members;
@@ -33,56 +37,56 @@ export class GroupConfig {
   serviceaccountToken?: ServiceAccountToken;
 }
 
-export class Projects {
+export class Projects implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
   delete?: boolean;
 }
 
-export class Members {
+export class Members implements Viewable {
   view?: boolean;
   edit?: boolean;
   remove?: boolean;
   invite?: boolean;
 }
 
-export class SSHKeys {
+export class SSHKeys implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
   delete?: boolean;
 }
 
-export class Clusters {
+export class Clusters implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
   delete?: boolean;
 }
 
-export class Nodes {
+export class Nodes implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
   delete?: boolean;
 }
 
-export class NodeDeployments {
+export class NodeDeployments implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
   delete?: boolean;
 }
 
-export class ServiceAccounts {
+export class ServiceAccounts implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
   delete?: boolean;
 }
 
-export class ServiceAccountToken {
+export class ServiceAccountToken implements Viewable {
   view?: boolean;
   edit?: boolean;
   create?: boolean;
