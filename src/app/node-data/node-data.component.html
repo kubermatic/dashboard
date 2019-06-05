@@ -79,8 +79,7 @@
                               [clusterId]="cluster.id"
                               [seedDCName]="seedDCName"></kubermatic-azure-node-data>
 
-  <mat-form-field class="km-operating-system"
-                  *ngIf="!isClusterOpenshift()">
+  <mat-form-field class="km-operating-system">
     <mat-label>Operating System*</mat-label>
     <mat-select formControlName="operatingSystem">
       <mat-option value="ubuntu">Ubuntu</mat-option>
@@ -88,6 +87,7 @@
       <mat-option value="containerLinux"
                   *ngIf="!cluster.spec.cloud.hetzner">Container Linux</mat-option>
     </mat-select>
+    <mat-hint *ngIf="isClusterOpenshift()">Only CentOS can be used for OpenShift clusters.</mat-hint>
     <mat-hint *ngIf="cluster.spec.cloud.openstack">Select the operating system of the entered image</mat-hint>
     <mat-hint *ngIf="cluster.spec.cloud.vsphere">Select the operating system of the entered template</mat-hint>
   </mat-form-field>

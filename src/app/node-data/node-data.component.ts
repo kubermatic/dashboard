@@ -46,7 +46,12 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       count: new FormControl(
           this.nodeData.count,
           [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
-      operatingSystem: new FormControl(Object.keys(this.nodeData.spec.operatingSystem)[0], Validators.required),
+      operatingSystem: new FormControl(
+          {
+            value: this.isClusterOpenshift() ? 'centos' : Object.keys(this.nodeData.spec.operatingSystem)[0],
+            disabled: this.isClusterOpenshift(),
+          },
+          Validators.required),
       name: new FormControl({value: this.nodeData.name, disabled: this.isNameDisabled}),
     });
 
@@ -126,14 +131,6 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   }
 
   getOSSpec(): OperatingSystemSpec {
-    if (this.isClusterOpenshift()) {
-      return {
-        centos: {
-          distUpgradeOnBoot: this.operatingSystemForm.controls.distUpgradeOnBootCentos.value,
-        },
-      };
-    }
-
     switch (this.nodeForm.controls.operatingSystem.value) {
       case 'ubuntu':
         return {
