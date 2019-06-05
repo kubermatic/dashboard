@@ -24,15 +24,18 @@
     </mat-form-field>
   </div>
 
-  <mat-form-field fxFlex>
-    <mat-label>Machine Type*</mat-label>
-    <input matInput
-           formControlName="machineType"
-           min="10"
-           max="16000"
-           type="number"
-           autocomplete="off">
-  </mat-form-field>
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Machine Type*</mat-label>
+      <mat-select formControlName="machineType">
+        <mat-option *ngFor="let type of machineTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
 
   <mat-form-field fxFlex>
     <mat-label>Zone*</mat-label>
@@ -43,7 +46,7 @@
 
   <div fxFlex="100%">
     <div class="km-node-options">
-      <label fxFlex="50%">Preemptible*</label>
+      <label fxFlex="50%">Preemptible</label>
       <mat-checkbox fxFlex="50%"
                     id="preemptible"
                     formControlName="preemptible"></mat-checkbox>

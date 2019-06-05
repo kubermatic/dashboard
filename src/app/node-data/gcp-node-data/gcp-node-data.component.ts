@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -15,7 +16,8 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 export class GCPNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
-  diskTypes: string[] = ['local-ssd', 'pd-ssd', 'pd-standard'];
+  diskTypes: string[] = NodeInstanceFlavors.GCP.DiskTypes;
+  machineTypes: string[] = NodeInstanceFlavors.GCP.MachineTypes;
   gcpNodeForm: FormGroup;
   labels: FormArray;
   hideOptional = true;
@@ -38,14 +40,18 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       diskSize: new FormControl(this.nodeData.spec.cloud.gcp.diskSize, Validators.required),
       diskType: new FormControl(this.nodeData.spec.cloud.gcp.diskType, Validators.required),
       machineType: new FormControl(this.nodeData.spec.cloud.gcp.machineType, Validators.required),
-      preemptible: new FormControl(this.nodeData.spec.cloud.gcp.preemptible, Validators.required),
       zone: new FormControl(this.nodeData.spec.cloud.gcp.zone, Validators.required),
+      preemptible: new FormControl(this.nodeData.spec.cloud.gcp.preemptible),
       tags: new FormControl(this.nodeData.spec.cloud.gcp.tags.toString().replace(/\,/g, ', ')),
       labels: labelList,
     });
 
     if (this.nodeData.spec.cloud.gcp.diskType === '') {
       this.gcpNodeForm.controls.diskType.setValue(this.diskTypes[0]);
+    }
+
+    if (this.nodeData.spec.cloud.gcp.machineType === '') {
+      this.gcpNodeForm.controls.machineType.setValue(this.machineTypes[0]);
     }
 
     this.subscriptions.push(this.gcpNodeForm.valueChanges.subscribe(() => {

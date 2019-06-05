@@ -149,10 +149,10 @@ export function getEmptyNodeProviderSpec(provider: string): object {
       } as PacketNodeSpec;
     case NodeProvider.GCP:
       return {
-        diskSize: 0,
+        diskSize: 25,
         diskType: '',
         machineType: '',
-        preemptible: true,
+        preemptible: false,
         zone: '',
         tags: [],
         labels: {'': ''},

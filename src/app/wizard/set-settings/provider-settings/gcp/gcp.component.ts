@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../core/services/wizard/wizard.service';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 
@@ -12,19 +12,20 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 export class GCPClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   gcpSettingsForm: FormGroup;
-  private gcpSettingsFormSub: Subscription;
+  hideOptional = true;
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.gcpSettingsForm = new FormGroup({
       serviceAccount: new FormControl(this.cluster.spec.cloud.gcp.serviceAccount, [Validators.required]),
-      firewallRuleName: new FormControl(this.cluster.spec.cloud.gcp.firewallRuleName, [Validators.required]),
-      network: new FormControl(this.cluster.spec.cloud.gcp.network, [Validators.required]),
-      subnetwork: new FormControl(this.cluster.spec.cloud.gcp.subnetwork, [Validators.required]),
+      firewallRuleName: new FormControl(this.cluster.spec.cloud.gcp.firewallRuleName),
+      network: new FormControl(this.cluster.spec.cloud.gcp.network),
+      subnetwork: new FormControl(this.cluster.spec.cloud.gcp.subnetwork),
     });
 
-    this.gcpSettingsFormSub = this.gcpSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
+    this.gcpSettingsForm.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.wizardService.changeClusterProviderSettings({
         cloudSpec: {
           gcp: {
@@ -38,9 +39,14 @@ export class GCPClusterSettingsComponent implements OnInit, OnDestroy {
         valid: this.gcpSettingsForm.valid,
       });
     });
+
+    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.hideOptional = data.hideOptional;
+    });
   }
 
   ngOnDestroy(): void {
-    this.gcpSettingsFormSub.unsubscribe();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

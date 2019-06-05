@@ -12,8 +12,9 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Firewall Rule Name*</mat-label>
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-label>Firewall Rule Name</mat-label>
     <input id="km-gcp-firewallRuleName-input"
            matInput
            formControlName="firewallRuleName"
@@ -24,8 +25,9 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Network*</mat-label>
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-label>Network</mat-label>
     <input id="km-gcp-network-input"
            matInput
            formControlName="network"
@@ -36,8 +38,9 @@
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field fxFlex>
-    <mat-label>Subnetwork*</mat-label>
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-label>Subnetwork</mat-label>
     <input id="km-gcp-subnetwork-input"
            matInput
            formControlName="subnetwork"
