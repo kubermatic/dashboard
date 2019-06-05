@@ -33,9 +33,9 @@ export class SidenavComponent implements OnInit, OnDestroy {
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {
           this._selectedProject = project;
-          return this._userService.getCurrentUserGroup(project.id);
+          return this._userService.currentUserGroup(project.id);
         }))
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.getUserGroupConfig(userGroup));
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
   }
 
   ngOnDestroy(): void {

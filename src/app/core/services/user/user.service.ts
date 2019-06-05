@@ -23,9 +23,10 @@ export class UserService {
     return this._user$;
   }
 
-  getCurrentUserGroup(projectID: string): Observable<string> {
-    return this.loggedInUser.pipe(map((res) => {
-      for (const project of res.projects) {
+  currentUserGroup(projectID: string): Observable<string> {
+    return this.loggedInUser.pipe(map((member) => {
+      const projects = member.projects ? member.projects : [];
+      for (const project of projects) {
         if (project.id === projectID) {
           return project.group.split('-')[0];
         }
@@ -34,7 +35,7 @@ export class UserService {
     }));
   }
 
-  getUserGroupConfig(userGroup: string): GroupConfig {
+  userGroupConfig(userGroup: string): GroupConfig {
     const userGroupConfig = this._appConfig.getUserGroupConfig();
     return !!userGroupConfig ? userGroupConfig[userGroup] : undefined;
   }

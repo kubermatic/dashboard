@@ -43,10 +43,6 @@ export class ProjectService {
         .pipe(filter(project => project !== undefined));
   }
 
-  private get _selectedProjectID(): string {
-    return this._params.get(PathParam.ProjectID);
-  }
-
   selectProject(project: ProjectEntity) {
     if (ProjectUtils.isProjectActive(project)) {
       this.onProjectChange.emit(project);
@@ -56,8 +52,8 @@ export class ProjectService {
     return this._router.navigate(['/projects']);
   }
 
-  deselectProject(): void {
-    this.onProjectChange.emit(undefined);
+  private get _selectedProjectID(): string {
+    return this._params.get(PathParam.ProjectID);
   }
 
   private _getProjects() {

@@ -36,7 +36,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userGroupConfig = this._appConfig.getUserGroupConfig();
-    this._userService.getCurrentUserGroup(this.projectID).subscribe((group) => {
+    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 

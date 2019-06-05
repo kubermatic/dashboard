@@ -51,9 +51,9 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {
           this._selectedProject = project;
-          return this._userService.getCurrentUserGroup(project.id);
+          return this._userService.currentUserGroup(project.id);
         }))
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.getUserGroupConfig(userGroup));
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
     merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._serviceAccountUpdate)
         .pipe(takeUntil(this._unsubscribe))

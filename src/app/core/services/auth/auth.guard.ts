@@ -36,8 +36,8 @@ export class AuthzGuard implements CanActivate {
     const projectID = this._getProjectID(state.url);
     const view = this._getView(state.url);
 
-    return this._userService.getCurrentUserGroup(projectID)
-        .pipe(map(userGroup => this._userService.getUserGroupConfig(userGroup)))
+    return this._userService.currentUserGroup(projectID)
+        .pipe(map(userGroup => this._userService.userGroupConfig(userGroup)))
         .pipe(map(groupConfig => {
           if (!this._hasViewPermissions(groupConfig[view])) {
             this._router.navigate([View.Projects]);
@@ -65,8 +65,8 @@ export class AuthzGuard implements CanActivate {
                               undefined;
   }
 
-  private _hasViewPermissions(permissions: Viewable): boolean {
-    return permissions.view;
+  private _hasViewPermissions(permission: Viewable): boolean {
+    return permission.view;
   }
 
   private _navigateToProjects(): Observable<boolean> {

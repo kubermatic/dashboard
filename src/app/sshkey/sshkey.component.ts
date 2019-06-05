@@ -43,7 +43,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     });
 
     this.userGroupConfig = this._appConfigService.getUserGroupConfig();
-    this._userService.getCurrentUserGroup(this.projectID).subscribe((group) => {
+    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 

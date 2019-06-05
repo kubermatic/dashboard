@@ -36,7 +36,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.getCurrentUserGroup(this.projectID).subscribe((group) => {
+    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 

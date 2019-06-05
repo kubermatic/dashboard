@@ -56,9 +56,9 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     this._nodeDeploymentID = this._activatedRoute.snapshot.paramMap.get('nodeDeploymentID');
     this._projectID = this._activatedRoute.snapshot.paramMap.get('projectID');
 
-    this._userService.getCurrentUserGroup(this._projectID)
+    this._userService.currentUserGroup(this._projectID)
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.getUserGroupConfig(userGroup));
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
     timer(0, 10 * this._appConfig.getRefreshTimeBase()).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.loadNodeDeployment();

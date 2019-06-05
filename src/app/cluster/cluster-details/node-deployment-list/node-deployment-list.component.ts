@@ -43,8 +43,8 @@ export class NodeDeploymentListComponent implements OnInit {
     this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
 
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(project => this._userService.getCurrentUserGroup(project.id)))
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.getUserGroupConfig(userGroup));
+        .pipe(switchMap(project => this._userService.currentUserGroup(project.id)))
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
   }
 
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {

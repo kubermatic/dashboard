@@ -77,7 +77,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private _loadCurrentUserRoles(): void {
     this.projects.forEach(project => {
-      this._userService.getCurrentUserGroup(project.id).subscribe((group) => {
+      this._userService.currentUserGroup(project.id).subscribe((group) => {
         this.role[project.id] = MemberUtils.getGroupDisplayName(group);
         this.rawRole[project.id] = group;
       });
@@ -148,8 +148,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(project: ProjectEntity): boolean {
-    return !this._userService.getUserGroupConfig(this.rawRole[project.id]) ||
-        this._userService.getUserGroupConfig(this.rawRole[project.id]).projects.edit;
+    return !this._userService.userGroupConfig(this.rawRole[project.id]) ||
+        this._userService.userGroupConfig(this.rawRole[project.id]).projects.edit;
   }
 
   editProject(project: ProjectEntity, event: Event): void {
@@ -164,8 +164,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(project: ProjectEntity): boolean {
-    return !this._userService.getUserGroupConfig(this.rawRole[project.id]) ||
-        this._userService.getUserGroupConfig(this.rawRole[project.id]).projects.delete;
+    return !this._userService.userGroupConfig(this.rawRole[project.id]) ||
+        this._userService.userGroupConfig(this.rawRole[project.id]).projects.delete;
   }
 
   deleteProject(project: ProjectEntity, event: Event): void {

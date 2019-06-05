@@ -38,10 +38,10 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {
           this.projectID = project.id;
-          return this._userService.getCurrentUserGroup(project.id);
+          return this._userService.currentUserGroup(project.id);
         }))
         .pipe(mergeMap(userGroup => {
-          this.groupConfig = this._userService.getUserGroupConfig(userGroup);
+          this.groupConfig = this._userService.userGroupConfig(userGroup);
           return this.api.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID);
         }))
         .subscribe((health) => {

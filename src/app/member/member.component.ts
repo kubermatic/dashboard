@@ -41,23 +41,22 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
+
     this._userService.loggedInUser.pipe(first()).subscribe(user => this.currentUser = user);
 
     this._projectService.selectedProject
         .pipe(switchMap(project => {
           this._selectedProject = project;
-          return this._userService.getCurrentUserGroup(project.id);
+          return this._userService.currentUserGroup(project.id);
         }))
         .pipe(first())
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.getUserGroupConfig(userGroup));
-
-    this.dataSource.sort = this.sort;
-    this.sort.active = 'name';
-    this.sort.direction = 'asc';
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
     merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
-        .pipe(switchMap(
-            () => this._projectService.project ? this._apiService.getMembers(this._selectedProject.id) : EMPTY))
+        .pipe(switchMap(() => this._selectedProject ? this._apiService.getMembers(this._selectedProject.id) : EMPTY))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(members => {
           this.members = members;
@@ -76,13 +75,13 @@ export class MemberComponent implements OnInit, OnDestroy {
   }
 
   getGroup(member: MemberEntity): string {
-    return this._projectService.project ?
+    return this._selectedProject ?
         MemberUtils.getGroupDisplayName(MemberUtils.getGroupInProject(member, this._selectedProject.id)) :
         '';
   }
 
   isAddEnabled(): boolean {
-    return this._currentGroupConfig.members.invite;
+    return !this._currentGroupConfig || this._currentGroupConfig.members.invite;
   }
 
   addMember(): void {

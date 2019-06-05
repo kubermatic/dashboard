@@ -39,9 +39,9 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => {
           this.project = project;
-          return this._userService.getCurrentUserGroup(this.project.id);
+          return this._userService.currentUserGroup(this.project.id);
         }))
-        .subscribe(group => this.groupConfig = this._userService.getUserGroupConfig(group));
+        .subscribe(group => this.groupConfig = this._userService.userGroupConfig(group));
 
     this._projectService.onProjectChange.subscribe((project) => {
       this.project = project;

@@ -68,8 +68,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this._route.snapshot.paramMap.get('clusterName');
     const seedDCName = this._route.snapshot.paramMap.get('seedDc');
 
-    this._userService.getCurrentUserGroup(this.projectID)
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.getUserGroupConfig(userGroup));
+    this._userService.currentUserGroup(this.projectID)
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
     combineLatest(
         this._datacenterService.getDataCenter(seedDCName),
