@@ -1,4 +1,3 @@
-
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
@@ -30,6 +29,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   operatingSystemForm: FormGroup;
   hideOptional = true;
   versions: string[] = [];
+  availableOS: string[] = [];
   private subscriptions: Subscription[] = [];
   private providerData: NodeProviderData = {valid: false};
 
@@ -47,13 +47,14 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       count: new FormControl(
           this.nodeData.count,
           [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
-      operatingSystem: new FormControl(Object.keys(this.nodeData.spec.operatingSystem)[0], Validators.required),
+      operatingSystem: new FormControl(
+          {
+            value: this.isClusterOpenshift() ? 'centos' : Object.keys(this.nodeData.spec.operatingSystem)[0],
+            disabled: this.isClusterOpenshift(),
+          },
+          Validators.required),
       name: new FormControl({value: this.nodeData.name, disabled: this.isNameDisabled}),
     });
-
-    if (this.cluster.type === 'openshift') {
-      this.nodeForm.controls.operatingSystem.setValue('centos');
-    }
 
     if (!this.isInWizard) {
       this.nodeForm.addControl('kubelet', new FormControl());
@@ -163,6 +164,9 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
+  isClusterOpenshift(): boolean {
+    return ClusterUtils.isOpenshiftType(this.cluster);
+  }
 
   getAddNodeData(): NodeData {
     let versions = {};
