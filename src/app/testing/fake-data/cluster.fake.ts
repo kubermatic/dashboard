@@ -123,6 +123,7 @@ export function fakeGCPCluster(): ClusterEntity {
       url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
       version: '1.8.5',
     },
+    type: 'kubernetes',
   };
 }
 
