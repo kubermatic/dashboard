@@ -49,46 +49,6 @@
       }
     }
 
-    .km-projects-container {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      padding: 0 30px;
-      width: 100%;
-    }
-
-    .km-projects-icon {
-      position: absolute;
-      right: 28px;
-      top: 16px;
-      background-color: $secondary;
-      pointer-events: none;
-      color: $secondary-light;
-    }
-
-    mat-label {
-      margin: ($baseline-grid / 2) 0 !important;
-      font-size: $caption-font-size-base;
-      line-height: $caption-font-size-base;
-    }
-
-    ::ng-deep.mat-select-value-text {
-      color: $secondary;
-      font-size: $subhead-font-size-base-lg;
-      line-height: $subhead-font-size-base-lg + $baseline-grid / 2;
-    }
-
-    ::ng-deep.mat-select-placeholder {
-      opacity: 0.4;
-      color: $secondary;
-      font-size: $subhead-font-size-base-lg !important;
-      line-height: $subhead-font-size-base-lg;
-    }
-
-    ::ng-deep.mat-select-arrow {
-      visibility: hidden;
-    }
-
     .mat-list-item i {
       background-color: $secondary;
     }

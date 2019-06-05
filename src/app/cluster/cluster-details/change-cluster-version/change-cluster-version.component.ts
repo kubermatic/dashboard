@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
-import {Subscription} from 'rxjs';
-import {first} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
 
 import {ApiService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
@@ -22,7 +22,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   selectedVersion: string;
   project: ProjectEntity;
   isNodeDeploymentUpgradeEnabled = false;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(
       private _apiService: ApiService, private _projectService: ProjectService,
@@ -34,11 +34,8 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       this.selectedVersion = this.controlPlaneVersions[this.controlPlaneVersions.length - 1];
     }
 
-    this.project = this._projectService.project;
-    this.subscriptions.push(this._projectService.selectedProjectChanges$.subscribe((project) => {
-      this.project = project;
-    }));
-
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+        .subscribe(project => this.project = project);
     this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChangeDialogOpened');
   }
 
@@ -77,10 +74,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

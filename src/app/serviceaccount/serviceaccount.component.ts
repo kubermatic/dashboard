@@ -8,8 +8,9 @@ import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
-import {MemberEntity} from '../shared/entity/MemberEntity';
+import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
+import {GroupConfig} from '../shared/model/Config';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
@@ -24,7 +25,6 @@ import {EditServiceAccountComponent} from './edit-serviceaccount/edit-serviceacc
 export class ServiceAccountComponent implements OnInit, OnDestroy {
   isInitializing = true;
   serviceAccounts: ServiceAccountEntity[] = [];
-  currentUser: MemberEntity;
   isShowToken = [];
   tokenList = [];
   isTokenInitializing = [];
@@ -34,7 +34,9 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   shouldToggleToken = (index, item) => this.isShowToken[item.id];
   private _unsubscribe: Subject<any> = new Subject();
-  private _externalServiceAccountUpdate: Subject<any> = new Subject();
+  private _serviceAccountUpdate: Subject<any> = new Subject();
+  private _selectedProject = {} as ProjectEntity;
+  private _currentGroupConfig: GroupConfig;
 
   constructor(
       private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
@@ -42,17 +44,20 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       private readonly _matDialog: MatDialog, private readonly _appConfig: AppConfigService) {}
 
   ngOnInit(): void {
-    this._userService.getUser().pipe(first()).subscribe((user) => {
-      this.currentUser = user;
-    });
-
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._externalServiceAccountUpdate)
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+        .pipe(switchMap(project => {
+          this._selectedProject = project;
+          return this._userService.currentUserGroup(project.id);
+        }))
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+
+    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._serviceAccountUpdate)
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._apiService.getServiceAccounts(this._projectService.getCurrentProjectId())))
+        .pipe(switchMap(() => this._apiService.getServiceAccounts(this._selectedProject.id)))
         .subscribe(serviceaccounts => {
           this.serviceAccounts = serviceaccounts;
           this.isInitializing = false;
@@ -79,8 +84,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   }
 
   isEnabled(action: string): boolean {
-    return !this._projectService.userGroup ||
-        this._projectService.userGroupConfig[this._projectService.userGroup].serviceaccounts[action];
+    return !this._currentGroupConfig || this._currentGroupConfig.serviceaccounts[action];
   }
 
   toggleToken(element: ServiceAccountEntity): void {
@@ -97,7 +101,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(
             () => !!this.tokenList[serviceaccount.id] ?
-                this._apiService.getServiceAccountTokens(this._projectService.getCurrentProjectId(), serviceaccount) :
+                this._apiService.getServiceAccountTokens(this._selectedProject.id, serviceaccount) :
                 EMPTY))
         .subscribe(tokens => {
           this.tokenList[serviceaccount.id] = tokens;
@@ -107,11 +111,11 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
   addServiceAccount(): void {
     const modal = this._matDialog.open(AddServiceAccountComponent);
-    modal.componentInstance.project = this._projectService.project;
+    modal.componentInstance.project = this._selectedProject;
 
     modal.afterClosed().pipe(first()).subscribe((isAdded) => {
       if (isAdded) {
-        this._externalServiceAccountUpdate.next();
+        this._serviceAccountUpdate.next();
       }
     });
   }
@@ -119,11 +123,11 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   editServiceAccount(serviceAccount: ServiceAccountEntity, event: Event): void {
     event.stopPropagation();
     const modal = this._matDialog.open(EditServiceAccountComponent);
-    modal.componentInstance.project = this._projectService.project;
+    modal.componentInstance.project = this._selectedProject;
     modal.componentInstance.serviceaccount = serviceAccount;
     modal.afterClosed().pipe(first()).subscribe((isEdited) => {
       if (isEdited) {
-        this._externalServiceAccountUpdate.next();
+        this._serviceAccountUpdate.next();
       }
     });
   }
@@ -136,7 +140,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       data: {
         title: 'Remove Service Account from project',
         message: `You are on the way to remove the Service Account ${serviceAccount.name} from the project ${
-            this._projectService.project.name}. This cannot be undone!`,
+            this._selectedProject.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
         cancelLabel: 'Close',
       },
@@ -147,16 +151,13 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().pipe(first()).subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.deleteServiceAccount(this._projectService.getCurrentProjectId(), serviceAccount)
-            .pipe(first())
-            .subscribe(() => {
-              delete this.tokenList[serviceAccount.id];
-              NotificationActions.success(
-                  'Success',
-                  `Service Account ${serviceAccount.name} has been removed from project ${
-                      this._projectService.project.name}`);
-              this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
-            });
+        this._apiService.deleteServiceAccount(this._selectedProject.id, serviceAccount).pipe(first()).subscribe(() => {
+          delete this.tokenList[serviceAccount.id];
+          NotificationActions.success(
+              'Success',
+              `Service Account ${serviceAccount.name} has been removed from project ${this._selectedProject.name}`);
+          this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
+        });
       }
     });
   }

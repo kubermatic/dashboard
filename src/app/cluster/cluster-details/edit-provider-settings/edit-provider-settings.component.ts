@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {ApiService, ClusterService, ProjectService} from '../../../core/services';
 import {ProviderSettingsPatch} from '../../../core/services/cluster/cluster.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
@@ -20,11 +21,12 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   project: ProjectEntity;
-  private subscriptions: Subscription[] = [];
   providerSettingsPatch: ProviderSettingsPatch = {
     isValid: false,
     cloudSpecPatch: {},
   };
+
+  private _unsubscribe = new Subject<void>();
 
   constructor(
       private api: ApiService, private clusterService: ClusterService, private projectService: ProjectService,
@@ -32,25 +34,16 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
       public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(
-        this.clusterService.providerSettingsPatchChanges$.subscribe(async (patch: ProviderSettingsPatch) => {
-          this.providerSettingsPatch = await patch;
-        }));
+    this.clusterService.providerSettingsPatchChanges$.pipe(takeUntil(this._unsubscribe))
+        .subscribe(async patch => this.providerSettingsPatch = await patch);
 
-    this.project = this.projectService.project;
-    this.subscriptions.push(this.projectService.selectedProjectChanges$.subscribe((project) => {
-      this.project = project;
-    }));
-
+    this.projectService.selectedProject.pipe(takeUntil(this._unsubscribe)).subscribe(project => this.project = project);
     this.googleAnalyticsService.emitEvent('clusterOverview', 'providerSettingsDialogOpened');
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   saveProviderSettings(): void {

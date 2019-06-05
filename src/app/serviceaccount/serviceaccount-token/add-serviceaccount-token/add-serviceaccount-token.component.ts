@@ -48,5 +48,6 @@ export class AddServiceAccountTokenComponent implements OnInit {
   openTokenDialog(token: ServiceAccountTokenEntity): void {
     const modal = this._matDialog.open(TokenDialogComponent);
     modal.componentInstance.serviceaccountToken = token;
+    modal.componentInstance.projectID = this.project.id;
   }
 }

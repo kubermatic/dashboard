@@ -2,7 +2,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatTabsModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, DatacenterService, ProjectService, UserService, WizardService} from '../../core/services';
@@ -21,10 +21,9 @@ import {VSphereNodeDataComponent} from '../../node-data/vsphere-add-node/vsphere
 import {VSphereOptionsComponent} from '../../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanSizes} from '../../testing/fake-data/addNodeModal.fake';
-import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
-import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
 import {RouterStub} from '../../testing/router-stubs';
+import {ActivatedRouteMock} from '../../testing/services/activate-route-mock';
 import {asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
@@ -90,6 +89,7 @@ describe('SetSettingsComponent', () => {
           providers: [
             NodeDataService,
             WizardService,
+            {provide: ActivatedRoute, useCass: ActivatedRouteMock},
             {provide: ApiService, useValue: apiMock},
             {provide: DatacenterService, useValue: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
@@ -106,10 +106,6 @@ describe('SetSettingsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(SetSettingsComponent);
     component = fixture.componentInstance;
-    component.cluster = fakeDigitaloceanCluster();
-    component.clusterSSHKeys = [];
-    component.nodeData = nodeDataFake();
-    fixture.detectChanges();
   });
 
   it('should create the set-settings cmp', () => {

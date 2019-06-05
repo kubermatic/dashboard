@@ -6,7 +6,7 @@ import {first, retry, switchMap, takeUntil} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, DatacenterService, ProjectService} from '../../core/services';
+import {ApiService, DatacenterService, UserService} from '../../core/services';
 import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';
@@ -14,7 +14,7 @@ import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {Config} from '../../shared/model/Config';
+import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
@@ -47,7 +47,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   config: Config = {share_kubeconfig: false};
   updatesAvailable = false;
   downgradesAvailable = false;
-  moreSshKeys = false;
   someUpgradesRestrictedByKubeletVersion = false;
   projectID: string;
   events: EventEntity[] = [];
@@ -55,12 +54,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   private _versionsList: string[] = [];
   private _externalClusterUpdate: Subject<any> = new Subject();
   private _unsubscribe: Subject<any> = new Subject();
+  private _currentGroupConfig: GroupConfig;
 
   constructor(
       private readonly _route: ActivatedRoute, private readonly _router: Router,
       private readonly _apiService: ApiService, private readonly _matDialog: MatDialog,
       private readonly _datacenterService: DatacenterService, private readonly _appConfigService: AppConfigService,
-      private readonly _node: NodeService, private readonly _projectService: ProjectService) {}
+      private readonly _node: NodeService, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
     this.config = this._appConfigService.getConfig();
@@ -68,9 +68,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const clusterName = this._route.snapshot.paramMap.get('clusterName');
     const seedDCName = this._route.snapshot.paramMap.get('seedDc');
 
+    this._userService.currentUserGroup(this.projectID)
+        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+
     combineLatest(
         this._datacenterService.getDataCenter(seedDCName),
-        this._apiService.getCluster(clusterName, seedDCName, this._projectService.getCurrentProjectId()))
+        this._apiService.getCluster(clusterName, seedDCName, this.projectID))
         .pipe(retry(3))
         .pipe(first())
         .pipe(switchMap(([datacenter, cluster]) => {
@@ -78,8 +81,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           this.cluster = cluster;
 
           return combineLatest(
-              this._apiService.getClusterSSHKeys(
-                  cluster.id, datacenter.metadata.name, this._projectService.getCurrentProjectId()),
+              this._apiService.getClusterSSHKeys(cluster.id, datacenter.metadata.name, this.projectID),
               this._datacenterService.getDataCenter(cluster.spec.cloud.dc),
           );
         }))
@@ -92,12 +94,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         }))
         .pipe(switchMap(() => {
           return combineLatest(
-              this._apiService.getCluster(
-                  this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId()),
-              this._apiService.getClusterHealth(
-                  this.cluster.id, seedDCName, this._projectService.getCurrentProjectId()),
-              this._apiService.getClusterEvents(
-                  this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId()));
+              this._apiService.getCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID),
+              this._apiService.getClusterHealth(this.cluster.id, seedDCName, this.projectID),
+              this._apiService.getClusterEvents(this.cluster.id, this.datacenter.metadata.name, this.projectID));
         }))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(
@@ -120,9 +119,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   private _reloadVersions(): void {
     if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
-      this._apiService
-          .getClusterUpgrades(
-              this._projectService.getCurrentProjectId(), this.datacenter.metadata.name, this.cluster.id)
+      this._apiService.getClusterUpgrades(this.projectID, this.datacenter.metadata.name, this.cluster.id)
           .pipe(takeUntil(this._unsubscribe))
           .subscribe((upgrades) => {
             this._versionsList = [];
@@ -164,16 +161,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   reloadClusterNodes(): void {
     if (this.cluster && HealthEntity.allHealthy(this.health)) {
-      this._apiService
-          .getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId())
+      this._apiService.getClusterNodes(this.cluster.id, this.datacenter.metadata.name, this.projectID)
           .pipe(takeUntil(this._unsubscribe))
           .subscribe((nodes) => {
             this.nodes = nodes;
           });
 
-      this._apiService
-          .getNodeDeployments(
-              this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId())
+      this._apiService.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
           .pipe(takeUntil(this._unsubscribe))
           .subscribe((nodeDeployments) => {
             this.nodeDeployments = nodeDeployments;
@@ -183,15 +177,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isAddNodeDeploymentsEnabled(): boolean {
-    return this.isClusterRunning &&
-        (!this._projectService.getUserGroupConfig() ||
-         this._projectService.getUserGroupConfig().nodeDeployments.create);
+    return this.isClusterRunning && (!this._currentGroupConfig || this._currentGroupConfig.nodeDeployments.create);
   }
 
   addNode(): void {
-    this._node
-        .showNodeDeploymentCreateDialog(
-            this.nodes.length, this.cluster, this._projectService.getCurrentProjectId(), this.datacenter)
+    this._node.showNodeDeploymentCreateDialog(this.nodes.length, this.cluster, this.projectID, this.datacenter)
         .pipe(first())
         .subscribe((isConfirmed) => {
           if (isConfirmed) {
@@ -201,17 +191,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isDeleteEnabled(): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().clusters.delete;
+    return !this._currentGroupConfig || this._currentGroupConfig.clusters.delete;
   }
 
   deleteClusterDialog(): void {
     const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.projectID = this._projectService.getCurrentProjectId();
+    modal.componentInstance.projectID = this.projectID;
     modal.afterClosed().pipe(first()).subscribe((deleted) => {
       if (deleted) {
-        this._router.navigate(['/projects/' + this._projectService.getCurrentProjectId() + '/clusters']);
+        this._router.navigate(['/projects/' + this.projectID + '/clusters']);
       }
     });
   }
@@ -220,14 +210,14 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this._matDialog.open(ClusterConnectComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.projectID = this._projectService.getCurrentProjectId();
+    modal.componentInstance.projectID = this.projectID;
   }
 
   shareConfigDialog(): void {
     const modal = this._matDialog.open(ShareKubeconfigComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.projectID = this._projectService.getCurrentProjectId();
+    modal.componentInstance.projectID = this.projectID;
   }
 
   changeClusterVersionDialog(): void {
@@ -243,8 +233,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getDownloadURL(): string {
-    return this._apiService.getKubeconfigURL(
-        this._projectService.getCurrentProjectId(), this.datacenter.metadata.name, this.cluster.id);
+    return this._apiService.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
 
   isLoaded(): boolean {
@@ -252,7 +241,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isEditEnabled(): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().clusters.edit;
+    return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
   }
 
   editProviderSettings(): void {
@@ -262,17 +251,16 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   isSSHKeysEditEnabled(): boolean {
-    return !this._projectService.getUserGroupConfig() || this._projectService.getUserGroupConfig().sshKeys.edit;
+    return !this._currentGroupConfig || this._currentGroupConfig.sshKeys.edit;
   }
 
   editSSHKeys(): void {
     const modal = this._matDialog.open(EditSSHKeysComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.projectID = this._projectService.getCurrentProjectId();
+    modal.componentInstance.projectID = this.projectID;
     modal.afterClosed().pipe(first()).subscribe(() => {
-      this._apiService
-          .getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this._projectService.getCurrentProjectId())
+      this._apiService.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
           .pipe(takeUntil(this._unsubscribe))
           .subscribe((keys) => {
             this.sshKeys = keys;

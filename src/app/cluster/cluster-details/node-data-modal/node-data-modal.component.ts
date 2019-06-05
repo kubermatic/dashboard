@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {MAT_DIALOG_DATA, MatTabChangeEvent} from '@angular/material';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
@@ -31,7 +32,7 @@ export interface NodeDataModalData {
 export class NodeDataModalComponent implements OnInit, OnDestroy {
   @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   nodeDC: DataCenterEntity;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(
       @Inject(MAT_DIALOG_DATA) public data: NodeDataModalData, private nodeDataService: NodeDataService,
@@ -51,9 +52,9 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       };
     }
 
-    this.dcService.getDataCenter(this.data.cluster.spec.cloud.dc).subscribe((result) => {
-      this.nodeDC = result;
-    });
+    this.dcService.getDataCenter(this.data.cluster.spec.cloud.dc)
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(result => this.nodeDC = result);
 
     if (this.data.editMode !== true) {
       this.data.nodeData.spec.cloud[this.nodeDC.spec.provider] = getEmptyNodeProviderSpec(this.nodeDC.spec.provider);
@@ -61,19 +62,15 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       this.data.nodeData.spec.versions = getEmptyNodeVersionSpec();
     }
 
-    this.subscriptions.push(this.nodeDataService.nodeDataChanges$.subscribe(async (data: NodeData) => {
-      this.data.nodeData = await data;
-    }));
+    this.nodeDataService.nodeDataChanges$.pipe(takeUntil(this._unsubscribe))
+        .subscribe(async data => this.data.nodeData = await data);
 
     this.googleAnalyticsService.emitEvent('clusterOverview', 'addNodeDialogOpened');
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   onTabChange(event: MatTabChangeEvent): void {

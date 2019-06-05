@@ -8,7 +8,7 @@ import {of} from 'rxjs';
 import Spy = jasmine.Spy;
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, ProjectService} from '../../core/services';
+import {ApiService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../../testing/components/noop-confirmation-dialog.component';
@@ -17,6 +17,7 @@ import {fakeServiceAccount, fakeServiceAccountTokens} from '../../testing/fake-d
 import {RouterStub, RouterTestingModule} from '../../testing/router-stubs';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
+import {UserMockService} from '../../testing/services/user-mock.service';
 import {ServiceAccountTokenComponent} from './serviceaccount-token.component';
 import {TokenDialogComponent} from './token-dialog/token-dialog.component';
 
@@ -51,6 +52,7 @@ describe('ServiceAccountTokenComponent', () => {
             {provide: ApiService, useValue: apiMock},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
+            {provide: UserService, useClass: UserMockService},
             MatDialog,
             GoogleAnalyticsService,
           ],
