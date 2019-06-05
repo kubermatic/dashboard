@@ -29,7 +29,6 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   operatingSystemForm: FormGroup;
   hideOptional = true;
   versions: string[] = [];
-  availableOS: string[] = [];
   private _unsubscribe = new Subject<void>();
   private providerData: NodeProviderData = {valid: false};
 
