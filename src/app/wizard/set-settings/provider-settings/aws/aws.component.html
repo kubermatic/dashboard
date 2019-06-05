@@ -12,6 +12,7 @@
     <mat-label>Access Key ID*</mat-label>
     <input matInput
            formControlName="accessKeyId"
+           name="accessKeyId"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="awsSettingsForm.controls.accessKeyId.hasError('required')">
@@ -22,6 +23,7 @@
     <mat-label>Secret Access Key*</mat-label>
     <input matInput
            formControlName="secretAccessKey"
+           name="secretAccessKey"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="awsSettingsForm.controls.secretAccessKey.hasError('required')">
@@ -33,6 +35,7 @@
     <mat-label>Security Group ID</mat-label>
     <input matInput
            formControlName="securityGroup"
+           name="securityGroup"
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
@@ -45,6 +48,7 @@
     <mat-label>VPC ID</mat-label>
     <input matInput
            formControlName="vpcId"
+           name="vpcId"
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
@@ -57,6 +61,7 @@
     <mat-label>Subnet ID</mat-label>
     <input matInput
            formControlName="subnetId"
+           name="subnetId"
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
@@ -69,6 +74,7 @@
     <mat-label>Route Table ID</mat-label>
     <input matInput
            formControlName="routeTableId"
+           name="routeTableId"
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Route table. If not specified, the default Route Table will be used.</mat-hint>

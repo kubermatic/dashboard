@@ -4,6 +4,7 @@
     <mat-label>Username*</mat-label>
     <input matInput
            formControlName="infraManagementUsername"
+           name="infraManagementUsername"
            type="text"
            autocomplete="off">
     <mat-error *ngIf="vsphereProviderSettingsForm.controls.infraManagementUsername.hasError('required')">
@@ -14,6 +15,7 @@
     <mat-label>Password*</mat-label>
     <input matInput
            formControlName="infraManagementPassword"
+           name="infraManagementPassword"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="vsphereProviderSettingsForm.controls.infraManagementPassword.hasError('required')">
@@ -24,6 +26,7 @@
     <mat-label>VSphere Cloud Provider Username</mat-label>
     <input matInput
            formControlName="username"
+           name="username"
            type="text"
            autocomplete="off">
   </mat-form-field>
@@ -31,6 +34,7 @@
     <mat-label>VSphere Cloud Provider Password</mat-label>
     <input matInput
            formControlName="password"
+           name="password"
            type="password"
            autocomplete="off">
   </mat-form-field>

@@ -4,6 +4,7 @@
     <mat-label>Client ID*</mat-label>
     <input matInput
            formControlName="clientID"
+           name="clientID"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="azureProviderSettingsForm.controls.clientID.hasError('required')">
@@ -15,6 +16,7 @@
     <mat-label>Client Secret*</mat-label>
     <input matInput
            formControlName="clientSecret"
+           name="clientSecret"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="azureProviderSettingsForm.controls.clientSecret.hasError('required')">
