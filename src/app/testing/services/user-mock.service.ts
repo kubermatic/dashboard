@@ -14,11 +14,11 @@ export class UserMockService {
     return this.user;
   }
 
-  getCurrentUserGroup(projectID: string): Observable<string> {
+  currentUserGroup(projectID: string): Observable<string> {
     return of(fakeMember().projects[0].group);
   }
 
-  getUserGroupConfig(userGroup: string): GroupConfig {
+  userGroupConfig(userGroup: string): GroupConfig {
     return fakeUserGroupConfig()[userGroup];
   }
 }
