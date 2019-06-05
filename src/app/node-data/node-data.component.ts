@@ -29,6 +29,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   operatingSystemForm: FormGroup;
   hideOptional = true;
   versions: string[] = [];
+  availableOS: string[] = [];
   private subscriptions: Subscription[] = [];
   private providerData: NodeProviderData = {valid: false};
 
@@ -54,10 +55,6 @@ export class NodeDataComponent implements OnInit, OnDestroy {
           Validators.required),
       name: new FormControl({value: this.nodeData.name, disabled: this.isNameDisabled}),
     });
-
-    if (this.cluster.type === 'openshift') {
-      this.nodeForm.controls.operatingSystem.setValue('centos');
-    }
 
     if (!this.isInWizard) {
       this.nodeForm.addControl('kubelet', new FormControl());
