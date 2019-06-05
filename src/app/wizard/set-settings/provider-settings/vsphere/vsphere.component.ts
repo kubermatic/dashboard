@@ -95,9 +95,25 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
                 if (sortedNetworks.length > 0 && this.vsphereSettingsForm.controls.vmNetName.value !== '0') {
                   this.vsphereSettingsForm.controls.vmNetName.setValue(this.cluster.spec.cloud.vsphere.vmNetName);
                 }
+                this.loadingNetworks = false;
               } else {
                 this.networks = [];
+                this.loadingNetworks = false;
               }
             }));
+  }
+
+  getNetworkFormState(field: string): string {
+    if (!this.loadingNetworks &&
+        (this.vsphereSettingsForm.controls.username.value === '' ||
+         this.vsphereSettingsForm.controls.password.value === '')) {
+      return 'Network: Please enter your credentials first!';
+    } else if (this.loadingNetworks) {
+      return 'Loading Networks...';
+    } else if (!this.loadingNetworks && this.networks.length === 0) {
+      return 'No Networks available';
+    } else {
+      return 'Network';
+    }
   }
 }

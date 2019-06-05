@@ -92,7 +92,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
 
   getFlavorsFormState(): string {
     if (!this.loadingFlavors && this.isInWizard() && !this.hasCredentials()) {
-      return 'Please enter your credentials first!';
+      return 'Flavor: Please enter your credentials first!';
     } else if (this.loadingFlavors) {
       return 'Loading flavors...';
     } else {
