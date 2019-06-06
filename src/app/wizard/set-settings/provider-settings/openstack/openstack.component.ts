@@ -64,7 +64,30 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((changes) => {
       if (changes.domain !== '' && changes.username !== '' && changes.password !== '') {
-        this.validateGetSettings(changes);
+        const osSpec = !!this.clusterSpec ? this.clusterSpec.cloudSpec.openstack : {};
+        if (!!osSpec &&
+            (this.tenants.length === 0 ||
+             (changes.domain !== osSpec.domain || changes.username !== osSpec.username ||
+              changes.password !== osSpec.password))) {
+          this.loadTenants();
+        } else if (
+            !!osSpec &&
+            ((changes.tenant !== '' && changes.tenant !== osSpec.tenant) ||
+             (changes.tenant !== '' && this.networks.length === 0 && this.floatingIpPools.length === 0 &&
+              this.securityGroups.length === 0))) {
+          this.loadOptionalSettings();
+        } else if (this.tenants.length === 0 || changes.tenant === '') {
+          this.resetOptionalFields(false);
+        } else if (
+            !!osSpec &&
+            ((changes.network !== '' && changes.network !== osSpec.network) ||
+             (changes.network !== '' && this.subnetIds.length === 0))) {
+          this.loadSubnetIds();
+        } else if (this.networks.length === 0) {
+          this.openstackSettingsForm.controls.subnetId.setValue('');
+          this.subnetIds = [];
+        }
+        this.checkState();
       } else {
         this.resetOptionalFields(true);
       }
@@ -108,33 +131,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.checkState();
   }
 
-  validateGetSettings(changes: object): void {
-    const osSpec = !!this.clusterSpec ? this.clusterSpec.cloudSpec.openstack : {};
-    if (!!osSpec &&
-        (this.tenants.length === 0 ||
-         (changes.domain !== osSpec.domain || changes.username !== osSpec.username ||
-          changes.password !== osSpec.password))) {
-      this.loadTenants();
-    } else if (
-        !!osSpec &&
-        ((changes.tenant !== '' && changes.tenant !== osSpec.tenant) ||
-         (changes.tenant !== '' && this.networks.length === 0 && this.floatingIpPools.length === 0 &&
-          this.securityGroups.length === 0))) {
-      this.loadOptionalSettings();
-    } else if (this.tenants.length === 0 || changes.tenant === '') {
-      this.resetOptionalFields(false);
-    } else if (
-        !!osSpec &&
-        ((changes.network !== '' && changes.network !== osSpec.network) ||
-         (changes.network !== '' && this.subnetIds.length === 0))) {
-      this.loadSubnetIds();
-    } else if (this.networks.length === 0) {
-      this.openstackSettingsForm.controls.subnetId.setValue('');
-      this.subnetIds = [];
-    }
-    this.checkState();
-  }
-
   loadTenants(): void {
     if (this.openstackSettingsForm.controls.username.value === '' ||
         this.openstackSettingsForm.controls.password.value === '' ||
@@ -163,9 +159,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             },
             () => {
               this.tenants = [];
-              this.loadingOptionalTenants = false;
-            },
-            err => {
               this.loadingOptionalTenants = false;
             });
   }
