@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';

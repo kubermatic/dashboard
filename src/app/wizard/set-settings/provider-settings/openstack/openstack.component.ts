@@ -5,7 +5,7 @@ import {debounceTime, first} from 'rxjs/operators';
 import {AppConfigService} from '../../../../app-config.service';
 import {ApiService, Auth, WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {OpenstackFloatingIpPool, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {OpenstackFloatingIpPool, OpenstackNetwork, OpenstackOptionalFields, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {Config} from '../../../../shared/model/Config';
 
@@ -19,9 +19,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   clusterSpec: ClusterProviderSettingsForm;
   tenants: OpenstackTenant[] = [];
   subnetIds: OpenstackSubnet[] = [];
-  network: OpenstackNetwork[] = [];
-  floatingIpPool: OpenstackFloatingIpPool[] = [];
-  securityGroup: OpenstackSecurityGroup[] = [];
+  networks: OpenstackNetwork[] = [];
+  floatingIpPools: OpenstackFloatingIpPool[] = [];
+  securityGroups: OpenstackSecurityGroup[] = [];
   loadingSubnetIds = false;
   loadingOptionalSettings = false;
   loadingOptionalTenants = false;
@@ -48,7 +48,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       username: new FormControl(this.cluster.spec.cloud.openstack.username, [Validators.required]),
       password: new FormControl(this.cluster.spec.cloud.openstack.password, [Validators.required]),
       floatingIpPool: new FormControl(this.cluster.spec.cloud.openstack.floatingIpPool),
-      securityGroups: new FormControl(this.cluster.spec.cloud.openstack.securityGroups),
+      securityGroup: new FormControl(this.cluster.spec.cloud.openstack.securityGroups),
       network: new FormControl(this.cluster.spec.cloud.openstack.network),
       subnetId: new FormControl(this.cluster.spec.cloud.openstack.subnetID),
     });
@@ -56,20 +56,17 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.loadTenants();
     this.loadOptionalSettings();
     this.loadSubnetIds();
+    this.checkState();
 
     this.wizardService.clusterProviderSettingsFormChanges$.subscribe((cluster) => {
       this.clusterSpec = cluster;
     });
 
-    this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((event) => {
-      if (event.domain !== '' && event.username !== '' && event.password !== '') {
-        if (event.tenant === '' ||
-            (!!this.clusterSpec.cloudSpec && event.tenant !== this.clusterSpec.cloudSpec.openstack.tenant)) {
-          this.loadTenants();
-          this.loadOptionalSettings();
-        } else if (!!this.clusterSpec.cloudSpec && event.network !== this.clusterSpec.cloudSpec.openstack.network) {
-          this.loadSubnetIds();
-        }
+    this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((changes) => {
+      if (changes.domain !== '' && changes.username !== '' && changes.password !== '') {
+        this.validateGetSettings(changes);
+      } else {
+        this.resetOptionalFields(true);
       }
 
       this.wizardService.changeClusterProviderSettings({
@@ -80,7 +77,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             username: this.openstackSettingsForm.controls.username.value,
             password: this.openstackSettingsForm.controls.password.value,
             floatingIpPool: this.openstackSettingsForm.controls.floatingIpPool.value,
-            securityGroups: this.openstackSettingsForm.controls.securityGroups.value,
+            securityGroups: this.openstackSettingsForm.controls.securityGroup.value,
             network: this.openstackSettingsForm.controls.network.value,
             subnetID: this.openstackSettingsForm.controls.subnetId.value,
           },
@@ -93,6 +90,49 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
+  }
+
+  resetOptionalFields(withTenant: boolean): void {
+    if (withTenant) {
+      this.openstackSettingsForm.controls.tenant.setValue('');
+      this.tenants = [];
+    }
+    this.openstackSettingsForm.controls.network.setValue('');
+    this.openstackSettingsForm.controls.floatingIpPool.setValue('');
+    this.openstackSettingsForm.controls.securityGroup.setValue('');
+    this.openstackSettingsForm.controls.subnetId.setValue('');
+    this.networks = [];
+    this.floatingIpPools = [];
+    this.securityGroups = [];
+    this.subnetIds = [];
+    this.checkState();
+  }
+
+  validateGetSettings(changes: object): void {
+    const osSpec = !!this.clusterSpec ? this.clusterSpec.cloudSpec.openstack : {};
+    if (!!osSpec &&
+        (this.tenants.length === 0 ||
+         (changes.domain !== osSpec.domain || changes.username !== osSpec.username ||
+          changes.password !== osSpec.password))) {
+      this.loadTenants();
+    } else if (
+        !!osSpec &&
+        ((changes.tenant !== '' && changes.tenant !== osSpec.tenant) ||
+         (changes.tenant !== '' && this.networks.length === 0 && this.floatingIpPools.length === 0 &&
+          this.securityGroups.length === 0))) {
+      this.loadOptionalSettings();
+    } else if (this.tenants.length === 0 || changes.tenant === '') {
+      this.resetOptionalFields(false);
+    } else if (
+        !!osSpec &&
+        ((changes.network !== '' && changes.network !== osSpec.network) ||
+         (changes.network !== '' && this.subnetIds.length === 0))) {
+      this.loadSubnetIds();
+    } else if (this.networks.length === 0) {
+      this.openstackSettingsForm.controls.subnetId.setValue('');
+      this.subnetIds = [];
+    }
+    this.checkState();
   }
 
   loadTenants(): void {
@@ -119,9 +159,13 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
               }
 
               this.loadingOptionalTenants = false;
+              this.checkState();
             },
             () => {
               this.tenants = [];
+              this.loadingOptionalTenants = false;
+            },
+            err => {
               this.loadingOptionalTenants = false;
             });
   }
@@ -142,18 +186,18 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             this.cluster.spec.cloud.dc)
         .pipe(first())
         .subscribe((networks: OpenstackNetwork[]) => {
-          this.network = networks.filter((network) => network.external !== true).sort((a, b) => {
+          this.networks = networks.filter((network) => network.external !== true).sort((a, b) => {
             return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
           });
-          this.floatingIpPool = networks.filter((network) => network.external === true).sort((a, b) => {
+          this.floatingIpPools = networks.filter((network) => network.external === true).sort((a, b) => {
             return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
           });
 
-          if (this.network.length === 0) {
+          if (this.networks.length === 0) {
             this.openstackSettingsForm.controls.network.setValue('');
           }
 
-          if (this.floatingIpPool.length === 0) {
+          if (this.floatingIpPools.length === 0) {
             this.openstackSettingsForm.controls.floatingIpPool.setValue('');
           }
         });
@@ -165,12 +209,12 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             this.cluster.spec.cloud.dc)
         .pipe(first())
         .subscribe((securityGroups) => {
-          this.securityGroup = securityGroups.sort((a, b) => {
+          this.securityGroups = securityGroups.sort((a, b) => {
             return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
           });
 
-          if (this.securityGroup.length === 0) {
-            this.openstackSettingsForm.controls.securityGroups.setValue('');
+          if (this.securityGroups.length === 0) {
+            this.openstackSettingsForm.controls.securityGroup.setValue('');
           }
 
           this.loadingOptionalSettings = false;
@@ -207,38 +251,55 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     return this.wizardService.getSelectedDatacenter().spec.openstack.enforce_floating_ip;
   }
 
+  hasCredentialsForTenant() {
+    return (
+        this.openstackSettingsForm.controls.username.value === '' ||
+        this.openstackSettingsForm.controls.password.value === '' ||
+        this.openstackSettingsForm.controls.domain.value === '');
+  }
+
+  showHint(field: string): boolean {
+    switch (field) {
+      case 'tenant':
+        return !this.loadingOptionalTenants && this.hasCredentialsForTenant();
+      case 'subnetId':
+        return !this.loadingSubnetIds &&
+            (this.hasCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '' ||
+             this.openstackSettingsForm.controls.network.value === '');
+      case 'optionalSettings':
+        return !this.loadingOptionalSettings &&
+            (this.hasCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '');
+      default:
+        return false;
+    }
+  }
+
   getTenantsFormState(): string {
-    if (!this.loadingOptionalTenants &&
-        (this.openstackSettingsForm.controls.username.value === '' ||
-         this.openstackSettingsForm.controls.password.value === '' ||
-         this.openstackSettingsForm.controls.domain.value === '')) {
-      return 'Project: Please enter your credentials first!';
+    if (!this.loadingOptionalTenants && this.hasCredentialsForTenant()) {
+      return 'Project*';
     } else if (this.loadingOptionalTenants) {
       return 'Loading Projects...';
     } else if (!this.loadingOptionalTenants && this.tenants.length === 0) {
       return 'No Projects available';
     } else {
-      return 'Project*:';
+      return 'Project*';
     }
   }
 
   getOptionalSettingsFormState(field: string): string {
     if (!this.loadingOptionalSettings &&
-        (this.openstackSettingsForm.controls.username.value === '' ||
-         this.openstackSettingsForm.controls.password.value === '' ||
-         this.openstackSettingsForm.controls.domain.value === '' ||
-         this.openstackSettingsForm.controls.tenant.value === '')) {
-      return field + ': Please enter Project first!';
+        (this.hasCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '')) {
+      return field;
     } else if (this.loadingOptionalSettings) {
       return 'Loading ' + field + 's...';
     } else {
       switch (field) {
         case 'Floating IP Pool':
-          return this.floatingIpPool.length === 0 ? 'No Floating IP Pools available' : field + ':';
+          return this.floatingIpPools.length === 0 ? 'No Floating IP Pools available' : field;
         case 'Security Group':
-          return this.securityGroup.length === 0 ? 'No Security Groups available' : field + ':';
+          return this.securityGroups.length === 0 ? 'No Security Groups available' : field;
         case 'Network':
-          return this.network.length === 0 ? 'No Networks available' : field + ':';
+          return this.networks.length === 0 ? 'No Networks available' : field;
         default:
           return '';
       }
@@ -247,18 +308,32 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   getSubnetIDFormState(): string {
     if (!this.loadingSubnetIds &&
-        (this.openstackSettingsForm.controls.username.value === '' ||
-         this.openstackSettingsForm.controls.password.value === '' ||
-         this.openstackSettingsForm.controls.domain.value === '' ||
-         this.openstackSettingsForm.controls.tenant.value === '' ||
+        (this.hasCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '' ||
          this.openstackSettingsForm.controls.network.value === '')) {
-      return 'Subnet ID: Please enter Network first!';
+      return 'Subnet ID';
     } else if (this.loadingSubnetIds) {
       return 'Loading Subnet IDs...';
     } else if (this.openstackSettingsForm.controls.network.value !== '' && this.subnetIds.length === 0) {
       return 'No Subnet IDs available';
     } else {
-      return 'Subnet ID:';
+      return 'Subnet ID';
+    }
+  }
+
+  checkState(): void {
+    const fields: OpenstackOptionalFields[] = [
+      {'length': this.tenants.length, 'name': 'tenant'},
+      {'length': this.floatingIpPools.length, 'name': 'floatingIpPool'},
+      {'length': this.securityGroups.length, 'name': 'securityGroup'},
+      {'length': this.networks.length, 'name': 'network'}, {'length': this.subnetIds.length, 'name': 'subnetId'}
+    ];
+
+    for (const i in fields) {
+      if (fields[i].length === 0) {
+        this.openstackSettingsForm.get(fields[i].name).disable();
+      } else {
+        this.openstackSettingsForm.get(fields[i].name).enable();
+      }
     }
   }
 
