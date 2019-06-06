@@ -31,8 +31,11 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
     });
 
+    this.checkNetworkState();
+
     this.subscriptions.push(this.vsphereSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
       this.loadNetworks();
+      this.checkNetworkState();
 
       let cloudUser = this.vsphereSettingsForm.controls.infraManagementUsername.value;
       let cloudPassword = this.vsphereSettingsForm.controls.infraManagementPassword.value;
@@ -75,7 +78,16 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
 
   loadNetworks(): void {
     if (this.vsphereSettingsForm.controls.username.value === '' ||
-        this.vsphereSettingsForm.controls.password.value === '' || this.networks.length > 0) {
+        this.vsphereSettingsForm.controls.password.value === '') {
+      if (this.networks.length > 0) {
+        this.vsphereSettingsForm.controls.vmNetName.setValue('');
+        this.networks = [];
+        return;
+      }
+      return;
+    }
+
+    if (this.networks.length > 0) {
       return;
     }
 
@@ -95,19 +107,18 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
                 if (sortedNetworks.length > 0 && this.vsphereSettingsForm.controls.vmNetName.value !== '0') {
                   this.vsphereSettingsForm.controls.vmNetName.setValue(this.cluster.spec.cloud.vsphere.vmNetName);
                 }
-                this.loadingNetworks = false;
               } else {
                 this.networks = [];
-                this.loadingNetworks = false;
               }
+              this.loadingNetworks = false;
             }));
   }
 
-  getNetworkFormState(field: string): string {
+  getNetworkFormState(): string {
     if (!this.loadingNetworks &&
         (this.vsphereSettingsForm.controls.username.value === '' ||
          this.vsphereSettingsForm.controls.password.value === '')) {
-      return 'Network: Please enter your credentials first!';
+      return 'Network';
     } else if (this.loadingNetworks) {
       return 'Loading Networks...';
     } else if (!this.loadingNetworks && this.networks.length === 0) {
@@ -115,5 +126,19 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
     } else {
       return 'Network';
     }
+  }
+
+  checkNetworkState(): void {
+    if (this.networks.length === 0) {
+      this.vsphereSettingsForm.controls.vmNetName.disable();
+    } else {
+      this.vsphereSettingsForm.controls.vmNetName.enable();
+    }
+  }
+
+  showNetworkHint(): boolean {
+    return !this.loadingNetworks &&
+        (this.vsphereSettingsForm.controls.username.value === '' ||
+         this.vsphereSettingsForm.controls.password.value === '');
   }
 }
