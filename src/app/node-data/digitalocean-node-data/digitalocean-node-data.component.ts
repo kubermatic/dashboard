@@ -2,7 +2,7 @@ import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@an
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {ApiService} from '../../core/services';
+import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
@@ -22,9 +22,9 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
 
   sizes: DigitaloceanSizes = {optimized: [], standard: []};
   doNodeForm: FormGroup;
+  loadingSizes = false;
   private _unsubscribe = new Subject<void>();
-
-  constructor(private api: ApiService, private addNodeService: NodeDataService) {}
+  constructor(private api: ApiService, private addNodeService: NodeDataService, private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.doNodeForm = new FormGroup({
@@ -33,6 +33,16 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
 
     this.doNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this.addNodeService.changeNodeProviderData(this.getNodeProviderData()));
+
+    this.subscriptions.push(this.wizardService.clusterProviderSettingsFormChanges$.subscribe((data) => {
+      this.cloudSpec = data.cloudSpec;
+      this.doNodeForm.controls.size.setValue('');
+      this.sizes = {optimized: [], standard: []};
+      this.checkSizeState();
+      if (data.cloudSpec.digitalocean.token !== '') {
+        this.reloadDigitaloceanSizes();
+      }
+    }));
 
     this.checkSizeState();
     this.reloadDigitaloceanSizes();
@@ -52,18 +62,28 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   }
 
   getSizesFormState(): string {
-    if ((!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token.length === 0) && this.isInWizard()) {
-      return 'Please enter a valid token first!';
-    } else if (this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
+    if ((!this.loadingSizes &&
+         (!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token.length === 0)) &&
+        this.isInWizard()) {
+      return 'Node Size*';
+    } else if (this.loadingSizes) {
       return 'Loading sizes...';
+    } else if (!this.loadingSizes && this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
+      return 'No Sizes available';
     } else {
-      return 'Node Size*:';
+      return 'Node Size*';
     }
+  }
+
+  showSizeHint(): boolean {
+    return (!this.loadingSizes && (!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token === '')) &&
+        this.isInWizard();
   }
 
   reloadDigitaloceanSizes(): void {
     if (this.isInWizard()) {
       if (this.cloudSpec.digitalocean.token) {
+        this.loadingSizes = true;
         this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token)
             .pipe(takeUntil(this._unsubscribe))
             .subscribe((data) => {
@@ -71,10 +91,12 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
               if (this.nodeData.spec.cloud.digitalocean.size === '') {
                 this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
               }
+              this.loadingSizes = false;
               this.checkSizeState();
-            });
+            }, err => this.loadingSizes = false);
       }
     } else {
+      this.loadingSizes = true;
       this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId)
           .pipe(takeUntil(this._unsubscribe))
           .subscribe((data) => {
@@ -82,8 +104,9 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
             if (this.nodeData.spec.cloud.digitalocean.size === '') {
               this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
             }
+            this.loadingSizes = false;
             this.checkSizeState();
-          });
+          }, err => this.loadingSizes = false);
     }
   }
 
