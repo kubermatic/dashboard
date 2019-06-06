@@ -64,23 +64,23 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((changes) => {
       if (changes.domain !== '' && changes.username !== '' && changes.password !== '') {
-        const osSpec = !!this.clusterSpec ? this.clusterSpec.cloudSpec.openstack : {};
-        if (!!osSpec &&
+        if (!!this.clusterSpec &&
             (this.tenants.length === 0 ||
-             (changes.domain !== osSpec.domain || changes.username !== osSpec.username ||
-              changes.password !== osSpec.password))) {
+             (changes.domain !== this.clusterSpec.cloudSpec.openstack.domain ||
+              changes.username !== this.clusterSpec.cloudSpec.openstack.username ||
+              changes.password !== this.clusterSpec.cloudSpec.openstack.password))) {
           this.loadTenants();
         } else if (
-            !!osSpec &&
-            ((changes.tenant !== '' && changes.tenant !== osSpec.tenant) ||
+            !!this.clusterSpec &&
+            ((changes.tenant !== '' && changes.tenant !== this.clusterSpec.cloudSpec.openstack.tenant) ||
              (changes.tenant !== '' && this.networks.length === 0 && this.floatingIpPools.length === 0 &&
               this.securityGroups.length === 0))) {
           this.loadOptionalSettings();
         } else if (this.tenants.length === 0 || changes.tenant === '') {
           this.resetOptionalFields(false);
         } else if (
-            !!osSpec &&
-            ((changes.network !== '' && changes.network !== osSpec.network) ||
+            !!this.clusterSpec &&
+            ((changes.network !== '' && changes.network !== this.clusterSpec.cloudSpec.openstack.network) ||
              (changes.network !== '' && this.subnetIds.length === 0))) {
           this.loadSubnetIds();
         } else if (this.networks.length === 0) {
