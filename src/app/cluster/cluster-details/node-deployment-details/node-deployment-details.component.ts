@@ -4,7 +4,7 @@ import {Subject, timer} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 
-import {ApiService, DatacenterService, UserService} from '../../../core/services';
+import {ApiService, ClusterService, DatacenterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
@@ -48,7 +48,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
       private readonly _activatedRoute: ActivatedRoute, private readonly _router: Router,
       private readonly _apiService: ApiService, private readonly _datacenterService: DatacenterService,
       private readonly _nodeService: NodeService, private readonly _appConfig: AppConfigService,
-      private readonly _userService: UserService) {}
+      private readonly _userService: UserService, private readonly _clusterService: ClusterService) {}
 
   ngOnInit(): void {
     this._clusterName = this._activatedRoute.snapshot.paramMap.get('clusterName');
@@ -101,7 +101,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   }
 
   loadCluster(): void {
-    this._apiService.getCluster(this._clusterName, this._dcName, this._projectID).pipe(first()).subscribe((c) => {
+    this._clusterService.cluster(this._projectID, this._clusterName, this._dcName).pipe(first()).subscribe((c) => {
       this.cluster = c;
       this.clusterProvider = ClusterUtils.getProvider(this.cluster.spec.cloud);
       this._isClusterLoaded = true;

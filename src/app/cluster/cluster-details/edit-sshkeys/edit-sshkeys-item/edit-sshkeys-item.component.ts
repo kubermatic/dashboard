@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, UserService} from '../../../../core/services';
+import {ClusterService, UserService} from '../../../../core/services';
 import {GoogleAnalyticsService} from '../../../../google-analytics.service';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -26,12 +26,13 @@ export class EditSSHKeysItemComponent implements OnInit {
   userGroupConfig: UserGroupConfig;
 
   constructor(
-      public dialog: MatDialog, private api: ApiService, private googleAnalyticsService: GoogleAnalyticsService,
-      private userService: UserService, private appConfigService: AppConfigService) {}
+      private readonly _dialog: MatDialog, private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _userService: UserService, private readonly _appConfigService: AppConfigService,
+      private readonly _clusterService: ClusterService) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
+    this.userGroupConfig = this._appConfigService.getUserGroupConfig();
+    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
   }
@@ -49,16 +50,17 @@ export class EditSSHKeysItemComponent implements OnInit {
       },
     };
 
-    const dialogRef = this.dialog.open(ConfirmationDialogComponent, dialogConfig);
-    this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteSshKeyOpened');
+    const dialogRef = this._dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteSshKeyOpened');
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this.api.deleteClusterSSHKey(this.sshKey.id, this.cluster.id, this.datacenter.metadata.name, this.projectID)
+        this._clusterService
+            .deleteSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, this.sshKey.id)
             .subscribe(() => {
               NotificationActions.success(
                   'Success', `SSH key ${this.sshKey.name} has been removed from cluster ${this.cluster.name}`);
-              this.googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
+              this._googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
             });
       }
     });

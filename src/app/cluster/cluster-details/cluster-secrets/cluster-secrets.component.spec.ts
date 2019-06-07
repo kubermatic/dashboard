@@ -6,12 +6,13 @@ import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, ProjectService, UserService} from '../../../core/services';
+import {ClusterService, ProjectService, UserService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
 import {RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 
@@ -41,7 +42,7 @@ describe('ClusterSecretsComponent', () => {
             ClusterSecretsComponent,
           ],
           providers: [
-            {provide: ApiService, useValue: apiMock},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Router, useClass: RouterStub},

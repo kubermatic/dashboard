@@ -2,7 +2,7 @@ import {Component, DoCheck, ElementRef, Input, OnInit, ViewChild} from '@angular
 import {FormControl, FormGroup} from '@angular/forms';
 import {MatDialogRef} from '@angular/material';
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService} from '../../../core/services';
+import {ClusterService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity, Finalizer} from '../../../shared/entity/ClusterEntity';
@@ -23,15 +23,17 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
   inputName = '';
 
   constructor(
-      private api: ApiService, private dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
-      public googleAnalyticsService: GoogleAnalyticsService, private _appConfig: AppConfigService) {}
+      private readonly _clusterService: ClusterService,
+      private readonly _dialogRef: MatDialogRef<ClusterDeleteConfirmationComponent>,
+      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _appConfig: AppConfigService) {
+  }
 
   ngOnInit(): void {
     this.deleteForm = new FormGroup({
       clusterLBCleanupCheckbox: new FormControl(!!this._appConfig.getConfig().cleanup_cluster),
       clusterVolumeCleanupCheckbox: new FormControl(!!this._appConfig.getConfig().cleanup_cluster),
     });
-    this.googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');
+    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteClusterDialogOpened');
   }
 
   ngDoCheck(): void {
@@ -50,16 +52,17 @@ export class ClusterDeleteConfirmationComponent implements OnInit, DoCheck {
     if (!this.inputNameMatches()) {
       return;
     } else {
-      this.api
-          .deleteCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID, {
+      this._clusterService
+          .delete(this.projectID, this.cluster.id, this.datacenter.metadata.name, {
             [Finalizer.DeleteLoadBalancers]: !!this.deleteForm.controls.clusterLBCleanupCheckbox.value,
             [Finalizer.DeleteVolumes]: !!this.deleteForm.controls.clusterVolumeCleanupCheckbox.value,
           })
           .subscribe(() => {
             NotificationActions.success('Success', `Cluster ${this.cluster.name} is being deleted`);
-            this.googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
+            this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterDeleted');
+            this._clusterService.refreshClusters();
           });
-      this.dialogRef.close(true);
+      this._dialogRef.close(true);
     }
   }
 }

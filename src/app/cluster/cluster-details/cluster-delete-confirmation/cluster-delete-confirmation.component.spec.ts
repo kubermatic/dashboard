@@ -7,15 +7,15 @@ import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, DatacenterService} from '../../../core/services';
+import {ClusterService, DatacenterService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
-import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation.component';
@@ -32,7 +32,7 @@ const modules: any[] = [
 describe('ClusterDeleteConfirmationComponent', () => {
   let fixture: ComponentFixture<ClusterDeleteConfirmationComponent>;
   let component: ClusterDeleteConfirmationComponent;
-  let apiService: ApiService;
+  let clusterService: ClusterService;
 
   beforeEach(() => {
     TestBed
@@ -45,7 +45,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ApiService, useClass: ApiMockService},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,
@@ -59,7 +59,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     fixture = TestBed.createComponent(ClusterDeleteConfirmationComponent);
     component = fixture.componentInstance;
 
-    apiService = fixture.debugElement.injector.get(ApiService);
+    clusterService = fixture.debugElement.injector.get(ClusterService);
     fixture.debugElement.injector.get(Router);
   });
 
@@ -90,7 +90,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
        component.projectID = fakeProject().id;
 
        fixture.detectChanges();
-       const spyDeleteCluster = spyOn(apiService, 'deleteCluster').and.returnValue(of(null));
+       const spyDeleteCluster = spyOn(clusterService, 'delete').and.returnValue(of(null));
 
        component.deleteCluster();
        tick();

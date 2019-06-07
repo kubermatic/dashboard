@@ -3,19 +3,17 @@ import {defer, Observable, of} from 'rxjs';
 import {async} from 'rxjs-compat/scheduler/async';
 
 import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEntity';
-import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {CreateClusterModel} from '../../shared/model/CreateClusterModel';
+import {fakeDigitaloceanSizes} from '../fake-data/addNodeModal.fake';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
-import {fakeClusters, fakeDigitaloceanCluster, fakeToken} from '../fake-data/cluster.fake';
-import {fakeHealth} from '../fake-data/health.fake';
+import {fakeToken} from '../fake-data/cluster.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
-import {nodesFake} from '../fake-data/node.fake';
+import {nodeDeploymentsFake, nodesFake} from '../fake-data/node.fake';
 import {fakeProject, fakeProjects} from '../fake-data/project.fake';
 import {fakeServiceAccount, fakeServiceAccounts, fakeServiceAccountToken, fakeServiceAccountTokens} from '../fake-data/serviceaccount.fake';
 import {fakeSSHKeys} from '../fake-data/sshkey.fake';
@@ -23,8 +21,6 @@ import {fakeVSphereNetworks} from '../fake-data/vsphere.fake';
 
 @Injectable()
 export class ApiMockService {
-  cluster: ClusterEntity = fakeDigitaloceanCluster();
-  clusters: ClusterEntity[] = fakeClusters();
   project: ProjectEntity = fakeProject();
   projects: ProjectEntity[] = fakeProjects();
   sshKeys: SSHKeyEntity[] = fakeSSHKeys();
@@ -38,7 +34,10 @@ export class ApiMockService {
   serviceAccountToken: ServiceAccountTokenEntity = fakeServiceAccountToken();
   serviceAccountTokens: ServiceAccountTokenEntity[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
-  health: HealthEntity = fakeHealth();
+
+  getNodeDeployments(cluster: string, dc: string, projectID: string) {
+    return of(nodeDeploymentsFake());
+  }
 
   deleteNodeDeployment(cluster: string, nodeDeployment: string, dc: string, project: string): Observable<any> {
     return of({});
@@ -64,60 +63,12 @@ export class ApiMockService {
     return of(null);
   }
 
-  getCluster(clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
-    return of(this.cluster);
-  }
-
-  getClusters(dc: string, projectID: string): Observable<ClusterEntity[]> {
-    return of(this.clusters);
-  }
-
-  getAllClusters(projectID: string): Observable<ClusterEntity[]> {
-    return of(this.clusters);
-  }
-
-  getClusterHealth(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
-    return of(this.health);
-  }
-
   getSSHKeys(): Observable<SSHKeyEntity[]> {
     return of(this.sshKeys);
   }
 
   deleteSSHKey(fingerprint: string): Observable<any> {
     return of(null);
-  }
-
-  createClusterNode(cluster: ClusterEntity, nodeModel: NodeEntity, dc: string, projectID: string): Observable<any> {
-    return of(null);
-  }
-
-  createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
-    return of(this.cluster);
-  }
-
-  deleteCluster(clusterName: string, dc: string, projectID: string): Observable<any> {
-    return of(null);
-  }
-
-  editCluster(cluster: ClusterEntity, dc: string, projectID: string): Observable<ClusterEntity> {
-    return of(this.cluster);
-  }
-
-  deleteClusterNode(clusterName: string, nodeName: string, dc: string, projectID: string): Observable<any> {
-    return of(null);
-  }
-
-  getClusterNodes(cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
-    return of(this.nodes);
-  }
-
-  getClusterUpgrades(cluster: string): Observable<MasterVersion[]> {
-    return of([]);
-  }
-
-  getClusterNodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
-    return of([]);
   }
 
   addSSHKey(sshKey: SSHKeyEntity): Observable<SSHKeyEntity> {
@@ -203,6 +154,14 @@ export class ApiMockService {
   deleteServiceAccountToken(projectID: string, serviceaccount: ServiceAccountEntity, token: ServiceAccountTokenEntity):
       Observable<any> {
     return of(null);
+  }
+
+  getDigitaloceanSizes() {
+    return of(fakeDigitaloceanSizes());
+  }
+
+  getKubeconfigURL() {
+    return '';
   }
 }
 

@@ -14,17 +14,17 @@ export class NavigationComponent implements OnInit {
   environment: any = environment;
   currentUser: MemberEntity;
 
-  constructor(public auth: Auth, private router: Router, private userService: UserService) {}
+  constructor(public auth: Auth, private readonly _router: Router, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
     if (this.auth.authenticated()) {
-      this.userService.loggedInUser.subscribe(user => this.currentUser = user);
+      this._userService.loggedInUser.subscribe(user => this.currentUser = user);
     }
   }
 
   logout(): void {
-    this.router.navigate(['']);
     this.auth.logout();
+    this._router.navigate(['']);
     delete this.currentUser;
   }
 

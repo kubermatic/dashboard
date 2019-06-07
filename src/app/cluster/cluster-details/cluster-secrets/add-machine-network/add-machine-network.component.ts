@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
-import {Subscription} from 'rxjs';
-import {ApiService, WizardService} from '../../../../core/services';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {ClusterService, WizardService} from '../../../../core/services';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../../shared/entity/DatacenterEntity';
@@ -12,21 +13,27 @@ import {MachineNetworkForm} from '../../../../shared/model/ClusterForm';
   templateUrl: './add-machine-network.component.html',
 })
 
-export class AddMachineNetworkComponent implements OnInit {
+export class AddMachineNetworkComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
   machineNetworkFormData: MachineNetworkForm[] = [];
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(
-      private api: ApiService, private wizardService: WizardService,
-      private dialogRef: MatDialogRef<AddMachineNetworkComponent>) {}
+      private readonly _clusterService: ClusterService, private readonly _wizardService: WizardService,
+      private readonly _dialogRef: MatDialogRef<AddMachineNetworkComponent>) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe((res: MachineNetworkForm[]) => {
-      this.machineNetworkFormData = res;
-    }));
+    this._wizardService.machineNetworksFormChanges$.pipe(takeUntil(this._unsubscribe))
+        .subscribe((res: MachineNetworkForm[]) => {
+          this.machineNetworkFormData = res;
+        });
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   isValid(): boolean {
@@ -58,9 +65,9 @@ export class AddMachineNetworkComponent implements OnInit {
         }
       }
     }
-    this.api.getCluster(this.cluster.id, this.datacenter.metadata.name, this.projectID).subscribe((res) => {
+    this._clusterService.cluster(this.projectID, this.cluster.id, this.datacenter.metadata.name).subscribe((res) => {
       NotificationActions.success('Success', `Machine Network(s) for ${this.cluster.name} successfully added`);
-      this.dialogRef.close(res);
+      this._dialogRef.close(res);
     });
   }
 }
