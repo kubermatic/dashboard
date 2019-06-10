@@ -5,26 +5,7 @@
   <km-dialog-title title="Delete Cluster"></km-dialog-title>
 
   <mat-dialog-content>
-    <p>You are on the way to delete the cluster {{cluster.name}}. It cannot be undone!</p>
-
-    <div class="km-delete-cluster-checkbox">
-      <label fxFlex>Cleanup connected Load Balancers</label>
-      <mat-checkbox fxFlex
-                    formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
-    </div>
-
-    <div class="km-delete-cluster-checkbox">
-      <label fxFlex>Cleanup connected volumes (PVs and PVCs)</label>
-      <mat-checkbox fxFlex
-                    formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
-    </div>
-
-    <div class="km-delete-cluster-warning">
-      <mat-icon fxFlexAlign="center">warning</mat-icon>
-      <span>
-        Not selecting above options might leave some leftover resources at your cloud provider after cluster deletion.
-      </span>
-    </div>
+    <p>Are you sure you want to permanently delete "<strong>{{cluster.name}}</strong>"?</p>
 
     <mat-form-field>
       <mat-label>Cluster Name*</mat-label>
@@ -36,6 +17,25 @@
              (keyup)="onChange($event)"
              #clusterNameInput>
     </mat-form-field>
+
+    <div class="km-delete-cluster-checkbox">
+      <mat-checkbox formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
+      <mat-label>Cleanup connected Load Balancers</mat-label>
+    </div>
+
+    <div class="km-delete-cluster-checkbox">
+      <mat-checkbox formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
+      <mat-label>Cleanup connected volumes (PVs and PVCs)</mat-label>
+    </div>
+
+    <div class="km-delete-cluster-warning">
+      <mat-icon fxFlexAlign="center">warning</mat-icon>
+      <span>
+        Deactivating clean up may result in leftover resources at your provider.
+      </span>
+    </div>
+
+
   </mat-dialog-content>
   <mat-dialog-actions>
     <button id="km-delete-cluster-dialog-delete-btn"
