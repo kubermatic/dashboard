@@ -30,6 +30,19 @@ KUBECONFIG_ENCODED=""
 DATACENTERS_PATH=${SCRIPT_PATH}/yamls/datacenters.yaml
 DATACENTERS_ENCODED=$(base64 ${DATACENTERS_PATH} | tr -d '\n')
 
+DO_E2E_TESTS_TOKEN=${DO_E2E_TESTS_TOKEN:-""}
+OS_USERNAME=${OS_USERNAME:-""}
+OS_PASSWORD=${OS_PASSWORD:-""}
+OS_TENANT_NAME=${OS_TENANT_NAME:-""}
+OS_DOMAIN=${OS_DOMAIN:-""}
+AZURE_E2E_TESTS_TENANT_ID=${AZURE_E2E_TESTS_TENANT_ID:-""}
+AZURE_E2E_TESTS_SUBSCRIPTION_ID=${AZURE_E2E_TESTS_SUBSCRIPTION_ID:-""}
+AZURE_E2E_TESTS_CLIENT_ID=${AZURE_E2E_TESTS_CLIENT_ID:-""}
+AZURE_E2E_TESTS_CLIENT_SECRET=${AZURE_E2E_TESTS_CLIENT_SECRET:-""}
+
+CREDENTIALS_PATH=${SCRIPT_PATH}/yamls/credentials.yaml
+CREDENTIALS_ENCODED=$(eval "echo \"$(cat ${CREDENTIALS_PATH})\"" | base64 | tr -d '\n')
+
 DEX_PATH=${SCRIPT_PATH}/helm/oauth
 
 TILLER_NAMESPACE="helm"
@@ -134,6 +147,7 @@ function deploy::kubermatic {
 		--set=kubermatic.auth.tokenIssuer=http://dex.oauth:5556 \
 		--set=kubermatic.auth.clientID=kubermatic \
 		--set=kubermatic.datacenters=${DATACENTERS_ENCODED} \
+		--set=kubermatic.credentials=${CREDENTIALS_ENCODED} \
 		--set=kubermatic.domain=${KUBERMATIC_DOMAIN} \
 		--set=kubermatic.kubeconfig=${KUBECONFIG_ENCODED} \
 		--set=kubermatic.deployVPA=false \
