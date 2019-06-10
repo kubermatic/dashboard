@@ -145,9 +145,8 @@ export class NodeService {
       hasBackdrop: true,
       data: {
         title: 'Delete Node Deployment',
-        message: `You are on the way to delete the ${nd.name} node deployment. It cannot be undone!`,
+        message: `Are you sure you want to permanently delete "<strong>${nd.name}</strong>"?`,
         confirmLabel: 'Delete',
-        cancelLabel: 'Close',
       },
     };
 

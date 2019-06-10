@@ -177,7 +177,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
         title: 'Delete Project',
         message: `Are you sure you want to permanently delete project ${project.name}?`,
         confirmLabel: 'Delete',
-        cancelLabel: 'Close',
         compareName: project.name,
         inputPlaceholder: 'Project name',
         inputTitle: 'Project name',

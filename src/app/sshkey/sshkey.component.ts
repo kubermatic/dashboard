@@ -103,8 +103,6 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
         message: `You are on the way to remove the SSH key ${sshKey.name} from the project. This cannot be undone!`,
         confirmLabel: 'Delete',
         confirmLabelId: 'km-delete-sshkey-dialog-btn',
-        cancelLabel: 'Close',
-        cancelLabelId: 'km-close-sshkey-dialog-btn',
       },
     };
 

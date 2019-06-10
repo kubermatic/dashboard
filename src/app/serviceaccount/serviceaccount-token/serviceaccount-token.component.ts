@@ -72,7 +72,6 @@ export class ServiceAccountTokenComponent implements OnInit {
         message: `You are on the way to regenerate Token ${token.name} for the Service Account ${
             this.serviceaccount.name}. This cannot be undone!`,
         confirmLabel: 'Regenerate',
-        cancelLabel: 'Close',
       },
     };
 
@@ -108,7 +107,6 @@ export class ServiceAccountTokenComponent implements OnInit {
         message: `You are on the way to remove the Token ${token.name} from the Service Account ${
             this.serviceaccount.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
-        cancelLabel: 'Close',
       },
     };
 

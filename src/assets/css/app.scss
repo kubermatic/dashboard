@@ -539,11 +539,6 @@ mat-button-toggle-group[group='providerGroup'] {
   }
 }
 
-.km-dialog-box {
-  min-width: $dialog-width;
-  width: $dialog-width;
-}
-
 // Scrollbar
 ::-webkit-scrollbar {
   width: 6px;
@@ -903,9 +898,15 @@ mat-form-field.mat-focused.ng-pristine label {
 }
 
 // Dialogs.
+.km-dialog-box {
+  min-width: $dialog-width;
+  width: $dialog-width;
+}
+
 .mat-dialog-container {
+  color: $text-color;
+
   .mat-dialog-title {
-    color: $text-color;
     font-weight: normal;
   }
 

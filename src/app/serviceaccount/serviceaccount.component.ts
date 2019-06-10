@@ -142,7 +142,6 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
         message: `You are on the way to remove the Service Account ${serviceAccount.name} from the project ${
             this._selectedProject.name}. This cannot be undone!`,
         confirmLabel: 'Delete',
-        cancelLabel: 'Close',
       },
     };
 
