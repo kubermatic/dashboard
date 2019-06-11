@@ -75,47 +75,49 @@
           <div value>{{nodeDeployment.spec.template.versions.kubelet}}</div>
         </km-property>
         <km-property>
-          <div key>Operating system</div>
+          <div key>Operating System</div>
           <div value>{{system}}</div>
         </km-property>
         <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.ubuntu">
-          <div key>Upgrade system on the first boot</div>
+          <div key>Upgrade System on the First Boot</div>
           <div value>
             <i [ngClass]="nodeDeployment.spec.template.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
           </div>
         </km-property>
         <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.centos">
-          <div key>Upgrade system on the first boot</div>
+          <div key>Upgrade System on the First Boot</div>
           <div value>
             <i [ngClass]="nodeDeployment.spec.template.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
           </div>
         </km-property>
         <km-property *ngIf="nodeDeployment.spec.template.operatingSystem.containerLinux">
-          <div key>Disable auto-update</div>
+          <div key>Disable Auto-update</div>
           <div value>
             <i [ngClass]="nodeDeployment.spec.template.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
           </div>
         </km-property>
         <km-property>
-          <div key>Cluster name</div>
+          <div key>Cluster Name</div>
           <div value
                class="km-link"
                id="km-node-deployment-cluster-name"
                (click)="goBackToCluster()">{{cluster.name}}</div>
         </km-property>
         <km-property>
-          <div key>Cluster provider</div>
+          <div key>Cluster Provider</div>
           <div value>
             <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
           </div>
         </km-property>
         <km-property>
-          <div key>Datacenter location</div>
+          <div key>Datacenter Location</div>
           <div value>{{datacenter.spec.country}}, {{datacenter.spec.location}}</div>
         </km-property>
         <km-property>
-          <div key>Creation date</div>
-          <div value>{{nodeDeployment.creationTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</div>
+          <div key>Created</div>
+          <div value>
+            <km-relative-time [date]="nodeDeployment.creationTimestamp"></km-relative-time>
+          </div>
         </km-property>
         <km-property>
           <div key>Node Labels</div>

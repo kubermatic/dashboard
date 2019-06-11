@@ -58,10 +58,12 @@
         <th mat-header-cell
             mat-sort-header
             *matHeaderCellDef
-            class="km-header-cell">Last Timestamp</th>
+            class="km-header-cell">Occurred</th>
         <td mat-cell
             class="km-events-long-text km-events-timestamp"
-            *matCellDef="let element">{{element.lastTimestamp | date:'yyyy-MM-dd, h:mm:ss a'}}</td>
+            *matCellDef="let element">
+          <km-relative-time [date]="element.lastTimestamp"></km-relative-time>
+        </td>
       </ng-container>
 
       <tr mat-header-row
