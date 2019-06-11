@@ -6,7 +6,6 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 @Component({
   selector: 'kubermatic-cluster-connect',
   templateUrl: './cluster-connect.component.html',
-  styleUrls: ['./cluster-connect.component.scss'],
 })
 
 export class ClusterConnectComponent {

@@ -847,6 +847,10 @@ div.km-form-group-tags {
       background-color: $tertiary-hover;
     }
   }
+
+  &.km-small-button {
+    min-width: unset;
+  }
 }
 
 // Inputs.
