@@ -917,6 +917,11 @@ mat-form-field.mat-focused.ng-pristine label {
     p {
       margin: 0 0 $baseline-grid;
     }
+
+    .km-dialog-warning {
+      display: flex;
+      margin: 2 * $baseline-grid 0;
+    }
   }
 
   .mat-dialog-actions {

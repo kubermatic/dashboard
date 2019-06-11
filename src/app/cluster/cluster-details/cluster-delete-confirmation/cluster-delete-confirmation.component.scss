@@ -9,16 +9,6 @@
   }
 }
 
-.km-delete-cluster-warning {
-  display: flex;
-  margin: 2 * $baseline-grid 0;
-
-  mat-icon {
-    color: $indicator-orange;
-    margin-right: $baseline-grid;
-  }
-}
-
 .mat-form-field {
   margin-top: $baseline-grid;
 }
