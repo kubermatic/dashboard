@@ -1,8 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {Subject} from 'rxjs';
-import {mergeMap, switchMap, takeUntil} from 'rxjs/operators';
-import {ClusterService, ProjectService, UserService} from '../../../core/services';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {ProjectService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
@@ -20,35 +20,32 @@ import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token
 export class ClusterSecretsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
+  @Input() health: HealthEntity;
   projectID: string;
   expand = false;
   dialogRef: any;
   isClusterRunning: boolean;
   healthStatus: ClusterHealthStatus;
-  health: HealthEntity;
   groupConfig: GroupConfig;
 
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      public dialog: MatDialog, private _clusterService: ClusterService,
-      private readonly _projectService: ProjectService, private readonly _userService: UserService) {}
+      public dialog: MatDialog, private readonly _projectService: ProjectService,
+      private readonly _userService: UserService) {}
 
   ngOnInit(): void {
+    this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, this.health);
+    this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, this.health);
+
     this._projectService.selectedProject
         .pipe(switchMap(project => {
           this.projectID = project.id;
-          return this._userService.currentUserGroup(project.id);
-        }))
-        .pipe(mergeMap(userGroup => {
-          this.groupConfig = this._userService.userGroupConfig(userGroup);
-          return this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name);
+          return this._userService.currentUserGroup(project.id).pipe(first());
         }))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe((health) => {
-          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-          this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
-          this.health = health;
+        .subscribe(userGroup => {
+          this.groupConfig = this._userService.userGroupConfig(userGroup);
         });
   }
 

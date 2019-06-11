@@ -28,25 +28,6 @@ export class DatacenterService {
   }
 
   getDataCenter(name: string): Observable<DataCenterEntity> {
-    return this.getDataCenters().pipe(map((res) => {
-      for (const i in res) {
-        if (res[i].metadata.name === name) {
-          return res[i];
-        }
-      }
-      return null;
-    }));
-  }
-
-  getSeedDataCenters(): Observable<DataCenterEntity[]> {
-    const datacenters: DataCenterEntity[] = [];
-    return this.getDataCenters().pipe(map((res) => {
-      for (const i in res) {
-        if (res[i].seed === true) {
-          datacenters.push(res[i]);
-        }
-      }
-      return datacenters;
-    }));
+    return this.getDataCenters().pipe(map((datacenters) => datacenters.find(dc => dc.metadata.name === name)));
   }
 }
