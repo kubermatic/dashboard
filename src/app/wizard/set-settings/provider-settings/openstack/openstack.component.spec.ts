@@ -1,4 +1,4 @@
-import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -128,7 +128,7 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.openstackSettingsForm.controls.domain.setValue('domain');
          fixture.detectChanges();
          component.loadTenants();
-         tick(1500);
+         tick();
          expect(getOpenStackTenantsForWizard.and.callThrough()).toHaveBeenCalled();
          expect(component.tenants).toEqual([
            {
@@ -144,6 +144,7 @@ describe('OpenstackClusterSettingsComponent', () => {
              name: 'loodse-poc2',
            },
          ]);
+         discardPeriodicTasks();
        }));
 
     it('should not load optional settings', () => {
@@ -162,9 +163,12 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.openstackSettingsForm.controls.password.setValue('password');
          component.openstackSettingsForm.controls.domain.setValue('domain');
          component.openstackSettingsForm.controls.tenant.setValue('loodse-poc');
+         component.networks = [];
+         component.floatingIpPools = [];
+         component.securityGroups = [];
          fixture.detectChanges();
          component.loadOptionalSettings();
-         tick(1500);
+         tick();
 
          expect(getOpenStackNetworkForWizard).toHaveBeenCalled();
          expect(component.networks).toEqual([
@@ -198,6 +202,7 @@ describe('OpenstackClusterSettingsComponent', () => {
              name: 'test-security-group',
            },
          ]);
+         discardPeriodicTasks();
        }));
 
     it('should not load subnet ids', () => {
@@ -209,10 +214,15 @@ describe('OpenstackClusterSettingsComponent', () => {
     });
 
     it('should load subnet ids', fakeAsync(() => {
-         component.openstackSettingsForm.controls.network.setValue('test-network');
+         component.openstackSettingsForm.controls.username.setValue('username');
+         component.openstackSettingsForm.controls.password.setValue('password');
+         component.openstackSettingsForm.controls.domain.setValue('domain');
+         component.openstackSettingsForm.controls.tenant.setValue('loodse-poc');
+         component.openstackSettingsForm.controls.network.setValue('network');
+         component.subnetIds = [];
          fixture.detectChanges();
          component.loadSubnetIds();
-         tick(1500);
+         tick();
          expect(getOpenStackSubnetIdsForWizard.and.callThrough()).toHaveBeenCalled();
          expect(component.subnetIds).toEqual([
            {
@@ -224,6 +234,7 @@ describe('OpenstackClusterSettingsComponent', () => {
              name: 'test-subnet',
            },
          ]);
+         discardPeriodicTasks();
        }));
 
     it('should set correct tenant placeholder', () => {
