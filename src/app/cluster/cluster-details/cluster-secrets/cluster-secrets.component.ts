@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {Subject} from 'rxjs';
 import {mergeMap, switchMap, takeUntil} from 'rxjs/operators';
-import {ApiService, ProjectService, UserService} from '../../../core/services';
+import {ClusterService, ProjectService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
@@ -31,19 +31,20 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      public dialog: MatDialog, private api: ApiService, private readonly _projectService: ProjectService,
-      private readonly _userService: UserService) {}
+      public dialog: MatDialog, private _clusterService: ClusterService,
+      private readonly _projectService: ProjectService, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+    this._projectService.selectedProject
         .pipe(switchMap(project => {
           this.projectID = project.id;
           return this._userService.currentUserGroup(project.id);
         }))
         .pipe(mergeMap(userGroup => {
           this.groupConfig = this._userService.userGroupConfig(userGroup);
-          return this.api.getClusterHealth(this.cluster.id, this.datacenter.metadata.name, this.projectID);
+          return this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name);
         }))
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe((health) => {
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
           this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
@@ -176,6 +177,7 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
     this.dialogRef.componentInstance.datacenter = this.datacenter;
     this.dialogRef.componentInstance.projectID = this.projectID;
   }
+
   addMachineNetwork(): void {
     this.dialogRef = this.dialog.open(AddMachineNetworkComponent);
     this.dialogRef.componentInstance.cluster = this.cluster;

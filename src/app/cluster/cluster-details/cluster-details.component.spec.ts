@@ -7,19 +7,17 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../testing/fake-data/datacenter.fake';
-import {fakeEvents} from '../../testing/fake-data/event.fake';
-import {fakeHealth} from '../../testing/fake-data/health.fake';
-import {nodeDeploymentsFake, nodesFake} from '../../testing/fake-data/node.fake';
-import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
+import {nodesFake} from '../../testing/fake-data/node.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
-import {asyncData} from '../../testing/services/api-mock.service';
+import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
+import {ClusterMockService} from '../../testing/services/cluster-mock-service';
+import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 import {NodeMockService} from '../../testing/services/node-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
@@ -34,25 +32,9 @@ describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
   let component: ClusterDetailsComponent;
   let activatedRoute: ActivatedRouteStub;
-  let apiMock;
+  let upgradesMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', [
-      'getCluster', 'getClusterUpgrades', 'getClusterNodes', 'getClusterSSHKeys', 'getKubeconfigURL',
-      'getNodeDeployments', 'getClusterHealth', 'getClusterEvents'
-    ]);
-    apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    apiMock.getClusterUpgrades.and.returnValue(asyncData([]));
-    apiMock.getNodeDeployments.and.returnValue(asyncData(nodeDeploymentsFake));
-    apiMock.getClusterNodes.and.returnValue(asyncData(nodesFake()));
-    apiMock.getClusterSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
-    apiMock.getKubeconfigURL.and.returnValue(asyncData(''));
-    apiMock.getClusterHealth.and.returnValue(asyncData(fakeHealth()));
-    apiMock.getClusterEvents.and.returnValue(asyncData(fakeEvents()));
-
-    const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
-    datacenterMock.getDataCenter.and.returnValue(asyncData(fakeDigitaloceanDatacenter()));
-
     TestBed
         .configureTestingModule({
           imports: [
@@ -70,8 +52,9 @@ describe('ClusterDetailsComponent', () => {
             NodeDeploymentListComponent,
           ],
           providers: [
-            {provide: ApiService, useValue: apiMock},
-            {provide: DatacenterService, useValue: datacenterMock},
+            {provide: ApiService, useClass: ApiMockService},
+            {provide: ClusterService, useClass: ClusterMockService},
+            {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: Auth, useClass: AuthMockService},
             {provide: Router, useClass: RouterStub},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
@@ -88,6 +71,7 @@ describe('ClusterDetailsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterDetailsComponent);
+    upgradesMock = spyOn(fixture.debugElement.injector.get(ClusterService), 'upgrades').and.callThrough();
     component = fixture.componentInstance;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
@@ -146,7 +130,7 @@ describe('ClusterDetailsComponent', () => {
      }));
 
   it('should show upgrade link', fakeAsync(() => {
-       apiMock.getClusterUpgrades.and.returnValue(asyncData([
+       upgradesMock.and.returnValue(asyncData([
          {
            version: '1.8.5',
            default: false,
@@ -164,7 +148,7 @@ describe('ClusterDetailsComponent', () => {
      }));
 
   it('should not show upgrade or downgrade link', fakeAsync(() => {
-       apiMock.getClusterUpgrades.and.returnValue(asyncData([
+       upgradesMock.and.returnValue(asyncData([
          {
            version: '1.8.5',
            default: false,
@@ -178,7 +162,7 @@ describe('ClusterDetailsComponent', () => {
      }));
 
   it('should show downgrade link', fakeAsync(() => {
-       apiMock.getClusterUpgrades.and.returnValue(asyncData([
+       upgradesMock.and.returnValue(asyncData([
          {
            version: '1.8.5',
            default: false,
@@ -196,7 +180,7 @@ describe('ClusterDetailsComponent', () => {
      }));
 
   it('should show downgrade and update link', fakeAsync(() => {
-       apiMock.getClusterUpgrades.and.returnValue(asyncData([
+       upgradesMock.and.returnValue(asyncData([
          {
            version: '1.8.5',
            default: false,
@@ -218,7 +202,7 @@ describe('ClusterDetailsComponent', () => {
      }));
 
   it('should filter restricted versions', fakeAsync(() => {
-       apiMock.getClusterUpgrades.and.returnValue(asyncData([
+       upgradesMock.and.returnValue(asyncData([
          {
            version: '1.8.5',
            default: false,
@@ -243,7 +227,7 @@ describe('ClusterDetailsComponent', () => {
      }));
 
   it('should not filter non-restricted versions', fakeAsync(() => {
-       apiMock.getClusterUpgrades.and.returnValue(asyncData([
+       upgradesMock.and.returnValue(asyncData([
          {
            version: '1.8.5',
            default: false,

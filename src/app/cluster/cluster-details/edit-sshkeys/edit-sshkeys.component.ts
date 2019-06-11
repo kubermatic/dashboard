@@ -4,7 +4,7 @@ import {find} from 'lodash';
 import {Subject, timer} from 'rxjs';
 import {retry, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, UserService} from '../../../core/services';
+import {ClusterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
@@ -31,8 +31,8 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private readonly _api: ApiService, private readonly _userService: UserService,
-      private readonly _appConfig: AppConfigService, public dialog: MatDialog) {}
+      private readonly _userService: UserService, private readonly _appConfig: AppConfigService,
+      private readonly _dialog: MatDialog, private readonly _clusterService: ClusterService) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this._appConfig.getUserGroupConfig();
@@ -51,7 +51,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   refreshSSHKeys(): void {
-    this._api.getClusterSSHKeys(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+    this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name)
         .pipe(retry(3))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((res) => {
@@ -62,7 +62,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   addSshKey(): void {
-    const dialogRef = this.dialog.open(AddClusterSSHKeysComponent);
+    const dialogRef = this._dialog.open(AddClusterSSHKeysComponent);
     dialogRef.componentInstance.projectID = this.projectID;
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;

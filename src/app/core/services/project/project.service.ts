@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 import {merge, Observable, Subject, timer} from 'rxjs';
-import {filter, first, map, shareReplay, switchMapTo} from 'rxjs/operators';
+import {filter, first, map, publishReplay, refCount, switchMapTo} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
@@ -24,8 +24,10 @@ export class ProjectService {
 
   get projects(): Observable<ProjectEntity[]> {
     if (!this._projects$) {
-      this._projects$ =
-          merge(this.onProjectsUpdate, this._refreshTimer$).pipe(switchMapTo(this._getProjects())).pipe(shareReplay(1));
+      this._projects$ = merge(this.onProjectsUpdate, this._refreshTimer$)
+                            .pipe(switchMapTo(this._getProjects()))
+                            .pipe(publishReplay(1))
+                            .pipe(refCount());
     }
 
     return this._projects$;
@@ -41,6 +43,11 @@ export class ProjectService {
         .pipe(switchMapTo(this.projects))
         .pipe(map(projects => projects.find(project => project.id === this._selectedProjectID)))
         .pipe(filter(project => project !== undefined));
+  }
+
+  delete(projectID: string): Observable<ProjectEntity> {
+    const url = `${this._restRoot}/projects/${projectID}`;
+    return this._http.delete<ProjectEntity>(url);
   }
 
   selectProject(project: ProjectEntity) {

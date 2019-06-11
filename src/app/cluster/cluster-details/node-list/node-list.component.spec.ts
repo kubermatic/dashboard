@@ -6,15 +6,15 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, UserService} from '../../../core/services';
+import {ClusterService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
-import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
+import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 
 import {NodeListComponent} from './node-list.component';
@@ -35,7 +35,7 @@ const modules: any[] = [
 describe('NodeComponent', () => {
   let fixture: ComponentFixture<NodeListComponent>;
   let component: NodeListComponent;
-  let apiService: ApiService;
+  let clusterService: ClusterService;
 
   beforeEach(async(() => {
     TestBed
@@ -47,7 +47,7 @@ describe('NodeComponent', () => {
             NodeListComponent,
           ],
           providers: [
-            {provide: ApiService, useClass: ApiMockService},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: MatDialog, useClass: MatDialogMock},
@@ -60,21 +60,21 @@ describe('NodeComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NodeListComponent);
     component = fixture.componentInstance;
-    apiService = fixture.debugElement.injector.get(ApiService);
+    clusterService = fixture.debugElement.injector.get(ClusterService);
   });
 
   it('should create the cluster details cmp', async(() => {
        expect(component).toBeTruthy();
      }));
 
-  it('should call deleteClusterNode', fakeAsync(() => {
+  it('should call deleteNode', fakeAsync(() => {
        component.cluster = fakeDigitaloceanCluster();
        component.datacenter = fakeDigitaloceanDatacenter();
        component.projectID = fakeProject().id;
        const event = new MouseEvent('click');
 
        fixture.detectChanges();
-       const spyDeleteClusterNode = spyOn(apiService, 'deleteClusterNode').and.returnValue(of(null));
+       const spyDeleteClusterNode = spyOn(clusterService, 'deleteNode').and.returnValue(of(null));
 
        component.deleteNodeDialog(nodeFake(), event);
        tick();

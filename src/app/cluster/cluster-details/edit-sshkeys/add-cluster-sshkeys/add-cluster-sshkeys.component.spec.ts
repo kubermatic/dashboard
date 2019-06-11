@@ -4,11 +4,11 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, ProjectService, UserService} from '../../../../core/services';
+import {ApiService, ClusterService, ProjectService, UserService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
-import {fakeSSHKeys} from '../../../../testing/fake-data/sshkey.fake';
-import {asyncData} from '../../../../testing/services/api-mock.service';
+import {ApiMockService} from '../../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
+import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
@@ -26,10 +26,6 @@ describe('AddClusterSSHKeysComponent', () => {
   let component: AddClusterSSHKeysComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getSSHKeys', 'addClusterSSHKey']);
-    apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
-    apiMock.addClusterSSHKey.and.returnValue(asyncData(fakeSSHKeys()[0]));
-
     TestBed
         .configureTestingModule({
           imports: [
@@ -40,7 +36,8 @@ describe('AddClusterSSHKeysComponent', () => {
           ],
           providers: [
             {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ApiService, useValue: apiMock},
+            {provide: ApiService, useValue: ApiMockService},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},

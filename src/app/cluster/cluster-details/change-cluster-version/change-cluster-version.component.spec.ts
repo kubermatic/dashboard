@@ -5,19 +5,18 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
-import Spy = jasmine.Spy;
 
-import {ApiService, ProjectService} from '../../../core/services';
+import {ClusterService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {RouterStub} from '../../../testing/router-stubs';
-import {asyncData} from '../../../testing/services/api-mock.service';
 import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {ChangeClusterVersionComponent} from './change-cluster-version.component';
+import Spy = jasmine.Spy;
 
 const modules: any[] = [
   BrowserModule,
@@ -33,9 +32,9 @@ describe('ChangeClusterVersionComponent', () => {
   let upgradeClusterNodeDeploymentsSpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['patchCluster', 'upgradeClusterNodeDeployments']);
-    patchClusterSpy = apiMock.patchCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
-    upgradeClusterNodeDeploymentsSpy = apiMock.upgradeClusterNodeDeployments.and.returnValue(of(null));
+    const clusterServiceMock = jasmine.createSpyObj('ClusterService', ['patch', 'upgradeNodeDeployments']);
+    patchClusterSpy = clusterServiceMock.patch.and.returnValue(of(fakeDigitaloceanCluster()));
+    upgradeClusterNodeDeploymentsSpy = clusterServiceMock.upgradeNodeDeployments.and.returnValue(of(null));
 
     TestBed
         .configureTestingModule({
@@ -48,7 +47,7 @@ describe('ChangeClusterVersionComponent', () => {
           providers: [
             {provide: MAT_DIALOG_DATA, useValue: {clusterName: 'clustername'}},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
-            {provide: ApiService, useValue: apiMock},
+            {provide: ClusterService, useValue: clusterServiceMock},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Router, useClass: RouterStub},
             GoogleAnalyticsService,

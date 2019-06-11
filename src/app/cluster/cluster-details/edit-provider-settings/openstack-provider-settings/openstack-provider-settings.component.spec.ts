@@ -8,6 +8,7 @@ import {ApiService} from '../../../../core/services/api/api.service';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
 import {ApiMockService} from '../../../../testing/services/api-mock.service';
+import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/azure-provider-settings.component';
@@ -45,7 +46,7 @@ describe('OpenstackProviderSettingsComponent', () => {
             PacketProviderSettingsComponent,
           ],
           providers: [
-            ClusterService,
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: ApiService, useClass: ApiMockService},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
           ],

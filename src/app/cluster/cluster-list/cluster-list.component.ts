@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatSort, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import {Subject, timer} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
-import {AppConfigService} from '../../app-config.service';
+import {EMPTY, forkJoin, onErrorResumeNext, Subject} from 'rxjs';
+import {catchError, distinctUntilChanged, switchMap, takeUntil, tap} from 'rxjs/operators';
 
-import {ApiService, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {CloudSpec, ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
@@ -34,10 +33,9 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   private _currentGroupConfig: GroupConfig;
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
+      private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _router: Router,
-      private readonly _datacenterService: DatacenterService, private readonly _appConfig: AppConfigService,
-      private readonly _activeRoute: ActivatedRoute) {}
+      private readonly _datacenterService: DatacenterService, private readonly _activeRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     this._selectedProject.id = this._activeRoute.snapshot.paramMap.get('projectID');
@@ -45,22 +43,39 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+    this._projectService.selectedProject
         .pipe(switchMap(project => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
         }))
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
-    timer(0, 5 * this._appConfig.getRefreshTimeBase())
-        .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._apiService.getAllClusters(this._selectedProject.id)))
-        .subscribe(clusters => {
+    this._projectService
+        .selectedProject
+        // Do not allow project refresh to fire clusters refresh unless project has been changed.
+        .pipe(distinctUntilChanged((p: ProjectEntity, q: ProjectEntity) => p.id === q.id))
+        .pipe(switchMap(project => this._clusterService.clusters(project.id)))
+        .pipe(switchMap((clusters: ClusterEntity[]) => {
           this.clusters = clusters;
-          this._loadNodeDc();
-          this._loadClusterHealth();
           this.isInitialized = false;
-        });
+
+          return forkJoin(clusters.map(cluster => {
+            return this._datacenterService.getDataCenter(cluster.spec.cloud.dc)
+                .pipe(tap(datacenter => this.nodeDC[cluster.id] = datacenter))
+                .pipe(switchMap(datacenter => this._datacenterService.getDataCenter(datacenter.spec.seed)))
+                .pipe(tap(seedDatacenter => this.seedDC[cluster.id] = seedDatacenter))
+                .pipe(switchMap(
+                    seedDatacenter => this._clusterService.health(
+                        this._selectedProject.id, cluster.id, seedDatacenter.metadata.name)))
+                // We need to resume on error, otherwise subscription will be canceled and clusters will stop
+                // refreshing.
+                .pipe(catchError(() => onErrorResumeNext(EMPTY)))
+                .pipe(tap(health => this.health[cluster.id] = health));
+          }));
+        }))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -96,27 +111,5 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   getType(type: string): string {
     return ClusterUtils.getType(type);
-  }
-
-  private _loadNodeDc(): void {
-    this.clusters.forEach(cluster => {
-      this._datacenterService.getDataCenter(cluster.spec.cloud.dc).subscribe((result) => {
-        this.nodeDC[cluster.id] = result;
-        this._datacenterService.getDataCenter(this.nodeDC[cluster.id].spec.seed).subscribe((seedRes) => {
-          this.seedDC[cluster.id] = seedRes;
-        });
-      });
-    });
-  }
-
-  private _loadClusterHealth(): void {
-    this.clusters.forEach(cluster => {
-      if (!!this.seedDC[cluster.id]) {
-        this._apiService.getClusterHealth(cluster.id, this.seedDC[cluster.id].metadata.name, this._selectedProject.id)
-            .subscribe((health) => {
-              this.health[cluster.id] = health;
-            });
-      }
-    });
   }
 }

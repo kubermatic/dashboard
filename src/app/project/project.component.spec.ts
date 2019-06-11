@@ -4,19 +4,16 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import {of} from 'rxjs';
-import Spy = jasmine.Spy;
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, DatacenterService, ProjectService, UserService} from '../core/services';
+import {ClusterService, DatacenterService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
-import {fakeClusters} from '../testing/fake-data/cluster.fake';
-import {fakeProject, fakeProjects} from '../testing/fake-data/project.fake';
+import {fakeProject} from '../testing/fake-data/project.fake';
 import {RouterStub, RouterTestingModule} from '../testing/router-stubs';
-import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
+import {ClusterMockService} from '../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
@@ -27,15 +24,8 @@ describe('ProjectComponent', () => {
   let fixture: ComponentFixture<ProjectComponent>;
   let component: ProjectComponent;
   let noop: ComponentFixture<NoopConfirmDialogComponent>;
-  let apiMock;
-  let deleteProjectSpy: Spy;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', ['getProjects', 'deleteProject', 'getAllClusters']);
-    deleteProjectSpy = apiMock.deleteProject.and.returnValue(of(null));
-    apiMock.getProjects.and.returnValue(asyncData(fakeProjects()));
-    apiMock.getAllClusters.and.returnValue(asyncData(fakeClusters()));
-
     TestBed
         .configureTestingModule({
           imports: [
@@ -49,7 +39,7 @@ describe('ProjectComponent', () => {
           declarations: [ProjectComponent],
           providers: [
             {provide: Router, useClass: RouterStub},
-            {provide: ApiService, useValue: apiMock},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
@@ -100,7 +90,5 @@ describe('ProjectComponent', () => {
        noop.detectChanges();
        fixture.detectChanges();
        tick(15000);
-
-       expect(deleteProjectSpy.and.callThrough()).toHaveBeenCalled();
      }));
 });

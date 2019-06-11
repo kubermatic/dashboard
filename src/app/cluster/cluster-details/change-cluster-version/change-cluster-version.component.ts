@@ -3,7 +3,7 @@ import {MatDialogRef} from '@angular/material';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
-import {ApiService, ProjectService} from '../../../core/services';
+import {ClusterService, ProjectService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -25,7 +25,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
 
   constructor(
-      private _apiService: ApiService, private _projectService: ProjectService,
+      private _clusterService: ClusterService, private _projectService: ProjectService,
       private _dialogRef: MatDialogRef<ChangeClusterVersionComponent>,
       public _googleAnalyticsService: GoogleAnalyticsService) {}
 
@@ -46,24 +46,22 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
       },
     };
 
-    this._apiService.patchCluster(patch, this.cluster.id, this.datacenter.metadata.name, this.project.id)
-        .subscribe(() => {
-          NotificationActions.success(
-              'Success', `Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`);
-          this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
+    this._clusterService.patch(this.project.id, this.cluster.id, this.datacenter.metadata.name, patch).subscribe(() => {
+      NotificationActions.success(
+          'Success', `Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`);
+      this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
 
-          if (this.isNodeDeploymentUpgradeEnabled) {
-            this.upgradeNodeDeployments();
-          }
-        });
+      if (this.isNodeDeploymentUpgradeEnabled) {
+        this.upgradeNodeDeployments();
+      }
+    });
 
     this._dialogRef.close(true);
   }
 
   upgradeNodeDeployments(): void {
-    this._apiService
-        .upgradeClusterNodeDeployments(
-            this.selectedVersion, this.cluster.id, this.datacenter.metadata.name, this.project.id)
+    this._clusterService
+        .upgradeNodeDeployments(this.project.id, this.cluster.id, this.datacenter.metadata.name, this.selectedVersion)
         .pipe(first())
         .subscribe(() => {
           NotificationActions.success(
