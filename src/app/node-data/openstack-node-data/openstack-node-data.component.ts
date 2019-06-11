@@ -1,7 +1,7 @@
-import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {ApiService, DatacenterService} from '../../core/services';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
@@ -12,7 +12,7 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
   styleUrls: ['./openstack-node-data.component.scss'],
   templateUrl: './openstack-node-data.component.html',
 })
-export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges {
+export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() projectId: string;
@@ -22,9 +22,12 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
   flavors: OpenstackFlavor[] = [];
   loadingFlavors = false;
   osNodeForm: FormGroup;
+  loadingSizes = false;
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: NodeDataService, private api: ApiService, private dcService: DatacenterService) {}
+  constructor(
+      private addNodeService: NodeDataService, private api: ApiService, private dcService: DatacenterService,
+      private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.osNodeForm = new FormGroup({
@@ -52,6 +55,24 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
         this.osNodeForm.controls.useFloatingIP.disable();
       }
     }));
+
+    this.subscriptions.push(this.wizardService.clusterProviderSettingsFormChanges$.subscribe((data) => {
+      if (data.cloudSpec.openstack.username === this.cloudSpec.openstack.username &&
+          data.cloudSpec.openstack.password === this.cloudSpec.openstack.password &&
+          data.cloudSpec.openstack.domain === this.cloudSpec.openstack.domain &&
+          data.cloudSpec.openstack.tenant === this.cloudSpec.openstack.tenant) {
+        return;
+      }
+
+      this.cloudSpec = data.cloudSpec;
+      this.osNodeForm.controls.flavor.setValue('');
+      this.flavors = [];
+      this.checkFlavorState();
+      if (data.cloudSpec.openstack.username !== '' || data.cloudSpec.openstack.password !== '' ||
+          data.cloudSpec.openstack.domain !== '' || data.cloudSpec.openstack.tenant !== '') {
+        this.loadFlavors();
+      }
+    }));
   }
 
   ngOnDestroy(): void {
@@ -59,12 +80,6 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
       if (sub) {
         sub.unsubscribe();
       }
-    }
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (!!changes.cloudSpec) {
-      this.loadFlavors();
     }
   }
 
@@ -90,13 +105,19 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
     }
   }
 
+  showFlavorHint(): boolean {
+    return (!this.loadingFlavors && !this.hasCredentials()) && this.isInWizard();
+  }
+
   getFlavorsFormState(): string {
-    if (!this.loadingFlavors && this.isInWizard() && !this.hasCredentials()) {
-      return 'Please enter your credentials first!';
+    if ((!this.loadingFlavors && !this.hasCredentials()) && this.isInWizard()) {
+      return 'Flavor*';
     } else if (this.loadingFlavors) {
       return 'Loading flavors...';
+    } else if (!this.loadingFlavors && this.flavors.length === 0) {
+      return 'No Flavors available';
     } else {
-      return 'Flavor*:';
+      return 'Flavor*';
     }
   }
 
@@ -137,14 +158,16 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy, OnChanges 
                                   .subscribe((flavors) => {
                                     this.handleFlavours(flavors);
                                     this.checkFlavorState();
-                                  }));
+                                    this.loadingFlavors = false;
+                                  }, err => this.loadingSizes = false));
     } else {
       this.loadingFlavors = true;
       this.subscriptions.push(
           this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId).subscribe((flavors) => {
             this.handleFlavours(flavors);
             this.checkFlavorState();
-          }));
+            this.loadingFlavors = false;
+          }, err => this.loadingSizes = false));
     }
   }
 

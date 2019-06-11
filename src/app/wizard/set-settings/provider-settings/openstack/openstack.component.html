@@ -36,7 +36,8 @@
       Password is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
-  <mat-form-field fxFlex>
+  <mat-form-field fxFlex
+                  [ngClass]="showHint('tenant') ? 'km-with-hint' : ''">
     <mat-label>{{getTenantsFormState()}}</mat-label>
     <input matInput
            formControlName="tenant"
@@ -52,70 +53,65 @@
     <mat-error *ngIf="openstackSettingsForm.controls.tenant.hasError('required')">
       Project is <strong>required</strong>.
     </mat-error>
+    <mat-hint *ngIf="showHint('tenant')">Please enter your credentials first.</mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex
                   id="km-floating-ip-pool-field"
+                  class="km-with-hint"
                   *ngIf="!hideOptional || isFloatingIPEnforced()">
     <mat-label>{{getOptionalSettingsFormState('Floating IP Pool')}}</mat-label>
     <mat-select [placeholder]="getOptionalSettingsFormState('Floating IP Pool')"
                 formControlName="floatingIpPool"
                 [required]="isFloatingIPEnforced()">
-      <mat-option *ngFor="let item of floatingIpPool"
+      <mat-option *ngFor="let item of floatingIpPools"
                   [value]="item.name">
         {{item.name}}
       </mat-option>
     </mat-select>
-    <mat-hint>When specified, all worker nodes will receive a public ip from this floating ip pool.</mat-hint>
+    <mat-hint><span *ngIf="showHint('optionalSettings')">Please enter a Project first.</span> When specified, all worker nodes will receive a public ip from this floating ip pool.</mat-hint>
   </mat-form-field>
 
-
   <mat-form-field fxFlex
+                  class="km-with-hint"
                   *ngIf="!hideOptional">
     <mat-label>{{getOptionalSettingsFormState('Security Group')}}</mat-label>
     <mat-select [placeholder]="getOptionalSettingsFormState('Security Group')"
-                formControlName="securityGroups">
-      <mat-option *ngFor="let item of securityGroup"
+                formControlName="securityGroup">
+      <mat-option *ngFor="let item of securityGroups"
                   [value]="item.name">
         {{item.name}}
       </mat-option>
     </mat-select>
-    <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security
-      group will be created.
-    </mat-hint>
+    <mat-hint><span *ngIf="showHint('optionalSettings')">Please enter a Project first.</span> When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
   </mat-form-field>
 
-  <div fxFlex
-       class="mat-select-container"
-       *ngIf="!hideOptional">
-    <mat-form-field>
-      <mat-label>{{getOptionalSettingsFormState('Network')}}</mat-label>
-      <mat-select [placeholder]="getOptionalSettingsFormState('Network')"
-                  formControlName="network">
-        <mat-option *ngFor="let item of network"
-                    [value]="item.name">
-          {{item.name}}
-        </mat-option>
-      </mat-select>
+  <mat-form-field fxFlex
+                  class="km-with-hint"
+                  *ngIf="!hideOptional">
+    <mat-label>{{getOptionalSettingsFormState('Network')}}</mat-label>
+    <mat-select [placeholder]="getOptionalSettingsFormState('Network')"
+                formControlName="network">
+      <mat-option *ngFor="let item of networks"
+                  [value]="item.name">
+        {{item.name}}
+      </mat-option>
+    </mat-select>
+    <mat-hint><span *ngIf="showHint('optionalSettings')">Please enter a Project first.</span> When specified, all worker nodes will be attached to this network. If not specified, a network, subnet & router will be created.</mat-hint>
+  </mat-form-field>
 
-      <mat-hint>When specified, all worker nodes will be attached to this network. If not specified, a network, subnet &
-        router will be created.
-      </mat-hint>
-    </mat-form-field>
-  </div>
+  <mat-form-field fxFlex
+                  class="km-with-hint"
+                  *ngIf="!hideOptional">
+    <mat-label>{{getSubnetIDFormState()}}</mat-label>
+    <mat-select [placeholder]="getSubnetIDFormState()"
+                formControlName="subnetId">
+      <mat-option *ngFor="let subnet of subnetIds"
+                  [value]="subnet.id">
+        {{subnet.name}}
+      </mat-option>
+    </mat-select>
+    <mat-hint *ngIf="showHint('subnetId')">Please enter a Network first.</mat-hint>
+  </mat-form-field>
 
-  <div fxFlex
-       class="mat-select-container"
-       *ngIf="!hideOptional">
-    <mat-form-field>
-      <mat-label>{{getSubnetIDFormState()}}</mat-label>
-      <mat-select [placeholder]="getSubnetIDFormState()"
-                  formControlName="subnetId">
-        <mat-option *ngFor="let subnet of subnetIds"
-                    [value]="subnet.id">
-          {{subnet.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
 </form>
