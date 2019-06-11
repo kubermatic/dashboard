@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
-import {MAT_DIALOG_DATA, MatTabChangeEvent} from '@angular/material';
+import {MAT_DIALOG_DATA} from '@angular/material';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
