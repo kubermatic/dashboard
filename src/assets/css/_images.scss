@@ -89,6 +89,16 @@
   background-color: $white-background;
 }
 
+.km-icon-copy {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  mask: url("/assets/images/icons/copy.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  background-color: $white-background;
+}
+
 .km-icon-cluster {
   display: inline-block;
   width: 22px;
