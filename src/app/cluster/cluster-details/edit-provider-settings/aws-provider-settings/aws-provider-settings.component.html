@@ -4,6 +4,7 @@
     <mat-label>Access Key ID*</mat-label>
     <input matInput
            formControlName="accessKeyId"
+           name="accessKeyId"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="awsProviderSettingsForm.controls.accessKeyId.hasError('required')">
@@ -14,6 +15,7 @@
     <mat-label>Secret Access Key*</mat-label>
     <input matInput
            formControlName="secretAccessKey"
+           name="secretAccessKey"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="awsProviderSettingsForm.controls.secretAccessKey.hasError('required')">

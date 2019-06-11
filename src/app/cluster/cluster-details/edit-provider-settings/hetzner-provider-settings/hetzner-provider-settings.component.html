@@ -4,6 +4,7 @@
     <mat-label>API Token*</mat-label>
     <input matInput
            formControlName="token"
+           name="token"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="(hetznerProviderSettingsForm.controls.token.hasError('minlength') || hetznerProviderSettingsForm.controls.token.hasError('maxlength'))">
