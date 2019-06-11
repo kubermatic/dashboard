@@ -23,6 +23,8 @@ export class ClusterUtils {
       return 'azure';
     } else if (cloud.packet) {
       return 'packet';
+    } else if (cloud.gcp) {
+      return 'gcp';
     }
   }
 
