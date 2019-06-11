@@ -99,8 +99,8 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         dialogId: 'km-delete-sshkey-dialog',
-        title: 'Remove SSH key from project',
-        message: `You are on the way to remove the SSH key ${sshKey.name} from the project. This cannot be undone!`,
+        title: 'Delete SSH Key',
+        message: `Are you sure you want to permanently delete SSH key "<strong>${sshKey.name}</strong>"?`,
         confirmLabel: 'Delete',
         confirmLabelId: 'km-delete-sshkey-dialog-btn',
       },

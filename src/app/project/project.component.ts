@@ -175,11 +175,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
       hasBackdrop: true,
       data: {
         title: 'Delete Project',
-        message: `Are you sure you want to permanently delete project ${project.name}?`,
+        message: `Are you sure you want to permanently delete project "<strong>${project.name}</strong>"?`,
         confirmLabel: 'Delete',
         compareName: project.name,
-        inputPlaceholder: 'Project name',
-        inputTitle: 'Project name',
+        inputPlaceholder: 'Project Name',
+        inputTitle: 'Project Name',
       },
     };
 
