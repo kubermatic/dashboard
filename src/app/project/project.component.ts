@@ -2,7 +2,7 @@ import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
-import {ApiService, ProjectService, UserService} from '../core/services';
+import {ClusterService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
@@ -31,7 +31,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private readonly _apiService: ApiService, private readonly _projectService: ProjectService,
+      private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
 
@@ -68,7 +68,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
   private _loadClusterCounts(): void {
     this.projects.forEach(project => {
       if (project.status === 'Active') {
-        this._apiService.getAllClusters(project.id).pipe(first()).subscribe((dcClusters) => {
+        this._clusterService.clusters(project.id).pipe(first()).subscribe((dcClusters) => {
           this.clusterCount[project.id] = dcClusters.length;
         });
       }
@@ -188,7 +188,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.deleteProject(project.id).subscribe(() => {
+        this._projectService.delete(project.id).subscribe(() => {
           NotificationActions.success('Success', `Project ${project.name} is being deleted`);
           this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
           this._projectService.onProjectsUpdate.next();

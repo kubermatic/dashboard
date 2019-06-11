@@ -4,7 +4,7 @@ import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {of} from 'rxjs';
 
-import {ApiService, DatacenterService} from '../../core/services';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeOpenstackFlavors} from '../../testing/fake-data/addNodeModal.fake';
@@ -38,6 +38,7 @@ describe('OpenstackNodeDataComponent', () => {
           ],
           providers: [
             NodeDataService,
+            WizardService,
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ApiService, useValue: apiMock},
           ],

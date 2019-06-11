@@ -4,7 +4,6 @@ import {MatDialogModule, MatDialogRef, MatFormFieldModule, MatInputModule, MatTo
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
-import {of} from 'rxjs';
 
 import {ApiService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
@@ -31,7 +30,6 @@ const modules: any[] = [
 describe('AddSshKeyDialogComponent', () => {
   let fixture: ComponentFixture<AddSshKeyDialogComponent>;
   let component: AddSshKeyDialogComponent;
-  let apiService: ApiService;
   let dialogRef: MatDialogRef<AddSshKeyDialogComponent, any>;
 
   beforeEach(() => {
@@ -59,7 +57,6 @@ describe('AddSshKeyDialogComponent', () => {
     component = fixture.componentInstance;
     component.projectID = fakeProject().id;
     fixture.detectChanges();
-    apiService = fixture.debugElement.injector.get(ApiService);
     dialogRef = fixture.debugElement.injector.get(MatDialogRef) as MatDialogRef<AddSshKeyDialogComponent, any>;
   });
 
@@ -81,19 +78,17 @@ describe('AddSshKeyDialogComponent', () => {
     expect(errors['required']).toBeFalsy();
   });
 
-  it('submitting a form calls addSSHKey method and closes dialog', fakeAsync(() => {
+  it('submitting a form calls createSSHKey method and closes dialog', fakeAsync(() => {
        expect(component.addSSHKeyForm.valid).toBeFalsy();
        component.addSSHKeyForm.controls['name'].setValue('testname');
        component.addSSHKeyForm.controls['key'].setValue('testkey');
        expect(component.addSSHKeyForm.valid).toBeTruthy();
 
        const spyDialogRefClose = spyOn(dialogRef, 'close');
-       const spyAddShhKey = spyOn(apiService, 'addSSHKey').and.returnValue(of(null));
        component.addSSHKey();
        tick();
        fixture.detectChanges();
 
-       expect(spyAddShhKey.and.callThrough()).toHaveBeenCalledTimes(1);
        expect(spyDialogRefClose.and.callThrough()).toHaveBeenCalledTimes(1);
      }));
 });

@@ -6,21 +6,20 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, Auth, DatacenterService, ProjectService, UserService} from '../../core/services';
+import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../core/services';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeHealth} from '../../testing/fake-data/health.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
-import {asyncData} from '../../testing/services/api-mock.service';
+import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
+import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
 
 import {ClusterListComponent} from './cluster-list.component';
-
 import Spy = jasmine.Spy;
-import {ProjectMockService} from '../../testing/services/project-mock.service';
 
 describe('ClusterListComponent', () => {
   let fixture: ComponentFixture<ClusterListComponent>;
@@ -29,9 +28,9 @@ describe('ClusterListComponent', () => {
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getAllClusters', 'getClusterHealth']);
-    getClustersSpy = apiMock.getAllClusters.and.returnValue(asyncData([fakeAWSCluster()]));
-    apiMock.getClusterHealth.and.returnValue(asyncData([fakeHealth()]));
+    const clusterServiceMock = jasmine.createSpyObj('ClusterService', ['clusters', 'health']);
+    getClustersSpy = clusterServiceMock.clusters.and.returnValue(asyncData([fakeAWSCluster()]));
+    clusterServiceMock.health.and.returnValue(asyncData([fakeHealth()]));
 
     TestBed
         .configureTestingModule({
@@ -47,7 +46,8 @@ describe('ClusterListComponent', () => {
             ClusterListComponent,
           ],
           providers: [
-            {provide: ApiService, useValue: apiMock},
+            {provide: ApiService, useValue: ApiMockService},
+            {provide: ClusterService, useValue: clusterServiceMock},
             {provide: Auth, useClass: AuthMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: UserService, useClass: UserMockService},

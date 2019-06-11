@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 
 import {AppConfigService} from '../../app-config.service';
-import {ApiService, DatacenterService, ProjectService, UserService, WizardService} from '../../core/services';
+import {ApiService, ClusterService, DatacenterService, ProjectService, UserService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {AWSNodeDataComponent} from '../../node-data/aws-node-data/aws-node-data.component';
@@ -20,12 +20,11 @@ import {PacketNodeDataComponent} from '../../node-data/packet-node-data/packet-n
 import {VSphereNodeDataComponent} from '../../node-data/vsphere-add-node/vsphere-node-data.component';
 import {VSphereOptionsComponent} from '../../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeDigitaloceanSizes} from '../../testing/fake-data/addNodeModal.fake';
-import {fakeSSHKeys} from '../../testing/fake-data/sshkey.fake';
 import {RouterStub} from '../../testing/router-stubs';
 import {ActivatedRouteMock} from '../../testing/services/activate-route-mock';
-import {asyncData} from '../../testing/services/api-mock.service';
+import {ApiMockService} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
+import {ClusterMockService} from '../../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../../testing/services/datacenter-mock.service';
 import {ClusterNameGeneratorMock} from '../../testing/services/name-generator-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
@@ -48,12 +47,6 @@ describe('SetSettingsComponent', () => {
   let component: SetSettingsComponent;
 
   beforeEach(async(() => {
-    const apiMock =
-        jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getSSHKeys']);
-    apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    apiMock.getSSHKeys.and.returnValue(asyncData(fakeSSHKeys()));
-
     TestBed
         .configureTestingModule({
           imports: [
@@ -90,7 +83,8 @@ describe('SetSettingsComponent', () => {
             NodeDataService,
             WizardService,
             {provide: ActivatedRoute, useCass: ActivatedRouteMock},
-            {provide: ApiService, useValue: apiMock},
+            {provide: ApiService, useClass: ApiMockService},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: DatacenterService, useValue: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},

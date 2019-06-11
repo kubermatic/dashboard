@@ -7,8 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
-import {ApiService, ProjectService} from '../../../core/services';
-import {DatacenterService, WizardService} from '../../../core/services';
+import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
@@ -24,15 +23,15 @@ import {PacketNodeDataComponent} from '../../../node-data/packet-node-data/packe
 import {VSphereNodeDataComponent} from '../../../node-data/vsphere-add-node/vsphere-node-data.component';
 import {VSphereOptionsComponent} from '../../../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
 import {SharedModule} from '../../../shared/shared.module';
-import {fakeDigitaloceanSizes} from '../../../testing/fake-data/addNodeModal.fake';
-import {masterVersionsFake} from '../../../testing/fake-data/cluster-spec.fake';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {fakeDigitaloceanCreateNode, nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
-import {asyncData} from '../../../testing/services/api-mock.service';
+import {ApiMockService} from '../../../testing/services/api-mock.service';
+import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
 import {ClusterNameGeneratorMock} from '../../../testing/services/name-generator-mock.service';
+import {NodeMockService} from '../../../testing/services/node-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {NodeService} from '../../services/node.service';
 
@@ -44,12 +43,6 @@ describe('NodeDataModalData', () => {
   let activatedRoute: ActivatedRouteStub;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj(
-        'ApiService', ['getDigitaloceanSizes', 'createClusterNode', 'patchNodeDeployment', 'getClusterNodeUpgrades']);
-    apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
-    apiMock.getClusterNodeUpgrades.and.returnValue(asyncData(masterVersionsFake()));
-    const nodeMock = jasmine.createSpyObj('NodeService', ['createNodeDeployment']);
-
     TestBed
         .configureTestingModule({
           imports: [
@@ -79,11 +72,12 @@ describe('NodeDataModalData', () => {
           providers: [
             {provide: MAT_DIALOG_DATA, useValue: {cluster: fakeDigitaloceanCluster()}},
             {provide: MatDialogRef, useValue: {}},
-            {provide: ApiService, useValue: apiMock},
+            {provide: ApiService, useClass: ApiMockService},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
-            {provide: NodeService, useValue: nodeMock},
+            {provide: NodeService, useClass: NodeMockService},
             {provide: Router, useClass: RouterStub},
             {provide: ClusterNameGenerator, useClass: ClusterNameGeneratorMock},
             NodeDataService,

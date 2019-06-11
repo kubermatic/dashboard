@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 
-import {ApiService} from '../../../core/services';
+import {ClusterService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
@@ -43,7 +43,7 @@ export class NodeListComponent implements OnInit {
   shouldToggleNodeItem = (index, item) => this.isShowNodeItem[item.id];
 
   constructor(
-      private readonly _matDialog: MatDialog, private readonly _apiService: ApiService,
+      private readonly _matDialog: MatDialog, private readonly _clusterService: ClusterService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
@@ -78,7 +78,7 @@ export class NodeListComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
-        this._apiService.deleteClusterNode(this.cluster.id, node, this.datacenter.metadata.name, this.projectID)
+        this._clusterService.deleteNode(this.projectID, this.cluster.id, this.datacenter.metadata.name, node.id)
             .subscribe(() => {
               NotificationActions.success('Success', `Node removed successfully from ${this.cluster.name}`);
               this._googleAnalyticsService.emitEvent('clusterOverview', 'nodeDeleted');

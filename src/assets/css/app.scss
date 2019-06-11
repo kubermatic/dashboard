@@ -811,6 +811,10 @@ div.km-form-group-tags {
 mat-form-field.mat-form-field {
   color: $text-color;
   width: 100%;
+
+  &.km-with-hint {
+    margin-bottom: 15px;
+  }
 }
 
 span.mat-select-value-text {

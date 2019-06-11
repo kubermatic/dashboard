@@ -7,7 +7,7 @@ import {RouterTestingModule} from '@angular/router/testing';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
-import {ApiService, Auth, DatacenterService, ProjectService, UserService} from '../../../core/services';
+import {ApiService, Auth, ClusterService, DatacenterService, ProjectService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
@@ -18,6 +18,7 @@ import {ActivatedRouteStub, RouterStub} from '../../../testing/router-stubs';
 import {asyncData} from '../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
+import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {NodeMockService} from '../../../testing/services/node-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
@@ -36,8 +37,7 @@ describe('NodeDeploymentDetailsComponent', () => {
 
   beforeEach(async(() => {
     apiMock = jasmine.createSpyObj(
-        'ApiService', ['getCluster', 'getNodeDeploymentNodes', 'getNodeDeployment', 'getNodeDeploymentNodesEvents']);
-    apiMock.getCluster.and.returnValue(asyncData(fakeDigitaloceanCluster()));
+        'ApiService', ['getNodeDeploymentNodes', 'getNodeDeployment', 'getNodeDeploymentNodesEvents']);
     apiMock.getNodeDeployment.and.returnValue(asyncData(nodeDeploymentsFake()[0]));
     apiMock.getNodeDeploymentNodes.and.returnValue(asyncData(nodesFake()));
     apiMock.getNodeDeploymentNodesEvents.and.returnValue(asyncData([]));
@@ -60,6 +60,7 @@ describe('NodeDeploymentDetailsComponent', () => {
           ],
           providers: [
             {provide: ApiService, useValue: apiMock},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: DatacenterService, useValue: dcMock},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Auth, useClass: AuthMockService},

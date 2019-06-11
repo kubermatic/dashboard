@@ -4,20 +4,20 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
-import Spy = jasmine.Spy;
 
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, UserService} from '../../../../core/services';
+import {ClusterService, UserService} from '../../../../core/services';
 import {GoogleAnalyticsService} from '../../../../google-analytics.service';
 import {SharedModule} from '../../../../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../../../../testing/components/noop-confirmation-dialog.component';
 import {fakeDigitaloceanCluster} from '../../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../../testing/fake-data/datacenter.fake';
-import {fakeSSHKeys} from '../../../../testing/fake-data/sshkey.fake';
 import {fakeProject} from '../../../../testing/fake-data/project.fake';
+import {fakeSSHKeys} from '../../../../testing/fake-data/sshkey.fake';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
 import {EditSSHKeysItemComponent} from './edit-sshkeys-item.component';
+import Spy = jasmine.Spy;
 
 describe('EditSSHKeysItemComponent', () => {
   let fixture: ComponentFixture<EditSSHKeysItemComponent>;
@@ -26,8 +26,8 @@ describe('EditSSHKeysItemComponent', () => {
   let deleteClusterSSHKeySpy: Spy;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['deleteClusterSSHKey']);
-    deleteClusterSSHKeySpy = apiMock.deleteClusterSSHKey.and.returnValue(of(null));
+    const clusterServiceMock = jasmine.createSpyObj('ClusterService', ['deleteSSHKey']);
+    deleteClusterSSHKeySpy = clusterServiceMock.deleteSSHKey.and.returnValue(of(null));
 
     TestBed
         .configureTestingModule({
@@ -43,7 +43,7 @@ describe('EditSSHKeysItemComponent', () => {
           ],
           providers: [
             MatDialog,
-            {provide: ApiService, useValue: apiMock},
+            {provide: ClusterService, useValue: clusterServiceMock},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             GoogleAnalyticsService,

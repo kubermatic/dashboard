@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {interval, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {forkJoin, of, Subject} from 'rxjs';
+import {delay, first, retryWhen, switchMap, takeUntil, tap} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, ProjectService, WizardService} from '../core/services';
+import {ClusterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {Step, StepsService} from '../core/services/wizard/steps.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
@@ -48,7 +48,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _wizardService: WizardService, private readonly _addNodeService: NodeDataService,
       private readonly _stepsService: StepsService, private readonly _router: Router,
-      private readonly _projectService: ProjectService, private readonly _api: ApiService,
+      private readonly _projectService: ProjectService, private readonly _clusterService: ClusterService,
       private readonly _googleAnalyticsService: GoogleAnalyticsService,
       private readonly _appConfigService: AppConfigService) {
     const defaultNodeCount = this._appConfigService.getConfig().default_node_count || 3;
@@ -263,36 +263,40 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   createCluster(): void {
     this.creating = true;
+    let createdCluster: ClusterEntity;
     const datacenter = this.clusterDatacenterFormData.datacenter;
     const createCluster = this._getCreateCluterModel();
 
-    this._api.createCluster(this._getCreateCluterModel(), datacenter.spec.seed, this.project.id)
+    this._clusterService.create(this.project.id, datacenter.spec.seed, createCluster)
+        .pipe(switchMap(cluster => {
+          NotificationActions.success('Success', `Cluster ${createCluster.cluster.name} successfully created`);
+          this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
+          createdCluster = cluster;
+
+          return this._clusterService.cluster(this.project.id, createdCluster.id, datacenter.spec.seed)
+              .pipe(first())
+              .pipe(retryWhen(errors => errors.pipe(tap(delay(1000)))));
+        }))
+        .pipe(switchMap(() => {
+          this.creating = false;
+
+          if (this.clusterSSHKeys.length > 0) {
+            return forkJoin(this.clusterSSHKeys.map(
+                key => this._clusterService.createSSHKey(
+                    this.project.id, createdCluster.id, datacenter.spec.seed, key.id)));
+          }
+
+          return of([]);
+        }))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(
-            (cluster) => {
-              NotificationActions.success('Success', `Cluster ${createCluster.cluster.name} successfully created`);
-              this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
-
-              const isReady = new Subject<boolean>();
-              interval(5 * this._appConfigService.getRefreshTimeBase()).pipe(takeUntil(isReady)).subscribe(() => {
-                this._api.getCluster(cluster.id, datacenter.spec.seed, this.project.id).subscribe(() => {
-                  this._router.navigate(
-                      ['/projects/' + this.project.id + '/dc/' + datacenter.spec.seed + '/clusters/' + cluster.id]);
-
-                  if (this.clusterSSHKeys.length > 0) {
-                    for (const key of this.clusterSSHKeys) {
-                      this._api.addClusterSSHKey(key.id, cluster.id, datacenter.spec.seed, this.project.id)
-                          .subscribe(() => {
-                            NotificationActions.success(
-                                'Success',
-                                `SSH key ${key.name} was added successfully to cluster ${createCluster.cluster.name}`);
-                          });
-                    }
-                  }
-                  isReady.next(true);
-                  this.creating = false;
-                });
-              });
+            (keys: SSHKeyEntity[]) => {
+              this._router.navigate(
+                  [`/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`]);
+              keys.forEach(
+                  key => NotificationActions.success(
+                      'Success',
+                      `SSH key ${key.name} was added successfully to cluster ${createCluster.cluster.name}`));
             },
             () => {
               NotificationActions.error('Error', `Could not create cluster ${createCluster.cluster.name}`);

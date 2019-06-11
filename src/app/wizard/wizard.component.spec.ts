@@ -6,8 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, DatacenterService, ProjectService} from '../core/services';
-import {WizardService} from '../core/services';
+import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {StepsService} from '../core/services/wizard/steps.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
@@ -28,8 +27,9 @@ import {SharedModule} from '../shared/shared.module';
 import {masterVersionsFake} from '../testing/fake-data/cluster-spec.fake';
 import {fakeDigitaloceanCluster} from '../testing/fake-data/cluster.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/router-stubs';
-import {asyncData} from '../testing/services/api-mock.service';
+import {ApiMockService, asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
+import {ClusterMockService} from '../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
 
@@ -107,7 +107,8 @@ describe('WizardComponent', () => {
           ],
           providers: [
             {provide: Router, useClass: RouterStub},
-            {provide: ApiService, useValue: apiMock},
+            {provide: ClusterService, useClass: ClusterMockService},
+            {provide: ApiService, useClass: ApiMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
             {provide: ProjectService, useClass: ProjectMockService},

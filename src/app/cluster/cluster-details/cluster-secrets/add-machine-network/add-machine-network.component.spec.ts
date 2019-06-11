@@ -5,14 +5,14 @@ import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
-import {ApiService, WizardService} from '../../../../core/services';
+import {ClusterService, WizardService} from '../../../../core/services';
 import {MachineNetworksComponent} from '../../../../machine-networks/machine-networks.component';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeClusterWithMachineNetwork} from '../../../../testing/fake-data/clusterWithMachineNetworks.fake';
 import {fakeDigitaloceanDatacenter} from '../../../../testing/fake-data/datacenter.fake';
 import {fakeProject} from '../../../../testing/fake-data/project.fake';
 import {RouterTestingModule} from '../../../../testing/router-stubs';
-import {ApiMockService} from '../../../../testing/services/api-mock.service';
+import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 import {AddMachineNetworkComponent} from './add-machine-network.component';
 
@@ -42,7 +42,7 @@ describe('AddMachineNetworkComponent', () => {
           ],
           providers: [
             WizardService,
-            {provide: ApiService, useClass: ApiMockService},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
           ],
         })
