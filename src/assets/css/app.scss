@@ -846,12 +846,9 @@ mat-form-field.mat-focused.ng-pristine label {
 }
 
 // Dialogs.
-.km-dialog-box {
-  min-width: $dialog-width;
-  width: $dialog-width;
-}
-
 .mat-dialog-container {
+  min-width: $dialog-width !important;
+  max-width: $dialog-width !important;
   color: $text-color;
 
   .mat-dialog-title {
@@ -861,6 +858,7 @@ mat-form-field.mat-focused.ng-pristine label {
   .mat-dialog-content {
     font-size: 16px;
     font-weight: 400;
+    max-height: $dialog-max-height;
 
     a {
       text-decoration: none;

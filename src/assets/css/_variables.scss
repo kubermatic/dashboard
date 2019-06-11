@@ -13,10 +13,14 @@ $caption-font-size-base: rem(1.2) !default;
 $baseline-grid: 8px;
 
 $toolbar-height: 7.5 * $baseline-grid;
+
 $sidenav-width: 30 * $baseline-grid;
 $sidenav-border-width: $baseline-grid / 4;
+
 $content-padding: 3.75 * $baseline-grid;
-$dialog-width: 600px;
+
+$dialog-width: 660px;
+$dialog-max-height: 800px;
 $dialog-padding: 30px;
 
 $line-height: 10px;
