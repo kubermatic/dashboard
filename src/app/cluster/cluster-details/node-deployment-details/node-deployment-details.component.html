@@ -27,12 +27,11 @@
 
   <mat-card class="km-node-deployment-detail-card white">
     <mat-card-header>
-
-      <mat-card-title class="km-node-deployment-name">
-        <span>{{nodeDeployment.name}}</span>
+      <mat-card-title>
         <i [matTooltip]="nodeDeploymentHealthStatus.message"
            [ngClass]="nodeDeploymentHealthStatus.color"
            class="km-node-deployment-health"></i>
+        <span>{{nodeDeployment.name}}</span>
       </mat-card-title>
     </mat-card-header>
     <mat-card-content fxLayout="row wrap"
@@ -133,7 +132,6 @@
     </mat-card-content>
   </mat-card>
 
-  <div class="km-pre-card-title">Nodes</div>
   <kubermatic-node-list [cluster]="cluster"
                         [nodes]="nodes"
                         (deleteNode)="loadNodes()"
@@ -142,7 +140,6 @@
                         [isClusterRunning]="true"
                         [clusterHealthStatus]="{css: 'km-status-running'}"></kubermatic-node-list>
 
-  <div class="km-pre-card-title">Nodes Events</div>
   <km-event-list [events]="events"></km-event-list>
 
 </ng-container>

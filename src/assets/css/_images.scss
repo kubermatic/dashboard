@@ -196,6 +196,33 @@
   background-color: transparent;
 }
 
+.km-icon-running {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 12px;
+  height: 10px;
+  background-image: url("/assets/images/Running-Check.svg");
+  background-repeat: no-repeat;
+}
+
+.km-icon-failed {
+  display: inline-block;
+  margin: 0 10px 0 5px;
+  width: 2px;
+  height: 10px;
+  background-image: url("/assets/images/Failed.svg");
+  background-repeat: no-repeat;
+}
+
+.km-icon-logs {
+  display: inline-block;
+  margin: 0 5px 0 0;
+  width: 12px;
+  height: 10px;
+  background-image: url("/assets/images/Logs.svg");
+  background-repeat: no-repeat;
+}
+
 .km-icon-kubernetes {
   display: inline-block;
   width: 30px;

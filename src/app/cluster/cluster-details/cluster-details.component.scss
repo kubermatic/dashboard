@@ -41,7 +41,8 @@ button:disabled {
 }
 
 .km-cluster-health {
-  margin-left: 10px;
+  margin-right: 2.5 * $baseline-grid;
+  font-size: $subhead-font-size-base;
   vertical-align: middle;
 }
 

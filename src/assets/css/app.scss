@@ -26,13 +26,6 @@ body {
   margin: auto;
 }
 
-// card
-.mat-card-header-text {
-  height: auto;
-  margin: 0;
-  width: auto;
-}
-
 // global
 .km-table {
   width: 100%;
@@ -161,35 +154,6 @@ body {
 .mat-column-status,
 .mat-column-stateArrow {
   width: 2 * $baseline-grid;
-}
-
-.mat-card-header {
-  margin-bottom: 10px;
-  border: none;
-
-  .mat-card-title {
-    padding-top: 0;
-    font-size: $body-font-size-base;
-    font-weight: normal;
-    align-items: baseline;
-  }
-
-  .mat-card-header-text {
-    width: 100%;
-    margin: 0;
-    font-size: $body-font-size-base;
-  }
-}
-
-.mat-card-title {
-  margin: 0;
-
-  h4 {
-    font-weight: 600;
-    margin: 10px 0;
-    font-size: 18px;
-    color: $text-color;
-  }
 }
 
 .mat-button-toggle-group-appearance-standard {
@@ -337,6 +301,11 @@ mat-button-toggle-group[group='providerGroup'] {
   }
 }
 
+mat-card-header > div > mat-card-title > div {
+  margin: $baseline-grid 0;
+  font-size: $body-font-size-base;
+}
+
 .mat-card.km-with-table-header {
   padding: 30px 0;
   margin: 20px 0 0 0;
@@ -350,21 +319,10 @@ mat-button-toggle-group[group='providerGroup'] {
     background-color: $white-text-color;
     color: $text-color;
     border-radius: 5px 5px 0 0;
-
-    .mat-card-header-text {
-      width: 100%;
-      margin: 0;
-
-      .mat-card-title {
-        font-weight: normal;
-        font-size: $body-font-size-base;
-        padding: 0;
-        margin: 0;
-      }
-    }
   }
 
   &.km-small .mat-card-header {
+    font-size: 10px !important;
     line-height: 1.6 * $line-height;
   }
 
@@ -393,10 +351,6 @@ mat-button-toggle-group[group='providerGroup'] {
 
       div {
         outline: none;
-      }
-
-      .km-cluster-name {
-        line-height: 5 * $line-height;
       }
 
       &.km-odd {
@@ -485,18 +439,9 @@ mat-button-toggle-group[group='providerGroup'] {
       margin: 0;
 
       .mat-card-title {
-        font-weight: normal;
-        font-size: $body-font-size-base;
         padding: 0;
         margin: 0;
-        line-height: 4 * $line-height;
         align-items: baseline;
-
-        &.km-cluster-name {
-          float: left;
-          padding: 0 30px;
-          font-size: $subhead-font-size-base-lg;
-        }
       }
     }
   }
@@ -727,13 +672,6 @@ mat-list-item.disabled {
   margin-right: 5px;
 }
 
-.km-pre-card-title {
-  margin-top: 30px;
-  color: $text-color;
-  font-size: 18px;
-  font-weight: 500;
-}
-
 .km-warning {
   color: $indicator-red !important;
 }
@@ -795,7 +733,23 @@ div.km-form-group-tags {
   width: 45% !important;
 }
 
-// Health statuses
+// Card headers.
+.mat-card-header .mat-card-title {
+  color: $text-color;
+  padding: $baseline-grid 0 (2 * $baseline-grid);
+  font-size: 20px;
+  font-weight: 400 !important;
+
+  i {
+    margin: 0 (3 * $baseline-grid) 0 (4 * $baseline-grid);
+  }
+}
+
+.mat-card-header-text {
+  margin: 0 !important;
+}
+
+// Health statuses.
 .green {
   color: $indicator-green;
 }
@@ -939,4 +893,9 @@ mat-form-field.mat-focused.ng-pristine label {
   line-height: 20px;
   font-family: $code-block;
   color: $text-color;
+}
+
+// Font colors.
+.km-color-primary {
+  color: $primary !important;
 }
