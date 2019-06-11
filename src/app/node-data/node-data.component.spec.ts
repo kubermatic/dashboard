@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 
-import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
+import {ApiService, ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {SharedModule} from '../shared/shared.module';
@@ -13,6 +13,7 @@ import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../
 import {nodeDataFake} from '../testing/fake-data/node.fake';
 import {RouterStub} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
+import {ClusterMockService} from '../testing/services/cluster-mock-service';
 import {DatacenterMockService} from '../testing/services/datacenter-mock.service';
 import {ClusterNameGeneratorMock} from '../testing/services/name-generator-mock.service';
 import {ProjectMockService} from '../testing/services/project-mock.service';
@@ -36,13 +37,13 @@ describe('NodeDataComponent', () => {
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', [
       'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard',
-      'getClusterNodeUpgrades'
+      'nodeUpgrades'
     ]);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
     apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors()));
-    apiMock.getClusterNodeUpgrades.and.returnValue(asyncData(masterVersionsFake()));
+    apiMock.nodeUpgrades.and.returnValue(asyncData(masterVersionsFake()));
 
     TestBed
         .configureTestingModule({
@@ -68,6 +69,7 @@ describe('NodeDataComponent', () => {
             NodeDataService,
             WizardService,
             {provide: ApiService, useValue: apiMock},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: DatacenterService, useClass: DatacenterMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: Router, useClass: RouterStub},

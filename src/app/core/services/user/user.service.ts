@@ -1,23 +1,27 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, of, timer} from 'rxjs';
-import {catchError, map, shareReplay, switchMapTo} from 'rxjs/operators';
+import {EMPTY, iif, Observable, of, timer} from 'rxjs';
+import {catchError, map, publishReplay, refCount, switchMap} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {GroupConfig} from '../../../shared/model/Config';
+import {Auth} from '../auth/auth.service';
 
 @Injectable()
 export class UserService {
   private readonly restRoot: string = environment.restRoot;
   private _user$: Observable<MemberEntity>;
+  private _refreshTimer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
 
-  constructor(private _http: HttpClient, private _appConfig: AppConfigService) {}
+  constructor(private _http: HttpClient, private _appConfig: AppConfigService, private readonly _auth: Auth) {}
 
   get loggedInUser(): Observable<MemberEntity> {
     if (!this._user$) {
-      const timer$ = timer(0, this._appConfig.getRefreshTimeBase() * 10);
-      this._user$ = timer$.pipe(switchMapTo(this._getLoggedInUser())).pipe(shareReplay(1));
+      this._user$ = this._refreshTimer$
+                        .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getLoggedInUser(), EMPTY)))
+                        .pipe(publishReplay(1))
+                        .pipe(refCount());
     }
 
     return this._user$;

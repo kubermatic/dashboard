@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialog, MatDialogRef} from '@angular/material';
 import {Subscription} from 'rxjs';
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, UserService} from '../../../../core/services';
+import {ApiService, ClusterService, UserService} from '../../../../core/services';
 import {NotificationActions} from '../../../../redux/actions/notification.actions';
 import {AddSshKeyDialogComponent} from '../../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
@@ -31,12 +31,13 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   userGroupConfig: UserGroupConfig;
 
   constructor(
-      private api: ApiService, private dialog: MatDialog, private appConfigService: AppConfigService,
-      private userService: UserService, private dialogRef: MatDialogRef<AddClusterSSHKeysComponent>) {}
+      private readonly _clusterService: ClusterService, private readonly _dialog: MatDialog,
+      private readonly _appConfigService: AppConfigService, private readonly _userService: UserService,
+      private readonly _dialogRef: MatDialogRef<AddClusterSSHKeysComponent>, private readonly _api: ApiService) {}
 
   ngOnInit(): void {
-    this.userGroupConfig = this.appConfigService.getUserGroupConfig();
-    this.userService.currentUserGroup(this.projectID).subscribe((group) => {
+    this.userGroupConfig = this._appConfigService.getUserGroupConfig();
+    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
       this.userGroup = group;
     });
 
@@ -50,7 +51,7 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   reloadKeys(): void {
-    this.keysSub = this.api.getSSHKeys(this.projectID).subscribe((sshKeysRes) => {
+    this.keysSub = this._api.getSSHKeys(this.projectID).subscribe((sshKeysRes) => {
       const newKeys: SSHKeyEntity[] = [];
       for (const i in sshKeysRes) {
         if (!this.sshKeys.find((x) => x.name === sshKeysRes[i].name)) {
@@ -64,19 +65,18 @@ export class AddClusterSSHKeysComponent implements OnInit, OnDestroy {
   }
 
   addClusterSSHKeys(): void {
-    this.api
-        .addClusterSSHKey(
-            this.keysForm.controls.keys.value, this.cluster.id, this.datacenter.metadata.name, this.projectID)
+    this._clusterService
+        .createSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, this.keysForm.controls.keys.value)
         .subscribe((res) => {
           NotificationActions.success(
               'Success',
               `SSH key ${this.keysForm.controls.keys.value} was successfully added to cluster ${this.cluster.name}`);
-          this.dialogRef.close(res);
+          this._dialogRef.close(res);
         });
   }
 
   addProjectSSHKeys(): void {
-    const dialogRef = this.dialog.open(AddSshKeyDialogComponent);
+    const dialogRef = this._dialog.open(AddSshKeyDialogComponent);
     dialogRef.componentInstance.projectID = this.projectID;
 
     dialogRef.afterClosed().subscribe((result) => {

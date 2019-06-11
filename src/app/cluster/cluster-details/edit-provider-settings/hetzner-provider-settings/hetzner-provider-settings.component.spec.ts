@@ -3,10 +3,10 @@ import {MatDialogRef} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {ApiService, ClusterService} from '../../../../core/services';
+import {ClusterService} from '../../../../core/services';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeHetznerCluster} from '../../../../testing/fake-data/cluster.fake';
-import {ApiMockService} from '../../../../testing/services/api-mock.service';
+import {ClusterMockService} from '../../../../testing/services/cluster-mock-service';
 import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/azure-provider-settings.component';
@@ -45,8 +45,7 @@ describe('HetznerProviderSettingsComponent', () => {
             PacketProviderSettingsComponent,
           ],
           providers: [
-            ClusterService,
-            {provide: ApiService, useClass: ApiMockService},
+            {provide: ClusterService, useClass: ClusterMockService},
             {provide: MatDialogRef, useClass: MatDialogRefMock},
           ],
         })

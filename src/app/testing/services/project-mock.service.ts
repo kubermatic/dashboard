@@ -15,4 +15,8 @@ export class ProjectMockService {
   get projects(): Observable<ProjectEntity[]> {
     return of(fakeProjects());
   }
+
+  delete(projectID: string) {
+    return of(null);
+  }
 }

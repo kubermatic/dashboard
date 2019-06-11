@@ -29,7 +29,7 @@ test:
 
 test-headless: install
 	@$(CC) run test:headless
-	curl -s https://codecov.io/bash | bash -s - -c -F unit -K -C ${PULL_PULL_SHA}
+	bash <(curl -s https://codecov.io/bash) -c -K -C ${PULL_PULL_SHA} -P ${PULL_NUMBER} -b ${BUILD_ID}
 
 run-e2e-ci: install
 	./hack/e2e/run_ci_e2e_test.sh

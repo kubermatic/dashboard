@@ -1,15 +1,12 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {catchError} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
 import {TaintFormComponent} from '../../../shared/components/taint-form/taint-form.component';
-import {ClusterEntity, Finalizer, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
-import {ClusterEntityPatch} from '../../../shared/entity/ClusterEntityPatch';
+import {ClusterEntity, MasterVersion, Token} from '../../../shared/entity/ClusterEntity';
 import {EventEntity} from '../../../shared/entity/EventEntity';
-import {HealthEntity} from '../../../shared/entity/HealthEntity';
 import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
@@ -17,12 +14,11 @@ import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant,} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
 
 import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
-import {CreateClusterModel} from '../../../shared/model/CreateClusterModel';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {Auth} from '../auth/auth.service';
 
@@ -98,92 +94,6 @@ export class ApiService {
     return this._http.put(url, editProjectEntity);
   }
 
-  deleteProject(projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}`;
-    return this._http.delete(url);
-  }
-
-  getAllClusters(projectID: string): Observable<ClusterEntity[]> {
-    const url = `${this._restRoot}/projects/${projectID}/clusters`;
-    return this._http.get<ClusterEntity[]>(url);
-  }
-  getCluster(cluster: string, dc: string, projectID: string): Observable<ClusterEntity> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}`;
-    return this._http.get<ClusterEntity>(url);
-  }
-
-  createCluster(createClusterModel: CreateClusterModel, dc: string, projectID: string): Observable<ClusterEntity> {
-    createClusterModel.nodeDeployment.spec.template.labels =
-        LabelFormComponent.filterNullifiedKeys(createClusterModel.nodeDeployment.spec.template.labels);
-    createClusterModel.nodeDeployment.spec.template.taints =
-        TaintFormComponent.filterNullifiedTaints(createClusterModel.nodeDeployment.spec.template.taints);
-
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters`;
-    return this._http.post<ClusterEntity>(url, createClusterModel);
-  }
-
-  patchCluster(patch: ClusterEntityPatch, clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}`;
-    return this._http.patch<ClusterEntity>(url, patch);
-  }
-
-  deleteCluster(cluster: string, dc: string, projectID: string, finalizers?: {[key in Finalizer]: boolean}):
-      Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}`;
-    if (finalizers !== undefined) {
-      for (const key of Object.keys(finalizers)) {
-        this._headers = this._headers.set(key, finalizers[key].toString());
-      }
-    }
-
-    return this._http.delete(url, {headers: this._headers});
-  }
-
-  getClusterEvents(cluster: string, dc: string, projectID: string): Observable<EventEntity[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/events`;
-    return this._http.get<EventEntity[]>(url);
-  }
-
-  getClusterHealth(cluster: string, dc: string, projectID: string): Observable<HealthEntity> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/health`;
-    return this._http.get<HealthEntity>(url);
-  }
-
-  upgradeClusterNodeDeployments(version: string, cluster: string, dc: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes/upgrades`;
-    return this._http.put(url, {version} as MasterVersion);
-  }
-
-  getClusterNodes(cluster: string, dc: string, projectID: string): Observable<NodeEntity[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes?hideInitialConditions=true`;
-    return this._http.get<NodeEntity[]>(url);
-  }
-
-  createClusterNode(cluster: ClusterEntity, node: NodeEntity, dc: string, projectID: string): Observable<NodeEntity> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/nodes`;
-    return this._http.post<NodeEntity>(url, node);
-  }
-
-  deleteClusterNode(cluster: string, node: NodeEntity, dc: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodes/${node.id}`;
-    return this._http.delete(url);
-  }
-
-  getClusterSSHKeys(cluster: string, dc: string, projectID: string): Observable<SSHKeyEntity[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys`;
-    return this._http.get<SSHKeyEntity[]>(url);
-  }
-
-  deleteClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyID}`;
-    return this._http.delete(url);
-  }
-
-  addClusterSSHKey(sshkeyID: string, cluster: string, dc: string, projectID: string): Observable<any> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/sshkeys/${sshkeyID}`;
-    return this._http.put(url, null);
-  }
-
   getSSHKeys(projectID: string): Observable<SSHKeyEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/sshkeys`;
     return this._http.get<SSHKeyEntity[]>(url);
@@ -208,20 +118,6 @@ export class ApiService {
   getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/digitalocean/sizes`;
     return this._http.get<DigitaloceanSizes>(url);
-  }
-
-  getClusterUpgrades(projectID: string, dc: string, clusterID: string): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterID}/upgrades`;
-    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => {
-      return of<MasterVersion[]>([]);
-    }));
-  }
-
-  getClusterNodeUpgrades(controlPlaneVersion: string, type: string): Observable<MasterVersion[]> {
-    const url = `${this._restRoot}/upgrades/node?control_plane_version=${controlPlaneVersion}&type=${type}`;
-    return this._http.get<MasterVersion[]>(url).pipe(catchError(() => {
-      return of<MasterVersion[]>([]);
-    }));
   }
 
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {

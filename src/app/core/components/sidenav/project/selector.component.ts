@@ -23,8 +23,11 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     this._projectService.projects.pipe(takeUntil(this._unsubscribe))
         .subscribe(projects => this.projects = projects.sort((a, b) => a.name.localeCompare(b.name)));
 
-    this._projectService.selectedProject.subscribe(project => this.selectedProject = project);
-    this._projectService.onProjectChange.subscribe(project => this.selectedProject = project);
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+        .subscribe(project => this.selectedProject = project);
+
+    this._projectService.onProjectChange.pipe(takeUntil(this._unsubscribe))
+        .subscribe(project => this.selectedProject = project);
   }
 
   onSelectionChange(event: MatSelectChange): void {

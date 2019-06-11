@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
 
-import {ApiService, DatacenterService, ProjectService, WizardService} from '../core/services';
+import {ClusterService, DatacenterService, ProjectService, WizardService} from '../core/services';
 import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../shared/entity/ClusterEntity';
@@ -35,7 +35,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
   constructor(
       private nameGenerator: ClusterNameGenerator, private addNodeService: NodeDataService,
       private wizardService: WizardService, private _dc: DatacenterService, private _project: ProjectService,
-      private readonly _apiService: ApiService) {}
+      private readonly _clusterService: ClusterService) {}
 
   ngOnInit(): void {
     const initialKubeletVersion = this.nodeData.spec.versions.kubelet;
@@ -97,7 +97,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       this.seedDCName = dc.spec.seed;
 
       if (!this.isInWizard) {
-        this._apiService.getClusterNodeUpgrades(this.cluster.spec.version, this.cluster.type)
+        this._clusterService.nodeUpgrades(this.cluster.spec.version, this.cluster.type)
             .pipe(first())
             .subscribe((upgrades: MasterVersion[]) => {
               upgrades.forEach(upgrade => this.versions.push(upgrade.version));
