@@ -68,6 +68,11 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
     }));
   }
 
+  isMissingCredentials(): boolean {
+    return this.vsphereSettingsForm.controls.username.value === '' ||
+        this.vsphereSettingsForm.controls.password.value === '';
+  }
+
   ngOnDestroy(): void {
     for (const sub of this.subscriptions) {
       if (sub) {
@@ -77,8 +82,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   loadNetworks(): void {
-    if (this.vsphereSettingsForm.controls.username.value === '' ||
-        this.vsphereSettingsForm.controls.password.value === '') {
+    if (this.isMissingCredentials()) {
       if (this.networks.length > 0) {
         this.vsphereSettingsForm.controls.vmNetName.setValue('');
         this.networks = [];
@@ -115,9 +119,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   getNetworkFormState(): string {
-    if (!this.loadingNetworks &&
-        (this.vsphereSettingsForm.controls.username.value === '' ||
-         this.vsphereSettingsForm.controls.password.value === '')) {
+    if (!this.loadingNetworks && this.isMissingCredentials()) {
       return 'Network';
     } else if (this.loadingNetworks) {
       return 'Loading Networks...';
@@ -137,8 +139,6 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   showNetworkHint(): boolean {
-    return !this.loadingNetworks &&
-        (this.vsphereSettingsForm.controls.username.value === '' ||
-         this.vsphereSettingsForm.controls.password.value === '');
+    return !this.loadingNetworks && this.isMissingCredentials();
   }
 }

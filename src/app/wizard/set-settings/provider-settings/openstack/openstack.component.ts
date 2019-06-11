@@ -244,7 +244,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     return this.wizardService.getSelectedDatacenter().spec.openstack.enforce_floating_ip;
   }
 
-  hasCredentialsForTenant() {
+  isMissingCredentialsForTenant() {
     return (
         this.openstackSettingsForm.controls.username.value === '' ||
         this.openstackSettingsForm.controls.password.value === '' ||
@@ -254,21 +254,21 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   showHint(field: string): boolean {
     switch (field) {
       case 'tenant':
-        return !this.loadingOptionalTenants && this.hasCredentialsForTenant();
+        return !this.loadingOptionalTenants && this.isMissingCredentialsForTenant();
       case 'subnetId':
         return !this.loadingSubnetIds &&
-            (this.hasCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '' ||
+            (this.isMissingCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '' ||
              this.openstackSettingsForm.controls.network.value === '');
       case 'optionalSettings':
         return !this.loadingOptionalSettings &&
-            (this.hasCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '');
+            (this.isMissingCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '');
       default:
         return false;
     }
   }
 
   getTenantsFormState(): string {
-    if (!this.loadingOptionalTenants && this.hasCredentialsForTenant()) {
+    if (!this.loadingOptionalTenants && this.isMissingCredentialsForTenant()) {
       return 'Project*';
     } else if (this.loadingOptionalTenants) {
       return 'Loading Projects...';
@@ -281,7 +281,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   getOptionalSettingsFormState(field: string): string {
     if (!this.loadingOptionalSettings &&
-        (this.hasCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '')) {
+        (this.isMissingCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '')) {
       return field;
     } else if (this.loadingOptionalSettings) {
       return 'Loading ' + field + 's...';
@@ -301,7 +301,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   getSubnetIDFormState(): string {
     if (!this.loadingSubnetIds &&
-        (this.hasCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '' ||
+        (this.isMissingCredentialsForTenant() || this.openstackSettingsForm.controls.tenant.value === '' ||
          this.openstackSettingsForm.controls.network.value === '')) {
       return 'Subnet ID';
     } else if (this.loadingSubnetIds) {

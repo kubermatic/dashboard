@@ -87,12 +87,15 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
     return !this.clusterId || this.clusterId.length === 0;
   }
 
+  isMissingCredentials(): boolean {
+    return (!this.cloudSpec.azure.clientID || this.cloudSpec.azure.clientID === '') ||
+        (!this.cloudSpec.azure.clientSecret || this.cloudSpec.azure.clientSecret === '') ||
+        (!this.cloudSpec.azure.tenantID || this.cloudSpec.azure.tenantID === '') ||
+        (!this.cloudSpec.azure.subscriptionID || this.cloudSpec.azure.subscriptionID === '');
+  }
+
   getSizesFormState(): string {
-    if ((!this.loadingSizes && (!this.cloudSpec.azure.clientID || this.cloudSpec.azure.clientID === '') ||
-         (!this.cloudSpec.azure.clientSecret || this.cloudSpec.azure.clientSecret === '') ||
-         (!this.cloudSpec.azure.tenantID || this.cloudSpec.azure.tenantID === '') ||
-         (!this.cloudSpec.azure.subscriptionID || this.cloudSpec.azure.subscriptionID === '')) &&
-        this.isInWizard()) {
+    if ((!this.loadingSizes && this.isMissingCredentials()) && this.isInWizard()) {
       return 'Node Size*';
     } else if (this.loadingSizes) {
       return 'Loading sizes...';
@@ -112,11 +115,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showSizeHint(): boolean {
-    return (!this.loadingSizes && (!this.cloudSpec.azure.clientID || this.cloudSpec.azure.clientID === '') ||
-            (!this.cloudSpec.azure.clientSecret || this.cloudSpec.azure.clientSecret === '') ||
-            (!this.cloudSpec.azure.tenantID || this.cloudSpec.azure.tenantID === '') ||
-            (!this.cloudSpec.azure.subscriptionID || this.cloudSpec.azure.subscriptionID === '')) &&
-        this.isInWizard();
+    return (!this.loadingSizes && this.isMissingCredentials()) && this.isInWizard();
   }
 
   reloadAzureSizes(): void {
