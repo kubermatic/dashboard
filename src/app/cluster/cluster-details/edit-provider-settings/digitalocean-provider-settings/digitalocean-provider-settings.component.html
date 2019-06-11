@@ -4,6 +4,7 @@
     <mat-label>API Token*</mat-label>
     <input matInput
            formControlName="token"
+           name="token"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="(digitaloceanProviderSettingsForm.controls.token.hasError('minlength') || digitaloceanProviderSettingsForm.controls.token.hasError('maxlength'))">

@@ -13,6 +13,7 @@
     <input id="km-digitalocean-token-input"
            matInput
            formControlName="token"
+           name="token"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="digitaloceanSettingsForm.controls.token.hasError('required')">

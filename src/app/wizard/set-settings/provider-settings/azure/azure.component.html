@@ -4,6 +4,7 @@
     <mat-label>Client ID*</mat-label>
     <input matInput
            formControlName="clientID"
+           name="clientID"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.clientID.hasError('required')">
@@ -15,6 +16,7 @@
     <mat-label>Client Secret*</mat-label>
     <input matInput
            formControlName="clientSecret"
+           name="clientSecret"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.clientSecret.hasError('required')">
@@ -26,6 +28,7 @@
     <mat-label>Tenant ID*</mat-label>
     <input matInput
            formControlName="tenantID"
+           name="tenantID"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.tenantID.hasError('required')">
@@ -37,6 +40,7 @@
     <mat-label>Subscription ID*</mat-label>
     <input matInput
            formControlName="subscriptionID"
+           name="subscriptionID"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="azureSettingsForm.controls.subscriptionID.hasError('required')">
@@ -49,6 +53,7 @@
     <mat-label>Resource Group</mat-label>
     <input matInput
            formControlName="resourceGroup"
+           name="resourceGroup"
            type="text"
            autocomplete="off">
   </mat-form-field>
@@ -58,6 +63,7 @@
     <mat-label>Route Table</mat-label>
     <input matInput
            formControlName="routeTable"
+           name="routeTable"
            type="text"
            autocomplete="off">
   </mat-form-field>
@@ -67,6 +73,7 @@
     <mat-label>Security Group</mat-label>
     <input matInput
            formControlName="securityGroup"
+           name="securityGroup"
            type="text"
            autocomplete="off">
   </mat-form-field>
@@ -76,6 +83,7 @@
     <mat-label>Subnet</mat-label>
     <input matInput
            formControlName="subnet"
+           name="subnet"
            type="text"
            autocomplete="off">
   </mat-form-field>
@@ -85,6 +93,7 @@
     <mat-label>VNet</mat-label>
     <input matInput
            formControlName="vnet"
+           name="vnet"
            type="text"
            autocomplete="off">
   </mat-form-field>

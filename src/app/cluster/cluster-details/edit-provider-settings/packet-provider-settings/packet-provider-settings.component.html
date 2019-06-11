@@ -4,6 +4,7 @@
     <mat-label>API Token*</mat-label>
     <input matInput
            formControlName="apiKey"
+           name="apiKey"
            type="password"
            autocomplete="off">
     <mat-error *ngIf="packetProviderSettingsForm.controls.apiKey.hasError('required')">
@@ -18,6 +19,7 @@
     <mat-label>Project ID*</mat-label>
     <input matInput
            formControlName="projectID"
+           name="projectID"
            type="text"
            autocomplete="off">
     <mat-error *ngIf="packetProviderSettingsForm.controls.projectID.hasError('required')">
