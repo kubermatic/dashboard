@@ -1,12 +1,5 @@
-<div class="km-add-nodes-dialog"
-     *ngIf="data.nodeData">
+<div *ngIf="data.nodeData">
   <km-dialog-title [title]="getDialogLabel()"></km-dialog-title>
-  <mat-tab-group class="km-change-view"
-                 (selectedTabChange)="onTabChange($event)"
-                 *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown">
-    <mat-tab label="Simple"></mat-tab>
-    <mat-tab label="Extended"></mat-tab>
-  </mat-tab-group>
   <mat-dialog-content class="km-add-node-outer">
     <div class="mat-dialog-content km-add-node-inner">
       <kubermatic-node-data [cluster]="data.cluster"
@@ -14,8 +7,15 @@
                             [existingNodesCount]="data.existingNodesCount"></kubermatic-node-data>
     </div>
   </mat-dialog-content>
-
   <mat-dialog-actions>
+    <button mat-flat-button
+            color="tertiary"
+            (click)="onViewChange()"
+            *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown">
+      <span *ngIf="!isExtended">Show Advanced Settings</span>
+      <span *ngIf="isExtended">Hide Advanced Settings</span>
+    </button>
+    <div fxFlex></div>
     <button mat-flat-button
             [mat-dialog-close]="data"
             [disabled]="!data?.nodeData?.valid"

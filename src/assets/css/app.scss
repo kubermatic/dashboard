@@ -623,16 +623,6 @@ mat-card-header > div > mat-card-title > div {
   float: right;
 }
 
-.km-dialog {
-  width: $dialog-width;
-}
-
-@media screen and (max-width: 745px) {
-  .km-dialog {
-    width: 100%;
-  }
-}
-
 // provider message
 
 .km-provider-message {
@@ -877,6 +867,8 @@ mat-form-field.mat-focused.ng-pristine label {
 
   .mat-dialog-actions {
     justify-content: flex-end;
+    padding: 0;
+    margin: 0;
   }
 }
 

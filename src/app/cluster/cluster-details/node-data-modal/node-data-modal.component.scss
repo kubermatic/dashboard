@@ -1,7 +1,4 @@
-.km-add-nodes-dialog {
-  max-width: 500px;
-  min-width: 500px;
-}
+@import "../../../../assets/css/variables";
 
 .mat-tab-group {
   margin-bottom: 20px;
@@ -13,6 +10,5 @@
 
 .km-add-node-inner {
   overflow-y: auto;
-  max-height: 370px;
-  margin-bottom: 15px;
+  margin-bottom: 2 * $baseline-grid;
 }

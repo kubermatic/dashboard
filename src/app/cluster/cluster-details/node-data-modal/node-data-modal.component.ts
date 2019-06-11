@@ -32,6 +32,7 @@ export interface NodeDataModalData {
 export class NodeDataModalComponent implements OnInit, OnDestroy {
   @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   nodeDC: DataCenterEntity;
+  isExtended = false;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -73,8 +74,9 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  onTabChange(event: MatTabChangeEvent): void {
-    this.wizardService.changeSettingsFormView({hideOptional: event.tab.textLabel !== 'Extended'});
+  onViewChange(): void {
+    this.isExtended = !this.isExtended;
+    this.wizardService.changeSettingsFormView({hideOptional: !this.isExtended});
   }
 
   getDialogLabel() {
