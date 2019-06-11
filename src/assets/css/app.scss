@@ -34,20 +34,6 @@ body {
 }
 
 // global
-.km-code-block {
-  background-color: $medium-background;
-  padding: 5px 15px;
-  font-size: 14px;
-  line-height: 20px;
-  font-family: $code-block;
-
-  p {
-    color: $text-color !important;
-    font-family: $code-block;
-  }
-}
-
-// global
 .km-table {
   width: 100%;
   border-radius: 5px;
@@ -932,4 +918,16 @@ mat-form-field.mat-focused.ng-pristine label {
 // Tooltips.
 .mat-tooltip-panel {
   height: 4 * $baseline-grid;
+}
+
+// Code blocks.
+.km-code-block {
+  background-color: $grey-background;
+  border-radius: $baseline-grid / 1.5;
+  margin: ($baseline-grid * 2) 0;
+  padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
+  font-size: $body-font-size-base;
+  line-height: 20px;
+  font-family: $code-block;
+  color: $text-color;
 }

@@ -79,6 +79,16 @@
   border-radius: $baseline-grid;
 }
 
+.km-icon-download {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  mask: url("/assets/images/icons/download.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  background-color: $white-background;
+}
+
 .km-icon-cluster {
   display: inline-block;
   width: 22px;
@@ -174,51 +184,6 @@
   background-image: url("/assets/images/close.svg");
   background-repeat: no-repeat;
   background-color: transparent;
-}
-
-.km-icon-running {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("/assets/images/Running-Check.svg");
-  background-repeat: no-repeat;
-}
-
-.km-icon-failed {
-  display: inline-block;
-  margin: 0 10px 0 5px;
-  width: 2px;
-  height: 10px;
-  background-image: url("/assets/images/Failed.svg");
-  background-repeat: no-repeat;
-}
-
-.km-icon-logs {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("/assets/images/Logs.svg");
-  background-repeat: no-repeat;
-}
-
-.km-icon-documents {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 11px;
-  background-image: url("/assets/images/Documents.svg");
-  background-repeat: no-repeat;
-}
-
-.km-icon-download {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("/assets/images/Download_blue.svg");
-  background-repeat: no-repeat;
 }
 
 .km-icon-kubernetes {
