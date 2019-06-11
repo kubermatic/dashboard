@@ -34,3 +34,8 @@ export class OpenstackSecurityGroup {
   id: string;
   name: string;
 }
+
+export class OpenstackOptionalFields {
+  length: number;
+  name: string;
+}

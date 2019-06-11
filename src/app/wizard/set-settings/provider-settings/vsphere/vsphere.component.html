@@ -42,17 +42,15 @@
   </mat-form-field>
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
-    <mat-label>Network</mat-label>
-    <mat-select formControlName="vmNetName">
-      <mat-option *ngIf="!loadingNetwork && (vsphereSettingsForm.controls.username.value === '' || vsphereSettingsForm.controls.password.value === '')"
-                  [value]="0">Please enter your credentials first!</mat-option>
-      <mat-option *ngIf="loadingNetwork"
-                  [value]="0">Loading networks...</mat-option>
+    <mat-label>{{getNetworkFormState()}}</mat-label>
+    <mat-select [placeholder]="getNetworkFormState()"
+                formControlName="vmNetName">
       <mat-option *ngFor="let item of networks"
                   [value]="item.name">
         {{item.name}}
       </mat-option>
     </mat-select>
+    <mat-hint *ngIf="showNetworkHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
 
 </form>

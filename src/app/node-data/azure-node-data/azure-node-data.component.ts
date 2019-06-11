@@ -26,6 +26,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   tags: FormArray;
   datacenter: DataCenterEntity;
   hideOptional = true;
+  loadingSizes = false;
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -57,7 +58,19 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       this.hideOptional = data.hideOptional;
     }));
 
+    this.subscriptions.push(this.wizardService.clusterProviderSettingsFormChanges$.subscribe((data) => {
+      this.cloudSpec = data.cloudSpec;
+      this.azureNodeForm.controls.size.setValue('');
+      this.sizes = [];
+      this.checkSizeState();
+      if (data.cloudSpec.azure.clientID !== '' || data.cloudSpec.azure.clientSecret !== '' ||
+          data.cloudSpec.azure.tenantID !== '' || data.cloudSpec.azure.subscriptionID !== '') {
+        this.reloadAzureSizes();
+      }
+    }));
+
     this.getDatacenter();
+    this.checkSizeState();
     this.reloadAzureSizes();
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -74,17 +87,35 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
     return !this.clusterId || this.clusterId.length === 0;
   }
 
+  isMissingCredentials(): boolean {
+    return (!this.cloudSpec.azure.clientID || this.cloudSpec.azure.clientID === '') ||
+        (!this.cloudSpec.azure.clientSecret || this.cloudSpec.azure.clientSecret === '') ||
+        (!this.cloudSpec.azure.tenantID || this.cloudSpec.azure.tenantID === '') ||
+        (!this.cloudSpec.azure.subscriptionID || this.cloudSpec.azure.subscriptionID === '');
+  }
+
   getSizesFormState(): string {
-    if ((!this.cloudSpec.azure.clientID || this.cloudSpec.azure.clientID === '') &&
-        (!this.cloudSpec.azure.clientSecret || this.cloudSpec.azure.clientSecret === '') &&
-        (!this.cloudSpec.azure.tenantID || this.cloudSpec.azure.tenantID === '') &&
-        (!this.cloudSpec.azure.subscriptionID || this.cloudSpec.azure.subscriptionID === '') && this.isInWizard()) {
-      return 'Please enter a valid token first!';
-    } else if (this.sizes.length === 0) {
+    if ((!this.loadingSizes && this.isMissingCredentials()) && this.isInWizard()) {
+      return 'Node Size*';
+    } else if (this.loadingSizes) {
       return 'Loading sizes...';
+    } else if (!this.loadingSizes && this.sizes.length === 0) {
+      return 'No Sizes available';
     } else {
-      return 'Node Size*:';
+      return 'Node Size*';
     }
+  }
+
+  checkSizeState(): void {
+    if (this.sizes.length === 0) {
+      this.azureNodeForm.controls.size.disable();
+    } else {
+      this.azureNodeForm.controls.size.enable();
+    }
+  }
+
+  showSizeHint(): boolean {
+    return (!this.loadingSizes && this.isMissingCredentials()) && this.isInWizard();
   }
 
   reloadAzureSizes(): void {
@@ -92,6 +123,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       if (this.isInWizard()) {
         if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID &&
             this.cloudSpec.azure.tenantID) {
+          this.loadingSizes = true;
           this.subscriptions.push(this.api
                                       .getAzureSizesForWizard(
                                           this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret,
@@ -102,16 +134,21 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
                                         if (this.nodeData.spec.cloud.azure.size === '') {
                                           this.azureNodeForm.controls.size.setValue(this.sizes[0].name);
                                         }
-                                      }));
+                                        this.loadingSizes = false;
+                                        this.checkSizeState();
+                                      }, err => this.loadingSizes = false));
         }
       } else {
+        this.loadingSizes = true;
         this.subscriptions.push(
             this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
               this.sizes = data;
               if (this.nodeData.spec.cloud.azure.size === '') {
                 this.azureNodeForm.controls.size.setValue(this.sizes[0].name);
               }
-            }));
+              this.loadingSizes = false;
+              this.checkSizeState();
+            }, err => this.loadingSizes = false));
       }
     } else {
       this.getDatacenter();
