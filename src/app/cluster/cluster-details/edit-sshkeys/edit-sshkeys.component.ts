@@ -1,8 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog, Sort} from '@angular/material';
-import {find} from 'lodash';
 import {Subject, timer} from 'rxjs';
-import {retry, takeUntil} from 'rxjs/operators';
+import {first, retry, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ClusterService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -36,7 +35,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.userGroupConfig = this._appConfig.getUserGroupConfig();
-    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
+    this._userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((group) => {
       this.userGroup = group;
     });
 
@@ -68,17 +67,14 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.sshKeys = this.sshKeys;
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().pipe(first()).subscribe((result) => {
       result && this.refreshSSHKeys();  // tslint:disable-line
     });
   }
 
-  trackSshKey(index: number, shhKey: SSHKeyEntity): number {
-    const prevSSHKey = find(this.sshKeys, (item) => {
-      return item.name === shhKey.name;
-    });
-
-    return prevSSHKey === shhKey ? index : undefined;
+  trackSshKey(index: number, sshKey: SSHKeyEntity): number {
+    const prevSSHKey = this.sshKeys.find((item) => item.name === sshKey.name);
+    return prevSSHKey === sshKey ? index : undefined;
   }
 
   sortSshKeyData(sort: Sort): void {
