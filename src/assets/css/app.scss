@@ -808,6 +808,14 @@ div.km-form-group-tags {
   }
 }
 
+.mat-icon-button {
+  margin: 0 $baseline-grid !important;
+
+  i {
+    background-color: $text-color;
+  }
+}
+
 // Inputs.
 mat-form-field.mat-form-field {
   color: $text-color;

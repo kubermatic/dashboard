@@ -3,7 +3,6 @@
        class="km-cluster-detail-actions">
     <div fxFlex="100%"
          align="right">
-
       <button id="km-delete-cluster-btn"
               mat-flat-button
               color="tertiary"
@@ -12,6 +11,22 @@
         Delete
       </button>
       <div fxFlex></div>
+      <button class="km-share-kubeconfig-btn"
+              (click)="shareConfigDialog()"
+              mat-icon-button
+              [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')"
+              *ngIf="!!config.share_kubeconfig"
+              matTooltip="Share">
+        <i class="km-icon-share"></i>
+      </button>
+      <a class="km-download-kubeconfig-btn"
+         mat-icon-button
+         disabled="{{ !isClusterRunning }}"
+         href="{{getDownloadURL()}}"
+         target="_blank"
+         matTooltip="Download config">
+        <i class="km-icon-download"></i>
+      </a>
       <button mat-flat-button
               color="alternative"
               (click)="addNode()"
@@ -26,20 +41,6 @@
               [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')">
         Connect
       </button>
-      <button class="km-share-kubeconfig-btn"
-              (click)="shareConfigDialog()"
-              mat-flat-button
-              [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')"
-              *ngIf="!!config.share_kubeconfig">
-        Share
-      </button>
-      <a class="km-download-kubeconfig-btn"
-         mat-flat-button
-         disabled="{{ !isClusterRunning }}"
-         href="{{getDownloadURL()}}"
-         target="_blank">
-        Download Config
-      </a>
     </div>
   </div>
 
