@@ -10,7 +10,6 @@ import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-dele
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
 import {AddMachineNetworkComponent} from './cluster-details/cluster-secrets/add-machine-network/add-machine-network.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
-import {RevokeAdminTokenComponent} from './cluster-details/cluster-secrets/revoke-admin-token/revoke-admin-token.component';
 import {AWSProviderSettingsComponent} from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from './cluster-details/edit-provider-settings/digitalocean-provider-settings/digitalocean-provider-settings.component';
@@ -26,6 +25,7 @@ import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-dat
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
+import {RevokeAdminTokenComponent} from './cluster-details/revoke-admin-token/revoke-admin-token.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';

@@ -2,14 +2,16 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {Subject} from 'rxjs';
 import {mergeMap, switchMap, takeUntil} from 'rxjs/operators';
+
 import {ClusterService, ProjectService, UserService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
+import {RevokeAdminTokenComponent} from '../revoke-admin-token/revoke-admin-token.component';
+
 import {AddMachineNetworkComponent} from './add-machine-network/add-machine-network.component';
-import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
@@ -62,39 +64,6 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
   }
 
   decode(type: string): void {
-    /* let data;
-    let name;
-
-    switch (type) {
-      case 'root-ca-certificate':
-        name = 'ca.crt';
-        data = this.cluster.status.rootCA.cert;
-        break;
-      case 'apiserver-cert-certificate':
-        data = this.cluster.status.apiserverCert.cert;
-        name = 'apiserver.crt';
-        break;
-      case 'apiserver-kubelet-client-certificate':
-        data = this.cluster.status.kubeletCert.cert;
-        name = 'kubelet-client.crt';
-        break;
-      case 'ssh-apiserver-rsa-public':
-        data = this.cluster.status.apiserverSshKey.publicKey;
-        name = 'apiserver_id-rsa.pub';
-        break;
-      default:
-        break;
-    }
-
-    if (data && name) {
-      const blob = new Blob([atob(data)], { type: 'text/plain' });
-      const a = window.document.createElement('a');
-      a.href = window.URL.createObjectURL(blob);
-      a.download = name;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } else {*/
     return;
     // }
   }
@@ -169,13 +138,6 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
         return 'Pending';
       }
     }
-  }
-
-  revokeAdminTokenDialog(): void {
-    this.dialogRef = this.dialog.open(RevokeAdminTokenComponent);
-    this.dialogRef.componentInstance.cluster = this.cluster;
-    this.dialogRef.componentInstance.datacenter = this.datacenter;
-    this.dialogRef.componentInstance.projectID = this.projectID;
   }
 
   addMachineNetwork(): void {

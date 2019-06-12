@@ -69,17 +69,20 @@
           <button mat-menu-item
                   (click)="editProviderSettings()"
                   [disabled]="!isEditEnabled()">
-
-            <mat-icon class="km-icon-edit"></mat-icon>
             <span>Edit Settings</span>
           </button>
           <button mat-menu-item
                   (click)="editSSHKeys()"
                   [disabled]="!isSSHKeysEditEnabled()">
-
-            <mat-icon class="km-icon-edit"></mat-icon>
             <span>Manage SSH keys</span>
           </button>
+
+          <button mat-menu-item
+                  (click)="revokeAdminToken()"
+                  [disabled]="!isRevokeAdminTokenEnabled()">
+            <span>Revoke Admin Token</span>
+          </button>
+
         </mat-menu>
       </div>
     </mat-card-header>

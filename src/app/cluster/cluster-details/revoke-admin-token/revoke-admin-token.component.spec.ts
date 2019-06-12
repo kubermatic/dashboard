@@ -4,13 +4,13 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import Spy = jasmine.Spy;
 
-import {ApiService} from '../../../../core/services';
-import {SharedModule} from '../../../../shared/shared.module';
-import {fakeDigitaloceanCluster, fakeToken} from '../../../../testing/fake-data/cluster.fake';
-import {fakeDigitaloceanDatacenter} from '../../../../testing/fake-data/datacenter.fake';
-import {fakeProject} from '../../../../testing/fake-data/project.fake';
-import {asyncData} from '../../../../testing/services/api-mock.service';
-import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock';
+import {ApiService} from '../../../core/services';
+import {SharedModule} from '../../../shared/shared.module';
+import {fakeDigitaloceanCluster, fakeToken} from '../../../testing/fake-data/cluster.fake';
+import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {fakeProject} from '../../../testing/fake-data/project.fake';
+import {asyncData} from '../../../testing/services/api-mock.service';
+import {MatDialogRefMock} from '../../../testing/services/mat-dialog-ref-mock';
 import {RevokeAdminTokenComponent} from './revoke-admin-token.component';
 
 const modules: any[] = [
