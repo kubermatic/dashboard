@@ -87,7 +87,7 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
       if (!this.health.apiserver) {
         return 'km-icon-failed';
       } else {
-        return 'fa fa-circle';
+        return 'fa fa-circle orange';
       }
     } else {
       return '';

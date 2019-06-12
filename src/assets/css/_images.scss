@@ -213,6 +213,7 @@
   height: 10px;
   background-image: url("/assets/images/Running-Check.svg");
   background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .km-icon-failed {
@@ -222,6 +223,7 @@
   height: 10px;
   background-image: url("/assets/images/Failed.svg");
   background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .km-icon-logs {
