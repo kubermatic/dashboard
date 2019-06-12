@@ -16,7 +16,7 @@ export class EventListComponent implements OnInit, OnChanges {
 
   dataSource = new MatTableDataSource<EventEntity>();
   displayedColumns: string[] =
-      ['type', 'message', 'involvedObjectName', 'involvedObjectKind', 'count', 'lastTimestamp'];
+      ['status', 'message', 'involvedObjectName', 'involvedObjectKind', 'count', 'lastTimestamp'];
 
   ngOnInit(): void {
     this.dataSource.data = this.events;
@@ -33,11 +33,11 @@ export class EventListComponent implements OnInit, OnChanges {
   getTypeIcon(event: EventEntity): string {
     switch (event.type) {
       case 'Normal':
-        return 'fa fa-info-circle green';
+        return 'fa fa-circle green';
       case 'Warning':
-        return 'fa fa-exclamation-circle orange';
+        return 'fa fa-circle orange';
       default:
-        return 'fa fa-question-circle';
+        return 'fa fa-circle';
     }
   }
 

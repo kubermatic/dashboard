@@ -151,11 +151,6 @@ body {
   border-top: 1px solid $separator;
 }
 
-.mat-column-status,
-.mat-column-stateArrow {
-  width: 2 * $baseline-grid;
-}
-
 .mat-button-toggle-group-appearance-standard {
   border: none;
 }
@@ -750,6 +745,12 @@ div.km-form-group-tags {
 
 .red {
   color: $indicator-red;
+}
+
+// Row width.
+.mat-column-status,
+.mat-column-stateArrow {
+  width: 2 * $baseline-grid;
 }
 
 // Remove background overlay added by the menu.
