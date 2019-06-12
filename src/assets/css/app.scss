@@ -793,6 +793,16 @@ div.km-form-group-tags {
     }
   }
 
+  &.mat-pure:not([disabled]) {
+    background-color: transparent;
+    color: $medium-text-color;
+    border: none;
+
+    &:hover {
+      background-color: $tertiary-hover;
+    }
+  }
+
   &.km-small-button {
     min-width: unset;
   }
