@@ -1,11 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {Subject} from 'rxjs';
-import {switchMap, takeUntil} from 'rxjs/operators';
-
-import {ClusterService, ProjectService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 
@@ -17,29 +13,16 @@ import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-h
 
 export class ClusterSecretsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  @Input() datacenter: DataCenterEntity;
-  projectID: string;
+  @Input() health: HealthEntity;
   isClusterRunning: boolean;
   healthStatus: ClusterHealthStatus;
-  health: HealthEntity;
   private _unsubscribe = new Subject<void>();
 
-  constructor(
-      public dialog: MatDialog, private _clusterService: ClusterService,
-      private readonly _projectService: ProjectService) {}
+  constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this._projectService.selectedProject
-        .pipe(switchMap(project => {
-          this.projectID = project.id;
-          return this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name);
-        }))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((health) => {
-          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-          this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
-          this.health = health;
-        });
+    this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, this.health);
+    this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, this.health);
   }
 
   ngOnDestroy(): void {
@@ -66,7 +49,7 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
           return '';
       }
     } else {
-      return 'fa fa-circle';
+      return 'fa fa-circle orange';
     }
   }
 

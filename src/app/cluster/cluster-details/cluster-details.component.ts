@@ -1,13 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
-import {combineLatest, Subject} from 'rxjs';
+import {combineLatest, of, Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 import {gt, lt} from 'semver';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../core/services';
-import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
+import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
@@ -74,40 +74,72 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
     combineLatest([
       this._datacenterService.getDataCenter(seedDCName),
-      this._clusterService.cluster(this.projectID, clusterID, seedDCName)
+      this._clusterService.cluster(this.projectID, clusterID, seedDCName),
     ])
-        .pipe(switchMap(([datacenter, cluster]) => {
-          this.datacenter = datacenter;
+        .pipe(switchMap(([seedDatacenter, cluster]) => {
+          this.datacenter = seedDatacenter;
           this.cluster = cluster;
 
-          return combineLatest(
-              [
-                this._clusterService.sshKeys(this.projectID, cluster.id, datacenter.metadata.name),
-                this._datacenterService.getDataCenter(cluster.spec.cloud.dc)
-              ],
-          );
+          return this._datacenterService.getDataCenter(cluster.spec.cloud.dc);
         }))
-        .pipe(switchMap(([keys, datacenter]) => {
-          this.sshKeys = keys;
+        .pipe(switchMap((datacenter) => {
           this.nodeDc = datacenter;
 
           return combineLatest([
-            this._clusterService.cluster(this.projectID, this.cluster.id, this.datacenter.metadata.name),
+            this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name),
             this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name),
-            this._clusterService.events(this.projectID, this.cluster.id, this.datacenter.metadata.name)
+            this._clusterService.events(this.projectID, this.cluster.id, this.datacenter.metadata.name),
           ]);
+        }))
+        .pipe(switchMap(([keys, health, events]) => {
+          this.sshKeys = keys;
+          this.health = health;
+          this.events = events;
+          this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
+          this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+
+          // Conditionally create an array of observables to use for 'combineLatest' operator.
+          // In case real observable should not be returned, observable emitting empty array will be added to the array.
+          const reload$ =
+              [].concat(
+                    this._canReloadVersions() ?
+                        this._clusterService.upgrades(this.projectID, this.cluster.id, this.datacenter.metadata.name) :
+                        of([]))
+                  .concat(
+                      this._canReloadNodes() ?
+                          [
+                            this._clusterService.nodes(this.projectID, this.cluster.id, this.datacenter.metadata.name),
+                            this._api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
+                          ] :
+                          [of([]), of([])],
+                  );
+
+          return combineLatest(reload$);
         }))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(
-            ([cluster, health, events]) => {
-              this.cluster = cluster;
-              this.health = health;
-              this.events = events;
-              this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
-              this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
+            ([upgrades, nodes, nodeDeployments]: [MasterVersion[], NodeEntity[], NodeDeploymentEntity[]]) => {
+              this.nodes = nodes;
+              this.nodeDeployments = nodeDeployments;
+              this.isNodeDeploymentLoadFinished = nodeDeployments.length > 0;
+              this.updatesAvailable = false;
 
-              this._reloadVersions();
-              this.reloadClusterNodes();
+              upgrades.forEach(upgrade => {
+                const isUpgrade = lt(this.cluster.spec.version, upgrade.version);
+                const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
+
+                if (upgrade.restrictedByKubeletVersion === true) {
+                  this.someUpgradesRestrictedByKubeletVersion = isUpgrade;
+                  return;  // Skip all restricted versions.
+                }
+
+                this.updatesAvailable = this.updatesAvailable ? true : isUpgrade;
+                this.downgradesAvailable = this.downgradesAvailable ? true : isDowngrade;
+
+                if (this._versionsList.indexOf(upgrade.version) < 0) {
+                  this._versionsList.push(upgrade.version);
+                }
+              });
             },
             (error) => {
               if (error.status === 404) {
@@ -116,38 +148,12 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             });
   }
 
-  private _reloadVersions(): void {
-    if (this.cluster && this.health && this.health.apiserver && this.health.machineController) {
-      this._clusterService.upgrades(this.projectID, this.cluster.id, this.datacenter.metadata.name)
-          .pipe(takeUntil(this._unsubscribe))
-          .subscribe((upgrades) => {
-            this._versionsList = [];
-            this.updatesAvailable = false;
-            for (const i in upgrades) {
-              if (upgrades.hasOwnProperty(i)) {
-                const isUpgrade = lt(this.cluster.spec.version, upgrades[i].version);
-                const isDowngrade = gt(this.cluster.spec.version, upgrades[i].version);
+  private _canReloadVersions() {
+    return this.cluster && this.health && this.health.apiserver && this.health.machineController;
+  }
 
-                if (upgrades[i].restrictedByKubeletVersion === true) {
-                  if (isUpgrade) {
-                    this.someUpgradesRestrictedByKubeletVersion = true;  // Show warning only for restricted upgrades.
-                  }
-                  continue;  // Skip all restricted versions.
-                }
-
-                if (isUpgrade) {
-                  this.updatesAvailable = true;
-                } else if (isDowngrade) {
-                  this.downgradesAvailable = true;
-                }
-
-                if (this._versionsList.indexOf(upgrades[i].version) < 0) {
-                  this._versionsList.push(upgrades[i].version);
-                }
-              }
-            }
-          });
-    }
+  private _canReloadNodes() {
+    return this.cluster && HealthEntity.allHealthy(this.health);
   }
 
   getType(type: string): string {
@@ -156,23 +162,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getVersionHeadline(type: string, isKubelet: boolean): string {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
-  }
-
-  reloadClusterNodes(): void {
-    if (this.cluster && HealthEntity.allHealthy(this.health)) {
-      this._clusterService.nodes(this.projectID, this.cluster.id, this.datacenter.metadata.name)
-          .pipe(takeUntil(this._unsubscribe))
-          .subscribe((nodes) => {
-            this.nodes = nodes;
-          });
-
-      this._api.getNodeDeployments(this.cluster.id, this.datacenter.metadata.name, this.projectID)
-          .pipe(takeUntil(this._unsubscribe))
-          .subscribe((nodeDeployments) => {
-            this.nodeDeployments = nodeDeployments;
-            this.isNodeDeploymentLoadFinished = true;
-          });
-    }
   }
 
   isAddNodeDeploymentsEnabled(): boolean {
@@ -184,7 +173,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe((isConfirmed) => {
           if (isConfirmed) {
-            this.reloadClusterNodes();
+            this._clusterService.onClusterUpdate.next();
           }
         });
   }
@@ -224,7 +213,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.controlPlaneVersions = this._versionsList;
-    modal.afterClosed().pipe(first()).subscribe((isChanged) => {
+    modal.afterClosed().pipe(first()).subscribe(isChanged => {
       if (isChanged) {
         this._clusterService.onClusterUpdate.next();
       }
@@ -258,12 +247,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
     modal.componentInstance.projectID = this.projectID;
-    modal.afterClosed().pipe(first()).subscribe(() => {
-      this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name)
-          .pipe(takeUntil(this._unsubscribe))
-          .subscribe((keys) => {
-            this.sshKeys = keys;
-          });
+    modal.afterClosed().pipe(first()).subscribe(isChanged => {
+      if (isChanged) {
+        this._clusterService.onClusterUpdate.next();
+      }
     });
   }
 
