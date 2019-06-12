@@ -5,7 +5,7 @@
   "openstack": {
     "wizard_use_default_user": false
   },
-  "share_kubeconfig": true,
+  "share_kubeconfig": false,
   "show_demo_info": false,
   "show_terms_of_service": false,
   "hide_kubernetes": false,
