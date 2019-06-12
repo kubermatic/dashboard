@@ -14,19 +14,6 @@
 
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
-    <mat-label>Firewall Rule Name</mat-label>
-    <input id="km-gcp-firewallRuleName-input"
-           matInput
-           formControlName="firewallRuleName"
-           type="password"
-           autocomplete="off">
-    <mat-error *ngIf="gcpSettingsForm.controls.firewallRuleName.hasError('required')">
-      Firewall Rule Name is <strong>required</strong>.
-    </mat-error>
-  </mat-form-field>
-
-  <mat-form-field fxFlex
-                  *ngIf="!hideOptional">
     <mat-label>Network</mat-label>
     <input id="km-gcp-network-input"
            matInput

@@ -34,7 +34,7 @@ describe('GCPClusterSettingsComponent', () => {
     fixture = TestBed.createComponent(GCPClusterSettingsComponent);
     component = fixture.componentInstance;
     component.cluster = fakeGCPCluster();
-    component.cluster.spec.cloud.gcp = {serviceAccount: '', firewallRuleName: '', network: '', subnetwork: ''};
+    component.cluster.spec.cloud.gcp = {serviceAccount: '', network: '', subnetwork: ''};
     fixture.detectChanges();
   });
 

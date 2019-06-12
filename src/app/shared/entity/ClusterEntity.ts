@@ -125,7 +125,6 @@ export function getEmptyCloudProviderSpec(provider: string): object {
       return {} as PacketCloudSpec;
     case NodeProvider.GCP:
       return {
-        firewallRuleName: '',
         network: '',
         serviceAccount: '',
         subnetwork: '',

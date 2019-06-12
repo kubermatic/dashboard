@@ -20,7 +20,6 @@ export class GCPClusterSettingsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.gcpSettingsForm = new FormGroup({
       serviceAccount: new FormControl(this.cluster.spec.cloud.gcp.serviceAccount, [Validators.required]),
-      firewallRuleName: new FormControl(this.cluster.spec.cloud.gcp.firewallRuleName),
       network: new FormControl(this.cluster.spec.cloud.gcp.network),
       subnetwork: new FormControl(this.cluster.spec.cloud.gcp.subnetwork),
     });
@@ -30,7 +29,6 @@ export class GCPClusterSettingsComponent implements OnInit, OnDestroy {
         cloudSpec: {
           gcp: {
             serviceAccount: this.gcpSettingsForm.controls.serviceAccount.value,
-            firewallRuleName: this.gcpSettingsForm.controls.firewallRuleName.value,
             network: this.gcpSettingsForm.controls.network.value,
             subnetwork: this.gcpSettingsForm.controls.subnetwork.value,
           },

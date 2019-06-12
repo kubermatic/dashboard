@@ -112,7 +112,6 @@ export function fakeGCPCluster(): ClusterEntity {
         packet: null,
         gcp: {
           serviceAccount: 'test-service-account',
-          firewallRuleName: 'test-firewall-rule-name',
           network: 'test-network',
           subnetwork: 'test-subnetwork',
         }

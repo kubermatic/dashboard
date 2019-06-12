@@ -115,13 +115,6 @@
             </div>
             <div fxLayout
                  class="km-card-list-content"
-                 *ngIf="cluster.spec.cloud.gcp.firewallRuleName">
-              <div fxFlex="50%"
-                   class="km-card-list-key">Firewall Rule Name</div>
-              <div fxFlex="50%">{{ cluster.spec.cloud.gcp.firewallRuleName }}</div>
-            </div>
-            <div fxLayout
-                 class="km-card-list-content"
                  *ngIf="cluster.spec.cloud.gcp.network">
               <div fxFlex="50%"
                    class="km-card-list-key">Network</div>

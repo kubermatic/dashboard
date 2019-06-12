@@ -61,7 +61,6 @@ describe('GCPProviderSettingsComponent', () => {
     component.cluster = fakeGCPCluster();
     component.cluster.spec.cloud.gcp = {
       serviceAccount: '',
-      firewallRuleName: '',
       network: '',
       subnetwork: '',
     };
