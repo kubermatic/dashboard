@@ -173,6 +173,10 @@
                                 [datacenter]="datacenter"></kubermatic-cluster-secrets>
   </mat-card>
 
+  <kubermatic-machine-networks-dispay [cluster]="cluster"
+                                      [datacenter]="datacenter"
+                                      [projectID]="projectID"></kubermatic-machine-networks-dispay>
+
   <kubermatic-node-deployment-list [cluster]="cluster"
                                    [nodeDeployments]="nodeDeployments"
                                    (changeNodeDeployment)="reloadClusterNodes()"

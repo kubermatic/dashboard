@@ -34,6 +34,11 @@ button:disabled {
   }
 }
 
+.km-provider-menu-btn {
+  color: $text-color;
+  margin-right: 3.5 * $baseline-grid !important;
+}
+
 .km-provider-menu {
   display: flex;
   align-items: center;

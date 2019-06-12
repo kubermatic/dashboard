@@ -4,11 +4,11 @@ import {MachineNetworksModule} from '../machine-networks/machine-networks.module
 import {NodeDataModule} from '../node-data/node-data.module';
 import {SharedModule} from '../shared/shared.module';
 
+import {AddMachineNetworkComponent} from './cluster-details/add-machine-network/add-machine-network.component';
 import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
-import {AddMachineNetworkComponent} from './cluster-details/cluster-secrets/add-machine-network/add-machine-network.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
 import {AWSProviderSettingsComponent} from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
@@ -21,6 +21,7 @@ import {VSphereProviderSettingsComponent} from './cluster-details/edit-provider-
 import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-cluster-sshkeys/add-cluster-sshkeys.component';
 import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
+import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/machine-networks-dispay.component';
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
@@ -37,6 +38,7 @@ const components: any[] = [
   NodeDeploymentListComponent,
   NodeDeploymentDetailsComponent,
   ClusterListComponent,
+  MachineNetworksDisplayComponent,
 ];
 
 const entryComponents: any[] = [

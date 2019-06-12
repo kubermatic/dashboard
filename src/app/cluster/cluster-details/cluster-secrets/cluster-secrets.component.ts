@@ -9,9 +9,8 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
 import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
-import {RevokeAdminTokenComponent} from '../revoke-admin-token/revoke-admin-token.component';
 
-import {AddMachineNetworkComponent} from './add-machine-network/add-machine-network.component';
+import {AddMachineNetworkComponent} from '../add-machine-network/add-machine-network.component';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
@@ -23,7 +22,6 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   projectID: string;
-  expand = false;
   dialogRef: any;
   isClusterRunning: boolean;
   healthStatus: ClusterHealthStatus;
@@ -57,15 +55,6 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
-  }
-
-  isExpand(expand: boolean): void {
-    this.expand = expand;
-  }
-
-  decode(type: string): void {
-    return;
-    // }
   }
 
   getIcon(name: string): string {
