@@ -62,14 +62,6 @@ describe('ClusterSecretsComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('should set variable expand', () => {
-    component.isExpand(true);
-    expect(component.expand).toBeTruthy();
-
-    component.isExpand(false);
-    expect(component.expand).toBeFalsy();
-  });
-
   it('should set icon class `km-icon-running`', () => {
     expect(component.getIconClass(true)).toBe('km-icon-running');
   });

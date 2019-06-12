@@ -1,16 +1,13 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {Subject} from 'rxjs';
-import {mergeMap, switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 
-import {ClusterService, ProjectService, UserService} from '../../../core/services';
+import {ClusterService, ProjectService} from '../../../core/services';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../../shared/entity/HealthEntity';
-import {GroupConfig} from '../../../shared/model/Config';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
-
-import {AddMachineNetworkComponent} from '../add-machine-network/add-machine-network.component';
 
 @Component({
   selector: 'kubermatic-cluster-secrets',
@@ -22,26 +19,19 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   projectID: string;
-  dialogRef: any;
   isClusterRunning: boolean;
   healthStatus: ClusterHealthStatus;
   health: HealthEntity;
-  groupConfig: GroupConfig;
-
   private _unsubscribe = new Subject<void>();
 
   constructor(
       public dialog: MatDialog, private _clusterService: ClusterService,
-      private readonly _projectService: ProjectService, private readonly _userService: UserService) {}
+      private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
     this._projectService.selectedProject
         .pipe(switchMap(project => {
           this.projectID = project.id;
-          return this._userService.currentUserGroup(project.id);
-        }))
-        .pipe(mergeMap(userGroup => {
-          this.groupConfig = this._userService.userGroupConfig(userGroup);
           return this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name);
         }))
         .pipe(takeUntil(this._unsubscribe))
@@ -127,12 +117,5 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
         return 'Pending';
       }
     }
-  }
-
-  addMachineNetwork(): void {
-    this.dialogRef = this.dialog.open(AddMachineNetworkComponent);
-    this.dialogRef.componentInstance.cluster = this.cluster;
-    this.dialogRef.componentInstance.datacenter = this.datacenter;
-    this.dialogRef.componentInstance.projectID = this.projectID;
   }
 }
