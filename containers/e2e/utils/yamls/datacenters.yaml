@@ -25,3 +25,21 @@ datacenters:
     spec:
       digitalocean:
         region: fra1
+  syseleven-dbl1:
+    location: Syseleven - dbl1
+    seed: prow-build-cluster
+    country: DE
+    provider: openstack
+    spec:
+      openstack:
+        auth_url: https://api.cbk.cloud.syseleven.net:5000/v3
+        availability_zone: dbl1
+        region: dbl
+        dns_servers:
+          - "37.123.105.116"
+          - "37.123.105.117"
+        images:
+          ubuntu: "Ubuntu 18.04 LTS - 2018-08-10"
+          centos: ""
+          coreos: ""
+        enforce_floating_ip: true
