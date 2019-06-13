@@ -3,6 +3,16 @@
   <div fxFlex="100%">
     <mat-form-field fxFlex
                     *ngIf="!hideOptional">
+      <mat-label>Disk Size in GB</mat-label>
+      <input matInput
+             formControlName="diskSizeGB"
+             type="number"
+             autocomplete="off">
+    </mat-form-field>
+  </div>
+  <div fxFlex="100%">
+    <mat-form-field fxFlex
+                    *ngIf="!hideOptional">
       <mat-label>VM Template</mat-label>
       <input matInput
              formControlName="template"

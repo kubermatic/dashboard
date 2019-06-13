@@ -636,6 +636,13 @@
               </div>
               <div class="km-card-list-content"
                    fxFlex="50%"
+                   *ngIf="nodeData.spec.cloud.vsphere.diskSizeGB">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Disk Size in GB</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.vsphere.diskSizeGB }}</div>
+              </div>
+              <div class="km-card-list-content"
+                   fxFlex="50%"
                    *ngIf="nodeData.spec.cloud.vsphere.template">
                 <div fxFlex="50%"
                      class="km-card-list-key">VM Template</div>
