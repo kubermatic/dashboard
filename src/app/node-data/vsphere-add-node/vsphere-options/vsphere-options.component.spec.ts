@@ -54,6 +54,7 @@ describe('VSphereOptionsComponent', () => {
 
   it('should call getVSphereOptionsData method', () => {
     component.vsphereOptionsForm.controls.template.patchValue('test-template');
+    component.vsphereOptionsForm.controls.diskSizeGB.patchValue(256);
     fixture.detectChanges();
     expect(component.getVSphereOptionsData())
         .toEqual({spec: {vsphere: {cpus: 1, memory: 512, template: 'test-template', diskSizeGB: 256}}, valid: true});
