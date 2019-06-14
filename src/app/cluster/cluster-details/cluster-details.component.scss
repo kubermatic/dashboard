@@ -32,6 +32,11 @@ button:disabled {
   mat-button {
     margin-left: 5px;
   }
+
+  .mat-icon-button i {
+    height: 24px;
+    width: 24px;
+  }
 }
 
 .km-provider-menu-btn {
