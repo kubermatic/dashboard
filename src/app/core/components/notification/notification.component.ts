@@ -1,7 +1,7 @@
 import {select} from '@angular-redux/store';
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 import {Notification, NotificationsService} from 'angular2-notifications';
-import {Observable, timer} from 'rxjs';
+import {Observable} from 'rxjs';
 import {NotificationToast, NotificationToastType} from '../../../shared/interfaces/notification-toast.interface';
 
 @Component({
@@ -11,7 +11,7 @@ import {NotificationToast, NotificationToastType} from '../../../shared/interfac
   providers: [NotificationsService],
   encapsulation: ViewEncapsulation.None,
 })
-export class NotificationComponent implements OnInit {
+export class NotificationComponent {
   private static readonly closeButtonClass = 'close-button';
 
   options = {
@@ -33,20 +33,6 @@ export class NotificationComponent implements OnInit {
       if (toast) {
         this.createToast(toast);
       }
-    });
-  }
-
-  ngOnInit(): void {
-    const toast: NotificationToast = {
-      type: NotificationToastType.success,
-      content: 'Node Deployment was successfully created!',
-    };
-
-    timer(0, 1000).subscribe(() => {
-      this.createToast(toast);
-
-      toast.type = NotificationToastType.error;
-      this.createToast(toast);
     });
   }
 

@@ -2,6 +2,11 @@
 @import "../../../../assets/css/fonts";
 @import "../../../../assets/css/variables";
 
+.simple-notification-wrapper {
+  bottom: $toolbar-height !important;
+  right: $content-padding !important;
+}
+
 .km-notification {
   background: $white-background !important;
   border-radius: $notification-border-radius;
