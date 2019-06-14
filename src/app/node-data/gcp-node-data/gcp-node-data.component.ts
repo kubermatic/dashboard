@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
@@ -21,7 +22,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   gcpNodeForm: FormGroup;
   labels: FormArray;
   hideOptional = true;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private addNodeService: NodeDataService, private wizardService: WizardService) {}
 
@@ -54,13 +55,13 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       this.gcpNodeForm.controls.machineType.setValue(this.machineTypes[0]);
     }
 
-    this.subscriptions.push(this.gcpNodeForm.valueChanges.subscribe(() => {
+    this.gcpNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    }));
+    });
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -114,10 +115,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

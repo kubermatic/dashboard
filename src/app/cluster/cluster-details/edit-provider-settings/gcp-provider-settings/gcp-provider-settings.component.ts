@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
@@ -13,7 +14,7 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   gcpProviderSettingsForm: FormGroup;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private clusterService: ClusterService) {}
 
@@ -22,17 +23,14 @@ export class GCPProviderSettingsComponent implements OnInit, OnDestroy {
       serviceAccount: new FormControl(this.cluster.spec.cloud.gcp.serviceAccount, [Validators.required]),
     });
 
-    this.subscriptions.push(this.gcpProviderSettingsForm.valueChanges.subscribe(() => {
+    this.gcpProviderSettingsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-    }));
+    });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getProviderSettingsPatch(): ProviderSettingsPatch {
