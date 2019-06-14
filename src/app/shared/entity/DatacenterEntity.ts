@@ -4,6 +4,7 @@ import {AWSDatacenterSpec} from './datacenter/AWSDatacenterSpec';
 import {AzureDatacenterSpec} from './datacenter/AzureDatacenterSpec';
 import {BringYourOwnDatacenterSpec} from './datacenter/BringYourOwnDatacenterSpec';
 import {DigitaloceanDatacenterSpec} from './datacenter/DigitaloceanDatacenterSpec';
+import {GCPDatacenterSpec} from './datacenter/GCPDatacenterSpec';
 import {HetznerDatacenterSpec} from './datacenter/HetznerDatacenterSpec';
 import {OpenStackDatacenterSpec} from './datacenter/OpenStackDatacenterSpec';
 import {PacketDatacenterSpec} from './datacenter/PacketDatacenterSpec';
@@ -30,6 +31,7 @@ export class DatacenterSpec {
   vsphere?: VSphereDatacenterSpec;
   hetzner?: HetznerDatacenterSpec;
   azure?: AzureDatacenterSpec;
+  gcp?: GCPDatacenterSpec;
 }
 
 export class DatacenterOperatingSystemOptions {
@@ -62,6 +64,9 @@ export function getDatacenterProvider(datacenter: DataCenterEntity): string {
   }
   if (!!datacenter.spec.azure) {
     return NodeProvider.AZURE;
+  }
+  if (!!datacenter.spec.gcp) {
+    return NodeProvider.GCP;
   }
   return '';
 }

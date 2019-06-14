@@ -1,0 +1,99 @@
+<form [formGroup]="gcpNodeForm"
+      fxLayout="column">
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Disk Size*</mat-label>
+      <input matInput
+             formControlName="diskSize"
+             type="number"
+             autocomplete="off">
+    </mat-form-field>
+  </div>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Disk Type*</mat-label>
+      <mat-select formControlName="diskType">
+        <mat-option *ngFor="let type of diskTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Machine Type*</mat-label>
+      <mat-select formControlName="machineType">
+        <mat-option *ngFor="let type of machineTypes"
+                    [value]="type">
+          {{type}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <mat-form-field fxFlex>
+    <mat-label>Zone*</mat-label>
+    <input matInput
+           formControlName="zone"
+           autocomplete="off">
+  </mat-form-field>
+
+  <div fxFlex="100%">
+    <div class="km-node-options">
+      <label fxFlex="50%">Preemptible</label>
+      <mat-checkbox fxFlex="50%"
+                    id="preemptible"
+                    formControlName="preemptible"></mat-checkbox>
+    </div>
+  </div>
+
+  <mat-form-field *ngIf="!hideOptional">
+    <mat-label>Tags</mat-label>
+    <textarea matInput
+              id="tags"
+              formControlName="tags"
+              matTextareaAutosize></textarea>
+    <mat-hint>Seperate tags with commas.</mat-hint>
+  </mat-form-field>
+
+  <div class="km-form-group-labels-header"
+       *ngIf="!hideOptional">
+    Labels
+    <i class="fa fa-plus"
+       style="float: right;"
+       aria-hidden="true"
+       (click)="addLabel()"></i>
+  </div>
+  <div class="km-form-group-labels"
+       *ngIf="!hideOptional">
+    <div fxFlex="100%"
+         *ngFor="let tag of getLabelForm(gcpNodeForm); let i=index"
+         formArrayName="labels">
+      <div class="km-form-group-labels-inner"
+           [formGroupName]="i">
+        <mat-form-field fxFlex="42%">
+          <mat-label>Key</mat-label>
+          <input matInput
+                 formControlName="key"
+                 autocomplete="off">
+        </mat-form-field>
+        <span class="km-seperator">:</span>
+        <mat-form-field fxFlex="42%">
+          <mat-label>Value</mat-label>
+          <input matInput
+                 formControlName="value"
+                 autocomplete="off">
+        </mat-form-field>
+        <i class="fa fa-times"
+           aria-hidden="true"
+           (click)="deleteLabel(i)"></i>
+      </div>
+    </div>
+  </div>
+</form>

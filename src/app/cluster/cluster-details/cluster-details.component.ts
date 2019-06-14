@@ -156,6 +156,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     return this.cluster && HealthEntity.allHealthy(this.health);
   }
 
+  getProvider(provider: string): string {
+    return provider === 'google' ? 'gcp' : provider;
+  }
+
   getType(type: string): string {
     return ClusterUtils.getType(type);
   }

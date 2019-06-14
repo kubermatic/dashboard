@@ -20,10 +20,15 @@ export class CloudSpecPatch {
   vsphere?: VSphereCloudSpecPatch;
   hetzner?: HetznerCloudSpecPatch;
   azure?: AzureCloudSpecPatch;
+  gcp?: GCPCloudSpecPatch;
 }
 
 export class DigitaloceanCloudSpecPatch {
   token?: string;
+}
+
+export class GCPCloudSpecPatch {
+  serviceAccount?: string;
 }
 
 export class OpenstackCloudSpecPatch {

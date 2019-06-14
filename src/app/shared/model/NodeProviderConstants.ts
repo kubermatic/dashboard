@@ -8,6 +8,7 @@ export class NodeProvider {
   static readonly VSPHERE: string = 'vsphere';
   static readonly HETZNER: string = 'hetzner';
   static readonly AZURE: string = 'azure';
+  static readonly GCP: string = 'gcp';
 
   static readonly Supported: string[] = [
     NodeProvider.AWS,
@@ -18,6 +19,7 @@ export class NodeProvider {
     NodeProvider.VSPHERE,
     NodeProvider.HETZNER,
     NodeProvider.AZURE,
+    NodeProvider.GCP,
   ];
 }
 
@@ -38,4 +40,15 @@ export namespace NodeInstanceFlavors {
 
   export const Hetzner: string[] =
       ['cx11', 'cx21', 'cx31', 'cx41', 'cx51', 'cx11-ceph', 'cx21-ceph', 'cx31-ceph', 'cx41-ceph', 'cx51-ceph'];
+
+  export namespace GCP {
+    // remove 'local-ssd' for now, as this must be handled differently in the machine-controller
+    export const DiskTypes: string[] = ['pd-ssd', 'pd-standard'];
+
+    // https://cloud.google.com/compute/docs/machine-types
+    export const MachineTypes: string[] = [
+      'n1-standard-1', 'n1-standard-2', 'n1-standard-4', 'n1-standard-8', 'n1-standard-16', 'n1-standard-32',
+      'n1-standard-64', 'n1-standard-96'
+    ];
+  }
 }

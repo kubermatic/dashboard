@@ -11,6 +11,7 @@ import {MatDialogRefMock} from '../../../../testing/services/mat-dialog-ref-mock
 import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/azure-provider-settings.component';
 import {EditProviderSettingsComponent} from '../edit-provider-settings.component';
+import {GCPProviderSettingsComponent} from '../gcp-provider-settings/gcp-provider-settings.component';
 import {HetznerProviderSettingsComponent} from '../hetzner-provider-settings/hetzner-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
@@ -43,6 +44,7 @@ describe('DigitaloceanProviderSettingsComponent', () => {
             VSphereProviderSettingsComponent,
             AzureProviderSettingsComponent,
             PacketProviderSettingsComponent,
+            GCPProviderSettingsComponent,
           ],
           providers: [
             {provide: ClusterService, useClass: ClusterMockService},
