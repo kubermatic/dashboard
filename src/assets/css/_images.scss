@@ -79,6 +79,17 @@
   border-radius: $baseline-grid;
 }
 
+.km-icon-tick {
+  display: inline-block;
+  width: $baseline-grid * 2;
+  height: $baseline-grid * 2;
+  margin: ($baseline-grid / 2) ($baseline-grid * 1.8) ($baseline-grid / 2) 0;
+  background: $indicator-green url("/assets/images/icons/tick.svg") no-repeat;
+  background-size: $baseline-grid * 1.5;
+  background-position: center;
+  border-radius: $baseline-grid;
+}
+
 .km-icon-download {
   display: inline-block;
   width: 20px;

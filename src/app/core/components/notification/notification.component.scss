@@ -11,7 +11,8 @@
   padding: unset !important;
   z-index: 2000 !important;
 
-  .icon {
+  .icon,
+  .sn-content {
     display: none;
   }
 
@@ -26,7 +27,26 @@
     }
 
     .km-notification-type {
+      align-items: center;
+      border-radius: $notification-border-radius 0 0 $notification-border-radius;
+      display: flex;
+      height: inherit;
+      justify-content: center;
+      margin: 0 auto;
       width: $notification-side-padding !important;
+
+      &.success {
+        background: $indicator-green;
+      }
+
+      &.error {
+        background: $indicator-red;
+      }
+
+      i {
+        background-size: 2 * $baseline-grid;
+        margin: 0 auto;
+      }
     }
 
     .km-notification-content {

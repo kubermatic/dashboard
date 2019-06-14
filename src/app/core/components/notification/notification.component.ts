@@ -15,7 +15,7 @@ export class NotificationComponent implements OnInit {
   private static readonly closeButtonClass = 'close-button';
 
   options = {
-    timeOut: 1000000,
+    timeOut: 10000,
     theClass: 'km-notification',
     lastOnBottom: true,
     clickToClose: false,
@@ -42,7 +42,10 @@ export class NotificationComponent implements OnInit {
       content: 'Node Deployment was successfully created!',
     };
 
-    timer(0, 5000).subscribe(() => {
+    timer(0, 1000).subscribe(() => {
+      this.createToast(toast);
+
+      toast.type = NotificationToastType.error;
       this.createToast(toast);
     });
   }
@@ -63,7 +66,20 @@ export class NotificationComponent implements OnInit {
   }
 
   createHtmlMessage(toast: NotificationToast): string {
-    return `<div class="km-notification-type">${toast.type}</div>
+    let typeClass = '';
+    let typeIcon = '';
+    switch (toast.type) {
+      case NotificationToastType.success:
+        typeClass = 'success';
+        typeIcon = 'km-icon-tick';
+        break;
+      case NotificationToastType.error:
+        typeClass = 'error';
+        typeIcon = 'km-icon-warning';
+        break;
+    }
+
+    return `<div class="km-notification-type ${typeClass}"><i class="${typeIcon}"></i></div>
       <div class="km-notification-content">${toast.content}</div>
       <div class="km-notification-close-button">
         <button class="km-icon-close ${NotificationComponent.closeButtonClass}"></button>
