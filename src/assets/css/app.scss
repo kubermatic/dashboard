@@ -329,6 +329,8 @@ mat-button-toggle-group {
 }
 
 mat-button-toggle-group[group='datacenterGroup'] {
+  border-radius: 0;
+
   .mat-button-toggle-label-content {
     flex-direction: column;
     padding: 20px 0;
@@ -338,9 +340,15 @@ mat-button-toggle-group[group='datacenterGroup'] {
   .mat-button-toggle-button {
     height: 100%;
   }
+
+  .mat-button-toggle-checked {
+    border-left: 1px solid $primary !important;
+  }
 }
 
 mat-button-toggle-group[group='providerGroup'] {
+  border-radius: 0;
+
   .mat-button-toggle-label-content {
     height: 100%;
     padding: 0 10px;
@@ -348,6 +356,10 @@ mat-button-toggle-group[group='providerGroup'] {
 
   .mat-button-toggle-button {
     height: 100%;
+  }
+
+  .mat-button-toggle-checked {
+    border-left: 1px solid $primary !important;
   }
 }
 
