@@ -18,6 +18,7 @@ export function clusterModelFake(): CreateClusterModel {
           hetzner: null,
           vsphere: null,
           azure: null,
+          gcp: null,
         },
         version: '',
       },
@@ -47,6 +48,7 @@ export function fakeDigitaloceanCluster(): ClusterEntity {
         hetzner: null,
         vsphere: null,
         azure: null,
+        gcp: null,
       },
       version: '1.8.5',
     },
@@ -74,10 +76,44 @@ export function fakePacketCluster(): ClusterEntity {
         hetzner: null,
         vsphere: null,
         azure: null,
+        gcp: null,
         packet: {
           apiKey: '123',
           projectID: '1',
           billingCycle: 'hourly',
+        }
+      },
+      version: '1.8.5',
+    },
+    status: {
+      url: 'https://4k6txp5sq.europe-west3-c.dev.kubermatic.io:30002',
+      version: '1.8.5',
+    },
+    type: 'kubernetes',
+  };
+}
+
+export function fakeGCPCluster(): ClusterEntity {
+  return {
+    creationTimestamp: new Date(),
+    id: '4k6txp5sq',
+    name: 'nifty-haibt',
+    spec: {
+      cloud: {
+        dc: 'gcp-westeurope',
+        digitalocean: null,
+        aws: null,
+        openstack: null,
+        baremetal: null,
+        bringyourown: null,
+        hetzner: null,
+        vsphere: null,
+        azure: null,
+        packet: null,
+        gcp: {
+          serviceAccount: 'test-service-account',
+          network: 'test-network',
+          subnetwork: 'test-subnetwork',
         }
       },
       version: '1.8.5',
@@ -104,6 +140,7 @@ export function fakeHetznerCluster(): ClusterEntity {
         baremetal: null,
         bringyourown: null,
         vsphere: null,
+        gcp: null,
         hetzner: {
           token: 'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
         },
@@ -143,6 +180,7 @@ export function fakeVSphereCluster(): ClusterEntity {
         },
         hetzner: null,
         azure: null,
+        gcp: null,
       },
       version: '1.8.5',
     },
@@ -177,6 +215,7 @@ export function fakeAWSCluster(): ClusterEntity {
         hetzner: null,
         vsphere: null,
         azure: null,
+        gcp: null,
       },
       version: '1.9.6',
     },
@@ -213,6 +252,7 @@ export function fakeOpenstackCluster(): ClusterEntity {
         hetzner: null,
         vsphere: null,
         azure: null,
+        gcp: null,
       },
       version: '1.9.6',
     },
@@ -239,6 +279,7 @@ export function fakeAzureCluster(): ClusterEntity {
         bringyourown: null,
         vsphere: null,
         hetzner: null,
+        gcp: null,
         azure: {
           clientID: 'azure-client-id',
           clientSecret: 'azure-client-secret',
@@ -277,6 +318,7 @@ export function fakeBringyourownCluster(): ClusterEntity {
         vsphere: null,
         hetzner: null,
         azure: null,
+        gcp: null,
       },
       version: '1.8.5',
     },

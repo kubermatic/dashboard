@@ -3,6 +3,7 @@ import {NodeProvider} from '../model/NodeProviderConstants';
 import {AWSNodeSpec} from './node/AWSNodeSpec';
 import {AzureNodeSpec} from './node/AzureNodeSpec';
 import {DigitaloceanNodeSpec} from './node/DigitaloceanNodeSpec';
+import {GCPNodeSpec} from './node/GCPNodeSpec';
 import {HetznerNodeSpec} from './node/HetznerNodeSpec';
 import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
 import {PacketNodeSpec} from './node/PacketNodeSpec';
@@ -47,6 +48,7 @@ export class NodeCloudSpec {
   hetzner?: HetznerNodeSpec;
   vsphere?: VSphereNodeSpec;
   azure?: AzureNodeSpec;
+  gcp?: GCPNodeSpec;
 }
 
 export class OperatingSystemSpec {
@@ -145,6 +147,16 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         instanceType: '',
         tags: [],
       } as PacketNodeSpec;
+    case NodeProvider.GCP:
+      return {
+        diskSize: 25,
+        diskType: '',
+        machineType: '',
+        preemptible: false,
+        zone: '',
+        tags: [],
+        labels: {'': ''},
+      } as GCPNodeSpec;
   }
   return {};
 }

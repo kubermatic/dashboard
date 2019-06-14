@@ -98,6 +98,35 @@
             </div>
           </ng-container>
 
+          <!-- GCP -->
+          <ng-container *ngIf="cluster.spec.cloud.gcp">
+            <div fxLayout
+                 class="km-card-list-content">
+              <div fxFlex="50%"
+                   class="km-card-list-key">Service Account</div>
+              <div fxFlex="50%">
+                <input class="km-card-list-secret"
+                       type="password"
+                       value="{{ cluster.spec.cloud.gcp.serviceAccount }}"
+                       disabled />
+              </div>
+            </div>
+            <div fxLayout
+                 class="km-card-list-content"
+                 *ngIf="cluster.spec.cloud.gcp.network">
+              <div fxFlex="50%"
+                   class="km-card-list-key">Network</div>
+              <div fxFlex="50%">{{ cluster.spec.cloud.gcp.network }}</div>
+            </div>
+            <div fxLayout
+                 class="km-card-list-content"
+                 *ngIf="cluster.spec.cloud.gcp.subnetwork">
+              <div fxFlex="50%"
+                   class="km-card-list-key">Subnetwork</div>
+              <div fxFlex="50%">{{ cluster.spec.cloud.gcp.subnetwork }}</div>
+            </div>
+          </ng-container>
+
           <!-- Packet -->
           <ng-container *ngIf="cluster.spec.cloud.packet">
             <div fxLayout
@@ -546,6 +575,56 @@
                 <div fxFlex="50%"
                      class="km-card-list-key">Tags</div>
                 <div fxFlex="50%">{{ nodeData.spec.cloud.digitalocean.tags }}</div>
+              </div>
+            </ng-container>
+
+            <!-- GCP Nodes -->
+            <ng-container *ngIf="cluster.spec.cloud.gcp">
+              <div class="km-card-list-content"
+                   fxFlex="50%">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Disk Size</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.gcp.diskSize }}</div>
+              </div>
+              <div class="km-card-list-content"
+                   fxFlex="50%">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Disk Type</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.gcp.diskType }}</div>
+              </div>
+              <div class="km-card-list-content"
+                   fxFlex="50%">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Machine Type</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.gcp.machineType }}</div>
+              </div>
+              <div class="km-card-list-content"
+                   fxFlex="50%">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Zone</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.gcp.zone }}</div>
+              </div>
+              <div class="km-card-list-content"
+                   fxFlex="50%">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Preemptible</div>
+                <div fxFlex="50%">
+                  <i [ngClass]="nodeData.spec.cloud.gcp.preemptible ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </div>
+              <div class="km-card-list-content"
+                   fxFlex="50%"
+                   *ngIf="nodeData.spec.cloud.gcp.tags.length > 0">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Tags</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.gcp.tags }}</div>
+              </div>
+              <div class="km-card-list-content"
+                   fxFlex="50%"
+                   *ngIf="displayTags(nodeData.spec.cloud.gcp.labels)">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Labels</div>
+                <div fxFlex="50%">{{ getTagsFromObject(nodeData.spec.cloud.gcp.labels) }}</div>
               </div>
             </ng-container>
 

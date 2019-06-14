@@ -15,6 +15,7 @@ import {AWSNodeDataComponent} from '../../../node-data/aws-node-data/aws-node-da
 import {AzureNodeDataComponent} from '../../../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../../../node-data/digitalocean-node-data/digitalocean-node-data.component';
 import {DigitaloceanOptionsComponent} from '../../../node-data/digitalocean-node-data/digitalocean-options/digitalocean-options.component';
+import {GCPNodeDataComponent} from '../../../node-data/gcp-node-data/gcp-node-data.component';
 import {HetznerNodeDataComponent} from '../../../node-data/hetzner-node-data/hetzner-node-data.component';
 import {NodeDataComponent} from '../../../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../../../node-data/openstack-node-data/openstack-node-data.component';
@@ -68,6 +69,7 @@ describe('NodeDataModalData', () => {
             VSphereOptionsComponent,
             AzureNodeDataComponent,
             PacketNodeDataComponent,
+            GCPNodeDataComponent,
           ],
           providers: [
             {provide: MAT_DIALOG_DATA, useValue: {cluster: fakeDigitaloceanCluster()}},

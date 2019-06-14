@@ -1,0 +1,12 @@
+div.km-node-options {
+  width: 100%;
+  line-height: 30px;
+  font-size: 14px;
+  display: flex;
+  margin-bottom: 15px;
+
+  mat-checkbox,
+  label {
+    flex: 1 1 100%;
+  }
+}
