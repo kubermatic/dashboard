@@ -1,7 +1,7 @@
 import {select} from '@angular-redux/store';
-import {Component, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Notification, NotificationsService} from 'angular2-notifications';
-import {Observable} from 'rxjs';
+import {Observable, timer} from 'rxjs';
 import {NotificationToast, NotificationToastType} from '../../../shared/interfaces/notification-toast.interface';
 
 @Component({
@@ -11,16 +11,15 @@ import {NotificationToast, NotificationToastType} from '../../../shared/interfac
   providers: [NotificationsService],
   encapsulation: ViewEncapsulation.None,
 })
-export class NotificationComponent {
-  private static readonly closeButtonClass = 'sn-close-button';
-  private static readonly copyButtonClass = 'sn-copy-button';
+export class NotificationComponent implements OnInit {
+  private static readonly closeButtonClass = 'close-button';
 
   options = {
-    timeOut: 10000,
-    theClass: 'custom-simple-notification',
+    timeOut: 1000000,
+    theClass: 'km-notification',
     lastOnBottom: true,
     clickToClose: false,
-    showProgressBar: true,
+    showProgressBar: false,
     pauseOnHover: true,
     preventDuplicates: false,
     preventLastDuplicates: 'visible',
@@ -37,48 +36,47 @@ export class NotificationComponent {
     });
   }
 
+  ngOnInit(): void {
+    const toast: NotificationToast = {
+      type: NotificationToastType.success,
+      content: 'Node Deployment was successfully created!',
+    };
+
+    timer(0, 5000).subscribe(() => {
+      this.createToast(toast);
+    });
+  }
+
   createToast(toast: NotificationToast): void {
     let notification: Notification;
-    const plainMessage = `${toast.title}: ${toast.content}`;
     const htmlMessage = this.createHtmlMessage(toast);
     switch (toast.type) {
       case NotificationToastType.success:
-        notification = this._service.success(toast.title, htmlMessage);
-        break;
-      case NotificationToastType.alert:
-        notification = this._service.alert(toast.title, htmlMessage);
+        notification = this._service.success(htmlMessage);
         break;
       case NotificationToastType.error:
-        notification = this._service.error(toast.title, htmlMessage);
-        break;
-      case NotificationToastType.info:
-        notification = this._service.info(toast.title, htmlMessage);
+        notification = this._service.error(htmlMessage);
         break;
     }
-    this.registerClickHandler(notification, plainMessage);
+
+    this.registerClickHandler(notification);
   }
 
   createHtmlMessage(toast: NotificationToast): string {
-    return `${toast.content}<div class="sn-controls"><span class="${
-        NotificationComponent.closeButtonClass}">Close</button>
-    <span class="${NotificationComponent.copyButtonClass}">Copy to clipboard</button></div>`;
+    return `<div class="km-notification-type">${toast.type}</div>
+      <div class="km-notification-content">${toast.content}</div>
+      <div class="km-notification-close-button">
+        <button class="km-icon-close ${NotificationComponent.closeButtonClass}"></button>
+      </div>`;
   }
 
-  registerClickHandler(notification: Notification, plainMessage: string): void {
+  registerClickHandler(notification: Notification): void {
     if (notification) {
       notification.click.subscribe((e: MouseEvent) => {
-        const targetId = (e.target as HTMLElement).className;
-        if (targetId.indexOf(NotificationComponent.closeButtonClass) > -1) {
+        if ((e.target as HTMLElement).className.indexOf(NotificationComponent.closeButtonClass) > -1) {
           this._service.remove(notification.id);
-        }
-        if (targetId.indexOf(NotificationComponent.copyButtonClass) > -1) {
-          this.copyToClipboard(plainMessage);
         }
       });
     }
-  }
-
-  copyToClipboard(text: string): void {
-    navigator.clipboard.writeText(text);
   }
 }

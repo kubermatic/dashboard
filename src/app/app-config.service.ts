@@ -28,7 +28,7 @@ export class AppConfigService {
               this._appConfig = resp as Config;
             },
             () => {
-              NotificationActions.error('Error', `Could not read configuration file`);
+              NotificationActions.error(`Could not read configuration file`);
             }))
         .toPromise();
   }
@@ -44,7 +44,7 @@ export class AppConfigService {
               this._userGroupConfig = resp as UserGroupConfig;
             },
             () => {
-              NotificationActions.error('Error', `Could not read user group configuration file`);
+              NotificationActions.error(`Could not read user group configuration file`);
             }))
         .toPromise();
   }
@@ -60,7 +60,7 @@ export class AppConfigService {
               this._gitVersion = resp as VersionInfo;
             },
             () => {
-              NotificationActions.error('Error', `Could not read Git version file`);
+              NotificationActions.error(`Could not read Git version file`);
             }))
         .toPromise();
   }

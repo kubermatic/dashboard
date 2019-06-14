@@ -39,7 +39,7 @@ export class EditServiceAccountTokenComponent implements OnInit {
         .pipe(first())
         .subscribe(() => {
           this._matDialogRef.close(true);
-          NotificationActions.success('Success', `Token ${this.token.name} is edited successfully`);
+          NotificationActions.success(`Token ${this.token.name} is edited successfully`);
         });
   }
 }

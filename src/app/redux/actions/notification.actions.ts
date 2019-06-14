@@ -8,13 +8,12 @@ export class NotificationActions extends ActionBase {
   static readonly PUSH_NOTIFICATION = NotificationActions.getActType('PUSH_NOTIFICATION');
 
   @dispatch()
-  static success(title: string, content: string): Action {
+  static success(content: string): Action {
     return {
       type: NotificationActions.PUSH_NOTIFICATION,
       payload: {
         toast: {
           type: NotificationToastType.success,
-          title,
           content,
         } as NotificationToast,
       },
@@ -22,41 +21,12 @@ export class NotificationActions extends ActionBase {
   }
 
   @dispatch()
-  static alert(title: string, content: string): Action {
-    return {
-      type: NotificationActions.PUSH_NOTIFICATION,
-      payload: {
-        toast: {
-          type: NotificationToastType.alert,
-          title,
-          content,
-        } as NotificationToast,
-      },
-    };
-  }
-
-  @dispatch()
-  static info(title: string, content: string): Action {
-    return {
-      type: NotificationActions.PUSH_NOTIFICATION,
-      payload: {
-        toast: {
-          type: NotificationToastType.info,
-          title,
-          content,
-        } as NotificationToast,
-      },
-    };
-  }
-
-  @dispatch()
-  static error(title: string, content: string): Action {
+  static error(content: string): Action {
     return {
       type: NotificationActions.PUSH_NOTIFICATION,
       payload: {
         toast: {
           type: NotificationToastType.error,
-          title,
           content,
         } as NotificationToast,
       },

@@ -1,18 +1,46 @@
-simple-notifications > * {
-  cursor: auto;
+@import "../../../../assets/css/colors";
+@import "../../../../assets/css/fonts";
+@import "../../../../assets/css/variables";
+
+.km-notification {
+  background: $white-background !important;
+  border-radius: $notification-border-radius;
+  box-shadow: $elevation-8dp;
+  color: $text-color !important;
+  min-height: unset !important;
+  padding: unset !important;
   z-index: 2000 !important;
-}
 
-simple-notifications .sn-close-button {
-  cursor: pointer;
-}
+  .icon {
+    display: none;
+  }
 
-simple-notifications .sn-copy-button {
-  cursor: pointer;
-  margin-left: 12px;
-}
+  .sn-title {
+    display: flex;
+    font-size: $subhead-font-size-base !important;
+    line-height: unset !important;
+    padding: 0 !important;
 
-simple-notifications .sn-controls {
-  font-size: 12px;
-  margin-top: 4px;
+    div {
+      margin: auto;
+    }
+
+    .km-notification-type {
+      width: $notification-side-padding !important;
+    }
+
+    .km-notification-content {
+      padding: $notification-content-padding;
+    }
+
+    .km-notification-close-button {
+      width: $notification-side-padding !important;
+
+      button.km-icon-close {
+        border: unset;
+        cursor: pointer;
+        outline: unset;
+      }
+    }
+  }
 }

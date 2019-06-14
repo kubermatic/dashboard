@@ -153,7 +153,6 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
         this._apiService.deleteServiceAccount(this._selectedProject.id, serviceAccount).pipe(first()).subscribe(() => {
           delete this.tokenList[serviceAccount.id];
           NotificationActions.success(
-              'Success',
               `Service Account ${serviceAccount.name} has been removed from project ${this._selectedProject.name}`);
           this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
         });

@@ -61,7 +61,7 @@ describe('NotificationComponent', () => {
            fixture.debugElement.injector.get(NotificationsService) as any;
        const spyNotification = spyOn(notificationService, 'success');
 
-       setMockNgRedux(fixture, {type: NotificationToastType.success, title: 'Success', content: 'Success'});
+       setMockNgRedux(fixture, {type: NotificationToastType.success, content: 'Success'});
 
        tick();
        fixture.detectChanges();

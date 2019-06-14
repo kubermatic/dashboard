@@ -189,7 +189,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this._projectService.delete(project.id).subscribe(() => {
-          NotificationActions.success('Success', `Project ${project.name} is being deleted`);
+          NotificationActions.success(`Project ${project.name} is being deleted`);
           this._googleAnalyticsService.emitEvent('projectOverview', 'ProjectDeleted');
           this._projectService.onProjectsUpdate.next();
         });

@@ -84,7 +84,7 @@ export class ServiceAccountTokenComponent implements OnInit {
             .pipe(first())
             .subscribe((token) => {
               this.openTokenDialog(token);
-              NotificationActions.success('Success', `Token ${token.name} has been regenerated.`);
+              NotificationActions.success(`Token ${token.name} has been regenerated.`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenRegenerated');
             });
       }
@@ -119,7 +119,7 @@ export class ServiceAccountTokenComponent implements OnInit {
             .pipe(first())
             .subscribe(() => {
               NotificationActions.success(
-                  'Success', `Token ${token.name} has been removed from Service Account ${this.serviceaccount.name}`);
+                  `Token ${token.name} has been removed from Service Account ${this.serviceaccount.name}`);
               this._googleAnalyticsService.emitEvent('serviceAccountTokenOverview', 'ServiceAccountTokenDeleted');
             });
       }
