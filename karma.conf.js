@@ -16,7 +16,10 @@ module.exports = function (config) {
       require('@angular/material')
     ],
     client:{
-      clearContext: false // leave Jasmine Spec Runner output visible in browser
+      clearContext: false, // leave Jasmine Spec Runner output visible in browser
+      jasmine: {
+        timeoutInterval: 10000,
+      }
     },
     files: [
       { pattern: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' }
