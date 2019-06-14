@@ -285,6 +285,11 @@
                 <div value>{{element.spec.cloud.vsphere.memory}}</div>
               </km-property>
 
+              <km-property *ngIf="element.spec.cloud.vsphere.diskSizeGB">
+                <div key>Disk Size in GB</div>
+                <div value>{{element.spec.cloud.vsphere.diskSizeGB}}</div>
+              </km-property>
+
               <km-property *ngIf="element.spec.cloud.vsphere.template">
                 <div key>VM Template</div>
                 <div value>{{element.spec.cloud.vsphere.template}}</div>

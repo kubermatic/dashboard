@@ -26,8 +26,10 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.vsphereOptionsForm = new FormGroup({
+      diskSizeGB: new FormControl(this.nodeData.spec.cloud.vsphere.diskSizeGB),
       template: new FormControl(this.nodeData.spec.cloud.vsphere.template),
     });
+
     this.subscriptions.push(this.vsphereOptionsForm.valueChanges.subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     }));
@@ -65,13 +67,13 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
 
       if (operatingSystem.ubuntu) {
         this.defaultTemplate = ubuntuTemplate;
-        return this.vsphereOptionsForm.setValue({template: ubuntuTemplate});
+        return this.vsphereOptionsForm.controls.template.setValue(ubuntuTemplate);
       } else if (operatingSystem.centos) {
         this.defaultTemplate = centosTemplate;
-        return this.vsphereOptionsForm.setValue({template: centosTemplate});
+        return this.vsphereOptionsForm.controls.template.setValue(centosTemplate);
       } else if (operatingSystem.containerLinux) {
         this.defaultTemplate = coreosTemplate;
-        return this.vsphereOptionsForm.setValue({template: coreosTemplate});
+        return this.vsphereOptionsForm.controls.template.setValue(coreosTemplate);
       }
     });
   }
@@ -91,6 +93,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
           cpus: this.nodeData.spec.cloud.vsphere.cpus,
           memory: this.nodeData.spec.cloud.vsphere.memory,
           template: this.vsphereOptionsForm.controls.template.value,
+          diskSizeGB: this.vsphereOptionsForm.controls.diskSizeGB.value,
         },
       },
       valid: this.vsphereOptionsForm.valid,

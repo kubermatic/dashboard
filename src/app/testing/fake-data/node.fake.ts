@@ -390,6 +390,7 @@ export function nodeDataCentOsFake(): NodeData {
           cpus: 1,
           memory: 512,
           template: '',
+          diskSizeGB: 256,
         },
         azure: {
           size: 'cx31',
