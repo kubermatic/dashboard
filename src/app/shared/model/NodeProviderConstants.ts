@@ -42,7 +42,8 @@ export namespace NodeInstanceFlavors {
       ['cx11', 'cx21', 'cx31', 'cx41', 'cx51', 'cx11-ceph', 'cx21-ceph', 'cx31-ceph', 'cx41-ceph', 'cx51-ceph'];
 
   export namespace GCP {
-    export const DiskTypes: string[] = ['local-ssd', 'pd-ssd', 'pd-standard'];
+    // remove 'local-ssd' for now, as this must be handled differently in the machine-controller
+    export const DiskTypes: string[] = ['pd-ssd', 'pd-standard'];
 
     // https://cloud.google.com/compute/docs/machine-types
     export const MachineTypes: string[] = [

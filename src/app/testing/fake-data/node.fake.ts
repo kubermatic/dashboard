@@ -350,7 +350,7 @@ export function nodeDataFake(): NodeData {
         },
         gcp: {
           diskSize: 25,
-          diskType: 'local-ssd',
+          diskType: 'pd-ssd',
           machineType: '',
           zone: '',
           preemptible: false,
@@ -414,7 +414,7 @@ export function nodeDataCentOsFake(): NodeData {
         },
         gcp: {
           diskSize: 25,
-          diskType: 'local-ssd',
+          diskType: 'pd-ssd',
           machineType: '',
           zone: '',
           preemptible: false,
@@ -477,7 +477,7 @@ export function nodeDataContainerLinuxFake(): NodeData {
         },
         gcp: {
           diskSize: 25,
-          diskType: 'local-ssd',
+          diskType: 'pd-ssd',
           machineType: '',
           zone: '',
           preemptible: false,
