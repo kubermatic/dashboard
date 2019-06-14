@@ -132,12 +132,6 @@
   </div>
 </form>
 
-<km-label-form title="Node Labels"
-               [(labels)]="nodeData.spec.labels"></km-label-form>
-
-<km-taint-form title="Node Taints"
-               [(taints)]="nodeData.spec.taints"></km-taint-form>
-
 <kubermatic-openstack-options *ngIf="cluster.spec.cloud.openstack"
                               [nodeData]="nodeData"
                               [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-options>
@@ -146,3 +140,9 @@
                             [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-options>
 <kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean && !hideOptional"
                                  [nodeData]="nodeData"></kubermatic-digitalocean-options>
+
+<km-label-form title="Node Labels"
+               [(labels)]="nodeData.spec.labels"></km-label-form>
+
+<km-taint-form title="Node Taints"
+               [(taints)]="nodeData.spec.taints"></km-taint-form>

@@ -1,8 +1,6 @@
 <mat-card>
   <mat-card-header>
-    <mat-card-title>
-      <h4>Summary</h4>
-    </mat-card-title>
+    <mat-card-title class="km-color-primary">Summary</mat-card-title>
   </mat-card-header>
   <mat-card-content>
 
@@ -712,6 +710,13 @@
                 <div fxFlex="50%"
                      class="km-card-list-key">Memory in MB</div>
                 <div fxFlex="50%">{{ nodeData.spec.cloud.vsphere.memory }}</div>
+              </div>
+              <div class="km-card-list-content"
+                   fxFlex="50%"
+                   *ngIf="nodeData.spec.cloud.vsphere.diskSizeGB">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Disk Size in GB</div>
+                <div fxFlex="50%">{{ nodeData.spec.cloud.vsphere.diskSizeGB }}</div>
               </div>
               <div class="km-card-list-content"
                    fxFlex="50%"

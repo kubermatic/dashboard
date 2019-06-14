@@ -121,11 +121,10 @@ export class MemberComponent implements OnInit, OnDestroy {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Remove member from project',
-        message: `You are on the way to remove the member ${member.name} from the project ${
-            this._selectedProject.name}. This cannot be undone!`,
+        title: 'Delete Member',
+        message: `Are you sure you want to permanently delete member "<strong>${member.name}</strong>"
+          from project "<strong>${this._selectedProject.name}</strong>"?`,
         confirmLabel: 'Delete',
-        cancelLabel: 'Close',
       },
     };
 

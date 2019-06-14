@@ -8,10 +8,6 @@
   }
 }
 
-a.km-download-kubeconfig-btn {
-  display: inline-block;
-}
-
 .km-ssh-keys-more {
   color: $light-text-color;
   cursor: default;
@@ -36,6 +32,16 @@ button:disabled {
   mat-button {
     margin-left: 5px;
   }
+
+  .mat-icon-button i {
+    height: 24px;
+    width: 24px;
+  }
+}
+
+.km-provider-menu-btn {
+  color: $text-color;
+  margin-right: 3.5 * $baseline-grid !important;
 }
 
 .km-provider-menu {
@@ -45,7 +51,8 @@ button:disabled {
 }
 
 .km-cluster-health {
-  margin-left: 10px;
+  margin-right: 2.5 * $baseline-grid;
+  font-size: $subhead-font-size-base;
   vertical-align: middle;
 }
 

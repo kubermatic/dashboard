@@ -62,14 +62,6 @@ describe('ClusterSecretsComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('should set variable expand', () => {
-    component.isExpand(true);
-    expect(component.expand).toBeTruthy();
-
-    component.isExpand(false);
-    expect(component.expand).toBeFalsy();
-  });
-
   it('should set icon class `km-icon-running`', () => {
     expect(component.getIconClass(true)).toBe('km-icon-running');
   });
@@ -79,19 +71,19 @@ describe('ClusterSecretsComponent', () => {
     expect(component.getIconClass(false)).toBe('km-icon-failed');
   });
 
-  it('should set icon class `fa fa-circle`', () => {
+  it('should set icon class `fa fa-circle orange`', () => {
     component.health = fakeHealthProvisioning();
-    expect(component.getIconClass(false)).toBe('fa fa-circle');
+    expect(component.getIconClass(false)).toBe('fa fa-circle orange');
   });
 
   it('should set correct icon for controllers', () => {
     component.health = fakeHealthProvisioning();
     expect(component.getIcon('apiserver')).toBe('km-icon-running');
     expect(component.getIcon('controller')).toBe('km-icon-running');
-    expect(component.getIcon('etcd')).toBe('fa fa-circle');
-    expect(component.getIcon('scheduler')).toBe('fa fa-circle');
+    expect(component.getIcon('etcd')).toBe('fa fa-circle orange');
+    expect(component.getIcon('scheduler')).toBe('fa fa-circle orange');
     expect(component.getIcon('machineController')).toBe('km-icon-running');
-    expect(component.getIcon('userClusterControllerManager')).toBe('fa fa-circle');
+    expect(component.getIcon('userClusterControllerManager')).toBe('fa fa-circle orange');
     expect(component.getIcon('test-controller')).toBe('');
   });
 

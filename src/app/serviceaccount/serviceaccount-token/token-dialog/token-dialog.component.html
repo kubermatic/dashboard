@@ -1,21 +1,28 @@
 <km-dialog-title title="Token"></km-dialog-title>
 <mat-dialog-content>
   <div class="mat-dialog-content">
-    <p>
-      <i class="fa fa-exclamation-triangle"></i>
-      Make sure to save this token at a safe place on your own device. It <strong>cannot</strong> be displayed again after closing this window.
-    </p>
     <p class="km-code-block km-copy"
        ngxClipboard
        [cbContent]="serviceaccountToken.token"
        matTooltip="click to copy">{{serviceaccountToken.token}}</p>
   </div>
+
+  <div class="km-dialog-warning">
+    <i class="km-icon-warning"></i>
+    <div>Store this token securely on your device. It will not be displayed again.</div>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <a mat-flat-button
+  <a class="km-small-button"
+     mat-flat-button
+     color="alternative"
      [href]="downloadUrl"
      [download]="downloadTitle"
      target="_blank">
-    Download Token
+    <i class="km-icon-download"></i>
   </a>
+  <button mat-dialog-close
+          mat-flat-button>
+    Got it
+  </button>
 </mat-dialog-actions>
