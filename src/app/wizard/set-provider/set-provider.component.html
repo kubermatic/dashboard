@@ -1,10 +1,9 @@
 <mat-card-header>
-  <mat-card-title>
-    <h4>Select the cloud provider for your nodes</h4>
-  </mat-card-title>
+  <mat-card-title class="km-color-primary">Provider</mat-card-title>
 </mat-card-header>
 <mat-card-content>
-  <p>Choose a cloud provider for your Kubernetes nodes to be deployed by
+  <p>
+    Choose a cloud provider for your Kubernetes nodes to be deployed by
     Kubermatic. Your nodes can be placed in any cloud you like.
   </p>
   <form [formGroup]="setProviderForm"

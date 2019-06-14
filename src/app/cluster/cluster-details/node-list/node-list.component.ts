@@ -68,9 +68,8 @@ export class NodeListComponent implements OnInit {
       hasBackdrop: true,
       data: {
         title: 'Delete Node',
-        message: `You are on the way to delete the ${node.name} node. It cannot be undone!`,
+        message: `Are you sure you want to permanently delete node "<strong>${node.name}</strong>"?`,
         confirmLabel: 'Delete',
-        cancelLabel: 'Close',
       },
     };
 

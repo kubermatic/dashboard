@@ -68,6 +68,47 @@
   }
 }
 
+.km-icon-warning {
+  display: inline-block;
+  width: $baseline-grid * 2;
+  height: $baseline-grid * 2;
+  margin: ($baseline-grid / 2) ($baseline-grid * 1.8) ($baseline-grid / 2) 0;
+  background: $indicator-red url("/assets/images/icons/warning.svg") no-repeat;
+  background-size: $baseline-grid * 1.5;
+  background-position: center;
+  border-radius: $baseline-grid;
+}
+
+.km-icon-download {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  mask: url("/assets/images/icons/download.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  background-color: $white-background;
+}
+
+.km-icon-share {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  mask: url("/assets/images/icons/share.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  background-color: $white-background;
+}
+
+.km-icon-copy {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  mask: url("/assets/images/icons/copy.svg");
+  mask-repeat: no-repeat;
+  mask-size: cover;
+  background-color: $white-background;
+}
+
 .km-icon-cluster {
   display: inline-block;
   width: 22px;
@@ -172,6 +213,7 @@
   height: 10px;
   background-image: url("/assets/images/Running-Check.svg");
   background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .km-icon-failed {
@@ -181,6 +223,7 @@
   height: 10px;
   background-image: url("/assets/images/Failed.svg");
   background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .km-icon-logs {
@@ -189,24 +232,6 @@
   width: 12px;
   height: 10px;
   background-image: url("/assets/images/Logs.svg");
-  background-repeat: no-repeat;
-}
-
-.km-icon-documents {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 11px;
-  background-image: url("/assets/images/Documents.svg");
-  background-repeat: no-repeat;
-}
-
-.km-icon-download {
-  display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("/assets/images/Download_blue.svg");
   background-repeat: no-repeat;
 }
 

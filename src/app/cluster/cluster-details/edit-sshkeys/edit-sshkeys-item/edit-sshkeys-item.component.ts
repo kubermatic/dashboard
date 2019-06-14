@@ -42,11 +42,10 @@ export class EditSSHKeysItemComponent implements OnInit {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Remove SSH key from cluster',
-        message: `You are on the way to remove the SSH key ${this.sshKey.name} from cluster ${
-            this.cluster.name}. This cannot be undone!`,
+        title: 'Delete SSH Key',
+        message: `Are you sure you want to permanently delete SSH key"<strong>${this.sshKey.name}</strong>"
+          from cluster "<strong>${this.cluster.name}</strong>"?`,
         confirmLabel: 'Delete',
-        cancelLabel: 'Close',
       },
     };
 

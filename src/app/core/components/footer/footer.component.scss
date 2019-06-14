@@ -2,8 +2,9 @@
 @import '../../../../assets/css/variables';
 
 footer {
-  padding: $baseline-grid (2.5 * $baseline-grid);
+  padding: $baseline-grid (3.5 * $baseline-grid);
   width: 100%;
+  height: $toolbar-height;
   z-index: 999;
 
   * {

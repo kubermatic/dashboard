@@ -5,7 +5,6 @@ export interface ConfirmationDialogConfig {
   title: string;
   message: string;
   confirmLabel: string;
-  cancelLabel: string;
   // following fields only required, if dialog should have an input field for verification
   compareName?: string;
   inputPlaceholder?: string;

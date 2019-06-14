@@ -2,16 +2,13 @@
 @import "../../../../assets/css/colors";
 
 .km-delete-cluster-checkbox {
-  font-size: $body-font-size-base;
   margin-bottom: $baseline-grid;
+
+  .mat-checkbox {
+    margin-right: 2 * $baseline-grid;
+  }
 }
 
-.km-delete-cluster-warning {
-  display: flex;
-  margin: 2 * $baseline-grid 0;
-
-  mat-icon {
-    color: $indicator-orange;
-    margin-right: $baseline-grid;
-  }
+.mat-form-field {
+  margin-top: $baseline-grid;
 }

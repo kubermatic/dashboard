@@ -1,11 +1,10 @@
-<km-dialog-title title="Connect to the Cluster"></km-dialog-title>
+<km-dialog-title title="Connect"></km-dialog-title>
 <mat-dialog-content>
   <div class="mat-dialog-content">
-    <a class="km-download-kubeconfig-btn"
-       mat-flat-button
-       href="{{ getDownloadURL() }}"
-       target="_blank">Download config</a>
-    <p><br>Configure kubectl command line by running the following command in Directory where the kubeconfig-admin-{{cluster.id}} is located:</p>
+    <p>
+      Configure kubectl by running the following command in the directory
+      where the kubeconfig-admin-{{cluster.id}} is located:
+    </p>
     <p class="km-code-block km-copy"
        ngxClipboard
        [cbContent]="copy('exportKubeconfig')"
@@ -15,7 +14,7 @@
        ngxClipboard
        [cbContent]="copy('kubectlProxy')"
        matTooltip="click to copy">$ kubectl proxy</p>
-    <p>Then open the Dashboard interface by navigating to the following location in your browser:</p>
+    <p>Then open the Kubernetes Dashboard by using following link in your browser:</p>
     <p class="km-button-link">
       <a href="http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/"
          target="_blank"
@@ -25,3 +24,14 @@
     </p>
   </div>
 </mat-dialog-content>
+<mat-dialog-actions>
+  <a class="km-small-button"
+     mat-flat-button
+     color="alternative"
+     [href]="getDownloadURL()"
+     target="_blank"><i class="km-icon-download"></i></a>
+  <button mat-dialog-close
+          mat-flat-button>
+    Got it
+  </button>
+</mat-dialog-actions>
