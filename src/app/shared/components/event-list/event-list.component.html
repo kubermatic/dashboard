@@ -1,10 +1,15 @@
 <mat-card class="km-with-table-header">
+  <mat-card-header>
+    <mat-card-title>
+      Events
+    </mat-card-title>
+  </mat-card-header>
   <mat-card-content>
     <table class="km-table"
            mat-table
            [dataSource]="dataSource"
            matSort>
-      <ng-container matColumnDef="type">
+      <ng-container matColumnDef="status">
         <th mat-header-cell
             *matHeaderCellDef
             class="km-header-cell"></th>

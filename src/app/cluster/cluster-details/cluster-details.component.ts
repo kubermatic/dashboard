@@ -25,6 +25,7 @@ import {ClusterConnectComponent} from './cluster-connect/cluster-connect.compone
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
+import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
 import {ShareKubeconfigComponent} from './share-kubeconfig/share-kubeconfig.component';
 
 @Component({
@@ -259,6 +260,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getTruncatedSSHKeys(): string {
     return this.sshKeys.slice(this.displayedSSHKeys).map(key => key.name).join(', ');
+  }
+
+  isRevokeAdminTokenEnabled(): boolean {
+    return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
+  }
+
+  revokeAdminToken(): void {
+    const dialogRef = this._matDialog.open(RevokeAdminTokenComponent);
+    dialogRef.componentInstance.cluster = this.cluster;
+    dialogRef.componentInstance.datacenter = this.datacenter;
+    dialogRef.componentInstance.projectID = this.projectID;
   }
 
   ngOnDestroy(): void {

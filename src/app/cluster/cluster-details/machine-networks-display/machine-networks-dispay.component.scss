@@ -1,0 +1,11 @@
+@import "../../../../assets/css/colors";
+
+button:disabled {
+  color: $disabled-button-color;
+  cursor: default;
+}
+
+div.km-scrollable-content {
+  overflow-y: auto;
+  max-height: 200px;
+}

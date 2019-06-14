@@ -1,33 +1,31 @@
-<div class="km-dialog-box">
-  <km-dialog-title title="Edit Provider Settings"></km-dialog-title>
-  <mat-dialog-content>
-    <div class="mat-dialog-content km-edit-provider-settings">
-      <p>You are on the way to edit the provider settings for "{{ cluster.name }}".</p>
-      <kubermatic-aws-provider-settings [cluster]="cluster"
-                                        *ngIf="!!cluster.spec.cloud.aws"></kubermatic-aws-provider-settings>
-      <kubermatic-digitalocean-provider-settings [cluster]="cluster"
-                                                 *ngIf="!!cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-provider-settings>
-      <kubermatic-hetzner-provider-settings [cluster]="cluster"
-                                            *ngIf="!!cluster.spec.cloud.hetzner"></kubermatic-hetzner-provider-settings>
-      <kubermatic-openstack-provider-settings [cluster]="cluster"
-                                              *ngIf="!!cluster.spec.cloud.openstack"></kubermatic-openstack-provider-settings>
-      <kubermatic-vsphere-provider-settings [cluster]="cluster"
-                                            *ngIf="!!cluster.spec.cloud.vsphere"></kubermatic-vsphere-provider-settings>
-      <kubermatic-azure-provider-settings [cluster]="cluster"
-                                          *ngIf="!!cluster.spec.cloud.azure"></kubermatic-azure-provider-settings>
-      <kubermatic-packet-provider-settings [cluster]="cluster"
-                                           *ngIf="!!cluster.spec.cloud.packet"></kubermatic-packet-provider-settings>
+<km-dialog-title title="Edit Provider Settings"></km-dialog-title>
+<mat-dialog-content>
+  <div class="mat-dialog-content km-edit-provider-settings">
+    <p>You are on the way to edit the provider settings for "{{ cluster.name }}".</p>
+    <kubermatic-aws-provider-settings [cluster]="cluster"
+                                      *ngIf="!!cluster.spec.cloud.aws"></kubermatic-aws-provider-settings>
+    <kubermatic-digitalocean-provider-settings [cluster]="cluster"
+                                               *ngIf="!!cluster.spec.cloud.digitalocean"></kubermatic-digitalocean-provider-settings>
+    <kubermatic-hetzner-provider-settings [cluster]="cluster"
+                                          *ngIf="!!cluster.spec.cloud.hetzner"></kubermatic-hetzner-provider-settings>
+    <kubermatic-openstack-provider-settings [cluster]="cluster"
+                                          *ngIf="!!cluster.spec.cloud.openstack"></kubermatic-openstack-provider-settings>
+    <kubermatic-vsphere-provider-settings [cluster]="cluster"
+                                          *ngIf="!!cluster.spec.cloud.vsphere"></kubermatic-vsphere-provider-settings>
+    <kubermatic-azure-provider-settings [cluster]="cluster"
+                                        *ngIf="!!cluster.spec.cloud.azure"></kubermatic-azure-provider-settings>
+    <kubermatic-packet-provider-settings [cluster]="cluster"
+                                         *ngIf="!!cluster.spec.cloud.packet"></kubermatic-packet-provider-settings>
 
-      <kubermatic-gcp-provider-settings [cluster]="cluster"
-                                        *ngIf="!!cluster.spec.cloud.gcp"></kubermatic-gcp-provider-settings>
-    </div>
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-flat-button
-            mat-dialog-close
-            [disabled]="!providerSettingsPatch.isValid"
-            (click)="saveProviderSettings()">
-      Save
-    </button>
-  </mat-dialog-actions>
-</div>
+    <kubermatic-gcp-provider-settings [cluster]="cluster"
+                                      *ngIf="!!cluster.spec.cloud.gcp"></kubermatic-gcp-provider-settings>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-flat-button
+          mat-dialog-close
+          [disabled]="!providerSettingsPatch.isValid"
+          (click)="saveProviderSettings()">
+    Save
+  </button>
+</mat-dialog-actions>

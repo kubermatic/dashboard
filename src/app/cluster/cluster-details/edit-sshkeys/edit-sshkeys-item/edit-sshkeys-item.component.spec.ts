@@ -76,7 +76,7 @@ describe('EditSSHKeysItemComponent', () => {
        const dialogTitle = document.body.querySelector('.mat-dialog-title');
        const deleteButton = document.body.querySelector('#km-confirmation-dialog-confirm-btn') as HTMLInputElement;
 
-       expect(dialogTitle.textContent).toBe('Remove SSH key from cluster');
+       expect(dialogTitle.textContent).toBe('Delete SSH Key');
        expect(deleteButton.textContent).toBe(' Delete ');
 
        deleteButton.click();

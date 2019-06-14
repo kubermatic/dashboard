@@ -47,6 +47,7 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
           cpus: this.vsphereNodeForm.controls.cpu.value,
           memory: this.vsphereNodeForm.controls.memory.value,
           template: this.nodeData.spec.cloud.vsphere.template,
+          diskSizeGB: this.nodeData.spec.cloud.vsphere.diskSizeGB,
         },
       },
       valid: this.vsphereNodeForm.valid,

@@ -1,8 +1,5 @@
 <mat-card-header>
-  <mat-card-title>
-    <h4 *ngIf="!cluster.spec.cloud.bringyourown">Select the datacenter of your cloud provider</h4>
-    <h4 *ngIf="cluster.spec.cloud.bringyourown">Select the datacenter for your master components</h4>
-  </mat-card-title>
+  <mat-card-title class="km-color-primary">Datacenter</mat-card-title>
 </mat-card-header>
 <mat-card-content>
   <p *ngIf="!cluster.spec.cloud.bringyourown">This is the datacenter of your cloud provider. Your worker nodes will get deployed there.</p>

@@ -68,11 +68,10 @@ export class ServiceAccountTokenComponent implements OnInit {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Regenerate Token for Service Account',
-        message: `You are on the way to regenerate Token ${token.name} for the Service Account ${
-            this.serviceaccount.name}. This cannot be undone!`,
+        title: 'Regenerate Token',
+        message: `Are you sure you want to regenerate token "<strong>${token.name}</strong>"
+          for service account "<strong>${this.serviceaccount.name}</strong>"?`,
         confirmLabel: 'Regenerate',
-        cancelLabel: 'Close',
       },
     };
 
@@ -104,11 +103,10 @@ export class ServiceAccountTokenComponent implements OnInit {
       disableClose: false,
       hasBackdrop: true,
       data: {
-        title: 'Remove Token from Service Account',
-        message: `You are on the way to remove the Token ${token.name} from the Service Account ${
-            this.serviceaccount.name}. This cannot be undone!`,
+        title: 'Delete Token',
+        message: `Are you sure you want to permanently delete token "<strong>${token.name}</strong>"
+          from service account "<strong>${this.serviceaccount.name}</strong>"?`,
         confirmLabel: 'Delete',
-        cancelLabel: 'Close',
       },
     };
 
