@@ -14,11 +14,7 @@
        fxLayoutGap="20px">
     <mat-card fxFlex="50%">
       <mat-card-header>
-        <mat-card-title>
-          <h4>
-            Provider credentials
-          </h4>
-        </mat-card-title>
+        <mat-card-title class="km-color-primary">Provider Credentials</mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <kubermatic-cluster-provider-settings [cluster]="cluster"></kubermatic-cluster-provider-settings>
@@ -27,11 +23,7 @@
     <mat-card class="node-settings-card"
               fxFlex="50%">
       <mat-card-header>
-        <mat-card-title>
-          <h4>
-            Node settings
-          </h4>
-        </mat-card-title>
+        <mat-card-title class="km-color-primary">Node Settings</mat-card-title>
       </mat-card-header>
       <mat-card-content fxLayout="column">
         <kubermatic-node-data [cluster]="cluster"

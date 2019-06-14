@@ -1,0 +1,11 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<mask id="path-1-inside-1" fill="white">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6 15V3H14V6H16V2C16 1.44772 15.5523 1 15 1H5C4.44772 1 4 1.44772 4 2V16C4 16.5523 4.44772 17 5 17H8V15H6Z"/>
+</mask>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6 15V3H14V6H16V2C16 1.44772 15.5523 1 15 1H5C4.44772 1 4 1.44772 4 2V16C4 16.5523 4.44772 17 5 17H8V15H6Z" fill="#4D555C"/>
+<path d="M6 3V1H4V3H6ZM6 15H4V17H6V15ZM14 3H16V1H14V3ZM14 6H12V8H14V6ZM16 6V8H18V6H16ZM8 17V19H10V17H8ZM8 15H10V13H8V15ZM4 3V15H8V3H4ZM14 1H6V5H14V1ZM16 6V3H12V6H16ZM14 8H16V4H14V8ZM18 6V2H14V6H18ZM18 2C18 0.343146 16.6569 -1 15 -1V3C14.4477 3 14 2.55228 14 2H18ZM15 -1H5V3H15V-1ZM5 -1C3.34315 -1 2 0.343146 2 2H6C6 2.55228 5.55228 3 5 3V-1ZM2 2V16H6V2H2ZM2 16C2 17.6569 3.34315 19 5 19V15C5.55228 15 6 15.4477 6 16H2ZM5 19H8V15H5V19ZM10 17V15H6V17H10ZM6 17H8V13H6V17Z" fill="#4D555C" mask="url(#path-1-inside-1)"/>
+<mask id="path-3-inside-2" fill="white">
+<rect x="9" y="7" width="12" height="16" rx="1"/>
+</mask>
+<rect x="9" y="7" width="12" height="16" rx="1" stroke="#4D555C" stroke-width="4" mask="url(#path-3-inside-2)"/>
+</svg>

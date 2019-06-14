@@ -26,27 +26,6 @@ body {
   margin: auto;
 }
 
-// card
-.mat-card-header-text {
-  height: auto;
-  margin: 0;
-  width: auto;
-}
-
-// global
-.km-code-block {
-  background-color: $medium-background;
-  padding: 5px 15px;
-  font-size: 14px;
-  line-height: 20px;
-  font-family: $code-block;
-
-  p {
-    color: $text-color !important;
-    font-family: $code-block;
-  }
-}
-
 // global
 .km-table {
   width: 100%;
@@ -170,40 +149,6 @@ body {
 .km-paginator {
   border-radius: 0 0 5px 5px;
   border-top: 1px solid $separator;
-}
-
-.mat-column-status,
-.mat-column-stateArrow {
-  width: 2 * $baseline-grid;
-}
-
-.mat-card-header {
-  margin-bottom: 10px;
-  border: none;
-
-  .mat-card-title {
-    padding-top: 0;
-    font-size: $body-font-size-base;
-    font-weight: normal;
-    align-items: baseline;
-  }
-
-  .mat-card-header-text {
-    width: 100%;
-    margin: 0;
-    font-size: $body-font-size-base;
-  }
-}
-
-.mat-card-title {
-  margin: 0;
-
-  h4 {
-    font-weight: 600;
-    margin: 10px 0;
-    font-size: 18px;
-    color: $text-color;
-  }
 }
 
 .mat-button-toggle-group-appearance-standard {
@@ -363,6 +308,11 @@ mat-button-toggle-group[group='providerGroup'] {
   }
 }
 
+mat-card-header > div > mat-card-title > div {
+  margin: $baseline-grid 0;
+  font-size: $body-font-size-base;
+}
+
 .mat-card.km-with-table-header {
   padding: 30px 0;
   margin: 20px 0 0 0;
@@ -376,21 +326,10 @@ mat-button-toggle-group[group='providerGroup'] {
     background-color: $white-text-color;
     color: $text-color;
     border-radius: 5px 5px 0 0;
-
-    .mat-card-header-text {
-      width: 100%;
-      margin: 0;
-
-      .mat-card-title {
-        font-weight: normal;
-        font-size: $body-font-size-base;
-        padding: 0;
-        margin: 0;
-      }
-    }
   }
 
   &.km-small .mat-card-header {
+    font-size: 10px !important;
     line-height: 1.6 * $line-height;
   }
 
@@ -419,10 +358,6 @@ mat-button-toggle-group[group='providerGroup'] {
 
       div {
         outline: none;
-      }
-
-      .km-cluster-name {
-        line-height: 5 * $line-height;
       }
 
       &.km-odd {
@@ -511,18 +446,9 @@ mat-button-toggle-group[group='providerGroup'] {
       margin: 0;
 
       .mat-card-title {
-        font-weight: normal;
-        font-size: $body-font-size-base;
         padding: 0;
         margin: 0;
-        line-height: 4 * $line-height;
         align-items: baseline;
-
-        &.km-cluster-name {
-          float: left;
-          padding: 0 30px;
-          font-size: $subhead-font-size-base-lg;
-        }
       }
     }
   }
@@ -549,11 +475,6 @@ mat-button-toggle-group[group='providerGroup'] {
       flex-flow: row wrap;
     }
   }
-}
-
-.km-dialog-box {
-  min-width: $dialog-width;
-  width: $dialog-width;
 }
 
 // Scrollbar
@@ -709,16 +630,6 @@ mat-button-toggle-group[group='providerGroup'] {
   float: right;
 }
 
-.km-dialog {
-  width: $dialog-width;
-}
-
-@media screen and (max-width: 745px) {
-  .km-dialog {
-    width: 100%;
-  }
-}
-
 // provider message
 
 .km-provider-message {
@@ -756,13 +667,6 @@ mat-list-item.disabled {
 
 .km-action-button-icon {
   margin-right: 5px;
-}
-
-.km-pre-card-title {
-  margin-top: 30px;
-  color: $text-color;
-  font-size: 18px;
-  font-weight: 500;
 }
 
 .km-warning {
@@ -826,7 +730,23 @@ div.km-form-group-tags {
   width: 45% !important;
 }
 
-// Health statuses
+// Card headers.
+.mat-card-header .mat-card-title {
+  color: $text-color;
+  padding: $baseline-grid 0 (2 * $baseline-grid);
+  font-size: 20px;
+  font-weight: 400 !important;
+
+  i {
+    margin: 0 (3 * $baseline-grid) 0 (4 * $baseline-grid);
+  }
+}
+
+.mat-card-header-text {
+  margin: 0 !important;
+}
+
+// Health statuses.
 .green {
   color: $indicator-green;
 }
@@ -837,6 +757,12 @@ div.km-form-group-tags {
 
 .red {
   color: $indicator-red;
+}
+
+// Row width.
+.mat-column-status,
+.mat-column-stateArrow {
+  width: 2 * $baseline-grid;
 }
 
 // Remove background overlay added by the menu.
@@ -877,6 +803,28 @@ div.km-form-group-tags {
     &:hover {
       background-color: $tertiary-hover;
     }
+  }
+
+  &.mat-pure:not([disabled]) {
+    background-color: transparent;
+    color: $medium-text-color;
+    border: none;
+
+    &:hover {
+      background-color: $tertiary-hover;
+    }
+  }
+
+  &.km-small-button {
+    min-width: unset;
+  }
+}
+
+.mat-icon-button {
+  margin: 0 $baseline-grid !important;
+
+  i {
+    background-color: $text-color;
   }
 }
 
@@ -920,26 +868,59 @@ mat-form-field.mat-focused.ng-pristine label {
 
 // Dialogs.
 .mat-dialog-container {
+  min-width: $dialog-width !important;
+  max-width: $dialog-width !important;
+  color: $text-color;
+
   .mat-dialog-title {
-    color: $text-color;
     font-weight: normal;
   }
 
   .mat-dialog-content {
     font-size: 16px;
     font-weight: 400;
+    max-height: $dialog-max-height;
+
+    a {
+      text-decoration: none;
+      color: $primary;
+    }
 
     p {
       margin: 0 0 $baseline-grid;
+    }
+
+    .km-dialog-warning {
+      display: flex;
+      margin: 2 * $baseline-grid 0;
     }
   }
 
   .mat-dialog-actions {
     justify-content: flex-end;
+    padding: 0;
+    margin: 0;
   }
 }
 
 // Tooltips.
 .mat-tooltip-panel {
   height: 4 * $baseline-grid;
+}
+
+// Code blocks.
+.km-code-block {
+  background-color: $grey-background;
+  border-radius: $baseline-grid / 1.5;
+  margin: ($baseline-grid * 2) 0;
+  padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
+  font-size: $body-font-size-base;
+  line-height: 20px;
+  font-family: $code-block;
+  color: $text-color;
+}
+
+// Font colors.
+.km-color-primary {
+  color: $primary !important;
 }

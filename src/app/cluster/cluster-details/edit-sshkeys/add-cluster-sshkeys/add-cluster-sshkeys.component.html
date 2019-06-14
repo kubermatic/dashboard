@@ -1,34 +1,31 @@
-<div class="km-dialog-box"
-     style="max-width: 500px; min-width: 500px;">
-  <km-dialog-title title="Add SSH Keys to the Cluster"></km-dialog-title>
-  <mat-dialog-content class="km-content-add-sshkeys">
-    <div class="mat-dialog-content">
+<km-dialog-title title="Add SSH Keys to the Cluster"></km-dialog-title>
+<mat-dialog-content class="km-content-add-sshkeys">
+  <div class="mat-dialog-content">
 
-      <p>Select a SSH key that you want to add to cluster <strong>{{cluster.name}}</strong>.</p>
-      <form [formGroup]="keysForm">
-        <mat-label>SSH Keys</mat-label>
-        <mat-form-field *ngIf="keys.length > 0">
-          <mat-select formControlName="keys">
-            <mat-option *ngFor="let key of keys"
-                        value="{{key.id}}">{{key.name}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-        <div *ngIf="keys.length === 0">
-          <p>You have no more SSH keys in your project</p>
-        </div>
-        <button class="km-project-sshkey"
-                (click)="addProjectSSHKeys()"
-                *ngIf="!!userGroup && !!userGroupConfig[userGroup].sshKeys.create">Add SSH key to project</button>
-      </form>
+    <p>Select a SSH key that you want to add to cluster <strong>{{cluster.name}}</strong>.</p>
+    <form [formGroup]="keysForm">
+      <mat-label>SSH Keys</mat-label>
+      <mat-form-field *ngIf="keys.length > 0">
+        <mat-select formControlName="keys">
+          <mat-option *ngFor="let key of keys"
+                      value="{{key.id}}">{{key.name}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <div *ngIf="keys.length === 0">
+        <p>You have no more SSH keys in your project</p>
+      </div>
+      <button class="km-project-sshkey"
+              (click)="addProjectSSHKeys()"
+              *ngIf="!!userGroup && !!userGroupConfig[userGroup].sshKeys.create">Add SSH key to project</button>
+    </form>
 
-    </div>
-  </mat-dialog-content>
+  </div>
+</mat-dialog-content>
 
-  <mat-dialog-actions>
-    <button mat-flat-button
-            (click)="addClusterSSHKeys()"
-            [disabled]="!keysForm.valid">
-      Add
-    </button>
-  </mat-dialog-actions>
-</div>
+<mat-dialog-actions>
+  <button mat-flat-button
+          (click)="addClusterSSHKeys()"
+          [disabled]="!keysForm.valid">
+    Add
+  </button>
+</mat-dialog-actions>
