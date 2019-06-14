@@ -1,4 +1,4 @@
-<form [formGroup]="awsSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div fxLayoutAlign="center center"
        class="km-provider-message">
@@ -16,7 +16,7 @@
            name="accessKeyId"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="awsSettingsForm.controls.accessKeyId.hasError('required')">
+    <mat-error *ngIf="form.controls.accessKeyId.hasError('required')">
       Access key ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -27,7 +27,7 @@
            name="secretAccessKey"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="awsSettingsForm.controls.secretAccessKey.hasError('required')">
+    <mat-error *ngIf="form.controls.secretAccessKey.hasError('required')">
       Secret access key is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -40,7 +40,7 @@
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
-    <mat-error *ngIf="awsSettingsForm.controls.securityGroup.hasError('pattern')">
+    <mat-error *ngIf="form.controls.securityGroup.hasError('pattern')">
       The security group ID need to look similar to 'sg-a2c195ca'.
     </mat-error>
   </mat-form-field>
@@ -53,7 +53,7 @@
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
-    <mat-error *ngIf="awsSettingsForm.controls.vpcId.hasError('pattern')">
+    <mat-error *ngIf="form.controls.vpcId.hasError('pattern')">
       The VPC ID needs to look similar to 'vpc-3a2f9851'.
     </mat-error>
   </mat-form-field>
@@ -66,7 +66,7 @@
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
-    <mat-error *ngIf="awsSettingsForm.controls.subnetId.hasError('pattern')">
+    <mat-error *ngIf="form.controls.subnetId.hasError('pattern')">
       The subnet ID needs to look similar to 'subnet-36275b5d'.
     </mat-error>
   </mat-form-field>
@@ -79,7 +79,7 @@
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this Route table. If not specified, the default Route Table will be used.</mat-hint>
-    <mat-error *ngIf="awsSettingsForm.controls.routeTableId.hasError('pattern')">
+    <mat-error *ngIf="form.controls.routeTableId.hasError('pattern')">
       The route table ID needs to look similar to 'rtb-0bd18f60'.
     </mat-error>
   </mat-form-field>

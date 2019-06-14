@@ -1,11 +1,12 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {iif, Subject} from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -24,7 +25,11 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   doNodeForm: FormGroup;
   loadingSizes = false;
   private _unsubscribe = new Subject<void>();
-  constructor(private api: ApiService, private addNodeService: NodeDataService, private wizardService: WizardService) {}
+  private _selectedCredentials: string;
+
+  constructor(
+      private readonly _api: ApiService, private readonly _addNodeService: NodeDataService,
+      private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.doNodeForm = new FormGroup({
@@ -32,9 +37,9 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
     });
 
     this.doNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this.addNodeService.changeNodeProviderData(this.getNodeProviderData()));
+        .subscribe(_ => this._addNodeService.changeNodeProviderData(this.getNodeProviderData()));
 
-    this.wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;
       this.doNodeForm.controls.size.setValue('');
       this.sizes = {optimized: [], standard: []};
@@ -44,9 +49,14 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
       }
     });
 
+    this._wizardService.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+      this._selectedCredentials = credentials;
+      this.reloadDigitaloceanSizes();
+    });
+
     this.checkSizeState();
     this.reloadDigitaloceanSizes();
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   isInWizard(): boolean {
@@ -81,33 +91,25 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   }
 
   reloadDigitaloceanSizes(): void {
-    if (this.isInWizard()) {
-      if (this.cloudSpec.digitalocean.token) {
-        this.loadingSizes = true;
-        this.api.getDigitaloceanSizesForWizard(this.cloudSpec.digitalocean.token)
-            .pipe(takeUntil(this._unsubscribe))
-            .subscribe((data) => {
-              this.sizes = data;
-              if (this.nodeData.spec.cloud.digitalocean.size === '') {
-                this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
-              }
-              this.loadingSizes = false;
-              this.checkSizeState();
-            }, err => this.loadingSizes = false);
-      }
-    } else {
-      this.loadingSizes = true;
-      this.api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId)
-          .pipe(takeUntil(this._unsubscribe))
-          .subscribe((data) => {
-            this.sizes = data;
-            if (this.nodeData.spec.cloud.digitalocean.size === '') {
-              this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
-            }
-            this.loadingSizes = false;
-            this.checkSizeState();
-          }, err => this.loadingSizes = false);
-    }
+    this.loadingSizes = true;
+
+    iif(() => this.isInWizard(),
+        this._wizardService.provider(NodeProvider.DIGITALOCEAN)
+            .token(this.cloudSpec.digitalocean.token)
+            .credential(this._selectedCredentials)
+            .flavors(),
+        this._api.getDigitaloceanSizes(this.projectId, this.seedDCName, this.clusterId))
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((data) => {
+          this.sizes = data;
+          if (this.nodeData.spec.cloud.digitalocean.size === '') {
+            this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
+          }
+
+          this.loadingSizes = false;
+          this.checkSizeState();
+        }, () => this.loadingSizes = false);
   }
 
   ngOnDestroy(): void {
@@ -117,7 +119,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
-      if (!!!changes.cloudSpec.previousValue ||
+      if (!changes.cloudSpec.previousValue ||
           (changes.cloudSpec.currentValue.digitalocean.token !== changes.cloudSpec.previousValue.digitalocean.token)) {
         this.reloadDigitaloceanSizes();
       }

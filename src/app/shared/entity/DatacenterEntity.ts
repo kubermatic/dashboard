@@ -40,33 +40,6 @@ export class DatacenterOperatingSystemOptions {
   ubuntu: string;
 }
 
-export function getDatacenterProvider(datacenter: DataCenterEntity): string {
-  if (!!datacenter.spec.digitalocean) {
-    return NodeProvider.DIGITALOCEAN;
-  }
-  if (!!datacenter.spec.aws) {
-    return NodeProvider.AWS;
-  }
-  if (!!datacenter.spec.bringyourown) {
-    return NodeProvider.BRINGYOUROWN;
-  }
-  if (!!datacenter.spec.openstack) {
-    return NodeProvider.OPENSTACK;
-  }
-  if (!!datacenter.spec.packet) {
-    return NodeProvider.PACKET;
-  }
-  if (!!datacenter.spec.vsphere) {
-    return NodeProvider.VSPHERE;
-  }
-  if (!!datacenter.spec.hetzner) {
-    return NodeProvider.HETZNER;
-  }
-  if (!!datacenter.spec.azure) {
-    return NodeProvider.AZURE;
-  }
-  if (!!datacenter.spec.gcp) {
-    return NodeProvider.GCP;
-  }
-  return '';
+export function getDatacenterProvider(datacenter: DataCenterEntity): NodeProvider {
+  return Object.values(NodeProvider).find(provider => provider === datacenter.spec.provider) || NodeProvider.NONE;
 }

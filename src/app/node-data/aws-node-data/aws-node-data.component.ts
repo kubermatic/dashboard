@@ -5,7 +5,7 @@ import {Subscription} from 'rxjs';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeInstanceFlavor, NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeProvider} from "../../shared/model/NodeProviderConstants";
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -18,14 +18,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  instanceTypes: NodeInstanceFlavor[] = NodeInstanceFlavors.AWS;
+  instanceTypes: NodeInstanceFlavor[] = this._wizardService.provider(NodeProvider.AWS).flavors();
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   awsNodeForm: FormGroup;
   tags: FormArray;
   hideOptional = true;
+
   private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: NodeDataService, private wizardService: WizardService) {}
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -51,14 +52,14 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     }
 
     this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+      this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     }));
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this.subscriptions.push(this._wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
 
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   isInWizard(): boolean {

@@ -13,13 +13,15 @@ import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
+import {CredentialListEntity} from '../../../shared/entity/provider/credentials/CredentialListEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
 
 import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
+import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {Auth} from '../auth/auth.service';
 
 @Injectable()
@@ -109,12 +111,6 @@ export class ApiService {
     return this._http.post<SSHKeyEntity>(url, sshKey);
   }
 
-  getDigitaloceanSizesForWizard(token: string): Observable<DigitaloceanSizes> {
-    this._headers = this._headers.set('DoToken', token);
-    const url = `${this._restRoot}/providers/digitalocean/sizes`;
-    return this._http.get<DigitaloceanSizes>(url, {headers: this._headers});
-  }
-
   getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/digitalocean/sizes`;
     return this._http.get<DigitaloceanSizes>(url);
@@ -125,59 +121,9 @@ export class ApiService {
     return this._http.put<Token>(url, token);
   }
 
-  private setOpenStackHeaders(username: string, password: string, domain: string, datacenterName: string): void {
-    this._headers = this._headers.set('Username', username);
-    this._headers = this._headers.set('Password', password);
-    this._headers = this._headers.set('Domain', domain);
-    this._headers = this._headers.set('DatacenterName', datacenterName);
-  }
-
-  getOpenStackFlavorsForWizard(
-      username: string, password: string, tenant: string, domain: string,
-      datacenterName: string): Observable<OpenstackFlavor[]> {
-    this.setOpenStackHeaders(username, password, domain, datacenterName);
-    this._headers = this._headers.set('Tenant', tenant);
-    const url = `${this._restRoot}/providers/openstack/sizes`;
-    return this._http.get<OpenstackFlavor[]>(url, {headers: this._headers});
-  }
-
   getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/openstack/sizes`;
     return this._http.get<OpenstackFlavor[]>(url);
-  }
-
-  getOpenStackTenantsForWizard(username: string, password: string, domain: string, datacenterName: string):
-      Observable<OpenstackTenant[]> {
-    this.setOpenStackHeaders(username, password, domain, datacenterName);
-    const url = `${this._restRoot}/providers/openstack/tenants`;
-    return this._http.get<OpenstackTenant[]>(url, {headers: this._headers});
-  }
-
-  getOpenStackSecurityGroupsForWizard(
-      username: string, password: string, tenant: string, domain: string,
-      datacenterName: string): Observable<OpenstackSecurityGroup[]> {
-    this.setOpenStackHeaders(username, password, domain, datacenterName);
-    this._headers = this._headers.set('Tenant', tenant);
-    const url = `${this._restRoot}/providers/openstack/securitygroups`;
-    return this._http.get<OpenstackSecurityGroup[]>(url, {headers: this._headers});
-  }
-
-  getOpenStackNetworkForWizard(
-      username: string, password: string, tenant: string, domain: string,
-      datacenterName: string): Observable<OpenstackNetwork[]> {
-    this.setOpenStackHeaders(username, password, domain, datacenterName);
-    this._headers = this._headers.set('Tenant', tenant);
-    const url = `${this._restRoot}/providers/openstack/networks`;
-    return this._http.get<OpenstackNetwork[]>(url, {headers: this._headers});
-  }
-
-  getOpenStackSubnetIdsForWizard(
-      username: string, password: string, tenant: string, domain: string, datacenterName: string,
-      network: string): Observable<OpenstackSubnet[]> {
-    this.setOpenStackHeaders(username, password, domain, datacenterName);
-    this._headers = this._headers.set('Tenant', tenant);
-    const url = `${this._restRoot}/providers/openstack/subnets?network_id=${network}`;
-    return this._http.get<OpenstackSubnet[]>(url, {headers: this._headers});
   }
 
   getKubeconfigURL(projectID: string, dc: string, clusterID: string): string {
@@ -189,22 +135,9 @@ export class ApiService {
         clusterID}&user_id=${userID}`;
   }
 
-  // type has to be eather kubernetes or openshift
-  getMasterVersions(type: string): Observable<MasterVersion[]> {
+  getMasterVersions(type: 'kubernetes'|'openshift'): Observable<MasterVersion[]> {
     const url = `${this._restRoot}/upgrades/cluster?type=${type}`;
     return this._http.get<MasterVersion[]>(url);
-  }
-
-  getAzureSizesForWizard(
-      clientID: string, clientSecret: string, subscriptionID: string, tenantID: string,
-      location: string): Observable<AzureSizes[]> {
-    this._headers = this._headers.set('ClientID', clientID);
-    this._headers = this._headers.set('ClientSecret', clientSecret);
-    this._headers = this._headers.set('SubscriptionID', subscriptionID);
-    this._headers = this._headers.set('TenantID', tenantID);
-    this._headers = this._headers.set('Location', location);
-    const url = `${this._restRoot}/providers/azure/sizes`;
-    return this._http.get<AzureSizes[]>(url, {headers: this._headers});
   }
 
   getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes[]> {
@@ -291,5 +224,10 @@ export class ApiService {
       Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.delete(url);
+  }
+
+  getProviderCredentials(provider: NodeProvider) {
+    const url = `${this._restRoot}/providers/${provider}/credentials`;
+    return this._http.get<CredentialListEntity>(url);
   }
 }

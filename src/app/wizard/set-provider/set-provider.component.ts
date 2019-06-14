@@ -4,8 +4,9 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../core/services';
-import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
+import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
+import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
 @Component({
   selector: 'kubermatic-set-provider',
@@ -15,14 +16,14 @@ import {getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
 export class SetProviderComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   setProviderForm: FormGroup;
-  providers: string[] = [];
+  providers: NodeProvider[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
 
   ngOnInit(): void {
     this.setProviderForm = new FormGroup({
-      provider: new FormControl(getClusterProvider(this.cluster), [Validators.required]),
+      provider: new FormControl('', [Validators.required]),
     });
 
     this.setProviderForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -30,17 +31,14 @@ export class SetProviderComponent implements OnInit, OnDestroy {
     });
 
     this.dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe((datacenters) => {
-      const providers: string[] = [];
+      const providers: NodeProvider[] = [];
       for (const datacenter of datacenters) {
         if (datacenter.seed) {
           continue;
         }
-        const provider = getDatacenterProvider(datacenter);
-        if (provider === '') {
-          continue;
-        }
 
-        if (providers.indexOf(provider) === -1) {
+        const provider = getDatacenterProvider(datacenter);
+        if (!providers.includes(provider)) {
           providers.push(provider);
         }
       }

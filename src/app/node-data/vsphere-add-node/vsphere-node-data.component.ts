@@ -1,6 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
@@ -16,7 +17,8 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
   @Input() clusterId: string;
 
   vsphereNodeForm: FormGroup;
-  private subscriptions: Subscription[] = [];
+
+  private _unsubscribe = new Subject<void>();
 
   constructor(private addNodeService: NodeDataService) {}
 
@@ -27,19 +29,16 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
       memory: new FormControl(this.nodeData.spec.cloud.vsphere.memory, [Validators.required, Validators.min(512)]),
     });
 
-    this.subscriptions.push(this.vsphereNodeForm.valueChanges.subscribe(() => {
+    this.vsphereNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    }));
+    });
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   isInWizard(): boolean {

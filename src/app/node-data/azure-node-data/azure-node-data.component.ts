@@ -1,11 +1,13 @@
 import {Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {EMPTY, iif, Subject} from 'rxjs';
+import {switchMap, takeUntil} from 'rxjs/operators';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
+import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -27,11 +29,11 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   datacenter: DataCenterEntity;
   hideOptional = true;
   loadingSizes = false;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(
-      private addNodeService: NodeDataService, private wizardService: WizardService, private api: ApiService,
-      private dcService: DatacenterService) {}
+      private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
+      private readonly _api: ApiService, private readonly _dcService: DatacenterService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -50,15 +52,15 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       tags: tagList,
     });
 
-    this.subscriptions.push(this.azureNodeForm.valueChanges.subscribe((data) => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    }));
+    this.azureNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    });
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
 
-    this.subscriptions.push(this.wizardService.clusterProviderSettingsFormChanges$.subscribe((data) => {
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;
       this.azureNodeForm.controls.size.setValue('');
       this.sizes = [];
@@ -67,19 +69,19 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
           data.cloudSpec.azure.tenantID !== '' || data.cloudSpec.azure.subscriptionID !== '') {
         this.reloadAzureSizes();
       }
-    }));
+    });
 
-    this.getDatacenter();
+    this.loadDatacenter();
     this.checkSizeState();
     this.reloadAzureSizes();
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
-  getDatacenter(): void {
+  loadDatacenter(): void {
     if (this.cloudSpec.dc) {
-      this.subscriptions.push(this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((data) => {
+      this._dcService.getDataCenter(this.cloudSpec.dc).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
         this.datacenter = data;
-      }));
+      });
     }
   }
 
@@ -119,40 +121,32 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   reloadAzureSizes(): void {
-    if (this.cloudSpec.dc) {
-      if (this.isInWizard()) {
-        if (this.cloudSpec.azure.clientID && this.cloudSpec.azure.clientSecret && this.cloudSpec.azure.subscriptionID &&
-            this.cloudSpec.azure.tenantID) {
+    iif(() => !!this.cloudSpec.dc, this._dcService.getDataCenter(this.cloudSpec.dc), EMPTY)
+        .pipe(switchMap(dc => {
+          this.datacenter = dc;
           this.loadingSizes = true;
-          this.subscriptions.push(this.api
-                                      .getAzureSizesForWizard(
-                                          this.cloudSpec.azure.clientID, this.cloudSpec.azure.clientSecret,
-                                          this.cloudSpec.azure.subscriptionID, this.cloudSpec.azure.tenantID,
-                                          this.datacenter.spec.azure.location)
-                                      .subscribe((data) => {
-                                        this.sizes = data;
-                                        if (this.nodeData.spec.cloud.azure.size === '') {
-                                          this.azureNodeForm.controls.size.setValue(this.sizes[0].name);
-                                        }
-                                        this.loadingSizes = false;
-                                        this.checkSizeState();
-                                      }, err => this.loadingSizes = false));
-        }
-      } else {
-        this.loadingSizes = true;
-        this.subscriptions.push(
-            this.api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId).subscribe((data) => {
-              this.sizes = data;
-              if (this.nodeData.spec.cloud.azure.size === '') {
-                this.azureNodeForm.controls.size.setValue(this.sizes[0].name);
-              }
-              this.loadingSizes = false;
-              this.checkSizeState();
-            }, err => this.loadingSizes = false));
-      }
-    } else {
-      this.getDatacenter();
-    }
+
+          return iif(
+              () => this.isInWizard(),
+              this._wizard.provider(NodeProvider.AZURE)
+                  .clientID(this.cloudSpec.azure.clientID)
+                  .clientSecret(this.cloudSpec.azure.clientSecret)
+                  .subscriptionID(this.cloudSpec.azure.subscriptionID)
+                  .tenantID(this.cloudSpec.azure.tenantID)
+                  .location(this.datacenter.spec.azure.location)
+                  .flavors(),
+              this._api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId));
+        }))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(data => {
+          this.sizes = data;
+          if (this.nodeData.spec.cloud.azure.size === '') {
+            this.azureNodeForm.controls.size.setValue(this.sizes[0].name);
+          }
+
+          this.loadingSizes = false;
+          this.checkSizeState();
+        }, () => this.loadingSizes = false);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -169,14 +163,11 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
-  getTagForm(form): any {
+  getTagForm(form) {
     return form.get('tags').controls;
   }
 

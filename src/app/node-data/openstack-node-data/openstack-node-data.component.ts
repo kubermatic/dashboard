@@ -1,10 +1,12 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {iif, Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
+import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -23,11 +25,11 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   loadingFlavors = false;
   osNodeForm: FormGroup;
   loadingSizes = false;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(
-      private addNodeService: NodeDataService, private api: ApiService, private dcService: DatacenterService,
-      private wizardService: WizardService) {}
+      private readonly _addNodeService: NodeDataService, private readonly _api: ApiService,
+      private readonly _dcService: DatacenterService, private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     this.osNodeForm = new FormGroup({
@@ -35,15 +37,15 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
     });
 
-    this.subscriptions.push(this.osNodeForm.valueChanges.subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    }));
+    this.osNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    });
 
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     this.loadFlavors();
     this.checkFlavorState();
 
-    this.subscriptions.push(this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((dc) => {
+    this._dcService.getDataCenter(this.cloudSpec.dc).pipe(takeUntil(this._unsubscribe)).subscribe((dc) => {
       if (dc.spec.openstack.enforce_floating_ip) {
         this.osNodeForm.controls.useFloatingIP.setValue(true);
         this.osNodeForm.controls.useFloatingIP.disable();
@@ -54,9 +56,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         this.osNodeForm.controls.useFloatingIP.setValue(false);
         this.osNodeForm.controls.useFloatingIP.disable();
       }
-    }));
+    });
 
-    this.subscriptions.push(this.wizardService.clusterProviderSettingsFormChanges$.subscribe((data) => {
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if (data.cloudSpec.openstack.username === this.cloudSpec.openstack.username &&
           data.cloudSpec.openstack.password === this.cloudSpec.openstack.password &&
           data.cloudSpec.openstack.domain === this.cloudSpec.openstack.domain &&
@@ -72,15 +74,12 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           data.cloudSpec.openstack.domain !== '' || data.cloudSpec.openstack.tenant !== '') {
         this.loadFlavors();
       }
-    }));
+    });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getNodeProviderData(): NodeProviderData {
@@ -145,30 +144,22 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   loadFlavors(): void {
-    if (this.isInWizard()) {
-      if (!this.hasCredentials()) {
-        return;
-      }
-      this.loadingFlavors = true;
-      this.subscriptions.push(this.api
-                                  .getOpenStackFlavorsForWizard(
-                                      this.cloudSpec.openstack.username, this.cloudSpec.openstack.password,
-                                      this.cloudSpec.openstack.tenant, this.cloudSpec.openstack.domain,
-                                      this.cloudSpec.dc)
-                                  .subscribe((flavors) => {
-                                    this.handleFlavours(flavors);
-                                    this.checkFlavorState();
-                                    this.loadingFlavors = false;
-                                  }, err => this.loadingSizes = false));
-    } else {
-      this.loadingFlavors = true;
-      this.subscriptions.push(
-          this.api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId).subscribe((flavors) => {
-            this.handleFlavours(flavors);
-            this.checkFlavorState();
-            this.loadingFlavors = false;
-          }, err => this.loadingSizes = false));
-    }
+    this.loadingFlavors = true;
+    iif(() => this.isInWizard(),
+        this._wizard.provider(NodeProvider.OPENSTACK)
+            .username(this.cloudSpec.openstack.username)
+            .password(this.cloudSpec.openstack.password)
+            .tenant(this.cloudSpec.openstack.tenant)
+            .domain(this.cloudSpec.openstack.domain)
+            .datacenter(this.cloudSpec.dc)
+            .flavors(),
+        this._api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((flavors) => {
+          this.handleFlavours(flavors);
+          this.checkFlavorState();
+          this.loadingFlavors = false;
+        }, () => this.loadingSizes = false);
   }
 
   isFloatingIPEnforced(): boolean {
