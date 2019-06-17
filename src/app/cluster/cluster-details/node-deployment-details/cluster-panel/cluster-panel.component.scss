@@ -1,0 +1,34 @@
+@import "../../../../../assets/css/colors";
+@import "../../../../../assets/css/variables";
+
+$panel-margin: -$content-padding;
+
+.km-cluster-panel-container {
+  background: $separator;
+  border-bottom: 1px solid $dropdown-border;
+  color: $text-color;
+  height: $toolbar-height + $baseline-grid / 4;
+  margin: $panel-margin $panel-margin $content-padding $panel-margin;
+  padding: 0 $content-padding;
+
+  .km-cluster-panel-container-positioning {
+    margin-top: $baseline-grid;
+
+    .km-icon-arrow-left {
+      background-color: $text-color;
+      margin-top: -$baseline-grid;
+    }
+
+    .mat-divider {
+      height: 5 * $baseline-grid;
+      margin: (-$baseline-grid) (4 * $baseline-grid) 0;
+    }
+
+    .km-cluster-type i {
+      filter: grayscale(100%);
+      height: 4 * $baseline-grid;
+      margin-right: 3 * $baseline-grid;
+      width: 4 * $baseline-grid;
+    }
+  }
+}

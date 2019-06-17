@@ -24,6 +24,7 @@ import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshk
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/machine-networks-dispay.component';
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
+import {ClusterPanelComponent} from './cluster-details/node-deployment-details/cluster-panel/cluster-panel.component';
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
@@ -40,6 +41,7 @@ const components: any[] = [
   NodeDeploymentDetailsComponent,
   ClusterListComponent,
   MachineNetworksDisplayComponent,
+  ClusterPanelComponent,
 ];
 
 const entryComponents: any[] = [

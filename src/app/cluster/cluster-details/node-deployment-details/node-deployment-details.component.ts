@@ -132,10 +132,6 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
     return this._projectID;
   }
 
-  getType(type: string): string {
-    return ClusterUtils.getType(type);
-  }
-
   getVersionHeadline(type: string, isKubelet: boolean): string {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
   }

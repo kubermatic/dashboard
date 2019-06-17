@@ -1,4 +1,7 @@
 <ng-container *ngIf="isInitialized()">
+  <km-cluster-panel [cluster]="cluster"
+                    [datacenter]="datacenter"></km-cluster-panel>
+
   <div fxLayout
        class="km-node-deployment-detail-actions">
     <div fxFlex="100%"
@@ -39,11 +42,8 @@
 
       <div class="km-content-wrap">
         <km-property>
-          <div key>Status</div>
-          <div value
-               id="km-node-deployment-status">
-            {{nodeDeploymentHealthStatus.message}}
-          </div>
+          <div key>{{getVersionHeadline(cluster.type, true)}}</div>
+          <div value>{{nodeDeployment.spec.template.versions.kubelet}}</div>
         </km-property>
         <km-property>
           <div key>Replicas</div>
@@ -59,19 +59,6 @@
         <km-property>
           <div key>Paused</div>
           <div value>{{nodeDeployment.spec.paused}}</div>
-        </km-property>
-        <km-property>
-          <div key>Type</div>
-          <div value>
-            <span class="km-cluster-type"
-                  [matTooltip]="getType(cluster.type)">
-              <i class="km-icon-{{cluster.type}}"></i>
-            </span>
-          </div>
-        </km-property>
-        <km-property>
-          <div key>{{getVersionHeadline(cluster.type, true)}}</div>
-          <div value>{{nodeDeployment.spec.template.versions.kubelet}}</div>
         </km-property>
         <km-property>
           <div key>Operating System</div>
@@ -96,21 +83,10 @@
           </div>
         </km-property>
         <km-property>
-          <div key>Cluster Name</div>
-          <div value
-               class="km-link"
-               id="km-node-deployment-cluster-name"
-               (click)="goBackToCluster()">{{cluster.name}}</div>
-        </km-property>
-        <km-property>
           <div key>Cluster Provider</div>
           <div value>
             <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
           </div>
-        </km-property>
-        <km-property>
-          <div key>Datacenter Location</div>
-          <div value>{{datacenter.spec.country}}, {{datacenter.spec.location}}</div>
         </km-property>
         <km-property>
           <div key>Created</div>

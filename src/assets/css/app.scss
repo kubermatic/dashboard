@@ -443,7 +443,6 @@ mat-card-header > div > mat-card-title > div {
 
     .mat-card-header-text {
       width: 100%;
-      margin: 0;
 
       .mat-card-title {
         padding: 0;
@@ -467,12 +466,6 @@ mat-card-header > div > mat-card-title > div {
     .km-row {
       line-height: 5 * $line-height;
       padding: 0;
-    }
-
-    .km-content-wrap {
-      padding: 0 30px;
-      display: flex;
-      flex-flow: row wrap;
     }
   }
 }
@@ -736,18 +729,26 @@ div.km-form-group-labels {
 
 // Card headers.
 .mat-card-header .mat-card-title {
-  color: $text-color;
+  color: $text-color !important;
   padding: $baseline-grid 0 (2 * $baseline-grid);
   font-size: 20px;
-  font-weight: 400 !important;
+  font-weight: normal !important;
 
   i {
-    margin: 0 (3 * $baseline-grid) 0 (4 * $baseline-grid);
+    font-size: $subhead-font-size-base-lg;
+    margin: 0 (2.5 * $baseline-grid);
   }
 }
 
 .mat-card-header-text {
   margin: 0 !important;
+}
+
+// Card contents.
+.km-content-wrap {
+  display: flex;
+  flex-flow: row wrap;
+  padding: $baseline-grid (7 * $baseline-grid) 0 !important;
 }
 
 // Health statuses.
