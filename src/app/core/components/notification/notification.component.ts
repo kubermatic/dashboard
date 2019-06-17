@@ -15,7 +15,7 @@ export class NotificationComponent {
   private static readonly closeButtonClass = 'close-button';
 
   options = {
-    timeOut: 10000,
+    timeOut: 1000000,
     theClass: 'km-notification',
     lastOnBottom: true,
     clickToClose: false,
@@ -65,8 +65,10 @@ export class NotificationComponent {
         break;
     }
 
+    const contentClass = toast.content.length > 64 ? 'small' : '';
+
     return `<div class="km-notification-type ${typeClass}"><i class="${typeIcon}"></i></div>
-      <div class="km-notification-content">${toast.content}</div>
+      <div class="km-notification-content ${contentClass}">${toast.content}</div>
       <div class="km-notification-close-button">
         <button class="km-icon-close ${NotificationComponent.closeButtonClass}"></button>
       </div>`;

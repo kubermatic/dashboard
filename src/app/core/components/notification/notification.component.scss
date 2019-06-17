@@ -49,6 +49,7 @@
       }
 
       i {
+        padding: 2 * $baseline-grid;
         background-size: 2 * $baseline-grid;
         margin: 0 auto;
       }
@@ -56,10 +57,15 @@
 
     .km-notification-content {
       padding: $notification-content-padding;
+      word-break: break-word;
+
+      &.small {
+        font-size: $body-font-size-base !important;
+      }
     }
 
     .km-notification-close-button {
-      width: $notification-side-padding !important;
+      padding: 2 * $baseline-grid;
 
       button.km-icon-close {
         border: unset;
