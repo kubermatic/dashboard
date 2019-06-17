@@ -5,4 +5,5 @@ export class AWSCloudSpec {
   subnetId: string;
   routeTableId: string;
   securityGroup: string;
+  instanceProfileName: string;
 }

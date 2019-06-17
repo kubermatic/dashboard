@@ -73,6 +73,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         vpcId: '',
         securityGroup: '',
         subnetId: '',
+        instanceProfileName: '',
       } as AWSCloudSpec;
     case NodeProvider.DIGITALOCEAN:
       return {

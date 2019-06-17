@@ -41,6 +41,7 @@ describe('AWSClusterSettingsComponent', () => {
       subnetId: '',
       securityGroup: '',
       vpcId: '',
+      instanceProfileName: '',
     };
     fixture.detectChanges();
   });

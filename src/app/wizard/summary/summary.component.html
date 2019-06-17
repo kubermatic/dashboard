@@ -210,6 +210,13 @@
                    class="km-card-list-key">Route table ID</div>
               <div fxFlex="50%">{{ cluster.spec.cloud.aws.routeTableId }}</div>
             </div>
+            <div fxLayout
+                 class="km-card-list-content"
+                 *ngIf="cluster.spec.cloud.aws.instanceProfileName">
+              <div fxFlex="50%"
+                   class="km-card-list-key">Instance Profile Name</div>
+              <div fxFlex="50%">{{ cluster.spec.cloud.aws.instanceProfileName }}</div>
+            </div>
           </ng-container>
 
           <!-- Open Stack -->

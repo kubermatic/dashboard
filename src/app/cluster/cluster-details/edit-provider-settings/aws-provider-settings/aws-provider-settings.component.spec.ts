@@ -65,6 +65,7 @@ describe('AWSProviderSettingsComponent', () => {
       subnetId: '',
       routeTableId: '',
       securityGroup: '',
+      instanceProfileName: '',
     };
     fixture.detectChanges();
   });
