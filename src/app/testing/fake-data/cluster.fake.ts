@@ -208,6 +208,7 @@ export function fakeAWSCluster(): ClusterEntity {
           vpcId: '',
           subnetId: '',
           routeTableId: '',
+          instanceProfileName: '',
         },
         openstack: null,
         baremetal: null,

@@ -27,6 +27,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       subnetId: new FormControl(this.cluster.spec.cloud.aws.subnetId, Validators.pattern('subnet-(\\w{8}|\\w{17})')),
       routeTableId:
           new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
+      instanceProfileName: new FormControl(this.cluster.spec.cloud.aws.instanceProfileName),
     });
 
     this.subscriptions.push(this.awsSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
@@ -39,6 +40,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
             vpcId: this.awsSettingsForm.controls.vpcId.value,
             subnetId: this.awsSettingsForm.controls.subnetId.value,
             routeTableId: this.awsSettingsForm.controls.routeTableId.value,
+            instanceProfileName: this.awsSettingsForm.controls.instanceProfileName.value,
           },
           dc: this.cluster.spec.cloud.dc,
         },

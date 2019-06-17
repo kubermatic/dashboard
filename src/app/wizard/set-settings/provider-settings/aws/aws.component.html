@@ -82,4 +82,13 @@
       The route table ID needs to look similar to 'rtb-0bd18f60'.
     </mat-error>
   </mat-form-field>
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-label>Instance Profile Name</mat-label>
+    <input matInput
+           formControlName="instanceProfileName"
+           name="instanceProfileName"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
 </form>
