@@ -66,7 +66,7 @@ export class AddMachineNetworkComponent implements OnInit, OnDestroy {
       }
     }
     this._clusterService.cluster(this.projectID, this.cluster.id, this.datacenter.metadata.name).subscribe((res) => {
-      NotificationActions.success('Success', `Machine Network(s) for ${this.cluster.name} successfully added`);
+      NotificationActions.success(`Machine Network(s) for ${this.cluster.name} successfully added`);
       this._dialogRef.close(res);
     });
   }

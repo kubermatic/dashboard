@@ -61,33 +61,7 @@ describe('NotificationComponent', () => {
            fixture.debugElement.injector.get(NotificationsService) as any;
        const spyNotification = spyOn(notificationService, 'success');
 
-       setMockNgRedux(fixture, {type: NotificationToastType.success, title: 'Success', content: 'Success'});
-
-       tick();
-       fixture.detectChanges();
-
-       expect(spyNotification).toHaveBeenCalled();
-     }));
-
-  it('should call alert notification', fakeAsync(() => {
-       const notificationService: NotificationMockService =
-           fixture.debugElement.injector.get(NotificationsService) as any;
-       const spyNotification = spyOn(notificationService, 'alert');
-
-       setMockNgRedux(fixture, {type: NotificationToastType.alert, title: 'Alert', content: 'Alert'});
-
-       tick();
-       fixture.detectChanges();
-
-       expect(spyNotification).toHaveBeenCalled();
-     }));
-
-  it('should call info notification', fakeAsync(() => {
-       const notificationService: NotificationMockService =
-           fixture.debugElement.injector.get(NotificationsService) as any;
-       const spyNotification = spyOn(notificationService, 'info');
-
-       setMockNgRedux(fixture, {type: NotificationToastType.info, title: 'Info', content: 'Info'});
+       setMockNgRedux(fixture, {type: NotificationToastType.success, content: 'Success'});
 
        tick();
        fixture.detectChanges();
@@ -100,7 +74,7 @@ describe('NotificationComponent', () => {
            fixture.debugElement.injector.get(NotificationsService) as any;
        const spyNotification = spyOn(notificationService, 'error');
 
-       setMockNgRedux(fixture, {type: NotificationToastType.error, title: 'Error', content: 'Error'});
+       setMockNgRedux(fixture, {type: NotificationToastType.error, content: 'Error'});
 
        tick();
        fixture.detectChanges();

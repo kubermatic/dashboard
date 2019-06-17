@@ -112,8 +112,7 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
       if (isConfirmed) {
         this._api.deleteSSHKey(sshKey.id, this.projectID).subscribe(() => {
-          NotificationActions.success(
-              'Success', `SSH key ${sshKey.name} has been removed from project ${this.projectID}`);
+          NotificationActions.success(`SSH key ${sshKey.name} has been removed from project ${this.projectID}`);
           this._googleAnalyticsService.emitEvent('sshKeyOverview', 'SshKeyDeleted');
         });
       }

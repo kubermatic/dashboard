@@ -12,15 +12,15 @@ import {NotificationToast, NotificationToastType} from '../../../shared/interfac
   encapsulation: ViewEncapsulation.None,
 })
 export class NotificationComponent {
-  private static readonly closeButtonClass = 'sn-close-button';
-  private static readonly copyButtonClass = 'sn-copy-button';
+  private static readonly closeButtonClass = 'close-action';
+  private static readonly copyButtonClass = 'copy-action';
 
   options = {
     timeOut: 10000,
-    theClass: 'custom-simple-notification',
+    theClass: 'km-notification',
     lastOnBottom: true,
     clickToClose: false,
-    showProgressBar: true,
+    showProgressBar: false,
     pauseOnHover: true,
     preventDuplicates: false,
     preventLastDuplicates: 'visible',
@@ -39,29 +39,42 @@ export class NotificationComponent {
 
   createToast(toast: NotificationToast): void {
     let notification: Notification;
-    const plainMessage = `${toast.title}: ${toast.content}`;
     const htmlMessage = this.createHtmlMessage(toast);
     switch (toast.type) {
       case NotificationToastType.success:
-        notification = this._service.success(toast.title, htmlMessage);
-        break;
-      case NotificationToastType.alert:
-        notification = this._service.alert(toast.title, htmlMessage);
+        notification = this._service.success(htmlMessage);
         break;
       case NotificationToastType.error:
-        notification = this._service.error(toast.title, htmlMessage);
-        break;
-      case NotificationToastType.info:
-        notification = this._service.info(toast.title, htmlMessage);
+        notification = this._service.error(htmlMessage);
         break;
     }
-    this.registerClickHandler(notification, plainMessage);
+
+    this.registerClickHandler(notification, toast.content);
   }
 
   createHtmlMessage(toast: NotificationToast): string {
-    return `${toast.content}<div class="sn-controls"><span class="${
-        NotificationComponent.closeButtonClass}">Close</button>
-    <span class="${NotificationComponent.copyButtonClass}">Copy to clipboard</button></div>`;
+    let typeClass = '';
+    let typeIcon = '';
+    switch (toast.type) {
+      case NotificationToastType.success:
+        typeClass = 'success';
+        typeIcon = 'km-icon-tick';
+        break;
+      case NotificationToastType.error:
+        typeClass = 'error';
+        typeIcon = 'km-icon-warning';
+        break;
+    }
+
+    const contentClass = toast.content.length > 64 ? 'small' : '';
+
+    return `<div class="km-notification-type ${typeClass}"><i class="${typeIcon}"></i></div>
+      <div class="km-notification-content ${contentClass} ${NotificationComponent.copyButtonClass}">
+        ${toast.content}
+      </div>
+      <div class="km-notification-close-button">
+        <button class="km-icon-close ${NotificationComponent.closeButtonClass}"></button>
+      </div>`;
   }
 
   registerClickHandler(notification: Notification, plainMessage: string): void {
@@ -72,13 +85,9 @@ export class NotificationComponent {
           this._service.remove(notification.id);
         }
         if (targetId.indexOf(NotificationComponent.copyButtonClass) > -1) {
-          this.copyToClipboard(plainMessage);
+          navigator.clipboard.writeText(plainMessage);
         }
       });
     }
-  }
-
-  copyToClipboard(text: string): void {
-    navigator.clipboard.writeText(text);
   }
 }

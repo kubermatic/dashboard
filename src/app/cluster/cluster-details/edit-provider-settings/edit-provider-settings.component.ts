@@ -57,7 +57,7 @@ export class EditProviderSettingsComponent implements OnInit, OnDestroy {
     this._clusterService.patch(this.project.id, this.cluster.id, this.datacenter.metadata.name, patch)
         .subscribe((r) => {
           this.cluster = r;
-          NotificationActions.success('Success', `Edited provider settings for ${this.cluster.name} successfully`);
+          NotificationActions.success(`Edited provider settings for ${this.cluster.name} successfully`);
           this._googleAnalyticsService.emitEvent('clusterOverview', 'providerSettingsSaved');
           this._dialogRef.close(r);
         });

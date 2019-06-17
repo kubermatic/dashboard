@@ -36,7 +36,6 @@ export class AddServiceAccountComponent implements OnInit {
     this._apiService.createServiceAccount(this.project.id, createServiceAccount).pipe(first()).subscribe(() => {
       this._matDialogRef.close(true);
       NotificationActions.success(
-          'Success',
           `Service Account ${createServiceAccount.name} is added successfully to project ${this.project.name}`);
     });
   }

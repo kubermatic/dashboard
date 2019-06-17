@@ -135,7 +135,7 @@ export class MemberComponent implements OnInit, OnDestroy {
       if (isConfirmed) {
         this._apiService.deleteMembers(this._selectedProject.id, member).pipe(first()).subscribe(() => {
           NotificationActions.success(
-              'Success', `Member ${member.name} has been removed from project ${this._selectedProject.name}`);
+              `Member ${member.name} has been removed from project ${this._selectedProject.name}`);
           this._googleAnalyticsService.emitEvent('memberOverview', 'MemberDeleted');
         });
       }
