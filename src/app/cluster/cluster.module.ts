@@ -20,7 +20,6 @@ import {OpenstackProviderSettingsComponent} from './cluster-details/edit-provide
 import {PacketProviderSettingsComponent} from './cluster-details/edit-provider-settings/packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from './cluster-details/edit-provider-settings/vsphere-provider-settings/vsphere-provider-settings.component';
 import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-cluster-sshkeys/add-cluster-sshkeys.component';
-import {EditSSHKeysItemComponent} from './cluster-details/edit-sshkeys/edit-sshkeys-item/edit-sshkeys-item.component';
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/machine-networks-dispay.component';
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
@@ -60,7 +59,6 @@ const entryComponents: any[] = [
   AzureProviderSettingsComponent,
   PacketProviderSettingsComponent,
   EditSSHKeysComponent,
-  EditSSHKeysItemComponent,
   AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,
 ];
