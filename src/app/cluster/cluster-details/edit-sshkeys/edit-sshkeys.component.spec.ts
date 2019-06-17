@@ -5,6 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {AppConfigService} from '../../../app-config.service';
 import {ClusterService, UserService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
@@ -36,6 +37,7 @@ describe('EditSSHKeysComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             MatDialog,
+            GoogleAnalyticsService,
           ],
         })
         .compileComponents();
