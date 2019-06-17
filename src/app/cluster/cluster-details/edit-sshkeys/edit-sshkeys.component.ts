@@ -1,9 +1,12 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {MatDialog, Sort} from '@angular/material';
+import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {Subject, timer} from 'rxjs';
 import {first, retry, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ClusterService, UserService} from '../../../core/services';
+import {GoogleAnalyticsService} from '../../../google-analytics.service';
+import {NotificationActions} from '../../../redux/actions/notification.actions';
+import {ConfirmationDialogComponent} from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
@@ -24,20 +27,30 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   loading = true;
   sshKeys: SSHKeyEntity[] = [];
   sortedSshKeys: SSHKeyEntity[] = [];
-  sort: Sort = {active: 'name', direction: 'asc'};
   userGroup: string;
   userGroupConfig: UserGroupConfig;
+  displayedColumns: string[] = ['name', 'actions'];
+  dataSource = new MatTableDataSource<SSHKeyEntity>();
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private readonly _userService: UserService, private readonly _appConfig: AppConfigService,
-      private readonly _dialog: MatDialog, private readonly _clusterService: ClusterService) {}
+      private readonly _userService: UserService,
+      private readonly _appConfig: AppConfigService,
+      private readonly _dialog: MatDialog,
+      private readonly _clusterService: ClusterService,
+      private readonly _googleAnalyticsService: GoogleAnalyticsService,
+  ) {}
 
   ngOnInit(): void {
     this.userGroupConfig = this._appConfig.getUserGroupConfig();
     this._userService.currentUserGroup(this.projectID).pipe(takeUntil(this._unsubscribe)).subscribe((group) => {
       this.userGroup = group;
     });
+
+    this.dataSource.sort = this.sort;
+    this.sort.active = 'name';
+    this.sort.direction = 'asc';
 
     timer(0, 5 * this._appConfig.getRefreshTimeBase())
         .pipe(takeUntil(this._unsubscribe))
@@ -49,13 +62,17 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
+  getDataSource(): MatTableDataSource<SSHKeyEntity> {
+    this.dataSource.data = this.sshKeys;
+    return this.dataSource;
+  }
+
   refreshSSHKeys(): void {
     this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name)
         .pipe(retry(3))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((res) => {
           this.sshKeys = res;
-          this.sortSshKeyData(this.sort);
           this.loading = false;
         });
   }
@@ -72,33 +89,29 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     });
   }
 
-  trackSshKey(index: number, sshKey: SSHKeyEntity): number {
-    const prevSSHKey = this.sshKeys.find((item) => item.name === sshKey.name);
-    return prevSSHKey === sshKey ? index : undefined;
-  }
+  deleteSshKey(sshKey: SSHKeyEntity): void {
+    const dialogConfig: MatDialogConfig = {
+      disableClose: false,
+      hasBackdrop: true,
+      data: {
+        title: 'Delete SSH Key',
+        message: `Are you sure you want to permanently delete SSH key"<strong>${sshKey.name}</strong>"
+          from cluster "<strong>${this.cluster.name}</strong>"?`,
+        confirmLabel: 'Delete',
+      },
+    };
 
-  sortSshKeyData(sort: Sort): void {
-    if (sort === null || !sort.active || sort.direction === '') {
-      this.sortedSshKeys = this.sshKeys;
-      return;
-    }
+    const dialogRef = this._dialog.open(ConfirmationDialogComponent, dialogConfig);
+    this._googleAnalyticsService.emitEvent('clusterOverview', 'deleteSshKeyOpened');
 
-    this.sort = sort;
-
-    this.sortedSshKeys = this.sshKeys.sort((a, b) => {
-      const isAsc = sort.direction === 'asc';
-      switch (sort.active) {
-        case 'name':
-          return this.compare(a.name, b.name, isAsc);
-        case 'status':
-          return this.compare(a.spec.fingerprint, b.spec.fingerprint, isAsc);
-        default:
-          return 0;
+    dialogRef.afterClosed().subscribe((isConfirmed: boolean) => {
+      if (isConfirmed) {
+        this._clusterService.deleteSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, sshKey.id)
+            .subscribe(() => {
+              NotificationActions.success(`SSH key ${sshKey.name} has been removed from cluster ${this.cluster.name}`);
+              this._googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
+            });
       }
     });
-  }
-
-  compare(a, b, isAsc): number {
-    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
   }
 }

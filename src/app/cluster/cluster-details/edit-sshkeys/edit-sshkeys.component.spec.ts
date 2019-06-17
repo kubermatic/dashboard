@@ -9,7 +9,6 @@ import {SharedModule} from '../../../shared/shared.module';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
-import {EditSSHKeysItemComponent} from './edit-sshkeys-item/edit-sshkeys-item.component';
 import {EditSSHKeysComponent} from './edit-sshkeys.component';
 
 const modules: any[] = [
@@ -31,7 +30,6 @@ describe('EditSSHKeysComponent', () => {
           ],
           declarations: [
             EditSSHKeysComponent,
-            EditSSHKeysItemComponent,
           ],
           providers: [
             {provide: ClusterService, useClass: ClusterMockService},
