@@ -12,7 +12,8 @@ import {NotificationToast, NotificationToastType} from '../../../shared/interfac
   encapsulation: ViewEncapsulation.None,
 })
 export class NotificationComponent {
-  private static readonly closeButtonClass = 'close-button';
+  private static readonly closeButtonClass = 'close-action';
+  private static readonly copyButtonClass = 'copy-action';
 
   options = {
     timeOut: 10000,
@@ -48,7 +49,7 @@ export class NotificationComponent {
         break;
     }
 
-    this.registerClickHandler(notification);
+    this.registerClickHandler(notification, toast.content);
   }
 
   createHtmlMessage(toast: NotificationToast): string {
@@ -68,17 +69,23 @@ export class NotificationComponent {
     const contentClass = toast.content.length > 64 ? 'small' : '';
 
     return `<div class="km-notification-type ${typeClass}"><i class="${typeIcon}"></i></div>
-      <div class="km-notification-content ${contentClass}">${toast.content}</div>
+      <div class="km-notification-content ${contentClass} ${NotificationComponent.copyButtonClass}">
+        ${toast.content}
+      </div>
       <div class="km-notification-close-button">
         <button class="km-icon-close ${NotificationComponent.closeButtonClass}"></button>
       </div>`;
   }
 
-  registerClickHandler(notification: Notification): void {
+  registerClickHandler(notification: Notification, plainMessage: string): void {
     if (notification) {
       notification.click.subscribe((e: MouseEvent) => {
-        if ((e.target as HTMLElement).className.indexOf(NotificationComponent.closeButtonClass) > -1) {
+        const targetId = (e.target as HTMLElement).className;
+        if (targetId.indexOf(NotificationComponent.closeButtonClass) > -1) {
           this._service.remove(notification.id);
+        }
+        if (targetId.indexOf(NotificationComponent.copyButtonClass) > -1) {
+          navigator.clipboard.writeText(plainMessage);
         }
       });
     }
