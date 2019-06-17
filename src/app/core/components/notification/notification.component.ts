@@ -15,7 +15,7 @@ export class NotificationComponent {
   private static readonly closeButtonClass = 'close-button';
 
   options = {
-    timeOut: 1000000,
+    timeOut: 10000,
     theClass: 'km-notification',
     lastOnBottom: true,
     clickToClose: false,
