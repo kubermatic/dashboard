@@ -1,18 +1,82 @@
-simple-notifications > * {
-  cursor: auto;
+@import "../../../../assets/css/colors";
+@import "../../../../assets/css/fonts";
+@import "../../../../assets/css/variables";
+
+.simple-notification-wrapper {
+  bottom: $toolbar-height !important;
+  right: $content-padding !important;
+}
+
+.km-notification {
+  background: $white-background !important;
+  border-radius: $notification-border-radius;
+  box-shadow: $elevation-8dp;
+  color: $text-color !important;
+  min-height: unset !important;
+  padding: unset !important;
   z-index: 2000 !important;
+
+  .icon,
+  .sn-content {
+    display: none;
+  }
+
+  .sn-title {
+    display: flex;
+    font-size: $subhead-font-size-base !important;
+    line-height: unset !important;
+    padding: 0 !important;
+
+    div {
+      margin: auto;
+    }
+
+    .km-notification-type {
+      align-items: center;
+      border-radius: $notification-border-radius 0 0 $notification-border-radius;
+      display: flex;
+      height: inherit;
+      justify-content: center;
+      margin: 0 auto;
+      width: $notification-side-padding !important;
+
+      &.success {
+        background: $indicator-green;
+      }
+
+      &.error {
+        background: $indicator-red;
+      }
+
+      i {
+        padding: 2 * $baseline-grid;
+        background-size: 2 * $baseline-grid;
+        margin: 0 auto;
+      }
+    }
+
+    .km-notification-content {
+      flex: 100;
+      padding: $notification-content-padding;
+      word-break: break-word;
+
+      &.small {
+        font-size: $body-font-size-base !important;
+      }
+    }
+
+    .km-notification-close-button {
+      padding: 2 * $baseline-grid;
+
+      button.km-icon-close {
+        border: unset;
+        cursor: pointer;
+        outline: unset;
+      }
+    }
+  }
 }
 
-simple-notifications .sn-close-button {
+.copy-action {
   cursor: pointer;
-}
-
-simple-notifications .sn-copy-button {
-  cursor: pointer;
-  margin-left: 12px;
-}
-
-simple-notifications .sn-controls {
-  font-size: 12px;
-  margin-top: 4px;
 }

@@ -269,7 +269,7 @@ export class WizardComponent implements OnInit, OnDestroy {
 
     this._clusterService.create(this.project.id, datacenter.spec.seed, createCluster)
         .pipe(switchMap(cluster => {
-          NotificationActions.success('Success', `Cluster ${createCluster.cluster.name} successfully created`);
+          NotificationActions.success(`Cluster ${createCluster.cluster.name} successfully created`);
           this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
           createdCluster = cluster;
 
@@ -295,11 +295,10 @@ export class WizardComponent implements OnInit, OnDestroy {
                   [`/projects/${this.project.id}/dc/${datacenter.spec.seed}/clusters/${createdCluster.id}`]);
               keys.forEach(
                   key => NotificationActions.success(
-                      'Success',
                       `SSH key ${key.name} was added successfully to cluster ${createCluster.cluster.name}`));
             },
             () => {
-              NotificationActions.error('Error', `Could not create cluster ${createCluster.cluster.name}`);
+              NotificationActions.error(`Could not create cluster ${createCluster.cluster.name}`);
               this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationFailed');
               this.creating = false;
             });

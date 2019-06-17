@@ -58,7 +58,7 @@ export class EditSSHKeysItemComponent implements OnInit {
             .deleteSSHKey(this.projectID, this.cluster.id, this.datacenter.metadata.name, this.sshKey.id)
             .subscribe(() => {
               NotificationActions.success(
-                  'Success', `SSH key ${this.sshKey.name} has been removed from cluster ${this.cluster.name}`);
+                  `SSH key ${this.sshKey.name} has been removed from cluster ${this.cluster.name}`);
               this._googleAnalyticsService.emitEvent('clusterOverview', 'SshKeyDeleted');
             });
       }

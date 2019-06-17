@@ -47,8 +47,7 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
     };
 
     this._clusterService.patch(this.project.id, this.cluster.id, this.datacenter.metadata.name, patch).subscribe(() => {
-      NotificationActions.success(
-          'Success', `Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`);
+      NotificationActions.success(`Cluster ${this.cluster.name} is being updated to version ${this.selectedVersion}`);
       this._googleAnalyticsService.emitEvent('clusterOverview', 'clusterVersionChanged');
 
       if (this.isNodeDeploymentUpgradeEnabled) {
@@ -64,10 +63,8 @@ export class ChangeClusterVersionComponent implements OnInit, OnDestroy {
         .upgradeNodeDeployments(this.project.id, this.cluster.id, this.datacenter.metadata.name, this.selectedVersion)
         .pipe(first())
         .subscribe(() => {
-          NotificationActions.success(
-              'Success',
-              `Node Deployments from cluster ${this.cluster.name} are being updated to version ${
-                  this.selectedVersion}`);
+          NotificationActions.success(`Node Deployments from cluster ${
+              this.cluster.name} are being updated to version ${this.selectedVersion}`);
         });
   }
 
