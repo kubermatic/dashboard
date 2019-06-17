@@ -13,6 +13,7 @@ import {AWSClusterSettingsComponent} from './set-settings/provider-settings/aws/
 import {AzureClusterSettingsComponent} from './set-settings/provider-settings/azure/azure.component';
 import {BringyourownClusterSettingsComponent} from './set-settings/provider-settings/bringyourown/bringyourown.component';
 import {DigitaloceanClusterSettingsComponent} from './set-settings/provider-settings/digitalocean/digitalocean.component';
+import {GCPClusterSettingsComponent} from './set-settings/provider-settings/gcp/gcp.component';
 import {HetznerClusterSettingsComponent} from './set-settings/provider-settings/hetzner/hetzner.component';
 import {OpenstackClusterSettingsComponent} from './set-settings/provider-settings/openstack/openstack.component';
 import {PacketClusterSettingsComponent} from './set-settings/provider-settings/packet/packet.component';
@@ -43,6 +44,7 @@ const components: any[] = [
   HetznerClusterSettingsComponent,
   VSphereClusterSettingsComponent,
   AzureClusterSettingsComponent,
+  GCPClusterSettingsComponent,
 ];
 
 @NgModule({

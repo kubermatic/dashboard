@@ -1,0 +1,13 @@
+<form [formGroup]="gcpProviderSettingsForm"
+      fxLayout="column">
+  <mat-form-field fxFlex>
+    <mat-label>Service Account*</mat-label>
+    <input matInput
+           formControlName="serviceAccount"
+           type="password"
+           autocomplete="off">
+    <mat-error *ngIf="gcpProviderSettingsForm.controls.serviceAccount.hasError('required')">
+      Service Account is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+</form>

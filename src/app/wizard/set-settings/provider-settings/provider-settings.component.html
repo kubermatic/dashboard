@@ -27,5 +27,9 @@
 </kubermatic-azure-cluster-settings>
 
 <kubermatic-packet-cluster-settings [cluster]="cluster"
-                                    *ngIf="cluster.spec.cloud.packet">>
+                                    *ngIf="cluster.spec.cloud.packet">
 </kubermatic-packet-cluster-settings>
+
+<kubermatic-gcp-cluster-settings [cluster]="cluster"
+                                 *ngIf="cluster.spec.cloud.gcp">
+</kubermatic-gcp-cluster-settings>

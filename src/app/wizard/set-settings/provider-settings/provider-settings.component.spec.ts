@@ -11,6 +11,7 @@ import {AWSClusterSettingsComponent} from './aws/aws.component';
 import {AzureClusterSettingsComponent} from './azure/azure.component';
 import {BringyourownClusterSettingsComponent} from './bringyourown/bringyourown.component';
 import {DigitaloceanClusterSettingsComponent} from './digitalocean/digitalocean.component';
+import {GCPClusterSettingsComponent} from './gcp/gcp.component';
 import {HetznerClusterSettingsComponent} from './hetzner/hetzner.component';
 import {OpenstackClusterSettingsComponent} from './openstack/openstack.component';
 import {PacketClusterSettingsComponent} from './packet/packet.component';
@@ -40,6 +41,7 @@ describe('ClusterProviderSettingsComponent', () => {
             VSphereClusterSettingsComponent,
             AzureClusterSettingsComponent,
             PacketClusterSettingsComponent,
+            GCPClusterSettingsComponent,
           ],
           providers: [
             WizardService,

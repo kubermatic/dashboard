@@ -688,7 +688,8 @@ mat-list-item.disabled {
 }
 
 // Tags
-div.km-form-group-tags-header {
+div.km-form-group-tags-header,
+div.km-form-group-labels-header {
   margin: 30px 0 10px;
   font-size: 14px;
   font-weight: bold;
@@ -700,11 +701,13 @@ div.km-form-group-tags-header {
   }
 }
 
-div.km-form-group-tags {
+div.km-form-group-tags,
+div.km-form-group-labels {
   display: flex;
   flex-direction: column;
 
-  div.km-form-group-tags-inner {
+  div.km-form-group-tags-inner,
+  div.km-form-group-labels-inner {
     display: flex;
   }
 
@@ -726,7 +729,8 @@ div.km-form-group-tags {
   }
 }
 
-.km-add-node-inner .km-form-group-tags-inner mat-form-field {
+.km-add-node-inner .km-form-group-tags-inner mat-form-field,
+.km-add-node-inner .km-form-group-labels-inner mat-form-field {
   width: 45% !important;
 }
 

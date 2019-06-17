@@ -12,6 +12,7 @@ import {AWSProviderSettingsComponent} from '../aws-provider-settings/aws-provide
 import {AzureProviderSettingsComponent} from '../azure-provider-settings/azure-provider-settings.component';
 import {DigitaloceanProviderSettingsComponent} from '../digitalocean-provider-settings/digitalocean-provider-settings.component';
 import {EditProviderSettingsComponent} from '../edit-provider-settings.component';
+import {GCPProviderSettingsComponent} from '../gcp-provider-settings/gcp-provider-settings.component';
 import {OpenstackProviderSettingsComponent} from '../openstack-provider-settings/openstack-provider-settings.component';
 import {PacketProviderSettingsComponent} from '../packet-provider-settings/packet-provider-settings.component';
 import {VSphereProviderSettingsComponent} from '../vsphere-provider-settings/vsphere-provider-settings.component';
@@ -43,6 +44,7 @@ describe('HetznerProviderSettingsComponent', () => {
             VSphereProviderSettingsComponent,
             AzureProviderSettingsComponent,
             PacketProviderSettingsComponent,
+            GCPProviderSettingsComponent,
           ],
           providers: [
             {provide: ClusterService, useClass: ClusterMockService},

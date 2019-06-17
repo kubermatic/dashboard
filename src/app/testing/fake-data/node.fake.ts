@@ -18,6 +18,7 @@ export function fakeDigitaloceanCreateNode(): NodeEntity {
         vsphere: null,
         hetzner: null,
         azure: null,
+        gcp: null,
       },
       operatingSystem: {
         ubuntu: {
@@ -53,6 +54,7 @@ export function nodeFake(): NodeEntity {
         vsphere: null,
         hetzner: null,
         azure: null,
+        gcp: null,
       },
       operatingSystem: {
         ubuntu: {
@@ -98,6 +100,47 @@ export function nodeFake(): NodeEntity {
   };
 }
 
+export function nodeAWSFake(): NodeEntity {
+  return {
+    id: 'worker-cht5l-684d57f97b-hkgrz',
+    name: 'ip-172-31-1-240.eu-central-1.compute.internal',
+    creationTimestamp: new Date(),
+    spec: {
+      cloud: {
+        aws: {
+          instanceType: 't3.small',
+          diskSize: 25,
+          volumeType: 'standard',
+          ami: '',
+          tags: {
+            'kubernetes.io/cluster/2j6gn77spl': '',
+          }
+        }
+      },
+      operatingSystem: {ubuntu: {distUpgradeOnBoot: false}},
+      versions: {kubelet: '1.13.5'}
+    },
+    status: {
+      machineName: 'worker-cht5l-684d57f97b-hkgrz',
+      capacity: {cpu: '2', memory: '2002700Ki'},
+      allocatable: {cpu: '1800m', memory: '1695500Ki'},
+      addresses: [
+        {type: 'InternalIP', address: '172.31.1.240'}, {type: 'ExternalIP', address: '3.121.87.120'},
+        {type: 'InternalDNS', address: 'ip-172-31-1-240.eu-central-1.compute.internal'},
+        {type: 'Hostname', address: 'ip-172-31-1-240.eu-central-1.compute.internal'},
+        {type: 'ExternalDNS', address: 'ec2-3-121-87-120.eu-central-1.compute.amazonaws.com'}
+      ],
+      nodeInfo: {
+        kernelVersion: '4.15.0-1039-aws',
+        containerRuntimeVersion: 'docker://18.9.2',
+        kubeletVersion: 'v1.13.5',
+        operatingSystem: 'linux',
+        architecture: 'amd64'
+      }
+    }
+  };
+}
+
 export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
   return [
     {
@@ -120,6 +163,7 @@ export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
             vsphere: null,
             hetzner: null,
             azure: null,
+            gcp: null,
           },
           operatingSystem: {
             ubuntu: {
@@ -157,6 +201,7 @@ export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
             vsphere: null,
             hetzner: null,
             azure: null,
+            gcp: null,
           },
           operatingSystem: {
             ubuntu: {
@@ -194,6 +239,7 @@ export function nodesFake(): NodeEntity[] {
           vsphere: null,
           hetzner: null,
           azure: null,
+          gcp: null,
         },
         operatingSystem: {
           ubuntu: {
@@ -255,6 +301,7 @@ export function nodesFake(): NodeEntity[] {
           vsphere: null,
           hetzner: null,
           azure: null,
+          gcp: null,
         },
         operatingSystem: {
           ubuntu: {
@@ -341,7 +388,16 @@ export function nodeDataFake(): NodeData {
         packet: {
           instanceType: 'm1.small',
           tags: [],
-        }
+        },
+        gcp: {
+          diskSize: 25,
+          diskType: 'pd-ssd',
+          machineType: '',
+          zone: '',
+          preemptible: false,
+          tags: [],
+          labels: {},
+        },
       },
       operatingSystem: {
         ubuntu: {
@@ -397,6 +453,15 @@ export function nodeDataCentOsFake(): NodeData {
           assignPublicIP: false,
           tags: {},
         },
+        gcp: {
+          diskSize: 25,
+          diskType: 'pd-ssd',
+          machineType: '',
+          zone: '',
+          preemptible: false,
+          tags: [],
+          labels: {},
+        },
       },
       operatingSystem: {
         ubuntu: null,
@@ -450,6 +515,15 @@ export function nodeDataContainerLinuxFake(): NodeData {
           size: 'cx31',
           assignPublicIP: false,
           tags: {},
+        },
+        gcp: {
+          diskSize: 25,
+          diskType: 'pd-ssd',
+          machineType: '',
+          zone: '',
+          preemptible: false,
+          tags: [],
+          labels: {},
         },
       },
       operatingSystem: {

@@ -6,6 +6,7 @@ import {BareMetalCloudSpec} from './cloud/BareMetalCloudSpec';
 import {BringYourOwnCloudSpec} from './cloud/BringYourOwnCloudSpec';
 import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
 import {FakeCloudSpec} from './cloud/FakeCloudSpec';
+import {GCPCloudSpec} from './cloud/GCPCloudSpec';
 import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
 import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
 import {PacketCloudSpec} from './cloud/PacketCloudSpec';
@@ -40,6 +41,9 @@ export function getClusterProvider(cluster: ClusterEntity): string {
     case !!cluster.spec.cloud.azure: {
       return NodeProvider.AZURE;
     }
+    case !!cluster.spec.cloud.gcp: {
+      return NodeProvider.GCP;
+    }
   }
   return '';
 }
@@ -69,6 +73,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         vpcId: '',
         securityGroup: '',
         subnetId: '',
+        instanceProfileName: '',
       } as AWSCloudSpec;
     case NodeProvider.DIGITALOCEAN:
       return {
@@ -119,6 +124,12 @@ export function getEmptyCloudProviderSpec(provider: string): object {
       } as AzureCloudSpec;
     case NodeProvider.PACKET:
       return {} as PacketCloudSpec;
+    case NodeProvider.GCP:
+      return {
+        network: '',
+        serviceAccount: '',
+        subnetwork: '',
+      } as GCPCloudSpec;
   }
   return {};
 }
@@ -135,6 +146,7 @@ export class CloudSpec {
   hetzner?: HetznerCloudSpec;
   azure?: AzureCloudSpec;
   fake?: FakeCloudSpec;
+  gcp?: GCPCloudSpec;
 }
 
 export class ClusterSpec {
