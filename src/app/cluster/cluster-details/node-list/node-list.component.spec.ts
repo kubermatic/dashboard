@@ -11,7 +11,7 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {nodeFake} from '../../../testing/fake-data/node.fake';
+import {nodeAWSFake, nodeFake} from '../../../testing/fake-data/node.fake';
 import {fakeProject} from '../../../testing/fake-data/project.fake';
 import {AppConfigMockService} from '../../../testing/services/app-config-mock.service';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
@@ -81,4 +81,30 @@ describe('NodeComponent', () => {
 
        expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
      }));
+
+  it('should get operating system image', () => {
+    expect(component.getOsImage(nodeFake())).toBe('Ubuntu');
+  });
+
+  it('should get info text for name', () => {
+    expect(component.getInfo(nodeFake())).toBe('kubermatic-tbbfvttvs-v5hmk');
+  });
+
+  it('should get info text for aws name', () => {
+    expect(component.getInfo(nodeAWSFake())).toBe('ip-172-31-1-240.eu-central-1.compute.internal');
+  });
+
+  it('should get node name', () => {
+    expect(component.getNodeName(nodeFake())).toBe('kubermatic-tbbfvttvs-v5hmk');
+  });
+
+  it('should display tags', () => {
+    const tags = {test: 'test', tag: 'tag'};
+    expect(component.displayTags(tags)).toBeTruthy();
+  });
+
+  it('should not display tags', () => {
+    const tags = {};
+    expect(component.displayTags(tags)).toBeFalsy();
+  });
 });
