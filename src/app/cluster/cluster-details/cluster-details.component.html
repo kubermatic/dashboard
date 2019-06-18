@@ -85,8 +85,7 @@
         </mat-menu>
       </div>
     </mat-card-header>
-    <mat-card-content fxLayout="row wrap"
-                      class="km-row">
+    <mat-card-content class="km-row">
 
       <div class="km-content-wrap">
         <km-property>
@@ -166,9 +165,11 @@
         </km-property>
 
       </div>
+
+      <km-cluster-secrets [cluster]="cluster"
+                          [health]="health"></km-cluster-secrets>
+
     </mat-card-content>
-    <kubermatic-cluster-secrets [cluster]="cluster"
-                                [health]="health"></kubermatic-cluster-secrets>
   </mat-card>
 
   <kubermatic-machine-networks-dispay [cluster]="cluster"

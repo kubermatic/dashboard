@@ -1,24 +1,6 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
-.km-icon-edit,
-.km-icon-delete {
-  height: 14px;
-  width: 14px;
-  background-color: $white-text-color;
-}
-
-button:disabled {
-  .km-icon-edit,
-  .km-icon-delete {
-    background-color: $disabled-text-color;
-  }
-}
-
-.km-node-deployment-detail-card {
-  margin-top: 2 * $baseline-grid;
-}
-
 .km-node-deployment-health {
   text-align: center;
 

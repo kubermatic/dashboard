@@ -6,9 +6,8 @@ import {HealthEntity} from '../../../shared/entity/HealthEntity';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 
 @Component({
-  selector: 'kubermatic-cluster-secrets',
+  selector: 'km-cluster-secrets',
   templateUrl: './cluster-secrets.component.html',
-  styleUrls: ['./cluster-secrets.component.scss'],
 })
 
 export class ClusterSecretsComponent implements OnInit, OnDestroy {

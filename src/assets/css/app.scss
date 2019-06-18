@@ -751,6 +751,32 @@ div.km-form-group-labels {
   padding: $baseline-grid (7 * $baseline-grid) 0 !important;
 }
 
+// Card "expansion panel".
+.km-card-expansion-panel {
+  color: $text-color;
+  font-size: $subhead-font-size-base;
+  margin: 0 (7 * $baseline-grid);
+  padding: (1 * $baseline-grid) 0;
+
+  & > div {
+    cursor: default;
+    margin-right: 6 * $baseline-grid;
+
+    & > span {
+      margin-right: 2 * $baseline-grid;
+    }
+  }
+
+  .km-icon-failed,
+  .km-icon-disabled,
+  .km-icon-running,
+  .fa {
+    width: $subhead-font-size-base;
+    height: $subhead-font-size-base;
+    font-size: $subhead-font-size-base;
+  }
+}
+
 // Health statuses.
 .green {
   color: $indicator-green;
