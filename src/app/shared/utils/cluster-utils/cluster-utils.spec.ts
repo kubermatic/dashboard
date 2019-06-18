@@ -21,7 +21,7 @@ describe('ClusterUtils', () => {
 
   it('should get correct version headline', () => {
     expect(ClusterUtils.getVersionHeadline('kubernetes', false)).toBe('Master Version');
-    expect(ClusterUtils.getVersionHeadline('kubernetes', true)).toBe('Kubelet Version');
+    expect(ClusterUtils.getVersionHeadline('kubernetes', true)).toBe('kubelet Version');
     expect(ClusterUtils.getVersionHeadline('openshift', false)).toBe('OpenShift Version');
   });
 });

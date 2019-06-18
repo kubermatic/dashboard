@@ -25,6 +25,7 @@ import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeService} from '../../services/node.service';
 import {NodeListComponent} from '../node-list/node-list.component';
 
+import {ClusterPanelComponent} from './cluster-panel/cluster-panel.component';
 import {NodeDeploymentDetailsComponent} from './node-deployment-details.component';
 
 describe('NodeDeploymentDetailsComponent', () => {
@@ -53,6 +54,7 @@ describe('NodeDeploymentDetailsComponent', () => {
             SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
+            ClusterPanelComponent,
           ],
           declarations: [
             NodeDeploymentDetailsComponent,
