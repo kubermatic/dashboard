@@ -41,7 +41,6 @@ const components: any[] = [
   NodeDeploymentDetailsComponent,
   ClusterListComponent,
   MachineNetworksDisplayComponent,
-  ClusterPanelComponent,
 ];
 
 const entryComponents: any[] = [
@@ -65,6 +64,7 @@ const entryComponents: any[] = [
   EditSSHKeysItemComponent,
   AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,
+  ClusterPanelComponent,
 ];
 
 @NgModule({

@@ -10,7 +10,6 @@ import {ClusterUtils} from '../../../../shared/utils/cluster-utils/cluster-utils
   templateUrl: './cluster-panel.component.html',
   styleUrls: ['./cluster-panel.component.scss'],
 })
-
 export class ClusterPanelComponent {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;

@@ -54,11 +54,11 @@ describe('NodeDeploymentDetailsComponent', () => {
             SlimLoadingBarModule.forRoot(),
             RouterTestingModule,
             SharedModule,
-            ClusterPanelComponent,
           ],
           declarations: [
             NodeDeploymentDetailsComponent,
             NodeListComponent,
+            ClusterPanelComponent,
           ],
           providers: [
             {provide: ApiService, useValue: apiMock},
