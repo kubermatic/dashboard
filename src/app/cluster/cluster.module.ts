@@ -23,6 +23,7 @@ import {AddClusterSSHKeysComponent} from './cluster-details/edit-sshkeys/add-clu
 import {EditSSHKeysComponent} from './cluster-details/edit-sshkeys/edit-sshkeys.component';
 import {MachineNetworksDisplayComponent} from './cluster-details/machine-networks-display/machine-networks-dispay.component';
 import {NodeDataModalComponent} from './cluster-details/node-data-modal/node-data-modal.component';
+import {ClusterPanelComponent} from './cluster-details/node-deployment-details/cluster-panel/cluster-panel.component';
 import {NodeDeploymentDetailsComponent} from './cluster-details/node-deployment-details/node-deployment-details.component';
 import {NodeDeploymentListComponent} from './cluster-details/node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
@@ -61,6 +62,7 @@ const entryComponents: any[] = [
   EditSSHKeysComponent,
   AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,
+  ClusterPanelComponent,
 ];
 
 @NgModule({

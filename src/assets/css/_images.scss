@@ -9,14 +9,14 @@
 
 // login & logout
 .km-login {
-  background-image: url("/assets/images/login.svg");
+  background-image: url("/assets/images/icons/login.svg");
   background-repeat: no-repeat;
   background-size: auto 10px;
   background-position: center left;
 }
 
 .km-logout {
-  background-image: url("/assets/images/logout.svg");
+  background-image: url("/assets/images/icons/logout.svg");
   background-size: auto 10px;
   background-repeat: no-repeat;
   background-position: center left;
@@ -212,38 +212,42 @@
 .km-icon-close {
   width: 20px;
   height: 20px;
-  background-image: url("/assets/images/close.svg");
+  background-image: url("/assets/images/icons/close.svg");
   background-repeat: no-repeat;
   background-color: transparent;
 }
 
 .km-icon-running {
   display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("/assets/images/Running-Check.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
+  margin-right: $baseline-grid;
+  width: 2 * $baseline-grid;
+  height: 2 * $baseline-grid;
+  mask: url("/assets/images/icons/tick.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background: $indicator-green;
 }
 
 .km-icon-failed {
   display: inline-block;
-  margin: 0 10px 0 5px;
-  width: 2px;
-  height: 10px;
-  background-image: url("/assets/images/Failed.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
+  margin-right: $baseline-grid;
+  width: 2 * $baseline-grid;
+  height: 2 * $baseline-grid;
+  mask: url("/assets/images/icons/warning.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background: $indicator-red;
 }
 
-.km-icon-logs {
+.km-icon-disabled {
   display: inline-block;
-  margin: 0 5px 0 0;
-  width: 12px;
-  height: 10px;
-  background-image: url("/assets/images/Logs.svg");
-  background-repeat: no-repeat;
+  margin-right: $baseline-grid;
+  width: 2 * $baseline-grid;
+  height: 2 * $baseline-grid;
+  mask: url("/assets/images/icons/close.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background: $indicator-red;
 }
 
 .km-icon-kubernetes {

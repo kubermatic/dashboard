@@ -43,7 +43,7 @@ export class ClusterUtils {
 
   static getVersionHeadline(type: string, isKubelet: boolean): string {
     if (type === 'kubernetes') {
-      return isKubelet ? 'Kubelet Version' : 'Master Version';
+      return isKubelet ? 'kubelet Version' : 'Master Version';
     } else if (type === 'openshift') {
       return 'OpenShift Version';
     }

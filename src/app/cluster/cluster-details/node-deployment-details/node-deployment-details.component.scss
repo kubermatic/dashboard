@@ -1,24 +1,6 @@
 @import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
-.km-icon-edit,
-.km-icon-delete {
-  height: 14px;
-  width: 14px;
-  background-color: $white-text-color;
-}
-
-button:disabled {
-  .km-icon-edit,
-  .km-icon-delete {
-    background-color: $disabled-text-color;
-  }
-}
-
-.km-node-deployment-detail-card {
-  margin-top: 2 * $baseline-grid;
-}
-
 .km-node-deployment-health {
   text-align: center;
 
@@ -36,11 +18,21 @@ button:disabled {
 }
 
 .km-node-deployment-name {
-  padding: 0 30px !important;
-  font-size: $subhead-font-size-base-lg !important;
+  font-size: $card-title-font-size !important;
+}
 
-  .km-node-deployment-health {
-    padding-left: 2 * $baseline-grid;
+.km-node-deployment-actions {
+  margin-right: 4 * $baseline-grid;
+
+  .mat-icon-button {
+    color: $text-color;
+    font-size: 2.5 * $baseline-grid;
+  }
+
+  .km-icon-delete {
+    background: $text-color;
+    height: 2.5 * $baseline-grid;
+    width: 2.5 * $baseline-grid;
   }
 }
 
