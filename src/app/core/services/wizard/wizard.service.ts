@@ -1,20 +1,23 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {BehaviorSubject} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 
+import {environment} from '../../../../environments/environment';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {CredentialListEntity} from '../../../shared/entity/provider/credentials/CredentialListEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+
 import {AWS} from './provider/aws';
 import {Azure} from './provider/azure';
-import {Provider} from './provider/base';
 import {Digitalocean} from './provider/digitalocean';
 import {GCP} from './provider/gcp';
 import {Hetzner} from './provider/hetzner';
 import {Openstack} from './provider/openstack';
 import {Packet} from './provider/packet';
+import {Provider} from './provider/provider';
 import {VSphere} from './provider/vsphere';
 
 @Injectable()
@@ -119,5 +122,10 @@ export class WizardService {
       default:
         throw new Error(`Provider ${provider} not supported.`);
     }
+  }
+
+  credentials(provider: NodeProvider): Observable<CredentialListEntity> {
+    const url = `${environment.restRoot}/providers/${provider}/credentials`;
+    return this._http.get<CredentialListEntity>(url);
   }
 }

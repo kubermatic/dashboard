@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {DigitaloceanSizes} from '../../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
-import {Provider} from './base';
+import {Provider} from './provider';
 
 export class Digitalocean extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {

@@ -13,7 +13,6 @@ import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
-import {CredentialListEntity} from '../../../shared/entity/provider/credentials/CredentialListEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
@@ -21,7 +20,6 @@ import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEnt
 import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
-import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 import {Auth} from '../auth/auth.service';
 
 @Injectable()
@@ -224,10 +222,5 @@ export class ApiService {
       Observable<any> {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.delete(url);
-  }
-
-  getProviderCredentials(provider: NodeProvider) {
-    const url = `${this._restRoot}/providers/${provider}/credentials`;
-    return this._http.get<CredentialListEntity>(url);
   }
 }

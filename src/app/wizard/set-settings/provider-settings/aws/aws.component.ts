@@ -19,7 +19,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _wizardService: WizardService) {}
+  constructor(private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -41,18 +41,17 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     );
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._formHelper.areControlsValid() ? this._wizardService.onCustomCredentialsDisable.emit(false) :
-                                            this._wizardService.onCustomCredentialsDisable.emit(true);
+      this._formHelper.areControlsValid() ? this._wizard.onCustomCredentialsDisable.emit(false) :
+                                            this._wizard.onCustomCredentialsDisable.emit(true);
 
-      this._wizardService.changeClusterProviderSettings(
-          this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
+      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
     });
 
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
     });
 
-    this._wizardService.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+    this._wizard.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this.form.disable();
         return;

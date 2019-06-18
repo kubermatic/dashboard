@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
   selector: 'kubermatic-azure-cluster-settings',
@@ -11,14 +12,16 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  azureSettingsForm: FormGroup;
+  form: FormGroup;
   hideOptional = true;
+
+  private _formHelper: FormHelper;
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private wizardService: WizardService) {}
+  constructor(private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
-    this.azureSettingsForm = new FormGroup({
+    this.form = new FormGroup({
       clientID: new FormControl(this.cluster.spec.cloud.azure.clientID, [Validators.required]),
       clientSecret: new FormControl(this.cluster.spec.cloud.azure.clientSecret, [Validators.required]),
       subscriptionID: new FormControl(this.cluster.spec.cloud.azure.subscriptionID, [Validators.required]),
@@ -30,28 +33,48 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       vnet: new FormControl(this.cluster.spec.cloud.azure.vnet),
     });
 
-    this.azureSettingsForm.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.wizardService.changeClusterProviderSettings({
+    this._formHelper = new FormHelper(this.form);
+    this._formHelper.registerFormControls(
+        this.form.controls.clientID,
+        this.form.controls.clientSecret,
+        this.form.controls.subscriptionID,
+        this.form.controls.tenantID,
+    );
+
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._formHelper.areControlsValid() ? this._wizard.onCustomCredentialsDisable.emit(false) :
+                                            this._wizard.onCustomCredentialsDisable.emit(true);
+
+      this._wizard.changeClusterProviderSettings({
         cloudSpec: {
           azure: {
-            clientID: this.azureSettingsForm.controls.clientID.value,
-            clientSecret: this.azureSettingsForm.controls.clientSecret.value,
-            resourceGroup: this.azureSettingsForm.controls.resourceGroup.value,
-            routeTable: this.azureSettingsForm.controls.routeTable.value,
-            securityGroup: this.azureSettingsForm.controls.securityGroup.value,
-            subnet: this.azureSettingsForm.controls.subnet.value,
-            subscriptionID: this.azureSettingsForm.controls.subscriptionID.value,
-            tenantID: this.azureSettingsForm.controls.tenantID.value,
-            vnet: this.azureSettingsForm.controls.vnet.value,
+            clientID: this.form.controls.clientID.value,
+            clientSecret: this.form.controls.clientSecret.value,
+            resourceGroup: this.form.controls.resourceGroup.value,
+            routeTable: this.form.controls.routeTable.value,
+            securityGroup: this.form.controls.securityGroup.value,
+            subnet: this.form.controls.subnet.value,
+            subscriptionID: this.form.controls.subscriptionID.value,
+            tenantID: this.form.controls.tenantID.value,
+            vnet: this.form.controls.vnet.value,
           },
           dc: this.cluster.spec.cloud.dc,
         },
-        valid: this.azureSettingsForm.valid,
+        valid: this.form.valid,
       });
     });
 
-    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
+    });
+
+    this._wizard.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      if (newCredentials) {
+        this.form.disable();
+        return;
+      }
+
+      this.form.enable();
     });
   }
 

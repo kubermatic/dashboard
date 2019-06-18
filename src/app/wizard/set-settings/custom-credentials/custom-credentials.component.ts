@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {EMPTY, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
-import {ApiService, WizardService} from '../../../core/services';
+import {WizardService} from '../../../core/services';
 import {CredentialListEntity} from '../../../shared/entity/provider/credentials/CredentialListEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 
@@ -42,14 +42,14 @@ export class CustomCredentialsSettingsComponent implements OnInit {
     return !this.credentialsLoaded || this._disabled;
   }
 
-  constructor(private readonly _api: ApiService, private readonly _wizard: WizardService) {}
+  constructor(private readonly _wizard: WizardService) {}
 
   ngOnInit() {
     this._wizard.clusterProviderFormChanges$
         .pipe(switchMap(
             providerForm => providerForm.provider === NodeProvider.BRINGYOUROWN ?
                 EMPTY :
-                this._api.getProviderCredentials(providerForm.provider)))
+                this._wizard.credentials(providerForm.provider)))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(credentialList => {
           this.credentialsLoaded = credentialList.names ? credentialList.names.length > 0 : false;

@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 import {OpenstackFlavor, OpenstackNetwork, OpenstackSecurityGroup, OpenstackSubnet, OpenstackTenant} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
-import {Provider} from './base';
+import {Provider} from './provider';
 
 export class Openstack extends Provider {
   private readonly _tenantsUrl = `${this._restRoot}/providers/openstack/tenants`;
