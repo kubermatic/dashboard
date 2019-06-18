@@ -1,0 +1,38 @@
+<div class="km-cluster-panel-container">
+  <div class="km-cluster-panel-container-positioning"
+       fxFlex
+       fxLayout="row"
+       fxLayoutAlign=" center">
+
+    <i class="km-icon-arrow-left"
+       matTooltip="Go back to the cluster"
+       (click)="navigate()"></i>
+
+    <mat-divider vertical="true"></mat-divider>
+
+    <span class="km-cluster-type">
+      <i class="km-icon-{{cluster.type}}"></i>
+    </span>
+
+    <km-property>
+      <div key>Cluster</div>
+      <div value>{{cluster.name}}</div>
+    </km-property>
+
+    <km-property>
+      <div key>{{getVersionHeadline(cluster.type, false)}}</div>
+      <div value>{{cluster.spec.version}}</div>
+    </km-property>
+
+    <km-property>
+      <div key>Cluster ID</div>
+      <div value>{{cluster.id}}</div>
+    </km-property>
+
+    <km-property *ngIf="datacenter?.spec?.provider !== 'bringyourown'">
+      <div key>Region</div>
+      <div value>{{datacenter?.spec?.country}} ({{datacenter?.spec?.location}})</div>
+    </km-property>
+
+  </div>
+</div>
