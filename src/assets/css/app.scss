@@ -320,7 +320,7 @@ mat-card-header > div > mat-card-title > div {
   border-radius: 5px !important;
 
   .mat-card-header {
-    padding: 0 30px;
+    padding: 0 7 * $baseline-grid;
     margin: 0;
     line-height: 1.6 * $line-height;
     background-color: $white-text-color;
@@ -767,7 +767,7 @@ div.km-form-group-labels {
 // Row width.
 .mat-column-status,
 .mat-column-stateArrow {
-  width: 2 * $baseline-grid;
+  width: $baseline-grid;
 }
 
 // Remove background overlay added by the menu.

@@ -39,6 +39,21 @@ button:disabled {
   font-size: $card-title-font-size !important;
 }
 
+.km-node-deployment-actions {
+  margin-right: 4 * $baseline-grid;
+
+  .mat-icon-button {
+    color: $text-color;
+    font-size: 2.5 * $baseline-grid;
+  }
+
+  .km-icon-delete {
+    background: $text-color;
+    height: 2.5 * $baseline-grid;
+    width: 2.5 * $baseline-grid;
+  }
+}
+
 .fa-check {
   color: $indicator-green !important;
 }

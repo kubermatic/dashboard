@@ -1,32 +1,8 @@
 <ng-container *ngIf="isInitialized()">
   <km-cluster-panel [cluster]="cluster"
-                    [datacenter]="datacenter"></km-cluster-panel>
-
-  <div fxLayout
-       class="km-node-deployment-detail-actions">
-    <div fxFlex="100%"
-         align="right">
-
-      <button mat-flat-button
-              color="tertiary"
-              (click)="showDeleteDialog()"
-              [disabled]="!isDeleteEnabled()">
-        Delete
-      </button>
-      <div fxFlex></div>
-      <button mat-flat-button
-              color="alternative"
-              (click)="goBackToCluster()">
-        Go Back to the Cluster
-      </button>
-
-      <button mat-flat-button
-              (click)="showEditDialog()"
-              [disabled]="!isEditEnabled()">
-        Edit
-      </button>
-    </div>
-  </div>
+                    [datacenter]="datacenter"
+                    [projectID]="projectID"
+                    [dcName]="dcName"></km-cluster-panel>
 
   <mat-card class="km-node-deployment-detail-card white">
     <mat-card-header>
@@ -36,6 +12,22 @@
            class="km-node-deployment-health"></i>
         <span class="km-node-deployment-name">{{nodeDeployment.name}}</span>
       </mat-card-title>
+
+      <div class="km-node-deployment-actions"
+           fxLayout="row">
+        <button mat-icon-button
+                color="primary"
+                (click)="showDeleteDialog()"
+                [disabled]="!isDeleteEnabled()">
+          <i class="km-icon-delete"></i>
+        </button>
+        <button mat-icon-button
+                (click)="showEditDialog()"
+                [disabled]="!isEditEnabled()">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </div>
+
     </mat-card-header>
     <mat-card-content fxLayout="row wrap"
                       class="km-row">
