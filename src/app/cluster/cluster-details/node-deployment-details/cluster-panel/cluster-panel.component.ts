@@ -24,6 +24,6 @@ export class ClusterPanelComponent {
   }
 
   navigate(): void {
-    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.dcName + '/clusters/' + this.cluster.name]);
+    this._router.navigate(['/projects/' + this.projectID + '/dc/' + this.dcName + '/clusters/' + this.cluster.id]);
   }
 }
