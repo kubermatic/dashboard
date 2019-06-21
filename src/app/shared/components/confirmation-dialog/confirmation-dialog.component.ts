@@ -27,6 +27,9 @@ export class ConfirmationDialogComponent {
   }
 
   onEnterKeyDown(): void {
+    if (!this.inputNameMatches()) {
+      return;
+    }
     this.dialogRef.close(true);
   }
 
