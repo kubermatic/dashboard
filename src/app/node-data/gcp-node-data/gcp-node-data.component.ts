@@ -17,6 +17,7 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 export class GCPNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
+  @Input() clusterId: string;
   diskTypes: string[] = NodeInstanceFlavors.GCP.DiskTypes;
   machineTypes: string[] = NodeInstanceFlavors.GCP.MachineTypes;
   gcpNodeForm: FormGroup;
@@ -64,6 +65,10 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+  }
+
+  isInWizard(): boolean {
+    return !this.clusterId || this.clusterId.length === 0;
   }
 
   getNodeProviderData(): NodeProviderData {

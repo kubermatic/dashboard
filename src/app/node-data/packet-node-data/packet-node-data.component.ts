@@ -17,6 +17,8 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 export class PacketNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
+  @Input() clusterId: string;
+
   instanceTypes: string[] = NodeInstanceFlavors.Packet;
   packetNodeForm: FormGroup;
   hideOptional = true;
@@ -43,6 +45,10 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+  }
+
+  isInWizard(): boolean {
+    return !this.clusterId || this.clusterId.length === 0;
   }
 
   getNodeProviderData(): NodeProviderData {

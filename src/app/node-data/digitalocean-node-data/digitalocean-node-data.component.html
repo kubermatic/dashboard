@@ -5,6 +5,8 @@
     <mat-form-field class="km-with-hint">
       <mat-label>{{getSizesFormState()}}</mat-label>
       <mat-select formControlName="size"
+                  disableOptionCentering
+                  [panelClass]="isInWizard() ? 'km-optgroup-dropdown' : 'km-optgroup-dropdown km-add-dialog-dropdown'"
                   [placeholder]="getSizesFormState()">
         <mat-optgroup *ngIf="sizes.standard.length > 0"
                       label="Standard Droplets">

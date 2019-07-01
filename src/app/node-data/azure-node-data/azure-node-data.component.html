@@ -5,6 +5,7 @@
     <mat-form-field class="km-with-hint">
       <mat-label>{{getSizesFormState()}}</mat-label>
       <mat-select [placeholder]="getSizesFormState()"
+                  disableOptionCentering
                   formControlName="size">
         <mat-option *ngFor="let size of sizes"
                     [value]="size.name">

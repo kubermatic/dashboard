@@ -53,6 +53,7 @@
       <mat-form-field fxFlex="30">
         <mat-label>Effect</mat-label>
         <mat-select formControlName="effect"
+                    disableOptionCentering
                     (keyup)="check(i)"
                     (change)="check(i)"
                     (valueChange)="check(i)"

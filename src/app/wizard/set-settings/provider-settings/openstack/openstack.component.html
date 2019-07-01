@@ -62,6 +62,7 @@
                   *ngIf="!hideOptional || isFloatingIPEnforced()">
     <mat-label>{{getOptionalSettingsFormState('Floating IP Pool')}}</mat-label>
     <mat-select [placeholder]="getOptionalSettingsFormState('Floating IP Pool')"
+                disableOptionCentering
                 formControlName="floatingIpPool"
                 [required]="isFloatingIPEnforced()">
       <mat-option *ngFor="let item of floatingIpPools"
@@ -77,6 +78,7 @@
                   *ngIf="!hideOptional">
     <mat-label>{{getOptionalSettingsFormState('Security Group')}}</mat-label>
     <mat-select [placeholder]="getOptionalSettingsFormState('Security Group')"
+                disableOptionCentering
                 formControlName="securityGroup">
       <mat-option *ngFor="let item of securityGroups"
                   [value]="item.name">
@@ -91,6 +93,7 @@
                   *ngIf="!hideOptional">
     <mat-label>{{getOptionalSettingsFormState('Network')}}</mat-label>
     <mat-select [placeholder]="getOptionalSettingsFormState('Network')"
+                disableOptionCentering
                 formControlName="network">
       <mat-option *ngFor="let item of networks"
                   [value]="item.name">
@@ -105,6 +108,7 @@
                   *ngIf="!hideOptional">
     <mat-label>{{getSubnetIDFormState()}}</mat-label>
     <mat-select [placeholder]="getSubnetIDFormState()"
+                disableOptionCentering
                 formControlName="subnetId">
       <mat-option *ngFor="let subnet of subnetIds"
                   [value]="subnet.id">

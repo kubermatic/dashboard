@@ -3,7 +3,9 @@
     <div class="mat-dialog-content">
       <mat-form-field>
         <mat-label>Control Plane Version</mat-label>
-        <mat-select [(ngModel)]="selectedVersion">
+        <mat-select [(ngModel)]="selectedVersion"
+                    panelClass="km-add-dialog-dropdown"
+                    disableOptionCentering>
           <mat-option *ngFor="let version of controlPlaneVersions"
                       [value]="version">
             {{version}}

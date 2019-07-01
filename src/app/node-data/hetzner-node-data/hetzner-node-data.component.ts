@@ -14,6 +14,7 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
+  @Input() clusterId: string;
 
   types: string[] = NodeInstanceFlavors.Hetzner;
   hetznerNodeForm: FormGroup;
@@ -43,6 +44,10 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
         sub.unsubscribe();
       }
     }
+  }
+
+  isInWizard(): boolean {
+    return !this.clusterId || this.clusterId.length === 0;
   }
 
   getNodeProviderData(): NodeProviderData {

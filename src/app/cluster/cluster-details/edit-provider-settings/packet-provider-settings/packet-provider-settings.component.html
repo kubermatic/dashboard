@@ -34,7 +34,8 @@
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Billing Cycle</mat-label>
-      <mat-select formControlName="billingCycle">
+      <mat-select formControlName="billingCycle"
+                  disableOptionCentering>
         <mat-option *ngFor="let billingCycle of getAvailableBillingCycles()"
                     [value]="billingCycle">
           {{billingCycle}}
