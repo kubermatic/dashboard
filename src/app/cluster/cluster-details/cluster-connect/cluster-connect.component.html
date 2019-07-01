@@ -18,6 +18,7 @@
     <p class="km-button-link">
       <a href="http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/"
          target="_blank"
+         rel="noopener"
          class="km-button white">
         http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/
       </a>
@@ -29,7 +30,8 @@
      mat-flat-button
      color="alternative"
      [href]="getDownloadURL()"
-     target="_blank"><i class="km-icon-download"></i></a>
+     target="_blank"
+     rel="noopener"><i class="km-icon-download"></i></a>
   <button mat-dialog-close
           mat-flat-button>
     Got it
