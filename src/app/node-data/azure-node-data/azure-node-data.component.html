@@ -19,10 +19,12 @@
        *ngIf="!hideOptional">
     <div fxLayout="row"
          class="km-azure-options">
-      <label fxFlex="50%">Assign Public IP</label>
-      <mat-checkbox fxFlex="50%"
-                    id="assignPublicIP"
-                    formControlName="assignPublicIP"></mat-checkbox>
+      <label class="km-clickable">
+        <span fxFlex="50%">Assign Public IP</span>
+        <mat-checkbox fxFlex="50%"
+                      id="assignPublicIP"
+                      formControlName="assignPublicIP"></mat-checkbox>
+      </label>
     </div>
   </div>
 

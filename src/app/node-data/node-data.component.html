@@ -104,30 +104,36 @@
     <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
-      <label fxFlex="50%">Upgrade system on first boot</label>
-      <mat-checkbox fxFlex="50%"
-                    id="distUpgradeOnBootUbuntu"
-                    formControlName="distUpgradeOnBootUbuntu"></mat-checkbox>
+      <label class="km-clickable">
+        <span fxFlex="50%">Upgrade system on first boot</span>
+        <mat-checkbox fxFlex="50%"
+                      id="distUpgradeOnBootUbuntu"
+                      formControlName="distUpgradeOnBootUbuntu"></mat-checkbox>
+      </label>
     </div>
 
     <!-- Options for CentOS -->
     <div *ngIf="nodeForm.controls.operatingSystem.value === 'centos'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
-      <label fxFlex="50%">Upgrade system on first boot</label>
-      <mat-checkbox fxFlex="50%"
-                    id="distUpgradeOnBootCentos"
-                    formControlName="distUpgradeOnBootCentos"></mat-checkbox>
+      <label class="km-clickable">
+        <span fxFlex="50%">Upgrade system on first boot</span>
+        <mat-checkbox fxFlex="50%"
+                      id="distUpgradeOnBootCentos"
+                      formControlName="distUpgradeOnBootCentos"></mat-checkbox>
+      </label>
     </div>
 
     <!-- Options for Container Linux -->
     <div *ngIf="nodeForm.controls.operatingSystem.value === 'containerLinux'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
-      <label fxFlex="50%">Disable auto-update</label>
-      <mat-checkbox fxFlex="50%"
-                    id="disableAutoUpdate"
-                    formControlName="disableAutoUpdate"></mat-checkbox>
+      <label class="km-clickable">
+        <span fxFlex="50%">Disable auto-update</span>
+        <mat-checkbox fxFlex="50%"
+                      id="disableAutoUpdate"
+                      formControlName="disableAutoUpdate"></mat-checkbox>
+      </label>
     </div>
   </div>
 </form>
