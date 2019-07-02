@@ -32,9 +32,10 @@
   </mat-form-field>
 
   <mat-form-field *ngIf="!isInWizard">
-
     <mat-label>{{getVersionHeadline(cluster.type, true)}}</mat-label>
-    <mat-select formControlName="kubelet">
+    <mat-select formControlName="kubelet"
+                disableOptionCentering
+                panelClass="km-add-dialog-dropdown">
       <mat-option *ngFor="let version of versions"
                   [value]="version">
         {{ version }}
@@ -44,6 +45,7 @@
 
   <kubermatic-aws-node-data *ngIf="cluster.spec.cloud.aws"
                             [cloudSpec]="cluster.spec.cloud"
+                            [clusterId]="cluster.id"
                             [nodeData]="nodeData"></kubermatic-aws-node-data>
 
   <kubermatic-digitalocean-node-data *ngIf="cluster.spec.cloud.digitalocean"
@@ -62,14 +64,18 @@
 
   <kubermatic-packet-node-data *ngIf="cluster.spec.cloud.packet"
                                [cloudSpec]="cluster.spec.cloud"
+                               [clusterId]="cluster.id"
                                [nodeData]="nodeData"></kubermatic-packet-node-data>
 
   <kubermatic-hetzner-node-data *ngIf="cluster.spec.cloud.hetzner"
                                 [cloudSpec]="cluster.spec.cloud"
+                                [clusterId]="cluster.id"
+                                s
                                 [nodeData]="nodeData"></kubermatic-hetzner-node-data>
 
   <kubermatic-vsphere-node-data *ngIf="cluster.spec.cloud.vsphere"
                                 [cloudSpec]="cluster.spec.cloud"
+                                [clusterId]="cluster.id"
                                 [nodeData]="nodeData"></kubermatic-vsphere-node-data>
 
   <kubermatic-azure-node-data *ngIf="cluster.spec.cloud.azure"
@@ -81,11 +87,14 @@
 
   <kubermatic-gcp-node-data *ngIf="cluster.spec.cloud.gcp"
                             [cloudSpec]="cluster.spec.cloud"
+                            [clusterId]="cluster.id"
                             [nodeData]="nodeData"></kubermatic-gcp-node-data>
 
   <mat-form-field class="km-operating-system">
     <mat-label>Operating System*</mat-label>
-    <mat-select formControlName="operatingSystem">
+    <mat-select formControlName="operatingSystem"
+                disableOptionCentering
+                [panelClass]="isInWizard ? '' : 'km-add-dialog-dropdown'">
       <mat-option value="ubuntu">Ubuntu</mat-option>
       <mat-option value="centos">CentOS</mat-option>
       <mat-option value="containerLinux"

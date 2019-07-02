@@ -6,6 +6,8 @@
     <mat-label>SSH Keys</mat-label>
     <mat-select formControlName="keys"
                 multiple
+                disableOptionCentering
+                panelClass="km-sshkey-dropdown"
                 [compareWith]="compareValues">
       <mat-option *ngFor="let key of keys"
                   [value]="key">{{key.name}}</mat-option>

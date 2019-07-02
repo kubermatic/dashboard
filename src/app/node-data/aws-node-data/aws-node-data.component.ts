@@ -15,6 +15,8 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 export class AWSNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
+  @Input() clusterId: string;
+
   instanceTypes: string[] = NodeInstanceFlavors.AWS;
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   awsNodeForm: FormGroup;
@@ -56,6 +58,10 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     }));
 
     this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+  }
+
+  isInWizard(): boolean {
+    return !this.clusterId || this.clusterId.length === 0;
   }
 
   getNodeProviderData(): NodeProviderData {

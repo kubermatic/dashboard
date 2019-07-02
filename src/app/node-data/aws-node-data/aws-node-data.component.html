@@ -4,7 +4,9 @@
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Node Size*</mat-label>
-      <mat-select formControlName="type">
+      <mat-select formControlName="type"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering>
         <mat-option *ngFor="let type of instanceTypes"
                     [value]="type">
           {{type}}
@@ -17,7 +19,9 @@
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Disk Type*</mat-label>
-      <mat-select formControlName="disk_type">
+      <mat-select formControlName="disk_type"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering>
         <mat-option *ngFor="let type of diskTypes"
                     [value]="type">
           {{type}}

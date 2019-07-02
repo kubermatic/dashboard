@@ -44,6 +44,7 @@
                   *ngIf="!hideOptional">
     <mat-label>{{getNetworkFormState()}}</mat-label>
     <mat-select [placeholder]="getNetworkFormState()"
+                disableOptionCentering
                 formControlName="vmNetName">
       <mat-option *ngFor="let item of networks"
                   [value]="item.name">
