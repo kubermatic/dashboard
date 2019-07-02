@@ -10,6 +10,7 @@
   font-size: $caption-font-size-base;
   line-height: 1.75 * $baseline-grid;
   margin-bottom: $baseline-grid / 2;
+  min-height: 1.75 * $baseline-grid;
 }
 
 .km-property-value {
@@ -17,5 +18,6 @@
   font-size: $subhead-font-size-base;
   line-height: 3 * $baseline-grid;
   margin-bottom: $baseline-grid;
+  min-height: 3 * $baseline-grid;
   word-break: break-all;
 }

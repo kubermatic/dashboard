@@ -1,0 +1,12 @@
+@import '../../../../assets/css/colors';
+@import '../../../../assets/css/variables';
+
+.km-icon-key {
+  background: $text-color;
+  margin-right: $baseline-grid;
+}
+
+.km-ssh-keys-list-more {
+  cursor: default;
+  user-select: none;
+}

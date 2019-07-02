@@ -51,7 +51,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   someUpgradesRestrictedByKubeletVersion = false;
   projectID: string;
   events: EventEntity[] = [];
-  displayedSSHKeys = 3;
   private _versionsList: string[] = [];
   private _unsubscribe: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
@@ -258,9 +257,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     });
   }
 
-  getTruncatedSSHKeys(): string {
-    return this.sshKeys.slice(this.displayedSSHKeys).map(key => key.name).join(', ');
-  }
+
 
   isRevokeAdminTokenEnabled(): boolean {
     return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;

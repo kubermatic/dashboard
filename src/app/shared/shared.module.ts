@@ -19,6 +19,7 @@ import {LabelFormComponent} from './components/label-form/label-form.component';
 import {LabelsComponent} from './components/labels/labels.component';
 import {PropertyComponent} from './components/property/property.component';
 import {RelativeTimeComponent} from './components/relativetime/relative-time.component';
+import {SSHKeyListComponent} from './components/ssh-key-list/ssh-key-list.component';
 import {TaintFormComponent} from './components/taint-form/taint-form.component';
 import {TaintsComponent} from './components/taints/taints.component';
 import {RelativeTimePipe} from './pipes/relativetime';
@@ -79,6 +80,7 @@ const modules: any[] = [
     TaintsComponent,
     RelativeTimePipe,
     RelativeTimeComponent,
+    SSHKeyListComponent,
   ],
   exports: [
     ...modules,
@@ -94,6 +96,7 @@ const modules: any[] = [
     TaintsComponent,
     RelativeTimePipe,
     RelativeTimeComponent,
+    SSHKeyListComponent,
   ],
   entryComponents: [
     AddProjectDialogComponent,
