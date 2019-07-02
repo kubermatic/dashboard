@@ -27,27 +27,27 @@ export class Openstack extends Provider {
   }
 
   username(username: string) {
-    if (username) this._headers.set(Openstack.Header.Username, username);
+    if (username) this._headers = this._headers.set(Openstack.Header.Username, username);
     return this;
   }
 
   password(password: string) {
-    if (password) this._headers.set(Openstack.Header.Password, password);
+    if (password) this._headers = this._headers.set(Openstack.Header.Password, password);
     return this;
   }
 
   domain(domain: string) {
-    if (domain) this._headers.set(Openstack.Header.Domain, domain);
+    if (domain) this._headers = this._headers.set(Openstack.Header.Domain, domain);
     return this;
   }
 
   datacenter(datacenter: string) {
-    if (datacenter) this._headers.set(Openstack.Header.Datacenter, datacenter);
+    if (datacenter) this._headers = this._headers.set(Openstack.Header.Datacenter, datacenter);
     return this;
   }
 
   tenant(tenant: string) {
-    if (tenant) this._headers.set(Openstack.Header.Tenant, tenant);
+    if (tenant) this._headers = this._headers.set(Openstack.Header.Tenant, tenant);
     return this;
   }
 

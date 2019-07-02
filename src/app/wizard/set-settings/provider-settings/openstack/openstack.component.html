@@ -1,4 +1,4 @@
-<form [formGroup]="openstackSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
     <mat-label>Domain*</mat-label>
@@ -7,8 +7,12 @@
            name="domain"
            type="text"
            title="Domain"
-           autocomplete="off">
-    <mat-error *ngIf="openstackSettingsForm.controls.domain.hasError('required')">
+           [matAutocomplete]="domainAutocomplete">
+    <mat-autocomplete #domainAutocomplete="matAutocomplete">
+      <mat-option *ngFor="let domain of ['Default']"
+                  [value]="domain"> {{domain}} </mat-option>
+    </mat-autocomplete>
+    <mat-error *ngIf="form.controls.domain.hasError('required')">
       Domain is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -20,7 +24,7 @@
            type="text"
            title="Username"
            autocomplete="off">
-    <mat-error *ngIf="openstackSettingsForm.controls.username.hasError('required')">
+    <mat-error *ngIf="form.controls.username.hasError('required')">
       Username is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -32,7 +36,7 @@
            type="password"
            title="Password"
            autocomplete="off">
-    <mat-error *ngIf="openstackSettingsForm.controls.password.hasError('required')">
+    <mat-error *ngIf="form.controls.password.hasError('required')">
       Password is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -50,7 +54,7 @@
         {{item.name}}
       </mat-option>
     </mat-autocomplete>
-    <mat-error *ngIf="openstackSettingsForm.controls.tenant.hasError('required')">
+    <mat-error *ngIf="form.controls.tenant.hasError('required')">
       Project is <strong>required</strong>.
     </mat-error>
     <mat-hint *ngIf="showHint('tenant')">Please enter your credentials first.</mat-hint>

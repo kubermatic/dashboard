@@ -83,5 +83,7 @@ export namespace NodeInstanceFlavors {
       new NodeInstanceFlavor('n1-standard-64', '64 vCPU, 240 GB'),
       new NodeInstanceFlavor('n1-standard-96', '96 vCPU, 360 GB'),
     ];
+
+    export const Zones: string[] = ['europe-west3-c'];
   }
 }

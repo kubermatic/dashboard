@@ -1,4 +1,4 @@
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
@@ -15,7 +15,6 @@ import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEn
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {VSphereNetwork} from '../../../shared/entity/provider/vsphere/VSphereEntity';
 
 import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
@@ -26,7 +25,6 @@ import {Auth} from '../auth/auth.service';
 export class ApiService {
   private _location: string = window.location.protocol + '//' + window.location.host;
   private _restRoot: string = environment.restRoot;
-  private _headers: HttpHeaders = new HttpHeaders();
   private readonly _token: string;
 
   constructor(private readonly _http: HttpClient, private readonly _auth: Auth) {
@@ -141,14 +139,6 @@ export class ApiService {
   getAzureSizes(projectId: string, dc: string, cluster: string): Observable<AzureSizes[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${cluster}/providers/azure/sizes`;
     return this._http.get<AzureSizes[]>(url);
-  }
-
-  getVSphereNetworks(username: string, password: string, datacenterName: string): Observable<VSphereNetwork[]> {
-    this._headers = this._headers.set('Username', username);
-    this._headers = this._headers.set('Password', password);
-    this._headers = this._headers.set('DatacenterName', datacenterName);
-    const url = `${this._restRoot}/providers/vsphere/networks`;
-    return this._http.get<VSphereNetwork[]>(url, {headers: this._headers});
   }
 
   getMembers(projectID: string): Observable<MemberEntity[]> {

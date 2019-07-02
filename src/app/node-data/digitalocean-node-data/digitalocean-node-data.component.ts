@@ -24,6 +24,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   sizes: DigitaloceanSizes = {optimized: [], standard: []};
   doNodeForm: FormGroup;
   loadingSizes = false;
+
   private _unsubscribe = new Subject<void>();
   private _selectedCredentials: string;
 
@@ -91,7 +92,9 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   }
 
   reloadDigitaloceanSizes(): void {
-    this.loadingSizes = true;
+    if (this.cloudSpec.digitalocean.token || this._selectedCredentials || !this.isInWizard()) {
+      this.loadingSizes = true;
+    }
 
     iif(() => this.isInWizard(),
         this._wizardService.provider(NodeProvider.DIGITALOCEAN)

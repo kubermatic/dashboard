@@ -45,23 +45,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       this._formHelper.areControlsValid() ? this._wizard.onCustomCredentialsDisable.emit(false) :
                                             this._wizard.onCustomCredentialsDisable.emit(true);
 
-      this._wizard.changeClusterProviderSettings({
-        cloudSpec: {
-          azure: {
-            clientID: this.form.controls.clientID.value,
-            clientSecret: this.form.controls.clientSecret.value,
-            resourceGroup: this.form.controls.resourceGroup.value,
-            routeTable: this.form.controls.routeTable.value,
-            securityGroup: this.form.controls.securityGroup.value,
-            subnet: this.form.controls.subnet.value,
-            subscriptionID: this.form.controls.subscriptionID.value,
-            tenantID: this.form.controls.tenantID.value,
-            vnet: this.form.controls.vnet.value,
-          },
-          dc: this.cluster.spec.cloud.dc,
-        },
-        valid: this.form.valid,
-      });
+      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
     });
 
     this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
@@ -76,6 +60,26 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
 
       this.form.enable();
     });
+  }
+
+  private _clusterProviderSettingsForm(valid: boolean) {
+    return {
+      cloudSpec: {
+        azure: {
+          clientID: this.form.controls.clientID.value,
+          clientSecret: this.form.controls.clientSecret.value,
+          resourceGroup: this.form.controls.resourceGroup.value,
+          routeTable: this.form.controls.routeTable.value,
+          securityGroup: this.form.controls.securityGroup.value,
+          subnet: this.form.controls.subnet.value,
+          subscriptionID: this.form.controls.subscriptionID.value,
+          tenantID: this.form.controls.tenantID.value,
+          vnet: this.form.controls.vnet.value,
+        },
+        dc: this.cluster.spec.cloud.dc,
+      },
+      valid,
+    };
   }
 
   ngOnDestroy(): void {

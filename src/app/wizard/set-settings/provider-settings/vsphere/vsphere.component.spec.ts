@@ -48,25 +48,23 @@ describe('VSphereClusterSettingsComponent', () => {
   });
 
   it('form invalid after creating', () => {
-    expect(component.vsphereSettingsForm.valid).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
   });
 
   it('required fields', () => {
-    expect(component.vsphereSettingsForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.vsphereSettingsForm.controls.infraManagementUsername.valid)
-        .toBeFalsy('username field is initially not valid');
-    expect(component.vsphereSettingsForm.controls.infraManagementUsername.hasError('required'))
+    expect(component.form.valid).toBeFalsy('form is initially not valid');
+    expect(component.form.controls.infraManagementUsername.valid).toBeFalsy('username field is initially not valid');
+    expect(component.form.controls.infraManagementUsername.hasError('required'))
         .toBeTruthy('username field has initially required error');
-    expect(component.vsphereSettingsForm.controls.infraManagementPassword.valid)
-        .toBeFalsy('password field is initially not valid');
-    expect(component.vsphereSettingsForm.controls.infraManagementPassword.hasError('required'))
+    expect(component.form.controls.infraManagementPassword.valid).toBeFalsy('password field is initially not valid');
+    expect(component.form.controls.infraManagementPassword.hasError('required'))
         .toBeTruthy('password field has initially required error');
 
-    component.vsphereSettingsForm.controls.infraManagementUsername.patchValue('foo');
-    expect(component.vsphereSettingsForm.controls.infraManagementUsername.hasError('required'))
+    component.form.controls.infraManagementUsername.patchValue('foo');
+    expect(component.form.controls.infraManagementUsername.hasError('required'))
         .toBeFalsy('username field has no required error after setting foo');
-    component.vsphereSettingsForm.controls.infraManagementPassword.patchValue('foo');
-    expect(component.vsphereSettingsForm.controls.infraManagementPassword.hasError('required'))
+    component.form.controls.infraManagementPassword.patchValue('foo');
+    expect(component.form.controls.infraManagementPassword.hasError('required'))
         .toBeFalsy('password field has no required error after setting foo');
   });
 });

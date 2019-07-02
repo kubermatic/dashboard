@@ -19,4 +19,8 @@ export class GCP extends Provider {
   machineTypes() {
     return NodeInstanceFlavors.GCP.MachineTypes;
   }
+
+  zones() {
+    return NodeInstanceFlavors.GCP.Zones;
+  }
 }

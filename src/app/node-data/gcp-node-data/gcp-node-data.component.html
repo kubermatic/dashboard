@@ -45,7 +45,11 @@
     <mat-label>Zone*</mat-label>
     <input matInput
            formControlName="zone"
-           autocomplete="off">
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let zone of zones"
+                  [value]="zone"> {{zone}} </mat-option>
+    </mat-autocomplete>
   </mat-form-field>
 
   <div fxFlex="100%">

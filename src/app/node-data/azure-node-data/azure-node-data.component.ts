@@ -29,7 +29,9 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   datacenter: DataCenterEntity;
   hideOptional = true;
   loadingSizes = false;
+
   private _unsubscribe = new Subject<void>();
+  private _selectedCredentials: string;
 
   constructor(
       private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
@@ -69,6 +71,11 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
           data.cloudSpec.azure.tenantID !== '' || data.cloudSpec.azure.subscriptionID !== '') {
         this.reloadAzureSizes();
       }
+    });
+
+    this._wizard.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+      this._selectedCredentials = credentials;
+      this.reloadAzureSizes();
     });
 
     this.loadDatacenter();
@@ -121,10 +128,11 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   reloadAzureSizes(): void {
+    this.loadingSizes = !this.isMissingCredentials() || !this.isInWizard() || !!this._selectedCredentials;
+
     iif(() => !!this.cloudSpec.dc, this._dcService.getDataCenter(this.cloudSpec.dc), EMPTY)
         .pipe(switchMap(dc => {
           this.datacenter = dc;
-          this.loadingSizes = true;
 
           return iif(
               () => this.isInWizard(),
@@ -134,6 +142,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
                   .subscriptionID(this.cloudSpec.azure.subscriptionID)
                   .tenantID(this.cloudSpec.azure.tenantID)
                   .location(this.datacenter.spec.azure.location)
+                  .credential(this._selectedCredentials)
                   .flavors(),
               this._api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId));
         }))
@@ -201,7 +210,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
           tags: tagMap,
         },
       },
-      valid: this.azureNodeForm.valid,
+      valid: this.sizes.length > 0 && this.azureNodeForm.valid,
     };
   }
 }

@@ -22,6 +22,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
   diskTypes: string[] = this._wizard.provider(NodeProvider.GCP).diskTypes();
   machineTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.GCP).machineTypes();
+  zones: string[] = this._wizard.provider(NodeProvider.GCP).zones();
   gcpNodeForm: FormGroup;
   labels: FormArray;
   hideOptional = true;

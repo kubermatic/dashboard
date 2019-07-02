@@ -63,7 +63,7 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         floatingIpPool: '',
         securityGroups: '',
         network: '',
-        domain: 'Default',
+        domain: '',
         tenant: '',
         subnetID: '',
       } as OpenstackCloudSpec;

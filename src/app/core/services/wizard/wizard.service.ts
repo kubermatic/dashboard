@@ -125,7 +125,7 @@ export class WizardService {
   }
 
   credentials(provider: NodeProvider): Observable<CredentialListEntity> {
-    const url = `${environment.restRoot}/providers/${provider}/credentials`;
+    const url = `${environment.restRoot}/providers/${provider}/presets/credentials`;
     return this._http.get<CredentialListEntity>(url);
   }
 }

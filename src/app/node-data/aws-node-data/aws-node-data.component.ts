@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
@@ -17,16 +17,16 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
-
-  instanceTypes: NodeInstanceFlavor[] = this._wizardService.provider(NodeProvider.AWS).flavors();
+  
+  instanceTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.AWS).flavors();
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   awsNodeForm: FormGroup;
   tags: FormArray;
   hideOptional = true;
 
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService) {}
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -51,13 +51,13 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       this.awsNodeForm.controls.type.setValue(this.instanceTypes[0].id);
     }
 
-    this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(() => {
+    this.awsNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    }));
+    });
 
-    this.subscriptions.push(this._wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
 
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
@@ -106,10 +106,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

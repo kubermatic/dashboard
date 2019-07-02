@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import {take, takeUntil} from 'rxjs/operators';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
@@ -25,7 +25,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   loadingFlavors = false;
   osNodeForm: FormGroup;
   loadingSizes = false;
+
   private _unsubscribe = new Subject<void>();
+  private _selectedCredentials: string;
 
   constructor(
       private readonly _addNodeService: NodeDataService, private readonly _api: ApiService,
@@ -74,6 +76,17 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           data.cloudSpec.openstack.domain !== '' || data.cloudSpec.openstack.tenant !== '') {
         this.loadFlavors();
       }
+    });
+
+    this._wizard.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+      if (credentials) {
+        this._selectedCredentials = credentials;
+        this.loadFlavors();
+        return;
+      }
+
+      this.flavors = [];
+      this.checkFlavorState();
     });
   }
 
@@ -144,16 +157,19 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   loadFlavors(): void {
-    this.loadingFlavors = true;
+    this.loadingFlavors = !this.isInWizard() || this.hasCredentials();
+
     iif(() => this.isInWizard(),
         this._wizard.provider(NodeProvider.OPENSTACK)
             .username(this.cloudSpec.openstack.username)
             .password(this.cloudSpec.openstack.password)
             .tenant(this.cloudSpec.openstack.tenant)
             .domain(this.cloudSpec.openstack.domain)
+            .credential(this._selectedCredentials)
             .datacenter(this.cloudSpec.dc)
             .flavors(),
         this._api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId))
+        .pipe(take(1))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((flavors) => {
           this.handleFlavours(flavors);

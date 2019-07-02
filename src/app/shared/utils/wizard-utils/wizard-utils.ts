@@ -51,6 +51,10 @@ export class FormHelper {
     this._setControlsValidationStrategy(this._controlsValidationStrategyType);
   }
 
+  registerFormControl(control: AbstractControl) {
+    this._controls.push(control);
+  }
+
   isFormValid() {
     return this._validationStrategy.isValid();
   }
@@ -85,6 +89,8 @@ export class EmptyFormControlsValidationStrategy implements FormValidationStrate
   }
 
   isValid(): boolean {
-    return this._controls.every(control => typeof control.value === 'string' && !control.value);
+    return this._controls.every(control => {
+      return control.value === null || control.value.toString().length === 0;
+    });
   }
 }
