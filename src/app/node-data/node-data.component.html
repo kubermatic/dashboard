@@ -15,6 +15,9 @@
          (click)="generateName()"
          *ngIf="!isNameDisabled"></i>
       <mat-hint *ngIf="!isNameDisabled">Leave it empty to use server-side generation.</mat-hint>
+      <mat-error *ngIf="nodeForm.controls.name.hasError('pattern')">
+        Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+      </mat-error>
     </mat-form-field>
 
   </div>
