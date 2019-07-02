@@ -5,6 +5,8 @@
     <mat-form-field class="km-with-hint">
       <mat-label>{{getFlavorsFormState()}}</mat-label>
       <mat-select formControlName="flavor"
+                  disableOptionCentering
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
                   [placeholder]="getFlavorsFormState()">
         <mat-option *ngFor="let flavor of flavors"
                     [value]="flavor.slug">

@@ -955,3 +955,38 @@ mat-form-field.mat-focused.ng-pristine label {
 .km-color-primary {
   color: $primary !important;
 }
+
+// Dropdowns
+.mat-select-panel {
+  margin-top: 30px !important;
+  margin-left: 6px !important;
+  min-width: calc(100% + 20px) !important;
+  max-width: calc(100% + 20px) !important;
+  transform-origin: 50% 0 0 !important;
+
+  &.ng-animating {
+    visibility: hidden;
+  }
+}
+
+.km-optgroup-dropdown {
+  margin-left: 22px !important;
+}
+
+.km-sshkey-dropdown {
+  margin-left: 30px !important;
+}
+
+.km-add-dialog-dropdown {
+  margin-top: 34px !important;
+}
+
+.mat-option {
+  padding: 0 0 0 10px !important;
+
+  &:hover,
+  &.mat-active {
+    background-color: $secondary-light !important;
+    color: $text-color !important;
+  }
+}

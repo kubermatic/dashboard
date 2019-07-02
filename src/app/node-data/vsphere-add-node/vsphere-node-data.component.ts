@@ -13,6 +13,8 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 export class VSphereNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
+  @Input() clusterId: string;
+
   vsphereNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
@@ -38,6 +40,10 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
         sub.unsubscribe();
       }
     }
+  }
+
+  isInWizard(): boolean {
+    return !this.clusterId || this.clusterId.length === 0;
   }
 
   getNodeProviderData(): NodeProviderData {

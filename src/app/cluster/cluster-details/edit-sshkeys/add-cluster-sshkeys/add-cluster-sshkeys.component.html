@@ -6,7 +6,9 @@
     <form [formGroup]="keysForm">
       <mat-label>SSH Keys</mat-label>
       <mat-form-field *ngIf="keys.length > 0">
-        <mat-select formControlName="keys">
+        <mat-select formControlName="keys"
+                    panelClass="km-add-dialog-dropdown"
+                    disableOptionCentering>
           <mat-option *ngFor="let key of keys"
                       value="{{key.id}}">{{key.name}}</mat-option>
         </mat-select>
