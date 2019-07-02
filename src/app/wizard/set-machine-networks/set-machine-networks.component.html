@@ -9,7 +9,7 @@
         <form [formGroup]="setMachineNetworkForm">
           <h4>
             <mat-checkbox id="configure-machine-networks"
-                          formControlName="checkMachineNetworks">Configure Machine Networks</mat-checkbox>
+                          formControlName="checkMachineNetworks">Do not use DHCP for worker address allocation</mat-checkbox>
           </h4>
           <p *ngIf="!nodeData.spec.operatingSystem.containerLinux"
              class="km-warning">Please note: Machine Networks are only available for Container Linux.</p>
