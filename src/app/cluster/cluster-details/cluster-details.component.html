@@ -89,35 +89,10 @@
     <mat-card-content class="km-row">
 
       <div class="km-content-wrap">
-        <km-property>
-          <div key>Type</div>
-          <div value>
-            <span class="km-cluster-type"
-                  [matTooltip]="getType(cluster.type)">
-              <i class="km-icon-{{cluster.type}}"></i>
-            </span>
-          </div>
-        </km-property>
-
-        <km-property>
-          <div key>{{getVersionHeadline(cluster.type, false)}}</div>
-          <div value
-               fxLayoutGap="4px">
-            <span *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)"
-                  (click)="changeClusterVersionDialog()"
-                  matTooltip="Click to change the version"
-                  class="km-copy">{{cluster.spec.version}}
-              <i *ngIf="updatesAvailable"
-                 class="fa fa-arrow-up"></i>
-            </span>
-            <i *ngIf="someUpgradesRestrictedByKubeletVersion"
-               matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
-               class="fa fa-exclamation-triangle orange"></i>
-            <span *ngIf="!isClusterRunning || !(updatesAvailable || downgradesAvailable)">
-              {{cluster.spec.version}}
-            </span>
-          </div>
-        </km-property>
+        <km-version-picker [datacenter]="datacenter"
+                           [cluster]="cluster"
+                           [isClusterRunning]="isClusterRunning"
+                           [upgrades]="upgrades"></km-version-picker>
 
         <km-property>
           <div key>Cluster ID</div>

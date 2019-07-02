@@ -1,0 +1,19 @@
+@import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
+
+.km-version-picker-container {
+  border: 1px solid $separator;
+  border-radius: 5px;
+
+  .km-version-picker-type {
+    background: $separator;
+    height: 100%;
+    padding: $baseline-grid;
+
+    i {
+      height: 30px;
+      width: 30px;
+      margin: 0 !important;
+    }
+  }
+}
