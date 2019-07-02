@@ -143,25 +143,8 @@
         </km-property>
 
         <km-property>
-          <div key>
-            <span>SSH Keys&nbsp;</span>
-            <span matTooltip="You can login into the nodes with the user 'root', 'ubuntu' or 'core'.">
-              <i class="fa fa-question-circle"
-                 aria-hidden="true"></i>
-            </span>
-          </div>
           <div value>
-            <span *ngFor="let key of sshKeys.slice(0, displayedSSHKeys); let last = last">
-              <span>{{key.name}}</span>
-              <span *ngIf="!last">,&nbsp;</span>
-            </span>
-            <ng-container *ngIf="sshKeys.length > displayedSSHKeys">
-              <span>...&nbsp;</span>
-              <span [matTooltip]="getTruncatedSSHKeys()"
-                    class="km-ssh-keys-more">+{{sshKeys.length - displayedSSHKeys}}
-              </span>
-            </ng-container>
-            <span *ngIf="sshKeys.length < 1">-</span>
+            <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
           </div>
         </km-property>
 

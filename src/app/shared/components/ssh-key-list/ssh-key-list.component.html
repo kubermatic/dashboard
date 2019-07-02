@@ -1,0 +1,13 @@
+<div fxFlex
+     fxFlexAlign="row"
+     fxLayoutAlign="center">
+  <i class="km-icon-key"></i>
+  <span> {{getDisplayed()}}</span>
+  <ng-container *ngIf="sshKeys.length > maxDisplayed">
+    <span>...&nbsp;</span>
+    <span [matTooltip]="getTruncatedSSHKeys()"
+          class="km-ssh-keys-list-more">+{{sshKeys.length - maxDisplayed}}
+    </span>
+  </ng-container>
+  <span *ngIf="sshKeys.length < 1">-</span>
+</div>
