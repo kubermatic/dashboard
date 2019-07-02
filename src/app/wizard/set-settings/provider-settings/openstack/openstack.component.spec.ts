@@ -14,7 +14,6 @@ import {asyncData} from '../../../../testing/services/api-mock.service';
 import {AuthMockService} from '../../../../testing/services/auth-mock.service';
 
 import {OpenstackClusterSettingsComponent} from './openstack.component';
-
 import Spy = jasmine.Spy;
 
 describe('OpenstackClusterSettingsComponent', () => {
@@ -83,10 +82,6 @@ describe('OpenstackClusterSettingsComponent', () => {
         username: '',
         subnetID: '',
       };
-      component.clusterSpec = {
-        cloudSpec: component.cluster.spec.cloud,
-        valid: false,
-      };
       fixture.detectChanges();
     });
 
@@ -117,7 +112,6 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.form.controls.username.setValue('');
       component.form.controls.password.setValue('');
       component.form.controls.domain.setValue('');
-      component.loadTenants();
       fixture.detectChanges();
       expect(component.tenants.length).toEqual(0);
     });
@@ -127,7 +121,6 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.form.controls.password.setValue('password');
          component.form.controls.domain.setValue('domain');
          fixture.detectChanges();
-         component.loadTenants();
          tick();
          expect(getOpenStackTenantsForWizard.and.callThrough()).toHaveBeenCalled();
          expect(component.tenants).toEqual([
@@ -152,7 +145,6 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.form.controls.password.setValue('');
       component.form.controls.domain.setValue('');
       component.form.controls.tenant.setValue('');
-      component.loadOptionalSettings();
       fixture.detectChanges();
       expect(getOpenStackNetworkForWizard).toHaveBeenCalledTimes(0);
       expect(getOpenStackSecurityGroupsForWizard).toHaveBeenCalledTimes(0);
@@ -167,7 +159,6 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.floatingIpPools = [];
          component.securityGroups = [];
          fixture.detectChanges();
-         component.loadOptionalSettings();
          tick();
 
          expect(getOpenStackNetworkForWizard).toHaveBeenCalled();
@@ -207,7 +198,6 @@ describe('OpenstackClusterSettingsComponent', () => {
 
     it('should not load subnet ids', () => {
       component.form.controls.network.setValue('');
-      component._loadSubnetIds();
       fixture.detectChanges();
       expect(component.subnetIds.length).toEqual(0);
       expect(getOpenStackSubnetIdsForWizard).toHaveBeenCalledTimes(0);
@@ -221,7 +211,6 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.form.controls.network.setValue('network');
          component.subnetIds = [];
          fixture.detectChanges();
-         component._loadSubnetIds();
          tick();
          expect(getOpenStackSubnetIdsForWizard.and.callThrough()).toHaveBeenCalled();
          expect(component.subnetIds).toEqual([
@@ -239,18 +228,15 @@ describe('OpenstackClusterSettingsComponent', () => {
 
     it('should set correct tenant placeholder', () => {
       component.form.controls.username.setValue('');
-      component.loadingOptionalTenants = false;
       fixture.detectChanges();
       expect(component.getTenantsFormState()).toEqual('Project*');
 
       component.form.controls.username.setValue('username');
       component.form.controls.password.setValue('password');
       component.form.controls.domain.setValue('domain');
-      component.loadingOptionalTenants = true;
       fixture.detectChanges();
       expect(component.getTenantsFormState()).toEqual('Loading Projects...');
 
-      component.loadingOptionalTenants = false;
       component.tenants = [];
       fixture.detectChanges();
       expect(component.getTenantsFormState()).toEqual('No Projects available');
@@ -262,7 +248,6 @@ describe('OpenstackClusterSettingsComponent', () => {
 
     it('should set correct optional settings placeholder', () => {
       component.form.controls.tenant.setValue('');
-      component.loadingOptionalSettings = false;
       fixture.detectChanges();
       expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
 
@@ -270,11 +255,9 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.form.controls.password.setValue('password');
       component.form.controls.domain.setValue('domain');
       component.form.controls.tenant.setValue('tenant');
-      component.loadingOptionalSettings = true;
       fixture.detectChanges();
       expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Loading Security Groups...');
 
-      component.loadingOptionalSettings = false;
       component.floatingIpPools = [];
       component.securityGroups = [];
       component.networks = [];
@@ -294,7 +277,6 @@ describe('OpenstackClusterSettingsComponent', () => {
 
     it('should set correct subnet id placeholder', () => {
       component.form.controls.network.setValue('');
-      component.loadingSubnetIds = false;
       fixture.detectChanges();
       expect(component.getSubnetIDFormState()).toEqual('Subnet ID');
 
@@ -303,11 +285,9 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.form.controls.domain.setValue('domain');
       component.form.controls.tenant.setValue('tenant');
       component.form.controls.network.setValue('network');
-      component.loadingSubnetIds = true;
       fixture.detectChanges();
       expect(component.getSubnetIDFormState()).toEqual('Loading Subnet IDs...');
 
-      component.loadingSubnetIds = false;
       component.subnetIds = [];
       fixture.detectChanges();
       expect(component.getSubnetIDFormState()).toEqual('No Subnet IDs available');
