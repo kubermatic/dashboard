@@ -3,7 +3,6 @@ import {MatDialog} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {combineLatest, of, Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
-import {gt, lt} from 'semver';
 
 import {AppConfigService} from '../../app-config.service';
 import {ApiService, ClusterService, DatacenterService, UserService} from '../../core/services';
@@ -16,11 +15,9 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
-import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {NodeService} from '../services/node.service';
 
-import {ChangeClusterVersionComponent} from './change-cluster-version/change-cluster-version.component';
 import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
@@ -46,12 +43,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   clusterHealthStatus: ClusterHealthStatus;
   health: HealthEntity;
   config: Config = {share_kubeconfig: false};
-  updatesAvailable = false;
-  downgradesAvailable = false;
-  someUpgradesRestrictedByKubeletVersion = false;
   projectID: string;
   events: EventEntity[] = [];
-  private _versionsList: string[] = [];
+  upgrades: MasterVersion[] = [];
   private _unsubscribe: Subject<any> = new Subject();
   private _currentGroupConfig: GroupConfig;
 
@@ -121,24 +115,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
               this.nodes = nodes;
               this.nodeDeployments = nodeDeployments;
               this.isNodeDeploymentLoadFinished = nodeDeployments.length > 0;
-              this.updatesAvailable = false;
-
-              upgrades.forEach(upgrade => {
-                const isUpgrade = lt(this.cluster.spec.version, upgrade.version);
-                const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
-
-                if (upgrade.restrictedByKubeletVersion === true) {
-                  this.someUpgradesRestrictedByKubeletVersion = isUpgrade;
-                  return;  // Skip all restricted versions.
-                }
-
-                this.updatesAvailable = this.updatesAvailable ? true : isUpgrade;
-                this.downgradesAvailable = this.downgradesAvailable ? true : isDowngrade;
-
-                if (this._versionsList.indexOf(upgrade.version) < 0) {
-                  this._versionsList.push(upgrade.version);
-                }
-              });
+              this.upgrades = upgrades;
             },
             (error) => {
               if (error.status === 404) {
@@ -157,14 +134,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   getProvider(provider: string): string {
     return provider === 'google' ? 'gcp' : provider;
-  }
-
-  getType(type: string): string {
-    return ClusterUtils.getType(type);
-  }
-
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
   isAddNodeDeploymentsEnabled(): boolean {
@@ -211,18 +180,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     modal.componentInstance.projectID = this.projectID;
   }
 
-  changeClusterVersionDialog(): void {
-    const modal = this._matDialog.open(ChangeClusterVersionComponent);
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.controlPlaneVersions = this._versionsList;
-    modal.afterClosed().pipe(first()).subscribe(isChanged => {
-      if (isChanged) {
-        this._clusterService.onClusterUpdate.next();
-      }
-    });
-  }
-
   getDownloadURL(): string {
     return this._api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
   }
@@ -256,8 +213,6 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
       }
     });
   }
-
-
 
   isRevokeAdminTokenEnabled(): boolean {
     return !this._currentGroupConfig || this._currentGroupConfig.clusters.edit;
