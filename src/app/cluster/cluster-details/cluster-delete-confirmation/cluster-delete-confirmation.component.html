@@ -18,13 +18,17 @@
     </mat-form-field>
 
     <div class="km-delete-cluster-checkbox">
-      <mat-checkbox formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
-      <mat-label>Cleanup connected Load Balancers</mat-label>
+      <label class="km-clickable">
+        <mat-checkbox formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
+        Cleanup connected Load Balancers
+      </label>
     </div>
 
     <div class="km-delete-cluster-checkbox">
-      <mat-checkbox formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
-      <mat-label>Cleanup connected volumes (PVs and PVCs)</mat-label>
+      <label class="km-clickable">
+        <mat-checkbox formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
+        Cleanup connected volumes (PVs and PVCs)
+      </label>
     </div>
 
     <div class="km-dialog-warning">
