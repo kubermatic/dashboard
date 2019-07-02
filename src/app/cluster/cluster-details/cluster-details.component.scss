@@ -56,7 +56,8 @@ button:disabled {
 }
 
 .km-provider-logo {
-  min-width: 12 * $baseline-grid;
+  margin-top: - $baseline-grid / 2;
+  min-width: 14 * $baseline-grid;
 }
 
 .km-cluster-type {

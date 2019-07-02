@@ -130,16 +130,15 @@
           </div>
         </km-property>
 
-        <km-property>
-          <div key>Provider</div>
-          <div value>
-            <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
-          </div>
-        </km-property>
-
         <km-property *ngIf="nodeDc?.spec?.provider !== 'bringyourown'">
           <div key>Region</div>
           <div value>{{nodeDc?.spec?.country}} ({{nodeDc?.spec?.location}})</div>
+        </km-property>
+
+        <km-property>
+          <div value>
+            <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
+          </div>
         </km-property>
 
         <km-property>

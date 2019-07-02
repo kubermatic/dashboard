@@ -2,8 +2,10 @@
 @import '../../../../assets/css/variables';
 
 .km-icon-key {
+  cursor: default;
   background: $text-color;
   margin-right: $baseline-grid;
+  user-select: none;
 }
 
 .km-ssh-keys-list-more {
