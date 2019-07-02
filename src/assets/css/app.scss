@@ -990,3 +990,30 @@ mat-form-field.mat-focused.ng-pristine label {
     color: $text-color !important;
   }
 }
+
+.mat-select-arrow-wrapper {
+  top: 3px;
+  right: 0;
+  position: relative;
+}
+
+.mat-select-arrow {
+  display: inline-block;
+  width: 6px !important;
+  height: 6px !important;
+  mask: url("/assets/images/icons/arrow-down.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $text-color;
+}
+
+.mat-form-field.mat-focused.mat-primary {
+  .mat-select-arrow-wrapper {
+    right: 5px;
+  }
+
+  .mat-select-arrow {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+  }
+}
