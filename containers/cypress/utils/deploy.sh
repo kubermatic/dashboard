@@ -40,8 +40,8 @@ AZURE_E2E_TESTS_SUBSCRIPTION_ID=${AZURE_E2E_TESTS_SUBSCRIPTION_ID:-""}
 AZURE_E2E_TESTS_CLIENT_ID=${AZURE_E2E_TESTS_CLIENT_ID:-""}
 AZURE_E2E_TESTS_CLIENT_SECRET=${AZURE_E2E_TESTS_CLIENT_SECRET:-""}
 
-CREDENTIALS_PATH=${SCRIPT_PATH}/yamls/credentials.yaml
-CREDENTIALS_ENCODED=$(eval "echo \"$(cat ${CREDENTIALS_PATH})\"" | base64 | tr -d '\n')
+PRESETS_PATH=${SCRIPT_PATH}/yamls/presets.yaml
+PRESETS_ENCODED=$(eval "echo \"$(cat ${PRESETS_PATH})\"" | base64 | tr -d '\n')
 
 DEX_PATH=${SCRIPT_PATH}/helm/oauth
 
@@ -147,7 +147,7 @@ function deploy::kubermatic {
 		--set=kubermatic.auth.tokenIssuer=http://dex.oauth:5556 \
 		--set=kubermatic.auth.clientID=kubermatic \
 		--set=kubermatic.datacenters=${DATACENTERS_ENCODED} \
-		--set=kubermatic.credentials=${CREDENTIALS_ENCODED} \
+		--set=kubermatic.presets=${PRESETS_ENCODED} \
 		--set=kubermatic.domain=${KUBERMATIC_DOMAIN} \
 		--set=kubermatic.kubeconfig=${KUBECONFIG_ENCODED} \
 		--set=kubermatic.deployVPA=false \
