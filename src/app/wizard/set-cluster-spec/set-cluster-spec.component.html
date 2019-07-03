@@ -29,6 +29,9 @@
           <mat-error *ngIf="clusterSpecForm.controls.name.hasError('minlength')">
             Name must be at least {{ clusterSpecForm.controls.name.getError('minlength').requiredLength }} characters.
           </mat-error>
+          <mat-error *ngIf="clusterSpecForm.controls.name.hasError('pattern')">
+            Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+          </mat-error>
         </mat-form-field>
       </form>
     </mat-card-content>
