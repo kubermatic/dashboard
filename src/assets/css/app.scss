@@ -912,6 +912,7 @@ mat-form-field.mat-focused.ng-pristine label {
     font-size: 16px;
     font-weight: 400;
     max-height: $dialog-max-height;
+    overflow: unset;
 
     a {
       text-decoration: none;
