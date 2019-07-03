@@ -36,6 +36,11 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   }
 
   processData(): void {
+    this.versionsList = [];
+    this.updatesAvailable = false;
+    this.downgradesAvailable = false;
+    this.someUpgradesRestrictedByKubeletVersion = false;
+
     this.upgrades.forEach(upgrade => {
       const isUpgrade = lt(this.cluster.spec.version, upgrade.version);
       const isDowngrade = gt(this.cluster.spec.version, upgrade.version);
