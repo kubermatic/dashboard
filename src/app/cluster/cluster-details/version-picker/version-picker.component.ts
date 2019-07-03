@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {first} from 'rxjs/operators';
 import {gt, lt} from 'semver';
@@ -25,7 +25,9 @@ export class VersionPickerComponent implements OnInit, OnChanges {
   downgradesAvailable = false;
   someUpgradesRestrictedByKubeletVersion = false;
 
-  constructor(private readonly _clusterService: ClusterService, private readonly _matDialog: MatDialog) {}
+  constructor(
+      private readonly _clusterService: ClusterService, private readonly _matDialog: MatDialog,
+      private _changeDetectorRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.processData();
@@ -57,6 +59,8 @@ export class VersionPickerComponent implements OnInit, OnChanges {
         this.versionsList.push(upgrade.version);
       }
     });
+
+    this._changeDetectorRef.detectChanges();
   }
 
   getType(type: string): string {
