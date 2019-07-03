@@ -23,32 +23,79 @@ export class NodeProvider {
   ];
 }
 
+export class NodeInstanceFlavor {
+  constructor(public id: string, public info?: string) {}
+
+  toString(): string {
+    if (this.info === null || this.info === '') {
+      return this.id;
+    }
+
+    return `${this.id} (${this.info})`;
+  }
+}
+
 // Only list instances which have at least 2 GB of memory. Otherwise the node is full with required pods like
 // kube-proxy, cni, etc.
 export namespace NodeInstanceFlavors {
   // Keep in sync with https://aws.amazon.com/ec2/instance-types/.
-  export const AWS: string[] = [
-    't3.small', 't3.medium', 't3.large', 't3.xlarge', 't3.2xlarge', 'm5.large', 'm5d.large', 'm5.xlarge', 'm5.2xlarge',
-    'm3.medium', 'c5.large', 'c5.xlarge', 'c5.2xlarge'
+  export const AWS: NodeInstanceFlavor[] = [
+    {id: 't3.small', info: '2 vCPU, 2 GB'},
+    {id: 't3.medium', info: '2 vCPU, 4 GB'},
+    {id: 't3.large', info: '2 vCPU, 8 GB'},
+    {id: 't3.xlarge', info: '4 vCPU, 16 GB'},
+    {id: 't3.2xlarge', info: '8 vCPU, 32 GB'},
+    {id: 'm5.large', info: '2 vCPU, 8 GB'},
+    {id: 'm5d.large', info: '2 vCPU, 8 GB'},
+    {id: 'm5.xlarge', info: '4 vCPU, 16 GB'},
+    {id: 'm5.2xlarge', info: '8 vCPU, 32 GB'},
+    {id: 'm3.medium', info: '1 vCPU, 3.75 GB'},
+    {id: 'c5.large', info: '2 vCPU, 4 GB'},
+    {id: 'c5.xlarge', info: '4 vCPU, 8 GB'},
+    {id: 'c5.2xlarge', info: '8 vCPU, 16 GB'},
   ];
 
   // Keep in sync with https://www.packet.com/cloud/servers/.
-  export const Packet: string[] =
-      ['t1.small.x86', 'c1.small.x86', 'c2.medium.x86', 'c1.large.x86', 'm2.large.x86', 'm1.large.x86', 's1.large.x86'];
+  export const Packet: NodeInstanceFlavor[] = [
+    {id: 't1.small.x86', info: '4 Cores, 8 GB'},
+    {id: 'c1.small.x86', info: '4 Cores, 32 GB'},
+    {id: 'c2.medium.x86', info: '24 Cores, 64 GB'},
+    {id: 'c1.large.x86', info: '16 Cores, 128 GB'},
+    {id: 'm1.large.x86', info: '24 Cores, 256 GB'},
+    {id: 'm2.large.x86', info: '28 Cores, 384 GB'},
+    {id: 's1.large.x86', info: '16 Cores, 128 GB'},
+  ];
 
-  export const Openstack: string[] = ['m1.micro', 'm1.tiny', 'm1.small', 'm1.medium', 'm1.large'];
+  export const Openstack: NodeInstanceFlavor[] =
+      [{id: 'm1.micro'}, {id: 'm1.tiny'}, {id: 'm1.small'}, {id: 'm1.medium'}, {id: 'm1.large'}];
 
-  export const Hetzner: string[] =
-      ['cx11', 'cx21', 'cx31', 'cx41', 'cx51', 'cx11-ceph', 'cx21-ceph', 'cx31-ceph', 'cx41-ceph', 'cx51-ceph'];
+  export const Hetzner: NodeInstanceFlavor[] = [
+    {id: 'cx11', info: '1 vCPU, 2 GB'},
+    {id: 'cx21', info: '2 vCPU, 4 GB'},
+    {id: 'cx31', info: '2 vCPU, 8 GB'},
+    {id: 'cx41', info: '4 vCPU, 16 GB'},
+    {id: 'cx51', info: '8 vCPU, 32 GB'},
+    {id: 'cx11-ceph', info: '1 vCPU, 2 GB'},
+    {id: 'cx21-ceph', info: '2 vCPU, 4 GB'},
+    {id: 'cx31-ceph', info: '2 vCPU, 8 GB'},
+    {id: 'cx41-ceph', info: '4 vCPU, 16 GB'},
+    {id: 'cx51-ceph', info: '8 vCPU, 32 GB'},
+  ];
 
   export namespace GCP {
     // remove 'local-ssd' for now, as this must be handled differently in the machine-controller
     export const DiskTypes: string[] = ['pd-ssd', 'pd-standard'];
 
     // https://cloud.google.com/compute/docs/machine-types
-    export const MachineTypes: string[] = [
-      'n1-standard-1', 'n1-standard-2', 'n1-standard-4', 'n1-standard-8', 'n1-standard-16', 'n1-standard-32',
-      'n1-standard-64', 'n1-standard-96'
+    export const MachineTypes: NodeInstanceFlavor[] = [
+      {id: 'n1-standard-1', info: '1 vCPU, 3.75 GB'},
+      {id: 'n1-standard-2', info: '2 vCPU, 7.50 GB'},
+      {id: 'n1-standard-4', info: '4 vCPU, 15 GB'},
+      {id: 'n1-standard-8', info: '8 vCPU, 30 GB'},
+      {id: 'n1-standard-16', info: '16 vCPU, 60 GB'},
+      {id: 'n1-standard-32', info: '32 vCPU, 120 GB'},
+      {id: 'n1-standard-64', info: '64 vCPU, 240 GB'},
+      {id: 'n1-standard-96', info: '96 vCPU, 360 GB'},
     ];
   }
 }

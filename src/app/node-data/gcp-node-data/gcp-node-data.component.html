@@ -34,7 +34,7 @@
                   [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
                   disableOptionCentering>
         <mat-option *ngFor="let type of machineTypes"
-                    [value]="type">
+                    [value]="type.id">
           {{type}}
         </mat-option>
       </mat-select>
