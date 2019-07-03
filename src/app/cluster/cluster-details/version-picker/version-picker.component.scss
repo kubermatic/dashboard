@@ -2,18 +2,89 @@
 @import "../../../../assets/css/variables";
 
 .km-version-picker-container {
-  border: 1px solid $separator;
-  border-radius: 5px;
+  margin: (.75 * $baseline-grid) (8 * $baseline-grid) (.75 * $baseline-grid) 0;
 
-  .km-version-picker-type {
-    background: $separator;
-    height: 100%;
-    padding: $baseline-grid;
+  .km-version-picker {
+    height: 50px;
 
-    i {
-      height: 30px;
-      width: 30px;
-      margin: 0 !important;
+    ::ng-deep * {
+      cursor: default;
     }
+
+    .km-version-picker-type {
+      background: $separator;
+      border-bottom: 1px;
+      border-left: 1px;
+      border-right: 0;
+      border-top: 1px;
+      border-style: solid;
+      border-color: $separator;
+      border-radius: 5px 0 0 5px;
+      height: 51px;
+      margin-top: -1px;
+      padding: $baseline-grid;
+      width: 50px;
+
+      i {
+        height: 30px;
+        width: 30px;
+        margin: 0 !important;
+      }
+    }
+
+    .mat-form-field {
+      font-size: $subhead-font-size-base;
+      margin-top: 20px;
+
+      ::ng-deep div.mat-form-field-flex label {
+        color: $medium-text-color;
+      }
+
+      ::ng-deep .mat-form-field-infix {
+        padding: 12px 0 12px 0 !important;
+        width: 120px;
+      }
+
+      ::ng-deep .mat-form-field-outline-end {
+        border-radius: 0 5px 5px 0 !important;
+      }
+
+      ::ng-deep .mat-form-field-outline-start {
+        border-radius: 0 !important;
+      }
+    }
+  }
+
+  .km-version-picker-enabled:hover {
+    ::ng-deep * {
+      cursor: pointer;
+    }
+
+    .km-version-picker-type {
+      border-bottom: 2px;
+      border-left: 2px;
+      border-top: 2px;
+      border-style: solid;
+      border-color: $quaternary;
+      margin-left: -1px;
+      transition: all .5s ease;
+      width: 51px;
+    }
+
+    ::ng-deep .mat-form-field-outline-thick {
+      color: $quaternary !important;
+      opacity: 1 !important;
+      transition: all .5s ease;
+    }
+
+    ::ng-deep div.mat-form-field-flex label {
+      transition: all .5s ease;
+      color: $quaternary-dark !important;
+    }
+  }
+
+  .fa {
+    margin: 1.5 * $baseline-grid;
+    font-size: 20px;
   }
 }
