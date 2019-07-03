@@ -16,7 +16,7 @@
 
     <mat-form-field>
       <mat-label>{{getVersionHeadline(cluster.type, false)}}</mat-label>
-      <mat-select [(ngModel)]="cluster.spec.version"
+      <mat-select [ngModel]="cluster.spec.version"
                   disabled>
         <mat-option [value]="cluster.spec.version">
           {{cluster.spec.version}}
