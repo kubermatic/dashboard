@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatButtonToggleModule} from '@angular/material';
@@ -26,6 +27,7 @@ describe('SetProviderComponent', () => {
             ReactiveFormsModule,
             SharedModule,
             MatButtonToggleModule,
+            HttpClientModule,
           ],
           declarations: [
             SetProviderComponent,

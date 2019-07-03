@@ -47,7 +47,7 @@ export class CustomCredentialsSettingsComponent implements OnInit {
   ngOnInit() {
     this._wizard.clusterProviderFormChanges$
         .pipe(switchMap(
-            providerForm => providerForm.provider === NodeProvider.BRINGYOUROWN ?
+            providerForm => providerForm.provider === NodeProvider.BRINGYOUROWN || !providerForm.provider ?
                 EMPTY :
                 this._wizard.credentials(providerForm.provider)))
         .pipe(takeUntil(this._unsubscribe))

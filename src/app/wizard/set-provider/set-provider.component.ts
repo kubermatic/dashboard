@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {DatacenterService, WizardService} from '../../core/services';
-import {ClusterEntity} from '../../shared/entity/ClusterEntity';
+import {ClusterEntity, getClusterProvider} from '../../shared/entity/ClusterEntity';
 import {getDatacenterProvider} from '../../shared/entity/DatacenterEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 
@@ -23,7 +23,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.setProviderForm = new FormGroup({
-      provider: new FormControl('', [Validators.required]),
+      provider: new FormControl(getClusterProvider(this.cluster), [Validators.required]),
     });
 
     this.setProviderForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {

@@ -1,11 +1,15 @@
+import {HttpClientModule} from '@angular/common/http';
+import {EventEmitter} from '@angular/core';
 import {async, ComponentFixture, discardPeriodicTasks, fakeAsync, TestBed, tick} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppConfigService} from '../../../../app-config.service';
-import {ApiService, Auth, WizardService} from '../../../../core/services';
+import {Auth, WizardService} from '../../../../core/services';
+import {ClusterSettingsFormView} from '../../../../shared/model/ClusterForm';
 import {Config} from '../../../../shared/model/Config';
+import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
 import {fakeOpenstackDatacenter} from '../../../../testing/fake-data/datacenter.fake';
@@ -20,26 +24,45 @@ describe('OpenstackClusterSettingsComponent', () => {
   let fixture: ComponentFixture<OpenstackClusterSettingsComponent>;
   let component: OpenstackClusterSettingsComponent;
   let config: Config;
-  let getSelectedDCSpyObj: Spy;
-  let getOpenStackTenantsForWizard: Spy;
-  let getOpenStackNetworkForWizard: Spy;
-  let getOpenStackSecurityGroupsForWizard: Spy;
-  let getOpenStackSubnetIdsForWizard: Spy;
-  let apiMock;
+  let tenantsMock: Spy;
+  let networksMock: Spy;
+  let securityGroupsMock: Spy;
+  let subnetIdsMock: Spy;
+  let wizardMock;
+  let providerMock;
 
   beforeEach(async(() => {
-    apiMock = jasmine.createSpyObj('ApiService', [
-      'getOpenStackTenantsForWizard', 'getOpenStackNetworkForWizard', 'getOpenStackSecurityGroupsForWizard',
-      'getOpenStackSubnetIdsForWizard'
-    ]);
-    getOpenStackTenantsForWizard =
-        apiMock.getOpenStackTenantsForWizard.and.returnValue(asyncData(openstackTenantsFake()));
-    getOpenStackNetworkForWizard =
-        apiMock.getOpenStackNetworkForWizard.and.returnValue(asyncData(openstackNetworksFake()));
-    getOpenStackSecurityGroupsForWizard =
-        apiMock.getOpenStackSecurityGroupsForWizard.and.returnValue(asyncData(openstackSecurityGroupsFake()));
-    getOpenStackSubnetIdsForWizard =
-        apiMock.getOpenStackSubnetIdsForWizard.and.returnValue(asyncData(openstackSubnetIdsFake()));
+    wizardMock =
+        jasmine.createSpyObj('WizardService', ['provider', 'getSelectedDatacenter', 'changeClusterProviderSettings']);
+    providerMock = jasmine.createSpyObj(
+        'Provider',
+        ['tenants', 'networks', 'securityGroups', 'subnets', 'username', 'password', 'domain', 'datacenter', 'tenant']);
+
+    wizardMock.changeClusterProviderSettings.and.callThrough();
+    wizardMock.onCustomCredentialsDisable = new EventEmitter<boolean>();
+    wizardMock.onCustomCredentialsSelect = new EventEmitter<string>();
+    wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
+
+    providerMock.username.and.returnValue(providerMock);
+    providerMock.password.and.returnValue(providerMock);
+    providerMock.domain.and.returnValue(providerMock);
+    providerMock.datacenter.and.returnValue(providerMock);
+    providerMock.tenant.and.returnValue(providerMock);
+
+    wizardMock.getSelectedDatacenter.and.returnValue(fakeOpenstackDatacenter());
+
+    tenantsMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
+    providerMock.tenants.and.returnValue(asyncData(openstackTenantsFake()));
+
+    networksMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
+    providerMock.networks.and.returnValue(asyncData(openstackNetworksFake()));
+
+    securityGroupsMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
+    providerMock.securityGroups.and.returnValue(asyncData(openstackSecurityGroupsFake()));
+
+    subnetIdsMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
+    providerMock.subnets.and.returnValue(asyncData(openstackSubnetIdsFake()));
+
     const appConfigServiceMock = jasmine.createSpyObj('AppConfigService', ['getConfig']);
     config = {} as Config;
     appConfigServiceMock.getConfig.and.returnValue(config);
@@ -51,13 +74,13 @@ describe('OpenstackClusterSettingsComponent', () => {
             BrowserAnimationsModule,
             ReactiveFormsModule,
             SharedModule,
+            HttpClientModule,
           ],
           declarations: [
             OpenstackClusterSettingsComponent,
           ],
           providers: [
-            WizardService,
-            {provide: ApiService, useValue: apiMock},
+            {provide: WizardService, useValue: wizardMock},
             {provide: Auth, useClass: AuthMockService},
             {provide: AppConfigService, useValue: appConfigServiceMock},
           ],
@@ -68,8 +91,6 @@ describe('OpenstackClusterSettingsComponent', () => {
   describe('Default config', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
-      const wizardService: WizardService = TestBed.get(WizardService);
-      getSelectedDCSpyObj = spyOn(wizardService, 'getSelectedDatacenter').and.returnValue(fakeOpenstackDatacenter());
       component = fixture.componentInstance;
       component.cluster = fakeOpenstackCluster();
       component.cluster.spec.cloud.openstack = {
@@ -100,7 +121,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     it('should show floating ip pool and make it required', () => {
       const dc = fakeOpenstackDatacenter();
       dc.spec.openstack.enforce_floating_ip = true;
-      getSelectedDCSpyObj.and.returnValue(dc);
+      wizardMock.getSelectedDatacenter.and.returnValue(dc);
 
       fixture.detectChanges();
       const el = fixture.debugElement.query(By.css('#km-floating-ip-pool-field'));
@@ -121,8 +142,8 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.form.controls.password.setValue('password');
          component.form.controls.domain.setValue('domain');
          fixture.detectChanges();
-         tick();
-         expect(getOpenStackTenantsForWizard.and.callThrough()).toHaveBeenCalled();
+         tick(1001);
+         expect(tenantsMock.and.callThrough()).toHaveBeenCalled();
          expect(component.tenants).toEqual([
            {
              id: 'id789',
@@ -146,8 +167,8 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.form.controls.domain.setValue('');
       component.form.controls.tenant.setValue('');
       fixture.detectChanges();
-      expect(getOpenStackNetworkForWizard).toHaveBeenCalledTimes(0);
-      expect(getOpenStackSecurityGroupsForWizard).toHaveBeenCalledTimes(0);
+      expect(networksMock).toHaveBeenCalledTimes(0);
+      expect(securityGroupsMock).toHaveBeenCalledTimes(0);
     });
 
     it('should load optional settings', fakeAsync(() => {
@@ -159,9 +180,9 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.floatingIpPools = [];
          component.securityGroups = [];
          fixture.detectChanges();
-         tick();
+         tick(1001);
 
-         expect(getOpenStackNetworkForWizard).toHaveBeenCalled();
+         expect(networksMock).toHaveBeenCalled();
          expect(component.networks).toEqual([
            {
              id: 'net456',
@@ -182,7 +203,7 @@ describe('OpenstackClusterSettingsComponent', () => {
            },
          ]);
 
-         expect(getOpenStackSecurityGroupsForWizard).toHaveBeenCalled();
+         expect(securityGroupsMock).toHaveBeenCalled();
          expect(component.securityGroups).toEqual([
            {
              id: 'sg456',
@@ -200,19 +221,30 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.form.controls.network.setValue('');
       fixture.detectChanges();
       expect(component.subnetIds.length).toEqual(0);
-      expect(getOpenStackSubnetIdsForWizard).toHaveBeenCalledTimes(0);
+      expect(subnetIdsMock).toHaveBeenCalledTimes(0);
     });
 
     it('should load subnet ids', fakeAsync(() => {
+         component.networks = [];
+         component.floatingIpPools = [];
+         component.securityGroups = [];
+
          component.form.controls.username.setValue('username');
          component.form.controls.password.setValue('password');
          component.form.controls.domain.setValue('domain');
-         component.form.controls.tenant.setValue('loodse-poc');
-         component.form.controls.network.setValue('network');
-         component.subnetIds = [];
          fixture.detectChanges();
-         tick();
-         expect(getOpenStackSubnetIdsForWizard.and.callThrough()).toHaveBeenCalled();
+         tick(1001);
+
+         component.form.controls.tenant.setValue('loodse-poc');
+         fixture.detectChanges();
+         tick(1001);
+
+         component.form.controls.network.setValue('network');
+         component.form.controls.tenant.setValue('loodse-poc');
+         fixture.detectChanges();
+         tick(1001);
+
+         expect(subnetIdsMock).toHaveBeenCalled();
          expect(component.subnetIds).toEqual([
            {
              id: 'sub456',
@@ -234,9 +266,6 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.form.controls.username.setValue('username');
       component.form.controls.password.setValue('password');
       component.form.controls.domain.setValue('domain');
-      fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('Loading Projects...');
-
       component.tenants = [];
       fixture.detectChanges();
       expect(component.getTenantsFormState()).toEqual('No Projects available');
@@ -246,34 +275,31 @@ describe('OpenstackClusterSettingsComponent', () => {
       expect(component.getTenantsFormState()).toEqual('Project*');
     });
 
-    it('should set correct optional settings placeholder', () => {
-      component.form.controls.tenant.setValue('');
-      fixture.detectChanges();
-      expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
+    it('should set correct optional settings placeholder', (() => {
+         component.form.controls.tenant.setValue('');
+         fixture.detectChanges();
+         expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
 
-      component.form.controls.username.setValue('username');
-      component.form.controls.password.setValue('password');
-      component.form.controls.domain.setValue('domain');
-      component.form.controls.tenant.setValue('tenant');
-      fixture.detectChanges();
-      expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Loading Security Groups...');
+         component.form.controls.username.setValue('username');
+         component.form.controls.password.setValue('password');
+         component.form.controls.domain.setValue('domain');
+         component.form.controls.tenant.setValue('tenant');
+         component.floatingIpPools = [];
+         component.securityGroups = [];
+         component.networks = [];
+         fixture.detectChanges();
+         expect(component.getOptionalSettingsFormState('Floating IP Pool')).toEqual('No Floating IP Pools available');
+         expect(component.getOptionalSettingsFormState('Security Group')).toEqual('No Security Groups available');
+         expect(component.getOptionalSettingsFormState('Network')).toEqual('No Networks available');
 
-      component.floatingIpPools = [];
-      component.securityGroups = [];
-      component.networks = [];
-      fixture.detectChanges();
-      expect(component.getOptionalSettingsFormState('Floating IP Pool')).toEqual('No Floating IP Pools available');
-      expect(component.getOptionalSettingsFormState('Security Group')).toEqual('No Security Groups available');
-      expect(component.getOptionalSettingsFormState('Network')).toEqual('No Networks available');
-
-      component.floatingIpPools = openstackSortedFloatingIpsFake();
-      component.securityGroups = openstackSecurityGroupsFake();
-      component.networks = openstackSortedNetworksFake();
-      fixture.detectChanges();
-      expect(component.getOptionalSettingsFormState('Floating IP Pool')).toEqual('Floating IP Pool');
-      expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
-      expect(component.getOptionalSettingsFormState('Network')).toEqual('Network');
-    });
+         component.floatingIpPools = openstackSortedFloatingIpsFake();
+         component.securityGroups = openstackSecurityGroupsFake();
+         component.networks = openstackSortedNetworksFake();
+         fixture.detectChanges();
+         expect(component.getOptionalSettingsFormState('Floating IP Pool')).toEqual('Floating IP Pool');
+         expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
+         expect(component.getOptionalSettingsFormState('Network')).toEqual('Network');
+       }));
 
     it('should set correct subnet id placeholder', () => {
       component.form.controls.network.setValue('');
@@ -285,9 +311,6 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.form.controls.domain.setValue('domain');
       component.form.controls.tenant.setValue('tenant');
       component.form.controls.network.setValue('network');
-      fixture.detectChanges();
-      expect(component.getSubnetIDFormState()).toEqual('Loading Subnet IDs...');
-
       component.subnetIds = [];
       fixture.detectChanges();
       expect(component.getSubnetIDFormState()).toEqual('No Subnet IDs available');
@@ -305,8 +328,6 @@ describe('OpenstackClusterSettingsComponent', () => {
       };
 
       fixture = TestBed.createComponent(OpenstackClusterSettingsComponent);
-      const wizardService: WizardService = TestBed.get(WizardService);
-      spyOn(wizardService, 'getSelectedDatacenter').and.returnValue(fakeOpenstackDatacenter());
       component = fixture.componentInstance;
       component.cluster = fakeOpenstackCluster();
       component.cluster.spec.cloud.openstack = {

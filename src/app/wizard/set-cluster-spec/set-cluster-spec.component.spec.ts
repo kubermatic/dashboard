@@ -1,3 +1,4 @@
+import {HttpClient, HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule, By} from '@angular/platform-browser';
@@ -19,6 +20,7 @@ const modules: any[] = [
   ReactiveFormsModule,
   SharedModule,
   MachineNetworksModule,
+  HttpClientModule,
 ];
 
 describe('SetClusterSpecComponent', () => {
@@ -39,6 +41,7 @@ describe('SetClusterSpecComponent', () => {
             SetClusterSpecComponent,
           ],
           providers: [
+            HttpClient,
             WizardService,
             {provide: ApiService, useValue: apiMock},
             {provide: AppConfigService, useClass: AppConfigMockService},

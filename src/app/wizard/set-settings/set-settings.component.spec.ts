@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatTabsModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
@@ -30,6 +31,7 @@ import {DatacenterMockService} from '../../testing/services/datacenter-mock.serv
 import {ClusterNameGeneratorMock} from '../../testing/services/name-generator-mock.service';
 import {ProjectMockService} from '../../testing/services/project-mock.service';
 import {UserMockService} from '../../testing/services/user-mock.service';
+import {CustomCredentialsSettingsComponent} from './custom-credentials/custom-credentials.component';
 
 import {AWSClusterSettingsComponent} from './provider-settings/aws/aws.component';
 import {AzureClusterSettingsComponent} from './provider-settings/azure/azure.component';
@@ -56,8 +58,10 @@ describe('SetSettingsComponent', () => {
             BrowserAnimationsModule,
             SharedModule,
             MatTabsModule,
+            HttpClientModule,
           ],
           declarations: [
+            CustomCredentialsSettingsComponent,
             SetSettingsComponent,
             ClusterSSHKeysComponent,
             ClusterProviderSettingsComponent,

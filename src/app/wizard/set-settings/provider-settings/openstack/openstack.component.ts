@@ -96,7 +96,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.form.controls.network.valueChanges.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => {
+        .subscribe((network) => {
           if (this._isNetworkSelected()) {
             this._loadSubnetIds();
           }
@@ -141,7 +141,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   getTenantsFormState(): string {
-    if (!this._loadingOptionalTenants && this._hasTenantCredentials()) {
+    if (!this._loadingOptionalTenants && !this._hasTenantCredentials()) {
       return 'Project*';
     } else if (this._loadingOptionalTenants) {
       return 'Loading Projects...';

@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -19,6 +20,7 @@ describe('HetznerClusterSettingsComponent', () => {
             BrowserAnimationsModule,
             ReactiveFormsModule,
             SharedModule,
+            HttpClientModule,
           ],
           declarations: [
             HetznerClusterSettingsComponent,

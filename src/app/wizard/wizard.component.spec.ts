@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {MatButtonToggleModule, MatDialog, MatTabsModule} from '@angular/material';
 import {BrowserModule} from '@angular/platform-browser';
@@ -39,6 +40,7 @@ import {SetClusterSpecComponent} from './set-cluster-spec/set-cluster-spec.compo
 import {SetDatacenterComponent} from './set-datacenter/set-datacenter.component';
 import {SetMachineNetworksComponent} from './set-machine-networks/set-machine-networks.component';
 import {SetProviderComponent} from './set-provider/set-provider.component';
+import {CustomCredentialsSettingsComponent} from './set-settings/custom-credentials/custom-credentials.component';
 import {AWSClusterSettingsComponent} from './set-settings/provider-settings/aws/aws.component';
 import {AzureClusterSettingsComponent} from './set-settings/provider-settings/azure/azure.component';
 import {BringyourownClusterSettingsComponent} from './set-settings/provider-settings/bringyourown/bringyourown.component';
@@ -75,8 +77,10 @@ describe('WizardComponent', () => {
             MatButtonToggleModule,
             MatTabsModule,
             MachineNetworksModule,
+            HttpClientModule,
           ],
           declarations: [
+            CustomCredentialsSettingsComponent,
             WizardComponent,
             ProgressComponent,
             SetSettingsComponent,
