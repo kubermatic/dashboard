@@ -4,9 +4,11 @@
        fxLayout="row"
        fxLayoutAlign=" center">
 
-    <i class="km-icon-arrow-left"
-       matTooltip="Go back to the cluster"
-       (click)="navigate()"></i>
+    <div class="km-cluster-panel-icon"
+         (click)="navigate()"
+         matTooltip="Go back to the cluster">
+      <i class="km-icon-arrow-left"></i>
+    </div>
 
     <mat-divider vertical="true"></mat-divider>
 
