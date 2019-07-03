@@ -272,12 +272,16 @@ mat-button-toggle-group {
 }
 
 mat-button-toggle-group[group='datacenterGroup'] {
-  border-radius: 4px;
+  border-radius: 0;
 
   .mat-button-toggle-label-content {
     flex-direction: column;
     padding: 20px 0;
     width: 100%;
+  }
+
+  .mat-button-toggle {
+    border-radius: 4px;
   }
 
   .mat-button-toggle-button {
@@ -290,7 +294,11 @@ mat-button-toggle-group[group='datacenterGroup'] {
 }
 
 mat-button-toggle-group[group='providerGroup'] {
-  border-radius: 4px;
+  border-radius: 0;
+
+  .mat-button-toggle {
+    border-radius: 4px;
+  }
 
   .mat-button-toggle-label-content {
     height: 100%;
