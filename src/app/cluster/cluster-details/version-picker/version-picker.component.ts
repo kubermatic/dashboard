@@ -62,15 +62,21 @@ export class VersionPickerComponent implements OnInit, OnChanges {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
+  isEnabled(): boolean {
+    return this.isClusterRunning && (this.updatesAvailable || this.downgradesAvailable);
+  }
+
   changeClusterVersionDialog(): void {
-    const modal = this._matDialog.open(ChangeClusterVersionComponent);
-    modal.componentInstance.cluster = this.cluster;
-    modal.componentInstance.datacenter = this.datacenter;
-    modal.componentInstance.controlPlaneVersions = this.versionsList;
-    modal.afterClosed().pipe(first()).subscribe(isChanged => {
-      if (isChanged) {
-        this._clusterService.onClusterUpdate.next();
-      }
-    });
+    if (this.isEnabled()) {
+      const modal = this._matDialog.open(ChangeClusterVersionComponent);
+      modal.componentInstance.cluster = this.cluster;
+      modal.componentInstance.datacenter = this.datacenter;
+      modal.componentInstance.controlPlaneVersions = this.versionsList;
+      modal.afterClosed().pipe(first()).subscribe(isChanged => {
+        if (isChanged) {
+          this._clusterService.onClusterUpdate.next();
+        }
+      });
+    }
   }
 }
