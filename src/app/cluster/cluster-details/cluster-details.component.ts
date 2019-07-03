@@ -85,7 +85,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           ]);
         }))
         .pipe(switchMap(([keys, health, events]) => {
-          this.sshKeys = keys;
+          this.sshKeys = keys.sort((a, b) => {
+            return a.name.localeCompare(b.name);
+          });
+
           this.health = health;
           this.events = events;
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
