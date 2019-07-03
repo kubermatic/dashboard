@@ -1,9 +1,10 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
+
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -16,7 +17,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  types: string[] = NodeInstanceFlavors.Hetzner;
+  types: NodeInstanceFlavor[] = NodeInstanceFlavors.Hetzner;
   hetznerNodeForm: FormGroup;
   private subscriptions: Subscription[] = [];
 
@@ -28,7 +29,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
     });
 
     if (this.nodeData.spec.cloud.hetzner.type === '') {
-      this.hetznerNodeForm.controls.type.setValue(this.types[0]);
+      this.hetznerNodeForm.controls.type.setValue(this.types[0].id);
     }
 
     this.subscriptions.push(this.hetznerNodeForm.valueChanges.subscribe((data) => {
