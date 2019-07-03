@@ -13,7 +13,7 @@ import {SharedModule} from '../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../testing/fake-data/cluster.fake';
 import {nodesFake} from '../../testing/fake-data/node.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../testing/router-stubs';
-import {ApiMockService, asyncData} from '../../testing/services/api-mock.service';
+import {ApiMockService} from '../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../testing/services/app-config-mock.service';
 import {AuthMockService} from '../../testing/services/auth-mock.service';
 import {ClusterMockService} from '../../testing/services/cluster-mock-service';
@@ -28,12 +28,12 @@ import {ClusterSecretsComponent} from './cluster-secrets/cluster-secrets.compone
 import {MachineNetworksDisplayComponent} from './machine-networks-display/machine-networks-dispay.component';
 import {NodeDeploymentListComponent} from './node-deployment-list/node-deployment-list.component';
 import {NodeListComponent} from './node-list/node-list.component';
+import {VersionPickerComponent} from './version-picker/version-picker.component';
 
 describe('ClusterDetailsComponent', () => {
   let fixture: ComponentFixture<ClusterDetailsComponent>;
   let component: ClusterDetailsComponent;
   let activatedRoute: ActivatedRouteStub;
-  let upgradesMock;
 
   beforeEach(async(() => {
     TestBed
@@ -52,6 +52,7 @@ describe('ClusterDetailsComponent', () => {
             NodeListComponent,
             NodeDeploymentListComponent,
             MachineNetworksDisplayComponent,
+            VersionPickerComponent,
           ],
           providers: [
             {provide: ApiService, useClass: ApiMockService},
@@ -73,7 +74,6 @@ describe('ClusterDetailsComponent', () => {
 
   beforeEach(() => {
     fixture = TestBed.createComponent(ClusterDetailsComponent);
-    upgradesMock = spyOn(fixture.debugElement.injector.get(ClusterService), 'upgrades').and.callThrough();
     component = fixture.componentInstance;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
@@ -128,126 +128,6 @@ describe('ClusterDetailsComponent', () => {
        de = fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
        expect(de).not.toBeNull('element should be rendered after requests');
 
-       discardPeriodicTasks();
-     }));
-
-  it('should show upgrade link', fakeAsync(() => {
-       upgradesMock.and.returnValue(asyncData([
-         {
-           version: '1.8.5',
-           default: false,
-         },
-         {
-           version: '1.8.6',
-           default: false,
-         },
-       ]));
-       fixture.detectChanges();
-       tick();
-       expect(component.updatesAvailable).toEqual(true, 'Updates should be available');
-       expect(component.downgradesAvailable).toEqual(false, 'Downgrades should not be available');
-       discardPeriodicTasks();
-     }));
-
-  it('should not show upgrade or downgrade link', fakeAsync(() => {
-       upgradesMock.and.returnValue(asyncData([
-         {
-           version: '1.8.5',
-           default: false,
-         },
-       ]));
-       fixture.detectChanges();
-       tick();
-       expect(component.updatesAvailable).toEqual(false, 'Updates should not be available');
-       expect(component.downgradesAvailable).toEqual(false, 'Downgrades should not be available');
-       discardPeriodicTasks();
-     }));
-
-  it('should show downgrade link', fakeAsync(() => {
-       upgradesMock.and.returnValue(asyncData([
-         {
-           version: '1.8.5',
-           default: false,
-         },
-         {
-           version: '1.8.4',
-           default: false,
-         },
-       ]));
-       fixture.detectChanges();
-       tick();
-       expect(component.updatesAvailable).toEqual(false, 'Updates should not be available');
-       expect(component.downgradesAvailable).toEqual(true, 'Downgrades should be available');
-       discardPeriodicTasks();
-     }));
-
-  it('should show downgrade and update link', fakeAsync(() => {
-       upgradesMock.and.returnValue(asyncData([
-         {
-           version: '1.8.5',
-           default: false,
-         },
-         {
-           version: '1.8.4',
-           default: false,
-         },
-         {
-           version: '1.8.6',
-           default: false,
-         },
-       ]));
-       fixture.detectChanges();
-       tick();
-       expect(component.updatesAvailable).toEqual(true, 'Updates should be available');
-       expect(component.downgradesAvailable).toEqual(true, 'Downgrades should be available');
-       discardPeriodicTasks();
-     }));
-
-  it('should filter restricted versions', fakeAsync(() => {
-       upgradesMock.and.returnValue(asyncData([
-         {
-           version: '1.8.5',
-           default: false,
-         },
-         {
-           version: '1.8.4',
-           default: false,
-           restrictedByKubeletVersion: true,
-         },
-         {
-           version: '1.8.6',
-           default: false,
-           restrictedByKubeletVersion: true,
-         },
-       ]));
-       fixture.detectChanges();
-       tick();
-       expect(component.updatesAvailable).toBeFalsy();
-       expect(component.downgradesAvailable).toBeFalsy();
-       expect(component.someUpgradesRestrictedByKubeletVersion).toBeTruthy();
-       discardPeriodicTasks();
-     }));
-
-  it('should not filter non-restricted versions', fakeAsync(() => {
-       upgradesMock.and.returnValue(asyncData([
-         {
-           version: '1.8.5',
-           default: false,
-         },
-         {
-           version: '1.8.4',
-           default: false,
-         },
-         {
-           version: '1.8.6',
-           default: false,
-         },
-       ]));
-       fixture.detectChanges();
-       tick();
-       expect(component.updatesAvailable).toBeTruthy();
-       expect(component.downgradesAvailable).toBeTruthy();
-       expect(component.someUpgradesRestrictedByKubeletVersion).toBeFalsy();
        discardPeriodicTasks();
      }));
 });
