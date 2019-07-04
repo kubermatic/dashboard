@@ -54,4 +54,14 @@
     <mat-hint *ngIf="showNetworkHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
 
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-label>Folder</mat-label>
+    <input matInput
+           formControlName="folder"
+           name="folder"
+           type="text"
+           autocomplete="off">
+  </mat-form-field>
+
 </form>

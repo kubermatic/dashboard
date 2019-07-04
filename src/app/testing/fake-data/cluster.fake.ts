@@ -173,6 +173,7 @@ export function fakeVSphereCluster(): ClusterEntity {
           username: 'foo',
           password: 'bar',
           vmNetName: '',
+          folder: '',
           infraManagementUser: {
             username: 'foo',
             password: 'bar',

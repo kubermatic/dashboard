@@ -19,6 +19,7 @@ export function fakeClusterWithMachineNetwork(): ClusterEntity {
           username: 'foo',
           password: 'bar',
           vmNetName: '',
+          folder: '',
           infraManagementUser: {
             username: 'foo',
             password: 'bar',
@@ -62,6 +63,7 @@ export function fakeGatewayInCidr(): ClusterEntity {
           username: 'foo',
           password: 'bar',
           vmNetName: '',
+          folder: '',
           infraManagementUser: {
             username: 'foo',
             password: 'bar',
@@ -105,6 +107,7 @@ export function fakeGatewayNotInCidr(): ClusterEntity {
           username: 'foo',
           password: 'bar',
           vmNetName: '',
+          folder: '',
           infraManagementUser: {
             username: 'foo',
             password: 'bar',
