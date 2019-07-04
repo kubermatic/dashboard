@@ -89,35 +89,10 @@
     <mat-card-content class="km-row">
 
       <div class="km-content-wrap">
-        <km-property>
-          <div key>Type</div>
-          <div value>
-            <span class="km-cluster-type"
-                  [matTooltip]="getType(cluster.type)">
-              <i class="km-icon-{{cluster.type}}"></i>
-            </span>
-          </div>
-        </km-property>
-
-        <km-property>
-          <div key>{{getVersionHeadline(cluster.type, false)}}</div>
-          <div value
-               fxLayoutGap="4px">
-            <span *ngIf="isClusterRunning && (updatesAvailable || downgradesAvailable)"
-                  (click)="changeClusterVersionDialog()"
-                  matTooltip="Click to change the version"
-                  class="km-copy">{{cluster.spec.version}}
-              <i *ngIf="updatesAvailable"
-                 class="fa fa-arrow-up"></i>
-            </span>
-            <i *ngIf="someUpgradesRestrictedByKubeletVersion"
-               matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
-               class="fa fa-exclamation-triangle orange"></i>
-            <span *ngIf="!isClusterRunning || !(updatesAvailable || downgradesAvailable)">
-              {{cluster.spec.version}}
-            </span>
-          </div>
-        </km-property>
+        <km-version-picker [datacenter]="datacenter"
+                           [cluster]="cluster"
+                           [isClusterRunning]="isClusterRunning"
+                           [upgrades]="upgrades"></km-version-picker>
 
         <km-property>
           <div key>Cluster ID</div>
@@ -130,38 +105,20 @@
           </div>
         </km-property>
 
-        <km-property>
-          <div key>Provider</div>
-          <div value>
-            <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
-          </div>
-        </km-property>
-
         <km-property *ngIf="nodeDc?.spec?.provider !== 'bringyourown'">
           <div key>Region</div>
           <div value>{{nodeDc?.spec?.country}} ({{nodeDc?.spec?.location}})</div>
         </km-property>
 
         <km-property>
-          <div key>
-            <span>SSH Keys&nbsp;</span>
-            <span matTooltip="You can login into the nodes with the user 'root', 'ubuntu' or 'core'.">
-              <i class="fa fa-question-circle"
-                 aria-hidden="true"></i>
-            </span>
-          </div>
           <div value>
-            <span *ngFor="let key of sshKeys.slice(0, displayedSSHKeys); let last = last">
-              <span>{{key.name}}</span>
-              <span *ngIf="!last">,&nbsp;</span>
-            </span>
-            <ng-container *ngIf="sshKeys.length > displayedSSHKeys">
-              <span>...&nbsp;</span>
-              <span [matTooltip]="getTruncatedSSHKeys()"
-                    class="km-ssh-keys-more">+{{sshKeys.length - displayedSSHKeys}}
-              </span>
-            </ng-container>
-            <span *ngIf="sshKeys.length < 1">-</span>
+            <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
+          </div>
+        </km-property>
+
+        <km-property>
+          <div value>
+            <km-ssh-key-list [sshKeys]="sshKeys"></km-ssh-key-list>
           </div>
         </km-property>
 

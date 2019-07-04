@@ -1,0 +1,32 @@
+<div class="km-version-picker-container"
+     fxFlex
+     fxFlexAlign="row"
+     fxLayoutAlign="center center">
+
+  <div class="km-version-picker"
+       [ngClass]="{'km-version-picker-enabled': isEnabled()}"
+       fxFlex
+       fxLayoutAlign="center center"
+       (click)="changeClusterVersionDialog()">
+
+    <div class="km-version-picker-type"
+         fxLayoutAlign="center center">
+      <i class="km-icon-{{cluster.type}}"></i>
+    </div>
+
+    <mat-form-field>
+      <mat-label>{{getVersionHeadline(cluster.type, false)}}</mat-label>
+      <mat-select [ngModel]="cluster.spec.version"
+                  disabled>
+        <mat-option [value]="cluster.spec.version">
+          {{cluster.spec.version}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+
+  <i *ngIf="someUpgradesRestrictedByKubeletVersion"
+     matTooltip="Some Kubernetes versions are not available due to incompatible nodes running in the cluster. Upgrade or recreate your nodes before you can upgrade your cluster to the latest version."
+     class="fa fa-exclamation-triangle orange"></i>
+</div>

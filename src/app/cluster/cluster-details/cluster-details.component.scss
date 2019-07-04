@@ -1,19 +1,6 @@
 @import "../../../assets/css/colors";
 @import "../../../assets/css/variables";
 
-.km-change-version {
-  small {
-    margin-left: 10px;
-    color: $primary;
-  }
-}
-
-.km-ssh-keys-more {
-  color: $light-text-color;
-  cursor: default;
-  user-select: none;
-}
-
 .km-icon-delete {
   width: 14px;
   height: 14px;
@@ -62,16 +49,6 @@ button:disabled {
 }
 
 .km-provider-logo {
-  min-width: 12 * $baseline-grid;
-}
-
-.km-cluster-type {
-  display: flex;
-  align-items: center;
-  margin-top: 3px;
-
-  i {
-    max-width: 25px;
-    max-height: 25px;
-  }
+  margin-top: - $baseline-grid / 2;
+  min-width: 14 * $baseline-grid;
 }
