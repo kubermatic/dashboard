@@ -9,7 +9,6 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {GroupConfig} from '../../../shared/model/Config';
-import {ButtonUtils} from '../../../shared/utils/button-utils/button-utils';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
@@ -51,10 +50,6 @@ export class NodeDeploymentListComponent implements OnInit {
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
     this.dataSource.data = this.nodeDeployments ? this.nodeDeployments : [];
     return this.dataSource;
-  }
-
-  getButtonWrapperClass(isDisabled: boolean): string {
-    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   getHealthStatus(nd: NodeDeploymentEntity): NodeDeploymentHealthStatus {

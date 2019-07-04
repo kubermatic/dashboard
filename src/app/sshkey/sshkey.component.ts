@@ -11,7 +11,6 @@ import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {SSHKeyEntity} from '../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../shared/model/Config';
-import {ButtonUtils} from '../shared/utils/button-utils/button-utils';
 
 @Component({
   selector: 'kubermatic-sshkey',
@@ -67,10 +66,6 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   getDataSource(): MatTableDataSource<SSHKeyEntity> {
     this.dataSource.data = this.sshKeys;
     return this.dataSource;
-  }
-
-  getButtonWrapperClass(isDisabled: boolean): string {
-    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   getPublicKeyName(sshKey: SSHKeyEntity): string {

@@ -11,7 +11,6 @@ import {ConfirmationDialogComponent} from '../shared/components/confirmation-dia
 import {MemberEntity} from '../shared/entity/MemberEntity';
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {GroupConfig} from '../shared/model/Config';
-import {ButtonUtils} from '../shared/utils/button-utils/button-utils';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 
 import {AddMemberComponent} from './add-member/add-member.component';
@@ -73,10 +72,6 @@ export class MemberComponent implements OnInit, OnDestroy {
   getDataSource(): MatTableDataSource<MemberEntity> {
     this.dataSource.data = this.members;
     return this.dataSource;
-  }
-
-  getButtonWrapperClass(isDisabled: boolean): string {
-    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   getGroup(member: MemberEntity): string {

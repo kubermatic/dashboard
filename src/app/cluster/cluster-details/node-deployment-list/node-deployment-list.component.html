@@ -94,26 +94,22 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <div [ngClass]="getButtonWrapperClass(!isEditEnabled())">
-                  <button class="km-node-deployment-action"
-                          matTooltip="Edit Node Deployment"
-                          (click)="showEditDialog(element, $event)"
-                          [disabled]="!isEditEnabled()">
-                    <mat-icon class="km-icon-edit"
-                              [ngClass]="isEditEnabled() ? '' : 'km-disabled'"></mat-icon>
-                  </button>
-                </div>
+                <button mat-icon-button
+                        class="km-node-deployment-action"
+                        matTooltip="Edit Node Deployment"
+                        (click)="showEditDialog(element, $event)"
+                        [disabled]="!isEditEnabled()">
+                  <i class="km-icon-edit"></i>
+                </button>
 
-                <div [ngClass]="getButtonWrapperClass(!isDeleteEnabled())">
-                  <button class="km-node-deployment-action"
-                          matTooltip="Delete Node Deployment"
-                          (click)="showDeleteDialog(element, $event)"
-                          [disabled]="!isDeleteEnabled()">
-                    <mat-icon class="km-icon-delete"
-                              aria-hidden="true"
-                              [ngClass]="isDeleteEnabled() ? '' : 'km-disabled'"></mat-icon>
-                  </button>
-                </div>
+                <button mat-icon-button
+                        class="km-node-deployment-action"
+                        matTooltip="Delete Node Deployment"
+                        (click)="showDeleteDialog(element, $event)"
+                        [disabled]="!isDeleteEnabled()">
+                  <i class="km-icon-delete"
+                     aria-hidden="true"></i>
+                </button>
               </ng-container>
             </ng-container>
           </div>

@@ -11,27 +11,23 @@
         Delete
       </button>
       <div fxFlex></div>
-      <div [ngClass]="!!config.share_kubeconfig ? getButtonWrapperClass(!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')) : ''">
-        <button class="km-share-kubeconfig-btn"
-                (click)="shareConfigDialog()"
-                mat-icon-button
-                [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')"
-                *ngIf="!!config.share_kubeconfig"
-                matTooltip="Share">
-          <i class="km-icon-share"></i>
-        </button>
-      </div>
-      <div [ngClass]="getButtonWrapperClass(!isClusterRunning)">
-        <a class="km-download-kubeconfig-btn"
-           mat-icon-button
-           disabled="{{ !isClusterRunning }}"
-           href="{{getDownloadURL()}}"
-           target="_blank"
-           rel="noopener"
-           matTooltip="Download config">
-          <i class="km-icon-download"></i>
-        </a>
-      </div>
+      <button mat-icon-button
+              class="km-share-kubeconfig-btn"
+              (click)="shareConfigDialog()"
+              [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')"
+              *ngIf="!!config.share_kubeconfig"
+              matTooltip="Share">
+        <i class="km-icon-share"></i>
+      </button>
+      <a class="km-download-kubeconfig-btn"
+         mat-icon-button
+         disabled="{{ !isClusterRunning }}"
+         href="{{getDownloadURL()}}"
+         target="_blank"
+         rel="noopener"
+         matTooltip="Download config">
+        <i class="km-icon-download"></i>
+      </a>
       <button mat-flat-button
               color="alternative"
               (click)="addNode()"
@@ -61,7 +57,7 @@
               class="km-copy">{{cluster.name}}</span>
       </mat-card-title>
 
-      <div class="km-provider-menu km-button-wrapper">
+      <div class="km-provider-menu">
         <button mat-icon-button
                 class="km-provider-menu-btn"
                 [matMenuTriggerFor]="menu"

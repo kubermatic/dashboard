@@ -94,20 +94,20 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <div [ngClass]="getButtonWrapperClass(!isEditEnabled(element))">
-                  <button class="km-icon-edit"
-                          [attr.id]="'km-edit-project-' + element.name"
-                          matTooltip="Edit Project"
-                          (click)="editProject(element, $event)"
-                          [disabled]="!isEditEnabled(element)"></button>
-                </div>
-                <div [ngClass]="getButtonWrapperClass(!isDeleteEnabled(element))">
-                  <button class="km-icon-delete"
-                          [attr.id]="'km-delete-project-' + element.name"
-                          matTooltip="Delete Project"
-                          (click)="deleteProject(element, $event)"
-                          [disabled]="!isDeleteEnabled(element)"></button>
-                </div>
+                <button mat-icon-button
+                        [attr.id]="'km-edit-project-' + element.name"
+                        matTooltip="Edit Project"
+                        (click)="editProject(element, $event)"
+                        [disabled]="!isEditEnabled(element)">
+                  <i class="km-icon-edit"></i>
+                </button>
+                <button mat-icon-button
+                        [attr.id]="'km-delete-project-' + element.name"
+                        matTooltip="Delete Project"
+                        (click)="deleteProject(element, $event)"
+                        [disabled]="!isDeleteEnabled(element)">
+                  <i class="km-icon-delete"></i>
+                </button>
               </ng-container>
             </ng-container>
           </div>

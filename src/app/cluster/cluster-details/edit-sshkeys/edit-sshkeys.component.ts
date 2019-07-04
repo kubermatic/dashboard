@@ -11,7 +11,6 @@ import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {UserGroupConfig} from '../../../shared/model/Config';
-import {ButtonUtils} from '../../../shared/utils/button-utils/button-utils';
 import {AddClusterSSHKeysComponent} from './add-cluster-sshkeys/add-cluster-sshkeys.component';
 
 @Component({
@@ -66,10 +65,6 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   getDataSource(): MatTableDataSource<SSHKeyEntity> {
     this.dataSource.data = this.sshKeys;
     return this.dataSource;
-  }
-
-  getButtonWrapperClass(isDisabled: boolean): string {
-    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   refreshSSHKeys(): void {

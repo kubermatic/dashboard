@@ -99,13 +99,13 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <div [ngClass]="getButtonWrapperClass(!!userGroup && !userGroupConfig[userGroup].clusters.delete)">
-                  <button class="km-icon-delete"
-                          [attr.id]="'km-delete-cluster-' + element.name"
-                          matTooltip="Delete Cluster"
-                          (click)="deleteClusterDialog(element, $event)"
-                          [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete"></button>
-                </div>
+                <button mat-icon-button
+                        [attr.id]="'km-delete-cluster-' + element.name"
+                        matTooltip="Delete Cluster"
+                        (click)="deleteClusterDialog(element, $event)"
+                        [disabled]="!!userGroup && !userGroupConfig[userGroup].clusters.delete">
+                  <i class="km-icon-delete"></i>
+                </button>
               </ng-container>
             </ng-container>
           </div>

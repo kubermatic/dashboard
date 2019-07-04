@@ -9,7 +9,6 @@ import {ConfirmationDialogComponent} from '../../shared/components/confirmation-
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {ServiceAccountEntity, ServiceAccountTokenEntity} from '../../shared/entity/ServiceAccountEntity';
 import {GroupConfig} from '../../shared/model/Config';
-import {ButtonUtils} from '../../shared/utils/button-utils/button-utils';
 import {AddServiceAccountTokenComponent} from './add-serviceaccount-token/add-serviceaccount-token.component';
 import {EditServiceAccountTokenComponent} from './edit-serviceaccount-token/edit-serviceaccount-token.component';
 import {TokenDialogComponent} from './token-dialog/token-dialog.component';
@@ -52,10 +51,6 @@ export class ServiceAccountTokenComponent implements OnInit {
   getDataSource(): MatTableDataSource<ServiceAccountTokenEntity> {
     this.dataSource.data = !!this.serviceaccountTokens ? this.serviceaccountTokens : [];
     return this.dataSource;
-  }
-
-  getButtonWrapperClass(isDisabled: boolean): string {
-    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   isEnabled(action: string): boolean {

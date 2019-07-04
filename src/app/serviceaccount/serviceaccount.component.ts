@@ -11,7 +11,6 @@ import {ConfirmationDialogComponent} from '../shared/components/confirmation-dia
 import {ProjectEntity} from '../shared/entity/ProjectEntity';
 import {ServiceAccountEntity} from '../shared/entity/ServiceAccountEntity';
 import {GroupConfig} from '../shared/model/Config';
-import {ButtonUtils} from '../shared/utils/button-utils/button-utils';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 import {AddServiceAccountComponent} from './add-serviceaccount/add-serviceaccount.component';
@@ -74,10 +73,6 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
   getDataSource(): MatTableDataSource<ServiceAccountEntity> {
     this.dataSource.data = this.serviceAccounts;
     return this.dataSource;
-  }
-
-  getButtonWrapperClass(isDisabled: boolean): string {
-    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   getStateIconClass(status: string): string {
