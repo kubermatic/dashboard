@@ -6,7 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -19,7 +19,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  instanceTypes: string[] = NodeInstanceFlavors.Packet;
+  instanceTypes: NodeInstanceFlavor[] = NodeInstanceFlavors.Packet;
   packetNodeForm: FormGroup;
   hideOptional = true;
   private _unsubscribe: Subject<any> = new Subject();
@@ -33,7 +33,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
     });
 
     if (this.nodeData.spec.cloud.packet.instanceType === '') {
-      this.packetNodeForm.controls.type.setValue(this.instanceTypes[0]);
+      this.packetNodeForm.controls.type.setValue(this.instanceTypes[0].id);
     }
 
     this.packetNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
