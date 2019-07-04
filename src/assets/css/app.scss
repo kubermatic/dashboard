@@ -764,6 +764,7 @@ div.km-form-group-labels {
 
     & > span {
       margin-right: 2 * $baseline-grid;
+      margin-top: $baseline-grid / 4;
     }
   }
 
@@ -911,6 +912,7 @@ mat-form-field.mat-focused.ng-pristine label {
     font-size: 16px;
     font-weight: 400;
     max-height: $dialog-max-height;
+    overflow: unset;
 
     a {
       text-decoration: none;

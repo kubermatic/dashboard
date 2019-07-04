@@ -14,6 +14,12 @@ $panel-margin: -$content-padding;
   .km-cluster-panel-container-positioning {
     margin-top: $baseline-grid;
 
+    .km-cluster-panel-icon {
+      cursor: pointer;
+      height: 3.75 * $baseline-grid;
+      width: 3.75 * $baseline-grid;
+    }
+
     .km-icon-arrow-left {
       background-color: $text-color;
       margin-top: -$baseline-grid;

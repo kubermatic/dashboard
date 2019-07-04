@@ -29,6 +29,7 @@ import {NodeDeploymentListComponent} from './cluster-details/node-deployment-lis
 import {NodeListComponent} from './cluster-details/node-list/node-list.component';
 import {RevokeAdminTokenComponent} from './cluster-details/revoke-admin-token/revoke-admin-token.component';
 import {ShareKubeconfigComponent} from './cluster-details/share-kubeconfig/share-kubeconfig.component';
+import {VersionPickerComponent} from './cluster-details/version-picker/version-picker.component';
 import {ClusterListComponent} from './cluster-list/cluster-list.component';
 import {ClusterRoutingModule} from './cluster-routing.module';
 import {NodeService} from './services/node.service';
@@ -75,6 +76,7 @@ const entryComponents: any[] = [
   declarations: [
     ...components,
     ...entryComponents,
+    VersionPickerComponent,
   ],
   exports: [
     ...components,
