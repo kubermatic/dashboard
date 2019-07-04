@@ -63,6 +63,7 @@ describe('VSphereProviderSettingsComponent', () => {
       username: '',
       password: '',
       vmNetName: '',
+      folder: '',
       infraManagementUser: {
         username: '',
         password: '',

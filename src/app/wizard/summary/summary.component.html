@@ -338,6 +338,13 @@
                    class="km-card-list-key">Network</div>
               <div fxFlex="50%">{{ cluster.spec.cloud.vsphere.vmNetName }}</div>
             </div>
+            <div fxLayout
+                 class="km-card-list-content"
+                 *ngIf="cluster.spec.cloud.vsphere.folder">
+              <div fxFlex="50%"
+                   class="km-card-list-key">Folder</div>
+              <div fxFlex="50%">{{ cluster.spec.cloud.vsphere.folder }}</div>
+            </div>
           </ng-container>
 
           <!-- Azure -->

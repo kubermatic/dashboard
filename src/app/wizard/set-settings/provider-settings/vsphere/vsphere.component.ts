@@ -29,6 +29,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       username: new FormControl(this.cluster.spec.cloud.vsphere.username),
       password: new FormControl(this.cluster.spec.cloud.vsphere.password),
       vmNetName: new FormControl(this.cluster.spec.cloud.vsphere.vmNetName),
+      folder: new FormControl(this.cluster.spec.cloud.vsphere.folder),
     });
 
     this.checkNetworkState();
@@ -52,6 +53,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
             username: cloudUser,
             password: cloudPassword,
             vmNetName: this.vsphereSettingsForm.controls.vmNetName.value,
+            folder: this.vsphereSettingsForm.controls.folder.value,
             infraManagementUser: {
               username: this.vsphereSettingsForm.controls.infraManagementUsername.value,
               password: this.vsphereSettingsForm.controls.infraManagementPassword.value,
