@@ -2,10 +2,11 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -19,7 +20,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
   diskTypes: string[] = NodeInstanceFlavors.GCP.DiskTypes;
-  machineTypes: string[] = NodeInstanceFlavors.GCP.MachineTypes;
+  machineTypes: NodeInstanceFlavor[] = NodeInstanceFlavors.GCP.MachineTypes;
   gcpNodeForm: FormGroup;
   labels: FormArray;
   hideOptional = true;
@@ -53,7 +54,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     }
 
     if (this.nodeData.spec.cloud.gcp.machineType === '') {
-      this.gcpNodeForm.controls.machineType.setValue(this.machineTypes[0]);
+      this.gcpNodeForm.controls.machineType.setValue(this.machineTypes[0].id);
     }
 
     this.gcpNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
