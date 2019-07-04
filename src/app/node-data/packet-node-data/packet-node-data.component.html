@@ -8,7 +8,7 @@
                   [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
                   disableOptionCentering>
         <mat-option *ngFor="let type of instanceTypes"
-                    [value]="type">
+                    [value]="type.id">
           {{type}}
         </mat-option>
       </mat-select>
