@@ -101,6 +101,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         username: '',
         password: '',
         vmNetName: '',
+        folder: '',
         infraManagementUser: {
           username: '',
           password: '',

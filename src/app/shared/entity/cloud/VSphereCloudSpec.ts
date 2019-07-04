@@ -2,6 +2,7 @@ export class VSphereCloudSpec {
   username: string;
   password: string;
   vmNetName: string;
+  folder?: string;
   infraManagementUser: VSphereInfraManagementUser;
 }
 
