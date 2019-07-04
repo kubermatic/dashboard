@@ -17,7 +17,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   vsphereOptionsForm: FormGroup;
   hideOptional = true;
-  defaultTemplate = 'ubuntu-template';
+  defaultTemplate = '';
   private subscriptions: Subscription[] = [];
 
   constructor(
@@ -28,6 +28,10 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
     this.vsphereOptionsForm = new FormGroup({
       diskSizeGB: new FormControl(this.nodeData.spec.cloud.vsphere.diskSizeGB),
       template: new FormControl(this.nodeData.spec.cloud.vsphere.template),
+    });
+
+    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((res) => {
+      this.defaultTemplate = res.spec.vsphere.templates.ubuntu;
     });
 
     this.subscriptions.push(this.vsphereOptionsForm.valueChanges.subscribe(() => {
