@@ -15,6 +15,8 @@
 
 .km-node-deployment-action {
   color: $text-color !important;
+  background: inherit;
+  margin-left: 20px;
 
   .km-icon-edit,
   .km-icon-delete {

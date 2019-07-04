@@ -94,8 +94,7 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button mat-icon-button
-                        class="km-node-deployment-action"
+                <button class="km-node-deployment-action"
                         matTooltip="Edit Node Deployment"
                         (click)="showEditDialog(element, $event)"
                         [disabled]="!isEditEnabled()">
@@ -103,8 +102,7 @@
                             [ngClass]="isEditEnabled() ? '' : 'km-disabled'"></mat-icon>
                 </button>
 
-                <button mat-icon-button
-                        class="km-node-deployment-action"
+                <button class="km-node-deployment-action"
                         matTooltip="Delete Node Deployment"
                         (click)="showDeleteDialog(element, $event)"
                         [disabled]="!isDeleteEnabled()">
