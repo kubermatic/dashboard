@@ -989,6 +989,13 @@ mat-form-field.mat-focused.ng-pristine label {
   margin-top: 34px !important;
 }
 
+.mat-optgroup-label {
+  font-size: $caption-font-size-base !important;
+  line-height: 3.5 * $line-height !important;
+  padding-left: 10px !important;
+  border-top: 1px solid $border !important;
+}
+
 .mat-option {
   padding: 0 0 0 10px !important;
 
