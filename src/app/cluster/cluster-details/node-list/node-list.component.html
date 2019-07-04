@@ -119,11 +119,13 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button class="km-icon-delete"
-                        [attr.id]="'km-delete-node-' + element.name"
-                        matTooltip="Delete Node"
-                        (click)="deleteNodeDialog(element, $event)"
-                        [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete"></button>
+                <div [ngClass]="getButtonWrapperClass(!!userGroup && !userGroupConfig[userGroup].nodes.delete)">
+                  <button class="km-icon-delete"
+                          [attr.id]="'km-delete-node-' + element.name"
+                          matTooltip="Delete Node"
+                          (click)="deleteNodeDialog(element, $event)"
+                          [disabled]="!!userGroup && !userGroupConfig[userGroup].nodes.delete"></button>
+                </div>
               </ng-container>
             </ng-container>
           </div>

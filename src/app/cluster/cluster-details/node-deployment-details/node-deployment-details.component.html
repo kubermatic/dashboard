@@ -15,17 +15,21 @@
 
       <div class="km-node-deployment-actions"
            fxLayout="row">
-        <button mat-icon-button
-                (click)="showEditDialog()"
-                [disabled]="!isEditEnabled()">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button
-                color="primary"
-                (click)="showDeleteDialog()"
-                [disabled]="!isDeleteEnabled()">
-          <i class="km-icon-delete"></i>
-        </button>
+        <div [ngClass]="getButtonWrapperClass(!isEditEnabled())">
+          <button mat-icon-button
+                  (click)="showEditDialog()"
+                  [disabled]="!isEditEnabled()">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+        <div [ngClass]="getButtonWrapperClass(!isDeleteEnabled())">
+          <button mat-icon-button
+                  color="primary"
+                  (click)="showDeleteDialog()"
+                  [disabled]="!isDeleteEnabled()">
+            <i class="km-icon-delete"></i>
+          </button>
+        </div>
       </div>
 
     </mat-card-header>

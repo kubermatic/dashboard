@@ -10,6 +10,7 @@ import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {HealthEntity} from '../../shared/entity/HealthEntity';
 import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../shared/model/Config';
+import {ButtonUtils} from '../../shared/utils/button-utils/button-utils';
 import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
@@ -89,6 +90,10 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   getDataSource(): MatTableDataSource<ClusterEntity> {
     this.dataSource.data = this.clusters;
     return this.dataSource;
+  }
+
+  getButtonWrapperClass(isDisabled: boolean): string {
+    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   getHealthStatus(cluster: ClusterEntity): ClusterHealthStatus {

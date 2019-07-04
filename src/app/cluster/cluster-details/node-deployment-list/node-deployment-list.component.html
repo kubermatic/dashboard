@@ -94,22 +94,26 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button class="km-node-deployment-action"
-                        matTooltip="Edit Node Deployment"
-                        (click)="showEditDialog(element, $event)"
-                        [disabled]="!isEditEnabled()">
-                  <mat-icon class="km-icon-edit"
-                            [ngClass]="isEditEnabled() ? '' : 'km-disabled'"></mat-icon>
-                </button>
+                <div [ngClass]="getButtonWrapperClass(!isEditEnabled())">
+                  <button class="km-node-deployment-action"
+                          matTooltip="Edit Node Deployment"
+                          (click)="showEditDialog(element, $event)"
+                          [disabled]="!isEditEnabled()">
+                    <mat-icon class="km-icon-edit"
+                              [ngClass]="isEditEnabled() ? '' : 'km-disabled'"></mat-icon>
+                  </button>
+                </div>
 
-                <button class="km-node-deployment-action"
-                        matTooltip="Delete Node Deployment"
-                        (click)="showDeleteDialog(element, $event)"
-                        [disabled]="!isDeleteEnabled()">
-                  <mat-icon class="km-icon-delete"
-                            aria-hidden="true"
-                            [ngClass]="isDeleteEnabled() ? '' : 'km-disabled'"></mat-icon>
-                </button>
+                <div [ngClass]="getButtonWrapperClass(!isDeleteEnabled())">
+                  <button class="km-node-deployment-action"
+                          matTooltip="Delete Node Deployment"
+                          (click)="showDeleteDialog(element, $event)"
+                          [disabled]="!isDeleteEnabled()">
+                    <mat-icon class="km-icon-delete"
+                              aria-hidden="true"
+                              [ngClass]="isDeleteEnabled() ? '' : 'km-disabled'"></mat-icon>
+                  </button>
+                </div>
               </ng-container>
             </ng-container>
           </div>

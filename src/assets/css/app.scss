@@ -1025,3 +1025,19 @@ mat-form-field.mat-focused.ng-pristine label {
     transform: rotate(180deg);
   }
 }
+
+// buttons
+.km-button-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 32px;
+  width: 32px;
+  margin-left: 10px;
+
+  &:hover:not(.disabled) {
+    background-color: $separator;
+    transition: visibility 0s 0s, opacity 0s ease-out;
+  }
+}

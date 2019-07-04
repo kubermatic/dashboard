@@ -8,6 +8,7 @@ import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
 import {ConfirmationDialogComponent} from '../shared/components/confirmation-dialog/confirmation-dialog.component';
 import {ProjectEntity, ProjectOwners} from '../shared/entity/ProjectEntity';
+import {ButtonUtils} from '../shared/utils/button-utils/button-utils';
 import {MemberUtils} from '../shared/utils/member-utils/member-utils';
 import {ProjectUtils} from '../shared/utils/project-utils/project-utils';
 
@@ -130,6 +131,9 @@ export class ProjectComponent implements OnInit, OnDestroy {
                         this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
   }
 
+  getButtonWrapperClass(isDisabled: boolean): string {
+    return ButtonUtils.getButtonWrapperClass(isDisabled);
+  }
 
   isProjectActive(project: ProjectEntity) {
     return ProjectUtils.isProjectActive(project);

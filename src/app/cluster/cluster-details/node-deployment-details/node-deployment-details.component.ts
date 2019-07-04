@@ -11,6 +11,7 @@ import {EventEntity} from '../../../shared/entity/EventEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {GroupConfig} from '../../../shared/model/Config';
+import {ButtonUtils} from '../../../shared/utils/button-utils/button-utils';
 import {ClusterUtils} from '../../../shared/utils/cluster-utils/cluster-utils';
 import {NodeDeploymentHealthStatus} from '../../../shared/utils/health-status/node-deployment-health-status';
 import {NodeUtils} from '../../../shared/utils/node-utils/node-utils';
@@ -68,6 +69,10 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
 
     this.loadSeedDatacenter();
     this.loadCluster();
+  }
+
+  getButtonWrapperClass(isDisabled: boolean): string {
+    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   loadNodeDeployment(): void {

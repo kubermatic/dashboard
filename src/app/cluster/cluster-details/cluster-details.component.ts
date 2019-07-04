@@ -15,6 +15,7 @@ import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
 import {Config, GroupConfig} from '../../shared/model/Config';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {ButtonUtils} from '../../shared/utils/button-utils/button-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
 import {NodeService} from '../services/node.service';
 
@@ -133,6 +134,10 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   private _canReloadNodes() {
     return this.cluster && HealthEntity.allHealthy(this.health);
+  }
+
+  getButtonWrapperClass(isDisabled: boolean): string {
+    return ButtonUtils.getButtonWrapperClass(isDisabled);
   }
 
   getProvider(provider: string): string {
