@@ -1,10 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subject} from "rxjs";
-import {WizardService} from "../../core/services";
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -17,7 +18,7 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  types: string[] = this._wizard.provider(NodeProvider.HETZNER).flavors();
+  types: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.HETZNER).flavors();
   hetznerNodeForm: FormGroup;
   private _unsubscribe = new Subject<void>();
 

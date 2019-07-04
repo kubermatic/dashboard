@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 
 export class Hetzner extends Provider {
@@ -12,7 +12,7 @@ export class Hetzner extends Provider {
     return this;
   }
 
-  flavors(): string[] {
+  flavors(): NodeInstanceFlavor[] {
     return NodeInstanceFlavors.Hetzner;
   }
 }

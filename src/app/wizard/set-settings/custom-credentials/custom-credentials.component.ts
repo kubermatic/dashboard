@@ -6,9 +6,9 @@ import {CredentialListEntity} from '../../../shared/entity/provider/credentials/
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 
 enum CredentialsState {
-  Ready = 'Custom Credentials',
+  Ready = 'Custom Preset',
   Loading = 'Loading...',
-  Empty = 'No Credentials available'
+  Empty = 'No Presets available'
 }
 
 @Component({

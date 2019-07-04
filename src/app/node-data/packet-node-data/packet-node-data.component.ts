@@ -6,7 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -19,7 +19,7 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  instanceTypes: string[] = this._wizard.provider(NodeProvider.PACKET).flavors();
+  instanceTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.PACKET).flavors();
   packetNodeForm: FormGroup;
   hideOptional = true;
 
