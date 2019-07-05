@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -52,6 +53,7 @@ describe('NodeDataComponent', () => {
             BrowserModule,
             BrowserAnimationsModule,
             SharedModule,
+            HttpClientModule,
           ],
           declarations: [
             NodeDataComponent,

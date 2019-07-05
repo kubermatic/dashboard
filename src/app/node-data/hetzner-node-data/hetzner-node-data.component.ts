@@ -1,10 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeInstanceFlavor, NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -17,11 +18,11 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  types: NodeInstanceFlavor[] = NodeInstanceFlavors.Hetzner;
+  types: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.HETZNER).flavors();
   hetznerNodeForm: FormGroup;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
-  constructor(private addNodeService: NodeDataService) {}
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     this.hetznerNodeForm = new FormGroup({
@@ -32,19 +33,16 @@ export class HetznerNodeDataComponent implements OnInit, OnDestroy {
       this.hetznerNodeForm.controls.type.setValue(this.types[0].id);
     }
 
-    this.subscriptions.push(this.hetznerNodeForm.valueChanges.subscribe((data) => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    }));
+    this.hetznerNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    });
 
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   isInWizard(): boolean {

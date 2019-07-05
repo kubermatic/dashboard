@@ -1,9 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../core/services/wizard/wizard.service';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
+import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
   selector: 'kubermatic-hetzner-cluster-settings',
@@ -11,32 +13,54 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 export class HetznerClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  hetznerSettingsForm: FormGroup;
-  private hetznerSettingsFormSub: Subscription;
+  form: FormGroup;
 
-  constructor(private wizardService: WizardService) {}
+  private _formHelper: FormHelper;
+  private _unsubscribe = new Subject<void>();
+
+  constructor(private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
-    this.hetznerSettingsForm = new FormGroup({
+    this.form = new FormGroup({
       token: new FormControl(
           this.cluster.spec.cloud.hetzner.token,
           [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.hetznerSettingsFormSub = this.hetznerSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
-      this.wizardService.changeClusterProviderSettings({
-        cloudSpec: {
-          hetzner: {
-            token: this.hetznerSettingsForm.controls.token.value,
-          },
-          dc: this.cluster.spec.cloud.dc,
-        },
-        valid: this.hetznerSettingsForm.valid,
-      });
+    this._formHelper = new FormHelper(this.form);
+    this._formHelper.registerFormControls(this.form.controls.token);
+
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
+                                            this._wizard.onCustomPresetsDisable.emit(true);
+
+      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
+    });
+
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      if (newCredentials) {
+        this.form.disable();
+        return;
+      }
+
+      this.form.enable();
     });
   }
 
   ngOnDestroy(): void {
-    this.hetznerSettingsFormSub.unsubscribe();
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
+    return {
+      cloudSpec: {
+        hetzner: {
+          token: this.form.controls.token.value,
+        },
+        dc: this.cluster.spec.cloud.dc,
+      },
+      valid,
+    };
   }
 }

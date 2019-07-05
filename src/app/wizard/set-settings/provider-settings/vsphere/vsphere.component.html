@@ -1,4 +1,4 @@
-<form [formGroup]="vsphereSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
     <mat-label>Username*</mat-label>
@@ -7,7 +7,7 @@
            name="infraManagementUsername"
            type="text"
            autocomplete="off">
-    <mat-error *ngIf="vsphereSettingsForm.controls.infraManagementUsername.hasError('required')">
+    <mat-error *ngIf="form.controls.infraManagementUsername.hasError('required')">
       Username is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -18,7 +18,7 @@
            name="infraManagementPassword"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="vsphereSettingsForm.controls.infraManagementPassword.hasError('required')">
+    <mat-error *ngIf="form.controls.infraManagementPassword.hasError('required')">
       Password is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

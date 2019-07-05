@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -19,6 +20,7 @@ describe('AWSClusterSettingsComponent', () => {
             BrowserAnimationsModule,
             ReactiveFormsModule,
             SharedModule,
+            HttpClientModule,
           ],
           declarations: [
             AWSClusterSettingsComponent,
@@ -52,30 +54,29 @@ describe('AWSClusterSettingsComponent', () => {
 
   it('form initially invalid', () => {
     fixture.detectChanges();
-    expect(component.awsSettingsForm.valid).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
   });
 
   it('form required values', () => {
-    component.awsSettingsForm.reset();
+    component.form.reset();
     fixture.detectChanges();
 
-    expect(component.awsSettingsForm.valid).toBeFalsy('form is invalid with empty defaults');
-    expect(component.awsSettingsForm.controls.accessKeyId.hasError('required'))
+    expect(component.form.valid).toBeFalsy('form is invalid with empty defaults');
+    expect(component.form.controls.accessKeyId.hasError('required'))
         .toBeTruthy('access key id field has required error');
-    expect(component.awsSettingsForm.controls.secretAccessKey.hasError('required'))
+    expect(component.form.controls.secretAccessKey.hasError('required'))
         .toBeTruthy('secret access key field has required error');
 
-    component.awsSettingsForm.controls.accessKeyId.patchValue('foo');
+    component.form.controls.accessKeyId.patchValue('foo');
     fixture.detectChanges();
-    expect(component.awsSettingsForm.controls.accessKeyId.hasError('required'))
+    expect(component.form.controls.accessKeyId.hasError('required'))
         .toBeFalsy('access key id has no required error after setting value');
-    expect(component.awsSettingsForm.valid).toBeFalsy('form is still invalid after setting only access key id');
+    expect(component.form.valid).toBeFalsy('form is still invalid after setting only access key id');
 
-    component.awsSettingsForm.controls.secretAccessKey.patchValue('bar');
+    component.form.controls.secretAccessKey.patchValue('bar');
     fixture.detectChanges();
-    expect(component.awsSettingsForm.controls.secretAccessKey.hasError('required'))
+    expect(component.form.controls.secretAccessKey.hasError('required'))
         .toBeFalsy('secret access key field has no required error after setting value');
-    expect(component.awsSettingsForm.valid)
-        .toBeTruthy('form is valid after setting both access key id and secret access key');
+    expect(component.form.valid).toBeTruthy('form is valid after setting both access key id and secret access key');
   });
 });

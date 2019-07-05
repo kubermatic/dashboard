@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -16,6 +17,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SharedModule,
   ReactiveFormsModule,
+  HttpClientModule,
 ];
 
 describe('DigitaloceanNodeDataComponent', () => {
@@ -23,8 +25,8 @@ describe('DigitaloceanNodeDataComponent', () => {
   let component: DigitaloceanNodeDataComponent;
 
   beforeEach(async(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizesForWizard']);
-    apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
+    const apiMock = jasmine.createSpyObj('ApiService', ['getDigitaloceanSizes']);
+    apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     TestBed
         .configureTestingModule({
           imports: [

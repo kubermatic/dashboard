@@ -1,11 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeInstanceFlavor, NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -18,14 +18,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  instanceTypes: NodeInstanceFlavor[] = NodeInstanceFlavors.AWS;
+  instanceTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.AWS).flavors();
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   awsNodeForm: FormGroup;
   tags: FormArray;
   hideOptional = true;
-  private subscriptions: Subscription[] = [];
 
-  constructor(private addNodeService: NodeDataService, private wizardService: WizardService) {}
+  private _unsubscribe = new Subject<void>();
+
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -50,15 +51,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       this.awsNodeForm.controls.type.setValue(this.instanceTypes[0].id);
     }
 
-    this.subscriptions.push(this.awsNodeForm.valueChanges.subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    }));
+    this.awsNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    });
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
 
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   isInWizard(): boolean {
@@ -105,10 +106,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

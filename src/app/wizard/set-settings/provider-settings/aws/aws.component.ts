@@ -1,9 +1,11 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
+import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
   selector: 'kubermatic-aws-cluster-settings',
@@ -11,14 +13,16 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 })
 export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
-  awsSettingsForm: FormGroup;
+  form: FormGroup;
   hideOptional = true;
-  private subscriptions: Subscription[] = [];
 
-  constructor(private wizardService: WizardService) {}
+  private _formHelper: FormHelper;
+  private _unsubscribe = new Subject<void>();
+
+  constructor(private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
-    this.awsSettingsForm = new FormGroup({
+    this.form = new FormGroup({
       accessKeyId: new FormControl(this.cluster.spec.cloud.aws.accessKeyId, Validators.required),
       secretAccessKey: new FormControl(this.cluster.spec.cloud.aws.secretAccessKey, Validators.required),
       securityGroup:
@@ -30,34 +34,53 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       instanceProfileName: new FormControl(this.cluster.spec.cloud.aws.instanceProfileName),
     });
 
-    this.subscriptions.push(this.awsSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
-      this.wizardService.changeClusterProviderSettings({
-        cloudSpec: {
-          aws: {
-            accessKeyId: this.awsSettingsForm.controls.accessKeyId.value,
-            secretAccessKey: this.awsSettingsForm.controls.secretAccessKey.value,
-            securityGroup: this.awsSettingsForm.controls.securityGroup.value,
-            vpcId: this.awsSettingsForm.controls.vpcId.value,
-            subnetId: this.awsSettingsForm.controls.subnetId.value,
-            routeTableId: this.awsSettingsForm.controls.routeTableId.value,
-            instanceProfileName: this.awsSettingsForm.controls.instanceProfileName.value,
-          },
-          dc: this.cluster.spec.cloud.dc,
-        },
-        valid: this.awsSettingsForm.valid,
-      });
-    }));
+    this._formHelper = new FormHelper(this.form);
+    this._formHelper.registerFormControls(
+        this.form.controls.accessKeyId,
+        this.form.controls.secretAccessKey,
+    );
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
+                                            this._wizard.onCustomPresetsDisable.emit(true);
+
+      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
+    });
+
+    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
+
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+      if (newCredentials) {
+        this.form.disable();
+        return;
+      }
+
+      this.form.enable();
+    });
+  }
+
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
+    return {
+      cloudSpec: {
+        aws: {
+          accessKeyId: this.form.controls.accessKeyId.value,
+          secretAccessKey: this.form.controls.secretAccessKey.value,
+          securityGroup: this.form.controls.securityGroup.value,
+          vpcId: this.form.controls.vpcId.value,
+          subnetId: this.form.controls.subnetId.value,
+          routeTableId: this.form.controls.routeTableId.value,
+          instanceProfileName: this.form.controls.instanceProfileName.value,
+        },
+        dc: this.cluster.spec.cloud.dc,
+      },
+      valid,
+    };
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 }

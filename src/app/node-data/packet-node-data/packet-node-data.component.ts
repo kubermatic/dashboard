@@ -6,7 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeInstanceFlavor, NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -19,12 +19,13 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
 
-  instanceTypes: NodeInstanceFlavor[] = NodeInstanceFlavors.Packet;
+  instanceTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.PACKET).flavors();
   packetNodeForm: FormGroup;
   hideOptional = true;
+
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private addNodeService: NodeDataService, private wizardService: WizardService) {}
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     this.packetNodeForm = new FormGroup({
@@ -37,14 +38,14 @@ export class PacketNodeDataComponent implements OnInit, OnDestroy {
     }
 
     this.packetNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+      this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
     });
 
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   isInWizard(): boolean {

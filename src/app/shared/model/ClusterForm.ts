@@ -1,5 +1,6 @@
 import {CloudSpec} from '../entity/ClusterEntity';
 import {DataCenterEntity} from '../entity/DatacenterEntity';
+import {NodeProvider} from './NodeProviderConstants';
 
 export class ClusterSpecForm {
   name: string;
@@ -22,7 +23,7 @@ export class MachineNetworkForm {
 }
 
 export class ClusterProviderForm {
-  provider: string;
+  provider: NodeProvider;
   valid: boolean;
 }
 
