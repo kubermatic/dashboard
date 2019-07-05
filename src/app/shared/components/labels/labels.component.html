@@ -1,7 +1,9 @@
 <mat-chip-list *ngIf="labelKeys.length > 0">
-  <mat-chip *ngFor="let labelKey of labelKeys">
-    <ng-container>{{labelKey}}</ng-container>
-    <ng-container *ngIf="!!labels[labelKey]">: {{labels[labelKey]}}</ng-container>
+  <mat-chip class="km-chip-container"
+            *ngFor="let labelKey of labelKeys">
+    <div>{{labelKey}}</div>
+    <div class="km-chip-accent"
+         *ngIf="!!labels[labelKey]">{{labels[labelKey]}}</div>
   </mat-chip>
 </mat-chip-list>
-<div *ngIf="labelKeys.length === 0">-</div>
+<div *ngIf="labelKeys.length === 0">No assigned labels</div>
