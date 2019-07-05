@@ -21,6 +21,10 @@
   font-size: $card-title-font-size !important;
 }
 
+mat-card-header {
+  align-items: baseline;
+}
+
 .km-node-deployment-actions {
   margin-right: 4 * $baseline-grid;
 

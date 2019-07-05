@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatSort, MatTableDataSource} from '@angular/material';
+import {MatDialog, MatSort, MatTableDataSource} from '@angular/material';
 import {ActivatedRoute, Router} from '@angular/router';
 import {EMPTY, forkJoin, onErrorResumeNext, Subject} from 'rxjs';
 import {catchError, distinctUntilChanged, switchMap, takeUntil, tap} from 'rxjs/operators';
@@ -12,6 +12,8 @@ import {ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {GroupConfig} from '../../shared/model/Config';
 import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 import {ClusterHealthStatus} from '../../shared/utils/health-status/cluster-health-status';
+import {ClusterDeleteConfirmationComponent} from '../cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
+
 
 @Component({
   selector: 'kubermatic-cluster-list',
@@ -25,7 +27,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   seedDC: DataCenterEntity[] = [];
   health: HealthEntity[] = [];
   provider = [];
-  displayedColumns: string[] = ['status', 'name', 'provider', 'region', 'type'];
+  displayedColumns: string[] = ['status', 'name', 'provider', 'region', 'type', 'actions'];
   dataSource = new MatTableDataSource<ClusterEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
@@ -35,7 +37,8 @@ export class ClusterListComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _router: Router,
-      private readonly _datacenterService: DatacenterService, private readonly _activeRoute: ActivatedRoute) {}
+      private readonly _datacenterService: DatacenterService, private readonly _activeRoute: ActivatedRoute,
+      private readonly _matDialog: MatDialog) {}
 
   ngOnInit(): void {
     this._selectedProject.id = this._activeRoute.snapshot.paramMap.get('projectID');
@@ -111,5 +114,13 @@ export class ClusterListComponent implements OnInit, OnDestroy {
 
   getType(type: string): string {
     return ClusterUtils.getType(type);
+  }
+
+  deleteClusterDialog(cluster: ClusterEntity, event: Event): void {
+    event.stopPropagation();
+    const modal = this._matDialog.open(ClusterDeleteConfirmationComponent);
+    modal.componentInstance.cluster = cluster;
+    modal.componentInstance.datacenter = this.seedDC[cluster.id];
+    modal.componentInstance.projectID = this._selectedProject.id;
   }
 }

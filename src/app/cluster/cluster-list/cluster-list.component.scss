@@ -27,3 +27,8 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
     max-height: 25px;
   }
 }
+
+.km-cluster-item-actions {
+  display: flex;
+  justify-content: flex-end;
+}

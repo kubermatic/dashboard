@@ -18,6 +18,8 @@ $panel-margin: -$content-padding;
       cursor: pointer;
       height: 3.75 * $baseline-grid;
       width: 3.75 * $baseline-grid;
+      display: flex;
+      align-items: center;
     }
 
     .km-icon-arrow-left {

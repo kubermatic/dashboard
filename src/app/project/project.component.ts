@@ -130,7 +130,6 @@ export class ProjectComponent implements OnInit, OnDestroy {
                         this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
   }
 
-
   isProjectActive(project: ProjectEntity) {
     return ProjectUtils.isProjectActive(project);
   }
