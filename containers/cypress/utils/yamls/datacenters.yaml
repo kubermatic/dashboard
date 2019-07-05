@@ -25,3 +25,15 @@ datacenters:
     spec:
       digitalocean:
         region: fra1
+  gcp-westeurope:
+    location: "Europe West (Germany)"
+    seed: prow-build-cluster
+    country: DE
+    provider: gcp
+    spec:
+      gcp:
+        region: europe-west3
+        zone_suffixes:
+          - a
+          - b
+          - c
