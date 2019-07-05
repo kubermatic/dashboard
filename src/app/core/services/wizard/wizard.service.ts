@@ -69,7 +69,7 @@ export class WizardService {
   }
 
   changeClusterProvider(data: ClusterProviderForm): void {
-    this.clusterProviderFormChanges$.next(data);
+    this._clusterProviderFormChanges$.next(data);
   }
 
   changeClusterDatacenter(data: ClusterDatacenterForm): void {

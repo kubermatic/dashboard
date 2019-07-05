@@ -39,8 +39,8 @@ describe('OpenstackClusterSettingsComponent', () => {
         ['tenants', 'networks', 'securityGroups', 'subnets', 'username', 'password', 'domain', 'datacenter', 'tenant']);
 
     wizardMock.changeClusterProviderSettings.and.callThrough();
-    wizardMock.onCustomCredentialsDisable = new EventEmitter<boolean>();
-    wizardMock.onCustomCredentialsSelect = new EventEmitter<string>();
+    wizardMock.onCustomPresetsDisable = new EventEmitter<boolean>();
+    wizardMock.onCustomPresetSelect = new EventEmitter<string>();
     wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
 
     providerMock.username.and.returnValue(providerMock);
