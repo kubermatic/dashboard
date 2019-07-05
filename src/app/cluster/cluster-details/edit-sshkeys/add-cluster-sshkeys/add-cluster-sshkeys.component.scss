@@ -1,10 +1,5 @@
 @import "../../../../../assets/css/colors";
 
-button.km-project-sshkey {
-  background-color: transparent;
-  border: none;
-  color: $primary;
-  font-weight: 600;
-  cursor: pointer;
-  margin-bottom: 20px;
+.mat-dialog-content form {
+  margin-top: 30px;
 }

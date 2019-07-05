@@ -2,10 +2,13 @@
 <mat-dialog-content class="km-content-add-sshkeys">
   <div class="mat-dialog-content">
 
-    <p>Select a SSH key that you want to add to cluster <strong>{{cluster.name}}</strong>.</p>
-    <form [formGroup]="keysForm">
-      <mat-label>SSH Keys</mat-label>
+    <p *ngIf="!!keys && keys.length > 0">Select an SSH key to add to the cluster "<strong>{{cluster.name}}</strong>".</p>
+    <p *ngIf="!keys || keys.length === 0">No SSH keys available in this project.</p>
+
+    <form [formGroup]="keysForm"
+          [hidden]="keys.length === 0">
       <mat-form-field *ngIf="keys.length > 0">
+        <mat-label>SSH key</mat-label>
         <mat-select formControlName="keys"
                     panelClass="km-add-dialog-dropdown"
                     disableOptionCentering>
@@ -13,12 +16,6 @@
                       value="{{key.id}}">{{key.name}}</mat-option>
         </mat-select>
       </mat-form-field>
-      <div *ngIf="keys.length === 0">
-        <p>You have no more SSH keys in your project</p>
-      </div>
-      <button class="km-project-sshkey"
-              (click)="addProjectSSHKeys()"
-              *ngIf="!!userGroup && !!userGroupConfig[userGroup].sshKeys.create">Add SSH key to project</button>
     </form>
 
   </div>
@@ -26,8 +23,16 @@
 
 <mat-dialog-actions>
   <button mat-flat-button
+          color="alternative"
+          (click)="addProjectSSHKeys()"
+          [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.create">
+    Add SSH key to project
+  </button>
+
+  <button mat-flat-button
           (click)="addClusterSSHKeys()"
-          [disabled]="!keysForm.valid">
-    Add
+          [disabled]="!keysForm.valid"
+          *ngIf="keys.length > 0">
+    Add SSH key
   </button>
 </mat-dialog-actions>
