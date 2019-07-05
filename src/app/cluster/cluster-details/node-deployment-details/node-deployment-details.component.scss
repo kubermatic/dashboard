@@ -49,5 +49,6 @@ mat-card-header {
 }
 
 .km-provider-logo {
-  height: 4 * $baseline-grid !important;
+  margin-top: - $baseline-grid / 2;
+  min-width: 14 * $baseline-grid;
 }
