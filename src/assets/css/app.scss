@@ -161,6 +161,28 @@ body {
   }
 }
 
+.km-mat-footer-row {
+  padding: 0;
+  border-style: solid dashed dashed dashed;
+  border-width: 1px;
+  border-color: $dropdown-border;
+  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 5px;
+
+  &:hover {
+    background-color: $hover;
+  }
+
+  button {
+    background-color: transparent;
+    width: 100%;
+    line-height: 5 * $baseline-grid;
+    color: $medium-text-color;
+    font-weight: normal;
+    font-size: $subhead-font-size-base;
+  }
+}
+
 .mat-card-content {
   p {
     color: $light-button-color;
