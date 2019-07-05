@@ -19,7 +19,7 @@ import {NavPage} from "../pages/shared/nav.po";
  *  - CRUD for projects, clusters, members
  *
  * It executes the following steps:
- *  - Login using static credentials as test user 'roxy'
+ *  - Login using static presets as test user 'roxy'
  *  - Create new project called 'e2e-test-project'
  *  - Create new cluster called 'e2e-test-cluster' using kubeadm provider
  *  - Add new member

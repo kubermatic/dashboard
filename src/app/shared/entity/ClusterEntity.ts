@@ -12,40 +12,12 @@ import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
 import {PacketCloudSpec} from './cloud/PacketCloudSpec';
 import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
 
-export function getClusterProvider(cluster: ClusterEntity): string {
-  switch (true) {
-    case !!cluster.spec.cloud.digitalocean: {
-      return NodeProvider.DIGITALOCEAN;
-    }
-    case !!cluster.spec.cloud.aws: {
-      return NodeProvider.AWS;
-    }
-    case !!cluster.spec.cloud.bringyourown: {
-      return NodeProvider.BRINGYOUROWN;
-    }
-    case !!cluster.spec.cloud.openstack: {
-      return NodeProvider.OPENSTACK;
-    }
-    case !!cluster.spec.cloud.packet: {
-      return NodeProvider.PACKET;
-    }
-    case !!cluster.spec.cloud.baremetal: {
-      return NodeProvider.BAREMETAL;
-    }
-    case !!cluster.spec.cloud.hetzner: {
-      return NodeProvider.HETZNER;
-    }
-    case !!cluster.spec.cloud.vsphere: {
-      return NodeProvider.VSPHERE;
-    }
-    case !!cluster.spec.cloud.azure: {
-      return NodeProvider.AZURE;
-    }
-    case !!cluster.spec.cloud.gcp: {
-      return NodeProvider.GCP;
-    }
-  }
-  return '';
+export function getClusterProvider(cluster: ClusterEntity): NodeProvider {
+  const clusterProviders = Object.values(NodeProvider)
+                               .map(provider => cluster.spec.cloud[provider] ? provider : undefined)
+                               .filter(p => p !== undefined);
+
+  return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
 }
 
 export const enum Finalizer {
@@ -61,9 +33,10 @@ export class ClusterEntity {
   spec: ClusterSpec;
   status?: Status;
   type: string;
+  credential?: string;
 }
 
-export function getEmptyCloudProviderSpec(provider: string): object {
+export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
   switch (provider) {
     case NodeProvider.AWS:
       return {
@@ -90,7 +63,7 @@ export function getEmptyCloudProviderSpec(provider: string): object {
         floatingIpPool: '',
         securityGroups: '',
         network: '',
-        domain: 'Default',
+        domain: '',
         tenant: '',
         subnetID: '',
       } as OpenstackCloudSpec;

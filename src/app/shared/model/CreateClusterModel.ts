@@ -11,4 +11,5 @@ class ClusterModel {
   spec: ClusterSpec;
   type: string;
   sshKeys: string[];
+  credential?: string;
 }

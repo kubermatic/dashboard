@@ -1,4 +1,4 @@
-<form [formGroup]="azureSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
     <mat-label>Client ID*</mat-label>
@@ -7,7 +7,7 @@
            name="clientID"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="azureSettingsForm.controls.clientID.hasError('required')">
+    <mat-error *ngIf="form.controls.clientID.hasError('required')">
       Client ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -19,7 +19,7 @@
            name="clientSecret"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="azureSettingsForm.controls.clientSecret.hasError('required')">
+    <mat-error *ngIf="form.controls.clientSecret.hasError('required')">
       Client Secret is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -31,7 +31,7 @@
            name="tenantID"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="azureSettingsForm.controls.tenantID.hasError('required')">
+    <mat-error *ngIf="form.controls.tenantID.hasError('required')">
       Tenant ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -43,7 +43,7 @@
            name="subscriptionID"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="azureSettingsForm.controls.subscriptionID.hasError('required')">
+    <mat-error *ngIf="form.controls.subscriptionID.hasError('required')">
       Subscription ID is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

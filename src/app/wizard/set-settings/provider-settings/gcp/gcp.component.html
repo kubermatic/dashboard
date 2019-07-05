@@ -1,4 +1,4 @@
-<form [formGroup]="gcpSettingsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <mat-form-field fxFlex>
     <mat-label>Service Account*</mat-label>
@@ -7,7 +7,7 @@
            formControlName="serviceAccount"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="gcpSettingsForm.controls.serviceAccount.hasError('required')">
+    <mat-error *ngIf="form.controls.serviceAccount.hasError('required')">
       Service Account is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -20,7 +20,7 @@
            formControlName="network"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="gcpSettingsForm.controls.network.hasError('required')">
+    <mat-error *ngIf="form.controls.network.hasError('required')">
       Network is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -33,7 +33,7 @@
            formControlName="subnetwork"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="gcpSettingsForm.controls.subnetwork.hasError('required')">
+    <mat-error *ngIf="form.controls.subnetwork.hasError('required')">
       Subnetwork is <strong>required</strong>.
     </mat-error>
   </mat-form-field>

@@ -6,7 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {NodeInstanceFlavor, NodeInstanceFlavors} from '../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -19,14 +19,17 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
-  diskTypes: string[] = NodeInstanceFlavors.GCP.DiskTypes;
-  machineTypes: NodeInstanceFlavor[] = NodeInstanceFlavors.GCP.MachineTypes;
+
+  diskTypes: string[] = this._wizard.provider(NodeProvider.GCP).diskTypes();
+  machineTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.GCP).machineTypes();
+  zones: string[] = this._wizard.provider(NodeProvider.GCP).zones();
   gcpNodeForm: FormGroup;
   labels: FormArray;
   hideOptional = true;
+
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private addNodeService: NodeDataService, private wizardService: WizardService) {}
+  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     const labelList = new FormArray([]);
@@ -58,14 +61,14 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     }
 
     this.gcpNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+      this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
     });
 
-    this.addNodeService.changeNodeProviderData(this.getNodeProviderData());
+    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 
   isInWizard(): boolean {

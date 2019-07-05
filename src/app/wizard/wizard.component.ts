@@ -36,9 +36,9 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   steps: Step[] = [];
   currentStep: Step;
-  currentStepIndex: number;
+  currentStepIndex = 0;
   cluster: ClusterEntity;
-  clusterProviderFormData: ClusterProviderForm = {valid: false, provider: ''};
+  clusterProviderFormData: ClusterProviderForm = {valid: false, provider: NodeProvider.NONE};
   clusterDatacenterFormData: ClusterDatacenterForm = {valid: false};
   clusterSSHKeys: SSHKeyEntity[] = [];
   addNodeData: NodeData;
@@ -61,7 +61,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         },
         machineNetworks: [],
       },
-      type: ''
+      type: '',
     };
 
     this.addNodeData = {
@@ -75,6 +75,7 @@ export class WizardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.updateSteps();
     this._projectService.selectedProject.subscribe(project => this.project = project);
     this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationWizardStarted');
 
@@ -182,6 +183,9 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.cluster = cluster;
     });
 
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe))
+        .subscribe(credentials => this.cluster.credential = credentials);
+
     this._stepsService.currentStepChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((step) => {
       this.currentStep = step;
       this.updateSteps();
@@ -196,7 +200,6 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.steps = steps;
     });
 
-    this.updateSteps();
     this._stepsService.changeCurrentStep(0, this.steps[0]);
   }
 
@@ -317,6 +320,7 @@ export class WizardComponent implements OnInit, OnDestroy {
         spec: this.cluster.spec,
         type: this.cluster.type,
         sshKeys: keyNames,
+        credential: this.cluster.credential,
       },
       nodeDeployment: {
         name: this.addNodeData.name,

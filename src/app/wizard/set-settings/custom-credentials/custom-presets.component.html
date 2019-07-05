@@ -1,0 +1,27 @@
+<mat-form-field fxFlex>
+  <mat-label>{{ label }}</mat-label>
+  <mat-select [(ngModel)]="selectedPresets"
+              [disabled]="disabled"
+              class="km-custom-credentials-select">
+    <mat-option *ngFor="let credentialName of presetList.names"
+                [value]="credentialName">{{credentialName}}</mat-option>
+    <mat-select-trigger fxFlex
+                        fxLayout="row">
+      <div fxFlex
+           fxLayoutAlign="start">
+        {{selectedPresets}}
+      </div>
+
+      <div fxFlex
+           fxLayoutAlign="end">
+        <button *ngIf="selectedPresets"
+                (click)="selectedPresets=undefined; $event.stopPropagation()"
+                mat-icon-button
+                aria-label="Clear">
+          <mat-icon class="km-custom-credentials-clear-icon"
+                    inline="true">close</mat-icon>
+        </button>
+      </div>
+    </mat-select-trigger>
+  </mat-select>
+</mat-form-field>

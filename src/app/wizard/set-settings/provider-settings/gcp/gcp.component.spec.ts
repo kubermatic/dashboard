@@ -1,3 +1,4 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
@@ -17,6 +18,7 @@ describe('GCPClusterSettingsComponent', () => {
           imports: [
             BrowserModule,
             BrowserAnimationsModule,
+            HttpClientModule,
             ReactiveFormsModule,
             SharedModule,
           ],
@@ -43,18 +45,17 @@ describe('GCPClusterSettingsComponent', () => {
   });
 
   it('form invalid after creating', () => {
-    expect(component.gcpSettingsForm.valid).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
   });
 
   it('serviceAccount field validity', () => {
-    expect(component.gcpSettingsForm.valid).toBeFalsy('form is initially not valid');
-    expect(component.gcpSettingsForm.controls.serviceAccount.valid)
-        .toBeFalsy('serviceAccount field is initially not valid');
-    expect(component.gcpSettingsForm.controls.serviceAccount.hasError('required'))
+    expect(component.form.valid).toBeFalsy('form is initially not valid');
+    expect(component.form.controls.serviceAccount.valid).toBeFalsy('serviceAccount field is initially not valid');
+    expect(component.form.controls.serviceAccount.hasError('required'))
         .toBeTruthy('serviceAccount field has initially required error');
 
-    component.gcpSettingsForm.controls.serviceAccount.patchValue('foo');
-    expect(component.gcpSettingsForm.controls.serviceAccount.hasError('required'))
+    component.form.controls.serviceAccount.patchValue('foo');
+    expect(component.form.controls.serviceAccount.hasError('required'))
         .toBeFalsy('serviceAccount field has no required error after setting foo');
   });
 });

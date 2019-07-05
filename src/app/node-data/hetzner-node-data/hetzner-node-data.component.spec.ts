@@ -1,7 +1,9 @@
+import {HttpClientModule} from '@angular/common/http';
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeHetznerCluster} from '../../testing/fake-data/cluster.fake';
@@ -13,6 +15,7 @@ const modules: any[] = [
   BrowserAnimationsModule,
   SharedModule,
   ReactiveFormsModule,
+  HttpClientModule,
 ];
 
 describe('HetznerNodeDataComponent', () => {
@@ -29,6 +32,7 @@ describe('HetznerNodeDataComponent', () => {
             HetznerNodeDataComponent,
           ],
           providers: [
+            WizardService,
             NodeDataService,
           ],
         })

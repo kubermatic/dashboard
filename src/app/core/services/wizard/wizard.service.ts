@@ -1,80 +1,135 @@
-import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs/Subject';
+import {HttpClient} from '@angular/common/http';
+import {EventEmitter, Injectable} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
 
+import {environment} from '../../../../environments/environment';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
+import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../../../shared/model/ClusterForm';
+import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
+
+import {AWS} from './provider/aws';
+import {Azure} from './provider/azure';
+import {Digitalocean} from './provider/digitalocean';
+import {GCP} from './provider/gcp';
+import {Hetzner} from './provider/hetzner';
+import {Openstack} from './provider/openstack';
+import {Packet} from './provider/packet';
+import {Provider} from './provider/provider';
+import {VSphere} from './provider/vsphere';
 
 @Injectable()
 export class WizardService {
   // Complete cluster object
-  private _cluster = new Subject<ClusterEntity>();
-  clusterChanges$ = this._cluster.asObservable();
+  clusterChanges$ = new EventEmitter<ClusterEntity>();
   // Cluster spec - form data
-  private _clusterSpecForm = new Subject<ClusterSpecForm>();
-  clusterSpecFormChanges$ = this._clusterSpecForm.asObservable();
+  clusterSpecFormChanges$ = new EventEmitter<ClusterSpecForm>();
   // Machine Networks List - form data
-  private _setMachineNetworksForm = new Subject<SetMachineNetworksForm>();
-  setMachineNetworksFormChanges$ = this._setMachineNetworksForm.asObservable();
+  setMachineNetworksFormChanges$ = new EventEmitter<SetMachineNetworksForm>();
   // Machine Networks - form data
-  private _machineNetworksForm = new Subject<MachineNetworkForm[]>();
-  machineNetworksFormChanges$ = this._machineNetworksForm.asObservable();
+  machineNetworksFormChanges$ = new EventEmitter<MachineNetworkForm[]>();
   // Cluster provider - form data
-  private _clusterProviderForm = new Subject<ClusterProviderForm>();
-  clusterProviderFormChanges$ = this._clusterProviderForm.asObservable();
+  private _clusterProviderFormChanges$ = new BehaviorSubject<ClusterProviderForm>({} as ClusterProviderForm);
   // Cluster datacenter - form data
-  private _clusterDatacenterForm = new Subject<ClusterDatacenterForm>();
   private _selectedDatacenter: DataCenterEntity;
-  clusterDatacenterFormChanges$ = this._clusterDatacenterForm.asObservable();
+  clusterDatacenterFormChanges$ = new EventEmitter<ClusterDatacenterForm>();
   // Cluster provider settings - form data
-  private _clusterProviderSettingsForm = new Subject<ClusterProviderSettingsForm>();
-  clusterProviderSettingsFormChanges$ = this._clusterProviderSettingsForm.asObservable();
+  clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
   // Cluster ssh keys
-  private _clusterSSHKeys = new Subject<SSHKeyEntity[]>();
-  clusterSSHKeysChanges$ = this._clusterSSHKeys.asObservable();
+  clusterSSHKeysChanges$ = new EventEmitter<SSHKeyEntity[]>();
   // Cluster settings form view (hide optional fields or not)
-  private _clusterSettingsFormView = new Subject<ClusterSettingsFormView>();
-  clusterSettingsFormViewChanged$ = this._clusterSettingsFormView.asObservable();
+  clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
+  // Custom preset selection state
+  onCustomPresetSelect = new EventEmitter<string>();
+  // Custom presets component state
+  onCustomPresetsDisable = new EventEmitter<boolean>();
+
+  constructor(private readonly _http: HttpClient) {}
+
+  get clusterProviderFormChanges$() {
+    return this._clusterProviderFormChanges$;
+  }
 
   changeCluster(data: ClusterEntity): void {
-    this._cluster.next(data);
+    this.clusterChanges$.emit(data);
   }
 
   changeClusterSpec(data: ClusterSpecForm): void {
-    this._clusterSpecForm.next(data);
+    this.clusterSpecFormChanges$.emit(data);
   }
 
   changeSetMachineNetworks(data: SetMachineNetworksForm): void {
-    this._setMachineNetworksForm.next(data);
+    this.setMachineNetworksFormChanges$.emit(data);
   }
 
   changeMachineNetwork(data: MachineNetworkForm[]): void {
-    this._machineNetworksForm.next(data);
+    this.machineNetworksFormChanges$.emit(data);
   }
 
   changeClusterProvider(data: ClusterProviderForm): void {
-    this._clusterProviderForm.next(data);
+    this._clusterProviderFormChanges$.next(data);
   }
 
   changeClusterDatacenter(data: ClusterDatacenterForm): void {
     this._selectedDatacenter = data.datacenter;
-    this._clusterDatacenterForm.next(data);
+    this.clusterDatacenterFormChanges$.emit(data);
   }
 
   changeClusterProviderSettings(data: ClusterProviderSettingsForm): void {
-    this._clusterProviderSettingsForm.next(data);
+    this.clusterProviderSettingsFormChanges$.emit(data);
   }
 
   changeClusterSSHKeys(keys: SSHKeyEntity[]): void {
-    this._clusterSSHKeys.next(keys);
+    this.clusterSSHKeysChanges$.emit(keys);
   }
 
   changeSettingsFormView(data: ClusterSettingsFormView): void {
-    this._clusterSettingsFormView.next(data);
+    this.clusterSettingsFormViewChanged$.emit(data);
   }
 
   getSelectedDatacenter(): DataCenterEntity {
     return this._selectedDatacenter;
+  }
+
+  selectCustomPreset(presetName: string): void {
+    this.onCustomPresetSelect.emit(presetName);
+  }
+
+  provider(provider: NodeProvider.AWS): AWS;
+  provider(provider: NodeProvider.AZURE): Azure;
+  provider(provider: NodeProvider.DIGITALOCEAN): Digitalocean;
+  provider(provider: NodeProvider.GCP): GCP;
+  provider(provider: NodeProvider.HETZNER): Hetzner;
+  provider(provider: NodeProvider.OPENSTACK): Openstack;
+  provider(provider: NodeProvider.PACKET): Packet;
+  provider(provider: NodeProvider.VSPHERE): VSphere;
+  provider(provider: NodeProvider): Provider {
+    switch (provider) {
+      case NodeProvider.AWS:
+        return new AWS(this._http, NodeProvider.AWS);
+      case NodeProvider.AZURE:
+        return new Azure(this._http, NodeProvider.AZURE);
+      case NodeProvider.DIGITALOCEAN:
+        return new Digitalocean(this._http, NodeProvider.DIGITALOCEAN);
+      case NodeProvider.GCP:
+        return new GCP(this._http, NodeProvider.GCP);
+      case NodeProvider.HETZNER:
+        return new Hetzner(this._http, NodeProvider.HETZNER);
+      case NodeProvider.OPENSTACK:
+        return new Openstack(this._http, NodeProvider.OPENSTACK);
+      case NodeProvider.PACKET:
+        return new Packet(this._http, NodeProvider.PACKET);
+      case NodeProvider.VSPHERE:
+        return new VSphere(this._http, NodeProvider.VSPHERE);
+      default:
+        throw new Error(`Provider ${provider} not supported.`);
+    }
+  }
+
+  presets(provider: NodeProvider): Observable<PresetListEntity> {
+    const url = `${environment.restRoot}/providers/${provider}/presets/credentials`;
+    return this._http.get<PresetListEntity>(url);
   }
 }

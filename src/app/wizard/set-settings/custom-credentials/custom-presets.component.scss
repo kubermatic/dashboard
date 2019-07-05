@@ -1,0 +1,11 @@
+@import '../../../../assets/css/colors';
+
+.mat-icon-button {
+  color: $text-color;
+  line-height: 15px;
+  margin-right: 5px !important;
+  margin-top: -3px !important;
+  max-height: 15px;
+  max-width: 15px;
+  position: relative;
+}
