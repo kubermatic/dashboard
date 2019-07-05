@@ -57,6 +57,6 @@ describe('DigitaloceanNodeDataComponent', () => {
   });
 
   it('form invalid when initializing', () => {
-    expect(component.doNodeForm.valid).toBeFalsy();
+    expect(component.form.valid).toBeFalsy();
   });
 });
