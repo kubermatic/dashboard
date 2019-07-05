@@ -22,7 +22,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   @Input() seedDCName: string;
 
   sizes: DigitaloceanSizes = {optimized: [], standard: []};
-  doNodeForm: FormGroup;
+  form: FormGroup;
   loadingSizes = false;
 
   private _unsubscribe = new Subject<void>();
@@ -33,26 +33,26 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
       private readonly _wizardService: WizardService) {}
 
   ngOnInit(): void {
-    this.doNodeForm = new FormGroup({
+    this.form = new FormGroup({
       size: new FormControl(this.nodeData.spec.cloud.digitalocean.size, Validators.required),
     });
 
-    this.doNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe))
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
         .subscribe(_ => this._addNodeService.changeNodeProviderData(this.getNodeProviderData()));
 
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;
-      this.doNodeForm.controls.size.setValue('');
+      this.form.controls.size.setValue('');
       this.sizes = {optimized: [], standard: []};
       this.checkSizeState();
-      if (data.cloudSpec.digitalocean.token !== '') {
+
+      if (data.cloudSpec.digitalocean.token !== '' || this._selectedCredentials) {
         this.reloadDigitaloceanSizes();
       }
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedCredentials = credentials;
-      this.reloadDigitaloceanSizes();
     });
 
     this.checkSizeState();
@@ -66,9 +66,9 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
 
   checkSizeState(): void {
     if (this.sizes.standard.length === 0 && this.sizes.optimized.length === 0) {
-      this.doNodeForm.controls.size.disable();
+      this.form.controls.size.disable();
     } else {
-      this.doNodeForm.controls.size.enable();
+      this.form.controls.size.enable();
     }
   }
 
@@ -107,7 +107,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
         .subscribe((data) => {
           this.sizes = data;
           if (this.nodeData.spec.cloud.digitalocean.size === '') {
-            this.doNodeForm.controls.size.setValue(this.sizes.standard[0].slug);
+            this.form.controls.size.setValue(this.sizes.standard[0].slug);
           }
 
           this.loadingSizes = false;
@@ -133,14 +133,14 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
     return {
       spec: {
         digitalocean: {
-          size: this.doNodeForm.controls.size.value,
+          size: this.form.controls.size.value,
           backups: this.nodeData.spec.cloud.digitalocean.backups,
           ipv6: this.nodeData.spec.cloud.digitalocean.ipv6,
           monitoring: this.nodeData.spec.cloud.digitalocean.monitoring,
           tags: this.nodeData.spec.cloud.digitalocean.tags,
         },
       },
-      valid: this.doNodeForm.valid,
+      valid: this.form.valid,
     };
   }
 }
