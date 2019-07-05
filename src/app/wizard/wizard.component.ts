@@ -183,7 +183,7 @@ export class WizardComponent implements OnInit, OnDestroy {
       this.cluster = cluster;
     });
 
-    this._wizardService.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe))
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe))
         .subscribe(credentials => this.cluster.credential = credentials);
 
     this._stepsService.currentStepChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((step) => {

@@ -103,8 +103,8 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._formHelper.areControlsValid() ? this._wizard.onCustomCredentialsDisable.emit(false) :
-                                            this._wizard.onCustomCredentialsDisable.emit(true);
+      this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
+                                            this._wizard.onCustomPresetsDisable.emit(true);
 
       this._checkState();
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
@@ -113,7 +113,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe))
         .subscribe((data) => this.hideOptional = data.hideOptional);
 
-    this._wizard.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this.form.disable();
         return;

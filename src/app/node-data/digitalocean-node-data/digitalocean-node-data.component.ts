@@ -50,7 +50,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
       }
     });
 
-    this._wizardService.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedCredentials = credentials;
       this.reloadDigitaloceanSizes();
     });

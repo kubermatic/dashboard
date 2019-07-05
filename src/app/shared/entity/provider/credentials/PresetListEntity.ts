@@ -1,4 +1,4 @@
-export class CredentialListEntity {
+export class PresetListEntity {
   names: string[] = [];
 
   constructor(...names: string[]) {

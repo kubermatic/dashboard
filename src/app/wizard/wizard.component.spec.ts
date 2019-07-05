@@ -40,7 +40,7 @@ import {SetClusterSpecComponent} from './set-cluster-spec/set-cluster-spec.compo
 import {SetDatacenterComponent} from './set-datacenter/set-datacenter.component';
 import {SetMachineNetworksComponent} from './set-machine-networks/set-machine-networks.component';
 import {SetProviderComponent} from './set-provider/set-provider.component';
-import {CustomCredentialsSettingsComponent} from './set-settings/custom-credentials/custom-credentials.component';
+import {CustomPresetsSettingsComponent} from './set-settings/custom-credentials/custom-presets.component';
 import {AWSClusterSettingsComponent} from './set-settings/provider-settings/aws/aws.component';
 import {AzureClusterSettingsComponent} from './set-settings/provider-settings/azure/azure.component';
 import {BringyourownClusterSettingsComponent} from './set-settings/provider-settings/bringyourown/bringyourown.component';
@@ -80,7 +80,7 @@ describe('WizardComponent', () => {
             HttpClientModule,
           ],
           declarations: [
-            CustomCredentialsSettingsComponent,
+            CustomPresetsSettingsComponent,
             WizardComponent,
             ProgressComponent,
             SetSettingsComponent,

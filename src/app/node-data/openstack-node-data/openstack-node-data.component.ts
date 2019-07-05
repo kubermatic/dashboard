@@ -78,7 +78,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       }
     });
 
-    this._wizard.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       if (credentials) {
         this._selectedCredentials = credentials;
         this.loadFlavors();

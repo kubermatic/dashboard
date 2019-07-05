@@ -5,7 +5,7 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {environment} from '../../../../environments/environment';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
-import {CredentialListEntity} from '../../../shared/entity/provider/credentials/CredentialListEntity';
+import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm, ClusterSettingsFormView, ClusterSpecForm, MachineNetworkForm, SetMachineNetworksForm} from '../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
@@ -31,7 +31,7 @@ export class WizardService {
   // Machine Networks - form data
   machineNetworksFormChanges$ = new EventEmitter<MachineNetworkForm[]>();
   // Cluster provider - form data
-  clusterProviderFormChanges$ = new BehaviorSubject<ClusterProviderForm>({} as ClusterProviderForm);
+  private _clusterProviderFormChanges$ = new BehaviorSubject<ClusterProviderForm>({} as ClusterProviderForm);
   // Cluster datacenter - form data
   private _selectedDatacenter: DataCenterEntity;
   clusterDatacenterFormChanges$ = new EventEmitter<ClusterDatacenterForm>();
@@ -41,12 +41,16 @@ export class WizardService {
   clusterSSHKeysChanges$ = new EventEmitter<SSHKeyEntity[]>();
   // Cluster settings form view (hide optional fields or not)
   clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
-  // Custom credentials selection state
-  onCustomCredentialsSelect = new EventEmitter<string>();
-  // Custom credentials component state
-  onCustomCredentialsDisable = new EventEmitter<boolean>();
+  // Custom preset selection state
+  onCustomPresetSelect = new EventEmitter<string>();
+  // Custom presets component state
+  onCustomPresetsDisable = new EventEmitter<boolean>();
 
   constructor(private readonly _http: HttpClient) {}
+
+  get clusterProviderFormChanges$() {
+    return this._clusterProviderFormChanges$;
+  }
 
   changeCluster(data: ClusterEntity): void {
     this.clusterChanges$.emit(data);
@@ -89,8 +93,8 @@ export class WizardService {
     return this._selectedDatacenter;
   }
 
-  selectCustomCredentials(credential: string): void {
-    this.onCustomCredentialsSelect.emit(credential);
+  selectCustomPreset(presetName: string): void {
+    this.onCustomPresetSelect.emit(presetName);
   }
 
   provider(provider: NodeProvider.AWS): AWS;
@@ -124,8 +128,8 @@ export class WizardService {
     }
   }
 
-  credentials(provider: NodeProvider): Observable<CredentialListEntity> {
+  presets(provider: NodeProvider): Observable<PresetListEntity> {
     const url = `${environment.restRoot}/providers/${provider}/presets/credentials`;
-    return this._http.get<CredentialListEntity>(url);
+    return this._http.get<PresetListEntity>(url);
   }
 }

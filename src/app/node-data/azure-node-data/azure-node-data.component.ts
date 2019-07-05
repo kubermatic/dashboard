@@ -73,7 +73,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    this._wizard.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedCredentials = credentials;
       this.reloadAzureSizes();
     });

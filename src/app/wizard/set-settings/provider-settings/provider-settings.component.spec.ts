@@ -7,7 +7,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {WizardService} from '../../../core/services';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
-import {CustomCredentialsSettingsComponent} from '../custom-credentials/custom-credentials.component';
+import {CustomPresetsSettingsComponent} from '../custom-credentials/custom-presets.component';
 
 import {AWSClusterSettingsComponent} from './aws/aws.component';
 import {AzureClusterSettingsComponent} from './azure/azure.component';
@@ -35,7 +35,7 @@ describe('ClusterProviderSettingsComponent', () => {
             HttpClientModule,
           ],
           declarations: [
-            CustomCredentialsSettingsComponent,
+            CustomPresetsSettingsComponent,
             ClusterProviderSettingsComponent,
             DigitaloceanClusterSettingsComponent,
             AWSClusterSettingsComponent,

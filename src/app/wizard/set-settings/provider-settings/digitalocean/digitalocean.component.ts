@@ -31,13 +31,13 @@ export class DigitaloceanClusterSettingsComponent implements OnInit, OnDestroy {
     this._formHelper.registerFormControls(this.form.controls.token);
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._formHelper.areControlsValid() ? this._wizard.onCustomCredentialsDisable.emit(false) :
-                                            this._wizard.onCustomCredentialsDisable.emit(true);
+      this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
+                                            this._wizard.onCustomPresetsDisable.emit(true);
 
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
     });
 
-    this._wizard.onCustomCredentialsSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this.form.disable();
         this.tokenRequired = false;
