@@ -49,10 +49,12 @@
                   </ng-container>
 
                   <ng-container *ngSwitchCase="false">
-                    <button class="km-icon-delete"
+                    <button mat-icon-button
                             matTooltip="Delete SSH key"
                             (click)="deleteSshKey(element, $event)"
-                            [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.delete"></button>
+                            [disabled]="!!userGroup && !userGroupConfig[userGroup].sshKeys.delete">
+                      <i class="km-icon-delete"></i>
+                    </button>
                   </ng-container>
                 </ng-container>
               </div>

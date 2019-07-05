@@ -61,17 +61,21 @@
               </ng-container>
 
               <ng-container *ngSwitchCase="false">
-                <button class="km-icon-edit"
+                <button mat-icon-button
                         [attr.id]="'km-edit-member-' + element?.email"
                         matTooltip="Edit Member"
                         (click)="editMember(element)"
-                        [disabled]="!isEditEnabled(element)"></button>
+                        [disabled]="!isEditEnabled(element)">
+                  <i class="km-icon-edit"></i>
+                </button>
 
-                <button class="km-icon-delete"
+                <button mat-icon-button
                         [attr.id]="'km-delete-member-' + element?.email"
                         matTooltip="Delete Member"
                         (click)="deleteMember(element)"
-                        [disabled]="!isDeleteEnabled(element)"></button>
+                        [disabled]="!isDeleteEnabled(element)">
+                  <i class="km-icon-delete"></i>
+                </button>
               </ng-container>
             </ng-container>
           </div>

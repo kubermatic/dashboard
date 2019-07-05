@@ -30,11 +30,11 @@ export class MembersPage {
     }
     
     static editBtn(email: string) {
-        return MembersPage.tableRow(email).find('button.km-icon-edit');
+        return MembersPage.tableRow(email).find('button i.km-icon-edit');
     }
     
     static deleteBtn(email: string) {
-        return MembersPage.tableRow(email).find('button.km-icon-delete');
+        return MembersPage.tableRow(email).find('button i.km-icon-delete');
     }
     
     static editMemberDialogSaveBtn() {

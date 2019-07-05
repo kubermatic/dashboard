@@ -280,6 +280,10 @@ mat-button-toggle-group[group='datacenterGroup'] {
     width: 100%;
   }
 
+  .mat-button-toggle {
+    border-radius: 4px;
+  }
+
   .mat-button-toggle-button {
     height: 100%;
   }
@@ -291,6 +295,10 @@ mat-button-toggle-group[group='datacenterGroup'] {
 
 mat-button-toggle-group[group='providerGroup'] {
   border-radius: 0;
+
+  .mat-button-toggle {
+    border-radius: 4px;
+  }
 
   .mat-button-toggle-label-content {
     height: 100%;
@@ -851,10 +859,16 @@ div.km-form-group-labels {
 }
 
 .mat-icon-button {
-  margin: 0 $baseline-grid !important;
-
   i {
     background-color: $text-color;
+  }
+
+  &:hover:not([disabled]) {
+    background-color: $separator;
+  }
+
+  &:disabled i {
+    background-color: $disabled-button-color;
   }
 }
 
@@ -981,6 +995,13 @@ mat-form-field.mat-focused.ng-pristine label {
   margin-top: 34px !important;
 }
 
+.mat-optgroup-label {
+  font-size: $caption-font-size-base !important;
+  line-height: 3.5 * $line-height !important;
+  padding-left: 10px !important;
+  border-top: 1px solid $border !important;
+}
+
 .mat-option {
   padding: 0 0 0 10px !important;
 
@@ -988,5 +1009,30 @@ mat-form-field.mat-focused.ng-pristine label {
   &.mat-active {
     background-color: $secondary-light !important;
     color: $text-color !important;
+  }
+}
+
+.mat-select-arrow-wrapper {
+  top: 3px;
+  right: 0;
+  position: relative;
+}
+
+.mat-select-arrow {
+  display: inline-block;
+  width: 6px !important;
+  height: 6px !important;
+  mask: url("/assets/images/icons/arrow-down.svg");
+  mask-repeat: no-repeat;
+  mask-size: contain;
+  background-color: $text-color;
+}
+
+.mat-form-field.mat-focused.mat-primary .mat-select-arrow-wrapper {
+  right: 5px;
+
+  .mat-select-arrow {
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
   }
 }

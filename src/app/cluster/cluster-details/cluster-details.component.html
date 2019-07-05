@@ -11,9 +11,9 @@
         Delete
       </button>
       <div fxFlex></div>
-      <button class="km-share-kubeconfig-btn"
+      <button mat-icon-button
+              class="km-share-kubeconfig-btn"
               (click)="shareConfigDialog()"
-              mat-icon-button
               [disabled]="!!clusterHealthStatus && (clusterHealthStatus.css !== 'km-status-running')"
               *ngIf="!!config.share_kubeconfig"
               matTooltip="Share">

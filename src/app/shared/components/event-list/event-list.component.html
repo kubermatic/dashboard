@@ -85,10 +85,10 @@
       No events available.
     </div>
 
-
-    <mat-paginator *ngIf="hasEvents()"
-                   [pageSizeOptions]="[10, 20]"
-                   showFirstLastButtons
-                   class="km-paginator"></mat-paginator>
+    <div [hidden]="isPaginatorVisible()">
+      <mat-paginator [pageSizeOptions]="[10, 20]"
+                     showFirstLastButtons
+                     class="km-paginator"></mat-paginator>
+    </div>
   </mat-card-content>
 </mat-card>
