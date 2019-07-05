@@ -45,7 +45,7 @@ export class EventListComponent implements OnInit, OnChanges {
     return this.events && this.events.length > 0;
   }
 
-  hidePaginator(): boolean {
-    return (this.events && this.paginator && this.events.length < this.paginator.pageSize) || !this.hasEvents();
+  isPaginatorVisible(): boolean {
+    return (this.events && this.paginator && this.events.length <= this.paginator.pageSize) || !this.hasEvents();
   }
 }
