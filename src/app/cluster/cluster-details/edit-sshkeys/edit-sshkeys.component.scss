@@ -1,9 +1,34 @@
+@import "../../../../assets/css/colors";
+
 .km-content-edit-sshkeys {
   overflow-y: hidden;
 }
 
-.km-sshkey-view {
-  mat-card-header {
-    padding: 10px 20px !important;
+.km-sshkey-view,
+.km-header-row,
+.km-mat-row {
+  background-color: transparent;
+}
+
+.km-mat-footer-row button {
+  color: $medium-text-color;
+  font-weight: normal;
+
+  &:hover {
+    background-color: $hover;
   }
+}
+
+.km-mat-footer-row.km-no-sshkeys {
+  border-style: dashed;
+  border-radius: 5px;
+}
+
+.km-sshkey-item-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.km-table-actions button {
+  opacity: 1;
 }

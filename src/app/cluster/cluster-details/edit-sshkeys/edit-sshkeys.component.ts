@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {Subject, timer} from 'rxjs';
-import {first, retry, takeUntil} from 'rxjs/operators';
+import {EMPTY, merge, Subject, timer} from 'rxjs';
+import {first, switchMap, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../app-config.service';
 import {ClusterService, UserService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
@@ -33,6 +33,7 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<SSHKeyEntity>();
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   private _unsubscribe: Subject<any> = new Subject();
+  private _sshKeysUpdate: Subject<any> = new Subject();
 
   constructor(
       private readonly _userService: UserService,
@@ -52,9 +53,16 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    timer(0, 5 * this._appConfig.getRefreshTimeBase())
+    merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._sshKeysUpdate)
+        .pipe(switchMap(
+            () => this.projectID ?
+                this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name) :
+                EMPTY))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe(() => this.refreshSSHKeys());
+        .subscribe(sshkeys => {
+          this.sshKeys = sshkeys;
+          this.loading = false;
+        });
   }
 
   ngOnDestroy(): void {
@@ -67,14 +75,8 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     return this.dataSource;
   }
 
-  refreshSSHKeys(): void {
-    this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name)
-        .pipe(retry(3))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((res) => {
-          this.sshKeys = res;
-          this.loading = false;
-        });
+  isTableVisible(): boolean {
+    return !!this.sshKeys && this.sshKeys.length > 0;
   }
 
   addSshKey(): void {
@@ -84,8 +86,11 @@ export class EditSSHKeysComponent implements OnInit, OnDestroy {
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.sshKeys = this.sshKeys;
 
-    dialogRef.afterClosed().pipe(first()).subscribe((result) => {
-      result && this.refreshSSHKeys();  // tslint:disable-line
+    dialogRef.afterClosed().pipe(first()).subscribe((sshkey: SSHKeyEntity) => {
+      if (sshkey) {
+        this.sshKeys.push(sshkey);
+        this._sshKeysUpdate.next();
+      }
     });
   }
 
