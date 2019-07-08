@@ -367,24 +367,30 @@
   min-height: 30px;
 }
 
-// operating system logos
+// Operating system logos.
 .km-os-image-centos {
-  background-image: url("/assets/images/operating-system/centos.png");
+  background-image: url("/assets/images/os/centos.svg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center left;
+  height: 3 * $baseline-grid;
+  width: 3 * $baseline-grid;
 }
 
-.km-os-image-containerlinux {
-  background-image: url("/assets/images/operating-system/containerlinux.png");
+.km-os-image-container-linux {
+  background-image: url("/assets/images/os/container-linux.svg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center left;
+  height: 3 * $baseline-grid;
+  width: 3 * $baseline-grid;
 }
 
 .km-os-image-ubuntu {
-  background-image: url("/assets/images/operating-system/ubuntu.png");
+  background-image: url("/assets/images/os/ubuntu.svg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center left;
+  height: 3 * $baseline-grid;
+  width: 3 * $baseline-grid;
 }

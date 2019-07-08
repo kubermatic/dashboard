@@ -17,3 +17,7 @@ presets:
         subscriptionId: ${AZURE_E2E_TESTS_SUBSCRIPTION_ID}
         clientId: ${AZURE_E2E_TESTS_CLIENT_ID}
         clientSecret: ${AZURE_E2E_TESTS_CLIENT_SECRET}
+  gcp:
+    credentials:
+      - name: gcp
+        serviceAccount: ${GOOGLE_SERVICE_ACCOUNT}

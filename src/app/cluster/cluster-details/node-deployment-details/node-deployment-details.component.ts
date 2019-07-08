@@ -31,6 +31,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
   datacenter: DataCenterEntity;
   seedDatacenter: DataCenterEntity;
   system: string;
+  systemLogoClass: string;
   dcName: string;
   projectID: string;
   private _nodeDeploymentID: string;
@@ -76,6 +77,7 @@ export class NodeDeploymentDetailsComponent implements OnInit, OnDestroy {
         .subscribe((nd: NodeDeploymentEntity) => {
           this.nodeDeployment = nd;
           this.system = NodeUtils.getOperatingSystem(this.nodeDeployment.spec.template);
+          this.systemLogoClass = NodeUtils.getOperatingSystemLogoClass(this.nodeDeployment.spec.template);
           this.nodeDeploymentHealthStatus = NodeDeploymentHealthStatus.getHealthStatus(this.nodeDeployment);
           this._isNodeDeploymentLoaded = true;
         });
