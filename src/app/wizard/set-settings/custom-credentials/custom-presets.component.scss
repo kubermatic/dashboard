@@ -8,4 +8,8 @@
   max-height: 15px;
   max-width: 15px;
   position: relative;
+
+  &:hover:not([disabled]) {
+    background-color: inherit;
+  }
 }
