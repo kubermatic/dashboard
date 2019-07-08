@@ -21,32 +21,32 @@ export class Openstack extends Provider {
     );
   }
 
-  credential(credential: string) {
+  credential(credential: string): Openstack {
     super._credential(credential);
     return this;
   }
 
-  username(username: string) {
+  username(username: string): Openstack {
     if (username) this._headers = this._headers.set(Openstack.Header.Username, username);
     return this;
   }
 
-  password(password: string) {
+  password(password: string): Openstack {
     if (password) this._headers = this._headers.set(Openstack.Header.Password, password);
     return this;
   }
 
-  domain(domain: string) {
+  domain(domain: string): Openstack {
     if (domain) this._headers = this._headers.set(Openstack.Header.Domain, domain);
     return this;
   }
 
-  datacenter(datacenter: string) {
+  datacenter(datacenter: string): Openstack {
     if (datacenter) this._headers = this._headers.set(Openstack.Header.Datacenter, datacenter);
     return this;
   }
 
-  tenant(tenant: string) {
+  tenant(tenant: string): Openstack {
     if (tenant) this._headers = this._headers.set(Openstack.Header.Tenant, tenant);
     return this;
   }

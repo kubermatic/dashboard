@@ -28,38 +28,38 @@ export class FormHelper {
     });
   }
 
-  private _setControlsValidationStrategy(strategy: ControlsValidationStrategy) {
+  private _setControlsValidationStrategy(strategy: ControlsValidationStrategy): void {
     switch (strategy) {
       case ControlsValidationStrategy.Default:
         this._controlsValidationStrategy = new EmptyFormControlsValidationStrategy(this._controls);
     }
   }
 
-  setValidationStrategy(strategy: ValidationStrategy) {
+  setValidationStrategy(strategy: ValidationStrategy): void {
     switch (strategy) {
       case ValidationStrategy.Default:
         this._validationStrategy = new DefaultFormValidationStrategy(this._form);
     }
   }
 
-  setControlsValidationStrategy(strategy: ControlsValidationStrategy) {
+  setControlsValidationStrategy(strategy: ControlsValidationStrategy): void {
     this._onControlsStrategyChange.emit(strategy);
   }
 
-  registerFormControls(...controls: AbstractControl[]) {
+  registerFormControls(...controls: AbstractControl[]): void {
     this._controls = controls;
     this._setControlsValidationStrategy(this._controlsValidationStrategyType);
   }
 
-  registerFormControl(control: AbstractControl) {
+  registerFormControl(control: AbstractControl): void {
     this._controls.push(control);
   }
 
-  isFormValid() {
+  isFormValid(): boolean {
     return this._validationStrategy.isValid();
   }
 
-  areControlsValid() {
+  areControlsValid(): boolean {
     return this._controlsValidationStrategy.isValid();
   }
 }

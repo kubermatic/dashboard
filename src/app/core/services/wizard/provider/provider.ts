@@ -11,17 +11,17 @@ export abstract class Provider {
 
   protected constructor(protected _http: HttpClient, protected readonly _provider: NodeProvider) {}
 
-  protected _setRequiredHeaders(...headers: any) {
+  protected _setRequiredHeaders(...headers: any): void {
     this._requiredHeaders = headers;
   }
 
-  protected _hasRequiredHeaders() {
+  protected _hasRequiredHeaders(): boolean {
     return this._headers.get(Provider.SharedHeader.Credential) !== null ||
         this._requiredHeaders.filter(header => this._headers.keys().includes(header)).length ===
         this._requiredHeaders.length;
   }
 
-  protected _credential(credential: string) {
+  protected _credential(credential: string): void {
     if (credential) this._headers = this._headers.set(Provider.SharedHeader.Credential, credential);
   }
 }

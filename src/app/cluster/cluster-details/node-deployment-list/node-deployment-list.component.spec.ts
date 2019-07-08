@@ -28,7 +28,7 @@ const modules: any[] = [
 ];
 
 class MatDialogMock {
-  open() {
+  open(): any {
     return {afterClosed: () => of([true])};
   }
 }

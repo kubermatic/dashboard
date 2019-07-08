@@ -1,6 +1,6 @@
 import {fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material';
-import {of} from 'rxjs';
+import {Observable, of} from 'rxjs';
 
 import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
@@ -13,7 +13,7 @@ import {ApiMockService} from '../../testing/services/api-mock.service';
 import {NodeService} from './node.service';
 
 class MatDialogMock {
-  open() {
+  open(): any {
     return {afterClosed: () => of(true)};
   }
 }

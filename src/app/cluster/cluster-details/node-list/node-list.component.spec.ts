@@ -20,7 +20,7 @@ import {UserMockService} from '../../../testing/services/user-mock.service';
 import {NodeListComponent} from './node-list.component';
 
 class MatDialogMock {
-  open() {
+  open(): any {
     return {afterClosed: () => of([true])};
   }
 }

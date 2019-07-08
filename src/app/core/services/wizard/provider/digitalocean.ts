@@ -11,12 +11,12 @@ export class Digitalocean extends Provider {
     this._setRequiredHeaders(Digitalocean.Header.Token);
   }
 
-  token(token: string) {
+  token(token: string): Digitalocean {
     if (token) this._headers = this._headers.set(Digitalocean.Header.Token, token);
     return this;
   }
 
-  credential(credential: string) {
+  credential(credential: string): Digitalocean {
     super._credential(credential);
     return this;
   }

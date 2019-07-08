@@ -331,21 +331,21 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _hasTenantCredentials() {
+  private _hasTenantCredentials(): boolean {
     return !(
         this.form.controls.username.value === '' || this.form.controls.password.value === '' ||
         this.form.controls.domain.value === '');
   }
 
-  private _hasRequiredCredentials() {
+  private _hasRequiredCredentials(): boolean {
     return this._hasTenantCredentials() && this.form.controls.tenant.value.toString().length > 0;
   }
 
-  private _isTenantSelected() {
+  private _isTenantSelected(): boolean {
     return this.form.controls.tenant.value.toString().length > 0;
   }
 
-  private _isNetworkSelected() {
+  private _isNetworkSelected(): boolean {
     return this.form.controls.network.value.toString().length > 0;
   }
 

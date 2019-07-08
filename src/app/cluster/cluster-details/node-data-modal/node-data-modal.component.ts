@@ -79,7 +79,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
     this.wizardService.changeSettingsFormView({hideOptional: !this.isExtended});
   }
 
-  getDialogLabel() {
+  getDialogLabel(): string {
     return `${this.data.editMode ? 'Edit' : 'Add'} Node Deployment`;
   }
 }

@@ -50,7 +50,7 @@ export class ClusterService {
     return this._clusters$.get(projectID);
   }
 
-  refreshClusters() {
+  refreshClusters(): void {
     this._onClustersUpdate.next();
     this._clusters$.clear();
   }
@@ -151,7 +151,7 @@ export class ClusterService {
     return this._http.delete(url);
   }
 
-  private _getClusters(projectID: string) {
+  private _getClusters(projectID: string): Observable<ClusterEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/clusters`;
     return this._http.get<ClusterEntity[]>(url);
   }

@@ -18,17 +18,17 @@ export class VSphere extends Provider {
     );
   }
 
-  username(username: string) {
+  username(username: string): VSphere {
     if (username) this._headers = this._headers.set(VSphere.Header.Username, username);
     return this;
   }
 
-  password(password: string) {
+  password(password: string): VSphere {
     if (password) this._headers = this._headers.set(VSphere.Header.Password, password);
     return this;
   }
 
-  datacenter(datacenter: string) {
+  datacenter(datacenter: string): VSphere {
     if (datacenter) this._headers = this._headers.set(VSphere.Header.Datacenter, datacenter);
     return this;
   }

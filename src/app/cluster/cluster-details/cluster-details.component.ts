@@ -127,11 +127,11 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             });
   }
 
-  private _canReloadVersions() {
+  private _canReloadVersions(): boolean {
     return this.cluster && this.health && this.health.apiserver && this.health.machineController;
   }
 
-  private _canReloadNodes() {
+  private _canReloadNodes(): boolean {
     return this.cluster && HealthEntity.allHealthy(this.health);
   }
 

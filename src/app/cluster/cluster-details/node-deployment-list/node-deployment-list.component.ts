@@ -64,7 +64,7 @@ export class NodeDeploymentListComponent implements OnInit {
     return ClusterUtils.getVersionHeadline(type, isKubelet);
   }
 
-  goToDetails(nd: NodeDeploymentEntity) {
+  goToDetails(nd: NodeDeploymentEntity): void {
     this._router.navigate(
         ['/projects/' + this.projectID + '/dc/' + this.datacenter.metadata.name + '/clusters/' + this.cluster.id +
          /nd/ + nd.id]);

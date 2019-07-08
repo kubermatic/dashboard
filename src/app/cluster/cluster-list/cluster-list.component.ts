@@ -95,7 +95,7 @@ export class ClusterListComponent implements OnInit, OnDestroy {
     return ClusterHealthStatus.getHealthStatus(cluster, this.health[cluster.id]);
   }
 
-  isAddEnabled() {
+  isAddEnabled(): boolean {
     return !this._currentGroupConfig || this._currentGroupConfig.clusters.create;
   }
 

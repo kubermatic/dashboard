@@ -84,7 +84,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
     });
   }
 
-  selectProject(project: ProjectEntity) {
+  selectProject(project: ProjectEntity): void {
     this._projectService.selectProject(project);
   }
 
@@ -130,7 +130,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
                         this.getOwnerNameArray(owners).slice(truncatedLength, owners.length).join(', ');
   }
 
-  isProjectActive(project: ProjectEntity) {
+  isProjectActive(project: ProjectEntity): boolean {
     return ProjectUtils.isProjectActive(project);
   }
 

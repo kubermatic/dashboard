@@ -2,8 +2,10 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
+
 import {WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 
 @Component({
@@ -62,7 +64,7 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _clusterProviderSettingsForm(valid: boolean) {
+  private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         azure: {
