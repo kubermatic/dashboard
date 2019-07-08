@@ -52,33 +52,40 @@
           <div value>{{nodeDeployment.spec.paused}}</div>
         </km-property>
         <km-property>
-          <div key>Operating System</div>
-          <div value>{{system}}</div>
-        </km-property>
-        <km-property>
-          <div key>Cluster Provider</div>
-          <div value>
-            <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
-          </div>
-        </km-property>
-        <km-property>
           <div key>Created</div>
           <div value>
             <km-relative-time [date]="nodeDeployment.creationTimestamp"></km-relative-time>
           </div>
         </km-property>
         <km-property>
-          <div key>Node Labels</div>
+          <div key></div>
           <div value>
-            <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
+            <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
           </div>
         </km-property>
         <km-property>
-          <div key>Node Taints</div>
-          <div value>
-            <km-taints [taints]="nodeDeployment.spec.template.taints"></km-taints>
+          <div key></div>
+          <div value
+               fxLayout="row"
+               fxLayoutGap="10px">
+            <div class="km-os-image-{{systemLogoClass}}"></div>
+            <span>{{system}}</span>
           </div>
         </km-property>
+        <div fxFlex="100%">
+          <km-property fxFlex="50%">
+            <div key>Node Labels</div>
+            <div value>
+              <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
+            </div>
+          </km-property>
+          <km-property fxFlex="50%">
+            <div key>Node Taints</div>
+            <div value>
+              <km-taints [taints]="nodeDeployment.spec.template.taints"></km-taints>
+            </div>
+          </km-property>
+        </div>
       </div>
 
       <div>

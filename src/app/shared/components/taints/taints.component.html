@@ -1,8 +1,9 @@
 <mat-chip-list *ngIf="taints && taints.length > 0">
-  <ng-container *ngFor="let taint of taints">
-    <mat-chip>
-      {{taint.key}}: {{taint.value}}: {{taint.effect}}
-    </mat-chip>
-  </ng-container>
+  <mat-chip class="km-chip-container"
+            *ngFor="let taint of taints">
+    <div>{{taint.key}}</div>
+    <div class="km-chip-accent">{{taint.value}}</div>
+    <div>{{taint.effect}}</div>
+  </mat-chip>
 </mat-chip-list>
 <div *ngIf="!taints || taints.length === 0">-</div>
