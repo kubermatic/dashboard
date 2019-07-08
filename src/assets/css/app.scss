@@ -567,27 +567,27 @@ mat-card-header > div > mat-card-title > div {
   }
 }
 
-[aria-sort='ascending'] {
-  .mat-sort-header-arrow {
-    .mat-sort-header-indicator {
-      &::before {
-        content: url("/assets/images/icons/arrow-up.svg");
-        position: absolute;
-        transform: translateY(3px);
-      }
-    }
+[aria-sort='ascending'] .mat-sort-header-arrow .mat-sort-header-indicator {
+  &::before {
+    content: url("/assets/images/icons/arrow-up.svg");
+    position: absolute;
+    transform: translateY(3px);
+  }
+
+  &.ng-animating {
+    visibility: hidden;
   }
 }
 
-[aria-sort='descending'] {
-  .mat-sort-header-arrow {
-    .mat-sort-header-indicator {
-      &::before {
-        content: url("/assets/images/icons/arrow-up.svg");
-        transform: rotate(180deg) translateY(4px);
-        position: absolute;
-      }
-    }
+[aria-sort='descending'] .mat-sort-header-arrow .mat-sort-header-indicator {
+  &::before {
+    content: url("/assets/images/icons/arrow-up.svg");
+    transform: rotate(180deg) translateY(3px);
+    position: absolute;
+  }
+
+  &.ng-animating {
+    visibility: hidden;
   }
 }
 
