@@ -12,7 +12,9 @@ export class Digitalocean extends Provider {
   }
 
   token(token: string): Digitalocean {
-    if (token) this._headers = this._headers.set(Digitalocean.Header.Token, token);
+    if (token) {
+      this._headers = this._headers.set(Digitalocean.Header.Token, token);
+    }
     return this;
   }
 
@@ -22,7 +24,9 @@ export class Digitalocean extends Provider {
   }
 
   flavors(): Observable<DigitaloceanSizes> {
-    if (!this._hasRequiredHeaders()) return EMPTY;
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
     return this._http.get<DigitaloceanSizes>(this._url, {headers: this._headers});
   }
 }

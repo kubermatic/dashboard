@@ -22,7 +22,9 @@ export abstract class Provider {
   }
 
   protected _credential(credential: string): void {
-    if (credential) this._headers = this._headers.set(Provider.SharedHeader.Credential, credential);
+    if (credential) {
+      this._headers = this._headers.set(Provider.SharedHeader.Credential, credential);
+    }
   }
 }
 

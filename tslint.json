@@ -1,6 +1,7 @@
 {
   "extends": "gts/tslint.json", // See: https://github.com/google/gts/blob/v0.9.0/tslint.json.
   "rules": {
+    "curly": true,
     "eofline": true,
     "no-any": false,
     "no-console": true,

@@ -19,17 +19,23 @@ export class VSphere extends Provider {
   }
 
   username(username: string): VSphere {
-    if (username) this._headers = this._headers.set(VSphere.Header.Username, username);
+    if (username) {
+      this._headers = this._headers.set(VSphere.Header.Username, username);
+    }
     return this;
   }
 
   password(password: string): VSphere {
-    if (password) this._headers = this._headers.set(VSphere.Header.Password, password);
+    if (password) {
+      this._headers = this._headers.set(VSphere.Header.Password, password);
+    }
     return this;
   }
 
   datacenter(datacenter: string): VSphere {
-    if (datacenter) this._headers = this._headers.set(VSphere.Header.Datacenter, datacenter);
+    if (datacenter) {
+      this._headers = this._headers.set(VSphere.Header.Datacenter, datacenter);
+    }
     return this;
   }
 
@@ -39,7 +45,9 @@ export class VSphere extends Provider {
   }
 
   networks(): Observable<VSphereNetwork[]> {
-    if (!this._hasRequiredHeaders()) return EMPTY;
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
     return this._http.get<OpenstackNetwork[]>(this._networksUrl, {headers: this._headers});
   }
 }
