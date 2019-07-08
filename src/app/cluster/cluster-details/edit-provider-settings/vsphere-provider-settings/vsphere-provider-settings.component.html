@@ -7,7 +7,7 @@
            name="infraManagementUsername"
            type="text"
            autocomplete="off">
-    <mat-error *ngIf="vsphereProviderSettingsForm.controls.infraManagementUsername.hasError('required')">
+    <mat-error *ngIf="vsphereProviderSettingsForm?.controls.infraManagementUsername.hasError('required')">
       Username is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
@@ -18,7 +18,7 @@
            name="infraManagementPassword"
            type="password"
            autocomplete="off">
-    <mat-error *ngIf="vsphereProviderSettingsForm.controls.infraManagementPassword.hasError('required')">
+    <mat-error *ngIf="vsphereProviderSettingsForm?.controls.infraManagementPassword.hasError('required')">
       Password is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
