@@ -1,6 +1,6 @@
 import {fakeAsync, inject, TestBed, tick} from '@angular/core/testing';
 import {MatDialog} from '@angular/material';
-import {Observable, of} from 'rxjs';
+import {of} from 'rxjs';
 
 import {ApiService} from '../../core/services';
 import {GoogleAnalyticsService} from '../../google-analytics.service';
