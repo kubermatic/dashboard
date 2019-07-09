@@ -1,11 +1,16 @@
 {
-  "extends": "gts/tslint.json",
+  "extends": "gts/tslint.json", // See: https://github.com/google/gts/blob/v0.9.0/tslint.json.
   "rules": {
+    "curly": true,
+    "eofline": true,
     "no-any": false,
     "no-console": true,
     "no-namespace": false,
     "switch-default": false,
-    "variable-name": false,
-    "eofline": true
+    "typedef": [
+      true,
+      "call-signature"
+    ],
+    "variable-name": false
   }
 }

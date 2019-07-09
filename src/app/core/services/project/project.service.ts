@@ -50,7 +50,7 @@ export class ProjectService {
     return this._http.delete<ProjectEntity>(url);
   }
 
-  selectProject(project: ProjectEntity) {
+  selectProject(project: ProjectEntity): Promise<boolean> {
     if (ProjectUtils.isProjectActive(project)) {
       this.onProjectChange.emit(project);
       return this._router.navigate([`/projects/${project.id}/clusters`]);
@@ -63,7 +63,7 @@ export class ProjectService {
     return this._params.get(PathParam.ProjectID);
   }
 
-  private _getProjects() {
+  private _getProjects(): Observable<ProjectEntity[]> {
     const url = `${this._restRoot}/projects`;
     return this._http.get<ProjectEntity[]>(url);
   }

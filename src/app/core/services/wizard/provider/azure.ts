@@ -17,27 +17,37 @@ export class Azure extends Provider {
   }
 
   clientID(clientID: string): Azure {
-    if (clientID) this._headers = this._headers.set(Azure.Header.ClientID, clientID);
+    if (clientID) {
+      this._headers = this._headers.set(Azure.Header.ClientID, clientID);
+    }
     return this;
   }
 
   clientSecret(clientSecret: string): Azure {
-    if (clientSecret) this._headers = this._headers.set(Azure.Header.ClientSecret, clientSecret);
+    if (clientSecret) {
+      this._headers = this._headers.set(Azure.Header.ClientSecret, clientSecret);
+    }
     return this;
   }
 
   subscriptionID(subscriptionID: string): Azure {
-    if (subscriptionID) this._headers = this._headers.set(Azure.Header.SubscriptionID, subscriptionID);
+    if (subscriptionID) {
+      this._headers = this._headers.set(Azure.Header.SubscriptionID, subscriptionID);
+    }
     return this;
   }
 
   tenantID(tenantID: string): Azure {
-    if (tenantID) this._headers = this._headers.set(Azure.Header.TenantID, tenantID);
+    if (tenantID) {
+      this._headers = this._headers.set(Azure.Header.TenantID, tenantID);
+    }
     return this;
   }
 
   location(location: string): Azure {
-    if (location) this._headers = this._headers.set(Azure.Header.Location, location);
+    if (location) {
+      this._headers = this._headers.set(Azure.Header.Location, location);
+    }
     return this;
   }
 
@@ -47,7 +57,9 @@ export class Azure extends Provider {
   }
 
   flavors(): Observable<AzureSizes[]> {
-    if (!this._hasRequiredHeaders()) return EMPTY;
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
     return this._http.get<AzureSizes[]>(this._url, {headers: this._headers});
   }
 }

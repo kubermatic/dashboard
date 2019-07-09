@@ -5,7 +5,7 @@ export class MemberUtils {
     return member.projects.find(memberProject => memberProject.id === projectID).group;
   }
 
-  static getGroupDisplayName(group: string) {
+  static getGroupDisplayName(group: string): string {
     const prefix = group.split('-')[0];
     switch (prefix) {
       case 'owners':

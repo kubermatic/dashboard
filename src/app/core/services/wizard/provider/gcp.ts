@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 
 export class GCP extends Provider {
@@ -12,15 +12,15 @@ export class GCP extends Provider {
     return this;
   }
 
-  diskTypes() {
+  diskTypes(): string[] {
     return NodeInstanceFlavors.GCP.DiskTypes;
   }
 
-  machineTypes() {
+  machineTypes(): NodeInstanceFlavor[] {
     return NodeInstanceFlavors.GCP.MachineTypes;
   }
 
-  zones() {
+  zones(): string[] {
     return NodeInstanceFlavors.GCP.Zones;
   }
 }

@@ -176,7 +176,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
     this._unsubscribe.complete();
   }
 
-  getTagForm(form) {
+  getTagForm(form): any {
     return form.get('tags').controls;
   }
 

@@ -13,7 +13,7 @@ import {ApiMockService} from '../../testing/services/api-mock.service';
 import {NodeService} from './node.service';
 
 class MatDialogMock {
-  open() {
+  open(): any {
     return {afterClosed: () => of(true)};
   }
 }

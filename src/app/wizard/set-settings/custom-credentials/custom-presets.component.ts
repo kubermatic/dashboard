@@ -25,7 +25,7 @@ export class CustomPresetsSettingsComponent implements OnInit {
   private _unsubscribe = new Subject<void>();
   private _state = PresetsState.Loading;
 
-  get selectedPresets() {
+  get selectedPresets(): string {
     return this._selectedPresets;
   }
 
@@ -34,17 +34,17 @@ export class CustomPresetsSettingsComponent implements OnInit {
     this._selectedPresets = newVal;
   }
 
-  get label() {
+  get label(): string {
     return this._state;
   }
 
-  get disabled() {
+  get disabled(): boolean {
     return !this.presetsLoaded || this._disabled;
   }
 
   constructor(private readonly _wizard: WizardService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this._wizard.clusterProviderFormChanges$
         .pipe(switchMap(
             providerForm => providerForm.provider === NodeProvider.BRINGYOUROWN || !providerForm.provider ?

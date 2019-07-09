@@ -189,7 +189,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _loadTenants(): void {
-    if (!this._hasTenantCredentials()) return;
+    if (!this._hasTenantCredentials()) {
+      return;
+    }
 
     this._loadingOptionalTenants = true;
     this._wizard.provider(NodeProvider.OPENSTACK)
@@ -219,7 +221,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _loadOptionalSettings(): void {
-    if (!this._hasRequiredCredentials()) return;
+    if (!this._hasRequiredCredentials()) {
+      return;
+    }
 
     this._loadingOptionalSettings = true;
     this._wizard.provider(NodeProvider.OPENSTACK)
@@ -271,7 +275,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _loadSubnetIds(): void {
-    if (!this._hasRequiredCredentials() || this.form.controls.network.value === '') return;
+    if (!this._hasRequiredCredentials() || this.form.controls.network.value === '') {
+      return;
+    }
 
     this._loadingSubnetIds = true;
     this._wizard.provider(NodeProvider.OPENSTACK)
@@ -331,21 +337,21 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _hasTenantCredentials() {
+  private _hasTenantCredentials(): boolean {
     return !(
         this.form.controls.username.value === '' || this.form.controls.password.value === '' ||
         this.form.controls.domain.value === '');
   }
 
-  private _hasRequiredCredentials() {
+  private _hasRequiredCredentials(): boolean {
     return this._hasTenantCredentials() && this.form.controls.tenant.value.toString().length > 0;
   }
 
-  private _isTenantSelected() {
+  private _isTenantSelected(): boolean {
     return this.form.controls.tenant.value.toString().length > 0;
   }
 
-  private _isNetworkSelected() {
+  private _isNetworkSelected(): boolean {
     return this.form.controls.network.value.toString().length > 0;
   }
 

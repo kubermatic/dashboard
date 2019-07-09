@@ -38,7 +38,7 @@ export class ProjectSelectorComponent implements OnInit, OnDestroy {
     });
   }
 
-  openDropdown(matSelect: MatSelect) {
+  openDropdown(matSelect: MatSelect): void {
     matSelect.open();
   }
 
