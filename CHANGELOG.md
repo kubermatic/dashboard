@@ -3,7 +3,7 @@
 
 - Service Accounts have been added to the UI [#1158](https://github.com/kubermatic/dashboard-v2/issues/1158) ([kgroschoff](https://github.com/kgroschoff))
 - The project menu has been redesigned. [#1195](https://github.com/kubermatic/dashboard-v2/issues/1195) ([maciaszczykm](https://github.com/maciaszczykm))
-- Fixed changing default OpenStack image on Operating System change [#1215](https://github.com/kubermatic/dashboard-v2/issues/1215) ([bashofmann](https://github.com/bashofmann))
+- Fixed changing default OpenStack image on operating system change [#1215](https://github.com/kubermatic/dashboard-v2/issues/1215) ([bashofmann](https://github.com/bashofmann))
 - `containerRuntimeVersion` and `kernelVersion` are now displayed on NodeDeployment detail page [#1216](https://github.com/kubermatic/dashboard-v2/issues/1216) ([bashofmann](https://github.com/bashofmann))
 - Custom links can now be added to the footer. [#1220](https://github.com/kubermatic/dashboard-v2/issues/1220) ([maciaszczykm](https://github.com/maciaszczykm))
 - The OIDC provider URL is now configurable via &#34;oidc_provider_url&#34; variable. [#1222](https://github.com/kubermatic/dashboard-v2/issues/1222) ([maciaszczykm](https://github.com/maciaszczykm))
