@@ -17,13 +17,13 @@ export class VSphereProviderSettingsComponent implements OnInit, OnDestroy {
 
   private _unsubscribe = new Subject<void>();
 
-  private get _infraManagementUsername() {
+  private get _infraManagementUsername(): string {
     return this.cluster.spec.cloud.vsphere.infraManagementUser ?
         this.cluster.spec.cloud.vsphere.infraManagementUser.username :
         '';
   }
 
-  private get _infraManagementPassword() {
+  private get _infraManagementPassword(): string {
     return this.cluster.spec.cloud.vsphere.infraManagementUser ?
         this.cluster.spec.cloud.vsphere.infraManagementUser.password :
         '';

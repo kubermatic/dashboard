@@ -26,7 +26,7 @@ export class ClusterMockService {
 
   providerSettingsPatchChanges$ = new Subject<ProviderSettingsPatch>().asObservable();
 
-  changeProviderSettingsPatch() {}
+  changeProviderSettingsPatch(): void {}
 
   cluster(clusterId: string, dc: string, projectID: string): Observable<ClusterEntity> {
     return asyncData(this._cluster);
@@ -64,7 +64,8 @@ export class ClusterMockService {
     return asyncData(this._cluster);
   }
 
-  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterEntityPatch) {
+  patch(projectID: string, clusterID: string, datacenter: string, patch: ClusterEntityPatch):
+      Observable<ClusterEntity> {
     return asyncData(this._cluster);
   }
 
@@ -80,7 +81,7 @@ export class ClusterMockService {
     return asyncData([]);
   }
 
-  nodes(projectID: string, clusterID: string, datacenter: string) {
+  nodes(projectID: string, clusterID: string, datacenter: string): Observable<NodeEntity[]> {
     return asyncData(nodesFake());
   }
 
@@ -88,7 +89,7 @@ export class ClusterMockService {
     return asyncData([]);
   }
 
-  upgradeNodeDeployments() {
+  upgradeNodeDeployments(): Observable<any[]> {
     return of([]);
   }
 
@@ -100,7 +101,7 @@ export class ClusterMockService {
     return of(fakeEvents());
   }
 
-  refreshClusters() {}
+  refreshClusters(): void {}
 }
 
 export function asyncData<T>(data: T): Observable<T> {

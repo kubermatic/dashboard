@@ -27,7 +27,7 @@ export class ParamsService {
     });
   }
 
-  get(name: string) {
+  get(name: string): string|undefined {
     return !!this._paramMap ? this._paramMap.get(name) : undefined;
   }
 }
