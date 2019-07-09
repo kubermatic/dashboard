@@ -48,7 +48,7 @@ export class WizardService {
 
   constructor(private readonly _http: HttpClient) {}
 
-  get clusterProviderFormChanges$() {
+  get clusterProviderFormChanges$(): BehaviorSubject<ClusterProviderForm> {
     return this._clusterProviderFormChanges$;
   }
 

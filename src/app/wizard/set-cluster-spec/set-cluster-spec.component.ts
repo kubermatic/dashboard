@@ -76,7 +76,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _setDefaultVersion(versions: MasterVersion[]) {
+  private _setDefaultVersion(versions: MasterVersion[]): void {
     this.masterVersions = versions;
     for (const version of versions) {
       if (version.default) {
@@ -86,7 +86,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _invalidateStep() {
+  private _invalidateStep(): void {
     this._wizardService.changeClusterSpec({
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,

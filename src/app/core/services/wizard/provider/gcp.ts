@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {EMPTY} from 'rxjs';
+import {EMPTY, Observable} from 'rxjs';
 
 import {GCPMachineSize} from '../../../../shared/entity/provider/gcp/GCP';
 import {NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
@@ -13,14 +13,14 @@ export class GCP extends Provider {
     this._setRequiredHeaders(GCP.Header.ServiceAccount, GCP.Header.Zone);
   }
 
-  serviceAccount(serviceAccount: string) {
+  serviceAccount(serviceAccount: string): GCP {
     if (serviceAccount) {
       this._headers = this._headers.set(GCP.Header.ServiceAccount, serviceAccount);
     }
     return this;
   }
 
-  zone(zone: string) {
+  zone(zone: string): GCP {
     if (zone) {
       this._headers = this._headers.set(GCP.Header.Zone, zone);
     }
@@ -32,18 +32,18 @@ export class GCP extends Provider {
     return this;
   }
 
-  diskTypes() {
+  diskTypes(): string[] {
     return NodeInstanceFlavors.GCP.DiskTypes;
   }
 
-  machineTypes() {
+  machineTypes(): Observable<GCPMachineSize[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
     return this._http.get<GCPMachineSize[]>(this._url, {headers: this._headers});
   }
 
-  zones() {
+  zones(): string[] {
     return NodeInstanceFlavors.GCP.Zones;
   }
 }

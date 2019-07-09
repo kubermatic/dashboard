@@ -1,5 +1,5 @@
 import {HttpClient} from '@angular/common/http';
-import {NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {NodeInstanceFlavor, NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 
 export class AWS extends Provider {
@@ -7,12 +7,12 @@ export class AWS extends Provider {
     super(http, provider);
   }
 
-  credential(credential: string) {
+  credential(credential: string): AWS {
     super._credential(credential);
     return this;
   }
 
-  flavors() {
+  flavors(): NodeInstanceFlavor[] {
     return NodeInstanceFlavors.AWS;
   }
 }

@@ -4,8 +4,10 @@ import {async} from 'rxjs-compat/scheduler/async';
 
 import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEntity';
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
+import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
+import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
@@ -35,7 +37,7 @@ export class ApiMockService {
   serviceAccountTokens: ServiceAccountTokenEntity[] = fakeServiceAccountTokens();
   vsphereNetworks: VSphereNetwork[] = fakeVSphereNetworks();
 
-  getNodeDeployments(cluster: string, dc: string, projectID: string) {
+  getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     return of(nodeDeploymentsFake());
   }
 
@@ -156,11 +158,11 @@ export class ApiMockService {
     return of(null);
   }
 
-  getDigitaloceanSizes() {
+  getDigitaloceanSizes(): Observable<DigitaloceanSizes> {
     return of(fakeDigitaloceanSizes());
   }
 
-  getKubeconfigURL() {
+  getKubeconfigURL(): string {
     return '';
   }
 }
