@@ -1,3 +1,132 @@
+### [v1.3.0]()
+
+
+- Service Accounts have been added to the UI [#1158](https://github.com/kubermatic/dashboard-v2/issues/1158) ([kgroschoff](https://github.com/kgroschoff))
+- The project menu has been redesigned. [#1195](https://github.com/kubermatic/dashboard-v2/issues/1195) ([maciaszczykm](https://github.com/maciaszczykm))
+- Fixed changing default OpenStack image on operating system change [#1215](https://github.com/kubermatic/dashboard-v2/issues/1215) ([bashofmann](https://github.com/bashofmann))
+- `containerRuntimeVersion` and `kernelVersion` are now displayed on NodeDeployment detail page [#1216](https://github.com/kubermatic/dashboard-v2/issues/1216) ([bashofmann](https://github.com/bashofmann))
+- Custom links can now be added to the footer. [#1220](https://github.com/kubermatic/dashboard-v2/issues/1220) ([maciaszczykm](https://github.com/maciaszczykm))
+- The OIDC provider URL is now configurable via &#34;oidc_provider_url&#34; variable. [#1222](https://github.com/kubermatic/dashboard-v2/issues/1222) ([maciaszczykm](https://github.com/maciaszczykm))
+- The application logo has been changed. [#1232](https://github.com/kubermatic/dashboard-v2/issues/1232) ([maciaszczykm](https://github.com/maciaszczykm))
+- The breadcrumbs component has been removed. The dialogs and buttons have been redesigned. [#1233](https://github.com/kubermatic/dashboard-v2/issues/1233) ([maciaszczykm](https://github.com/maciaszczykm))
+- Serviceaccount tokens can now be downloaded. [#1234](https://github.com/kubermatic/dashboard-v2/issues/1234) ([kgroschoff](https://github.com/kgroschoff))
+- Packet cloud provider is now supported. [#1238](https://github.com/kubermatic/dashboard-v2/issues/1238) ([maciaszczykm](https://github.com/maciaszczykm))
+- Tables have been redesigned. [#1240](https://github.com/kubermatic/dashboard-v2/issues/1240) ([kgroschoff](https://github.com/kgroschoff))
+- Added option to specify taints when creating/updating NodeDeployments [#1244](https://github.com/kubermatic/dashboard-v2/issues/1244) ([bashofmann](https://github.com/bashofmann))
+- Styling of the cluster details view has been improved. [#1270](https://github.com/kubermatic/dashboard-v2/issues/1270) ([maciaszczykm](https://github.com/maciaszczykm))
+- Missing parameters for OIDC providers have been added. [#1273](https://github.com/kubermatic/dashboard-v2/issues/1273) ([maciaszczykm](https://github.com/maciaszczykm))
+- Add OpenShift support in UI [#1274](https://github.com/kubermatic/dashboard-v2/issues/1274) ([kgroschoff](https://github.com/kgroschoff))
+- Dates are now displayed using relative format, i.e. 3 days ago. [#1303](https://github.com/kubermatic/dashboard-v2/issues/1303) ([maciaszczykm](https://github.com/maciaszczykm))
+- Redesigned dialogs and cluster details page. [#1305](https://github.com/kubermatic/dashboard-v2/issues/1305) ([maciaszczykm](https://github.com/maciaszczykm))
+- Add provider GCP to UI [#1307](https://github.com/kubermatic/dashboard-v2/issues/1307) ([kgroschoff](https://github.com/kgroschoff))
+- Redesigned notifications. [#1315](https://github.com/kubermatic/dashboard-v2/issues/1315) ([maciaszczykm](https://github.com/maciaszczykm))
+- The Instance Profile Name for AWS could be specified in UI. [#1317](https://github.com/kubermatic/dashboard-v2/issues/1317) ([kgroschoff](https://github.com/kgroschoff))
+- Redesigned node deployment view. [#1320](https://github.com/kubermatic/dashboard-v2/issues/1320) ([maciaszczykm](https://github.com/maciaszczykm))
+- Redesigned cluster details page. [#1345](https://github.com/kubermatic/dashboard-v2/issues/1345) ([kubermatic-bot](https://github.com/kubermatic-bot))
+
+
+
+
+### [v1.2.2]()
+
+
+**Misc:**
+
+- Missing parameters for OIDC providers have been added. [#1273](https://github.com/kubermatic/dashboard-v2/issues/1273) ([maciaszczykm](https://github.com/maciaszczykm))
+
+
+
+
+### [v1.2.1]()
+
+
+**Misc:**
+
+- `containerRuntimeVersion` and `kernelVersion` are now displayed on NodeDeployment detail page [#1217](https://github.com/kubermatic/dashboard-v2/issues/1217) ([kubermatic-bot](https://github.com/kubermatic-bot))
+- Fixed changing default OpenStack image on Operating System change [#1218](https://github.com/kubermatic/dashboard-v2/issues/1218) ([kubermatic-bot](https://github.com/kubermatic-bot))
+- The OIDC provider URL is now configurable via &#34;oidc_provider_url&#34; variable. [#1224](https://github.com/kubermatic/dashboard-v2/issues/1224) ([kubermatic-bot](https://github.com/kubermatic-bot))
+
+
+
+
+### [v1.2.0]()
+
+
+- Nodes and Node Deployments statuses are more accurate [#1016](https://github.com/kubermatic/dashboard-v2/issues/1016) ([maciaszczykm](https://github.com/maciaszczykm))
+- DigitalOcean sizes and OpenStack flavors option pickers have been redesigned. [#1021](https://github.com/kubermatic/dashboard-v2/issues/1021) ([maciaszczykm](https://github.com/maciaszczykm))
+- Smoother operation on bad network connection thanks to changes in asset caching. [#1030](https://github.com/kubermatic/dashboard-v2/issues/1030) ([kdomanski](https://github.com/kdomanski))
+- Added a flag allowing to change the default number of nodes created with clusters. [#1032](https://github.com/kubermatic/dashboard-v2/issues/1032) ([maciaszczykm](https://github.com/maciaszczykm))
+- Setting openstack tags for instances is possible via UI now. [#1038](https://github.com/kubermatic/dashboard-v2/issues/1038) ([kgroschoff](https://github.com/kgroschoff))
+- Node Deployments can now be named. [#1039](https://github.com/kubermatic/dashboard-v2/issues/1039) ([maciaszczykm](https://github.com/maciaszczykm))
+- Adding multiple owners to a project is possible via UI now. [#1042](https://github.com/kubermatic/dashboard-v2/issues/1042) ([kgroschoff](https://github.com/kgroschoff))
+- kubelet version can now be specified for Node Deployments. [#1047](https://github.com/kubermatic/dashboard-v2/issues/1047) ([maciaszczykm](https://github.com/maciaszczykm))
+- Events related to the Nodes are now displayed in the Node Deployment details view. [#1054](https://github.com/kubermatic/dashboard-v2/issues/1054) ([maciaszczykm](https://github.com/maciaszczykm))
+- Fixed reload behaviour of openstack setting fields. [#1056](https://github.com/kubermatic/dashboard-v2/issues/1056) ([kgroschoff](https://github.com/kgroschoff))
+- Fixed missing dashboard version info in the footer. [#1067](https://github.com/kubermatic/dashboard-v2/issues/1067) ([maciaszczykm](https://github.com/maciaszczykm))
+- Project owners visible in project list view now. [#1082](https://github.com/kubermatic/dashboard-v2/issues/1082) ([kgroschoff](https://github.com/kgroschoff))
+- Added possibility to assign labels to nodes. [#1101](https://github.com/kubermatic/dashboard-v2/issues/1101) ([maciaszczykm](https://github.com/maciaszczykm))
+- User will be warned about cluster upgrades unavailable due to old nodes. [#1121](https://github.com/kubermatic/dashboard-v2/issues/1121) ([maciaszczykm](https://github.com/maciaszczykm))
+- Updated list of AWS instance types to match latest available. [#1122](https://github.com/kubermatic/dashboard-v2/issues/1122) ([maciaszczykm](https://github.com/maciaszczykm))
+- Fixed display number of replicas if the field is empty (0 replicas). [#1126](https://github.com/kubermatic/dashboard-v2/issues/1126) ([maciaszczykm](https://github.com/maciaszczykm))
+- Added an option to include custom links into the application. [#1131](https://github.com/kubermatic/dashboard-v2/issues/1131) ([maciaszczykm](https://github.com/maciaszczykm))
+- Minor layout issues with the cluster wizard have been fixed. [#1134](https://github.com/kubermatic/dashboard-v2/issues/1134) ([kgroschoff](https://github.com/kgroschoff))
+- Removed AWS instance types t3.nano &amp; t3.micro as they are too small to schedule any workload on them [#1138](https://github.com/kubermatic/dashboard-v2/issues/1138) ([mrIncompetent](https://github.com/mrIncompetent))
+- Application sidebar has been redesigned. [#1173](https://github.com/kubermatic/dashboard-v2/issues/1173) ([maciaszczykm](https://github.com/maciaszczykm))
+
+
+
+
+### [v1.1.5]()
+
+
+**Misc:**
+
+- Removed AWS instance types t3.nano &amp; t3.micro as they are too small to schedule any workload on them [#1140](https://github.com/kubermatic/dashboard-v2/issues/1140) ([kubermatic-bot](https://github.com/kubermatic-bot))
+
+
+
+
+### [v1.1.4]()
+
+
+**Misc:**
+
+- Minor layout issues with the cluster wizard have been fixed. [#1134](https://github.com/kubermatic/dashboard-v2/issues/1134) ([kgroschoff](https://github.com/kgroschoff))
+
+
+
+
+### [v1.1.3]()
+
+
+- Updated list of AWS instance types to match latest available. [#1127](https://github.com/kubermatic/dashboard-v2/issues/1127) ([kubermatic-bot](https://github.com/kubermatic-bot))
+
+
+
+
+### [v1.1.2]()
+
+
+- Fixed missing dashboard version info in the footer. [#1096](https://github.com/kubermatic/dashboard-v2/issues/1096) ([kubermatic-bot](https://github.com/kubermatic-bot))
+
+
+
+
+### [v1.1.1]()
+
+- Nodes and Node Deployments statuses are more accurate [#1016](https://github.com/kubermatic/dashboard-v2/issues/1016) ([maciaszczykm](https://github.com/maciaszczykm))
+- DigitalOcean sizes and OpenStack flavors option pickers have been redesigned. [#1021](https://github.com/kubermatic/dashboard-v2/issues/1021) ([maciaszczykm](https://github.com/maciaszczykm))
+- Smoother operation on bad network connection thanks to changes in asset caching. [#1030](https://github.com/kubermatic/dashboard-v2/issues/1030) ([kdomanski](https://github.com/kdomanski))
+- Added a flag allowing to change the default number of nodes created with clusters. [#1032](https://github.com/kubermatic/dashboard-v2/issues/1032) ([maciaszczykm](https://github.com/maciaszczykm))
+- Setting openstack tags for instances is possible via UI now. [#1038](https://github.com/kubermatic/dashboard-v2/issues/1038) ([kgroschoff](https://github.com/kgroschoff))
+- Node Deployments can now be named. [#1039](https://github.com/kubermatic/dashboard-v2/issues/1039) ([maciaszczykm](https://github.com/maciaszczykm))
+- kubelet version can now be specified for Node Deployments. [#1047](https://github.com/kubermatic/dashboard-v2/issues/1047) ([maciaszczykm](https://github.com/maciaszczykm))
+- Events related to the Nodes are now displayed in the Node Deployment details view. [#1054](https://github.com/kubermatic/dashboard-v2/issues/1054) ([maciaszczykm](https://github.com/maciaszczykm))
+- Fixed reload behaviour of openstack setting fields. [#1056](https://github.com/kubermatic/dashboard-v2/issues/1056) ([kgroschoff](https://github.com/kgroschoff))
+
+
+
+
 ### [v1.1.0]()
 
 
