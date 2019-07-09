@@ -53,7 +53,7 @@ export class ActivatedRouteStub {
 
   private _testParamMap: ParamMap;
 
-  get testParamMap(): ParamMap {  // tslint:disable-line
+  get testParamMap() {  // tslint:disable-line
     return this._testParamMap;
   }  // tslint:disable-line
 
