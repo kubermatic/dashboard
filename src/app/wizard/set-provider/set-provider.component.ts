@@ -19,7 +19,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   providers: NodeProvider[] = [];
   private _unsubscribe: Subject<any> = new Subject();
 
-  constructor(private dcService: DatacenterService, private wizardService: WizardService) {}
+  constructor(private readonly _dcService: DatacenterService, private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     this.setProviderForm = new FormGroup({
@@ -30,7 +30,7 @@ export class SetProviderComponent implements OnInit, OnDestroy {
       this.changeClusterProvider();
     });
 
-    this.dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe((datacenters) => {
+    this._dcService.getDataCenters().pipe(takeUntil(this._unsubscribe)).subscribe((datacenters) => {
       const providers: NodeProvider[] = [];
       for (const datacenter of datacenters) {
         if (datacenter.seed) {
@@ -47,7 +47,11 @@ export class SetProviderComponent implements OnInit, OnDestroy {
   }
 
   changeClusterProvider(): void {
-    this.wizardService.changeClusterProvider({
+    if (getClusterProvider(this.cluster) !== this.setProviderForm.controls.provider.value) {
+      this._wizard.selectCustomPreset(undefined);
+    }
+
+    this._wizard.changeClusterProvider({
       provider: this.setProviderForm.controls.provider.value,
       valid: this.setProviderForm.valid,
     });
