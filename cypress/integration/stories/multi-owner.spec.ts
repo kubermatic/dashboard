@@ -1,9 +1,8 @@
-import {ClustersPage} from "../../pages/clusters.po";
 import {MembersPage} from "../../pages/members.po";
 import {ProjectsPage} from "../../pages/projects.po";
 import {login, logout} from "../../utils/auth";
 import {Condition} from "../../utils/condition";
-import {Group} from "../../utils/member";
+import {Group, reloadUsers} from "../../utils/member";
 import {wait} from "../../utils/wait";
 
 describe('Multi owner story', () => {
@@ -86,10 +85,3 @@ describe('Multi owner story', () => {
     logout();
   });
 });
-
-function reloadUsers() {
-  wait('**/users', 'GET', 'listUsers');
-
-  ClustersPage.visit();
-  MembersPage.visit();
-}
