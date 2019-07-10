@@ -4,7 +4,7 @@ import {ProjectsPage} from "../../pages/projects.po";
 import {WizardPage} from "../../pages/wizard.po";
 import {login, logout} from "../../utils/auth";
 import {Condition} from "../../utils/condition";
-import {Group} from "../../utils/member";
+import {Group, reloadUsers} from "../../utils/member";
 import {Datacenter, Provider} from "../../utils/provider";
 import {wait} from "../../utils/wait";
 
@@ -121,10 +121,3 @@ describe('Basic story', () => {
     logout();
   });
 });
-
-function reloadUsers() {
-  wait('**/users', 'GET', 'listUsers');
-
-  ClustersPage.visit();
-  MembersPage.visit();
-}

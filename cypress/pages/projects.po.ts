@@ -38,14 +38,18 @@ export class ProjectsPage {
     }
 
     static editProjectBtn(projectName: string) {
-      return cy.get(`#km-edit-project-${projectName}`);
+        return cy.get(`#km-edit-project-${projectName}`);
     }
 
     static editDialogInput() {
-      return cy.get('#km-edit-project-dialog-input');
+        return cy.get('#km-edit-project-dialog-input');
     }
 
     static editDialogConfirmBtn() {
-      return cy.get('#km-edit-project-dialog-edit-btn');
+        return cy.get('#km-edit-project-dialog-edit-btn');
+    }
+
+    static table() {
+        return cy.get('tbody');
     }
 }
