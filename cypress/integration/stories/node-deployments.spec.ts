@@ -10,7 +10,7 @@ import {wait} from "../../utils/wait";
 describe('Node Deployments story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  const digitaloceanToken = Cypress.env('KUBERMATIC_E2E_DIGITALOCEAN_TOKEN');
+  const digitaloceanToken = Cypress.env('DO_E2E_TESTS_TOKEN');
   let projectName = 'e2e-test-project';
   const clusterName = 'e2e-test-cluster';
   const initialNodeDeploymentName = 'e2e-test-nd';
