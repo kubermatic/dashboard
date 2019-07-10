@@ -85,6 +85,10 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       this.reloadSizes();
     });
 
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+      this._selectedCredentials = credentials;
+    });
+
     this.form.controls.zone.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this._unsubscribe))
         .subscribe(value => {
           this.nodeData.spec.cloud.gcp.zone = value;
@@ -122,9 +126,10 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     }
 
     if (this.isInWizard() && !this.loadingSizes && !this.nodeData.spec.cloud.gcp.zone &&
-        !this.cloudSpec.gcp.serviceAccount) {
+        !(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials)) {
       return 'Please enter valid service account and zone first.';
-    } else if (this.isInWizard() && !this.loadingSizes && !this.cloudSpec.gcp.serviceAccount) {
+    } else if (
+        this.isInWizard() && !this.loadingSizes && !(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials)) {
       return 'Please enter valid service account first.';
     } else if (!this.loadingSizes && !this.nodeData.spec.cloud.gcp.zone) {
       return 'Please enter valid zone first.';
