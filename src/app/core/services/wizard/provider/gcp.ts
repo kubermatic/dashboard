@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {GCPMachineSize} from '../../../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize} from '../../../../shared/entity/provider/gcp/GCP';
 import {NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
@@ -32,8 +32,12 @@ export class GCP extends Provider {
     return this;
   }
 
-  diskTypes(): string[] {
-    return NodeInstanceFlavors.GCP.DiskTypes;
+  diskTypes(): Observable<GCPDiskType[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    const url = `${this._restRoot}/providers/${this._provider}/disktypes`;
+    return this._http.get<GCPDiskType[]>(url, {headers: this._headers});
   }
 
   machineTypes(): Observable<GCPMachineSize[]> {

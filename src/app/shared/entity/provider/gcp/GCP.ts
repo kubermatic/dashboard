@@ -4,3 +4,8 @@ export class GCPMachineSize {
   memory: number;
   vcpus: number;
 }
+
+export class GCPDiskType {
+  name: string;
+  description: string;
+}

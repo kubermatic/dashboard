@@ -11,21 +11,6 @@
     </mat-form-field>
   </div>
 
-  <div fxFlex
-       class="mat-select-container">
-    <mat-form-field>
-      <mat-label>Disk Type*</mat-label>
-      <mat-select formControlName="diskType"
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering>
-        <mat-option *ngFor="let type of diskTypes"
-                    [value]="type">
-          {{type}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
   <mat-form-field fxFlex>
     <mat-label>Zone*</mat-label>
     <input matInput
@@ -36,6 +21,22 @@
                   [value]="zone"> {{zone}} </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Disk Type*</mat-label>
+      <mat-select formControlName="diskType"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering>
+        <mat-option *ngFor="let type of diskTypes"
+                    [value]="type.name">
+          {{type.name}} ({{type.description}})
+        </mat-option>
+      </mat-select>
+      <mat-hint>{{getDiskTypeHint()}}</mat-hint>
+    </mat-form-field>
+  </div>
 
   <div fxFlex
        class="mat-select-container">

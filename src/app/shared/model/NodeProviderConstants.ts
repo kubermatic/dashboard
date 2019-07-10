@@ -68,10 +68,5 @@ export namespace NodeInstanceFlavors {
     new NodeInstanceFlavor('cx51-ceph', '8 vCPU, 32 GB'),
   ];
 
-  export namespace GCP {
-    // remove 'local-ssd' for now, as this must be handled differently in the machine-controller
-    export const DiskTypes: string[] = ['pd-ssd', 'pd-standard'];
-
-    export const Zones: string[] = ['europe-west3-c'];
-  }
+  export namespace GCP { export const Zones: string[] = ['europe-west3-c']; }
 }

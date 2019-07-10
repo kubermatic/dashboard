@@ -14,7 +14,7 @@ import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
-import {GCPMachineSize} from '../../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize} from '../../../shared/entity/provider/gcp/GCP';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
@@ -121,6 +121,12 @@ export class ApiService {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/sizes`;
     const headers = new HttpHeaders().set('Zone', zone);
     return this._http.get<GCPMachineSize[]>(url, {headers});
+  }
+
+  getGCPDiskTypes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPDiskType[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/disktypes`;
+    const headers = new HttpHeaders().set('Zone', zone);
+    return this._http.get<GCPDiskType[]>(url, {headers});
   }
 
   getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {
