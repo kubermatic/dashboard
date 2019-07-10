@@ -22,4 +22,12 @@ export class ClustersPage {
     static deleteDialogBtn() {
         return cy.get('#km-delete-cluster-dialog-delete-btn');
     }
+
+    static table() {
+        return cy.get('tbody');
+    }
+
+    static nodeDeploymentItem(nodeDeploymentName: string) {
+        return cy.get(`#nodeDeploymentName`);
+    }
 }
