@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, first, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
@@ -52,7 +52,8 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       diskSize: new FormControl(this.nodeData.spec.cloud.gcp.diskSize, Validators.required),
       diskType: new FormControl(this.nodeData.spec.cloud.gcp.diskType, Validators.required),
-      machineType: new FormControl(this.nodeData.spec.cloud.gcp.machineType, Validators.required),
+      machineType:
+          new FormControl({value: this.nodeData.spec.cloud.gcp.machineType, disabled: true}, Validators.required),
       zone: new FormControl(this.nodeData.spec.cloud.gcp.zone, Validators.required),
       preemptible: new FormControl(this.nodeData.spec.cloud.gcp.preemptible),
       tags: new FormControl(this.nodeData.spec.cloud.gcp.tags.toString().replace(/\,/g, ', ')),
@@ -80,15 +81,36 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;
-      this.form.controls.machineType.setValue('');
-      this.machineTypes = [];
-      // this.checkSizeState();
-
-      if (data.cloudSpec.gcp.serviceAccount !== '' || this._selectedCredentials) {
-        this.reloadSizes();
-      }
+      this.disableSizes();
+      this.reloadSizes();
     });
+
+    this.form.controls.zone.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this._unsubscribe))
+        .subscribe(value => {
+          this.nodeData.spec.cloud.gcp.zone = value;
+          this.reloadSizes();
+        });
+
+    this.reloadSizes();
   }
+
+  disableSizes(): void {
+    this.loadingSizes = false;
+    this.machineTypes = [];
+    this.form.controls.machineType.setValue('');
+    this.form.controls.machineType.disable();
+  }
+
+  enableSizes(data: GCPMachineSize[]): void {
+    this.loadingSizes = false;
+    this.form.controls.machineType.enable();
+    this.machineTypes = data;
+    if (this.nodeData.spec.cloud.gcp.machineType === '' && this.machineTypes.length > 0) {
+      this.form.controls.machineType.setValue(this.machineTypes[0].name);
+    }
+  }
+
+  // todo on changes
 
   isInWizard(): boolean {
     return !this.clusterId || this.clusterId.length === 0;
@@ -101,11 +123,11 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
     if (this.isInWizard() && !this.loadingSizes && !this.nodeData.spec.cloud.gcp.zone &&
         !this.cloudSpec.gcp.serviceAccount) {
-      return 'Please enter a valid service account and a zone first.';
-    } else if (this.isInWizard() && !this.loadingSizes && !this.nodeData.spec.cloud.gcp.zone) {
-      return 'Please enter a zone first.';
+      return 'Please enter valid service account and zone first.';
     } else if (this.isInWizard() && !this.loadingSizes && !this.cloudSpec.gcp.serviceAccount) {
-      return 'Please enter a valid service account first.';
+      return 'Please enter valid service account first.';
+    } else if (!this.loadingSizes && !this.nodeData.spec.cloud.gcp.zone) {
+      return 'Please enter valid zone first.';
     } else if (this.loadingSizes) {
       return 'Loading sizes...';
     } else {
@@ -113,31 +135,26 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     }
   }
 
-  reloadSizes(): void {
-    if ((this.cloudSpec.gcp.serviceAccount && this.nodeData.spec.cloud.gcp.zone) || this._selectedCredentials ||
-        !this.isInWizard()) {
-      this.loadingSizes = true;
+  reloadSizes(zone = this.nodeData.spec.cloud.gcp.zone): void {
+    if (!(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials || !this.isInWizard()) || !zone) {
+      return;
     }
+
+    this.loadingSizes = true;
 
     iif(() => this.isInWizard(),
         this._wizardService.provider(NodeProvider.GCP)
-            .zone(this.nodeData.spec.cloud.gcp.zone)
+            .zone(zone)
             .serviceAccount(this.cloudSpec.gcp.serviceAccount)
             .credential(this._selectedCredentials)
             .machineTypes(),
-        this._apiService.getGCPSizes(this.projectId, this.seedDCName, this.clusterId))
+        this._apiService.getGCPSizes(zone, this.projectId, this.seedDCName, this.clusterId))
         .pipe(first())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((data) => {
-          this.machineTypes = data;
-
-          if (this.nodeData.spec.cloud.gcp.machineType === '') {
-            this.form.controls.machineType.setValue(this.machineTypes[0].name);
-          }
-
           this.loadingSizes = false;
-          // todo this.checkSizeState();
-        }, () => this.loadingSizes = false);
+          this.enableSizes(data);
+        }, () => this.disableSizes());
   }
 
   getNodeProviderData(): NodeProviderData {

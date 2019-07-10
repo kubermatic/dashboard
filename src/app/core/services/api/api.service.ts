@@ -1,4 +1,4 @@
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
@@ -117,9 +117,10 @@ export class ApiService {
     return this._http.put<Token>(url, token);
   }
 
-  getGCPSizes(projectId: string, dc: string, clusterId: string): Observable<GCPMachineSize[]> {
+  getGCPSizes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPMachineSize[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/gcp/sizes`;
-    return this._http.get<GCPMachineSize[]>(url);
+    const headers = new HttpHeaders().set('Zone', zone);
+    return this._http.get<GCPMachineSize[]>(url, {headers});
   }
 
   getOpenStackFlavors(projectId: string, dc: string, cluster: string): Observable<OpenstackFlavor[]> {

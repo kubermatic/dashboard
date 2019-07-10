@@ -43,7 +43,6 @@
       <mat-label>Machine Type*</mat-label>
       <mat-select formControlName="machineType"
                   [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  [disabled]="machineTypes.length < 1"
                   disableOptionCentering>
         <mat-option *ngFor="let type of machineTypes"
                     [value]="type.name">
