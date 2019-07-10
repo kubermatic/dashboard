@@ -1,4 +1,4 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, first, takeUntil} from 'rxjs/operators';
@@ -64,11 +64,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       this.form.controls.diskType.setValue(this.diskTypes[0]);
     }
 
-    if (this.nodeData.spec.cloud.gcp.machineType !== '') {
-      // todo restore from object
-      // this.form.controls.machineType.setValue(this.machineTypes[0].id);
-    }
-
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
     });
@@ -98,6 +93,15 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     this.reloadSizes();
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
+      if (!changes.cloudSpec.previousValue ||
+          (changes.cloudSpec.currentValue.gcp.serviceAccount !== changes.cloudSpec.previousValue.gcp.serviceAccount)) {
+        this.reloadSizes();
+      }
+    }
+  }
+
   disableSizes(): void {
     this.loadingSizes = false;
     this.machineTypes = [];
@@ -109,12 +113,15 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     this.loadingSizes = false;
     this.form.controls.machineType.enable();
     this.machineTypes = data;
-    if (this.nodeData.spec.cloud.gcp.machineType === '' && this.machineTypes.length > 0) {
-      this.form.controls.machineType.setValue(this.machineTypes[0].name);
+    if (this.machineTypes.length > 0) {
+      if (this.nodeData.spec.cloud.gcp.machineType !== '' &&
+          this.machineTypes.filter(value => value.name === this.nodeData.spec.cloud.gcp.machineType).length > 0) {
+        this.form.controls.machineType.setValue(this.nodeData.spec.cloud.gcp.machineType);
+      } else {
+        this.form.controls.machineType.setValue(this.machineTypes[0].name);
+      }
     }
   }
-
-  // todo on changes
 
   isInWizard(): boolean {
     return !this.clusterId || this.clusterId.length === 0;
