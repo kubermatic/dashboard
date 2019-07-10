@@ -1,4 +1,5 @@
 import {ClustersPage} from "../../pages/clusters.po";
+import {NodeDeploymentDetailsPage} from "../../pages/node-deployment-details.po.ts";
 import {ProjectsPage} from "../../pages/projects.po";
 import {WizardPage} from "../../pages/wizard.po";
 import {login, logout} from "../../utils/auth";
@@ -63,7 +64,32 @@ describe('Node Deployments story', () => {
 
   it('should wait for initial node deployment to be created', () => {
     ClustersPage.clusterItem(clusterName).click();
+    wait('**/nodedeployments', 'GET', 'getNodeDeployments', 600000);
     cy.get('kubermatic-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
+  });
+
+  it('should go to node deployment details', () => {
+    ClustersPage.tableRowNodeDeploymentNameColumn(initialNodeDeploymentName).click();
+  });
+
+  it('should verify node deployment name', () => {
+    NodeDeploymentDetailsPage.nodeDeploymentNameElement().should(Condition.Contain, initialNodeDeploymentName);
+  });
+
+  it('should verify node deployment cluster name', () => {
+    NodeDeploymentDetailsPage.nodeDeploymentClusterNameElement().should(Condition.Contain, clusterName);
+  });
+
+  it('should go back to cluster details page and remove initial node deployment', () => {
+    ClustersPage.visit();
+    wait('**/clusters');
+    ClustersPage.table().should(Condition.Contain, clusterName);
+    ClustersPage.clusterItem(clusterName).click();
+
+    cy.get('kubermatic-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
+    ClustersPage.nodeDeploymentRemoveBtn(initialNodeDeploymentName).click();
+    ClustersPage.deleteNodeDeploymentDialogBtn().click();
+    ClustersPage.tableRowNodeDeploymentNameColumn(initialNodeDeploymentName).should(Condition.NotExist);
   });
 
   it('should delete created cluster', () => {
