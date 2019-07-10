@@ -19,8 +19,12 @@ export class WizardPage {
         return cy.get('button').contains('.km-location', datacenterName);
     }
 
-    static digitaloceanTokenInput() {
-        return cy.get('#km-digitalocean-token-input');
+    static presetSelectBox() {
+        return cy.get('.km-custom-credentials-select');
+    }
+
+    static presetVaultItem() {
+        return cy.get('mat-option').contains('span', 'vault');
     }
 
     static nodeNameInput() {
