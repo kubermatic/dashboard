@@ -38,7 +38,7 @@ describe('Node Deployments story', () => {
     ProjectsPage.addDialogSaveBtn().click();
   });
   
-  it('should create a new cluster', () => {
+  it('should create a new cluster: Step Cluster', () => {
     ProjectsPage.select(projectName);
     ClustersPage.visit();
     wait('**/me');
@@ -49,14 +49,24 @@ describe('Node Deployments story', () => {
     WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.nextBtn().should(Condition.NotBe, 'disabled');
     WizardPage.nextBtn().click();
+  });
+
+  it('should create a new cluster: Step Provider & Datacenter', () => {
     WizardPage.providerBtn(Provider.Digitalocean).click();
     WizardPage.datacenterBtn(Datacenter.Frankfurt).click();
+  });
+
+  it('should create a new cluster: Step Settings', () => {
     WizardPage.digitaloceanTokenInput().type(digitaloceanToken).should(Condition.HaveValue, digitaloceanToken);
     wait('**/providers/digitalocean/sizes');
     WizardPage.nodeNameInput().type(initialNodeDeploymentName).should(Condition.HaveValue, initialNodeDeploymentName);
     WizardPage.nodeCountInput().clear().type(initialNodeDeploymentReplicas).should(Condition.HaveValue, initialNodeDeploymentReplicas);
+    cy.wait(10000);
     WizardPage.nextBtn().should(Condition.NotBe, 'disabled');
     WizardPage.nextBtn().click();
+  });
+
+  it('should create a new cluster: Step Summary', () => {
     WizardPage.createBtn().should(Condition.NotBe, 'disabled');
     WizardPage.createBtn().click();
 

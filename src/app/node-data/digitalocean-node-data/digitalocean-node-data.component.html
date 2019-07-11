@@ -7,7 +7,8 @@
       <mat-select formControlName="size"
                   disableOptionCentering
                   [panelClass]="isInWizard() ? 'km-optgroup-dropdown' : 'km-optgroup-dropdown km-add-dialog-dropdown'"
-                  [placeholder]="getSizesFormState()">
+                  [placeholder]="getSizesFormState()"
+                  id="km-node-data-digitalocean-size">
         <mat-optgroup *ngIf="sizes.standard.length > 0"
                       label="Standard Droplets">
           <mat-option *ngFor="let size of sizes.standard"
