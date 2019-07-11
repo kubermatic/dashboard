@@ -1,5 +1,5 @@
 import {ClustersPage} from "../../pages/clusters.po";
-import {NodeDeploymentDetailsPage} from "../../pages/node-deployment-details.po.ts";
+import {NodeDeploymentDetailsPage} from "../../pages/node-deployment-details.po";
 import {ProjectsPage} from "../../pages/projects.po";
 import {WizardPage} from "../../pages/wizard.po";
 import {login, logout} from "../../utils/auth";
@@ -10,7 +10,6 @@ import {wait} from "../../utils/wait";
 describe('Node Deployments story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  //const digitaloceanToken = Cypress.env('DO_E2E_TESTS_TOKEN');
   let projectName = 'e2e-test-project';
   const clusterName = 'e2e-test-cluster';
   const initialNodeDeploymentName = 'e2e-test-nd';
@@ -38,37 +37,21 @@ describe('Node Deployments story', () => {
     ProjectsPage.addDialogSaveBtn().click();
   });
   
-  it('should create a new cluster: Step Cluster', () => {
+  it('should create a new cluster', () => {
     ProjectsPage.select(projectName);
     ClustersPage.visit();
-    wait('**/me');
-    ClustersPage.addClusterBtn().should(Condition.NotBe, 'disabled');
     ClustersPage.addClusterBtn().click();
 
-    wait('**/cluster?type=kubernetes');
     WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    WizardPage.nextBtn().should(Condition.NotBe, 'disabled');
     WizardPage.nextBtn().click();
-  });
-
-  it('should create a new cluster: Step Provider & Datacenter', () => {
     WizardPage.providerBtn(Provider.Digitalocean).click();
     WizardPage.datacenterBtn(Datacenter.Frankfurt).click();
-  });
-
-  it('should create a new cluster: Step Settings', () => {
     WizardPage.customPresetsCombobox().click();
     WizardPage.customPresetsValue('digitalocean').click();
     wait('**/providers/digitalocean/sizes');
     WizardPage.nodeNameInput().type(initialNodeDeploymentName).should(Condition.HaveValue, initialNodeDeploymentName);
     WizardPage.nodeCountInput().clear().type(initialNodeDeploymentReplicas).should(Condition.HaveValue, initialNodeDeploymentReplicas);
-    cy.wait(10000);
-    WizardPage.nextBtn().should(Condition.NotBe, 'disabled');
     WizardPage.nextBtn().click();
-  });
-
-  it('should create a new cluster: Step Summary', () => {
-    WizardPage.createBtn().should(Condition.NotBe, 'disabled');
     WizardPage.createBtn().click();
 
     cy.url().should(Condition.Contain, '/clusters');
