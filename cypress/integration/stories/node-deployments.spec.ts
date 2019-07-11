@@ -41,9 +41,13 @@ describe('Node Deployments story', () => {
   it('should create a new cluster', () => {
     ProjectsPage.select(projectName);
     ClustersPage.visit();
+    wait('**/me');
+    ClustersPage.addClusterBtn().should(Condition.NotBe, 'disabled');
     ClustersPage.addClusterBtn().click();
 
+    wait('**/cluster?type=kubernetes');
     WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    WizardPage.nextBtn().should(Condition.NotBe, 'disabled');
     WizardPage.nextBtn().click();
     WizardPage.providerBtn(Provider.Digitalocean).click();
     WizardPage.datacenterBtn(Datacenter.Frankfurt).click();
@@ -51,7 +55,9 @@ describe('Node Deployments story', () => {
     wait('**/providers/digitalocean/sizes');
     WizardPage.nodeNameInput().type(initialNodeDeploymentName).should(Condition.HaveValue, initialNodeDeploymentName);
     WizardPage.nodeCountInput().clear().type(initialNodeDeploymentReplicas).should(Condition.HaveValue, initialNodeDeploymentReplicas);
+    WizardPage.nextBtn().should(Condition.NotBe, 'disabled');
     WizardPage.nextBtn().click();
+    WizardPage.createBtn().should(Condition.NotBe, 'disabled');
     WizardPage.createBtn().click();
 
     cy.url().should(Condition.Contain, '/clusters');
