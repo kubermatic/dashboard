@@ -23,6 +23,14 @@ export class WizardPage {
         return cy.get('#km-digitalocean-token-input');
     }
 
+    static customPresetsCombobox() {
+        return cy.get('.km-custom-credentials-select');
+    }
+
+    static customPresetsValue(presetName: string) {
+        return cy.get('mat-option').contains('span', presetName);
+    }
+
     static nodeNameInput() {
         return cy.get('#km-node-name-input');
     }
