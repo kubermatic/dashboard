@@ -81,21 +81,17 @@ describe('Node Deployments story', () => {
   });
 
   it('should go back to cluster details page and remove initial node deployment', () => {
-    ClustersPage.visit();
-    wait('**/clusters');
-    ClustersPage.table().should(Condition.Contain, clusterName);
-    ClustersPage.clusterItem(clusterName).click();
-
+    NodeDeploymentDetailsPage.backToClusterBtn().click();
+    cy.url().should(Condition.Contain, '/clusters');
+    cy.get('mat-card-title').should(Condition.Contain, clusterName);
     cy.get('kubermatic-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
+    
     ClustersPage.nodeDeploymentRemoveBtn(initialNodeDeploymentName).click();
     ClustersPage.deleteNodeDeploymentDialogBtn().click();
     ClustersPage.tableRowNodeDeploymentNameColumn(initialNodeDeploymentName).should(Condition.NotExist);
   });
 
   it('should delete created cluster', () => {
-    ClustersPage.visit();
-    ClustersPage.clusterItem(clusterName).click();
-
     ClustersPage.deleteClusterBtn().click();
     ClustersPage.deleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
     ClustersPage.deleteDialogBtn().click();
@@ -107,6 +103,7 @@ describe('Node Deployments story', () => {
   
   it('should delete created project', () => {
     ProjectsPage.visit();
+    ProjectsPage.deleteProjectBtn(projectName).should(Condition.NotBe, 'disabled');
     ProjectsPage.deleteProjectBtn(projectName).click();
     ProjectsPage.deleteDialogInput().type(projectName).should(Condition.HaveValue, projectName);
     ProjectsPage.deleteDialogConfirmBtn().click();
