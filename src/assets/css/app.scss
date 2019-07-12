@@ -885,12 +885,23 @@ div.km-form-group-labels {
     background-color: $text-color;
   }
 
+  a {
+    display: flex;
+    justify-content: center;
+  }
+
   &:hover:not([disabled]) {
     background-color: $separator;
   }
 
   &:disabled i {
     background-color: $disabled-button-color;
+  }
+
+  &:disabled a {
+    cursor: default;
+    text-decoration: none;
+    pointer-events: none;
   }
 }
 
