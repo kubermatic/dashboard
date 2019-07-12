@@ -50,7 +50,7 @@ describe('EditProjectComponent', () => {
     fixture.detectChanges();
   }));
 
-  it('should create the edit project component', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
      }));
 

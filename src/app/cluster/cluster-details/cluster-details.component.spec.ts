@@ -83,7 +83,7 @@ describe('ClusterDetailsComponent', () => {
     fixture.debugElement.query(By.css('.km-cluster-detail-actions'));
   });
 
-  it('should create the cluster details cmp', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
      }));
 

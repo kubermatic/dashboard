@@ -8,6 +8,7 @@ import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import {GCPDiskType, GCPMachineSize} from '../../shared/entity/provider/gcp/GCP';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
@@ -160,6 +161,14 @@ export class ApiMockService {
 
   getDigitaloceanSizes(): Observable<DigitaloceanSizes> {
     return of(fakeDigitaloceanSizes());
+  }
+
+  getGCPSizes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPMachineSize[]> {
+    return of([]);
+  }
+
+  getGCPDiskTypes(zone: string, projectId: string, dc: string, clusterId: string): Observable<GCPDiskType[]> {
+    return of([]);
   }
 
   getKubeconfigURL(): string {

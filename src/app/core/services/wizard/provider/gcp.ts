@@ -1,10 +1,30 @@
 import {HttpClient} from '@angular/common/http';
-import {NodeInstanceFlavor, NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {EMPTY, Observable} from 'rxjs';
+
+import {GCPDiskType, GCPMachineSize} from '../../../../shared/entity/provider/gcp/GCP';
+import {NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+
 import {Provider} from './provider';
 
 export class GCP extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
+
+    this._setRequiredHeaders(GCP.Header.ServiceAccount, GCP.Header.Zone);
+  }
+
+  serviceAccount(serviceAccount: string): GCP {
+    if (serviceAccount) {
+      this._headers = this._headers.set(GCP.Header.ServiceAccount, serviceAccount);
+    }
+    return this;
+  }
+
+  zone(zone: string): GCP {
+    if (zone) {
+      this._headers = this._headers.set(GCP.Header.Zone, zone);
+    }
+    return this;
   }
 
   credential(credential: string): GCP {
@@ -12,15 +32,29 @@ export class GCP extends Provider {
     return this;
   }
 
-  diskTypes(): string[] {
-    return NodeInstanceFlavors.GCP.DiskTypes;
+  diskTypes(): Observable<GCPDiskType[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    const url = `${this._restRoot}/providers/${this._provider}/disktypes`;
+    return this._http.get<GCPDiskType[]>(url, {headers: this._headers});
   }
 
-  machineTypes(): NodeInstanceFlavor[] {
-    return NodeInstanceFlavors.GCP.MachineTypes;
+  machineTypes(): Observable<GCPMachineSize[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    return this._http.get<GCPMachineSize[]>(this._url, {headers: this._headers});
   }
 
   zones(): string[] {
     return NodeInstanceFlavors.GCP.Zones;
+  }
+}
+
+export namespace GCP {
+  export enum Header {
+    ServiceAccount = 'ServiceAccount',
+    Zone = 'Zone',
   }
 }

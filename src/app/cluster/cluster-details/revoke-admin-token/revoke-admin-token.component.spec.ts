@@ -49,7 +49,7 @@ describe('RevokeAdminTokenComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the revoke admin token cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 

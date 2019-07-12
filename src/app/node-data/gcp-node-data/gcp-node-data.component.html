@@ -1,4 +1,4 @@
-<form [formGroup]="gcpNodeForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div fxFlex
        class="mat-select-container">
@@ -8,36 +8,6 @@
              formControlName="diskSize"
              type="number"
              autocomplete="off">
-    </mat-form-field>
-  </div>
-
-  <div fxFlex
-       class="mat-select-container">
-    <mat-form-field>
-      <mat-label>Disk Type*</mat-label>
-      <mat-select formControlName="diskType"
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering>
-        <mat-option *ngFor="let type of diskTypes"
-                    [value]="type">
-          {{type}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div fxFlex
-       class="mat-select-container">
-    <mat-form-field>
-      <mat-label>Machine Type*</mat-label>
-      <mat-select formControlName="machineType"
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering>
-        <mat-option *ngFor="let type of machineTypes"
-                    [value]="type.id">
-          {{type}}
-        </mat-option>
-      </mat-select>
     </mat-form-field>
   </div>
 
@@ -51,6 +21,38 @@
                   [value]="zone"> {{zone}} </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Disk Type*</mat-label>
+      <mat-select formControlName="diskType"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering>
+        <mat-option *ngFor="let type of diskTypes"
+                    [value]="type.name">
+          {{type.name}} ({{type.description}})
+        </mat-option>
+      </mat-select>
+      <mat-hint>{{getDiskTypeHint()}}</mat-hint>
+    </mat-form-field>
+  </div>
+
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Machine Type*</mat-label>
+      <mat-select formControlName="machineType"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering>
+        <mat-option *ngFor="let type of machineTypes"
+                    [value]="type.name">
+          {{type.name}} ({{type.description}})
+        </mat-option>
+      </mat-select>
+      <mat-hint>{{getSizeHint()}}</mat-hint>
+    </mat-form-field>
+  </div>
 
   <div fxFlex="100%">
     <div class="km-node-options">
@@ -83,7 +85,7 @@
   <div class="km-form-group-labels"
        *ngIf="!hideOptional">
     <div fxFlex="100%"
-         *ngFor="let tag of getLabelForm(gcpNodeForm); let i=index"
+         *ngFor="let tag of getLabelForm(form); let i=index"
          formArrayName="labels">
       <div class="km-form-group-labels-inner"
            [formGroupName]="i">

@@ -43,7 +43,7 @@ describe('CustomPresetsSettingsComponent', () => {
     httpTestingController.verify();
   });
 
-  it('should create the custom presets cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 
