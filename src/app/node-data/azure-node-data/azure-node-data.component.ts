@@ -31,7 +31,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   loadingSizes = false;
 
   private _unsubscribe = new Subject<void>();
-  private _selectedCredentials: string;
+  private _selectedPreset: string;
 
   constructor(
       private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
@@ -68,14 +68,13 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
       this.sizes = [];
       this.checkSizeState();
       if (data.cloudSpec.azure.clientID !== '' || data.cloudSpec.azure.clientSecret !== '' ||
-          data.cloudSpec.azure.tenantID !== '' || data.cloudSpec.azure.subscriptionID !== '') {
+          data.cloudSpec.azure.tenantID !== '' || data.cloudSpec.azure.subscriptionID !== '' || this._selectedPreset) {
         this.reloadAzureSizes();
       }
     });
 
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
-      this._selectedCredentials = credentials;
-      this.reloadAzureSizes();
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      this._selectedPreset = preset;
     });
 
     this.loadDatacenter();
@@ -128,7 +127,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   reloadAzureSizes(): void {
-    this.loadingSizes = !this.isMissingCredentials() || !this.isInWizard() || !!this._selectedCredentials;
+    this.loadingSizes = !this.isMissingCredentials() || !this.isInWizard() || !!this._selectedPreset;
 
     iif(() => !!this.cloudSpec.dc, this._dcService.getDataCenter(this.cloudSpec.dc), EMPTY)
         .pipe(switchMap(dc => {
@@ -142,7 +141,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
                   .subscriptionID(this.cloudSpec.azure.subscriptionID)
                   .tenantID(this.cloudSpec.azure.tenantID)
                   .location(this.datacenter.spec.azure.location)
-                  .credential(this._selectedCredentials)
+                  .credential(this._selectedPreset)
                   .flavors(),
               this._api.getAzureSizes(this.projectId, this.seedDCName, this.clusterId));
         }))
