@@ -1,8 +1,11 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
+import {Router} from '@angular/router';
+import {CookieService} from 'ngx-cookie-service';
 import {Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
-import {ClusterService, ProjectService, UserService} from '../core/services';
+
+import {Auth, ClusterService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddProjectDialogComponent} from '../shared/components/add-project-dialog/add-project-dialog.component';
@@ -33,7 +36,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   constructor(
       private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
-      private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
+      private readonly _cookie: CookieService) {}
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
@@ -45,6 +49,11 @@ export class ProjectComponent implements OnInit, OnDestroy {
       this._sortProjectOwners();
       this._loadClusterCounts();
       this._loadCurrentUserRoles();
+
+      if (this._shouldRedirectToCluster()) {
+        this._redirectToCluster();
+      }
+
       this.isInitializing = false;
     });
   }
@@ -194,5 +203,15 @@ export class ProjectComponent implements OnInit, OnDestroy {
         });
       }
     });
+  }
+
+  private _shouldRedirectToCluster(): boolean {
+    const autoredirect: boolean = this._cookie.get(Auth.Cookie.Autoredirect) === 'true';
+    this._cookie.delete(Auth.Cookie.Autoredirect);
+    return this.projects.length === 1 && autoredirect;
+  }
+
+  private _redirectToCluster(): void {
+    this._router.navigate([`/projects/${this.projects[0].id}/clusters`]);
   }
 }

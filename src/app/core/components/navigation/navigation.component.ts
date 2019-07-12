@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {environment} from '../../../../environments/environment';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
 import {Auth, UserService} from '../../services';
 
@@ -10,25 +9,32 @@ import {Auth, UserService} from '../../services';
   styleUrls: ['./navigation.component.scss'],
 })
 export class NavigationComponent implements OnInit {
-  isScrolled = false;
-  environment: any = environment;
   currentUser: MemberEntity;
 
-  constructor(public auth: Auth, private readonly _router: Router, private readonly _userService: UserService) {}
+  constructor(
+      private readonly _auth: Auth, private readonly _router: Router, private readonly _userService: UserService) {}
 
   ngOnInit(): void {
-    if (this.auth.authenticated()) {
+    if (this._auth.authenticated()) {
       this._userService.loggedInUser.subscribe(user => this.currentUser = user);
     }
   }
 
+  isAuthenticated(): boolean {
+    return this._auth.authenticated();
+  }
+
   logout(): void {
-    this.auth.logout();
+    this._auth.logout();
     this._router.navigate(['']);
     delete this.currentUser;
   }
 
-  scrolledChanged(isScrolled): void {
-    this.isScrolled = isScrolled;
+  login(): void {
+    this._auth.login();
+  }
+
+  getOIDCProviderURL(): string {
+    return this._auth.getOIDCProviderURL();
   }
 }

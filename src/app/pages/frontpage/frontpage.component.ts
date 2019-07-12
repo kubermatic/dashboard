@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, HostListener, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {CookieService} from 'ngx-cookie-service';
-import {environment} from '../../../environments/environment';
 import {Auth} from '../../core/services';
 
 @Component({
@@ -36,10 +35,9 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
   };
 
   isInitialized = false;
-  environment: any = environment;
-  isAuth = false;
 
-  constructor(public auth: Auth, private router: Router, private cookieService: CookieService) {}
+  constructor(
+      private readonly _auth: Auth, private readonly _router: Router, private readonly _cookieService: CookieService) {}
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent): void {
@@ -50,18 +48,18 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    if (this.auth.authenticated()) {
-      this.router.navigate(['/projects']);
-      this.isAuth = true;
+    if (this._auth.authenticated()) {
+      this._router.navigate(['/projects']);
     }
+
     const nonceRegExp = /&nonce=(.*)$/;
-    const nonceStr = nonceRegExp.exec(this.auth.getOIDCProviderURL());
+    const nonceStr = nonceRegExp.exec(this._auth.getOIDCProviderURL());
     if (!!nonceStr && nonceStr.length >= 2 && !!nonceStr[1]) {
-      this.cookieService.set('nonce', nonceStr[1], null, null, null, true);
+      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, null, null, true);
       // localhost is only served via http, though secure cookie is not possible
       // following line will only work when domain is localhost
-      this.cookieService.set('nonce', nonceStr[1], null, null, 'localhost');
-      this.cookieService.set('nonce', nonceStr[1], null, null, '127.0.0.1');
+      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, null, 'localhost');
+      this._cookieService.set(Auth.Cookie.Nonce, nonceStr[1], null, null, '127.0.0.1');
     }
   }
 
@@ -75,5 +73,13 @@ export class FrontpageComponent implements OnInit, AfterViewInit {
 
   goToLogin(): void {
     document.getElementById('login-button').click();
+  }
+
+  getOIDCProviderURL(): string {
+    return this._auth.getOIDCProviderURL();
+  }
+
+  login(): void {
+    this._auth.login();
   }
 }
