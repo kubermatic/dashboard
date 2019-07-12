@@ -9,7 +9,7 @@ import {ApiService, ClusterService, DatacenterService, UserService} from '../../
 import {ClusterEntity, getClusterProvider, MasterVersion} from '../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {EventEntity} from '../../shared/entity/EventEntity';
-import {HealthEntity, HealthStatus} from '../../shared/entity/HealthEntity';
+import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
@@ -128,8 +128,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   private _canReloadVersions(): boolean {
-    return this.cluster && this.health && this.health.apiserver === HealthStatus.up &&
-        this.health.machineController === HealthStatus.up;
+    return this.cluster && this.health && HealthState.isUp(this.health.apiserver) &&
+        HealthState.isUp(this.health.machineController);
   }
 
   private _canReloadNodes(): boolean {

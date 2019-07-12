@@ -7,6 +7,7 @@ import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {AppConfigService} from '../../../app-config.service';
 import {ClusterService, ProjectService, UserService} from '../../../core/services';
+import {HealthState} from '../../../shared/entity/HealthEntity';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeHealth, fakeHealthFailed, fakeHealthProvisioning} from '../../../testing/fake-data/health.fake';
 import {RouterStub} from '../../../testing/router-stubs';
@@ -63,17 +64,17 @@ describe('ClusterSecretsComponent', () => {
      }));
 
   it('should set icon class `km-icon-running`', () => {
-    expect(component.getIconClass(true)).toBe('km-icon-running');
+    expect(component.getIconClass(HealthState.up)).toBe('km-icon-running');
   });
 
   it('should set icon class `km-icon-failed`', () => {
     component.health = fakeHealthFailed();
-    expect(component.getIconClass(false)).toBe('km-icon-failed');
+    expect(component.getIconClass(HealthState.down)).toBe('km-icon-failed');
   });
 
   it('should set icon class `fa fa-circle orange`', () => {
     component.health = fakeHealthProvisioning();
-    expect(component.getIconClass(false)).toBe('fa fa-circle orange');
+    expect(component.getIconClass(HealthState.provisioning)).toBe('fa fa-circle orange');
   });
 
   it('should set correct icon for controllers', () => {
@@ -88,17 +89,17 @@ describe('ClusterSecretsComponent', () => {
   });
 
   it('should set health status `Running`', () => {
-    expect(component.getHealthStatus(true)).toBe('Running');
+    expect(component.getHealthStatus(HealthState.up)).toBe('Running');
   });
 
   it('should set health status `Failed`', () => {
     component.health = fakeHealthFailed();
-    expect(component.getHealthStatus(false)).toBe('Failed');
+    expect(component.getHealthStatus(HealthState.down)).toBe('Failed');
   });
 
   it('should set health status `Pending`', () => {
     component.health = fakeHealthProvisioning();
-    expect(component.getHealthStatus(false)).toBe('Pending');
+    expect(component.getHealthStatus(HealthState.provisioning)).toBe('Pending');
   });
 
   it('should set correct status for controllers', () => {

@@ -1,37 +1,37 @@
-import {HealthEntity, HealthStatus} from '../../shared/entity/HealthEntity';
+import {HealthEntity, HealthState} from '../../shared/entity/HealthEntity';
 
 export function fakeHealth(): HealthEntity {
   return {
-    apiserver: HealthStatus.up,
-    controller: HealthStatus.up,
-    etcd: HealthStatus.up,
-    machineController: HealthStatus.up,
-    scheduler: HealthStatus.up,
-    cloudProviderInfrastructure: HealthStatus.up,
-    userClusterControllerManager: HealthStatus.up,
+    apiserver: HealthState.up,
+    controller: HealthState.up,
+    etcd: HealthState.up,
+    machineController: HealthState.up,
+    scheduler: HealthState.up,
+    cloudProviderInfrastructure: HealthState.up,
+    userClusterControllerManager: HealthState.up,
   };
 }
 
 export function fakeHealthProvisioning(): HealthEntity {
   return {
-    apiserver: HealthStatus.up,
-    controller: HealthStatus.up,
-    etcd: HealthStatus.down,
-    machineController: HealthStatus.up,
-    scheduler: HealthStatus.down,
-    cloudProviderInfrastructure: HealthStatus.down,
-    userClusterControllerManager: HealthStatus.down,
+    apiserver: HealthState.up,
+    controller: HealthState.up,
+    etcd: HealthState.provisioning,
+    machineController: HealthState.up,
+    scheduler: HealthState.provisioning,
+    cloudProviderInfrastructure: HealthState.down,
+    userClusterControllerManager: HealthState.provisioning,
   };
 }
 
 export function fakeHealthFailed(): HealthEntity {
   return {
-    apiserver: HealthStatus.down,
-    controller: HealthStatus.down,
-    etcd: HealthStatus.down,
-    machineController: HealthStatus.down,
-    scheduler: HealthStatus.down,
-    cloudProviderInfrastructure: HealthStatus.down,
-    userClusterControllerManager: HealthStatus.down,
+    apiserver: HealthState.down,
+    controller: HealthState.down,
+    etcd: HealthState.down,
+    machineController: HealthState.down,
+    scheduler: HealthState.down,
+    cloudProviderInfrastructure: HealthState.down,
+    userClusterControllerManager: HealthState.down,
   };
 }

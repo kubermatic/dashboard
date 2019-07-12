@@ -2,7 +2,7 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
 import {Subject} from 'rxjs';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
-import {HealthEntity, HealthStatus} from '../../../shared/entity/HealthEntity';
+import {HealthEntity, HealthState} from '../../../shared/entity/HealthEntity';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
 
 @Component({
@@ -53,13 +53,13 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getIconClass(isHealthy: HealthStatus): string {
+  getIconClass(isHealthy: HealthState): string {
     switch (isHealthy) {
-      case HealthStatus.up:
+      case HealthState.up:
         return 'km-icon-running';
-      case HealthStatus.down:
+      case HealthState.down:
         return 'km-icon-failed';
-      case HealthStatus.provisioning:
+      case HealthState.provisioning:
         return 'fa fa-circle orange';
       default:
         return '';
@@ -89,11 +89,11 @@ export class ClusterSecretsComponent implements OnInit, OnDestroy {
     }
   }
 
-  getHealthStatus(isHealthy: HealthStatus): string {
-    if (isHealthy === HealthStatus.up) {
+  getHealthStatus(isHealthy: HealthState): string {
+    if (HealthState.isUp(isHealthy)) {
       return 'Running';
     } else {
-      if (this.health.apiserver === HealthStatus.down) {
+      if (HealthState.isDown(this.health.apiserver)) {
         return 'Failed';
       } else {
         return 'Pending';
