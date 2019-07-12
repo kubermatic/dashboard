@@ -24,15 +24,14 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   @Input() seedDCName: string;
 
   diskTypes: GCPDiskType[] = [];
-  loadingDiskTypes = false;
   machineTypes: GCPMachineSize[] = [];
-  loadingSizes = false;
   zones: string[] = this._wizardService.provider(NodeProvider.GCP).zones();
   form: FormGroup;
   labels: FormArray;
   hideOptional = true;
-
-  private _selectedCredentials: string;
+  private _loadingDiskTypes = false;
+  private _loadingSizes = false;
+  private _selectedPreset: string;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
@@ -73,50 +72,59 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;
-      this.disableSizes();
-      this.reloadSizes();
-      this.disableDiskTypes();
-      this.reloadDiskTypes();
+      this._disableSizes();
+      this._reloadSizes();
+      this._disableDiskTypes();
+      this._reloadDiskTypes();
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
-      this._selectedCredentials = credentials;
+      this._selectedPreset = credentials;
     });
 
     this.form.controls.zone.valueChanges.pipe(debounceTime(1000), distinctUntilChanged(), takeUntil(this._unsubscribe))
         .subscribe(value => {
           this.nodeData.spec.cloud.gcp.zone = value;
-          this.reloadSizes();
-          this.reloadDiskTypes();
+          this._reloadSizes();
+          this._reloadDiskTypes();
         });
 
-    this.reloadSizes();
-    this.reloadDiskTypes();
+    this._reloadSizes();
+    this._reloadDiskTypes();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
       if (!changes.cloudSpec.previousValue ||
           (changes.cloudSpec.currentValue.gcp.serviceAccount !== changes.cloudSpec.previousValue.gcp.serviceAccount)) {
-        this.reloadSizes();
-        this.reloadDiskTypes();
+        this._reloadSizes();
+        this._reloadDiskTypes();
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   isInWizard(): boolean {
     return !this.clusterId || this.clusterId.length === 0;
   }
 
-  disableDiskTypes(): void {
-    this.loadingDiskTypes = false;
+  private _hasCredentials(): boolean {
+    return !!this.cloudSpec.gcp.serviceAccount || !!this._selectedPreset || !this.isInWizard();
+  }
+
+  private _disableDiskTypes(): void {
+    this._loadingDiskTypes = false;
     this.diskTypes = [];
     this.form.controls.diskType.setValue('');
     this.form.controls.diskType.disable();
   }
 
-  enableDiskTypes(data: GCPDiskType[]): void {
-    this.loadingDiskTypes = false;
+  private _enableDiskTypes(data: GCPDiskType[]): void {
+    this._loadingDiskTypes = false;
     this.form.controls.diskType.enable();
     this.diskTypes = data;
     if (this.diskTypes.length > 0) {
@@ -134,55 +142,53 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       return '';
     }
 
-    if (this.isInWizard() && !this.loadingDiskTypes && !this.nodeData.spec.cloud.gcp.zone &&
-        !(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials)) {
+    if (this.isInWizard() && !this._loadingDiskTypes && !this.nodeData.spec.cloud.gcp.zone &&
+        !(this.cloudSpec.gcp.serviceAccount || this._selectedPreset)) {
       return 'Please enter valid service account and zone first.';
     } else if (
-        this.isInWizard() && !this.loadingDiskTypes &&
-        !(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials)) {
+        this.isInWizard() && !this._loadingDiskTypes && !(this.cloudSpec.gcp.serviceAccount || this._selectedPreset)) {
       return 'Please enter valid service account first.';
-    } else if (!this.loadingDiskTypes && !this.nodeData.spec.cloud.gcp.zone) {
+    } else if (!this._loadingDiskTypes && !this.nodeData.spec.cloud.gcp.zone) {
       return 'Please enter valid zone first.';
-    } else if (this.loadingDiskTypes) {
+    } else if (this._loadingDiskTypes) {
       return `Loading disk types...`;
     } else {
       return '';
     }
   }
 
-  reloadDiskTypes(): void {
-    if (!(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials || !this.isInWizard()) ||
-        !this.nodeData.spec.cloud.gcp.zone) {
+  private _reloadDiskTypes(): void {
+    if (!this._hasCredentials || !this.nodeData.spec.cloud.gcp.zone) {
       return;
     }
 
-    this.loadingDiskTypes = true;
+    this._loadingDiskTypes = true;
 
     iif(() => this.isInWizard(),
         this._wizardService.provider(NodeProvider.GCP)
             .zone(this.nodeData.spec.cloud.gcp.zone)
             .serviceAccount(this.cloudSpec.gcp.serviceAccount)
-            .credential(this._selectedCredentials)
+            .credential(this._selectedPreset)
             .diskTypes(),
         this._apiService.getGCPDiskTypes(
             this.nodeData.spec.cloud.gcp.zone, this.projectId, this.seedDCName, this.clusterId))
         .pipe(first())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((data) => {
-          this.loadingDiskTypes = false;
-          this.enableDiskTypes(data);
-        }, () => this.disableDiskTypes());
+          this._loadingDiskTypes = false;
+          this._enableDiskTypes(data);
+        }, () => this._disableDiskTypes());
   }
 
-  disableSizes(): void {
-    this.loadingSizes = false;
+  private _disableSizes(): void {
+    this._loadingSizes = false;
     this.machineTypes = [];
     this.form.controls.machineType.setValue('');
     this.form.controls.machineType.disable();
   }
 
-  enableSizes(data: GCPMachineSize[]): void {
-    this.loadingSizes = false;
+  private _enableSizes(data: GCPMachineSize[]): void {
+    this._loadingSizes = false;
     this.form.controls.machineType.enable();
     this.machineTypes = data;
     if (this.machineTypes.length > 0) {
@@ -200,43 +206,42 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       return '';
     }
 
-    if (this.isInWizard() && !this.loadingSizes && !this.nodeData.spec.cloud.gcp.zone &&
-        !(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials)) {
+    if (this.isInWizard() && !this._loadingSizes && !this.nodeData.spec.cloud.gcp.zone &&
+        !(this.cloudSpec.gcp.serviceAccount || this._selectedPreset)) {
       return 'Please enter valid service account and zone first.';
     } else if (
-        this.isInWizard() && !this.loadingSizes && !(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials)) {
+        this.isInWizard() && !this._loadingSizes && !(this.cloudSpec.gcp.serviceAccount || this._selectedPreset)) {
       return 'Please enter valid service account first.';
-    } else if (!this.loadingSizes && !this.nodeData.spec.cloud.gcp.zone) {
+    } else if (!this._loadingSizes && !this.nodeData.spec.cloud.gcp.zone) {
       return 'Please enter valid zone first.';
-    } else if (this.loadingSizes) {
+    } else if (this._loadingSizes) {
       return `Loading machine types...`;
     } else {
       return '';
     }
   }
 
-  reloadSizes(): void {
-    if (!(this.cloudSpec.gcp.serviceAccount || this._selectedCredentials || !this.isInWizard()) ||
-        !this.nodeData.spec.cloud.gcp.zone) {
+  private _reloadSizes(): void {
+    if (!this._hasCredentials || !this.nodeData.spec.cloud.gcp.zone) {
       return;
     }
 
-    this.loadingSizes = true;
+    this._loadingSizes = true;
 
     iif(() => this.isInWizard(),
         this._wizardService.provider(NodeProvider.GCP)
             .zone(this.nodeData.spec.cloud.gcp.zone)
             .serviceAccount(this.cloudSpec.gcp.serviceAccount)
-            .credential(this._selectedCredentials)
+            .credential(this._selectedPreset)
             .machineTypes(),
         this._apiService.getGCPSizes(
             this.nodeData.spec.cloud.gcp.zone, this.projectId, this.seedDCName, this.clusterId))
         .pipe(first())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((data) => {
-          this.loadingSizes = false;
-          this.enableSizes(data);
-        }, () => this.disableSizes());
+          this._loadingSizes = false;
+          this._enableSizes(data);
+        }, () => this._disableSizes());
   }
 
   getNodeProviderData(): NodeProviderData {
@@ -284,10 +289,5 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   deleteLabel(index: number): void {
     const arrayControl = this.form.get('labels') as FormArray;
     arrayControl.removeAt(index);
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 }
