@@ -885,6 +885,11 @@ div.km-form-group-labels {
     background-color: $text-color;
   }
 
+  a {
+    display: flex;
+    justify-content: center;
+  }
+
   &:hover:not([disabled]) {
     background-color: $separator;
   }
@@ -893,19 +898,10 @@ div.km-form-group-labels {
     background-color: $disabled-button-color;
   }
 
-  // if button is a link
-  &.isDisabled {
+  &:disabled a {
     cursor: default;
     text-decoration: none;
     pointer-events: none;
-
-    i {
-      background-color: $disabled-button-color;
-    }
-
-    &:hover {
-      background-color: transparent;
-    }
   }
 }
 
