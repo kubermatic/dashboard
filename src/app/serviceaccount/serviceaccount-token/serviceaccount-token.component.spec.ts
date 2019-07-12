@@ -72,7 +72,7 @@ describe('ServiceAccountTokenComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it('should create service account token cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 

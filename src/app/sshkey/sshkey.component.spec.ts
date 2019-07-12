@@ -71,7 +71,7 @@ describe('SSHKeyComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it('should create sshkey cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 

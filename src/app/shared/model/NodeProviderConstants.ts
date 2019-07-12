@@ -68,22 +68,5 @@ export namespace NodeInstanceFlavors {
     new NodeInstanceFlavor('cx51-ceph', '8 vCPU, 32 GB'),
   ];
 
-  export namespace GCP {
-    // remove 'local-ssd' for now, as this must be handled differently in the machine-controller
-    export const DiskTypes: string[] = ['pd-ssd', 'pd-standard'];
-
-    // https://cloud.google.com/compute/docs/machine-types
-    export const MachineTypes: NodeInstanceFlavor[] = [
-      new NodeInstanceFlavor('n1-standard-1', '1 vCPU, 3.75 GB'),
-      new NodeInstanceFlavor('n1-standard-2', '2 vCPU, 7.50 GB'),
-      new NodeInstanceFlavor('n1-standard-4', '4 vCPU, 15 GB'),
-      new NodeInstanceFlavor('n1-standard-8', '8 vCPU, 30 GB'),
-      new NodeInstanceFlavor('n1-standard-16', '16 vCPU, 60 GB'),
-      new NodeInstanceFlavor('n1-standard-32', '32 vCPU, 120 GB'),
-      new NodeInstanceFlavor('n1-standard-64', '64 vCPU, 240 GB'),
-      new NodeInstanceFlavor('n1-standard-96', '96 vCPU, 360 GB'),
-    ];
-
-    export const Zones: string[] = ['europe-west3-c'];
-  }
+  export namespace GCP { export const Zones: string[] = ['europe-west3-c']; }
 }

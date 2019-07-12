@@ -90,6 +90,8 @@
   <kubermatic-gcp-node-data *ngIf="cluster.spec.cloud.gcp"
                             [cloudSpec]="cluster.spec.cloud"
                             [clusterId]="cluster.id"
+                            [projectId]="projectId"
+                            [seedDCName]="seedDCName"
                             [nodeData]="nodeData"></kubermatic-gcp-node-data>
 
   <mat-form-field class="km-operating-system">

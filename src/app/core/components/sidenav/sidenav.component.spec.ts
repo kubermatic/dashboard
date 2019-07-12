@@ -76,7 +76,7 @@ describe('SidenavComponent', () => {
     links = linkDes.map((de) => de.injector.get(RouterLinkStubDirective) as RouterLinkStubDirective);
   });
 
-  it('should create the sidenav cmp', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
      }));
 

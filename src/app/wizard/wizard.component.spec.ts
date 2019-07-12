@@ -139,7 +139,7 @@ describe('WizardComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it('should create wizard cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 

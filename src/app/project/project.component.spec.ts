@@ -59,7 +59,7 @@ describe('ProjectComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it('should create project cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 
