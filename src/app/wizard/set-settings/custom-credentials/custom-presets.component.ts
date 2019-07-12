@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {EMPTY, Subject} from 'rxjs';
 import {switchMap, takeUntil} from 'rxjs/operators';
+
 import {WizardService} from '../../../core/services';
 import {PresetListEntity} from '../../../shared/entity/provider/credentials/PresetListEntity';
 import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
@@ -21,17 +22,17 @@ export class CustomPresetsSettingsComponent implements OnInit {
   presetsLoaded = false;
 
   private _disabled = false;
-  private _selectedPresets: string;
+  private _selectedPreset: string;
   private _unsubscribe = new Subject<void>();
   private _state = PresetsState.Loading;
 
-  get selectedPresets(): string {
-    return this._selectedPresets;
+  get selectedPreset(): string {
+    return this._selectedPreset;
   }
 
-  set selectedPresets(newVal: string) {
+  set selectedPreset(newVal: string) {
     this._wizard.selectCustomPreset(newVal);
-    this._selectedPresets = newVal;
+    this._selectedPreset = newVal;
   }
 
   get label(): string {
@@ -56,6 +57,9 @@ export class CustomPresetsSettingsComponent implements OnInit {
           this._state = this.presetsLoaded ? PresetsState.Ready : PresetsState.Empty;
           this.presetList = presetList;
         });
+
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe))
+        .subscribe(preset => this._selectedPreset = preset);
 
     this._wizard.onCustomPresetsDisable.pipe(takeUntil(this._unsubscribe))
         .subscribe(disable => this._disabled = disable);

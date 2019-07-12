@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {BehaviorSubject, Observable, ReplaySubject} from 'rxjs';
 
 import {environment} from '../../../../environments/environment';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
@@ -42,7 +42,7 @@ export class WizardService {
   // Cluster settings form view (hide optional fields or not)
   clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
   // Custom preset selection state
-  onCustomPresetSelect = new EventEmitter<string>();
+  onCustomPresetSelect = new ReplaySubject<string>();
   // Custom presets component state
   onCustomPresetsDisable = new EventEmitter<boolean>();
 
@@ -94,7 +94,7 @@ export class WizardService {
   }
 
   selectCustomPreset(presetName: string): void {
-    this.onCustomPresetSelect.emit(presetName);
+    this.onCustomPresetSelect.next(presetName);
   }
 
   provider(provider: NodeProvider.AWS): AWS;
