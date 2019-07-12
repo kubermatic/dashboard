@@ -109,7 +109,7 @@ describe('NodeDataModalData', () => {
     fixture.detectChanges();
   });
 
-  it('should create the add node modal cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 

@@ -50,7 +50,7 @@ describe('GCPNodeDataComponent', () => {
     component.nodeData = nodeDataFake();
   });
 
-  it('should init', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
     fixture.detectChanges();
   });

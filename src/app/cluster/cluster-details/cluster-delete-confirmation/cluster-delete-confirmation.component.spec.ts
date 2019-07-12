@@ -63,7 +63,7 @@ describe('ClusterDeleteConfirmationComponent', () => {
     fixture.debugElement.injector.get(Router);
   });
 
-  it('should create the add node modal cmp', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
      }));
 

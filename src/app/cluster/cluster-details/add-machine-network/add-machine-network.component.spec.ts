@@ -59,7 +59,7 @@ describe('AddMachineNetworkComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the add machine network component', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 });

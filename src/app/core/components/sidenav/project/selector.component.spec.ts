@@ -75,7 +75,7 @@ describe('SidenavComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the project selector cmp', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
      }));
 

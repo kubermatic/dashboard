@@ -74,7 +74,7 @@ describe('KubermaticComponent', () => {
     authService = fixture.debugElement.injector.get(Auth) as any;
   });
 
-  it('should create the Kubermatic', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 

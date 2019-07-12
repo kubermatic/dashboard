@@ -40,7 +40,7 @@ describe('GCPClusterSettingsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the gcp cluster cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 

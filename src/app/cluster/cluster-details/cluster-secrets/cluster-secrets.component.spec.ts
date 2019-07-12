@@ -58,7 +58,7 @@ describe('ClusterSecretsComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the cluster secrets cmp', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
      }));
 

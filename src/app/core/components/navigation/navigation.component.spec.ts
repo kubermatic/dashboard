@@ -53,7 +53,7 @@ describe('NavigationComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create the cmp', async(() => {
+  it('should initialize', async(() => {
        expect(component).toBeTruthy();
      }));
 

@@ -30,7 +30,7 @@ describe('BringyourownClusterSettingsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the BYO cluster cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 });

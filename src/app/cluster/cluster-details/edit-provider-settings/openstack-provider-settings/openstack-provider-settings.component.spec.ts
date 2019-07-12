@@ -73,7 +73,7 @@ describe('OpenstackProviderSettingsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the openstack provider settings cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 

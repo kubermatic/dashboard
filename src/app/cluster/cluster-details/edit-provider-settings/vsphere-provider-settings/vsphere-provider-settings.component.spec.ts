@@ -72,7 +72,7 @@ describe('VSphereProviderSettingsComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the vsphere provider settings cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
   });
 
