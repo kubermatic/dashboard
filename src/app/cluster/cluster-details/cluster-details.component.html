@@ -21,11 +21,11 @@
       </button>
       <a class="km-download-kubeconfig-btn"
          mat-icon-button
-         disabled="{{ !isClusterRunning }}"
+         [ngClass]="!isClusterRunning ? 'isDisabled' : ''"
          href="{{getDownloadURL()}}"
          target="_blank"
          rel="noopener"
-         matTooltip="Download config">
+         [matTooltip]="!isClusterRunning ? '' : 'Download config'">
         <i class="km-icon-download"></i>
       </a>
       <button mat-flat-button

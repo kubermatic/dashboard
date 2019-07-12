@@ -892,6 +892,21 @@ div.km-form-group-labels {
   &:disabled i {
     background-color: $disabled-button-color;
   }
+
+  // if button is a link
+  &.isDisabled {
+    cursor: default;
+    text-decoration: none;
+    pointer-events: none;
+
+    i {
+      background-color: $disabled-button-color;
+    }
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
 }
 
 // Inputs.
