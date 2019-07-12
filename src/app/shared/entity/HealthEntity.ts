@@ -1,15 +1,19 @@
 export class HealthEntity {
-  apiserver: boolean;
-  controller: boolean;
-  etcd: boolean;
-  machineController: boolean;
-  scheduler: boolean;
-  cloudProviderInfrastructure: boolean;
-  userClusterControllerManager: boolean;
+  apiserver: HealthStatus;
+  controller: HealthStatus;
+  etcd: HealthStatus;
+  machineController: HealthStatus;
+  scheduler: HealthStatus;
+  cloudProviderInfrastructure: HealthStatus;
+  userClusterControllerManager: HealthStatus;
 
   static allHealthy(health: HealthEntity): boolean {
-    return (
-        health && !!health.apiserver && !!health.controller && !!health.etcd && !!health.machineController &&
-        !!health.scheduler && !!health.cloudProviderInfrastructure && !!health.userClusterControllerManager);
+    return Object.values(health).every(status => status === HealthStatus.up);
   }
+}
+
+export enum HealthStatus {
+  down = 0,
+  up = 1,
+  provisioning = 2
 }

@@ -1,37 +1,37 @@
-import {HealthEntity} from '../../shared/entity/HealthEntity';
+import {HealthEntity, HealthStatus} from '../../shared/entity/HealthEntity';
 
 export function fakeHealth(): HealthEntity {
   return {
-    apiserver: true,
-    controller: true,
-    etcd: true,
-    machineController: true,
-    scheduler: true,
-    cloudProviderInfrastructure: true,
-    userClusterControllerManager: true,
+    apiserver: HealthStatus.up,
+    controller: HealthStatus.up,
+    etcd: HealthStatus.up,
+    machineController: HealthStatus.up,
+    scheduler: HealthStatus.up,
+    cloudProviderInfrastructure: HealthStatus.up,
+    userClusterControllerManager: HealthStatus.up,
   };
 }
 
 export function fakeHealthProvisioning(): HealthEntity {
   return {
-    apiserver: true,
-    controller: true,
-    etcd: false,
-    machineController: true,
-    scheduler: false,
-    cloudProviderInfrastructure: false,
-    userClusterControllerManager: false,
+    apiserver: HealthStatus.up,
+    controller: HealthStatus.up,
+    etcd: HealthStatus.down,
+    machineController: HealthStatus.up,
+    scheduler: HealthStatus.down,
+    cloudProviderInfrastructure: HealthStatus.down,
+    userClusterControllerManager: HealthStatus.down,
   };
 }
 
 export function fakeHealthFailed(): HealthEntity {
   return {
-    apiserver: false,
-    controller: false,
-    etcd: false,
-    machineController: false,
-    scheduler: false,
-    cloudProviderInfrastructure: false,
-    userClusterControllerManager: false,
+    apiserver: HealthStatus.down,
+    controller: HealthStatus.down,
+    etcd: HealthStatus.down,
+    machineController: HealthStatus.down,
+    scheduler: HealthStatus.down,
+    cloudProviderInfrastructure: HealthStatus.down,
+    userClusterControllerManager: HealthStatus.down,
   };
 }
