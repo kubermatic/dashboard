@@ -6,7 +6,7 @@ import {debounceTime, distinctUntilChanged, first, takeUntil} from 'rxjs/operato
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {GCPDiskType, GCPMachineSize} from '../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
@@ -25,7 +25,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
   diskTypes: GCPDiskType[] = [];
   machineTypes: GCPMachineSize[] = [];
-  zones: string[] = this._wizardService.provider(NodeProvider.GCP).zones();
+  zones: GCPZone[] = [];
   form: FormGroup;
   labels: FormArray;
   hideOptional = true;
@@ -76,6 +76,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       this._reloadSizes();
       this._disableDiskTypes();
       this._reloadDiskTypes();
+      this._reloadZones();
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
@@ -89,6 +90,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           this._reloadDiskTypes();
         });
 
+    this._reloadZones();
     this._reloadSizes();
     this._reloadDiskTypes();
   }
@@ -110,6 +112,24 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
   isInWizard(): boolean {
     return !this.clusterId || this.clusterId.length === 0;
+  }
+
+  private _reloadZones(): void {
+    if (!this._hasCredentials) {
+      return;
+    }
+
+    iif(() => this.isInWizard(),
+        this._wizardService.provider(NodeProvider.GCP)
+            .serviceAccount(this.cloudSpec.gcp.serviceAccount)
+            .credential(this._selectedPreset)
+            .zones(this.seedDCName),
+        this._apiService.getGCPZones(this.projectId, this.seedDCName, this.clusterId))
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((data) => {
+          this.zones = data;
+        }, () => this.zones = []);
   }
 
   private _hasCredentials(): boolean {

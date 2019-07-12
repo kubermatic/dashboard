@@ -67,6 +67,4 @@ export namespace NodeInstanceFlavors {
     new NodeInstanceFlavor('cx41-ceph', '4 vCPU, 16 GB'),
     new NodeInstanceFlavor('cx51-ceph', '8 vCPU, 32 GB'),
   ];
-
-  export namespace GCP { export const Zones: string[] = ['europe-west3-c']; }
 }
