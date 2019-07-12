@@ -1,5 +1,5 @@
 import {ClusterEntity} from '../../entity/ClusterEntity';
-import {HealthEntity} from '../../entity/HealthEntity';
+import {HealthEntity, HealthState} from '../../entity/HealthEntity';
 
 import {HealthStatus, HealthStatusColor, HealthStatusMessage} from './health-status';
 
@@ -14,7 +14,9 @@ export class ClusterHealthStatus extends HealthStatus {
   static getHealthStatus(c: ClusterEntity, h: HealthEntity): ClusterHealthStatus {
     if (!!c.deletionTimestamp) {
       return new ClusterHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red, HealthStatusCss.Deleting);
-    } else if (!!h && !!h.apiserver && !!h.scheduler && !!h.controller && !!h.machineController && !!h.etcd) {
+    } else if (
+        !!h && HealthState.isUp(h.apiserver) && HealthState.isUp(h.scheduler) && HealthState.isUp(h.controller) &&
+        HealthState.isUp(h.machineController) && HealthState.isUp(h.etcd)) {
       return new ClusterHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running);
     } else {
       return new ClusterHealthStatus(
