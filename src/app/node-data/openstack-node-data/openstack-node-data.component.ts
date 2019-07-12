@@ -27,7 +27,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   loadingSizes = false;
 
   private _unsubscribe = new Subject<void>();
-  private _selectedCredentials: string;
+  private _selectedPreset: string;
 
   constructor(
       private readonly _addNodeService: NodeDataService, private readonly _api: ApiService,
@@ -61,10 +61,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.cloudSpec.openstack.username === this.cloudSpec.openstack.username &&
-          data.cloudSpec.openstack.password === this.cloudSpec.openstack.password &&
-          data.cloudSpec.openstack.domain === this.cloudSpec.openstack.domain &&
-          data.cloudSpec.openstack.tenant === this.cloudSpec.openstack.tenant) {
+      if (!this.hasCredentials() && !this._selectedPreset) {
         return;
       }
 
@@ -73,15 +70,14 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       this.flavors = [];
       this.checkFlavorState();
       if (data.cloudSpec.openstack.username !== '' || data.cloudSpec.openstack.password !== '' ||
-          data.cloudSpec.openstack.domain !== '' || data.cloudSpec.openstack.tenant !== '') {
+          data.cloudSpec.openstack.domain !== '' || data.cloudSpec.openstack.tenant !== '' || this._selectedPreset) {
         this.loadFlavors();
       }
     });
 
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
-      if (credentials) {
-        this._selectedCredentials = credentials;
-        this.loadFlavors();
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
+      if (preset) {
+        this._selectedPreset = preset;
         return;
       }
 
@@ -157,7 +153,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   loadFlavors(): void {
-    this.loadingFlavors = !this.isInWizard() || this.hasCredentials();
+    this.loadingFlavors = !this.isInWizard() || this.hasCredentials() || !!this._selectedPreset;
 
     iif(() => this.isInWizard(),
         this._wizard.provider(NodeProvider.OPENSTACK)
@@ -165,7 +161,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
             .password(this.cloudSpec.openstack.password)
             .tenant(this.cloudSpec.openstack.tenant)
             .domain(this.cloudSpec.openstack.domain)
-            .credential(this._selectedCredentials)
+            .credential(this._selectedPreset)
             .datacenter(this.cloudSpec.dc)
             .flavors(),
         this._api.getOpenStackFlavors(this.projectId, this.seedDCName, this.clusterId))

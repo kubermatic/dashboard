@@ -1,6 +1,6 @@
 <mat-form-field fxFlex>
   <mat-label>{{ label }}</mat-label>
-  <mat-select [(ngModel)]="selectedPresets"
+  <mat-select [(ngModel)]="selectedPreset"
               [disabled]="disabled"
               class="km-custom-credentials-select">
     <mat-option *ngFor="let credentialName of presetList.names"
@@ -9,13 +9,13 @@
                         fxLayout="row">
       <div fxFlex
            fxLayoutAlign="start">
-        {{selectedPresets}}
+        {{selectedPreset}}
       </div>
 
       <div fxFlex
            fxLayoutAlign="end">
-        <button *ngIf="selectedPresets"
-                (click)="selectedPresets=undefined; $event.stopPropagation()"
+        <button *ngIf="selectedPreset"
+                (click)="selectedPreset=undefined; $event.stopPropagation()"
                 mat-icon-button
                 aria-label="Clear">
           <mat-icon class="km-custom-credentials-clear-icon"
