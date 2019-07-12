@@ -19,15 +19,16 @@
               matTooltip="Share">
         <i class="km-icon-share"></i>
       </button>
-      <a class="km-download-kubeconfig-btn"
-         mat-icon-button
-         disabled="{{ !isClusterRunning }}"
-         href="{{getDownloadURL()}}"
-         target="_blank"
-         rel="noopener"
-         matTooltip="Download config">
-        <i class="km-icon-download"></i>
-      </a>
+      <button class="km-download-kubeconfig-btn"
+              mat-icon-button
+              [disabled]="!isClusterRunning"
+              matTooltip="Download config">
+        <a href="{{getDownloadURL()}}"
+           target="_blank"
+           rel="noopener">
+          <i class="km-icon-download"></i>
+        </a>
+      </button>
       <button mat-flat-button
               color="alternative"
               (click)="addNode()"

@@ -184,7 +184,9 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getDownloadURL(): string {
-    return this._api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id);
+    return this.isClusterRunning ?
+        this._api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id) :
+        '';
   }
 
   isLoaded(): boolean {
