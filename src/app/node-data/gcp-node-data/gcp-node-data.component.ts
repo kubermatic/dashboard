@@ -176,8 +176,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
         }, () => this._disableZones());
   }
 
-
-
   private _disableDiskTypes(): void {
     this._loadingDiskTypes = false;
     this.diskTypes = [];
