@@ -8,7 +8,6 @@ export function SSHKeyFormValidator(): ValidatorFn {
   return (control: FormControl): any => {
     const splitForm = control.value.toString().trim().split(' ');
 
-
     if (splitForm.length < 2 || splitForm.length > 3) {
       return {validSSHKey: true};  // Key type and encoded data are required. Comment part is optional.
     }
