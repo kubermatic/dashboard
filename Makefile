@@ -28,7 +28,7 @@ test:
 	@$(CC) run test
 
 test-headless: install
-	@$(CC) run test:headless
+	@$(CC) run test
 	./hack/upload-coverage.sh
 
 run-e2e-ci: install

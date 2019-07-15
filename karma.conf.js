@@ -12,7 +12,6 @@ module.exports = function (config) {
       require('karma-jasmine-html-reporter'),
       require('karma-coverage-istanbul-reporter'),
       require('karma-chrome-launcher'),
-      require('karma-firefox-launcher'),
       require('@angular-devkit/build-angular/plugins/karma'),
       require('@angular/material')
     ],
@@ -42,7 +41,7 @@ module.exports = function (config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    browsers: ['ChromeHeadless', 'Chrome', 'FirefoxAutoAllowGUM'],
+    browsers: ['ChromeHeadless'],
     customLaunchers: {
       ChromeHeadless: {
         base: 'Chrome',
@@ -54,12 +53,6 @@ module.exports = function (config) {
           '--remote-debugging-port=9222',
         ],
       },
-      FirefoxAutoAllowGUM: {
-        base: 'Firefox',
-        prefs: {
-          'media.navigator.permission.disabled': true
-        }
-      }
     },
     captureTimeout: 210000,
     browserDisconnectTimeout : 210000,
