@@ -14,7 +14,10 @@ export function SSHKeyFormValidator(): ValidatorFn {
     }
 
     try {
-      window.atob((splitForm[1]));
+      const encoded = window.atob((splitForm[1]));
+      if (!encoded.includes(splitForm[0])) {
+        return {validSSHKey: true};  // Key type should be also included in encoded data.
+      }
     } catch (err) {
       return {validSSHKey: true};  // Not able to decode SSH key.
     }
