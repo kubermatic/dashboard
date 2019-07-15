@@ -3,13 +3,14 @@ import {ProjectsPage} from "../../pages/projects.po";
 import {login, logout} from "../../utils/auth";
 import {Condition} from "../../utils/condition";
 import {Group, reloadUsers} from "../../utils/member";
+import {prefixedString} from "../../utils/random";
 import {wait} from "../../utils/wait";
 
 describe('Multi owner story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  let projectName = 'e2e-test-project';
+  let projectName = prefixedString('e2e-test-project');
   
   before(() => {
     cy.clearCookies();

@@ -5,14 +5,15 @@ import {WizardPage} from "../../pages/wizard.po";
 import {login, logout} from "../../utils/auth";
 import {Condition} from "../../utils/condition";
 import {Datacenter, Provider} from "../../utils/provider";
+import {prefixedString} from "../../utils/random";
 import {wait} from "../../utils/wait";
 
 describe('Node Deployments story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  let projectName = 'e2e-test-project';
-  const clusterName = 'e2e-test-cluster';
-  const initialNodeDeploymentName = 'e2e-test-nd';
+  let projectName = prefixedString('e2e-test-project');
+  const clusterName = prefixedString('e2e-test-cluster');
+  const initialNodeDeploymentName = prefixedString('e2e-test-nd');
   const initialNodeDeploymentReplicas = '1';
   
   before(() => {
