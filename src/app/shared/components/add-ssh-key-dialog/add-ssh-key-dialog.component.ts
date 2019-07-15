@@ -5,6 +5,7 @@ import {ApiService} from '../../../core/services';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {NotificationActions} from '../../../redux/actions/notification.actions';
 import {SSHKeyEntity} from '../../entity/SSHKeyEntity';
+import {SSHKeyFormValidator} from '../../validators/ssh-key-form.validator';
 
 @Component({
   selector: 'kubermatic-add-ssh-key-dialog',
@@ -23,7 +24,7 @@ export class AddSshKeyDialogComponent implements OnInit {
   ngOnInit(): void {
     this.addSSHKeyForm = this.formBuilder.group({
       name: ['', [Validators.required as any]],
-      key: ['', [Validators.required as any]],
+      key: ['', [Validators.required, SSHKeyFormValidator()]],
     });
     this.googleAnalyticsService.emitEvent('addSshKey', 'addSshKeyDialogOpened');
   }
