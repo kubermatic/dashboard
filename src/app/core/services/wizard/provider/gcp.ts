@@ -10,7 +10,7 @@ export class GCP extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
-    this._setRequiredHeaders(GCP.Header.ServiceAccount, GCP.Header.Zone);
+    this._setRequiredHeaders(GCP.Header.ServiceAccount);
   }
 
   serviceAccount(serviceAccount: string): GCP {
@@ -33,7 +33,7 @@ export class GCP extends Provider {
   }
 
   diskTypes(): Observable<GCPDiskType[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this._hasRequiredHeaders() && this._headers.has(GCP.Header.Zone)) {
       return EMPTY;
     }
     const url = `${this._restRoot}/providers/${this._provider}/disktypes`;
@@ -41,7 +41,7 @@ export class GCP extends Provider {
   }
 
   machineTypes(): Observable<GCPMachineSize[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this._hasRequiredHeaders() && this._headers.has(GCP.Header.Zone)) {
       return EMPTY;
     }
     return this._http.get<GCPMachineSize[]>(this._url, {headers: this._headers});
