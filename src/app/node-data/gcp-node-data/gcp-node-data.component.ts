@@ -123,7 +123,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
         this._wizardService.provider(NodeProvider.GCP)
             .serviceAccount(this.cloudSpec.gcp.serviceAccount)
             .credential(this._selectedPreset)
-            .zones(this.seedDCName),
+            .zones(this.cloudSpec.dc),
         this._apiService.getGCPZones(this.projectId, this.seedDCName, this.clusterId))
         .pipe(first())
         .pipe(takeUntil(this._unsubscribe))
