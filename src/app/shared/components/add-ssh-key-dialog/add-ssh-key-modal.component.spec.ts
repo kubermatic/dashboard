@@ -92,4 +92,17 @@ describe('AddSshKeyDialogComponent', () => {
 
        expect(spyDialogRefClose.and.callThrough()).toHaveBeenCalledTimes(1);
      }));
+
+  it('validation should fail when SSH key is invalid', fakeAsync(() => {
+       expect(component.addSSHKeyForm.valid).toBeFalsy();
+       component.addSSHKeyForm.controls['name'].setValue('test');
+       component.addSSHKeyForm.controls['key'].setValue('ssh-rsa 7Kq3O9ZIvDwt9cbGUf55xN');
+       expect(component.addSSHKeyForm.valid).toBeFalsy();
+
+       component.addSSHKeyForm.controls['key'].setValue('ssh-rda 7Kq3O9ZIvDwt9cbGUf55xN');
+       expect(component.addSSHKeyForm.valid).toBeFalsy();
+
+       component.addSSHKeyForm.controls['key'].setValue('test');
+       expect(component.addSSHKeyForm.valid).toBeFalsy();
+     }));
 });
