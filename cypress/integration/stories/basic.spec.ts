@@ -6,14 +6,15 @@ import {login, logout} from "../../utils/auth";
 import {Condition} from "../../utils/condition";
 import {Group, reloadUsers} from "../../utils/member";
 import {Datacenter, Provider} from "../../utils/provider";
+import {prefixedString} from "../../utils/random";
 import {wait} from "../../utils/wait";
 
 describe('Basic story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  let projectName = 'e2e-test-project';
-  const clusterName = 'e2e-test-cluster';
+  let projectName = prefixedString('e2e-test-project');
+  const clusterName = prefixedString('e2e-test-cluster');
   
   before(() => {
     cy.clearCookies();
@@ -34,7 +35,9 @@ describe('Basic story', () => {
     ProjectsPage.addProjectBtn().click();
     
     ProjectsPage.addDialogInput().type(projectName).should(Condition.HaveValue, projectName);
+    ProjectsPage.addDialogSaveBtn().should(Condition.NotBe, 'disabled');
     ProjectsPage.addDialogSaveBtn().click();
+    ProjectsPage.table().should(Condition.Contain, projectName);
   });
   
   it('should create a new cluster', () => {

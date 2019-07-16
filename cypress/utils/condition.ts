@@ -5,4 +5,5 @@ export enum Condition {
   NotExist = 'not.exist',
   HaveClass = 'have.class',
   HaveLength = 'have.length',
+  NotBe = 'not.be',
 }

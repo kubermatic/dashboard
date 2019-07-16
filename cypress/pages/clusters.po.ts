@@ -22,4 +22,28 @@ export class ClustersPage {
     static deleteDialogBtn() {
         return cy.get('#km-delete-cluster-dialog-delete-btn');
     }
+
+    static table() {
+        return cy.get('tbody');
+    }
+
+    static tableRow(nodeDeploymentName: string) {
+        return ClustersPage.tableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
+    }
+    
+    static tableRowNodeDeploymentNameColumn(nodeDeploymentName: string) {
+        return cy.get('td').contains(nodeDeploymentName);
+    }
+
+    static nodeDeploymentItem(nodeDeploymentName: string) {
+        return cy.get(`#nodeDeploymentName`);
+    }
+
+    static nodeDeploymentRemoveBtn(nodeDeploymentName: string) {
+        return ClustersPage.tableRow(nodeDeploymentName).find('button i.km-icon-delete');
+    }
+
+    static deleteNodeDeploymentDialogBtn() {
+        return cy.get('#km-confirmation-dialog-confirm-btn');
+    }
 }
