@@ -9,3 +9,7 @@ export class GCPDiskType {
   name: string;
   description: string;
 }
+
+export class GCPZone {
+  name: string;
+}

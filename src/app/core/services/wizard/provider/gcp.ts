@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {GCPDiskType, GCPMachineSize} from '../../../../shared/entity/provider/gcp/GCP';
-import {NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../../shared/entity/provider/gcp/GCP';
+import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
 
@@ -10,7 +10,7 @@ export class GCP extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
 
-    this._setRequiredHeaders(GCP.Header.ServiceAccount, GCP.Header.Zone);
+    this._setRequiredHeaders(GCP.Header.ServiceAccount);
   }
 
   serviceAccount(serviceAccount: string): GCP {
@@ -33,7 +33,7 @@ export class GCP extends Provider {
   }
 
   diskTypes(): Observable<GCPDiskType[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this._hasRequiredHeaders() && this._headers.has(GCP.Header.Zone)) {
       return EMPTY;
     }
     const url = `${this._restRoot}/providers/${this._provider}/disktypes`;
@@ -41,14 +41,18 @@ export class GCP extends Provider {
   }
 
   machineTypes(): Observable<GCPMachineSize[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this._hasRequiredHeaders() && this._headers.has(GCP.Header.Zone)) {
       return EMPTY;
     }
     return this._http.get<GCPMachineSize[]>(this._url, {headers: this._headers});
   }
 
-  zones(): string[] {
-    return NodeInstanceFlavors.GCP.Zones;
+  zones(dc: string): Observable<GCPZone[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    const url = `${this._restRoot}/providers/${this._provider}/${dc}/zones`;
+    return this._http.get<GCPZone[]>(url, {headers: this._headers});
   }
 }
 

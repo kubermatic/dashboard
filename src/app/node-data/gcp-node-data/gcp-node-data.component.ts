@@ -6,7 +6,7 @@ import {debounceTime, distinctUntilChanged, first, takeUntil} from 'rxjs/operato
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {GCPDiskType, GCPMachineSize} from '../../shared/entity/provider/gcp/GCP';
+import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
@@ -25,10 +25,11 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
   diskTypes: GCPDiskType[] = [];
   machineTypes: GCPMachineSize[] = [];
-  zones: string[] = this._wizardService.provider(NodeProvider.GCP).zones();
+  zones: GCPZone[] = [];
   form: FormGroup;
   labels: FormArray;
   hideOptional = true;
+  private _loadingZones = false;
   private _loadingDiskTypes = false;
   private _loadingSizes = false;
   private _selectedPreset: string;
@@ -54,7 +55,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       diskType: new FormControl({value: this.nodeData.spec.cloud.gcp.diskType, disabled: true}, Validators.required),
       machineType:
           new FormControl({value: this.nodeData.spec.cloud.gcp.machineType, disabled: true}, Validators.required),
-      zone: new FormControl(this.nodeData.spec.cloud.gcp.zone, Validators.required),
+      zone: new FormControl({value: this.nodeData.spec.cloud.gcp.zone, disabled: true}, Validators.required),
       preemptible: new FormControl(this.nodeData.spec.cloud.gcp.preemptible),
       tags: new FormControl(this.nodeData.spec.cloud.gcp.tags.toString().replace(/\,/g, ', ')),
       labels: labelList,
@@ -76,6 +77,8 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       this._reloadSizes();
       this._disableDiskTypes();
       this._reloadDiskTypes();
+      this._disableZones();
+      this._reloadZones();
     });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
@@ -89,6 +92,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           this._reloadDiskTypes();
         });
 
+    this._reloadZones();
     this._reloadSizes();
     this._reloadDiskTypes();
   }
@@ -97,6 +101,7 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     if (changes.cloudSpec && !changes.cloudSpec.firstChange) {
       if (!changes.cloudSpec.previousValue ||
           (changes.cloudSpec.currentValue.gcp.serviceAccount !== changes.cloudSpec.previousValue.gcp.serviceAccount)) {
+        this._reloadZones();
         this._reloadSizes();
         this._reloadDiskTypes();
       }
@@ -114,6 +119,61 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
 
   private _hasCredentials(): boolean {
     return !!this.cloudSpec.gcp.serviceAccount || !!this._selectedPreset || !this.isInWizard();
+  }
+
+  private _disableZones(): void {
+    this._loadingZones = false;
+    this.zones = [];
+    this.form.controls.zone.setValue('');
+    this.form.controls.zone.disable();
+  }
+
+  private _enableZones(data: GCPZone[]): void {
+    this._loadingZones = false;
+    this.form.controls.zone.enable();
+    this.zones = data;
+    if (this.zones.length > 0) {
+      if (this.nodeData.spec.cloud.gcp.zone !== '' &&
+          this.zones.filter(value => value.name === this.nodeData.spec.cloud.gcp.zone).length > 0) {
+        this.form.controls.zone.setValue(this.nodeData.spec.cloud.gcp.zone);
+      } else {
+        this.form.controls.zone.setValue(this.zones[0].name);
+      }
+    }
+  }
+
+  getZoneHint(): string {
+    if (this.zones.length > 0) {
+      return '';
+    }
+
+    if (this.isInWizard() && !this._loadingZones && !(this.cloudSpec.gcp.serviceAccount || this._selectedPreset)) {
+      return 'Please enter valid service account first.';
+    } else if (this._loadingZones) {
+      return `Loading zones...`;
+    } else {
+      return '';
+    }
+  }
+
+  private _reloadZones(): void {
+    if (!this._hasCredentials) {
+      return;
+    }
+
+    this._loadingZones = true;
+    iif(() => this.isInWizard(),
+        this._wizardService.provider(NodeProvider.GCP)
+            .serviceAccount(this.cloudSpec.gcp.serviceAccount)
+            .credential(this._selectedPreset)
+            .zones(this.cloudSpec.dc),
+        this._apiService.getGCPZones(this.projectId, this.seedDCName, this.clusterId))
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((data) => {
+          this._loadingZones = false;
+          this._enableZones(data);
+        }, () => this._disableZones());
   }
 
   private _disableDiskTypes(): void {
@@ -163,7 +223,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     }
 
     this._loadingDiskTypes = true;
-
     iif(() => this.isInWizard(),
         this._wizardService.provider(NodeProvider.GCP)
             .zone(this.nodeData.spec.cloud.gcp.zone)
@@ -227,7 +286,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
     }
 
     this._loadingSizes = true;
-
     iif(() => this.isInWizard(),
         this._wizardService.provider(NodeProvider.GCP)
             .zone(this.nodeData.spec.cloud.gcp.zone)
