@@ -1,6 +1,6 @@
 export enum Provider {
     BringYourOwn = 'bringyourown',
-    Digitalocean = 'digitalcoean',
+    Digitalocean = 'digitalocean',
 }
 
 export enum Datacenter {
