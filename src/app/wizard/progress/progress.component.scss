@@ -2,7 +2,7 @@
 @import "../../../assets/css/variables";
 
 .km-card-progress-bar.mat-card {
-  padding: 5px 10px 16px;
+  padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid);
 
   .mat-card-title {
     margin-bottom: 0;
@@ -49,5 +49,11 @@
         background: $secondary-dark;
       }
     }
+  }
+
+  .km-wizard-step-divider {
+    height: 1px;
+    background: $separator;
+    margin: (2.25 * $baseline-grid) $baseline-grid 0;
   }
 }
