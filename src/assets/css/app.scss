@@ -260,16 +260,16 @@ mat-button-toggle-group {
   box-shadow: none !important;
 
   mat-button-toggle {
-    margin-right: 20px;
+    margin-right: 10px;
     display: flex;
     align-items: center;
     background-color: $white-text-color;
     border: 1px solid $border;
     cursor: pointer;
-    max-width: 90px;
-    min-width: 90px;
-    min-height: 90px;
-    max-height: 90px;
+    max-width: 150px;
+    min-width: 150px;
+    min-height: 60px;
+    max-height: 60px;
 
     &:hover {
       border: 1px solid $primary;
@@ -290,31 +290,16 @@ mat-button-toggle-group {
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .km-provider-logo {
+      min-height: 28px;
+      max-height: 28px !important;
+      max-width: 90px !important;
+    }
   }
 }
 
-mat-button-toggle-group[group='datacenterGroup'] {
-  border-radius: 0;
-
-  .mat-button-toggle-label-content {
-    flex-direction: column;
-    padding: 20px 0;
-    width: 100%;
-  }
-
-  .mat-button-toggle {
-    border-radius: 4px;
-  }
-
-  .mat-button-toggle-button {
-    height: 100%;
-  }
-
-  .mat-button-toggle-checked {
-    border-left: 1px solid $primary !important;
-  }
-}
-
+mat-button-toggle-group[group='datacenterGroup'],
 mat-button-toggle-group[group='providerGroup'] {
   border-radius: 0;
 
@@ -322,11 +307,6 @@ mat-button-toggle-group[group='providerGroup'] {
     border-radius: 4px;
   }
 
-  .mat-button-toggle-label-content {
-    height: 100%;
-    padding: 0 10px;
-  }
-
   .mat-button-toggle-button {
     height: 100%;
   }
@@ -334,6 +314,16 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-button-toggle-checked {
     border-left: 1px solid $primary !important;
   }
+}
+
+mat-button-toggle-group[group='datacenterGroup'] .mat-button-toggle-label-content {
+  padding: 20px 0;
+  width: 100%;
+}
+
+mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
+  height: 100%;
+  padding: 0 10px;
 }
 
 mat-card-header > div > mat-card-title > div {
