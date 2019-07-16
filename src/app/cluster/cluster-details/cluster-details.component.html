@@ -137,7 +137,6 @@
 
   <kubermatic-node-deployment-list [cluster]="cluster"
                                    [nodeDeployments]="nodeDeployments"
-                                   (changeNodeDeployment)="reloadClusterNodes()"
                                    [datacenter]="datacenter"
                                    [projectID]="projectID"
                                    [clusterHealthStatus]="clusterHealthStatus"
@@ -147,7 +146,6 @@
   <div *ngIf="nodes.length > 0">
     <kubermatic-node-list [cluster]="cluster"
                           [nodes]="nodes"
-                          (deleteNode)="reloadClusterNodes()"
                           [datacenter]="datacenter"
                           [projectID]="projectID"
                           [clusterHealthStatus]="clusterHealthStatus"
