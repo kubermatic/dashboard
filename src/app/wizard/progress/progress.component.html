@@ -1,12 +1,20 @@
 <mat-card class="km-card-progress-bar"
-          fxLayout
-          fxLayoutGap="15px">
-  <mat-card-title *ngFor="let step of steps;let i = index"
-                  fxFlex
-                  class="km-wizard-step">
-    <span [style.cursor]="getCursor(i)"
-          (click)="gotoStep(i, step)">
-      <small [ngClass]="getTitleClass(i)">{{step.description}}</small>
-    </span>
-  </mat-card-title>
+          fxFlex
+          fxLayout>
+  <ng-container *ngFor="let step of steps; let i = index">
+    <mat-card-title class="km-wizard-step"
+                    [ngClass]="{'active': i === currentStepIndex, 'completed': i < currentStepIndex}">
+      <span (click)="gotoStep(i, step)">
+        <div class="km-wizard-step-number">
+          <span *ngIf="i >= currentStepIndex">{{i + 1}}</span>
+          <i *ngIf="i < currentStepIndex"
+             class="km-icon-tick-blue"></i>
+        </div>
+        <span>{{step.description}}</span>
+      </span>
+    </mat-card-title>
+    <div *ngIf="i < steps.length - 1"
+         class="km-wizard-step-divider"
+         fxFlex></div>
+  </ng-container>
 </mat-card>

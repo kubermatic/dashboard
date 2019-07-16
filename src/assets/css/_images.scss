@@ -90,6 +90,16 @@
   border-radius: $baseline-grid;
 }
 
+.km-icon-tick-blue {
+  background-color: $primary;
+  display: inline-block;
+  width: $baseline-grid * 1.5;
+  height: $baseline-grid * 1.5;
+  mask: url("/assets/images/icons/tick.svg") no-repeat;
+  mask-repeat: no-repeat;
+  mask-size: cover;
+}
+
 .km-icon-download {
   display: inline-block;
   width: 20px;
