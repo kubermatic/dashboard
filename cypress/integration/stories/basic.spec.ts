@@ -28,22 +28,32 @@ describe('Basic story', () => {
   
   it('should login', () => {
     login(email, password);
+
     cy.url().should(Condition.Include, 'projects');
   });
 
   it('should create a new project', () => {
     ProjectsPage.addProjectBtn().click();
-    
     ProjectsPage.addDialogInput().type(projectName).should(Condition.HaveValue, projectName);
     ProjectsPage.addDialogSaveBtn().should(Condition.NotBe, 'disabled');
     ProjectsPage.addDialogSaveBtn().click();
+
     ProjectsPage.table().should(Condition.Contain, projectName);
+  });
+
+  it('select project', () => {
+    ProjectsPage.select(projectName);
+
+    cy.url().should(Condition.Include, 'clusters');
+  });
+
+  it('go to wizard', () => {
+    ClustersPage.addClusterBtn().click();
+
+    cy.url().should(Condition.Include, 'wizard');
   });
   
   it('should create a new cluster', () => {
-    ProjectsPage.select(projectName);
-    ClustersPage.addClusterBtn().click();
-
     WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.nextBtn().click();
     WizardPage.providerBtn(Provider.BringYourOwn).click();
@@ -53,11 +63,14 @@ describe('Basic story', () => {
     cy.url().should(Condition.Contain, '/clusters');
   });
 
-  it('should add a new member', () => {
+  it('go to members view', () => {
     MembersPage.visit();
-
     wait('**/users');
 
+    cy.url().should(Condition.Include, 'members');
+  });
+
+  it('should add a new member', () => {
     MembersPage.addMemberBtn().click();
     MembersPage.addMemberDialogEmailInput().type(newUserEmail).should(Condition.HaveValue, newUserEmail);
     MembersPage.addMemberDialogGroupCombobox().click();

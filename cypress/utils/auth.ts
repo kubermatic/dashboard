@@ -3,7 +3,7 @@ import {LoginPage} from "../pages/login.po";
 import {Condition} from "./condition";
 import {wait} from "./wait";
 
-export function login(email: string, password: string) {
+export function login(email: string, password: string): void {
     LoginPage.visit();
     LoginPage.loginBtn().click();
     
@@ -15,6 +15,6 @@ export function login(email: string, password: string) {
     wait('**/projects');
 }
 
-export function logout() {
+export function logout(): void {
     LoginPage.logoutBtn().click();
 }
