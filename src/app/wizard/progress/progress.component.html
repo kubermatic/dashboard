@@ -1,7 +1,6 @@
 <mat-card class="km-card-progress-bar"
           fxFlex
-          fxLayout
-          fxLayoutGap="16px">
+          fxLayout>
   <ng-container *ngFor="let step of steps; let i = index">
     <mat-card-title class="km-wizard-step"
                     [ngClass]="{'active': i === currentStepIndex, 'completed': i < currentStepIndex}">

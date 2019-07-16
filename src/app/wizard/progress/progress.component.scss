@@ -54,6 +54,6 @@
   .km-wizard-step-divider {
     height: 1px;
     background: $separator;
-    margin: (2.25 * $baseline-grid) $baseline-grid 0;
+    margin: (2.5 * $baseline-grid) (2.5 * $baseline-grid) 0 $baseline-grid;
   }
 }
