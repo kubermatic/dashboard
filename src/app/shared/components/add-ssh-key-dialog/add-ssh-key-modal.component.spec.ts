@@ -81,7 +81,8 @@ describe('AddSshKeyDialogComponent', () => {
   it('submitting a form calls createSSHKey method and closes dialog', fakeAsync(() => {
        expect(component.addSSHKeyForm.valid).toBeFalsy();
        component.addSSHKeyForm.controls['name'].setValue('testname');
-       component.addSSHKeyForm.controls['key'].setValue('testkey');
+       component.addSSHKeyForm.controls['key'].setValue(
+           'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyVGaw1PuEl98f4/7Kq3O9ZIvDw2OFOSXAFVqilSFNkHlefm1iMtPeqsIBp2t9cbGUf55xNDULz/bD/4BCV43yZ5lh0cUYuXALg9NI29ui7PEGReXjSpNwUD6ceN/78YOK41KAcecq+SS0bJ4b4amKZIJG3JWmDKljtv1dmSBCrTmEAQaOorxqGGBYmZS7NQumRe4lav5r6wOs8OACMANE1ejkeZsGFzJFNqvr5DuHdDL5FAudW23me3BDmrM9ifUzzjl1Jwku3bnRaCcjaxH8oTumt1a00mWci/1qUlaVFft085yvVq7KZbF2OPPbl+erDW91+EZ2FgEi+v1/CSJ5 your_username@hostname');
        expect(component.addSSHKeyForm.valid).toBeTruthy();
 
        const spyDialogRefClose = spyOn(dialogRef, 'close');
@@ -90,5 +91,18 @@ describe('AddSshKeyDialogComponent', () => {
        fixture.detectChanges();
 
        expect(spyDialogRefClose.and.callThrough()).toHaveBeenCalledTimes(1);
+     }));
+
+  it('validation should fail when SSH key is invalid', fakeAsync(() => {
+       expect(component.addSSHKeyForm.valid).toBeFalsy();
+       component.addSSHKeyForm.controls['name'].setValue('test');
+       component.addSSHKeyForm.controls['key'].setValue('ssh-rsa 7Kq3O9ZIvDwt9cbGUf55xN');
+       expect(component.addSSHKeyForm.valid).toBeFalsy();
+
+       component.addSSHKeyForm.controls['key'].setValue('ssh-rda 7Kq3O9ZIvDwt9cbGUf55xN');
+       expect(component.addSSHKeyForm.valid).toBeFalsy();
+
+       component.addSSHKeyForm.controls['key'].setValue('test');
+       expect(component.addSSHKeyForm.valid).toBeFalsy();
      }));
 });
