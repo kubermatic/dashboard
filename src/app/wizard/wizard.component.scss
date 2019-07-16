@@ -3,7 +3,7 @@
 
 .mat-card {
   margin-bottom: 50px;
-  padding: 3.75 * $baseline-grid;
+  padding: (2 * $baseline-grid) (3.75 * $baseline-grid) (3.75 * $baseline-grid) (3.75 * $baseline-grid);
 
   .mat-card-header {
     padding: 0;

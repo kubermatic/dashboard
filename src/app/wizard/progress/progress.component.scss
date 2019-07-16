@@ -1,35 +1,53 @@
 @import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
 
 .km-card-progress-bar.mat-card {
   padding: 5px 10px 16px;
-  background-color: $alternative-light;
-  border-radius: 5px 5px 0 0;
 
   .mat-card-title {
-    font-size: 16px;
-    font-weight: 600;
     margin-bottom: 0;
     margin-top: 0;
     padding-right: 15px;
     text-align: center;
-
-    i {
-      color: $alternative-text-color;
-      margin-left: 5px;
-
-      &.fa-check {
-        color: $indicator-green;
-      }
-    }
   }
 
   .km-wizard-step {
-    padding-top: 8px;
-    color: $alternative-text-color;
-    font-weight: bold;
+    color: $medium-text-color;
+    cursor: default;
+    font-size: $subhead-font-size-base;
+    font-weight: normal;
+    padding-top: $baseline-grid;
+    user-select: none;
 
-    .km-title-unchecked {
-      color: $alternative-disabled-text-color;
+    .km-wizard-step-number {
+      align-items: center;
+      border-radius: 50%;
+      background: $separator;
+      display: inline-flex;
+      font-size: $body-font-size-base;
+      font-weight: normal;
+      height: 3 * $baseline-grid;
+      justify-content: center;
+      margin-right: 1.75 * $baseline-grid;
+      width: 3 * $baseline-grid;
+    }
+
+    &.active {
+      color: $primary;
+      font-weight: 500;
+
+      .km-wizard-step-number {
+        background: $secondary-dark;
+      }
+    }
+
+    &.completed {
+      color: $primary;
+      cursor: pointer;
+
+      .km-wizard-step-number {
+        background: $secondary-dark;
+      }
     }
   }
 }
