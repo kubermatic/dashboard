@@ -59,19 +59,7 @@ describe('ProgressComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create the progress cmp', () => {
+  it('should initialize', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should return correct title class', () => {
-    expect(component.getTitleClass(2)).toBe('km-title-unchecked');
-    expect(component.getTitleClass(1)).toBe('');
-    expect(component.getTitleClass(0)).toBe('');
-  });
-
-  it('should return correct cursor style', () => {
-    expect(component.getCursor(2)).toBe('default');
-    expect(component.getCursor(1)).toBe('default');
-    expect(component.getCursor(0)).toBe('pointer');
   });
 });
