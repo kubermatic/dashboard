@@ -14,7 +14,7 @@
 }
 
 .km-set-cluster-spec {
-  padding: 0 3px;
+  padding: 0;
 
   &:nth-child(1) {
     padding-right: 20px;
@@ -41,7 +41,8 @@
 
     &:hover {
       background-color: transparent;
-      border: 2px solid $border;
+      border: 2px solid $quaternary;
+      transition: all .5s ease;
     }
 
     &[value='kubernetes'] {
