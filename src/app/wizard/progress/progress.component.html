@@ -6,7 +6,11 @@
     <mat-card-title class="km-wizard-step"
                     [ngClass]="{'active': i === currentStepIndex, 'completed': i < currentStepIndex}">
       <span (click)="gotoStep(i, step)">
-        <div class="km-wizard-step-number">{{i + 1}}</div>
+        <div class="km-wizard-step-number">
+          <span *ngIf="i >= currentStepIndex">{{i + 1}}</span>
+          <i *ngIf="i < currentStepIndex"
+             class="km-icon-tick-blue"></i>
+        </div>
         <span>{{step.description}}</span>
       </span>
     </mat-card-title>
