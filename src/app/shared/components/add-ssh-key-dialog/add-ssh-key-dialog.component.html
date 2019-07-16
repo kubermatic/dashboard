@@ -23,9 +23,14 @@
                     type="text"
                     class="form-control"
                     (change)="onNewKeyTextChanged()"></textarea>
-          <mat-hint>Remember to paste only the public part of your SSH key and store the private part safely.</mat-hint>
+          <mat-hint>
+            Paste only the public part of your SSH key and store the private part safely.
+          </mat-hint>
           <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('required')">
             Key is <strong>required</strong>.
+          </mat-error>
+          <mat-error *ngIf="addSSHKeyForm.controls.key.hasError('validSSHKey')">
+            SSH Key has invalid form. Use OpenSSH format.
           </mat-error>
         </mat-form-field>
       </form>
