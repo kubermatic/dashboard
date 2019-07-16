@@ -31,7 +31,9 @@ describe('Multi owner story', () => {
     ProjectsPage.addProjectBtn().click();
     
     ProjectsPage.addDialogInput().type(projectName).should(Condition.HaveValue, projectName);
+    ProjectsPage.addDialogSaveBtn().should(Condition.NotBe, 'disabled');
     ProjectsPage.addDialogSaveBtn().click();
+    ProjectsPage.table().should(Condition.Contain, projectName);
   });
   
   it('should add a new member', () => {
