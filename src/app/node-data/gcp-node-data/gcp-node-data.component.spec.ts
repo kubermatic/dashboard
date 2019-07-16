@@ -35,9 +35,9 @@ describe('GCPNodeDataComponent', () => {
             GCPNodeDataComponent,
           ],
           providers: [
+            {provide: ApiService, useClass: ApiMockService},
             NodeDataService,
             WizardService,
-            {provide: ApiService, useValue: ApiMockService},
           ],
         })
         .compileComponents();
