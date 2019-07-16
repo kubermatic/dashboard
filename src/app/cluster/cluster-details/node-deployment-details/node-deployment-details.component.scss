@@ -48,7 +48,18 @@ mat-card-header {
   color: $indicator-red !important;
 }
 
+.km-provider-logo-value {
+  display: flex;
+  align-items: center;
+}
+
 .km-provider-logo {
   margin-top: - $baseline-grid / 2;
   min-width: 14 * $baseline-grid;
+  min-height: 3.5 * $baseline-grid;
+
+  &.km-provider-logo-aws,
+  &.km-provider-logo-gcp {
+    min-width: 40px;
+  }
 }
