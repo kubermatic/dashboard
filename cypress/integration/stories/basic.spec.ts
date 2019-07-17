@@ -7,7 +7,6 @@ import {Condition} from "../../utils/condition";
 import {Group, reloadUsers} from "../../utils/member";
 import {Datacenter, Provider} from "../../utils/provider";
 import {prefixedString} from "../../utils/random";
-import {wait} from "../../utils/wait";
 
 describe('Basic story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -62,8 +61,6 @@ describe('Basic story', () => {
 
   it('should go to members view', () => {
     MembersPage.visit();
-
-
   });
 
   it('should add a new member', () => {
@@ -108,7 +105,7 @@ describe('Basic story', () => {
     ClustersPage.deleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
     ClustersPage.deleteDialogBtn().click();
 
-    wait('**/clusters');
+    ClustersPage.waitForRefresh();
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
   });
@@ -121,6 +118,8 @@ describe('Basic story', () => {
     projectName = `${projectName}-edited`;
     ProjectsPage.getEditDialogInput().type('-edited').should(Condition.HaveValue, projectName);
     ProjectsPage.getEditDialogConfirmBtn().click();
+
+    ProjectsPage.waitForRefresh();
   });
 
   it('should delete the project', () => {

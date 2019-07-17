@@ -1,11 +1,7 @@
 import {wait} from "../utils/wait";
+import {Condition} from "../utils/condition";
 
 export class ClustersPage {
-  static visit(): void {
-    cy.get('#km-nav-item-clusters').click();
-    wait('**/clusters');
-  }
-
   static addClusterBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-cluster-top-btn');
   }
@@ -44,5 +40,15 @@ export class ClustersPage {
 
   static deleteNodeDeploymentDialogBtn(): Cypress.Chainable<any> {
     return cy.get('#km-confirmation-dialog-confirm-btn');
+  }
+
+  static waitForRefresh(): void {
+    wait('**/clusters', 'GET', 'list clusters');
+  }
+
+  static visit(): void {
+    cy.get('#km-nav-item-clusters').click();
+    cy.url().should(Condition.Include, 'clusters');
+    this.waitForRefresh();
   }
 }

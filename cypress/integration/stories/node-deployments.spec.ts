@@ -95,7 +95,7 @@ describe('Node Deployments story', () => {
     ClustersPage.deleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
     ClustersPage.deleteDialogBtn().click();
 
-    wait('**/clusters');
+    ClustersPage.waitForRefresh();
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
   });

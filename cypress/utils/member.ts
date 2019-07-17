@@ -1,6 +1,5 @@
 import {ClustersPage} from "../pages/clusters.po";
 import {MembersPage} from "../pages/members.po";
-import {wait} from "./wait";
 
 export enum Group {
     Owner = 'Owner',
@@ -9,9 +8,7 @@ export enum Group {
 }
 
 export function reloadUsers(): void {
-  wait('**/users', 'GET', 'listUsers');
-
+  MembersPage.waitForRefresh();
   ClustersPage.visit();
-
   MembersPage.visit();
 }

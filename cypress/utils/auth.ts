@@ -1,7 +1,7 @@
 import {DexPage} from "../pages/dex.po";
 import {LoginPage} from "../pages/login.po";
 import {Condition} from "./condition";
-import {wait} from "./wait";
+import {ProjectsPage} from "../pages/projects.po";
 
 export function login(email: string, password: string): void {
   LoginPage.visit();
@@ -14,7 +14,7 @@ export function login(email: string, password: string): void {
   DexPage.passwordInput().type(password).should(Condition.HaveValue, password);
   DexPage.loginBtn().click();
 
-  wait('**/projects');
+  ProjectsPage.waitForRefresh();
 }
 
 export function logout(): void {

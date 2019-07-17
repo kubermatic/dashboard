@@ -1,4 +1,5 @@
 import {Condition} from "../utils/condition";
+import {wait} from "../utils/wait";
 
 export class ProjectsPage {
   private static _getAddProjectBtn(): Cypress.Chainable<any> {
@@ -25,8 +26,14 @@ export class ProjectsPage {
     return cy.get('tbody');
   }
 
+  static waitForRefresh(): void {
+    wait('**/projects', 'GET', 'list projects');
+  }
+
   static visit(): void {
     cy.get('#km-nav-item-projects').click();
+    cy.url().should(Condition.Include, 'projects');
+    this.waitForRefresh();
   }
 
   static selectProject(projectName: string): void {

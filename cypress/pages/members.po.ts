@@ -3,12 +3,6 @@ import {wait} from "../utils/wait";
 import {Condition} from "../utils/condition";
 
 export class MembersPage {
-  static visit(): void {
-    cy.get('#km-nav-item-members').click();
-    cy.url().should(Condition.Include, 'members');
-    wait('**/users');
-  }
-
   static addMemberBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-member-top-btn');
   }
@@ -63,5 +57,15 @@ export class MembersPage {
 
   static deleteMemberDialogDeleteBtn(): Cypress.Chainable<any> {
     return cy.get('#km-confirmation-dialog-confirm-btn');
+  }
+
+  static waitForRefresh(): void {
+    wait('**/users', 'GET', 'list members');
+  }
+
+  static visit(): void {
+    cy.get('#km-nav-item-members').click();
+    cy.url().should(Condition.Include, 'members');
+    this.waitForRefresh();
   }
 }
