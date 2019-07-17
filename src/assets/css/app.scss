@@ -767,6 +767,10 @@ div.km-form-group-labels {
   }
 }
 
+kubermatic-wizard .mat-card-header .mat-card-title {
+  padding: (2 * $baseline-grid) 0 0 0;
+}
+
 .mat-card-header-text {
   margin: 0 !important;
 }
