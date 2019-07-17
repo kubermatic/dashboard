@@ -11,17 +11,17 @@ describe('Multi owner story', () => {
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
   let projectName = prefixedString('e2e-test-project');
-  
+
   before(() => {
     cy.clearCookies();
   });
-  
+
   beforeEach(() => {
     cy.server();
-    
+
     Cypress.Cookies.preserveOnce('token', 'nonce');
   });
-  
+
   it('should login as a first owner', () => {
     login(email, password);
     cy.url().should(Condition.Include, 'projects');
@@ -29,13 +29,13 @@ describe('Multi owner story', () => {
 
   it('should create a new project', () => {
     ProjectsPage.addProjectBtn().click();
-    
+
     ProjectsPage.addDialogInput().type(projectName).should(Condition.HaveValue, projectName);
     ProjectsPage.addDialogSaveBtn().should(Condition.NotBe, 'disabled');
     ProjectsPage.addDialogSaveBtn().click();
     ProjectsPage.table().should(Condition.Contain, projectName);
   });
-  
+
   it('should add a new member', () => {
     ProjectsPage.select(projectName);
     MembersPage.visit();
@@ -57,6 +57,13 @@ describe('Multi owner story', () => {
 
   it('should login as a second owner', () => {
     login(newUserEmail, password);
+    cy.url().should(Condition.Include, 'projects');
+  });
+
+  it('should wait for autoredirect and go back to projects', () => {
+    wait('**/clusters');
+
+    ProjectsPage.visit();
     cy.url().should(Condition.Include, 'projects');
   });
 

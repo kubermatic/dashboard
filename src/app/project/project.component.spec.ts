@@ -4,6 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+import {CookieService} from 'ngx-cookie-service';
 
 import {AppConfigService} from '../app-config.service';
 import {CoreModule} from '../core/core.module';
@@ -49,6 +50,7 @@ describe('ProjectComponent', () => {
             {provide: DatacenterService, useClass: DatacenterMockService},
             MatDialog,
             GoogleAnalyticsService,
+            CookieService,
           ],
         })
         .compileComponents();
