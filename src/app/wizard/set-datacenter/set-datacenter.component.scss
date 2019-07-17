@@ -21,6 +21,12 @@ mat-button-toggle-group[group='datacenterGroup'] {
     text-align: left;
     max-width: 105px;
     display: inline-block;
+
+    ::ng-deep .km-country-prefix {
+      display: block;
+      font-size: $caption-font-size-base;
+      line-height: 1.4 * $line-height;
+    }
   }
 
   .flag-icon {

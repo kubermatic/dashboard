@@ -316,12 +316,6 @@ mat-button-toggle-group[group='providerGroup'] {
   .mat-button-toggle-checked {
     border-left: 1px solid $primary !important;
   }
-
-  .km-country-prefix {
-    display: block;
-    font-size: $caption-font-size-base;
-    line-height: 1.4 * $line-height;
-  }
 }
 
 mat-button-toggle-group[group='datacenterGroup'] .mat-button-toggle-label-content {
@@ -765,10 +759,6 @@ div.km-form-group-labels {
     font-size: $subhead-font-size-base-lg;
     margin: 0 (2.5 * $baseline-grid);
   }
-}
-
-kubermatic-wizard .mat-card-header .mat-card-title {
-  padding: (2 * $baseline-grid) 0 0 0;
 }
 
 .mat-card-header-text {
