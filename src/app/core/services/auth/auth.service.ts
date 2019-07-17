@@ -21,11 +21,11 @@ export class Auth {
       if (this.compareNonceWithToken(token, nonce)) {
         // remove URL fragment with token, so that users can't accidentally copy&paste it and send it to others
         this.removeFragment();
-        this._cookieService.set('token', token, 1, null, null, true);
+        this._cookieService.set(Auth.Cookie.Token, token, 1, null, null, true);
         // localhost is only served via http, though secure cookie is not possible
         // following line will only work when domain is localhost
-        this._cookieService.set('token', token, 1, null, 'localhost');
-        this._cookieService.set('token', token, 1, null, '127.0.0.1');
+        this._cookieService.set(Auth.Cookie.Token, token, 1, null, 'localhost');
+        this._cookieService.set(Auth.Cookie.Token, token, 1, null, '127.0.0.1');
       }
     }
   }
@@ -44,11 +44,11 @@ export class Auth {
   }
 
   getBearerToken(): string {
-    return this._cookieService.get('token');
+    return this._cookieService.get(Auth.Cookie.Token);
   }
 
   getNonce(): string {
-    return this._cookieService.get('nonce');
+    return this._cookieService.get(Auth.Cookie.Nonce);
   }
 
   authenticated(): boolean {
@@ -80,9 +80,13 @@ export class Auth {
     return false;
   }
 
+  login(): void {
+    this._cookieService.set(Auth.Cookie.Autoredirect, 'true');
+  }
+
   logout(): void {
-    this._cookieService.delete('token');
-    this._cookieService.delete('nonce');
+    this._cookieService.delete(Auth.Cookie.Token);
+    this._cookieService.delete(Auth.Cookie.Nonce);
   }
 
   private getTokenFromQuery(): string {
@@ -128,4 +132,8 @@ export class Auth {
     }
     return decodeURIComponent(window.atob(output));
   }
+}
+
+export namespace Auth {
+  export enum Cookie {Autoredirect = 'autoredirect', Nonce = 'nonce', Token = 'token'}
 }

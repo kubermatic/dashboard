@@ -11,21 +11,21 @@ import {wait} from "../../utils/wait";
 describe('Node Deployments story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
-  let projectName = prefixedString('e2e-test-project');
+  const projectName = prefixedString('e2e-test-project');
   const clusterName = prefixedString('e2e-test-cluster');
   const initialNodeDeploymentName = prefixedString('e2e-test-nd');
   const initialNodeDeploymentReplicas = '1';
-  
+
   before(() => {
     cy.clearCookies();
   });
-  
+
   beforeEach(() => {
     cy.server();
-    
+
     Cypress.Cookies.preserveOnce('token', 'nonce');
   });
-  
+
   it('should login', () => {
     login(email, password);
     cy.url().should(Condition.Include, 'projects');
@@ -33,13 +33,13 @@ describe('Node Deployments story', () => {
 
   it('should create a new project', () => {
     ProjectsPage.addProjectBtn().click();
-    
+
     ProjectsPage.addDialogInput().type(projectName).should(Condition.HaveValue, projectName);
     ProjectsPage.addDialogSaveBtn().should(Condition.NotBe, 'disabled');
     ProjectsPage.addDialogSaveBtn().click();
     ProjectsPage.table().should(Condition.Contain, projectName);
   });
-  
+
   it('should create a new cluster', () => {
     ProjectsPage.select(projectName);
     ClustersPage.visit();
@@ -88,7 +88,7 @@ describe('Node Deployments story', () => {
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('mat-card-title').should(Condition.Contain, clusterName);
     cy.get('kubermatic-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
-    
+
     ClustersPage.nodeDeploymentRemoveBtn(initialNodeDeploymentName).click();
     ClustersPage.deleteNodeDeploymentDialogBtn().click();
     ClustersPage.tableRowNodeDeploymentNameColumn(initialNodeDeploymentName).should(Condition.NotExist);
@@ -103,7 +103,7 @@ describe('Node Deployments story', () => {
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
   });
-  
+
   it('should delete created project', () => {
     ProjectsPage.visit();
     ProjectsPage.deleteProjectBtn(projectName).should(Condition.NotBe, 'disabled');
@@ -111,7 +111,7 @@ describe('Node Deployments story', () => {
     ProjectsPage.deleteDialogInput().type(projectName).should(Condition.HaveValue, projectName);
     ProjectsPage.deleteDialogConfirmBtn().click();
   });
-  
+
   it('should logout', () => {
     logout();
   });
