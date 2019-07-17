@@ -2,8 +2,6 @@
   <mat-card-title class="km-color-primary">Datacenter</mat-card-title>
 </mat-card-header>
 <mat-card-content>
-  <p *ngIf="!cluster.spec.cloud.bringyourown">This is the datacenter of your cloud provider. Your worker nodes will get deployed there.</p>
-  <p *ngIf="cluster.spec.cloud.bringyourown">This is the kubermatic datacenter you want your master components to run in.</p>
   <form [formGroup]="setDatacenterForm"
         fxLayoutAlign="left"
         fxLayout="row wrap">
@@ -14,9 +12,8 @@
                          (click)="this.changeClusterDatacenter()">
         <span class="flag-icon flag-icon-{{ datacenter.spec.country.toLowerCase() }}">
         </span>
-        <div class="km-location">
-          {{ datacenter.spec.location }}
-        </div>
+        <div class="km-location"
+             [innerHtml]="getLocationName(datacenter)"></div>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </form>
