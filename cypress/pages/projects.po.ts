@@ -1,16 +1,19 @@
 import {Condition} from "../utils/condition";
 
 export class ProjectsPage {
-    static visit() {
+    static visit(): void {
         cy.get('#km-nav-item-projects').click();
     }
 
-    static select(projectName: string) {
-      cy.get(`#km-project-name-${projectName}`)
-        .should(Condition.HaveLength, 1)
-        .get('i.km-health-state.fa.fa-circle.green')
-        .should(Condition.HaveLength, 1)
-        .click();
+    static selectProject(projectName: string): void {
+      cy.get(`#km-project-name-${projectName}`).should(Condition.HaveLength, 1);
+      cy.get('i.km-health-state.fa.fa-circle.green').should(Condition.HaveLength, 1).click();
+    }
+
+    static deleteProject(projectName: string): void {
+      cy.get(`#km-delete-project-${projectName}`).should(Condition.NotBe, 'disabled').click();
+      cy.get('#km-confirmation-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
+      cy.get('#km-confirmation-dialog-confirm-btn').click();
     }
     
     static addProjectBtn() {
@@ -23,18 +26,6 @@ export class ProjectsPage {
     
     static addDialogSaveBtn() {
         return cy.get('#km-add-project-dialog-save');
-    }
-    
-    static deleteProjectBtn(projectName: string) {
-        return cy.get(`#km-delete-project-${projectName}`);
-    }
-    
-    static deleteDialogInput() {
-        return cy.get('#km-confirmation-dialog-input');
-    }
-    
-    static deleteDialogConfirmBtn() {
-        return cy.get('#km-confirmation-dialog-confirm-btn');
     }
 
     static editProjectBtn(projectName: string) {

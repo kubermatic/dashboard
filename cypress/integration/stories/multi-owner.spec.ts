@@ -36,7 +36,7 @@ describe('Multi owner story', () => {
   });
   
   it('should add a new member', () => {
-    ProjectsPage.select(projectName);
+    ProjectsPage.selectProject(projectName);
     MembersPage.visit();
 
     MembersPage.addMemberBtn().click();
@@ -62,7 +62,7 @@ describe('Multi owner story', () => {
   });
 
   it('should delete first owner from project', () => {
-    ProjectsPage.select(projectName);
+    ProjectsPage.selectProject(projectName);
     MembersPage.visit();
 
     MembersPage.deleteBtn(email).click();
@@ -73,11 +73,12 @@ describe('Multi owner story', () => {
     MembersPage.tableRowEmailColumn(email).should(Condition.NotExist);
   });
 
-  it('should delete project', () => {
+  it('should go to the projects page', () => {
     ProjectsPage.visit();
-    ProjectsPage.deleteProjectBtn(projectName).click();
-    ProjectsPage.deleteDialogInput().type(projectName).should(Condition.HaveValue, projectName);
-    ProjectsPage.deleteDialogConfirmBtn().click();
+  });
+
+  it('should delete the project', () => {
+    ProjectsPage.deleteProject(projectName);
   });
 
   it('should logout', () => {

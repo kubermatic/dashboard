@@ -1,9 +1,11 @@
 import {Group} from "../utils/member";
 import {wait} from "../utils/wait";
+import {Condition} from "../utils/condition";
 
 export class MembersPage {
-    static visit() {
+    static visit(): void {
         cy.get('#km-nav-item-members').click();
+        cy.url().should(Condition.Include, 'members');
         wait('**/users');
     }
     

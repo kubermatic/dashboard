@@ -41,7 +41,7 @@ describe('Node Deployments story', () => {
   });
   
   it('should create a new cluster', () => {
-    ProjectsPage.select(projectName);
+    ProjectsPage.selectProject(projectName);
     ClustersPage.visit();
     ClustersPage.addClusterBtn().click();
 
@@ -104,12 +104,12 @@ describe('Node Deployments story', () => {
     cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
   });
   
-  it('should delete created project', () => {
+  it('should go to the projects page', () => {
     ProjectsPage.visit();
-    ProjectsPage.deleteProjectBtn(projectName).should(Condition.NotBe, 'disabled');
-    ProjectsPage.deleteProjectBtn(projectName).click();
-    ProjectsPage.deleteDialogInput().type(projectName).should(Condition.HaveValue, projectName);
-    ProjectsPage.deleteDialogConfirmBtn().click();
+  });
+
+  it('should delete the project', () => {
+    ProjectsPage.deleteProject(projectName);
   });
   
   it('should logout', () => {

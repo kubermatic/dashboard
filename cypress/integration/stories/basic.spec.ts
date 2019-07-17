@@ -41,13 +41,13 @@ describe('Basic story', () => {
     ProjectsPage.table().should(Condition.Contain, projectName);
   });
 
-  it('select project', () => {
-    ProjectsPage.select(projectName);
+  it('should select project', () => {
+    ProjectsPage.selectProject(projectName);
 
     cy.url().should(Condition.Include, 'clusters');
   });
 
-  it('go to wizard', () => {
+  it('should go to wizard', () => {
     ClustersPage.addClusterBtn().click();
 
     cy.url().should(Condition.Include, 'wizard');
@@ -63,10 +63,10 @@ describe('Basic story', () => {
     cy.url().should(Condition.Contain, '/clusters');
   });
 
-  it('go to members view', () => {
+  it('should go to members view', () => {
     MembersPage.visit();
 
-    cy.url().should(Condition.Include, 'members');
+
   });
 
   it('should add a new member', () => {
@@ -125,11 +125,9 @@ describe('Basic story', () => {
     ProjectsPage.editDialogInput().type('-edited').should(Condition.HaveValue, projectName);
     ProjectsPage.editDialogConfirmBtn().click();
   });
-  
-  it('should delete created project', () => {
-    ProjectsPage.deleteProjectBtn(projectName).click();
-    ProjectsPage.deleteDialogInput().type(projectName).should(Condition.HaveValue, projectName);
-    ProjectsPage.deleteDialogConfirmBtn().click();
+
+  it('should delete the project', () => {
+    ProjectsPage.deleteProject(projectName);
   });
   
   it('should logout', () => {
