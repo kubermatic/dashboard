@@ -1,5 +1,4 @@
-<header (scrollChange)="scrolledChanged($event)"
-        [ngClass]="{scrolled: isScrolled}">
+<header>
   <ng2-slim-loading-bar color="white"
                         height="2px"></ng2-slim-loading-bar>
   <div fxLayout
@@ -12,13 +11,14 @@
             *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
       <span id="km-navbar-logout-btn"
             class="km-button km-logout"
-            *ngIf="auth.authenticated()"
+            *ngIf="isAuthenticated()"
             (click)="logout()">
         Logout
       </span>
       <a class="km-button km-login"
-         *ngIf="!auth.authenticated()"
-         href="{{auth.getOIDCProviderURL()}}">
+         *ngIf="!isAuthenticated()"
+         (click)="login()"
+         href="{{getOIDCProviderURL()}}">
         Login / Sign-in
       </a>
     </div>
