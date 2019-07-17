@@ -15,16 +15,16 @@ describe('Node Deployments Story', () => {
   const clusterName = prefixedString('e2e-test-cluster');
   const initialNodeDeploymentName = prefixedString('e2e-test-nd');
   const initialNodeDeploymentReplicas = '1';
-  
+
   before(() => {
     cy.clearCookies();
   });
-  
+
   beforeEach(() => {
     cy.server();
     Cypress.Cookies.preserveOnce('token', 'nonce');
   });
-  
+
   it('should login', () => {
     login(email, password);
     cy.url().should(Condition.Include, 'projects');
@@ -41,7 +41,7 @@ describe('Node Deployments Story', () => {
   it('should go to wizard', () => {
     ClustersPage.openWizard();
   });
-  
+
   it('should create a new cluster', () => {
     WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.nextBtn().click();
@@ -86,7 +86,7 @@ describe('Node Deployments Story', () => {
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('mat-card-title').should(Condition.Contain, clusterName);
     cy.get('kubermatic-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
-    
+
     ClustersPage.nodeDeploymentRemoveBtn(initialNodeDeploymentName).click();
     ClustersPage.deleteNodeDeploymentDialogBtn().click();
     ClustersPage.tableRowNodeDeploymentNameColumn(initialNodeDeploymentName).should(Condition.NotExist);
@@ -109,7 +109,7 @@ describe('Node Deployments Story', () => {
   it('should delete the project', () => {
     ProjectsPage.deleteProject(projectName);
   });
-  
+
   it('should logout', () => {
     logout();
   });

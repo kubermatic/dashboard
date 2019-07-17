@@ -3,7 +3,7 @@
 
 .mat-card {
   margin-bottom: 50px;
-  padding: $baseline-grid * 3;
+  padding: (2 * $baseline-grid) (3.75 * $baseline-grid) (3.75 * $baseline-grid) (3.75 * $baseline-grid);
 
   .mat-card-header {
     padding: 0;
@@ -34,10 +34,9 @@
   }
 }
 
-// navigation buttons
-
+// Navigation buttons.
 .km-button-navigation {
-  margin-top: 35px;
+  margin-top: 5 * $baseline-grid;
   text-align: left;
 }
 
@@ -50,4 +49,8 @@
 .km-wizard-wrapper {
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.12);
   border-radius: 5px;
+}
+
+::ng-deep .mat-card-header .mat-card-title {
+  padding: (2 * $baseline-grid) 0 0 0;
 }

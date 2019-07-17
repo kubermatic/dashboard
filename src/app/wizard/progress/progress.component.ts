@@ -13,25 +13,6 @@ export class ProgressComponent {
 
   constructor(private stepsService: StepsService) {}
 
-  getTitleClass(step: number): string {
-    let titleClass = '';
-
-    if (this.currentStepIndex < step) {
-      titleClass = 'km-title-unchecked';
-    }
-    return titleClass;
-  }
-
-  getCursor(step: number): string {
-    let cursor = 'default';
-
-    if (this.currentStepIndex > step) {
-      cursor = 'pointer';
-    }
-
-    return cursor;
-  }
-
   gotoStep(i: number, step: Step): void {
     if (this.currentStepIndex > i) {
       this.stepsService.changeCurrentStep(i, step);
