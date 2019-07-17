@@ -66,7 +66,7 @@
            formControlName="tenantID"
            name="tenantID"
            placeholder="Project ID">
-    <mat-error *ngIf="form.controls.tenant.hasError('required')">
+    <mat-error *ngIf="form.controls.tenantID.hasError('required')">
       Project ID is <strong>required</strong>.
     </mat-error>
     <mat-hint *ngIf="showHint('tenant')">Please enter your credentials first.</mat-hint>

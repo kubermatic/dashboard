@@ -322,6 +322,43 @@ describe('OpenstackClusterSettingsComponent', () => {
       fixture.detectChanges();
       expect(component.getSubnetIDFormState()).toEqual('Subnet ID');
     });
+
+    it('should disable Project field when Project ID is provided', fakeAsync(() => {
+         fixture.detectChanges();
+
+         expect(component.form.controls.tenant.disabled).toBeTruthy();
+         expect(component.form.controls.tenantID.disabled).toBeTruthy();
+
+         component.form.controls.username.setValue('username');
+         component.form.controls.password.setValue('password');
+         component.form.controls.domain.setValue('domain');
+         component.form.controls.tenantID.setValue('tenantID');
+         fixture.detectChanges();
+         tick(1001);
+
+         expect(component.form.controls.tenant.disabled).toBeTruthy();
+         expect(component.form.controls.tenantID.enabled).toBeTruthy();
+         discardPeriodicTasks();
+       }));
+
+    it('should disable Project ID field when Project is provided', fakeAsync(() => {
+         fixture.detectChanges();
+
+         expect(component.form.controls.tenant.disabled).toBeTruthy();
+         expect(component.form.controls.tenantID.disabled).toBeTruthy();
+
+         component.form.controls.username.setValue('username');
+         component.form.controls.password.setValue('password');
+         component.form.controls.domain.setValue('domain');
+         component.form.controls.tenant.setValue('test-project');
+         component.tenants = [{id: 'test-id', name: 'test-project'}];
+         fixture.detectChanges();
+         tick(1001);
+
+         expect(component.form.controls.tenant.enabled).toBeTruthy();
+         expect(component.form.controls.tenantID.disabled).toBeTruthy();
+         discardPeriodicTasks();
+       }));
   });
 
   describe('Config with DefaultUserName', () => {
