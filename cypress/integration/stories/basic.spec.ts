@@ -21,7 +21,6 @@ describe('Basic Story', () => {
   
   beforeEach(() => {
     cy.server();
-    
     Cypress.Cookies.preserveOnce('token', 'nonce');
   });
   
@@ -40,9 +39,7 @@ describe('Basic Story', () => {
   });
 
   it('should go to wizard', () => {
-    ClustersPage.addClusterBtn().click();
-
-    cy.url().should(Condition.Include, 'wizard');
+    ClustersPage.openWizard();
   });
   
   it('should create a new cluster', () => {

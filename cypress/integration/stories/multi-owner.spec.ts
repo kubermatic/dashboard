@@ -17,7 +17,6 @@ describe('Multi owner Story', () => {
   
   beforeEach(() => {
     cy.server();
-    
     Cypress.Cookies.preserveOnce('token', 'nonce');
   });
   

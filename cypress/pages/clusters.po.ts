@@ -55,4 +55,9 @@ export class ClustersPage {
     this.verifyUrl();
     this.waitForRefresh();
   }
+
+  static openWizard(): void {
+    this.addClusterBtn().click();
+    cy.url().should(Condition.Include, 'wizard');
+  }
 }

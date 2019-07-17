@@ -22,7 +22,6 @@ describe('Node Deployments Story', () => {
   
   beforeEach(() => {
     cy.server();
-    
     Cypress.Cookies.preserveOnce('token', 'nonce');
   });
   
@@ -34,12 +33,16 @@ describe('Node Deployments Story', () => {
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
   });
+
+  it('should select project', () => {
+    ProjectsPage.selectProject(projectName);
+  });
+
+  it('should go to wizard', () => {
+    ClustersPage.openWizard();
+  });
   
   it('should create a new cluster', () => {
-    ProjectsPage.selectProject(projectName);
-    ClustersPage.visit();
-    ClustersPage.addClusterBtn().click();
-
     WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
     WizardPage.nextBtn().click();
     WizardPage.providerBtn(Provider.Digitalocean).click();
