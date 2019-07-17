@@ -8,7 +8,7 @@ import {Datacenter, Provider} from "../../utils/provider";
 import {prefixedString} from "../../utils/random";
 import {wait} from "../../utils/wait";
 
-describe('Node Deployments story', () => {
+describe('Node Deployments Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = prefixedString('e2e-test-project');
@@ -33,7 +33,6 @@ describe('Node Deployments story', () => {
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
-    ProjectsPage.getTable().should(Condition.Contain, projectName);
   });
   
   it('should create a new cluster', () => {

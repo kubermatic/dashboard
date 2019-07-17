@@ -8,7 +8,7 @@ import {Group, reloadUsers} from "../../utils/member";
 import {Datacenter, Provider} from "../../utils/provider";
 import {prefixedString} from "../../utils/random";
 
-describe('Basic story', () => {
+describe('Basic Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
@@ -33,14 +33,10 @@ describe('Basic story', () => {
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
-
-    ProjectsPage.getTable().should(Condition.Contain, projectName);
   });
 
   it('should select project', () => {
     ProjectsPage.selectProject(projectName);
-
-    cy.url().should(Condition.Include, 'clusters');
   });
 
   it('should go to wizard', () => {

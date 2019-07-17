@@ -63,9 +63,13 @@ export class MembersPage {
     wait('**/users', 'GET', 'list members');
   }
 
+  static verifyUrl(): void {
+    cy.url().should(Condition.Include, 'members');
+  }
+
   static visit(): void {
     cy.get('#km-nav-item-members').click();
-    cy.url().should(Condition.Include, 'members');
+    this.verifyUrl();
     this.waitForRefresh();
   }
 }

@@ -5,7 +5,7 @@ import {Condition} from "../../utils/condition";
 import {Group, reloadUsers} from "../../utils/member";
 import {prefixedString} from "../../utils/random";
 
-describe('Multi owner story', () => {
+describe('Multi owner Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
@@ -28,7 +28,6 @@ describe('Multi owner story', () => {
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
-    ProjectsPage.getTable().should(Condition.Contain, projectName);
   });
   
   it('should add a new member', () => {

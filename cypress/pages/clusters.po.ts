@@ -46,9 +46,13 @@ export class ClustersPage {
     wait('**/clusters', 'GET', 'list clusters');
   }
 
+  static verifyUrl(): void {
+    cy.url().should(Condition.Include, 'clusters');
+  }
+
   static visit(): void {
     cy.get('#km-nav-item-clusters').click();
-    cy.url().should(Condition.Include, 'clusters');
+    this.verifyUrl();
     this.waitForRefresh();
   }
 }
