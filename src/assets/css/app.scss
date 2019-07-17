@@ -1092,3 +1092,18 @@ mat-form-field.mat-focused.ng-pristine label {
     }
   }
 }
+
+// Mat menu.
+.mat-menu-item {
+  padding: 0 10px !important;
+  line-height: 42px !important;
+  height: 42px !important;
+
+  .mat-icon {
+    margin-right: 0 !important;
+  }
+}
+
+.mat-menu-content {
+  padding: 0 !important;
+}

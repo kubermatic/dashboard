@@ -5,22 +5,32 @@
        fxFlex
        class="km-navigation-bar">
     <a class="km-header-logo"></a>
-    <div class="km-auth"
+    <div *ngIf="isAuthenticated()"
+         class="km-auth"
          fxFlex>
-      <span class="km-current-user"
-            *ngIf="currentUser && !!currentUser.name">{{ currentUser.name }}</span>
-      <span id="km-navbar-logout-btn"
-            class="km-button km-logout"
-            *ngIf="isAuthenticated()"
-            (click)="logout()">
-        Logout
-      </span>
-      <a class="km-button km-login"
-         *ngIf="!isAuthenticated()"
-         (click)="login()"
-         href="{{getOIDCProviderURL()}}">
-        Login / Sign-in
-      </a>
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu"
+              class="km-user">
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item
+                  *ngIf="currentUser && !!currentUser.name"
+                  (click)="$event.stopPropagation()"
+                  [disabled]="true"
+                  class="km-current-user">
+            {{ currentUser.name }}
+          </button>
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item
+                  id="km-navbar-logout-btn"
+                  *ngIf="isAuthenticated()"
+                  (click)="logout()">
+            <mat-icon class="km-logout"></mat-icon>
+            <span>Sign out</span>
+          </button>
+        </mat-menu>
+      </button>
     </div>
   </div>
 </header>
