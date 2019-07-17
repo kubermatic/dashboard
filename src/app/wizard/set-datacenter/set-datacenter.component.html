@@ -14,9 +14,8 @@
                          (click)="this.changeClusterDatacenter()">
         <span class="flag-icon flag-icon-{{ datacenter.spec.country.toLowerCase() }}">
         </span>
-        <div class="km-location">
-          {{ datacenter.spec.location }}
-        </div>
+        <div class="km-location"
+             [innerHtml]="getLocationName(datacenter)"></div>
       </mat-button-toggle>
     </mat-button-toggle-group>
   </form>

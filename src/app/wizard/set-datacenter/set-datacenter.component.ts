@@ -59,6 +59,20 @@ export class SetDatacenterComponent implements OnInit, OnDestroy {
     });
   }
 
+  getLocationName(datacenter: DataCenterEntity): string {
+    if (datacenter.spec.location.includes('(')) {
+      const splitted = datacenter.spec.location.replace(')', '').split('(');
+      return '<span class="km-country-prefix">' + splitted[0].trim() + '</span><span>' + splitted[1].trim() + '</span>';
+    }
+
+    if (datacenter.spec.openstack && datacenter.spec.location.includes(' - ')) {
+      const splitted = datacenter.spec.location.split(' - ');
+      return '<span class="km-country-prefix">' + splitted[0].trim() + '</span><span>' + splitted[1].trim() + '</span>';
+    }
+
+    return datacenter.spec.location.replace('Azure', '');
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();

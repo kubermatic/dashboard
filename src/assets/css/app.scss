@@ -309,16 +309,25 @@ mat-button-toggle-group[group='providerGroup'] {
 
   .mat-button-toggle-button {
     height: 100%;
+    text-align: left;
+    padding: 0 10px;
   }
 
   .mat-button-toggle-checked {
     border-left: 1px solid $primary !important;
   }
+
+  .km-country-prefix {
+    display: block;
+    font-size: $caption-font-size-base;
+    line-height: 1.4 * $line-height;
+  }
 }
 
 mat-button-toggle-group[group='datacenterGroup'] .mat-button-toggle-label-content {
-  padding: 20px 0;
+  padding: 0 5px;
   width: 100%;
+  display: inline-block;
 }
 
 mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
