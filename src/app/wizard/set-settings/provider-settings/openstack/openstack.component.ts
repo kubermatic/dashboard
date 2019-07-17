@@ -241,6 +241,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             () => {
               this.tenants = [];
               this._loadingOptionalTenants = false;
+            },
+            () => {
+              this._loadingOptionalTenants = false;
             });
   }
 
@@ -259,24 +262,28 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         .datacenter(this.cluster.spec.cloud.dc)
         .networks()
         .pipe(take(1))
-        .subscribe((networks: OpenstackNetwork[]) => {
-          this.networks = networks.filter((network) => network.external !== true).sort((a, b) => {
-            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-          });
-          this.floatingIpPools = networks.filter((network) => network.external === true).sort((a, b) => {
-            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-          });
+        .subscribe(
+            (networks: OpenstackNetwork[]) => {
+              this.networks = networks.filter((network) => network.external !== true).sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
+              this.floatingIpPools = networks.filter((network) => network.external === true).sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
 
-          if (this.networks.length === 0) {
-            this.form.controls.network.setValue('');
-          }
+              if (this.networks.length === 0) {
+                this.form.controls.network.setValue('');
+              }
 
-          if (this.floatingIpPools.length === 0) {
-            this.form.controls.floatingIpPool.setValue('');
-          }
+              if (this.floatingIpPools.length === 0) {
+                this.form.controls.floatingIpPool.setValue('');
+              }
 
-          this._checkState();
-        });
+              this._checkState();
+            },
+            () => {
+              this._loadingOptionalSettings = false;
+            });
 
     this._wizard.provider(NodeProvider.OPENSTACK)
         .username(this.form.controls.username.value)
@@ -287,17 +294,21 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         .datacenter(this.cluster.spec.cloud.dc)
         .securityGroups()
         .pipe(take(1))
-        .subscribe((securityGroups) => {
-          this.securityGroups = securityGroups.sort((a, b) => {
-            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-          });
+        .subscribe(
+            (securityGroups) => {
+              this.securityGroups = securityGroups.sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
 
-          if (this.securityGroups.length === 0) {
-            this.form.controls.securityGroup.setValue('');
-          }
+              if (this.securityGroups.length === 0) {
+                this.form.controls.securityGroup.setValue('');
+              }
 
-          this._loadingOptionalSettings = false;
-        });
+              this._loadingOptionalSettings = false;
+            },
+            () => {
+              this._loadingOptionalSettings = false;
+            });
   }
 
   private _loadSubnetIds(): void {
@@ -315,18 +326,22 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         .datacenter(this.cluster.spec.cloud.dc)
         .subnets(this.form.controls.network.value)
         .pipe(take(1))
-        .subscribe((subnets) => {
-          this.subnetIds = subnets.sort((a, b) => {
-            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-          });
+        .subscribe(
+            (subnets) => {
+              this.subnetIds = subnets.sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
 
-          if (this.subnetIds.length === 0) {
-            this.form.controls.subnetId.setValue('');
-          }
+              if (this.subnetIds.length === 0) {
+                this.form.controls.subnetId.setValue('');
+              }
 
-          this._loadingSubnetIds = false;
-          this._checkState();
-        });
+              this._loadingSubnetIds = false;
+              this._checkState();
+            },
+            () => {
+              this._loadingSubnetIds = false;
+            });
   }
 
   private _resetOptionalFields(withTenant: boolean): void {

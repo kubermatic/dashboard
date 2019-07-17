@@ -173,7 +173,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           this.handleFlavours(flavors);
           this.checkFlavorState();
           this.loadingFlavors = false;
-        }, () => this.loadingSizes = false);
+        }, () => this.loadingFlavors = false);
   }
 
   isFloatingIPEnforced(): boolean {
