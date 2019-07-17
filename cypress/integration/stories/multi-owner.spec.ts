@@ -28,7 +28,7 @@ describe('Multi owner story', () => {
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
-    ProjectsPage.table().should(Condition.Contain, projectName);
+    ProjectsPage.getTable().should(Condition.Contain, projectName);
   });
   
   it('should add a new member', () => {
@@ -54,7 +54,7 @@ describe('Multi owner story', () => {
   });
 
   it('should check if multi owner project is in list', () => {
-    ProjectsPage.table().should(Condition.Contain, projectName);
+    ProjectsPage.getTable().should(Condition.Contain, projectName);
   });
 
   it('should delete first owner from project', () => {

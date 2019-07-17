@@ -1,41 +1,37 @@
 export class WizardPage {
-  static nextBtn() {
+  static nextBtn(): Cypress.Chainable<any> {
     return cy.get('#km-create-cluster-next-btn');
   }
 
-  static clusterNameInput() {
+  static clusterNameInput(): Cypress.Chainable<any> {
     return cy.get('#km-create-cluster-name-input');
   }
 
-  static createBtn() {
+  static createBtn(): Cypress.Chainable<any> {
     return cy.get('#km-create-cluster-create-btn');
   }
 
-  static providerBtn(providerName: string) {
+  static providerBtn(providerName: string): Cypress.Chainable<any> {
     return cy.get(`.km-provider-logo-${providerName}`);
   }
 
-  static datacenterBtn(datacenterName: string) {
+  static datacenterBtn(datacenterName: string): Cypress.Chainable<any> {
     return cy.get('button').contains('.km-location', datacenterName);
   }
 
-  static digitaloceanTokenInput() {
-    return cy.get('#km-digitalocean-token-input');
-  }
-
-  static customPresetsCombobox() {
+  static customPresetsCombobox(): Cypress.Chainable<any> {
     return cy.get('.km-custom-credentials-select');
   }
 
-  static customPresetsValue(presetName: string) {
+  static customPresetsValue(presetName: string): Cypress.Chainable<any> {
     return cy.get('mat-option').contains('span', presetName);
   }
 
-  static nodeNameInput() {
+  static nodeNameInput(): Cypress.Chainable<any> {
     return cy.get('#km-node-name-input');
   }
 
-  static nodeCountInput() {
+  static nodeCountInput(): Cypress.Chainable<any> {
     return cy.get('#km-node-count-input');
   }
 }

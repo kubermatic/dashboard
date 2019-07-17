@@ -33,7 +33,7 @@ describe('Node Deployments story', () => {
 
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
-    ProjectsPage.table().should(Condition.Contain, projectName);
+    ProjectsPage.getTable().should(Condition.Contain, projectName);
   });
   
   it('should create a new cluster', () => {

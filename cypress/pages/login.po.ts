@@ -1,13 +1,13 @@
 export class LoginPage {
-  static visit() {
+  static visit(): void {
     cy.visit('/');
   }
 
-  static loginBtn() {
+  static loginBtn(): Cypress.Chainable<any> {
     return cy.get('#login-button');
   }
 
-  static logoutBtn() {
+  static logoutBtn(): Cypress.Chainable<any> {
     return cy.get('#km-navbar-logout-btn');
   }
 }

@@ -1,52 +1,48 @@
 import {wait} from "../utils/wait";
 
 export class ClustersPage {
-  static visit() {
+  static visit(): void {
     cy.get('#km-nav-item-clusters').click();
     wait('**/clusters');
   }
 
-  static addClusterBtn() {
+  static addClusterBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-cluster-top-btn');
   }
 
-  static clusterItem(clusterName: string) {
+  static clusterItem(clusterName: string): Cypress.Chainable<any> {
     return cy.get(`#km-clusters-${clusterName}`);
   }
 
-  static deleteClusterBtn() {
+  static deleteClusterBtn(): Cypress.Chainable<any> {
     return cy.get('#km-delete-cluster-btn');
   }
 
-  static deleteDialogInput() {
+  static deleteDialogInput(): Cypress.Chainable<any> {
     return cy.get('#km-delete-cluster-dialog-input');
   }
 
-  static deleteDialogBtn() {
+  static deleteDialogBtn(): Cypress.Chainable<any> {
     return cy.get('#km-delete-cluster-dialog-delete-btn');
   }
 
-  static table() {
+  static table(): Cypress.Chainable<any> {
     return cy.get('tbody');
   }
 
-  static tableRow(nodeDeploymentName: string) {
+  static tableRow(nodeDeploymentName: string): Cypress.Chainable<any> {
     return ClustersPage.tableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
   }
 
-  static tableRowNodeDeploymentNameColumn(nodeDeploymentName: string) {
+  static tableRowNodeDeploymentNameColumn(nodeDeploymentName: string): Cypress.Chainable<any> {
     return cy.get('td').contains(nodeDeploymentName);
   }
 
-  static nodeDeploymentItem(nodeDeploymentName: string) {
-    return cy.get(`#nodeDeploymentName`);
-  }
-
-  static nodeDeploymentRemoveBtn(nodeDeploymentName: string) {
+  static nodeDeploymentRemoveBtn(nodeDeploymentName: string): Cypress.Chainable<any> {
     return ClustersPage.tableRow(nodeDeploymentName).find('button i.km-icon-delete');
   }
 
-  static deleteNodeDeploymentDialogBtn() {
+  static deleteNodeDeploymentDialogBtn(): Cypress.Chainable<any> {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 }

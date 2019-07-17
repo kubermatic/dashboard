@@ -9,59 +9,59 @@ export class MembersPage {
     wait('**/users');
   }
 
-  static addMemberBtn() {
+  static addMemberBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-member-top-btn');
   }
 
-  static addMemberDialogEmailInput() {
+  static addMemberDialogEmailInput(): Cypress.Chainable<any> {
     return cy.get('#km-add-member-dialog-email-input');
   }
 
-  static addMemberDialogGroupCombobox() {
+  static addMemberDialogGroupCombobox(): Cypress.Chainable<any> {
     return cy.get('#km-add-member-dialog-group-combobox');
   }
 
-  static addMemberDialogSaveBtn() {
+  static addMemberDialogSaveBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-member-dialog-add-btn');
   }
 
-  static memberDialogGroup(group: Group) {
+  static memberDialogGroup(group: Group): Cypress.Chainable<any> {
     return cy.get('mat-option').contains('span', group);
   }
 
-  static editMemberDialogGroupCombobox() {
+  static editMemberDialogGroupCombobox(): Cypress.Chainable<any> {
     return cy.get('#km-edit-member-dialog-group-combobox');
   }
 
-  static editBtn(email: string) {
+  static editBtn(email: string): Cypress.Chainable<any> {
     return MembersPage.tableRow(email).find('button i.km-icon-edit');
   }
 
-  static deleteBtn(email: string) {
+  static deleteBtn(email: string): Cypress.Chainable<any> {
     return MembersPage.tableRow(email).find('button i.km-icon-delete');
   }
 
-  static editMemberDialogSaveBtn() {
+  static editMemberDialogSaveBtn(): Cypress.Chainable<any> {
     return cy.get('#km-edit-member-dialog-edit-btn');
   }
 
-  static table() {
+  static table(): Cypress.Chainable<any> {
     return cy.get('tbody');
   }
 
-  static tableRow(email: string) {
+  static tableRow(email: string): Cypress.Chainable<any> {
     return MembersPage.tableRowEmailColumn(email).parent();
   }
 
-  static tableRowEmailColumn(email: string) {
+  static tableRowEmailColumn(email: string): Cypress.Chainable<any> {
     return cy.get('td').contains(email);
   }
 
-  static tableRowGroupColumn(email: string) {
+  static tableRowGroupColumn(email: string): Cypress.Chainable<any> {
     return MembersPage.tableRow(email).find('td.mat-column-group');
   }
 
-  static deleteMemberDialogDeleteBtn() {
+  static deleteMemberDialogDeleteBtn(): Cypress.Chainable<any> {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
 }

@@ -35,7 +35,7 @@ describe('Basic story', () => {
   it('should create a new project', () => {
     ProjectsPage.addProject(projectName);
 
-    ProjectsPage.table().should(Condition.Contain, projectName);
+    ProjectsPage.getTable().should(Condition.Contain, projectName);
   });
 
   it('should select project', () => {
@@ -116,11 +116,11 @@ describe('Basic story', () => {
   it('should edit created project name', () => {
     ProjectsPage.visit();
 
-    ProjectsPage.editProjectBtn(projectName).click();
+    ProjectsPage.getEditProjectBtn(projectName).click();
 
     projectName = `${projectName}-edited`;
-    ProjectsPage.editDialogInput().type('-edited').should(Condition.HaveValue, projectName);
-    ProjectsPage.editDialogConfirmBtn().click();
+    ProjectsPage.getEditDialogInput().type('-edited').should(Condition.HaveValue, projectName);
+    ProjectsPage.getEditDialogConfirmBtn().click();
   });
 
   it('should delete the project', () => {

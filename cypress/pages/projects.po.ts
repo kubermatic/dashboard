@@ -9,19 +9,19 @@ export class ProjectsPage {
     return cy.get(`#km-delete-project-${projectName}`);
   }
 
-  static editProjectBtn(projectName: string): any {
+  static getEditProjectBtn(projectName: string): Cypress.Chainable<any> {
     return cy.get(`#km-edit-project-${projectName}`);
   }
 
-  static editDialogInput(): any {
+  static getEditDialogInput(): Cypress.Chainable<any> {
     return cy.get('#km-edit-project-dialog-input');
   }
 
-  static editDialogConfirmBtn(): any {
+  static getEditDialogConfirmBtn(): Cypress.Chainable<any> {
     return cy.get('#km-edit-project-dialog-edit-btn');
   }
 
-  static table(): any {
+  static getTable(): Cypress.Chainable<any> {
     return cy.get('tbody');
   }
 
