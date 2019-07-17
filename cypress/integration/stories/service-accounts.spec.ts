@@ -10,6 +10,7 @@ describe('Service Accounts Story', () => {
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const projectName = prefixedString('e2e-test-project');
   const serviceAccountName = 'test-sa';
+  const tokenName = 'test-token';
 
   before(() => {
     cy.clearCookies();
@@ -39,6 +40,21 @@ describe('Service Accounts Story', () => {
 
   it('should create new service account', () => {
     ServiceAccountsPage.addServiceAccount(serviceAccountName, Group.Editor);
+  });
+
+  it('should open token panel for created service account', () => {
+    ServiceAccountsPage.getTableRow(serviceAccountName).click();
+  });
+
+  it('should open add token dialog', () => {
+    ServiceAccountsPage.getAddTokenBtn().click();
+  });
+
+  it('should add token', () => {
+    ServiceAccountsPage.getAddTokenNameInput().type(tokenName).should(Condition.HaveValue, tokenName);
+    ServiceAccountsPage.getAddTokenSaveBtn().should(Condition.NotBe, 'disabled').click();
+
+    // todo add dialog utils and close the window
   });
 
   it('should go to the projects page', () => {

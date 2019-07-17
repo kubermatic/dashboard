@@ -7,24 +7,40 @@ export class ServiceAccountsPage {
     return cy.get('#km-add-serviceaccount-top-btn');
   }
 
-  static _getAddServiceAccountNameInput(): Cypress.Chainable<any> {
+  private static _getAddServiceAccountNameInput(): Cypress.Chainable<any> {
     return cy.get('#km-add-serviceaccount-dialog-name-input');
   }
 
-  static _getAddServiceAccountGroupCombobox(): Cypress.Chainable<any> {
+  private static _getAddServiceAccountGroupCombobox(): Cypress.Chainable<any> {
     return cy.get('#km-add-serviceaccount-dialog-group-combobox');
   }
 
-  static _getAddServiceAccountGroupOption(group: Group): Cypress.Chainable<any> {
+  private static _getAddServiceAccountGroupOption(group: Group): Cypress.Chainable<any> {
     return cy.get('mat-option').contains('span', group);
   }
 
-  static _getAddServiceAccountSaveBtn(): Cypress.Chainable<any> {
+  private static _getAddServiceAccountSaveBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-serviceaccount-dialog-add-btn');
   }
 
-  static _getTable(): Cypress.Chainable<any> {
+  private static _getTable(): Cypress.Chainable<any> {
     return cy.get('tbody');
+  }
+
+  static getTableRow(name: string): Cypress.Chainable<any> {
+    return cy.get('td').contains(name).parent();
+  }
+
+  static getAddTokenBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-add-serviceaccount-token');
+  }
+
+  static getAddTokenNameInput(): Cypress.Chainable<any> {
+    return cy.get('#km-add-serviceaccount-token-dialog-name-input');
+  }
+
+  static getAddTokenSaveBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-add-serviceaccount-token-dialog-add-btn');
   }
 
   static waitForRefresh(): void {
