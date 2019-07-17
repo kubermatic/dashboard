@@ -1,6 +1,9 @@
+import {wait} from "../utils/wait";
+
 export class ClustersPage {
     static visit() {
         cy.get('#km-nav-item-clusters').click();
+        wait('**/clusters');
     }
     
     static addClusterBtn() {

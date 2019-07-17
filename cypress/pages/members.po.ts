@@ -1,8 +1,10 @@
 import {Group} from "../utils/member";
+import {wait} from "../utils/wait";
 
 export class MembersPage {
     static visit() {
         cy.get('#km-nav-item-members').click();
+        wait('**/users');
     }
     
     static addMemberBtn() {

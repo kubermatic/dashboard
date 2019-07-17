@@ -4,7 +4,6 @@ import {login, logout} from "../../utils/auth";
 import {Condition} from "../../utils/condition";
 import {Group, reloadUsers} from "../../utils/member";
 import {prefixedString} from "../../utils/random";
-import {wait} from "../../utils/wait";
 
 describe('Multi owner story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
@@ -40,8 +39,6 @@ describe('Multi owner story', () => {
     ProjectsPage.select(projectName);
     MembersPage.visit();
 
-    wait('**/users');
-
     MembersPage.addMemberBtn().click();
     MembersPage.addMemberDialogEmailInput().type(newUserEmail).should(Condition.HaveValue, newUserEmail);
     MembersPage.addMemberDialogGroupCombobox().click();
@@ -68,7 +65,6 @@ describe('Multi owner story', () => {
     ProjectsPage.select(projectName);
     MembersPage.visit();
 
-    wait('**/users');
     MembersPage.deleteBtn(email).click();
     MembersPage.deleteMemberDialogDeleteBtn().click();
 

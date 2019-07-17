@@ -65,7 +65,6 @@ describe('Basic story', () => {
 
   it('go to members view', () => {
     MembersPage.visit();
-    wait('**/users');
 
     cy.url().should(Condition.Include, 'members');
   });
