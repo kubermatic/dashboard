@@ -47,10 +47,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
           this.nodeData.count,
           [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
       operatingSystem: new FormControl(
-          {
-            value: this.isClusterOpenshift() ? 'centos' : Object.keys(this.nodeData.spec.operatingSystem)[0],
-            disabled: this.isClusterOpenshift(),
-          },
+          this.isClusterOpenshift() ? 'centos' : Object.keys(this.nodeData.spec.operatingSystem)[0],
           Validators.required),
       name: new FormControl({value: this.nodeData.name, disabled: this.isNameDisabled}),
     });

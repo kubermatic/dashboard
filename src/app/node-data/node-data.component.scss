@@ -53,7 +53,7 @@ mat-button-toggle-group[group='operatingSystemGroup'] {
       filter: grayscale(100%);
     }
 
-    &.mat-button-toggle-checked:not(.mat-button-toggle-disabled) {
+    &.mat-button-toggle-checked {
       border: 1px solid $primary;
 
       i {
