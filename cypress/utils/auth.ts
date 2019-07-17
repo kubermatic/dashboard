@@ -5,9 +5,11 @@ import {wait} from "./wait";
 
 export function login(email: string, password: string): void {
     LoginPage.visit();
+
     LoginPage.loginBtn().click();
     
     DexPage.loginWithEmailBtn().click();
+
     DexPage.loginInput().type(email).should(Condition.HaveValue, email);
     DexPage.passwordInput().type(password).should(Condition.HaveValue, password);
     DexPage.loginBtn().click();

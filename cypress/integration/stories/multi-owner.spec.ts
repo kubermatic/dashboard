@@ -9,7 +9,7 @@ describe('Multi owner story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  let projectName = prefixedString('e2e-test-project');
+  const projectName = prefixedString('e2e-test-project');
   
   before(() => {
     cy.clearCookies();

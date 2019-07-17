@@ -8,9 +8,10 @@ export enum Group {
     Viewer = 'Viewer',
 }
 
-export function reloadUsers() {
+export function reloadUsers(): void {
   wait('**/users', 'GET', 'listUsers');
 
   ClustersPage.visit();
+
   MembersPage.visit();
 }
