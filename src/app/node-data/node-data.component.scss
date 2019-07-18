@@ -1,3 +1,6 @@
+@import '../../assets/css/colors';
+@import '../../assets/css/variables';
+
 mat-form-field.operating-system {
   margin-top: 20px;
 }
@@ -24,5 +27,48 @@ div.km-os-options {
 
   &.km-with-margin {
     margin: 5px 0 10px;
+  }
+}
+
+mat-button-toggle-group[group='operatingSystemGroup'] {
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+
+  .mat-button-toggle {
+    border-radius: 4px;
+    max-width: 170px;
+    min-width: 120px;
+    min-height: 60px;
+    max-height: 60px;
+    outline: none;
+
+    i {
+      margin-right: 10px;
+      min-width: 28px;
+      min-height: 28px;
+      -webkit-filter: grayscale(100%);
+      -moz-filter: grayscale(100%);
+      -ms-filter: grayscale(100%);
+      -o-filter: grayscale(100%);
+      filter: grayscale(100%);
+    }
+
+    &.mat-button-toggle-checked {
+      border: 1px solid $primary;
+
+      i {
+        -webkit-filter: none;
+        -moz-filter: none;
+        -ms-filter: none;
+        -o-filter: none;
+        filter: none;
+      }
+    }
+  }
+
+  ::ng-deep .mat-button-toggle-label-content {
+    font-size: $subhead-font-size-base;
+    font-weight: normal;
+    color: $text-color;
   }
 }
