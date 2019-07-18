@@ -112,6 +112,8 @@ describe('Basic story', () => {
     projectName = `${projectName}-edited`;
     ProjectsPage.editDialogInput().type('-edited').should(Condition.HaveValue, projectName);
     ProjectsPage.editDialogConfirmBtn().click();
+
+    wait('**/projects', 'GET', 'list projects');
   });
   
   it('should delete created project', () => {
