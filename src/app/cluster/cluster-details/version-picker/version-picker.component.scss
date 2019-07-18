@@ -55,6 +55,12 @@
     }
   }
 
+  .km-version-picker-disabled {
+    ::ng-deep .mat-select-arrow {
+      visibility: hidden;
+    }
+  }
+
   .km-version-picker-enabled:hover {
     ::ng-deep * {
       cursor: pointer;

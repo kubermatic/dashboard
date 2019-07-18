@@ -4,7 +4,7 @@
      fxLayoutAlign="center center">
 
   <div class="km-version-picker"
-       [ngClass]="{'km-version-picker-enabled': isEnabled()}"
+       [ngClass]="{'km-version-picker-enabled': isEnabled(), 'km-version-picker-disabled': !isEnabled()}"
        fxFlex
        fxLayoutAlign="center center"
        (click)="changeClusterVersionDialog()">
