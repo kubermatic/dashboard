@@ -52,8 +52,8 @@ export class ClustersPage {
 
   static visit(): void {
     cy.get('#km-nav-item-clusters').click();
-    this.verifyUrl();
     this.waitForRefresh();
+    this.verifyUrl();
   }
 
   static openWizard(): void {

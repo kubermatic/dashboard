@@ -53,15 +53,15 @@ export class ProjectsPage {
 
   static visit(): void {
     cy.get('#km-nav-item-projects').click();
-    this.verifyUrl();
     this.waitForRefresh();
+    this.verifyUrl();
   }
 
   static selectProject(projectName: string): void {
     this._getProjectItem(projectName).should(Condition.HaveLength, 1);
     this._getActiveProjects().should(Condition.HaveLength, 1).click();
-    ClustersPage.verifyUrl();
     ClustersPage.waitForRefresh();
+    ClustersPage.verifyUrl();
   }
 
   static addProject(projectName: string): void {

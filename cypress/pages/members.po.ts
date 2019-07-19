@@ -69,7 +69,7 @@ export class MembersPage {
 
   static visit(): void {
     cy.get('#km-nav-item-members').click();
-    this.verifyUrl();
     this.waitForRefresh();
+    this.verifyUrl();
   }
 }
