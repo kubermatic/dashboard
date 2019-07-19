@@ -13,7 +13,7 @@
     "start:e2e-local": "npm run versioninfo && ng serve --hmr --configuration=e2e-local",
     "build": "npm run versioninfo && ng build --prod",
     "test": "ng test --browsers=ChromeHeadless --watch=false",
-    "cy": "cypress open",
+    "cy": "cypress run --record false",
     "e2e": "start-server-and-test start:e2e http-get://localhost:8000 cy",
     "e2e:local": "start-server-and-test start:e2e-local http-get://localhost:8000 cy",
     "check": "npm run check:ts && npm run check:scss",
