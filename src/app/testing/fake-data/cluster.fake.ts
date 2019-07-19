@@ -247,6 +247,7 @@ export function fakeOpenstackCluster(): ClusterEntity {
           network: 'test-network',
           domain: 'test-domain',
           tenant: 'test-tenant',
+          tenantID: '',
           subnetID: 'test-subnet-id',
         },
         baremetal: null,

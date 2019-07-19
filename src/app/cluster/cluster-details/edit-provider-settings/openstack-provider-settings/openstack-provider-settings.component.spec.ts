@@ -64,6 +64,7 @@ describe('OpenstackProviderSettingsComponent', () => {
       password: '',
       username: '',
       tenant: '',
+      tenantID: '',
       domain: '',
       network: '',
       securityGroups: '',

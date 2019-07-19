@@ -61,16 +61,12 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (!this.hasCredentials() && !this._selectedPreset) {
-        return;
-      }
-
       this.cloudSpec = data.cloudSpec;
       this.osNodeForm.controls.flavor.setValue('');
       this.flavors = [];
       this.checkFlavorState();
-      if (data.cloudSpec.openstack.username !== '' || data.cloudSpec.openstack.password !== '' ||
-          data.cloudSpec.openstack.domain !== '' || data.cloudSpec.openstack.tenant !== '' || this._selectedPreset) {
+
+      if (this.hasCredentials() || this._selectedPreset) {
         this.loadFlavors();
       }
     });
@@ -136,8 +132,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   hasCredentials(): boolean {
     return !!this.cloudSpec.openstack.username && this.cloudSpec.openstack.username.length > 0 &&
         !!this.cloudSpec.openstack.password && this.cloudSpec.openstack.password.length > 0 &&
-        !!this.cloudSpec.openstack.tenant && this.cloudSpec.openstack.tenant.length > 0 &&
-        !!this.cloudSpec.openstack.domain && this.cloudSpec.openstack.domain.length > 0;
+        !!this.cloudSpec.openstack.domain && this.cloudSpec.openstack.domain.length > 0 &&
+        ((!!this.cloudSpec.openstack.tenant && this.cloudSpec.openstack.tenant.length > 0) ||
+         (!!this.cloudSpec.openstack.tenantID && this.cloudSpec.openstack.tenantID.length > 0));
   }
 
   private handleFlavours(flavors: OpenstackFlavor[]): void {
@@ -153,6 +150,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   loadFlavors(): void {
+    if (!this.hasCredentials() && !this._selectedPreset) {
+      return;
+    }
+
     this.loadingFlavors = !this.isInWizard() || this.hasCredentials() || !!this._selectedPreset;
 
     iif(() => this.isInWizard(),
@@ -160,6 +161,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
             .username(this.cloudSpec.openstack.username)
             .password(this.cloudSpec.openstack.password)
             .tenant(this.cloudSpec.openstack.tenant)
+            .tenantID(this.cloudSpec.openstack.tenantID)
             .domain(this.cloudSpec.openstack.domain)
             .credential(this._selectedPreset)
             .datacenter(this.cloudSpec.dc)
@@ -171,7 +173,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           this.handleFlavours(flavors);
           this.checkFlavorState();
           this.loadingFlavors = false;
-        }, () => this.loadingSizes = false);
+        }, () => this.loadingFlavors = false);
   }
 
   isFloatingIPEnforced(): boolean {

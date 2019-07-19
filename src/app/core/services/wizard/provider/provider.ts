@@ -15,6 +15,13 @@ export abstract class Provider {
     this._requiredHeaders = headers;
   }
 
+  protected _changeRequiredHeader(from: any, to: any): void {
+    const idx = this._requiredHeaders.indexOf(from);
+    if (idx > -1) {
+      this._requiredHeaders[idx] = to;
+    }
+  }
+
   protected _hasRequiredHeaders(): boolean {
     return this._headers.get(Provider.SharedHeader.Credential) !== null ||
         this._requiredHeaders.filter(header => this._headers.keys().includes(header)).length ===

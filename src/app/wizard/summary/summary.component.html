@@ -278,12 +278,21 @@
                          disabled />
                 </div>
               </div>
-              <div fxLayout
+              <div *ngIf="cluster.spec.cloud.openstack.tenant"
+                   fxLayout
                    class="km-card-list-content">
                 <div fxFlex="50%"
                      class="km-card-list-key">Project
                 </div>
                 <div fxFlex="50%">{{ cluster.spec.cloud.openstack.tenant }}</div>
+              </div>
+              <div *ngIf="cluster.spec.cloud.openstack.tenantID"
+                   fxLayout
+                   class="km-card-list-content">
+                <div fxFlex="50%"
+                     class="km-card-list-key">Project ID
+                </div>
+                <div fxFlex="50%">{{ cluster.spec.cloud.openstack.tenantID }}</div>
               </div>
               <div fxLayout
                    class="km-card-list-content"

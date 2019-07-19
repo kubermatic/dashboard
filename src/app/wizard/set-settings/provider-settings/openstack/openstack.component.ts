@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormControl, FormGroup, Validators} from '@angular/forms';
 import {merge, Subject} from 'rxjs';
 import {debounceTime, take, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../../../../app-config.service';
@@ -49,6 +49,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       domain: new FormControl(this.cluster.spec.cloud.openstack.domain, [Validators.required]),
       tenant: new FormControl(this.cluster.spec.cloud.openstack.tenant, [Validators.required]),
+      tenantID: new FormControl(this.cluster.spec.cloud.openstack.tenantID, [Validators.required]),
       username: new FormControl(this.cluster.spec.cloud.openstack.username, [Validators.required]),
       password: new FormControl(this.cluster.spec.cloud.openstack.password, [Validators.required]),
       floatingIpPool: new FormControl(this.cluster.spec.cloud.openstack.floatingIpPool),
@@ -61,6 +62,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     this._formHelper.registerFormControls(
         this.form.controls.domain,
         this.form.controls.tenant,
+        this.form.controls.tenantID,
         this.form.controls.username,
         this.form.controls.password,
     );
@@ -81,18 +83,40 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
           if (!this._hasTenantCredentials()) {
+            this.form.controls.tenantID.disable();
             this._resetOptionalFields(true);
+            return;
           }
 
+          this.form.controls.tenantID.enable();
           this._loadTenants();
         });
 
-    this.form.controls.tenant.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      if (this._isTenantSelected()) {
-        this._resetOptionalFields(false);
-        this._loadOptionalSettings();
-      }
-    });
+    this.form.controls.tenantID.valueChanges.pipe(debounceTime(1000))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(value => {
+          value ? this._disableControl(this.form.controls.tenant) : this._enableControl(this.form.controls.tenant);
+
+          if (this._isTenantIDSelected()) {
+            this._resetOptionalFields(false);
+            this._loadOptionalSettings();
+          } else if (!this._isTenantSelected()) {
+            this._resetOptionalFields(false);
+          }
+        });
+
+    this.form.controls.tenant.valueChanges.pipe(debounceTime(1000))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(value => {
+          value ? this._disableControl(this.form.controls.tenantID) : this._enableControl(this.form.controls.tenantID);
+
+          if (this._isTenantSelected()) {
+            this._resetOptionalFields(false);
+            this._loadOptionalSettings();
+          } else if (!this._isTenantIDSelected()) {
+            this._resetOptionalFields(false);
+          }
+        });
 
     this.form.controls.network.valueChanges.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
@@ -142,13 +166,13 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   getTenantsFormState(): string {
     if (!this._loadingOptionalTenants && !this._hasTenantCredentials()) {
-      return 'Project*';
+      return 'Project';
     } else if (this._loadingOptionalTenants) {
       return 'Loading Projects...';
     } else if (!this._loadingOptionalTenants && this.tenants.length === 0) {
       return 'No Projects available';
     } else {
-      return 'Project*';
+      return 'Project';
     }
   }
 
@@ -217,6 +241,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             () => {
               this.tenants = [];
               this._loadingOptionalTenants = false;
+            },
+            () => {
+              this._loadingOptionalTenants = false;
             });
   }
 
@@ -230,48 +257,58 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         .username(this.form.controls.username.value)
         .password(this.form.controls.password.value)
         .tenant(this.form.controls.tenant.value)
+        .tenantID(this.form.controls.tenantID.value)
         .domain(this.form.controls.domain.value)
         .datacenter(this.cluster.spec.cloud.dc)
         .networks()
         .pipe(take(1))
-        .subscribe((networks: OpenstackNetwork[]) => {
-          this.networks = networks.filter((network) => network.external !== true).sort((a, b) => {
-            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-          });
-          this.floatingIpPools = networks.filter((network) => network.external === true).sort((a, b) => {
-            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-          });
+        .subscribe(
+            (networks: OpenstackNetwork[]) => {
+              this.networks = networks.filter((network) => network.external !== true).sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
+              this.floatingIpPools = networks.filter((network) => network.external === true).sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
 
-          if (this.networks.length === 0) {
-            this.form.controls.network.setValue('');
-          }
+              if (this.networks.length === 0) {
+                this.form.controls.network.setValue('');
+              }
 
-          if (this.floatingIpPools.length === 0) {
-            this.form.controls.floatingIpPool.setValue('');
-          }
+              if (this.floatingIpPools.length === 0) {
+                this.form.controls.floatingIpPool.setValue('');
+              }
 
-          this._checkState();
-        });
+              this._checkState();
+            },
+            () => {
+              this._loadingOptionalSettings = false;
+            });
 
     this._wizard.provider(NodeProvider.OPENSTACK)
         .username(this.form.controls.username.value)
         .password(this.form.controls.password.value)
         .tenant(this.form.controls.tenant.value)
+        .tenantID(this.form.controls.tenantID.value)
         .domain(this.form.controls.domain.value)
         .datacenter(this.cluster.spec.cloud.dc)
         .securityGroups()
         .pipe(take(1))
-        .subscribe((securityGroups) => {
-          this.securityGroups = securityGroups.sort((a, b) => {
-            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-          });
+        .subscribe(
+            (securityGroups) => {
+              this.securityGroups = securityGroups.sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
 
-          if (this.securityGroups.length === 0) {
-            this.form.controls.securityGroup.setValue('');
-          }
+              if (this.securityGroups.length === 0) {
+                this.form.controls.securityGroup.setValue('');
+              }
 
-          this._loadingOptionalSettings = false;
-        });
+              this._loadingOptionalSettings = false;
+            },
+            () => {
+              this._loadingOptionalSettings = false;
+            });
   }
 
   private _loadSubnetIds(): void {
@@ -284,22 +321,27 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
         .username(this.form.controls.username.value)
         .password(this.form.controls.password.value)
         .tenant(this.form.controls.tenant.value)
+        .tenantID(this.form.controls.tenantID.value)
         .domain(this.form.controls.domain.value)
         .datacenter(this.cluster.spec.cloud.dc)
         .subnets(this.form.controls.network.value)
         .pipe(take(1))
-        .subscribe((subnets) => {
-          this.subnetIds = subnets.sort((a, b) => {
-            return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
-          });
+        .subscribe(
+            (subnets) => {
+              this.subnetIds = subnets.sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
 
-          if (this.subnetIds.length === 0) {
-            this.form.controls.subnetId.setValue('');
-          }
+              if (this.subnetIds.length === 0) {
+                this.form.controls.subnetId.setValue('');
+              }
 
-          this._loadingSubnetIds = false;
-          this._checkState();
-        });
+              this._loadingSubnetIds = false;
+              this._checkState();
+            },
+            () => {
+              this._loadingSubnetIds = false;
+            });
   }
 
   private _resetOptionalFields(withTenant: boolean): void {
@@ -321,7 +363,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   private _checkState(): void {
     const fields: OpenstackOptionalFields[] = [
-      {'length': this.tenants.length, 'name': 'tenant'},
       {'length': this.floatingIpPools.length, 'name': 'floatingIpPool'},
       {'length': this.securityGroups.length, 'name': 'securityGroup'},
       {'length': this.networks.length, 'name': 'network'},
@@ -329,11 +370,35 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     ];
 
     for (const i in fields) {
-      if (fields[i].length === 0 && this.form.get(fields[i].name).enabled) {
-        this.form.get(fields[i].name).disable();
-      } else if (fields[i].length > 0 && this.form.get(fields[i].name).disabled) {
-        this.form.get(fields[i].name).enable();
+      if (fields[i].length === 0) {
+        this._disableControl(this.form.get(fields[i].name));
+      } else {
+        this._enableControl(this.form.get(fields[i].name));
       }
+    }
+
+    if (this.tenants.length === 0) {
+      this._disableControl(this.form.controls.tenant);
+    } else if (this.tenants.length > 0 && !this.form.controls.tenantID.value) {
+      this._enableControl(this.form.controls.tenant);
+    }
+
+    if (this._hasTenantCredentials() && !this.form.controls.tenant.value) {
+      this._enableControl(this.form.controls.tenantID);
+    } else {
+      this._disableControl(this.form.controls.tenantID);
+    }
+  }
+
+  private _disableControl(control: AbstractControl): void {
+    if (control.enabled) {
+      control.disable();
+    }
+  }
+
+  private _enableControl(control: AbstractControl): void {
+    if (control.disabled) {
+      control.enable();
     }
   }
 
@@ -344,11 +409,15 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _hasRequiredCredentials(): boolean {
-    return this._hasTenantCredentials() && this.form.controls.tenant.value.toString().length > 0;
+    return this._hasTenantCredentials() && (this._isTenantSelected() || this._isTenantIDSelected());
   }
 
   private _isTenantSelected(): boolean {
     return this.form.controls.tenant.value.toString().length > 0;
+  }
+
+  private _isTenantIDSelected(): boolean {
+    return this.form.controls.tenantID.value;
   }
 
   private _isNetworkSelected(): boolean {
@@ -360,6 +429,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       cloudSpec: {
         openstack: {
           tenant: this.form.controls.tenant.value,
+          tenantID: this.form.controls.tenantID.value,
           domain: this.form.controls.domain.value,
           username: this.form.controls.username.value,
           password: this.form.controls.password.value,
