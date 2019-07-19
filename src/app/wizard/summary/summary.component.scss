@@ -93,3 +93,33 @@ input[type="password"].km-card-list-secret {
     word-break: break-word;
   }
 }
+
+.km-summary-row {
+  display: flex;
+  align-items: center;
+  line-height: 24px;
+}
+
+.km-provider-logo {
+  max-width: 100px !important;
+}
+
+.km-os-image {
+  display: inline-block;
+  height: 28px;
+  width: 28px;
+}
+
+.km-summary-left {
+  display: inline-block;
+  width: 35px;
+
+  .fa-times,
+  .fa-check {
+    font-size: $subhead-font-size-base-lg;
+  }
+}
+
+::ng-deep .km-property-container {
+  margin: 0 0 5px !important;
+}

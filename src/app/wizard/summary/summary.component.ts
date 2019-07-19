@@ -30,6 +30,10 @@ export class SummaryComponent implements OnInit {
     return NodeUtils.getOperatingSystem(this.nodeData.spec);
   }
 
+  getOperatingSystemLogoClass(): string {
+    return NodeUtils.getOperatingSystemLogoClass(this.nodeData.spec);
+  }
+
   getType(type: string): string {
     return ClusterUtils.getType(type);
   }
