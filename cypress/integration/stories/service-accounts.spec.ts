@@ -46,15 +46,16 @@ describe('Service Accounts Story', () => {
     ServiceAccountsPage.getTableRow(serviceAccountName).click();
   });
 
-  it('should open add token dialog', () => {
-    ServiceAccountsPage.getAddTokenBtn().click();
+  it('should add token', () => {
+    ServiceAccountsPage.addToken(tokenName);
   });
 
-  it('should add token', () => {
-    ServiceAccountsPage.getAddTokenNameInput().type(tokenName).should(Condition.HaveValue, tokenName);
-    ServiceAccountsPage.getAddTokenSaveBtn().should(Condition.NotBe, 'disabled').click();
+  it('should close token panel for created service account', () => {
+    ServiceAccountsPage.getTableRow(serviceAccountName).click();
+  });
 
-    // todo add dialog utils and close the window
+  it('should delete service account', () => {
+    ServiceAccountsPage.deleteServiceAccount(serviceAccountName);
   });
 
   it('should go to the projects page', () => {

@@ -23,24 +23,36 @@ export class ServiceAccountsPage {
     return cy.get('#km-add-serviceaccount-dialog-add-btn');
   }
 
+  private static _getDeleteServiceAccountBtn(name: string): Cypress.Chainable<any> {
+    return this.getTableRow(name).find('button i.km-icon-delete');
+  }
+
   private static _getTable(): Cypress.Chainable<any> {
     return cy.get('tbody');
   }
 
-  static getTableRow(name: string): Cypress.Chainable<any> {
-    return cy.get('td').contains(name).parent();
-  }
-
-  static getAddTokenBtn(): Cypress.Chainable<any> {
+  private static _getAddTokenBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-serviceaccount-token');
   }
 
-  static getAddTokenNameInput(): Cypress.Chainable<any> {
+  private static _getAddTokenNameInput(): Cypress.Chainable<any> {
     return cy.get('#km-add-serviceaccount-token-dialog-name-input');
   }
 
-  static getAddTokenSaveBtn(): Cypress.Chainable<any> {
+  private static _getAddTokenSaveBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-serviceaccount-token-dialog-add-btn');
+  }
+
+  private static _getTokenGotItBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-token-dialog-confirm-btn');
+  }
+
+  private static _waitForTokenRefresh(): void {
+    wait('**/tokens', 'GET', 'list service account tokens');
+  }
+
+  static getTableRow(name: string): Cypress.Chainable<any> {
+    return cy.get('td').contains(name).parent();
   }
 
   static waitForRefresh(): void {
@@ -65,5 +77,20 @@ export class ServiceAccountsPage {
     this._getAddServiceAccountSaveBtn().should(Condition.NotBe, 'disabled').click();
     this.waitForRefresh();
     this._getTable().should(Condition.Contain, name);
+  }
+
+  static deleteServiceAccount(name: string): void {
+    this._getDeleteServiceAccountBtn(name).should(Condition.NotBe, 'disabled').click();
+    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
+    this.waitForRefresh();
+    this._getTable().should(Condition.NotContain, name);
+  }
+
+  static addToken(name: string): void {
+    this._getAddTokenBtn().click();
+    this._getAddTokenNameInput().type(name).should(Condition.HaveValue, name);
+    this._getAddTokenSaveBtn().should(Condition.NotBe, 'disabled').click();
+    this._waitForTokenRefresh();
+    this._getTokenGotItBtn().should(Condition.NotBe, 'disabled').click();
   }
 }
