@@ -13,12 +13,8 @@ export class Openstack extends Provider {
     super(http, provider);
 
     this._setRequiredHeaders(
-        Openstack.Header.Username,
-        Openstack.Header.Password,
-        Openstack.Header.Domain,
-        Openstack.Header.Datacenter,
-        Openstack.Header.Tenant,
-    );
+        Openstack.Header.Username, Openstack.Header.Password, Openstack.Header.Domain, Openstack.Header.Datacenter,
+        Openstack.Header.Tenant);
   }
 
   credential(credential: string): Openstack {
@@ -57,6 +53,14 @@ export class Openstack extends Provider {
   tenant(tenant: string): Openstack {
     if (tenant) {
       this._headers = this._headers.set(Openstack.Header.Tenant, tenant);
+    }
+    return this;
+  }
+
+  tenantID(tenantID: string): Openstack {
+    if (tenantID) {
+      this._changeRequiredHeader(Openstack.Header.Tenant, Openstack.Header.TenantID);
+      this._headers = this._headers.set(Openstack.Header.TenantID, tenantID);
     }
     return this;
   }
@@ -107,5 +111,6 @@ export namespace Openstack {
     Domain = 'Domain',
     Datacenter = 'DatacenterName',
     Tenant = 'Tenant',
+    TenantID = 'TenantID',
   }
 }

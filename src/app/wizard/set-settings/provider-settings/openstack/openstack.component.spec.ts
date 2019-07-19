@@ -34,9 +34,10 @@ describe('OpenstackClusterSettingsComponent', () => {
   beforeEach(async(() => {
     wizardMock =
         jasmine.createSpyObj('WizardService', ['provider', 'getSelectedDatacenter', 'changeClusterProviderSettings']);
-    providerMock = jasmine.createSpyObj(
-        'Provider',
-        ['tenants', 'networks', 'securityGroups', 'subnets', 'username', 'password', 'domain', 'datacenter', 'tenant']);
+    providerMock = jasmine.createSpyObj('Provider', [
+      'tenants', 'networks', 'securityGroups', 'subnets', 'username', 'password', 'domain', 'datacenter', 'tenant',
+      'tenantID'
+    ]);
 
     wizardMock.changeClusterProviderSettings.and.callThrough();
     wizardMock.onCustomPresetsDisable = new EventEmitter<boolean>();
@@ -48,6 +49,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     providerMock.domain.and.returnValue(providerMock);
     providerMock.datacenter.and.returnValue(providerMock);
     providerMock.tenant.and.returnValue(providerMock);
+    providerMock.tenantID.and.returnValue(providerMock);
 
     wizardMock.getSelectedDatacenter.and.returnValue(fakeOpenstackDatacenter());
 
@@ -95,6 +97,7 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.cluster = fakeOpenstackCluster();
       component.cluster.spec.cloud.openstack = {
         tenant: '',
+        tenantID: '',
         domain: '',
         network: '',
         securityGroups: '',
@@ -261,7 +264,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     it('should set correct tenant placeholder', () => {
       component.form.controls.username.setValue('');
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('Project*');
+      expect(component.getTenantsFormState()).toEqual('Project');
 
       component.form.controls.username.setValue('username');
       component.form.controls.password.setValue('password');
@@ -272,7 +275,7 @@ describe('OpenstackClusterSettingsComponent', () => {
 
       component.tenants = openstackTenantsFake();
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('Project*');
+      expect(component.getTenantsFormState()).toEqual('Project');
     });
 
     it('should set correct optional settings placeholder', (() => {
@@ -319,6 +322,43 @@ describe('OpenstackClusterSettingsComponent', () => {
       fixture.detectChanges();
       expect(component.getSubnetIDFormState()).toEqual('Subnet ID');
     });
+
+    it('should disable Project field when Project ID is provided', fakeAsync(() => {
+         fixture.detectChanges();
+
+         expect(component.form.controls.tenant.disabled).toBeTruthy();
+         expect(component.form.controls.tenantID.disabled).toBeTruthy();
+
+         component.form.controls.username.setValue('username');
+         component.form.controls.password.setValue('password');
+         component.form.controls.domain.setValue('domain');
+         component.form.controls.tenantID.setValue('tenantID');
+         fixture.detectChanges();
+         tick(1001);
+
+         expect(component.form.controls.tenant.disabled).toBeTruthy();
+         expect(component.form.controls.tenantID.enabled).toBeTruthy();
+         discardPeriodicTasks();
+       }));
+
+    it('should disable Project ID field when Project is provided', fakeAsync(() => {
+         fixture.detectChanges();
+
+         expect(component.form.controls.tenant.disabled).toBeTruthy();
+         expect(component.form.controls.tenantID.disabled).toBeTruthy();
+
+         component.form.controls.username.setValue('username');
+         component.form.controls.password.setValue('password');
+         component.form.controls.domain.setValue('domain');
+         component.form.controls.tenant.setValue('test-project');
+         component.tenants = [{id: 'test-id', name: 'test-project'}];
+         fixture.detectChanges();
+         tick(1001);
+
+         expect(component.form.controls.tenant.enabled).toBeTruthy();
+         expect(component.form.controls.tenantID.disabled).toBeTruthy();
+         discardPeriodicTasks();
+       }));
   });
 
   describe('Config with DefaultUserName', () => {
@@ -332,6 +372,7 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.cluster = fakeOpenstackCluster();
       component.cluster.spec.cloud.openstack = {
         tenant: '',
+        tenantID: '',
         domain: '',
         network: '',
         securityGroups: '',
