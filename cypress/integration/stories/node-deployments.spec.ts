@@ -43,59 +43,59 @@ describe('Node Deployments Story', () => {
   });
 
   it('should create a new cluster', () => {
-    WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    WizardPage.nextBtn().click();
-    WizardPage.providerBtn(Provider.Digitalocean).click();
-    WizardPage.datacenterBtn(Datacenter.Frankfurt).click();
-    WizardPage.customPresetsCombobox().click();
-    WizardPage.customPresetsValue('digitalocean').click();
+    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    WizardPage.getNextBtn().click();
+    WizardPage.getProviderBtn(Provider.Digitalocean).click();
+    WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
+    WizardPage.getCustomPresetsCombobox().click();
+    WizardPage.getCustomPresetsValue('digitalocean').click();
     wait('**/providers/digitalocean/sizes');
-    WizardPage.nodeNameInput().type(initialNodeDeploymentName).should(Condition.HaveValue, initialNodeDeploymentName);
-    WizardPage.nodeCountInput().clear().type(initialNodeDeploymentReplicas).should(Condition.HaveValue, initialNodeDeploymentReplicas);
-    WizardPage.nextBtn().click();
-    WizardPage.createBtn().click();
+    WizardPage.getNodeNameInput().type(initialNodeDeploymentName).should(Condition.HaveValue, initialNodeDeploymentName);
+    WizardPage.getNodeCountInput().clear().type(initialNodeDeploymentReplicas).should(Condition.HaveValue, initialNodeDeploymentReplicas);
+    WizardPage.getNextBtn().click();
+    WizardPage.getCreateBtn().click();
 
     cy.url().should(Condition.Contain, '/clusters');
   });
 
   it('should check if cluster was created', () => {
     ClustersPage.visit();
-    ClustersPage.table().should(Condition.Contain, clusterName);
+    ClustersPage.getTable().should(Condition.Contain, clusterName);
   });
 
   it('should wait for initial node deployment to be created', () => {
-    ClustersPage.clusterItem(clusterName).click();
+    ClustersPage.getClusterItem(clusterName).click();
     wait('**/nodedeployments', 'GET', 'getNodeDeployments', 600000);
     cy.get('kubermatic-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
   });
 
   it('should go to node deployment details', () => {
-    ClustersPage.tableRowNodeDeploymentNameColumn(initialNodeDeploymentName).click();
+    ClustersPage.getTableRowNodeDeploymentNameColumn(initialNodeDeploymentName).click();
   });
 
   it('should verify node deployment name', () => {
-    NodeDeploymentDetailsPage.nodeDeploymentNameElement().should(Condition.Contain, initialNodeDeploymentName);
+    NodeDeploymentDetailsPage.getNodeDeploymentNameElement().should(Condition.Contain, initialNodeDeploymentName);
   });
 
   it('should verify node deployment cluster name', () => {
-    NodeDeploymentDetailsPage.nodeDeploymentClusterNameElement().should(Condition.Contain, clusterName);
+    NodeDeploymentDetailsPage.getNodeDeploymentClusterNameElement().should(Condition.Contain, clusterName);
   });
 
   it('should go back to cluster details page and remove initial node deployment', () => {
-    NodeDeploymentDetailsPage.backToClusterBtn().click();
+    NodeDeploymentDetailsPage.getBackToClusterBtn().click();
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('mat-card-title').should(Condition.Contain, clusterName);
     cy.get('kubermatic-node-deployment-list').should(Condition.Contain, initialNodeDeploymentName);
 
-    ClustersPage.nodeDeploymentRemoveBtn(initialNodeDeploymentName).click();
-    ClustersPage.deleteNodeDeploymentDialogBtn().click();
-    ClustersPage.tableRowNodeDeploymentNameColumn(initialNodeDeploymentName).should(Condition.NotExist);
+    ClustersPage.getNodeDeploymentRemoveBtn(initialNodeDeploymentName).click();
+    ClustersPage.getDeleteNodeDeploymentDialogBtn().click();
+    ClustersPage.getTableRowNodeDeploymentNameColumn(initialNodeDeploymentName).should(Condition.NotExist);
   });
 
   it('should delete created cluster', () => {
-    ClustersPage.deleteClusterBtn().click();
-    ClustersPage.deleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    ClustersPage.deleteDialogBtn().click();
+    ClustersPage.getDeleteClusterBtn().click();
+    ClustersPage.getDeleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    ClustersPage.getDeleteDialogBtn().click();
 
     ClustersPage.waitForRefresh();
     cy.url().should(Condition.Contain, '/clusters');

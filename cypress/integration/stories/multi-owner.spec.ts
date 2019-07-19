@@ -30,17 +30,16 @@ describe('Multi owner Story', () => {
     ProjectsPage.addProject(projectName);
   });
 
-  it('should add a new member', () => {
+  it('should select project', () => {
     ProjectsPage.selectProject(projectName);
+  });
+
+  it('should go to members view', () => {
     MembersPage.visit();
+  });
 
-    MembersPage.addMemberBtn().click();
-    MembersPage.addMemberDialogEmailInput().type(newUserEmail).should(Condition.HaveValue, newUserEmail);
-    MembersPage.addMemberDialogGroupCombobox().click();
-    MembersPage.memberDialogGroup(Group.Owner).click();
-    MembersPage.addMemberDialogSaveBtn().click();
-
-    MembersPage.table().should(Condition.Contain, newUserEmail);
+  it('should add a new member', () => {
+    MembersPage.addMember(newUserEmail, Group.Owner);
   });
 
   it('should logout', () => {
@@ -54,25 +53,28 @@ describe('Multi owner Story', () => {
 
   it('should wait for autoredirect and go back to projects', () => {
     ClustersPage.waitForRefresh();
-
     ProjectsPage.visit();
-    cy.url().should(Condition.Include, 'projects');
   });
 
   it('should check if multi owner project is in list', () => {
     ProjectsPage.getTable().should(Condition.Contain, projectName);
   });
 
-  it('should delete first owner from project', () => {
+  it('should select project', () => {
     ProjectsPage.selectProject(projectName);
-    MembersPage.visit();
+  });
 
-    MembersPage.deleteBtn(email).click();
-    MembersPage.deleteMemberDialogDeleteBtn().click();
+  it('should go to members view', () => {
+    MembersPage.visit();
+  });
+
+  it('should delete first owner from project', () => {
+    MembersPage.getDeleteBtn(email).click();
+    MembersPage.getDeleteMemberDialogDeleteBtn().click();
 
     reloadUsers();
 
-    MembersPage.tableRowEmailColumn(email).should(Condition.NotExist);
+    MembersPage.getTableRowEmailColumn(email).should(Condition.NotExist);
   });
 
   it('should go to the projects page', () => {

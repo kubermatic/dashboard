@@ -1,17 +1,17 @@
 export class DexPage {
-  static loginWithEmailBtn(): Cypress.Chainable<any> {
+  static getLoginWithEmailBtn(): Cypress.Chainable<any> {
     return cy.get('a').contains('Log in with Email');
   }
 
-  static loginInput(): Cypress.Chainable<any> {
+  static getLoginInput(): Cypress.Chainable<any> {
     return cy.get('input#login');
   }
 
-  static passwordInput(): Cypress.Chainable<any> {
+  static getPasswordInput(): Cypress.Chainable<any> {
     return cy.get('input#password');
   }
 
-  static loginBtn(): Cypress.Chainable<any> {
+  static getLoginBtn(): Cypress.Chainable<any> {
     return cy.get('button#submit-login');
   }
 }

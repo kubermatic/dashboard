@@ -6,17 +6,17 @@ import {ProjectsPage} from "../pages/projects.po";
 export function login(email: string, password: string): void {
   LoginPage.visit();
 
-  LoginPage.loginBtn().click();
+  LoginPage.getLoginBtn().click();
 
-  DexPage.loginWithEmailBtn().click();
+  DexPage.getLoginWithEmailBtn().click();
 
-  DexPage.loginInput().type(email).should(Condition.HaveValue, email);
-  DexPage.passwordInput().type(password).should(Condition.HaveValue, password);
-  DexPage.loginBtn().click();
+  DexPage.getLoginInput().type(email).should(Condition.HaveValue, email);
+  DexPage.getPasswordInput().type(password).should(Condition.HaveValue, password);
+  DexPage.getLoginBtn().click();
 
   ProjectsPage.waitForRefresh();
 }
 
 export function logout(): void {
-  LoginPage.logoutBtn().click();
+  LoginPage.getLogoutBtn().click();
 }

@@ -1,46 +1,49 @@
 import {wait} from "../utils/wait";
 import {Condition} from "../utils/condition";
+import {WizardPage} from "./wizard.po";
 
 export class ClustersPage {
-  static addClusterBtn(): Cypress.Chainable<any> {
+  static getAddClusterBtn(): Cypress.Chainable<any> {
     return cy.get('#km-add-cluster-top-btn');
   }
 
-  static clusterItem(clusterName: string): Cypress.Chainable<any> {
+  static getClusterItem(clusterName: string): Cypress.Chainable<any> {
     return cy.get(`#km-clusters-${clusterName}`);
   }
 
-  static deleteClusterBtn(): Cypress.Chainable<any> {
+  static getDeleteClusterBtn(): Cypress.Chainable<any> {
     return cy.get('#km-delete-cluster-btn');
   }
 
-  static deleteDialogInput(): Cypress.Chainable<any> {
+  static getDeleteDialogInput(): Cypress.Chainable<any> {
     return cy.get('#km-delete-cluster-dialog-input');
   }
 
-  static deleteDialogBtn(): Cypress.Chainable<any> {
+  static getDeleteDialogBtn(): Cypress.Chainable<any> {
     return cy.get('#km-delete-cluster-dialog-delete-btn');
   }
 
-  static table(): Cypress.Chainable<any> {
+  static getTable(): Cypress.Chainable<any> {
     return cy.get('tbody');
   }
 
-  static tableRow(nodeDeploymentName: string): Cypress.Chainable<any> {
-    return ClustersPage.tableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
+  static getTableRow(nodeDeploymentName: string): Cypress.Chainable<any> {
+    return this.getTableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
   }
 
-  static tableRowNodeDeploymentNameColumn(nodeDeploymentName: string): Cypress.Chainable<any> {
+  static getTableRowNodeDeploymentNameColumn(nodeDeploymentName: string): Cypress.Chainable<any> {
     return cy.get('td').contains(nodeDeploymentName);
   }
 
-  static nodeDeploymentRemoveBtn(nodeDeploymentName: string): Cypress.Chainable<any> {
-    return ClustersPage.tableRow(nodeDeploymentName).find('button i.km-icon-delete');
+  static getNodeDeploymentRemoveBtn(nodeDeploymentName: string): Cypress.Chainable<any> {
+    return this.getTableRow(nodeDeploymentName).find('button i.km-icon-delete');
   }
 
-  static deleteNodeDeploymentDialogBtn(): Cypress.Chainable<any> {
+  static getDeleteNodeDeploymentDialogBtn(): Cypress.Chainable<any> {
     return cy.get('#km-confirmation-dialog-confirm-btn');
   }
+
+  // Utils.
 
   static waitForRefresh(): void {
     wait('**/clusters', 'GET', 'list clusters');
@@ -57,7 +60,7 @@ export class ClustersPage {
   }
 
   static openWizard(): void {
-    this.addClusterBtn().click();
-    cy.url().should(Condition.Include, 'wizard');
+    this.getAddClusterBtn().click();
+    WizardPage.verifyUrl();
   }
 }

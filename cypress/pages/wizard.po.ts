@@ -1,37 +1,45 @@
+import {Condition} from "../utils/condition";
+
 export class WizardPage {
-  static nextBtn(): Cypress.Chainable<any> {
+  static getNextBtn(): Cypress.Chainable<any> {
     return cy.get('#km-create-cluster-next-btn');
   }
 
-  static clusterNameInput(): Cypress.Chainable<any> {
+  static getClusterNameInput(): Cypress.Chainable<any> {
     return cy.get('#km-create-cluster-name-input');
   }
 
-  static createBtn(): Cypress.Chainable<any> {
+  static getCreateBtn(): Cypress.Chainable<any> {
     return cy.get('#km-create-cluster-create-btn');
   }
 
-  static providerBtn(providerName: string): Cypress.Chainable<any> {
+  static getProviderBtn(providerName: string): Cypress.Chainable<any> {
     return cy.get(`.km-provider-logo-${providerName}`);
   }
 
-  static datacenterBtn(datacenterName: string): Cypress.Chainable<any> {
+  static getDatacenterBtn(datacenterName: string): Cypress.Chainable<any> {
     return cy.get('button').contains('.km-location', datacenterName);
   }
 
-  static customPresetsCombobox(): Cypress.Chainable<any> {
+  static getCustomPresetsCombobox(): Cypress.Chainable<any> {
     return cy.get('.km-custom-credentials-select');
   }
 
-  static customPresetsValue(presetName: string): Cypress.Chainable<any> {
+  static getCustomPresetsValue(presetName: string): Cypress.Chainable<any> {
     return cy.get('mat-option').contains('span', presetName);
   }
 
-  static nodeNameInput(): Cypress.Chainable<any> {
+  static getNodeNameInput(): Cypress.Chainable<any> {
     return cy.get('#km-node-name-input');
   }
 
-  static nodeCountInput(): Cypress.Chainable<any> {
+  static getNodeCountInput(): Cypress.Chainable<any> {
     return cy.get('#km-node-count-input');
+  }
+
+  // Utils.
+
+  static verifyUrl(): void {
+    cy.url().should(Condition.Include, 'wizard');
   }
 }

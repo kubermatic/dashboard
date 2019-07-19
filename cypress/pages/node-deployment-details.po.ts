@@ -1,13 +1,13 @@
 export class NodeDeploymentDetailsPage {
-  static nodeDeploymentNameElement(): Cypress.Chainable<any> {
+  static getNodeDeploymentNameElement(): Cypress.Chainable<any> {
     return cy.get('.km-node-deployment-name');
   }
 
-  static nodeDeploymentClusterNameElement(): Cypress.Chainable<any> {
+  static getNodeDeploymentClusterNameElement(): Cypress.Chainable<any> {
     return cy.get('.km-node-deployment-cluster-name');
   }
 
-  static backToClusterBtn(): Cypress.Chainable<any> {
+  static getBackToClusterBtn(): Cypress.Chainable<any> {
     return cy.get('.km-cluster-panel-icon');
   }
 }

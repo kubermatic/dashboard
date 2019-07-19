@@ -43,13 +43,13 @@ describe('Basic Story', () => {
   });
   
   it('should create a new cluster', () => {
-    WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    WizardPage.nextBtn().click();
-    WizardPage.providerBtn(Provider.BringYourOwn).click();
-    WizardPage.datacenterBtn(Datacenter.Frankfurt).click();
-    WizardPage.createBtn().click();
+    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    WizardPage.getNextBtn().click();
+    WizardPage.getProviderBtn(Provider.BringYourOwn).click();
+    WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
+    WizardPage.getCreateBtn().click();
 
-    cy.url().should(Condition.Contain, '/clusters');
+    ClustersPage.verifyUrl();
   });
 
   it('should go to members view', () => {
@@ -57,55 +57,42 @@ describe('Basic Story', () => {
   });
 
   it('should add a new member', () => {
-    MembersPage.addMemberBtn().click();
-    MembersPage.addMemberDialogEmailInput().type(newUserEmail).should(Condition.HaveValue, newUserEmail);
-    MembersPage.addMemberDialogGroupCombobox().click();
-    MembersPage.memberDialogGroup(Group.Editor).click();
-    MembersPage.addMemberDialogSaveBtn().click();
-
-    MembersPage.table().should(Condition.Contain, newUserEmail);
+    MembersPage.addMember(newUserEmail, Group.Editor);
   });
 
   it('should edit created member info', () => {
     reloadUsers();
-
-    MembersPage.editBtn(newUserEmail).click();
-    MembersPage.editMemberDialogGroupCombobox().click();
-    MembersPage.memberDialogGroup(Group.Viewer).click();
-    MembersPage.editMemberDialogSaveBtn().click();
-
+    MembersPage.editMember(newUserEmail, Group.Viewer);
     reloadUsers();
-
-    MembersPage.tableRowGroupColumn(newUserEmail).should(Condition.Contain, Group.Viewer);
+    MembersPage.getTableRowGroupColumn(newUserEmail).should(Condition.Contain, Group.Viewer);
   });
 
   it('should delete created member', () => {
     reloadUsers();
-
-    MembersPage.deleteBtn(newUserEmail).click();
-    MembersPage.deleteMemberDialogDeleteBtn().click();
-
+    MembersPage.getDeleteBtn(newUserEmail).click();
+    MembersPage.getDeleteMemberDialogDeleteBtn().click();
     reloadUsers();
-
-    MembersPage.tableRowEmailColumn(newUserEmail).should(Condition.NotExist);
+    MembersPage.getTableRowEmailColumn(newUserEmail).should(Condition.NotExist);
   });
 
   it('should delete created cluster', () => {
     ClustersPage.visit();
-    ClustersPage.clusterItem(clusterName).click();
+    ClustersPage.getClusterItem(clusterName).click();
 
-    ClustersPage.deleteClusterBtn().click();
-    ClustersPage.deleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    ClustersPage.deleteDialogBtn().click();
+    ClustersPage.getDeleteClusterBtn().click();
+    ClustersPage.getDeleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    ClustersPage.getDeleteDialogBtn().click();
 
     ClustersPage.waitForRefresh();
     cy.url().should(Condition.Contain, '/clusters');
     cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
   });
+
+  it('should go to the projects page', () => {
+    ProjectsPage.visit();
+  });
   
   it('should edit created project name', () => {
-    ProjectsPage.visit();
-
     ProjectsPage.getEditProjectBtn(projectName).click();
 
     projectName = `${projectName}-edited`;
