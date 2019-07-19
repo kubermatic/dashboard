@@ -1,41 +1,45 @@
+import {Condition} from "../utils/condition";
+
 export class WizardPage {
-    static nextBtn() {
-        return cy.get('#km-create-cluster-next-btn');
-    }
-    
-    static clusterNameInput() {
-        return cy.get('#km-create-cluster-name-input');
-    }
-    
-    static createBtn() {
-        return cy.get('#km-create-cluster-create-btn');
-    }
-    
-    static providerBtn(providerName: string) {
-        return cy.get(`.km-provider-logo-${providerName}`);
-    }
-    
-    static datacenterBtn(datacenterName: string) {
-        return cy.get('button').contains('.km-location', datacenterName);
-    }
+  static getNextBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-create-cluster-next-btn');
+  }
 
-    static digitaloceanTokenInput() {
-        return cy.get('#km-digitalocean-token-input');
-    }
+  static getClusterNameInput(): Cypress.Chainable<any> {
+    return cy.get('#km-create-cluster-name-input');
+  }
 
-    static customPresetsCombobox() {
-        return cy.get('.km-custom-credentials-select');
-    }
+  static getCreateBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-create-cluster-create-btn');
+  }
 
-    static customPresetsValue(presetName: string) {
-        return cy.get('mat-option').contains('span', presetName);
-    }
+  static getProviderBtn(providerName: string): Cypress.Chainable<any> {
+    return cy.get(`.km-provider-logo-${providerName}`);
+  }
 
-    static nodeNameInput() {
-        return cy.get('#km-node-name-input');
-    }
+  static getDatacenterBtn(datacenterName: string): Cypress.Chainable<any> {
+    return cy.get('button').contains('.km-location', datacenterName);
+  }
 
-    static nodeCountInput() {
-        return cy.get('#km-node-count-input');
-    }
+  static getCustomPresetsCombobox(): Cypress.Chainable<any> {
+    return cy.get('.km-custom-credentials-select');
+  }
+
+  static getCustomPresetsValue(presetName: string): Cypress.Chainable<any> {
+    return cy.get('mat-option').contains('span', presetName);
+  }
+
+  static getNodeNameInput(): Cypress.Chainable<any> {
+    return cy.get('#km-node-name-input');
+  }
+
+  static getNodeCountInput(): Cypress.Chainable<any> {
+    return cy.get('#km-node-count-input');
+  }
+
+  // Utils.
+
+  static verifyUrl(): void {
+    cy.url().should(Condition.Include, 'wizard');
+  }
 }

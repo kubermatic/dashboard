@@ -1,20 +1,22 @@
 import {DexPage} from "../pages/dex.po";
 import {LoginPage} from "../pages/login.po";
 import {Condition} from "./condition";
-import {wait} from "./wait";
+import {ProjectsPage} from "../pages/projects.po";
 
-export function login(email: string, password: string) {
-    LoginPage.visit();
-    LoginPage.loginBtn().click();
-    
-    DexPage.loginWithEmailBtn().click();
-    DexPage.loginInput().type(email).should(Condition.HaveValue, email);
-    DexPage.passwordInput().type(password).should(Condition.HaveValue, password);
-    DexPage.loginBtn().click();
-    
-    wait('**/projects');
+export function login(email: string, password: string): void {
+  LoginPage.visit();
+
+  LoginPage.getLoginBtn().click();
+
+  DexPage.getLoginWithEmailBtn().click();
+
+  DexPage.getLoginInput().type(email).should(Condition.HaveValue, email);
+  DexPage.getPasswordInput().type(password).should(Condition.HaveValue, password);
+  DexPage.getLoginBtn().click();
+
+  ProjectsPage.waitForRefresh();
 }
 
-export function logout() {
-    LoginPage.logoutBtn().click();
+export function logout(): void {
+  LoginPage.getLogoutBtn().click();
 }

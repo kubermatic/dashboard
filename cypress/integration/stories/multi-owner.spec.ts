@@ -4,21 +4,20 @@ import {login, logout} from "../../utils/auth";
 import {Condition} from "../../utils/condition";
 import {Group, reloadUsers} from "../../utils/member";
 import {prefixedString} from "../../utils/random";
-import {wait} from "../../utils/wait";
+import {ClustersPage} from "../../pages/clusters.po";
 
-describe('Multi owner story', () => {
+describe('Multi owner Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
-  let projectName = prefixedString('e2e-test-project');
-
+  const projectName = prefixedString('e2e-test-project');
+  
   before(() => {
     cy.clearCookies();
   });
 
   beforeEach(() => {
     cy.server();
-
     Cypress.Cookies.preserveOnce('token', 'nonce');
   });
 
@@ -28,27 +27,19 @@ describe('Multi owner story', () => {
   });
 
   it('should create a new project', () => {
-    ProjectsPage.addProjectBtn().click();
+    ProjectsPage.addProject(projectName);
+  });
 
-    ProjectsPage.addDialogInput().type(projectName).should(Condition.HaveValue, projectName);
-    ProjectsPage.addDialogSaveBtn().should(Condition.NotBe, 'disabled');
-    ProjectsPage.addDialogSaveBtn().click();
-    ProjectsPage.table().should(Condition.Contain, projectName);
+  it('should select project', () => {
+    ProjectsPage.selectProject(projectName);
+  });
+
+  it('should go to members view', () => {
+    MembersPage.visit();
   });
 
   it('should add a new member', () => {
-    ProjectsPage.select(projectName);
-    MembersPage.visit();
-
-    wait('**/users');
-
-    MembersPage.addMemberBtn().click();
-    MembersPage.addMemberDialogEmailInput().type(newUserEmail).should(Condition.HaveValue, newUserEmail);
-    MembersPage.addMemberDialogGroupCombobox().click();
-    MembersPage.memberDialogGroup(Group.Owner).click();
-    MembersPage.addMemberDialogSaveBtn().click();
-
-    MembersPage.table().should(Condition.Contain, newUserEmail);
+    MembersPage.addMember(newUserEmail, Group.Owner);
   });
 
   it('should logout', () => {
@@ -61,34 +52,37 @@ describe('Multi owner story', () => {
   });
 
   it('should wait for autoredirect and go back to projects', () => {
-    wait('**/clusters');
-
+    ClustersPage.waitForRefresh();
     ProjectsPage.visit();
-    cy.url().should(Condition.Include, 'projects');
   });
 
   it('should check if multi owner project is in list', () => {
-    ProjectsPage.table().should(Condition.Contain, projectName);
+    ProjectsPage.getTable().should(Condition.Contain, projectName);
+  });
+
+  it('should select project', () => {
+    ProjectsPage.selectProject(projectName);
+  });
+
+  it('should go to members view', () => {
+    MembersPage.visit();
   });
 
   it('should delete first owner from project', () => {
-    ProjectsPage.select(projectName);
-    MembersPage.visit();
-
-    wait('**/users');
-    MembersPage.deleteBtn(email).click();
-    MembersPage.deleteMemberDialogDeleteBtn().click();
+    MembersPage.getDeleteBtn(email).click();
+    MembersPage.getDeleteMemberDialogDeleteBtn().click();
 
     reloadUsers();
 
-    MembersPage.tableRowEmailColumn(email).should(Condition.NotExist);
+    MembersPage.getTableRowEmailColumn(email).should(Condition.NotExist);
   });
 
-  it('should delete project', () => {
+  it('should go to the projects page', () => {
     ProjectsPage.visit();
-    ProjectsPage.deleteProjectBtn(projectName).click();
-    ProjectsPage.deleteDialogInput().type(projectName).should(Condition.HaveValue, projectName);
-    ProjectsPage.deleteDialogConfirmBtn().click();
+  });
+
+  it('should delete the project', () => {
+    ProjectsPage.deleteProject(projectName);
   });
 
   it('should logout', () => {

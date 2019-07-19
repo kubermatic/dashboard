@@ -7,9 +7,8 @@ import {Condition} from "../../utils/condition";
 import {Group, reloadUsers} from "../../utils/member";
 import {Datacenter, Provider} from "../../utils/provider";
 import {prefixedString} from "../../utils/random";
-import {wait} from "../../utils/wait";
 
-describe('Basic story', () => {
+describe('Basic Story', () => {
   const email = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME');
   const password = Cypress.env('KUBERMATIC_DEX_DEV_E2E_PASSWORD');
   const newUserEmail = Cypress.env('KUBERMATIC_DEX_DEV_E2E_USERNAME_2');
@@ -22,104 +21,86 @@ describe('Basic story', () => {
   
   beforeEach(() => {
     cy.server();
-    
     Cypress.Cookies.preserveOnce('token', 'nonce');
   });
   
   it('should login', () => {
     login(email, password);
+
     cy.url().should(Condition.Include, 'projects');
   });
 
   it('should create a new project', () => {
-    ProjectsPage.addProjectBtn().click();
-    
-    ProjectsPage.addDialogInput().type(projectName).should(Condition.HaveValue, projectName);
-    ProjectsPage.addDialogSaveBtn().should(Condition.NotBe, 'disabled');
-    ProjectsPage.addDialogSaveBtn().click();
-    ProjectsPage.table().should(Condition.Contain, projectName);
+    ProjectsPage.addProject(projectName);
+  });
+
+  it('should select project', () => {
+    ProjectsPage.selectProject(projectName);
+  });
+
+  it('should go to wizard', () => {
+    ClustersPage.openWizard();
   });
   
   it('should create a new cluster', () => {
-    ProjectsPage.select(projectName);
-    ClustersPage.addClusterBtn().click();
+    WizardPage.getClusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
+    WizardPage.getNextBtn().click();
+    WizardPage.getProviderBtn(Provider.BringYourOwn).click();
+    WizardPage.getDatacenterBtn(Datacenter.Frankfurt).click();
+    WizardPage.getCreateBtn().click();
 
-    WizardPage.clusterNameInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    WizardPage.nextBtn().click();
-    WizardPage.providerBtn(Provider.BringYourOwn).click();
-    WizardPage.datacenterBtn(Datacenter.Frankfurt).click();
-    WizardPage.createBtn().click();
+    ClustersPage.verifyUrl();
+  });
 
-    cy.url().should(Condition.Contain, '/clusters');
+  it('should go to members view', () => {
+    MembersPage.visit();
   });
 
   it('should add a new member', () => {
-    MembersPage.visit();
-
-    wait('**/users');
-
-    MembersPage.addMemberBtn().click();
-    MembersPage.addMemberDialogEmailInput().type(newUserEmail).should(Condition.HaveValue, newUserEmail);
-    MembersPage.addMemberDialogGroupCombobox().click();
-    MembersPage.memberDialogGroup(Group.Editor).click();
-    MembersPage.addMemberDialogSaveBtn().click();
-
-    MembersPage.table().should(Condition.Contain, newUserEmail);
+    MembersPage.addMember(newUserEmail, Group.Editor);
   });
 
   it('should edit created member info', () => {
     reloadUsers();
-
-    MembersPage.editBtn(newUserEmail).click();
-    MembersPage.editMemberDialogGroupCombobox().click();
-    MembersPage.memberDialogGroup(Group.Viewer).click();
-    MembersPage.editMemberDialogSaveBtn().click();
-
+    MembersPage.editMember(newUserEmail, Group.Viewer);
     reloadUsers();
-
-    MembersPage.tableRowGroupColumn(newUserEmail).should(Condition.Contain, Group.Viewer);
+    MembersPage.getTableRowGroupColumn(newUserEmail).should(Condition.Contain, Group.Viewer);
   });
 
   it('should delete created member', () => {
     reloadUsers();
-
-    MembersPage.deleteBtn(newUserEmail).click();
-    MembersPage.deleteMemberDialogDeleteBtn().click();
-
+    MembersPage.getDeleteBtn(newUserEmail).click();
+    MembersPage.getDeleteMemberDialogDeleteBtn().click();
     reloadUsers();
-
-    MembersPage.tableRowEmailColumn(newUserEmail).should(Condition.NotExist);
+    MembersPage.getTableRowEmailColumn(newUserEmail).should(Condition.NotExist);
   });
 
   it('should delete created cluster', () => {
     ClustersPage.visit();
-    ClustersPage.clusterItem(clusterName).click();
+    ClustersPage.getClusterItem(clusterName).click();
+    ClustersPage.deleteCluster(clusterName);
+  });
 
-    ClustersPage.deleteClusterBtn().click();
-    ClustersPage.deleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    ClustersPage.deleteDialogBtn().click();
+  it('should verify that there are no clusters', () => {
+    ClustersPage.verifyNoClusters();
+  });
 
-    wait('**/clusters');
-    cy.url().should(Condition.Contain, '/clusters');
-    cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
+  it('should go to the projects page', () => {
+    ProjectsPage.visit();
   });
   
   it('should edit created project name', () => {
-    ProjectsPage.visit();
-
-    ProjectsPage.editProjectBtn(projectName).click();
+    ProjectsPage.getEditProjectBtn(projectName).click();
 
     projectName = `${projectName}-edited`;
-    ProjectsPage.editDialogInput().type('-edited').should(Condition.HaveValue, projectName);
-    ProjectsPage.editDialogConfirmBtn().click();
+    ProjectsPage.getEditDialogInput().type('-edited').should(Condition.HaveValue, projectName);
+    ProjectsPage.getEditDialogConfirmBtn().click();
 
-    wait('**/projects', 'GET', 'list projects');
+    ProjectsPage.waitForRefresh();
   });
-  
-  it('should delete created project', () => {
-    ProjectsPage.deleteProjectBtn(projectName).click();
-    ProjectsPage.deleteDialogInput().type(projectName).should(Condition.HaveValue, projectName);
-    ProjectsPage.deleteDialogConfirmBtn().click();
+
+  it('should delete the project', () => {
+    ProjectsPage.deleteProject(projectName);
   });
   
   it('should logout', () => {

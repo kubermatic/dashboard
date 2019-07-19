@@ -6,7 +6,7 @@ before(() => {
   });
 });
 
-afterEach(function () {
+afterEach(function (): void {
   if (this.currentTest.state === 'failed') {
     cy.setCookie('has-failed-test', 'true');
     (Cypress as any).runner.stop();
