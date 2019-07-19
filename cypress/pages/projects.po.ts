@@ -1,55 +1,82 @@
 import {Condition} from "../utils/condition";
+import {wait} from "../utils/wait";
+import {ClustersPage} from "./clusters.po";
 
 export class ProjectsPage {
-    static visit() {
-        cy.get('#km-nav-item-projects').click();
-    }
+  static getProjectItem(projectName: string): Cypress.Chainable<any> {
+    return cy.get(`#km-project-name-${projectName}`);
+  }
 
-    static select(projectName: string) {
-      cy.get(`#km-project-name-${projectName}`)
-        .should(Condition.HaveLength, 1)
-        .get('i.km-health-state.fa.fa-circle.green')
-        .should(Condition.HaveLength, 1)
-        .click();
-    }
-    
-    static addProjectBtn() {
-        return cy.get('#km-add-project-top-btn');
-    }
-    
-    static addDialogInput() {
-        return cy.get('#km-add-project-dialog-input');
-    }
-    
-    static addDialogSaveBtn() {
-        return cy.get('#km-add-project-dialog-save');
-    }
-    
-    static deleteProjectBtn(projectName: string) {
-        return cy.get(`#km-delete-project-${projectName}`);
-    }
-    
-    static deleteDialogInput() {
-        return cy.get('#km-confirmation-dialog-input');
-    }
-    
-    static deleteDialogConfirmBtn() {
-        return cy.get('#km-confirmation-dialog-confirm-btn');
-    }
+  static getActiveProjects(): Cypress.Chainable<any> {
+    return cy.get('i.km-health-state.fa.fa-circle.green');
+  }
 
-    static editProjectBtn(projectName: string) {
-        return cy.get(`#km-edit-project-${projectName}`);
-    }
+  static getAddProjectBtn(): Cypress.Chainable<any> {
+    return cy.get(`#km-add-project-top-btn`);
+  }
 
-    static editDialogInput() {
-        return cy.get('#km-edit-project-dialog-input');
-    }
+  static getAddProjectInput(): Cypress.Chainable<any> {
+    return cy.get(`#km-add-project-dialog-input`);
+  }
 
-    static editDialogConfirmBtn() {
-        return cy.get('#km-edit-project-dialog-edit-btn');
-    }
+  static getAddProjectConfirmBtn(): Cypress.Chainable<any> {
+    return cy.get(`#km-add-project-dialog-save`);
+  }
 
-    static table() {
-        return cy.get('tbody');
-    }
+  static getDeleteProjectBtn(projectName: string): Cypress.Chainable<any> {
+    return cy.get(`#km-delete-project-${projectName}`);
+  }
+
+  static getEditProjectBtn(projectName: string): Cypress.Chainable<any> {
+    return cy.get(`#km-edit-project-${projectName}`);
+  }
+
+  static getEditDialogInput(): Cypress.Chainable<any> {
+    return cy.get('#km-edit-project-dialog-input');
+  }
+
+  static getEditDialogConfirmBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-edit-project-dialog-edit-btn');
+  }
+
+  static getTable(): Cypress.Chainable<any> {
+    return cy.get('tbody');
+  }
+
+  // Utils.
+
+  static waitForRefresh(): void {
+    wait('**/projects', 'GET', 'list projects');
+  }
+
+  static verifyUrl(): void {
+    cy.url().should(Condition.Include, 'projects');
+  }
+
+  static visit(): void {
+    cy.get('#km-nav-item-projects').click();
+    this.waitForRefresh();
+    this.verifyUrl();
+  }
+
+  static selectProject(projectName: string): void {
+    this.getProjectItem(projectName).should(Condition.HaveLength, 1);
+    this.getActiveProjects().should(Condition.HaveLength, 1).click();
+    ClustersPage.waitForRefresh();
+    ClustersPage.verifyUrl();
+  }
+
+  static addProject(projectName: string): void {
+    this.getAddProjectBtn().should(Condition.NotBe, 'disabled').click();
+    this.getAddProjectInput().type(projectName).should(Condition.HaveValue, projectName);
+    this.getAddProjectConfirmBtn().should(Condition.NotBe, 'disabled').click();
+    this.waitForRefresh();
+    this.getTable().should(Condition.Contain, projectName);
+  }
+
+  static deleteProject(projectName: string): void {
+    this.getDeleteProjectBtn(projectName).should(Condition.NotBe, 'disabled').click();
+    cy.get('#km-confirmation-dialog-input').type(projectName).should(Condition.HaveValue, projectName);
+    cy.get('#km-confirmation-dialog-confirm-btn').should(Condition.NotBe, 'disabled').click();
+  }
 }

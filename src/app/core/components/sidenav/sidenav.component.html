@@ -38,7 +38,8 @@
 
       <div [matTooltip]="getTooltip('serviceaccounts')">
         <mat-list-item [ngClass]="getMenuItemClass('serviceaccounts')">
-          <a mat-line
+          <a id="km-nav-item-service-accounts"
+             mat-line
              fxLayoutAlign=" center"
              [routerLink]="getRouterLink('serviceaccounts')"
              [ngClass]="getLinkClass('serviceaccounts')">

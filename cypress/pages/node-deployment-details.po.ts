@@ -1,13 +1,13 @@
 export class NodeDeploymentDetailsPage {
-    static nodeDeploymentNameElement() {
-        return cy.get('.km-node-deployment-name');
-    }
-    
-    static nodeDeploymentClusterNameElement() {
-        return cy.get('.km-node-deployment-cluster-name');
-    }
+  static getNodeDeploymentNameElement(): Cypress.Chainable<any> {
+    return cy.get('.km-node-deployment-name');
+  }
 
-    static backToClusterBtn() {
-      return cy.get('.km-cluster-panel-icon');
-    }
+  static getNodeDeploymentClusterNameElement(): Cypress.Chainable<any> {
+    return cy.get('.km-node-deployment-cluster-name');
+  }
+
+  static getBackToClusterBtn(): Cypress.Chainable<any> {
+    return cy.get('.km-cluster-panel-icon');
+  }
 }

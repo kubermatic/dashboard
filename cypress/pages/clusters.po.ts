@@ -1,49 +1,80 @@
+import {wait} from "../utils/wait";
+import {Condition} from "../utils/condition";
+import {WizardPage} from "./wizard.po";
+
 export class ClustersPage {
-    static visit() {
-        cy.get('#km-nav-item-clusters').click();
-    }
-    
-    static addClusterBtn() {
-        return cy.get('#km-add-cluster-top-btn');
-    }
-    
-    static clusterItem(clusterName: string) {
-        return cy.get(`#km-clusters-${clusterName}`);
-    }
-    
-    static deleteClusterBtn() {
-        return cy.get('#km-delete-cluster-btn');
-    }
-    
-    static deleteDialogInput() {
-        return cy.get('#km-delete-cluster-dialog-input');
-    }
-    
-    static deleteDialogBtn() {
-        return cy.get('#km-delete-cluster-dialog-delete-btn');
-    }
+  static getAddClusterBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-add-cluster-top-btn');
+  }
 
-    static table() {
-        return cy.get('tbody');
-    }
+  static getClusterItem(clusterName: string): Cypress.Chainable<any> {
+    return cy.get(`#km-clusters-${clusterName}`);
+  }
 
-    static tableRow(nodeDeploymentName: string) {
-        return ClustersPage.tableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
-    }
-    
-    static tableRowNodeDeploymentNameColumn(nodeDeploymentName: string) {
-        return cy.get('td').contains(nodeDeploymentName);
-    }
+  static getDeleteClusterBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-delete-cluster-btn');
+  }
 
-    static nodeDeploymentItem(nodeDeploymentName: string) {
-        return cy.get(`#nodeDeploymentName`);
-    }
+  static getDeleteDialogInput(): Cypress.Chainable<any> {
+    return cy.get('#km-delete-cluster-dialog-input');
+  }
 
-    static nodeDeploymentRemoveBtn(nodeDeploymentName: string) {
-        return ClustersPage.tableRow(nodeDeploymentName).find('button i.km-icon-delete');
-    }
+  static getDeleteDialogBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-delete-cluster-dialog-delete-btn');
+  }
 
-    static deleteNodeDeploymentDialogBtn() {
-        return cy.get('#km-confirmation-dialog-confirm-btn');
-    }
+  static getTable(): Cypress.Chainable<any> {
+    return cy.get('tbody');
+  }
+
+  static getTableRow(nodeDeploymentName: string): Cypress.Chainable<any> {
+    return this.getTableRowNodeDeploymentNameColumn(nodeDeploymentName).parent();
+  }
+
+  static getTableRowNodeDeploymentNameColumn(nodeDeploymentName: string): Cypress.Chainable<any> {
+    return cy.get('td').contains(nodeDeploymentName);
+  }
+
+  static getNodeDeploymentRemoveBtn(nodeDeploymentName: string): Cypress.Chainable<any> {
+    return this.getTableRow(nodeDeploymentName).find('button i.km-icon-delete');
+  }
+
+  static getDeleteNodeDeploymentDialogBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-confirmation-dialog-confirm-btn');
+  }
+
+  // Utils.
+
+  static waitForRefresh(): void {
+    wait('**/clusters', 'GET', 'list clusters');
+  }
+
+  static verifyUrl(): void {
+    cy.url().should(Condition.Include, 'clusters');
+  }
+
+  static visit(): void {
+    cy.get('#km-nav-item-clusters').click();
+    this.waitForRefresh();
+    this.verifyUrl();
+  }
+
+  static openWizard(): void {
+    this.getAddClusterBtn().click();
+    WizardPage.verifyUrl();
+  }
+
+  static verifyNoClusters(): void {
+    this.waitForRefresh();
+    this.verifyUrl();
+    cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
+  }
+
+  static deleteCluster(name: string): void {
+    this.getDeleteClusterBtn().click();
+    this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);
+    this.getDeleteDialogBtn().should(Condition.NotBe, 'disabled').click();
+    this.waitForRefresh();
+    this.getTable().should(Condition.NotContain, name);
+  }
 }
