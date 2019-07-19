@@ -63,4 +63,18 @@ export class ClustersPage {
     this.getAddClusterBtn().click();
     WizardPage.verifyUrl();
   }
+
+  static verifyNoClusters(): void {
+    this.waitForRefresh();
+    this.verifyUrl();
+    cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
+  }
+
+  static deleteCluster(name: string): void {
+    this.getDeleteClusterBtn().click();
+    this.getDeleteDialogInput().type(name).should(Condition.HaveValue, name);
+    this.getDeleteDialogBtn().should(Condition.NotBe, 'disabled').click();
+    this.waitForRefresh();
+    this.getTable().should(Condition.NotContain, name);
+  }
 }

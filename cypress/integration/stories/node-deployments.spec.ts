@@ -93,13 +93,11 @@ describe('Node Deployments Story', () => {
   });
 
   it('should delete created cluster', () => {
-    ClustersPage.getDeleteClusterBtn().click();
-    ClustersPage.getDeleteDialogInput().type(clusterName).should(Condition.HaveValue, clusterName);
-    ClustersPage.getDeleteDialogBtn().click();
+    ClustersPage.deleteCluster(clusterName);
+  });
 
-    ClustersPage.waitForRefresh();
-    cy.url().should(Condition.Contain, '/clusters');
-    cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
+  it('should verify that there are no clusters', () => {
+    ClustersPage.verifyNoClusters();
   });
   
   it('should go to the projects page', () => {
