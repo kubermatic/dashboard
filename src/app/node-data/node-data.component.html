@@ -94,20 +94,24 @@
                             [seedDCName]="seedDCName"
                             [nodeData]="nodeData"></kubermatic-gcp-node-data>
 
-  <mat-form-field class="km-operating-system">
-    <mat-label>Operating System*</mat-label>
-    <mat-select formControlName="operatingSystem"
-                disableOptionCentering
-                [panelClass]="isInWizard ? '' : 'km-add-dialog-dropdown'">
-      <mat-option value="ubuntu">Ubuntu</mat-option>
-      <mat-option value="centos">CentOS</mat-option>
-      <mat-option value="containerLinux"
-                  *ngIf="!cluster.spec.cloud.hetzner">Container Linux</mat-option>
-    </mat-select>
-    <mat-hint *ngIf="isClusterOpenshift()">Only CentOS can be used for OpenShift clusters.</mat-hint>
-    <mat-hint *ngIf="cluster.spec.cloud.openstack">Select the operating system of the entered image</mat-hint>
-    <mat-hint *ngIf="cluster.spec.cloud.vsphere">Select the operating system of the entered template</mat-hint>
-  </mat-form-field>
+  <mat-button-toggle-group group="operatingSystemGroup"
+                           formControlName="operatingSystem">
+    <mat-button-toggle value="ubuntu"
+                       *ngIf="!isClusterOpenshift()">
+      <i class="km-os-image-ubuntu"></i>
+      Ubuntu
+    </mat-button-toggle>
+    <mat-button-toggle value="centos">
+      <i class="km-os-image-centos"></i>
+      CentOS
+    </mat-button-toggle>
+    <mat-button-toggle value="containerLinux"
+                       *ngIf="!cluster.spec.cloud.hetzner && !isClusterOpenshift()">
+      <i class="km-os-image-container-linux"></i>
+      Container Linux
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+
 </form>
 
 <form [formGroup]="operatingSystemForm"
