@@ -87,7 +87,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
   }
 
   showSizeHint(): boolean {
-    return (!this.loadingSizes && (!this.cloudSpec.digitalocean.token || this.cloudSpec.digitalocean.token === '')) &&
+    return (!this.loadingSizes && !this.cloudSpec.digitalocean.token && !this._selectedCredentials) &&
         this.isInWizard();
   }
 
