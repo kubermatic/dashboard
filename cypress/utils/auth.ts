@@ -18,5 +18,6 @@ export function login(email: string, password: string): void {
 }
 
 export function logout(): void {
+  LoginPage.getLogoutMenuBtn().click();
   LoginPage.getLogoutBtn().click();
 }

@@ -35,15 +35,9 @@ ng2-slim-loading-bar {
     font-weight: 400;
     text-align: right;
 
-    .km-current-user {
-      margin-right: 20px;
-    }
-
-    .km-login {
-      padding-left: 15px;
-      margin-right: 25px;
+    .km-user {
+      margin: 10px 15px 10px 0;
       font-weight: 500;
-      line-height: 22px;
     }
 
     .km-logout {
@@ -62,4 +56,8 @@ ng2-slim-loading-bar {
   text-decoration: none;
   font-family: $primary-font-cursive;
   font-weight: 600;
+}
+
+.km-current-user {
+  //margin: 10px;
 }

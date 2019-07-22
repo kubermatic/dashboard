@@ -7,6 +7,10 @@ export class LoginPage {
     return cy.get('#km-navbar-logout-btn');
   }
 
+  static getLogoutMenuBtn(): Cypress.Chainable<any> {
+    return cy.get('#km-navbar-user-menu');
+  }
+
   // Utils.
 
   static visit(): void {

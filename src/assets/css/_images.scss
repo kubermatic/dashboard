@@ -7,19 +7,26 @@
   background-repeat: no-repeat;
 }
 
-// login & logout
+// login & logout & user
 .km-login {
   background-image: url("/assets/images/icons/login.svg");
   background-repeat: no-repeat;
-  background-size: auto 10px;
+  background-size: auto 12px;
   background-position: center left;
 }
 
 .km-logout {
   background-image: url("/assets/images/icons/logout.svg");
-  background-size: auto 10px;
+  background-size: auto 14px;
   background-repeat: no-repeat;
   background-position: center left;
+}
+
+.km-user {
+  background-image: url("/assets/images/icons/user.svg");
+  background-repeat: no-repeat;
+  background-size: auto 24px;
+  background-position: center;
 }
 
 // icons
