@@ -38,7 +38,7 @@ export class DigitaloceanNodeDataComponent implements OnInit, OnDestroy, OnChang
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .subscribe(_ => this._addNodeService.changeNodeProviderData(this.getNodeProviderData()));
+        .subscribe(() => this._addNodeService.changeNodeProviderData(this.getNodeProviderData()));
 
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cloudSpec = data.cloudSpec;

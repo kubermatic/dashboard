@@ -1,6 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../../shared/entity/ClusterEntity';
@@ -18,7 +20,7 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
   vsphereOptionsForm: FormGroup;
   hideOptional = true;
   defaultTemplate = '';
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(
       private addNodeService: NodeDataService, private dcService: DatacenterService,
@@ -34,23 +36,28 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
       this.defaultTemplate = res.spec.vsphere.templates.ubuntu;
     });
 
-    this.subscriptions.push(this.vsphereOptionsForm.valueChanges.subscribe(() => {
+    this.vsphereOptionsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
-    }));
+    });
 
-    this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe((data) => {
+    this.addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.setImage(data);
       this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
-    }));
+    });
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
 
     this.addNodeService.changeNodeProviderData(this.getVSphereOptionsData());
     if (this.nodeData.spec.cloud.vsphere.template === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
@@ -80,14 +87,6 @@ export class VSphereOptionsComponent implements OnInit, OnDestroy {
         return this.vsphereOptionsForm.controls.template.setValue(coreosTemplate);
       }
     });
-  }
-
-  ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
   }
 
   getVSphereOptionsData(): NodeProviderData {

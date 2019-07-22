@@ -1,6 +1,5 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material';
-import {Subject} from 'rxjs';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {HealthEntity, HealthState} from '../../../shared/entity/HealthEntity';
 import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-health-status';
@@ -11,23 +10,17 @@ import {ClusterHealthStatus} from '../../../shared/utils/health-status/cluster-h
   styleUrls: ['./cluster-secrets.component.scss'],
 })
 
-export class ClusterSecretsComponent implements OnInit, OnDestroy {
+export class ClusterSecretsComponent implements OnInit {
   @Input() cluster: ClusterEntity;
   @Input() health: HealthEntity;
   isClusterRunning: boolean;
   healthStatus: ClusterHealthStatus;
-  private _unsubscribe = new Subject<void>();
 
   constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, this.health);
     this.healthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, this.health);
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
   }
 
   getIcon(name: string): string {

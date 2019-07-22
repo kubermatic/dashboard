@@ -1,6 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
@@ -14,7 +16,7 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
 
   openstackProviderSettingsForm: FormGroup;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 
@@ -24,17 +26,14 @@ export class OpenstackProviderSettingsComponent implements OnInit, OnDestroy {
       password: new FormControl(this.cluster.spec.cloud.openstack.password, [Validators.required]),
     });
 
-    this.subscriptions.push(this.openstackProviderSettingsForm.valueChanges.subscribe(() => {
+    this.openstackProviderSettingsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-    }));
+    });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getProviderSettingsPatch(): ProviderSettingsPatch {
