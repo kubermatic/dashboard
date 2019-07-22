@@ -10,7 +10,8 @@
          fxFlex>
       <button mat-icon-button
               [matMenuTriggerFor]="menu"
-              class="km-user">
+              class="km-user"
+              id="km-navbar-user-menu">
         <mat-menu #menu="matMenu">
           <button mat-menu-item
                   *ngIf="currentUser && !!currentUser.name"
