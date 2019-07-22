@@ -120,7 +120,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.form.controls.network.valueChanges.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
-        .subscribe((network) => {
+        .subscribe(() => {
           if (this._isNetworkSelected()) {
             this._loadSubnetIds();
           }

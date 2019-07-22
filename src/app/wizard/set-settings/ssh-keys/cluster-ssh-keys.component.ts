@@ -48,7 +48,7 @@ export class ClusterSSHKeysComponent implements OnInit, OnDestroy {
     });
 
     this.keysForm.controls.keys.patchValue(this.selectedKeys);
-    this.keysForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this.setClusterSSHKeysSpec());
+    this.keysForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => this.setClusterSSHKeysSpec());
     this.reloadKeys();
   }
 
