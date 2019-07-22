@@ -5,7 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Subject} from 'rxjs';
 import {first, switchMap, takeUntil} from 'rxjs/operators';
 import {ApiService, ProjectService, UserService} from '../../../core/services';
-import {WizardService} from '../../../core/services/wizard/wizard.service';
+import {WizardService} from '../../../core/services';
 import {AddSshKeyDialogComponent} from '../../../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';

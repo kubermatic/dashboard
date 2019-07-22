@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../core/services';
 import {ClusterEntity} from '../shared/entity/ClusterEntity';
 
@@ -16,9 +16,8 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
   @Input() width: number;
   @Input() isWizard: boolean;
   machineNetworksForm: FormGroup;
-  machineNetworksList: FormArray;
   machineNetworks: FormArray;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(private wizardService: WizardService) {}
 
@@ -55,19 +54,16 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
       machineNetworks: machineNetworksList,
     });
 
-    this.subscriptions.push(this.machineNetworksForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
+    this.machineNetworksForm.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.setMachineNetworkSpec();
-    }));
+    });
 
     this.setMachineNetworkSpec();
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getMachineNetworksForm(form): void {

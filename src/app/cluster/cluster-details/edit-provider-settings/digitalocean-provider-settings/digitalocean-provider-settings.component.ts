@@ -1,6 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 import {ClusterService} from '../../../../core/services';
 import {ProviderSettingsPatch} from '../../../../core/services/cluster/cluster.service';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
@@ -13,7 +15,7 @@ import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   digitaloceanProviderSettingsForm: FormGroup;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(private clusterService: ClusterService) {}
 
@@ -24,17 +26,14 @@ export class DigitaloceanProviderSettingsComponent implements OnInit, OnDestroy 
           [Validators.required, Validators.minLength(64), Validators.maxLength(64)]),
     });
 
-    this.subscriptions.push(this.digitaloceanProviderSettingsForm.valueChanges.subscribe(() => {
+    this.digitaloceanProviderSettingsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.clusterService.changeProviderSettingsPatch(this.getProviderSettingsPatch());
-    }));
+    });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getProviderSettingsPatch(): ProviderSettingsPatch {

@@ -1,6 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../../shared/entity/ClusterEntity';
@@ -19,7 +21,7 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
   osOptionsForm: FormGroup;
   tags: FormArray;
   hideOptional = true;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(
       private addNodeService: NodeDataService, private dcService: DatacenterService,
@@ -41,27 +43,32 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
       tags: tagList,
     });
 
-    this.subscriptions.push(this.osOptionsForm.valueChanges.subscribe((data) => {
+    this.osOptionsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
-    }));
+    });
 
-    this.subscriptions.push(this.addNodeService.nodeOperatingSystemDataChanges$.subscribe((data) => {
+    this.addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if ((!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
           (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
           (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux)) {
         this.setImage(data);
       }
       this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
-    }));
+    });
 
-    this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
+    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    }));
+    });
 
     this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
     if (this.nodeData.spec.cloud.openstack.image === '') {
       this.setImage(this.nodeData.spec.operatingSystem);
     }
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   setImage(operatingSystem: OperatingSystemSpec): void {
@@ -105,14 +112,6 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
   deleteTag(index: number): void {
     const arrayControl = this.osOptionsForm.get('tags') as FormArray;
     arrayControl.removeAt(index);
-  }
-
-  ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
   }
 
   getOsOptionsData(): NodeProviderData {
