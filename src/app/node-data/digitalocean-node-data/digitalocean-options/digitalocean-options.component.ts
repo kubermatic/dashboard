@@ -1,6 +1,8 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
@@ -13,7 +15,7 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   doOptionsForm: FormGroup;
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(private addNodeService: NodeDataService) {}
 
@@ -22,21 +24,18 @@ export class DigitaloceanOptionsComponent implements OnInit, OnDestroy {
       backups: new FormControl(this.nodeData.spec.cloud.digitalocean.backups),
       ipv6: new FormControl(this.nodeData.spec.cloud.digitalocean.ipv6),
       monitoring: new FormControl(this.nodeData.spec.cloud.digitalocean.monitoring),
-      tags: new FormControl(this.nodeData.spec.cloud.digitalocean.tags.toString().replace(/\,/g, ', ')),
+      tags: new FormControl(this.nodeData.spec.cloud.digitalocean.tags.toString().replace(/,/g, ', ')),
     });
-    this.subscriptions.push(this.doOptionsForm.valueChanges.subscribe(() => {
+    this.doOptionsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
-    }));
+    });
 
     this.addNodeService.changeNodeProviderData(this.getDoOptionsData());
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getDoOptionsData(): NodeProviderData {

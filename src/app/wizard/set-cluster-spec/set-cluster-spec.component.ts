@@ -41,11 +41,11 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
         .subscribe(this._setDefaultVersion.bind(this));
 
     this.clusterSpecForm.controls.type.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(_ => this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)))
+        .pipe(switchMap(() => this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)))
         .subscribe(this._setDefaultVersion.bind(this));
 
     this.clusterSpecForm.valueChanges.pipe(takeUntil(this._unsubscribe))
-        .pipe(map(_ => this._invalidateStep()))
+        .pipe(map(() => this._invalidateStep()))
         .pipe(debounce(() => interval(500)))
         .subscribe(() => this.setClusterSpec());
   }

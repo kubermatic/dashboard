@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
-import {Subscription} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../core/services';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {MachineNetworkForm} from '../../shared/model/ClusterForm';
@@ -18,7 +18,7 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   setMachineNetworkForm: FormGroup;
   machineNetworkFormData: MachineNetworkForm[] = [];
-  private subscriptions: Subscription[] = [];
+  private _unsubscribe = new Subject<void>();
 
   constructor(private wizardService: WizardService) {}
 
@@ -35,22 +35,22 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
       this.setMachineNetworkForm.controls.checkMachineNetworks.disable();
     }
 
-    this.subscriptions.push(this.setMachineNetworkForm.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
-      this.setMachineNetworks();
-    }));
+    this.setMachineNetworkForm.valueChanges.pipe(debounceTime(1000))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          this.setMachineNetworks();
+        });
 
-    this.subscriptions.push(this.wizardService.machineNetworksFormChanges$.subscribe((res: MachineNetworkForm[]) => {
-      this.machineNetworkFormData = res;
-      this.setMachineNetworks();
-    }));
+    this.wizardService.machineNetworksFormChanges$.pipe(takeUntil(this._unsubscribe))
+        .subscribe((res: MachineNetworkForm[]) => {
+          this.machineNetworkFormData = res;
+          this.setMachineNetworks();
+        });
   }
 
   ngOnDestroy(): void {
-    for (const sub of this.subscriptions) {
-      if (sub) {
-        sub.unsubscribe();
-      }
-    }
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   setMachineNetworks(): void {
