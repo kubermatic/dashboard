@@ -55,6 +55,10 @@ docker-push: docker-build
 
 docker-push-custom: docker-build-custom
 	docker push $(REPO_CUSTOM):$(IMAGE_TAG)
+	for TAG in $(ADDITIONAL_TAGS) ; do \
+		docker tag $(REPO_CUSTOM):$(IMAGE_TAG) $(REPO_CUSTOM):$$TAG ; \
+		docker push $(REPO_CUSTOM):$$TAG ; \
+	done
 
 docker-run-custom: build dist
 	./dashboard-v2
