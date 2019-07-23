@@ -144,9 +144,13 @@
                   <div key>Username</div>
                   <div value>{{cluster.spec.cloud.openstack.username}}</div>
                 </km-property>
-                <km-property>
+                <km-property *ngIf="cluster.spec.cloud.openstack.tenant">
                   <div key>Project</div>
                   <div value>{{cluster.spec.cloud.openstack.tenant}}</div>
+                </km-property>
+                <km-property *ngIf="cluster.spec.cloud.openstack.tenantID">
+                  <div key>Project ID</div>
+                  <div value>{{cluster.spec.cloud.openstack.tenantID}}</div>
                 </km-property>
                 <km-property *ngIf="cluster.spec.cloud.openstack.network">
                   <div key>Network name</div>
@@ -264,34 +268,6 @@
                 <div key>Image</div>
                 <div value>{{nodeData.spec.cloud.openstack.image}}</div>
               </km-property>
-              <km-property>
-                <div key>Username</div>
-                <div value>{{cluster.spec.cloud.openstack.username}}</div>
-              </km-property>
-              <km-property *ngIf="cluster.spec.cloud.openstack.tenant">
-                <div key>Project</div>
-                <div value>{{cluster.spec.cloud.openstack.tenant}}</div>
-              </km-property>
-              <km-property *ngIf="cluster.spec.cloud.openstack.tenantID">
-                <div key>Project ID</div>
-                <div value>{{cluster.spec.cloud.openstack.tenantID}}</div>
-              </km-property>
-              <km-property *ngIf="cluster.spec.cloud.openstack.network">
-                <div key>Network name</div>
-                <div value>{{cluster.spec.cloud.openstack.network}}</div>
-              </km-property>
-              <km-property *ngIf="cluster.spec.cloud.openstack.securityGroups">
-                <div key>Security Groups</div>
-                <div value>{{cluster.spec.cloud.openstack.securityGroups}}</div>
-              </km-property>
-              <km-property *ngIf="cluster.spec.cloud.openstack.floatingIpPool">
-                <div key>Floating IP Pool</div>
-                <div value>{{cluster.spec.cloud.openstack.floatingIpPool}}</div>
-              </km-property>
-              <km-property *ngIf="cluster.spec.cloud.openstack.subnetID">
-                <div key>Subnet ID</div>
-                <div value>{{cluster.spec.cloud.openstack.subnetID}}</div>
-              </km-property>
             </ng-container>
 
             <!-- Hetzner Nodes -->
@@ -354,6 +330,16 @@
                   <i [ngClass]="nodeData.spec.cloud.gcp.preemptible ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Preemptible</span>
+              </div>
+            </ng-container>
+
+            <!-- Openstack Node Options -->
+            <ng-container *ngIf="cluster.spec.cloud.openstack">
+              <div class="km-summary-row">
+                <span class="km-summary-left">
+                  <i [ngClass]="nodeData.spec.cloud.openstack.useFloatingIP ? 'km-icon-running' : 'km-icon-disabled'"></i>
+                </span>
+                <span>Allocate Floating IP</span>
               </div>
             </ng-container>
 
