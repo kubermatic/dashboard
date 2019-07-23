@@ -38,6 +38,29 @@ export class SummaryComponent implements OnInit {
     return ClusterUtils.getType(type);
   }
 
+  displayProvider(): boolean {
+    return !!this.cluster.spec.cloud.digitalocean || !!this.cluster.spec.cloud.hetzner ||
+        !!this.cluster.spec.cloud.bringyourown || (!!this.cluster.spec.cloud.aws && !this.hasAWSProviderOptions()) ||
+        (!!this.cluster.spec.cloud.gcp && !this.hasGCPProviderOptions()) ||
+        (!!this.cluster.spec.cloud.azure && !this.hasAzureProviderOptions());
+  }
+
+  hasAWSProviderOptions(): boolean {
+    return this.cluster.spec.cloud.aws.securityGroup !== '' || this.cluster.spec.cloud.aws.vpcId !== '' ||
+        this.cluster.spec.cloud.aws.vpcId !== '' || this.cluster.spec.cloud.aws.subnetId !== '' ||
+        this.cluster.spec.cloud.aws.routeTableId !== '' || this.cluster.spec.cloud.aws.instanceProfileName !== '';
+  }
+
+  hasGCPProviderOptions(): boolean {
+    return this.cluster.spec.cloud.gcp.network !== '' || this.cluster.spec.cloud.gcp.subnetwork !== '';
+  }
+
+  hasAzureProviderOptions(): boolean {
+    return this.cluster.spec.cloud.azure.resourceGroup !== '' || this.cluster.spec.cloud.azure.routeTable !== '' ||
+        this.cluster.spec.cloud.azure.securityGroup !== '' || this.cluster.spec.cloud.azure.subnet !== '' ||
+        this.cluster.spec.cloud.azure.vnet !== '';
+  }
+
   displayTags(tags: object): boolean {
     return Object.keys(tags).length > 0;
   }
