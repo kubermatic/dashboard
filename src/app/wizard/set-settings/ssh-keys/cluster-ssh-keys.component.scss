@@ -1,6 +1,7 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
 
-.km-wizard-ssh-key {
-  color: $white-text-color;
-  padding: 0 5px;
+.mat-flat-button {
+  margin-left: 0 !important;
+  padding: 0 $baseline-grid;
 }
