@@ -81,22 +81,6 @@ export class SummaryComponent implements OnInit {
     }
   }
 
-  getTagsFromObject(tags: object): string {
-    let tagsValue = '';
-    let counter = 0;
-    for (const i in tags) {
-      if (tags.hasOwnProperty(i)) {
-        counter++;
-        if (counter === 1) {
-          tagsValue += (i + ': ' + tags[i]);
-        } else {
-          tagsValue += (', ' + i + ': ' + tags[i]);
-        }
-      }
-    }
-    return tagsValue;
-  }
-
   getDnsServers(dnsServers: string[]): string {
     return dnsServers.join(', ');
   }
