@@ -5,14 +5,6 @@ mat-card {
   padding: 0;
 }
 
-.fa-check {
-  color: $indicator-green !important;
-}
-
-.fa-times {
-  color: $indicator-red !important;
-}
-
 .km-summary mat-card-content {
   margin-bottom: 3 * $baseline-grid;
 }
@@ -54,20 +46,11 @@ mat-card {
 }
 
 .km-summary-left {
-  display: inline-block;
+  display: flex;
+  align-items: center;
   width: 4.25 * $baseline-grid;
   font-size: $subhead-font-size-base;
   color: $text-color;
-
-  .fa-times,
-  .fa-check {
-    font-size: $subhead-font-size-base-lg;
-  }
-
-  &.km-summary-os {
-    display: flex;
-    align-items: center;
-  }
 }
 
 .km-icon-key {

@@ -38,21 +38,21 @@
           <div class="km-summary-row"
                *ngIf="nodeData.spec.operatingSystem.ubuntu">
             <span class="km-summary-left">
-              <i [ngClass]="nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+              <i [ngClass]="nodeData.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Upgrade system on first boot</span>
           </div>
           <div class="km-summary-row"
                *ngIf="nodeData.spec.operatingSystem.centos">
             <span class="km-summary-left">
-              <i [ngClass]="nodeData.spec.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+              <i [ngClass]="nodeData.spec.operatingSystem.centos.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Upgrade system on first boot</span>
           </div>
           <div class="km-summary-row"
                *ngIf="nodeData.spec.operatingSystem.containerLinux">
             <span class="km-summary-left">
-              <i [ngClass]="nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
+              <i [ngClass]="nodeData.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></i>
             </span>
             <span>Disable auto-update</span>
           </div>
@@ -329,19 +329,19 @@
             <ng-container *ngIf="cluster.spec.cloud.digitalocean">
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i [ngClass]="nodeData.spec.cloud.digitalocean.backups ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.digitalocean.backups ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Backups</span>
               </div>
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i [ngClass]="nodeData.spec.cloud.digitalocean.ipv6 ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.digitalocean.ipv6 ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>IPv6</span>
               </div>
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i [ngClass]="nodeData.spec.cloud.digitalocean.monitoring ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.digitalocean.monitoring ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Monitoring</span>
               </div>
@@ -351,7 +351,7 @@
             <ng-container *ngIf="cluster.spec.cloud.gcp">
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i [ngClass]="nodeData.spec.cloud.gcp.preemptible ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.gcp.preemptible ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Preemptible</span>
               </div>
@@ -361,7 +361,7 @@
             <ng-container *ngIf="cluster.spec.cloud.azure">
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i [ngClass]="nodeData.spec.cloud.azure.assignPublicIP ? 'fa fa-check' : 'fa fa-times'"></i>
+                  <i [ngClass]="nodeData.spec.cloud.azure.assignPublicIP ? 'km-icon-running' : 'km-icon-disabled'"></i>
                 </span>
                 <span>Assign Public IP</span>
               </div>
@@ -411,7 +411,7 @@
             <ng-container *ngIf="displayNoProviderTags()">
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i class="fa fa-times"></i>
+                  <i class="km-icon-disabled"></i>
                 </span>
                 <span>Provider Tags</span>
               </div>
@@ -427,7 +427,7 @@
             <ng-container *ngIf="nodeData.spec.cloud.gcp && !displayTags(nodeData.spec.cloud.gcp.labels)">
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i class="fa fa-times"></i>
+                  <i class="km-icon-disabled"></i>
                 </span>
                 <span>Provider Labels</span>
               </div>
@@ -442,7 +442,7 @@
             <div *ngIf="!nodeData.spec.labels || !displayTags(nodeData.spec.labels)">
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i class="fa fa-times"></i>
+                  <i class="km-icon-disabled"></i>
                 </span>
                 <span>Node Labels</span>
               </div>
@@ -457,7 +457,7 @@
             <div *ngIf="!nodeData.spec.taints || nodeData.spec.taints.length === 0">
               <div class="km-summary-row">
                 <span class="km-summary-left">
-                  <i class="fa fa-times"></i>
+                  <i class="km-icon-disabled"></i>
                 </span>
                 <span>Node Taints</span>
               </div>
