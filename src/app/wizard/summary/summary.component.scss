@@ -100,8 +100,22 @@ input[type="password"].km-card-list-secret {
   line-height: 24px;
 }
 
+.km-summary-row-with-margin {
+  margin-bottom: 15px;
+}
+
 .km-provider-logo {
   max-width: 100px !important;
+
+  &.km-provider-logo-aws,
+  &.km-provider-logo-gcp {
+    margin-top: 10px;
+  }
+
+  &.km-provider-logo-vsphere,
+  &.km-provider-logo-bringyourown {
+    margin-top: 5px;
+  }
 }
 
 .km-os-image {
@@ -118,6 +132,19 @@ input[type="password"].km-card-list-secret {
   .fa-check {
     font-size: $subhead-font-size-base-lg;
   }
+
+  &.km-summary-os {
+    display: flex;
+    align-items: center;
+  }
+}
+
+.km-summary-sshkeys {
+  display: flex;
+}
+
+.km-summary-tags {
+  margin: 15px 0;
 }
 
 ::ng-deep .km-property-container {

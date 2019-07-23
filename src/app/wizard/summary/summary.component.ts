@@ -38,12 +38,24 @@ export class SummaryComponent implements OnInit {
     return ClusterUtils.getType(type);
   }
 
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
-  }
-
   displayTags(tags: object): boolean {
     return Object.keys(tags).length > 0;
+  }
+
+  displayNoProviderTags(): boolean {
+    if (this.nodeData.spec.cloud.aws) {
+      return !this.displayTags(this.nodeData.spec.cloud.aws.tags);
+    } else if (this.nodeData.spec.cloud.digitalocean) {
+      return this.nodeData.spec.cloud.digitalocean.tags.length === 0;
+    } else if (this.nodeData.spec.cloud.gcp) {
+      return this.nodeData.spec.cloud.gcp.tags.length === 0;
+    } else if (this.nodeData.spec.cloud.openstack) {
+      return !this.displayTags(this.nodeData.spec.cloud.openstack.tags);
+    } else if (this.nodeData.spec.cloud.azure) {
+      return !this.displayTags(this.nodeData.spec.cloud.azure.tags);
+    } else {
+      return false;
+    }
   }
 
   getTagsFromObject(tags: object): string {
