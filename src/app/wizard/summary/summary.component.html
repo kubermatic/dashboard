@@ -7,7 +7,8 @@
          fxLayout.xs="column"
          fxLayoutGap="20px">
 
-      <mat-card fxFlex="50%">
+      <mat-card fxFlex="50%"
+                class="km-summary">
         <mat-card-header>
           <mat-card-title class="km-color-primary">Cluster</mat-card-title>
         </mat-card-header>
@@ -61,9 +62,10 @@
           <mat-card-header>
             <mat-card-title class="km-color-primary">SSH keys</mat-card-title>
           </mat-card-header>
-          <mat-card-content class="km-summary-sshkeys">
-            <div>
-              <km-ssh-key-list [sshKeys]="clusterSSHKeys"></km-ssh-key-list>
+          <mat-card-content>
+            <div class="km-summary-row km-summary-sshkeys">
+              <span class="km-summary-left"><i class="km-icon-key"></i></span>
+              <span>{{getSSHKeyNames()}}</span>
             </div>
           </mat-card-content>
         </ng-container>
@@ -299,12 +301,12 @@
 
             <!-- VSphere Nodes -->
             <ng-container *ngIf="cluster.spec.cloud.vsphere">
-              <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.vsphere.cpus}} CPUs, Memory {{nodeData.spec.cloud.vsphere.memory}} MB
-                <span *ngIf="nodeData.spec.cloud.vsphere.diskSizeGB">, Disk {{nodeData.spec.cloud.vsphere.diskSizeGB}} GB</span>
+              <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.vsphere.cpus}} CPUs, {{nodeData.spec.cloud.vsphere.memory}} MB Memory
+                <span *ngIf="nodeData.spec.cloud.vsphere.diskSizeGB">, {{nodeData.spec.cloud.vsphere.diskSizeGB}} GB Disk</span>
               </div>
               <km-property *ngIf="nodeData.spec.cloud.vsphere.template">
                 <div key>Template</div>
-                <div value>{{nodeData.spec.cloud.vsphere.template}}}}</div>
+                <div value>{{nodeData.spec.cloud.vsphere.template}}</div>
               </km-property>
             </ng-container>
 
@@ -314,7 +316,7 @@
             </ng-container>
 
             <!-- Initial Node Replicas -->
-            <div [ngClass]="noMoreIpsLeft ? 'km-warning' : '' ">
+            <div [ngClass]="noMoreIpsLeft ? 'km-summary-row km-warning' : 'km-summary-row' ">
               <span class="km-summary-left">{{nodeData.count}}</span>
               <span>Initial Deployment Replicas</span>
             </div>
@@ -432,7 +434,7 @@
             </ng-container>
 
             <!-- Node Labels -->
-            <div *ngIf="nodeData.spec.labels && nodeData.spec.labels.length > 0"
+            <div *ngIf="nodeData.spec.labels && displayTags(nodeData.spec.labels)"
                  class="km-summary-tags">
               <div class="km-summary-row">Node Labels</div>
               <km-labels [labels]="nodeData.spec.labels"></km-labels>
@@ -461,6 +463,35 @@
               </div>
             </div>
 
+          </mat-card-content>
+        </ng-container>
+
+        <ng-container *ngIf="cluster.spec.cloud.vsphere && cluster.spec.machineNetworks && cluster.spec.machineNetworks.length > 0">
+          <mat-card-header>
+            <mat-card-title class="km-color-primary">Machine Networks</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div fxLayout="row"
+                 fxLayoutGap="20px">
+              <div fxFlex="50%"
+                   *ngFor="let network of cluster.spec.machineNetworks; let i=index">
+                <div fxLayout="column">
+                  <span class="km-summary-row km-summary-row-with-margin">#{{i+1}}</span>
+                  <km-property>
+                    <div key>CIDR Range</div>
+                    <div value>{{network.cidr}}</div>
+                  </km-property>
+                  <km-property>
+                    <div key>DNS Server</div>
+                    <div value>{{getDnsServers(network.dnsServers)}}</div>
+                  </km-property>
+                  <km-property>
+                    <div key>Gateway</div>
+                    <div value>{{network.gateway}}</div>
+                  </km-property>
+                </div>
+              </div>
+            </div>
           </mat-card-content>
         </ng-container>
 

@@ -101,6 +101,10 @@ export class SummaryComponent implements OnInit {
     return dnsServers.join(', ');
   }
 
+  getSSHKeyNames(): string {
+    return this.clusterSSHKeys.map(key => key.name).join(', ');
+  }
+
   noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
     const ipCount = getIpCount(cluster);
 

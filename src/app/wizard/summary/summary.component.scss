@@ -94,14 +94,24 @@ input[type="password"].km-card-list-secret {
   }
 }
 
+.km-summary mat-card-content {
+  margin-bottom: 3 * $baseline-grid;
+}
+
 .km-summary-row {
   display: flex;
   align-items: center;
-  line-height: 24px;
+  line-height: 2.4 * $line-height;
+  font-size: $subhead-font-size-base;
+  color: $text-color;
+
+  &.km-summary-sshkeys {
+    align-items: flex-start;
+  }
 }
 
 .km-summary-row-with-margin {
-  margin-bottom: 15px;
+  margin-bottom: 2 * $baseline-grid;
 }
 
 .km-provider-logo {
@@ -109,12 +119,12 @@ input[type="password"].km-card-list-secret {
 
   &.km-provider-logo-aws,
   &.km-provider-logo-gcp {
-    margin-top: 10px;
+    margin-top: 1.25 * $baseline-grid;
   }
 
   &.km-provider-logo-vsphere,
   &.km-provider-logo-bringyourown {
-    margin-top: 5px;
+    margin-top: 0.6 * $baseline-grid;
   }
 }
 
@@ -126,7 +136,9 @@ input[type="password"].km-card-list-secret {
 
 .km-summary-left {
   display: inline-block;
-  width: 35px;
+  width: 4.25 * $baseline-grid;
+  font-size: $subhead-font-size-base;
+  color: $text-color;
 
   .fa-times,
   .fa-check {
@@ -139,14 +151,17 @@ input[type="password"].km-card-list-secret {
   }
 }
 
-.km-summary-sshkeys {
-  display: flex;
+.km-icon-key {
+  cursor: default;
+  background: $text-color;
+  margin-right: 2 * $baseline-grid;
+  user-select: none;
 }
 
 .km-summary-tags {
-  margin: 15px 0;
+  margin: (2 * $baseline-grid) 0;
 }
 
 ::ng-deep .km-property-container {
-  margin: 0 0 5px !important;
+  margin: 0 0 (0.6 * $baseline-grid) !important;
 }
