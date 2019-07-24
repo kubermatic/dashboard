@@ -74,6 +74,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       if (preset) {
         this._selectedPreset = preset;
+        this.loadFlavors();
         return;
       }
 
