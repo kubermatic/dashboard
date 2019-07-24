@@ -1,4 +1,3 @@
 export class AWSAvailabilityZone {
-    name: string;
+  name: string;
 }
-  

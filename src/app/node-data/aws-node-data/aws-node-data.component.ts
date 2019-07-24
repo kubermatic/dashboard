@@ -2,12 +2,13 @@ import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
 import {first, takeUntil} from 'rxjs/operators';
+
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {AWSAvailabilityZone} from '../../shared/entity/provider/aws/AWS';
 import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
-import {AWSAvailabilityZone} from '../../shared/entity/provider/aws/AWS';
 
 @Component({
   selector: 'kubermatic-aws-node-data',
@@ -32,8 +33,9 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   private _loadingZones = false;
   private _selectedPreset: string;
 
-  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
-    private readonly _apiService: ApiService) {}
+  constructor(
+      private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
+      private readonly _apiService: ApiService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -73,7 +75,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cloudSpec = data.cloudSpec;;
+      this.cloudSpec = data.cloudSpec;
       this._disableZones();
       this._reloadZones();
     });
@@ -183,7 +185,8 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       return '';
     }
 
-    if (this.isInWizard() && !this._loadingZones && !((this.cloudSpec.aws.accessKeyId && this.cloudSpec.aws.secretAccessKey) || this._selectedPreset)) {
+    if (this.isInWizard() && !this._loadingZones &&
+        !((this.cloudSpec.aws.accessKeyId && this.cloudSpec.aws.secretAccessKey) || this._selectedPreset)) {
       return 'Please enter valid service account first.';
     } else if (this._loadingZones) {
       return `Loading zones...`;

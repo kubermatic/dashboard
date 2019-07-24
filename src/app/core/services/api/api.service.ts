@@ -12,6 +12,7 @@ import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity'
 import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
+import {AWSAvailabilityZone} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
@@ -20,7 +21,6 @@ import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, Ser
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
 import {CreateProjectModel} from '../../../shared/model/CreateProjectModel';
 import {Auth} from '../auth/auth.service';
-import { AWSAvailabilityZone } from '../../../shared/entity/provider/aws/AWS';
 
 @Injectable()
 export class ApiService {

@@ -1,8 +1,10 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
+
+import {AWSAvailabilityZone} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeInstanceFlavor, NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+
 import {Provider} from './provider';
-import { AWSAvailabilityZone } from '../../../../shared/entity/provider/aws/AWS';
 
 export class AWS extends Provider {
   constructor(http: HttpClient, provider: NodeProvider) {
