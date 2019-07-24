@@ -48,6 +48,8 @@
   <kubermatic-aws-node-data *ngIf="cluster.spec.cloud.aws"
                             [cloudSpec]="cluster.spec.cloud"
                             [clusterId]="cluster.id"
+                            [projectId]="projectId"
+                            [seedDCName]="seedDCName"
                             [nodeData]="nodeData"></kubermatic-aws-node-data>
 
   <kubermatic-digitalocean-node-data *ngIf="cluster.spec.cloud.digitalocean"
