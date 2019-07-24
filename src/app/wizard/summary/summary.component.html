@@ -248,7 +248,7 @@
 
             <!-- Packet Nodes -->
             <ng-container *ngIf="cluster.spec.cloud.packet km-summary-row-with-margin">
-              <div class="km-summary-row">{{nodeData.spec.cloud.packet.instanceType}}</div>
+              <div class="km-summary-row km-summary-row-with-margin">{{nodeData.spec.cloud.packet.instanceType}}</div>
             </ng-container>
 
             <!-- AWS Nodes -->
@@ -366,6 +366,14 @@
               <div class="km-summary-tags">
                 <div class="km-summary-row">Provider Tags</div>
                 <km-labels [labels]="nodeData.spec.cloud.gcp.tags"></km-labels>
+              </div>
+            </ng-container>
+
+            <!-- Packet Tags -->
+            <ng-container *ngIf="nodeData.spec.cloud.packet && nodeData.spec.cloud.packet.tags.length > 0">
+              <div class="km-summary-tags">
+                <div class="km-summary-row">Provider Tags</div>
+                <km-labels [labels]="nodeData.spec.cloud.packet.tags"></km-labels>
               </div>
             </ng-container>
 

@@ -72,6 +72,8 @@ export class SummaryComponent implements OnInit {
       return this.nodeData.spec.cloud.digitalocean.tags.length === 0;
     } else if (this.nodeData.spec.cloud.gcp) {
       return this.nodeData.spec.cloud.gcp.tags.length === 0;
+    } else if (this.nodeData.spec.cloud.packet) {
+      return this.nodeData.spec.cloud.packet.tags.length === 0;
     } else if (this.nodeData.spec.cloud.openstack) {
       return !this.displayTags(this.nodeData.spec.cloud.openstack.tags);
     } else if (this.nodeData.spec.cloud.azure) {
