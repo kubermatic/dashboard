@@ -67,7 +67,7 @@ export class ClustersPage {
   static verifyNoClusters(): void {
     this.waitForRefresh();
     this.verifyUrl();
-    cy.get('div').should(Condition.Contain, 'No Clusters available. Please add a new Cluster.');
+    cy.get('div').should(Condition.Contain, 'No clusters available.');
   }
 
   static deleteCluster(name: string): void {

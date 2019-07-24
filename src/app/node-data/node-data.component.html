@@ -27,7 +27,7 @@
            matInput
            formControlName="count"
            type="number"
-           min="1"
+           min="0"
            autocomplete="off">
     <mat-error *ngIf="nodeForm.controls.count.hasError('required')">Number of replicas is required.</mat-error>
     <mat-error *ngIf="nodeForm.controls.count.hasError('ipsMissing')">Not enough IPs left. Reduce number of replicas or add more machine networks.</mat-error>
@@ -72,7 +72,6 @@
   <kubermatic-hetzner-node-data *ngIf="cluster.spec.cloud.hetzner"
                                 [cloudSpec]="cluster.spec.cloud"
                                 [clusterId]="cluster.id"
-                                s
                                 [nodeData]="nodeData"></kubermatic-hetzner-node-data>
 
   <kubermatic-vsphere-node-data *ngIf="cluster.spec.cloud.vsphere"
