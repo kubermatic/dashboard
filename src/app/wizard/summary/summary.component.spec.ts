@@ -62,11 +62,6 @@ describe('SummaryComponent', () => {
     expect(component.displayTags(noTags)).toBeFalsy();
   });
 
-  it('should concat Tags from object', () => {
-    const tags = {key: 'kubermatic', anotherKey: 'kubermatic-cluster-tr9bczz84t'};
-    expect(component.getTagsFromObject(tags)).toBe('key: kubermatic, anotherKey: kubermatic-cluster-tr9bczz84t');
-  });
-
   it('should concat DNS Servers', () => {
     const dnsServers = fakeClusterWithMachineNetwork().spec.machineNetworks[0].dnsServers;
     expect(component.getDnsServers(dnsServers)).toBe('8.8.8.8, 8.8.1.1');
