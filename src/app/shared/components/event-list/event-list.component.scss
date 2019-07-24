@@ -11,3 +11,16 @@
   padding-bottom: 10px;
   line-height: 20px;
 }
+
+mat-card-header {
+  padding: 0 !important;
+  cursor: pointer;
+}
+
+.km-toggled-events {
+  padding-bottom: 0;
+
+  mat-card-header {
+    border-radius: 5px;
+  }
+}

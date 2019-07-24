@@ -1,12 +1,14 @@
-<mat-card class="km-with-table-header">
-  <mat-card-header>
+<mat-card [ngClass]="isShowEvents ? 'km-with-table-header' : 'km-with-table-header km-toggled-events'">
+  <mat-card-header (click)="toggleEvents()">
     <mat-card-title>
+      <i [ngClass]="isShowEvents ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
       Events
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>
     <table class="km-table"
            mat-table
+           [hidden]="!isShowEvents"
            [dataSource]="dataSource"
            matSort>
       <ng-container matColumnDef="status">
@@ -80,7 +82,7 @@
     </table>
 
 
-    <div *ngIf="!hasEvents()"
+    <div *ngIf="!hasEvents() && isShowEvents"
          class="km-row km-no-item">
       No events available.
     </div>
