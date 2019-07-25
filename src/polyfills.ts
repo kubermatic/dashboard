@@ -19,3 +19,7 @@ import 'core-js/es7/reflect';
 import 'zone.js/dist/zone';
 
 import 'hammerjs/hammer';
+
+(window as any).global = window;
+// @ts-ignore
+window.Buffer = window.Buffer || require('buffer').Buffer;

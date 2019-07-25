@@ -1,5 +1,9 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
+
+import {AuthGuard} from '../core/services';
+
+import {ApiDocsComponent} from './api-docs/api-docs.component';
 import {FrontpageComponent} from './frontpage/frontpage.component';
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 import {TermsOfServiceComponent} from './terms-of-service/terms-of-service.component';
@@ -13,6 +17,11 @@ const routes: Routes = [
   {
     path: 'terms-of-service',
     component: TermsOfServiceComponent,
+  },
+  {
+    path: 'api-docs',
+    component: ApiDocsComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: '404',
