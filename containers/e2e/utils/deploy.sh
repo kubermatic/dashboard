@@ -159,6 +159,7 @@ function deploy::kubermatic {
 		--set=kubermatic.controller.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.api.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.api.replicas=1 \
+		--set=kubermatic.apiserverDefaultReplicas=1 \
 		--set=kubermatic.masterController.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.controller.featureGates="" \
 		--values ${KUBERMATIC_PATH}/values.yaml \
