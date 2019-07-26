@@ -53,4 +53,14 @@ export class EventListComponent implements OnInit, OnChanges {
   toggleEvents(): void {
     this.isShowEvents = !this.isShowEvents;
   }
+
+  getTypeIconForEvents(): string {
+    if (this.events.filter((event) => event.type === 'Warning').length > 0) {
+      return 'fa fa-circle orange';
+    } else if (this.events.filter((event) => event.type === 'Normal').length > 0) {
+      return 'fa fa-circle green';
+    } else {
+      return '';
+    }
+  }
 }

@@ -3,6 +3,10 @@
     <mat-card-title>
       <i [ngClass]="isShowEvents ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
       Events
+      <span class="km-events-title">
+        <i [ngClass]="getTypeIconForEvents()"></i>
+        {{events.length}}
+      </span>
     </mat-card-title>
   </mat-card-header>
   <mat-card-content>

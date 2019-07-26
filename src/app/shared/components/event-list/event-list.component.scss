@@ -1,3 +1,5 @@
+@import '../../../../assets/css/variables';
+
 .km-events-long-text {
   line-height: 20px !important;
 }
@@ -18,9 +20,23 @@ mat-card-header {
 }
 
 .km-toggled-events {
-  padding-bottom: 0;
+  padding-bottom: 10px;
 
   mat-card-header {
     border-radius: 5px;
   }
+}
+
+.km-events-title {
+  float: right;
+  padding-right: 30px;
+  font-size: $subhead-font-size-base;
+
+  i {
+    margin-right: 10px;
+  }
+}
+
+::ng-deep .mat-card-header-text {
+  width: 100%;
 }
