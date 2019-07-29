@@ -65,6 +65,7 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         network: '',
         domain: '',
         tenant: '',
+        tenantID: '',
         subnetID: '',
       } as OpenstackCloudSpec;
     case NodeProvider.BRINGYOUROWN:
