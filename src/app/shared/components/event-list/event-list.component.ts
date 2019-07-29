@@ -14,6 +14,7 @@ export class EventListComponent implements OnInit, OnChanges {
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
+  isShowEvents = false;
   dataSource = new MatTableDataSource<EventEntity>();
   displayedColumns: string[] =
       ['status', 'message', 'involvedObjectName', 'involvedObjectKind', 'count', 'lastTimestamp'];
@@ -47,5 +48,19 @@ export class EventListComponent implements OnInit, OnChanges {
 
   isPaginatorVisible(): boolean {
     return (this.events && this.paginator && this.events.length <= this.paginator.pageSize) || !this.hasEvents();
+  }
+
+  toggleEvents(): void {
+    this.isShowEvents = !this.isShowEvents;
+  }
+
+  getTypeIconForEvents(): string {
+    if (this.events.filter((event) => event.type === 'Warning').length > 0) {
+      return 'fa fa-circle orange';
+    } else if (this.events.filter((event) => event.type === 'Normal').length > 0) {
+      return 'fa fa-circle green';
+    } else {
+      return '';
+    }
   }
 }
