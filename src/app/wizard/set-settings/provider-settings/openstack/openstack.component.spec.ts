@@ -241,7 +241,7 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.openstackSettingsForm.controls.username.setValue('');
       component.loadingOptionalTenants = false;
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('Project*');
+      expect(component.getTenantsFormState()).toEqual('Project');
 
       component.openstackSettingsForm.controls.username.setValue('username');
       component.openstackSettingsForm.controls.password.setValue('password');
@@ -253,11 +253,11 @@ describe('OpenstackClusterSettingsComponent', () => {
       component.loadingOptionalTenants = false;
       component.tenants = [];
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('No Projects available');
+      expect(component.getTenantsFormState()).toEqual('Project');
 
       component.tenants = openstackTenantsFake();
       fixture.detectChanges();
-      expect(component.getTenantsFormState()).toEqual('Project*');
+      expect(component.getTenantsFormState()).toEqual('Project');
     });
 
     it('should set correct optional settings placeholder', () => {
