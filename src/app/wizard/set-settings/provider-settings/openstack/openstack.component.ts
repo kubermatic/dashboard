@@ -411,7 +411,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _isTenantIDSelected(): boolean {
-    return this.form.controls.tenantID.value;
+    return this.form.controls.tenantID.value.toString().length > 0;
   }
 
   private _isNetworkSelected(): boolean {
