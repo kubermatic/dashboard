@@ -377,12 +377,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.tenants.length === 0) {
-      this._disableControl(this.form.controls.tenant);
-    } else if (this.tenants.length > 0 && !this.form.controls.tenantID.value) {
-      this._enableControl(this.form.controls.tenant);
-    }
-
     if (this._hasTenantCredentials() && !this.form.controls.tenant.value) {
       this._enableControl(this.form.controls.tenantID);
     } else {
