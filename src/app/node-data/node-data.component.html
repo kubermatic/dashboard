@@ -10,10 +10,13 @@
              formControlName="name"
              type="text"
              autocomplete="off">
-      <i class="km-icon-randomize"
-         matTooltip="Generate name"
-         (click)="generateName()"
-         *ngIf="!isNameDisabled"></i>
+      <button mat-icon-button
+              class="km-randomize-btn"
+              matTooltip="Generate name"
+              (click)="generateName()"
+              *ngIf="!isNameDisabled">
+        <i class="km-icon-randomize"></i>
+      </button>
       <mat-hint *ngIf="!isNameDisabled">Leave it empty to use server-side generation.</mat-hint>
       <mat-error *ngIf="nodeForm.controls.name.hasError('pattern')">
         Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
