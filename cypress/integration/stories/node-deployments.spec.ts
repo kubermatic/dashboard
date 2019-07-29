@@ -65,8 +65,8 @@ describe('Node Deployments Story', () => {
 
   it('should wait for initial node deployment to be created', () => {
     ClustersPage.getClusterItem(clusterName).click();
-    wait('**/nodedeployments', 'GET', 'getNodeDeployments', 600000);
-    cy.get('kubermatic-node-deployment-list', {timeout: 600000}).should(Condition.Contain, initialNodeDeploymentName);
+    wait('**/nodedeployments', 'GET', 'getNodeDeployments', 900000);
+    cy.get('kubermatic-node-deployment-list', {timeout: 900000}).should(Condition.Contain, initialNodeDeploymentName);
   });
 
   it('should go to node deployment details', () => {

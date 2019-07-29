@@ -326,7 +326,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     it('should disable Project field when Project ID is provided', fakeAsync(() => {
          fixture.detectChanges();
 
-         expect(component.form.controls.tenant.disabled).toBeTruthy();
+         expect(component.form.controls.tenant.enabled).toBeTruthy();
          expect(component.form.controls.tenantID.disabled).toBeTruthy();
 
          component.form.controls.username.setValue('username');
@@ -334,7 +334,7 @@ describe('OpenstackClusterSettingsComponent', () => {
          component.form.controls.domain.setValue('domain');
          component.form.controls.tenantID.setValue('tenantID');
          fixture.detectChanges();
-         tick(1001);
+         tick(2001);
 
          expect(component.form.controls.tenant.disabled).toBeTruthy();
          expect(component.form.controls.tenantID.enabled).toBeTruthy();
@@ -344,7 +344,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     it('should disable Project ID field when Project is provided', fakeAsync(() => {
          fixture.detectChanges();
 
-         expect(component.form.controls.tenant.disabled).toBeTruthy();
+         expect(component.form.controls.tenant.enabled).toBeTruthy();
          expect(component.form.controls.tenantID.disabled).toBeTruthy();
 
          component.form.controls.username.setValue('username');
