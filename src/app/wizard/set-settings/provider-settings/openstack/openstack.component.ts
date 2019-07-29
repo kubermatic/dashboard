@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subscription} from 'rxjs';
-import {debounceTime, first} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, first} from 'rxjs/operators';
 import {AppConfigService} from '../../../../app-config.service';
 import {ApiService, Auth, WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
@@ -62,53 +62,57 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
       this.clusterSpec = cluster;
     });
 
-    this.subscriptions.push(this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((changes) => {
-      if (changes.domain !== '' && changes.username !== '' && changes.password !== '') {
-        if (!!this.clusterSpec &&
-            (this.tenants.length === 0 ||
-             (changes.domain !== this.clusterSpec.cloudSpec.openstack.domain ||
-              changes.username !== this.clusterSpec.cloudSpec.openstack.username ||
-              changes.password !== this.clusterSpec.cloudSpec.openstack.password))) {
-          this.loadTenants();
-        } else if (
-            !!this.clusterSpec &&
-            ((changes.tenant !== '' && changes.tenant !== this.clusterSpec.cloudSpec.openstack.tenant) ||
-             (changes.tenant !== '' && this.networks.length === 0 && this.floatingIpPools.length === 0 &&
-              this.securityGroups.length === 0))) {
-          this.loadOptionalSettings();
-        } else if (this.tenants.length === 0 || changes.tenant === '') {
-          this.resetOptionalFields(false);
-        } else if (
-            !!this.clusterSpec &&
-            ((changes.network !== '' && changes.network !== this.clusterSpec.cloudSpec.openstack.network) ||
-             (changes.network !== '' && this.subnetIds.length === 0))) {
-          this.loadSubnetIds();
-        } else if (this.networks.length === 0) {
-          this.openstackSettingsForm.controls.subnetId.setValue('');
-          this.subnetIds = [];
-        }
-        this.checkState();
-      } else {
-        this.resetOptionalFields(true);
-      }
+    this.subscriptions.push(
+        this.openstackSettingsForm.valueChanges.pipe(debounceTime(1000))
+            .pipe(distinctUntilChanged(
+                (prev, curr) => Object.entries(prev).toString() === Object.entries(curr).toString()))
+            .subscribe((changes) => {
+              if (changes.domain !== '' && changes.username !== '' && changes.password !== '') {
+                if (!!this.clusterSpec &&
+                    (this.tenants.length === 0 ||
+                     (changes.domain !== this.clusterSpec.cloudSpec.openstack.domain ||
+                      changes.username !== this.clusterSpec.cloudSpec.openstack.username ||
+                      changes.password !== this.clusterSpec.cloudSpec.openstack.password))) {
+                  this.loadTenants();
+                } else if (
+                    !!this.clusterSpec &&
+                    ((changes.tenant !== '' && changes.tenant !== this.clusterSpec.cloudSpec.openstack.tenant) ||
+                     (changes.tenant !== '' && this.networks.length === 0 && this.floatingIpPools.length === 0 &&
+                      this.securityGroups.length === 0))) {
+                  this.loadOptionalSettings();
+                } else if (this.tenants.length === 0 || changes.tenant === '') {
+                  this.resetOptionalFields(false);
+                } else if (
+                    !!this.clusterSpec &&
+                    ((changes.network !== '' && changes.network !== this.clusterSpec.cloudSpec.openstack.network) ||
+                     (changes.network !== '' && this.subnetIds.length === 0))) {
+                  this.loadSubnetIds();
+                } else if (this.networks.length === 0) {
+                  this.openstackSettingsForm.controls.subnetId.setValue('');
+                  this.subnetIds = [];
+                }
+                this.checkState();
+              } else {
+                this.resetOptionalFields(true);
+              }
 
-      this.wizardService.changeClusterProviderSettings({
-        cloudSpec: {
-          openstack: {
-            tenant: this.openstackSettingsForm.controls.tenant.value,
-            domain: this.openstackSettingsForm.controls.domain.value,
-            username: this.openstackSettingsForm.controls.username.value,
-            password: this.openstackSettingsForm.controls.password.value,
-            floatingIpPool: this.openstackSettingsForm.controls.floatingIpPool.value,
-            securityGroups: this.openstackSettingsForm.controls.securityGroup.value,
-            network: this.openstackSettingsForm.controls.network.value,
-            subnetID: this.openstackSettingsForm.controls.subnetId.value,
-          },
-          dc: this.cluster.spec.cloud.dc,
-        },
-        valid: this.openstackSettingsForm.valid,
-      });
-    }));
+              this.wizardService.changeClusterProviderSettings({
+                cloudSpec: {
+                  openstack: {
+                    tenant: this.openstackSettingsForm.controls.tenant.value,
+                    domain: this.openstackSettingsForm.controls.domain.value,
+                    username: this.openstackSettingsForm.controls.username.value,
+                    password: this.openstackSettingsForm.controls.password.value,
+                    floatingIpPool: this.openstackSettingsForm.controls.floatingIpPool.value,
+                    securityGroups: this.openstackSettingsForm.controls.securityGroup.value,
+                    network: this.openstackSettingsForm.controls.network.value,
+                    subnetID: this.openstackSettingsForm.controls.subnetId.value,
+                  },
+                  dc: this.cluster.spec.cloud.dc,
+                },
+                valid: this.openstackSettingsForm.valid,
+              });
+            }));
 
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
@@ -139,6 +143,7 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
     }
 
     this.loadingOptionalTenants = true;
+    this.openstackSettingsForm.controls.tenant.disable();
     this.api
         .getOpenStackTenantsForWizard(
             this.openstackSettingsForm.controls.username.value, this.openstackSettingsForm.controls.password.value,
@@ -155,11 +160,13 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
               }
 
               this.loadingOptionalTenants = false;
+              this.openstackSettingsForm.controls.tenant.enable();
               this.checkState();
             },
             () => {
               this.tenants = [];
               this.loadingOptionalTenants = false;
+              this.openstackSettingsForm.controls.tenant.enable();
             });
   }
 
@@ -268,14 +275,10 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   getTenantsFormState(): string {
-    if (!this.loadingOptionalTenants && this.isMissingCredentialsForTenant()) {
-      return 'Project*';
-    } else if (this.loadingOptionalTenants) {
+    if (this.loadingOptionalTenants) {
       return 'Loading Projects...';
-    } else if (!this.loadingOptionalTenants && this.tenants.length === 0) {
-      return 'No Projects available';
     } else {
-      return 'Project*';
+      return 'Project';
     }
   }
 
@@ -315,10 +318,10 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
 
   checkState(): void {
     const fields: OpenstackOptionalFields[] = [
-      {'length': this.tenants.length, 'name': 'tenant'},
       {'length': this.floatingIpPools.length, 'name': 'floatingIpPool'},
       {'length': this.securityGroups.length, 'name': 'securityGroup'},
-      {'length': this.networks.length, 'name': 'network'}, {'length': this.subnetIds.length, 'name': 'subnetId'}
+      {'length': this.networks.length, 'name': 'network'},
+      {'length': this.subnetIds.length, 'name': 'subnetId'},
     ];
 
     for (const i in fields) {
