@@ -5,11 +5,9 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {MockComponent} from 'ng2-mock-component';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 
 import {SharedModule} from '../../../shared/shared.module';
-import {RouterStub} from '../../../testing/router-stubs';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
@@ -39,16 +37,11 @@ describe('NavigationComponent', () => {
           ],
           declarations: [
             NavigationComponent,
-            MockComponent({
-              selector: 'a',
-              inputs: ['routerLink'],
-            }),
           ],
           providers: [
             MatDialog,
             {provide: UserService, useClass: UserMockService},
             {provide: ProjectService, useClass: ProjectMockService},
-            {provide: Router, useClass: RouterStub},
             {provide: Auth, useClass: AuthMockService},
           ],
         })
