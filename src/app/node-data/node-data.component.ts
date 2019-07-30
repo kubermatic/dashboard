@@ -45,7 +45,7 @@ export class NodeDataComponent implements OnInit, OnDestroy {
     this.nodeForm = new FormGroup({
       count: new FormControl(
           this.nodeData.count,
-          [Validators.required, Validators.min(1), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
+          [Validators.required, Validators.min(0), NoIpsLeftValidator(this.cluster, this.existingNodesCount)]),
       operatingSystem: new FormControl(
           this.isClusterOpenshift() ? 'centos' : Object.keys(this.nodeData.spec.operatingSystem)[0],
           Validators.required),
