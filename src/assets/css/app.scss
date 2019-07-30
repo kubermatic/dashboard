@@ -473,13 +473,6 @@ mat-card-header > div > mat-card-title > div {
     }
   }
 
-  .mat-card-subtitle {
-    .km-pause-reason {
-      margin-top: 0;
-      color: $indicator-red;
-    }
-  }
-
   .mat-card-content {
     line-height: 5 * $line-height;
 
@@ -589,21 +582,6 @@ mat-card-header > div > mat-card-title > div {
   box-shadow: none !important;
 }
 
-// Mat Tab Toggle
-.km-change-view {
-  .mat-tab-group.mat-primary .mat-tab-label:focus,
-  .mat-tab-group.mat-primary .mat-tab-link:focus,
-  .mat-tab-nav-bar.mat-primary .mat-tab-label:focus,
-  .mat-tab-nav-bar.mat-primary .mat-tab-link:focus {
-    background-color: transparent !important;
-  }
-
-  .mat-tab-label {
-    height: 36px !important;
-    min-width: 120px !important;
-  }
-}
-
 // tooltip
 .mat-tooltip {
   background-color: $light-primary !important;
@@ -635,17 +613,11 @@ mat-card-header > div > mat-card-title > div {
 }
 
 // overlay background
-
 .mat-button-focus-overlay {
   background-color: transparent !important;
 }
-// modal
-.km-btn-right {
-  float: right;
-}
 
 // provider message
-
 .km-provider-message {
   height: 52px;
   background-color: $medium-background;

@@ -1,17 +1,9 @@
-<ng-container>
-
-  <mat-tab-group class="km-change-view"
-                 (selectedTabChange)="changeView($event)"
-                 *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.bringyourown">
-    <mat-tab label="Simple"></mat-tab>
-    <mat-tab label="Extended"></mat-tab>
-  </mat-tab-group>
-
+<div fxLayout="column">
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"
        fxLayout.xs="column"
-       fxLayoutGap="20px">
+       fxLayoutGap="30px">
     <mat-card fxFlex="50%">
       <mat-card-header>
         <mat-card-title class="km-color-primary">Provider Credentials</mat-card-title>
@@ -35,4 +27,20 @@
       </mat-card-content>
     </mat-card>
   </div>
-</ng-container>
+
+  <div class="km-wizard-settings-extended-wrapper"
+       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.bringyourown && !isExtended"
+       fxFlex>
+    <div class="km-wizard-settings-extended-divider"
+         fxFlex>
+    </div>
+    <div class="km-wizard-settings-extended-btn"
+         (click)="extend()">
+      <span>Show extended options&nbsp;</span>
+      <i class="km-icon-arrow-down"></i>
+    </div>
+    <div class="km-wizard-settings-extended-divider"
+         fxFlex>
+    </div>
+  </div>
+</div>

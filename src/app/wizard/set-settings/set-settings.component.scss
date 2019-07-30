@@ -1,0 +1,27 @@
+@import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
+
+.mat-card {
+  padding: 0 !important;
+}
+
+.km-wizard-settings-extended-wrapper {
+  margin-top: 4 * $baseline-grid;
+
+  .km-wizard-settings-extended-divider {
+    height: 1px;
+    background: $separator;
+    margin: (2 * $baseline-grid) 0;
+  }
+
+  .km-wizard-settings-extended-btn {
+    color: $medium-text-color;
+    cursor: pointer;
+    margin: $baseline-grid;
+    user-select: none;
+
+    .km-icon-arrow-down {
+      background: $medium-text-color;
+    }
+  }
+}
