@@ -150,11 +150,11 @@ export class ClusterService {
 
   private _getClusters(projectID: string): Observable<ClusterEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/clusters`;
-    return this._http.get<ClusterEntity[]>(url);
+    return this._http.get<ClusterEntity[]>(url).pipe(catchError(() => of<ClusterEntity[]>()));
   }
 
   private _getCluster(projectID: string, clusterID: string, datacenter: string): Observable<ClusterEntity> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}`;
-    return this._http.get<ClusterEntity>(url);
+    return this._http.get<ClusterEntity>(url).pipe(catchError(() => of<ClusterEntity>()));
   }
 }
