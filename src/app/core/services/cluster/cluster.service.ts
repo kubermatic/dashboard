@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {merge, Observable, of, timer} from 'rxjs';
-import {catchError, publishReplay, refCount, switchMapTo} from 'rxjs/operators';
+import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
@@ -42,8 +42,7 @@ export class ClusterService {
     if (!this._clusters$.get(projectID)) {
       const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$)
                             .pipe(switchMapTo(this._getClusters(projectID)))
-                            .pipe(publishReplay(1))
-                            .pipe(refCount());
+                            .pipe(shareReplay({refCount: true, bufferSize: 1}));
       this._clusters$.set(projectID, clusters$);
     }
 
@@ -58,9 +57,7 @@ export class ClusterService {
   cluster(projectID: string, clusterID: string, datacenter: string): Observable<ClusterEntity> {
     return merge(this.onClusterUpdate, this._refreshTimer$)
         .pipe(switchMapTo(this._getCluster(projectID, clusterID, datacenter)))
-        .pipe(publishReplay(1))
-        .pipe(refCount())
-        .pipe(catchError(() => of(undefined)));
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
   create(projectID: string, datacenter: string, createClusterModel: CreateClusterModel): Observable<ClusterEntity> {

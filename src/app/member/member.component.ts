@@ -55,7 +55,7 @@ export class MemberComponent implements OnInit, OnDestroy {
         .pipe(first())
         .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
 
-    merge(timer(0, 5 * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
+    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._membersUpdate)
         .pipe(switchMap(() => this._selectedProject ? this._apiService.getMembers(this._selectedProject.id) : EMPTY))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(members => {
