@@ -82,7 +82,7 @@
     "rxjs": "6.5.2",
     "rxjs-compat": "6.5.2",
     "semver": "6.1.1",
-    "swagger-ui": "^3.23.1",
+    "swagger-ui": "^3.23.2",
     "ts-helpers": "1.1.2",
     "zone.js": "0.9.1"
   },
