@@ -114,7 +114,8 @@ export function nodeAWSFake(): NodeEntity {
           ami: '',
           tags: {
             'kubernetes.io/cluster/2j6gn77spl': '',
-          }
+          },
+          availabilityZone: 'eu-central-1c',
         }
       },
       operatingSystem: {ubuntu: {distUpgradeOnBoot: false}},
@@ -365,6 +366,7 @@ export function nodeDataFake(): NodeData {
           volumeType: 'standard',
           ami: '',
           tags: {},
+          availabilityZone: 'eu-central-1c',
         },
         openstack: {
           flavor: 'm1.small',
@@ -432,6 +434,7 @@ export function nodeDataCentOsFake(): NodeData {
           volumeType: 'standard',
           ami: '',
           tags: {},
+          availabilityZone: 'eu-central-1c',
         },
         openstack: {
           flavor: 'm1.small',
@@ -496,6 +499,7 @@ export function nodeDataContainerLinuxFake(): NodeData {
           volumeType: 'standard',
           ami: '',
           tags: {},
+          availabilityZone: 'eu-central-1c',
         },
         openstack: {
           flavor: 'm1.small',

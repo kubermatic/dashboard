@@ -110,6 +110,7 @@ export function getEmptyNodeProviderSpec(provider: string): object {
         volumeType: 'standard',
         ami: '',
         tags: {'': ''},
+        availabilityZone: '',
       } as AWSNodeSpec;
     case NodeProvider.DIGITALOCEAN:
       return {

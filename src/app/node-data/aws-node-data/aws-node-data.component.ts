@@ -1,10 +1,12 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {WizardService} from '../../core/services';
+import {iif, Subject} from 'rxjs';
+import {first, takeUntil} from 'rxjs/operators';
+
+import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {AWSAvailabilityZone} from '../../shared/entity/provider/aws/AWS';
 import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
@@ -17,16 +19,23 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
+  @Input() projectId: string;
+  @Input() seedDCName: string;
 
   instanceTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.AWS).flavors();
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
+  zones: AWSAvailabilityZone[] = [];
   awsNodeForm: FormGroup;
   tags: FormArray;
   hideOptional = true;
 
   private _unsubscribe = new Subject<void>();
+  private _loadingZones = false;
+  private _selectedPreset: string;
 
-  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService) {}
+  constructor(
+      private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
+      private readonly _apiService: ApiService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -45,11 +54,17 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
       tags: tagList,
+      availability_zone: new FormControl(this.nodeData.spec.cloud.aws.availabilityZone),
     });
 
     if (this.nodeData.spec.cloud.aws.instanceType === '') {
       this.awsNodeForm.controls.type.setValue(this.instanceTypes[0].id);
     }
+
+    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+      this._selectedPreset = credentials;
+      this._reloadZones();
+    });
 
     this.awsNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
@@ -59,7 +74,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       this.hideOptional = data.hideOptional;
     });
 
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cloudSpec = data.cloudSpec;
+      this._disableZones();
+      this._reloadZones();
+    });
+
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
+
+    this._reloadZones();
   }
 
   isInWizard(): boolean {
@@ -82,6 +105,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
           ami: this.awsNodeForm.controls.ami.value,
           tags: tagMap,
           volumeType: this.awsNodeForm.controls.disk_type.value,
+          availabilityZone: this.awsNodeForm.controls.availability_zone.value,
         },
       },
       valid: this.awsNodeForm.valid,
@@ -108,5 +132,66 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  private _hasCredentials(): boolean {
+    return !!this.cloudSpec.aws.accessKeyId || !!this._selectedPreset || !this.isInWizard();
+  }
+
+  private _reloadZones(): void {
+    if (!this._hasCredentials) {
+      return;
+    }
+
+    this._loadingZones = true;
+    iif(() => this.isInWizard(),
+        this._wizard.provider(NodeProvider.AWS)
+            .accessKeyID(this.cloudSpec.aws.accessKeyId)
+            .secretAccessKey(this.cloudSpec.aws.secretAccessKey)
+            .credential(this._selectedPreset)
+            .zones(this.cloudSpec.dc),
+        this._apiService.getAWSZones(this.projectId, this.seedDCName, this.clusterId))
+        .pipe(first())
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((data) => {
+          this._loadingZones = false;
+          this._enableZones(data);
+        }, () => this._disableZones());
+  }
+
+  private _enableZones(data: AWSAvailabilityZone[]): void {
+    this._loadingZones = false;
+    this.awsNodeForm.controls.availability_zone.enable();
+    this.zones = data;
+    if (this.zones.length > 0) {
+      if (this.nodeData.spec.cloud.aws.availabilityZone !== '' &&
+          this.zones.filter(value => value.name === this.nodeData.spec.cloud.aws.availabilityZone).length > 0) {
+        this.awsNodeForm.controls.availability_zone.setValue(this.nodeData.spec.cloud.aws.availabilityZone);
+      } else {
+        this.awsNodeForm.controls.availability_zone.setValue(this.zones[0].name);
+      }
+    }
+  }
+
+  private _disableZones(): void {
+    this._loadingZones = false;
+    this.zones = [];
+    this.awsNodeForm.controls.availability_zone.setValue('');
+    this.awsNodeForm.controls.availability_zone.disable();
+  }
+
+  getZoneHint(): string {
+    if (this.zones.length > 0) {
+      return '';
+    }
+
+    if (this.isInWizard() && !this._loadingZones &&
+        !((this.cloudSpec.aws.accessKeyId && this.cloudSpec.aws.secretAccessKey) || this._selectedPreset)) {
+      return 'Please enter valid service account first.';
+    } else if (this._loadingZones) {
+      return `Loading zones...`;
+    } else {
+      return '';
+    }
   }
 }

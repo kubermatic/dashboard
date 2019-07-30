@@ -47,6 +47,22 @@
            autocomplete="off">
   </mat-form-field>
 
+  <div fxFlex
+       class="mat-select-container">
+    <mat-form-field>
+      <mat-label>Availability Zone*</mat-label>
+      <mat-select formControlName="availability_zone"
+                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                  disableOptionCentering>
+        <mat-option *ngFor="let zone of zones"
+                    [value]="zone.name">
+          {{zone.name}}
+        </mat-option>
+      </mat-select>
+      <mat-hint>{{getZoneHint()}}</mat-hint>
+    </mat-form-field>
+  </div>
+
   <div class="km-form-group-tags-header"
        *ngIf="!hideOptional">
     Tags
