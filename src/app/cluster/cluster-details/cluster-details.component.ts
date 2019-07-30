@@ -117,7 +117,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
             ([upgrades, nodes, nodeDeployments]: [MasterVersion[], NodeEntity[], NodeDeploymentEntity[]]) => {
               this.nodes = nodes;
               this.nodeDeployments = nodeDeployments;
-              this.isNodeDeploymentLoadFinished = nodeDeployments.length > 0;
+              this.isNodeDeploymentLoadFinished = true;
               this.upgrades = upgrades;
             },
             (error) => {
