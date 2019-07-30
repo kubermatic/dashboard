@@ -1,10 +1,9 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
-import {ActivatedRoute} from '@angular/router';
 import {Subject, timer} from 'rxjs';
-import {retry, takeUntil} from 'rxjs/operators';
+import {retry, switchMap, takeUntil} from 'rxjs/operators';
 import {AppConfigService} from '../app-config.service';
-import {ApiService, UserService} from '../core/services';
+import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {NotificationActions} from '../redux/actions/notification.actions';
 import {AddSshKeyDialogComponent} from '../shared/components/add-ssh-key-dialog/add-ssh-key-dialog.component';
@@ -32,26 +31,26 @@ export class SSHKeyComponent implements OnInit, OnDestroy {
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(
-      private readonly _route: ActivatedRoute, private readonly _api: ApiService,
-      private readonly _userService: UserService, private readonly _appConfigService: AppConfigService,
-      public dialog: MatDialog, private readonly _googleAnalyticsService: GoogleAnalyticsService) {}
+      private readonly _api: ApiService, private readonly _userService: UserService,
+      private readonly _appConfigService: AppConfigService, public dialog: MatDialog,
+      private readonly _googleAnalyticsService: GoogleAnalyticsService,
+      private readonly _projectService: ProjectService) {}
 
   ngOnInit(): void {
-    this._route.paramMap.pipe(takeUntil(this._unsubscribe)).subscribe((m) => {
-      this.projectID = m.get('projectID');
-      this.refreshSSHKeys();
-    });
-
     this.userGroupConfig = this._appConfigService.getUserGroupConfig();
-    this._userService.currentUserGroup(this.projectID).subscribe((group) => {
-      this.userGroup = group;
-    });
-
     this.dataSource.sort = this.sort;
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    timer(0, 10 * this._appConfigService.getRefreshTimeBase())
+    this._projectService.selectedProject
+        .pipe(switchMap(project => {
+          this.projectID = project.id;
+          return this._userService.currentUserGroup(this.projectID);
+        }))
+        .pipe(switchMap(group => {
+          this.userGroup = group;
+          return timer(0, 10 * this._appConfigService.getRefreshTimeBase());
+        }))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => this.refreshSSHKeys());
   }
