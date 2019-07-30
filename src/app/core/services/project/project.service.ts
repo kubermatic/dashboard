@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {merge, Observable, Subject, timer} from 'rxjs';
-import {filter, first, map, shareReplay, switchMapTo} from 'rxjs/operators';
+import {merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, filter, first, map, shareReplay, switchMapTo} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
@@ -64,6 +64,6 @@ export class ProjectService {
 
   private _getProjects() {
     const url = `${this._restRoot}/projects`;
-    return this._http.get<ProjectEntity[]>(url);
+    return this._http.get<ProjectEntity[]>(url).pipe(catchError(() => of<ProjectEntity[]>()));
   }
 }

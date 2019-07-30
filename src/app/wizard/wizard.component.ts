@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {forkJoin, of, Subject} from 'rxjs';
-import {delay, retryWhen, switchMap, takeUntil} from 'rxjs/operators';
+import {switchMap, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
 import {ClusterService, ProjectService, WizardService} from '../core/services';
@@ -273,8 +273,7 @@ export class WizardComponent implements OnInit, OnDestroy {
           this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreated');
           createdCluster = cluster;
 
-          return this._clusterService.cluster(this.project.id, createdCluster.id, datacenter.spec.seed)
-              .pipe(retryWhen(errors => errors.pipe(delay(3000))));
+          return this._clusterService.cluster(this.project.id, createdCluster.id, datacenter.spec.seed);
         }))
         .pipe(switchMap(() => {
           this.creating = false;
