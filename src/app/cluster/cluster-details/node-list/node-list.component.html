@@ -149,6 +149,33 @@
               <div value>{{element.status.nodeInfo.containerRuntimeVersion}}</div>
             </km-property>
 
+            <!-- Node sizes for all providers. -->
+            <km-property *ngIf="element.spec.cloud.aws">
+              <div key>Node Size</div>
+              <div value>{{element.spec.cloud.aws.instanceType}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.azure">
+              <div key>Node Size</div>
+              <div value>{{element.spec.cloud.azure.size}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.digitalocean">
+              <div key>Node Size</div>
+              <div value>{{element.spec.cloud.digitalocean.size}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.hetzner">
+              <div key>Node Size</div>
+              <div value>{{element.spec.cloud.hetzner.type}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.openstack">
+              <div key>Node Size</div>
+              <div value>{{element.spec.cloud.openstack.flavor}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.packet">
+              <div key>Instance Type</div>
+              <div value>{{element.spec.cloud.packet.instanceType}}</div>
+            </km-property>
+            <!-- End of node sizes.-->
+
             <km-property *ngIf="!!element.status.capacity.cpu && !!element.status.capacity.memory">
               <div key>Node Capacity</div>
               <div value>{{element.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}</div>
@@ -163,163 +190,107 @@
               </div>
             </km-property>
 
+            <!-- Other provider-specific properties. -->
+            <km-property *ngIf="element.spec.cloud.aws">
+              <div key>Disk Type</div>
+              <div value>{{element.spec.cloud.aws.volumeType}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.aws">
+              <div key>Disk Size in GB</div>
+              <div value>{{element.spec.cloud.aws.diskSize}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.aws && element.spec.cloud.aws.ami">
+              <div key>AMI ID</div>
+              <div value>{{element.spec.cloud.aws.ami}}</div>
+            </km-property>
+
+            <km-property *ngIf="element.spec.cloud.openstack">
+              <div key>Node Image</div>
+              <div value>{{element.spec.cloud.openstack.image}}</div>
+            </km-property>
+
+            <km-property *ngIf="element.spec.cloud.vsphere">
+              <div key>Number of CPU's</div>
+              <div value>{{element.spec.cloud.vsphere.cpus}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.vsphere">
+              <div key>Memory in MB</div>
+              <div value>{{element.spec.cloud.vsphere.memory}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.vsphere && element.spec.cloud.vsphere.diskSizeGB">
+              <div key>Disk Size in GB</div>
+              <div value>{{element.spec.cloud.vsphere.diskSizeGB}}</div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.vsphere && element.spec.cloud.vsphere.template">
+              <div key>VM Template</div>
+              <div value>{{element.spec.cloud.vsphere.template}}</div>
+            </km-property>
+            <!-- End of other properties. -->
+
+            <!-- Tags for all providers. -->
+            <km-property *ngIf="element.spec.cloud.aws && displayTags(element.spec.cloud.aws.tags)">
+              <div key>Tags</div>
+              <div value>
+                <km-labels [labels]="element.spec.cloud.aws.tags"></km-labels>
+              </div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.azure && displayTags(element.spec.cloud.azure.tags)">
+              <div key>Tags</div>
+              <div value>
+                <km-labels [labels]="element.spec.cloud.azure.tags"></km-labels>
+              </div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.digitalocean && element.spec.cloud.digitalocean.tags.length > 0">
+              <div key>Tags</div>
+              <div value>
+                <km-labels [labels]="element.spec.cloud.digitalocean.tags"></km-labels>
+              </div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.packet && element.spec.cloud.packet.tags.length > 0">
+              <div key>Tags</div>
+              <div value>
+                <km-labels [labels]="element.spec.cloud.packet.tags"></km-labels>
+              </div>
+            </km-property>
+            <km-property *ngIf="element.spec.cloud.openstack && displayTags(element.spec.cloud.openstack.tags)">
+              <div key>Tags</div>
+              <div value>
+                <km-labels [labels]="element.spec.cloud.openstack.tags"></km-labels>
+              </div>
+            </km-property>
+            <!-- End of tags.-->
+
+            <!-- Boolean properties. -->
             <km-boolean-property *ngIf="!!element.spec.operatingSystem.ubuntu"
                                  label="Upgrade system on first boot"
                                  [value]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot">
             </km-boolean-property>
-
             <km-boolean-property *ngIf="!!element.spec.operatingSystem.centos"
                                  label="Upgrade system on first boot"
                                  [value]="element.spec.operatingSystem.centos.distUpgradeOnBoot">
             </km-boolean-property>
-
             <km-boolean-property *ngIf="!!element.spec.operatingSystem.containerLinux"
                                  label="Disable auto-update"
                                  [value]="element.spec.operatingSystem.containerLinux.disableAutoUpdate">
             </km-boolean-property>
+            <km-boolean-property *ngIf="element.spec.cloud.digitalocean"
+                                 label="Backups"
+                                 [value]="element.spec.cloud.digitalocean.backups">
+            </km-boolean-property>
+            <km-boolean-property *ngIf="element.spec.cloud.digitalocean"
+                                 label="IPv6"
+                                 [value]="element.spec.cloud.digitalocean.ipv6">
+            </km-boolean-property>
+            <km-boolean-property *ngIf="element.spec.cloud.digitalocean"
+                                 label="Monitoring"
+                                 [value]="element.spec.cloud.digitalocean.monitoring">
+            </km-boolean-property>
+            <km-boolean-property *ngIf="element.spec.cloud.azure"
+                                 label="Assign Public IP"
+                                 [value]="element.spec.cloud.azure.assignPublicIP">
+            </km-boolean-property>
+            <!-- End of boolean properties. -->
 
-            <!-- AWS -->
-            <ng-container *ngIf="element.spec.cloud.aws">
-              <km-property>
-                <div key>Node Size</div>
-                <div value>{{element.spec.cloud.aws.instanceType}}</div>
-              </km-property>
-
-              <km-property>
-                <div key>Disk Type</div>
-                <div value>{{element.spec.cloud.aws.volumeType}}</div>
-              </km-property>
-
-              <km-property>
-                <div key>Disk Size in GB</div>
-                <div value>{{element.spec.cloud.aws.diskSize}}</div>
-              </km-property>
-
-              <km-property *ngIf="element.spec.cloud.aws.ami">
-                <div key>AMI ID</div>
-                <div value>{{element.spec.cloud.aws.ami}}</div>
-              </km-property>
-
-              <km-property *ngIf="displayTags(element.spec.cloud.aws.tags)">
-                <div key>Tags</div>
-                <div value>
-                  <km-labels [labels]="element.spec.cloud.aws.tags"></km-labels>
-                </div>
-              </km-property>
-            </ng-container>
-
-            <!-- DO -->
-            <ng-container *ngIf="element.spec.cloud.digitalocean">
-              <km-property>
-                <div key>Node Size</div>
-                <div value>{{element.spec.cloud.digitalocean.size}}</div>
-              </km-property>
-
-              <km-boolean-property label="Backups"
-                                   [value]="element.spec.cloud.digitalocean.backups">
-              </km-boolean-property>
-
-              <km-boolean-property label="IPv6"
-                                   [value]="element.spec.cloud.digitalocean.ipv6">
-              </km-boolean-property>
-
-              <km-boolean-property label="Monitoring"
-                                   [value]="element.spec.cloud.digitalocean.monitoring">
-              </km-boolean-property>
-
-              <km-property *ngIf="element.spec.cloud.digitalocean.tags.length > 0">
-                <div key>Tags</div>
-                <div value>
-                  <km-labels [labels]="element.spec.cloud.digitalocean.tags"></km-labels>
-                </div>
-              </km-property>
-            </ng-container>
-
-            <!-- Packet -->
-            <ng-container *ngIf="element.spec.cloud.packet">
-              <km-property>
-                <div key>Instance Type</div>
-                <div value>{{element.spec.cloud.packet.instanceType}}</div>
-              </km-property>
-
-
-              <km-property *ngIf="element.spec.cloud.packet.tags.length > 0">
-                <div key>Tags</div>
-                <div value>
-                  <km-labels [labels]="element.spec.cloud.packet.tags"></km-labels>
-                </div>
-              </km-property>
-            </ng-container>
-
-            <!-- Openstack -->
-            <ng-container *ngIf="element.spec.cloud.openstack">
-              <km-property>
-                <div key>Node Size</div>
-                <div value>{{element.spec.cloud.openstack.flavor}}</div>
-              </km-property>
-
-              <km-property>
-                <div key>Node Image</div>
-                <div value>{{element.spec.cloud.openstack.image}}</div>
-              </km-property>
-
-              <km-property *ngIf="displayTags(element.spec.cloud.openstack.tags)">
-                <div key>Tags</div>
-                <div value>
-                  <km-labels [labels]="element.spec.cloud.openstack.tags"></km-labels>
-                </div>
-              </km-property>
-            </ng-container>
-
-            <!-- Hetzner -->
-            <ng-container *ngIf="element.spec.cloud.hetzner">
-              <km-property>
-                <div key>Node Size</div>
-                <div value>{{element.spec.cloud.hetzner.type}}</div>
-              </km-property>
-            </ng-container>
-
-            <!-- vSphere -->
-            <ng-container *ngIf="element.spec.cloud.vsphere">
-              <km-property>
-                <div key>Number of CPU's</div>
-                <div value>{{element.spec.cloud.vsphere.cpus}}</div>
-              </km-property>
-
-              <km-property>
-                <div key>Memory in MB</div>
-                <div value>{{element.spec.cloud.vsphere.memory}}</div>
-              </km-property>
-
-              <km-property *ngIf="element.spec.cloud.vsphere.diskSizeGB">
-                <div key>Disk Size in GB</div>
-                <div value>{{element.spec.cloud.vsphere.diskSizeGB}}</div>
-              </km-property>
-
-              <km-property *ngIf="element.spec.cloud.vsphere.template">
-                <div key>VM Template</div>
-                <div value>{{element.spec.cloud.vsphere.template}}</div>
-              </km-property>
-            </ng-container>
-
-            <!-- Azure -->
-            <ng-container *ngIf="element.spec.cloud.azure">
-              <km-property>
-                <div key>Node Size</div>
-                <div value>{{element.spec.cloud.azure.size}}</div>
-              </km-property>
-
-              <km-boolean-property label="Assign Public IP"
-                                   [value]="element.spec.cloud.azure.assignPublicIP">
-              </km-boolean-property>
-
-              <km-property *ngIf="displayTags(element.spec.cloud.azure.tags)">
-                <div key>Tags</div>
-                <div value>
-                  <km-labels [labels]="element.spec.cloud.azure.tags"></km-labels>
-                </div>
-              </km-property>
-            </ng-container>
           </mat-card-content>
         </td>
       </ng-container>
