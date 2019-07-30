@@ -19,7 +19,7 @@ const routes: Routes = [
     component: TermsOfServiceComponent,
   },
   {
-    path: 'api-docs',
+    path: 'api',
     component: ApiDocsComponent,
     canActivate: [AuthGuard],
   },

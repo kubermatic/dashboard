@@ -10,6 +10,17 @@
     </div>
   </div>
 
+  <div class="footer-link"
+       fxFlexAlign=" center"
+       fxLayout="row"
+       *ngIf="showApiDocs()">
+    <div class="km-separator">–</div>
+    <a routerLink="api"
+       matTooltip="API">
+      API
+    </a>
+  </div>
+
   <div *ngIf="!!version"
        fxFlexAlign=" center"
        fxLayout="row">
@@ -41,15 +52,6 @@
        target="_blank"
        rel="noopener">
       <i [ngStyle]="getCustomLinkIconStyle(link)"></i>
-    </a>
-  </div>
-
-  <div class="footer-link"
-       fxFlexAlign="center"
-       fxLayoutAlign="end center">
-    <a routerLink="/api-docs"
-       matTooltip="API Docs">
-      API Docs
     </a>
   </div>
 </footer>

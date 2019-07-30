@@ -1,5 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {DOCUMENT} from '@angular/common';
+import {Component, Inject, OnInit} from '@angular/core';
 import SwaggerUI from 'swagger-ui';
+
 import {ApiService, Auth} from '../../core/services';
 
 @Component({
@@ -7,12 +9,14 @@ import {ApiService, Auth} from '../../core/services';
   templateUrl: './api-docs.component.html',
 })
 export class ApiDocsComponent implements OnInit {
-  constructor(private _auth: Auth, private _api: ApiService) {}
+  constructor(
+      private readonly _auth: Auth, private readonly _api: ApiService,
+      @Inject(DOCUMENT) private readonly _document: Document) {}
 
   ngOnInit(): void {
     this._api.getSwaggerJson().subscribe((swaggerSpec) => {
-      swaggerSpec.host = window.location.host;
-      swaggerSpec.schemes = [window.location.protocol.replace(':', '')];
+      swaggerSpec.host = this._document.location.host;
+      swaggerSpec.schemes = [this._document.location.protocol.replace(':', '')];
       SwaggerUI({
         dom_id: '#swaggerContainer',
         spec: swaggerSpec,

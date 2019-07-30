@@ -30,6 +30,10 @@ export class FooterComponent implements OnInit {
     return this.config.show_terms_of_service;
   }
 
+  showApiDocs(): boolean {
+    return this.config.show_api_docs;
+  }
+
   getCustomLinkIconStyle(link: CustomLink): any {
     return {
       'background-image': `url('${CustomLink.getIcon(link)}')`,
