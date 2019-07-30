@@ -163,26 +163,20 @@
               </div>
             </km-property>
 
-            <km-property *ngIf="!!element.spec.operatingSystem.ubuntu">
-              <div key>Upgrade system on first boot</div>
-              <div value>
-                <i [ngClass]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
-              </div>
-            </km-property>
+            <km-boolean-property *ngIf="!!element.spec.operatingSystem.ubuntu"
+                                 label="Upgrade system on first boot"
+                                 [value]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot">
+            </km-boolean-property>
 
-            <km-property *ngIf="!!element.spec.operatingSystem.centos">
-              <div key>Upgrade system on first boot</div>
-              <div value>
-                <i [ngClass]="element.spec.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
-              </div>
-            </km-property>
+            <km-boolean-property *ngIf="!!element.spec.operatingSystem.centos"
+                                 label="Upgrade system on first boot"
+                                 [value]="element.spec.operatingSystem.centos.distUpgradeOnBoot">
+            </km-boolean-property>
 
-            <km-property *ngIf="!!element.spec.operatingSystem.containerLinux">
-              <div key>Disable auto-update</div>
-              <div value>
-                <i [ngClass]="element.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
-              </div>
-            </km-property>
+            <km-boolean-property *ngIf="!!element.spec.operatingSystem.containerLinux"
+                                 label="Disable auto-update"
+                                 [value]="element.spec.operatingSystem.containerLinux.disableAutoUpdate">
+            </km-boolean-property>
 
             <!-- AWS -->
             <ng-container *ngIf="element.spec.cloud.aws">
@@ -221,26 +215,17 @@
                 <div value>{{element.spec.cloud.digitalocean.size}}</div>
               </km-property>
 
-              <km-property>
-                <div key>Backups</div>
-                <div value>
-                  <i [ngClass]="element.spec.cloud.digitalocean.backups ? 'fa fa-check' : 'fa fa-times'"></i>
-                </div>
-              </km-property>
+              <km-boolean-property label="Backups"
+                                   [value]="element.spec.cloud.digitalocean.backups">
+              </km-boolean-property>
 
-              <km-property>
-                <div key>IPv6</div>
-                <div value>
-                  <i [ngClass]="element.spec.cloud.digitalocean.ipv6 ? 'fa fa-check' : 'fa fa-times'"></i>
-                </div>
-              </km-property>
+              <km-boolean-property label="IPv6"
+                                   [value]="element.spec.cloud.digitalocean.ipv6">
+              </km-boolean-property>
 
-              <km-property>
-                <div key>Monitoring</div>
-                <div value>
-                  <i [ngClass]="element.spec.cloud.digitalocean.monitoring ? 'fa fa-check' : 'fa fa-times'"></i>
-                </div>
-              </km-property>
+              <km-boolean-property label="Monitoring"
+                                   [value]="element.spec.cloud.digitalocean.monitoring">
+              </km-boolean-property>
 
               <km-property *ngIf="element.spec.cloud.digitalocean.tags.length > 0">
                 <div key>Tags</div>
@@ -324,12 +309,9 @@
                 <div value>{{element.spec.cloud.azure.size}}</div>
               </km-property>
 
-              <km-property *ngIf="element.spec.cloud.azure.assignPublicIP">
-                <div key>Assign Public IP</div>
-                <div value>
-                  <i [ngClass]="element.spec.cloud.azure.assignPublicIP ? 'fa fa-check' : 'fa fa-times'"></i>
-                </div>
-              </km-property>
+              <km-boolean-property label="Assign Public IP"
+                                   [value]="element.spec.cloud.azure.assignPublicIP">
+              </km-boolean-property>
 
               <km-property *ngIf="displayTags(element.spec.cloud.azure.tags)">
                 <div key>Tags</div>
