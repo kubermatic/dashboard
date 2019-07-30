@@ -130,10 +130,6 @@ export class NodeListComponent implements OnInit {
     return addresses;
   }
 
-  getOsImage(node: NodeEntity): string {
-    return NodeUtils.getOperatingSystem(node.spec);
-  }
-
   showInfo(node: NodeEntity): boolean {
     return node.name !== node.id.replace('machine-', '') && node.id !== '';
   }
@@ -159,5 +155,13 @@ export class NodeListComponent implements OnInit {
     if (className !== 'km-copy') {
       this.isShowNodeItem[element.id] = !this.isShowNodeItem[element.id];
     }
+  }
+
+  getSystem(node: NodeEntity): string {
+    return NodeUtils.getOperatingSystem(node.spec);
+  }
+
+  getSystemLogoClass(node: NodeEntity): string {
+    return NodeUtils.getOperatingSystemLogoClass(node.spec);
   }
 }

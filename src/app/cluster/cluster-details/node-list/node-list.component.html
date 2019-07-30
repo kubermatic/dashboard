@@ -139,14 +139,28 @@
             [attr.colspan]="displayedColumns.length">
           <mat-card-content fxLayout="row wrap"
                             class="km-row">
-            <km-property>
-              <div key>Operating System</div>
-              <div value>{{getOsImage(element)}}</div>
+            <km-property *ngIf="!!element.status.nodeInfo.kernelVersion">
+              <div key>Kernel Version</div>
+              <div value>{{element.status.nodeInfo.kernelVersion}}</div>
+            </km-property>
+
+            <km-property *ngIf="!!element.status.nodeInfo.containerRuntimeVersion">
+              <div key>Container Runtime Version</div>
+              <div value>{{element.status.nodeInfo.containerRuntimeVersion}}</div>
             </km-property>
 
             <km-property *ngIf="!!element.status.capacity.cpu && !!element.status.capacity.memory">
-              <div key>Capacity</div>
+              <div key>Node Capacity</div>
               <div value>{{element.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}</div>
+            </km-property>
+
+            <km-property>
+              <div value
+                   fxLayout="row"
+                   fxLayoutGap="10px">
+                <div class="km-os-image-{{getSystemLogoClass(element)}}"></div>
+                <span>{{getSystem(element)}}</span>
+              </div>
             </km-property>
 
             <km-property *ngIf="!!element.spec.operatingSystem.ubuntu">
@@ -324,16 +338,6 @@
                 </div>
               </km-property>
             </ng-container>
-
-            <km-property *ngIf="!!element.status.nodeInfo.kernelVersion">
-              <div key>Kernel Version</div>
-              <div value>{{element.status.nodeInfo.kernelVersion}}</div>
-            </km-property>
-
-            <km-property *ngIf="!!element.status.nodeInfo.containerRuntimeVersion">
-              <div key>Container Runtime Version</div>
-              <div value>{{element.status.nodeInfo.containerRuntimeVersion}}</div>
-            </km-property>
           </mat-card-content>
         </td>
       </ng-container>
