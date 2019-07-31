@@ -15,10 +15,12 @@ ng2-slim-loading-bar {
 }
 
 .km-navigation-bar {
-  z-index: 2;
-  height: $toolbar-height;
   background-color: $white-text-color;
   box-shadow: 0 4px 4px rgba($text-color, 0.1);
+  height: $toolbar-height;
+  position: fixed;
+  width: 100%;
+  z-index: 2;
 
   .km-header-logo {
     display: block;
