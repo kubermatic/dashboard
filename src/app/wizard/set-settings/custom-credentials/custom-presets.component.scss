@@ -2,14 +2,11 @@
 
 .mat-icon-button {
   color: $text-color;
-  line-height: 15px;
+  line-height: 20px;
   margin-right: 5px !important;
-  margin-top: -3px !important;
-  max-height: 15px;
-  max-width: 15px;
-  position: relative;
-
-  &:hover:not([disabled]) {
-    background-color: inherit;
-  }
+  right: 25px;
+  top: -4px;
+  max-height: 20px;
+  max-width: 20px;
+  position: absolute;
 }
