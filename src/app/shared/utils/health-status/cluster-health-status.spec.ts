@@ -23,7 +23,7 @@ describe('ClusterHealthStatus', () => {
   });
 
   it('should return if cluster is running', () => {
-    expect(ClusterHealthStatus.isClusterRunning(cluster, health)).toBeTruthy();
-    expect(ClusterHealthStatus.isClusterRunning(cluster, healthFailed)).toBeFalsy();
+    expect(ClusterHealthStatus.isClusterAPIRunning(cluster, health)).toBeTruthy();
+    expect(ClusterHealthStatus.isClusterAPIRunning(cluster, healthFailed)).toBeFalsy();
   });
 });
