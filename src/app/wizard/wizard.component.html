@@ -41,8 +41,10 @@
          color="tertiary"
          routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
       <div fxFlex></div>
-      <mat-icon class="fa fa-spinner fa-spin"
-                *ngIf="creating"></mat-icon>
+      <mat-spinner [diameter]="30"
+                   class="km-spinner"
+                   color="accent"
+                   *ngIf="creating"></mat-spinner>
       <button type="button"
               class="km-btn-back"
               mat-flat-button
