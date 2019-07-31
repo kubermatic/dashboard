@@ -4,15 +4,9 @@
 .mat-flat-button {
   margin-left: 0 !important;
   padding: 0 $baseline-grid;
+  font-weight: normal;
 }
 
 mat-card-header {
   margin-top: 20px;
-}
-
-.km-wizard-ssh-key {
-  color: $white-text-color;
-  font-weight: normal;
-  padding: 0 10px;
-  margin-left: 0 !important;
 }
