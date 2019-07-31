@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {EventEmitter, Injectable} from '@angular/core';
 import {Router} from '@angular/router';
-import {merge, Observable, Subject, timer} from 'rxjs';
-import {filter, first, map, publishReplay, refCount, switchMapTo} from 'rxjs/operators';
+import {merge, Observable, of, Subject, timer} from 'rxjs';
+import {catchError, filter, first, map, shareReplay, switchMapTo} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {ProjectEntity} from '../../../shared/entity/ProjectEntity';
@@ -26,8 +26,7 @@ export class ProjectService {
     if (!this._projects$) {
       this._projects$ = merge(this.onProjectsUpdate, this._refreshTimer$)
                             .pipe(switchMapTo(this._getProjects()))
-                            .pipe(publishReplay(1))
-                            .pipe(refCount());
+                            .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
 
     return this._projects$;
@@ -39,7 +38,7 @@ export class ProjectService {
 
 
   get selectedProject(): Observable<ProjectEntity> {
-    return merge(this._params.onParamChange, this.projects)
+    return merge(this._params.onParamChange, this.projects.pipe(first()))
         .pipe(switchMapTo(this.projects))
         .pipe(map(projects => projects.find(project => project.id === this._selectedProjectID)))
         .pipe(filter(project => project !== undefined));
@@ -65,6 +64,6 @@ export class ProjectService {
 
   private _getProjects(): Observable<ProjectEntity[]> {
     const url = `${this._restRoot}/projects`;
-    return this._http.get<ProjectEntity[]>(url);
+    return this._http.get<ProjectEntity[]>(url).pipe(catchError(() => of<ProjectEntity[]>()));
   }
 }
