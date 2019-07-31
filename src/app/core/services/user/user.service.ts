@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {EMPTY, iif, Observable, of, timer} from 'rxjs';
-import {catchError, map, publishReplay, refCount, switchMap} from 'rxjs/operators';
+import {catchError, first, map, shareReplay, switchMap} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
 import {MemberEntity} from '../../../shared/entity/MemberEntity';
@@ -20,15 +20,14 @@ export class UserService {
     if (!this._user$) {
       this._user$ = this._refreshTimer$
                         .pipe(switchMap(() => iif(() => this._auth.authenticated(), this._getLoggedInUser(), EMPTY)))
-                        .pipe(publishReplay(1))
-                        .pipe(refCount());
+                        .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
 
     return this._user$;
   }
 
   currentUserGroup(projectID: string): Observable<string> {
-    return this.loggedInUser.pipe(map((member) => {
+    return this.loggedInUser.pipe(first()).pipe(map((member) => {
       const projects = member.projects ? member.projects : [];
       for (const project of projects) {
         if (project.id === projectID) {

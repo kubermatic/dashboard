@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatDialog, MatDialogConfig, MatSort, MatTableDataSource} from '@angular/material';
 import {EMPTY, merge, Subject, timer} from 'rxjs';
-import {first, switchMap, takeUntil} from 'rxjs/operators';
+import {first, switchMap, switchMapTo, takeUntil} from 'rxjs/operators';
 
 import {AppConfigService} from '../app-config.service';
 import {ApiService, ProjectService, UserService} from '../core/services';
@@ -48,16 +48,17 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
     this.sort.active = 'name';
     this.sort.direction = 'asc';
 
-    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+    merge(this._serviceAccountUpdate, this._projectService.selectedProject.pipe(first()))
+        .pipe(switchMapTo(this._projectService.selectedProject))
         .pipe(switchMap(project => {
           this._selectedProject = project;
           return this._userService.currentUserGroup(project.id);
         }))
-        .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
-
-    merge(timer(0, 10 * this._appConfig.getRefreshTimeBase()), this._serviceAccountUpdate)
+        .pipe(switchMap(userGroup => {
+          this._currentGroupConfig = this._userService.userGroupConfig(userGroup);
+          return this._apiService.getServiceAccounts(this._selectedProject.id);
+        }))
         .pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => this._apiService.getServiceAccounts(this._selectedProject.id)))
         .subscribe(serviceaccounts => {
           this.serviceAccounts = serviceaccounts;
           this.isInitializing = false;
@@ -152,6 +153,7 @@ export class ServiceAccountComponent implements OnInit, OnDestroy {
       if (isConfirmed) {
         this._apiService.deleteServiceAccount(this._selectedProject.id, serviceAccount).pipe(first()).subscribe(() => {
           delete this.tokenList[serviceAccount.id];
+          this._serviceAccountUpdate.next();
           NotificationActions.success(
               `Service Account ${serviceAccount.name} has been removed from project ${this._selectedProject.name}`);
           this._googleAnalyticsService.emitEvent('serviceAccountOverview', 'ServiceAccountDeleted');
