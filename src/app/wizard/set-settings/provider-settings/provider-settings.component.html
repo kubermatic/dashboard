@@ -36,3 +36,6 @@
 <kubermatic-gcp-cluster-settings [cluster]="cluster"
                                  *ngIf="cluster.spec.cloud.gcp">
 </kubermatic-gcp-cluster-settings>
+
+<kubermatic-cluster-ssh-keys [cluster]="cluster"
+                             [selectedKeys]="clusterSSHKeys"></kubermatic-cluster-ssh-keys>
