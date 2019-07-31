@@ -39,7 +39,8 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   nodes: NodeEntity[] = [];
   nodeDeployments: NodeDeploymentEntity[];
   isNodeDeploymentLoadFinished = false;
-  isClusterRunning: boolean;
+  isClusterRunning = false;
+  isClusterAPIRunning = false;
   clusterHealthStatus: ClusterHealthStatus;
   health: HealthEntity;
   config: Config = {share_kubeconfig: false};
@@ -91,6 +92,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
           this.health = health;
           this.events = events;
+          this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);
           this.clusterHealthStatus = ClusterHealthStatus.getHealthStatus(this.cluster, health);
 
@@ -185,7 +187,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   }
 
   getDownloadURL(): string {
-    return this.isClusterRunning ?
+    return this.isClusterAPIRunning ?
         this._api.getKubeconfigURL(this.projectID, this.datacenter.metadata.name, this.cluster.id) :
         '';
   }

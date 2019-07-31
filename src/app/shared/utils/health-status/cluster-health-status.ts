@@ -14,9 +14,7 @@ export class ClusterHealthStatus extends HealthStatus {
   static getHealthStatus(c: ClusterEntity, h: HealthEntity): ClusterHealthStatus {
     if (!!c.deletionTimestamp) {
       return new ClusterHealthStatus(HealthStatusMessage.Deleting, HealthStatusColor.Red, HealthStatusCss.Deleting);
-    } else if (
-        !!h && HealthState.isUp(h.apiserver) && HealthState.isUp(h.scheduler) && HealthState.isUp(h.controller) &&
-        HealthState.isUp(h.machineController) && HealthState.isUp(h.etcd)) {
+    } else if (this.isClusterRunning(c, h)) {
       return new ClusterHealthStatus(HealthStatusMessage.Running, HealthStatusColor.Green, HealthStatusCss.Running);
     } else {
       return new ClusterHealthStatus(
@@ -25,12 +23,12 @@ export class ClusterHealthStatus extends HealthStatus {
   }
 
   static isClusterRunning(c: ClusterEntity, h: HealthEntity): boolean {
-    if (!!c.deletionTimestamp) {
-      return false;
-    } else if (!!h && h.apiserver) {
-      return true;
-    }
-    return false;
+    return !!h && HealthState.isUp(h.apiserver) && HealthState.isUp(h.scheduler) && HealthState.isUp(h.controller) &&
+        HealthState.isUp(h.machineController) && HealthState.isUp(h.etcd) && !c.deletionTimestamp;
+  }
+
+  static isClusterAPIRunning(c: ClusterEntity, h: HealthEntity): boolean {
+    return !!h && HealthState.isUp(h.apiserver) && !c.deletionTimestamp;
   }
 
   css: string;
