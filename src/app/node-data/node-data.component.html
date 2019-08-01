@@ -122,36 +122,24 @@
     <div *ngIf="nodeForm.controls.operatingSystem.value === 'ubuntu'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
-      <label class="km-clickable">
-        <span fxFlex="50%">Upgrade system on first boot</span>
-        <mat-checkbox fxFlex="50%"
-                      id="distUpgradeOnBootUbuntu"
-                      formControlName="distUpgradeOnBootUbuntu"></mat-checkbox>
-      </label>
+      <mat-checkbox id="distUpgradeOnBootUbuntu"
+                    formControlName="distUpgradeOnBootUbuntu">Upgrade system on first boot</mat-checkbox>
     </div>
 
     <!-- Options for CentOS -->
     <div *ngIf="nodeForm.controls.operatingSystem.value === 'centos'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
-      <label class="km-clickable">
-        <span fxFlex="50%">Upgrade system on first boot</span>
-        <mat-checkbox fxFlex="50%"
-                      id="distUpgradeOnBootCentos"
-                      formControlName="distUpgradeOnBootCentos"></mat-checkbox>
-      </label>
+      <mat-checkbox id="distUpgradeOnBootCentos"
+                    formControlName="distUpgradeOnBootCentos">Upgrade system on first boot</mat-checkbox>
     </div>
 
     <!-- Options for Container Linux -->
     <div *ngIf="nodeForm.controls.operatingSystem.value === 'containerLinux'"
          class="km-os-options"
          [ngClass]="(cluster.spec.cloud.openstack || cluster.spec.cloud.vsphere) ? 'km-with-margin' : ''">
-      <label class="km-clickable">
-        <span fxFlex="50%">Disable auto-update</span>
-        <mat-checkbox fxFlex="50%"
-                      id="disableAutoUpdate"
-                      formControlName="disableAutoUpdate"></mat-checkbox>
-      </label>
+      <mat-checkbox id="disableAutoUpdate"
+                    formControlName="disableAutoUpdate">Disable auto-update</mat-checkbox>
     </div>
   </div>
 </form>

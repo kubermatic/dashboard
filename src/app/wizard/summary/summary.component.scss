@@ -5,91 +5,65 @@ mat-card {
   padding: 0;
 }
 
-.fa-check {
-  color: $indicator-green !important;
+.km-summary mat-card-content {
+  margin-bottom: 3 * $baseline-grid;
 }
 
-.fa-times {
-  color: $indicator-red !important;
-}
+.km-summary-row {
+  display: flex;
+  align-items: center;
+  line-height: 2.4 * $line-height;
+  font-size: $subhead-font-size-base;
+  color: $text-color;
 
-.km-summary-container {
-  .km-summary-box {
-    border: 1px solid $border;
-    padding: 0 0 5px 0;
-
-    h3 {
-      background-color: $medium-background;
-      border-bottom: 1px solid $border;
-      padding: 5px;
-      margin: 0 0 5px 0;
-      font-size: 12px;
-      font-weight: 400;
-      color: $medium-text-color;
-      text-transform: uppercase;
-    }
-  }
-
-  .km-summary-left,
-  .km-summary-right,
-  .km-summary-full {
-    margin-top: $baseline-grid;
-    margin-bottom: $baseline-grid;
-
-    div.km-card-list-content {
-      padding: 0 10px;
-      height: auto;
-    }
-  }
-
-  .km-summary-left {
-    margin-right: $baseline-grid;
-  }
-
-  .km-summary-right {
-    margin-left: $baseline-grid;
-  }
-
-  .km-seperated {
-    margin-bottom: 20px;
-  }
-
-  .km-node-settings {
-    flex-flow: row wrap;
-  }
-
-  .km-card-list-key {
-    font-size: 14px;
-    font-weight: 600;
-    color: $text-color;
+  &.km-summary-sshkeys {
+    align-items: flex-start;
   }
 }
 
-input[type="password"].km-card-list-secret {
-  border: 0 solid $white-text-color;
-  background-color: transparent;
-  width: 100%;
+.km-summary-row-with-margin {
+  margin-bottom: 2 * $baseline-grid;
 }
 
-.km-card-list-content {
-  height: 26px;
-  line-height: 26px;
+.km-provider-logo {
+  max-width: 100px !important;
 
-  &.km-machine-networks {
-    padding-bottom: 15px;
+  &.km-provider-logo-aws,
+  &.km-provider-logo-gcp {
+    margin-top: 1.25 * $baseline-grid;
   }
 
-  &.km-provider {
-    height: auto;
-    line-height: 50px;
-    align-items: center;
-
-    .km-provider-logo {
-      padding-top: 15px;
-    }
+  &.km-provider-logo-vsphere,
+  &.km-provider-logo-bringyourown {
+    margin-top: 0.6 * $baseline-grid;
   }
+}
 
-  .km-machine-networks-dns-server {
-    word-break: break-word;
-  }
+.km-os-image {
+  display: inline-block;
+  height: 28px;
+  width: 28px;
+}
+
+.km-summary-left {
+  display: flex;
+  align-items: center;
+  width: 4.25 * $baseline-grid;
+  font-size: $subhead-font-size-base;
+  color: $text-color;
+}
+
+.km-icon-key {
+  cursor: default;
+  background: $text-color;
+  margin-right: 2 * $baseline-grid;
+  user-select: none;
+}
+
+.km-summary-tags {
+  margin: (2 * $baseline-grid) 0;
+}
+
+::ng-deep .km-property-container {
+  margin: 0 0 (0.6 * $baseline-grid) !important;
 }

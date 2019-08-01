@@ -1,4 +1,5 @@
 <div fxLayout="column">
+
   <div fxLayout="row"
        fxLayout.md="column"
        fxLayout.sm="column"
@@ -29,7 +30,7 @@
   </div>
 
   <div class="km-wizard-settings-extended-wrapper"
-       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.bringyourown && !isExtended"
+       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.packet && !cluster.spec.cloud.bringyourown && !isExtended"
        fxFlex>
     <div class="km-wizard-settings-extended-divider"
          fxFlex>

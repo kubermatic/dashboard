@@ -30,36 +30,65 @@ export class SummaryComponent implements OnInit {
     return NodeUtils.getOperatingSystem(this.nodeData.spec);
   }
 
+  getOperatingSystemLogoClass(): string {
+    return NodeUtils.getOperatingSystemLogoClass(this.nodeData.spec);
+  }
+
   getType(type: string): string {
     return ClusterUtils.getType(type);
   }
 
-  getVersionHeadline(type: string, isKubelet: boolean): string {
-    return ClusterUtils.getVersionHeadline(type, isKubelet);
+  displayProvider(): boolean {
+    return !!this.cluster.spec.cloud.digitalocean || !!this.cluster.spec.cloud.hetzner ||
+        !!this.cluster.spec.cloud.bringyourown || (!!this.cluster.spec.cloud.aws && !this.hasAWSProviderOptions()) ||
+        (!!this.cluster.spec.cloud.gcp && !this.hasGCPProviderOptions()) ||
+        (!!this.cluster.spec.cloud.azure && !this.hasAzureProviderOptions());
+  }
+
+  hasAWSProviderOptions(): boolean {
+    return this.cluster.spec.cloud.aws.securityGroup !== '' || this.cluster.spec.cloud.aws.vpcId !== '' ||
+        this.cluster.spec.cloud.aws.vpcId !== '' || this.cluster.spec.cloud.aws.subnetId !== '' ||
+        this.cluster.spec.cloud.aws.routeTableId !== '' || this.cluster.spec.cloud.aws.instanceProfileName !== '';
+  }
+
+  hasGCPProviderOptions(): boolean {
+    return this.cluster.spec.cloud.gcp.network !== '' || this.cluster.spec.cloud.gcp.subnetwork !== '';
+  }
+
+  hasAzureProviderOptions(): boolean {
+    return this.cluster.spec.cloud.azure.resourceGroup !== '' || this.cluster.spec.cloud.azure.routeTable !== '' ||
+        this.cluster.spec.cloud.azure.securityGroup !== '' || this.cluster.spec.cloud.azure.subnet !== '' ||
+        this.cluster.spec.cloud.azure.vnet !== '';
   }
 
   displayTags(tags: object): boolean {
     return Object.keys(tags).length > 0;
   }
 
-  getTagsFromObject(tags: object): string {
-    let tagsValue = '';
-    let counter = 0;
-    for (const i in tags) {
-      if (tags.hasOwnProperty(i)) {
-        counter++;
-        if (counter === 1) {
-          tagsValue += (i + ': ' + tags[i]);
-        } else {
-          tagsValue += (', ' + i + ': ' + tags[i]);
-        }
-      }
+  displayNoProviderTags(): boolean {
+    if (this.nodeData.spec.cloud.aws) {
+      return !this.displayTags(this.nodeData.spec.cloud.aws.tags);
+    } else if (this.nodeData.spec.cloud.digitalocean) {
+      return this.nodeData.spec.cloud.digitalocean.tags.length === 0;
+    } else if (this.nodeData.spec.cloud.gcp) {
+      return this.nodeData.spec.cloud.gcp.tags.length === 0;
+    } else if (this.nodeData.spec.cloud.packet) {
+      return this.nodeData.spec.cloud.packet.tags.length === 0;
+    } else if (this.nodeData.spec.cloud.openstack) {
+      return !this.displayTags(this.nodeData.spec.cloud.openstack.tags);
+    } else if (this.nodeData.spec.cloud.azure) {
+      return !this.displayTags(this.nodeData.spec.cloud.azure.tags);
+    } else {
+      return false;
     }
-    return tagsValue;
   }
 
   getDnsServers(dnsServers: string[]): string {
     return dnsServers.join(', ');
+  }
+
+  getSSHKeyNames(): string {
+    return this.clusterSSHKeys.map(key => key.name).join(', ');
   }
 
   noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
