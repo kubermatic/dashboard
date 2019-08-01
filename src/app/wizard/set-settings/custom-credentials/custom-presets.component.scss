@@ -1,12 +1,17 @@
 @import '../../../../assets/css/colors';
+@import '../../../../assets/css/variables';
 
 .mat-icon-button {
   color: $text-color;
-  line-height: 20px;
-  margin-right: 5px !important;
-  right: 25px;
-  top: -4px;
-  max-height: 20px;
-  max-width: 20px;
+  line-height: 2 * $line-height;
+  margin-right: 0.625 * $baseline-grid !important;
+  right: 3 * $baseline-grid;
+  top: -0.5 * $baseline-grid;
+  max-height: 2.5 * $baseline-grid;
+  max-width: 2.5 * $baseline-grid;
   position: absolute;
+}
+
+::ng-deep .km-preset-dropdown {
+  margin-top: 5.25 * $baseline-grid !important;
 }
