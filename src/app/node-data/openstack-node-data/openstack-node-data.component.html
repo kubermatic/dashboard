@@ -16,17 +16,13 @@
       <mat-hint *ngIf="showFlavorHint()">Please enter a valid token first.</mat-hint>
     </mat-form-field>
     <div class="km-floating-ip-checkbox">
-      <label class="km-clickable"
-             fxFlex="100%">
-        <span fxFlex="50%">
-          Allocate Floating IP
-          <i *ngIf="isFloatingIPEnforced()"
-             class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
-             matTooltip="Floating IP usage is enforced by selected datacenter"></i>
-        </span>
-        <mat-checkbox fxFlex="50%"
-                      formControlName="useFloatingIP"></mat-checkbox>
-      </label>
+      <mat-checkbox fxFlex="50%"
+                    formControlName="useFloatingIP">
+        Allocate Floating IP
+        <i *ngIf="isFloatingIPEnforced()"
+           class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
+           matTooltip="Floating IP usage is enforced by selected datacenter"></i>
+      </mat-checkbox>
     </div>
   </div>
 </form>

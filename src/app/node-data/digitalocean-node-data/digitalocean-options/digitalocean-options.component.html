@@ -5,28 +5,16 @@
   </mat-card-header>
   <div fxFlex="100%">
     <div class="km-node-options">
-      <label class="km-clickable">
-        <span fxFlex="50%">Backups</span>
-        <mat-checkbox fxFlex="50%"
-                      id="backups"
-                      formControlName="backups"></mat-checkbox>
-      </label>
+      <mat-checkbox id="backups"
+                    formControlName="backups">Backups</mat-checkbox>
     </div>
     <div class="km-node-options">
-      <label class="km-clickable">
-        <span fxFlex="50%">IPv6</span>
-        <mat-checkbox fxFlex="50%"
-                      id="ipv6"
-                      formControlName="ipv6"></mat-checkbox>
-      </label>
+      <mat-checkbox id="ipv6"
+                    formControlName="ipv6">IPv6</mat-checkbox>
     </div>
     <div class="km-node-options">
-      <label class="km-clickable">
-        <span fxFlex="50%">Monitoring</span>
-        <mat-checkbox fxFlex="50%"
-                      id="monitoring"
-                      formControlName="monitoring"></mat-checkbox>
-      </label>
+      <mat-checkbox id="monitoring"
+                    formControlName="monitoring">Monitoring</mat-checkbox>
     </div>
     <mat-form-field class="km-node-tags">
       <mat-label>Tags</mat-label>

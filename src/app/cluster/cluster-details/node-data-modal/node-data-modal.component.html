@@ -11,7 +11,7 @@
     <button mat-flat-button
             color="pure"
             (click)="onViewChange()"
-            *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.bringyourown">
+            *ngIf="!data.cluster.spec.cloud.hetzner && !data.cluster.spec.cloud.packet && !data.cluster.spec.cloud.bringyourown">
       <span *ngIf="!isExtended">Show Advanced Settings</span>
       <span *ngIf="isExtended">Hide Advanced Settings</span>
     </button>
