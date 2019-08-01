@@ -19,9 +19,12 @@
                  type="text"
                  title="name"
                  autocomplete="off">
-          <i class="km-icon-randomize"
-             matTooltip="Generate name"
-             (click)="generateName()"></i>
+          <button mat-icon-button
+                  class="km-randomize-btn"
+                  matTooltip="Generate name"
+                  (click)="generateName()">
+            <i class="km-icon-randomize"></i>
+          </button>
           <mat-error *ngIf="clusterSpecForm.controls.name.hasError('required')">
             Name is <strong>required</strong>.
           </mat-error>

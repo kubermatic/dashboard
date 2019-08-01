@@ -1,15 +1,17 @@
 @import '../../../../assets/css/colors';
+@import '../../../../assets/css/variables';
 
 .mat-icon-button {
   color: $text-color;
-  line-height: 15px;
-  margin-right: 5px !important;
-  margin-top: -3px !important;
-  max-height: 15px;
-  max-width: 15px;
-  position: relative;
+  line-height: 2 * $line-height;
+  margin-right: 0.625 * $baseline-grid !important;
+  right: 3 * $baseline-grid;
+  top: -0.5 * $baseline-grid;
+  max-height: 2.5 * $baseline-grid;
+  max-width: 2.5 * $baseline-grid;
+  position: absolute;
+}
 
-  &:hover:not([disabled]) {
-    background-color: inherit;
-  }
+::ng-deep .km-preset-dropdown {
+  margin-top: 5.25 * $baseline-grid !important;
 }

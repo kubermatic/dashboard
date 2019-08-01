@@ -617,22 +617,6 @@ mat-card-header > div > mat-card-title > div {
   background-color: transparent !important;
 }
 
-// provider message
-.km-provider-message {
-  height: 52px;
-  background-color: $medium-background;
-  margin: 5px 0 24px 0;
-  padding-left: 15px;
-  padding-right: 15px;
-  color: $text-color;
-  text-align: center;
-
-  a {
-    color: $primary;
-    text-decoration: none;
-  }
-}
-
 // cluster details: edit provider settings
 .km-provider-edit-settings,
 .km-machine-networks-settings {
@@ -896,6 +880,11 @@ mat-form-field.mat-form-field-should-float:not(.mat-focused):not(.ng-invalid):no
 mat-form-field.mat-focused:not(.ng-invalid) label,
 mat-form-field.mat-focused.ng-pristine label {
   color: $alternative-text-color;
+}
+
+mat-hint a {
+  color: $primary;
+  text-decoration: none;
 }
 
 // Checkboxes.

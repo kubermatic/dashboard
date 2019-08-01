@@ -2,7 +2,8 @@
   <mat-label>{{ label }}</mat-label>
   <mat-select [(ngModel)]="selectedPreset"
               [disabled]="disabled"
-              class="km-custom-credentials-select">
+              class="km-custom-credentials-select"
+              panelClass="km-preset-dropdown">
     <mat-option *ngFor="let credentialName of presetList.names"
                 [value]="credentialName">{{credentialName}}</mat-option>
     <mat-select-trigger fxFlex
