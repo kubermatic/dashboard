@@ -51,3 +51,8 @@ button:disabled {
   margin-top: - $baseline-grid / 2;
   min-width: 14 * $baseline-grid;
 }
+
+.km-share-kubeconfig-btn,
+.km-download-kubeconfig-btn {
+  margin-right: 1.25 * $baseline-grid;
+}
