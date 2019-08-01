@@ -16,8 +16,7 @@
           <button mat-menu-item
                   *ngIf="currentUser && !!currentUser.name"
                   (click)="$event.stopPropagation()"
-                  [disabled]="true"
-                  class="km-current-user">
+                  [disabled]="true">
             {{ currentUser.name }}
           </button>
 
