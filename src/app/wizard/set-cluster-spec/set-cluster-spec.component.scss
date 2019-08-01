@@ -5,12 +5,20 @@
   display: flex;
 }
 
-.km-generate-name-btn {
-  margin-top: 30px;
+.km-randomize-btn {
+  position: absolute;
+  right: -0.625 * $baseline-grid;
+  top: -0.25 * $baseline-grid;
+}
 
-  button {
-    background-color: transparent;
-  }
+::ng-deep .mat-button-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mat-icon-button i {
+  background-color: transparent;
 }
 
 .km-set-cluster-spec {

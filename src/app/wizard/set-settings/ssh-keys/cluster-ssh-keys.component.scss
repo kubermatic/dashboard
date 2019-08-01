@@ -4,4 +4,9 @@
 .mat-flat-button {
   margin-left: 0 !important;
   padding: 0 $baseline-grid;
+  font-weight: normal;
+}
+
+mat-card-header {
+  margin-top: 2.5 * $baseline-grid;
 }

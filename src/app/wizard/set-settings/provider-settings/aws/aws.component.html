@@ -1,14 +1,5 @@
 <form [formGroup]="form"
       fxLayout="column">
-  <div fxLayoutAlign="center center"
-       class="km-provider-message">
-
-    <span>We need a AWS Access Key and Secret Access Key <b>with write access</b>.<br>
-      You can create one&nbsp;<a target="_blank"
-         rel="noopener"
-         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
-    </span>
-  </div>
   <mat-form-field fxFlex>
     <mat-label>Access Key ID*</mat-label>
     <input matInput
@@ -16,6 +7,11 @@
            name="accessKeyId"
            type="password"
            autocomplete="off">
+    <mat-hint>
+      We need a AWS Access Key with write access. You can create one&nbsp;<a target="_blank"
+         rel="noopener"
+         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+    </mat-hint>
     <mat-error *ngIf="form.controls.accessKeyId.hasError('required')">
       Access key ID is <strong>required</strong>.
     </mat-error>
@@ -27,6 +23,11 @@
            name="secretAccessKey"
            type="password"
            autocomplete="off">
+    <mat-hint>
+      We need a AWS Secret Access Key with write access. You can create one&nbsp;<a target="_blank"
+         rel="noopener"
+         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+    </mat-hint>
     <mat-error *ngIf="form.controls.secretAccessKey.hasError('required')">
       Secret access key is <strong>required</strong>.
     </mat-error>

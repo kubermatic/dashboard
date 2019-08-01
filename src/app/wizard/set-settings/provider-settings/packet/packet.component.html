@@ -1,9 +1,5 @@
 <form [formGroup]="form"
       fxLayout="column">
-  <div fxLayoutAlign="center center"
-       class="km-provider-message">
-    We need the Packet API key and the project ID. Billing cycle can also be specified.
-  </div>
   <mat-form-field fxFlex>
     <mat-label>API Key*</mat-label>
     <input matInput
@@ -11,6 +7,7 @@
            name="apiKey"
            type="password"
            autocomplete="off">
+    <mat-hint>We need the Packet API key.</mat-hint>
     <mat-error *ngIf="form.controls.apiKey.hasError('required')">
       Packet API key is <strong>required</strong>.
     </mat-error>
@@ -25,6 +22,7 @@
            name="projectID"
            type="text"
            autocomplete="off">
+    <mat-hint>We need the Packet Project ID.</mat-hint>
     <mat-error *ngIf="form.controls.projectID.hasError('required')">
       Packet project ID is <strong>required</strong>.
     </mat-error>
