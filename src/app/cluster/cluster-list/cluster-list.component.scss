@@ -32,3 +32,21 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   display: flex;
   justify-content: flex-end;
 }
+
+.km-provider-logo {
+  max-width: unset !important;
+  min-width: unset !important;
+  min-height: 25px !important;
+  max-height: 25px !important;
+}
+
+.km-provider-logo-digitalocean,
+.km-provider-logo-openstack {
+  min-height: 20px !important;
+  max-height: 20px !important;
+}
+
+.km-provider-logo-hetzner {
+  min-height: 16px !important;
+  max-height: 16px !important;
+}
