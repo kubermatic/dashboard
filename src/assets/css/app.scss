@@ -104,6 +104,7 @@ body {
   // transition for buttons in tables
   .km-table-actions button {
     opacity: 0;
+    margin-left: 5px;
     transition: visibility 0s 0s, opacity 0s ease-out;
   }
 
