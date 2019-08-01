@@ -1025,6 +1025,11 @@ mat-hint a {
 }
 
 // Chips.
+mat-chip-list {
+  cursor: default;
+  pointer-events: none;
+}
+
 .mat-chip.mat-standard-chip {
   background: $separator;
   border: 1px solid $separator;

@@ -1,4 +1,5 @@
-<mat-chip-list *ngIf="taints && taints.length > 0">
+<mat-chip-list *ngIf="taints && taints.length > 0"
+               selectable="false">
   <mat-chip class="km-chip-container"
             *ngFor="let taint of taints">
     <div>{{taint.key}}</div>
