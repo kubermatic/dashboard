@@ -91,7 +91,7 @@
       No events available.
     </div>
 
-    <div [hidden]="isPaginatorVisible()">
+    <div [hidden]="!isPaginatorVisible()">
       <mat-paginator [pageSizeOptions]="[10, 20]"
                      showFirstLastButtons
                      class="km-paginator"></mat-paginator>
