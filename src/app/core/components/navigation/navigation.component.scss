@@ -36,6 +36,8 @@ ng2-slim-loading-bar {
     font-family: $primary-font-cursive;
     font-weight: 400;
     text-align: right;
+    position: fixed;
+    right: 20px;
 
     .km-user {
       margin: 10px 15px 10px 0;
