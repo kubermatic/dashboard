@@ -88,7 +88,7 @@
           <div class="km-table-actions km-node-deployment-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="30"
+                <mat-spinner [diameter]="25"
                              class="km-spinner"
                              color="accent"></mat-spinner>
               </ng-container>
@@ -136,7 +136,7 @@
         <mat-spinner color="accent"
                      class="km-node-deployment-spinner"
                      *ngIf="!cluster.spec.cloud.bringyourown"
-                     [diameter]="30"></mat-spinner>
+                     [diameter]="25"></mat-spinner>
       </div>
     </ng-container>
 

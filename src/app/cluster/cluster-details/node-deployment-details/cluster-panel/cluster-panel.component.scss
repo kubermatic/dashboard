@@ -9,17 +9,18 @@ $panel-margin: -$content-padding;
   color: $text-color;
   height: $toolbar-height + $baseline-grid / 4;
   margin: $panel-margin $panel-margin $content-padding $panel-margin;
-  padding: 0 $content-padding;
+  padding: 0 $content-padding 0 0;
 
   .km-cluster-panel-container-positioning {
     margin-top: $baseline-grid;
 
     .km-cluster-panel-icon {
       cursor: pointer;
-      height: 3.75 * $baseline-grid;
-      width: 3.75 * $baseline-grid;
+      height: 6.25 * $baseline-grid;
+      width: 11.875 * $baseline-grid;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
     .km-icon-arrow-left {
@@ -29,7 +30,7 @@ $panel-margin: -$content-padding;
 
     .mat-divider {
       height: 5 * $baseline-grid;
-      margin: (-$baseline-grid) (4 * $baseline-grid) 0;
+      margin: (-$baseline-grid) (4 * $baseline-grid) 0 0;
     }
 
     .km-cluster-type i {

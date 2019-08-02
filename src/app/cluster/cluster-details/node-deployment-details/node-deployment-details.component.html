@@ -127,6 +127,7 @@
 </ng-container>
 
 <ng-container *ngIf="!isInitialized()">
-  <mat-spinner color="accent"
+  <mat-spinner [diameter]="25"
+               color="accent"
                class="km-spinner"></mat-spinner>
 </ng-container>

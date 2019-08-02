@@ -7,6 +7,7 @@ import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 @Component({
   selector: 'kubermatic-share-kubeconfig',
   templateUrl: './share-kubeconfig.component.html',
+  styleUrls: ['./share-kubeconfig.component.scss'],
 })
 
 export class ShareKubeconfigComponent implements OnInit {

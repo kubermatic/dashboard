@@ -1,4 +1,5 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
 
 .km-content-edit-sshkeys {
   overflow-y: hidden;
@@ -13,6 +14,7 @@
 .km-mat-footer-row button {
   color: $medium-text-color;
   font-weight: normal;
+  line-height: 5 * $line-height;
 
   &:hover {
     background-color: $hover;
