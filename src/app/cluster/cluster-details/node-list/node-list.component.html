@@ -149,6 +149,27 @@
               <div value>{{element.status.capacity.cpu}} CPU, {{getFormattedNodeMemory(element.status.capacity.memory)}}</div>
             </km-property>
 
+            <km-property *ngIf="!!element.spec.operatingSystem.ubuntu">
+              <div key>Upgrade system on first boot</div>
+              <div value>
+                <i [ngClass]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+              </div>
+            </km-property>
+
+            <km-property *ngIf="!!element.spec.operatingSystem.centos">
+              <div key>Upgrade system on first boot</div>
+              <div value>
+                <i [ngClass]="element.spec.operatingSystem.centos.distUpgradeOnBoot ? 'fa fa-check' : 'fa fa-times'"></i>
+              </div>
+            </km-property>
+
+            <km-property *ngIf="!!element.spec.operatingSystem.containerLinux">
+              <div key>Disable auto-update</div>
+              <div value>
+                <i [ngClass]="element.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'fa fa-check' : 'fa fa-times'"></i>
+              </div>
+            </km-property>
+
             <!-- AWS -->
             <ng-container *ngIf="element.spec.cloud.aws">
               <km-property>
@@ -186,6 +207,27 @@
                 <div value>{{element.spec.cloud.digitalocean.size}}</div>
               </km-property>
 
+              <km-property>
+                <div key>Backups</div>
+                <div value>
+                  <i [ngClass]="element.spec.cloud.digitalocean.backups ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </km-property>
+
+              <km-property>
+                <div key>IPv6</div>
+                <div value>
+                  <i [ngClass]="element.spec.cloud.digitalocean.ipv6 ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </km-property>
+
+              <km-property>
+                <div key>Monitoring</div>
+                <div value>
+                  <i [ngClass]="element.spec.cloud.digitalocean.monitoring ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </km-property>
+
               <km-property *ngIf="element.spec.cloud.digitalocean.tags.length > 0">
                 <div key>Tags</div>
                 <div value>
@@ -200,6 +242,7 @@
                 <div key>Instance Type</div>
                 <div value>{{element.spec.cloud.packet.instanceType}}</div>
               </km-property>
+
 
               <km-property *ngIf="element.spec.cloud.packet.tags.length > 0">
                 <div key>Tags</div>
@@ -267,6 +310,13 @@
                 <div value>{{element.spec.cloud.azure.size}}</div>
               </km-property>
 
+              <km-property *ngIf="element.spec.cloud.azure.assignPublicIP">
+                <div key>Assign Public IP</div>
+                <div value>
+                  <i [ngClass]="element.spec.cloud.azure.assignPublicIP ? 'fa fa-check' : 'fa fa-times'"></i>
+                </div>
+              </km-property>
+
               <km-property *ngIf="displayTags(element.spec.cloud.azure.tags)">
                 <div key>Tags</div>
                 <div value>
@@ -284,61 +334,6 @@
               <div key>Container Runtime Version</div>
               <div value>{{element.status.nodeInfo.containerRuntimeVersion}}</div>
             </km-property>
-
-            <km-property *ngIf="!!element.spec.operatingSystem.ubuntu">
-              <div key></div>
-              <div value>
-                <span [ngClass]="element.spec.operatingSystem.ubuntu.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span> Upgrade system on first boot
-              </div>
-            </km-property>
-
-            <km-property *ngIf="!!element.spec.operatingSystem.centos">
-              <div key></div>
-              <div value>
-                <span [ngClass]="element.spec.operatingSystem.centos.distUpgradeOnBoot ? 'km-icon-running' : 'km-icon-disabled'"></span> Upgrade system on first boot
-              </div>
-            </km-property>
-
-            <km-property *ngIf="!!element.spec.operatingSystem.containerLinux">
-              <div key></div>
-              <div value>
-                <span [ngClass]="element.spec.operatingSystem.containerLinux.disableAutoUpdate ? 'km-icon-running' : 'km-icon-disabled'"></span> Disable auto-update
-              </div>
-            </km-property>
-
-            <!-- DO -->
-            <ng-container *ngIf="element.spec.cloud.digitalocean">
-              <km-property>
-                <div key></div>
-                <div value>
-                  <span [ngClass]="element.spec.cloud.digitalocean.backups ? 'km-icon-running' : 'km-icon-disabled'"></span> Backups
-                </div>
-              </km-property>
-
-              <km-property>
-                <div key></div>
-                <div value>
-                  <span [ngClass]="element.spec.cloud.digitalocean.ipv6 ? 'km-icon-running' : 'km-icon-disabled'"></span> IPv6
-                </div>
-              </km-property>
-
-              <km-property>
-                <div key></div>
-                <div value>
-                  <span [ngClass]="element.spec.cloud.digitalocean.monitoring ? 'km-icon-running' : 'km-icon-disabled'"></span> Monitoring
-                </div>
-              </km-property>
-            </ng-container>
-
-            <!-- Azure -->
-            <ng-container *ngIf="element.spec.cloud.azure">
-              <km-property *ngIf="element.spec.cloud.azure.assignPublicIP">
-                <div key></div>
-                <div value>
-                  <span [ngClass]="element.spec.cloud.azure.assignPublicIP ? 'km-icon-running' : 'km-icon-disabled'"></span> Assign Public IP
-                </div>
-              </km-property>
-            </ng-container>
           </mat-card-content>
         </td>
       </ng-container>
