@@ -67,9 +67,6 @@ export class ApiService {
   patchNodeDeployment(
       nd: NodeDeploymentEntity, patch: NodeDeploymentPatch, clusterId: string, dc: string,
       projectID: string): Observable<NodeDeploymentEntity> {
-    patch.spec.template.labels = LabelFormComponent.filterNullifiedKeys(patch.spec.template.labels);
-    patch.spec.template.taints = TaintFormComponent.filterNullifiedTaints(patch.spec.template.taints);
-
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${clusterId}/nodedeployments/${nd.id}`;
     return this._http.patch<NodeDeploymentEntity>(url, patch);
   }
