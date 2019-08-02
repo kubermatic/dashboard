@@ -25,7 +25,7 @@ h3 {
   cursor: pointer;
   border: 1px dashed $border;
   border-radius: 5px;
-  height: 230px;
+  height: 50px;
   color: $text-color;
   font-weight: 400;
 }
@@ -46,6 +46,10 @@ h3 {
 
     &:nth-child(2n+2) {
       padding-right: 0;
+    }
+
+    .km-add-machine-network {
+      height: 230px;
     }
   }
 }

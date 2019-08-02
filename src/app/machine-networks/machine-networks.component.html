@@ -4,7 +4,7 @@
      fxLayoutGap="20px">
   <div fxFlex="100%">
 
-    <h2>Machine Networks</h2>
+    <h2 *ngIf="!!isWizard">Machine Networks</h2>
     <form [formGroup]="machineNetworksForm"
           fxLayout
           class="km-machine-networks-form">

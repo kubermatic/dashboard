@@ -1,7 +1,7 @@
 import {Component, Input} from '@angular/core';
-import {MatDialog} from '@angular/material';
+import {MatDialog, MatTableDataSource} from '@angular/material';
 
-import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
+import {ClusterEntity, MachineNetwork} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 
 import {AddMachineNetworkComponent} from '../add-machine-network/add-machine-network.component';
@@ -17,7 +17,19 @@ export class MachineNetworksDisplayComponent {
   @Input() datacenter: DataCenterEntity;
   @Input() projectID: string;
 
+  displayedColumns: string[] = ['number', 'cidr', 'dnsServers', 'gateway'];
+  dataSource = new MatTableDataSource<MachineNetwork>();
+
   constructor(public dialog: MatDialog) {}
+
+  getDataSource(): MatTableDataSource<MachineNetwork> {
+    this.dataSource.data = this.cluster.spec.machineNetworks;
+    return this.dataSource;
+  }
+
+  getDnsString(element: MachineNetwork): string {
+    return element.dnsServers.join(', ');
+  }
 
   addMachineNetwork(): void {
     const dialogRef = this.dialog.open(AddMachineNetworkComponent);
