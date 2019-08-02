@@ -2,7 +2,6 @@
   <ng2-slim-loading-bar color="white"
                         height="2px"></ng2-slim-loading-bar>
   <div fxLayout
-       fxFlex
        class="km-navigation-bar">
     <a class="km-header-logo"></a>
     <div *ngIf="isAuthenticated()"
@@ -16,8 +15,7 @@
           <button mat-menu-item
                   *ngIf="currentUser && !!currentUser.name"
                   (click)="$event.stopPropagation()"
-                  [disabled]="true"
-                  class="km-current-user">
+                  [disabled]="true">
             {{ currentUser.name }}
           </button>
 
