@@ -15,7 +15,7 @@ h3 {
 }
 
 .km-machine-networks {
-  margin-top: 55px;
+  margin-top: 6.875 * $baseline-grid;
 }
 
 .km-add-machine-network {
@@ -25,13 +25,13 @@ h3 {
   cursor: pointer;
   border: 1px dashed $border;
   border-radius: 5px;
-  height: 50px;
+  height: 6.25 * $baseline-grid;
   color: $text-color;
   font-weight: 400;
 }
 
 .km-single-machine-network {
-  margin-bottom: 5px;
+  margin-bottom: 0.625 * $baseline-grid;
 }
 
 .km-machine-networks-form {
@@ -39,17 +39,17 @@ h3 {
 }
 
 .km-machine-networks-form-inner {
-  margin-bottom: 30px;
+  margin-bottom: 3.75 * $baseline-grid;
 
   &.withPadding {
-    padding-right: 30px;
+    padding-right: 3.75 * $baseline-grid;
 
     &:nth-child(2n+2) {
       padding-right: 0;
     }
 
     .km-add-machine-network {
-      height: 230px;
+      height: 28.75 * $baseline-grid;
     }
   }
 }
