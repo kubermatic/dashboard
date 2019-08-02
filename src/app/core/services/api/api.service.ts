@@ -1,6 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
+import {Observable, of} from 'rxjs';
+import {catchError} from 'rxjs/operators';
 
 import {environment} from '../../../../environments/environment';
 import {LabelFormComponent} from '../../../shared/components/label-form/label-form.component';
@@ -43,7 +44,7 @@ export class ApiService {
 
   getNodeDeployments(cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster}/nodedeployments`;
-    return this._http.get<NodeDeploymentEntity[]>(url);
+    return this._http.get<NodeDeploymentEntity[]>(url).pipe(catchError(() => of<NodeDeploymentEntity[]>()));
   }
 
   getNodeDeployment(ndId: string, cluster: string, dc: string, projectID: string): Observable<NodeDeploymentEntity> {
