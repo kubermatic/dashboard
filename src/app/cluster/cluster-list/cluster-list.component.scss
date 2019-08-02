@@ -1,4 +1,5 @@
 @import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
 
 $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
@@ -11,10 +12,10 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
 
 .km-button.white {
   color: $primary;
-  height: 30px;
-  line-height: 30px;
+  height: 3.75 * $baseline-grid;
+  line-height: 3 * $line-height;
   text-decoration: none;
-  font-size: 14px;
+  font-size: $body-font-size-base;
   font-weight: 500;
 }
 
@@ -23,12 +24,31 @@ $MOBILE_RESOLUTION_BREAKPOINT: 504px;
   align-items: center;
 
   i {
-    max-width: 25px;
-    max-height: 25px;
+    max-width: 3.125 * $baseline-grid;
+    max-height: 3.125 * $baseline-grid;
   }
 }
 
 .km-cluster-item-actions {
   display: flex;
   justify-content: flex-end;
+}
+
+.km-provider-logo {
+  max-width: 18.75 * $baseline-grid !important;
+  min-width: 8.75 * $baseline-grid !important;
+  min-height: 3.125 * $baseline-grid !important;
+  max-height: 3.125 * $baseline-grid !important;
+  margin-right: $baseline-grid;
+}
+
+.km-provider-logo-digitalocean,
+.km-provider-logo-openstack {
+  min-height: 2.5 * $baseline-grid !important;
+  max-height: 2.5 * $baseline-grid !important;
+}
+
+.km-provider-logo-hetzner {
+  min-height: 2 * $baseline-grid !important;
+  max-height: 2 * $baseline-grid !important;
 }

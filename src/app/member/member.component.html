@@ -55,7 +55,7 @@
           <div class="km-table-actions km-member-item-actions">
             <ng-container [ngSwitch]="!!element.deletionTimestamp">
               <ng-container *ngSwitchCase="true">
-                <mat-spinner [diameter]="30"
+                <mat-spinner [diameter]="25"
                              class="km-spinner"
                              color="accent"></mat-spinner>
               </ng-container>
@@ -99,7 +99,7 @@
            *ngIf="isInitializing">
         <mat-spinner color="accent"
                      class="km-spinner"
-                     [diameter]="30"></mat-spinner>
+                     [diameter]="25"></mat-spinner>
       </div>
     </ng-container>
 

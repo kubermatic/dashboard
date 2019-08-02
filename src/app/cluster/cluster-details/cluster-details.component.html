@@ -112,7 +112,8 @@
         </km-property>
 
         <km-property>
-          <div value>
+          <div value
+               class="km-provider-logo-value">
             <span class="km-provider-logo km-provider-logo-{{getProvider(nodeDc?.spec?.provider)}}"></span>
           </div>
         </km-property>
@@ -157,6 +158,7 @@
 </ng-container>
 
 <div *ngIf="!isLoaded()">
-  <mat-spinner color="accent"
+  <mat-spinner [diameter]="25"
+               color="accent"
                class="km-spinner"></mat-spinner>
 </div>
