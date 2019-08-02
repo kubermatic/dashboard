@@ -1,3 +1,14 @@
+@import '../../../assets/css/variables';
+
 .km-set-machine-networks {
-  padding: 0 3px;
+  padding: 0;
+
+  h4 {
+    margin-top: 0;
+    font-weight: 400;
+  }
+}
+
+.km-warning {
+  font-size: $subhead-font-size-base;
 }

@@ -4,19 +4,20 @@
      fxLayoutGap="20px">
   <div fxFlex="100%">
 
+    <h2>Machine Networks</h2>
     <form [formGroup]="machineNetworksForm"
           fxLayout
           class="km-machine-networks-form">
       <div fxFlex="{{width}}%"
            *ngFor="let tag of getMachineNetworksForm(machineNetworksForm); let i=index"
            formArrayName="machineNetworks"
-           class="km-machine-networks-firm-inner"
+           class="km-machine-networks-form-inner"
            [ngClass]="width === 100 ? '' : 'withPadding'">
         <div class="km-form-group-tags-inner"
              [formGroupName]="i">
           <span class="km-single-machine-network">
-            Machine Network #{{i+1}}
-            <i class="fa fa-times"
+            <h3>#{{i+1}}</h3>
+            <i class="km-icon-close"
                style="float: right"
                aria-hidden="true"
                (click)="deleteMachineNetwork(i)"></i>
@@ -62,15 +63,17 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <mat-divider></mat-divider>
+      </div>
+
+      <div fxFlex="{{width}}%"
+           [ngClass]="width === 100 ? 'km-machine-networks-form-inner' : 'km-machine-networks-form-inner withPadding'">
+        <div class="km-add-machine-network"
+             (click)="addMachineNetwork()"
+             matTooltip="Add a new address range to pick worker addresses from">
+          + Machine Network
+        </div>
       </div>
     </form>
 
-    <span class="km-add-machine-network"
-          (click)="addMachineNetwork()">
-      <i class="fa fa-plus"
-         aria-hidden="true"></i>
-      Add a new address range to pick worker addresses from
-    </span>
   </div>
 </div>

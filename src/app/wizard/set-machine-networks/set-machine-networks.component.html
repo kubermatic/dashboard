@@ -9,10 +9,11 @@
         <form [formGroup]="setMachineNetworkForm">
           <h4>
             <mat-checkbox id="configure-machine-networks"
+                          *ngIf="nodeData.spec.operatingSystem.containerLinux"
                           formControlName="checkMachineNetworks">Do not use DHCP for worker address allocation</mat-checkbox>
           </h4>
           <p *ngIf="!nodeData.spec.operatingSystem.containerLinux"
-             class="km-warning">Please note: Machine Networks are only available for Container Linux.</p>
+             class="km-warning">Please note: Machine Networks are only available for Container Linux. You've choosen {{getOperatingSystem()}}.</p>
         </form>
       </mat-card-title>
     </mat-card-header>

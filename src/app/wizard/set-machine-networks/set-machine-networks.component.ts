@@ -6,6 +6,7 @@ import {WizardService} from '../../core/services';
 import {ClusterEntity} from '../../shared/entity/ClusterEntity';
 import {MachineNetworkForm} from '../../shared/model/ClusterForm';
 import {NodeData} from '../../shared/model/NodeSpecChange';
+import {NodeUtils} from '../../shared/utils/node-utils/node-utils';
 
 @Component({
   selector: 'kubermatic-set-machine-networks',
@@ -51,6 +52,10 @@ export class SetMachineNetworksComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  getOperatingSystem(): string {
+    return NodeUtils.getOperatingSystem(this.nodeData.spec);
   }
 
   setMachineNetworks(): void {
