@@ -82,8 +82,8 @@ describe('NodeComponent', () => {
        expect(spyDeleteClusterNode.and.callThrough()).toHaveBeenCalledTimes(1);
      }));
 
-  it('should get operating system image', () => {
-    expect(component.getOsImage(nodeFake())).toBe('Ubuntu');
+  it('should get operating system name', () => {
+    expect(component.getSystem(nodeFake())).toBe('Ubuntu');
   });
 
   it('should get info text for name', () => {

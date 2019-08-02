@@ -52,20 +52,12 @@
           <div value>{{nodeDeployment.spec.paused}}</div>
         </km-property>
         <km-property>
-          <div key>Created</div>
-          <div value>
-            <km-relative-time [date]="nodeDeployment.creationTimestamp"></km-relative-time>
-          </div>
-        </km-property>
-        <km-property>
-          <div key></div>
           <div value
                class="km-provider-logo-value">
             <span class="km-provider-logo km-provider-logo-{{clusterProvider}}"></span>
           </div>
         </km-property>
         <km-property>
-          <div key></div>
           <div value
                fxLayout="row"
                fxLayoutGap="10px">
@@ -73,14 +65,22 @@
             <span>{{system}}</span>
           </div>
         </km-property>
+        <km-property>
+          <div key>Created</div>
+          <div value>
+            <km-relative-time [date]="nodeDeployment.creationTimestamp"></km-relative-time>
+          </div>
+        </km-property>
         <div fxFlex="100%">
-          <km-property fxFlex="50%">
+          <km-property fxFlex="50%"
+                       *ngIf="nodeDeployment.spec.template.labels">
             <div key>Node Labels</div>
             <div value>
               <km-labels [labels]="nodeDeployment.spec.template.labels"></km-labels>
             </div>
           </km-property>
-          <km-property fxFlex="50%">
+          <km-property fxFlex="50%"
+                       *ngIf="nodeDeployment.spec.template.taints">
             <div key>Node Taints</div>
             <div value>
               <km-taints [taints]="nodeDeployment.spec.template.taints"></km-taints>
