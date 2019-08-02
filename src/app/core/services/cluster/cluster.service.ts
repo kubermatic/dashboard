@@ -91,18 +91,18 @@ export class ClusterService {
   upgrades(projectID: string, clusterID: string, datacenter: string): Observable<MasterVersion[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/upgrades`;
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => {
-      return of<MasterVersion[]>([]);
+      return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
     }));
   }
 
   events(projectID: string, clusterID: string, datacenter: string): Observable<EventEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/events`;
-    return this._http.get<EventEntity[]>(url);
+    return this._http.get<EventEntity[]>(url).pipe(catchError(() => of<EventEntity[]>()));
   }
 
   health(projectID: string, clusterID: string, datacenter: string): Observable<HealthEntity> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/health`;
-    return this._http.get<HealthEntity>(url);
+    return this._http.get<HealthEntity>(url).pipe(catchError(() => of<HealthEntity>()));
   }
 
   upgradeNodeDeployments(projectID: string, clusterID: string, datacenter: string, version: string): Observable<any> {
@@ -113,7 +113,7 @@ export class ClusterService {
   nodes(projectID: string, clusterID: string, datacenter: string): Observable<NodeEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${
         clusterID}/nodes?hideInitialConditions=true`;
-    return this._http.get<NodeEntity[]>(url);
+    return this._http.get<NodeEntity[]>(url).pipe(catchError(() => of<NodeEntity[]>()));
   }
 
   createNode(projectID: string, clusterID: string, datacenter: string, node: NodeEntity): Observable<NodeEntity> {
@@ -135,7 +135,7 @@ export class ClusterService {
 
   sshKeys(projectID: string, clusterID: string, datacenter: string): Observable<SSHKeyEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/sshkeys`;
-    return this._http.get<SSHKeyEntity[]>(url);
+    return this._http.get<SSHKeyEntity[]>(url).pipe(catchError(() => of<SSHKeyEntity[]>()));
   }
 
   createSSHKey(projectID: string, clusterID: string, datacenter: string, sshKeyID: string): Observable<any> {
