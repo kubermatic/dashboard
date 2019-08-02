@@ -39,6 +39,7 @@
     <div class="km-button-navigation">
       <a mat-flat-button
          color="tertiary"
+         [disabled]="creating"
          routerLink="/projects/{{project?.id}}/clusters">Cancel</a>
       <div fxFlex></div>
       <button type="button"
@@ -46,6 +47,7 @@
               mat-flat-button
               color="tertiary"
               (click)="stepBack()"
+              [disabled]="creating"
               *ngIf="currentStepIndex !== 0">
         Back
       </button>
