@@ -14,3 +14,7 @@ td:first-child,
 th:first-child {
   padding-left: 7 * $baseline-grid !important;
 }
+
+::ng-deep mat-dialog-content {
+  overflow-y: auto !important;
+}
