@@ -23,7 +23,7 @@
 
 .km-mat-footer-row.km-no-sshkeys {
   border-style: dashed;
-  border-radius: 5px;
+  border-radius: $border-radius;
 }
 
 .km-sshkey-item-actions {

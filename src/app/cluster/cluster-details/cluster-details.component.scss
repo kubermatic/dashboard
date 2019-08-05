@@ -14,10 +14,10 @@ button:disabled {
 
 // setting menu
 .km-cluster-detail-actions {
-  padding-bottom: 15px;
+  padding-bottom: 1.875 * $baseline-grid;
 
   mat-button {
-    margin-left: 5px;
+    margin-left: 0.625 * $baseline-grid;
   }
 
   .mat-icon-button i {
@@ -33,7 +33,7 @@ button:disabled {
 .km-provider-menu {
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin-right: 1.25 * $baseline-grid;
 }
 
 .km-cluster-health {

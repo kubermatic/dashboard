@@ -1,5 +1,6 @@
 @import "../../../../../assets/css/colors";
+@import "../../../../../assets/css/variables";
 
 .mat-dialog-content form {
-  margin-top: 30px;
+  margin-top: 3.75 * $baseline-grid;
 }

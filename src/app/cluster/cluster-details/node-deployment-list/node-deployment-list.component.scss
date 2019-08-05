@@ -1,7 +1,8 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
 
 .km-node-deployment-spinner {
-  margin: 20px auto !important;
+  margin: (2.5 * $baseline-grid) auto !important;
 }
 
 .km-node-deployment-health {

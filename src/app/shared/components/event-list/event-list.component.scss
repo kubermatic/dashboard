@@ -1,7 +1,7 @@
 @import '../../../../assets/css/variables';
 
 .km-events-long-text {
-  line-height: 20px !important;
+  line-height: 2 * $line-height !important;
 }
 
 .km-events-timestamp {
@@ -9,9 +9,9 @@
 }
 
 .km-mat-row td {
-  padding-top: 10px;
-  padding-bottom: 10px;
-  line-height: 20px;
+  padding-top: 1.25 * $baseline-grid;
+  padding-bottom: 1.25 * $baseline-grid;
+  line-height: 2 * $line-height;
 }
 
 mat-card-header {
@@ -23,17 +23,17 @@ mat-card-header {
   padding-bottom: $baseline-grid;
 
   mat-card-header {
-    border-radius: 5px;
+    border-radius: $border-radius;
   }
 }
 
 .km-events-title {
   float: right;
-  padding-right: 30px;
+  padding-right: 3.75 * $baseline-grid;
   font-size: $subhead-font-size-base;
 
   i {
-    margin-right: 10px;
+    margin-right: 1.25 * $baseline-grid;
   }
 }
 

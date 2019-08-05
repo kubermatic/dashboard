@@ -27,29 +27,29 @@ body {
 // global
 .km-table {
   width: 100%;
-  border-radius: 5px;
+  border-radius: $border-radius;
   border-collapse: separate;
   border-spacing: 0;
 
   tr:first-child th:first-child {
-    border-top-left-radius: 5px;
+    border-top-left-radius: $border-radius;
   }
 
   tr:first-child th:last-child {
-    border-top-right-radius: 5px;
+    border-top-right-radius: $border-radius;
   }
 
   td:first-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
-    padding-left: 30px !important;
+    padding-left: 3.75 * $baseline-grid !important;
   }
 
   td:last-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
-    padding-right: 30px !important;
+    padding-right: 3.75 * $baseline-grid !important;
   }
 
   .km-header-row {
     background-color: $white-text-color;
-    border-radius: 5px;
+    border-radius: $border-radius;
     border-collapse: separate;
     line-height: 4 * $line-height;
   }
@@ -64,11 +64,11 @@ body {
   }
 
   .km-header-cell:last-of-type {
-    padding-right: 30px;
+    padding-right: 3.75 * $baseline-grid;
   }
 
   .km-header-cell:first-of-type {
-    padding-left: 30px;
+    padding-left: 3.75 * $baseline-grid;
   }
 
   .mat-header-row {
@@ -125,11 +125,11 @@ body {
   }
 
   tr:first-child td:first-child {
-    border-top-left-radius: 5px;
+    border-top-left-radius: $border-radius;
   }
 
   tr:first-child td:last-child {
-    border-top-right-radius: 5px;
+    border-top-right-radius: $border-radius;
   }
 
   td.mat-cell {
@@ -146,7 +146,7 @@ body {
 }
 
 .km-paginator {
-  border-radius: 0 0 5px 5px;
+  border-radius: 0 0 $border-radius $border-radius;
   border-top: 1px solid $separator;
 }
 
@@ -167,8 +167,8 @@ body {
   border-style: solid dashed dashed dashed;
   border-width: 1px;
   border-color: $dropdown-border;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: $border-radius;
+  border-bottom-left-radius: $border-radius;
 
   &:hover {
     background-color: $hover;
@@ -187,8 +187,8 @@ body {
 .mat-card-content {
   p {
     color: $light-button-color;
-    font-size: 12px;
-    margin: 0 0 15px;
+    font-size: $caption-font-size-base;
+    margin: 0 0 (1.875 * $baseline-grid);
   }
 
   button {
@@ -196,7 +196,7 @@ body {
     color: $primary;
     outline: none;
     cursor: pointer;
-    font-size: 14px;
+    font-size: $body-font-size-base;
     font-weight: 600;
     padding: 0;
   }
@@ -229,7 +229,7 @@ simple-notifications * {
   .mat-tab-label {
     background-color: $secondary !important;
     opacity: 1;
-    margin-right: 3px;
+    margin-right: 0.375 * $baseline-grid;
     padding: 0;
 
     &.mat-tab-disabled {
@@ -249,7 +249,7 @@ simple-notifications * {
 
     .mat-tab-label-content {
       text-transform: uppercase;
-      font-size: 16px;
+      font-size: $subhead-font-size-base;
     }
   }
 }
@@ -261,7 +261,7 @@ mat-button-toggle-group {
   box-shadow: none !important;
 
   mat-button-toggle {
-    margin-right: 10px;
+    margin-right: 1.25 * $baseline-grid;
     display: flex;
     align-items: center;
     background-color: $white-text-color;
@@ -305,13 +305,13 @@ mat-button-toggle-group[group='providerGroup'] {
   border-radius: 0;
 
   .mat-button-toggle {
-    border-radius: 4px;
+    border-radius: $border-radius;
   }
 
   .mat-button-toggle-button {
     height: 100%;
     text-align: left;
-    padding: 0 10px;
+    padding: 0 (1.25 * $baseline-grid);
   }
 
   .mat-button-toggle-checked {
@@ -320,14 +320,14 @@ mat-button-toggle-group[group='providerGroup'] {
 }
 
 mat-button-toggle-group[group='datacenterGroup'] .mat-button-toggle-label-content {
-  padding: 0 5px;
+  padding: 0 (0.625 * $baseline-grid);
   width: 100%;
   display: inline-block;
 }
 
 mat-button-toggle-group[group='providerGroup'] .mat-button-toggle-label-content {
   height: 100%;
-  padding: 0 10px;
+  padding: 0 (1.25 * $baseline-grid);
 }
 
 mat-card-header > div > mat-card-title > div {
@@ -336,10 +336,10 @@ mat-card-header > div > mat-card-title > div {
 }
 
 .mat-card.km-with-table-header {
-  padding: 30px 0;
-  margin: 20px 0 0 0;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.12) !important;
-  border-radius: 5px !important;
+  padding: (3.75 * $baseline-grid) 0;
+  margin: (2.5 * $baseline-grid) 0 0 0;
+  box-shadow: $border-box-shadow !important;
+  border-radius: $border-radius !important;
 
   .mat-card-header {
     padding: 0 7 * $baseline-grid;
@@ -347,11 +347,11 @@ mat-card-header > div > mat-card-title > div {
     line-height: 1.6 * $line-height;
     background-color: $white-text-color;
     color: $text-color;
-    border-radius: 5px 5px 0 0;
+    border-radius: $border-radius $border-radius 0 0;
   }
 
   &.km-small .mat-card-header {
-    font-size: 10px !important;
+    font-size: $small-font-size-base !important;
     line-height: 1.6 * $line-height;
   }
 
@@ -361,11 +361,11 @@ mat-card-header > div > mat-card-title > div {
     &.km-row,
     .km-row {
       line-height: 5 * $line-height;
-      padding: 0 30px;
+      padding: 0 (3.75 * $baseline-grid);
       border-top: 1px solid $separator;
 
       &.km-small {
-        padding: 10px 24px;
+        padding: (1.25 * $baseline-grid) (3 * $baseline-grid);
         margin: 0;
         line-height: 2 * $line-height;
       }
@@ -410,7 +410,7 @@ mat-card-header > div > mat-card-title > div {
       &.km-no-item,
       .km-no-item {
         text-align: center;
-        font-size: 14px;
+        font-size: $body-font-size-base;
         color: $text-color;
       }
 
@@ -418,15 +418,15 @@ mat-card-header > div > mat-card-title > div {
         line-height: normal;
         color: $text-color;
         margin: 0;
-        font-size: 14px;
+        font-size: $body-font-size-base;
       }
 
       .km-region {
         align-items: center;
 
         .flag-icon {
-          font-size: 24px;
-          margin-right: 10px;
+          font-size: $head-font-size-base;
+          margin-right: 1.25 * $baseline-grid;
         }
       }
     }
@@ -442,13 +442,13 @@ mat-card-header > div > mat-card-title > div {
 }
 
 .mat-card.white {
-  padding: 30px 0;
+  padding: (3.75 * $baseline-grid) 0;
   margin: 0;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.12) !important;
-  border-radius: 5px !important;
+  box-shadow: $border-box-shadow !important;
+  border-radius: $border-radius !important;
 
   &.km-cluster-details {
-    padding: 30px 0 0 0;
+    padding: (3.75 * $baseline-grid) 0 0 0;
   }
 
   &.km-status-waiting {
@@ -499,7 +499,7 @@ mat-card-header > div > mat-card-title > div {
 ::-webkit-scrollbar-thumb {
   background: $light-text-color;
   border: 0 none $white-text-color;
-  border-radius: 50px;
+  border-radius: 10 * $border-radius;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -513,7 +513,7 @@ mat-card-header > div > mat-card-title > div {
 ::-webkit-scrollbar-track {
   background: $medium-background;
   border: 0 none $white-text-color;
-  border-radius: 50px;
+  border-radius: 10 * $border-radius;
 }
 
 ::-webkit-scrollbar-track:hover {
@@ -543,7 +543,7 @@ mat-card-header > div > mat-card-title > div {
 
 // List Header sorting arrow
 .mat-sort-header-arrow {
-  margin: auto 0 auto 6px !important;
+  margin: auto 0 auto (0.75 * $baseline-grid) !important;
   color: $text-color !important;
 
   .mat-sort-header-stem,
@@ -586,15 +586,15 @@ mat-card-header > div > mat-card-title > div {
 // tooltip
 .mat-tooltip {
   background-color: $light-primary !important;
-  margin-top: 5px !important;
+  margin-top: 0.625 * $baseline-grid !important;
 }
 
 // button shadow
 
 .mat-raised-button {
   height: 30px;
-  line-height: 16px !important;
-  margin-left: 5px !important;
+  line-height: 1.6 * $line-height !important;
+  margin-left: 0.625 * $baseline-grid !important;
   font-weight: 500 !important;
 }
 
@@ -637,7 +637,7 @@ mat-list-item.disabled {
 }
 
 .km-action-button-icon {
-  margin-right: 5px;
+  margin-right: 0.625 * $baseline-grid;
 }
 
 .km-warning {
@@ -661,11 +661,11 @@ mat-list-item.disabled {
 // Tags
 div.km-form-group-tags-header,
 div.km-form-group-labels-header {
-  margin: 30px 0 10px;
-  font-size: 14px;
+  margin: (3.75 * $baseline-grid) 0 (1.25 * $baseline-grid);
+  font-size: $body-font-size-base;
   font-weight: bold;
   border-bottom: 1px solid $border;
-  padding-bottom: 15px;
+  padding-bottom: 1.875 * $baseline-grid;
 
   i.fa-plus {
     cursor: pointer;
@@ -688,7 +688,7 @@ div.km-form-group-labels {
     align-items: center;
     justify-content: center;
     font-weight: 600;
-    padding-bottom: 6px;
+    padding-bottom: 0.75 * $baseline-grid;
   }
 
   i.fa-times {
@@ -861,7 +861,7 @@ mat-form-field.mat-form-field {
   width: 100%;
 
   &.km-with-hint {
-    margin-bottom: 15px;
+    margin-bottom: 1.875 * $baseline-grid;
   }
 }
 
@@ -895,7 +895,7 @@ mat-hint a {
 
 .mat-checkbox-frame {
   border: 2px solid $separator;
-  border-radius: 5px;
+  border-radius: $border-radius;
 }
 
 // Dialogs.
@@ -909,7 +909,7 @@ mat-hint a {
   }
 
   .mat-dialog-content {
-    font-size: 16px;
+    font-size: $subhead-font-size-base;
     font-weight: 400;
     max-height: $dialog-max-height;
     overflow: unset;
@@ -948,7 +948,7 @@ mat-hint a {
   margin: ($baseline-grid * 2) 0;
   padding: ($baseline-grid * 1.5) ($baseline-grid * 2);
   font-size: $body-font-size-base;
-  line-height: 20px;
+  line-height: 2 * $line-height;
   font-family: $code-block;
   color: $text-color;
 }
@@ -960,8 +960,8 @@ mat-hint a {
 
 // Dropdowns.
 .mat-select-panel {
-  margin-top: 30px !important;
-  margin-left: 6px !important;
+  margin-top: 3.75 * $baseline-grid !important;
+  margin-left: 0.75 * $baseline-grid !important;
   min-width: calc(100% + 20px) !important;
   max-width: calc(100% + 20px) !important;
   transform-origin: 50% 0 0 !important;
@@ -972,26 +972,26 @@ mat-hint a {
 }
 
 .km-optgroup-dropdown {
-  margin-left: 22px !important;
+  margin-left: 2.75 * $baseline-grid !important;
 }
 
 .km-sshkey-dropdown {
-  margin-left: 30px !important;
+  margin-left: 3.75 * $baseline-grid !important;
 }
 
 .km-add-dialog-dropdown {
-  margin-top: 34px !important;
+  margin-top: 4.25 * $baseline-grid !important;
 }
 
 .mat-optgroup-label {
   font-size: $caption-font-size-base !important;
   line-height: 3.5 * $line-height !important;
-  padding-left: 10px !important;
+  padding-left: 1.25 * $baseline-grid !important;
   border-top: 1px solid $border !important;
 }
 
 .mat-option {
-  padding: 0 0 0 10px !important;
+  padding: 0 0 0 (1.25 * $baseline-grid) !important;
 
   &:hover,
   &.mat-active {
@@ -1034,14 +1034,14 @@ mat-chip-list {
 .mat-chip.mat-standard-chip {
   background: $separator;
   border: 1px solid $separator;
-  border-radius: 5px;
+  border-radius: $border-radius;
   color: $text-color;
   font-size: $body-font-size-base;
   font-weight: normal;
   line-height: $subhead-font-size-base;
   max-height: 22px;
   min-height: 22px;
-  padding: 3px 10px;
+  padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
 
   &.km-chip-container {
     padding: 0;
@@ -1052,7 +1052,7 @@ mat-chip-list {
     display: flex;
     height: 100%;
     justify-content: center;
-    padding: 3px 10px;
+    padding: (0.375 * $baseline-grid) (1.25 * $baseline-grid);
 
     &.km-chip-accent {
       background: $white-background;
@@ -1062,8 +1062,8 @@ mat-chip-list {
 
 // Mat menu.
 .mat-menu-item {
-  padding: 0 10px !important;
-  line-height: 42px !important;
+  padding: 0 (1.25 * $baseline-grid) !important;
+  line-height: 4.2 * $line-height !important;
   height: 42px !important;
 
   .mat-icon {

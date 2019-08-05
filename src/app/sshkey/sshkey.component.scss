@@ -12,19 +12,19 @@
 
 .km-publickey-wrapper {
   background-color: $light-background;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
-  padding: 15px 30px 20px 60px;
+  box-shadow: $border-box-shadow-inset;
+  padding: (1.875 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
 
   .km-publickey-content {
     .km-publickey-name {
       text-transform: uppercase;
       color: $text-color;
-      line-height: 30px;
+      line-height: 3 * $line-height;
     }
 
     .km-publickey {
       font-size: $caption-font-size-base;
-      line-height: 18px;
+      line-height: 1.8 * $line-height;
       word-break: break-all;
     }
   }

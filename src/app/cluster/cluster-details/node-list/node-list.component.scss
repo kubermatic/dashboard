@@ -1,10 +1,11 @@
 @import "../../../../assets/css/colors";
+@import "../../../../assets/css/variables";
 
 .km-conditionsMessage {
   border-top: 1px solid $light-border;
-  margin-bottom: 10px;
+  margin-bottom: 1.25 * $baseline-grid;
   margin-top: -20px;
-  line-height: 40px;
+  line-height: 4 * $line-height;
 
   p {
     margin: 0 auto;
@@ -28,7 +29,7 @@
 
 .km-node-ip-addresses {
   display: block;
-  line-height: 20px;
+  line-height: 2 * $line-height;
 }
 
 .km-node-item-actions {
@@ -38,37 +39,37 @@
 
 .km-spinner {
   float: right;
-  margin: 5px;
+  margin: 0.625 * $baseline-grid;
 }
 
 .km-btn-remove-node-wrapper {
-  padding-right: 20px;
+  padding-right: 2.5 * $baseline-grid;
   position: relative;
   justify-content: flex-end;
   display: flex;
 }
 
 .km-node-list-spinner {
-  margin: 20px auto !important;
+  margin: (2.5 * $baseline-grid) auto !important;
 }
 
 i.fa-info-circle {
   color: $light-button-color;
-  padding-left: 5px;
+  padding-left: 0.625 * $baseline-grid;
 }
 
 i.fa-exclamation-triangle {
   color: $indicator-red;
-  padding-left: 5px;
+  padding-left: 0.625 * $baseline-grid;
 }
 
 .km-node-details {
   background-color: $light-background;
-  box-shadow: inset 0 4px 4px rgba(0, 0, 0, 0.1);
-  padding: 15px 30px 20px 60px;
+  box-shadow: $border-box-shadow-inset;
+  padding: (1.875 * $baseline-grid) (3.75 * $baseline-grid) (2.5 * $baseline-grid) (7.5 * $baseline-grid);
 
   mat-card-content {
-    margin-top: 15px;
+    margin-top: 1.875 * $baseline-grid;
     border: none !important;
   }
 
@@ -82,5 +83,5 @@ i.fa-exclamation-triangle {
 }
 
 .km-mat-card-code-block {
-  margin-top: 20px;
+  margin-top: 2.5 * $baseline-grid;
 }

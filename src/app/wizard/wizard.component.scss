@@ -7,7 +7,7 @@
 
   .mat-card-header {
     padding: 0;
-    margin-bottom: 10px;
+    margin-bottom: 1.25 * $baseline-grid;
     height: 6 * $baseline-grid;
   }
 
@@ -16,20 +16,20 @@
 
     h4 {
       font-weight: 400;
-      margin: 10px 0;
-      font-size: 18px;
+      margin: (1.25 * $baseline-grid) 0;
+      font-size: $subhead-font-size-base-lg;
       color: $text-color;
     }
   }
 
   .mat-card-content {
     form {
-      padding-top: 10px;
+      padding-top: 1.25 * $baseline-grid;
     }
 
     p {
       color: $text-color;
-      margin: 0 8px 5px;
+      margin: 0 $baseline-grid (0.625 * $baseline-grid);
     }
   }
 }
@@ -42,13 +42,13 @@
 
 .km-project-status-info {
   color: $indicator-red;
-  font-size: 10px;
-  margin-left: 15px;
+  font-size: $small-font-size-base;
+  margin-left: 1.875 * $baseline-grid;
 }
 
 .km-wizard-wrapper {
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.12);
-  border-radius: 5px;
+  box-shadow: $border-box-shadow;
+  border-radius: $border-radius;
 }
 
 ::ng-deep .mat-card-header .mat-card-title {
