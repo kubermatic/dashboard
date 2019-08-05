@@ -234,4 +234,9 @@ export class ApiService {
     const url = `${this._restRoot}/projects/${projectID}/serviceaccounts/${serviceaccount.id}/tokens/${token.id}`;
     return this._http.delete(url);
   }
+
+  getSwaggerJson(): Observable<any> {
+    const url = '/api/swagger.json';
+    return this._http.get(url);
+  }
 }

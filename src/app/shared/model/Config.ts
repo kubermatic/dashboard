@@ -4,6 +4,7 @@ export interface Config {
   default_node_count?: number;
   show_demo_info?: boolean;
   show_terms_of_service?: boolean;
+  show_api_docs?: boolean;
   share_kubeconfig?: boolean;
   openstack?: {wizard_use_default_user?: boolean;};
   google_analytics_code?: string;
