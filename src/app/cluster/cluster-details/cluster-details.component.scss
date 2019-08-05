@@ -67,3 +67,7 @@ button:disabled {
 .km-download-kubeconfig-btn {
   margin-right: 1.25 * $baseline-grid;
 }
+
+::ng-deep .km-property-container {
+  margin: (.75 * $baseline-grid) (6.25 * $baseline-grid) (.75 * $baseline-grid) 0 !important;
+}
