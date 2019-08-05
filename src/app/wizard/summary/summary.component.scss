@@ -67,3 +67,7 @@ mat-card {
 ::ng-deep .km-property-container {
   margin: 0 0 (0.6 * $baseline-grid) !important;
 }
+
+.km-icon-disabled {
+  margin-left: -2px;
+}
