@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {merge, Observable, of, timer} from 'rxjs';
-import {catchError, publishReplay, refCount, switchMapTo} from 'rxjs/operators';
+import {catchError, shareReplay, switchMapTo} from 'rxjs/operators';
 import {Subject} from 'rxjs/Subject';
 import {environment} from '../../../../environments/environment';
 import {AppConfigService} from '../../../app-config.service';
@@ -42,8 +42,7 @@ export class ClusterService {
     if (!this._clusters$.get(projectID)) {
       const clusters$ = merge(this._onClustersUpdate, this._refreshTimer$)
                             .pipe(switchMapTo(this._getClusters(projectID)))
-                            .pipe(publishReplay(1))
-                            .pipe(refCount());
+                            .pipe(shareReplay({refCount: true, bufferSize: 1}));
       this._clusters$.set(projectID, clusters$);
     }
 
@@ -58,9 +57,7 @@ export class ClusterService {
   cluster(projectID: string, clusterID: string, datacenter: string): Observable<ClusterEntity> {
     return merge(this.onClusterUpdate, this._refreshTimer$)
         .pipe(switchMapTo(this._getCluster(projectID, clusterID, datacenter)))
-        .pipe(publishReplay(1))
-        .pipe(refCount())
-        .pipe(catchError(() => of(undefined)));
+        .pipe(shareReplay({refCount: true, bufferSize: 1}));
   }
 
   create(projectID: string, datacenter: string, createClusterModel: CreateClusterModel): Observable<ClusterEntity> {
@@ -94,18 +91,18 @@ export class ClusterService {
   upgrades(projectID: string, clusterID: string, datacenter: string): Observable<MasterVersion[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/upgrades`;
     return this._http.get<MasterVersion[]>(url).pipe(catchError(() => {
-      return of<MasterVersion[]>([]);
+      return of<MasterVersion[]>([]).pipe(catchError(() => of<MasterVersion[]>()));
     }));
   }
 
   events(projectID: string, clusterID: string, datacenter: string): Observable<EventEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/events`;
-    return this._http.get<EventEntity[]>(url);
+    return this._http.get<EventEntity[]>(url).pipe(catchError(() => of<EventEntity[]>()));
   }
 
   health(projectID: string, clusterID: string, datacenter: string): Observable<HealthEntity> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/health`;
-    return this._http.get<HealthEntity>(url);
+    return this._http.get<HealthEntity>(url).pipe(catchError(() => of<HealthEntity>()));
   }
 
   upgradeNodeDeployments(projectID: string, clusterID: string, datacenter: string, version: string): Observable<any> {
@@ -116,7 +113,7 @@ export class ClusterService {
   nodes(projectID: string, clusterID: string, datacenter: string): Observable<NodeEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${
         clusterID}/nodes?hideInitialConditions=true`;
-    return this._http.get<NodeEntity[]>(url);
+    return this._http.get<NodeEntity[]>(url).pipe(catchError(() => of<NodeEntity[]>()));
   }
 
   createNode(projectID: string, clusterID: string, datacenter: string, node: NodeEntity): Observable<NodeEntity> {
@@ -138,7 +135,7 @@ export class ClusterService {
 
   sshKeys(projectID: string, clusterID: string, datacenter: string): Observable<SSHKeyEntity[]> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}/sshkeys`;
-    return this._http.get<SSHKeyEntity[]>(url);
+    return this._http.get<SSHKeyEntity[]>(url).pipe(catchError(() => of<SSHKeyEntity[]>()));
   }
 
   createSSHKey(projectID: string, clusterID: string, datacenter: string, sshKeyID: string): Observable<any> {
@@ -153,11 +150,11 @@ export class ClusterService {
 
   private _getClusters(projectID: string) {
     const url = `${this._restRoot}/projects/${projectID}/clusters`;
-    return this._http.get<ClusterEntity[]>(url);
+    return this._http.get<ClusterEntity[]>(url).pipe(catchError(() => of<ClusterEntity[]>()));
   }
 
   private _getCluster(projectID: string, clusterID: string, datacenter: string): Observable<ClusterEntity> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${datacenter}/clusters/${clusterID}`;
-    return this._http.get<ClusterEntity>(url);
+    return this._http.get<ClusterEntity>(url).pipe(catchError(() => of<ClusterEntity>()));
   }
 }

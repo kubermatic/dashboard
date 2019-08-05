@@ -5,10 +5,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {of} from 'rxjs';
-import Spy = jasmine.Spy;
 
 import {AppConfigService} from '../app-config.service';
-import {ApiService, UserService} from '../core/services';
+import {ApiService, ProjectService, UserService} from '../core/services';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {SharedModule} from '../shared/shared.module';
 import {DialogTestModule, NoopConfirmDialogComponent} from '../testing/components/noop-confirmation-dialog.component';
@@ -17,8 +16,12 @@ import {fakeSSHKeys} from '../testing/fake-data/sshkey.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../testing/router-stubs';
 import {asyncData} from '../testing/services/api-mock.service';
 import {AppConfigMockService} from '../testing/services/app-config-mock.service';
+import {ProjectMockService} from '../testing/services/project-mock.service';
 import {UserMockService} from '../testing/services/user-mock.service';
+
 import {SSHKeyComponent} from './sshkey.component';
+
+import Spy = jasmine.Spy;
 
 describe('SSHKeyComponent', () => {
   let fixture: ComponentFixture<SSHKeyComponent>;
@@ -52,6 +55,7 @@ describe('SSHKeyComponent', () => {
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
             {provide: ActivatedRoute, useClass: ActivatedRouteStub},
+            {provide: ProjectService, useClass: ProjectMockService},
             MatDialog,
             GoogleAnalyticsService,
           ],

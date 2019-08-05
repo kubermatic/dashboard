@@ -1,7 +1,7 @@
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {map, publishReplay, refCount} from 'rxjs/operators';
+import {map, shareReplay} from 'rxjs/operators';
 import {environment} from '../../../../environments/environment';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {Auth} from '../auth/auth.service';
@@ -21,8 +21,8 @@ export class DatacenterService {
   getDataCenters(): Observable<DataCenterEntity[]> {
     const url = `${this.restRoot}/dc`;
     if (!this.dataCenterCache) {
-      this.dataCenterCache =
-          this.http.get<DataCenterEntity[]>(url, {headers: this.headers}).pipe(publishReplay(1), refCount());
+      this.dataCenterCache = this.http.get<DataCenterEntity[]>(url, {headers: this.headers})
+                                 .pipe(shareReplay({refCount: true, bufferSize: 1}));
     }
     return this.dataCenterCache;
   }
