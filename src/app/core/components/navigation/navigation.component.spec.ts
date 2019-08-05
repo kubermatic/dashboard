@@ -6,12 +6,13 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
+
 import {SharedModule} from '../../../shared/shared.module';
-import {RouterStub} from '../../../testing/router-stubs';
 import {AuthMockService} from '../../../testing/services/auth-mock.service';
 import {ProjectMockService} from '../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../testing/services/user-mock.service';
 import {Auth, ProjectService, UserService} from '../../services/index';
+
 import {NavigationComponent} from './navigation.component';
 
 const modules: any[] = [
@@ -41,7 +42,6 @@ describe('NavigationComponent', () => {
             MatDialog,
             {provide: UserService, useClass: UserMockService},
             {provide: ProjectService, useClass: ProjectMockService},
-            {provide: Router, useClass: RouterStub},
             {provide: Auth, useClass: AuthMockService},
           ],
         })

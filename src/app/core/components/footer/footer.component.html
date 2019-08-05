@@ -10,6 +10,15 @@
     </div>
   </div>
 
+  <div fxFlexAlign=" center"
+       fxLayout="row"
+       *ngIf="showApiDocs()">
+    <div class="km-separator">–</div>
+    <a routerLink="rest-api">
+      API
+    </a>
+  </div>
+
   <div *ngIf="!!version"
        fxFlexAlign=" center"
        fxLayout="row">
