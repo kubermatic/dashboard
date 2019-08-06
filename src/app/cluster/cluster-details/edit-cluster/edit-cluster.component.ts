@@ -38,6 +38,7 @@ export class EditClusterComponent implements OnInit {
     this._cluster.patch(this.projectID, this.cluster.id, this.datacenter.metadata.name, clusterEntityPatch)
         .subscribe((cluster) => {
           this._dialogRef.close(cluster);
+          this._cluster.onClusterUpdate.next();
           NotificationActions.success(`Cluster ${this.cluster.name} has been edited successfully`);
         });
   }
