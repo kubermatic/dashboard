@@ -12,6 +12,7 @@ import {fakeAWSCluster} from '../../../testing/fake-data/cluster.fake';
 import {EditClusterComponent} from './edit-cluster.component';
 import {ClusterService} from '../../../core/services';
 import {fakeAWSDatacenter} from '../../../testing/fake-data/datacenter.fake';
+import {Subject} from 'rxjs';
 
 const modules: any[] = [
   BrowserModule,
@@ -27,6 +28,7 @@ describe('EditClusterComponent', () => {
 
   beforeEach(async(() => {
     const clusterServiceMock = jasmine.createSpyObj('ClusterService', ['patch']);
+    clusterServiceMock.onClusterUpdate = new Subject<void>();
     editClusterSpy = clusterServiceMock.patch.and.returnValue(asyncData(fakeAWSCluster()));
 
     TestBed
