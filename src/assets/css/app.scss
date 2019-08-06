@@ -893,6 +893,10 @@ mat-hint a {
   background-color: $primary !important;
 }
 
+.mat-checkbox-disabled .mat-checkbox-background {
+  background-color: $disabled-button-color !important;
+}
+
 .mat-checkbox-frame {
   border: 2px solid $separator;
   border-radius: 5px;

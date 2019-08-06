@@ -1,5 +1,6 @@
 {
   "cleanup_cluster":  false,
+  "enforce_cleanup_cluster":  false,
   "custom_links": [],
   "default_node_count": 3,
   "openstack": {

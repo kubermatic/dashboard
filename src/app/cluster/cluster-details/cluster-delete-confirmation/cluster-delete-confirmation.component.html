@@ -18,20 +18,15 @@
     </mat-form-field>
 
     <div class="km-delete-cluster-checkbox">
-      <label class="km-clickable">
-        <mat-checkbox formControlName="clusterLBCleanupCheckbox"></mat-checkbox>
-        Cleanup connected Load Balancers
-      </label>
+      <mat-checkbox formControlName="clusterLBCleanupCheckbox">Cleanup connected Load Balancers</mat-checkbox>
     </div>
 
     <div class="km-delete-cluster-checkbox">
-      <label class="km-clickable">
-        <mat-checkbox formControlName="clusterVolumeCleanupCheckbox"></mat-checkbox>
-        Cleanup connected volumes (PVs and PVCs)
-      </label>
+      <mat-checkbox formControlName="clusterVolumeCleanupCheckbox">Cleanup connected volumes (PVs and PVCs)</mat-checkbox>
     </div>
 
-    <div class="km-dialog-warning">
+    <div class="km-dialog-warning"
+         *ngIf="!disableCheckbox()">
       <i class="km-icon-warning"></i>
       <div>Deactivating clean up may result in leftover resources at your provider.</div>
     </div>

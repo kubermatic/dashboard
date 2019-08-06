@@ -10,5 +10,6 @@ export function fakeAppConfig(): Config {
       wizard_use_default_user: false,
     },
     cleanup_cluster: false,
+    enforce_cleanup_cluster: false,
   };
 }
