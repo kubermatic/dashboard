@@ -1,18 +1,16 @@
-<mat-card class="km-with-table-header km-small"
+<mat-card class="km-with-table-header"
           *ngIf="!!cluster.spec.machineNetworks">
   <mat-card-header>
     <mat-card-title>Machine Networks</mat-card-title>
-    <div fxFlex
-         fxLayout="row"
-         fxLayoutAlign="end center">
+    <div class="km-provider-menu">
       <button mat-icon-button
+              class="km-provider-menu-btn"
               [matMenuTriggerFor]="menu"
               *ngIf="!cluster.spec.cloud.bringyourown">
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu"
-                class="km-machine-networks-settings"
-                xPosition="before">
+                class="km-machine-networks-settings">
         <button mat-menu-item
                 (click)="addMachineNetwork()">
           <span>Add Machine Network</span>
@@ -20,24 +18,48 @@
       </mat-menu>
     </div>
   </mat-card-header>
-  <div class="km-scrollable-content">
-    <ng-container *ngFor="let network of cluster.spec.machineNetworks; let i=index;">
-      <mat-card-content fxLayout="column"
-                        class="km-row km-small">
-        <strong>Machine Network #{{i + 1}}</strong>
-        <div fxLayout>
-          <div fxFlex="50%"><strong>CIDR</strong></div>
-          <div fxFlex="50%">{{ network.cidr }}</div>
-        </div>
-        <div fxLayout>
-          <div fxFlex="50%"><strong>DNS Servers</strong></div>
-          <div fxFlex="50%">{{ network.dnsServers }}</div>
-        </div>
-        <div fxLayout>
-          <div fxFlex="50%"><strong>Gateway</strong></div>
-          <div fxFlex="50%">{{ network.gateway }}</div>
-        </div>
-      </mat-card-content>
-    </ng-container>
-  </div>
+
+  <mat-card-content>
+    <table class="km-table"
+           mat-table
+           [dataSource]="getDataSource()">
+      <ng-container matColumnDef="number">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Number</th>
+        <td mat-cell
+            *matCellDef="let element; index as i;">{{i+1}}</td>
+      </ng-container>
+      <ng-container matColumnDef="cidr">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">CIDR</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.cidr}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dnsServers">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">DNS Servers</th>
+        <td mat-cell
+            *matCellDef="let element">{{getDnsString(element)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="gateway">
+        <th mat-header-cell
+            *matHeaderCellDef
+            class="km-header-cell">Gateway</th>
+        <td mat-cell
+            *matCellDef="let element">{{element.gateway}}</td>
+      </ng-container>
+
+      <tr mat-header-row
+          class="km-header-row"
+          *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          class="km-mat-row"></tr>
+    </table>
+  </mat-card-content>
 </mat-card>

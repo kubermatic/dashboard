@@ -1,42 +1,65 @@
+@import '../../assets/css/colors';
+@import '../../assets/css/variables';
+
+h2 {
+  font-weight: 400;
+  margin-top: 0;
+  color: $text-color;
+}
+
+h3 {
+  display: inline-block;
+  font-weight: 400;
+  margin: 0;
+  color: $text-color;
+}
+
 .km-machine-networks {
-  margin-top: 55px;
+  margin-top: 6.875 * $baseline-grid;
 }
 
 .km-add-machine-network {
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  border: 1px dashed $border;
+  border-radius: 5px;
+  height: 6.25 * $baseline-grid;
+  color: $text-color;
+  font-weight: 400;
 }
 
 .km-single-machine-network {
-  font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 0.625 * $baseline-grid;
 }
 
 .km-machine-networks-form {
   flex-wrap: wrap;
 }
 
-.km-machine-networks-firm-inner {
+.km-machine-networks-form-inner {
+  margin-bottom: 3.75 * $baseline-grid;
+
   &.withPadding {
-    padding-right: 30px;
+    padding-right: 3.75 * $baseline-grid;
 
     &:nth-child(2n+2) {
       padding-right: 0;
-      padding-left: 20px;
+    }
+
+    .km-add-machine-network {
+      height: 28.75 * $baseline-grid;
     }
   }
 }
 
 .km-machine-networks-form-field {
-  margin-left: 15px;
-  width: 94% !important;
+  width: 100% !important;
 }
 
-mat-divider {
-  margin: 10px 0 20px 0;
-  position: relative !important;
-}
-
-.fa-times {
+.km-icon-close {
   cursor: pointer;
+  width: 2 * $baseline-grid;
+  height: 2 * $baseline-grid;
 }
