@@ -157,7 +157,7 @@ function deploy::kubermatic {
 		--set=kubermatic.controller.replicas=1 \
 		--set=kubermatic.controller.datacenterName=${KUBECONFIG_CLUSTER_NAME} \
 		--set=kubermatic.controller.image.tag=${KUBERMATIC_IMAGE_TAG} \
-		--set=kubermatic.controller.addons.kubernetes.image.tag=${KUBERMATIC_IMAGE_TAG} \
+		--set=kubermatic.controller.addons.kubernetes.image.tag="latest" \
 		--set=kubermatic.api.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.api.replicas=1 \
 		--set=kubermatic.apiserverDefaultReplicas=1 \
