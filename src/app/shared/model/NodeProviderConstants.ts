@@ -54,17 +54,4 @@ export namespace NodeInstanceFlavors {
     new NodeInstanceFlavor('m2.large.x86', '28 Cores, 384 GB'),
     new NodeInstanceFlavor('s1.large.x86', '16 Cores, 128 GB'),
   ];
-
-  export const Hetzner: NodeInstanceFlavor[] = [
-    new NodeInstanceFlavor('cx11', '1 vCPU, 2 GB'),
-    new NodeInstanceFlavor('cx21', '2 vCPU, 4 GB'),
-    new NodeInstanceFlavor('cx31', '2 vCPU, 8 GB'),
-    new NodeInstanceFlavor('cx41', '4 vCPU, 16 GB'),
-    new NodeInstanceFlavor('cx51', '8 vCPU, 32 GB'),
-    new NodeInstanceFlavor('cx11-ceph', '1 vCPU, 2 GB'),
-    new NodeInstanceFlavor('cx21-ceph', '2 vCPU, 4 GB'),
-    new NodeInstanceFlavor('cx31-ceph', '2 vCPU, 8 GB'),
-    new NodeInstanceFlavor('cx41-ceph', '4 vCPU, 16 GB'),
-    new NodeInstanceFlavor('cx51-ceph', '8 vCPU, 32 GB'),
-  ];
 }

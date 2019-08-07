@@ -2,16 +2,28 @@
       fxLayout="column">
   <div fxFlex
        class="mat-select-container">
-    <mat-form-field>
-      <mat-label>Node Type*</mat-label>
+    <mat-form-field class="km-with-hint">
+      <mat-label>{{getTypesFormState()}}</mat-label>
       <mat-select formControlName="type"
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering>
-        <mat-option *ngFor="let type of types"
-                    [value]="type.id">
-          {{ type }}
-        </mat-option>
+                  disableOptionCentering
+                  [panelClass]="isInWizard() ? 'km-optgroup-dropdown' : 'km-optgroup-dropdown km-add-dialog-dropdown'"
+                  [placeholder]="getTypesFormState()">
+        <mat-optgroup *ngIf="types.standard.length > 0"
+                      label="Standard Droplets">
+          <mat-option *ngFor="let type of types.standard"
+                      [value]="type.name">
+            {{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)
+          </mat-option>
+        </mat-optgroup>
+        <mat-optgroup *ngIf="types.dedicated.length > 0"
+                      label="Dedicated vCPU Instanzen">
+          <mat-option *ngFor="let type of types.dedicated"
+                      [value]="type.name">
+            {{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)
+          </mat-option>
+        </mat-optgroup>
       </mat-select>
+      <mat-hint *ngIf="showSizeHint()">Please enter a valid token first.</mat-hint>
     </mat-form-field>
   </div>
 </form>

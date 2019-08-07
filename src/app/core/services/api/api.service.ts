@@ -17,6 +17,7 @@ import {AWSAvailabilityZone} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
+import {HetznerTypes} from '../../../shared/entity/provider/hetzner/TypeEntity';
 import {OpenstackFlavor} from '../../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {CreateServiceAccountEntity, CreateTokenEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../../shared/entity/SSHKeyEntity';
@@ -109,6 +110,11 @@ export class ApiService {
   getDigitaloceanSizes(projectId: string, dc: string, clusterId: string): Observable<DigitaloceanSizes> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/digitalocean/sizes`;
     return this._http.get<DigitaloceanSizes>(url);
+  }
+
+  getHetznerTypes(projectId: string, dc: string, clusterId: string): Observable<HetznerTypes> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/hetzner/sizes`;
+    return this._http.get<HetznerTypes>(url);
   }
 
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
