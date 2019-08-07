@@ -3,11 +3,13 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {WizardService} from '../../core/services';
+import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
+import {fakeHetznerTypes} from '../../testing/fake-data/addNodeModal.fake';
 import {fakeHetznerCluster} from '../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
+import {asyncData} from '../../testing/services/api-mock.service';
 import {HetznerNodeDataComponent} from './hetzner-node-data.component';
 
 const modules: any[] = [
@@ -23,6 +25,9 @@ describe('HetznerNodeDataComponent', () => {
   let component: HetznerNodeDataComponent;
 
   beforeEach(async(() => {
+    const apiMock = jasmine.createSpyObj('ApiService', ['getHetznerTypes']);
+    apiMock.getHetznerTypes.and.returnValue(asyncData(fakeHetznerTypes()));
+
     TestBed
         .configureTestingModule({
           imports: [
@@ -34,6 +39,7 @@ describe('HetznerNodeDataComponent', () => {
           providers: [
             WizardService,
             NodeDataService,
+            {provide: ApiService, useValue: apiMock},
           ],
         })
         .compileComponents();
@@ -44,15 +50,14 @@ describe('HetznerNodeDataComponent', () => {
     component = fixture.componentInstance;
     component.cloudSpec = fakeHetznerCluster().spec.cloud;
     component.nodeData = nodeDataFake();
+    fixture.detectChanges();
   });
 
   it('should create the add node cmp', () => {
     expect(component).toBeTruthy();
-    fixture.detectChanges();
   });
 
-  it('form valid when initializing since hetzner has sane defaults for required fields', () => {
-    fixture.detectChanges();
-    expect(component.hetznerNodeForm.valid).toBeTruthy();
+  it('form invalid when initializing', () => {
+    expect(component.hetznerNodeForm.valid).toBeFalsy();
   });
 });
