@@ -1,5 +1,6 @@
 import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
+import {HetznerTypes} from '../../shared/entity/provider/hetzner/TypeEntity';
 import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 
 export function fakeDigitaloceanSizes(): DigitaloceanSizes {
@@ -46,4 +47,13 @@ export function fakeAzureSizes(): AzureSizes[] {
       resourceDiskSizeInMB: 20480,
     },
   ];
+}
+
+export function fakeHetznerTypes(): HetznerTypes {
+  return {
+    standard: [
+      {id: 1, name: 'cx11', description: 'CX11', cores: 1, memory: 2, disk: 20},
+    ],
+    dedicated: [],
+  };
 }

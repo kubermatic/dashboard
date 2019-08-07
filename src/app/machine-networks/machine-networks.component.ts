@@ -40,7 +40,9 @@ export class MachineNetworksComponent implements OnInit, OnDestroy {
           }));
         }
       }
-    } else {
+    }
+
+    if (machineNetworksList.length === 0) {
       machineNetworksList.push(new FormGroup({
         cidr: new FormControl(
             '', [Validators.required, Validators.pattern(/^((\d{1,3}\.){3}\d{1,3}\/([0-9]|[1-2][0-9]|3[0-2]))$/)]),

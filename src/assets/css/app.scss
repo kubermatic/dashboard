@@ -40,7 +40,7 @@ body {
   }
 
   td:first-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
-    padding-left: 3.75 * $baseline-grid !important;
+    padding-left: 3.75 * $baseline-grid;
   }
 
   td:last-child:not(.km-serviceaccount-token):not(.km-key-publickey) {
@@ -1073,4 +1073,8 @@ mat-chip-list {
 
 .mat-menu-content {
   padding: 0 !important;
+}
+
+.mat-menu-panel {
+  min-height: auto !important;
 }

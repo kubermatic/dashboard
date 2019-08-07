@@ -2,7 +2,7 @@
 // https://karma-runner.github.io/0.13/config/configuration-file.html
 
 module.exports = function (config) {
-  config.set({
+  let configuration = {
     basePath: '',
     frameworks: ['parallel', 'jasmine', '@angular-devkit/build-angular'],
     plugins: [
@@ -57,5 +57,21 @@ module.exports = function (config) {
     captureTimeout: 210000,
     browserDisconnectTimeout : 210000,
     browserNoActivityTimeout : 210000
-  });
+  };
+
+  // Disable parallel testing on prow as it takes too much resources.
+  if(!!process.env.PROW_JOB_ID) {
+    configuration.frameworks = ['jasmine', '@angular-devkit/build-angular'];
+    configuration.plugins = [
+      require('karma-jasmine'),
+      require('karma-mocha-reporter'),
+      require('karma-jasmine-html-reporter'),
+      require('karma-coverage-istanbul-reporter'),
+      require('karma-chrome-launcher'),
+      require('@angular-devkit/build-angular/plugins/karma'),
+      require('@angular/material')
+    ];
+  }
+
+  config.set(configuration);
 };
