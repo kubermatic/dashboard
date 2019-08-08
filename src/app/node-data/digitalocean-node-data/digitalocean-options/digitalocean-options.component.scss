@@ -1,7 +1,9 @@
+@import "../../../../assets/css/variables";
+
 div.km-node-options {
   width: 100%;
-  line-height: 30px;
-  font-size: 14px;
+  line-height: 3 * $line-height;
+  font-size: $body-font-size-base;
   display: flex;
 
   mat-checkbox,
@@ -11,9 +13,9 @@ div.km-node-options {
 }
 
 textarea.mat-input-element {
-  line-height: 20px;
+  line-height: 2 * $baseline-grid;
 }
 
 .km-node-tags {
-  margin-top: 10px;
+  margin-top: 1.25 * $baseline-grid;
 }

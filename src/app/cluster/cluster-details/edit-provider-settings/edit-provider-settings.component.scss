@@ -1,4 +1,6 @@
+@import "../../../../assets/css/variables";
+
 .km-edit-provider-settings {
   min-height: 125px;
-  padding-bottom: 20px;
+  padding-bottom: 2.5 * $baseline-grid;
 }

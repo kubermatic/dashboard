@@ -2,11 +2,11 @@
 @import '../../assets/css/variables';
 
 mat-form-field.operating-system {
-  margin-top: 20px;
+  margin-top: 2.5 * $baseline-grid;
 }
 
 mat-form-field.km-node-deployment-name {
-  margin-bottom: 20px;
+  margin-bottom: 2.5 * $baseline-grid;
 
   &.none {
     margin-bottom: auto;
@@ -15,10 +15,10 @@ mat-form-field.km-node-deployment-name {
 
 div.km-os-options {
   width: 100%;
-  line-height: 30px;
-  font-size: 14px;
+  line-height: 3 * $line-height;
+  font-size: $body-font-size-base;
   display: flex;
-  margin: 0 0 10px;
+  margin: 0 0 (1.25 * $baseline-grid);
 
   mat-checkbox,
   label {
@@ -26,25 +26,25 @@ div.km-os-options {
   }
 
   &.km-with-margin {
-    margin: 5px 0 10px;
+    margin: (0.625 * $baseline-grid) 0 (1.25 * $baseline-grid);
   }
 }
 
 mat-button-toggle-group[group='operatingSystemGroup'] {
   flex-wrap: wrap;
-  margin-bottom: 5px;
+  margin-bottom: 0.625 * $baseline-grid;
 
   .mat-button-toggle {
-    border-radius: 4px;
+    border-radius: $border-radius;
     max-width: 170px;
     min-width: 120px;
     min-height: 60px;
     max-height: 60px;
     outline: none;
-    margin-bottom: 10px;
+    margin-bottom: 1.25 * $baseline-grid;
 
     i {
-      margin-right: 10px;
+      margin-right: 1.25 * $baseline-grid;
       min-width: 28px;
       min-height: 28px;
       -webkit-filter: grayscale(100%);

@@ -2,7 +2,7 @@
 @import "../../assets/css/variables";
 
 .km-projects-spinner {
-  margin: 20px auto !important;
+  margin: (2.5 * $baseline-grid) auto !important;
 }
 
 .km-health-status {
@@ -19,5 +19,5 @@
   margin: 0;
   font-size: $subhead-font-size-base;
   color: $medium-text-color;
-  margin-left: -3px;
+  margin-left: -0.375 * $baseline-grid;
 }

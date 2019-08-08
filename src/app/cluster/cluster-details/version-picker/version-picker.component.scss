@@ -19,7 +19,7 @@
       border-top: 1px;
       border-style: solid;
       border-color: $separator;
-      border-radius: 5px 0 0 5px;
+      border-radius: $border-radius 0 0 $border-radius;
       height: 51px;
       margin-top: -1px;
       padding: $baseline-grid;
@@ -34,19 +34,19 @@
 
     .mat-form-field {
       font-size: $subhead-font-size-base;
-      margin-top: 20px;
+      margin-top: 2.5 * $baseline-grid;
 
       ::ng-deep div.mat-form-field-flex label {
         color: $medium-text-color;
       }
 
       ::ng-deep .mat-form-field-infix {
-        padding: 12px 0 12px 0 !important;
+        padding: (1.5 * $baseline-grid) 0 (1.5 * $baseline-grid) 0 !important;
         width: 120px;
       }
 
       ::ng-deep .mat-form-field-outline-end {
-        border-radius: 0 5px 5px 0 !important;
+        border-radius: 0 $border-radius $border-radius 0 !important;
       }
 
       ::ng-deep .mat-form-field-outline-start {
@@ -91,6 +91,6 @@
 
   .fa {
     margin: 1.5 * $baseline-grid;
-    font-size: 20px;
+    font-size: $card-title-font-size;
   }
 }

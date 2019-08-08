@@ -29,7 +29,7 @@
 
     a {
       font-size: $subhead-font-size-base-lg;
-      padding: 10px 30px !important;
+      padding: (1.25 * $baseline-grid) (3.75 * $baseline-grid) !important;
       display: flex;
       align-items: center;
 
@@ -45,7 +45,7 @@
 
       i {
         width: 20px;
-        margin-right: 16px;
+        margin-right: 2 * $baseline-grid;
       }
     }
 
