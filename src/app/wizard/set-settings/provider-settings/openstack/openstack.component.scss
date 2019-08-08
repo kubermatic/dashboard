@@ -1,3 +1,5 @@
+@import '../../../../../assets/css/variables';
+
 .mat-select-container {
-  margin-top: 10px;
+  margin-top: 1.25 * $baseline-grid;
 }

@@ -15,7 +15,7 @@ a {
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 0 30px;
+  padding: 0 (3.75 * $baseline-grid);
   width: 100%;
 
   * {

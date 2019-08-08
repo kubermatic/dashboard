@@ -2,7 +2,7 @@
 @import '../../../assets/css/variables';
 
 .km-floating-ip-checkbox {
-  font-size: 14px;
+  font-size: $body-font-size-base;
   display: flex;
   line-height: $baseline-grid * 4;
   margin: ($baseline-grid / 2) 0 ($baseline-grid * 2);

@@ -10,12 +10,17 @@ $subhead-font-size-base-lg: rem(1.8) !default;
 $subhead-font-size-base: rem(1.6) !default;
 $body-font-size-base: rem(1.4) !default;
 $caption-font-size-base: rem(1.2) !default;
+$small-font-size-base: rem(1) !default;
 
 $elevation-24dp:  0 9px 46px rgba(0, 0, 0, 0.12), 0 24px 38px rgba(0, 0, 0, 0.14), 0 11px 15px rgba(0, 0, 0, 0.2);
 $elevation-16dp:  0 8px 10px rgba(0, 0, 0, 0.2), 0 16px 24px rgba(0, 0, 0, 0.14), 0 6px 30px rgba(0, 0, 0, 0.12);
 $elevation-8dp:  0 5px 5px rgba(0, 0, 0, 0.2), 0 8px 10px rgba(0, 0, 0, 0.14), 0 3px 14px rgba(0, 0, 0, 0.12);
 
 $baseline-grid: 8px;
+
+$border-radius: 5px;
+$border-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.12);
+$border-box-shadow-inset: inset 0 4px 4px rgba(0, 0, 0, 0.1);
 
 $toolbar-height: 7.5 * $baseline-grid;
 

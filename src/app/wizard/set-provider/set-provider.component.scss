@@ -1,8 +1,10 @@
+@import '../../../assets/css/variables';
+
 mat-button-toggle-group[group='providerGroup'] {
   flex-wrap: wrap;
 
   mat-button-toggle {
-    margin-top: 10px;
+    margin-top: 1.25 * $baseline-grid;
   }
 }
 

@@ -1,11 +1,12 @@
 @import "../../../assets/css/colors";
+@import "../../../assets/css/variables";
 
 div.km-azure-options {
   width: 100%;
-  line-height: 30px;
-  font-size: 14px;
+  line-height: 3 * $line-height;
+  font-size: $body-font-size-base;
   display: flex;
-  margin: 0 0 10px;
+  margin: 0 0 (1.25 * $baseline-grid);
 
   mat-checkbox,
   label {

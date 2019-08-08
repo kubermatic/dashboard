@@ -40,15 +40,15 @@ ng2-slim-loading-bar {
     right: 20px;
 
     .km-user {
-      margin: 10px 15px 10px 0;
+      margin: (1.25 * $baseline-grid) (1.875 * $baseline-grid) (1.25 * $baseline-grid) 0;
       font-weight: 500;
     }
 
     .km-logout {
-      padding-left: 15px;
-      margin-right: 25px;
+      padding-left: 1.875 * $baseline-grid;
+      margin-right: 3.125 * $baseline-grid;
       font-weight: 500;
-      line-height: 22px;
+      line-height: 2.2 * $line-height;
     }
   }
 }
