@@ -69,7 +69,7 @@
                   class="km-provider-edit-settings">
           <button mat-menu-item
                   (click)="editCluster()"
-                  [disabled]="!isEditEnabled()">
+                  [disabled]="!isClusterRunning || !isEditEnabled()">
             <span>Edit Cluster</span>
           </button>
           <button mat-menu-item
