@@ -1,0 +1,53 @@
+<km-dialog-title title="Configure Pod Security Policy"></km-dialog-title>
+
+<ng-container *ngIf="!isPodSecurityPolicyActive()">
+  <mat-dialog-content>
+    <p>Pod Security Policy is currently not active in this cluster.</p>
+
+    <p class="km-warning">Activating Pod Security Policy will mean that a lot of Pod specifications, Operators and Helm charts will not work out of the box. Make sure that you know the consequences of activating this feature.</p>
+
+    <p>For more information have a look at the <a href="https://kubernetes.io/docs/concepts/policy/pod-security-policy/"
+         target="_blank"
+         rel="noopener">Documentation</a>.</p>
+
+    <p>Click here to activate Pod Security Policy for cluster "<strong>{{cluster.name}}</strong>" and confirm by entering</p>
+    <p class="km-code-block">{{ expectedConfirmation }}</p>
+    <p>below:</p>
+
+    <mat-form-field>
+      <mat-label>Confirmation*</mat-label>
+      <input matInput
+             type="text"
+             title="Confirmation"
+             (blur)="onChange($event)"
+             (keyup)="onChange($event)">
+    </mat-form-field>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button (click)="activatePodSecurity()"
+            mat-dialog-close
+            mat-flat-button
+            [disabled]="!inputConfirmationMatches()">
+      Activate
+    </button>
+  </mat-dialog-actions>
+</ng-container>
+<ng-container *ngIf="isPodSecurityPolicyActive()">
+  <mat-dialog-content>
+    <p>Pod Security Policy is currently active in this cluster.</p>
+    <p>For more information have a look at the <a href="https://kubernetes.io/docs/concepts/policy/pod-security-policy/"
+         target="_blank"
+         rel="noopener">Documentation</a>.</p>
+    <p>Click here to deactivate Pod Security Policy for cluster "<strong>{{cluster.name}}</strong>":</p>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button (click)="deactivatePodSecurity()"
+            mat-dialog-close
+            mat-flat-button>
+      Deactivate
+    </button>
+  </mat-dialog-actions>
+</ng-container>

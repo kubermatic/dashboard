@@ -20,6 +20,7 @@ import {NodeService} from '../services/node.service';
 
 import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
+import {ConfigurePodSecurityComponent} from './configure-pod-security/configure-pod-security.component';
 import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
 import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
@@ -236,6 +237,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
 
   revokeAdminToken(): void {
     const dialogRef = this._matDialog.open(RevokeAdminTokenComponent);
+    dialogRef.componentInstance.cluster = this.cluster;
+    dialogRef.componentInstance.datacenter = this.datacenter;
+    dialogRef.componentInstance.projectID = this.projectID;
+  }
+
+  configPodSecurity(): void {
+    const dialogRef = this._matDialog.open(ConfigurePodSecurityComponent);
     dialogRef.componentInstance.cluster = this.cluster;
     dialogRef.componentInstance.datacenter = this.datacenter;
     dialogRef.componentInstance.projectID = this.projectID;

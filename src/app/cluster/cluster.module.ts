@@ -10,6 +10,7 @@ import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
+import {ConfigurePodSecurityComponent} from './cluster-details/configure-pod-security/configure-pod-security.component';
 import {EditClusterComponent} from './cluster-details/edit-cluster/edit-cluster.component';
 import {AWSProviderSettingsComponent} from './cluster-details/edit-provider-settings/aws-provider-settings/aws-provider-settings.component';
 import {AzureProviderSettingsComponent} from './cluster-details/edit-provider-settings/azure-provider-settings/azure-provider-settings.component';
@@ -54,6 +55,7 @@ const entryComponents: any[] = [
   RevokeAdminTokenComponent,
   AddMachineNetworkComponent,
   EditProviderSettingsComponent,
+  ConfigurePodSecurityComponent,
   AWSProviderSettingsComponent,
   DigitaloceanProviderSettingsComponent,
   HetznerProviderSettingsComponent,

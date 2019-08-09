@@ -128,6 +128,7 @@ export class ClusterSpec {
   cloud: CloudSpec;
   machineNetworks?: MachineNetwork[];
   version?: string;
+  usePodSecurityPolicyAdmissionPlugin?: boolean;
 }
 
 export class MachineNetwork {
