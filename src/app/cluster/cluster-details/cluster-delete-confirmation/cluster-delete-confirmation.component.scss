@@ -4,11 +4,15 @@
 .km-delete-cluster-checkbox {
   margin-bottom: $baseline-grid;
 
-  .mat-checkbox {
+  ::ng-deep .mat-checkbox-inner-container {
     margin-right: 2 * $baseline-grid;
   }
 }
 
 .mat-form-field {
   margin-top: $baseline-grid;
+}
+
+.km-icon-warning {
+  margin: 0 ($baseline-grid * 1.8) 0 0;
 }
