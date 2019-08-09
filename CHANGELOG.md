@@ -1,3 +1,26 @@
+### [v1.3.4]()
+
+- Fixed an issue with handling resources refresh on error conditions [#1452](https://github.com/kubermatic/dashboard-v2/issues/1452) ([floreks](https://github.com/floreks))
+
+
+
+
+### [v1.3.3]()
+
+
+- Openstack: the project name can now be provided manually [#1426](https://github.com/kubermatic/dashboard-v2/issues/1426) ([floreks](https://github.com/floreks))
+
+
+
+
+### [v1.3.2]()
+
+
+- JS dependencies have been updated to address potential vulnerabilities in some of them. [#1388](https://github.com/kubermatic/dashboard-v2/issues/1388) ([kgroschoff](https://github.com/kgroschoff))
+
+
+
+
 ### [v1.3.0]()
 
 
