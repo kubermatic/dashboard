@@ -1,3 +1,4 @@
+import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
 import {AzureSizes} from '../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {HetznerTypes} from '../../shared/entity/provider/hetzner/TypeEntity';
@@ -56,4 +57,13 @@ export function fakeHetznerTypes(): HetznerTypes {
     ],
     dedicated: [],
   };
+}
+
+export function fakePacketSizes(): PacketSize[] {
+  return [{
+    name: 'x1.small.x86',
+    memory: '32GB',
+    cpus: [],
+    drives: [],
+  }];
 }

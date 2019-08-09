@@ -71,8 +71,10 @@
 
   <kubermatic-packet-node-data *ngIf="cluster.spec.cloud.packet"
                                [cloudSpec]="cluster.spec.cloud"
+                               [projectId]="projectId"
                                [clusterId]="cluster.id"
-                               [nodeData]="nodeData"></kubermatic-packet-node-data>
+                               [nodeData]="nodeData"
+                               [seedDCName]="seedDCName"></kubermatic-packet-node-data>
 
   <kubermatic-hetzner-node-data *ngIf="cluster.spec.cloud.hetzner"
                                 [cloudSpec]="cluster.spec.cloud"

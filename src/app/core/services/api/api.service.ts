@@ -12,6 +12,7 @@ import {CreateMemberEntity, MemberEntity} from '../../../shared/entity/MemberEnt
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
 import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
+import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
 import {AWSAvailabilityZone} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
@@ -115,6 +116,11 @@ export class ApiService {
   getHetznerTypes(projectId: string, dc: string, clusterId: string): Observable<HetznerTypes> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/hetzner/sizes`;
     return this._http.get<HetznerTypes>(url);
+  }
+
+  getPacketSizes(projectId: string, dc: string, clusterId: string): Observable<PacketSize[]> {
+    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/packet/sizes`;
+    return this._http.get<PacketSize[]>(url);
   }
 
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
