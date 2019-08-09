@@ -6,13 +6,14 @@ import {ClusterEntity, MasterVersion, Token} from '../../shared/entity/ClusterEn
 import {CreateMemberEntity, MemberEntity} from '../../shared/entity/MemberEntity';
 import {NodeDeploymentEntity} from '../../shared/entity/NodeDeploymentEntity';
 import {NodeEntity} from '../../shared/entity/NodeEntity';
+import {PacketSize} from '../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../shared/entity/ProjectEntity';
 import {DigitaloceanSizes} from '../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../shared/entity/provider/gcp/GCP';
 import {VSphereNetwork} from '../../shared/entity/provider/vsphere/VSphereEntity';
 import {CreateServiceAccountEntity, ServiceAccountEntity, ServiceAccountTokenEntity, ServiceAccountTokenPatch} from '../../shared/entity/ServiceAccountEntity';
 import {SSHKeyEntity} from '../../shared/entity/SSHKeyEntity';
-import {fakeDigitaloceanSizes} from '../fake-data/addNodeModal.fake';
+import {fakeDigitaloceanSizes, fakePacketSizes} from '../fake-data/addNodeModal.fake';
 import {masterVersionsFake} from '../fake-data/cluster-spec.fake';
 import {fakeToken} from '../fake-data/cluster.fake';
 import {fakeMember, fakeMembers} from '../fake-data/member.fake';
@@ -177,6 +178,10 @@ export class ApiMockService {
 
   getKubeconfigURL(): string {
     return '';
+  }
+
+  getPacketSizes(): Observable<PacketSize[]> {
+    return of(fakePacketSizes());
   }
 }
 
