@@ -16,7 +16,7 @@
           </mat-option>
         </mat-optgroup>
         <mat-optgroup *ngIf="types.dedicated.length > 0"
-                      label="Dedicated vCPU Instanzen">
+                      label="Dedicated vCPU Instances">
           <mat-option *ngFor="let type of types.dedicated"
                       [value]="type.name">
             {{type.name}} ({{ type.cores }} vCPU, {{type.memory}} GB RAM)

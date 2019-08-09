@@ -43,15 +43,4 @@ export namespace NodeInstanceFlavors {
     new NodeInstanceFlavor('c5.xlarge', '4 vCPU, 8 GB'),
     new NodeInstanceFlavor('c5.2xlarge', '8 vCPU, 16 GB'),
   ];
-
-  // Keep in sync with https://www.packet.com/cloud/servers/.
-  export const Packet: NodeInstanceFlavor[] = [
-    new NodeInstanceFlavor('t1.small.x86', '4 Cores, 8 GB'),
-    new NodeInstanceFlavor('c1.small.x86', '4 Cores, 32 GB'),
-    new NodeInstanceFlavor('c2.medium.x86', '24 Cores, 64 GB'),
-    new NodeInstanceFlavor('c1.large.x86', '16 Cores, 128 GB'),
-    new NodeInstanceFlavor('m1.large.x86', '24 Cores, 256 GB'),
-    new NodeInstanceFlavor('m2.large.x86', '28 Cores, 384 GB'),
-    new NodeInstanceFlavor('s1.large.x86', '16 Cores, 128 GB'),
-  ];
 }

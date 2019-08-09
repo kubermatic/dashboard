@@ -3,11 +3,14 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {WizardService} from '../../core/services';
+
+import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakePacketCluster} from '../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
+import {ApiMockService} from '../../testing/services/api-mock.service';
+
 import {PacketNodeDataComponent} from './packet-node-data.component';
 
 const modules: any[] = [
@@ -34,6 +37,7 @@ describe('PacketNodeDataComponent', () => {
           providers: [
             NodeDataService,
             WizardService,
+            {provide: ApiService, useClass: ApiMockService},
           ],
         })
         .compileComponents();
@@ -53,6 +57,6 @@ describe('PacketNodeDataComponent', () => {
 
   it('form valid when initializing since Packet has sane defaults for required fields', () => {
     fixture.detectChanges();
-    expect(component.packetNodeForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 });

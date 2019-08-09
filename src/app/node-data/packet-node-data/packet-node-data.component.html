@@ -1,17 +1,19 @@
-<form [formGroup]="packetNodeForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
-      <mat-label>Node Size*</mat-label>
-      <mat-select formControlName="type"
+      <mat-label>{{getSizesFormState()}}</mat-label>
+      <mat-select formControlName="size"
+                  disableOptionCentering
                   [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering>
-        <mat-option *ngFor="let type of instanceTypes"
-                    [value]="type.id">
-          {{type}}
+                  [placeholder]="getSizesFormState()">
+        <mat-option *ngFor="let size of sizes"
+                    [value]="size.name">
+          {{size.name}} {{getPlanDetails(size)}}
         </mat-option>
       </mat-select>
+      <mat-hint *ngIf="showSizeHint()">Please enter a valid API Key and Project ID first.</mat-hint>
     </mat-form-field>
   </div>
 
