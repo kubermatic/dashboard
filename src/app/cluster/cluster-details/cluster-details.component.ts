@@ -20,6 +20,7 @@ import {NodeService} from '../services/node.service';
 
 import {ClusterConnectComponent} from './cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-delete-confirmation/cluster-delete-confirmation.component';
+import {EditClusterComponent} from './edit-cluster/edit-cluster.component';
 import {EditProviderSettingsComponent} from './edit-provider-settings/edit-provider-settings.component';
 import {EditSSHKeysComponent} from './edit-sshkeys/edit-sshkeys.component';
 import {RevokeAdminTokenComponent} from './revoke-admin-token/revoke-admin-token.component';
@@ -204,6 +205,13 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
     const modal = this._matDialog.open(EditProviderSettingsComponent);
     modal.componentInstance.cluster = this.cluster;
     modal.componentInstance.datacenter = this.datacenter;
+  }
+
+  editCluster(): void {
+    const modal = this._matDialog.open(EditClusterComponent);
+    modal.componentInstance.cluster = this.cluster;
+    modal.componentInstance.datacenter = this.datacenter;
+    modal.componentInstance.projectID = this.projectID;
   }
 
   isSSHKeysEditEnabled(): boolean {
