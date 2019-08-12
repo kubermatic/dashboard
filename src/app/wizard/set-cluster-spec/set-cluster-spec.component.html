@@ -42,7 +42,7 @@
   <mat-card class="km-set-cluster-spec"
             fxFlex>
     <mat-card-header>
-      <mat-card-title class="km-color-primary">Type</mat-card-title>
+      <mat-card-title class="km-color-primary">Specification</mat-card-title>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="clusterSpecForm"
@@ -50,7 +50,8 @@
 
         <mat-button-toggle-group group="clusterSpecTypeGroup"
                                  class="km-cluster-spec-type"
-                                 formControlName="type">
+                                 formControlName="type"
+                                 *ngIf="hasMultipleTypes()">
           <mat-button-toggle value="kubernetes"
                              *ngIf="!hideType('kubernetes')">
             <i class="km-icon-kubernetes"></i>
