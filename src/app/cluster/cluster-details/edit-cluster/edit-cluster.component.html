@@ -1,0 +1,37 @@
+<div id="km-edit-cluster-dialog">
+  <km-dialog-title title="Edit Cluster"></km-dialog-title>
+  <mat-dialog-content>
+    <div class="mat-dialog-content">
+      <form [formGroup]="editClusterForm"
+            fxLayout="column">
+        <mat-form-field fxFlex>
+          <mat-label>Name*</mat-label>
+          <input id="km-edit-cluster-dialog-input"
+                 matInput
+                 formControlName="name"
+                 type="text"
+                 autocomplete="off"
+                 cdkFocusInitial>
+          <mat-error *ngIf="editClusterForm.controls.name.hasError('required')">
+            Name is <strong>required</strong>.
+          </mat-error>
+          <mat-error *ngIf="editClusterForm.controls.name.hasError('minlength')">
+            Name must be at least {{ editClusterForm.controls.name.getError('minlength').requiredLength }} characters.
+          </mat-error>
+          <mat-error *ngIf="editClusterForm.controls.name.hasError('pattern')">
+            Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+          </mat-error>
+        </mat-form-field>
+
+      </form>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button id="km-edit-cluster-dialog-edit-btn"
+            mat-flat-button
+            (click)="editCluster()"
+            [disabled]="!editClusterForm.valid">
+      Edit
+    </button>
+  </mat-dialog-actions>
+</div>
