@@ -6,7 +6,7 @@ import {AppConfigService} from '../../app-config.service';
 import {ApiService, WizardService} from '../../core/services';
 import {ClusterNameGenerator} from '../../core/util/name-generator.service';
 import {ClusterEntity, MasterVersion} from '../../shared/entity/ClusterEntity';
-import {ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
+import {ClusterType, ClusterUtils} from '../../shared/utils/cluster-utils/cluster-utils';
 
 @Component({
   selector: 'kubermatic-set-cluster-spec',
@@ -33,7 +33,11 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     });
 
     if (this.clusterSpecForm.controls.type.value === '') {
-      this.clusterSpecForm.controls.type.setValue('kubernetes');
+      if (!this.hideType(ClusterType.Kubernetes)) {
+        this.clusterSpecForm.controls.type.setValue(ClusterType.Kubernetes);
+      } else if (!this.hideType(ClusterType.OpenShift)) {
+        this.clusterSpecForm.controls.type.setValue(ClusterType.OpenShift);
+      }
     }
 
     this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)
@@ -65,6 +69,10 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   hideType(type: string): boolean {
     return !!this._appConfig.getConfig()['hide_' + type] ? this._appConfig.getConfig()['hide_' + type] : false;
+  }
+
+  hasMultipleTypes(): boolean {
+    return !this.hideType(ClusterType.Kubernetes) && !this.hideType(ClusterType.OpenShift);
   }
 
   setClusterSpec(): void {

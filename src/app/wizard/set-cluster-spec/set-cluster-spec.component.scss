@@ -30,6 +30,8 @@
 }
 
 .km-cluster-spec-type {
+  margin-right: 20px;
+
   mat-button-toggle {
     min-height: 50px;
     max-height: 50px;
@@ -87,5 +89,4 @@
 .km-version-inline {
   width: auto;
   max-width: 130px;
-  margin-left: 20px;
 }
