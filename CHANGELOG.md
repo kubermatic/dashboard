@@ -387,3 +387,4 @@
   - Node list now shows nodes&#39; creation dates [#606](https://github.com/kubermatic/dashboard-v2/issues/606) ([kgroschoff](https://github.com/kgroschoff))
   - Node creation now allows to choose an OS and container runtime [#597](https://github.com/kubermatic/dashboard-v2/issues/597) ([kgroschoff](https://github.com/kgroschoff))
 - Various minor fixes and improvements
+bla
