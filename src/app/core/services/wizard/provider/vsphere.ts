@@ -1,12 +1,12 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
-import {OpenstackNetwork} from '../../../../shared/entity/provider/openstack/OpenstackSizeEntity';
-import {VSphereNetwork} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {VSphereFolder, VSphereNetwork} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {Provider} from './provider';
 
 export class VSphere extends Provider {
   private readonly _networksUrl = `${this._restRoot}/providers/vsphere/networks`;
+  private readonly _foldersUrl = `${this._restRoot}/providers/vsphere/folders`;
 
   constructor(http: HttpClient, provider: NodeProvider) {
     super(http, provider);
@@ -48,7 +48,14 @@ export class VSphere extends Provider {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
-    return this._http.get<OpenstackNetwork[]>(this._networksUrl, {headers: this._headers});
+    return this._http.get<VSphereNetwork[]>(this._networksUrl, {headers: this._headers});
+  }
+
+  folders(): Observable<VSphereFolder[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    return this._http.get<VSphereFolder[]>(this._foldersUrl, {headers: this._headers});
   }
 }
 
