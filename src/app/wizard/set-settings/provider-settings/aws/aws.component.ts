@@ -1,11 +1,15 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {debounceTime, takeUntil} from 'rxjs/operators';
+import {debounceTime, take, takeUntil} from 'rxjs/operators';
+
 import {WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
+import {AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
+import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
+
 
 @Component({
   selector: 'kubermatic-aws-cluster-settings',
@@ -15,7 +19,9 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
   hideOptional = true;
+  subnetIds: AWSSubnet[] = [];
 
+  private _loadingSubnetIds = false;
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
 
@@ -40,6 +46,16 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         this.form.controls.secretAccessKey,
     );
 
+    this._loadSubnetIds();
+    this.checkSubnetState();
+
+    this.form.controls.vpcId.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      if (this._isVPCSelected()) {
+        this._loadSubnetIds();
+        this.checkSubnetState();
+      }
+    });
+
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
                                             this._wizard.onCustomPresetsDisable.emit(true);
@@ -59,6 +75,64 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
       this.form.enable();
     });
+  }
+
+  getSubnetIDFormState(): string {
+    if (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '')) {
+      return 'Subnet ID';
+    } else if (this._loadingSubnetIds) {
+      return 'Loading Subnet IDs...';
+    } else if (this.form.controls.vpcId.value !== '' && this.subnetIds.length === 0) {
+      return 'No Subnet IDs available';
+    } else {
+      return 'Subnet ID';
+    }
+  }
+
+  private _loadSubnetIds(): void {
+    if (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '') {
+      return;
+    }
+
+    this._loadingSubnetIds = true;
+    this._wizard.provider(NodeProvider.AWS)
+        .accessKeyID(this.form.controls.accessKeyId.value)
+        .secretAccessKey(this.form.controls.secretAccessKey.value)
+        .vpc(this.form.controls.vpcId.value)
+        .subnets(this.cluster.spec.cloud.dc)
+        .pipe(take(1))
+        .subscribe(
+            (subnets) => {
+              this.subnetIds = subnets.sort((a, b) => {
+                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+              });
+
+              if (this.subnetIds.length === 0) {
+                this.form.controls.subnetId.setValue('');
+              }
+
+              this._loadingSubnetIds = false;
+              this.checkSubnetState();
+            },
+            () => {
+              this._loadingSubnetIds = false;
+            });
+  }
+
+  checkSubnetState(): void {
+    if (this.subnetIds.length === 0 && this.form.controls.subnetId.enabled) {
+      this.form.controls.subnetId.disable();
+    } else if (this.subnetIds.length > 0 && this.form.controls.subnetId.disabled) {
+      this.form.controls.subnetId.enable();
+    }
+  }
+
+  private _hasRequiredCredentials(): boolean {
+    return !(this.form.controls.accessKeyId.value === '' || this.form.controls.secretAccessKey.value === '');
+  }
+
+  private _isVPCSelected(): boolean {
+    return this.form.controls.vpcId.value.toString().length > 0;
   }
 
   private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
