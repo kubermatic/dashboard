@@ -72,10 +72,7 @@
         {{subnet.name}} ({{subnet.id}}, {{subnet.availability_zone}})
       </mat-option>
     </mat-select>
-    <mat-hint>When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
-    <mat-error *ngIf="form.controls.subnetId.hasError('pattern')">
-      The subnet ID needs to look similar to 'subnet-36275b5d'.
-    </mat-error>
+    <mat-hint *ngIf="showSubnetIDHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex

@@ -57,6 +57,8 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+      this._loadSubnetIds();
+      this.checkSubnetState();
       this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
                                             this._wizard.onCustomPresetsDisable.emit(true);
 
@@ -125,6 +127,10 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     } else if (this.subnetIds.length > 0 && this.form.controls.subnetId.disabled) {
       this.form.controls.subnetId.enable();
     }
+  }
+
+  showSubnetIDHint(): boolean {
+    return !this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '');
   }
 
   private _hasRequiredCredentials(): boolean {
