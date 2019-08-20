@@ -826,6 +826,7 @@ div.km-form-group-labels {
   }
 
   &.km-small-button {
+    height: 5 * $baseline-grid;
     min-width: unset;
   }
 }
