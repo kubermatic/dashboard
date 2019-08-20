@@ -1,11 +1,9 @@
 <div *ngIf="data.nodeData">
   <km-dialog-title [title]="getDialogLabel()"></km-dialog-title>
   <mat-dialog-content class="km-add-node-outer">
-    <div class="mat-dialog-content km-add-node-inner">
-      <kubermatic-node-data [cluster]="data.cluster"
-                            [nodeData]="data.nodeData"
-                            [existingNodesCount]="data.existingNodesCount"></kubermatic-node-data>
-    </div>
+    <kubermatic-node-data [cluster]="data.cluster"
+                          [nodeData]="data.nodeData"
+                          [existingNodesCount]="data.existingNodesCount"></kubermatic-node-data>
   </mat-dialog-content>
   <mat-dialog-actions>
     <button mat-flat-button
