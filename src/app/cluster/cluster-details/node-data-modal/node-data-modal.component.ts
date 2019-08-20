@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
 import {MAT_DIALOG_DATA} from '@angular/material';
+import * as _ from 'lodash';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
@@ -9,8 +10,9 @@ import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {ClusterEntity} from '../../../shared/entity/ClusterEntity';
 import {DataCenterEntity} from '../../../shared/entity/DatacenterEntity';
 import {NodeDeploymentEntity} from '../../../shared/entity/NodeDeploymentEntity';
-import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec} from '../../../shared/entity/NodeEntity';
+import {getEmptyNodeProviderSpec, getEmptyNodeVersionSpec, getEmptyOperatingSystemSpec, NodeSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData} from '../../../shared/model/NodeSpecChange';
+import {objectDiff} from '../../../shared/utils/common-utils';
 
 export interface NodeDataModalData {
   cluster: ClusterEntity;
@@ -33,6 +35,7 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   @Output() editNodeDeployment = new EventEmitter<NodeDeploymentEntity>();
   nodeDC: DataCenterEntity;
   isExtended = false;
+  private _initialNodeSpec: NodeSpec;
   private _unsubscribe = new Subject<void>();
 
   constructor(
@@ -41,6 +44,11 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
       public googleAnalyticsService: GoogleAnalyticsService) {}
 
   ngOnInit(): void {
+    if (this.data.editMode && this.data.nodeDeployment) {
+      // Using data.nodeDeployment as it is not a deep copy created using JSON parse & stringify like data.NodeData.
+      this._initialNodeSpec = this.data.nodeDeployment.spec.template;
+    }
+
     if (!this.data.nodeData) {
       this.data.nodeData = {
         spec: {
@@ -77,6 +85,10 @@ export class NodeDataModalComponent implements OnInit, OnDestroy {
   onViewChange(): void {
     this.isExtended = !this.isExtended;
     this.wizardService.changeSettingsFormView({hideOptional: !this.isExtended});
+  }
+
+  isRecreationWarningVisible(): boolean {
+    return this.data.editMode && !_.isEqual(objectDiff(this._initialNodeSpec, this.data.nodeData.spec), {});
   }
 
   getDialogLabel(): string {

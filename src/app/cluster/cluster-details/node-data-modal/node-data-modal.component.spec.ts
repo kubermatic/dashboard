@@ -26,7 +26,7 @@ import {VSphereOptionsComponent} from '../../../node-data/vsphere-add-node/vsphe
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeDigitaloceanCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeDigitaloceanDatacenter} from '../../../testing/fake-data/datacenter.fake';
-import {fakeDigitaloceanCreateNode, nodeDataFake} from '../../../testing/fake-data/node.fake';
+import {fakeDigitaloceanCreateNode, nodeDataFake, nodeDeploymentsFake} from '../../../testing/fake-data/node.fake';
 import {ActivatedRouteStub, RouterStub, RouterTestingModule} from '../../../testing/router-stubs';
 import {ApiMockService} from '../../../testing/services/api-mock.service';
 import {ClusterMockService} from '../../../testing/services/cluster-mock-service';
@@ -101,7 +101,8 @@ describe('NodeDataModalData', () => {
       valid: true,
     };
     component.data.nodeData = nodeDataFake();
-    component.data.editMode = false;
+    component.data.nodeDeployment = nodeDeploymentsFake()[0];
+    component.data.editMode = true;
 
     activatedRoute = fixture.debugElement.injector.get(ActivatedRoute) as any;
     activatedRoute.testParamMap = {clusterName: 'tbbfvttvs'};
@@ -116,5 +117,15 @@ describe('NodeDataModalData', () => {
   it('should render action buttons', () => {
     const actions = fixture.debugElement.query(By.css('.mat-dialog-actions'));
     expect(actions).not.toBeNull();
+  });
+
+  it('should not show node recreation warning if spec was not changed', () => {
+    component.data.nodeData.spec = component.data.nodeDeployment.spec.template;
+    expect(component.isRecreationWarningVisible()).toBeFalsy();
+  });
+
+  it('should show node recreation warning if spec was changed', () => {
+    component.data.nodeData.spec.versions.kubelet = 'changed';
+    expect(component.isRecreationWarningVisible()).toBeTruthy();
   });
 });

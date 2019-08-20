@@ -83,7 +83,7 @@
   background: $indicator-red url("/assets/images/icons/warning.svg") no-repeat;
   background-size: $baseline-grid * 1.5;
   background-position: center;
-  border-radius: $baseline-grid;
+  border-radius: 50%;
 }
 
 .km-icon-tick {
