@@ -15,7 +15,7 @@ import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
   templateUrl: './openstack-node-data.component.html',
 })
 export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
-  @Input() cloudSpec: CloudSpec;
+  @Input() cloudSpec: CloudSpec = {openstack: {}} as CloudSpec;
   @Input() nodeData: NodeData;
   @Input() projectId: string;
   @Input() clusterId: string;
@@ -24,7 +24,6 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   flavors: OpenstackFlavor[] = [];
   loadingFlavors = false;
   osNodeForm: FormGroup;
-  loadingSizes = false;
 
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
@@ -40,11 +39,11 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this.osNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
+      this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
     });
 
-    this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
-    this.loadFlavors();
+    this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
+    this._loadFlavors();
     this.checkFlavorState();
 
     this._dcService.getDataCenter(this.cloudSpec.dc).pipe(takeUntil(this._unsubscribe)).subscribe((dc) => {
@@ -61,45 +60,32 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cloudSpec = data.cloudSpec;
-      this.osNodeForm.controls.flavor.setValue('');
-      this.flavors = [];
-      this.checkFlavorState();
+      let credentialsChanged = false;
+      if (this._hasCredentialsChanged(this.cloudSpec, data.cloudSpec)) {
+        this.osNodeForm.controls.flavor.setValue('');
+        this.flavors = [];
+        this.checkFlavorState();
+        credentialsChanged = true;
+      }
 
-      if (this.hasCredentials() || this._selectedPreset) {
-        this.loadFlavors();
+      this.cloudSpec = data.cloudSpec;
+
+      if (this._hasCredentials() && credentialsChanged) {
+        this._loadFlavors();
       }
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       if (preset) {
         this._selectedPreset = preset;
-        this.loadFlavors();
+        this._loadFlavors();
         return;
       }
 
       this.flavors = [];
+      this._selectedPreset = '';
       this.checkFlavorState();
     });
-  }
-
-  ngOnDestroy(): void {
-    this._unsubscribe.next();
-    this._unsubscribe.complete();
-  }
-
-  getNodeProviderData(): NodeProviderData {
-    return {
-      spec: {
-        openstack: {
-          flavor: this.osNodeForm.controls.flavor.value,
-          image: this.nodeData.spec.cloud.openstack.image,
-          useFloatingIP: this.osNodeForm.controls.useFloatingIP.value,
-          tags: this.nodeData.spec.cloud.openstack.tags,
-        },
-      },
-      valid: this.osNodeForm.valid,
-    };
   }
 
   checkFlavorState(): void {
@@ -111,11 +97,11 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   showFlavorHint(): boolean {
-    return (!this.loadingFlavors && !this.hasCredentials()) && this.isInWizard();
+    return (!this.loadingFlavors && !this._hasCredentials()) && this.isInWizard();
   }
 
   getFlavorsFormState(): string {
-    if ((!this.loadingFlavors && !this.hasCredentials()) && this.isInWizard()) {
+    if ((!this.loadingFlavors && !this._hasCredentials()) && this.isInWizard()) {
       return 'Flavor*';
     } else if (this.loadingFlavors) {
       return 'Loading flavors...';
@@ -130,7 +116,30 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     return !this.clusterId || this.clusterId.length === 0;
   }
 
-  hasCredentials(): boolean {
+  isFloatingIPEnforced(): boolean {
+    return this.osNodeForm.controls.useFloatingIP.disabled;
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
+  }
+
+  private _getNodeProviderData(): NodeProviderData {
+    return {
+      spec: {
+        openstack: {
+          flavor: this.osNodeForm.controls.flavor.value,
+          image: this.nodeData.spec.cloud.openstack.image,
+          useFloatingIP: this.osNodeForm.controls.useFloatingIP.value,
+          tags: this.nodeData.spec.cloud.openstack.tags,
+        },
+      },
+      valid: this.osNodeForm.valid,
+    };
+  }
+
+  private _hasCredentials(): boolean {
     return !!this.cloudSpec.openstack.username && this.cloudSpec.openstack.username.length > 0 &&
         !!this.cloudSpec.openstack.password && this.cloudSpec.openstack.password.length > 0 &&
         !!this.cloudSpec.openstack.domain && this.cloudSpec.openstack.domain.length > 0 &&
@@ -138,7 +147,13 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
          (!!this.cloudSpec.openstack.tenantID && this.cloudSpec.openstack.tenantID.length > 0));
   }
 
-  private handleFlavours(flavors: OpenstackFlavor[]): void {
+  private _hasCredentialsChanged(prev: CloudSpec, curr: CloudSpec): boolean {
+    return prev.openstack.username !== curr.openstack.username || prev.openstack.password !== curr.openstack.password ||
+        prev.openstack.domain !== curr.openstack.domain || prev.openstack.tenant !== curr.openstack.tenant ||
+        prev.openstack.tenantID !== curr.openstack.tenantID;
+  }
+
+  private _handleFlavours(flavors: OpenstackFlavor[]): void {
     const sortedFlavors = flavors.sort((a, b) => {
       return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
     });
@@ -150,12 +165,12 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this.loadingFlavors = false;
   }
 
-  loadFlavors(): void {
-    if (!this.hasCredentials() && !this._selectedPreset) {
+  private _loadFlavors(): void {
+    if (!this._hasCredentials() && !this._selectedPreset) {
       return;
     }
 
-    this.loadingFlavors = !this.isInWizard() || this.hasCredentials() || !!this._selectedPreset;
+    this.loadingFlavors = !this.isInWizard() || this._hasCredentials() || !!this._selectedPreset;
 
     iif(() => this.isInWizard(),
         this._wizard.provider(NodeProvider.OPENSTACK)
@@ -171,13 +186,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
         .pipe(take(1))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((flavors) => {
-          this.handleFlavours(flavors);
+          this._handleFlavours(flavors);
           this.checkFlavorState();
           this.loadingFlavors = false;
         }, () => this.loadingFlavors = false);
-  }
-
-  isFloatingIPEnforced(): boolean {
-    return this.osNodeForm.controls.useFloatingIP.disabled;
   }
 }

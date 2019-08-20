@@ -77,7 +77,7 @@ export class DefaultFormValidationStrategy implements FormValidationStrategy {
   }
 
   isValid(): boolean {
-    return this._validStatuses.includes(this._form.status);
+    return Object.values(this._form.controls).every(control => this._validStatuses.includes(control.status));
   }
 }
 
