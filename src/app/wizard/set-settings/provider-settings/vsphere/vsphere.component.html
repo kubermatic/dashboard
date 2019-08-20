@@ -47,7 +47,7 @@
                 disableOptionCentering
                 formControlName="vmNetName">
       <mat-option *ngFor="let item of networks"
-                  [value]="item.name">
+                  [value]="item.absolutePath">
         {{item.name}}
       </mat-option>
     </mat-select>
