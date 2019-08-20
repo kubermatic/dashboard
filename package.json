@@ -103,9 +103,9 @@
     "jasmine-spec-reporter": "4.2.1",
     "js-beautify": "1.10.2",
     "karma": "4.2.0",
-    "karma-chrome-launcher": "3.0.0",
+    "karma-chrome-launcher": "3.1.0",
     "karma-cli": "2.0.0",
-    "karma-coverage-istanbul-reporter": "2.0.5",
+    "karma-coverage-istanbul-reporter": "2.1.0",
     "karma-jasmine": "2.0.1",
     "karma-jasmine-html-reporter": "1.4.2",
     "karma-mocha-reporter": "2.2.5",
@@ -117,14 +117,14 @@
     "ng2-slim-loading-bar": "4.0.0",
     "ngrx-store-freeze": "0.2.4",
     "ngrx-store-logger": "0.2.3",
-    "node-gyp": "4.0.0",
+    "node-gyp": "5.0.3",
     "request": "2.88.0",
     "start-server-and-test": "1.10.0",
     "stylelint": "10.1.0",
     "stylelint-config-standard": "18.3.0",
     "ts-node": "8.3.0",
     "tslint": "5.18.0",
-    "typescript": "3.4.5"
+    "typescript": "3.5.3"
   },
   "engines": {
     "node": ">=10.9.0"
