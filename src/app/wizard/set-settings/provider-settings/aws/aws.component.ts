@@ -20,6 +20,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   hideOptional = true;
   subnetIds: AWSSubnet[] = [];
+  subnetList = {};
 
   private _loadingSubnetIds = false;
   private _formHelper: FormHelper;
@@ -109,6 +110,15 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
                 return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
               });
 
+              this.subnetList = {};
+              this.subnetIds.forEach(subnet => {
+                const find = Object.keys(this.subnetList).find(x => x === subnet.availability_zone);
+                if (!find) {
+                  this.subnetList[subnet.availability_zone] = [];
+                }
+                this.subnetList[subnet.availability_zone].push(subnet);
+              });
+
               if (this.subnetIds.length === 0) {
                 this.form.controls.subnetId.setValue('');
               }
@@ -133,6 +143,14 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     return !this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '');
   }
 
+  getKeys(): string[] {
+    return Object.keys(this.subnetList);
+  }
+
+  getSubnetOptionName(subnet: AWSSubnet): string {
+    return subnet.name !== '' ? subnet.name + ' (' + subnet.id + ')' : subnet.id;
+  }
+
   private _hasRequiredCredentials(): boolean {
     return !(this.form.controls.accessKeyId.value === '' || this.form.controls.secretAccessKey.value === '');
   }
@@ -140,6 +158,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   private _isVPCSelected(): boolean {
     return this.form.controls.vpcId.value.toString().length > 0;
   }
+
 
   private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {

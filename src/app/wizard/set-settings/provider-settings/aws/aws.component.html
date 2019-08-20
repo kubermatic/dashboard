@@ -66,11 +66,15 @@
     <mat-label>{{getSubnetIDFormState()}}</mat-label>
     <mat-select [placeholder]="getSubnetIDFormState()"
                 disableOptionCentering
+                panelClass="km-optgroup-dropdown"
                 formControlName="subnetId">
-      <mat-option *ngFor="let subnet of subnetIds"
-                  [value]="subnet.id">
-        {{subnet.name}} ({{subnet.id}}, {{subnet.availability_zone}})
-      </mat-option>
+      <mat-optgroup *ngFor="let az of getKeys()"
+                    [label]="az">
+        <mat-option *ngFor="let subnet of subnetList[az]"
+                    [value]="subnet.id">
+          {{getSubnetOptionName(subnet)}}
+        </mat-option>
+      </mat-optgroup>
     </mat-select>
     <mat-hint *ngIf="showSubnetIDHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
