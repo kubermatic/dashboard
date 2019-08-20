@@ -4,7 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, takeUntil} from 'rxjs/operators';
 import {WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {VSphereNetwork} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
+import {VSphereFolder, VSphereNetwork} from '../../../../shared/entity/provider/vsphere/VSphereEntity';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
@@ -18,7 +18,9 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   hideOptional = true;
   loadingNetworks = false;
+  loadingFolders = false;
   networks: VSphereNetwork[] = [];
+  folders: VSphereFolder[] = [];
 
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
@@ -48,6 +50,8 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.loadNetworks();
       this.checkNetworkState();
+      this.loadFolders();
+      this.checkFolderState();
 
       this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
                                             this._wizard.onCustomPresetsDisable.emit(true);
@@ -133,6 +137,68 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
 
   showNetworkHint(): boolean {
     return !this.loadingNetworks && this.isMissingCredentials();
+  }
+
+  loadFolders(): void {
+    if (this.isMissingCredentials()) {
+      if (this.folders.length > 0) {
+        this.form.controls.folder.setValue('');
+        this.folders = [];
+        return;
+      }
+      return;
+    }
+
+    if (this.folders.length > 0) {
+      return;
+    }
+
+    this.loadingFolders = true;
+    this._wizard.provider(NodeProvider.VSPHERE)
+        .username(this.form.controls.username.value)
+        .password(this.form.controls.password.value)
+        .datacenter(this.cluster.spec.cloud.dc)
+        .folders()
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((folders) => {
+          if (folders.length > 0) {
+            const sortedFolders = folders.sort((a, b) => {
+              return (a.path < b.path ? -1 : 1) * ('asc' ? 1 : -1);
+            });
+
+            this.folders = sortedFolders;
+            if (sortedFolders.length > 0 && this.form.controls.folder.value !== '0') {
+              this.form.controls.folder.setValue(this.cluster.spec.cloud.vsphere.folder);
+            }
+          } else {
+            this.folders = [];
+          }
+          this.loadingFolders = false;
+        });
+  }
+
+  getFolderFormState(): string {
+    if (!this.loadingFolders && this.isMissingCredentials()) {
+      return 'Folder';
+    } else if (this.loadingFolders) {
+      return 'Loading Folders...';
+    } else if (!this.loadingFolders && this.folders.length === 0) {
+      return 'No Folders available';
+    } else {
+      return 'Folder';
+    }
+  }
+
+  checkFolderState(): void {
+    if (this.folders.length === 0 && this.form.controls.folder.enabled) {
+      this.form.controls.folder.disable();
+    } else if (this.folders.length > 0 && this.form.controls.folder.disabled) {
+      this.form.controls.folder.enable();
+    }
+  }
+
+  showFolderHint(): boolean {
+    return !this.loadingFolders && this.isMissingCredentials();
   }
 
   ngOnDestroy(): void {
