@@ -1,3 +1,4 @@
+@import "../../../../assets/css/colors";
 @import "../../../../assets/css/variables";
 
 .mat-tab-group {
@@ -11,4 +12,11 @@
 .km-add-node-inner {
   overflow-y: auto;
   margin-bottom: 2 * $baseline-grid;
+}
+
+.km-icon-warning {
+  width: $baseline-grid * 3.5;
+  height: $baseline-grid * 3.5;
+  background-color: $indicator-orange;
+  background-size: $baseline-grid * 1.75;
 }
