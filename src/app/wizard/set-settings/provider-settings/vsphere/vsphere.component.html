@@ -46,10 +46,13 @@
     <mat-select [placeholder]="getNetworkFormState()"
                 disableOptionCentering
                 formControlName="vmNetName">
-      <mat-option *ngFor="let item of networks"
-                  [value]="item.absolutePath">
-        {{item.name}}
-      </mat-option>
+      <mat-optgroup *ngFor="let type of getKeys()"
+                    [label]="type">
+        <mat-option *ngFor="let item of networkList[type]"
+                    [value]="item.absolutePath">
+          {{item.relativePath}}
+        </mat-option>
+      </mat-optgroup>
     </mat-select>
     <mat-hint *ngIf="showNetworkHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
