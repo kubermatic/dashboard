@@ -27,7 +27,8 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.clusterSpecForm = new FormGroup({
-      name: new FormControl(this.cluster.name, [Validators.required, Validators.minLength(5)]),
+      name: new FormControl(
+          this.cluster.name, [Validators.required, Validators.minLength(5), Validators.pattern('[a-zA-Z0-9-]*')]),
       version: new FormControl(this.cluster.spec.version),
       type: new FormControl(this.cluster.type),
     });
