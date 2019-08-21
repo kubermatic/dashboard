@@ -45,6 +45,7 @@
     <mat-label>{{getNetworkFormState()}}</mat-label>
     <mat-select [placeholder]="getNetworkFormState()"
                 disableOptionCentering
+                panelClass="km-optgroup-dropdown"
                 formControlName="vmNetName">
       <mat-optgroup *ngFor="let type of getKeys()"
                     [label]="type">
