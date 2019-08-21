@@ -1,0 +1,20 @@
+<form [formGroup]="form">
+  <mat-horizontal-stepper linear
+                          formArrayName="steps">
+    <mat-step *ngFor="let step of steps; index as i; first as first; last as last"
+              [formGroupName]="i.toString()"
+              #matStep>
+      <ng-template matStepLabel>{{step.name}}</ng-template>
+      <ng-template #dynamic></ng-template>
+
+      <div class="km-button-navigation">
+        <button mat-button
+                matStepperPrevious
+                *ngIf="!first">Previous</button>
+        <button mat-button
+                matStepperNext
+                *ngIf="!last">Next</button>
+      </div>
+    </mat-step>
+  </mat-horizontal-stepper>
+</form>

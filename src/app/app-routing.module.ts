@@ -15,6 +15,7 @@ const appRoutes: Routes = [
         path: 'projects/:projectID/wizard',
         loadChildren: './wizard/wizard.module#WizardModule',
       },
+      {path: 'projects/:projectID/wizard-new', loadChildren: './wizard-new/module#WizardModule'},
       {
         path: 'projects/:projectID/sshkeys',
         loadChildren: './sshkey/sshkey.module#SSHKeyModule',
