@@ -1,0 +1,102 @@
+<form [formGroup]="form">
+  <div fxLayout="row"
+       fxLayout.md="column"
+       fxLayout.sm="column"
+       fxLayout.xs="column"
+       fxLayoutGap="20px">
+    <mat-card class="km-set-cluster-spec"
+              fxFlex>
+      <mat-card-header>
+        <mat-card-title class="km-color-primary">Cluster</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-form-field fxFlex>
+          <mat-label>Name*</mat-label>
+          <input id="km-create-cluster-name-input"
+                 matInput
+                 formControlName="name"
+                 type="text"
+                 title="name"
+                 autocomplete="off">
+          <button mat-icon-button
+                  class="km-randomize-btn"
+                  matTooltip="Generate name"
+                  (click)="generateName()">
+            <i class="km-icon-randomize"></i>
+          </button>
+          <mat-error *ngIf="form.controls.name.hasError('required')">
+            Name is <strong>required</strong>.
+          </mat-error>
+          <mat-error *ngIf="form.controls.name.hasError('minlength')">
+            Name must be at least {{ form.controls.name.getError('minlength').requiredLength }} characters.
+          </mat-error>
+          <mat-error *ngIf="form.controls.name.hasError('pattern')">
+            Name can only contain alphanumeric characters and dashes (a-z, 0-9 and -).
+          </mat-error>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="km-set-cluster-spec"
+              fxFlex>
+      <mat-card-header>
+        <mat-card-title class="km-color-primary">Specification</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-button-toggle-group group="clusterSpecTypeGroup"
+                                 class="km-cluster-spec-type"
+                                 formControlName="type"
+                                 *ngIf="hasMultipleTypes()">
+          <mat-button-toggle value="kubernetes">
+            <i class="km-icon-kubernetes"></i>
+            Kubernetes
+          </mat-button-toggle>
+          <mat-button-toggle value="openshift">
+            <i class="km-icon-openshift"></i>
+            OpenShift
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+
+        <mat-form-field class="km-version-inline">
+          <mat-label>Version</mat-label>
+          <mat-select formControlName="version"
+                      disableOptionCentering>
+            <mat-option *ngFor="let version of masterVersions"
+                        [value]="version.version">
+              {{ version.version }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</form>
+
+<!--  <mat-step [stepControl]="secondFormGroup">-->
+<!--    <form [formGroup]="secondFormGroup">-->
+<!--      <ng-template matStepLabel>Provider</ng-template>-->
+<!--      <mat-form-field>-->
+<!--        <input matInput-->
+<!--               placeholder="Address"-->
+<!--               formControlName="secondCtrl"-->
+<!--               required>-->
+<!--      </mat-form-field>-->
+<!--      <div>-->
+<!--        <button mat-button-->
+<!--                matStepperPrevious>Back</button>-->
+<!--        <button mat-button-->
+<!--                matStepperNext>Next</button>-->
+<!--      </div>-->
+<!--    </form>-->
+<!--  </mat-step>-->
+
+<!--  <mat-step>-->
+<!--    <ng-template matStepLabel>Datacenter</ng-template>-->
+<!--    You are now done.-->
+<!--    <div>-->
+<!--      <button mat-button-->
+<!--              matStepperPrevious>Back</button>-->
+<!--      <button mat-button-->
+<!--              (click)="stepper.reset()">Reset</button>-->
+<!--    </div>-->
+<!--  </mat-step>-->

@@ -112,7 +112,7 @@ export class ClusterListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   loadWizard(): void {
-    this._router.navigate([`/projects/${this._selectedProject.id}/wizard`]);
+    this._router.navigate([`/projects/${this._selectedProject.id}/wizard-new`]);
   }
 
   navigateToCluster(cluster: ClusterEntity): void {

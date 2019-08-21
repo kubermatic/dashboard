@@ -15,6 +15,7 @@ const appRoutes: Routes = [
         path: 'projects/:projectID/wizard',
         loadChildren: () => import('./wizard/wizard.module').then(m => m.WizardModule),
       },
+      {path: 'projects/:projectID/wizard-new', loadChildren: './wizard-new/module#WizardModule'},
       {
         path: 'projects/:projectID/sshkeys',
         loadChildren: () => import('./sshkey/sshkey.module').then(m => m.SSHKeyModule),
