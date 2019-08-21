@@ -53,6 +53,7 @@ LOCAL_PROVISIONER_NAMESPACE="local-provisioner"
 KUBERMATIC_STORAGE_CLASS_NAME="kubermatic-fast"
 KUBERMATIC_IMAGE_TAG=${1:-"latest"}
 KUBERMATIC_IMAGE="quay.io/kubermatic/api"
+KUBERMATIC_KUBELETDNAT_CONTROLLER_IMAGE="quay.io/kubermatic/kubeletdnat-controller"
 
 function cleanup {
 	kind delete cluster --name ${KUBECONFIG_CLUSTER_NAME}
@@ -185,6 +186,10 @@ function push::img {
 	if [[ ! -z $(docker images -q ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG}) ]]; then
 		echo "Loading/pushing ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG} image to ${KUBECONFIG_CLUSTER_NAME} cluster"
 		kind load docker-image ${KUBERMATIC_IMAGE}:${KUBERMATIC_IMAGE_TAG} --name ${KUBECONFIG_CLUSTER_NAME}
+	fi
+	if [[ ! -z $(docker images -q ${KUBERMATIC_KUBELETDNAT_CONTROLLER_IMAGE}:${KUBERMATIC_IMAGE_TAG}) ]]; then
+		echo "Loading/pushing ${KUBERMATIC_KUBELETDNAT_CONTROLLER_IMAGE}:${KUBERMATIC_IMAGE_TAG} image to ${KUBECONFIG_CLUSTER_NAME} cluster"
+		kind load docker-image ${KUBERMATIC_KUBELETDNAT_CONTROLLER_IMAGE}:${KUBERMATIC_IMAGE_TAG} --name ${KUBECONFIG_CLUSTER_NAME}
 	fi
 }
 
