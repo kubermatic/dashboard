@@ -57,7 +57,7 @@ describe('OpenstackOptionsComponent', () => {
     component.osOptionsForm.controls.image.patchValue('test-image');
     fixture.detectChanges();
     expect(component.getOsOptionsData()).toEqual({
-      spec: {openstack: {flavor: 'm1.small', image: 'test-image', useFloatingIP: false, tags: {}}},
+      spec: {openstack: {flavor: 'm1.small', image: 'test-image', useFloatingIP: false, tags: {}, diskSize: undefined}},
       valid: true
     });
   });
