@@ -47,9 +47,9 @@
                 disableOptionCentering
                 panelClass="km-optgroup-dropdown"
                 formControlName="vmNetName">
-      <mat-optgroup *ngFor="let type of getKeys()"
+      <mat-optgroup *ngFor="let type of networkTypes"
                     [label]="type">
-        <mat-option *ngFor="let item of networkList[type]"
+        <mat-option *ngFor="let item of getNetworks(type)"
                     [value]="item.absolutePath">
           {{item.relativePath}}
         </mat-option>
