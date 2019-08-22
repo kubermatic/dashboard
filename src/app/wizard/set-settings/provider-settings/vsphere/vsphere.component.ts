@@ -19,9 +19,9 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   hideOptional = true;
   loadingNetworks = false;
   loadingFolders = false;
-  networks: VSphereNetwork[] = [];
   folders: VSphereFolder[] = [];
 
+  private _networkMap: {[type: string]: VSphereNetwork[]} = {};
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
 
@@ -79,15 +79,15 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
 
   loadNetworks(): void {
     if (this.isMissingCredentials()) {
-      if (this.networks.length > 0) {
+      if (this.networkTypes.length > 0) {
         this.form.controls.vmNetName.setValue('');
-        this.networks = [];
+        this._networkMap = {};
         return;
       }
       return;
     }
 
-    if (this.networks.length > 0) {
+    if (this.networkTypes.length > 0) {
       return;
     }
 
@@ -100,19 +100,31 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((networks) => {
           if (networks.length > 0) {
-            const sortedNetworks = networks.sort((a, b) => {
-              return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+            this._networkMap = {};
+            networks.forEach(network => {
+              const find = this.networkTypes.find(x => x === network.type);
+              if (!find) {
+                this._networkMap[network.type] = [];
+              }
+              this._networkMap[network.type].push(network);
             });
 
-            this.networks = sortedNetworks;
-            if (sortedNetworks.length > 0 && this.form.controls.vmNetName.value !== '0') {
+            if (this.form.controls.vmNetName.value !== '0') {
               this.form.controls.vmNetName.setValue(this.cluster.spec.cloud.vsphere.vmNetName);
             }
           } else {
-            this.networks = [];
+            this._networkMap = {};
           }
           this.loadingNetworks = false;
         });
+  }
+
+  get networkTypes(): string[] {
+    return Object.keys(this._networkMap);
+  }
+
+  getNetworks(type: string): VSphereNetwork[] {
+    return this._networkMap[type];
   }
 
   getNetworkFormState(): string {
@@ -120,7 +132,7 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       return 'Network';
     } else if (this.loadingNetworks) {
       return 'Loading Networks...';
-    } else if (!this.loadingNetworks && this.networks.length === 0) {
+    } else if (!this.loadingNetworks && this.networkTypes.length === 0) {
       return 'No Networks available';
     } else {
       return 'Network';
@@ -128,9 +140,9 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   checkNetworkState(): void {
-    if (this.networks.length === 0 && this.form.controls.vmNetName.enabled) {
+    if (this.networkTypes.length === 0 && this.form.controls.vmNetName.enabled) {
       this.form.controls.vmNetName.disable();
-    } else if (this.networks.length > 0 && this.form.controls.vmNetName.disabled) {
+    } else if (this.networkTypes.length > 0 && this.form.controls.vmNetName.disabled) {
       this.form.controls.vmNetName.enable();
     }
   }
