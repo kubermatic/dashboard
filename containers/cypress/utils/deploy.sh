@@ -163,6 +163,7 @@ function deploy::kubermatic {
 		--set=kubermatic.apiserverDefaultReplicas=1 \
 		--set=kubermatic.masterController.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.controller.featureGates="" \
+		--set=kubermatic.controller.addons.openshift.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--values ${KUBERMATIC_PATH}/values.yaml \
 		--namespace ${KUBERMATIC_NAMESPACE} \
 		--name kubermatic-e2e ${KUBERMATIC_PATH}
