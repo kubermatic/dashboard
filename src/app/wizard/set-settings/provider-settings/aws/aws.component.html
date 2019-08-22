@@ -68,15 +68,15 @@
                 disableOptionCentering
                 panelClass="km-optgroup-dropdown"
                 formControlName="subnetId">
-      <mat-optgroup *ngFor="let az of getKeys()"
+      <mat-optgroup *ngFor="let az of subnetAZ"
                     [label]="az">
-        <mat-option *ngFor="let subnet of subnetList[az]"
+        <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
                     [value]="subnet.id">
           {{getSubnetOptionName(subnet)}}
         </mat-option>
       </mat-optgroup>
     </mat-select>
-    <mat-hint *ngIf="showSubnetIDHint()">Please enter your credentials first.</mat-hint>
+    <mat-hint>{{getSubnetIDHint()}} When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex

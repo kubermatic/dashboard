@@ -20,8 +20,8 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   hideOptional = true;
   subnetIds: AWSSubnet[] = [];
-  subnetList = {};
 
+  private _subnetMap: {[type: string]: AWSSubnet[]} = {};
   private _loadingSubnetIds = false;
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
@@ -54,6 +54,10 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       if (this._isVPCSelected()) {
         this._loadSubnetIds();
         this.checkSubnetState();
+      } else {
+        this.subnetIds = [];
+        this._subnetMap = {};
+        this.form.controls.subnetId.setValue('');
       }
     });
 
@@ -110,13 +114,13 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
                 return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
               });
 
-              this.subnetList = {};
+              this._subnetMap = {};
               this.subnetIds.forEach(subnet => {
-                const find = Object.keys(this.subnetList).find(x => x === subnet.availability_zone);
+                const find = this.subnetAZ.find(x => x === subnet.availability_zone);
                 if (!find) {
-                  this.subnetList[subnet.availability_zone] = [];
+                  this._subnetMap[subnet.availability_zone] = [];
                 }
-                this.subnetList[subnet.availability_zone].push(subnet);
+                this._subnetMap[subnet.availability_zone].push(subnet);
               });
 
               if (this.subnetIds.length === 0) {
@@ -139,12 +143,18 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     }
   }
 
-  showSubnetIDHint(): boolean {
-    return !this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '');
+  getSubnetIDHint(): string {
+    return (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '')) ?
+        'Please enter your credentials first.' :
+        '';
   }
 
-  getKeys(): string[] {
-    return Object.keys(this.subnetList);
+  get subnetAZ(): string[] {
+    return Object.keys(this._subnetMap);
+  }
+
+  getSubnetToAZ(az: string): AWSSubnet[] {
+    return this._subnetMap[az];
   }
 
   getSubnetOptionName(subnet: AWSSubnet): string {
