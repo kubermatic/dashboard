@@ -45,11 +45,15 @@
     <mat-label>{{getNetworkFormState()}}</mat-label>
     <mat-select [placeholder]="getNetworkFormState()"
                 disableOptionCentering
+                panelClass="km-optgroup-dropdown"
                 formControlName="vmNetName">
-      <mat-option *ngFor="let item of networks"
-                  [value]="item.name">
-        {{item.name}}
-      </mat-option>
+      <mat-optgroup *ngFor="let type of networkTypes"
+                    [label]="type">
+        <mat-option *ngFor="let item of getNetworks(type)"
+                    [value]="item.absolutePath">
+          {{item.relativePath}}
+        </mat-option>
+      </mat-optgroup>
     </mat-select>
     <mat-hint *ngIf="showNetworkHint()">Please enter your credentials first.</mat-hint>
   </mat-form-field>
