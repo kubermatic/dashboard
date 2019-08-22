@@ -15,6 +15,18 @@
       </mat-select>
       <mat-hint *ngIf="showFlavorHint()">Please enter a valid token first.</mat-hint>
     </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Disk Size in GB</mat-label>
+      <input matInput
+             formControlName="disk_size"
+             min="10"
+             max="16000"
+             type="number"
+             autocomplete="off">
+    </mat-form-field>
+    <p>Only set this if you want to have a disk size different to the one provided by the flavor.</p>
+
     <div class="km-floating-ip-checkbox">
       <mat-checkbox fxFlex="50%"
                     formControlName="useFloatingIP">

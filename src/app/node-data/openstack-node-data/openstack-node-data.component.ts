@@ -36,6 +36,8 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this.osNodeForm = new FormGroup({
       flavor: new FormControl(this.nodeData.spec.cloud.openstack.flavor, Validators.required),
       useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
+      disk_size: new FormControl(
+          this.nodeData.spec.cloud.openstack.diskSize > 0 ? this.nodeData.spec.cloud.openstack.diskSize : ''),
     });
 
     this.osNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -133,6 +135,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           image: this.nodeData.spec.cloud.openstack.image,
           useFloatingIP: this.osNodeForm.controls.useFloatingIP.value,
           tags: this.nodeData.spec.cloud.openstack.tags,
+          diskSize: this.osNodeForm.controls.disk_size.value,
         },
       },
       valid: this.osNodeForm.valid,
