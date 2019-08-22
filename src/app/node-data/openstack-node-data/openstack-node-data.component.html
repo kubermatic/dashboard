@@ -2,30 +2,42 @@
       fxLayout="column">
   <div fxFlex
        class="mat-select-container">
-    <mat-form-field class="km-with-hint">
-      <mat-label>{{getFlavorsFormState()}}</mat-label>
-      <mat-select formControlName="flavor"
-                  disableOptionCentering
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  [placeholder]="getFlavorsFormState()">
-        <mat-option *ngFor="let flavor of flavors"
-                    [value]="flavor.slug">
-          {{flavor.slug}} - {{ flavor.memory / 1024 }} GB RAM, {{ flavor.vcpus }} CPU{{ (flavor.vcpus!=1) ? 's' : '' }}, {{ flavor.disk }} GB Disk
-        </mat-option>
-      </mat-select>
-      <mat-hint *ngIf="showFlavorHint()">Please enter a valid token first.</mat-hint>
-    </mat-form-field>
+    <div fxLayout="row"
+         fxLayoutGap="10px">
+      <mat-form-field class="km-with-hint">
+        <mat-label>{{getFlavorsFormState()}}</mat-label>
+        <mat-select formControlName="flavor"
+                    disableOptionCentering
+                    [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
+                    [placeholder]="getFlavorsFormState()">
+          <mat-option *ngFor="let flavor of flavors"
+                      [value]="flavor.slug">
+            {{flavor.slug}} - {{ flavor.memory / 1024 }} GB RAM, {{ flavor.vcpus }} CPU{{ (flavor.vcpus!=1) ? 's' : '' }}, {{ flavor.disk }} GB Disk
+          </mat-option>
+        </mat-select>
+        <mat-hint *ngIf="showFlavorHint()">Please enter a valid token first.</mat-hint>
+      </mat-form-field>
+      <ng-container *ngIf="!osNodeForm.controls.disk_size.value">
+        <button mat-flat-button
+                fxFlex="22"
+                class="km-change-disk-button"
+                type="button"
+                (click)="osNodeForm.controls.disk_size.setValue(50)">Change disk size</button>
+      </ng-container>
+    </div>
 
-    <mat-form-field>
-      <mat-label>Disk Size in GB</mat-label>
-      <input matInput
-             formControlName="disk_size"
-             min="10"
-             max="16000"
-             type="number"
-             autocomplete="off">
-    </mat-form-field>
-    <p>Only set this if you want to have a disk size different to the one provided by the flavor.</p>
+    <ng-container *ngIf="!!osNodeForm.controls.disk_size.value">
+      <mat-form-field>
+        <mat-label>Disk Size in GB</mat-label>
+        <input matInput
+               formControlName="disk_size"
+               min="10"
+               max="16000"
+               type="number"
+               autocomplete="off">
+        <mat-hint>If you change the disk size, an additional network storage volume will be created and used as the disk for the VM.</mat-hint>
+      </mat-form-field>
+    </ng-container>
 
     <div class="km-floating-ip-checkbox">
       <mat-checkbox fxFlex="50%"

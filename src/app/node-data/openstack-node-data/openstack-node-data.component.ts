@@ -135,7 +135,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           image: this.nodeData.spec.cloud.openstack.image,
           useFloatingIP: this.osNodeForm.controls.useFloatingIP.value,
           tags: this.nodeData.spec.cloud.openstack.tags,
-          diskSize: this.osNodeForm.controls.disk_size.value,
+          diskSize: this._getCurrentFlavor() && this.osNodeForm.controls.disk_size.value > 0 &&
+                  this.osNodeForm.controls.disk_size.value !== this._getCurrentFlavor().disk ?
+              this.osNodeForm.controls.disk_size.value :
+              '',
         },
       },
       valid: this.osNodeForm.valid,
@@ -193,5 +196,13 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           this.checkFlavorState();
           this.loadingFlavors = false;
         }, () => this.loadingFlavors = false);
+  }
+
+  private _getCurrentFlavor(): OpenstackFlavor {
+    for (const flavor of this.flavors) {
+      if (flavor.slug === this.nodeData.spec.cloud.openstack.flavor) {
+        return flavor;
+      }
+    }
   }
 }
