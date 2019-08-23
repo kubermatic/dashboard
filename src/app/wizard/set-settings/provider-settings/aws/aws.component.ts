@@ -28,7 +28,18 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       routeTableId:
           new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
       instanceProfileName: new FormControl(this.cluster.spec.cloud.aws.instanceProfileName),
+      roleName: new FormControl(this.cluster.spec.cloud.aws.roleName),
     });
+
+    this.subscriptions.push(
+        this.awsSettingsForm.controls.instanceProfileName.valueChanges.pipe(debounceTime(1000)).subscribe(() => {
+          if (this.awsSettingsForm.controls.instanceProfileName.value !== '') {
+            this.awsSettingsForm.controls.roleName.setValidators(Validators.required);
+          } else {
+            this.awsSettingsForm.controls.roleName.setValidators(null);
+          }
+          this.awsSettingsForm.controls.roleName.updateValueAndValidity();
+        }));
 
     this.subscriptions.push(this.awsSettingsForm.valueChanges.pipe(debounceTime(1000)).subscribe((data) => {
       this.wizardService.changeClusterProviderSettings({
@@ -41,6 +52,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
             subnetId: this.awsSettingsForm.controls.subnetId.value,
             routeTableId: this.awsSettingsForm.controls.routeTableId.value,
             instanceProfileName: this.awsSettingsForm.controls.instanceProfileName.value,
+            roleName: this.awsSettingsForm.controls.roleName.value,
           },
           dc: this.cluster.spec.cloud.dc,
         },
@@ -51,6 +63,16 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.wizardService.clusterSettingsFormViewChanged$.subscribe((data) => {
       this.hideOptional = data.hideOptional;
     }));
+  }
+
+  getRolePlaceholder(): string {
+    return this.awsSettingsForm.controls.instanceProfileName.value !== '' ? 'Role Name*' : 'Role Name';
+  }
+
+  getRoleHint(): string {
+    return this.awsSettingsForm.controls.instanceProfileName.value !== '' ?
+        'Instance Profile is specified. Please set a Role Name.' :
+        '';
   }
 
   ngOnDestroy(): void {
