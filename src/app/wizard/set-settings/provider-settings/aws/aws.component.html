@@ -93,4 +93,14 @@
            autocomplete="off">
     <mat-hint>When specified, the worker nodes will use this instance profile. If not specified, a new instance profile will be created.</mat-hint>
   </mat-form-field>
+  <mat-form-field fxFlex
+                  *ngIf="!hideOptional">
+    <mat-label>{{getRolePlaceholder()}}</mat-label>
+    <input matInput
+           formControlName="roleName"
+           name="roleName"
+           type="text"
+           autocomplete="off">
+    <mat-hint>{{getRoleHint()}}</mat-hint>
+  </mat-form-field>
 </form>
