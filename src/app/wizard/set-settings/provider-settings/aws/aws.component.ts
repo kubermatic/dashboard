@@ -23,6 +23,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
   private _loadingSubnetIds = false;
+  private _noSubnets = false;
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
 
@@ -51,19 +52,22 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     this.checkSubnetState();
 
     this.form.controls.vpcId.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      if (this._isVPCSelected()) {
+      if (this._isVPCSelectedAndValid()) {
         this._loadSubnetIds();
-        this.checkSubnetState();
       } else {
         this.subnetIds = [];
         this._subnetMap = {};
         this.form.controls.subnetId.setValue('');
       }
+      this.checkSubnetState();
     });
 
-    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._loadSubnetIds();
+    this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if (this._isVPCSelectedAndValid()) {
+        this._loadSubnetIds();
+      }
       this.checkSubnetState();
+
       this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
                                             this._wizard.onCustomPresetsDisable.emit(true);
 
@@ -87,9 +91,11 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   getSubnetIDFormState(): string {
     if (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '')) {
       return 'Subnet ID';
-    } else if (this._loadingSubnetIds) {
+    } else if (this._loadingSubnetIds && !this._noSubnets) {
       return 'Loading Subnet IDs...';
-    } else if (this.form.controls.vpcId.value !== '' && this.subnetIds.length === 0) {
+    } else if (
+        this.form.controls.vpcId.value !== '' && this.form.controls.vpcId.valid && this.subnetIds.length === 0 ||
+        this._noSubnets) {
       return 'No Subnet IDs available';
     } else {
       return 'Subnet ID';
@@ -125,6 +131,9 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
               if (this.subnetIds.length === 0) {
                 this.form.controls.subnetId.setValue('');
+                this._noSubnets = true;
+              } else {
+                this._noSubnets = false;
               }
 
               this._loadingSubnetIds = false;
@@ -144,7 +153,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   getSubnetIDHint(): string {
-    return (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '')) ?
+    return (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || !this._isVPCSelectedAndValid())) ?
         'Please enter your credentials first.' :
         '';
   }
@@ -165,8 +174,8 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     return !(this.form.controls.accessKeyId.value === '' || this.form.controls.secretAccessKey.value === '');
   }
 
-  private _isVPCSelected(): boolean {
-    return this.form.controls.vpcId.value.toString().length > 0;
+  private _isVPCSelectedAndValid(): boolean {
+    return this.form.controls.vpcId.value.toString().length > 0 && this.form.controls.vpcId.valid;
   }
 
 

@@ -78,10 +78,17 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       if (data.cloudSpec.aws.subnetId !== '' && data.cloudSpec.aws.subnetId !== this.cloudSpec.aws.subnetId) {
         this.loadSubnetsAndSetAZ(data.cloudSpec.aws.subnetId);
         this.cloudSpec = data.cloudSpec;
-      } else if (data.cloudSpec.aws.subnetId === '') {
-        this.cloudSpec = data.cloudSpec;
-        this._disableZones();
-        this._reloadZones();
+      } else if (
+          data.cloudSpec.aws.accessKeyId !== this.cloudSpec.aws.accessKeyId ||
+          data.cloudSpec.aws.secretAccessKey !== this.cloudSpec.aws.secretAccessKey) {
+        if (data.cloudSpec.aws.subnetId !== '') {
+          this.loadSubnetsAndSetAZ(data.cloudSpec.aws.subnetId);
+          this.cloudSpec = data.cloudSpec;
+        } else {
+          this.cloudSpec = data.cloudSpec;
+          this._disableZones();
+          this._reloadZones();
+        }
       }
     });
 
