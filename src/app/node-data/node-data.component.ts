@@ -49,7 +49,8 @@ export class NodeDataComponent implements OnInit, OnDestroy {
       operatingSystem: new FormControl(
           this.isClusterOpenshift() ? 'centos' : Object.keys(this.nodeData.spec.operatingSystem)[0],
           Validators.required),
-      name: new FormControl({value: this.nodeData.name, disabled: this.isNameDisabled}),
+      name: new FormControl(
+          {value: this.nodeData.name, disabled: this.isNameDisabled}, [Validators.pattern('[a-zA-Z0-9-]*')]),
     });
 
     if (!this.isInWizard) {
