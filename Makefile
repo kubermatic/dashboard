@@ -60,7 +60,14 @@ docker-push-custom: docker-build-custom
 		docker push $(REPO_CUSTOM):$$TAG ; \
 	done
 
-docker-run-custom: build dist
+copy-config:
+	cp -R dist/config/ . | true
+
+restore-config:
+	cp -R config/ dist/ | true
+	rm -R config/ | true
+
+docker-run-custom: copy-config build dist restore-config
 	./dashboard-v2
 
 deploy:
