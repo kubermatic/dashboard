@@ -15,7 +15,12 @@
   position: relative;
 }
 
-.km-change-disk-button {
+.km-custom-disk-size {
   height: 51px;
-  margin-top: 3px;
+  display: flex;
+
+  .mat-checkbox {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
 }

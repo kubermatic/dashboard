@@ -17,16 +17,18 @@
         </mat-select>
         <mat-hint *ngIf="showFlavorHint()">Please enter a valid token first.</mat-hint>
       </mat-form-field>
-      <ng-container *ngIf="!osNodeForm.controls.disk_size.value">
-        <button mat-flat-button
-                fxFlex="22"
-                class="mat-primary km-change-disk-button"
-                type="button"
-                (click)="osNodeForm.controls.disk_size.setValue(50)">Change disk size</button>
-      </ng-container>
+      <div class="km-custom-disk-size">
+        <mat-checkbox id="customDiskSize"
+                      [disabled]="showFlavorHint()"
+                      formControlName="customDiskSize">
+          Custom disk
+          <i class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
+             matTooltip="If you enable custom disk, an additional network storage volume will be created and used as the disk for the VM."></i>
+        </mat-checkbox>
+      </div>
     </div>
 
-    <ng-container *ngIf="!!osNodeForm.controls.disk_size.value">
+    <ng-container *ngIf="!!osNodeForm.controls.customDiskSize.value">
       <mat-form-field>
         <mat-label>Disk Size in GB</mat-label>
         <input matInput
@@ -35,7 +37,7 @@
                max="16000"
                type="number"
                autocomplete="off">
-        <mat-hint>If you change the disk size, an additional network storage volume will be created and used as the disk for the VM.</mat-hint>
+        <mat-hint>An additional network storage volume will be created and used as the disk for the VM.</mat-hint>
       </mat-form-field>
     </ng-container>
 

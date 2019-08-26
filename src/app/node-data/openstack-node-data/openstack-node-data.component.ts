@@ -38,6 +38,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
       disk_size: new FormControl(
           this.nodeData.spec.cloud.openstack.diskSize > 0 ? this.nodeData.spec.cloud.openstack.diskSize : ''),
+      customDiskSize: new FormControl(this.nodeData.spec.cloud.openstack.diskSize > 0)
     });
 
     this.osNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
