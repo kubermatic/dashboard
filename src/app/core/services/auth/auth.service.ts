@@ -94,7 +94,7 @@ export class Auth {
   }
 
   private getTokenFromQuery(): string {
-    const results = new RegExp('[\?&]id_token=([^&#]*)').exec(window.location.href);
+    const results = new RegExp('[\?&#]id_token=([^&#]*)').exec(window.location.href);
     return results == null ? null : results[1] || '';
   }
 
