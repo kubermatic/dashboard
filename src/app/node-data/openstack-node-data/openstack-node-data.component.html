@@ -19,10 +19,9 @@
       </mat-form-field>
       <div class="km-custom-disk-size">
         <mat-checkbox id="customDiskSize"
-                      [disabled]="showFlavorHint()"
                       formControlName="customDiskSize">
           Custom disk
-          <i class="fa fa-info-circle km-floating-ip-checkbox-info-icon"
+          <i class="fa fa-info-circle km-custom-disk-size-info-icon"
              matTooltip="If you enable custom disk, an additional network storage volume will be created and used as the disk for the VM."></i>
         </mat-checkbox>
       </div>

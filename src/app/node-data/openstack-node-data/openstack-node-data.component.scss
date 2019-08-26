@@ -9,7 +9,8 @@
   width: 100%;
 }
 
-.km-floating-ip-checkbox-info-icon {
+.km-floating-ip-checkbox-info-icon,
+.km-custom-disk-size-info-icon {
   color: $light-text-color;
   padding-left: $baseline-grid / 2;
   position: relative;

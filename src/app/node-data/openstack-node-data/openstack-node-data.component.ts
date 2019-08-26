@@ -94,8 +94,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   checkFlavorState(): void {
     if (this.flavors.length === 0) {
       this.osNodeForm.controls.flavor.disable();
+      this.osNodeForm.controls.customDiskSize.disable();
     } else {
       this.osNodeForm.controls.flavor.enable();
+      this.osNodeForm.controls.customDiskSize.enable();
     }
   }
 
