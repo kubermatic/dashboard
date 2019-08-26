@@ -1,7 +1,7 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
-import {first, takeUntil} from 'rxjs/operators';
+import {first, take, takeUntil} from 'rxjs/operators';
 
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
@@ -75,9 +75,21 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.cloudSpec = data.cloudSpec;
-      this._disableZones();
-      this._reloadZones();
+      if (data.cloudSpec.aws.subnetId !== '' && data.cloudSpec.aws.subnetId !== this.cloudSpec.aws.subnetId) {
+        this.loadSubnetsAndSetAZ(data.cloudSpec.aws.subnetId);
+        this.cloudSpec = data.cloudSpec;
+      } else if (
+          data.cloudSpec.aws.accessKeyId !== this.cloudSpec.aws.accessKeyId ||
+          data.cloudSpec.aws.secretAccessKey !== this.cloudSpec.aws.secretAccessKey) {
+        if (data.cloudSpec.aws.subnetId !== '') {
+          this.loadSubnetsAndSetAZ(data.cloudSpec.aws.subnetId);
+          this.cloudSpec = data.cloudSpec;
+        } else {
+          this.cloudSpec = data.cloudSpec;
+          this._disableZones();
+          this._reloadZones();
+        }
+      }
     });
 
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
@@ -135,11 +147,14 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _hasCredentials(): boolean {
-    return !!this.cloudSpec.aws.accessKeyId || !!this._selectedPreset || !this.isInWizard();
+    return (!!this.cloudSpec.aws.accessKeyId && !!this.cloudSpec.aws.secretAccessKey) || !!this._selectedPreset ||
+        !this.isInWizard();
   }
 
   private _reloadZones(): void {
     if (!this._hasCredentials) {
+      this.zones = [];
+      this.awsNodeForm.controls.availability_zone.setValue('');
       return;
     }
 
@@ -180,18 +195,42 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     this.awsNodeForm.controls.availability_zone.disable();
   }
 
-  getZoneHint(): string {
-    if (this.zones.length > 0) {
-      return '';
-    }
-
+  getAvailabilityZoneFormState(): string {
     if (this.isInWizard() && !this._loadingZones &&
         !((this.cloudSpec.aws.accessKeyId && this.cloudSpec.aws.secretAccessKey) || this._selectedPreset)) {
-      return 'Please enter valid service account first.';
+      return 'Availability Zone*';
     } else if (this._loadingZones) {
-      return `Loading zones...`;
+      return 'Loading Availability Zones...';
+    } else if (this.zones.length === 0) {
+      return 'No Availability Zones available';
+    } else {
+      return 'Availability Zone*';
+    }
+  }
+
+  getZoneHint(): string {
+    if (this.zones.length > 0 && this.cloudSpec.aws.subnetId !== '') {
+      return 'Note: Availability Zone was set corresponding to the chosen Subnet ID';
+    } else if (
+        this.isInWizard() && !this._loadingZones &&
+        !((this.cloudSpec.aws.accessKeyId && this.cloudSpec.aws.secretAccessKey) || this._selectedPreset)) {
+      return 'Please enter valid credentials first.';
     } else {
       return '';
     }
+  }
+
+  loadSubnetsAndSetAZ(subnetId: string): void {
+    this._wizard.provider(NodeProvider.AWS)
+        .accessKeyID(this.cloudSpec.aws.accessKeyId)
+        .secretAccessKey(this.cloudSpec.aws.secretAccessKey)
+        .vpc(this.cloudSpec.aws.vpcId)
+        .subnets(this.cloudSpec.dc)
+        .pipe(take(1))
+        .subscribe((subnets) => {
+          const findSubnet = subnets.find(x => x.id === subnetId);
+          this.awsNodeForm.controls.availability_zone.setValue(findSubnet.availability_zone);
+          this.awsNodeForm.controls.availability_zone.disable();
+        });
   }
 }

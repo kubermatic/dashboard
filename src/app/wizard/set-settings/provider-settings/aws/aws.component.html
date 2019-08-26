@@ -32,6 +32,7 @@
       Secret access key is <strong>required</strong>.
     </mat-error>
   </mat-form-field>
+
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
     <mat-label>Security Group ID</mat-label>
@@ -45,6 +46,7 @@
       The security group ID need to look similar to 'sg-a2c195ca'.
     </mat-error>
   </mat-form-field>
+
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
     <mat-label>VPC ID</mat-label>
@@ -58,19 +60,25 @@
       The VPC ID needs to look similar to 'vpc-3a2f9851'.
     </mat-error>
   </mat-form-field>
+
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
-    <mat-label>Subnet ID</mat-label>
-    <input matInput
-           formControlName="subnetId"
-           name="subnetId"
-           type="text"
-           autocomplete="off">
-    <mat-hint>When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
-    <mat-error *ngIf="form.controls.subnetId.hasError('pattern')">
-      The subnet ID needs to look similar to 'subnet-36275b5d'.
-    </mat-error>
+    <mat-label>{{getSubnetIDFormState()}}</mat-label>
+    <mat-select [placeholder]="getSubnetIDFormState()"
+                disableOptionCentering
+                panelClass="km-optgroup-dropdown"
+                formControlName="subnetId">
+      <mat-optgroup *ngFor="let az of subnetAZ"
+                    [label]="az">
+        <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
+                    [value]="subnet.id">
+          {{getSubnetOptionName(subnet)}}
+        </mat-option>
+      </mat-optgroup>
+    </mat-select>
+    <mat-hint>{{getSubnetIDHint()}} When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
   </mat-form-field>
+
   <mat-form-field fxFlex
                   *ngIf="!hideOptional">
     <mat-label>Route Table ID</mat-label>

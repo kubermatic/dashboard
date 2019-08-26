@@ -50,7 +50,7 @@
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
-      <mat-label>Availability Zone*</mat-label>
+      <mat-label>{{getAvailabilityZoneFormState()}}</mat-label>
       <mat-select formControlName="availability_zone"
                   [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
                   disableOptionCentering>
