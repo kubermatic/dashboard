@@ -39,7 +39,11 @@ export class Auth {
         this._appConfigService.getConfig().oidc_provider_scope :
         this._defaultScope;
 
-    return `${baseUrl}?response_type=${this._responseType}&client_id=${this._clientId}` +
+    const clientId = this._appConfigService.getConfig().oidc_provider_client_id ?
+        this._appConfigService.getConfig().oidc_provider_client_id :
+        this._clientId;
+
+    return `${baseUrl}?response_type=${this._responseType}&client_id=${clientId}` +
         `&redirect_uri=${this._redirectUri}&scope=${scope}&nonce=${this._nonce}`;
   }
 
