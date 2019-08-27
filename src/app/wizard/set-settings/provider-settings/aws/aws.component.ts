@@ -126,7 +126,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         .subscribe(
             (subnets) => {
               this.subnetIds = subnets.sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+                return a.name.localeCompare(b.name);
               });
 
               this._subnetMap = {};
@@ -213,7 +213,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         .subscribe(
             (vpcs) => {
               this.vpcIds = vpcs.sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+                return a.name.localeCompare(b.name);
               });
 
               if (this.vpcIds.length === 0) {
