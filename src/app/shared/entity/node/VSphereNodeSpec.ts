@@ -3,5 +3,4 @@ export class VSphereNodeSpec {
   memory: number;
   template: string;
   diskSizeGB?: number;
-  templateNetName?: string;
 }
