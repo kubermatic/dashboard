@@ -129,6 +129,7 @@ export class OpenstackOptionsComponent implements OnInit, OnDestroy {
           flavor: this.nodeData.spec.cloud.openstack.flavor,
           image: this.osOptionsForm.controls.image.value,
           useFloatingIP: this.nodeData.spec.cloud.openstack.useFloatingIP,
+          diskSize: this.nodeData.spec.cloud.openstack.diskSize,
           tags: tagMap,
         },
       },
