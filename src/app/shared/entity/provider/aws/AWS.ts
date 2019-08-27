@@ -9,13 +9,34 @@ export class AWSSubnet {
   availability_zone_id: string;
   ipv4cidr: string;
   ipv6cidr: string;
-  tags: AWSSubnetTags[];
+  tags: AWSTags[];
   state: string;
   available_ip_address_count: number;
   default: boolean;
 }
 
-export class AWSSubnetTags {
+export class AWSTags {
   key: string;
   value: string;
+}
+
+export class AWSVPC {
+  vpcId: string;
+  name: string;
+  cidrBlock: string;
+  cidrBlockAssociationSet: AWSCidrBlockSet[];
+  dhcpOptionsId: string;
+  instanceTenancy: string;
+  ipv6CidrBlockAssociationSet: AWSCidrBlockSet[];
+  isDefault: boolean;
+  ownerId: string;
+  state: string;
+  tags: AWSTags[];
+}
+
+export class AWSCidrBlockSet {
+  associationId: string;
+  cidrBlock: string;
+  state: string;
+  statusMessage: string;
 }
