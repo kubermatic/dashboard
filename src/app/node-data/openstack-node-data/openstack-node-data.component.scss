@@ -5,12 +5,23 @@
   font-size: $body-font-size-base;
   display: flex;
   line-height: $baseline-grid * 4;
-  margin: ($baseline-grid / 2) 0 ($baseline-grid * 2);
+  margin: ($baseline-grid * 2) 0 ($baseline-grid * 2);
   width: 100%;
 }
 
-.km-floating-ip-checkbox-info-icon {
+.km-floating-ip-checkbox-info-icon,
+.km-custom-disk-size-info-icon {
   color: $light-text-color;
   padding-left: $baseline-grid / 2;
   position: relative;
+}
+
+.km-custom-disk-size {
+  height: 51px;
+  display: flex;
+
+  .mat-checkbox {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
 }

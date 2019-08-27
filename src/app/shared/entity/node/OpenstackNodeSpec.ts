@@ -3,4 +3,5 @@ export class OpenstackNodeSpec {
   image: string;
   useFloatingIP: boolean;
   tags: object;
+  diskSize?: number;
 }

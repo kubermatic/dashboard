@@ -36,6 +36,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this.osNodeForm = new FormGroup({
       flavor: new FormControl(this.nodeData.spec.cloud.openstack.flavor, Validators.required),
       useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
+      disk_size: new FormControl(
+          this.nodeData.spec.cloud.openstack.diskSize > 0 ? this.nodeData.spec.cloud.openstack.diskSize : ''),
+      customDiskSize: new FormControl(this.nodeData.spec.cloud.openstack.diskSize > 0)
     });
 
     this.osNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -91,8 +94,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   checkFlavorState(): void {
     if (this.flavors.length === 0) {
       this.osNodeForm.controls.flavor.disable();
+      this.osNodeForm.controls.customDiskSize.disable();
     } else {
       this.osNodeForm.controls.flavor.enable();
+      this.osNodeForm.controls.customDiskSize.enable();
     }
   }
 
@@ -133,6 +138,10 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           image: this.nodeData.spec.cloud.openstack.image,
           useFloatingIP: this.osNodeForm.controls.useFloatingIP.value,
           tags: this.nodeData.spec.cloud.openstack.tags,
+          diskSize: this._getCurrentFlavor() && this.osNodeForm.controls.disk_size.value > 0 &&
+                  this.osNodeForm.controls.disk_size.value !== this._getCurrentFlavor().disk ?
+              this.osNodeForm.controls.disk_size.value :
+              undefined,
         },
       },
       valid: this.osNodeForm.valid,
@@ -190,5 +199,13 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
           this.checkFlavorState();
           this.loadingFlavors = false;
         }, () => this.loadingFlavors = false);
+  }
+
+  private _getCurrentFlavor(): OpenstackFlavor {
+    for (const flavor of this.flavors) {
+      if (flavor.slug === this.nodeData.spec.cloud.openstack.flavor) {
+        return flavor;
+      }
+    }
   }
 }
