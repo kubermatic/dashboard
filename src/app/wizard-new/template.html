@@ -13,6 +13,7 @@
                 *ngIf="!first">Previous</button>
         <button mat-button
                 matStepperNext
+                [disabled]="!isStepValid(i)"
                 *ngIf="!last">Next</button>
       </div>
     </mat-step>
