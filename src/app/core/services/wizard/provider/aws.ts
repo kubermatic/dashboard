@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {AWSAvailabilityZone, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
-import {NodeInstanceFlavor, NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {AWSAvailabilityZone, AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
+import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
 
@@ -57,8 +57,12 @@ export class AWS extends Provider {
     return this._http.get<AWSSubnet[]>(url, {headers: this._headers});
   }
 
-  flavors(): NodeInstanceFlavor[] {
-    return NodeInstanceFlavors.AWS;
+  flavors(): Observable<AWSSize[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+
+    return this._http.get<AWSSize[]>(this._url, {headers: this._headers});
   }
 }
 
