@@ -66,6 +66,7 @@ describe('AWSProviderSettingsComponent', () => {
       routeTableId: '',
       securityGroup: '',
       instanceProfileName: '',
+      roleARN: '',
     };
     fixture.detectChanges();
   });

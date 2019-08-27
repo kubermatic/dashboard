@@ -6,4 +6,5 @@ export class AWSCloudSpec {
   routeTableId: string;
   securityGroup: string;
   instanceProfileName: string;
+  roleARN: string;
 }
