@@ -11,6 +11,7 @@ export class ClusterSpecPatch {
   cloud?: CloudSpecPatch;
   version?: string;
   humanReadableName?: string;
+  usePodSecurityPolicyAdmissionPlugin?: boolean;
 }
 
 export class CloudSpecPatch {
