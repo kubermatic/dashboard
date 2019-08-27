@@ -44,6 +44,7 @@ describe('AWSClusterSettingsComponent', () => {
       securityGroup: '',
       vpcId: '',
       instanceProfileName: '',
+      roleARN: '',
     };
     fixture.detectChanges();
   });

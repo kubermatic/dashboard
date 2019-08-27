@@ -40,6 +40,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       routeTableId:
           new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
       instanceProfileName: new FormControl(this.cluster.spec.cloud.aws.instanceProfileName),
+      roleARN: new FormControl(this.cluster.spec.cloud.aws.roleARN),
     });
 
     this._formHelper = new FormHelper(this.form);
@@ -190,6 +191,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
           subnetId: this.form.controls.subnetId.value,
           routeTableId: this.form.controls.routeTableId.value,
           instanceProfileName: this.form.controls.instanceProfileName.value,
+          roleARN: this.form.controls.roleARN.value,
         },
         dc: this.cluster.spec.cloud.dc,
       },
