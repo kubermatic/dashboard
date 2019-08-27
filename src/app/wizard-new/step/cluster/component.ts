@@ -39,7 +39,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, OnDestroy 
       [Controls.Type]: new FormControl(''),
     });
 
-    this.control(Controls.Version).disable();
     this._setDefaultClusterType();
 
     this._api.getMasterVersions(this.controlValue(Controls.Type))
@@ -49,8 +48,9 @@ export class ClusterStepComponent extends StepBase implements OnInit, OnDestroy 
     this.control(Controls.Type)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(() => {
-          this.control(Controls.Version).disable();
+          this.masterVersions = [];
           this.control(Controls.Version).reset();
+
           return this._api.getMasterVersions(this.controlValue(Controls.Type) as ClusterType);
         }))
         .subscribe(this._setDefaultVersion.bind(this));
@@ -76,8 +76,6 @@ export class ClusterStepComponent extends StepBase implements OnInit, OnDestroy 
         this.control(Controls.Version).setValue(version.version);
       }
     }
-
-    this.control(Controls.Version).enable();
   }
 
   private _setDefaultClusterType(): void {

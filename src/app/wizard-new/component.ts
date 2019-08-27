@@ -13,9 +13,11 @@ import {WizardStep} from './step/step';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WizardComponent implements OnInit, AfterViewInit {
-  @ViewChildren('dynamic', {read: ViewContainerRef}) stepComponentRefList: QueryList<ViewContainerRef>;
-  @ViewChildren('matStep') stepList: QueryList<MatStep>;
   form: FormGroup;
+
+  @ViewChildren('dynamic', {read: ViewContainerRef})
+  private readonly _stepComponentRefList: QueryList<ViewContainerRef>;
+  @ViewChildren('matStep') private readonly _stepList: QueryList<MatStep>;
 
   private _steps: FormArray;
 
@@ -32,7 +34,7 @@ export class WizardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.stepComponentRefList.toArray().filter((_, i) => steps[i].required).forEach((stepComponentRef, i) => {
+    this._stepComponentRefList.toArray().filter((_, i) => steps[i].required).forEach((stepComponentRef, i) => {
       stepComponentRef.clear();
       const factory = this._resolver.resolveComponentFactory(steps[i].component);
       const componentRef = stepComponentRef.createComponent<StepBase>(factory);
@@ -43,10 +45,14 @@ export class WizardComponent implements OnInit, AfterViewInit {
       }
 
       // Initialize StepBase
-      componentRef.instance.form = (this.form.controls.steps as FormArray).controls[i] as FormGroup;
+      componentRef.instance.form = this._steps.controls[i] as FormGroup;
 
       // Set stepControl form programmatically to sync form state with step control
-      this.stepList.toArray()[i].stepControl = componentRef.instance.form as any;
+      this._stepList.toArray()[i].stepControl = componentRef.instance.form as any;
     });
+  }
+
+  isStepValid(stepNr: number): boolean {
+    return this._steps.controls[stepNr].valid;
   }
 }
