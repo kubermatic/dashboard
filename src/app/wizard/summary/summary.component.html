@@ -132,6 +132,10 @@
                   <div key>Instance Profile Name</div>
                   <div value>{{cluster.spec.cloud.aws.instanceProfileName}}</div>
                 </km-property>
+                <km-property *ngIf="cluster.spec.cloud.aws.roleARN">
+                  <div key>Control plane role (ARN)</div>
+                  <div value>{{cluster.spec.cloud.aws.roleARN}}</div>
+                </km-property>
               </ng-container>
 
               <!-- Openstack -->

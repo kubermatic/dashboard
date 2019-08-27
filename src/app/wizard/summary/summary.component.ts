@@ -48,7 +48,8 @@ export class SummaryComponent implements OnInit {
   hasAWSProviderOptions(): boolean {
     return this.cluster.spec.cloud.aws.securityGroup !== '' || this.cluster.spec.cloud.aws.vpcId !== '' ||
         this.cluster.spec.cloud.aws.vpcId !== '' || this.cluster.spec.cloud.aws.subnetId !== '' ||
-        this.cluster.spec.cloud.aws.routeTableId !== '' || this.cluster.spec.cloud.aws.instanceProfileName !== '';
+        this.cluster.spec.cloud.aws.routeTableId !== '' || this.cluster.spec.cloud.aws.instanceProfileName !== '' ||
+        this.cluster.spec.cloud.aws.roleARN !== '';
   }
 
   hasGCPProviderOptions(): boolean {

@@ -102,4 +102,15 @@
            autocomplete="off">
     <mat-hint>When specified, the worker nodes will use this instance profile. If not specified, a new instance profile will be created.</mat-hint>
   </mat-form-field>
+  <mat-form-field fxFlex
+                  class="km-with-hint"
+                  *ngIf="!hideOptional">
+    <mat-label>Control plane role (ARN)</mat-label>
+    <input matInput
+           formControlName="roleARN"
+           name="roleARN"
+           type="text"
+           autocomplete="off">
+    <mat-hint>When specified, the Kubernetes control plane will use this role when communicating with the AWS API. If not specified, a new role will be created.</mat-hint>
+  </mat-form-field>
 </form>
