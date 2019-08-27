@@ -6,8 +6,8 @@ import {first, take, takeUntil} from 'rxjs/operators';
 import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {AWSAvailabilityZone} from '../../shared/entity/provider/aws/AWS';
-import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {AWSAvailabilityZone, AWSSize} from '../../shared/entity/provider/aws/AWS';
+import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -22,7 +22,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   @Input() projectId: string;
   @Input() seedDCName: string;
 
-  instanceTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.AWS).flavors();
+  instanceTypes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   zones: AWSAvailabilityZone[] = [];
   awsNodeForm: FormGroup;
