@@ -3,13 +3,16 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {ApiService, WizardService} from '../../core/services';
+
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
 import {fakeAwsZones} from '../../testing/fake-data/availabilyZones.fake';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
+import {fakeAWSDatacenter} from '../../testing/fake-data/datacenter.fake';
 import {nodeDataFake} from '../../testing/fake-data/node.fake';
 import {asyncData} from '../../testing/services/api-mock.service';
+
 import {AWSNodeDataComponent} from './aws-node-data.component';
 
 const modules: any[] = [
@@ -27,6 +30,8 @@ describe('AWSNodeDataComponent', () => {
   beforeEach(() => {
     const apiMock = jasmine.createSpyObj('ApiService', ['getAWSZones']);
     apiMock.getAWSZones.and.returnValue(asyncData(fakeAwsZones()));
+    const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
+    datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAWSDatacenter()));
 
     TestBed
         .configureTestingModule({
@@ -40,6 +45,7 @@ describe('AWSNodeDataComponent', () => {
             NodeDataService,
             WizardService,
             {provide: ApiService, useValue: apiMock},
+            {provide: DatacenterService, useValue: datacenterMock},
           ],
         })
         .compileComponents();
@@ -59,6 +65,6 @@ describe('AWSNodeDataComponent', () => {
 
   it('form valid when initializing since aws has sane defaults for required fields', () => {
     fixture.detectChanges();
-    expect(component.awsNodeForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 });
