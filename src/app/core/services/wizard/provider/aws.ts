@@ -32,6 +32,13 @@ export class AWS extends Provider {
     return this;
   }
 
+  region(region: string): AWS {
+    if (region) {
+      this._headers = this._headers.set(AWS.Header.Region, region);
+    }
+    return this;
+  }
+
   vpc(vpc: string): AWS {
     if (vpc) {
       this._headers = this._headers.set(AWS.Header.VPC, vpc);
@@ -58,10 +65,9 @@ export class AWS extends Provider {
   }
 
   flavors(): Observable<AWSSize[]> {
-    if (!this._hasRequiredHeaders()) {
+    if (!this._headers.get(AWS.Header.Region)) {
       return EMPTY;
     }
-
     return this._http.get<AWSSize[]>(this._url, {headers: this._headers});
   }
 }
@@ -71,5 +77,6 @@ export namespace AWS {
     AccessKeyID = 'AccessKeyID',
     SecretAccessKey = 'SecretAccessKey',
     VPC = 'VPC',
+    Region = 'Region',
   }
 }
