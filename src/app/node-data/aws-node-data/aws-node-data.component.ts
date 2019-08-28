@@ -6,7 +6,6 @@ import {first, switchMap, take, takeUntil} from 'rxjs/operators';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {DataCenterEntity} from '../../shared/entity/DatacenterEntity';
 import {AWSAvailabilityZone, AWSSize} from '../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
@@ -29,7 +28,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   form: FormGroup;
   tags: FormArray;
   hideOptional = true;
-  datacenter: DataCenterEntity;
 
   private _loadingSizes = false;
   private _unsubscribe = new Subject<void>();
@@ -86,25 +84,14 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
           this.cloudSpec = data.cloudSpec;
           this._disableZones();
           this._reloadZones();
-          this._disableSizes();
-          this._reloadSizes();
         }
       }
     });
 
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
 
-    this.loadDatacenter();
     this._reloadZones();
     this._reloadSizes();
-  }
-
-  loadDatacenter(): void {
-    if (this.cloudSpec.dc) {
-      this._dcService.getDataCenter(this.cloudSpec.dc).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-        this.datacenter = data;
-      });
-    }
   }
 
   isInWizard(): boolean {
@@ -178,11 +165,9 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
     iif(() => !!this.cloudSpec.dc, this._dcService.getDataCenter(this.cloudSpec.dc), EMPTY)
         .pipe(switchMap(dc => {
-          this.datacenter = dc;
-
           return iif(
               () => this.isInWizard(),
-              this._wizardService.provider(NodeProvider.AWS).region(this.datacenter.spec.aws.region).flavors(),
+              this._wizardService.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors(),
               this._apiService.getAWSSizes(this.projectId, this.seedDCName, this.clusterId));
         }))
         .pipe(takeUntil(this._unsubscribe))
@@ -203,6 +188,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     this._loadingSizes = false;
     this.form.controls.size.enable();
     this.sizes = data;
+
     if (this.sizes.length > 0) {
       if (this.nodeData.spec.cloud.aws.instanceType !== '' &&
           this.sizes.filter(value => value.name === this.nodeData.spec.cloud.aws.instanceType).length > 0) {
