@@ -54,14 +54,17 @@
                   class="km-with-hint"
                   *ngIf="!hideOptional">
     <mat-label>{{getVPCFormState()}}</mat-label>
-    <mat-select [placeholder]="getVPCFormState()"
-                disableOptionCentering
-                formControlName="vpcId">
+    <input matInput
+           formControlName="vpcId"
+           name="vpcId"
+           [placeholder]="getVPCFormState()"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
       <mat-option *ngFor="let vpc of vpcIds"
                   [value]="vpc.vpcId">
         {{getVPCOptionName(vpc)}}
       </mat-option>
-    </mat-select>
+    </mat-autocomplete>
     <mat-hint>{{getVPCIdHint()}} When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
     <mat-error *ngIf="form.controls.vpcId.hasError('pattern')">
       The VPC ID needs to look similar to 'vpc-3a2f9851'.

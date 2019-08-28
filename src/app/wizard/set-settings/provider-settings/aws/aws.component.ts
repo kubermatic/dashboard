@@ -224,6 +224,10 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
               this.checkVPCState();
             },
             () => {
+              this.vpcIds = [];
+              this._loadingVPCs = false;
+            },
+            () => {
               this._loadingVPCs = false;
             });
   }
