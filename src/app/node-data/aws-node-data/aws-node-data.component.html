@@ -9,9 +9,7 @@
                   disableOptionCentering>
         <mat-option *ngFor="let size of sizes"
                     [value]="size.name">
-          <span>{{size.pretty_name}} ({{size.vcpus}} vCPU{{size.vcpus != 1 ? 's' : ''}}, {{size.memory}} GB RAM</span>
-          <span *ngIf="size.price > 0">, {{size.price | number: '1.2-5'}} USD per hour</span>
-          <span>)</span>
+          {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
         </mat-option>
       </mat-select>
       <mat-hint>{{getSizeHint()}}</mat-hint>
