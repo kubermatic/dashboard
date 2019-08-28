@@ -187,7 +187,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   private _enableSizes(data: AWSSize[]): void {
     this._loadingSizes = false;
     this.form.controls.size.enable();
-    this.sizes = data;
+    this.sizes = data.sort((a, b) => a.name.localeCompare(b.name));
 
     if (this.sizes.length > 0) {
       if (this.nodeData.spec.cloud.aws.instanceType !== '' &&
