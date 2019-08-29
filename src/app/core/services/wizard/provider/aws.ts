@@ -60,7 +60,8 @@ export class AWS extends Provider {
   }
 
   subnets(dc: string): Observable<AWSSubnet[]> {
-    if (!this._hasRequiredHeaders() || !this._headers.get(AWS.Header.VPC)) {
+    if ((!this._hasRequiredHeaders() || !this._headers.get(AWS.Header.VPC)) &&
+        !this._headers.get(Provider.SharedHeader.Credential)) {
       return EMPTY;
     }
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/subnets`;

@@ -259,6 +259,14 @@
             <ng-container *ngIf="cluster.spec.cloud.aws">
               <div class="km-summary-row">{{nodeData.spec.cloud.aws.instanceType}}</div>
               <div class="km-summary-row km-summary-row-with-margin">Disk {{nodeData.spec.cloud.aws.diskSize}} GB, {{nodeData.spec.cloud.aws.volumeType}}</div>
+              <km-property *ngIf="nodeData.spec.cloud.aws.subnetId">
+                <div key>Subnet ID</div>
+                <div value>{{nodeData.spec.cloud.aws.subnetId}}</div>
+              </km-property>
+              <km-property *ngIf="nodeData.spec.cloud.aws.availabilityZone">
+                <div key>Availability Zone</div>
+                <div value>{{nodeData.spec.cloud.aws.availabilityZone}}</div>
+              </km-property>
               <km-property *ngIf="nodeData.spec.cloud.aws.ami">
                 <div key>AMI ID</div>
                 <div value>{{nodeData.spec.cloud.aws.ami}}</div>

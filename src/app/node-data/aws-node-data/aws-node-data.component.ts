@@ -65,8 +65,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedPreset = credentials;
-      this._loadSubnetIds();
-      this.checkSubnetState();
     });
 
     this.awsNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -78,8 +76,12 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this._loadSubnetIds();
-      this.checkSubnetState();
+      if ((data.cloudSpec.aws.vpcId !== '' && data.cloudSpec.aws.accessKeyId !== '' &&
+           data.cloudSpec.aws.secretAccessKey !== '') ||
+          this._selectedPreset) {
+        this._loadSubnetIds();
+        this.checkSubnetState();
+      }
       this.cloudSpec = data.cloudSpec;
     });
 
@@ -140,25 +142,24 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   private _hasCredentials(): boolean {
-    return (!!this.cloudSpec.aws.accessKeyId && !!this.cloudSpec.aws.secretAccessKey) || !!this._selectedPreset ||
-        !this.isInWizard();
+    return (!!this.cloudSpec.aws.accessKeyId && !!this.cloudSpec.aws.secretAccessKey) || !this.isInWizard();
   }
 
   private _loadSubnetIds(): void {
-    if (!this._hasCredentials() || this.cloudSpec.aws.vpcId === '') {
-      return;
+    if ((!!this._hasCredentials() && !!this.cloudSpec.aws.vpcId) || !!this._selectedPreset) {
+      this._loadingSubnetIds = true;
     }
-
-    this._loadingSubnetIds = true;
 
     iif(() => this.isInWizard(),
         this._wizard.provider(NodeProvider.AWS)
             .accessKeyID(this.cloudSpec.aws.accessKeyId)
             .secretAccessKey(this.cloudSpec.aws.secretAccessKey)
             .vpc(this.cloudSpec.aws.vpcId)
+            .credential(this._selectedPreset)
             .subnets(this.cloudSpec.dc),
         this._apiService.getAWSSubnets(this.projectId, this.seedDCName, this.clusterId))
         .pipe(take(1))
+        .pipe(takeUntil(this._unsubscribe))
         .subscribe(
             (subnets) => {
               this.subnetIds = subnets.sort((a, b) => {

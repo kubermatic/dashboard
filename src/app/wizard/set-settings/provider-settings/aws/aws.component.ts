@@ -1,6 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
+import {merge, Subject} from 'rxjs';
 import {debounceTime, take, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../core/services';
@@ -57,24 +57,31 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     this._loadSubnetIds();
     this.checkSubnetState();
 
-    this.form.controls.vpcId.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      if (this._isVPCSelectedAndValid()) {
-        this._loadSubnetIds();
-      } else {
-        this.subnetIds = [];
-        this._subnetMap = {};
-        this.form.controls.subnetId.setValue('');
-      }
-      this.checkSubnetState();
-    });
+    this.form.controls.vpcId.valueChanges.pipe(debounceTime(1000))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((data) => {
+          if (this._isVPCSelectedAndValid()) {
+            this._loadSubnetIds();
+          } else {
+            this.subnetIds = [];
+            this._subnetMap = {};
+            this.form.controls.subnetId.setValue('');
+          }
+          this.checkSubnetState();
+        });
+
+    merge(this.form.controls.accessKeyId.valueChanges, this.form.controls.secretAccessKey.valueChanges)
+        .pipe(debounceTime(1000))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe(() => {
+          if (this._hasRequiredCredentials() && !this._noSubnets) {
+            this._loadVPCs();
+          }
+          this.checkVPCState();
+        });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (this._hasRequiredCredentials() && !this._noSubnets) {
-        this._loadVPCs();
-      }
-      this.checkVPCState();
-
-      if (this._isVPCSelectedAndValid()) {
+      if (this._isVPCSelectedAndValid() && data.vpcId !== this.form.controls.vpcId.value) {
         this._loadSubnetIds();
       }
       this.checkSubnetState();
