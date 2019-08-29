@@ -226,6 +226,11 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
               if (this.vpcIds.length === 0) {
                 this.form.controls.vpcId.setValue('');
+              } else {
+                const defaultVpc = this.vpcIds.find(x => x.isDefault);
+                if (defaultVpc) {
+                  this.form.controls.vpcId.setValue(defaultVpc.vpcId);
+                }
               }
 
               this._loadingVPCs = false;
