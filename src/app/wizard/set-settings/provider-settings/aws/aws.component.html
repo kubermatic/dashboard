@@ -38,21 +38,7 @@
   <mat-form-field fxFlex
                   class="km-with-hint"
                   *ngIf="!hideOptional">
-    <mat-label>Security Group ID</mat-label>
-    <input matInput
-           formControlName="securityGroup"
-           name="securityGroup"
-           type="text"
-           autocomplete="off">
-    <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
-    <mat-error *ngIf="form.controls.securityGroup.hasError('pattern')">
-      The security group ID need to look similar to 'sg-a2c195ca'.
-    </mat-error>
-  </mat-form-field>
 
-  <mat-form-field fxFlex
-                  class="km-with-hint"
-                  *ngIf="!hideOptional">
     <mat-label>{{getVPCFormState()}}</mat-label>
     <input matInput
            formControlName="vpcId"
@@ -75,10 +61,12 @@
                   class="km-with-hint"
                   *ngIf="!hideOptional">
     <mat-label>{{getSubnetIDFormState()}}</mat-label>
-    <mat-select [placeholder]="getSubnetIDFormState()"
-                disableOptionCentering
-                panelClass="km-optgroup-dropdown"
-                formControlName="subnetId">
+    <input matInput
+           formControlName="subnetId"
+           name="subnetId"
+           [placeholder]="getSubnetIDFormState()"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
       <mat-optgroup *ngFor="let az of subnetAZ"
                     [label]="az">
         <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
@@ -86,12 +74,26 @@
           {{getSubnetOptionName(subnet)}}
         </mat-option>
       </mat-optgroup>
-    </mat-select>
+    </mat-autocomplete>
     <mat-hint>{{getSubnetIDHint()}} When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
   </mat-form-field>
 
   <mat-form-field fxFlex
                   class="km-with-hint"
+                  *ngIf="!hideOptional">
+    <mat-label>Security Group ID</mat-label>
+    <input matInput
+           formControlName="securityGroup"
+           name="securityGroup"
+           type="text"
+           autocomplete="off">
+    <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
+    <mat-error *ngIf="form.controls.securityGroup.hasError('pattern')">
+      The security group ID need to look similar to 'sg-a2c195ca'.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex
                   *ngIf="!hideOptional">
     <mat-label>Route Table ID</mat-label>
     <input matInput

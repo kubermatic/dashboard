@@ -47,21 +47,24 @@
            autocomplete="off">
   </mat-form-field>
 
-  <div fxFlex
-       class="mat-select-container">
-    <mat-form-field>
-      <mat-label>{{getAvailabilityZoneFormState()}}</mat-label>
-      <mat-select formControlName="availability_zone"
-                  [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
-                  disableOptionCentering>
-        <mat-option *ngFor="let zone of zones"
-                    [value]="zone.name">
-          {{zone.name}}
+  <mat-form-field fxFlex>
+    <mat-label>{{getSubnetIDFormState()}}</mat-label>
+    <input matInput
+           formControlName="subnetId"
+           name="subnetId"
+           [placeholder]="getSubnetIDFormState()"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-optgroup *ngFor="let az of subnetAZ"
+                    [label]="az">
+        <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
+                    [value]="subnet.id">
+          {{getSubnetOptionName(subnet)}}
         </mat-option>
-      </mat-select>
-      <mat-hint>{{getZoneHint()}}</mat-hint>
-    </mat-form-field>
-  </div>
+      </mat-optgroup>
+    </mat-autocomplete>
+    <mat-hint>{{getSubnetIDHint()}}</mat-hint>
+  </mat-form-field>
 
   <div class="km-form-group-tags-header"
        *ngIf="!hideOptional">
