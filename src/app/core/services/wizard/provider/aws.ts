@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {AWSAvailabilityZone, AWSSize, AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
+import {AWSAvailabilityZone, AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
@@ -52,6 +52,14 @@ export class AWS extends Provider {
     }
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/zones`;
     return this._http.get<AWSAvailabilityZone[]>(url, {headers: this._headers});
+  }
+
+  vpcs(dc: string): Observable<AWSVPC[]> {
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    const url = `${this._restRoot}/providers/${this._provider}/${dc}/vpcs`;
+    return this._http.get<AWSVPC[]>(url, {headers: this._headers});
   }
 
   subnets(dc: string): Observable<AWSSubnet[]> {

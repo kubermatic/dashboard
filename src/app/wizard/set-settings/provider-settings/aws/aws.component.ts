@@ -5,7 +5,7 @@ import {debounceTime, take, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../core/services';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {AWSSubnet} from '../../../../shared/entity/provider/aws/AWS';
+import {AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
@@ -20,9 +20,11 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   hideOptional = true;
   subnetIds: AWSSubnet[] = [];
+  vpcIds: AWSVPC[] = [];
 
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
   private _loadingSubnetIds = false;
+  private _loadingVPCs = false;
   private _noSubnets = false;
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
@@ -49,6 +51,8 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         this.form.controls.secretAccessKey,
     );
 
+    this._loadVPCs();
+    this.checkVPCState();
     this._loadSubnetIds();
     this.checkSubnetState();
 
@@ -64,6 +68,11 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if (this._hasRequiredCredentials() && !this._noSubnets) {
+        this._loadVPCs();
+      }
+      this.checkVPCState();
+
       if (this._isVPCSelectedAndValid()) {
         this._loadSubnetIds();
       }
@@ -118,7 +127,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         .subscribe(
             (subnets) => {
               this.subnetIds = subnets.sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+                return a.name.localeCompare(b.name);
               });
 
               this._subnetMap = {};
@@ -176,9 +185,69 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   }
 
   private _isVPCSelectedAndValid(): boolean {
-    return this.form.controls.vpcId.value.toString().length > 0 && this.form.controls.vpcId.valid;
+    return this.form.controls.vpcId.value !== '' && this.form.controls.vpcId.valid;
   }
 
+  getVPCFormState(): string {
+    if (!this._loadingVPCs && !this._hasRequiredCredentials()) {
+      return 'VPC ID';
+    } else if (this._loadingVPCs) {
+      return 'Loading VPC IDs...';
+    } else if (this.vpcIds.length === 0) {
+      return 'No VPC IDs available';
+    } else {
+      return 'VPC ID';
+    }
+  }
+
+  private _loadVPCs(): void {
+    if (!this._hasRequiredCredentials()) {
+      return;
+    }
+
+    this._loadingVPCs = true;
+    this._wizard.provider(NodeProvider.AWS)
+        .accessKeyID(this.form.controls.accessKeyId.value)
+        .secretAccessKey(this.form.controls.secretAccessKey.value)
+        .vpcs(this.cluster.spec.cloud.dc)
+        .pipe(take(1))
+        .subscribe(
+            (vpcs) => {
+              this.vpcIds = vpcs.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+              });
+
+              if (this.vpcIds.length === 0) {
+                this.form.controls.vpcId.setValue('');
+              }
+
+              this._loadingVPCs = false;
+              this.checkVPCState();
+            },
+            () => {
+              this.vpcIds = [];
+              this._loadingVPCs = false;
+            },
+            () => {
+              this._loadingVPCs = false;
+            });
+  }
+
+  checkVPCState(): void {
+    if (this.vpcIds.length === 0 && this.form.controls.vpcId.enabled) {
+      this.form.controls.vpcId.disable();
+    } else if (this.vpcIds.length > 0 && this.form.controls.vpcId.disabled) {
+      this.form.controls.vpcId.enable();
+    }
+  }
+
+  getVPCIdHint(): string {
+    return (!this._loadingVPCs && !this._hasRequiredCredentials()) ? 'Please enter your credentials first.' : '';
+  }
+
+  getVPCOptionName(vpc: AWSVPC): string {
+    return vpc.name !== '' ? vpc.name + ' (' + vpc.vpcId + ')' : vpc.vpcId;
+  }
 
   private _clusterProviderSettingsForm(valid: boolean): ClusterProviderSettingsForm {
     return {
