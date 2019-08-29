@@ -1,9 +1,9 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {Subject} from 'rxjs';
+import {iif, Subject} from 'rxjs';
 import {take, takeUntil} from 'rxjs/operators';
 
-import {WizardService} from '../../core/services';
+import {ApiService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
 import {AWSSubnet} from '../../shared/entity/provider/aws/AWS';
@@ -35,7 +35,9 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
 
-  constructor(private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService) {}
+  constructor(
+      private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
+      private readonly _apiService: ApiService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -147,13 +149,15 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       return;
     }
 
-
     this._loadingSubnetIds = true;
-    this._wizard.provider(NodeProvider.AWS)
-        .accessKeyID(this.cloudSpec.aws.accessKeyId)
-        .secretAccessKey(this.cloudSpec.aws.secretAccessKey)
-        .vpc(this.cloudSpec.aws.vpcId)
-        .subnets(this.cloudSpec.dc)
+
+    iif(() => this.isInWizard(),
+        this._wizard.provider(NodeProvider.AWS)
+            .accessKeyID(this.cloudSpec.aws.accessKeyId)
+            .secretAccessKey(this.cloudSpec.aws.secretAccessKey)
+            .vpc(this.cloudSpec.aws.vpcId)
+            .subnets(this.cloudSpec.dc),
+        this._apiService.getAWSSubnets(this.projectId, this.seedDCName, this.clusterId))
         .pipe(take(1))
         .subscribe(
             (subnets) => {
@@ -175,6 +179,10 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
                 this._noSubnets = true;
               } else {
                 this._noSubnets = false;
+              }
+
+              if (this.nodeData.spec.cloud.aws.subnetId !== '') {
+                this.awsNodeForm.controls.subnetId.setValue(this.nodeData.spec.cloud.aws.subnetId);
               }
 
               this._loadingSubnetIds = false;

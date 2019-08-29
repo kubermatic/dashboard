@@ -41,13 +41,6 @@
   </mat-form-field>
 
   <mat-form-field fxFlex>
-    <mat-label>AMI ID</mat-label>
-    <input matInput
-           formControlName="ami"
-           autocomplete="off">
-  </mat-form-field>
-
-  <mat-form-field fxFlex>
     <mat-label>{{getSubnetIDFormState()}}</mat-label>
     <input matInput
            formControlName="subnetId"
@@ -64,6 +57,13 @@
       </mat-optgroup>
     </mat-autocomplete>
     <mat-hint>{{getSubnetIDHint()}}</mat-hint>
+  </mat-form-field>
+
+  <mat-form-field fxFlex>
+    <mat-label>AMI ID</mat-label>
+    <input matInput
+           formControlName="ami"
+           autocomplete="off">
   </mat-form-field>
 
   <div class="km-form-group-tags-header"

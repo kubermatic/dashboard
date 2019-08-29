@@ -4,6 +4,7 @@ import {Subject} from 'rxjs';
 import {debounceTime, take, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../core/services';
+import {NodeDataService} from '../../../../core/services/node-data/node-data.service';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
 import {AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
@@ -29,7 +30,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _wizard: WizardService) {}
+  constructor(private readonly _wizard: WizardService, private readonly _addNodeService: NodeDataService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -86,6 +87,12 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
     this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
+    });
+
+    this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if (data.spec.aws.subnetId !== '' && this.form.controls.subnetId.value === '') {
+        this.form.controls.subnetId.setValue(data.spec.aws.subnetId);
+      }
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
