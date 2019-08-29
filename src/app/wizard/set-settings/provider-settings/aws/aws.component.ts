@@ -60,12 +60,9 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     this.form.controls.vpcId.valueChanges.pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe((data) => {
+          this.clearSubnetId();
           if (this._isVPCSelectedAndValid()) {
             this._loadSubnetIds();
-          } else {
-            this.subnetIds = [];
-            this._subnetMap = {};
-            this.form.controls.subnetId.setValue('');
           }
           this.checkSubnetState();
         });
@@ -82,6 +79,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if (this._isVPCSelectedAndValid() && data.vpcId !== this.form.controls.vpcId.value) {
+        this.clearSubnetId();
         this._loadSubnetIds();
       }
       this.checkSubnetState();
@@ -110,6 +108,12 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
       this.form.enable();
     });
+  }
+
+  clearSubnetId(): void {
+    this.subnetIds = [];
+    this._subnetMap = {};
+    this.form.controls.subnetId.setValue('');
   }
 
   getSubnetIDFormState(): string {

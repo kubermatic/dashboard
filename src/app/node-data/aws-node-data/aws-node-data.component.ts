@@ -79,6 +79,12 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       if ((data.cloudSpec.aws.vpcId !== '' && data.cloudSpec.aws.accessKeyId !== '' &&
            data.cloudSpec.aws.secretAccessKey !== '') ||
           this._selectedPreset) {
+        if (data.cloudSpec.aws.vpcId !== this.cloudSpec.aws.vpcId ||
+            data.cloudSpec.aws.accessKeyId !== this.cloudSpec.aws.accessKeyId ||
+            data.cloudSpec.aws.secretAccessKey !== this.cloudSpec.aws.secretAccessKey) {
+          this.clearSubnetId();
+        }
+        this.cloudSpec = data.cloudSpec;
         this._loadSubnetIds();
         this.checkSubnetState();
       }
@@ -95,7 +101,14 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     return !this.clusterId || this.clusterId.length === 0;
   }
 
+  clearSubnetId(): void {
+    this.subnetIds = [];
+    this._subnetMap = {};
+    this.awsNodeForm.controls.subnetId.setValue('');
+  }
+
   getNodeProviderData(): NodeProviderData {
+    const azFromSubnet = this.getAZFromSubnet(this.awsNodeForm.controls.subnetId.value);
     const tagMap = {};
     for (const i in this.awsNodeForm.controls.tags.value) {
       if (this.awsNodeForm.controls.tags.value[i].key !== '' && this.awsNodeForm.controls.tags.value[i].value !== '') {
@@ -112,7 +125,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
           tags: tagMap,
           volumeType: this.awsNodeForm.controls.disk_type.value,
           subnetId: this.awsNodeForm.controls.subnetId.value,
-          availabilityZone: this.getAZFromSubnet(this.awsNodeForm.controls.subnetId.value),
+          availabilityZone: azFromSubnet,
         },
       },
       valid: this.awsNodeForm.valid,
@@ -163,7 +176,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
         .subscribe(
             (subnets) => {
               this.subnetIds = subnets.sort((a, b) => {
-                return (a.name < b.name ? -1 : 1) * ('asc' ? 1 : -1);
+                return a.name.localeCompare(b.name);
               });
 
               this._subnetMap = {};
@@ -180,10 +193,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
                 this._noSubnets = true;
               } else {
                 this._noSubnets = false;
-              }
-
-              if (this.nodeData.spec.cloud.aws.subnetId !== '') {
-                this.awsNodeForm.controls.subnetId.setValue(this.nodeData.spec.cloud.aws.subnetId);
               }
 
               this._loadingSubnetIds = false;
