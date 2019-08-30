@@ -10,10 +10,9 @@ import (
 	"syscall"
 	"time"
 
-	"go.uber.org/zap/zapcore"
-
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 func main() {
