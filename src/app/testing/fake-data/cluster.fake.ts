@@ -207,7 +207,6 @@ export function fakeAWSCluster(): ClusterEntity {
           secretAccessKey: 'bbbbbbbbbbbb',
           securityGroup: '',
           vpcId: '',
-          subnetId: '',
           routeTableId: '',
           instanceProfileName: '',
           roleARN: '',
