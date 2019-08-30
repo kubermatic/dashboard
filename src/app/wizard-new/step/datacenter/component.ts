@@ -46,6 +46,10 @@ export class DatacenterStepComponent extends StepBase implements OnInit, OnDestr
           }
           this.datacenters = providerDatacenters;
         });
+
+    this.control(Controls.Datacenter)
+        .valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(datacenter => this._wizard.datacenter = datacenter);
   }
 
   getLocation(datacenter: DataCenterEntity): string {

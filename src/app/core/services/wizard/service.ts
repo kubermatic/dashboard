@@ -7,6 +7,7 @@ import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 @Injectable()
 export class NewWizardService {
   providerChanges$ = new EventEmitter<NodeProvider>();
+  datacenterChanges$ = new EventEmitter();
 
   private _clusterEntity: ClusterEntity = {
     spec: {
@@ -35,6 +36,15 @@ export class NewWizardService {
                                  .filter(p => p !== undefined);
 
     return clusterProviders.length > 0 ? clusterProviders[0] : NodeProvider.NONE;
+  }
+
+  set datacenter(datacenter: string) {
+    this._clusterEntity.spec.cloud.dc = datacenter;
+    this.datacenterChanges$.emit(datacenter);
+  }
+
+  get datacenter(): string {
+    return this._clusterEntity.spec.cloud.dc;
   }
 
   set stepper(stepper: MatStepper) {
