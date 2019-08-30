@@ -51,6 +51,18 @@
           <div key>Paused</div>
           <div value>{{nodeDeployment.spec.paused}}</div>
         </km-property>
+
+        <ng-container *ngIf="nodeDeployment.spec.template.cloud.aws">
+          <km-property>
+            <div key>Subnet ID</div>
+            <div value>{{nodeDeployment.spec.template.cloud.aws.subnetID}}</div>
+          </km-property>
+          <km-property>
+            <div key>Availability Zone</div>
+            <div value>{{nodeDeployment.spec.template.cloud.aws.availabilityZone}}</div>
+          </km-property>
+        </ng-container>
+
         <km-property>
           <div value
                class="km-provider-logo-value">

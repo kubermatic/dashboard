@@ -115,6 +115,7 @@ export function nodeAWSFake(): NodeEntity {
           tags: {
             'kubernetes.io/cluster/2j6gn77spl': '',
           },
+          subnetId: 'subnet-f3427db9',
           availabilityZone: 'eu-central-1c',
         }
       },
@@ -366,6 +367,7 @@ export function nodeDataFake(): NodeData {
           volumeType: 'standard',
           ami: '',
           tags: {},
+          subnetId: 'subnet-f3427db9',
           availabilityZone: 'eu-central-1c',
         },
         openstack: {
@@ -434,6 +436,7 @@ export function nodeDataCentOsFake(): NodeData {
           volumeType: 'standard',
           ami: '',
           tags: {},
+          subnetId: 'subnet-f3427db9',
           availabilityZone: 'eu-central-1c',
         },
         openstack: {
@@ -499,6 +502,7 @@ export function nodeDataContainerLinuxFake(): NodeData {
           volumeType: 'standard',
           ami: '',
           tags: {},
+          subnetId: 'subnet-f3427db9',
           availabilityZone: 'eu-central-1c',
         },
         openstack: {

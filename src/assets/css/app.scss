@@ -994,6 +994,7 @@ mat-hint a {
 .mat-optgroup-label {
   font-size: $caption-font-size-base !important;
   line-height: 3.5 * $line-height !important;
+  height: 3.5 * $line-height !important;
   padding-left: 1.25 * $baseline-grid !important;
   border-top: 1px solid $border !important;
 }
