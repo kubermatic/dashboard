@@ -1083,6 +1083,14 @@ mat-chip-list {
   min-height: auto !important;
 }
 
+.mat-step-header {
+  background-color: unset !important;
+
+  &:hover {
+    background-color: unset;
+  }
+}
+
 // Confirmation Dialogs
 #km-confirmation-dialog mat-dialog-content,
 #km-delete-cluster-dialog mat-dialog-content {

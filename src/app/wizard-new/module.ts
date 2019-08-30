@@ -7,7 +7,9 @@ import {SharedModule} from '../shared/shared.module';
 import {WizardComponent} from './component';
 import {Routing} from './routing';
 import {ClusterStepComponent} from './step/cluster/component';
+import {DatacenterStepComponent} from './step/datacenter/component';
 import {MockStepComponent} from './step/mock/component';
+import {ProviderStepComponent} from './step/provider/component';
 
 const components: any[] = [
   WizardComponent,
@@ -16,6 +18,8 @@ const components: any[] = [
 const entryComponents: any[] = [
   ClusterStepComponent,
   MockStepComponent,
+  ProviderStepComponent,
+  DatacenterStepComponent,
 ];
 
 @NgModule({

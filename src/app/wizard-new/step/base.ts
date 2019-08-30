@@ -1,6 +1,15 @@
 import {AbstractControl, FormGroup} from '@angular/forms';
 
+import {CoreModule} from '../../core/core.module';
+import {NewWizardService} from '../../core/services';
+
 export class StepBase {
+  protected readonly _wizard: NewWizardService;
+
+  constructor() {
+    this._wizard = CoreModule.injector.get(NewWizardService);
+  }
+
   private _form: FormGroup;
 
   set form(form: FormGroup) {
@@ -24,5 +33,9 @@ export class StepBase {
 
   controlValue(name: string): any {
     return this.form.controls[name].value;
+  }
+
+  next(): void {
+    this._wizard.stepper.next();
   }
 }

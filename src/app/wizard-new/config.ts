@@ -1,5 +1,7 @@
 import {ClusterStepComponent} from './step/cluster/component';
+import {DatacenterStepComponent} from './step/datacenter/component';
 import {MockStepComponent} from './step/mock/component';
+import {ProviderStepComponent} from './step/provider/component';
 import {WizardStep} from './step/step';
 
 /**
@@ -7,8 +9,8 @@ import {WizardStep} from './step/step';
  */
 export const steps = [
   new WizardStep('Cluster', ClusterStepComponent),
-  new WizardStep('Provider', MockStepComponent),
-  new WizardStep('Datacenter', MockStepComponent),
+  new WizardStep('Provider', ProviderStepComponent),
+  new WizardStep('Datacenter', DatacenterStepComponent),
   new WizardStep('Settings', MockStepComponent),
   new WizardStep('Summary', MockStepComponent),
 ];
