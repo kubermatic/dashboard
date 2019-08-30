@@ -16,7 +16,7 @@ var httpRequestsDuration = prometheus.NewHistogramVec(
 	prometheus.HistogramOpts{
 		Name:    "http_request_duration_seconds",
 		Help:    "A histogram of latencies for requests.",
-		Buckets: []float64{.005, .01, .025, .05, 0.1, 0.25, 0.5, 1, 1.25, 1.85, 2, 5},
+		Buckets: []float64{.005, .01, .025, .05, 0.1, 0.25, 0.5, 1},
 	},
 	[]string{"method", "path"},
 )

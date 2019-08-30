@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"flag"
-	"fmt"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,21 +10,24 @@ import (
 	"syscall"
 	"time"
 
+	"go.uber.org/zap/zapcore"
+
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"go.uber.org/zap"
 )
 
 func main() {
 	addr := flag.String("address", "0.0.0.0:8080", "Address to listen on")
-	rawLog, _ := zap.NewProduction()
-	log := rawLog.Sugar()
 	flag.Parse()
 
-	defer func() {
-		if err := rawLog.Sync(); err != nil {
-			fmt.Println(err)
-		}
-	}()
+	config := zap.NewProductionConfig()
+	config.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	config.EncoderConfig.TimeKey = "time"
+	config.DisableCaller = true
+	config.DisableStacktrace = true
+
+	rawLog, _ := config.Build()
+	log := rawLog.Sugar()
 
 	mux := http.NewServeMux()
 	mux.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
@@ -40,13 +42,13 @@ func main() {
 		IdleTimeout:  2 * time.Minute,
 	}
 
-	stop := make(chan os.Signal)
-	signal.Notify(stop, os.Interrupt, syscall.SIGKILL)
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt, syscall.SIGTERM)
 
 	go func() {
-		log.Infof("Starting the http server: %s", *addr)
+		log.Infow("Starting the HTTP server", "listen", *addr)
 		if err := s.ListenAndServe(); err != nil {
-			panic(err)
+			log.Fatalw("Failed to start server", zap.Error(err))
 		}
 	}()
 
@@ -56,9 +58,9 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	log.Infof("Shutting down the http server: %s", *addr)
+	log.Info("Shutting the HTTP server down")
 	if err := s.Shutdown(ctx); err != nil {
-		panic(err)
+		log.Fatalw("Failed to shutdown", zap.Error(err))
 	}
 }
 
