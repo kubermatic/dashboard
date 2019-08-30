@@ -9,6 +9,7 @@ import {ParamsService} from './params/params.service';
 import {ProjectService} from './project/project.service';
 import {RBACService} from './rbac/rbac.service';
 import {UserService} from './user/user.service';
+import {NewWizardService} from './wizard/service';
 import {WizardService} from './wizard/wizard.service';
 
 export {
@@ -20,6 +21,7 @@ export {
   DatacenterService,
   LabelService,
   NotificationService,
+  NewWizardService,
   ParamsService,
   ProjectService,
   RBACService,
