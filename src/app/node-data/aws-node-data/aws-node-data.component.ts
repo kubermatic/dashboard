@@ -209,7 +209,8 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getSubnetIDHint(): string {
-    return (!this._loadingSubnetIds && (!this._hasCredentials() || this.cloudSpec.aws.vpcId === '')) ?
+    return (!this._loadingSubnetIds && (!this._hasCredentials() || this.cloudSpec.aws.vpcId === '') &&
+            !this._selectedPreset) ?
         'Please enter your credentials first.' :
         '';
   }
