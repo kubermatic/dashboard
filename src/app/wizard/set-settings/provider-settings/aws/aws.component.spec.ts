@@ -3,9 +3,12 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {WizardService} from '../../../../core/services/wizard/wizard.service';
+
+import {WizardService} from '../../../../core/services';
+import {NodeDataService} from '../../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeAWSCluster} from '../../../../testing/fake-data/cluster.fake';
+
 import {AWSClusterSettingsComponent} from './aws.component';
 
 describe('AWSClusterSettingsComponent', () => {
@@ -27,6 +30,7 @@ describe('AWSClusterSettingsComponent', () => {
           ],
           providers: [
             WizardService,
+            NodeDataService,
           ],
         })
         .compileComponents();
