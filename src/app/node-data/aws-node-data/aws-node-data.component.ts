@@ -90,6 +90,10 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
         this.cloudSpec = data.cloudSpec;
         this._loadSubnetIds();
         this.checkSubnetState();
+      } else if (
+          data.cloudSpec.aws.vpcId === '' || data.cloudSpec.aws.accessKeyId === '' ||
+          data.cloudSpec.aws.secretAccessKey === '') {
+        this.clearSubnetId();
       }
       this.cloudSpec = data.cloudSpec;
     });
@@ -201,6 +205,10 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
               this._loadingSubnetIds = false;
               this.checkSubnetState();
+            },
+            () => {
+              this.clearSubnetId();
+              this._loadingSubnetIds = false;
             },
             () => {
               this._loadingSubnetIds = false;

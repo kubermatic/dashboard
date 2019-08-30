@@ -55,8 +55,10 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           if (this._hasRequiredCredentials()) {
             this._loadVPCs();
+            this.checkVPCState();
+          } else {
+            this.clearVpcId();
           }
-          this.checkVPCState();
         });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
@@ -82,6 +84,12 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
   private _hasRequiredCredentials(): boolean {
     return !(this.form.controls.accessKeyId.value === '' || this.form.controls.secretAccessKey.value === '');
+  }
+
+  clearVpcId(): void {
+    this.vpcIds = [];
+    this.form.controls.vpcId.setValue('');
+    this.checkVPCState();
   }
 
   getVPCFormState(): string {
@@ -126,7 +134,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
               this.checkVPCState();
             },
             () => {
-              this.vpcIds = [];
+              this.clearVpcId();
               this._loadingVPCs = false;
             },
             () => {
