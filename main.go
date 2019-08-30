@@ -58,7 +58,7 @@ func main() {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 	defer cancel()
 
-	log.Info("Shutting the HTTP server down")
+	log.Info("Signal received, shutting the HTTP server down")
 	if err := s.Shutdown(ctx); err != nil {
 		log.Fatalw("Failed to shutdown", zap.Error(err))
 	}

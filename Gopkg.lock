@@ -2,20 +2,20 @@
 
 
 [[projects]]
-  branch = "master"
   digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
   name = "github.com/beorn7/perks"
   packages = ["quantile"]
   pruneopts = "UT"
-  revision = "3a771d992973f24aa725d07868b467d1ddfceafb"
+  revision = "37c8de3658fcb183f997c4e13e8337516ab753e6"
+  version = "v1.0.1"
 
 [[projects]]
-  digest = "1:318f1c959a8a740366fce4b1e1eb2fd914036b4af58fbd0a003349b305f118ad"
+  digest = "1:573ca21d3669500ff845bdebee890eb7fc7f0f50c59f2132f2a0c6b03d85086a"
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   pruneopts = "UT"
-  revision = "b5d812f8a3706043e23a9cd5babf2e5423744d30"
-  version = "v1.3.1"
+  revision = "6c65a5562fc06764971b7c5d05c76c75e84bdbf7"
+  version = "v1.3.2"
 
 [[projects]]
   digest = "1:ff5ebae34cfbf047d505ee150de27e60570e8c394b3b8fdbb720ff6ac71985fc"
@@ -26,8 +26,7 @@
   version = "v1.0.1"
 
 [[projects]]
-  branch = "master"
-  digest = "1:9f4058902e8a1188ffec272c5f4c8f61e29d074afa3849069d6704a3f37abfc0"
+  digest = "1:eb04f69c8991e52eff33c428bd729e04208bf03235be88e4df0d88497c6861b9"
   name = "github.com/prometheus/client_golang"
   packages = [
     "prometheus",
@@ -35,7 +34,8 @@
     "prometheus/promhttp",
   ]
   pruneopts = "UT"
-  revision = "7490f0a74525a1f863eaf81b42f3ead3a1ecc43a"
+  revision = "170205fb58decfd011f1550d4cfb737230d7ae4f"
+  version = "v1.1.0"
 
 [[projects]]
   branch = "master"
@@ -43,10 +43,10 @@
   name = "github.com/prometheus/client_model"
   packages = ["go"]
   pruneopts = "UT"
-  revision = "fd36f4220a901265f90734c3183c5f0c91daa0b8"
+  revision = "14fe0d1b01d4d5fc031dd4bec1823bd3ebbe8016"
 
 [[projects]]
-  digest = "1:35cf6bdf68db765988baa9c4f10cc5d7dda1126a54bd62e252dbcd0b1fc8da90"
+  digest = "1:8dcedf2e8f06c7f94e48267dea0bc0be261fa97b377f3ae3e87843a92a549481"
   name = "github.com/prometheus/common"
   packages = [
     "expfmt",
@@ -54,16 +54,20 @@
     "model",
   ]
   pruneopts = "UT"
-  revision = "cfeb6f9992ffa54aaa4f2170ade4067ee478b250"
-  version = "v0.2.0"
+  revision = "31bed53e4047fd6c510e43a941f90cb31be0972a"
+  version = "v0.6.0"
 
 [[projects]]
-  branch = "master"
-  digest = "1:f806b417865e83457c3659232926203f5b0d39aa741b71d9e3e4c0c774e71a5c"
+  digest = "1:8232537905152d6a0b116b9af5a0868fcac0e84eb02ec5a150624c077bdedb0b"
   name = "github.com/prometheus/procfs"
-  packages = ["."]
+  packages = [
+    ".",
+    "internal/fs",
+    "internal/util",
+  ]
   pruneopts = "UT"
-  revision = "ea9eea63887261e4d8ed8315f4078e88d540c725"
+  revision = "00ec24a6a2d86e7074629c8384715dbb05adccd8"
+  version = "v0.0.4"
 
 [[projects]]
   digest = "1:a5158647b553c61877aa9ae74f4015000294e47981e6b8b07525edcbb0747c81"
@@ -96,6 +100,14 @@
   revision = "27376062155ad36be76b0f12cf1572a221d3a48c"
   version = "v1.10.0"
 
+[[projects]]
+  branch = "master"
+  digest = "1:fd3f2e7d5c37e0e9fdee87c81448009d2688f34716d61a95ff3272174ed32caa"
+  name = "golang.org/x/sys"
+  packages = ["windows"]
+  pruneopts = "UT"
+  revision = "08d80c9d36de4cf3f0843a021c300dd67a5e47dc"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
@@ -103,6 +115,7 @@
     "github.com/prometheus/client_golang/prometheus",
     "github.com/prometheus/client_golang/prometheus/promhttp",
     "go.uber.org/zap",
+    "go.uber.org/zap/zapcore",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1
