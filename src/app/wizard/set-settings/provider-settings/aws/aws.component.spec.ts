@@ -5,7 +5,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {WizardService} from '../../../../core/services';
-import {NodeDataService} from '../../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeAWSCluster} from '../../../../testing/fake-data/cluster.fake';
 
@@ -30,7 +29,6 @@ describe('AWSClusterSettingsComponent', () => {
           ],
           providers: [
             WizardService,
-            NodeDataService,
           ],
         })
         .compileComponents();
@@ -44,7 +42,6 @@ describe('AWSClusterSettingsComponent', () => {
       accessKeyId: '',
       secretAccessKey: '',
       routeTableId: '',
-      subnetId: '',
       securityGroup: '',
       vpcId: '',
       instanceProfileName: '',

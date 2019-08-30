@@ -120,10 +120,6 @@
                   <div key>VPC ID</div>
                   <div value>{{cluster.spec.cloud.aws.vpcId}}</div>
                 </km-property>
-                <km-property *ngIf="cluster.spec.cloud.aws.subnetId">
-                  <div key>Subnet ID</div>
-                  <div value>{{cluster.spec.cloud.aws.subnetId}}</div>
-                </km-property>
                 <km-property *ngIf="cluster.spec.cloud.aws.routeTableId">
                   <div key>Route table ID</div>
                   <div value>{{cluster.spec.cloud.aws.routeTableId}}</div>

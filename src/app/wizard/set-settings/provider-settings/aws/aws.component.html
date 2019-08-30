@@ -60,27 +60,6 @@
   <mat-form-field fxFlex
                   class="km-with-hint"
                   *ngIf="!hideOptional">
-    <mat-label>{{getSubnetIDFormState()}}</mat-label>
-    <input matInput
-           formControlName="subnetId"
-           name="subnetId"
-           [placeholder]="getSubnetIDFormState()"
-           [matAutocomplete]="auto">
-    <mat-autocomplete #auto="matAutocomplete">
-      <mat-optgroup *ngFor="let az of subnetAZ"
-                    [label]="az">
-        <mat-option *ngFor="let subnet of getSubnetToAZ(az)"
-                    [value]="subnet.id">
-          {{getSubnetOptionName(subnet)}}
-        </mat-option>
-      </mat-optgroup>
-    </mat-autocomplete>
-    <mat-hint>{{getSubnetIDHint()}} When specified, all worker nodes will be attached to this Subnet. If not specified, the default Subnet will be used.</mat-hint>
-  </mat-form-field>
-
-  <mat-form-field fxFlex
-                  class="km-with-hint"
-                  *ngIf="!hideOptional">
     <mat-label>Security Group ID</mat-label>
     <input matInput
            formControlName="securityGroup"

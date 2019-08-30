@@ -4,9 +4,8 @@ import {merge, Subject} from 'rxjs';
 import {debounceTime, take, takeUntil} from 'rxjs/operators';
 
 import {WizardService} from '../../../../core/services';
-import {NodeDataService} from '../../../../core/services/node-data/node-data.service';
 import {ClusterEntity} from '../../../../shared/entity/ClusterEntity';
-import {AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
+import {AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
 import {ClusterProviderSettingsForm} from '../../../../shared/model/ClusterForm';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
@@ -20,17 +19,13 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
   hideOptional = true;
-  subnetIds: AWSSubnet[] = [];
   vpcIds: AWSVPC[] = [];
 
-  private _subnetMap: {[type: string]: AWSSubnet[]} = {};
-  private _loadingSubnetIds = false;
   private _loadingVPCs = false;
-  private _noSubnets = false;
   private _formHelper: FormHelper;
   private _unsubscribe = new Subject<void>();
 
-  constructor(private readonly _wizard: WizardService, private readonly _addNodeService: NodeDataService) {}
+  constructor(private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
     this.form = new FormGroup({
@@ -39,7 +34,6 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       securityGroup:
           new FormControl(this.cluster.spec.cloud.aws.securityGroup, Validators.pattern('sg-(\\w{8}|\\w{17})')),
       vpcId: new FormControl(this.cluster.spec.cloud.aws.vpcId, Validators.pattern('vpc-(\\w{8}|\\w{17})')),
-      subnetId: new FormControl(this.cluster.spec.cloud.aws.subnetId, Validators.pattern('subnet-(\\w{8}|\\w{17})')),
       routeTableId:
           new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
       instanceProfileName: new FormControl(this.cluster.spec.cloud.aws.instanceProfileName),
@@ -54,36 +48,18 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
     this._loadVPCs();
     this.checkVPCState();
-    this._loadSubnetIds();
-    this.checkSubnetState();
-
-    this.form.controls.vpcId.valueChanges.pipe(debounceTime(1000))
-        .pipe(takeUntil(this._unsubscribe))
-        .subscribe((data) => {
-          this.clearSubnetId();
-          if (this._isVPCSelectedAndValid()) {
-            this._loadSubnetIds();
-          }
-          this.checkSubnetState();
-        });
 
     merge(this.form.controls.accessKeyId.valueChanges, this.form.controls.secretAccessKey.valueChanges)
         .pipe(debounceTime(1000))
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
-          if (this._hasRequiredCredentials() && !this._noSubnets) {
+          if (this._hasRequiredCredentials()) {
             this._loadVPCs();
           }
           this.checkVPCState();
         });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (this._isVPCSelectedAndValid() && data.vpcId !== this.form.controls.vpcId.value) {
-        this.clearSubnetId();
-        this._loadSubnetIds();
-      }
-      this.checkSubnetState();
-
       this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
                                             this._wizard.onCustomPresetsDisable.emit(true);
 
@@ -92,12 +68,6 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
 
     this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
-    });
-
-    this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if (data.spec.aws.subnetId !== '' && this.form.controls.subnetId.value === '') {
-        this.form.controls.subnetId.setValue(data.spec.aws.subnetId);
-      }
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
@@ -110,100 +80,8 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  clearSubnetId(): void {
-    this.subnetIds = [];
-    this._subnetMap = {};
-    this.form.controls.subnetId.setValue('');
-  }
-
-  getSubnetIDFormState(): string {
-    if (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '')) {
-      return 'Subnet ID';
-    } else if (this._loadingSubnetIds && !this._noSubnets) {
-      return 'Loading Subnet IDs...';
-    } else if (
-        this.form.controls.vpcId.value !== '' && this.form.controls.vpcId.valid && this.subnetIds.length === 0 ||
-        this._noSubnets) {
-      return 'No Subnet IDs available';
-    } else {
-      return 'Subnet ID';
-    }
-  }
-
-  private _loadSubnetIds(): void {
-    if (!this._hasRequiredCredentials() || this.form.controls.vpcId.value === '') {
-      return;
-    }
-
-    this._loadingSubnetIds = true;
-    this._wizard.provider(NodeProvider.AWS)
-        .accessKeyID(this.form.controls.accessKeyId.value)
-        .secretAccessKey(this.form.controls.secretAccessKey.value)
-        .vpc(this.form.controls.vpcId.value)
-        .subnets(this.cluster.spec.cloud.dc)
-        .pipe(take(1))
-        .subscribe(
-            (subnets) => {
-              this.subnetIds = subnets.sort((a, b) => {
-                return a.name.localeCompare(b.name);
-              });
-
-              this._subnetMap = {};
-              this.subnetIds.forEach(subnet => {
-                const find = this.subnetAZ.find(x => x === subnet.availability_zone);
-                if (!find) {
-                  this._subnetMap[subnet.availability_zone] = [];
-                }
-                this._subnetMap[subnet.availability_zone].push(subnet);
-              });
-
-              if (this.subnetIds.length === 0) {
-                this.form.controls.subnetId.setValue('');
-                this._noSubnets = true;
-              } else {
-                this._noSubnets = false;
-              }
-
-              this._loadingSubnetIds = false;
-              this.checkSubnetState();
-            },
-            () => {
-              this._loadingSubnetIds = false;
-            });
-  }
-
-  checkSubnetState(): void {
-    if (this.subnetIds.length === 0 && this.form.controls.subnetId.enabled) {
-      this.form.controls.subnetId.disable();
-    } else if (this.subnetIds.length > 0 && this.form.controls.subnetId.disabled) {
-      this.form.controls.subnetId.enable();
-    }
-  }
-
-  getSubnetIDHint(): string {
-    return (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || !this._isVPCSelectedAndValid())) ?
-        'Please enter your credentials first.' :
-        '';
-  }
-
-  get subnetAZ(): string[] {
-    return Object.keys(this._subnetMap);
-  }
-
-  getSubnetToAZ(az: string): AWSSubnet[] {
-    return this._subnetMap[az];
-  }
-
-  getSubnetOptionName(subnet: AWSSubnet): string {
-    return subnet.name !== '' ? subnet.name + ' (' + subnet.id + ')' : subnet.id;
-  }
-
   private _hasRequiredCredentials(): boolean {
     return !(this.form.controls.accessKeyId.value === '' || this.form.controls.secretAccessKey.value === '');
-  }
-
-  private _isVPCSelectedAndValid(): boolean {
-    return this.form.controls.vpcId.value !== '' && this.form.controls.vpcId.valid;
   }
 
   getVPCFormState(): string {
@@ -280,7 +158,6 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
           secretAccessKey: this.form.controls.secretAccessKey.value,
           securityGroup: this.form.controls.securityGroup.value,
           vpcId: this.form.controls.vpcId.value,
-          subnetId: this.form.controls.subnetId.value,
           routeTableId: this.form.controls.routeTableId.value,
           instanceProfileName: this.form.controls.instanceProfileName.value,
           roleARN: this.form.controls.roleARN.value,
