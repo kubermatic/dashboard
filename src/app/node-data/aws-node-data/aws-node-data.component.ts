@@ -65,6 +65,9 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedPreset = credentials;
+      if (!credentials) {
+        this.clearSubnetId();
+      }
     });
 
     this.awsNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -105,6 +108,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     this.subnetIds = [];
     this._subnetMap = {};
     this.awsNodeForm.controls.subnetId.setValue('');
+    this.checkSubnetState();
   }
 
   getNodeProviderData(): NodeProviderData {
