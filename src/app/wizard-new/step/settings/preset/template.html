@@ -1,0 +1,27 @@
+<form [formGroup]="form">
+  <mat-form-field fxFlex>
+    <mat-label>{{ label }}</mat-label>
+    <mat-select formControlName="preset"
+                panelClass="km-preset-dropdown">
+      <mat-option *ngFor="let presetName of presetList.names"
+                  [value]="presetName">{{presetName}}</mat-option>
+      <mat-select-trigger fxFlex
+                          fxLayout="row">
+        <div fxFlex
+             fxLayoutAlign="start">
+          {{selectedPreset}}
+        </div>
+
+        <div fxFlex
+             fxLayoutAlign="end">
+          <button *ngIf="selectedPreset"
+                  (click)="selectedPreset=undefined; $event.stopPropagation()"
+                  mat-icon-button
+                  aria-label="Clear">
+            <mat-icon inline="true">close</mat-icon>
+          </button>
+        </div>
+      </mat-select-trigger>
+    </mat-select>
+  </mat-form-field>
+</form>

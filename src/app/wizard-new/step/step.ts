@@ -4,6 +4,13 @@ export class WizardStep {
   constructor(readonly name: string, readonly component: Type<any>, readonly required = true) {}
 
   get config(): {[key: string]: WizardStep} {
-    return {config: this};
+    return {[WizardStep.Controls.Config]: this};
+  }
+}
+
+export namespace WizardStep {
+  export enum Controls {
+    // A form property that holds step config information
+    Config = 'config',
   }
 }

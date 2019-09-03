@@ -1,0 +1,110 @@
+<form [formGroup]="form"
+      fxLayout="column">
+  <mat-form-field fxFlex
+                  class="km-with-hint">
+    <mat-label>Access Key ID</mat-label>
+    <input matInput
+           formControlName="accessKeyId"
+           name="accessKeyId"
+           type="password"
+           autocomplete="off">
+    <mat-hint>
+      We need a AWS Access Key with write access. You can create one&nbsp;<a target="_blank"
+         rel="noopener"
+         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+    </mat-hint>
+    <mat-error *ngIf="hasError(controls.AccessKeyID,'required')">
+      Access key ID is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex
+                  class="km-with-hint">
+    <mat-label>Secret Access Key</mat-label>
+    <input matInput
+           formControlName="secretAccessKey"
+           name="secretAccessKey"
+           type="password"
+           autocomplete="off">
+    <mat-hint>
+      We need a AWS Secret Access Key with write access. You can create one&nbsp;<a target="_blank"
+         rel="noopener"
+         href="http://docs.aws.amazon.com/general/latest/gr/managing-aws-access-keys.html">here</a>.
+    </mat-hint>
+    <mat-error *ngIf="hasError(controls.SecretAccessKey, 'required')">
+      Secret access key is <strong>required</strong>.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex
+                  class="km-with-hint"
+                  *ngIf="!hideOptional">
+
+    <mat-label>VPC</mat-label>
+    <input matInput
+           formControlName="vpcId"
+           name="vpcId"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <!--      <mat-option *ngFor="let vpc of vpcIds"-->
+      <!--                  [value]="vpc.vpcId">-->
+      <!--        {{getVPCOptionName(vpc)}}-->
+      <!--      </mat-option>-->
+    </mat-autocomplete>
+    <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
+    <mat-error *ngIf="hasError(controls.VPCID, 'pattern')">
+      The VPC ID needs to look similar to 'vpc-3a2f9851'.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex
+                  class="km-with-hint"
+                  *ngIf="!hideOptional">
+    <mat-label>Security Group ID</mat-label>
+    <input matInput
+           formControlName="securityGroup"
+           name="securityGroup"
+           type="text"
+           autocomplete="off">
+    <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
+    <mat-error *ngIf="hasError(controls.SecurityGroup, 'pattern')">
+      The security group ID need to look similar to 'sg-a2c195ca'.
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field fxFlex
+                  class="km-with-hint"
+                  *ngIf="!hideOptional">
+    <mat-label>Route Table ID</mat-label>
+    <input matInput
+           formControlName="routeTableId"
+           name="routeTableId"
+           type="text"
+           autocomplete="off">
+    <mat-hint>When specified, all worker nodes will be attached to this Route table. If not specified, the default Route Table will be used.</mat-hint>
+    <mat-error *ngIf="hasError(controls.RouteTableID, 'pattern')">
+      The route table ID needs to look similar to 'rtb-0bd18f60'.
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field fxFlex
+                  class="km-with-hint"
+                  *ngIf="!hideOptional">
+    <mat-label>Instance Profile Name</mat-label>
+    <input matInput
+           formControlName="instanceProfileName"
+           name="instanceProfileName"
+           type="text"
+           autocomplete="off">
+    <mat-hint>When specified, the worker nodes will use this instance profile. If not specified, a new instance profile will be created.</mat-hint>
+  </mat-form-field>
+  <mat-form-field fxFlex
+                  class="km-with-hint"
+                  *ngIf="!hideOptional">
+    <mat-label>Control plane role (ARN)</mat-label>
+    <input matInput
+           formControlName="roleARN"
+           name="roleARN"
+           type="text"
+           autocomplete="off">
+    <mat-hint>When specified, the Kubernetes control plane will use this role when communicating with the AWS API. If not specified, a new role will be created.</mat-hint>
+  </mat-form-field>
+</form>

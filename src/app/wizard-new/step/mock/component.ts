@@ -6,4 +6,7 @@ import {StepBase} from '../base';
   template: 'MOCKED',
 })
 export class MockStepComponent extends StepBase {
+  constructor() {
+    super();
+  }
 }

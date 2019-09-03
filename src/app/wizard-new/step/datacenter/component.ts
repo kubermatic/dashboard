@@ -30,7 +30,7 @@ export class DatacenterStepComponent extends StepBase implements OnInit, OnDestr
       [Controls.Datacenter]: new FormControl('', [Validators.required]),
     });
 
-    this._wizard.providerChanges$.pipe(takeUntil(this._unsubscribe))
+    this._wizard.providerChanges.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(_ => this._dcService.getDataCenters()))
         .subscribe(datacenters => {
           const providerDatacenters: DataCenterEntity[] = [];
@@ -38,12 +38,14 @@ export class DatacenterStepComponent extends StepBase implements OnInit, OnDestr
             if (datacenter.seed) {
               continue;
             }
+
             const provider = getDatacenterProvider(datacenter);
             const clusterProvider = this._wizard.provider;
             if (provider === clusterProvider) {
               providerDatacenters.push(datacenter);
             }
           }
+
           this.datacenters = providerDatacenters;
         });
 
