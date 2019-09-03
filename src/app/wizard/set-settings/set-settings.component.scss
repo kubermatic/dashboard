@@ -20,7 +20,8 @@
     margin: $baseline-grid;
     user-select: none;
 
-    .km-icon-arrow-down {
+    .km-icon-arrow-down,
+    .km-icon-arrow-up {
       background: $medium-text-color;
     }
   }

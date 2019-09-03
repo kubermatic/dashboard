@@ -35,15 +35,16 @@
   </div>
 
   <div class="km-wizard-settings-extended-wrapper"
-       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.packet && !cluster.spec.cloud.bringyourown && !isExtended"
+       *ngIf="!cluster.spec.cloud.hetzner && !cluster.spec.cloud.packet && !cluster.spec.cloud.bringyourown"
        fxFlex>
     <div class="km-wizard-settings-extended-divider"
          fxFlex>
     </div>
     <div class="km-wizard-settings-extended-btn"
          (click)="extend()">
-      <span>Show extended options&nbsp;</span>
-      <i class="km-icon-arrow-down"></i>
+      <span *ngIf="!isExtended">Show extended options&nbsp;</span>
+      <span *ngIf="isExtended">Hide extended options&nbsp;</span>
+      <i [ngClass]="isExtended ? 'km-icon-arrow-up' : 'km-icon-arrow-down'"></i>
     </div>
     <div class="km-wizard-settings-extended-divider"
          fxFlex>
