@@ -190,6 +190,15 @@
               </div>
             </km-property>
 
+            <km-property *ngIf="element.spec.sshUserName">
+              <div key
+                   matTooltip="Use this username if you need to connect to your nodes via SSH.">
+                SSH key Username
+                <i class="fa fa-info-circle"></i>
+              </div>
+              <div value>{{element.spec.sshUserName}}</div>
+            </km-property>
+
             <!-- Other provider-specific properties. -->
             <km-property *ngIf="element.spec.cloud.aws">
               <div key>Disk Type</div>
