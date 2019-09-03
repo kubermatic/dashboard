@@ -1,5 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import {EMPTY, merge, Observable, onErrorResumeNext, Subject} from 'rxjs';
+import {catchError, debounceTime, map, switchMap, takeUntil} from 'rxjs/operators';
+
+import {PresetsService} from '../../../../../core/services';
+import {AWSVPC} from '../../../../../shared/entity/provider/aws/AWS';
+import {NodeProvider} from '../../../../../shared/model/NodeProviderConstants';
 import {StepBase} from '../../../base';
 
 enum Controls {
@@ -19,8 +25,11 @@ enum Controls {
 })
 export class AWSProviderComponent extends StepBase implements OnInit, OnDestroy {
   hideOptional = false;
+  vpcIds: AWSVPC[] = [];
 
-  constructor(private readonly _builder: FormBuilder) {
+  private readonly _unsubscribe = new Subject<void>();
+
+  constructor(private readonly _builder: FormBuilder, private readonly _presets: PresetsService) {
     super(Controls);
   }
 
@@ -34,11 +43,43 @@ export class AWSProviderComponent extends StepBase implements OnInit, OnDestroy 
       [Controls.InstanceProfileName]: new FormControl(''),
       [Controls.RoleARN]: new FormControl(''),
     });
+
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(_ => this._wizard.enablePresets(this.areControlsEmpty()));
+
+    this._wizard.presetChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(preset => Object.values(Controls).forEach(control => this.enable(!preset, control)));
+
+    merge(this.control(Controls.AccessKeyID).valueChanges, this.control(Controls.SecretAccessKey).valueChanges)
+        .pipe(debounceTime(this._debounceTime))
+        .pipe(switchMap(value => {
+          this._clearVPC();
+          return this._vpcListObservable();
+        }))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((vpcs: AWSVPC[]) => {
+          this.vpcIds = vpcs;
+          const defaultVPC = vpcs.find(vpc => vpc.isDefault);
+          this.control(Controls.VPCID).setValue(defaultVPC ? defaultVPC.vpcId : undefined);
+        });
   }
 
-  hasError(control: Controls, errorName: string): boolean {
-    return this.control(control).hasError(errorName);
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
-  ngOnDestroy(): void {}
+  private _vpcListObservable(): Observable<AWSVPC[]> {
+    return this._presets.provider(NodeProvider.AWS)
+        .accessKeyID(this.form.controls.accessKeyId.value)
+        .secretAccessKey(this.form.controls.secretAccessKey.value)
+        .vpcs(this._wizard.datacenter)
+        .pipe(map(vpcs => vpcs.sort((a, b) => a.name.localeCompare(b.name))))
+        .pipe(catchError(() => onErrorResumeNext(EMPTY)));
+  }
+
+  private _clearVPC(): void {
+    this.vpcIds = [];
+    this.control(Controls.VPCID).setValue(undefined);
+  }
 }

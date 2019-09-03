@@ -40,6 +40,7 @@ export class ClusterStepComponent extends StepBase implements OnInit, OnDestroy 
     });
 
     this._setDefaultClusterType();
+    this._wizard.clusterType = this.control(Controls.Type).value as ClusterType;
 
     this._api.getMasterVersions(this.controlValue(Controls.Type))
         .pipe(first())
@@ -47,9 +48,10 @@ export class ClusterStepComponent extends StepBase implements OnInit, OnDestroy 
 
     this.control(Controls.Type)
         .valueChanges.pipe(takeUntil(this._unsubscribe))
-        .pipe(switchMap(() => {
+        .pipe(switchMap((type: ClusterType) => {
           this.masterVersions = [];
           this.control(Controls.Version).reset();
+          this._wizard.clusterType = type;
 
           return this._api.getMasterVersions(this.controlValue(Controls.Type) as ClusterType);
         }))

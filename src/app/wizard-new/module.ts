@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
-import {NodeDataModule} from '../node-data/node-data.module';
+import {NodeDataModule} from '../node-data-new/module';
 import {SharedModule} from '../shared/shared.module';
 
 import {WizardComponent} from './component';
@@ -11,6 +11,7 @@ import {DatacenterStepComponent} from './step/datacenter/component';
 import {MockStepComponent} from './step/mock/component';
 import {ProviderStepComponent} from './step/provider/component';
 import {SettingsStepComponent} from './step/settings/component';
+import {NodeDataComponent} from './step/settings/nodedata/component';
 import {PresetsComponent} from './step/settings/preset/component';
 import {AWSProviderComponent} from './step/settings/provider/aws/component';
 
@@ -26,6 +27,7 @@ const entryComponents: any[] = [
   DatacenterStepComponent,
   SettingsStepComponent,
   AWSProviderComponent,
+  NodeDataComponent,
 ];
 
 @NgModule({

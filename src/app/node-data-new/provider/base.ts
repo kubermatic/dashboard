@@ -1,20 +1,12 @@
+import {Input} from '@angular/core';
 import {AbstractControl, FormGroup} from '@angular/forms';
 
-import {CoreModule} from '../../core/core.module';
-import {NewWizardService} from '../../core/services';
-
-export class StepBase {
-  readonly controls: {[key: string]: string};
-
-  protected readonly _wizard: NewWizardService;
+export class NodeDataProviderBase {
   protected readonly _debounceTime = 250;
 
-  private _form: FormGroup;
+  @Input('form') private _form: FormGroup;
 
-  constructor(controls: {[key: number]: string} = {}) {
-    this._wizard = CoreModule.injector.get(NewWizardService);
-    this.controls = controls;
-  }
+  constructor() {}
 
   set form(form: FormGroup) {
     if (!this._form) {
@@ -39,16 +31,6 @@ export class StepBase {
     return this.form.controls[name] ? this.form.controls[name].value : undefined;
   }
 
-  next(): void {
-    this._wizard.stepper.next();
-  }
-
-  reset(controls: string[]): void {
-    Object.keys(this._form.controls).filter(key => !controls.includes(key)).forEach(key => {
-      this._form.removeControl(key);
-    });
-  }
-
   isEnabled(name: string): boolean {
     return this.form.controls[name].enabled;
   }
@@ -61,10 +43,6 @@ export class StepBase {
     if (!enable && this.control(name).enabled) {
       this.control(name).disable();
     }
-  }
-
-  areControlsEmpty(): boolean {
-    return Object.values(this.controls).every(control => !this.controlValue(control));
   }
 
   hasError(control: string, errorName: string): boolean {

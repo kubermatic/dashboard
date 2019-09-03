@@ -71,8 +71,4 @@ export class WizardComponent implements OnInit, OnDestroy, AfterViewInit {
       this._stepList.toArray()[i].stepControl = componentRef.instance.form as any;
     });
   }
-
-  isStepValid(stepNr: number): boolean {
-    return this._steps.controls[stepNr].valid;
-  }
 }

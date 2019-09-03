@@ -45,10 +45,10 @@
            name="vpcId"
            [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
-      <!--      <mat-option *ngFor="let vpc of vpcIds"-->
-      <!--                  [value]="vpc.vpcId">-->
-      <!--        {{getVPCOptionName(vpc)}}-->
-      <!--      </mat-option>-->
+      <mat-option *ngFor="let vpc of vpcIds"
+                  [value]="vpc.vpcId">
+        {{vpc.displayName}}
+      </mat-option>
     </mat-autocomplete>
     <mat-hint>When specified, all worker nodes will be attached to this VPC. If not specified, the default VPC will be used.</mat-hint>
     <mat-error *ngIf="hasError(controls.VPCID, 'pattern')">

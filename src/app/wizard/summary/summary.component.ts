@@ -93,7 +93,7 @@ export class SummaryComponent implements OnInit {
   }
 
   noIpsLeft(cluster: ClusterEntity, nodeCount: number): boolean {
-    const ipCount = getIpCount(cluster);
+    const ipCount = getIpCount(cluster.spec.machineNetworks);
 
     if (!!ipCount && ipCount > 0) {
       return !((ipCount - nodeCount) >= 0);

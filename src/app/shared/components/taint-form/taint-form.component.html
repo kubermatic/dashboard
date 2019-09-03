@@ -1,7 +1,7 @@
 <mat-card-header>
   <mat-card-title>{{title}}</mat-card-title>
 </mat-card-header>
-<form [formGroup]="taintsForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div formArrayName="taints">
     <div *ngFor="let taint of taintArray.controls; let i = index;"

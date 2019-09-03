@@ -25,13 +25,13 @@ export class TaintFormComponent implements OnInit {
   @Input() title = 'Taints';
   @Input() taints: Taint[];
   @Output() taintsChange = new EventEmitter<object>();
-  taintsForm: FormGroup;
+  form: FormGroup;
   availableEffects = Taint.getAvailableEffects();
 
   constructor(private readonly _formBuilder: FormBuilder) {}
 
   get taintArray(): FormArray {
-    return this.taintsForm.get('taints') as FormArray;
+    return this.form.get('taints') as FormArray;
   }
 
   static filterNullifiedTaints(taints: Taint[]): Taint[] {
@@ -48,7 +48,7 @@ export class TaintFormComponent implements OnInit {
 
   ngOnInit(): void {
     // Initialize taints form.
-    this.taintsForm = this._formBuilder.group({taints: this._formBuilder.array([])});
+    this.form = this._formBuilder.group({taints: this._formBuilder.array([])});
 
     // Make sure that taints array exist.
     if (!this.taints) {
@@ -124,7 +124,7 @@ export class TaintFormComponent implements OnInit {
       elem.setErrors({validLabelKeyUniqueness: true});
     }
 
-    this.taintsForm.updateValueAndValidity();
+    this.form.updateValueAndValidity();
   }
 
   private _isKeyDuplicated(index: number): boolean {
