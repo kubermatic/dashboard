@@ -21,6 +21,8 @@ export enum PresetsState {
 export class PresetsComponent extends StepBase implements OnInit, OnDestroy {
   @Input('baseForm') private readonly _baseForm: FormGroup;
 
+  readonly Controls = Presets.Controls;
+
   presetList = new PresetListEntity();
   presetsLoaded = false;
 
@@ -58,23 +60,14 @@ export class PresetsComponent extends StepBase implements OnInit, OnDestroy {
           this.presetList = presetList;
         });
 
+    this._wizard.datacenterChanges.pipe(takeUntil(this._unsubscribe)).subscribe(_ => this._reset());
+
     this.control(Presets.Controls.Preset).valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(preset => {
       this._wizard.preset = preset;
     });
 
-    this._wizard.presetStatusChanges.pipe(takeUntil(this._unsubscribe)).subscribe(enable => {
-      if (enable) {
-        this.control(Presets.Controls.Preset).enable();
-      } else {
-        this.control(Presets.Controls.Preset).disable();
-      }
-    });
-    //
-    // this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe))
-    //     .subscribe(preset => this._selectedPreset = preset);
-    //
-    // this._wizard.onCustomPresetsDisable.pipe(takeUntil(this._unsubscribe))
-    //     .subscribe(disable => this._disabled = disable);
+    this._wizard.presetStatusChanges.pipe(takeUntil(this._unsubscribe))
+        .subscribe(enable => this.enable(enable, Presets.Controls.Preset));
   }
 
   ngOnDestroy(): void {

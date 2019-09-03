@@ -10,12 +10,8 @@ export class ProviderConfig {
     [NodeProvider.AWS]: AWSProviderComponent,
   };
 
-  static GetProviderComponent(provider: NodeProvider): Type<any> {
+  static GetComponent(provider: NodeProvider): Type<any> {
     const component = this._providerConfig[provider];
-    if (component) {
-      return component;
-    }
-
-    return MockStepComponent;
+    return component ? component : MockStepComponent;
   }
 }
