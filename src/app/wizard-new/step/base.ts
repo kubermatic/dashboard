@@ -4,10 +4,13 @@ import {CoreModule} from '../../core/core.module';
 import {NewWizardService} from '../../core/services';
 
 export class StepBase {
+  readonly controls: {[key: string]: string};
+
   protected readonly _wizard: NewWizardService;
 
-  constructor() {
+  constructor(controls: {[key: number]: string} = {}) {
     this._wizard = CoreModule.injector.get(NewWizardService);
+    this.controls = controls;
   }
 
   private _form: FormGroup;
@@ -37,5 +40,11 @@ export class StepBase {
 
   next(): void {
     this._wizard.stepper.next();
+  }
+
+  reset(controls: string[]): void {
+    Object.keys(this._form.controls).filter(key => !controls.includes(key)).forEach(key => {
+      this._form.removeControl(key);
+    });
   }
 }

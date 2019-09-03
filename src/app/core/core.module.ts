@@ -31,7 +31,7 @@ import {
   ParamsService,
   WizardService,
   NewWizardService,
-  RBACService
+  RBACService, PresetsService
 } from './services';
 import {GlobalModule} from './services/global/global.module';
 import {HistoryService} from './services/history/history.service';
@@ -40,6 +40,7 @@ import {SettingsService} from './services/settings/settings.service';
 import {StepsService} from './services/wizard/steps.service';
 import {ClusterNameGenerator} from './util/name-generator.service';
 import {ProgressBrowserXhr} from './util/ProgressBrowserXhr';
+import {GlobalModule} from "./services/global/global.module";
 
 const modules: any[] = [
   CommonModule,
@@ -82,6 +83,7 @@ const services: any[] = [
   HistoryService,
   SettingsService,
   RBACService,
+  PresetsService,
 ];
 
 const interceptors: any[] = [

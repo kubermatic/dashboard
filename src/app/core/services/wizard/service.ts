@@ -6,8 +6,10 @@ import {NodeProvider} from '../../../shared/model/NodeProviderConstants';
 
 @Injectable()
 export class NewWizardService {
-  providerChanges$ = new EventEmitter<NodeProvider>();
-  datacenterChanges$ = new EventEmitter();
+  readonly providerChanges = new EventEmitter<NodeProvider>();
+  readonly datacenterChanges = new EventEmitter<string>();
+  // True - enabled, false - disabled
+  readonly presetStatusChanges = new EventEmitter<boolean>();
 
   private _clusterEntity: ClusterEntity = {
     spec: {
@@ -15,6 +17,7 @@ export class NewWizardService {
     } as ClusterSpec,
   } as ClusterEntity;
   private _stepper: MatStepper;
+  private _preset: string;
 
   set cluster(cluster: ClusterEntity) {
     this._clusterEntity = {...this._clusterEntity, ...cluster};
@@ -27,7 +30,7 @@ export class NewWizardService {
   set provider(provider: NodeProvider) {
     this._clusterEntity.spec.cloud = {} as CloudSpec;
     this._clusterEntity.spec.cloud[provider] = {};
-    this.providerChanges$.emit(provider);
+    this.providerChanges.emit(provider);
   }
 
   get provider(): NodeProvider {
@@ -40,7 +43,7 @@ export class NewWizardService {
 
   set datacenter(datacenter: string) {
     this._clusterEntity.spec.cloud.dc = datacenter;
-    this.datacenterChanges$.emit(datacenter);
+    this.datacenterChanges.emit(datacenter);
   }
 
   get datacenter(): string {
@@ -53,5 +56,17 @@ export class NewWizardService {
 
   get stepper(): MatStepper {
     return this._stepper;
+  }
+
+  set preset(preset: string) {
+    this._preset = preset;
+  }
+
+  get preset(): string {
+    return this._preset;
+  }
+
+  enablePresets(enable: boolean): void {
+    this.presetStatusChanges.emit(enable);
   }
 }
