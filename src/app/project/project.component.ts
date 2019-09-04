@@ -37,7 +37,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
       private readonly _clusterService: ClusterService, private readonly _projectService: ProjectService,
       private readonly _userService: UserService, private readonly _matDialog: MatDialog,
       private readonly _googleAnalyticsService: GoogleAnalyticsService, private readonly _router: Router,
-      private readonly _cookie: CookieService) {}
+      private readonly _cookieService: CookieService) {}
 
   ngOnInit(): void {
     this.dataSource.sort = this.sort;
@@ -206,8 +206,8 @@ export class ProjectComponent implements OnInit, OnDestroy {
   }
 
   private _shouldRedirectToCluster(): boolean {
-    const autoredirect: boolean = this._cookie.get(Auth.Cookie.Autoredirect) === 'true';
-    this._cookie.delete(Auth.Cookie.Autoredirect);
+    const autoredirect: boolean = this._cookieService.get(Auth.Cookie.Autoredirect) === 'true';
+    this._cookieService.delete(Auth.Cookie.Autoredirect);
     return this.projects.length === 1 && autoredirect;
   }
 
