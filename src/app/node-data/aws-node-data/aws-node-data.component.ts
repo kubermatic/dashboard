@@ -1,13 +1,13 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
-import {iif, Subject} from 'rxjs';
-import {take, takeUntil} from 'rxjs/operators';
+import {EMPTY, iif, Subject} from 'rxjs';
+import {switchMap, take, takeUntil} from 'rxjs/operators';
 
-import {ApiService, WizardService} from '../../core/services';
+import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
-import {AWSSubnet} from '../../shared/entity/provider/aws/AWS';
-import {NodeInstanceFlavor, NodeProvider} from '../../shared/model/NodeProviderConstants';
+import {AWSSize, AWSSubnet} from '../../shared/entity/provider/aws/AWS';
+import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
 
 @Component({
@@ -22,22 +22,23 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   @Input() projectId: string;
   @Input() seedDCName: string;
 
-  instanceTypes: NodeInstanceFlavor[] = this._wizard.provider(NodeProvider.AWS).flavors();
+  sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
-  awsNodeForm: FormGroup;
+  form: FormGroup;
   tags: FormArray;
   hideOptional = true;
   subnetIds: AWSSubnet[] = [];
 
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
   private _loadingSubnetIds = false;
+  private _loadingSizes = false;
   private _noSubnets = false;
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
 
   constructor(
-      private readonly _addNodeService: NodeDataService, private readonly _wizard: WizardService,
-      private readonly _apiService: ApiService) {}
+      private readonly _addNodeService: NodeDataService, private readonly _wizardService: WizardService,
+      private readonly _apiService: ApiService, private readonly _dcService: DatacenterService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -49,9 +50,8 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
         }));
       }
     }
-
-    this.awsNodeForm = new FormGroup({
-      type: new FormControl(this.nodeData.spec.cloud.aws.instanceType, Validators.required),
+    this.form = new FormGroup({
+      size: new FormControl({value: this.nodeData.spec.cloud.aws.instanceType, disabled: true}, Validators.required),
       disk_size: new FormControl(this.nodeData.spec.cloud.aws.diskSize, Validators.required),
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
@@ -59,26 +59,22 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       subnetId: new FormControl(this.nodeData.spec.cloud.aws.subnetId, Validators.required),
     });
 
-    if (this.nodeData.spec.cloud.aws.instanceType === '') {
-      this.awsNodeForm.controls.type.setValue(this.instanceTypes[0].id);
-    }
-
-    this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
+    this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(credentials => {
       this._selectedPreset = credentials;
       if (!credentials) {
         this.clearSubnetId();
       }
     });
 
-    this.awsNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.hideOptional = data.hideOptional;
     });
 
-    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if ((data.cloudSpec.aws.vpcId !== '' && data.cloudSpec.aws.accessKeyId !== '' &&
            data.cloudSpec.aws.secretAccessKey !== '') ||
           this._selectedPreset) {
@@ -100,6 +96,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
 
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
 
+    this._reloadSizes();
     this._loadSubnetIds();
     this.checkSubnetState();
   }
@@ -111,32 +108,32 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   clearSubnetId(): void {
     this.subnetIds = [];
     this._subnetMap = {};
-    this.awsNodeForm.controls.subnetId.setValue('');
+    this.form.controls.subnetId.setValue('');
     this.checkSubnetState();
   }
 
   getNodeProviderData(): NodeProviderData {
-    const azFromSubnet = this.getAZFromSubnet(this.awsNodeForm.controls.subnetId.value);
+    const azFromSubnet = this.getAZFromSubnet(this.form.controls.subnetId.value);
     const tagMap = {};
-    for (const i in this.awsNodeForm.controls.tags.value) {
-      if (this.awsNodeForm.controls.tags.value[i].key !== '' && this.awsNodeForm.controls.tags.value[i].value !== '') {
-        tagMap[this.awsNodeForm.controls.tags.value[i].key] = this.awsNodeForm.controls.tags.value[i].value;
+    for (const i in this.form.controls.tags.value) {
+      if (this.form.controls.tags.value[i].key !== '' && this.form.controls.tags.value[i].value !== '') {
+        tagMap[this.form.controls.tags.value[i].key] = this.form.controls.tags.value[i].value;
       }
     }
 
     return {
       spec: {
         aws: {
-          instanceType: this.awsNodeForm.controls.type.value,
-          diskSize: this.awsNodeForm.controls.disk_size.value,
-          ami: this.awsNodeForm.controls.ami.value,
+          instanceType: this.form.controls.size.value,
+          diskSize: this.form.controls.disk_size.value,
+          ami: this.form.controls.ami.value,
           tags: tagMap,
-          volumeType: this.awsNodeForm.controls.disk_type.value,
-          subnetId: this.awsNodeForm.controls.subnetId.value,
+          volumeType: this.form.controls.disk_type.value,
+          subnetId: this.form.controls.subnetId.value,
           availabilityZone: azFromSubnet,
         },
       },
-      valid: this.awsNodeForm.valid,
+      valid: this.form.valid,
     };
   }
 
@@ -145,7 +142,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   addTag(): void {
-    this.tags = this.awsNodeForm.get('tags') as FormArray;
+    this.tags = this.form.get('tags') as FormArray;
     this.tags.push(new FormGroup({
       key: new FormControl(''),
       value: new FormControl(''),
@@ -153,7 +150,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   deleteTag(index: number): void {
-    const arrayControl = this.awsNodeForm.get('tags') as FormArray;
+    const arrayControl = this.form.get('tags') as FormArray;
     arrayControl.removeAt(index);
   }
 
@@ -166,13 +163,64 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
     return (!!this.cloudSpec.aws.accessKeyId && !!this.cloudSpec.aws.secretAccessKey) || !this.isInWizard();
   }
 
+  getSizeHint(): string {
+    if (this.sizes.length > 0) {
+      return '';
+    }
+
+    if (this._loadingSizes) {
+      return `Loading instance types...`;
+    } else {
+      return '';
+    }
+  }
+
+  private _reloadSizes(): void {
+    this._loadingSizes = true;
+
+    iif(() => !!this.cloudSpec.dc, this._dcService.getDataCenter(this.cloudSpec.dc), EMPTY)
+        .pipe(switchMap(dc => {
+          return iif(
+              () => this.isInWizard(),
+              this._wizardService.provider(NodeProvider.AWS).region(dc.spec.aws.region).flavors(),
+              this._apiService.getAWSSizes(this.projectId, this.seedDCName, this.clusterId));
+        }))
+        .pipe(takeUntil(this._unsubscribe))
+        .subscribe((data) => {
+          this._loadingSizes = false;
+          this._enableSizes(data);
+        }, () => this._disableSizes());
+  }
+
+  private _disableSizes(): void {
+    this._loadingSizes = false;
+    this.sizes = [];
+    this.form.controls.size.setValue('');
+    this.form.controls.size.disable();
+  }
+
+  private _enableSizes(data: AWSSize[]): void {
+    this._loadingSizes = false;
+    this.form.controls.size.enable();
+    this.sizes = data.sort((a, b) => a.name.localeCompare(b.name));
+
+    if (this.sizes.length > 0) {
+      if (this.nodeData.spec.cloud.aws.instanceType !== '' &&
+          this.sizes.filter(value => value.name === this.nodeData.spec.cloud.aws.instanceType).length > 0) {
+        this.form.controls.size.setValue(this.nodeData.spec.cloud.aws.instanceType);
+      } else {
+        this.form.controls.size.setValue(this.sizes[0].name);
+      }
+    }
+  }
+
   private _loadSubnetIds(): void {
     if ((!!this._hasCredentials() && !!this.cloudSpec.aws.vpcId) || !!this._selectedPreset) {
       this._loadingSubnetIds = true;
     }
 
     iif(() => this.isInWizard(),
-        this._wizard.provider(NodeProvider.AWS)
+        this._wizardService.provider(NodeProvider.AWS)
             .accessKeyID(this.cloudSpec.aws.accessKeyId)
             .secretAccessKey(this.cloudSpec.aws.secretAccessKey)
             .vpc(this.cloudSpec.aws.vpcId)
@@ -197,7 +245,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
               });
 
               if (this.subnetIds.length === 0) {
-                this.awsNodeForm.controls.subnetId.setValue('');
+                this.form.controls.subnetId.setValue('');
                 this._noSubnets = true;
               } else {
                 this._noSubnets = false;
@@ -252,10 +300,10 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   }
 
   checkSubnetState(): void {
-    if (this.subnetIds.length === 0 && this.awsNodeForm.controls.subnetId.enabled) {
-      this.awsNodeForm.controls.subnetId.disable();
-    } else if (this.subnetIds.length > 0 && this.awsNodeForm.controls.subnetId.disabled) {
-      this.awsNodeForm.controls.subnetId.enable();
+    if (this.subnetIds.length === 0 && this.form.controls.subnetId.enabled) {
+      this.form.controls.subnetId.disable();
+    } else if (this.subnetIds.length > 0 && this.form.controls.subnetId.disabled) {
+      this.form.controls.subnetId.enable();
     }
   }
 }

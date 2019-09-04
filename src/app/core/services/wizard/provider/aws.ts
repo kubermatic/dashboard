@@ -1,8 +1,8 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {AWSAvailabilityZone, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
-import {NodeInstanceFlavor, NodeInstanceFlavors, NodeProvider} from '../../../../shared/model/NodeProviderConstants';
+import {AWSAvailabilityZone, AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
+import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';
 
@@ -32,6 +32,13 @@ export class AWS extends Provider {
     return this;
   }
 
+  region(region: string): AWS {
+    if (region) {
+      this._headers = this._headers.set(AWS.Header.Region, region);
+    }
+    return this;
+  }
+
   vpc(vpc: string): AWS {
     if (vpc) {
       this._headers = this._headers.set(AWS.Header.VPC, vpc);
@@ -55,10 +62,6 @@ export class AWS extends Provider {
     return this._http.get<AWSVPC[]>(url, {headers: this._headers});
   }
 
-  flavors(): NodeInstanceFlavor[] {
-    return NodeInstanceFlavors.AWS;
-  }
-
   subnets(dc: string): Observable<AWSSubnet[]> {
     this._setRequiredHeaders(AWS.Header.AccessKeyID, AWS.Header.SecretAccessKey, AWS.Header.VPC);
 
@@ -68,6 +71,14 @@ export class AWS extends Provider {
     const url = `${this._restRoot}/providers/${this._provider}/${dc}/subnets`;
     return this._http.get<AWSSubnet[]>(url, {headers: this._headers});
   }
+
+  flavors(): Observable<AWSSize[]> {
+    this._setRequiredHeaders(AWS.Header.Region);
+    if (!this._hasRequiredHeaders()) {
+      return EMPTY;
+    }
+    return this._http.get<AWSSize[]>(this._url, {headers: this._headers});
+  }
 }
 
 export namespace AWS {
@@ -75,5 +86,6 @@ export namespace AWS {
     AccessKeyID = 'AccessKeyID',
     SecretAccessKey = 'SecretAccessKey',
     VPC = 'VPC',
+    Region = 'Region',
   }
 }

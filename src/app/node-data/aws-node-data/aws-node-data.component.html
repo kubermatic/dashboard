@@ -1,17 +1,18 @@
-<form [formGroup]="awsNodeForm"
+<form [formGroup]="form"
       fxLayout="column">
   <div fxFlex
        class="mat-select-container">
     <mat-form-field>
       <mat-label>Node Size*</mat-label>
-      <mat-select formControlName="type"
+      <mat-select formControlName="size"
                   [panelClass]="isInWizard() ? '' : 'km-add-dialog-dropdown'"
                   disableOptionCentering>
-        <mat-option *ngFor="let type of instanceTypes"
-                    [value]="type.id">
-          {{type}}
+        <mat-option *ngFor="let size of sizes"
+                    [value]="size.name">
+          {{size.name}} ({{size.vcpus}} vCPU, {{size.memory}} GB RAM, {{size.price | number: '1.2-5'}} USD per hour)
         </mat-option>
       </mat-select>
+      <mat-hint>{{getSizeHint()}}</mat-hint>
     </mat-form-field>
   </div>
 
@@ -77,7 +78,7 @@
   <div class="km-form-group-tags"
        *ngIf="!hideOptional">
     <div fxFlex="100%"
-         *ngFor="let tag of getTagForm(awsNodeForm); let i=index"
+         *ngFor="let tag of getTagForm(form); let i=index"
          formArrayName="tags">
       <div class="km-form-group-tags-inner"
            [formGroupName]="i">
