@@ -22,6 +22,7 @@ export class NodeSpec {
   cloud: NodeCloudSpec;
   operatingSystem: OperatingSystemSpec;
   versions?: NodeVersionInfo;
+  sshUserName?: string;
   labels?: object;
   taints?: Taint[];
 }
