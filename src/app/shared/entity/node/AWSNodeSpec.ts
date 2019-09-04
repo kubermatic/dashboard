@@ -4,5 +4,6 @@ export class AWSNodeSpec {
   volumeType: string;
   ami: string;
   tags: object;
+  subnetId: string;
   availabilityZone: string;
 }

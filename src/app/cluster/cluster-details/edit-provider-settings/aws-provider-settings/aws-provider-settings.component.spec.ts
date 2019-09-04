@@ -62,7 +62,6 @@ describe('AWSProviderSettingsComponent', () => {
       accessKeyId: '',
       secretAccessKey: '',
       vpcId: '',
-      subnetId: '',
       routeTableId: '',
       securityGroup: '',
       instanceProfileName: '',

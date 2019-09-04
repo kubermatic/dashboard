@@ -45,6 +45,10 @@ export class NodeDeploymentListComponent implements OnInit {
     this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
         .pipe(switchMap(project => this._userService.currentUserGroup(project.id)))
         .subscribe(userGroup => this._currentGroupConfig = this._userService.userGroupConfig(userGroup));
+
+    if (this.cluster.spec.cloud.aws) {
+      this.displayedColumns = ['status', 'name', 'replicas', 'ver', 'availabilityZone', 'os', 'created', 'actions'];
+    }
   }
 
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
