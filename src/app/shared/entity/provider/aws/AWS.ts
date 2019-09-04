@@ -40,3 +40,11 @@ export class AWSCidrBlockSet {
   state: string;
   statusMessage: string;
 }
+
+export class AWSSize {
+  name: string;
+  pretty_name: string;
+  memory: number;
+  vcpus: number;
+  price: number;
+}
