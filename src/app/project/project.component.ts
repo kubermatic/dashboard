@@ -207,7 +207,7 @@ export class ProjectComponent implements OnInit, OnDestroy {
 
   private _shouldRedirectToCluster(): boolean {
     const autoredirect: boolean = this._cookieService.get(Auth.Cookie.Autoredirect) === 'true';
-    this._cookieService.delete(Auth.Cookie.Autoredirect);
+    this._cookieService.delete(Auth.Cookie.Autoredirect, '/');
     return this.projects.length === 1 && autoredirect;
   }
 
