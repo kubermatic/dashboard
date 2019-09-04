@@ -73,7 +73,8 @@ export class AWS extends Provider {
   }
 
   flavors(): Observable<AWSSize[]> {
-    if (!this._headers.get(AWS.Header.Region)) {
+    this._setRequiredHeaders(AWS.Header.Region);
+    if (!this._hasRequiredHeaders()) {
       return EMPTY;
     }
     return this._http.get<AWSSize[]>(this._url, {headers: this._headers});
