@@ -50,4 +50,9 @@
          fxFlex>
     </div>
   </div>
+
+  <kubermatic-extended-options [cluster]="cluster"
+                               [nodeData]="nodeData"
+                               *ngIf="isExtended"></kubermatic-extended-options>
+
 </div>

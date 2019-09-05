@@ -1,0 +1,44 @@
+<div fxLayout="row"
+     fxLayout.md="column"
+     fxLayout.sm="column"
+     fxLayout.xs="column"
+     fxLayoutGap="30px">
+  <mat-card fxFlex="50%"
+            class="km-ext-opt">
+    <mat-card-content fxLayout="column">
+
+      <kubermatic-azure-provider-options *ngIf="cluster.spec.cloud.azure"
+                                         [cluster]="cluster"></kubermatic-azure-provider-options>
+
+      <kubermatic-gcp-provider-options *ngIf="cluster.spec.cloud.gcp"
+                                       [cluster]="cluster"></kubermatic-gcp-provider-options>
+
+      <kubermatic-vsphere-provider-options *ngIf="cluster.spec.cloud.vsphere"
+                                           [cluster]="cluster"></kubermatic-vsphere-provider-options>
+
+    </mat-card-content>
+  </mat-card>
+  <mat-card fxFlex="50%"
+            class="km-ext-opt">
+    <mat-card-content fxLayout="column">
+
+      <kubermatic-azure-node-options *ngIf="cluster.spec.cloud.azure"
+                                     [nodeData]="nodeData"></kubermatic-azure-node-options>
+
+      <kubermatic-digitalocean-node-options *ngIf="cluster.spec.cloud.digitalocean"
+                                            [nodeData]="nodeData"></kubermatic-digitalocean-node-options>
+
+      <kubermatic-gcp-node-options *ngIf="cluster.spec.cloud.gcp"
+                                   [nodeData]="nodeData"></kubermatic-gcp-node-options>
+
+      <kubermatic-openstack-node-options *ngIf="cluster.spec.cloud.openstack"
+                                         [nodeData]="nodeData"
+                                         [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-node-options>
+
+      <kubermatic-vsphere-node-options *ngIf="cluster.spec.cloud.vsphere"
+                                       [nodeData]="nodeData"
+                                       [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-node-options>
+
+    </mat-card-content>
+  </mat-card>
+</div>

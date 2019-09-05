@@ -16,16 +16,16 @@ import {MachineNetworksModule} from '../machine-networks/machine-networks.module
 import {AWSNodeDataComponent} from '../node-data/aws-node-data/aws-node-data.component';
 import {AzureNodeDataComponent} from '../node-data/azure-node-data/azure-node-data.component';
 import {DigitaloceanNodeDataComponent} from '../node-data/digitalocean-node-data/digitalocean-node-data.component';
-import {DigitaloceanOptionsComponent} from '../node-data/digitalocean-node-data/digitalocean-options/digitalocean-options.component';
+import {DigitaloceanNodeOptionsComponent} from '../node-data/digitalocean-node-data/digitalocean-node-options/digitalocean-node-options.component';
 import {GCPNodeDataComponent} from '../node-data/gcp-node-data/gcp-node-data.component';
 import {HetznerNodeDataComponent} from '../node-data/hetzner-node-data/hetzner-node-data.component';
 import {KubeVirtNodeDataComponent} from '../node-data/kubevirt-add-node/kubevirt-node-data.component';
 import {NodeDataComponent} from '../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../node-data/openstack-node-data/openstack-node-data.component';
-import {OpenstackOptionsComponent} from '../node-data/openstack-node-data/openstack-options/openstack-options.component';
+import {OpenstackNodeOptionsComponent} from '../node-data/openstack-node-data/openstack-node-options/openstack-node-options.component';
 import {PacketNodeDataComponent} from '../node-data/packet-node-data/packet-node-data.component';
 import {VSphereNodeDataComponent} from '../node-data/vsphere-add-node/vsphere-node-data.component';
-import {VSphereOptionsComponent} from '../node-data/vsphere-add-node/vsphere-options/vsphere-options.component';
+import {VSphereNodeOptionsComponent} from '../node-data/vsphere-add-node/vsphere-node-options/vsphere-node-options.component';
 import {SharedModule} from '../shared/shared.module';
 import {masterVersionsFake} from '../testing/fake-data/cluster-spec.fake';
 import {fakeDigitaloceanCluster} from '../testing/fake-data/cluster.fake';
@@ -100,14 +100,14 @@ describe('WizardComponent', () => {
             PacketClusterSettingsComponent,
             NodeDataComponent,
             OpenstackNodeDataComponent,
-            OpenstackOptionsComponent,
+            OpenstackNodeOptionsComponent,
             AWSNodeDataComponent,
             DigitaloceanNodeDataComponent,
-            DigitaloceanOptionsComponent,
+            DigitaloceanNodeOptionsComponent,
             GCPNodeDataComponent,
             HetznerNodeDataComponent,
             VSphereNodeDataComponent,
-            VSphereOptionsComponent,
+            VSphereNodeOptionsComponent,
             AzureNodeDataComponent,
             SetClusterSpecComponent,
             SetMachineNetworksComponent,

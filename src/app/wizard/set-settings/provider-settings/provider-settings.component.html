@@ -1,6 +1,8 @@
+<!-- Custom Presets -->
 <kubermatic-custom-presets-settings>
 </kubermatic-custom-presets-settings>
 
+<!-- Cluster Provider Settings -->
 <kubermatic-digitalocean-cluster-settings [cluster]="cluster"
                                           *ngIf="cluster.spec.cloud.digitalocean">
 </kubermatic-digitalocean-cluster-settings>
@@ -41,5 +43,22 @@
                                       *ngIf="cluster.spec.cloud.kubevirt">
 </kubermatic-kubevirt-cluster-settings>
 
+<!-- Extended Options -->
+<ng-container *ngIf="!hideOptional && !isInWizard">
+  <kubermatic-azure-provider-options [cluster]="cluster"
+                                     *ngIf="cluster.spec.cloud.azure">
+  </kubermatic-azure-provider-options>
+
+  <kubermatic-gcp-provider-options [cluster]="cluster"
+                                   *ngIf="cluster.spec.cloud.gcp">
+  </kubermatic-gcp-provider-options>
+
+  <kubermatic-vsphere-provider-options [cluster]="cluster"
+                                       *ngIf="cluster.spec.cloud.vsphere">
+  </kubermatic-vsphere-provider-options>
+
+</ng-container>
+
+<!-- SSH Keys -->
 <kubermatic-cluster-ssh-keys [cluster]="cluster"
                              [selectedKeys]="clusterSSHKeys"></kubermatic-cluster-ssh-keys>

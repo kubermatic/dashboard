@@ -100,12 +100,18 @@
                               [clusterId]="cluster.id"
                               [seedDCName]="seedDCName"></kubermatic-azure-node-data>
 
+  <kubermatic-azure-node-options *ngIf="cluster.spec.cloud.azure && !hideOptional && !isInWizard"
+                                 [nodeData]="nodeData"></kubermatic-azure-node-options>
+
   <kubermatic-gcp-node-data *ngIf="cluster.spec.cloud.gcp"
                             [cloudSpec]="cluster.spec.cloud"
                             [clusterId]="cluster.id"
                             [projectId]="projectId"
                             [seedDCName]="seedDCName"
                             [nodeData]="nodeData"></kubermatic-gcp-node-data>
+
+  <kubermatic-gcp-node-options *ngIf="cluster.spec.cloud.gcp && !hideOptional && !isInWizard"
+                               [nodeData]="nodeData"></kubermatic-gcp-node-options>
 
   <mat-button-toggle-group group="operatingSystemGroup"
                            formControlName="operatingSystem">
@@ -156,14 +162,14 @@
   </div>
 </form>
 
-<kubermatic-openstack-options *ngIf="cluster.spec.cloud.openstack"
-                              [nodeData]="nodeData"
-                              [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-options>
-<kubermatic-vsphere-options *ngIf="cluster.spec.cloud.vsphere"
-                            [nodeData]="nodeData"
-                            [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-options>
-<kubermatic-digitalocean-options *ngIf="cluster.spec.cloud.digitalocean && !hideOptional"
-                                 [nodeData]="nodeData"></kubermatic-digitalocean-options>
+<kubermatic-openstack-node-options *ngIf="cluster.spec.cloud.openstack"
+                                   [nodeData]="nodeData"
+                                   [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-node-options>
+<kubermatic-vsphere-node-options *ngIf="cluster.spec.cloud.vsphere && !hideOptional && !isInWizard"
+                                 [nodeData]="nodeData"
+                                 [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-node-options>
+<kubermatic-digitalocean-node-options *ngIf="cluster.spec.cloud.digitalocean && !hideOptional && !isInWizard"
+                                      [nodeData]="nodeData"></kubermatic-digitalocean-node-options>
 
 <km-label-form title="Node Labels"
                [(labels)]="nodeData.spec.labels"></km-label-form>
