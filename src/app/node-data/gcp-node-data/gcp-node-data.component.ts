@@ -1,5 +1,5 @@
 import {Component, Input, OnDestroy, OnInit, SimpleChanges} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {iif, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, first, takeUntil} from 'rxjs/operators';
 
@@ -28,7 +28,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   machineTypes: GCPMachineSize[] = [];
   zones: GCPZone[] = [];
   form: FormGroup;
-  labels: FormArray;
   hideOptional = true;
   private _loadingZones = false;
   private _loadingDiskTypes = false;
@@ -41,16 +40,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
       private readonly _apiService: ApiService) {}
 
   ngOnInit(): void {
-    const labelList = new FormArray([]);
-    for (const i in this.nodeData.spec.cloud.gcp.labels) {
-      if (this.nodeData.spec.cloud.gcp.labels.hasOwnProperty(i)) {
-        labelList.push(new FormGroup({
-          key: new FormControl(i),
-          value: new FormControl(this.nodeData.spec.cloud.gcp.labels[i]),
-        }));
-      }
-    }
-
     this.form = new FormGroup({
       diskSize: new FormControl(this.nodeData.spec.cloud.gcp.diskSize, Validators.required),
       diskType: new FormControl({value: this.nodeData.spec.cloud.gcp.diskType, disabled: true}, Validators.required),
@@ -58,8 +47,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           new FormControl({value: this.nodeData.spec.cloud.gcp.machineType, disabled: true}, Validators.required),
       zone: new FormControl({value: this.nodeData.spec.cloud.gcp.zone, disabled: true}, Validators.required),
       preemptible: new FormControl(this.nodeData.spec.cloud.gcp.preemptible),
-      tags: new FormControl(this.nodeData.spec.cloud.gcp.tags.toString().replace(/\,/g, ', ')),
-      labels: labelList,
     });
 
     this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
@@ -304,12 +291,6 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
   }
 
   getNodeProviderData(): NodeProviderData {
-    let gcpTags: string[] = [];
-    if ((this.form.controls.tags.value).length > 0) {
-      gcpTags = (this.form.controls.tags.value).split(',').map(tag => tag.trim());
-      gcpTags.map(tag => tag.trim());
-    }
-
     return {
       spec: {
         gcp: {
@@ -318,28 +299,9 @@ export class GCPNodeDataComponent implements OnInit, OnDestroy {
           machineType: this.form.controls.machineType.value,
           preemptible: this.form.controls.preemptible.value,
           zone: this.form.controls.zone.value,
-          labels: objectFromForm(this.form.controls.labels),
-          tags: gcpTags,
         },
       },
       valid: this.form.valid,
     };
-  }
-
-  getLabelForm(form): any {
-    return form.get('labels').controls;
-  }
-
-  addLabel(): void {
-    this.labels = this.form.get('labels') as FormArray;
-    this.labels.push(new FormGroup({
-      key: new FormControl(''),
-      value: new FormControl(''),
-    }));
-  }
-
-  deleteLabel(index: number): void {
-    const arrayControl = this.form.get('labels') as FormArray;
-    arrayControl.removeAt(index);
   }
 }

@@ -14,7 +14,6 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 export class GCPClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
-  hideOptional = true;
 
   private _formHelper: FormHelper;
   private _unsubscribe: Subject<any> = new Subject();
@@ -24,8 +23,6 @@ export class GCPClusterSettingsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = new FormGroup({
       serviceAccount: new FormControl(this.cluster.spec.cloud.gcp.serviceAccount, [Validators.required]),
-      network: new FormControl(this.cluster.spec.cloud.gcp.network),
-      subnetwork: new FormControl(this.cluster.spec.cloud.gcp.subnetwork),
     });
 
     this._formHelper = new FormHelper(this.form);
@@ -36,10 +33,6 @@ export class GCPClusterSettingsComponent implements OnInit, OnDestroy {
                                             this._wizard.onCustomPresetsDisable.emit(true);
 
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
-    });
-
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
@@ -62,8 +55,8 @@ export class GCPClusterSettingsComponent implements OnInit, OnDestroy {
       cloudSpec: {
         gcp: {
           serviceAccount: this.form.controls.serviceAccount.value,
-          network: this.form.controls.network.value,
-          subnetwork: this.form.controls.subnetwork.value,
+          network: this.cluster.spec.cloud.gcp.network,
+          subnetwork: this.cluster.spec.cloud.gcp.subnetwork,
         },
         dc: this.cluster.spec.cloud.dc,
       },
