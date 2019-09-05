@@ -5,7 +5,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
-import {DigitaloceanOptionsComponent} from './digitalocean-options.component';
+import {DigitaloceanNodeOptionsComponent} from './digitalocean-node-options.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -14,9 +14,9 @@ const modules: any[] = [
   ReactiveFormsModule,
 ];
 
-describe('DigitaloceanOptionsComponent', () => {
-  let fixture: ComponentFixture<DigitaloceanOptionsComponent>;
-  let component: DigitaloceanOptionsComponent;
+describe('DigitaloceanNodeOptionsComponent', () => {
+  let fixture: ComponentFixture<DigitaloceanNodeOptionsComponent>;
+  let component: DigitaloceanNodeOptionsComponent;
 
   beforeEach(async(() => {
     TestBed
@@ -25,7 +25,7 @@ describe('DigitaloceanOptionsComponent', () => {
             ...modules,
           ],
           declarations: [
-            DigitaloceanOptionsComponent,
+            DigitaloceanNodeOptionsComponent,
           ],
           providers: [
             NodeDataService,
@@ -35,7 +35,7 @@ describe('DigitaloceanOptionsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DigitaloceanOptionsComponent);
+    fixture = TestBed.createComponent(DigitaloceanNodeOptionsComponent);
     component = fixture.componentInstance;
     component.nodeData = nodeDataFake();
     fixture.detectChanges();
