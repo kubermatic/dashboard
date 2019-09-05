@@ -20,6 +20,7 @@ import {GCPProviderOptionsComponent} from './set-settings/provider-settings/gcp/
 import {GCPClusterSettingsComponent} from './set-settings/provider-settings/gcp/gcp.component';
 import {HetznerClusterSettingsComponent} from './set-settings/provider-settings/hetzner/hetzner.component';
 import {KubeVirtClusterSettingsComponent} from './set-settings/provider-settings/kubevirt/kubevirt.component';
+import {OpenstackProviderOptionsComponent} from './set-settings/provider-settings/openstack/openstack-provider-options/openstack-provider-options.component';
 import {OpenstackClusterSettingsComponent} from './set-settings/provider-settings/openstack/openstack.component';
 import {PacketClusterSettingsComponent} from './set-settings/provider-settings/packet/packet.component';
 import {ClusterProviderSettingsComponent} from './set-settings/provider-settings/provider-settings.component';
@@ -43,6 +44,7 @@ const components: any[] = [
   SummaryComponent,
   ClusterProviderSettingsComponent,
   OpenstackClusterSettingsComponent,
+  OpenstackProviderOptionsComponent,
   DigitaloceanClusterSettingsComponent,
   PacketClusterSettingsComponent,
   AWSClusterSettingsComponent,

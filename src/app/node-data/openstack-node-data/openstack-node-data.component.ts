@@ -5,6 +5,7 @@ import {take, takeUntil} from 'rxjs/operators';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../shared/entity/ClusterEntity';
+import {OperatingSystemSpec} from '../../shared/entity/NodeEntity';
 import {OpenstackFlavor} from '../../shared/entity/provider/openstack/OpenstackSizeEntity';
 import {NodeProvider} from '../../shared/model/NodeProviderConstants';
 import {NodeData, NodeProviderData} from '../../shared/model/NodeSpecChange';
@@ -23,7 +24,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
 
   flavors: OpenstackFlavor[] = [];
   loadingFlavors = false;
-  osNodeForm: FormGroup;
+  form: FormGroup;
 
   private _unsubscribe = new Subject<void>();
   private _selectedPreset: string;
@@ -33,15 +34,16 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       private readonly _dcService: DatacenterService, private readonly _wizard: WizardService) {}
 
   ngOnInit(): void {
-    this.osNodeForm = new FormGroup({
+    this.form = new FormGroup({
       flavor: new FormControl(this.nodeData.spec.cloud.openstack.flavor, Validators.required),
       useFloatingIP: new FormControl(this.nodeData.spec.cloud.openstack.useFloatingIP),
       disk_size: new FormControl(
           this.nodeData.spec.cloud.openstack.diskSize > 0 ? this.nodeData.spec.cloud.openstack.diskSize : ''),
-      customDiskSize: new FormControl(this.nodeData.spec.cloud.openstack.diskSize > 0)
+      customDiskSize: new FormControl(this.nodeData.spec.cloud.openstack.diskSize > 0),
+      image: new FormControl(this.nodeData.spec.cloud.openstack.image),
     });
 
-    this.osNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
     });
 
@@ -49,23 +51,36 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     this._loadFlavors();
     this.checkFlavorState();
 
+    if (this.nodeData.spec.cloud.openstack.image === '') {
+      this.setImage(this.nodeData.spec.operatingSystem);
+    }
+
+    this._addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      if ((!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
+          (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
+          (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux)) {
+        this.setImage(data);
+      }
+      this._addNodeService.changeNodeProviderData(this._getNodeProviderData());
+    });
+
     this._dcService.getDataCenter(this.cloudSpec.dc).pipe(takeUntil(this._unsubscribe)).subscribe((dc) => {
       if (dc.spec.openstack.enforce_floating_ip) {
-        this.osNodeForm.controls.useFloatingIP.setValue(true);
-        this.osNodeForm.controls.useFloatingIP.disable();
+        this.form.controls.useFloatingIP.setValue(true);
+        this.form.controls.useFloatingIP.disable();
         return;
       }
 
       if (!this.isInWizard() && !this.cloudSpec.openstack.floatingIpPool) {
-        this.osNodeForm.controls.useFloatingIP.setValue(false);
-        this.osNodeForm.controls.useFloatingIP.disable();
+        this.form.controls.useFloatingIP.setValue(false);
+        this.form.controls.useFloatingIP.disable();
       }
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       let credentialsChanged = false;
       if (this._hasCredentialsChanged(this.cloudSpec, data.cloudSpec)) {
-        this.osNodeForm.controls.flavor.setValue('');
+        this.form.controls.flavor.setValue('');
         this.flavors = [];
         this.checkFlavorState();
         credentialsChanged = true;
@@ -91,13 +106,39 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     });
   }
 
+  setImage(operatingSystem: OperatingSystemSpec): void {
+    this._dcService.getDataCenter(this.cloudSpec.dc).subscribe((res) => {
+      let coreosImage = '';
+      let centosImage = '';
+      let ubuntuImage = '';
+
+      for (const i in res.spec.openstack.images) {
+        if (i === 'coreos') {
+          coreosImage = res.spec.openstack.images[i];
+        } else if (i === 'centos') {
+          centosImage = res.spec.openstack.images[i];
+        } else if (i === 'ubuntu') {
+          ubuntuImage = res.spec.openstack.images[i];
+        }
+      }
+
+      if (operatingSystem.ubuntu) {
+        return this.form.controls.image.setValue(ubuntuImage);
+      } else if (operatingSystem.centos) {
+        return this.form.controls.image.setValue(centosImage);
+      } else if (operatingSystem.containerLinux) {
+        return this.form.controls.image.setValue(coreosImage);
+      }
+    });
+  }
+
   checkFlavorState(): void {
     if (this.flavors.length === 0) {
-      this.osNodeForm.controls.flavor.disable();
-      this.osNodeForm.controls.customDiskSize.disable();
+      this.form.controls.flavor.disable();
+      this.form.controls.customDiskSize.disable();
     } else {
-      this.osNodeForm.controls.flavor.enable();
-      this.osNodeForm.controls.customDiskSize.enable();
+      this.form.controls.flavor.enable();
+      this.form.controls.customDiskSize.enable();
     }
   }
 
@@ -122,7 +163,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   isFloatingIPEnforced(): boolean {
-    return this.osNodeForm.controls.useFloatingIP.disabled;
+    return this.form.controls.useFloatingIP.disabled;
   }
 
   ngOnDestroy(): void {
@@ -134,17 +175,17 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
     return {
       spec: {
         openstack: {
-          flavor: this.osNodeForm.controls.flavor.value,
-          image: this.nodeData.spec.cloud.openstack.image,
-          useFloatingIP: this.osNodeForm.controls.useFloatingIP.value,
+          flavor: this.form.controls.flavor.value,
+          image: this.form.controls.image.value,
+          useFloatingIP: this.form.controls.useFloatingIP.value,
           tags: this.nodeData.spec.cloud.openstack.tags,
-          diskSize: this._getCurrentFlavor() && this.osNodeForm.controls.disk_size.value > 0 &&
-                  this.osNodeForm.controls.disk_size.value !== this._getCurrentFlavor().disk ?
-              this.osNodeForm.controls.disk_size.value :
+          diskSize: this._getCurrentFlavor() && this.form.controls.disk_size.value > 0 &&
+                  this.form.controls.disk_size.value !== this._getCurrentFlavor().disk ?
+              this.form.controls.disk_size.value :
               null,
         },
       },
-      valid: this.osNodeForm.valid,
+      valid: this.form.valid,
     };
   }
 
@@ -167,9 +208,9 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
       return (a.memory < b.memory ? -1 : 1) * ('asc' ? 1 : -1);
     });
     this.flavors = sortedFlavors;
-    if (sortedFlavors.length > 0 && this.osNodeForm.controls.flavor.value !== '0' &&
+    if (sortedFlavors.length > 0 && this.form.controls.flavor.value !== '0' &&
         this.nodeData.spec.cloud.openstack.flavor === '') {
-      this.osNodeForm.controls.flavor.setValue(this.flavors[0].slug);
+      this.form.controls.flavor.setValue(this.flavors[0].slug);
     }
     this.loadingFlavors = false;
   }

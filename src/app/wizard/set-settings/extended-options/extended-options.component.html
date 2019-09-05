@@ -13,6 +13,9 @@
       <kubermatic-gcp-provider-options *ngIf="cluster.spec.cloud.gcp"
                                        [cluster]="cluster"></kubermatic-gcp-provider-options>
 
+      <kubermatic-openstack-provider-options *ngIf="cluster.spec.cloud.openstack"
+                                             [cluster]="cluster"></kubermatic-openstack-provider-options>
+
       <kubermatic-vsphere-provider-options *ngIf="cluster.spec.cloud.vsphere"
                                            [cluster]="cluster"></kubermatic-vsphere-provider-options>
 

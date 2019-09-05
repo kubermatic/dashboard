@@ -13,7 +13,7 @@ import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
 import {fakeOpenstackDatacenter} from '../../../../testing/fake-data/datacenter.fake';
-import {openstackNetworksFake, openstackSecurityGroupsFake, openstackSortedFloatingIpsFake, openstackSortedNetworksFake, openstackSubnetIdsFake, openstackTenantsFake} from '../../../../testing/fake-data/wizard.fake';
+import {openstackNetworksFake, openstackSecurityGroupsFake, openstackSortedFloatingIpsFake, openstackSubnetIdsFake, openstackTenantsFake} from '../../../../testing/fake-data/wizard.fake';
 import {asyncData} from '../../../../testing/services/api-mock.service';
 import {AuthMockService} from '../../../../testing/services/auth-mock.service';
 
@@ -26,8 +26,6 @@ describe('OpenstackClusterSettingsComponent', () => {
   let config: Config;
   let tenantsMock: Spy;
   let networksMock: Spy;
-  let securityGroupsMock: Spy;
-  let subnetIdsMock: Spy;
   let wizardMock;
   let providerMock;
 
@@ -59,10 +57,10 @@ describe('OpenstackClusterSettingsComponent', () => {
     networksMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
     providerMock.networks.and.returnValue(asyncData(openstackNetworksFake()));
 
-    securityGroupsMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
+    wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
     providerMock.securityGroups.and.returnValue(asyncData(openstackSecurityGroupsFake()));
 
-    subnetIdsMock = wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
+    wizardMock.provider.withArgs(NodeProvider.OPENSTACK).and.returnValue(providerMock);
     providerMock.subnets.and.returnValue(asyncData(openstackSubnetIdsFake()));
 
     const appConfigServiceMock = jasmine.createSpyObj('AppConfigService', ['getConfig']);
@@ -164,98 +162,21 @@ describe('OpenstackClusterSettingsComponent', () => {
          discardPeriodicTasks();
        }));
 
-    it('should not load optional settings', () => {
-      component.form.controls.username.setValue('');
-      component.form.controls.password.setValue('');
-      component.form.controls.domain.setValue('');
-      component.form.controls.tenant.setValue('');
-      fixture.detectChanges();
-      expect(networksMock).toHaveBeenCalledTimes(0);
-      expect(securityGroupsMock).toHaveBeenCalledTimes(0);
-    });
-
     it('should load optional settings', fakeAsync(() => {
          component.form.controls.username.setValue('username');
          component.form.controls.password.setValue('password');
          component.form.controls.domain.setValue('domain');
          component.form.controls.tenant.setValue('loodse-poc');
-         component.networks = [];
          component.floatingIpPools = [];
-         component.securityGroups = [];
          fixture.detectChanges();
          tick(1001);
 
          expect(networksMock).toHaveBeenCalled();
-         expect(component.networks).toEqual([
-           {
-             id: 'net456',
-             name: 'ext-net',
-             external: false,
-           },
-           {
-             id: 'net123',
-             name: 'test-network',
-             external: false,
-           },
-         ]);
          expect(component.floatingIpPools).toEqual([
            {
              id: 'net789',
              name: 'ext-net',
              external: true,
-           },
-         ]);
-
-         expect(securityGroupsMock).toHaveBeenCalled();
-         expect(component.securityGroups).toEqual([
-           {
-             id: 'sg456',
-             name: 'another-security-group',
-           },
-           {
-             id: 'sg123',
-             name: 'test-security-group',
-           },
-         ]);
-         discardPeriodicTasks();
-       }));
-
-    it('should not load subnet ids', () => {
-      component.form.controls.network.setValue('');
-      fixture.detectChanges();
-      expect(component.subnetIds.length).toEqual(0);
-      expect(subnetIdsMock).toHaveBeenCalledTimes(0);
-    });
-
-    it('should load subnet ids', fakeAsync(() => {
-         component.networks = [];
-         component.floatingIpPools = [];
-         component.securityGroups = [];
-
-         component.form.controls.username.setValue('username');
-         component.form.controls.password.setValue('password');
-         component.form.controls.domain.setValue('domain');
-         fixture.detectChanges();
-         tick(1001);
-
-         component.form.controls.tenant.setValue('loodse-poc');
-         fixture.detectChanges();
-         tick(1001);
-
-         component.form.controls.network.setValue('network');
-         component.form.controls.tenant.setValue('loodse-poc');
-         fixture.detectChanges();
-         tick(1001);
-
-         expect(subnetIdsMock).toHaveBeenCalled();
-         expect(component.subnetIds).toEqual([
-           {
-             id: 'sub456',
-             name: 'another-subnet',
-           },
-           {
-             id: 'sub123',
-             name: 'test-subnet',
            },
          ]);
          discardPeriodicTasks();
@@ -279,54 +200,17 @@ describe('OpenstackClusterSettingsComponent', () => {
     });
 
     it('should set correct optional settings placeholder', (() => {
-         component.form.controls.tenant.setValue('');
-         fixture.detectChanges();
-         expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
-
          component.form.controls.username.setValue('username');
          component.form.controls.password.setValue('password');
          component.form.controls.domain.setValue('domain');
          component.form.controls.tenant.setValue('tenant');
          component.floatingIpPools = [];
-         component.securityGroups = [];
-         component.networks = [];
          fixture.detectChanges();
-         expect(component.getOptionalSettingsFormState('Floating IP Pool')).toEqual('No Floating IP Pools available');
-         expect(component.getOptionalSettingsFormState('Security Group')).toEqual('No Security Groups available');
-         expect(component.getOptionalSettingsFormState('Network')).toEqual('No Networks available');
+         expect(component.getFloatingIPPoolFormState()).toEqual('No Floating IP Pools available');
 
          component.floatingIpPools = openstackSortedFloatingIpsFake();
-         component.securityGroups = openstackSecurityGroupsFake();
-         component.networks = openstackSortedNetworksFake();
          fixture.detectChanges();
-         expect(component.getOptionalSettingsFormState('Floating IP Pool')).toEqual('Floating IP Pool');
-         expect(component.getOptionalSettingsFormState('Security Group')).toEqual('Security Group');
-         expect(component.getOptionalSettingsFormState('Network')).toEqual('Network');
-       }));
-
-    it('should set correct subnet id placeholder', fakeAsync(() => {
-         component.form.controls.network.setValue('');
-         fixture.detectChanges();
-         expect(component.getSubnetIDFormState()).toEqual('Subnet ID');
-
-         component.form.controls.username.setValue('username');
-         component.form.controls.password.setValue('password');
-         component.form.controls.domain.setValue('domain');
-
-         fixture.detectChanges();
-         tick(2001);
-
-         component.form.controls.tenant.setValue('tenant');
-         component.form.controls.network.setValue('network');
-         component.subnetIds = [];
-
-         expect(component.getSubnetIDFormState()).toEqual('Loading Subnet IDs...');
-
-         component.subnetIds = openstackSubnetIdsFake();
-         fixture.detectChanges();
-         tick(2001);
-
-         expect(component.getSubnetIDFormState()).toEqual('Subnet ID');
+         expect(component.getFloatingIPPoolFormState()).toEqual('Floating IP Pool');
        }));
 
     it('should disable Project field when Project ID is provided', fakeAsync(() => {

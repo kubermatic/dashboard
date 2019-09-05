@@ -3,10 +3,8 @@ import {FormArray, FormControl, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {DatacenterService, WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {CloudSpec} from '../../../shared/entity/ClusterEntity';
-import {OperatingSystemSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
@@ -18,14 +16,11 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
-  osOptionsForm: FormGroup;
+  form: FormGroup;
   tags: FormArray;
-  hideOptional = true;
   private _unsubscribe = new Subject<void>();
 
-  constructor(
-      private addNodeService: NodeDataService, private dcService: DatacenterService,
-      private wizardService: WizardService) {}
+  constructor(private addNodeService: NodeDataService) {}
 
   ngOnInit(): void {
     const tagList = new FormArray([]);
@@ -38,32 +33,13 @@ export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.osOptionsForm = new FormGroup({
-      image: new FormControl(this.nodeData.spec.cloud.openstack.image),
+    this.form = new FormGroup({
       tags: tagList,
     });
 
-    this.osOptionsForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
     });
-
-    this.addNodeService.nodeOperatingSystemDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      if ((!!this.nodeData.spec.operatingSystem.ubuntu && !data.ubuntu) ||
-          (!!this.nodeData.spec.operatingSystem.centos && !data.centos) ||
-          (!!this.nodeData.spec.operatingSystem.containerLinux && !data.containerLinux)) {
-        this.setImage(data);
-      }
-      this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
-    });
-
-    this.wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
-
-    this.addNodeService.changeNodeProviderData(this.getOsOptionsData());
-    if (this.nodeData.spec.cloud.openstack.image === '') {
-      this.setImage(this.nodeData.spec.operatingSystem);
-    }
   }
 
   ngOnDestroy(): void {
@@ -71,38 +47,12 @@ export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  setImage(operatingSystem: OperatingSystemSpec): void {
-    this.dcService.getDataCenter(this.cloudSpec.dc).subscribe((res) => {
-      let coreosImage = '';
-      let centosImage = '';
-      let ubuntuImage = '';
-
-      for (const i in res.spec.openstack.images) {
-        if (i === 'coreos') {
-          coreosImage = res.spec.openstack.images[i];
-        } else if (i === 'centos') {
-          centosImage = res.spec.openstack.images[i];
-        } else if (i === 'ubuntu') {
-          ubuntuImage = res.spec.openstack.images[i];
-        }
-      }
-
-      if (operatingSystem.ubuntu) {
-        return this.osOptionsForm.setValue({image: ubuntuImage, tags: this.osOptionsForm.controls.tags.value});
-      } else if (operatingSystem.centos) {
-        return this.osOptionsForm.setValue({image: centosImage, tags: this.osOptionsForm.controls.tags.value});
-      } else if (operatingSystem.containerLinux) {
-        return this.osOptionsForm.setValue({image: coreosImage, tags: this.osOptionsForm.controls.tags.value});
-      }
-    });
-  }
-
   getTagForm(form): any {
     return form.get('tags').controls;
   }
 
   addTag(): void {
-    this.tags = this.osOptionsForm.get('tags') as FormArray;
+    this.tags = this.form.get('tags') as FormArray;
     this.tags.push(new FormGroup({
       key: new FormControl(''),
       value: new FormControl(''),
@@ -110,16 +60,15 @@ export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
   }
 
   deleteTag(index: number): void {
-    const arrayControl = this.osOptionsForm.get('tags') as FormArray;
+    const arrayControl = this.form.get('tags') as FormArray;
     arrayControl.removeAt(index);
   }
 
   getOsOptionsData(): NodeProviderData {
     const tagMap = {};
-    for (const i in this.osOptionsForm.controls.tags.value) {
-      if (this.osOptionsForm.controls.tags.value[i].key !== '' &&
-          this.osOptionsForm.controls.tags.value[i].value !== '') {
-        tagMap[this.osOptionsForm.controls.tags.value[i].key] = this.osOptionsForm.controls.tags.value[i].value;
+    for (const i in this.form.controls.tags.value) {
+      if (this.form.controls.tags.value[i].key !== '' && this.form.controls.tags.value[i].value !== '') {
+        tagMap[this.form.controls.tags.value[i].key] = this.form.controls.tags.value[i].value;
       }
     }
 
@@ -127,13 +76,13 @@ export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
       spec: {
         openstack: {
           flavor: this.nodeData.spec.cloud.openstack.flavor,
-          image: this.osOptionsForm.controls.image.value,
+          image: this.nodeData.spec.cloud.openstack.image,
           useFloatingIP: this.nodeData.spec.cloud.openstack.useFloatingIP,
           diskSize: this.nodeData.spec.cloud.openstack.diskSize,
           tags: tagMap,
         },
       },
-      valid: this.osOptionsForm.valid,
+      valid: this.nodeData.valid,
     };
   }
 }

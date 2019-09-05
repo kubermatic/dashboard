@@ -53,6 +53,10 @@
                                    *ngIf="cluster.spec.cloud.gcp">
   </kubermatic-gcp-provider-options>
 
+  <kubermatic-openstack-provider-options [cluster]="cluster"
+                                         *ngIf="cluster.spec.cloud.openstack">
+  </kubermatic-openstack-provider-options>
+
   <kubermatic-vsphere-provider-options [cluster]="cluster"
                                        *ngIf="cluster.spec.cloud.vsphere">
   </kubermatic-vsphere-provider-options>
