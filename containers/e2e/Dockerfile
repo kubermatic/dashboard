@@ -22,6 +22,7 @@ FROM docker:18.06.3-ce-dind
 
 RUN apk update && \
     apk add --no-cache \
+    curl \
     jq \
     bash \
     go \
