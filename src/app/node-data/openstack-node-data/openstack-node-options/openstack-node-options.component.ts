@@ -10,12 +10,12 @@ import {OperatingSystemSpec} from '../../../shared/entity/NodeEntity';
 import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 @Component({
-  selector: 'kubermatic-openstack-options',
-  templateUrl: './openstack-options.component.html',
-  styleUrls: ['./openstack-options.component.scss'],
+  selector: 'kubermatic-openstack-node-options',
+  templateUrl: './openstack-node-options.component.html',
+  styleUrls: ['./openstack-node-options.component.scss'],
 })
 
-export class OpenstackOptionsComponent implements OnInit, OnDestroy {
+export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
   osOptionsForm: FormGroup;

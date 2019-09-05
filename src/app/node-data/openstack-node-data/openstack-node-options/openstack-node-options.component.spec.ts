@@ -9,7 +9,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
-import {OpenstackOptionsComponent} from './openstack-options.component';
+import {OpenstackNodeOptionsComponent} from './openstack-node-options.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -19,9 +19,9 @@ const modules: any[] = [
   HttpClientModule,
 ];
 
-describe('OpenstackOptionsComponent', () => {
-  let fixture: ComponentFixture<OpenstackOptionsComponent>;
-  let component: OpenstackOptionsComponent;
+describe('OpenstackNodeOptionsComponent', () => {
+  let fixture: ComponentFixture<OpenstackNodeOptionsComponent>;
+  let component: OpenstackNodeOptionsComponent;
 
   beforeEach(async(() => {
     TestBed
@@ -30,7 +30,7 @@ describe('OpenstackOptionsComponent', () => {
             ...modules,
           ],
           declarations: [
-            OpenstackOptionsComponent,
+            OpenstackNodeOptionsComponent,
           ],
           providers: [NodeDataService, WizardService, {provide: DatacenterService, useClass: DatacenterMockService}],
         })
@@ -38,7 +38,7 @@ describe('OpenstackOptionsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OpenstackOptionsComponent);
+    fixture = TestBed.createComponent(OpenstackNodeOptionsComponent);
     component = fixture.componentInstance;
     component.cloudSpec = fakeOpenstackCluster().spec.cloud;
     component.nodeData = nodeDataFake();
