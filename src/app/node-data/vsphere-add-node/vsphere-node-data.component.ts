@@ -15,13 +15,15 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
   @Input() cloudSpec: CloudSpec;
   @Input() nodeData: NodeData;
   @Input() clusterId: string;
-  vsphereNodeForm: FormGroup;
+
+  form: FormGroup;
   private _unsubscribe = new Subject<void>();
+
 
   constructor(private _nodeDataService: NodeDataService) {}
 
   ngOnInit(): void {
-    this.vsphereNodeForm = new FormGroup({
+    this.form = new FormGroup({
       cpu: new FormControl(
           this.nodeData.spec.cloud.vsphere.cpus,
           [
@@ -36,7 +38,7 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
           ]),
     });
 
-    this.vsphereNodeForm.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
+    this.form.valueChanges.pipe(takeUntil(this._unsubscribe)).subscribe(() => {
       this._nodeDataService.changeNodeProviderData(this.getNodeProviderData());
     });
 
@@ -56,13 +58,13 @@ export class VSphereNodeDataComponent implements OnInit, OnDestroy {
     return {
       spec: {
         vsphere: {
-          cpus: this.vsphereNodeForm.controls.cpu.value,
-          memory: this.vsphereNodeForm.controls.memory.value,
+          cpus: this.form.controls.cpu.value,
+          memory: this.form.controls.memory.value,
           template: this.nodeData.spec.cloud.vsphere.template,
           diskSizeGB: this.nodeData.spec.cloud.vsphere.diskSizeGB,
         },
       },
-      valid: this.vsphereNodeForm.valid,
+      valid: this.form.valid,
     };
   }
 }

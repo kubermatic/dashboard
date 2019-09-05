@@ -10,7 +10,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import {fakeVSphereCluster} from '../../../testing/fake-data/cluster.fake';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {DatacenterMockService} from '../../../testing/services/datacenter-mock.service';
-import {VSphereOptionsComponent} from './vsphere-options.component';
+import {VSphereNodeOptionsComponent} from './vsphere-node-options.component';
 
 const modules: any[] = [
   BrowserModule,
@@ -20,9 +20,9 @@ const modules: any[] = [
   HttpClientModule,
 ];
 
-describe('VSphereOptionsComponent', () => {
-  let fixture: ComponentFixture<VSphereOptionsComponent>;
-  let component: VSphereOptionsComponent;
+describe('VSphereNodeOptionsComponent', () => {
+  let fixture: ComponentFixture<VSphereNodeOptionsComponent>;
+  let component: VSphereNodeOptionsComponent;
 
   beforeEach(async(() => {
     TestBed
@@ -31,7 +31,7 @@ describe('VSphereOptionsComponent', () => {
             ...modules,
           ],
           declarations: [
-            VSphereOptionsComponent,
+            VSphereNodeOptionsComponent,
           ],
           providers: [NodeDataService, WizardService, {provide: DatacenterService, useClass: DatacenterMockService}],
         })
@@ -39,7 +39,7 @@ describe('VSphereOptionsComponent', () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(VSphereOptionsComponent);
+    fixture = TestBed.createComponent(VSphereNodeOptionsComponent);
     component = fixture.componentInstance;
     component.cloudSpec = fakeVSphereCluster().spec.cloud;
     component.nodeData = nodeDataFake();
