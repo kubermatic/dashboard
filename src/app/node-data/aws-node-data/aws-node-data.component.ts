@@ -1,5 +1,6 @@
 import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {FormArray, FormControl, FormGroup, Validators} from '@angular/forms';
+
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {EMPTY, iif, Subject} from 'rxjs';
 import {switchMap, take, takeUntil} from 'rxjs/operators';
 
@@ -26,8 +27,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   sizes: AWSSize[] = [];
   diskTypes: string[] = ['standard', 'gp2', 'io1', 'sc1', 'st1'];
   form: FormGroup;
-  tags: FormArray;
-  hideOptional = true;
   subnetIds: AWSSubnet[] = [];
 
   private _subnetMap: {[type: string]: AWSSubnet[]} = {};
@@ -61,7 +60,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
       assignPublicIP: new FormControl(assignPublicIP),
-      tags: tagList,
       subnetID: new FormControl(this.nodeData.spec.cloud.aws.subnetID, Validators.required),
     });
 
@@ -76,9 +74,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-    this._wizardService.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
-    });
 
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if ((data.cloudSpec.aws.vpcId !== '' && data.cloudSpec.aws.accessKeyId !== '' &&
@@ -114,11 +109,14 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
   clearSubnetId(): void {
     this.subnetIds = [];
     this._subnetMap = {};
+
     this.form.controls.subnetID.setValue('');
     this.checkSubnetState();
   }
 
   getNodeProviderData(): NodeProviderData {
+    const azFromSubnet = this.getAZFromSubnet(this.form.controls.subnetID.value);
+
     return {
       spec: {
         aws: {
@@ -134,23 +132,6 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       },
       valid: this.form.valid,
     };
-  }
-
-  getTagForm(form): any {
-    return form.get('tags').controls;
-  }
-
-  addTag(): void {
-    this.tags = this.form.get('tags') as FormArray;
-    this.tags.push(new FormGroup({
-      key: new FormControl(''),
-      value: new FormControl(''),
-    }));
-  }
-
-  deleteTag(index: number): void {
-    const arrayControl = this.form.get('tags') as FormArray;
-    arrayControl.removeAt(index);
   }
 
   ngOnDestroy(): void {

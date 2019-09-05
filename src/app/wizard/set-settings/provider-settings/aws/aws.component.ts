@@ -18,7 +18,6 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
-  hideOptional = true;
   vpcIds: AWSVPC[] = [];
 
   private _loadingVPCs = false;
@@ -34,10 +33,6 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       securityGroupID:
           new FormControl(this.cluster.spec.cloud.aws.securityGroupID, Validators.pattern('sg-(\\w{8}|\\w{17})')),
       vpcId: new FormControl(this.cluster.spec.cloud.aws.vpcId, Validators.pattern('vpc-(\\w{8}|\\w{17})')),
-      routeTableId:
-          new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
-      instanceProfileName: new FormControl(this.cluster.spec.cloud.aws.instanceProfileName),
-      roleARN: new FormControl(this.cluster.spec.cloud.aws.roleARN),
     });
 
     this._formHelper = new FormHelper(this.form);
@@ -66,10 +61,6 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
                                             this._wizard.onCustomPresetsDisable.emit(true);
 
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
-    });
-
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
@@ -166,9 +157,10 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
           secretAccessKey: this.form.controls.secretAccessKey.value,
           securityGroupID: this.form.controls.securityGroupID.value,
           vpcId: this.form.controls.vpcId.value,
-          routeTableId: this.form.controls.routeTableId.value,
-          instanceProfileName: this.form.controls.instanceProfileName.value,
-          roleARN: this.form.controls.roleARN.value,
+          securityGroup: this.cluster.spec.cloud.aws.securityGroup,
+          routeTableId: this.cluster.spec.cloud.aws.routeTableId,
+          instanceProfileName: this.cluster.spec.cloud.aws.instanceProfileName,
+          roleARN: this.cluster.spec.cloud.aws.roleARN,
         },
         dc: this.cluster.spec.cloud.dc,
       },

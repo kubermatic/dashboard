@@ -6,6 +6,7 @@ import {MatAutocompleteModule, MatCardModule, MatCheckboxModule, MatFormFieldMod
 import {SharedModule} from '../shared/shared.module';
 
 import {AWSNodeDataComponent} from './aws-node-data/aws-node-data.component';
+import {AWSNodeOptionsComponent} from './aws-node-data/aws-node-options/aws-node-options.component';
 import {AzureNodeDataComponent} from './azure-node-data/azure-node-data.component';
 import {AzureNodeOptionsComponent} from './azure-node-data/azure-node-options/azure-node-options.component';
 import {DigitaloceanNodeDataComponent} from './digitalocean-node-data/digitalocean-node-data.component';
@@ -27,6 +28,7 @@ import {VSphereNodeOptionsComponent} from './vsphere-add-node/vsphere-node-optio
 const components: any[] = [
   NodeDataComponent,
   AWSNodeDataComponent,
+  AWSNodeOptionsComponent,
   DigitaloceanNodeDataComponent,
   DigitaloceanNodeOptionsComponent,
   OpenstackNodeDataComponent,
