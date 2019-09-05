@@ -15,7 +15,6 @@ import {FormHelper} from '../../../../shared/utils/wizard-utils/wizard-utils';
 export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
-  hideOptional = true;
 
   private _formHelper: FormHelper;
   private _unsubscribe: Subject<any> = new Subject();
@@ -28,11 +27,6 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       clientSecret: new FormControl(this.cluster.spec.cloud.azure.clientSecret, [Validators.required]),
       subscriptionID: new FormControl(this.cluster.spec.cloud.azure.subscriptionID, [Validators.required]),
       tenantID: new FormControl(this.cluster.spec.cloud.azure.tenantID, [Validators.required]),
-      resourceGroup: new FormControl(this.cluster.spec.cloud.azure.resourceGroup),
-      routeTable: new FormControl(this.cluster.spec.cloud.azure.routeTable),
-      securityGroup: new FormControl(this.cluster.spec.cloud.azure.securityGroup),
-      subnet: new FormControl(this.cluster.spec.cloud.azure.subnet),
-      vnet: new FormControl(this.cluster.spec.cloud.azure.vnet),
     });
 
     this._formHelper = new FormHelper(this.form);
@@ -48,10 +42,6 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
                                             this._wizard.onCustomPresetsDisable.emit(true);
 
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
-    });
-
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
-      this.hideOptional = data.hideOptional;
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
@@ -70,13 +60,13 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
         azure: {
           clientID: this.form.controls.clientID.value,
           clientSecret: this.form.controls.clientSecret.value,
-          resourceGroup: this.form.controls.resourceGroup.value,
-          routeTable: this.form.controls.routeTable.value,
-          securityGroup: this.form.controls.securityGroup.value,
-          subnet: this.form.controls.subnet.value,
           subscriptionID: this.form.controls.subscriptionID.value,
           tenantID: this.form.controls.tenantID.value,
-          vnet: this.form.controls.vnet.value,
+          resourceGroup: this.cluster.spec.cloud.azure.resourceGroup,
+          routeTable: this.cluster.spec.cloud.azure.routeTable,
+          securityGroup: this.cluster.spec.cloud.azure.securityGroup,
+          subnet: this.cluster.spec.cloud.azure.subnet,
+          vnet: this.cluster.spec.cloud.azure.vnet,
         },
         dc: this.cluster.spec.cloud.dc,
       },
