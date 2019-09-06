@@ -20,7 +20,8 @@
     </mat-card-header>
     <mat-card-content fxLayout="column">
       <kubermatic-node-data-options [nodeData]="nodeData"
-                                    [cloudSpec]="cluster.spec.cloud"></kubermatic-node-data-options>
+                                    [cloudSpec]="cluster.spec.cloud"
+                                    [isInWizard]="isInWizard()"></kubermatic-node-data-options>
     </mat-card-content>
   </mat-card>
 </div>

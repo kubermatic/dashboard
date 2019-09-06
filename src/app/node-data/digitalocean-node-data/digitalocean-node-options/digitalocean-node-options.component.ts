@@ -14,6 +14,7 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 
 export class DigitaloceanNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
+  @Input() isInWizard: boolean;
   form: FormGroup;
   private _unsubscribe = new Subject<void>();
 

@@ -11,4 +11,5 @@ import {NodeData} from '../../shared/model/NodeSpecChange';
 export class NodeDataOptionsComponent {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
+  @Input() isInWizard: boolean;
 }

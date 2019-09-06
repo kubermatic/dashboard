@@ -1,6 +1,6 @@
 <form [formGroup]="form"
       fxLayout="column">
-  <div class="km-form-group-tags-header">
+  <div [ngClass]="isInWizard ? 'km-form-group-tags-header km-tags-in-wizard' : 'km-form-group-tags-header'">
     Tags
     <i class="fa fa-plus"
        aria-hidden="true"

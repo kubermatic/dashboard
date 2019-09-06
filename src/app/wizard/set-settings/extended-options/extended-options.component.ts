@@ -10,4 +10,8 @@ import {NodeData} from '../../../shared/model/NodeSpecChange';
 export class ExtendedOptionsComponent {
   @Input() cluster: ClusterEntity;
   @Input() nodeData: NodeData;
+
+  isInWizard(): boolean {
+    return !this.cluster.id || this.cluster.id === '';
+  }
 }

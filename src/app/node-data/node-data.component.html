@@ -157,11 +157,14 @@
   </div>
 </form>
 
+<!-- Extended Node Options -->
 <ng-container *ngIf="!hideOptional && !isInWizard">
   <kubermatic-node-data-options [nodeData]="nodeData"
-                                [cloudSpec]="cluster.spec.cloud"></kubermatic-node-data-options>
+                                [cloudSpec]="cluster.spec.cloud"
+                                [isInWizard]="isInWizard"></kubermatic-node-data-options>
 </ng-container>
 
+<!-- Node Labels & Taints -->
 <km-label-form title="Node Labels"
                [(labels)]="nodeData.spec.labels"></km-label-form>
 

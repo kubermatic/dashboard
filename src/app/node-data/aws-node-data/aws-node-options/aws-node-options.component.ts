@@ -9,10 +9,12 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 @Component({
   selector: 'kubermatic-aws-node-options',
   templateUrl: './aws-node-options.component.html',
+  styleUrls: ['./aws-node-options.component.scss'],
 })
 
 export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
+  @Input() isInWizard: boolean;
 
   form: FormGroup;
   tags: FormArray;

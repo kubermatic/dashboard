@@ -16,6 +16,7 @@ import {NodeData, NodeProviderData} from '../../../shared/model/NodeSpecChange';
 export class OpenstackNodeOptionsComponent implements OnInit, OnDestroy {
   @Input() nodeData: NodeData;
   @Input() cloudSpec: CloudSpec;
+  @Input() isInWizard: boolean;
   form: FormGroup;
   tags: FormArray;
   private _unsubscribe = new Subject<void>();
