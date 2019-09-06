@@ -31,6 +31,7 @@ COPY --from=download /usr/local/bin/yq /usr/local/bin/yq
 COPY --from=download /usr/local/bin/kind /usr/local/bin/kind
 COPY start.sh /start.sh
 COPY utils/ opt/e2e/
+COPY kindest.tar /kindest.tar
 
 RUN ln -s /opt/e2e/deploy.sh /usr/local/bin && \
     ln -s /opt/e2e/expose.sh /usr/local/bin && \
