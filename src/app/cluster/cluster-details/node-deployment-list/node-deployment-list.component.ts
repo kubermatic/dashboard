@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {Router} from '@angular/router';
 import {Subject} from 'rxjs';
@@ -20,7 +20,7 @@ import {NodeService} from '../../services/node.service';
   templateUrl: 'node-deployment-list.component.html',
   styleUrls: ['node-deployment-list.component.scss'],
 })
-export class NodeDeploymentListComponent implements OnInit {
+export class NodeDeploymentListComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   @Input() datacenter: DataCenterEntity;
   @Input() nodeDeployments: NodeDeploymentEntity[] = [];
@@ -49,6 +49,11 @@ export class NodeDeploymentListComponent implements OnInit {
     if (this.cluster.spec.cloud.aws) {
       this.displayedColumns = ['status', 'name', 'replicas', 'ver', 'availabilityZone', 'os', 'created', 'actions'];
     }
+  }
+
+  ngOnDestroy(): void {
+    this._unsubscribe.next();
+    this._unsubscribe.complete();
   }
 
   getDataSource(): MatTableDataSource<NodeDeploymentEntity> {
