@@ -34,12 +34,9 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       subnetId: new FormControl({value: '', disabled: true}),
     });
 
-    this._resetControls(...this._getOptionalControls());
-
     if (this._hasRequiredCredentials()) {
       this._loadOptionalSettings();
     }
-
     this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
 
     merge(
@@ -69,15 +66,24 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
         return;
       }
 
-      this.form.enable();
+      if (this._hasRequiredCredentials()) {
+        this.form.enable();
+      }
     });
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
       if (this._hasRequiredCredentials()) {
         this._loadOptionalSettings();
+        this.form.enable();
+      } else {
+        this.form.disable();
       }
     });
+  }
+
+  disableForm(): void {
+    this.form.disable();
   }
 
   showHint(field: string): boolean {
@@ -228,14 +234,6 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
     } else if (!enable && control.enabled) {
       control.disable();
     }
-  }
-
-  private _getOptionalControls(): AbstractControl[] {
-    return [
-      this.form.controls.network,
-      this.form.controls.securityGroup,
-      this.form.controls.subnetId,
-    ];
   }
 
   private _hasRequiredCredentials(): boolean {
