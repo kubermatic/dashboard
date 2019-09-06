@@ -24,6 +24,7 @@ import {KubeVirtClusterSettingsComponent} from './set-settings/provider-settings
 import {OpenstackProviderOptionsComponent} from './set-settings/provider-settings/openstack/openstack-provider-options/openstack-provider-options.component';
 import {OpenstackClusterSettingsComponent} from './set-settings/provider-settings/openstack/openstack.component';
 import {PacketClusterSettingsComponent} from './set-settings/provider-settings/packet/packet.component';
+import {ClusterProviderOptionsComponent} from './set-settings/provider-settings/provider-options/provider-options.component';
 import {ClusterProviderSettingsComponent} from './set-settings/provider-settings/provider-settings.component';
 import {VSphereProviderOptionsComponent} from './set-settings/provider-settings/vsphere/vsphere-provider-options/vsphere-provider-options.component';
 import {VSphereClusterSettingsComponent} from './set-settings/provider-settings/vsphere/vsphere.component';
@@ -44,6 +45,7 @@ const components: any[] = [
   ClusterSSHKeysComponent,
   SummaryComponent,
   ClusterProviderSettingsComponent,
+  ClusterProviderOptionsComponent,
   OpenstackClusterSettingsComponent,
   OpenstackProviderOptionsComponent,
   DigitaloceanClusterSettingsComponent,

@@ -158,20 +158,8 @@
 </form>
 
 <ng-container *ngIf="!hideOptional && !isInWizard">
-  <kubermatic-aws-node-options *ngIf="cluster.spec.cloud.aws"
-                               [nodeData]="nodeData"></kubermatic-aws-node-options>
-  <kubermatic-azure-node-options *ngIf="cluster.spec.cloud.azure"
-                                 [nodeData]="nodeData"></kubermatic-azure-node-options>
-  <kubermatic-digitalocean-node-options *ngIf="cluster.spec.cloud.digitalocean"
-                                        [nodeData]="nodeData"></kubermatic-digitalocean-node-options>
-  <kubermatic-gcp-node-options *ngIf="cluster.spec.cloud.gcp"
-                               [nodeData]="nodeData"></kubermatic-gcp-node-options>
-  <kubermatic-openstack-node-options *ngIf="cluster.spec.cloud.openstack"
-                                     [nodeData]="nodeData"
-                                     [cloudSpec]="cluster.spec.cloud"></kubermatic-openstack-node-options>
-  <kubermatic-vsphere-node-options *ngIf="cluster.spec.cloud.vsphere"
-                                   [nodeData]="nodeData"
-                                   [cloudSpec]="cluster.spec.cloud"></kubermatic-vsphere-node-options>
+  <kubermatic-node-data-options [nodeData]="nodeData"
+                                [cloudSpec]="cluster.spec.cloud"></kubermatic-node-data-options>
 </ng-container>
 
 <km-label-form title="Node Labels"

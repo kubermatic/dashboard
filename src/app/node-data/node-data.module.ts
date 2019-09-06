@@ -16,6 +16,7 @@ import {GCPNodeDataComponent} from './gcp-node-data/gcp-node-data.component';
 import {GCPNodeOptionsComponent} from './gcp-node-data/gcp-node-options/gcp-node-options.component';
 import {HetznerNodeDataComponent} from './hetzner-node-data/hetzner-node-data.component';
 import {KubeVirtNodeDataComponent} from './kubevirt-add-node/kubevirt-node-data.component';
+import {NodeDataOptionsComponent} from './node-data-options/node-data-options.component';
 import {NodeDataComponent} from './node-data.component';
 import {OpenstackNodeDataComponent} from './openstack-node-data/openstack-node-data.component';
 
@@ -27,6 +28,7 @@ import {VSphereNodeOptionsComponent} from './vsphere-add-node/vsphere-node-optio
 
 const components: any[] = [
   NodeDataComponent,
+  NodeDataOptionsComponent,
   AWSNodeDataComponent,
   AWSNodeOptionsComponent,
   DigitaloceanNodeDataComponent,

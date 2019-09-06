@@ -36,20 +36,7 @@
 
 <!-- Extended Options -->
 <ng-container *ngIf="!hideOptional && !isInWizard">
-  <kubermatic-aws-provider-options *ngIf="cluster.spec.cloud.aws"
-                                   [cluster]="cluster"></kubermatic-aws-provider-options>
-
-  <kubermatic-azure-provider-options *ngIf="cluster.spec.cloud.azure"
-                                     [cluster]="cluster"></kubermatic-azure-provider-options>
-
-  <kubermatic-gcp-provider-options *ngIf="cluster.spec.cloud.gcp"
-                                   [cluster]="cluster"></kubermatic-gcp-provider-options>
-
-  <kubermatic-openstack-provider-options *ngIf="cluster.spec.cloud.openstack"
-                                         [cluster]="cluster"></kubermatic-openstack-provider-options>
-
-  <kubermatic-vsphere-provider-options *ngIf="cluster.spec.cloud.vsphere"
-                                       [cluster]="cluster"></kubermatic-vsphere-provider-options>
+  <kubermatic-cluster-provider-options [cluster]="cluster"></kubermatic-cluster-provider-options>
 </ng-container>
 
 <!-- SSH Keys -->
