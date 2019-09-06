@@ -75,7 +75,7 @@
           </mat-select>
         </mat-form-field>
 
-        <mat-form-field *ngIf="clusterSpecForm.controls.type.value === 'openshift'"
+        <mat-form-field *ngIf="isOpenShiftSelected()"
                         class="km-imagepullsecret-inline">
           <mat-label>Image Pull Secret*</mat-label>
           <input matInput
