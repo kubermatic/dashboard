@@ -37,6 +37,16 @@ cat /hosts > /etc/hosts
 # Start docker daemon
 dockerd > /dev/null 2> /dev/null &
 
+# Wait for it to start
+while (! docker stats --no-stream ); do
+  # Docker takes a few seconds to initialize
+  echo "Waiting for Docker..."
+  sleep 1
+done
+
+# Load kind image
+docker load --input /kindest.tar
+
 deploy.sh
 DOCKER_CONFIG=/ docker run --name controller -d -v /root/.kube/config:/inner -v /etc/kubeconfig/kubeconfig:/outer --network host --privileged ${CONTROLLER_IMAGE} --kubeconfig-inner "/inner" --kubeconfig-outer "/outer" --namespace "default" --build-id "$PROW_JOB_ID"
 docker logs -f controller &
