@@ -161,6 +161,7 @@ function deploy::kubermatic {
 		--set=kubermatic.controller.addons.kubernetes.image.tag="latest" \
 		--set=kubermatic.api.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.api.replicas=1 \
+		--set=kubermatic.ui.image.tag=latest \
 		--set=kubermatic.apiserverDefaultReplicas=1 \
 		--set=kubermatic.masterController.image.tag=${KUBERMATIC_IMAGE_TAG} \
 		--set=kubermatic.controller.featureGates="" \
