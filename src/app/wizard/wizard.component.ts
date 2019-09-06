@@ -76,7 +76,8 @@ export class WizardComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updateSteps();
-    this._projectService.selectedProject.subscribe(project => this.project = project);
+    this._projectService.selectedProject.pipe(takeUntil(this._unsubscribe))
+        .subscribe(project => this.project = project);
     this._googleAnalyticsService.emitEvent('clusterCreation', 'clusterCreationWizardStarted');
 
     // When the cluster spec got changed, update the cluster

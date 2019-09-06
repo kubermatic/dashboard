@@ -12,7 +12,7 @@ import {ProjectEntity} from '../../../../shared/entity/ProjectEntity';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeProjects} from '../../../../testing/fake-data/project.fake';
 import {RouterTestingModule} from '../../../../testing/router-stubs';
-import {asyncData} from '../../../../testing/services/api-mock.service';
+import {ApiMockService} from '../../../../testing/services/api-mock.service';
 import {AppConfigMockService} from '../../../../testing/services/app-config-mock.service';
 import {ProjectMockService} from '../../../../testing/services/project-mock.service';
 import {UserMockService} from '../../../../testing/services/user-mock.service';
@@ -35,9 +35,6 @@ describe('SidenavComponent', () => {
   let component: ProjectSelectorComponent;
 
   beforeEach(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getProjects']);
-    apiMock.getProjects.and.returnValue(asyncData(fakeProjects()));
-
     TestBed
         .configureTestingModule({
           imports: [
@@ -52,7 +49,7 @@ describe('SidenavComponent', () => {
             }),
           ],
           providers: [
-            {provide: ApiService, useValue: apiMock},
+            {provide: ApiService, useValue: ApiMockService},
             {provide: ProjectService, useClass: ProjectMockService},
             {provide: UserService, useClass: UserMockService},
             {provide: AppConfigService, useClass: AppConfigMockService},
