@@ -74,6 +74,9 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
 
     this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
+      if (this._hasRequiredCredentials()) {
+        this._loadOptionalSettings();
+      }
     });
   }
 
