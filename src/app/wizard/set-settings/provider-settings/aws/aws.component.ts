@@ -63,6 +63,10 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
     });
 
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.aws = data.cloudSpec.aws;
+    });
+
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this.form.disable();

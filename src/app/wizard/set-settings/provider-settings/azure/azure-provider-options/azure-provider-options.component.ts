@@ -15,6 +15,7 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
 
+  private _selectedPreset: string;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private readonly _wizard: WizardService) {}
@@ -29,11 +30,16 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm());
+      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
+    });
+
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.azure = data.cloudSpec.azure;
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
+        this._selectedPreset = newCredentials;
         this.form.disable();
         return;
       }
@@ -42,11 +48,13 @@ export class AzureProviderOptionsComponent implements OnInit, OnDestroy {
     });
   }
 
-  private _clusterProviderSettingsForm(): ClusterProviderSettingsForm {
-    const isValid: boolean = this.cluster.spec.cloud.azure.clientID !== '' &&
-        this.cluster.spec.cloud.azure.clientSecret !== '' && this.cluster.spec.cloud.azure.subscriptionID !== '' &&
-        this.cluster.spec.cloud.azure.tenantID !== '';
+  private _hasRequiredCredentials(): boolean {
+    return (this.cluster.spec.cloud.azure.clientID !== '' && this.cluster.spec.cloud.azure.clientSecret !== '' &&
+            this.cluster.spec.cloud.azure.subscriptionID !== '' && this.cluster.spec.cloud.azure.tenantID !== '') ||
+        !!this._selectedPreset;
+  }
 
+  private _clusterProviderSettingsForm(isValid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         azure: {

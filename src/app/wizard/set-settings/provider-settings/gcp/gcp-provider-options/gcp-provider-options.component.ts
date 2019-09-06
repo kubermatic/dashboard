@@ -14,6 +14,7 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
   @Input() cluster: ClusterEntity;
   form: FormGroup;
 
+  private _selectedPreset: string;
   private _unsubscribe: Subject<any> = new Subject();
 
   constructor(private readonly _wizard: WizardService) {}
@@ -25,11 +26,16 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
     });
 
     this.form.valueChanges.pipe(debounceTime(1000)).pipe(takeUntil(this._unsubscribe)).subscribe(() => {
-      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm());
+      this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
+    });
+
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.gcp = data.cloudSpec.gcp;
     });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
+        this._selectedPreset = newCredentials;
         this.form.disable();
         return;
       }
@@ -38,14 +44,16 @@ export class GCPProviderOptionsComponent implements OnInit, OnDestroy {
     });
   }
 
+  private _hasRequiredCredentials(): boolean {
+    return this.cluster.spec.cloud.gcp.serviceAccount !== '' || !!this._selectedPreset;
+  }
+
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
   }
 
-  private _clusterProviderSettingsForm(): ClusterProviderSettingsForm {
-    const isValid: boolean = this.cluster.spec.cloud.gcp.serviceAccount !== '';
-
+  private _clusterProviderSettingsForm(isValid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         gcp: {

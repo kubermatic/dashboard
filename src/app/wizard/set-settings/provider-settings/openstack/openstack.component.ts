@@ -22,7 +22,6 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   tenants: OpenstackTenant[] = [];
   floatingIpPools: OpenstackFloatingIpPool[] = [];
-  hideOptional = true;
 
   private _loadingFloatingIPPools = false;
   private _loadingTenants = false;
@@ -139,8 +138,9 @@ export class OpenstackClusterSettingsComponent implements OnInit, OnDestroy {
             () => this._formHelper.areControlsValid() ? this._wizard.onCustomPresetsDisable.emit(false) :
                                                         this._wizard.onCustomPresetsDisable.emit(true));
 
-    this._wizard.clusterSettingsFormViewChanged$.pipe(takeUntil(this._unsubscribe))
-        .subscribe((data) => this.hideOptional = data.hideOptional);
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
+    });
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {

@@ -74,7 +74,10 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
-
+    this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.nodeData.spec.cloud.aws = data.spec.aws;
+      this.nodeData.valid = data.valid;
+    });
     this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
       if ((data.cloudSpec.aws.vpcId !== '' && data.cloudSpec.aws.accessKeyId !== '' &&
            data.cloudSpec.aws.secretAccessKey !== '') ||

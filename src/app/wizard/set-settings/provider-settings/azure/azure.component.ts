@@ -44,6 +44,10 @@ export class AzureClusterSettingsComponent implements OnInit, OnDestroy {
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
     });
 
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.azure = data.cloudSpec.azure;
+    });
+
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this.form.disable();

@@ -41,6 +41,10 @@ export class VSphereClusterSettingsComponent implements OnInit, OnDestroy {
       this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._formHelper.isFormValid()));
     });
 
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.vsphere = data.cloudSpec.vsphere;
+    });
+
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
         this.form.disable();

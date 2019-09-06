@@ -40,6 +40,11 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
       this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
     });
 
+    this._addNodeService.nodeProviderDataChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.nodeData.spec.cloud.aws = data.spec.aws;
+      this.nodeData.valid = data.valid;
+    });
+
     this._addNodeService.changeNodeProviderData(this.getNodeProviderData());
   }
 

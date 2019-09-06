@@ -20,6 +20,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   loadingFolders = false;
   folders: VSphereFolder[] = [];
 
+  private _selectedPreset: string;
   private _networkMap: {[type: string]: VSphereNetwork[]} = {};
   private _unsubscribe = new Subject<void>();
 
@@ -39,14 +40,21 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
       this.loadFolders();
       this.checkFolderState();
 
-      this._wizardService.changeClusterProviderSettings(this.getVSphereOptionsData());
+      this._wizardService.changeClusterProviderSettings(this.getVSphereOptionsData(this._hasRequiredCredentials()));
     });
 
     this.checkNetworkState();
-    this._wizardService.changeClusterProviderSettings(this.getVSphereOptionsData());
+    this._setUsernamePassword();
+    this._wizardService.changeClusterProviderSettings(this.getVSphereOptionsData(this._hasRequiredCredentials()));
+
+    this._wizardService.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.vsphere = data.cloudSpec.vsphere;
+      this._setUsernamePassword();
+    });
 
     this._wizardService.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
+        this._selectedPreset = newCredentials;
         this.form.disable();
         return;
       }
@@ -60,12 +68,25 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
     this._unsubscribe.complete();
   }
 
-  isMissingCredentials(): boolean {
-    return this.form.controls.username.value === '' || this.form.controls.password.value === '';
+  private _hasRequiredCredentials(): boolean {
+    return (this.form.controls.username.value !== '' && this.form.controls.password.value !== '') ||
+        !!this._selectedPreset;
+  }
+
+  private _setUsernamePassword(): void {
+    if (this.cluster.spec.cloud.vsphere.infraManagementUser.username !== '' &&
+        this.cluster.spec.cloud.vsphere.username === '') {
+      this.form.controls.username.setValue(this.cluster.spec.cloud.vsphere.infraManagementUser.username);
+    }
+
+    if (this.cluster.spec.cloud.vsphere.infraManagementUser.password !== '' &&
+        this.cluster.spec.cloud.vsphere.password === '') {
+      this.form.controls.password.setValue(this.cluster.spec.cloud.vsphere.infraManagementUser.password);
+    }
   }
 
   loadNetworks(): void {
-    if (this.isMissingCredentials()) {
+    if (!this._hasRequiredCredentials()) {
       if (this.networkTypes.length > 0) {
         this.form.controls.vmNetName.setValue('');
         this._networkMap = {};
@@ -115,7 +136,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getNetworkFormState(): string {
-    if (!this.loadingNetworks && this.isMissingCredentials()) {
+    if (!this.loadingNetworks && !this._hasRequiredCredentials()) {
       return 'Network';
     } else if (this.loadingNetworks) {
       return 'Loading Networks...';
@@ -135,11 +156,11 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   showNetworkHint(): boolean {
-    return !this.loadingNetworks && this.isMissingCredentials();
+    return !this.loadingNetworks && !this._hasRequiredCredentials();
   }
 
   loadFolders(): void {
-    if (this.isMissingCredentials()) {
+    if (!this._hasRequiredCredentials()) {
       if (this.folders.length > 0) {
         this.form.controls.folder.setValue('');
         this.folders = [];
@@ -177,7 +198,7 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   getFolderFormState(): string {
-    if (!this.loadingFolders && this.isMissingCredentials()) {
+    if (!this.loadingFolders && !this._hasRequiredCredentials()) {
       return 'Folder';
     } else if (this.loadingFolders) {
       return 'Loading Folders...';
@@ -197,12 +218,10 @@ export class VSphereProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   showFolderHint(): boolean {
-    return !this.loadingFolders && this.isMissingCredentials();
+    return !this.loadingFolders && !this._hasRequiredCredentials();
   }
 
-  getVSphereOptionsData(): ClusterProviderSettingsForm {
-    const isValid: boolean = this.cluster.spec.cloud.vsphere.infraManagementUser.username !== '' &&
-        this.cluster.spec.cloud.vsphere.infraManagementUser.password !== '';
+  getVSphereOptionsData(isValid: boolean): ClusterProviderSettingsForm {
     let cloudUser = this.cluster.spec.cloud.vsphere.infraManagementUser.username;
     let cloudPassword = this.cluster.spec.cloud.vsphere.infraManagementUser.password;
 

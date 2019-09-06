@@ -20,6 +20,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   networks: OpenstackNetwork[] = [];
   securityGroups: OpenstackSecurityGroup[] = [];
 
+  private _selectedPreset: string;
   private _loadingSubnetIds = false;
   private _loadingOptionalSettings = false;
   private _unsubscribe = new Subject<void>();
@@ -39,7 +40,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
       this._loadOptionalSettings();
     }
 
-    this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm());
+    this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
 
     merge(
         this.form.controls.network.valueChanges, this.form.controls.subnetId.valueChanges,
@@ -47,7 +48,7 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
         .pipe(distinctUntilChanged())
         .pipe(takeUntil(this._unsubscribe))
         .subscribe(() => {
-          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm());
+          this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
         });
 
     this.form.controls.network.valueChanges.pipe(distinctUntilChanged())
@@ -62,12 +63,17 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
 
     this._wizard.onCustomPresetSelect.pipe(takeUntil(this._unsubscribe)).subscribe(newCredentials => {
       if (newCredentials) {
+        this._selectedPreset = newCredentials;
         this.form.disable();
-        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm());
+        this._wizard.changeClusterProviderSettings(this._clusterProviderSettingsForm(this._hasRequiredCredentials()));
         return;
       }
 
       this.form.enable();
+    });
+
+    this._wizard.clusterProviderSettingsFormChanges$.pipe(takeUntil(this._unsubscribe)).subscribe((data) => {
+      this.cluster.spec.cloud.openstack = data.cloudSpec.openstack;
     });
   }
 
@@ -229,18 +235,17 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   }
 
   private _hasRequiredCredentials(): boolean {
-    return (this.cluster.spec.cloud.openstack.username !== '' && this.cluster.spec.cloud.openstack.password !== '' &&
-            this.cluster.spec.cloud.openstack.domain !== '') &&
-        (this.cluster.spec.cloud.openstack.tenant !== '' || this.cluster.spec.cloud.openstack.tenantID !== '');
+    return ((this.cluster.spec.cloud.openstack.username !== '' && this.cluster.spec.cloud.openstack.password !== '' &&
+             this.cluster.spec.cloud.openstack.domain !== '') &&
+            (this.cluster.spec.cloud.openstack.tenant !== '' || this.cluster.spec.cloud.openstack.tenantID !== '')) ||
+        !!this._selectedPreset;
   }
 
   private _isNetworkSelected(): boolean {
     return this.form.controls.network.value.toString().length > 0;
   }
 
-  private _clusterProviderSettingsForm(): ClusterProviderSettingsForm {
-    const isValid: boolean = this._hasRequiredCredentials();
-
+  private _clusterProviderSettingsForm(isValid: boolean): ClusterProviderSettingsForm {
     return {
       cloudSpec: {
         openstack: {
