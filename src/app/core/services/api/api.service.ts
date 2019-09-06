@@ -78,11 +78,6 @@ export class ApiService {
     return this._http.delete(url);
   }
 
-  getProjects(): Observable<ProjectEntity[]> {
-    const url = `${this._restRoot}/projects`;
-    return this._http.get<ProjectEntity[]>(url);
-  }
-
   createProject(createProjectModel: CreateProjectModel): Observable<ProjectEntity> {
     const url = `${this._restRoot}/projects`;
     return this._http.post<ProjectEntity>(url, createProjectModel);
