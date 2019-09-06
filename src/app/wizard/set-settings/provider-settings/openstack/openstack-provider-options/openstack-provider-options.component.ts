@@ -83,7 +83,8 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   showHint(field: string): boolean {
     switch (field) {
       case 'subnetId':
-        return !this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.network.value === '');
+        return !this._loadingSubnetIds &&
+            (!this._hasRequiredCredentials() || this.form.controls.network.value === '') && !this._selectedPreset;
       case 'optionalSettings':
         return !this._loadingOptionalSettings && !this._hasRequiredCredentials();
       default:
@@ -94,14 +95,14 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   getOptionalSettingsFormState(field: string): string {
     if (!this._loadingOptionalSettings && !this._hasRequiredCredentials()) {
       return field;
-    } else if (this._loadingOptionalSettings) {
+    } else if (this._loadingOptionalSettings && !this._selectedPreset) {
       return 'Loading ' + field + 's...';
     } else {
       switch (field) {
         case 'Security Group':
-          return this.securityGroups.length === 0 ? 'No Security Groups available' : field;
+          return this.securityGroups.length === 0 && !this._selectedPreset ? 'No Security Groups available' : field;
         case 'Network':
-          return this.networks.length === 0 ? 'No Networks available' : field;
+          return this.networks.length === 0 && !this._selectedPreset ? 'No Networks available' : field;
         default:
           return '';
       }
@@ -111,9 +112,9 @@ export class OpenstackProviderOptionsComponent implements OnInit, OnDestroy {
   getSubnetIDFormState(): string {
     if (!this._loadingSubnetIds && (!this._hasRequiredCredentials() || this.form.controls.network.value === '')) {
       return 'Subnet ID';
-    } else if (this._loadingSubnetIds) {
+    } else if (this._loadingSubnetIds && !this._selectedPreset) {
       return 'Loading Subnet IDs...';
-    } else if (this.form.controls.network.value !== '' && this.subnetIds.length === 0) {
+    } else if (this.form.controls.network.value !== '' && this.subnetIds.length === 0 && !this._selectedPreset) {
       return 'No Subnet IDs available';
     } else {
       return 'Subnet ID';
