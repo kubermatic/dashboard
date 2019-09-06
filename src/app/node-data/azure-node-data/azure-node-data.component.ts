@@ -110,7 +110,7 @@ export class AzureNodeDataComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showSizeHint(): boolean {
-    return (!this.loadingSizes && this.isMissingCredentials()) && this.isInWizard();
+    return (!this.loadingSizes && this.isMissingCredentials() && !this._selectedPreset) && this.isInWizard();
   }
 
   reloadAzureSizes(): void {

@@ -143,7 +143,7 @@ export class OpenstackNodeDataComponent implements OnInit, OnDestroy {
   }
 
   showFlavorHint(): boolean {
-    return (!this.loadingFlavors && !this._hasCredentials()) && this.isInWizard();
+    return (!this.loadingFlavors && !this._hasCredentials() && !this._selectedPreset) && this.isInWizard();
   }
 
   getFlavorsFormState(): string {
