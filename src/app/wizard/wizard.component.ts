@@ -17,6 +17,7 @@ import {ClusterDatacenterForm, ClusterProviderForm, ClusterProviderSettingsForm,
 import {CreateClusterModel} from '../shared/model/CreateClusterModel';
 import {NodeProvider} from '../shared/model/NodeProviderConstants';
 import {NodeData} from '../shared/model/NodeSpecChange';
+import {ClusterType} from '../shared/utils/cluster-utils/cluster-utils';
 
 @Component({
   selector: 'kubermatic-wizard',
@@ -86,6 +87,11 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.cluster.name = this._clusterSpecFormData.name;
         this.cluster.spec.version = this._clusterSpecFormData.version;
         this.cluster.type = this._clusterSpecFormData.type;
+
+        if (this._clusterSpecFormData.type === ClusterType.OpenShift) {
+          this.cluster.spec.openshift.imagePullSecret = this._clusterSpecFormData.imagePullSecret;
+        }
+
         this._wizardService.changeCluster(this.cluster);
       }
     });

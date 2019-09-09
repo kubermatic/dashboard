@@ -101,6 +101,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
+      imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       valid: this.clusterSpecForm.valid,
     });
   }
@@ -120,6 +121,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
+      imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       valid: false,
     });
   }
