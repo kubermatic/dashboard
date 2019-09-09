@@ -89,7 +89,9 @@ export class WizardComponent implements OnInit, OnDestroy {
         this.cluster.type = this._clusterSpecFormData.type;
 
         if (this._clusterSpecFormData.type === ClusterType.OpenShift) {
-          this.cluster.spec.openshift.imagePullSecret = this._clusterSpecFormData.imagePullSecret;
+          this.cluster.spec.openshift = {
+            imagePullSecret: this._clusterSpecFormData.imagePullSecret,
+          };
         }
 
         this._wizardService.changeCluster(this.cluster);
