@@ -34,6 +34,13 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (tagList.length === 0) {
+      tagList.push(new FormGroup({
+        key: new FormControl(''),
+        value: new FormControl(''),
+      }));
+    }
+
     this.form = new FormGroup({
       tags: tagList,
     });

@@ -31,6 +31,13 @@ export class GCPNodeOptionsComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (labelList.length === 0) {
+      labelList.push(new FormGroup({
+        key: new FormControl(''),
+        value: new FormControl(''),
+      }));
+    }
+
     this.form = new FormGroup({
       tags: new FormControl(this.nodeData.spec.cloud.gcp.tags.toString().replace(/\,/g, ', ')),
       labels: labelList,
