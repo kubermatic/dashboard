@@ -17,7 +17,7 @@
                   *ngIf="currentUser && !!currentUser.name"
                   (click)="$event.stopPropagation()"
                   [disabled]="true">
-            {{ currentUser.name }}
+            Signed in as {{currentUser.name}}
           </button>
 
           <mat-divider></mat-divider>
@@ -26,7 +26,6 @@
                   id="km-navbar-logout-btn"
                   *ngIf="isAuthenticated()"
                   (click)="logout()">
-            <mat-icon class="km-logout"></mat-icon>
             <span>Sign out</span>
           </button>
         </mat-menu>
