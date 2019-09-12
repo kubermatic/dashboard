@@ -129,6 +129,11 @@ export class ClusterSpec {
   machineNetworks?: MachineNetwork[];
   version?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
+  openshift?: OpenShift;
+}
+
+export class OpenShift {
+  imagePullSecret?: string;
 }
 
 export class MachineNetwork {
