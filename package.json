@@ -47,7 +47,7 @@
     ]
   },
   "dependencies": {
-    "@angular-redux/form": "9.0.1",
+    "@angular-redux/form": "10.0.0",
     "@angular-redux/store": "9.0.0",
     "@angular/animations": "8.2.2",
     "@angular/cdk": "8.1.3",
