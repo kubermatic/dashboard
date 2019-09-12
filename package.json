@@ -65,7 +65,7 @@
     "angular2-notifications": "2.0.0",
     "animate.css": "3.7.2",
     "buffer": "5.4.3",
-    "core-js": "2.6.9",
+    "core-js": "3.2.1",
     "flag-icon-css": "3.3.0",
     "git-describe": "4.0.4",
     "hammerjs": "2.0.8",
