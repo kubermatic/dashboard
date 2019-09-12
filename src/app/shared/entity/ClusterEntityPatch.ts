@@ -12,6 +12,11 @@ export class ClusterSpecPatch {
   version?: string;
   humanReadableName?: string;
   usePodSecurityPolicyAdmissionPlugin?: boolean;
+  openshift?: OpenShiftPatch;
+}
+
+export class OpenShiftPatch {
+  imagePullSecret?: string;
 }
 
 export class CloudSpecPatch {

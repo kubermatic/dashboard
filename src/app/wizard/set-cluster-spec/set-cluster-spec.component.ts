@@ -31,6 +31,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
           this.cluster.name, [Validators.required, Validators.minLength(5), Validators.pattern('[a-zA-Z0-9-]*')]),
       version: new FormControl(this.cluster.spec.version),
       type: new FormControl(this.cluster.type),
+      imagePullSecret: new FormControl(),
     });
 
     if (this.clusterSpecForm.controls.type.value === '') {
@@ -40,6 +41,8 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
         this.clusterSpecForm.controls.type.setValue(ClusterType.OpenShift);
       }
     }
+
+    this._setClusterTypeValidators();
 
     this._api.getMasterVersions(this.clusterSpecForm.controls.type.value)
         .pipe(first())
@@ -52,12 +55,29 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
     this.clusterSpecForm.valueChanges.pipe(takeUntil(this._unsubscribe))
         .pipe(map(() => this._invalidateStep()))
         .pipe(debounce(() => interval(500)))
-        .subscribe(() => this.setClusterSpec());
+        .subscribe(() => {
+          this._setClusterTypeValidators();
+          this.setClusterSpec();
+        });
   }
 
   ngOnDestroy(): void {
     this._unsubscribe.next();
     this._unsubscribe.complete();
+  }
+
+  isOpenShiftSelected(): boolean {
+    return this.clusterSpecForm.controls.type.value === ClusterType.OpenShift;
+  }
+
+  private _setClusterTypeValidators(): void {
+    if (this.clusterSpecForm.controls.type.value === ClusterType.OpenShift) {
+      this.clusterSpecForm.controls.imagePullSecret.setValidators([Validators.required]);
+    } else {
+      this.clusterSpecForm.controls.imagePullSecret.clearValidators();
+    }
+
+    this.clusterSpecForm.controls.imagePullSecret.updateValueAndValidity();
   }
 
   generateName(): void {
@@ -81,6 +101,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
+      imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       valid: this.clusterSpecForm.valid,
     });
   }
@@ -100,6 +121,7 @@ export class SetClusterSpecComponent implements OnInit, OnDestroy {
       name: this.clusterSpecForm.controls.name.value,
       type: this.clusterSpecForm.controls.type.value,
       version: this.clusterSpecForm.controls.version.value,
+      imagePullSecret: this.clusterSpecForm.controls.imagePullSecret.value,
       valid: false,
     });
   }

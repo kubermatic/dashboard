@@ -6,6 +6,7 @@ export class ClusterSpecForm {
   name: string;
   type: string;
   version: string;
+  imagePullSecret?: string;
   valid: boolean;
 }
 

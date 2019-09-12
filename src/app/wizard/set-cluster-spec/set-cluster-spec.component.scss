@@ -1,6 +1,8 @@
 @import "../../../assets/css/colors";
 @import "../../../assets/css/variables";
 
+$type-toggle-width: 150px;
+
 .km-cluster-spec {
   display: flex;
 }
@@ -30,13 +32,15 @@
 }
 
 .km-cluster-spec-type {
-  margin-right: 20px;
+  margin-right: 2.5 * $baseline-grid;
+  min-width: $type-toggle-width * 2 + $baseline-grid;
+  max-width: $type-toggle-width * 2 + $baseline-grid;
 
   mat-button-toggle {
     min-height: 50px;
     max-height: 50px;
-    min-width: 150px;
-    max-width: 150px;
+    min-width: $type-toggle-width;
+    max-width: $type-toggle-width;
     margin: (0.25 * $baseline-grid) 0 0 0;
     border-width: 2px;
     background-color: $grey-background;
@@ -89,4 +93,9 @@
 .km-version-inline {
   width: auto;
   max-width: 130px;
+}
+
+.km-imagepullsecret-inline {
+  margin-left: 2.5 * $baseline-grid;
+  min-width: 160px;
 }
