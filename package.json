@@ -80,7 +80,7 @@
     "openstack-lib": "0.0.2",
     "redux": "4.0.1",
     "rxjs": "6.5.2",
-    "rxjs-compat": "6.5.2",
+    "rxjs-compat": "6.5.3",
     "semver": "6.3.0",
     "swagger-ui": "3.23.9",
     "ts-helpers": "1.1.2",
