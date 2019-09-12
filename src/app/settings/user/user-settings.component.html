@@ -1,0 +1,40 @@
+<div [formGroup]="form">
+  <mat-card class="white"
+            style="margin-bottom: 20px">
+    <mat-card-header style="margin-left: 10px; margin-bottom: 20px">
+      <mat-card-title>Settings</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div>
+        <div fxFlex="25"
+             style="margin-left: 10px">Items per page: {{itemsPerPage}}</div>
+        <mat-slider [max]="25"
+                    [min]="5"
+                    [step]="5"
+                    [(value)]="itemsPerPage"
+                    fxFlex="25"
+                    color="primary"
+                    fxFlexAlign=" start"></mat-slider>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="white">
+    <mat-card-header style="margin-left: 10px; margin-bottom: 20px">
+      <mat-card-title>Theme</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-button-toggle-group style="margin-left: 10px"
+                               formControlName="themes">
+        <mat-button-toggle *ngFor="let theme of themes;"
+                           value="{{theme}}"
+                           class="km-theme-{{theme}}"
+                           (click)="changeTheme()">
+          <div>{{theme}}</div>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </mat-card-content>
+  </mat-card>
+</div>
