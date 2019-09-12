@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {EMPTY, Observable} from 'rxjs';
 
-import {AWSAvailabilityZone, AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
+import {AWSSize, AWSSubnet, AWSVPC} from '../../../../shared/entity/provider/aws/AWS';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 
 import {Provider} from './provider';

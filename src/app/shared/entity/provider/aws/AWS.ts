@@ -1,7 +1,3 @@
-export class AWSAvailabilityZone {
-  name: string;
-}
-
 export class AWSSubnet {
   name: string;
   id: string;

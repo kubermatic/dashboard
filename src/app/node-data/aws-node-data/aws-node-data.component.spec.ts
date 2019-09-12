@@ -7,7 +7,6 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {ApiService, DatacenterService, WizardService} from '../../core/services';
 import {NodeDataService} from '../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../shared/shared.module';
-import {fakeAwsZones} from '../../testing/fake-data/availabilyZones.fake';
 import {fakeAwsSubnets} from '../../testing/fake-data/aws-subnets.fake';
 import {fakeAWSCluster} from '../../testing/fake-data/cluster.fake';
 import {fakeAWSDatacenter} from '../../testing/fake-data/datacenter.fake';
@@ -29,8 +28,7 @@ describe('AWSNodeDataComponent', () => {
   let component: AWSNodeDataComponent;
 
   beforeEach(() => {
-    const apiMock = jasmine.createSpyObj('ApiService', ['getAWSZones', 'getAWSSubnets']);
-    apiMock.getAWSZones.and.returnValue(asyncData(fakeAwsZones()));
+    const apiMock = jasmine.createSpyObj('ApiService', ['getAWSSubnets']);
     apiMock.getAWSSubnets.and.returnValue(asyncData(fakeAwsSubnets()));
     const datacenterMock = jasmine.createSpyObj('DatacenterService', ['getDataCenter']);
     datacenterMock.getDataCenter.and.returnValue(asyncData(fakeAWSDatacenter()));

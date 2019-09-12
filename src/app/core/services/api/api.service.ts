@@ -14,7 +14,7 @@ import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {AWSAvailabilityZone, AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
+import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
