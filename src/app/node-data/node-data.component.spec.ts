@@ -9,7 +9,6 @@ import {NodeDataService} from '../core/services/node-data/node-data.service';
 import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {SharedModule} from '../shared/shared.module';
 import {fakeDigitaloceanSizes, fakeOpenstackFlavors} from '../testing/fake-data/addNodeModal.fake';
-import {fakeAwsZones} from '../testing/fake-data/availabilyZones.fake';
 import {fakeAwsSubnets} from '../testing/fake-data/aws-subnets.fake';
 import {masterVersionsFake} from '../testing/fake-data/cluster-spec.fake';
 import {fakeAWSCluster, fakeDigitaloceanCluster, fakeOpenstackCluster} from '../testing/fake-data/cluster.fake';
@@ -41,14 +40,13 @@ describe('NodeDataComponent', () => {
   beforeEach(async(() => {
     const apiMock = jasmine.createSpyObj('ApiService', [
       'getDigitaloceanSizes', 'getDigitaloceanSizesForWizard', 'getOpenStackFlavors', 'getOpenStackFlavorsForWizard',
-      'nodeUpgrades', 'getAWSZones', 'getAWSSubnets'
+      'nodeUpgrades', 'getAWSSubnets'
     ]);
     apiMock.getDigitaloceanSizes.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getDigitaloceanSizesForWizard.and.returnValue(asyncData(fakeDigitaloceanSizes()));
     apiMock.getOpenStackFlavors.and.returnValue(asyncData(fakeOpenstackFlavors()));
     apiMock.getOpenStackFlavorsForWizard.and.returnValue(asyncData(fakeOpenstackFlavors()));
     apiMock.nodeUpgrades.and.returnValue(asyncData(masterVersionsFake()));
-    apiMock.getAWSZones.and.returnValue(asyncData(fakeAwsZones()));
     apiMock.getAWSSubnets.and.returnValue(asyncData(fakeAwsSubnets()));
 
     TestBed

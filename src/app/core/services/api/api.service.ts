@@ -14,7 +14,7 @@ import {NodeDeploymentPatch} from '../../../shared/entity/NodeDeploymentPatch';
 import {NodeEntity} from '../../../shared/entity/NodeEntity';
 import {PacketSize} from '../../../shared/entity/packet/PacketSizeEntity';
 import {EditProjectEntity, ProjectEntity} from '../../../shared/entity/ProjectEntity';
-import {AWSAvailabilityZone, AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
+import {AWSSize, AWSSubnet} from '../../../shared/entity/provider/aws/AWS';
 import {AzureSizes} from '../../../shared/entity/provider/azure/AzureSizeEntity';
 import {DigitaloceanSizes} from '../../../shared/entity/provider/digitalocean/DropletSizeEntity';
 import {GCPDiskType, GCPMachineSize, GCPZone} from '../../../shared/entity/provider/gcp/GCP';
@@ -121,11 +121,6 @@ export class ApiService {
   editToken(cluster: ClusterEntity, dc: string, projectID: string, token: Token): Observable<Token> {
     const url = `${this._restRoot}/projects/${projectID}/dc/${dc}/clusters/${cluster.id}/token`;
     return this._http.put<Token>(url, token);
-  }
-
-  getAWSZones(projectId: string, dc: string, clusterId: string): Observable<AWSAvailabilityZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/zones`;
-    return this._http.get<AWSAvailabilityZone[]>(url);
   }
 
   getAWSSubnets(projectId: string, dc: string, clusterId: string): Observable<AWSSubnet[]> {
