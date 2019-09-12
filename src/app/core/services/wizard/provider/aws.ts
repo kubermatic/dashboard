@@ -46,14 +46,6 @@ export class AWS extends Provider {
     return this;
   }
 
-  zones(dc: string): Observable<AWSAvailabilityZone[]> {
-    if (!this._hasRequiredHeaders()) {
-      return EMPTY;
-    }
-    const url = `${this._restRoot}/providers/${this._provider}/${dc}/zones`;
-    return this._http.get<AWSAvailabilityZone[]>(url, {headers: this._headers});
-  }
-
   vpcs(dc: string): Observable<AWSVPC[]> {
     if (!this._hasRequiredHeaders()) {
       return EMPTY;

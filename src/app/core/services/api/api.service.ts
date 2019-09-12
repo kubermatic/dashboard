@@ -123,11 +123,6 @@ export class ApiService {
     return this._http.put<Token>(url, token);
   }
 
-  getAWSZones(projectId: string, dc: string, clusterId: string): Observable<AWSAvailabilityZone[]> {
-    const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/zones`;
-    return this._http.get<AWSAvailabilityZone[]>(url);
-  }
-
   getAWSSubnets(projectId: string, dc: string, clusterId: string): Observable<AWSSubnet[]> {
     const url = `${this._restRoot}/projects/${projectId}/dc/${dc}/clusters/${clusterId}/providers/aws/subnets`;
     return this._http.get<AWSSubnet[]>(url);
