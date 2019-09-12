@@ -93,7 +93,7 @@
     "@bahmutov/add-typescript-to-cypress": "2.1.2",
     "@ngrx/store": "8.2.0",
     "@types/jasmine": "3.4.0",
-    "@types/lodash": "4.14.137",
+    "@types/lodash": "4.14.138",
     "@types/node": "12.7.2",
     "codelyzer": "5.1.0",
     "cypress": "3.4.1",
