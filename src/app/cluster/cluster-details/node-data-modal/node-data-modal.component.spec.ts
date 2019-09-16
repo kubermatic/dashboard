@@ -12,12 +12,16 @@ import {NodeDataService} from '../../../core/services/node-data/node-data.servic
 import {ClusterNameGenerator} from '../../../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../../../google-analytics.service';
 import {AWSNodeDataComponent} from '../../../node-data/aws-node-data/aws-node-data.component';
+import {AWSNodeOptionsComponent} from '../../../node-data/aws-node-data/aws-node-options/aws-node-options.component';
 import {AzureNodeDataComponent} from '../../../node-data/azure-node-data/azure-node-data.component';
+import {AzureNodeOptionsComponent} from '../../../node-data/azure-node-data/azure-node-options/azure-node-options.component';
 import {DigitaloceanNodeDataComponent} from '../../../node-data/digitalocean-node-data/digitalocean-node-data.component';
 import {DigitaloceanNodeOptionsComponent} from '../../../node-data/digitalocean-node-data/digitalocean-node-options/digitalocean-node-options.component';
 import {GCPNodeDataComponent} from '../../../node-data/gcp-node-data/gcp-node-data.component';
+import {GCPNodeOptionsComponent} from '../../../node-data/gcp-node-data/gcp-node-options/gcp-node-options.component';
 import {HetznerNodeDataComponent} from '../../../node-data/hetzner-node-data/hetzner-node-data.component';
 import {KubeVirtNodeDataComponent} from '../../../node-data/kubevirt-add-node/kubevirt-node-data.component';
+import {NodeDataOptionsComponent} from '../../../node-data/node-data-options/node-data-options.component';
 import {NodeDataComponent} from '../../../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../../../node-data/openstack-node-data/openstack-node-data.component';
 import {OpenstackNodeOptionsComponent} from '../../../node-data/openstack-node-data/openstack-node-options/openstack-node-options.component';
@@ -60,18 +64,22 @@ describe('NodeDataModalData', () => {
           declarations: [
             NodeDataModalComponent,
             NodeDataComponent,
+            NodeDataOptionsComponent,
             OpenstackNodeDataComponent,
             OpenstackNodeOptionsComponent,
             AWSNodeDataComponent,
+            AWSNodeOptionsComponent,
             DigitaloceanNodeDataComponent,
             DigitaloceanNodeOptionsComponent,
             HetznerNodeDataComponent,
             VSphereNodeDataComponent,
             VSphereNodeOptionsComponent,
             AzureNodeDataComponent,
+            AzureNodeOptionsComponent,
             PacketNodeDataComponent,
             GCPNodeDataComponent,
             KubeVirtNodeDataComponent,
+            GCPNodeOptionsComponent,
           ],
           providers: [
             {provide: MAT_DIALOG_DATA, useValue: {cluster: fakeDigitaloceanCluster()}},

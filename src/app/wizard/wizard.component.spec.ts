@@ -14,12 +14,16 @@ import {ClusterNameGenerator} from '../core/util/name-generator.service';
 import {GoogleAnalyticsService} from '../google-analytics.service';
 import {MachineNetworksModule} from '../machine-networks/machine-networks.module';
 import {AWSNodeDataComponent} from '../node-data/aws-node-data/aws-node-data.component';
+import {AWSNodeOptionsComponent} from '../node-data/aws-node-data/aws-node-options/aws-node-options.component';
 import {AzureNodeDataComponent} from '../node-data/azure-node-data/azure-node-data.component';
+import {AzureNodeOptionsComponent} from '../node-data/azure-node-data/azure-node-options/azure-node-options.component';
 import {DigitaloceanNodeDataComponent} from '../node-data/digitalocean-node-data/digitalocean-node-data.component';
 import {DigitaloceanNodeOptionsComponent} from '../node-data/digitalocean-node-data/digitalocean-node-options/digitalocean-node-options.component';
 import {GCPNodeDataComponent} from '../node-data/gcp-node-data/gcp-node-data.component';
+import {GCPNodeOptionsComponent} from '../node-data/gcp-node-data/gcp-node-options/gcp-node-options.component';
 import {HetznerNodeDataComponent} from '../node-data/hetzner-node-data/hetzner-node-data.component';
 import {KubeVirtNodeDataComponent} from '../node-data/kubevirt-add-node/kubevirt-node-data.component';
+import {NodeDataOptionsComponent} from '../node-data/node-data-options/node-data-options.component';
 import {NodeDataComponent} from '../node-data/node-data.component';
 import {OpenstackNodeDataComponent} from '../node-data/openstack-node-data/openstack-node-data.component';
 import {OpenstackNodeOptionsComponent} from '../node-data/openstack-node-data/openstack-node-options/openstack-node-options.component';
@@ -42,16 +46,23 @@ import {SetDatacenterComponent} from './set-datacenter/set-datacenter.component'
 import {SetMachineNetworksComponent} from './set-machine-networks/set-machine-networks.component';
 import {SetProviderComponent} from './set-provider/set-provider.component';
 import {CustomPresetsSettingsComponent} from './set-settings/custom-credentials/custom-presets.component';
+import {ExtendedOptionsComponent} from './set-settings/extended-options/extended-options.component';
+import {AWSProviderOptionsComponent} from './set-settings/provider-settings/aws/aws-provider-options/aws-provider-options.component';
 import {AWSClusterSettingsComponent} from './set-settings/provider-settings/aws/aws.component';
+import {AzureProviderOptionsComponent} from './set-settings/provider-settings/azure/azure-provider-options/azure-provider-options.component';
 import {AzureClusterSettingsComponent} from './set-settings/provider-settings/azure/azure.component';
 import {BringyourownClusterSettingsComponent} from './set-settings/provider-settings/bringyourown/bringyourown.component';
 import {DigitaloceanClusterSettingsComponent} from './set-settings/provider-settings/digitalocean/digitalocean.component';
+import {GCPProviderOptionsComponent} from './set-settings/provider-settings/gcp/gcp-provider-options/gcp-provider-options.component';
 import {GCPClusterSettingsComponent} from './set-settings/provider-settings/gcp/gcp.component';
 import {HetznerClusterSettingsComponent} from './set-settings/provider-settings/hetzner/hetzner.component';
 import {KubeVirtClusterSettingsComponent} from './set-settings/provider-settings/kubevirt/kubevirt.component';
+import {OpenstackProviderOptionsComponent} from './set-settings/provider-settings/openstack/openstack-provider-options/openstack-provider-options.component';
 import {OpenstackClusterSettingsComponent} from './set-settings/provider-settings/openstack/openstack.component';
 import {PacketClusterSettingsComponent} from './set-settings/provider-settings/packet/packet.component';
+import {ClusterProviderOptionsComponent} from './set-settings/provider-settings/provider-options/provider-options.component';
 import {ClusterProviderSettingsComponent} from './set-settings/provider-settings/provider-settings.component';
+import {VSphereProviderOptionsComponent} from './set-settings/provider-settings/vsphere/vsphere-provider-options/vsphere-provider-options.component';
 import {VSphereClusterSettingsComponent} from './set-settings/provider-settings/vsphere/vsphere.component';
 import {SetSettingsComponent} from './set-settings/set-settings.component';
 import {ClusterSSHKeysComponent} from './set-settings/ssh-keys/cluster-ssh-keys.component';
@@ -82,33 +93,44 @@ describe('WizardComponent', () => {
             HttpClientModule,
           ],
           declarations: [
+            ExtendedOptionsComponent,
             CustomPresetsSettingsComponent,
             WizardComponent,
             ProgressComponent,
             SetSettingsComponent,
             ClusterSSHKeysComponent,
             ClusterProviderSettingsComponent,
+            ClusterProviderOptionsComponent,
             DigitaloceanClusterSettingsComponent,
             AWSClusterSettingsComponent,
+            AWSProviderOptionsComponent,
             OpenstackClusterSettingsComponent,
+            OpenstackProviderOptionsComponent,
             BringyourownClusterSettingsComponent,
             GCPClusterSettingsComponent,
+            GCPProviderOptionsComponent,
             HetznerClusterSettingsComponent,
             VSphereClusterSettingsComponent,
+            VSphereProviderOptionsComponent,
             AzureClusterSettingsComponent,
-            PacketNodeDataComponent,
+            AzureProviderOptionsComponent,
             PacketClusterSettingsComponent,
+            PacketNodeDataComponent,
             NodeDataComponent,
+            NodeDataOptionsComponent,
             OpenstackNodeDataComponent,
             OpenstackNodeOptionsComponent,
             AWSNodeDataComponent,
+            AWSNodeOptionsComponent,
             DigitaloceanNodeDataComponent,
             DigitaloceanNodeOptionsComponent,
             GCPNodeDataComponent,
+            GCPNodeOptionsComponent,
             HetznerNodeDataComponent,
             VSphereNodeDataComponent,
             VSphereNodeOptionsComponent,
             AzureNodeDataComponent,
+            AzureNodeOptionsComponent,
             SetClusterSpecComponent,
             SetMachineNetworksComponent,
             SetProviderComponent,

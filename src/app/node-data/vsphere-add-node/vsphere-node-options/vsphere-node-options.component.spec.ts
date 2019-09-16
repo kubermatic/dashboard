@@ -51,12 +51,12 @@ describe('VSphereNodeOptionsComponent', () => {
   });
 
   it('should have valid form when initializing', () => {
-    expect(component.vsphereOptionsForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 
   it('should call getVSphereOptionsData method', () => {
-    component.vsphereOptionsForm.controls.template.patchValue('test-template');
-    component.vsphereOptionsForm.controls.diskSizeGB.patchValue(256);
+    component.form.controls.template.patchValue('test-template');
+    component.form.controls.diskSizeGB.patchValue(256);
     fixture.detectChanges();
     expect(component.getVSphereOptionsData())
         .toEqual({spec: {vsphere: {cpus: 1, memory: 512, template: 'test-template', diskSizeGB: 256}}, valid: true});

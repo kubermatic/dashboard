@@ -46,12 +46,12 @@ describe('DigitaloceanNodeOptionsComponent', () => {
   });
 
   it('should have valid form when initializing', () => {
-    expect(component.doOptionsForm.valid).toBeTruthy();
+    expect(component.form.valid).toBeTruthy();
   });
 
   it('should call getDoOptionsData method', () => {
-    component.doOptionsForm.controls.tags.patchValue('test-tag1, test-tag2');
-    component.doOptionsForm.controls.ipv6.patchValue(true);
+    component.form.controls.tags.patchValue('test-tag1, test-tag2');
+    component.form.controls.ipv6.patchValue(true);
     fixture.detectChanges();
 
     expect(component.getDoOptionsData()).toEqual({

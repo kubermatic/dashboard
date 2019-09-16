@@ -7,7 +7,6 @@ import {ApiService, DatacenterService, WizardService} from '../../../core/servic
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeAzureSizes} from '../../../testing/fake-data/addNodeModal.fake';
-import {fakeAzureCluster} from '../../../testing/fake-data/cluster.fake';
 import {fakeAzureDatacenter} from '../../../testing/fake-data/datacenter.fake';
 import {nodeDataFake} from '../../../testing/fake-data/node.fake';
 import {asyncData} from '../../../testing/services/api-mock.service';
@@ -53,7 +52,6 @@ describe('AzureNodeOptionsComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AzureNodeOptionsComponent);
     component = fixture.componentInstance;
-    component.cloudSpec = fakeAzureCluster().spec.cloud;
     component.nodeData = nodeDataFake();
     component.datacenter = fakeAzureDatacenter();
   });

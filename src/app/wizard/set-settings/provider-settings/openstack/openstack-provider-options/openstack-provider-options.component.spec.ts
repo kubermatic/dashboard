@@ -127,7 +127,6 @@ describe('OpenstackProviderOptionsComponent', () => {
          component.cluster.spec.cloud.openstack.password = 'password';
          component.cluster.spec.cloud.openstack.domain = 'domain';
          component.cluster.spec.cloud.openstack.tenant = 'loodse-poc';
-         component.cluster.spec.cloud.openstack.floatingIpPools = [];
          component.networks = [];
          component.securityGroups = [];
          fixture.detectChanges();
@@ -169,7 +168,6 @@ describe('OpenstackProviderOptionsComponent', () => {
     });
 
     it('should load subnet ids', fakeAsync(() => {
-         component.cluster.spec.cloud.openstack.floatingIpPools = [];
          component.networks = [];
          component.securityGroups = [];
 
@@ -211,7 +209,6 @@ describe('OpenstackProviderOptionsComponent', () => {
          component.cluster.spec.cloud.openstack.password = 'password';
          component.cluster.spec.cloud.openstack.domain = 'domain';
          component.cluster.spec.cloud.openstack.tenant = 'tenant';
-         component.cluster.spec.cloud.openstack.floatingIpPools = [];
          component.securityGroups = [];
          component.networks = [];
          fixture.detectChanges();
