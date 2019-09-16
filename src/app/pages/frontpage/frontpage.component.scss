@@ -1,5 +1,6 @@
 @import "../../../assets/css/colors";
 @import "../../../assets/css/fonts";
+@import "../../../assets/css/variables";
 
 .km-frontpage-bg {
   background-color: $alternative-dark;
@@ -23,6 +24,7 @@
     font-weight: 500;
     line-height: 42px;
     margin-bottom: 25px;
+    text-shadow: 2px 2px 2px $disabled-text-color;
   }
 
   .mat-raised-button {
