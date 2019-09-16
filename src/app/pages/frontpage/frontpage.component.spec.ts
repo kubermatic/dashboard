@@ -3,7 +3,6 @@ import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {ParticlesModule} from 'angular-particle';
 import {SlimLoadingBarModule} from 'ng2-slim-loading-bar';
 import {CookieService} from 'ngx-cookie-service';
 
@@ -18,7 +17,6 @@ const modules: any[] = [
   BrowserModule,
   RouterTestingModule,
   BrowserAnimationsModule,
-  ParticlesModule,
   SlimLoadingBarModule.forRoot(),
   SharedModule,
 ];
