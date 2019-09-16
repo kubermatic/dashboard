@@ -3,11 +3,11 @@ import {Taint} from '../entity/NodeEntity';
 
 export class TaintFormValidators {
   /**
-   * Checks if taint value is minimum 1 char and not longer than 63 chars.
+   * Checks if taint value is not longer than 63 chars.
    */
   static taintValueLength(control: FormControl): {[key: string]: object} {
     const value = control.value;
-    return value.length > 1 && value.length <= 63 ? null : {validLabelValueLength: {value: true}};
+    return value.length <= 63 ? null : {validLabelValueLength: {value: true}};
   }
 
   /**
