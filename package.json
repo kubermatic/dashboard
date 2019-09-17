@@ -61,6 +61,7 @@
     "@angular/platform-browser": "8.2.2",
     "@angular/platform-browser-dynamic": "8.2.2",
     "@angular/router": "8.2.2",
+    "angular-particle": "1.0.4",
     "angular2-notifications": "2.0.0",
     "animate.css": "3.7.2",
     "buffer": "5.4.3",

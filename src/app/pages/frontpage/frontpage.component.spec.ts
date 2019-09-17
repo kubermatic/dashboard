@@ -57,7 +57,7 @@ describe('FrontpageComponent', () => {
        expect(component).toBeTruthy();
      }));
 
-  it('should navigate to clusters list if not authenticated', () => {
+  it('should navigate to clusters list if authenticated', () => {
     const spyNavigate = spyOn(router, 'navigate');
     authService.isAuth = true;
 

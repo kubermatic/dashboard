@@ -1,14 +1,15 @@
 @import "colors";
 @import "variables";
 
-// logo
+// Branding.
 .km-header-logo {
-  background-image: url("/assets/images/logo/kubermatic.svg");
+  background-image: url("/assets/images/branding/kubermatic-logo.svg");
   background-repeat: no-repeat;
 }
 
 .km-frontpage-bg {
-  background-image: url("/assets/images/bg.png");
+  background-image: url("/assets/images/branding/frontpage-background.png");
+  background-repeat: no-repeat;
   background-size: cover;
 }
 

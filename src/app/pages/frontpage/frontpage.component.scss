@@ -1,8 +1,5 @@
 @import "../../../assets/css/colors";
 @import "../../../assets/css/fonts";
-@import "../../../assets/css/variables";
-
-$button-margin: 5 * $baseline-grid;
 
 .km-frontpage-bg {
   background-color: $alternative-dark;
@@ -27,11 +24,11 @@ $button-margin: 5 * $baseline-grid;
     font-size: 28px;
     font-weight: 500;
     line-height: 42px;
-    margin-bottom: $button-margin;
-    text-shadow: 2px 2px 2px $disabled-text-color;
+    margin-bottom: 40px;
   }
 
   .mat-raised-button {
+    background-color: #fff;
     color: $alternative-dark;
     font-size: 20px;
     font-family: $primary-font-sans-serif;
@@ -39,6 +36,5 @@ $button-margin: 5 * $baseline-grid;
     line-height: 50px !important;
     width: 200px;
     height: 50px;
-    background-color: #fff;
   }
 }
