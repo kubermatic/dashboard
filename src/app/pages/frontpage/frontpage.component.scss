@@ -2,6 +2,8 @@
 @import "../../../assets/css/fonts";
 @import "../../../assets/css/variables";
 
+$button-margin: 5 * $baseline-grid;
+
 .km-frontpage-bg {
   background-color: $alternative-dark;
   position: absolute;
@@ -21,28 +23,22 @@
   .km-frontpage-inner-text {
     text-align: center;
     color: $white-text-color;
-    text-transform: uppercase;
-    font-family: $primary-font-sans-serif;
+    font-family: $secondary-font;
     font-size: 28px;
     font-weight: 500;
     line-height: 42px;
-    margin-bottom: 25px;
+    margin-bottom: $button-margin;
     text-shadow: 2px 2px 2px $disabled-text-color;
   }
 
   .mat-raised-button {
-    line-height: 57px !important;
     color: $alternative-dark;
-    font-size: 28px;
+    font-size: 20px;
     font-family: $primary-font-sans-serif;
-    font-weight: normal;
-    width: 470px;
-    height: 60px;
-    z-index: 1;
-    background-color: $raised-button;
-
-    &:hover {
-      background-color: $raised-button-hover;
-    }
+    font-weight: 500 !important;
+    line-height: 50px !important;
+    width: 200px;
+    height: 50px;
+    background-color: #fff;
   }
 }
