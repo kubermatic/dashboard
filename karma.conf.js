@@ -53,6 +53,7 @@ module.exports = function (config) {
           '--no-default-browser-check',
           '--enable-logging',
           '--disable-gpu',
+          '--disable-dev-shm-usage',
           '--disable-default-apps',
           '--disable-popup-blocking',
           '--disable-translate',
