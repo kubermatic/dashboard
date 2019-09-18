@@ -209,7 +209,8 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
           this.sizes.filter(value => value.name === this.nodeData.spec.cloud.aws.instanceType).length > 0) {
         this.form.controls.size.setValue(this.nodeData.spec.cloud.aws.instanceType);
       } else {
-        this.form.controls.size.setValue(this.sizes[0].name);
+        const cheapestInstance = this.sizes.reduce((prev, curr) => prev.price < curr.price ? prev : curr);
+        this.form.controls.size.setValue(cheapestInstance.name);
       }
     }
   }
