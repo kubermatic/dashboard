@@ -17,7 +17,7 @@
                   *ngIf="currentUser && !!currentUser.name"
                   (click)="$event.stopPropagation()"
                   [disabled]="true">
-            Signed in as {{currentUser.name}}
+            {{currentUser.name}}
           </button>
 
           <mat-divider></mat-divider>
