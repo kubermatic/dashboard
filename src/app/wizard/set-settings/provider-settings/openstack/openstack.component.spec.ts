@@ -7,17 +7,18 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {AppConfigService} from '../../../../app-config.service';
 import {Auth, WizardService} from '../../../../core/services';
-import {ClusterSettingsFormView} from '../../../../shared/model/ClusterForm';
+import {ClusterProviderSettingsForm, ClusterSettingsFormView} from '../../../../shared/model/ClusterForm';
 import {Config} from '../../../../shared/model/Config';
 import {NodeProvider} from '../../../../shared/model/NodeProviderConstants';
 import {SharedModule} from '../../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../../testing/fake-data/cluster.fake';
 import {fakeOpenstackDatacenter} from '../../../../testing/fake-data/datacenter.fake';
-import {openstackNetworksFake, openstackSecurityGroupsFake, openstackSortedFloatingIpsFake, openstackSubnetIdsFake, openstackTenantsFake} from '../../../../testing/fake-data/wizard.fake';
+import {openstackNetworksFake, openstackSecurityGroupsFake, openstackSubnetIdsFake, openstackTenantsFake} from '../../../../testing/fake-data/wizard.fake';
 import {asyncData} from '../../../../testing/services/api-mock.service';
 import {AuthMockService} from '../../../../testing/services/auth-mock.service';
 
 import {OpenstackClusterSettingsComponent} from './openstack.component';
+
 import Spy = jasmine.Spy;
 
 describe('OpenstackClusterSettingsComponent', () => {
@@ -41,6 +42,7 @@ describe('OpenstackClusterSettingsComponent', () => {
     wizardMock.onCustomPresetsDisable = new EventEmitter<boolean>();
     wizardMock.onCustomPresetSelect = new EventEmitter<string>();
     wizardMock.clusterSettingsFormViewChanged$ = new EventEmitter<ClusterSettingsFormView>();
+    wizardMock.clusterProviderSettingsFormChanges$ = new EventEmitter<ClusterProviderSettingsForm>();
 
     providerMock.username.and.returnValue(providerMock);
     providerMock.password.and.returnValue(providerMock);
@@ -198,20 +200,6 @@ describe('OpenstackClusterSettingsComponent', () => {
       fixture.detectChanges();
       expect(component.getTenantsFormState()).toEqual('Project');
     });
-
-    it('should set correct optional settings placeholder', (() => {
-         component.form.controls.username.setValue('username');
-         component.form.controls.password.setValue('password');
-         component.form.controls.domain.setValue('domain');
-         component.form.controls.tenant.setValue('tenant');
-         component.floatingIpPools = [];
-         fixture.detectChanges();
-         expect(component.getFloatingIPPoolFormState()).toEqual('No Floating IP Pools available');
-
-         component.floatingIpPools = openstackSortedFloatingIpsFake();
-         fixture.detectChanges();
-         expect(component.getFloatingIPPoolFormState()).toEqual('Floating IP Pool');
-       }));
 
     it('should disable Project field when Project ID is provided', fakeAsync(() => {
          fixture.detectChanges();
