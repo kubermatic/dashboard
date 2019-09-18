@@ -8,8 +8,10 @@
 }
 
 .km-frontpage-bg {
-  background-image: url("/assets/images/branding/frontpage-background.png");
-  background-repeat: no-repeat;
+  background: url("/assets/images/branding/frontpage-background.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
   background-size: cover;
 }
 
