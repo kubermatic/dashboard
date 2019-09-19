@@ -251,6 +251,9 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
                 this.form.controls.subnetId.setValue('');
                 this._noSubnets = true;
               } else {
+                if (this.nodeData.spec.cloud.aws.subnetId === '') {
+                  this.form.controls.subnetId.setValue(this._subnetMap[Object.keys(this._subnetMap)[0]][0].id);
+                }
                 this._noSubnets = false;
               }
 
