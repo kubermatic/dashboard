@@ -25,10 +25,10 @@ run:
 test-full: test run-e2e
 
 test:
-	@$(CC) run test
+	@$(CC) test
 
 test-headless: install
-	@$(CC) run test
+	@$(CC) test
 	./hack/upload-coverage.sh
 
 run-e2e-ci: install
