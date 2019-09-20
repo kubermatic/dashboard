@@ -71,3 +71,12 @@ button:disabled {
 ::ng-deep .km-property-container {
   margin: (.75 * $baseline-grid) (6.25 * $baseline-grid) (.75 * $baseline-grid) 0 !important;
 }
+
+.mat-card.km-metrics-card {
+  padding: (3.75 * $baseline-grid) (7.5 * $baseline-grid);
+  margin: $baseline-grid * 2.5 0;
+
+  .mat-card-title {
+    margin-bottom: 2 * $baseline-grid !important;
+  }
+}

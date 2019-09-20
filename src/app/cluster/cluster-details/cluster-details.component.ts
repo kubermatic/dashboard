@@ -47,6 +47,7 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
   health: HealthEntity;
   config: Config = {share_kubeconfig: false};
   projectID: string;
+  metrics: any[] = [];
   events: EventEntity[] = [];
   upgrades: MasterVersion[] = [];
   private _unsubscribe: Subject<any> = new Subject();
@@ -84,15 +85,17 @@ export class ClusterDetailsComponent implements OnInit, OnDestroy {
           return combineLatest([
             this._clusterService.sshKeys(this.projectID, this.cluster.id, this.datacenter.metadata.name),
             this._clusterService.health(this.projectID, this.cluster.id, this.datacenter.metadata.name),
+            this._clusterService.metrics(this.projectID, this.cluster.id, this.datacenter.metadata.name),
             this._clusterService.events(this.projectID, this.cluster.id, this.datacenter.metadata.name),
           ]);
         }))
-        .pipe(switchMap(([keys, health, events]) => {
+        .pipe(switchMap(([keys, health, metrics, events]) => {
           this.sshKeys = keys.sort((a, b) => {
             return a.name.localeCompare(b.name);
           });
 
           this.health = health;
+          this.metrics = metrics;
           this.events = events;
           this.isClusterAPIRunning = ClusterHealthStatus.isClusterAPIRunning(this.cluster, health);
           this.isClusterRunning = ClusterHealthStatus.isClusterRunning(this.cluster, health);

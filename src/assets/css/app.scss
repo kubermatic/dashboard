@@ -338,8 +338,6 @@ mat-card-header > div > mat-card-title > div {
 .mat-card.km-with-table-header {
   padding: (3.75 * $baseline-grid) 0;
   margin: (2.5 * $baseline-grid) 0 0 0;
-  box-shadow: $border-box-shadow !important;
-  border-radius: $border-radius !important;
 
   .mat-card-header {
     padding: 0 7 * $baseline-grid;
@@ -444,8 +442,6 @@ mat-card-header > div > mat-card-title > div {
 .mat-card.white {
   padding: (3.75 * $baseline-grid) 0;
   margin: 0;
-  box-shadow: $border-box-shadow !important;
-  border-radius: $border-radius !important;
 
   &.km-cluster-details {
     padding: (3.75 * $baseline-grid) 0 0 0;
@@ -578,11 +574,6 @@ mat-card-header > div > mat-card-title > div {
   }
 }
 
-// mat card remove border
-.mat-card {
-  box-shadow: none !important;
-}
-
 // tooltip
 .mat-tooltip {
   background-color: $light-primary !important;
@@ -705,31 +696,35 @@ div.km-form-group-labels {
   width: 45% !important;
 }
 
-// Card headers.
-.mat-card-header .mat-card-title {
-  color: $text-color !important;
-  padding: $baseline-grid 0 (2 * $baseline-grid);
-  font-size: 20px;
-  font-weight: normal !important;
+// Cards.
+.mat-card {
+  box-shadow: $border-box-shadow !important;
+  border-radius: $border-radius !important;
 
-  i {
-    font-size: $subhead-font-size-base-lg;
-    margin: 0 (2.5 * $baseline-grid);
+  .mat-card-header .mat-card-title {
+    color: $text-color !important;
+    padding: $baseline-grid 0 (2 * $baseline-grid);
+    font-size: 20px;
+    font-weight: normal !important;
+
+    i {
+      font-size: $subhead-font-size-base-lg;
+      margin: 0 (2.5 * $baseline-grid);
+    }
+  }
+
+  .mat-card-header-text {
+    margin: 0 !important;
   }
 }
 
-.mat-card-header-text {
-  margin: 0 !important;
-}
-
-// Card contents.
 .km-content-wrap {
   display: flex;
   flex-flow: row wrap;
   padding: $baseline-grid (7 * $baseline-grid) 0 !important;
 }
 
-// Card "expansion panel".
+// Card expansion panel.
 .km-card-expansion-panel {
   color: $text-color;
   font-size: $subhead-font-size-base;
@@ -1069,7 +1064,7 @@ mat-chip-list {
   }
 }
 
-// Mat menu.
+// Menus.
 .mat-menu-item {
   padding: 0 (1.25 * $baseline-grid) !important;
   line-height: 4.2 * $line-height !important;

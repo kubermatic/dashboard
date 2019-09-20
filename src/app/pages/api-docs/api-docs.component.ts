@@ -7,7 +7,6 @@ import {ApiService, Auth} from '../../core/services';
 @Component({
   selector: 'kubermatic-api-docs',
   templateUrl: './api-docs.component.html',
-  styleUrls: ['./api-docs.component.scss'],
 })
 export class ApiDocsComponent implements OnInit {
   constructor(
