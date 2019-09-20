@@ -112,9 +112,9 @@
 
               <!-- AWS -->
               <ng-container *ngIf="cluster.spec.cloud.aws">
-                <km-property *ngIf="cluster.spec.cloud.aws.securityGroup">
+                <km-property *ngIf="cluster.spec.cloud.aws.securityGroupId">
                   <div key>Security Group ID</div>
-                  <div value>{{cluster.spec.cloud.aws.securityGroup}}</div>
+                  <div value>{{cluster.spec.cloud.aws.securityGroupId}}</div>
                 </km-property>
                 <km-property *ngIf="cluster.spec.cloud.aws.vpcId">
                   <div key>VPC ID</div>

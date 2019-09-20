@@ -3,7 +3,7 @@ export class AWSCloudSpec {
   secretAccessKey: string;
   vpcId: string;
   routeTableId: string;
-  securityGroup: string;
+  securityGroupId: string;
   instanceProfileName: string;
   roleARN: string;
 }

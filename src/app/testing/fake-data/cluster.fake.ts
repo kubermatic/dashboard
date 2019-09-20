@@ -205,7 +205,7 @@ export function fakeAWSCluster(): ClusterEntity {
         aws: {
           accessKeyId: 'aaaaaaaaaaaa',
           secretAccessKey: 'bbbbbbbbbbbb',
-          securityGroup: '',
+          securityGroupId: '',
           vpcId: '',
           routeTableId: '',
           instanceProfileName: '',
