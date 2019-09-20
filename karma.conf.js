@@ -22,11 +22,10 @@ module.exports = function (config) {
       }
     },
     files: [
-      { pattern: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css' }
+      {pattern: './node_modules/@angular/material/prebuilt-themes/indigo-pink.css'},
+      {pattern: '/assets/*', watched: false, included: false, served: true},
     ],
-    preprocessors: {
-
-    },
+    preprocessors: {},
     mime: {
       'text/x-typescript': ['ts','tsx']
     },
@@ -34,7 +33,9 @@ module.exports = function (config) {
       dir: require('path').join(__dirname, 'coverage'), reports: [ 'html', 'lcovonly' ],
       fixWebpackSourcePaths: true
     },
-
+    proxies:  {
+      '/assets/': '/base/assets/'
+    },
     reporters: config.angularCli && config.angularCli.codeCoverage
       ? ['mocha', 'coverage-istanbul']
       : ['mocha', 'kjhtml'],
@@ -48,15 +49,26 @@ module.exports = function (config) {
         flags: [
           '--headless',
           '--no-sandbox',
+          '--no-first-run',
+          '--no-default-browser-check',
+          '--enable-logging',
           '--disable-gpu',
-          // Without a remote debugging port, Google Chrome exits immediately.
-          '--remote-debugging-port=9222',
+          '--disable-dev-shm-usage',
+          '--disable-default-apps',
+          '--disable-popup-blocking',
+          '--disable-translate',
+          '--disable-web-security',
+          '--disable-background-timer-throttling',
+          '--disable-renderer-backgrounding',
+          '--disable-device-discovery-notifications',
+          '--remote-debugging-port=9222'
         ],
       },
     },
-    captureTimeout: 210000,
-    browserDisconnectTimeout : 210000,
-    browserNoActivityTimeout : 210000
+    captureTimeout: 300000,
+    browserNoActivityTimeout : 300000,
+    browserDisconnectTimeout : 300000,
+    browserDisconnectTolerance: 0,
   };
 
   // Disable parallel testing on prow as it takes too much resources.

@@ -22,14 +22,8 @@ describe('TaintFormValidators', () => {
     expect(result).toBe(null);
   });
 
-  it('taintValueLength should be invalid if too short', () => {
-    const control = {value: tooLongValue} as FormControl;
-    const result = TaintFormValidators.taintValueLength(control);
-    expect(result).not.toBe(null);
-  });
-
   it('taintValueLength should be invalid if too long', () => {
-    const control = {value: ''} as FormControl;
+    const control = {value: tooLongValue} as FormControl;
     const result = TaintFormValidators.taintValueLength(control);
     expect(result).not.toBe(null);
   });

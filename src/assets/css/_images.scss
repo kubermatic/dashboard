@@ -1,10 +1,18 @@
 @import "colors";
 @import "variables";
 
-// logo
+// Branding.
 .km-header-logo {
-  background-image: url("/assets/images/logo/kubermatic.svg");
+  background-image: url("/assets/images/branding/kubermatic-logo.svg");
   background-repeat: no-repeat;
+}
+
+.km-frontpage-bg {
+  background: url("/assets/images/branding/frontpage-background-min.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
 // login & logout & user
@@ -329,7 +337,7 @@
 }
 
 .km-provider-logo-gcp {
-  background-image: url("/assets/images/clouds/gcp.png");
+  background-image: url("/assets/images/clouds/gcp.svg");
   background-repeat: no-repeat;
   background-size: contain;
   background-position: left;

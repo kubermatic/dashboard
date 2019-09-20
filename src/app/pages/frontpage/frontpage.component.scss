@@ -12,38 +12,29 @@
 }
 
 .km-frontpage-content {
-  margin-top: 15%;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
 
   .km-frontpage-inner-text {
     text-align: center;
     color: $white-text-color;
-    text-transform: uppercase;
-    font-family: $primary-font-sans-serif;
+    font-family: $secondary-font;
     font-size: 28px;
     font-weight: 500;
     line-height: 42px;
-    margin-bottom: 25px;
+    margin-bottom: 40px;
   }
 
   .mat-raised-button {
-    line-height: 57px !important;
+    background-color: #fff;
     color: $alternative-dark;
-    font-size: 28px;
+    font-size: 20px;
     font-family: $primary-font-sans-serif;
-    font-weight: normal !important;
-    width: 470px;
-    height: 60px;
-    z-index: 1;
-    background-color: $raised-button;
-
-    &:hover {
-      background-color: $raised-button-hover;
-    }
+    font-weight: 500 !important;
+    line-height: 50px !important;
+    width: 200px;
+    height: 50px;
   }
-}
-
-.mat-card {
-  max-width: 400px;
-  height: 120px;
-  z-index: 1;
 }
