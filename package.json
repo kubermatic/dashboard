@@ -112,7 +112,7 @@
     "karma-parallel": "0.3.1",
     "karma-remap-istanbul": "0.6.0",
     "license-checker": "^25.0.1",
-    "lint-staged": "9.2.5",
+    "lint-staged": "9.3.0",
     "ng2-mock-component": "0.2.0",
     "ng2-slim-loading-bar": "4.0.0",
     "ngrx-store-freeze": "0.2.4",
