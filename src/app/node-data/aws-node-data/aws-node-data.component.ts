@@ -55,6 +55,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
       disk_size: new FormControl(this.nodeData.spec.cloud.aws.diskSize, Validators.required),
       disk_type: new FormControl(this.nodeData.spec.cloud.aws.volumeType, Validators.required),
       ami: new FormControl(this.nodeData.spec.cloud.aws.ami),
+      assignPublicIP: new FormControl(this.nodeData.spec.cloud.aws.assignPublicIP),
       tags: tagList,
       subnetId: new FormControl(this.nodeData.spec.cloud.aws.subnetId, Validators.required),
     });
@@ -131,6 +132,7 @@ export class AWSNodeDataComponent implements OnInit, OnDestroy {
           volumeType: this.form.controls.disk_type.value,
           subnetId: this.form.controls.subnetId.value,
           availabilityZone: azFromSubnet,
+          assignPublicIP: this.form.controls.assignPublicIP.value,
         },
       },
       valid: this.form.valid,

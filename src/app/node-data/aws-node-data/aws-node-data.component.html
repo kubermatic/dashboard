@@ -67,6 +67,10 @@
            autocomplete="off">
   </mat-form-field>
 
+  <mat-checkbox *ngIf="!hideOptional"
+                id="assignPublicIP"
+                formControlName="assignPublicIP">Assign Public IP</mat-checkbox>
+
   <div class="km-form-group-tags-header"
        *ngIf="!hideOptional">
     Tags
