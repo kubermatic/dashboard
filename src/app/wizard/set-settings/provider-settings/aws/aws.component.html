@@ -62,12 +62,12 @@
                   *ngIf="!hideOptional">
     <mat-label>Security Group ID</mat-label>
     <input matInput
-           formControlName="securityGroup"
-           name="securityGroup"
+           formControlName="securityGroupID"
+           name="securityGroupID"
            type="text"
            autocomplete="off">
     <mat-hint>When specified, all worker nodes will be attached to this security group. If not specified, a security group will be created.</mat-hint>
-    <mat-error *ngIf="form.controls.securityGroup.hasError('pattern')">
+    <mat-error *ngIf="form.controls.securityGroupID.hasError('pattern')">
       The security group ID need to look similar to 'sg-a2c195ca'.
     </mat-error>
   </mat-form-field>
