@@ -139,20 +139,7 @@
       <km-cluster-secrets [cluster]="cluster"
                           [health]="health"></km-cluster-secrets>
 
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card class="white km-metrics-card">
-    <mat-card-header>
-      <mat-card-title>Metrics</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <km-property>
-        <div key>Memory used</div>
-        <div value>
-          {{metrics | json}}
-        </div>
-      </km-property>
+      <km-cluster-metrics [metrics]="metrics"></km-cluster-metrics>
 
     </mat-card-content>
   </mat-card>

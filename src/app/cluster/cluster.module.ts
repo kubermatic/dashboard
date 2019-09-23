@@ -9,6 +9,7 @@ import {ChangeClusterVersionComponent} from './cluster-details/change-cluster-ve
 import {ClusterConnectComponent} from './cluster-details/cluster-connect/cluster-connect.component';
 import {ClusterDeleteConfirmationComponent} from './cluster-details/cluster-delete-confirmation/cluster-delete-confirmation.component';
 import {ClusterDetailsComponent} from './cluster-details/cluster-details.component';
+import {ClusterMetricsComponent} from './cluster-details/cluster-metrics/cluster-metrics.component';
 import {ClusterSecretsComponent} from './cluster-details/cluster-secrets/cluster-secrets.component';
 import {ConfigurePodSecurityComponent} from './cluster-details/configure-pod-security/configure-pod-security.component';
 import {EditClusterComponent} from './cluster-details/edit-cluster/edit-cluster.component';
@@ -68,6 +69,7 @@ const entryComponents: any[] = [
   AddClusterSSHKeysComponent,
   ShareKubeconfigComponent,
   ClusterPanelComponent,
+  ClusterMetricsComponent,
 ];
 
 @NgModule({

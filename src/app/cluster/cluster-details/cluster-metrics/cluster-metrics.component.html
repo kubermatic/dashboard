@@ -1,0 +1,32 @@
+<mat-divider></mat-divider>
+
+<div class="km-card-expansion-panel"
+     fxFlex
+     fxLayout="row wrap"
+     fxLayoutAlign=" center">
+
+  <km-property>
+    <div key>Control Plane Memory Usage</div>
+    <div value>{{metrics.controlPlane.memoryTotalBytes}} bytes</div>
+  </km-property>
+  <km-property>
+    <div key>Control Plane CPU Usage</div>
+    <div value>{{metrics.controlPlane.cpuTotalMillicores}} milicores</div>
+  </km-property>
+
+  <km-property>
+    <div key>Nodes Memory Usage</div>
+    <div value>
+      {{metrics.nodes.memoryTotalBytes}}/{{metrics.nodes.memoryAvailableBytes}} bytes
+      ({{metrics.nodes.memoryUsedPercentage}}%)
+    </div>
+  </km-property>
+  <km-property>
+    <div key>Nodes CPU Usage</div>
+    <div value>
+      {{metrics.nodes.cpuTotalMillicores}}/{{metrics.nodes.cpuAvailableMillicores}} milicores
+      ({{metrics.nodes.cpuUsedPercentage}}%)
+    </div>
+  </km-property>
+
+</div>
