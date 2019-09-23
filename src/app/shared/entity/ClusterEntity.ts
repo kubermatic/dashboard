@@ -44,7 +44,7 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
         secretAccessKey: '',
         routeTableId: '',
         vpcId: '',
-        securityGroupId: '',
+        securityGroupID: '',
         instanceProfileName: '',
         roleARN: '',
       } as AWSCloudSpec;
