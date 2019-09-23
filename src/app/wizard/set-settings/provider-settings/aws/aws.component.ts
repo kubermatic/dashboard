@@ -31,8 +31,8 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       accessKeyId: new FormControl(this.cluster.spec.cloud.aws.accessKeyId, Validators.required),
       secretAccessKey: new FormControl(this.cluster.spec.cloud.aws.secretAccessKey, Validators.required),
-      securityGroupId:
-          new FormControl(this.cluster.spec.cloud.aws.securityGroupId, Validators.pattern('sg-(\\w{8}|\\w{17})')),
+      securityGroupID:
+          new FormControl(this.cluster.spec.cloud.aws.securityGroupID, Validators.pattern('sg-(\\w{8}|\\w{17})')),
       vpcId: new FormControl(this.cluster.spec.cloud.aws.vpcId, Validators.pattern('vpc-(\\w{8}|\\w{17})')),
       routeTableId:
           new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
@@ -164,7 +164,7 @@ export class AWSClusterSettingsComponent implements OnInit, OnDestroy {
         aws: {
           accessKeyId: this.form.controls.accessKeyId.value,
           secretAccessKey: this.form.controls.secretAccessKey.value,
-          securityGroupId: this.form.controls.securityGroupId.value,
+          securityGroupID: this.form.controls.securityGroupID.value,
           vpcId: this.form.controls.vpcId.value,
           routeTableId: this.form.controls.routeTableId.value,
           instanceProfileName: this.form.controls.instanceProfileName.value,
