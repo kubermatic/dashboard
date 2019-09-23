@@ -58,8 +58,7 @@ mat-card-header {
   min-width: 14 * $baseline-grid;
   min-height: 3.5 * $baseline-grid;
 
-  &.km-provider-logo-aws,
-  &.km-provider-logo-gcp {
-    min-width: 40px;
+  &.km-provider-logo-aws {
+    min-width: 5 * $baseline-grid;
   }
 }

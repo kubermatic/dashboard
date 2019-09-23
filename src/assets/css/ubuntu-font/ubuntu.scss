@@ -1,0 +1,19 @@
+$font-path: "../fonts/ubuntu-v14-latin" !default;
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    url('#{$font-path}/ubuntu-v14-latin-regular.woff2') format('woff2'),
+    url('#{$font-path}/ubuntu-v14-latin-regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  src:
+    url('#{$font-path}/ubuntu-v14-latin-500.woff2') format('woff2'),
+    url('#{$font-path}/ubuntu-v14-latin-500.woff') format('woff');
+}
