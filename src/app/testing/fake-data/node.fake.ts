@@ -13,19 +13,11 @@ export function fakeDigitaloceanCreateNode(): NodeEntity {
           monitoring: null,
           tags: null,
         },
-        aws: null,
-        openstack: null,
-        vsphere: null,
-        hetzner: null,
-        azure: null,
-        gcp: null,
       },
       operatingSystem: {
         ubuntu: {
           distUpgradeOnBoot: false,
         },
-        centos: null,
-        containerLinux: null,
       },
       versions: {
         kubelet: null,
@@ -49,19 +41,11 @@ export function nodeFake(): NodeEntity {
           monitoring: false,
           tags: [],
         },
-        aws: null,
-        openstack: null,
-        vsphere: null,
-        hetzner: null,
-        azure: null,
-        gcp: null,
       },
       operatingSystem: {
         ubuntu: {
           distUpgradeOnBoot: false,
         },
-        centos: null,
-        containerLinux: null,
       },
       versions: {
         kubelet: 'v1.8.5',
@@ -160,19 +144,11 @@ export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
               monitoring: null,
               tags: null,
             },
-            aws: null,
-            openstack: null,
-            vsphere: null,
-            hetzner: null,
-            azure: null,
-            gcp: null,
           },
           operatingSystem: {
             ubuntu: {
               distUpgradeOnBoot: false,
             },
-            centos: null,
-            containerLinux: null,
           },
           versions: {
             kubelet: null,
@@ -198,19 +174,11 @@ export function nodeDeploymentsFake(): NodeDeploymentEntity[] {
               monitoring: null,
               tags: null,
             },
-            aws: null,
-            openstack: null,
-            vsphere: null,
-            hetzner: null,
-            azure: null,
-            gcp: null,
           },
           operatingSystem: {
             ubuntu: {
               distUpgradeOnBoot: false,
             },
-            centos: null,
-            containerLinux: null,
           },
           versions: {
             kubelet: null,
@@ -236,19 +204,11 @@ export function nodesFake(): NodeEntity[] {
             monitoring: null,
             tags: null,
           },
-          aws: null,
-          openstack: null,
-          vsphere: null,
-          hetzner: null,
-          azure: null,
-          gcp: null,
         },
         operatingSystem: {
           ubuntu: {
             distUpgradeOnBoot: false,
           },
-          centos: null,
-          containerLinux: null,
         },
         versions: {
           kubelet: null,
@@ -298,19 +258,11 @@ export function nodesFake(): NodeEntity[] {
             monitoring: false,
             tags: [],
           },
-          aws: null,
-          openstack: null,
-          vsphere: null,
-          hetzner: null,
-          azure: null,
-          gcp: null,
         },
         operatingSystem: {
           ubuntu: {
             distUpgradeOnBoot: false,
           },
-          centos: null,
-          containerLinux: null,
         },
         versions: {
           kubelet: 'v1.8.5',
@@ -470,11 +422,9 @@ export function nodeDataCentOsFake(): NodeData {
         },
       },
       operatingSystem: {
-        ubuntu: null,
         centos: {
           distUpgradeOnBoot: false,
         },
-        containerLinux: null,
       },
       versions: {
         kubelet: null,
@@ -535,8 +485,6 @@ export function nodeDataContainerLinuxFake(): NodeData {
         },
       },
       operatingSystem: {
-        ubuntu: null,
-        centos: null,
         containerLinux: {
           disableAutoUpdate: false,
         },

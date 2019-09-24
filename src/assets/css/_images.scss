@@ -376,6 +376,14 @@
   min-height: 30px;
 }
 
+.km-provider-logo-kubevirt {
+  background-image: url("/assets/images/clouds/kubevirt.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: left;
+  min-height: 30px;
+}
+
 .km-provider-logo-vsphere {
   background-image: url("/assets/images/clouds/vsphere.png");
   background-repeat: no-repeat;

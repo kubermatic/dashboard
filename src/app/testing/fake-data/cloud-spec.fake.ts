@@ -6,12 +6,5 @@ export function doCloudSpecFake(): CloudSpec {
     digitalocean: {
       token: 'foo-bar',
     },
-    aws: null,
-    baremetal: null,
-    bringyourown: null,
-    openstack: null,
-    vsphere: null,
-    hetzner: null,
-    azure: null,
   };
 }

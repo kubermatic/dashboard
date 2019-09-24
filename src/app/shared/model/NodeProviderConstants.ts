@@ -8,6 +8,7 @@ export enum NodeProvider {
   HETZNER = 'hetzner',
   OPENSTACK = 'openstack',
   PACKET = 'packet',
+  KUBEVIRT = 'kubevirt',
   VSPHERE = 'vsphere',
   NONE = '',
 }

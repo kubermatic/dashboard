@@ -11,14 +11,6 @@ export function clusterModelFake(): CreateClusterModel {
           digitalocean: {
             token: 'd6fec6ec65cd1fe6b2e6bba7bef91395ad9e3539646ccf8ed9eeac01f629570d',
           },
-          bringyourown: null,
-          aws: null,
-          openstack: null,
-          baremetal: null,
-          hetzner: null,
-          vsphere: null,
-          azure: null,
-          gcp: null,
         },
         version: '',
       },
@@ -41,14 +33,6 @@ export function fakeDigitaloceanCluster(): ClusterEntity {
         digitalocean: {
           token: 'token',
         },
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        hetzner: null,
-        vsphere: null,
-        azure: null,
-        gcp: null,
       },
       version: '1.8.5',
     },
@@ -68,15 +52,6 @@ export function fakePacketCluster(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'packet-ams',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        hetzner: null,
-        vsphere: null,
-        azure: null,
-        gcp: null,
         packet: {
           apiKey: '123',
           projectID: '1',
@@ -101,15 +76,6 @@ export function fakeGCPCluster(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'gcp-westeurope',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        hetzner: null,
-        vsphere: null,
-        azure: null,
-        packet: null,
         gcp: {
           serviceAccount: 'test-service-account',
           network: 'test-network',
@@ -134,17 +100,9 @@ export function fakeHetznerCluster(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'do-fra1',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        vsphere: null,
-        gcp: null,
         hetzner: {
           token: 'pixH4QgO2nbVY1Xoo8yVN0RPN2d3CBQYPKcPrfd1BWwFsWrKMsdUKyos7wYAa6hQ',
         },
-        azure: null,
       },
       version: '1.8.5',
     },
@@ -164,11 +122,6 @@ export function fakeVSphereCluster(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'vsphere-hetzner',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
         vsphere: {
           username: 'foo',
           password: 'bar',
@@ -179,9 +132,6 @@ export function fakeVSphereCluster(): ClusterEntity {
             password: 'bar',
           },
         },
-        hetzner: null,
-        azure: null,
-        gcp: null,
       },
       version: '1.8.5',
     },
@@ -201,7 +151,6 @@ export function fakeAWSCluster(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'do-fra1',
-        digitalocean: null,
         aws: {
           accessKeyId: 'aaaaaaaaaaaa',
           secretAccessKey: 'bbbbbbbbbbbb',
@@ -211,13 +160,6 @@ export function fakeAWSCluster(): ClusterEntity {
           instanceProfileName: '',
           roleARN: '',
         },
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        hetzner: null,
-        vsphere: null,
-        azure: null,
-        gcp: null,
       },
       version: '1.9.6',
     },
@@ -237,8 +179,6 @@ export function fakeOpenstackCluster(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'os-fra1',
-        digitalocean: null,
-        aws: null,
         openstack: {
           username: 'test-username',
           password: 'test-password',
@@ -250,12 +190,6 @@ export function fakeOpenstackCluster(): ClusterEntity {
           tenantID: '',
           subnetID: 'test-subnet-id',
         },
-        baremetal: null,
-        bringyourown: null,
-        hetzner: null,
-        vsphere: null,
-        azure: null,
-        gcp: null,
       },
       version: '1.9.6',
     },
@@ -275,14 +209,6 @@ export function fakeAzureCluster(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'do-fra1',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
-        bringyourown: null,
-        vsphere: null,
-        hetzner: null,
-        gcp: null,
         azure: {
           clientID: 'azure-client-id',
           clientSecret: 'azure-client-secret',
@@ -313,15 +239,7 @@ export function fakeBringyourownCluster(): ClusterEntity {
     spec: {
       cloud: {
         dc: 'do-fra1',
-        digitalocean: null,
-        aws: null,
-        openstack: null,
-        baremetal: null,
         bringyourown: {},
-        vsphere: null,
-        hetzner: null,
-        azure: null,
-        gcp: null,
       },
       version: '1.8.5',
     },
