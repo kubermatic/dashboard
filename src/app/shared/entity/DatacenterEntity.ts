@@ -6,6 +6,7 @@ import {BringYourOwnDatacenterSpec} from './datacenter/BringYourOwnDatacenterSpe
 import {DigitaloceanDatacenterSpec} from './datacenter/DigitaloceanDatacenterSpec';
 import {GCPDatacenterSpec} from './datacenter/GCPDatacenterSpec';
 import {HetznerDatacenterSpec} from './datacenter/HetznerDatacenterSpec';
+import {KubeVirtDatacenterSpec} from './datacenter/KubeVirtDatacenterSpec';
 import {OpenStackDatacenterSpec} from './datacenter/OpenStackDatacenterSpec';
 import {PacketDatacenterSpec} from './datacenter/PacketDatacenterSpec';
 import {VSphereDatacenterSpec} from './datacenter/VSphereDatacenterSpec';
@@ -32,6 +33,7 @@ export class DatacenterSpec {
   hetzner?: HetznerDatacenterSpec;
   azure?: AzureDatacenterSpec;
   gcp?: GCPDatacenterSpec;
+  kubevirt?: KubeVirtDatacenterSpec;
 }
 
 export class DatacenterOperatingSystemOptions {

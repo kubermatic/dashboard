@@ -8,7 +8,7 @@ import {DigitaloceanCloudSpec} from './cloud/DigitaloceanCloudSpec';
 import {FakeCloudSpec} from './cloud/FakeCloudSpec';
 import {GCPCloudSpec} from './cloud/GCPCloudSpec';
 import {HetznerCloudSpec} from './cloud/HetznerCloudSpec';
-import {KubevirtCloudSpec} from './cloud/KubevirtCloudSpec';
+import {KubeVirtCloudSpec} from './cloud/KubeVirtCloudSpec';
 import {OpenstackCloudSpec} from './cloud/OpenstackCloudSpec';
 import {PacketCloudSpec} from './cloud/PacketCloudSpec';
 import {VSphereCloudSpec} from './cloud/VSphereCloudSpec';
@@ -101,7 +101,7 @@ export function getEmptyCloudProviderSpec(provider: NodeProvider): object {
     case NodeProvider.PACKET:
       return {} as PacketCloudSpec;
     case NodeProvider.KUBEVIRT:
-      return {kubeconfig: ''} as KubevirtCloudSpec;
+      return {kubeconfig: ''} as KubeVirtCloudSpec;
     case NodeProvider.GCP:
       return {
         network: '',
@@ -125,7 +125,7 @@ export class CloudSpec {
   azure?: AzureCloudSpec;
   fake?: FakeCloudSpec;
   gcp?: GCPCloudSpec;
-  kubevirt?: KubevirtCloudSpec;
+  kubevirt?: KubeVirtCloudSpec;
 }
 
 export class ClusterSpec {
