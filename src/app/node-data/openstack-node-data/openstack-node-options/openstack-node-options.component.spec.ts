@@ -3,6 +3,7 @@ import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {BrowserModule} from '@angular/platform-browser';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {WizardService} from '../../../core/services';
 import {NodeDataService} from '../../../core/services/node-data/node-data.service';
 import {SharedModule} from '../../../shared/shared.module';
 import {fakeOpenstackCluster} from '../../../testing/fake-data/cluster.fake';
@@ -30,7 +31,10 @@ describe('OpenstackNodeOptionsComponent', () => {
           declarations: [
             OpenstackNodeOptionsComponent,
           ],
-          providers: [NodeDataService],
+          providers: [
+            NodeDataService,
+            WizardService,
+          ],
         })
         .compileComponents();
   }));
