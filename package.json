@@ -94,7 +94,7 @@
     "@ngrx/store": "8.3.0",
     "@types/jasmine": "3.4.0",
     "@types/lodash": "4.14.139",
-    "@types/node": "12.7.5",
+    "@types/node": "12.7.7",
     "codelyzer": "5.1.1",
     "cypress": "3.4.1",
     "gts": "0.9.0",
