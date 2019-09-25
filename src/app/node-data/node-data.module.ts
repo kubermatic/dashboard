@@ -11,6 +11,7 @@ import {DigitaloceanNodeDataComponent} from './digitalocean-node-data/digitaloce
 import {DigitaloceanOptionsComponent} from './digitalocean-node-data/digitalocean-options/digitalocean-options.component';
 import {GCPNodeDataComponent} from './gcp-node-data/gcp-node-data.component';
 import {HetznerNodeDataComponent} from './hetzner-node-data/hetzner-node-data.component';
+import {KubeVirtNodeDataComponent} from './kubevirt-add-node/kubevirt-node-data.component';
 import {NodeDataComponent} from './node-data.component';
 import {OpenstackNodeDataComponent} from './openstack-node-data/openstack-node-data.component';
 import {OpenstackOptionsComponent} from './openstack-node-data/openstack-options/openstack-options.component';
@@ -45,6 +46,7 @@ import {VSphereOptionsComponent} from './vsphere-add-node/vsphere-options/vspher
     AzureNodeDataComponent,
     PacketNodeDataComponent,
     GCPNodeDataComponent,
+    KubeVirtNodeDataComponent,
   ],
   exports: [
     NodeDataComponent,

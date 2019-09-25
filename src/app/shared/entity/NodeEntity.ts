@@ -5,6 +5,7 @@ import {AzureNodeSpec} from './node/AzureNodeSpec';
 import {DigitaloceanNodeSpec} from './node/DigitaloceanNodeSpec';
 import {GCPNodeSpec} from './node/GCPNodeSpec';
 import {HetznerNodeSpec} from './node/HetznerNodeSpec';
+import {KubeVirtNodeSpec} from './node/KubeVirtNodeSpec';
 import {OpenstackNodeSpec} from './node/OpenstackNodeSpec';
 import {PacketNodeSpec} from './node/PacketNodeSpec';
 import {VSphereNodeSpec} from './node/VSphereNodeSpec';
@@ -50,6 +51,7 @@ export class NodeCloudSpec {
   vsphere?: VSphereNodeSpec;
   azure?: AzureNodeSpec;
   gcp?: GCPNodeSpec;
+  kubevirt?: KubeVirtNodeSpec;
 }
 
 export class OperatingSystemSpec {
