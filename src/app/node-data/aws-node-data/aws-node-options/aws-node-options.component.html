@@ -1,5 +1,9 @@
 <form [formGroup]="form"
       fxLayout="column">
+
+  <mat-checkbox id="assignPublicIP"
+                formControlName="assignPublicIP">Assign Public IP</mat-checkbox>
+
   <div [ngClass]="isInWizard ? 'km-form-group-tags-header km-tags-in-wizard' : 'km-form-group-tags-header'">
     Tags
     <i class="fa fa-plus"

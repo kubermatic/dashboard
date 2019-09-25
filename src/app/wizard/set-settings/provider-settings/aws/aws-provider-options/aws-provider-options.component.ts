@@ -22,8 +22,8 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.form = new FormGroup({
-      securityGroup:
-          new FormControl(this.cluster.spec.cloud.aws.securityGroup, Validators.pattern('sg-(\\w{8}|\\w{17})')),
+      securityGroupID:
+          new FormControl(this.cluster.spec.cloud.aws.securityGroupID, Validators.pattern('sg-(\\w{8}|\\w{17})')),
       routeTableId:
           new FormControl(this.cluster.spec.cloud.aws.routeTableId, Validators.pattern('rtb-(\\w{8}|\\w{17})')),
       instanceProfileName: new FormControl(this.cluster.spec.cloud.aws.instanceProfileName),
@@ -61,7 +61,7 @@ export class AWSProviderOptionsComponent implements OnInit, OnDestroy {
           accessKeyId: this.cluster.spec.cloud.aws.accessKeyId,
           secretAccessKey: this.cluster.spec.cloud.aws.secretAccessKey,
           vpcId: this.cluster.spec.cloud.aws.vpcId,
-          securityGroup: this.form.controls.securityGroup.value,
+          securityGroupID: this.form.controls.securityGroupID.value,
           routeTableId: this.form.controls.routeTableId.value,
           instanceProfileName: this.form.controls.instanceProfileName.value,
           roleARN: this.form.controls.roleARN.value,

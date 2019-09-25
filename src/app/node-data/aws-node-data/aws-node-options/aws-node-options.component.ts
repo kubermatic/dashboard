@@ -42,6 +42,7 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
     }
 
     this.form = new FormGroup({
+      assignPublicIP: new FormControl(this.nodeData.spec.cloud.aws.assignPublicIP),
       tags: tagList,
     });
 
@@ -74,6 +75,7 @@ export class AWSNodeOptionsComponent implements OnInit, OnDestroy {
           volumeType: this.nodeData.spec.cloud.aws.volumeType,
           subnetId: this.nodeData.spec.cloud.aws.subnetId,
           availabilityZone: this.nodeData.spec.cloud.aws.availabilityZone,
+          assignPublicIP: this.form.controls.assignPublicIP.value,
           tags: tagMap,
         },
       },
